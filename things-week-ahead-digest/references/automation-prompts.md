@@ -1,5 +1,7 @@
 # Automation Prompt Templates
 
+Use this section order in this file: Suitability, App template, CLI template, Placeholders, Customization Points.
+
 ## Suitability
 
 - Codex App: `Strong` - recurring weekly/daily planning digests are a direct automation fit.

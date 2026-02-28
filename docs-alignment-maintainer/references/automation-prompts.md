@@ -1,5 +1,7 @@
 # Automation Prompt Templates
 
+Use this section order in this file: Suitability, App template, CLI template, Placeholders, Customization Points.
+
 ## Suitability
 
 - Codex App: `Strong` - recurring workspace hygiene checks map directly to unattended local automations.

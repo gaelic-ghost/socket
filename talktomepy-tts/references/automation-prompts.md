@@ -1,5 +1,7 @@
 # Automation Prompt Templates
 
+Use this section order in this file: Suitability, App template, CLI template, Placeholders, Customization Points.
+
 ## Suitability
 
 - Codex App: `Conditional` - works for recurring narration tasks, but only when text source and local service availability are explicit.
