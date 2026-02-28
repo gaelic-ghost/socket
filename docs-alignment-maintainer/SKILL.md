@@ -88,4 +88,3 @@ Use JSON for automation pipelines and Markdown for operator review.
 - Rust guidance: `references/checks-rust.md`
 - Safe-fix policy boundaries: `references/fix-policies.md`
 - Report schema and section contract: `references/output-contract.md`
-- Automation-ready prompt body: `references/automation-prompt-template.md`
