@@ -21,6 +21,7 @@
 
 ### `talktomepy-tts`
 - Continue improving ambiguous invocation text-selection behavior.
+- TODO: Investigate and fix the `speak_with_talktomepy.sh` false health-check failure where `/health` is reachable manually but the script times out in `wait_for_service_healthy`.
 - Improve summarization behavior for long source text by offering:
   - Summarize the full text.
   - Summarize section-by-section.
@@ -48,3 +49,4 @@
 
 ## Change Log
 - 2026-02-27: Initialized repository roadmap and added per-skill sections, including `talktomepy-tts` summarization enhancements.
+- 2026-02-27: Added TODO to investigate/fix `talktomepy-tts` script health-check timeout mismatch.
