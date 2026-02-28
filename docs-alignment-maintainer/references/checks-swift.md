@@ -12,7 +12,7 @@ Treat repository as Swift when any is present:
 - Docs should include Swift command usage for package-based repos:
   - `swift build`
   - `swift test`
-- If AGENTS guidance explicitly requires `swiftly` for toolchain management, docs should not direct users to unrelated toolchain managers.
+- If repository docs require `swiftly` for toolchain management, docs should not direct users to unrelated toolchain managers.
 
 ## Safe Fix Scope
 

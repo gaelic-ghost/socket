@@ -6,7 +6,6 @@
 - Treat directory as project root when any is true:
   - `.git` directory exists.
   - `.git` file exists.
-  - `AGENTS.md` exists.
 - After identifying a root, do not descend into child directories for nested root detection.
 - Skip excluded paths and all descendants.
 
@@ -14,7 +13,6 @@
 
 Primary targets:
 - `README.md`
-- `AGENTS.md`
 - `ROADMAP.md`
 - `CONTRIBUTING.md`
 - `docs/**/*.md`
@@ -25,7 +23,6 @@ Primary targets:
 - Detect mismatch between manifest/tooling evidence and documented commands.
 - Detect package manager drift in command examples.
 - Detect missing minimal run/test guidance when a runnable project is evident.
-- Detect AGENTS preferences that conflict with docs command examples.
 
 ## Severity
 

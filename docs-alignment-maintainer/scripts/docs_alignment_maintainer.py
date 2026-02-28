@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
-DOC_BASENAMES = {"README.md", "AGENTS.md", "ROADMAP.md", "CONTRIBUTING.md"}
+DOC_BASENAMES = {"README.md", "ROADMAP.md", "CONTRIBUTING.md"}
 DOC_EXT = ".md"
 
 
@@ -116,7 +116,7 @@ def discover_repos(workspace: Path, excludes: Sequence[Path], max_repos: int) ->
             if d not in {".git", ".hg", ".svn"} and not path_is_excluded(root_path / d, excludes)
         ]
 
-        is_repo = (root_path / ".git").exists() or (root_path / "AGENTS.md").is_file()
+        is_repo = (root_path / ".git").exists()
         if is_repo:
             repos.append(root_path)
             dirs[:] = []
@@ -147,7 +147,6 @@ def detect_signals(repo: Path) -> Dict[str, object]:
         "prefer_uv": (repo / "uv.lock").exists(),
         "has_tests": (repo / "tests").exists() or (repo / "test").exists(),
         "canonical_js_manager": infer_js_manager(repo),
-        "agents_text": read_text(repo / "AGENTS.md") if (repo / "AGENTS.md").is_file() else "",
     }
     return signals
 
@@ -204,17 +203,6 @@ def quickstart_for_signals(signals: Dict[str, object]) -> Optional[str]:
 def has_quickstart(texts: Iterable[str]) -> bool:
     lowered = "\n".join(texts).lower()
     return "development quickstart" in lowered or "getting started" in lowered
-
-
-def agent_pref_manager(agents_text: str) -> str:
-    lowered = agents_text.lower()
-    if "use pnpm" in lowered or "pnpm for" in lowered:
-        return "pnpm"
-    if "use npm" in lowered or "npm for" in lowered:
-        return "npm"
-    if "use yarn" in lowered or "yarn for" in lowered:
-        return "yarn"
-    return "unknown"
 
 
 def id_for(repo: Path, category: str, doc_file: Path, index: int) -> str:
@@ -288,7 +276,7 @@ def detect_issues(repo: Path, signals: Dict[str, object], docs: List[Path]) -> L
                     category="rust-missing-build",
                     severity="medium",
                     language_scope="rust",
-                    doc_file=str(readme if readme.is_file() else repo / "AGENTS.md"),
+                    doc_file=str(readme),
                     evidence="Rust repo detected, but cargo build guidance is missing in docs.",
                     recommended_fix="Add cargo build to Development Quickstart.",
                     auto_fixable=readme.is_file(),
@@ -301,7 +289,7 @@ def detect_issues(repo: Path, signals: Dict[str, object], docs: List[Path]) -> L
                     category="rust-missing-test",
                     severity="medium",
                     language_scope="rust",
-                    doc_file=str(readme if readme.is_file() else repo / "AGENTS.md"),
+                    doc_file=str(readme),
                     evidence="Rust tests likely present, but cargo test guidance is missing.",
                     recommended_fix="Add cargo test to Development Quickstart.",
                     auto_fixable=readme.is_file(),
@@ -316,7 +304,7 @@ def detect_issues(repo: Path, signals: Dict[str, object], docs: List[Path]) -> L
                     category="swift-missing-build",
                     severity="medium",
                     language_scope="swift",
-                    doc_file=str(readme if readme.is_file() else repo / "AGENTS.md"),
+                    doc_file=str(readme),
                     evidence="Swift project detected, but swift build guidance is missing.",
                     recommended_fix="Add swift build to Development Quickstart.",
                     auto_fixable=readme.is_file(),
@@ -329,7 +317,7 @@ def detect_issues(repo: Path, signals: Dict[str, object], docs: List[Path]) -> L
                     category="swift-missing-test",
                     severity="medium",
                     language_scope="swift",
-                    doc_file=str(readme if readme.is_file() else repo / "AGENTS.md"),
+                    doc_file=str(readme),
                     evidence="Swift project detected, but swift test guidance is missing.",
                     recommended_fix="Add swift test to Development Quickstart.",
                     auto_fixable=readme.is_file(),
@@ -352,24 +340,6 @@ def detect_issues(repo: Path, signals: Dict[str, object], docs: List[Path]) -> L
                         auto_fixable=True,
                     )
                 )
-
-    agents_text = str(signals["agents_text"])
-    pref_mgr = agent_pref_manager(agents_text)
-    if pref_mgr != "unknown" and readme.is_file():
-        readme_text = docs_text.get(readme, read_text(readme)).lower()
-        if pref_mgr == "pnpm" and ("npm install" in readme_text or "npm run " in readme_text):
-            issues.append(
-                Issue(
-                    issue_id=id_for(repo, "agents-readme-tooling-mismatch", readme, 4),
-                    category="agents-readme-tooling-mismatch",
-                    severity="medium",
-                    language_scope="common",
-                    doc_file=str(readme),
-                    evidence="AGENTS guidance prefers pnpm while README shows npm commands.",
-                    recommended_fix="Align README commands with AGENTS package manager preference.",
-                    auto_fixable=True,
-                )
-            )
 
     return issues
 
@@ -421,10 +391,8 @@ def apply_issue_fix(repo: Path, issue: Issue, signals: Dict[str, object]) -> Tup
     new_text = text
     changed = 0
 
-    if issue.category in {"js-package-manager-mismatch", "agents-readme-tooling-mismatch"}:
+    if issue.category == "js-package-manager-mismatch":
         canonical = str(signals["canonical_js_manager"])
-        if canonical == "unknown":
-            canonical = agent_pref_manager(str(signals["agents_text"]))
         if canonical == "unknown":
             return False, "skipped", "canonical package manager unknown"
         new_text, changed = rewrite_js_commands(text, canonical)

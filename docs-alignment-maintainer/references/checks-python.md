@@ -10,7 +10,7 @@ Treat repository as Python when any is present:
 
 ## Tooling Preference
 
-- If `uv.lock` exists or AGENTS/docs explicitly require uv, commands should use uv-centric workflow where applicable.
+- If `uv.lock` exists, commands should use uv-centric workflow where applicable.
 - Canonical examples:
   - `uv sync`
   - `uv run <command>`
@@ -18,7 +18,7 @@ Treat repository as Python when any is present:
 ## Alignment Expectations
 
 - Avoid contradictory guidance that defaults to raw `pip install -r requirements.txt` when uv signals are strong.
-- Keep instructions consistent between README and AGENTS when both exist.
+- Keep instructions internally consistent across README and other in-scope docs.
 
 ## Safe Fix Scope
 

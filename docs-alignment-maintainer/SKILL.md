@@ -60,7 +60,8 @@ python3 scripts/docs_alignment_maintainer.py \
 ## Safety Rules
 
 - Never commit changes automatically.
-- Edit docs only (for example `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/*.md`).
+- Edit docs only (for example `README.md`, `CONTRIBUTING.md`, `ROADMAP.md`, `docs/*.md`).
+- `AGENTS.md` is out-of-scope for this skill and is owned by a dedicated AGENTS maintainer workflow.
 - Never edit source code, lockfiles, or manifests.
 - Apply only bounded replacements and concise quickstart insertion when evidence is explicit.
 - Keep diffs minimal and preserve existing formatting style.

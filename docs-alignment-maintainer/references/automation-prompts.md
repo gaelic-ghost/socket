@@ -22,6 +22,7 @@ Execution policy:
 - Run audit pass first.
 - If <APPLY_FIXES_TRUE_FALSE> is true, run a second pass with safe docs-only fixes, then re-check.
 - Never edit source code, manifests, lockfiles, or generated files.
+- Do not scan or modify `AGENTS.md` (handled by a separate AGENTS maintainer workflow).
 - Never commit, push, or open a PR.
 
 Output contract:
