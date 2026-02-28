@@ -1,5 +1,5 @@
 version: 1
 interface:
-  display_name: "TalkToMePy TTS"
-  short_description: "Speak text aloud with local TalkToMePy v0.5+ VoiceDesign service"
-  default_prompt: "Use $talktomepy-tts to read text aloud, infer the speech source from invocation placement when text is omitted, offer summarize-then-speak for long content, and continue normal reply handling for remaining user input."
+  display_name: "TalkToMePy TTS (Deprecated)"
+  short_description: "Deprecated legacy TalkToMePy speech helper; prefer successor workflows in a11y-skills"
+  default_prompt: "This skill is deprecated and retained for backward compatibility. Prefer the maintained speech workflow successor in a11y-skills for new usage."

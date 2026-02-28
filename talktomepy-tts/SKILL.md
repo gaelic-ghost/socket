@@ -1,9 +1,16 @@
 ---
 name: talktomepy-tts
-description: Use this skill when the user wants text read aloud using the local TalkToMePy v0.5+ TTS HTTP service in VoiceDesign mode. Use in direct or ambiguous invocation contexts (standalone invocation, invocation prefixing a longer user message, or invocation suffixing user text). Resolve speech source from invocation placement, optionally summarize long text before speaking, then synthesize WAV via /synthesize/voice-design, save in the current workspace, and play on macOS with afplay.
+description: Deprecated legacy TalkToMePy TTS skill retained for backward compatibility. Prefer successor speech workflows in the a11y-skills repository.
 ---
 
-# TalkToMePy TTS
+# TalkToMePy TTS (Deprecated)
+
+## Deprecation Status
+
+- Status: Deprecated
+- Scope: Legacy-only, backward compatibility
+- Successor: Use the speech workflow successor in the `a11y-skills` repository for new automation and active maintenance.
+- Guidance: Do not choose this skill for new setups unless you explicitly need this older TalkToMePy-specific behavior.
 
 Use this skill when the user asks to hear text spoken aloud from the local machine.
 

@@ -23,9 +23,9 @@ This repository helps users and agents run recurring maintenance tasks with cons
 - `things-week-ahead-digest`
   - Use when you want weekly planning summaries from Things data.
   - Helps by surfacing priorities and actionable next steps.
-- `talktomepy-tts`
-  - Use when you want local TalkToMePy speech output integrated into agent workflows.
-  - Helps by turning text outputs into spoken audio with repeatable command flows.
+- `talktomepy-tts` (Deprecated)
+  - Legacy TalkToMePy speech helper retained for backward compatibility.
+  - New speech-focused workflows should use the successor path in `a11y-skills` instead.
 
 ## Quick Start (Vercel Skills CLI)
 
@@ -49,7 +49,6 @@ npx skills add gaelic-ghost/productivity-skills@skills-readme-alignment-maintain
 npx skills add gaelic-ghost/productivity-skills@project-roadmap-manager -a codex
 npx skills add gaelic-ghost/productivity-skills@workspace-cleanup-audit -a codex
 npx skills add gaelic-ghost/productivity-skills@things-week-ahead-digest -a codex
-npx skills add gaelic-ghost/productivity-skills@talktomepy-tts -a codex
 ```
 
 ## Find Skills like these with the `skills` CLI by Vercel — [vercel-labs/skills](https://github.com/vercel-labs/skills)
@@ -88,6 +87,7 @@ npx skills find "docs drift maintenance"
 
 - Each skill includes `references/automation-prompts.md` templates for Codex App and Codex CLI automation usage.
 - `docs-alignment-maintainer` is docs-focused only; AGENTS maintenance is intentionally out-of-scope.
+- `talktomepy-tts` is deprecated; avoid new installs and prefer successor speech workflows in `a11y-skills`.
 
 ## Search Keywords
 

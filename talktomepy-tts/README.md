@@ -1,5 +1,7 @@
 # TalkToMePy TTS Customization Guide
 
+> Deprecated: This skill is retained for backward compatibility. For new speech workflows, use the maintained successor path in `a11y-skills`.
+
 ## What To Customize First
 
 - Service endpoint (`--base-url` / `TALKTOMEPY_BASE_URL`).
