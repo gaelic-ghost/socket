@@ -1,6 +1,6 @@
 # Automation Prompt Templates
 
-Deprecated note: this skill is legacy-only. Prefer maintained speech workflows in `a11y-skills` for new automations.
+Deprecated note: this skill is legacy-only. Prefer maintained speech workflows in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills) for new automations.
 
 Use this section order in this file: Suitability, App template, CLI template, Placeholders, Customization Points.
 

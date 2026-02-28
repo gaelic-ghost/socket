@@ -1,6 +1,6 @@
 ---
 name: talktomepy-tts
-description: Deprecated legacy TalkToMePy TTS skill retained for backward compatibility. Prefer successor speech workflows in the a11y-skills repository.
+description: Deprecated legacy TalkToMePy TTS skill retained for backward compatibility. Prefer successor speech workflows in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills).
 ---
 
 # TalkToMePy TTS (Deprecated)
@@ -9,7 +9,7 @@ description: Deprecated legacy TalkToMePy TTS skill retained for backward compat
 
 - Status: Deprecated
 - Scope: Legacy-only, backward compatibility
-- Successor: Use the speech workflow successor in the `a11y-skills` repository for new automation and active maintenance.
+- Successor: Use the speech workflow successor in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills) for new automation and active maintenance.
 - Guidance: Do not choose this skill for new setups unless you explicitly need this older TalkToMePy-specific behavior.
 
 Use this skill when the user asks to hear text spoken aloud from the local machine.

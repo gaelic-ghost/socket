@@ -25,7 +25,7 @@ This repository helps users and agents run recurring maintenance tasks with cons
   - Helps by surfacing priorities and actionable next steps.
 - `talktomepy-tts` (Deprecated)
   - Legacy TalkToMePy speech helper retained for backward compatibility.
-  - New speech-focused workflows should use the successor path in `a11y-skills` instead.
+  - New speech-focused workflows should use the successor path in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills) instead.
 
 ## Quick Start (Vercel Skills CLI)
 
@@ -87,7 +87,7 @@ npx skills find "docs drift maintenance"
 
 - Each skill includes `references/automation-prompts.md` templates for Codex App and Codex CLI automation usage.
 - `docs-alignment-maintainer` is docs-focused only; AGENTS maintenance is intentionally out-of-scope.
-- `talktomepy-tts` is deprecated; avoid new installs and prefer successor speech workflows in `a11y-skills`.
+- `talktomepy-tts` is deprecated; avoid new installs and prefer successor speech workflows in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills).
 
 ## Search Keywords
 

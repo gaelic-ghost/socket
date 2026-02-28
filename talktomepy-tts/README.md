@@ -1,6 +1,6 @@
 # TalkToMePy TTS Customization Guide
 
-> Deprecated: This skill is retained for backward compatibility. For new speech workflows, use the maintained successor path in `a11y-skills`.
+> Deprecated: This skill is retained for backward compatibility. For new speech workflows, use the maintained successor path in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills).
 
 ## What To Customize First
 

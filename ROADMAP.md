@@ -23,7 +23,7 @@
 - Status: Deprecated (legacy-only)
 - Do not schedule new feature work.
 - Keep existing behavior stable for backward compatibility only.
-- Route new speech workflow investment to successor capabilities in `a11y-skills`.
+- Route new speech workflow investment to successor capabilities in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills).
 
 ### `things-week-ahead-digest`
 - Refine weekly digest output for stronger prioritization and clearer next-action recommendations.
