@@ -1,15 +1,50 @@
 # private-skills
 
-Private, non-public Codex skills that are not shared on GitHub.
+Private Codex skills repository for non-public workflows and experiments.
 
-## Current Structure
+## What These Agent Skills Help With
 
-This repository is flat for now. Skills live at the repository root.
+This repository is intended for personal or internal-use skills that are not published for broad public reuse.
 
-## Initial Inventory
+## Skill Guide (When To Use What)
 
 - `resume-repo-line-items`
+  - Use when you need structured resume-style line item generation from repository work.
+  - Helps by turning repository activity into concise, usable resume bullets.
 
-## Future Organization
+## Quick Start (Vercel Skills CLI)
 
-Skills will be reorganized into intent categories as this private skill set grows.
+If you have access to this private repository:
+
+```bash
+npx skills add gaelic-ghost/private-skills -a codex
+```
+
+```bash
+npx skills add gaelic-ghost/private-skills -a codex -g
+```
+
+## Install individually by Skill
+
+```bash
+npx skills add gaelic-ghost/private-skills@resume-repo-line-items -a codex
+```
+
+## Repository Layout
+
+```text
+.
+├── README.md
+├── ROADMAP.md
+├── docs/
+└── resume-repo-line-items/
+```
+
+## Notes
+
+- Keep this repo private; do not copy sensitive content into public repos.
+- Keep README and skill directory names synchronized.
+
+## License
+
+This is a private repository and does not currently define an open-source license.
