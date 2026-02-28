@@ -30,6 +30,7 @@ npx skills add gaelic-ghost/productivity-skills -a codex -g
 ## Included skills
 
 - `docs-alignment-maintainer`
+- `skills-readme-alignment-maintainer`
 - `project-roadmap-manager`
 - `workspace-cleanup-audit`
 - `things-week-ahead-digest`
@@ -52,6 +53,7 @@ Each skill now includes `references/automation-prompts.md` with:
 - Suitability ratings, placeholders, guardrails, and customization points
 
 - [`docs-alignment-maintainer/references/automation-prompts.md`](./docs-alignment-maintainer/references/automation-prompts.md)
+- [`skills-readme-alignment-maintainer/references/automation-prompts.md`](./skills-readme-alignment-maintainer/references/automation-prompts.md)
 - [`project-roadmap-manager/references/automation-prompts.md`](./project-roadmap-manager/references/automation-prompts.md)
 - [`workspace-cleanup-audit/references/automation-prompts.md`](./workspace-cleanup-audit/references/automation-prompts.md)
 - [`things-week-ahead-digest/references/automation-prompts.md`](./things-week-ahead-digest/references/automation-prompts.md)

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skills README Alignment Maintainer"
+  short_description: "Audit and align README standards across skills repos"
+  default_prompt: "Use $skills-readme-alignment-maintainer to audit or safely align README structure and command integrity across *-skills repositories with profile-aware rules."
