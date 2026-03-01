@@ -12,5 +12,17 @@ settings:
     - De-scoped
   includeOwnerField: false
   includeDependencyField: false
+  enableSubMilestones: false
+  subMilestoneIdStyle: hierarchical
+  subMilestonePrefix: T
+  subMilestonePadWidth: 2
+  subMilestoneDelimiter: "."
+  allowExternalTrackerIds: false
+  subMilestoneStatusValues:
+    - Planned
+    - In Progress
+    - Completed
+    - Blocked
+    - De-scoped
   planHistoryVerbosity: standard
   changeLogVerbosity: standard

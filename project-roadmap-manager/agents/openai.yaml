@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Roadmap Manager"
-  short_description: "Maintain ROADMAP.md milestones and accepted plans"
-  default_prompt: "Create or update the project root ROADMAP.md whenever plans are accepted, milestones are defined or changed, or roadmap status is requested."
+  short_description: "Maintain ROADMAP.md milestones, sub-milestones, and plans"
+  default_prompt: "Use $project-roadmap-manager to create or update the project root ROADMAP.md when plans, milestones, or optional sub-milestones change."

@@ -21,6 +21,7 @@ Execution policy:
 - Restrict all edits to <ROADMAP_PATH_DEFAULT_PROJECT_ROOT_ROADMAP_MD> only.
 - Preserve existing roadmap content; update sections in place instead of duplicating.
 - Keep `Current Milestone`, `Milestones`, `Plan History`, and `Change Log` internally consistent.
+- If sub-milestones are enabled in skill config, keep parent/child linkage, child ID uniqueness, and child status values consistent.
 - Never edit unrelated files.
 - Never commit, push, or open PRs.
 
@@ -56,6 +57,8 @@ Validate:
 - Current Milestone matches active milestone row.
 - Milestone statuses are non-conflicting.
 - Plan History and Change Log are consistent with current state.
+- If sub-milestones are enabled, child IDs are deterministic for configured style and unique within parent scope.
+- If sub-milestones are enabled, child statuses follow `subMilestoneStatusValues` (or inherited `statusValues`).
 
 If no updates are needed, output exactly `No findings.`.
 Otherwise output a concise required-changes report.
@@ -73,6 +76,7 @@ Use $project-roadmap-manager.
 Apply bounded updates to <ROADMAP_PATH_DEFAULT_PROJECT_ROOT_ROADMAP_MD> for project <PROJECT_ROOT_ABS_PATH>.
 Edit this file only.
 Synchronize Current Milestone, Milestones, Plan History, and Change Log per skill rules.
+If sub-milestones are enabled, also synchronize child entries and parent/child linkage per skill rules.
 Keep edits minimal and deterministic.
 Never edit other files.
 Never commit or push.
@@ -103,5 +107,6 @@ codex exec --sandbox workspace-write --output-last-message <FINAL_MESSAGE_PATH> 
 
 - Run mode (`check-only` vs `apply`).
 - Allowed status vocabulary and milestone naming conventions.
+- Optional sub-milestone settings (enablement, ID style, delimiter, and child status vocabulary).
 - Change-log verbosity requirements.
 - Date/target conventions (version-based or calendar-based).
