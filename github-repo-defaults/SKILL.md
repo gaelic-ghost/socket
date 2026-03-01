@@ -25,6 +25,8 @@ Apply these defaults unless the user explicitly asks otherwise:
 - Projects: disabled.
 - Discussions: disabled.
 - Delete branch on merge: enabled.
+- Always suggest updating pull request branches: enabled.
+- Auto-close issues with merged linked pull requests: enabled.
 - Merge strategy: squash only (`allow_squash_merge=true`, merge/rebase disabled).
 
 ## Description Heuristics
@@ -74,6 +76,8 @@ gh api --method PATCH /repos/<owner>/<name> \
   -F has_projects=false \
   -F has_discussions=false \
   -F delete_branch_on_merge=true \
+  -F allow_update_branch=true \
+  -F auto_close_issues=true \
   -F allow_squash_merge=true \
   -F allow_merge_commit=false \
   -F allow_rebase_merge=false
