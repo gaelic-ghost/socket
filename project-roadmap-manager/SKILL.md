@@ -9,22 +9,50 @@ Maintain `ROADMAP.md` in the project root as the canonical roadmap record. Prefe
 
 ## Workflow
 
-1. Identify project root and target file:
+1. Load active customization config:
+   - Prefer `<skill_root>/config/customization.yaml`.
+   - Fall back to `<skill_root>/config/customization.template.yaml`.
+   - Apply settings under `settings` to roadmap generation and update decisions.
+2. Identify project root and target file:
    - Use `<project_root>/ROADMAP.md`.
    - If root is ambiguous, infer from repository root.
-2. Ensure `ROADMAP.md` exists:
+3. Ensure `ROADMAP.md` exists:
    - If missing, create it using the template in this skill.
-3. Classify the request into one of these event types:
+4. Classify the request into one of these event types:
    - Project bootstrap.
    - Plan acceptance/completion.
    - Milestone/version roadmap set or changed.
    - Milestone reached/blocked/de-scoped.
    - Roadmap reference/query.
-4. Apply the event-specific update rules.
-5. Keep all sections internally consistent:
+5. Apply the event-specific update rules.
+6. Keep all sections internally consistent:
    - `Current Milestone` matches active milestone in `Milestones`.
    - `Plan History` includes accepted plan snapshots.
    - `Change Log` captures each roadmap mutation with date and reason.
+
+## Customization Workflow
+
+When a user asks to customize this skill, use this deterministic flow:
+
+1. Read active config from `config/customization.yaml`; if missing, use `config/customization.template.yaml`.
+2. Confirm target profile and desired behavior for:
+   - `milestoneIdStyle`
+   - `targetStyle`
+   - `statusValues`
+   - owner/dependency fields
+   - plan history and changelog verbosity
+3. Propose 2-4 option bundles with one recommended default.
+4. Create or update `config/customization.yaml` from the template and set:
+   - `schemaVersion: 1`
+   - `isCustomized: true`
+   - `profile: <selected-profile>`
+5. Apply the selected settings immediately to roadmap output behavior.
+6. Validate with a dry-run roadmap update and report changed keys plus behavior deltas.
+
+## Customization Reference
+
+- Detailed knobs and examples: `references/customization.md`
+- YAML schema and allowed values: `references/config-schema.md`
 
 ## ROADMAP.md Template
 
@@ -107,3 +135,5 @@ For ready-to-fill Codex App and Codex CLI (`codex exec`) templates, including bo
 ## References
 
 - Automation prompt templates: `references/automation-prompts.md`
+- Customization guide: `references/customization.md`
+- Customization schema: `references/config-schema.md`

@@ -11,36 +11,68 @@ Run a read-only scan over repositories in `~/Workspace` and report cleanup chore
 
 ## Workflow
 
-1. Run `scripts/scan_workspace_cleanup.py`.
-2. Review top-ranked findings first.
-3. Report findings with severity, repo, directory, category, size, and reason.
-4. Suggest cleanup actions as text only.
+1. Load active customization config:
+   - Prefer `<skill_root>/config/customization.yaml`.
+   - Fall back to `<skill_root>/config/customization.template.yaml`.
+2. Run `scripts/scan_workspace_cleanup.py`.
+3. Review top-ranked findings first.
+4. Report findings with severity, repo, directory, category, size, and reason.
+5. Suggest cleanup actions as text only.
 
 ## Commands
 
 Use the default workspace scan:
 
 ```bash
-python3 scripts/scan_workspace_cleanup.py
+uv run --with pyyaml python scripts/scan_workspace_cleanup.py
 ```
 
 Scan a custom workspace root:
 
 ```bash
-python3 scripts/scan_workspace_cleanup.py --workspace ~/Workspace
+uv run --with pyyaml python scripts/scan_workspace_cleanup.py --workspace ~/Workspace
 ```
 
 Return machine-readable output:
 
 ```bash
-python3 scripts/scan_workspace_cleanup.py --json
+uv run --with pyyaml python scripts/scan_workspace_cleanup.py --json
 ```
 
 Tune noise floor and stale threshold:
 
 ```bash
-python3 scripts/scan_workspace_cleanup.py --min-mb 100 --stale-days 90
+uv run --with pyyaml python scripts/scan_workspace_cleanup.py --min-mb 100 --stale-days 90
 ```
+
+Configuration precedence:
+
+1. CLI flags
+2. `config/customization.yaml`
+3. `config/customization.template.yaml`
+4. Script hardcoded defaults
+
+## Customization Workflow
+
+When a user asks to customize this skill, use this deterministic flow:
+
+1. Read active config from `config/customization.yaml`; if missing, use `config/customization.template.yaml`.
+2. Confirm desired behavior for:
+   - workspace root
+   - thresholds (`minMb`, `staleDays`, `maxFindings`)
+   - severity cutoffs
+   - directory/file override rules
+3. Propose 2-4 option bundles with one recommended default.
+4. Create or update `config/customization.yaml` from template and set:
+   - `schemaVersion: 1`
+   - `isCustomized: true`
+   - `profile: <selected-profile>`
+5. Validate with a scan run and report changed keys plus behavior deltas.
+
+## Customization Reference
+
+- Detailed knobs and examples: `references/customization.md`
+- YAML schema and allowed values: `references/config-schema.md`
 
 ## Output Contract
 
@@ -78,3 +110,5 @@ For ready-to-fill Codex App and Codex CLI (`codex exec`) templates, including pl
 
 - Pattern and threshold notes: `references/patterns.md`
 - Automation prompt templates: `references/automation-prompts.md`
+- Customization guide: `references/customization.md`
+- Customization schema: `references/config-schema.md`
