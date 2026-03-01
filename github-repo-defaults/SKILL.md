@@ -55,6 +55,26 @@ Keep 3-8 topics total, lowercase, no duplicates.
 ## Command Patterns
 
 Run from the target repository root.
+`<skill-dir>` is the directory containing this `SKILL.md` file.
+
+Primary one-command path:
+
+```bash
+<skill-dir>/scripts/apply_defaults.sh
+```
+
+Useful overrides:
+
+```bash
+<skill-dir>/scripts/apply_defaults.sh \
+  --owner <owner> \
+  --visibility private \
+  --topics "topic-a,topic-b"
+```
+
+```bash
+<skill-dir>/scripts/apply_defaults.sh --dry-run
+```
 
 Create new GitHub repo + remote:
 
