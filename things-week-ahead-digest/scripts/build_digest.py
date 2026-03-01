@@ -5,10 +5,46 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections import defaultdict
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from typing import Any
+from pathlib import Path
+from typing import Any, Dict
+
+try:
+    import yaml
+except ImportError:  # pragma: no cover - runtime dependency check
+    yaml = None
+
+DEFAULT_SETTINGS: Dict[str, Any] = {
+    "dueSoonDays": 3,
+    "daysAhead": 4,
+    "topProjects": 3,
+    "topAreas": 2,
+    "maxSuggestions": 5,
+    "openCountCap": 10,
+    "outputStyle": "operational",
+    "scoringWeights": {
+        "completed7d": 3.0,
+        "dueSoon": 2.0,
+        "overdue": 3.0,
+        "openCountWeight": 0.5,
+        "checklistHints": 1.5,
+    },
+}
+
+
+@dataclass
+class Activity:
+    title: str
+    area_title: str = ""
+    open_count: int = 0
+    due_soon: int = 0
+    overdue: int = 0
+    completed_7d: int = 0
+    checklist_hints: int = 0
 
 
 def parse_args() -> argparse.Namespace:
@@ -29,8 +65,52 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--days-ahead",
         type=int,
-        default=4,
-        help="How many days ahead to include in week/weekend view",
+        default=None,
+        help="Override planning horizon in days",
+    )
+    parser.add_argument(
+        "--due-soon-days",
+        type=int,
+        default=None,
+        help="Override due-soon horizon in days",
+    )
+    parser.add_argument(
+        "--top-projects",
+        type=int,
+        default=None,
+        help="Override number of top projects in digest",
+    )
+    parser.add_argument(
+        "--top-areas",
+        type=int,
+        default=None,
+        help="Override number of top areas in digest",
+    )
+    parser.add_argument(
+        "--max-suggestions",
+        type=int,
+        default=None,
+        help="Override max number of suggestion bullets",
+    )
+    parser.add_argument(
+        "--open-count-cap",
+        type=int,
+        default=None,
+        help="Override scoring cap applied to open todo counts",
+    )
+    parser.add_argument(
+        "--output-style",
+        choices=["operational", "executive"],
+        default=None,
+        help="Override output style",
+    )
+    parser.add_argument(
+        "--config",
+        default="",
+        help=(
+            "Optional path to customization.yaml. Default resolution uses "
+            "config/customization.yaml then config/customization.template.yaml"
+        ),
     )
     parser.add_argument(
         "--today",
@@ -38,6 +118,63 @@ def parse_args() -> argparse.Namespace:
         help="Override date in YYYY-MM-DD (defaults to local today)",
     )
     return parser.parse_args()
+
+
+def require_yaml() -> None:
+    if yaml is None:
+        raise RuntimeError(
+            "Missing dependency: PyYAML. Run with `uv run --with pyyaml python "
+            "scripts/build_digest.py ...`"
+        )
+
+
+def load_yaml_dict(path: Path) -> Dict[str, Any]:
+    require_yaml()
+    with path.open("r", encoding="utf-8") as handle:
+        payload = yaml.safe_load(handle) or {}
+    if not isinstance(payload, dict):
+        raise ValueError(f"Expected a YAML mapping in {path}")
+    return payload
+
+
+def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = deepcopy(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def resolve_settings(args_config: str) -> tuple[Dict[str, Any], Path, str]:
+    script_path = Path(__file__).resolve()
+    skill_root = script_path.parent.parent
+    template_path = skill_root / "config" / "customization.template.yaml"
+    active_path = (
+        Path(args_config).expanduser().resolve()
+        if args_config
+        else (skill_root / "config" / "customization.yaml")
+    )
+
+    settings = deepcopy(DEFAULT_SETTINGS)
+    source = "hardcoded-defaults"
+
+    if template_path.exists():
+        template_payload = load_yaml_dict(template_path)
+        template_settings = template_payload.get("settings")
+        if isinstance(template_settings, dict):
+            settings = deep_merge(settings, template_settings)
+        source = str(template_path)
+
+    if active_path.exists():
+        active_payload = load_yaml_dict(active_path)
+        active_settings = active_payload.get("settings")
+        if isinstance(active_settings, dict):
+            settings = deep_merge(settings, active_settings)
+        source = str(active_path)
+
+    return settings, active_path, source
 
 
 def read_items(path: str) -> list[dict[str, Any]]:
@@ -86,25 +223,14 @@ def short_task(task: dict[str, Any]) -> str:
     return title
 
 
-@dataclass
-class Activity:
-    title: str
-    area_title: str = ""
-    open_count: int = 0
-    due_soon: int = 0
-    overdue: int = 0
-    completed_7d: int = 0
-    checklist_hints: int = 0
-
-    @property
-    def score(self) -> float:
-        return (
-            self.completed_7d * 3
-            + self.due_soon * 2
-            + self.overdue * 3
-            + min(self.open_count, 10) * 0.5
-            + self.checklist_hints * 1.5
-        )
+def activity_score(activity: Activity, weights: Dict[str, float], open_count_cap: int) -> float:
+    return (
+        activity.completed_7d * weights["completed7d"]
+        + activity.due_soon * weights["dueSoon"]
+        + activity.overdue * weights["overdue"]
+        + min(activity.open_count, open_count_cap) * weights["openCountWeight"]
+        + activity.checklist_hints * weights["checklistHints"]
+    )
 
 
 def inc_activity(
@@ -117,6 +243,19 @@ def inc_activity(
     return entry
 
 
+def normalize_weights(raw: Any) -> Dict[str, float]:
+    weights = dict(DEFAULT_SETTINGS["scoringWeights"])
+    if not isinstance(raw, dict):
+        return weights
+
+    for key in ("completed7d", "dueSoon", "overdue", "openCountWeight", "checklistHints"):
+        value = raw.get(key)
+        if isinstance(value, (int, float)):
+            weights[key] = float(value)
+
+    return weights
+
+
 def render_digest(
     areas: list[dict[str, Any]],
     projects: list[dict[str, Any]],
@@ -125,6 +264,13 @@ def render_digest(
     detailed_todos: list[dict[str, Any]],
     today: date,
     days_ahead: int,
+    due_soon_days: int,
+    top_projects_limit: int,
+    top_areas_limit: int,
+    max_suggestions: int,
+    output_style: str,
+    weights: Dict[str, float],
+    open_count_cap: int,
 ) -> str:
     area_names = {str(a.get("id")): str(a.get("title") or "Unknown") for a in areas}
     project_names = {
@@ -152,7 +298,7 @@ def render_digest(
         if due is not None:
             if due < today:
                 overdue_count += 1
-            if due <= today + timedelta(days=3):
+            if due <= today + timedelta(days=due_soon_days):
                 due_soon_count += 1
             if today <= due <= window_end:
                 window_tasks.append((due, todo))
@@ -164,7 +310,7 @@ def render_digest(
         p_entry.open_count += 1
         if due and due < today:
             p_entry.overdue += 1
-        if due and due <= today + timedelta(days=3):
+        if due and due <= today + timedelta(days=due_soon_days):
             p_entry.due_soon += 1
         p_entry.checklist_hints += checklist_hint_score(str(todo.get("notes") or ""))
 
@@ -173,7 +319,7 @@ def render_digest(
         a_entry.open_count += 1
         if due and due < today:
             a_entry.overdue += 1
-        if due and due <= today + timedelta(days=3):
+        if due and due <= today + timedelta(days=due_soon_days):
             a_entry.due_soon += 1
         a_entry.checklist_hints += checklist_hint_score(str(todo.get("notes") or ""))
 
@@ -204,22 +350,36 @@ def render_digest(
         inc_activity(area_activity, a_key, area_title, area_title).checklist_hints += hint
 
     top_projects = sorted(
-        proj_activity.values(), key=lambda item: item.score, reverse=True
-    )[:3]
+        proj_activity.items(),
+        key=lambda row: activity_score(row[1], weights, open_count_cap),
+        reverse=True,
+    )[:top_projects_limit]
     top_areas = sorted(
-        area_activity.values(), key=lambda item: item.score, reverse=True
-    )[:2]
+        area_activity.items(),
+        key=lambda row: activity_score(row[1], weights, open_count_cap),
+        reverse=True,
+    )[:top_areas_limit]
     window_tasks.sort(key=lambda row: row[0])
 
     lines: list[str] = []
     lines.append(f"# Things Planning Digest - {today.isoformat()}")
     lines.append("")
+
+    if output_style == "executive":
+        lines.append("## Executive Summary")
+        lines.append(f"- Open todos: {len(open_todos)}")
+        lines.append(f"- Immediate risk: {overdue_count} overdue, {due_soon_count} due soon")
+        lines.append(
+            f"- Top focus: {top_projects[0][1].title if top_projects else 'None currently'}"
+        )
+        lines.append("")
+
     lines.append("## Snapshot")
     lines.append(f"- Open todos: {len(open_todos)}")
     lines.append(f"- Overdue: {overdue_count}")
-    lines.append(f"- Due in next 72h: {due_soon_count}")
+    lines.append(f"- Due in next {due_soon_days}d: {due_soon_count}")
     lines.append(f"- Recently completed (7d): {len(recent_done)}")
-    most_active_area = top_areas[0].title if top_areas else "None currently"
+    most_active_area = top_areas[0][1].title if top_areas else "None currently"
     lines.append(f"- Most active area: {most_active_area}")
     lines.append("")
     lines.append("## Recently Active")
@@ -227,7 +387,7 @@ def render_digest(
     if not top_projects:
         lines.append("1. None currently")
     else:
-        for idx, item in enumerate(top_projects, start=1):
+        for idx, (_, item) in enumerate(top_projects, start=1):
             area_suffix = f" ({item.area_title})" if item.area_title else ""
             lines.append(
                 f"{idx}. {item.title}{area_suffix} - "
@@ -239,7 +399,7 @@ def render_digest(
     if not top_areas:
         lines.append("1. None currently")
     else:
-        for idx, item in enumerate(top_areas, start=1):
+        for idx, (_, item) in enumerate(top_areas, start=1):
             lines.append(
                 f"{idx}. {item.title} - open:{item.open_count}, due soon:{item.due_soon}, "
                 f"overdue:{item.overdue}, completed 7d:{item.completed_7d}"
@@ -261,19 +421,9 @@ def render_digest(
             f"Triage {overdue_count} overdue todo(s) first and reschedule or complete each one today."
         )
 
-    for item in top_projects[:2]:
+    for key, item in top_projects[:2]:
         candidates = sorted(
-            open_by_project.get(
-                next(
-                    (
-                        key
-                        for key, value in proj_activity.items()
-                        if value.title == item.title and value.area_title == item.area_title
-                    ),
-                    "",
-                ),
-                [],
-            ),
+            open_by_project.get(key, []),
             key=lambda todo: parse_date(str(todo.get("deadline") or "")) or date.max,
         )
         if not candidates:
@@ -287,9 +437,11 @@ def render_digest(
             "Block a weekend prep session for deadline-bound tasks due on Saturday or Sunday."
         )
     elif window_tasks:
-        suggestions.append("Reserve a 30-minute planning pass for the next 4 days of deadlines.")
+        suggestions.append(
+            f"Reserve a 30-minute planning pass for the next {days_ahead} days of deadlines."
+        )
 
-    checklist_total = sum(item.checklist_hints for item in top_projects)
+    checklist_total = sum(item.checklist_hints for _, item in top_projects)
     if checklist_total > 0:
         suggestions.append(
             "Split one checklist-heavy todo into smaller next actions to reduce context switching."
@@ -298,7 +450,7 @@ def render_digest(
     if not suggestions:
         suggestions.append("Pick one high-impact todo and complete it before adding new tasks.")
 
-    for idx, suggestion in enumerate(suggestions[:5], start=1):
+    for idx, suggestion in enumerate(suggestions[:max_suggestions], start=1):
         lines.append(f"{idx}. {suggestion}")
 
     return "\n".join(lines)
@@ -306,6 +458,32 @@ def render_digest(
 
 def main() -> int:
     args = parse_args()
+
+    try:
+        settings, active_config_path, config_source = resolve_settings(args.config)
+    except Exception as exc:
+        print(f"Failed to resolve configuration: {exc}", file=sys.stderr)
+        return 2
+
+    weights = normalize_weights(settings.get("scoringWeights"))
+
+    try:
+        due_soon_days = int(args.due_soon_days if args.due_soon_days is not None else settings.get("dueSoonDays", 3))
+        days_ahead = int(args.days_ahead if args.days_ahead is not None else settings.get("daysAhead", 4))
+        top_projects = int(args.top_projects if args.top_projects is not None else settings.get("topProjects", 3))
+        top_areas = int(args.top_areas if args.top_areas is not None else settings.get("topAreas", 2))
+        max_suggestions = int(
+            args.max_suggestions if args.max_suggestions is not None else settings.get("maxSuggestions", 5)
+        )
+        open_count_cap = int(args.open_count_cap if args.open_count_cap is not None else settings.get("openCountCap", 10))
+    except (TypeError, ValueError) as exc:
+        print(f"Invalid numeric config value: {exc}", file=sys.stderr)
+        return 2
+
+    output_style = args.output_style if args.output_style is not None else str(settings.get("outputStyle", "operational"))
+    if output_style not in {"operational", "executive"}:
+        output_style = "operational"
+
     today = (
         date.fromisoformat(args.today)
         if args.today
@@ -325,8 +503,17 @@ def main() -> int:
         recent_done=recent_done,
         detailed_todos=detailed_todos,
         today=today,
-        days_ahead=args.days_ahead,
+        days_ahead=days_ahead,
+        due_soon_days=due_soon_days,
+        top_projects_limit=max(1, top_projects),
+        top_areas_limit=max(1, top_areas),
+        max_suggestions=max(1, max_suggestions),
+        output_style=output_style,
+        weights=weights,
+        open_count_cap=max(1, open_count_cap),
     )
+
+    print(f"<!-- config_source: {config_source}; active_config_path: {active_config_path} -->")
     print(digest)
     return 0
 

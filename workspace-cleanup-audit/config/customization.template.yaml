@@ -1,0 +1,14 @@
+schemaVersion: 1
+isCustomized: false
+profile: default
+settings:
+  workspaceRoot: ~/Workspace
+  minMb: 50
+  staleDays: 90
+  maxFindings: 200
+  severityCutoffs:
+    medium: 45
+    high: 70
+    critical: 85
+  dirRuleOverrides: {}
+  fileExtRuleOverrides: {}

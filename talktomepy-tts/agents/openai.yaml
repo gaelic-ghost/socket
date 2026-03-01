@@ -1,5 +1,0 @@
-version: 1
-interface:
-  display_name: "TalkToMePy TTS (Deprecated)"
-  short_description: "Deprecated legacy TalkToMePy speech helper; prefer successor workflows in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills)"
-  default_prompt: "This skill is deprecated and retained for backward compatibility. Prefer the maintained speech workflow successor in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills) for new usage."

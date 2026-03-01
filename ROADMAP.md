@@ -19,12 +19,6 @@
 - Maintain `ROADMAP.md` as the single canonical milestone record.
 - Keep `Current Milestone`, `Milestones`, `Plan History`, and `Change Log` synchronized.
 
-### `talktomepy-tts`
-- Status: Deprecated (legacy-only)
-- Do not schedule new feature work.
-- Keep existing behavior stable for backward compatibility only.
-- Route new speech workflow investment to successor capabilities in [gaelic-ghost/a11y-skills](https://github.com/gaelic-ghost/a11y-skills).
-
 ### `things-week-ahead-digest`
 - Refine weekly digest output for stronger prioritization and clearer next-action recommendations.
 - Expand handling of checklist-like notes and project-level rollups.
@@ -37,15 +31,11 @@
 ### 2026-02-27 - Accepted Plan (v0.1.0 / M1)
 - Scope:
   - Create repository-root roadmap with sections for each skill in this repo.
-  - Record near-term roadmap item for `talktomepy-tts` summarization improvements.
 - Acceptance Criteria:
   - `ROADMAP.md` exists at repository root.
   - The file contains a section for each skill currently in the repo.
-  - The `talktomepy-tts` section includes the requested summarization enhancement options.
 - Risks/Dependencies:
   - Skill inventory changes over time and will require roadmap updates.
 
 ## Change Log
-- 2026-02-27: Initialized repository roadmap and added per-skill sections, including `talktomepy-tts` summarization enhancements.
-- 2026-02-27: Added TODO to investigate/fix `talktomepy-tts` script health-check timeout mismatch.
-- 2026-02-28: Marked `talktomepy-tts` as deprecated and redirected new speech workflow work to successor paths.
+- 2026-02-27: Initialized repository roadmap and added per-skill sections.

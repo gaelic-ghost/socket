@@ -1,0 +1,16 @@
+schemaVersion: 1
+isCustomized: false
+profile: default
+settings:
+  milestoneIdStyle: M
+  targetStyle: semver
+  statusValues:
+    - Planned
+    - In Progress
+    - Completed
+    - Blocked
+    - De-scoped
+  includeOwnerField: false
+  includeDependencyField: false
+  planHistoryVerbosity: standard
+  changeLogVerbosity: standard
