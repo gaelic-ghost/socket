@@ -189,3 +189,11 @@ Common normalized error codes:
 - `tests/test_things_client.py`: URL encoding and callback client tests.
 - `docs/things-route-matrix.md`: route coverage and next implementation targets.
 - `docs/examples.md`: copy-paste local CLI examples for each major tool.
+
+## Development Quickstart
+
+```bash
+uv sync
+uv run pytest
+```
+
