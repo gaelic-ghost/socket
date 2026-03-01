@@ -7,10 +7,11 @@ Codex skills for Apple development workflows focused on Swift, Xcode, and Apple 
 This repository is a practical skill bundle for Apple-platform development work in Codex and similar agents.
 It is designed for:
 
-- Swift and Xcode engineers
-- maintainers of Swift package repositories
-- agent users who want safer Apple workflow automation
-- teams that want local-first documentation access with Dash docsets
+- Swift engineers using Xcode, or working across multiple IDEs
+- Maintainers of Swift package repositories
+- Agent users who want safer Apple workflow automation
+- Teams that want local-first documentation access with Dash docsets
+- Anyone who needs smooth access to Apple/Swift/DocC documentation
 
 In short: if you or your users are building, testing, packaging, documenting, or maintaining Apple/Swift projects, these skills provide repeatable workflows and safer defaults.
 
@@ -59,30 +60,12 @@ In short: if you or your users are building, testing, packaging, documenting, or
 Use the Vercel `skills` CLI against this repository to install any skill directory you want to use. Or install them all conveniently with one command.
 
 ```bash
-# Install your choice of skill(s) via the Vercel `skills` cli
-# The `skills` CLI will prompt you interactively for further options
-# Uses `npx` to fetch the `skills` CLI without installing it on your machine
+# Install your choice of skill(s) via the Vercel `skills` CLI
+# Using `npx` fetches `skills` without installing it on your machine
 npx skills add gaelic-ghost/apple-dev-skills
 ```
 
 The CLI will prompt you to choose which skill(s) to install from this repo.
-
-Additional examples:
-
-```bash
-# Install to you global Agent profile(s)
-npx skills add gaelic-ghost/apple-dev-skills -g
-```
-
-```bash
-# Target Codex, or any other Agent, explicitly
-npx skills add gaelic-ghost/apple-dev-skills -a codex
-```
-
-```bash
-# Combine both of the above for global install to a target Agent
-npx skills add gaelic-ghost/apple-dev-skills -a codex -g
-```
 
 Notes on `skills` CLI flags (see https://www.npmjs.com/package/skills):
 
@@ -92,22 +75,38 @@ Notes on `skills` CLI flags (see https://www.npmjs.com/package/skills):
 ## Install individually by Skill
 
 ```bash
-npx skills add gaelic-ghost/apple-dev-skills@apple-xcode-hybrid-orchestrator -a codex
+# Xcode Skill Pack 1/4
+npx skills add gaelic-ghost/apple-dev-skills@apple-xcode-hybrid-orchestrator
 ```
 ```bash
-npx skills add gaelic-ghost/apple-dev-skills@xcode-mcp-first-executor -a codex
+# Xcode Skill Pack 2/4
+npx skills add gaelic-ghost/apple-dev-skills@xcode-mcp-first-executor
 ```
 ```bash
-npx skills add gaelic-ghost/apple-dev-skills@apple-swift-cli-fallback -a codex
+# Xcode Skill Pack 3/4
+npx skills add gaelic-ghost/apple-dev-skills@apple-swift-cli-fallback
 ```
 ```bash
-npx skills add gaelic-ghost/apple-dev-skills@apple-dev-safety-and-docs -a codex
+# Xcode Skill Pack 4/4
+npx skills add gaelic-ghost/apple-dev-skills@apple-dev-safety-and-docs
 ```
 ```bash
-npx skills add gaelic-ghost/apple-dev-skills@bootstrap-swift-package -a codex
+# Dash.app Skills Pack 1/2
+# Search Docsets and Cheatsheets 
+npx skills add gaelic-ghost/apple-dev-skills@
 ```
 ```bash
-npx skills add gaelic-ghost/apple-dev-skills@swift-package-agents-maintainer -a codex
+# Dash.app Skills Pack 2/2
+# Install or Generate Docsets and Cheatsheets 
+npx skills add gaelic-ghost/apple-dev-skills@
+```
+```bash
+# Bootstrap a Swift package with consistent defaults
+npx skills add gaelic-ghost/apple-dev-skills@bootstrap-swift-package
+```
+```bash
+# Automate maintaining a consistent `AGENST.md` across many Swift repos
+npx skills add gaelic-ghost/apple-dev-skills@swift-package-agents-maintainer
 ```
 
 ## Find Skills like these with the `skills` CLI by Vercel — [vercel-labs/skills](https://github.com/vercel-labs/skills)
@@ -123,12 +122,12 @@ npx skills find "dash docset apple docs"
 Install Vercel's skill bundle (which includes `find-skills`), then query the ecosystem:
 
 ```bash
-# Install vercel-labs agent-skills bundle for Codex
-npx skills add vercel-labs/agent-skills -a codex
+# Install vercel-labs agent-skills bundle
+npx skills add vercel-labs/agent-skills
 ```
 
 ```bash
-# Search for relevant skills
+# Search for relevant skills with `skills find`
 npx skills find "xcode mcp swift"
 npx skills find "apple docs dash docsets"
 npx skills find "swift package workflow"
