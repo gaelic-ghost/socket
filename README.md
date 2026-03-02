@@ -249,6 +249,14 @@ Version `v1.6.0` improves grouped skill-pack organization and install guidance:
 - adds "install all" guidance with `--all` for one-command setup
 - updates CI validation to discover `SKILL.md` recursively so nested skill directories remain supported
 
+## v1.6.1 Highlights
+
+Version `v1.6.1` adds Claude Code plugin manifest compatibility for grouped nested skills:
+
+- adds `.claude-plugin/marketplace.json` at the repository root
+- maps each nested skill pack to explicit plugin entries and relative skill paths
+- enables `skills` CLI plugin-manifest discovery/grouping for the nested pack layout
+
 ## Repository Layout
 
 ```text

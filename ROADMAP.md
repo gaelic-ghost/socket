@@ -1,12 +1,12 @@
 # Project Roadmap
 
 ## Current Milestone
-- ID: M6
-- Name: v1.5.0 Readiness and Documentation Parity
-- Status: Completed
-- Target Version: v1.5.0
+- ID: M7
+- Name: Claude Code Compatibility Completion
+- Status: Planned
+- Target Version: v1.7.0
 - Last Updated: 2026-03-01
-- Summary: Canonical roadmap, documentation parity, and CI guardrails are all in place, completing the readiness track before new feature work.
+- Summary: Complete end-to-end Claude Code compatibility for grouped/nested skill packaging and compatibility signaling across repository metadata and release docs.
 
 ## Milestones
 | ID | Name | Target Version | Status | Target Date | Notes |
@@ -17,6 +17,7 @@
 | M4 | Hybrid Apple/Xcode Workflow Suite | v1.3.0 | Completed | 2026-02-28 | Added orchestrator, MCP-first executor, CLI fallback, and safety/docs skills. |
 | M5 | Discovery and README Polish | v1.4.x | Completed | 2026-02-28 | README discoverability and link/wording cleanup through `v1.4.2`. |
 | M6 | Readiness and Documentation Parity | v1.5.0 | Completed | 2026-03-01 | Roadmap established, P1 docs parity merged, and P2 CI validation guardrail merged. |
+| M7 | Claude Code Compatibility Completion | v1.7.0 | Planned | 2026-03-15 | Ensure full Claude Code/plugin-manifest compatibility for nested skill packs and keep release/docs compatibility signaling synchronized. |
 
 ## Plan History
 ### 2026-02-28 - Accepted Plan (v1.5.0 / M6)
@@ -44,3 +45,4 @@
 - 2026-02-28: Closed P1 documentation parity (missing per-skill READMEs + root README v1.4.x highlights).
 - 2026-02-28: Started P2 by adding CI guardrail workflow for roadmap/docs/skill-structure drift checks.
 - 2026-03-01: Completed M6 after merging P2 CI guardrails and synchronizing roadmap status.
+- 2026-03-01: Added M7 to track full Claude Code compatibility for nested skill-pack/plugin-manifest workflows.
