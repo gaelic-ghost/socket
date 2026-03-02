@@ -12,6 +12,7 @@
 | ID | Name | Target Version | Status | Target Date | Notes |
 | --- | --- | --- | --- | --- | --- |
 | M1 | Skill Roadmap Baseline | v0.1.0 | In Progress | 2026-03-13 | Add roadmap sections for each skill and define near-term improvements. |
+| M2 | Things MCP Reminder Reliability | v0.2.0 | Planned | 2026-03-16 | Add deterministic Things reminder wrapper workflow with auth-first update path and duplicate prevention. |
 
 ## Skill Sections
 
@@ -22,6 +23,11 @@
 ### `things-week-ahead-digest`
 - Refine weekly digest output for stronger prioritization and clearer next-action recommendations.
 - Expand handling of checklist-like notes and project-level rollups.
+
+### `things-mcp-reminder-wrapper`
+- Enforce auth-first, update-first reminder mutations for Things MCP workflows.
+- Normalize relative date language to explicit local dates before mutation.
+- Prevent silent duplicate creation when update intent is clear.
 
 ### `workspace-cleanup-audit`
 - Improve issue ranking and severity rationale for cleanup findings.
@@ -39,3 +45,4 @@
 
 ## Change Log
 - 2026-02-27: Initialized repository roadmap and added per-skill sections.
+- 2026-03-01: Added M2 planning and skill section for things-mcp-reminder-wrapper.

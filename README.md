@@ -23,6 +23,9 @@ This repository helps users and agents run recurring maintenance tasks with cons
 - `things-week-ahead-digest`
   - Use when you want weekly planning summaries from Things data.
   - Helps by surfacing priorities and actionable next steps.
+- `things-mcp-reminder-wrapper`
+  - Use when you need deterministic create/update reminder handling in Things via MCP.
+  - Helps by normalizing relative dates, checking auth early, and preventing accidental duplicate tasks.
 
 ## Quick Start (Vercel Skills CLI)
 
@@ -54,6 +57,8 @@ npx skills add gaelic-ghost/productivity-skills --skill project-roadmap-manager
 npx skills add gaelic-ghost/productivity-skills --skill workspace-cleanup-audit
 
 npx skills add gaelic-ghost/productivity-skills --skill things-week-ahead-digest
+
+npx skills add gaelic-ghost/productivity-skills --skill things-mcp-reminder-wrapper
 ```
 
 ## Update Skills
@@ -98,7 +103,8 @@ Then ask your Agent for help finding a skill for "" or ""
 ├── skills-readme-alignment-maintainer/
 ├── project-roadmap-manager/
 ├── workspace-cleanup-audit/
-└── things-week-ahead-digest/
+├── things-week-ahead-digest/
+└── things-mcp-reminder-wrapper/
 ```
 
 ## Notes
@@ -108,7 +114,7 @@ Then ask your Agent for help finding a skill for "" or ""
 
 ## Search Keywords
 
-Codex skills, productivity automation, docs alignment, README alignment, workspace cleanup, roadmap maintenance, Things planning.
+Codex skills, productivity automation, docs alignment, README alignment, workspace cleanup, roadmap maintenance, Things planning, Things reminders, task deduplication.
 
 ## License
 

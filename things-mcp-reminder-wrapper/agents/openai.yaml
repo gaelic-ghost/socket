@@ -1,0 +1,4 @@
+interface:
+  display_name: "Things MCP Reminder Wrapper"
+  short_description: "Deterministic Things reminder create/update workflow"
+  default_prompt: "Use this skill when creating or updating Things reminders. Always verify token status first, normalize relative dates in America/New_York, dedupe existing tasks, then update-or-create with explicit confirmation output."
