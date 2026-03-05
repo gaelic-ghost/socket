@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Docs Maintainer"
+  short_description: "Audit and safely align project docs and skills README standards."
+  default_prompt: "Use $project-docs-maintainer with mode=workspace_docs_alignment or mode=skills_readme_alignment to run audit-first docs maintenance and optional bounded fixes with Markdown plus JSON reporting."

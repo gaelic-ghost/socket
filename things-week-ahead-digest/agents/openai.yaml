@@ -1,5 +1,0 @@
-version: 1
-interface:
-  display_name: Things Week Ahead Digest
-  short_description: Weekly Things digest and next-step planner.
-  default_prompt: Generate my Things planning digest with recent activity, week/weekend ahead, and prioritized suggestions.

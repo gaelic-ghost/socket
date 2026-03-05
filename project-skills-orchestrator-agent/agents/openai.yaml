@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Skills Orchestrator Agent"
+  short_description: "Route requests to the right skill and provide install guidance."
+  default_prompt: "Use $project-skills-orchestrator-agent to choose the best skill for this request, explain why, and provide exact npx skills install commands if the skill is missing."

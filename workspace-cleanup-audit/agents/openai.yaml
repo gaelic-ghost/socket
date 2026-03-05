@@ -1,4 +1,0 @@
-interface:
-  display_name: "Workspace Cleanup Audit"
-  short_description: "Read-only repo hygiene scanner for cleanup chores."
-  default_prompt: "Scan repositories under ~/Workspace for cleanup chores and rank findings by severity."

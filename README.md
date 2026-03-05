@@ -2,96 +2,65 @@
 
 Curated Codex skills for productivity workflows, maintenance automation, and operational hygiene.
 
-## What These Agent Skills Help With
+## Active Skills
 
-This repository helps users and agents run recurring maintenance tasks with consistent guardrails and predictable outputs.
+- `project-skills-orchestrator-agent`
+  - Front-door router that selects the best skill and prints exact install commands for missing skills.
+- `project-docs-maintainer`
+  - Audit and safely align workspace docs and `*-skills` README standards using explicit modes.
+- `project-roadmap-maintainer`
+  - Maintain a canonical checklist-style `ROADMAP.md` for milestones, tickets, and exit criteria.
+- `project-workspace-cleaner`
+  - Read-only workspace hygiene scanner that ranks cleanup chores.
+- `things-reminders-manager`
+  - Deterministic Things reminder create/update workflow with duplicate and date safeguards.
+- `things-digest-generator`
+  - Weekly Things digest generator with prioritized next-step suggestions.
 
-## Skill Guide (When To Use What)
+## Migration Table (Old -> New)
 
-- `docs-alignment-maintainer`
-  - Use when you need workspace-wide docs drift checks and bounded docs fixes.
-  - Helps by producing deterministic Markdown/JSON findings with safe remediation options.
-- `skills-readme-alignment-maintainer`
-  - Use when you need profile-aware README standards maintenance across `*-skills` repos.
-  - Helps by normalizing structure and command integrity without touching code files.
-- `project-roadmap-manager`
-  - Use when you need a canonical `ROADMAP.md` workflow for milestones and accepted plans.
-  - Helps by keeping project planning state explicit and current.
-- `workspace-cleanup-audit`
-  - Use when you need a read-only cleanup audit across workspace repos.
-  - Helps by identifying artifact buildup and cleanup priorities.
-- `things-week-ahead-digest`
-  - Use when you want weekly planning summaries from Things data.
-  - Helps by surfacing priorities and actionable next steps.
-- `things-mcp-reminder-wrapper`
-  - Use when you need deterministic create/update reminder handling in Things via MCP.
-  - Helps by normalizing relative dates, checking auth early, and preventing accidental duplicate tasks.
+| Old skill name | New skill name |
+| --- | --- |
+| `docs-alignment-maintainer` | `project-docs-maintainer` |
+| `skills-readme-alignment-maintainer` | `project-docs-maintainer` (merged mode) |
+| `project-roadmap-manager` | `project-roadmap-maintainer` |
+| `workspace-cleanup-audit` | `project-workspace-cleaner` |
+| `things-mcp-reminder-wrapper` | `things-reminders-manager` |
+| `things-week-ahead-digest` | `things-digest-generator` |
 
-## Quick Start (Vercel Skills CLI)
+## Quick Start
 
-Use the Vercel `skills` CLI against this repository to install any skill directory you want to use. Or install them all conveniently with one command.
+Install the orchestrator first:
 
 ```bash
-# Install your choice of skill(s) interactively via the Vercel `skills` CLI
-# Using `npx` fetches `skills` without installing it on your machine
-npx skills add gaelic-ghost/productivity-skills
+npx skills add gaelic-ghost/productivity-skills --skill project-skills-orchestrator-agent
 ```
 
-The CLI will prompt you to choose which skill(s) to install from this repo.
+Then ask your agent to route your request and suggest any missing installs.
+
+## Install Individually
 
 ```bash
-# Install all skills from this repo non-interactively
+npx skills add gaelic-ghost/productivity-skills --skill project-skills-orchestrator-agent
+npx skills add gaelic-ghost/productivity-skills --skill project-docs-maintainer
+npx skills add gaelic-ghost/productivity-skills --skill project-roadmap-maintainer
+npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
+npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
+npx skills add gaelic-ghost/productivity-skills --skill things-digest-generator
+```
+
+Install all skills:
+
+```bash
 npx skills add gaelic-ghost/productivity-skills --all
 ```
 
-## Install individually by Skill
+## Update Installed Skills
 
 ```bash
-
-npx skills add gaelic-ghost/productivity-skills --skill docs-alignment-maintainer
-
-npx skills add gaelic-ghost/productivity-skills --skill skills-readme-alignment-maintainer
-
-npx skills add gaelic-ghost/productivity-skills --skill project-roadmap-manager
-
-npx skills add gaelic-ghost/productivity-skills --skill workspace-cleanup-audit
-
-npx skills add gaelic-ghost/productivity-skills --skill things-week-ahead-digest
-
-npx skills add gaelic-ghost/productivity-skills --skill things-mcp-reminder-wrapper
-```
-
-## Update Skills
-
-```bash
-# Check for available updates to installed Skills
 npx skills check
-# Update installed Skills
 npx skills update
 ```
-
-## More resources for similar Skills
-
-### Find Skills like these with the `skills` CLI by Vercel — [vercel-labs/skills](https://github.com/vercel-labs/skills)
-
-```bash
-npx skills find "workspace maintenance codex"
-npx skills find "readme alignment skill"
-npx skills find "productivity automation"
-```
-
-### Find Skills like these with the `Find Skills` Skill by Vercel — [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)
-
-```bash
-# `Find Skills` is a part of Vercel's `agent-skills` repo
-npx skills add vercel-labs/agent-skills --skill find-skills
-```
-
-Then ask your Agent for help finding a skill for "" or ""
-
-### Leaderboard
-
-- Skills catalog: [skills.sh](https://skills.sh/)
 
 ## Repository Layout
 
@@ -99,22 +68,26 @@ Then ask your Agent for help finding a skill for "" or ""
 .
 ├── README.md
 ├── LICENSE
-├── docs-alignment-maintainer/
-├── skills-readme-alignment-maintainer/
-├── project-roadmap-manager/
-├── workspace-cleanup-audit/
-├── things-week-ahead-digest/
-└── things-mcp-reminder-wrapper/
+├── AGENTS.md
+├── ROADMAP.md
+├── docs/
+│   └── agents-standards-snippets.md
+├── project-docs-maintainer/
+├── project-roadmap-maintainer/
+├── project-skills-orchestrator-agent/
+├── project-workspace-cleaner/
+├── things-digest-generator/
+└── things-reminders-manager/
 ```
 
 ## Notes
 
-- Each skill includes `references/automation-prompts.md` templates for Codex App and Codex CLI automation usage.
-- `docs-alignment-maintainer` is docs-focused only; AGENTS maintenance is intentionally out-of-scope.
+- Each skill keeps `SKILL.md` concise and pushes deeper details into `references/`.
+- `project-docs-maintainer` supports `workspace_docs_alignment` and `skills_readme_alignment` modes.
 
 ## Search Keywords
 
-Codex skills, productivity automation, docs alignment, README alignment, workspace cleanup, roadmap maintenance, Things planning, Things reminders, task deduplication.
+Codex skills, skills orchestration, docs alignment, roadmap maintenance, workspace cleanup, Things reminders, Things digest, productivity automation.
 
 ## License
 

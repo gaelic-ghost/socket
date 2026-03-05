@@ -1,4 +1,0 @@
-interface:
-  display_name: "Docs Alignment Maintainer"
-  short_description: "Audit and safely fix docs/project alignment."
-  default_prompt: "Use $docs-alignment-maintainer to scan a workspace for repo docs drift, apply safe fixes, and report Markdown plus JSON results."

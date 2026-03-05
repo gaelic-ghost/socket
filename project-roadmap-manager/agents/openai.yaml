@@ -1,4 +1,0 @@
-interface:
-  display_name: "Project Roadmap Manager"
-  short_description: "Maintain checklist ROADMAP milestones and ticket progress"
-  default_prompt: "Use $project-roadmap-manager to create, migrate, or update a project root checklist-style ROADMAP.md with milestone progress, Tickets, and Exit criteria kept in sync."

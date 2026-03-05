@@ -1,0 +1,4 @@
+interface:
+  display_name: "Things Reminders Manager"
+  short_description: "Deterministic Things reminder update-or-create workflow."
+  default_prompt: "Use $things-reminders-manager to normalize relative dates, check Things auth/token readiness, deduplicate matches, and perform update-first reminder mutations with explicit confirmation output."

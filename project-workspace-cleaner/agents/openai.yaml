@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Workspace Cleaner"
+  short_description: "Read-only workspace hygiene audit and cleanup prioritization."
+  default_prompt: "Use $project-workspace-cleaner to scan repositories under ~/Workspace for cleanup chores and rank findings by severity, size, and repository impact."

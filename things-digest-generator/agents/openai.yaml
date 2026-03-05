@@ -1,0 +1,4 @@
+interface:
+  display_name: "Things Digest Generator"
+  short_description: "Generate weekly Things digest and prioritized next actions."
+  default_prompt: "Use $things-digest-generator to summarize recent Things activity, upcoming week/weekend commitments, and concrete prioritized next actions."

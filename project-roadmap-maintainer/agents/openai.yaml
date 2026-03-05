@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Roadmap Maintainer"
+  short_description: "Maintain checklist ROADMAP milestones and progress."
+  default_prompt: "Use $project-roadmap-maintainer to create, migrate, or update a project root checklist ROADMAP.md while keeping milestone progress, tickets, and exit criteria synchronized."
