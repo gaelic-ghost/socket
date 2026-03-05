@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Skills Router Advise Install"
+  short_description: "Route requests and suggest install commands for missing skills"
+  default_prompt: "Use apple-skills-router-advise-install to map Apple development requests to the right skill and provide exact install commands when skills are missing."

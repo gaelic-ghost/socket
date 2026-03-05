@@ -1,0 +1,7 @@
+schemaVersion: 1
+isCustomized: false
+settings:
+  defaultRoutingPreference: "specific-skill-first"
+  preferPackSuggestions: true
+  installCommandStyle: "explicit"
+  includeAllOption: true
