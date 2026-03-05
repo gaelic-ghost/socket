@@ -2,22 +2,22 @@
 
 ## Overview
 
-This report describes the active skills in this repository after the naming-first workflow straightening pass completed on 2026-03-05.
+This report describes the active skills in this repository after the router-removal cleanup completed on 2026-03-05.
 
-Detailed workflow diagrams, path maps, and Agent ↔ User UX descriptions now live in `WORKFLOWS.md`.
+Maintainer-facing workflow diagrams, path maps, and Agent ↔ User UX descriptions now live in `WORKFLOWS.md`.
 
 Active skills:
 
-1. `apple-skills-router`
-2. `apple-xcode-workflow`
-3. `apple-dash-docsets`
-4. `apple-swift-package-bootstrap`
+1. `apple-xcode-workflow`
+2. `apple-dash-docsets`
+3. `apple-swift-package-bootstrap`
 
 Migration map:
 
-| Old ID | New ID |
+| Historical ID | Current State |
 | --- | --- |
-| `apple-skills-router-advise-install` | `apple-skills-router` |
+| `apple-skills-router-advise-install` | removed |
+| `apple-skills-router` | removed |
 | `apple-xcode-workflow-execute` | `apple-xcode-workflow` |
 | `apple-dash-docset-manage` | `apple-dash-docsets` |
 
@@ -51,29 +51,6 @@ Canonical status policy:
 
 ## Skill Summaries
 
-### `apple-skills-router`
-
-Purpose:
-
-- Route Apple and Swift requests to the best active skill.
-
-Primary workflow:
-
-1. Classify the request.
-2. Choose one target.
-3. Route to that target.
-
-Straightened behavior:
-
-- Install guidance is now a `fallback`, not a second primary workflow.
-- AGENTS guidance is now an external `handoff`, not a peer route target.
-
-Contract notes:
-
-- `status`: `success`, `handoff`, `blocked`
-- `path_type`: `primary`, `fallback`
-- Handoff contract: `skills/apple-skills-router/references/handoff-contract.md`
-
 ### `apple-xcode-workflow`
 
 Purpose:
@@ -93,6 +70,7 @@ Straightened behavior:
 
 - Mutation handling is now a `guard`, not a peer workflow.
 - Docs lookup is now an operation profile under the same execution engine, not a separate top-level track.
+- The skill is a top-level entry point and may recommend `apple-dash-docsets` or `apple-swift-package-bootstrap` directly when the user has shifted tasks.
 
 Contract notes:
 
@@ -118,6 +96,7 @@ Straightened behavior:
 
 - Default flow is now `search -> install -> generate`.
 - `generate` is terminal guidance, not a peer top-level workflow in practice.
+- The skill is a top-level entry point and may recommend `apple-xcode-workflow` for Apple execution work or `apple-swift-package-bootstrap` for new package creation.
 
 Contract notes:
 
@@ -143,6 +122,7 @@ Straightened behavior:
 
 - Manual `swift package init` is fallback-only guidance.
 - `tool` remains supported but is documented as an advanced explicit passthrough, not a default branch.
+- The skill is a top-level entry point for new Swift packages only and may recommend `apple-xcode-workflow` or `apple-dash-docsets` directly when the user moves into execution or docs work.
 
 Contract notes:
 
@@ -153,20 +133,16 @@ Contract notes:
 
 This pass aligned:
 
-- public skill IDs
-- directory names
-- `SKILL.md` frontmatter names
-- install commands
-- root docs
-- `WORKFLOWS.md`
-- handoff references
-- `agents/openai.yaml`
-- runtime `SKILL_NAME` constants used by customization state
+- the public skill surface back to three top-level skills
+- install commands and maintainer docs to the three-skill surface
+- `WORKFLOWS.md` to maintainer-only documentation
+- cross-skill recommendation language inside each remaining skill
+- per-skill local end-user AGENTS guidance references
 
 ## Follow-Up
 
 The remaining maintenance work is routine:
 
-- keep future skill additions on the `apple-<domain>-<purpose>` naming pattern
-- preserve one numbered primary workflow per skill
-- keep guards, fallbacks, and handoffs out of peer top-level workflow positions
+- preserve one top-level entry point per skill
+- keep skill-local operational resources self-contained
+- avoid reintroducing a repo-level Apple orchestrator layer

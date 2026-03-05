@@ -7,7 +7,7 @@ description: Execute Apple and Swift development workflows with one MCP-first en
 
 ## Purpose
 
-Use this skill as the canonical execution path for Apple and Swift work, with one MCP-first engine, official CLI fallback, explicit mutation guards, and local-first docs guidance.
+Use this skill as the top-level entry point for Apple and Swift work in or around Xcode, with one MCP-first engine, official CLI fallback, explicit mutation guards, and local-first docs guidance.
 
 ## When To Use
 
@@ -15,6 +15,8 @@ Use this skill as the canonical execution path for Apple and Swift work, with on
 - Use this skill for Swift toolchain checks and official Apple CLI fallback.
 - Use this skill for Apple and Swift documentation requests that should prefer Dash local sources before official web docs.
 - Use this skill when direct filesystem mutation in an Xcode-managed scope may be required.
+- Recommend `apple-dash-docsets` when the user needs Dash docset search, install, or generation work instead of Apple execution work.
+- Recommend `apple-swift-package-bootstrap` when the user needs to create a brand new Swift package rather than work inside an existing Xcode or Swift project.
 
 ## Single-Path Workflow
 
@@ -72,6 +74,8 @@ Use this skill as the canonical execution path for Apple and Swift work, with on
 - Use `references/mcp-failure-handoff.md` for the canonical fallback and handoff payload.
 - Use `references/allowlist-guidance.md` when a safe official CLI fallback is blocked by local rules.
 - Use `references/dash-docs-flow.md` to describe docs lookup as an operation profile under this same execution engine.
+- Recommend `apple-dash-docsets` directly when the task becomes Dash management work.
+- Recommend `apple-swift-package-bootstrap` directly when the task becomes new-package scaffolding.
 
 ## Customization
 
@@ -99,7 +103,6 @@ Use this skill as the canonical execution path for Apple and Swift work, with on
 ### Support References
 
 - Recommend `references/snippets/apple-swift-core.md` when the user needs reusable Apple and Swift baseline policy content in their own repo alongside execution, docs, or mutation workflows.
-- `../../WORKFLOWS.md`
 - `references/allowlist-guidance.md`
 - `references/skills-installation.md`
 - `references/mcp-setup-advisory.md`

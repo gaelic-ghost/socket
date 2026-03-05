@@ -1,4 +1,0 @@
-interface:
-  display_name: "Apple Skills Router"
-  short_description: "Route Apple requests and provide exact install guidance"
-  default_prompt: "Use apple-skills-router to choose the best active Apple skill in this repository, hand off to that skill directly, and return install guidance only as fallback when the target skill is missing."

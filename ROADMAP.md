@@ -2,11 +2,11 @@
 
 ## Current Milestone
 - ID: M10
-- Name: Post-Retirement Contract Hardening
-- Status: In Progress
-- Target Version: v3.1.0
+- Name: Top-Level Skill Reset
+- Status: Completed
+- Target Version: v3.2.0
 - Last Updated: 2026-03-05
-- Summary: Normalize public skill names, straighten workflow roles into primary or guard or fallback or handoff, and align root docs with the renamed four-skill surface.
+- Summary: Remove the router layer, restore three independent top-level skills, and realign docs around standalone skill entry points.
 
 ## Milestones
 | ID | Name | Target Version | Status | Target Date | Notes |
@@ -20,8 +20,8 @@
 | M7 | Claude Code Compatibility Completion | v1.7.0 | Completed | 2026-03-01 | Added grouped nested plugin manifest support. |
 | M8 | Canonical Skill v2.0.0 Consolidation | v2.0.0 | Completed | 2026-03-05 | Consolidated the repository around canonical Apple skills and extracted the shared Swift/Apple snippet. |
 | M9 | AGENTS Sync Skill Retirement | v3.0.0 | Completed | 2026-03-05 | Removed `apple-swift-package-agents-sync` from the active surface and replaced it with snippet-first guidance plus external docs-alignment recommendations. |
-| M10 | Post-Retirement Contract Hardening | v3.1.0 | In Progress | 2026-03-05 | Standardize skill contracts, rename skills for clarity, and straighten workflow roles into primary, guard, fallback, and handoff. |
-| M11 | Documentation Maintenance Cadence | v3.1.x | Planned | 2026-03-10 | Add lightweight periodic doc audits and report-refresh guidance for future skill changes. |
+| M10 | Top-Level Skill Reset | v3.2.0 | Completed | 2026-03-05 | Removed `apple-skills-router`, restored three independent top-level skills, and kept maintainer docs separate from skill-operational docs. |
+| M11 | Documentation Maintenance Cadence | v3.2.x | Planned | 2026-03-10 | Add lightweight periodic doc audits and report-refresh guidance for future skill changes. |
 
 ## Plan History
 ### 2026-03-05 - Accepted Plan (M8 -> M9 Transition)
@@ -67,6 +67,20 @@
   - Renames require root docs, metadata, references, and runtime `SKILL_NAME` constants to land together.
   - Users pinned to old IDs need explicit migration notes.
 
+### 2026-03-05 - Accepted Plan (M10 Router Removal and Three-Skill Reset)
+- Scope:
+  - Remove `apple-skills-router` entirely from the active surface.
+  - Keep `apple-xcode-workflow`, `apple-dash-docsets`, and `apple-swift-package-bootstrap` as parallel top-level skills.
+  - Separate maintainer docs from skill-operational docs and keep each installed skill standalone.
+- Acceptance Criteria:
+  - Active skill surface reduced from 4 to 3.
+  - Root docs no longer imply any Apple orchestrator or default front door.
+  - Each remaining skill can recommend local end-user AGENTS guidance and the other relevant top-level skills directly.
+  - Validation passes with only the three remaining skills.
+- Risks/Dependencies:
+  - Historical migration notes must remain clear without implying the router is still active.
+  - Skill-local docs must not depend on repo-root maintainer docs for operation.
+
 ## Change Log
 - 2026-02-28: Initialized roadmap for repository status and next-priority planning.
 - 2026-02-28: Closed documentation parity follow-ups and added CI guardrail workflow.
@@ -76,3 +90,5 @@
 - 2026-03-05: Completed M8 and M9 in the active repository surface.
 - 2026-03-05: Started M10 to normalize contracts, handoffs, and policy/runtime wording across active docs.
 - 2026-03-05: Expanded M10 to rename public skills for naming consistency and to straighten workflow roles across the active skill surface.
+- 2026-03-05: Expanded M10 again to remove the router layer and restore three independent top-level skills.
+- 2026-03-05: Completed M10 with the three-skill top-level surface and router removal.

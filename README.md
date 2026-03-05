@@ -1,17 +1,15 @@
 # apple-dev-skills
 
-Canonical Codex skills for Apple development workflows focused on Xcode execution, Dash docsets, Swift package bootstrap, and Apple-skill routing.
+Canonical Codex skills for Apple development workflows focused on Xcode execution, Dash docsets, and Swift package bootstrap.
 
 ## Active Skills
 
-- `apple-skills-router`
-  - Routes Apple and Swift requests to the right active skill and returns install guidance only as fallback when a skill is missing.
 - `apple-xcode-workflow`
-  - Canonical Apple and Swift execution workflow with one MCP-first engine, official CLI fallback, mutation guards, and local-first docs guidance.
+  - Top-level Apple and Swift skill for Xcode work, execution, diagnostics, toolchains, mutation decisions, and docs lookup.
 - `apple-dash-docsets`
-  - Manages Dash docsets through a straight stage flow: `search -> install -> generate`.
+  - Top-level Dash skill with one entry point and internal `search -> install -> generate` workflows.
 - `apple-swift-package-bootstrap`
-  - Deterministic Swift package bootstrap workflow with verification and `AGENTS.md` generation.
+  - Top-level skill for new Swift package scaffolding only, with verification and `AGENTS.md` generation.
 
 Every active skill now follows the same documentation contract:
 
@@ -20,7 +18,7 @@ Every active skill now follows the same documentation contract:
 - named `fallback` and `handoff` behavior
 - customization knobs labeled `policy-only` unless runtime enforcement exists
 
-Detailed workflow diagrams, input/output contracts, and Agent ↔ User UX maps live in [WORKFLOWS.md](./WORKFLOWS.md).
+Maintainer-facing workflow diagrams, input/output contracts, and Agent ↔ User UX maps live in [WORKFLOWS.md](./WORKFLOWS.md).
 
 ## Install
 
@@ -38,26 +36,25 @@ npx skills add gaelic-ghost/apple-dev-skills --all
 
 Common starting points:
 
-- Router:
-  `npx skills add gaelic-ghost/apple-dev-skills --skill apple-skills-router`
-- Xcode workflow:
+- Xcode work:
   `npx skills add gaelic-ghost/apple-dev-skills --skill apple-xcode-workflow`
-- Dash docsets:
+- Dash work:
   `npx skills add gaelic-ghost/apple-dev-skills --skill apple-dash-docsets`
-- Swift package bootstrap:
+- New Swift package bootstrap:
   `npx skills add gaelic-ghost/apple-dev-skills --skill apple-swift-package-bootstrap`
 
 ## Migration
 
-This pass normalized public skill names for clarity and consistency.
+This repo previously experimented with a router layer and later removed it.
 
-| Old ID | New ID |
+| Historical ID | Current State |
 | --- | --- |
-| `apple-skills-router-advise-install` | `apple-skills-router` |
+| `apple-skills-router-advise-install` | removed |
+| `apple-skills-router` | removed |
 | `apple-xcode-workflow-execute` | `apple-xcode-workflow` |
 | `apple-dash-docset-manage` | `apple-dash-docsets` |
 
-This is a naming and workflow-clarity cleanup. Update install commands, references, and automation prompts to the new IDs.
+The active public surface is now the three top-level skills listed above. Update install commands, references, and automation prompts accordingly.
 
 ## AGENTS Guidance
 
@@ -65,10 +62,11 @@ Repository-consumable Swift/Apple baseline policy snippet:
 
 - [shared/agents-snippets/apple-swift-core.md](./shared/agents-snippets/apple-swift-core.md)
 
-Use this snippet for cross-project standards that belong in `AGENTS.md`.
+Use this snippet for cross-project standards that belong in end-user `AGENTS.md`.
 
+- Each active skill ships its own local copy of this snippet so individually installed skills can recommend it directly.
 - For new Swift package repositories, `apple-swift-package-bootstrap` copies its full `assets/AGENTS.md` template, which already incorporates this baseline.
-- For existing repositories, use the shared snippet for targeted updates.
+- For existing repositories, use the shared snippet for targeted updates or the skill-local copies when reading an installed skill in isolation.
 - For cross-repo AGENTS drift and documentation alignment workflows, use dedicated docs-alignment skills maintained outside this repository.
 
 ## Retired Skill Note
@@ -88,7 +86,6 @@ Use this snippet for cross-project standards that belong in `AGENTS.md`.
 │   └── agents-snippets/
 │       └── apple-swift-core.md
 └── skills/
-    ├── apple-skills-router/
     ├── apple-xcode-workflow/
     ├── apple-dash-docsets/
     └── apple-swift-package-bootstrap/

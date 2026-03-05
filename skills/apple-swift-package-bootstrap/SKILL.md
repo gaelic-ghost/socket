@@ -7,13 +7,16 @@ description: Bootstrap new Swift Package Manager projects with consistent defaul
 
 ## Purpose
 
-Create a new Swift package repository with one deterministic scaffold path, explicit defaults, and verification grounded in the bundled bootstrap script.
+Create a new Swift package repository with one top-level entry point, one deterministic scaffold path, explicit defaults, and verification grounded in the bundled bootstrap script.
 
 ## When To Use
 
 - Use this skill for new Swift package scaffolding.
 - Use this skill when the user wants consistent package defaults, `AGENTS.md` generation, and immediate validation.
 - Use this skill when the user wants to customize the documented bootstrap defaults for future runs.
+- Do not use this skill as the default path for normal Xcode app collaboration work.
+- Recommend `apple-xcode-workflow` when the user is working in an existing Xcode project or needs Apple-platform execution after bootstrap.
+- Recommend `apple-dash-docsets` when the user needs Dash docset search, install, or generation work.
 
 ## Single-Path Workflow
 
@@ -87,6 +90,7 @@ Create a new Swift package repository with one deterministic scaffold path, expl
 - Use manual `swift package init` guidance only when the script is unavailable or the user explicitly asks for the manual path.
 - `tool` is an advanced explicit passthrough, not a default branch of the workflow.
 - After a successful scaffold, hand off build, test, or Apple-platform execution tasks to `apple-xcode-workflow`.
+- Recommend `apple-dash-docsets` directly when the user’s next step is Dash docset or cheatsheet management.
 
 ## Customization
 
@@ -108,7 +112,6 @@ Create a new Swift package repository with one deterministic scaffold path, expl
 ### Support References
 
 - Recommend `references/snippets/apple-swift-core.md` when the new package repo should start with reusable Apple and Swift baseline policy content next to the generated `AGENTS.md`.
-- `../../WORKFLOWS.md`
 - `assets/AGENTS.md`
 - `references/snippets/apple-swift-core.md`
 

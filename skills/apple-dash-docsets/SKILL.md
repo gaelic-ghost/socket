@@ -7,7 +7,7 @@ description: Manage Dash docsets and cheatsheets on macOS through a straight sta
 
 ## Purpose
 
-Manage Dash docsets and cheatsheets on macOS with a straight stage flow, explicit approval gates, and deterministic fallback order.
+Manage Dash docsets and cheatsheets on macOS with one top-level entry point, a straight internal stage flow, explicit approval gates, and deterministic fallback order.
 
 ## When To Use
 
@@ -15,6 +15,8 @@ Manage Dash docsets and cheatsheets on macOS with a straight stage flow, explici
 - Use this skill for Dash installation requests after search has identified a missing docset.
 - Use this skill for Dash generation guidance when installation cannot complete.
 - Use this skill when the user needs the exact fallback path between MCP, local HTTP, and URL or Service integration.
+- Recommend `apple-xcode-workflow` when the user needs Apple or Swift execution, diagnostics, build or test work, or Apple docs reasoning outside Dash management.
+- Recommend `apple-swift-package-bootstrap` when the user is starting a brand new Swift package rather than managing Dash content.
 
 ## Single-Path Workflow
 
@@ -74,6 +76,8 @@ Manage Dash docsets and cheatsheets on macOS with a straight stage flow, explici
 - `install` hands off to `generate` when no installable catalog match exists.
 - `generate` falls back from stable automation to deterministic manual guidance.
 - Use `references/stage-handoff-contract.md` when `search` transitions to `install` or `install` transitions to `generate`.
+- Recommend `apple-xcode-workflow` directly when the user’s task shifts from docs management to Apple or Swift execution work.
+- Recommend `apple-swift-package-bootstrap` directly when the user needs new Swift package scaffolding.
 
 ## Customization
 
@@ -98,7 +102,6 @@ Manage Dash docsets and cheatsheets on macOS with a straight stage flow, explici
 ### Support References
 
 - Recommend `references/snippets/apple-swift-core.md` when the user needs a reusable Apple and Swift baseline snippet in their own repo alongside Dash-based docs workflows.
-- `../../WORKFLOWS.md`
 - `references/catalog_built_in_docsets.json`
 - `references/catalog_user_contrib_docsets.json`
 - `references/catalog_cheatsheets.json`

@@ -1,6 +1,6 @@
 # Workflow Maps
 
-This document describes every active workflow in the `apple-dev-skills` repository, including branches, guards, fallbacks, handoffs, input and output contracts, and the user-facing interface between the user, the agent, and each skill.
+This document describes the maintainer-facing workflow view of the active skills in `apple-dev-skills`, including branches, guards, fallbacks, handoffs, input and output contracts, and the user-facing interface between the user, the agent, and each skill.
 
 ## Terminology
 
@@ -19,131 +19,34 @@ This document describes every active workflow in the `apple-dev-skills` reposito
 ```mermaid
 flowchart TD
     U["User request"] --> A["Agent classifies request"]
-    A --> R{"Needs routing help?"}
-    R -->|Yes| SR["apple-skills-router"]
-    R -->|No| D{"Direct skill fit?"}
-    D -->|Execution| X["apple-xcode-workflow"]
-    D -->|Dash docsets| DD["apple-dash-docsets"]
-    D -->|Swift package bootstrap| B["apple-swift-package-bootstrap"]
-    D -->|No clear fit| SR
-
-    SR --> SRX["Handoff to apple-xcode-workflow"]
-    SR --> SRD["Handoff to apple-dash-docsets"]
-    SR --> SRB["Handoff to apple-swift-package-bootstrap"]
-    SR --> SRA["Handoff to external AGENTS guidance"]
-    SR --> SRI["Fallback install guidance"]
-    SR --> SRBL["Blocked"]
-
-    SRX --> X
-    SRD --> DD
-    SRB --> B
+    A --> X["apple-xcode-workflow"]
+    A --> DD["apple-dash-docsets"]
+    A --> B["apple-swift-package-bootstrap"]
+    X --> XD["May recommend apple-dash-docsets"]
+    X --> XB["May recommend apple-swift-package-bootstrap"]
+    DD --> DX["May recommend apple-xcode-workflow"]
+    DD --> DB["May recommend apple-swift-package-bootstrap"]
+    B --> BX["May recommend apple-xcode-workflow"]
+    B --> BD["May recommend apple-dash-docsets"]
 ```
 
 ### Branch and Path Notes
 
-- The router is the entry point when the user needs help selecting the right skill or when the agent cannot confidently activate a single skill directly.
-- Direct activation remains valid when the user request clearly matches one active skill.
-- External AGENTS guidance is not an active skill in this repo. It is an intentional external handoff.
-- Install guidance is a router fallback, not a peer primary workflow.
+- The repo has no Apple router or orchestrator layer.
+- The three active skills are parallel top-level entry points for different situations.
+- Cross-skill recommendation is decentralized inside each skill.
+- End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 
 ### Agent ↔ User UX
 
 - Entry:
   - The user asks for Apple, Swift, Dash, or package-bootstrap help.
 - Agent behavior:
-  - The agent either activates the matching skill directly or uses the router to choose one.
+  - The agent chooses the best matching top-level skill directly and may recommend another top-level skill if the task shifts.
 - User-visible response:
-  - The user sees either direct progress inside a skill, a handoff to the next skill, fallback install guidance, or a blocked explanation.
+  - The user sees direct progress inside one of the three top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-  - The repo-level UX is a bundle of one router skill, one execution skill, one staged guidance skill, and one scaffold automation skill.
-
-## `apple-skills-router`
-
-### Purpose
-
-Route Apple and Swift requests to the best active skill in this repository.
-
-### Workflow Diagram
-
-```mermaid
-flowchart TD
-    I["Intent input"] --> C["Classify with routing matrix"]
-    C --> T{"Target resolved?"}
-    T -->|No| BL["Blocked"]
-    T -->|Xcode| X["apple-xcode-workflow"]
-    T -->|Dash| D["apple-dash-docsets"]
-    T -->|Bootstrap| B["apple-swift-package-bootstrap"]
-    T -->|AGENTS guidance| A["External AGENTS guidance"]
-    X --> AV{"Target available?"}
-    D --> AV
-    B --> AV
-    AV -->|Yes| HS["Success / primary route"]
-    AV -->|No| FI["Success / fallback install guidance"]
-    A --> HO["Handoff / primary"]
-```
-
-```mermaid
-flowchart LR
-    R["Resolved target"] --> M{"Missing?"}
-    M -->|No| ROUTE["Route directly"]
-    M -->|Yes| INSTALL["Return single-skill install command"]
-    ROUTE --> OUT1["status=success, path_type=primary"]
-    INSTALL --> OUT2["status=success, path_type=fallback"]
-```
-
-### Branch and Path Notes
-
-- The primary workflow is routing only.
-- Install guidance happens only when the resolved skill is missing.
-- External AGENTS guidance is a handoff, not a normal in-repo route target.
-- Repo-wide install remains optional convenience guidance after the single-skill fallback.
-
-### Inputs
-
-- Required:
-  - `intent`
-- Optional:
-  - `installed_skill`
-  - `repo_policy_scope`
-- Defaults:
-  - most-specific active skill first
-  - single-skill install preferred over repo-wide install
-  - AGENTS maintenance treated as external guidance
-
-### Outputs
-
-- `status`
-  - `success`
-  - `handoff`
-  - `blocked`
-- `path_type`
-  - `primary`
-  - `fallback`
-- Primary output fields:
-  - target skill or external guidance target
-  - next-step command when fallback install guidance is needed
-  - concise routing reason
-
-### Agent ↔ User UX
-
-- Entry:
-  - The user asks which Apple skill to use or gives an Apple request that does not clearly map to one active skill.
-- Agent behavior:
-  - The agent classifies the request, resolves one target, and either routes, hands off, or returns install fallback guidance.
-- User-visible response:
-  - On success: the user sees the selected skill and why it fits.
-  - On fallback: the user sees the exact install command.
-  - On handoff: the user sees the external AGENTS guidance path.
-  - On blocked: the user sees that the request is outside the active Apple skill surface.
-- Interaction style:
-  - Routing with lightweight fallback guidance.
-
-### Failure / Fallback / Handoff States
-
-- `success` + `primary`: direct route to one active skill
-- `success` + `fallback`: exact install guidance because the target skill is missing
-- `handoff` + `primary`: external AGENTS guidance
-- `blocked`: no supported route in this repo
+  - The repo-level UX is a bundle of three parallel top-level skills: one execution skill, one Dash management skill, and one new-package bootstrap skill.
 
 ## `apple-xcode-workflow`
 

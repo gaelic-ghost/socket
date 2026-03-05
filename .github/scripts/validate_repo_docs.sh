@@ -46,7 +46,6 @@ require_contains "README.md" 'WORKFLOWS.md'
 
 echo "Validating workflow document structure..."
 require_contains "WORKFLOWS.md" "## Repo Workflow Map"
-require_contains "WORKFLOWS.md" '## `apple-skills-router`'
 require_contains "WORKFLOWS.md" '## `apple-xcode-workflow`'
 require_contains "WORKFLOWS.md" '## `apple-dash-docsets`'
 require_contains "WORKFLOWS.md" '## `apple-swift-package-bootstrap`'
@@ -59,7 +58,7 @@ done < <(find . -type f -name SKILL.md \
   -not -path "./.git/*" \
   -not -path "./.github/*" \
   | sort)
-[[ ${#skill_mds[@]} -gt 0 ]] || fail "No skill directories found (missing SKILL.md files)."
+[[ ${#skill_mds[@]} -eq 3 ]] || fail "Expected exactly 3 active skills, found ${#skill_mds[@]}."
 
 shared_snippet="./shared/agents-snippets/apple-swift-core.md"
 [[ -f "$shared_snippet" ]] || fail "Missing shared snippet: $shared_snippet"
@@ -102,5 +101,6 @@ echo "Validating workflow document content..."
 grep -q '```mermaid' WORKFLOWS.md || fail "WORKFLOWS.md must contain Mermaid diagrams."
 grep -q 'Agent ↔ User UX' WORKFLOWS.md || fail "WORKFLOWS.md must describe Agent ↔ User UX."
 grep -q 'Failure / Fallback / Handoff States' WORKFLOWS.md || fail "WORKFLOWS.md must describe failure, fallback, and handoff states."
+! grep -q 'apple-skills-router' WORKFLOWS.md || fail "WORKFLOWS.md must not mention apple-skills-router."
 
 echo "All validation checks passed."
