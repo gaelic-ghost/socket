@@ -53,25 +53,25 @@ Exit criteria:
 - [x] Docs maintenance behavior remains available via explicit modes.
 - [x] Orchestrator emits exact install commands and never auto-installs.
 
-## Milestone 2: Validation hardening and snippet adoption
+## Milestone 2: Validation hardening and maintainer-doc cleanup
 
 Scope:
 
 - Validate metadata and reference consistency after refactor.
-- Promote reusable AGENTS standards snippets for end users.
+- Reduce repo-maintainer docs to the durable operating set.
 
 Tickets:
 
 - [ ] Run stale-name sweeps and reference-integrity checks.
 - [ ] Validate each skill `agents/openai.yaml` against current SKILL intent.
-- [ ] Socialize `docs/agents-standards-snippets.md` for copy/paste adoption.
+- [ ] Reduce maintainer docs to `AGENTS.md`, `docs/maintainers/reality-audit.md`, and `docs/maintainers/workflow-atlas.md`.
 - [x] Consolidate roadmap handling under `project-docs-maintainer` with `mode=roadmap_maintenance`.
 - [x] Keep `project-roadmap-maintainer` as a deprecation-cycle compatibility shim.
 
 Exit criteria:
 
 - [ ] No stale skill names remain outside migration docs.
-- [ ] Shared passive standards are documented and reusable.
+- [ ] Maintainer guidance is reduced to the durable operating set.
 - [x] Canonical roadmap ownership is documented under `project-docs-maintainer`.
 
 ## Risks and mitigations

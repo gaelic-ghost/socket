@@ -1,6 +1,6 @@
 # Repo Reality Audit
 
-This document is maintainer-only. It defines how to verify that repo docs match the code and that skill runtime resources stay self-contained.
+This document is maintainer-only. It is the operating guide for verifying that repo docs match the code and that skill runtime resources stay self-contained.
 
 ## Source Of Truth Order
 
@@ -51,10 +51,9 @@ If two layers disagree, fix the lower-trust layer or narrow its claims.
 
 ### Maintainer Surfaces
 
+- `AGENTS.md`
+- `docs/maintainers/reality-audit.md`
 - `docs/maintainers/workflow-atlas.md`
-- `docs/maintainers/documentation-rubric.md`
-- `docs/maintainers/documentation-tracker.md`
-- `docs/maintainers/agents-standards-snippets.md`
 
 ## Audit Procedure
 
@@ -74,6 +73,70 @@ Required checks:
 - exact phrases like `No findings.` match actual output
 - blocked/error branches are documented only if they really exist
 - compatibility aliases stay secondary
+
+## Review Rubric
+
+Use these criteria when closing a maintainer doc or a skill runtime surface.
+
+### Pass 1: Accurate and Current
+
+- Trigger clarity: `SKILL.md` frontmatter and `agents/openai.yaml` describe the same capability and trigger conditions.
+- Canonical naming: mode names, script names, config paths, and compatibility notes match the current repo.
+- Command accuracy: every documented command, flag, and file path exists.
+- Contract accuracy: documented outputs match the actual report fields, section order, or mutation result shape.
+- Deprecation accuracy: compatibility paths are clearly labeled as non-canonical and redirect to the right place.
+- Reference integrity: every referenced file exists and is the right source for the claim it supports.
+
+### Pass 2: Simplified and Durable
+
+- Single-path workflow: `SKILL.md` has one clear main path, not a menu of competing flows.
+- Section consistency: prefer `Inputs`, `Workflow`, `Output Contract`, `Guardrails`, and `References`.
+- Minimal primary surface: keep customization, automation templates, schemas, and examples in references unless they are first-class runtime behavior.
+- Naming consistency: use the same term everywhere for the same thing.
+- Input contract clarity: state required inputs, optional overrides, defaults, and config precedence without ambiguity.
+- Output contract clarity: state exactly what the user gets back and when exact clean-run text such as `No findings.` is valid.
+- Reference modularity: skill runtime docs stay inside the skill directory; repo-level docs stay maintainer-only.
+- Deprecated-path handling: compatibility notes stay brief and never overshadow the canonical path.
+
+### Completion Rule
+
+Mark a surface complete only when:
+
+- Pass 1 has no known drift against scripts, config files, current metadata, or current references.
+- Pass 2 leaves one clear primary workflow and removes unnecessary duplication from the main path.
+
+## Maintainer Conventions
+
+Use these conventions when editing repo-maintainer guidance.
+
+### Python execution baseline
+
+- Use `uv run` for Python commands (`uv run python`, `uv run pytest`, `uv run ruff check`, `uv run mypy`) unless project docs explicitly require otherwise.
+
+### Safety defaults
+
+- Never auto-commit changes.
+- Never auto-install dependencies or tools without explicit user confirmation.
+- Keep edits bounded to the requested scope.
+- When blocked, report the exact blocker and the next required user action.
+
+### Config precedence template
+
+1. CLI flags
+2. `config/customization.yaml`
+3. `config/customization.template.yaml`
+4. tool/script defaults
+
+### Output contract defaults
+
+- Provide a short human-readable summary.
+- Provide machine-readable JSON output when the workflow supports it.
+- Include touched files, unresolved issues, and explicit error details.
+
+### Relative date normalization default
+
+- Resolve relative date terms (`today`, `tomorrow`, `next Monday`) against current local date/time first.
+- Confirm scheduled dates in absolute form with timezone in user-visible output.
 
 ## Current Invariants
 

@@ -2,7 +2,7 @@
 
 This document is maintainer-only. It is the repo-level workflow reference for every skill in this repository.
 
-It diagrams real current workflows, captures their inputs and outputs, and describes the public Agent+Skill UX so maintainers can verify that runtime docs still match code. It is not part of installed skill runtime context.
+It diagrams real current workflows, captures their inputs and outputs, and describes the public Agent+Skill UX. Audit procedure, review criteria, and maintainer operating rules live in `docs/maintainers/reality-audit.md`.
 
 ## Repo-Wide Conventions
 

@@ -35,9 +35,8 @@ Applicability guidance:
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `references/`, `config/`, and `scripts/`.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.
-- Use `docs/maintainers/agents-standards-snippets.md` for maintainer-only reusable `AGENTS.md` snippets.
+- Use `docs/maintainers/reality-audit.md` as the maintainer operating guide for source-of-truth order, audit procedure, durable review criteria, and reusable repo-maintenance conventions.
 - Use `docs/maintainers/workflow-atlas.md` for repo-maintainer workflow diagrams, branch paths, workflow inputs/outputs, and Agent+Skill UX audits.
-- Use `docs/maintainers/reality-audit.md` as the source-of-truth map for checking docs against code.
 - Prefer logically grouped skills over splitting adjacent workflows into separate skills.
 - Within a grouped skill, define one primary workflow path and keep variants subordinate to that path.
 - Do not create a separate skill for an adjacent workflow unless it has materially different tools, inputs, outputs, and audience.
@@ -45,4 +44,4 @@ Applicability guidance:
 - If config changes workflow decisions or output contracts, surface that in the main workflow instead of hiding it only in references.
 - When docs and scripts disagree on a workflow contract, fix the script or explicitly narrow the documented contract so they match.
 
-See `docs/maintainers/` for repo-maintainer procedures and audit references.
+See `docs/maintainers/reality-audit.md` and `docs/maintainers/workflow-atlas.md` for the durable maintainer reference set.
