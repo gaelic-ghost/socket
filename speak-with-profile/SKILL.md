@@ -118,5 +118,5 @@ The local wrapper loads supported customization values from `config/customizatio
 ## Validation helper
 Use `scripts/validate_manifest.py` to verify required manifest keys:
 ```bash
-uv run python speak-with-profile/scripts/validate_manifest.py path/to/output/file.manifest.json
+uv run --group dev python speak-with-profile/scripts/validate_manifest.py path/to/output/file.manifest.json
 ```

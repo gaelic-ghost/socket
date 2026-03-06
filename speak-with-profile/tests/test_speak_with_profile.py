@@ -582,6 +582,3 @@ profiles:
         self.assertEqual(payload["playback_succeeded"], 1)
         self.assertEqual(payload["backend_mode"], "local-cli")
         self.assertEqual(payload["disclosure"], m.DEFAULT_DISCLOSURE)
-
-if __name__ == "__main__":
-    unittest.main()

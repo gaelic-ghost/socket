@@ -111,7 +111,7 @@ Use these conventions when editing repo-maintainer guidance.
 
 ### Python execution baseline
 
-- Use `uv run` for Python commands (`uv run python`, `uv run pytest`, `uv run ruff check`, `uv run mypy`) unless project docs explicitly require otherwise.
+- Use `uv run` for Python commands. In this repository, prefer the root dev baseline for maintainer workflows (`uv run --group dev pytest`, `uv run --group dev python`) unless project docs explicitly require otherwise.
 
 ### Safety defaults
 

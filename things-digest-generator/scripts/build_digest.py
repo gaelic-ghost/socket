@@ -128,7 +128,7 @@ def parse_args() -> argparse.Namespace:
 def require_yaml() -> None:
     if yaml is None:
         raise RuntimeError(
-            "Missing dependency: PyYAML. Run with `uv run --with pyyaml python "
+            "Missing dependency: PyYAML. Run with `uv run --group dev python "
             "scripts/build_digest.py ...`"
         )
 

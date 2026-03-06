@@ -20,6 +20,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [ ] Milestone 5: Speech summarization planning (planned)
 - [ ] Milestone 6: Default profile expansion planning (planned)
 - [ ] Milestone 7: Cross-agent speech compatibility planning (planned)
+- [x] Milestone 8: Python tooling and test standardization (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -176,6 +177,27 @@ Exit criteria:
 
 - [ ] The roadmap explicitly names Claude Code, Claude Desktop, OpenCode, and Aider as initial planning targets.
 - [ ] The milestone remains planning-only and does not imply existing multi-agent support.
+
+## Milestone 8: Python tooling and test standardization
+
+Scope:
+
+- Standardize repo-maintainer Python workflows around the root `uv` tool surface and `pytest`.
+- Add baseline smoke-test coverage for Python-backed skills that previously had scripts but no tests.
+
+Tickets:
+
+- [x] Add root `pytest` discovery settings for Python-backed skill test suites.
+- [x] Replace lingering ad hoc `PyYAML` execution guidance with the root `uv` dev baseline where appropriate.
+- [x] Standardize repo-maintainer Python command guidance on `uv run --group dev ...`.
+- [x] Add smoke tests for `project-docs-maintainer`, `project-workspace-cleaner`, and `things-digest-generator`.
+- [x] Remove stale direct `unittest` runner assumptions from the speech test surface.
+
+Exit criteria:
+
+- [x] `uv run --group dev pytest` works from repo root as the canonical Python test command.
+- [x] Python-backed skills with scripts have at least minimal deterministic smoke-test coverage.
+- [x] Repo docs and script dependency messages no longer point at ad hoc `uv --with ...` execution for maintained paths.
 
 ## Risks and mitigations
 
