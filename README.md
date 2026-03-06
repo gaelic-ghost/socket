@@ -18,7 +18,7 @@ Every active skill now follows the same documentation contract:
 - named `fallback` and `handoff` behavior
 - customization knobs labeled `policy-only` unless runtime enforcement exists
 
-Maintainer-facing workflow diagrams, input/output contracts, and Agent ↔ User UX maps live in [WORKFLOWS.md](./WORKFLOWS.md).
+Maintainer-facing workflow diagrams, input/output contracts, and Agent ↔ User UX maps live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md). Audit procedure and source-of-truth guidance live in [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
 
 ## Install
 
@@ -82,6 +82,10 @@ Use this snippet for cross-project standards that belong in end-user `AGENTS.md`
 .
 ├── README.md
 ├── ROADMAP.md
+├── docs/
+│   └── maintainers/
+│       ├── reality-audit.md
+│       └── workflow-atlas.md
 ├── shared/
 │   └── agents-snippets/
 │       └── apple-swift-core.md

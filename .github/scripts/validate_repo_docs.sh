@@ -21,18 +21,20 @@ echo "Validating roadmap presence..."
 echo "Validating root docs presence..."
 [[ -f README.md ]] || fail "Missing README.md at repo root."
 [[ -f AGENTS.md ]] || fail "Missing AGENTS.md at repo root."
-[[ -f WORKFLOWS.md ]] || fail "Missing WORKFLOWS.md at repo root."
+[[ -f docs/maintainers/workflow-atlas.md ]] || fail "Missing docs/maintainers/workflow-atlas.md."
+[[ -f docs/maintainers/reality-audit.md ]] || fail "Missing docs/maintainers/reality-audit.md."
 
 echo "Validating authoritative resource links in root docs..."
 required_resource_strings=(
   "/Users/galew/.codex/skills/.system/skill-creator/SKILL.md"
-  "https://developers.openai.com/codex/skills/"
+  "https://developers.openai.com/codex/skills"
   "https://developers.openai.com/codex/mcp/"
   "openaiDeveloperDocs"
   "\$openai-docs"
-  "https://docs.anthropic.com/en/docs/claude-code/sub-agents"
-  "https://docs.anthropic.com/en/docs/claude-code/ide-integrations"
-  "https://docs.anthropic.com/en/docs/claude-code/mcp"
+  "https://code.claude.com/docs/en/features-overview"
+  "https://code.claude.com/docs/en/skills"
+  "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices"
+  "https://code.claude.com/docs/en/plugins"
   "https://agentskills.io/home"
   "https://vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context"
 )
@@ -42,13 +44,25 @@ done
 
 echo "Validating README maintainer pointer..."
 require_contains "README.md" 'Maintainers: authoritative skill-authoring resources live in `AGENTS.md`.'
-require_contains "README.md" 'WORKFLOWS.md'
+require_contains "README.md" 'docs/maintainers/workflow-atlas.md'
+require_contains "README.md" 'docs/maintainers/reality-audit.md'
+
+echo "Validating AGENTS maintainer pointers..."
+require_contains "AGENTS.md" 'docs/maintainers/reality-audit.md'
+require_contains "AGENTS.md" 'docs/maintainers/workflow-atlas.md'
 
 echo "Validating workflow document structure..."
-require_contains "WORKFLOWS.md" "## Repo Workflow Map"
-require_contains "WORKFLOWS.md" '## `apple-xcode-workflow`'
-require_contains "WORKFLOWS.md" '## `apple-dash-docsets`'
-require_contains "WORKFLOWS.md" '## `apple-swift-package-bootstrap`'
+workflow_doc="docs/maintainers/workflow-atlas.md"
+require_contains "$workflow_doc" "## Repo Workflow Map"
+require_contains "$workflow_doc" '## `apple-xcode-workflow`'
+require_contains "$workflow_doc" '## `apple-dash-docsets`'
+require_contains "$workflow_doc" '## `apple-swift-package-bootstrap`'
+
+echo "Validating reality audit guide..."
+audit_doc="docs/maintainers/reality-audit.md"
+require_contains "$audit_doc" "## Source-of-Truth Order"
+require_contains "$audit_doc" "## Audit Procedure"
+require_contains "$audit_doc" "## Reporting Shape"
 
 echo "Validating skill directory layout..."
 skill_mds=()
@@ -98,9 +112,9 @@ for skill_md in "${skill_mds[@]}"; do
 done
 
 echo "Validating workflow document content..."
-grep -q '```mermaid' WORKFLOWS.md || fail "WORKFLOWS.md must contain Mermaid diagrams."
-grep -q 'Agent ↔ User UX' WORKFLOWS.md || fail "WORKFLOWS.md must describe Agent ↔ User UX."
-grep -q 'Failure / Fallback / Handoff States' WORKFLOWS.md || fail "WORKFLOWS.md must describe failure, fallback, and handoff states."
-! grep -q 'apple-skills-router' WORKFLOWS.md || fail "WORKFLOWS.md must not mention apple-skills-router."
+grep -q '```mermaid' "$workflow_doc" || fail "$workflow_doc must contain Mermaid diagrams."
+grep -q 'Agent ↔ User UX' "$workflow_doc" || fail "$workflow_doc must describe Agent ↔ User UX."
+grep -q 'Failure / Fallback / Handoff States' "$workflow_doc" || fail "$workflow_doc must describe failure, fallback, and handoff states."
+! grep -q 'apple-skills-router' "$workflow_doc" || fail "$workflow_doc must not mention apple-skills-router."
 
 echo "All validation checks passed."

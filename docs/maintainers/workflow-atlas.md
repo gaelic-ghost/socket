@@ -1,4 +1,4 @@
-# Workflow Maps
+# Workflow Atlas
 
 This document describes the maintainer-facing workflow view of the active skills in `apple-dev-skills`, including branches, guards, fallbacks, handoffs, input and output contracts, and the user-facing interface between the user, the agent, and each skill.
 
@@ -258,63 +258,51 @@ flowchart LR
   - The agent selects a stage, calls `run_workflow.py`, and uses the structured stage result to choose the right Dash access path instead of stitching helper scripts together manually.
 - User-visible response:
   - On success: the user sees what stage ran and what path completed it.
-  - On fallback: the user sees which secondary path completed the stage.
-  - On handoff: the user sees that the next stage is required and why.
-  - On blocked: the user sees the missing prerequisite, approval, or path failure.
+  - On handoff: the user sees the next stage and why it is needed.
+  - On blocked: the user sees the missing approval, missing request, or exhausted access path.
 - Interaction style:
-  - Staged guidance with explicit forward handoffs.
+  - Stage-based docs-management workflow with one forward handoff contract.
 
 ### Failure / Fallback / Handoff States
 
-- `success` + `primary`: selected stage completed normally
-- `success` + `fallback`: search or generate completed through documented fallback behavior
-- `handoff`: `search -> install` or `install -> generate`
-- `blocked`: no usable stage path remains
+- `success` + `primary`: selected stage completed on its normal path
+- `success` + `fallback`: selected stage completed on a documented fallback path
+- `handoff`: supporting context passed to the next Dash stage
+- `blocked`: no usable access path, missing approval, or missing stage input
 
 ## `apple-swift-package-bootstrap`
 
 ### Purpose
 
-Create one deterministic Swift package scaffold path through a runtime wrapper grounded in the bundled bootstrap script.
+Create a new Swift package repository with one top-level entry point. `scripts/run_workflow.py` is the runtime wrapper, and `scripts/bootstrap_swift_package.sh` remains the implementation core for scaffold creation and validation.
 
 ### Workflow Diagram
 
 ```mermaid
 flowchart TD
-    I["Scaffold inputs"] --> RW["run_workflow.py"]
-    RW --> N["Normalize aliases and defaults"]
-    N --> RUN["Run bootstrap script"]
-    RUN --> OK{"Script success?"}
-    OK -->|Yes| V["Verify generated repo"]
+    I["Bootstrap request"] --> N["Normalize aliases and defaults"]
+    N --> RW["run_workflow.py"]
+    RW --> BS["bootstrap_swift_package.sh"]
+    BS --> OK{"Scaffold succeeds?"}
+    OK -->|Yes| VERIFY["Verify repo contents and validation commands"]
     OK -->|No| FAIL["Failed"]
-    V --> VOK{"Verification success?"}
+    VERIFY --> VOK{"Verification succeeds?"}
     VOK -->|Yes| OUT1["Success / primary"]
     VOK -->|No| FAIL
 ```
 
 ```mermaid
 flowchart LR
-    MAIN["Primary script path unavailable?"] --> DEC{"Fallback allowed?"}
-    DEC -->|Yes| MANUAL["Manual swift package init guidance"]
-    DEC -->|No| BL["Blocked"]
-    MANUAL --> OUT["Success / fallback"]
-```
-
-```mermaid
-flowchart LR
-    DONE["Scaffold completed"] --> NEXT["Handoff to apple-xcode-workflow"]
-    TYPE{"Requested type?"} -->|library| LIB["Normal default"]
-    TYPE -->|executable| EXE["Normal CLI default"]
-    TYPE -->|tool| TOOL["Advanced explicit passthrough"]
+    B["Bundled script unavailable?"] --> M["Manual swift package init guidance"]
+    M --> OUT["Success / fallback"]
 ```
 
 ### Branch and Path Notes
 
-- `run_workflow.py` is the runtime entrypoint and `bootstrap_swift_package.sh` is the implementation core.
-- The primary workflow is always the bundled script.
-- Manual scaffold guidance is fallback-only.
-- `tool` stays supported, but only as an advanced explicit passthrough.
-- Post-bootstrap handoff goes to `apple-xcode-workflow` for build, test, or Apple-platform work.
+- `run_workflow.py` is the documented runtime entrypoint.
+- `scripts/bootstrap_swift_package.sh` remains the preferred scaffold path.
+- Manual `swift package init` guidance is a narrow fallback, not a peer primary workflow.
+- Successful scaffolds should hand off later execution work to `apple-xcode-workflow`.
 
 ### Inputs
 
@@ -333,7 +321,7 @@ flowchart LR
   - `destination=.`
   - `platform=multiplatform`
   - `version_profile=current-minus-one`
-  - validation enabled unless skipped
+  - validation runs unless `--skip-validation` is passed
 
 ### Outputs
 
@@ -353,20 +341,19 @@ flowchart LR
 ### Agent ↔ User UX
 
 - Entry:
-  - The user asks for a new Swift package scaffold or wants scaffold defaults explained.
+  - The user asks to create a new Swift package repo or customize bootstrap defaults.
 - Agent behavior:
-  - The agent gathers inputs, calls `run_workflow.py`, and uses the wrapper output instead of parsing shell behavior ad hoc.
+  - The agent resolves defaults through `run_workflow.py`, lets the wrapper invoke the bundled script, and reports the normalized result.
 - User-visible response:
   - On success: the user sees the created path, normalized options, and validation result.
-  - On fallback: the user sees manual scaffold guidance instead of the script path.
-  - On handoff: the user sees the next suggested execution skill.
-  - On blocked or failed: the user sees the exact prerequisite or execution failure.
+  - On fallback: the user sees the manual bootstrap path and why the bundled path was unavailable.
+  - On blocked: the user sees the missing prerequisite or unsafe target-directory condition.
 - Interaction style:
-  - Scaffold automation with one primary script path.
+  - Deterministic scaffolding workflow with one preferred script path and one manual fallback.
 
 ### Failure / Fallback / Handoff States
 
-- `success` + `primary`: bundled script completed and verification passed
-- `success` + `fallback`: manual scaffold guidance used
-- `blocked`: prerequisites or destination constraints prevent the run
-- `failed`: the script started but did not complete successfully
+- `success` + `primary`: bundled scaffold path completed successfully
+- `success` + `fallback`: manual scaffold guidance is being used instead of the script
+- `failed`: the bundled script started but did not complete
+- `blocked`: prerequisites or target-directory rules prevented the run

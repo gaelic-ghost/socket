@@ -1,12 +1,12 @@
 # Project Roadmap
 
 ## Current Milestone
-- ID: M10
-- Name: Top-Level Skill Reset
+- ID: M11
+- Name: Documentation Maintenance Cadence
 - Status: Completed
-- Target Version: v3.2.0
-- Last Updated: 2026-03-05
-- Summary: Remove the router layer, restore three independent top-level skills, and realign docs around standalone skill entry points.
+- Target Version: v3.2.1
+- Last Updated: 2026-03-06
+- Summary: Align root docs and maintainer validation with the actual `docs/maintainers/` contract, add a durable reality-audit guide, and keep the three-skill surface unchanged.
 
 ## Milestones
 | ID | Name | Target Version | Status | Target Date | Notes |
@@ -21,7 +21,8 @@
 | M8 | Canonical Skill v2.0.0 Consolidation | v2.0.0 | Completed | 2026-03-05 | Consolidated the repository around canonical Apple skills and extracted the shared Swift/Apple snippet. |
 | M9 | AGENTS Sync Skill Retirement | v3.0.0 | Completed | 2026-03-05 | Removed `apple-swift-package-agents-sync` from the active surface and replaced it with snippet-first guidance plus external docs-alignment recommendations. |
 | M10 | Top-Level Skill Reset | v3.2.0 | Completed | 2026-03-05 | Removed `apple-skills-router`, restored three independent top-level skills, and kept maintainer docs separate from skill-operational docs. |
-| M11 | Documentation Maintenance Cadence | v3.2.x | Planned | 2026-03-10 | Add lightweight periodic doc audits and report-refresh guidance for future skill changes. |
+| M11 | Documentation Maintenance Cadence | v3.2.1 | Completed | 2026-03-06 | Fixed stale maintainer-doc path assumptions, added a canonical reality-audit guide, and realigned validation with `docs/maintainers/`. |
+| M12 | Ongoing Audit Reporting | v3.2.x | Planned | 2026-03-13 | Refine the recurring maintainer audit/report cadence now that the canonical maintainer-doc contract is in place. |
 
 ## Plan History
 ### 2026-03-05 - Accepted Plan (M8 -> M9 Transition)
@@ -81,6 +82,21 @@
   - Historical migration notes must remain clear without implying the router is still active.
   - Skill-local docs must not depend on repo-root maintainer docs for operation.
 
+### 2026-03-06 - Accepted Plan (M11 Repo Reality Audit and Documentation Alignment)
+- Scope:
+  - Treat the current skills, scripts, and passing tests as the source of truth for maintainer-facing docs.
+  - Align root docs and maintainer-doc links to the canonical `docs/maintainers/` layout.
+  - Repair the repo docs validator so it checks the canonical maintainer docs instead of a stale root-level `WORKFLOWS.md`.
+  - Add a durable reality-audit guide for future documentation checks.
+- Acceptance Criteria:
+  - Root docs resolve to the actual maintainer-doc files on disk.
+  - Repo docs validation passes without requiring a root-level `WORKFLOWS.md`.
+  - Test health remains unchanged after documentation-only edits.
+  - The active public skill surface remains the same three top-level skills.
+- Risks/Dependencies:
+  - Root docs, maintainer docs, and validation rules must change together to avoid new drift.
+  - Historical roadmap notes must remain clearly historical and not imply the pre-fix drift is still current.
+
 ## Change Log
 - 2026-02-28: Initialized roadmap for repository status and next-priority planning.
 - 2026-02-28: Closed documentation parity follow-ups and added CI guardrail workflow.
@@ -92,3 +108,4 @@
 - 2026-03-05: Expanded M10 to rename public skills for naming consistency and to straighten workflow roles across the active skill surface.
 - 2026-03-05: Expanded M10 again to remove the router layer and restore three independent top-level skills.
 - 2026-03-05: Completed M10 with the three-skill top-level surface and router removal.
+- 2026-03-06: Completed M11 by aligning root docs and maintainer validation to the canonical `docs/maintainers/` layout and adding a reality-audit guide.
