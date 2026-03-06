@@ -80,14 +80,14 @@ The Markdown body has no required format, but if you want reliability, use a pre
 ### Additional Directories
 
 - `scripts/`: For executable helpers. Useful in supporting deterministic, repeatable, automatable steps in workflows.
-- `references/`: For longer documentation, checklists, templates, etc.
-- `assets/`: For static templates, output templates, sample configs, diagrams, etc.
+- `references/`: For longer documentation, checklists, internal templates, etc.
+- `assets/`: For static/output templates, diagrams, etc.
 
 ### Constraints on Skills (Config/Customization/Automation)
 
 Skills are installed by an end user for their Agent to make use of. Skill installation is typically handled by the Vercel `skills` CLI, and located in a managed directory that neither Skill, nor Agent, will have write access to. Keep this in mind when considering customizations and configuration.
 
-Some alternatives for user customization/config include using their Agent's memory or personalization features, an end user's global or project-level `AGENTS.md` file, or automation workflows such as Codex App Automations or Codex CLI exec workflows.
+Some alternatives for user customization/config include using their Agent's memory or personalization features, an end user's global or project-level `AGENTS.md` file, automation workflows such as Codex App Automations or Codex CLI exec workflows, and storing user-set custom configs within `~/.config/gaelic-ghost/<REPO>/<SKILL>/`.
 
 ## Repo-local Passive Standards
 
@@ -95,7 +95,7 @@ Some alternatives for user customization/config include using their Agent's memo
 - Keep skill instructions deterministic, concise, and safety-forward.
 - Implement all applicable YAML fields in the Frontmatter.
 - Never auto-install skills; report required commands and wait for user confirmation.
-- Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `references/`, `config/`, and `scripts/`.
+- Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.
 - Use `docs/maintainers/reality-audit.md` as the maintainer operating guide for source-of-truth order, audit procedure, durable review criteria, and reusable repo-maintenance conventions.
