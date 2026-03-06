@@ -4,6 +4,7 @@
 
 - For work in this repository, edit skills only under `/Users/galew/Workspace/productivity-skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
+- This file defines maintainer guidance for developing skills in this repository. Keep these links and rules at repo root for contributor workflows.
 
 ## Standards and Guidance
 
@@ -14,6 +15,7 @@ Consult these resources when creating, updating, reviewing, or sharing skills:
 - Skill Creator workflow: [$skill-creator](/Users/galew/.codex/skills/.system/skill-creator/SKILL.md)
 - OpenAI Codex Skills: [developers.openai.com/codex/skills](https://developers.openai.com/codex/skills)
 - OpenAI Codex AGENTS.md configuration: [developers.openai.com/codex/configuration/agents-md](https://developers.openai.com/codex/configuration/agents-md)
+- OpenAI Codex MCP documentation: [https://developers.openai.com/codex/mcp/](https://developers.openai.com/codex/mcp/)
 - Claude Code Features Overview: [code.claude.com/docs/en/features-overview](https://code.claude.com/docs/en/features-overview)
 - Claude Code Skills: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills)
 - Anthropic Agent Skills Best Practices: [platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
@@ -22,9 +24,9 @@ Consult these resources when creating, updating, reviewing, or sharing skills:
 
 Applicability guidance:
 
-- Always consult Skill Creator workflow for skill lifecycle work.
+- Always consult the `$skill-creator` workflow for skill lifecycle work: [/Users/galew/.codex/skills/.system/skill-creator/SKILL.md](/Users/galew/.codex/skills/.system/skill-creator/SKILL.md)
 - Always consult Agent Skills Standard and Vercel guidance for cross-platform standards alignment.
-- Consult OpenAI Codex docs when behavior is OpenAI/Codex specific.
+- When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
 
 ## Anatomy of an Agent Skill
