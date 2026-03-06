@@ -151,7 +151,7 @@ def dump_yaml(config: dict) -> str:
 
 
 def template_path() -> Path:
-    return Path(__file__).resolve().parents[1] / "customization.template.yaml"
+    return Path(__file__).resolve().parents[1] / "references" / "customization.template.yaml"
 
 
 def config_root() -> Path:

@@ -25,7 +25,7 @@ Use the highest-confidence artifact first and only fall back when the higher lay
 2. Check each active skill for the documented contract:
    - required headings in `SKILL.md`
    - `agents/openai.yaml`
-   - `customization.template.yaml`
+   - `references/customization.template.yaml`
    - `references/`
    - local snippet copy under `references/snippets/`
 3. Run the repo docs validator and treat failures as documentation-contract drift unless code assets prove otherwise.
