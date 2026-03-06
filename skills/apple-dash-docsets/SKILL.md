@@ -7,14 +7,14 @@ description: Manage Dash docsets and cheatsheets on macOS through a straight sta
 
 ## Purpose
 
-Manage Dash docsets and cheatsheets on macOS with one top-level entry point. `scripts/run_workflow.py` is the authoritative runtime path for stage selection, fallback order, source priority, approval gating, and structured generation guidance.
+Manage Dash docsets and cheatsheets on macOS with one top-level entry point. `scripts/run_workflow.py` is the authoritative runtime path for stage selection, fallback order, source priority, approval gating, and structured generation guidance; it does not replace the agent's own Dash access methods.
 
 ## When To Use
 
 - Use this skill for Dash search and discovery requests.
 - Use this skill for Dash installation requests after search has identified a missing docset.
 - Use this skill for Dash generation guidance when installation cannot complete.
-- Use this skill when the user needs the exact fallback path between MCP, local HTTP, and URL or Service integration.
+- Use this skill when the user needs the exact fallback path between agent-side Dash MCP usage, local HTTP, and URL or Service integration.
 - Recommend `apple-xcode-workflow` when the user needs Apple or Swift execution, diagnostics, build or test work, or Apple docs reasoning outside Dash management.
 - Recommend `apple-swift-package-bootstrap` when the user is starting a brand new Swift package rather than managing Dash content.
 
@@ -68,13 +68,13 @@ Manage Dash docsets and cheatsheets on macOS with one top-level entry point. `sc
 
 - Do not run install actions without explicit user approval.
 - Do not invent docset identifiers or catalog matches.
-- Stop with `blocked` when MCP, HTTP, and URL or Service paths are all unusable for `search`.
+- Stop with `blocked` when agent-side Dash MCP usage, HTTP, and URL or Service paths are all unusable for `search`.
 - Stop with `blocked` when `install` or `generate` lacks a concrete docset request.
 - Keep `search`, `install`, and `generate` in forward stage order; do not blend them into competing primary workflows.
 
 ## Fallbacks and Handoffs
 
-- `search` falls back in this order: MCP, local HTTP API, then URL or Service guidance.
+- `search` falls back in this order: agent-side Dash MCP usage, local HTTP API, then URL or Service guidance.
 - `install` hands off to `generate` when no installable catalog match exists.
 - `generate` falls back from stable automation to deterministic manual guidance.
 - Use `references/stage-handoff-contract.md` when `search` transitions to `install` or `install` transitions to `generate`.

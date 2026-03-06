@@ -52,7 +52,7 @@ flowchart TD
 
 ### Purpose
 
-Provide the canonical Apple and Swift execution workflow with one MCP-first engine and one local runtime-policy entrypoint.
+Provide the canonical Apple and Swift workflow guidance with one local runtime-policy entrypoint and one agent-side execution path.
 
 ### Workflow Diagram
 
@@ -61,7 +61,7 @@ flowchart TD
     I["Operation input"] --> C["Classify operation type"]
     C --> RW["run_workflow.py"]
     RW --> RC["Resolve workspace context and local policy"]
-    RC --> MCP["Agent runs MCP path"]
+    RC --> MCP["Agent uses MCP tools"]
     MCP --> OK{"MCP success?"}
     OK -->|Yes| OUT1["Success / primary"]
     OK -->|No| RT{"Transient failure?"}
@@ -98,7 +98,7 @@ flowchart LR
 - `run_workflow.py` is the local runtime entrypoint.
 - Mutation is a guard, not a second top-level workflow.
 - Docs lookup is an operation profile under the same execution engine.
-- Official CLI execution remains the only documented fallback plan for the primary workflow.
+- Official CLI execution remains the only documented fallback plan when the primary agent-side MCP path cannot complete.
 
 ### Inputs
 
@@ -137,7 +137,7 @@ flowchart LR
 - Entry:
   - The user asks for Apple or Swift execution, diagnostics, docs, toolchain, or mutation work.
 - Agent behavior:
-  - The agent classifies the operation, runs `run_workflow.py` for local policy and fallback planning, then executes MCP or the planned fallback path.
+  - The agent classifies the operation, runs `run_workflow.py` for local policy and fallback planning, then uses MCP tools or the planned fallback path.
 - User-visible response:
   - On success: the user sees the completed path and what ran.
   - On fallback: the user sees that CLI was used and why.
@@ -148,7 +148,7 @@ flowchart LR
 
 ### Failure / Fallback / Handoff States
 
-- `success` + `primary`: MCP path completed
+- `success` + `primary`: agent-side MCP path completed
 - `success` + `fallback`: official CLI fallback completed
 - `handoff`: supporting context passed to a later step or another skill
 - `blocked`: mutation guard failed, context missing, or safe fallback unavailable
@@ -187,7 +187,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    SEARCH["search"] --> MCP["MCP"]
+    SEARCH["search"] --> MCP["Agent uses Dash MCP"]
     MCP --> OK{"Success?"}
     OK -->|Yes| DONE["Success / primary"]
     OK -->|No| HTTP["HTTP API"]
@@ -255,7 +255,7 @@ flowchart LR
 - Entry:
   - The user asks to search Dash, install a missing docset, or get generation guidance.
 - Agent behavior:
-  - The agent selects a stage, calls `run_workflow.py`, and uses the structured stage result instead of stitching helper scripts together manually.
+  - The agent selects a stage, calls `run_workflow.py`, and uses the structured stage result to choose the right Dash access path instead of stitching helper scripts together manually.
 - User-visible response:
   - On success: the user sees what stage ran and what path completed it.
   - On fallback: the user sees which secondary path completed the stage.

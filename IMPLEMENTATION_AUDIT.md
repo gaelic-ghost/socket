@@ -33,7 +33,7 @@ This document records the current claim-vs-code status for the three active skil
 
 ### Implemented By Agent/Tool Layer
 
-- Dash MCP execution remains agent-side when `search` selects `mcp`.
+- Dash MCP usage remains agent-side when `search` selects `mcp`.
 - Real Dash UI launch side effects still rely on the local `open` command via helper scripts.
 
 ### Docs-Only And Reduced
