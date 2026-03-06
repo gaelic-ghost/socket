@@ -26,11 +26,13 @@ This repository standardizes maintainer-side Python tooling around `uv`.
 
 ```bash
 uv sync --dev
+bash .github/scripts/sync_apple_swift_core_snippet.sh
 bash .github/scripts/validate_repo_docs.sh
 uv run pytest
 ```
 
 Use `uv run python ...` for repo-local Python helper execution and validation.
+Run the snippet sync script before validation whenever `shared/agents-snippets/apple-swift-core.md` changes.
 
 ## Install
 
