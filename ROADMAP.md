@@ -210,3 +210,5 @@ Exit criteria:
 
 - Add lightweight validation tooling for SKILL/frontmatter/openai.yaml alignment.
 - Add validation checks for README layout and skill inventory consistency.
+- Add broader automated testing for Things workflow surfaces, including deterministic validation paths where feasible.
+- Decide the `speak-with-profile` e2e test strategy, including whether to use a fake downstream CLI, real tool integration, or a bounded hybrid approach.
