@@ -39,6 +39,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - Required: a feature, request, event, job, datum, or code path to follow
 - Optional: detail level (`quick`, `standard`, `thorough`)
 - Optional: focus modifiers such as data-shape-heavy, branch-heavy, boundary-heavy, or debugging-oriented
+- Trigger surface includes both explicit domain language and natural phrasing such as `walk me through this`, `follow this through the code`, `what calls this`, and `where does this data go next`
 
 **Branch Conditions**
 
@@ -88,6 +89,7 @@ flowchart TD
 - Required: two slice targets or two versions of one slice
 - Optional: detail level (`quick`, `standard`, `thorough`)
 - Optional: same focus modifiers as the primary workflow
+- Trigger surface includes comparison phrasing such as `compare these flows`, `what changed between the old and new path`, and `compare how these code paths move data`
 
 **Branch Conditions**
 

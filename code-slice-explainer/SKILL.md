@@ -1,16 +1,6 @@
 ---
 name: code-slice-explainer
-description: Explain a bounded code slice end to end with data shape first, then full execution flow, boundaries, branch points, transformations, and final output. Use when users ask for a pipeline, execution flow, request lifecycle, data flow, trace, walkthrough, or how a part of a codebase works.
-license: Apache-2.0
-compatibility:
-  platforms:
-    - codex
-metadata:
-  version: 1.0.0
-  owner: gaelic-ghost
-  source_repo: https://github.com/gaelic-ghost/productivity-skills
-  category: code
-  domain: explanation
+description: Use this skill when the user wants a code path, flow, pipeline, request lifecycle, trace, walkthrough, or part of a system explained step by step from start to finish. Explain where data comes from, what shape it has, who sends it, why it enters the flow, what calls what next, where branches and boundaries happen, how data transforms, and what comes out at the end. Also use this when the user asks things like “walk me through this,” “follow this through the code,” “show me the path,” “what calls this,” “where does this data come from,” “where does it go next,” “why is this shaped like this,” “how does this part work,” or when they want two flows compared.
 ---
 
 # Code Slice Explainer
@@ -98,6 +88,8 @@ First explain each slice clearly enough to stand on its own. Then compare:
 - output differences
 - why the two paths diverge
 
+Treat comparison requests as first-class trigger cases, not as an advanced follow-up.
+
 ## Detail levels
 
 - `quick`: keep each step brief, but still include every meaningful step in order.
@@ -126,6 +118,12 @@ The writing should stay conversational and narrative-first. Avoid sterile dumps,
 - Prefer concrete file/function references when available.
 - Keep branch and data-shape notes short and move clutter out of the main narrative when a marker note will do.
 
+## Validation
+
+- Validate the skill with `uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py code-slice-explainer`.
+- Keep `agents/openai.yaml` aligned with the final trigger wording in this skill.
+- Use `references/trigger-eval.md` to audit whether the description is broad enough to catch natural phrasing and comparison requests.
+
 ## References
 
 - Output contract: `references/output-contract.md`
@@ -133,3 +131,4 @@ The writing should stay conversational and narrative-first. Avoid sterile dumps,
 - Diagram rules: `references/diagram-format.md`
 - Comparison workflow: `references/comparison-workflow.md`
 - Example prompts: `references/example-prompts.md`
+- Trigger evaluation prompts: `references/trigger-eval.md`

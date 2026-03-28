@@ -12,6 +12,20 @@ Use $code-slice-explainer to explain the slice for saving a new reminder. Start 
 Explain this slice at quick detail: how does the login request move through this codebase from the initial trigger to the final response?
 ```
 
+## Natural phrasing
+
+```text
+Walk me through this from start to finish.
+```
+
+```text
+Follow this value through the code and tell me where it comes from, where it changes shape, and where it ends up.
+```
+
+```text
+What calls this, what does it call next, and why is the data shaped like that?
+```
+
 ## Thorough walkthrough
 
 ```text
@@ -28,4 +42,12 @@ Use $code-slice-explainer to explain the file-upload slice with a debugging focu
 
 ```text
 Compare these two slices at standard detail: the old checkout flow and the new checkout flow. Explain each path clearly, then compare where their triggers, transformations, boundaries, and outputs differ.
+```
+
+```text
+Show me what changed between the old flow and the new one, step by step.
+```
+
+```text
+Compare how these two code paths move data from input to output.
 ```

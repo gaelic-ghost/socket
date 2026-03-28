@@ -76,6 +76,7 @@ Required checks:
 - exact phrases like `No findings.` match actual output
 - blocked/error branches are documented only if they really exist
 - compatibility aliases stay secondary
+- trigger wording is broad enough to match the intended natural-language request shapes for the skill
 
 ## Review Rubric
 
@@ -89,6 +90,7 @@ Use these criteria when closing a maintainer doc or a skill runtime surface.
 - Contract accuracy: documented outputs match the actual report fields, section order, or mutation result shape.
 - Deprecation accuracy: compatibility paths are clearly labeled as non-canonical and redirect to the right place.
 - Reference integrity: every referenced file exists and is the right source for the claim it supports.
+- Trigger coverage: if a skill depends on wide natural-language activation, its references include realistic should-trigger and should-not-trigger examples.
 
 ### Pass 2: Simplified and Durable
 
@@ -100,6 +102,21 @@ Use these criteria when closing a maintainer doc or a skill runtime surface.
 - Output contract clarity: state exactly what the user gets back and when exact clean-run text such as `No findings.` is valid.
 - Reference modularity: skill runtime docs stay inside the skill directory; repo-level docs stay maintainer-only.
 - Deprecated-path handling: compatibility notes stay brief and never overshadow the canonical path.
+- Trigger realism: frontmatter descriptions bias toward user intent and real phrasing, not only internal terminology.
+
+## Trigger Audit Workflow
+
+Use this when a skill depends heavily on natural-language routing.
+
+1. Read the `SKILL.md` frontmatter description first.
+2. Check `agents/openai.yaml` to confirm the UI metadata matches the same trigger surface.
+3. Review the skill-local trigger-eval prompts when present.
+4. Confirm the description covers:
+   - direct domain terms
+   - indirect natural-language asks
+   - terse phrasing
+   - comparison asks when comparison is part of the skill
+5. If the skill is intentionally wide-trigger, prefer false-positive tolerance over missed intended activations.
 
 ### Completion Rule
 

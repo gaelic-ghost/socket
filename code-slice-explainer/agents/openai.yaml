@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Slice Explainer"
-  short_description: "Explain one bounded code slice end to end with data shape, execution flow, branches, boundaries, and outputs."
-  default_prompt: "Use $code-slice-explainer to explain one slice from trigger to final output. Start with incoming data shape and purpose, then walk every meaningful step in order, include a simple diagram with branch/data markers, and keep the response at the requested detail level without omitting steps."
+  short_description: "Explain code paths, flows, and slices step by step."
+  default_prompt: "Use $code-slice-explainer to explain or compare a code path from trigger to final output. Start with incoming data shape and purpose, then walk every meaningful step in order, including branches, boundaries, transformations, and a simple diagram with notes."
