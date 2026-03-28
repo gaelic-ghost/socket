@@ -32,6 +32,9 @@ If two layers disagree, fix the lower-trust layer or narrow its claims.
 
 ### Skill Runtime Surfaces
 
+- `code-slice-explainer`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
 - `project-docs-maintainer`
   - Scripts: `scripts/skills_readme_maintenance.py`, `scripts/roadmap_alignment_maintainer.py`
   - Metadata: `agents/openai.yaml`

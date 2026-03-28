@@ -17,10 +17,105 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
+| `code-slice-explainer` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `project-docs-maintainer` | Canonical maintainer for `*-skills` README drift and checklist roadmap maintenance | `skills_readme_maintenance`, `roadmap_maintenance` |
 | `project-workspace-cleaner` | Read-only cleanup audit | findings path, clean run, partial-results branch |
 | `things-digest-generator` | Things planning digest builder | MCP-first, JSON fallback, executive output, clean run, missing-input failure |
 | `things-reminders-manager` | Things reminder mutation workflow | create, update, `duplicatePolicy=ask-first`, `onUpdateWithoutToken` variants, blocked/disambiguation |
+
+## `code-slice-explainer`
+
+### Workflow: `explain a slice`
+
+**Overview**
+
+- Triggered when the user wants one bounded end-to-end walkthrough of how part of a codebase works.
+- Primary workflow.
+- `read-only`
+
+**Inputs**
+
+- User intent selecting a slice explanation
+- Required: a feature, request, event, job, datum, or code path to follow
+- Optional: detail level (`quick`, `standard`, `thorough`)
+- Optional: focus modifiers such as data-shape-heavy, branch-heavy, boundary-heavy, or debugging-oriented
+
+**Branch Conditions**
+
+- Ambiguous entrypoint: explain the most likely slice and name the uncertainty
+- Multiple meaningful branches: keep the mainline readable and note the alternates
+- Incomplete code evidence: state uncertainty explicitly instead of inventing missing behavior
+
+**Outputs**
+
+- Structured narrative with `Slice summary`, `Walkthrough`, `Diagram`, and `Notes`
+- Complete step chain in execution order
+- Simple numbered diagram with branch markers and data-shape markers
+
+**Public Interface / UX**
+
+- The Agent presents this as a conversational slice walkthrough.
+- The explanation begins with the incoming data shape and why it is entering the flow.
+- The walkthrough then follows every meaningful step in order through boundaries, branch points, and transformations.
+- The user can change detail density without losing meaningful steps.
+
+**Diagram**
+
+```mermaid
+flowchart TD
+  A["User asks how a part of the code works"] --> B["Identify bounded slice"]
+  B --> C["Describe trigger and incoming data shape"]
+  C --> D["Walk each execution step in order"]
+  D --> E{"Branch point?"}
+  E -- "yes" --> F["Mark branch and explain alternate path in notes"]
+  E -- "no" --> G["Continue mainline path"]
+  F --> H["Continue to output path"]
+  G --> H
+  H --> I["Describe final output shape and consumer"]
+```
+
+### Workflow: `compare slices`
+
+**Overview**
+
+- Triggered when the user wants to compare two related slices or two implementations of one slice.
+- Variant workflow.
+- `read-only`
+
+**Inputs**
+
+- User intent selecting a comparison
+- Required: two slice targets or two versions of one slice
+- Optional: detail level (`quick`, `standard`, `thorough`)
+- Optional: same focus modifiers as the primary workflow
+
+**Branch Conditions**
+
+- Slices partially overlap: identify where they converge and diverge
+- One slice is a branch of the other: say that directly
+- Uneven evidence quality between the two slices: keep the comparison grounded and explicit about uncertainty
+
+**Outputs**
+
+- Two grounded slice explanations or concise summaries, depending on scope
+- Comparison commentary covering trigger, data-shape, execution, boundary, branch, and output differences
+
+**Public Interface / UX**
+
+- The Agent should first make both paths understandable on their own.
+- The comparison should stay tied to real execution and contract differences, not just filenames or component names.
+- The user should be able to see why the slices differ, not only that they differ.
+
+**Diagram**
+
+```mermaid
+flowchart TD
+  A["User asks to compare two slices"] --> B["Identify slice A and slice B"]
+  B --> C["Explain slice A"]
+  B --> D["Explain slice B"]
+  C --> E["Compare triggers, data shapes, branches, boundaries, and outputs"]
+  D --> E
+```
 
 ## `project-docs-maintainer`
 

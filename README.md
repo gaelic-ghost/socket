@@ -1,6 +1,6 @@
 # productivity-skills
 
-Curated Codex skills for productivity workflows, maintenance automation, operational hygiene, and reusable speech-output tasks.
+Curated Codex skills for productivity workflows, maintenance automation, code-understanding walkthroughs, operational hygiene, and reusable speech-output tasks.
 
 For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
@@ -19,12 +19,14 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
 ## What These Agent Skills Help With
 
-This repository packages reusable Codex skills for canonical docs maintenance, read-only workspace hygiene, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
+This repository packages reusable Codex skills for canonical docs maintenance, read-only workspace hygiene, code-slice walkthroughs, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
 
 ## Skill Guide (When To Use What)
 
 - `project-docs-maintainer`
   - Canonical maintainer for `*-skills` README drift and checklist roadmap maintenance through explicit modes.
+- `code-slice-explainer`
+  - End-to-end slice walkthroughs for pipelines, execution flows, request lifecycles, traces, and code-path explanations with data shape first.
 - `project-workspace-cleaner`
   - Read-only workspace hygiene scanner that ranks cleanup chores.
 - `things-reminders-manager`
@@ -57,6 +59,7 @@ Canonical installs:
 
 ```bash
 npx skills add gaelic-ghost/productivity-skills --skill project-docs-maintainer
+npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
 npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
 npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
 npx skills add gaelic-ghost/productivity-skills --skill things-digest-generator
@@ -73,6 +76,7 @@ npx skills add gaelic-ghost/productivity-skills --all
 
 ```bash
 npx skills add gaelic-ghost/productivity-skills --skill project-docs-maintainer
+npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
 npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
 npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
 npx skills add gaelic-ghost/productivity-skills --skill things-digest-generator
@@ -92,6 +96,7 @@ npx skills update
 
 ```bash
 npx skills find "skills readme maintenance"
+npx skills find "code slice walkthrough"
 npx skills find "workspace cleanup automation"
 npx skills find "things productivity automation"
 npx skills find "text to speech workflow"
@@ -116,6 +121,7 @@ Then ask your Agent for help finding a skill for "" or ""
 .
 ├── README.md
 ├── AGENTS.md
+├── code-slice-explainer/
 ├── docs/
 │   └── maintainers/
 ├── project-docs-maintainer/
@@ -133,7 +139,7 @@ Then ask your Agent for help finding a skill for "" or ""
 
 ## Keywords
 
-Codex skills, skills README maintenance, roadmap maintenance, workspace cleanup, Things reminders, Things digest, productivity automation, text-to-speech, audio summaries, narrated notes.
+Codex skills, code walkthrough, slice explanation, execution flow, request lifecycle, pipeline explanation, data flow, skills README maintenance, roadmap maintenance, workspace cleanup, Things reminders, Things digest, productivity automation, text-to-speech, audio summaries, narrated notes.
 
 ## License
 

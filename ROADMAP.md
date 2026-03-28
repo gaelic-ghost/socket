@@ -21,6 +21,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [ ] Milestone 6: Default profile expansion planning (planned)
 - [ ] Milestone 7: Cross-agent speech compatibility planning (planned)
 - [x] Milestone 8: Python tooling and test standardization (completed)
+- [x] Milestone 9: Code slice walkthrough skill (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -198,6 +199,28 @@ Exit criteria:
 - [x] `uv run --group dev pytest` works from repo root as the canonical Python test command.
 - [x] Python-backed skills with scripts have at least minimal deterministic smoke-test coverage.
 - [x] Repo docs and script dependency messages no longer point at ad hoc `uv --with ...` execution for maintained paths.
+
+## Milestone 9: Code slice walkthrough skill
+
+Scope:
+
+- Add a reusable skill for end-to-end code-slice explanation.
+- Normalize pipeline, execution-flow, request-lifecycle, and data-flow requests onto one canonical slice workflow.
+- Keep explanation completeness invariant while making explanation density adjustable.
+
+Tickets:
+
+- [x] Add standalone `code-slice-explainer` skill with a canonical slice vocabulary.
+- [x] Define a structured narrative output contract with summary, walkthrough, diagram, and notes.
+- [x] Add detail-level guidance for `quick`, `standard`, and `thorough` without allowing omitted meaningful steps.
+- [x] Add a slice-comparison workflow for old/new or side-by-side path explanation.
+- [x] Update public repo inventory and install guidance to include the new skill.
+
+Exit criteria:
+
+- [x] The repository contains a standalone skill for slice walkthroughs.
+- [x] The skill treats data shape first and execution flow second as the canonical explanation order.
+- [x] The skill documents a simple diagram format with branch and data-shape markers.
 
 ## Risks and mitigations
 
