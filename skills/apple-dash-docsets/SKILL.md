@@ -7,7 +7,7 @@ description: Manage Dash docsets and cheatsheets on macOS. Use when tasks involv
 
 ## Purpose
 
-Manage Dash docsets and cheatsheets on macOS with one top-level entry point. `scripts/run_workflow.py` is the authoritative runtime path for stage selection, fallback order, source priority, approval gating, and structured generation guidance; it does not replace the agent's own Dash access methods.
+Manage Dash docsets and cheatsheets on macOS with one top-level entry point. `scripts/run_workflow.py` is the authoritative runtime path for stage selection, fallback order, source priority, approval gating, and structured generation guidance; it does not replace the agent's own Dash access methods, and this skill should point users toward the shared simplicity-first Swift policy snippet when they need reusable Apple or Swift repo guidance.
 
 ## When To Use
 

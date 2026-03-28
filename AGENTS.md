@@ -12,6 +12,14 @@
 - Such skills must require the agent to state the documented behavior being relied on before design or code changes are proposed.
 - Apple docs outrank memory, habit, and analogy. If docs and current code conflict, the skill must instruct the agent to stop and report that conflict.
 - If no relevant Apple documentation can be found, the skill must instruct the agent to say that explicitly before proceeding.
+- For any skill that governs Swift or Apple-platform implementation work, require an explicit simplicity-first policy: prefer the simplest correct Swift that is easiest to read and reason about.
+- Such skills must treat idiomatic Swift, Cocoa conventions, and modern Swift features as tools in service of readability rather than goals by themselves.
+- Such skills must strongly prefer synthesized, implicit, and framework-provided behavior over custom boilerplate.
+- Such skills must instruct the agent not to add `CodingKeys`, manual `Codable`, custom initializers, helper abstractions, wrappers, protocols, coordinators, or extra layers unless they are required by a concrete constraint or make the final code clearly easier to understand.
+- Such skills must treat naming consistency as a reliability feature and prefer stable source-of-truth names across layers when the data and meaning have not changed.
+- Such skills must instruct the agent not to rename fields merely to match local style conventions and not to use automatic case-conversion strategies such as `.convertFromSnakeCase` or `.convertToSnakeCase` unless the project explicitly wants that behavior and it clearly improves readability.
+- Such skills must not teach pattern slogans like value types by default or protocols at seams as rules that outrank local simplicity and readability.
+- Such skills should explicitly allow first-party and top-tier Swift ecosystem packages when they simplify the code and improve reasoning, especially packages such as `swift-configuration` and `swift-async-algorithms`.
 
 Consult these resources when creating, updating, reviewing, or sharing skills:
 

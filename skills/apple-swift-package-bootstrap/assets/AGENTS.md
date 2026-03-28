@@ -20,37 +20,43 @@
 
 ## Swift Coding Preferences
 
-- Use idiomatic Swift and Cocoa-style naming conventions.
+- Prefer the simplest correct Swift that is easiest to read, reason about, and maintain.
+- Treat idiomatic Swift and Cocoa-style naming conventions as tools in service of readability, not goals by themselves.
 - Prefer explicit, consistent, and unambiguous names.
-- Prefer compact and concise code; use shorthand syntax when readability remains high.
-- Prefer trailing-closure syntax when it improves clarity.
-- Avoid deep nesting; refactor into focused helpers and types.
+- Prefer compact and concise code; use shorthand syntax and trailing-closure syntax when readability improves.
+- Do not add boilerplate, helper types, or extra layers just to make code look more architectural or more "Swifty".
+- Strongly prefer synthesized, implicit, and framework-provided behavior over handwritten setup code.
+- Prefer stable, source-of-truth naming across layers when the data and meaning have not changed.
+- Treat naming consistency as a reliability feature: if the same data still serves the same purpose, keep the same name.
+- Do not rename fields just to match local style conventions when the external schema is already clear and stable.
+- Do not use automatic case-conversion strategies such as `.convertFromSnakeCase` or `.convertToSnakeCase` unless the project explicitly wants that behavior and it clearly improves readability overall.
 
 ## Types and Architecture
 
-- Prefer value types (`struct`, `enum`) for domain modeling.
-- Prefer concrete types internally; use protocols at module seams and integration boundaries.
+- Prefer concrete, straightforward types and data flow that keep the code easy to follow.
+- Use `struct`, `enum`, `class`, `actor`, and protocols only when each one is the clearest fit for the actual problem.
 - Mark classes as `final` by default.
-- Prefer synthesized conformances (`Codable`, `Equatable`, `Hashable`, etc.) where possible.
-- Prefer synthesized/memberwise initializers; avoid unnecessary custom initializers.
-- Use enums as namespaces to group related concerns.
-- Keep code modular and cohesive; group highly related concerns together.
-- Avoid spaghetti code and tight coupling.
+- Prefer synthesized conformances (`Codable`, `Equatable`, `Hashable`, etc.) whenever they satisfy the actual requirements.
+- Prefer memberwise and otherwise synthesized initializers, default property values, and framework defaults over handwritten setup code.
+- Do not add `CodingKeys`, manual `Codable`, custom initializers, wrappers, helper types, protocols, coordinators, or extra layers unless they are required by a concrete constraint or make the final code clearly easier to understand.
+- When an API, cloud service, or wire format already provides clear names, preserve those names directly in Swift models and nearby code unless the meaning actually changes or a concrete collision must be resolved.
+- Use enums as namespaces only when they genuinely reduce clutter instead of adding indirection.
+- Keep code modular and cohesive without fragmenting simple logic across unnecessary files or types.
 - Prefer pure Swift solutions where practical.
 
 ## Concurrency and Language Mode
 
 - Keep code compliant with Swift 6 language mode.
 - Keep strict concurrency checking enabled.
-- Use modern structured concurrency (`async`/`await`, task groups) instead of legacy async patterns.
+- Use modern structured concurrency (`async`/`await`, task groups, actors, `AsyncSequence`) instead of legacy async patterns when it keeps the flow clearer and more direct.
 - For app-facing packages, prefer approachable concurrency defaults with main-actor isolation by default.
 - Introduce parallelism where it produces clear performance gains.
 
 ## State, Frameworks, and Dependencies
 
 - Prefer `@Observation` over Combine for observation/state propagation.
-- Prefer frameworks and packages from Swift.org, Swift on Server, Apple, and Apple Open Source ecosystems when suitable.
-- Commonly acceptable examples include packages like `swift-algorithms`.
+- Prefer frameworks and packages from Swift.org, Swift on Server, Apple, and Apple Open Source ecosystems when they simplify the code and make it easier to reason about.
+- Commonly approved examples include packages such as `swift-configuration`, `swift-async-algorithms`, and `swift-algorithms`.
 
 ## Testing and Tooling Baseline
 
