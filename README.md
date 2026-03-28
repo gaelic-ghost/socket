@@ -24,17 +24,23 @@ This repository packages reusable Codex skills for canonical docs maintenance, r
 ## Skill Guide (When To Use What)
 
 - `project-docs-maintainer`
-  - Canonical maintainer for `*-skills` README drift and checklist roadmap maintenance through explicit modes.
+  - Use when a `*-skills` repo needs README maintenance or checklist-style roadmap validation.
+  - Helps by providing one canonical doc-maintenance entrypoint with explicit modes.
 - `code-slice-explainer`
-  - End-to-end slice walkthroughs for pipelines, execution flows, request lifecycles, traces, and code-path explanations with data shape first.
+  - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
+  - Helps by starting with data shape, then walking the full slice through branches, boundaries, transformations, and outputs.
 - `project-workspace-cleaner`
-  - Read-only workspace hygiene scanner that ranks cleanup chores.
+  - Use when a workspace needs a read-only cleanup audit.
+  - Helps by ranking cleanup chores and surfacing repo-level hygiene hotspots.
 - `things-reminders-manager`
-  - Deterministic Things reminder create/update workflow with duplicate and date safeguards.
+  - Use when Things reminders need deterministic create or update handling.
+  - Helps by applying duplicate checks and date-safety guardrails.
 - `things-digest-generator`
-  - Weekly Things digest generator with prioritized next-step suggestions.
+  - Use when you want a week-ahead Things planning digest.
+  - Helps by summarizing active work and generating prioritized next-step suggestions.
 - `speak-with-profile`
-  - Profile-aware speech workflow for narrated notes, spoken drafts, audio summaries, accessibility reads, and deterministic local speech runs.
+  - Use when speech output needs reusable profiles, disclosure, and reproducible reporting.
+  - Helps by routing narrated notes, spoken drafts, audio summaries, and accessibility reads through one profile-aware workflow.
 
 ## Quick Start (Vercel Skills CLI)
 
@@ -110,6 +116,11 @@ npx skills add vercel-labs/agent-skills --skill find-skills
 ```
 
 Then ask your Agent for help finding a skill for "" or ""
+
+### Release highlights
+
+- Latest release: [`v2.2.0`](https://github.com/gaelic-ghost/productivity-skills/releases/tag/v2.2.0)
+- Includes the new `code-slice-explainer` skill plus widened trigger coverage for natural-language walkthrough requests.
 
 ### Leaderboard
 
