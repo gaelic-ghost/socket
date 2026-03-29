@@ -18,7 +18,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
 | `code-slice-explainer` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
-| `maintain-project-readme` | General README maintainer for ordinary software projects | audit-first README guidance, bounded README editing |
+| `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-skills-readme` | Specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
 | `project-workspace-cleaner` | Read-only cleanup audit | findings path, clean run, partial-results branch |
@@ -48,29 +48,50 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 ## `maintain-project-readme`
 
-### Workflow: audit-first ordinary project README maintenance
+### Workflow: `check-only`
 
 **Overview**
 
-- Triggered when the user wants to improve an ordinary software-project `README.md`.
+- Triggered when the user wants deterministic auditing for an ordinary software-project `README.md`.
 - Primary workflow.
-- `read-only` until edits are explicitly requested
+- `read-only`
 
 **Inputs**
 
-- User intent about a project `README.md`
-- Required: target repo or README path
-- Optional: audience, missing sections, and whether to edit
+- Required: `--project-root <path>`
+- Required: `--run-mode check-only`
+- Optional: `--readme-path <path>`
+- Tool/script input: `scripts/maintain_project_readme.py`
 
 **Branch Conditions**
 
-- Skills/plugin repo detected: redirect to `maintain-skills-readme`
-- README already sound: report that plainly
-- Edits requested: bounded README-only edit path
+- Skills/plugin repo detected: reject and redirect to `maintain-skills-readme`
+- Multiple repo profiles match: report ambiguity while selecting the conservative valid profile
+- README already sound: exact clean-run text
 
 **Outputs**
 
-- Concise README audit or bounded change guidance in Markdown
+- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `apply`
+
+**Overview**
+
+- Triggered when the user wants bounded README-only normalization or repair for an ordinary software-project `README.md`.
+- Variant workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode apply`
+- Optional: `--readme-path <path>`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
 
 ## `maintain-project-roadmap`
 

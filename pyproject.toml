@@ -13,6 +13,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = [
+  "skills/maintain-project-readme/tests",
   "skills/maintain-project-roadmap/tests",
   "skills/maintain-skills-readme/tests",
   "skills/project-workspace-cleaner/tests",

@@ -26,8 +26,8 @@ It is also structured to be Codex plugin-ready for local or team installation, w
 ## Skill Guide (When To Use What)
 
 - `maintain-project-readme`
-  - Use when an ordinary software project `README.md` needs clearer overview, setup, usage, development, or verification guidance.
-  - Helps by keeping README maintenance focused on general project documentation instead of skills/plugin catalog rules.
+  - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
+  - Helps by applying a shared README schema, repo-profile detection, and README-only fixes instead of skills/plugin catalog rules.
 - `maintain-project-roadmap`
   - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
   - Helps by keeping roadmap maintenance deterministic through explicit `check-only` and `apply` modes.

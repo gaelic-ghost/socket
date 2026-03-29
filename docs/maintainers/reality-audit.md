@@ -38,8 +38,9 @@ All active repo-authored skills live under `skills/`.
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-project-readme`
+  - Script: `scripts/maintain_project_readme.py`
   - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`
+  - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-project-roadmap`
   - Script: `scripts/maintain_project_roadmap.py`
   - Metadata: `agents/openai.yaml`
