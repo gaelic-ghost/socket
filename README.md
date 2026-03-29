@@ -59,57 +59,8 @@ Use the Vercel `skills` CLI to install from this repository.
 npx skills add gaelic-ghost/productivity-skills
 ```
 
-## Current Skill Split
-
-- Removed skill surface:
-  - `project-docs-maintainer`
-- Use direct document-type skills instead:
-  - `maintain-project-readme`
-  - `maintain-project-roadmap`
-  - `maintain-skills-readme`
-- For ordinary software-project `README.md` files, use `maintain-project-readme`.
-- For skills/plugin repository `README.md` files, use `maintain-skills-readme`.
-- For checklist roadmap maintenance, use `maintain-project-roadmap`.
-
-Canonical installs:
-
 ```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
-npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme
-npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
-npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
-npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
-npx skills add gaelic-ghost/productivity-skills --skill things-digest-generator
-npx skills add gaelic-ghost/productivity-skills --skill speak-with-profile
-```
-
-## Historical Note for v2.0.0
-
-`v2.0.0` is a breaking release.
-
-- Removed skill surfaces:
-  - `project-skills-orchestrator-agent`
-  - `project-roadmap-maintainer`
-- Use direct standalone skill installs instead of orchestrator-first flows.
-- For roadmap maintenance, use `maintain-project-roadmap`.
-
-Canonical installs:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
-npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme
-npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
-npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
-npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
-npx skills add gaelic-ghost/productivity-skills --skill things-digest-generator
-npx skills add gaelic-ghost/productivity-skills --skill speak-with-profile
-```
-
-Install all skills from this repository:
-
-```bash
+# Install every skill from this repository
 npx skills add gaelic-ghost/productivity-skills --all
 ```
 
@@ -125,6 +76,12 @@ This repository is now organized around the Codex plugin model:
 Current OpenAI plugin publishing is still evolving, so this repository remains documented first as a source repo for reusable skills. For current plugin authoring guidance, see [Build plugins](https://developers.openai.com/codex/plugins/build).
 
 ## Install individually by Skill or Skill Pack
+
+Use the current skill names directly:
+
+- `maintain-project-readme` for ordinary software-project `README.md` maintenance
+- `maintain-skills-readme` for skills/plugin repository `README.md` maintenance
+- `maintain-project-roadmap` for checklist-style `ROADMAP.md` maintenance
 
 ```bash
 npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
@@ -168,7 +125,7 @@ Then ask your Agent for help finding a skill for "" or ""
 ### Release highlights
 
 - Latest release: [`v2.2.0`](https://github.com/gaelic-ghost/productivity-skills/releases/tag/v2.2.0)
-- Includes the new `code-slice-explainer` skill plus widened trigger coverage for natural-language walkthrough requests.
+- Includes the new `code-slice-explainer` skill and the split README/roadmap maintenance surfaces under the plugin-ready `skills/` layout.
 
 ### Leaderboard
 
@@ -200,7 +157,7 @@ Then ask your Agent for help finding a skill for "" or ""
 
 - Install and use skills individually; do not assume access to repo-level maintainer docs.
 - Active repo-authored skills now live under `skills/`, and the repository root acts as the plugin root for Codex plugin packaging.
-- Prefer canonical skills over compatibility shims for new prompts.
+- Prefer the current skill names in new prompts; retired compatibility names are no longer the active guidance surface.
 - `speak-with-profile` is the canonical speech workflow in this repository; prefer it over direct speech calls when profile resolution or manifest reporting matters.
 
 ## Keywords

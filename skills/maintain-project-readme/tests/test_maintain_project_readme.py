@@ -6,6 +6,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "maintain_project_readme.py"
 SPEC = importlib.util.spec_from_file_location("maintain_project_readme", SCRIPT_PATH)
@@ -501,3 +503,167 @@ demo-lib provides reusable helpers for the surrounding application code.
     assert "## Verification" in updated_readme
     assert report["post_fix_status"] == []
     assert pyproject.read_text(encoding="utf-8") == original_pyproject
+
+
+def test_apply_mode_preserves_rich_preamble_content(tmp_path: Path) -> None:
+    write(
+        tmp_path / "pyproject.toml",
+        """
+[project]
+name = "demo-lib"
+version = "0.1.0"
+""".strip(),
+    )
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-lib
+
+A reusable Python package for demo purposes.
+
+![CI](https://example.com/badge.svg)
+
+> Early access package. Interfaces may still evolve.
+
+Additional intro context that should stay in the preamble.
+
+## Overview
+
+demo-lib provides reusable helpers for the surrounding application code.
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated_readme = readme.read_text(encoding="utf-8")
+    assert report["fixes_applied"]
+    assert "![CI](https://example.com/badge.svg)" in updated_readme
+    assert "> Early access package. Interfaces may still evolve." in updated_readme
+    assert "Additional intro context that should stay in the preamble." in updated_readme
+    assert updated_readme.index("![CI](https://example.com/badge.svg)") < updated_readme.index("## Overview")
+    assert updated_readme.index("> Early access package. Interfaces may still evolve.") < updated_readme.index("## Overview")
+
+
+def test_main_prints_no_findings_for_clean_readme(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    write(
+        tmp_path / "pyproject.toml",
+        """
+[project]
+name = "demo-lib"
+version = "0.1.0"
+""".strip(),
+    )
+    write(
+        tmp_path / "README.md",
+        """
+# demo-lib
+
+A reusable Python package for demo purposes.
+
+## Overview
+
+demo-lib provides reusable helpers for the surrounding application code.
+
+### Motivation
+
+It keeps common Python behaviors in one package so downstream code stays simpler.
+
+## Setup
+
+```bash
+uv sync
+```
+
+## Usage
+
+Import the package from Python code that needs the shared helpers.
+
+## Development
+
+Make changes locally and keep the package behavior focused and testable.
+
+## Verification
+
+```bash
+uv run pytest
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+""".strip(),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "maintain_project_readme.py",
+            "--project-root",
+            str(tmp_path),
+            "--run-mode",
+            "check-only",
+        ],
+    )
+    exit_code = MODULE.main()
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == "No findings.\n"
+
+
+def test_main_respects_fail_on_issues_exit_code(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    write(
+        tmp_path / "pyproject.toml",
+        """
+[project]
+name = "demo-lib"
+version = "0.1.0"
+""".strip(),
+    )
+    write(
+        tmp_path / "README.md",
+        """
+# demo-lib
+
+A reusable Python package for demo purposes.
+
+## Overview
+
+demo-lib provides reusable helpers for the surrounding application code.
+""".strip(),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "maintain_project_readme.py",
+            "--project-root",
+            str(tmp_path),
+            "--run-mode",
+            "check-only",
+            "--fail-on-issues",
+        ],
+    )
+    exit_code = MODULE.main()
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "## Schema Violations" in captured.out
+
+
+def test_main_rejects_skills_repo_with_nonzero_exit(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    write(tmp_path / ".codex-plugin" / "plugin.json", '{"name":"demo"}')
+    write(tmp_path / "skills" / "demo-skill" / "SKILL.md", "---\nname: demo-skill\n---\n")
+    write(tmp_path / "README.md", "# demo\n\ntext\n")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "maintain_project_readme.py",
+            "--project-root",
+            str(tmp_path),
+            "--run-mode",
+            "check-only",
+        ],
+    )
+    exit_code = MODULE.main()
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert "maintain-skills-readme" in captured.out

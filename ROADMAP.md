@@ -268,6 +268,29 @@ Exit criteria:
 - [x] README and roadmap maintenance now route through separate skill names.
 - [x] General project README maintenance is separated from skills/plugin README maintenance.
 
+## Milestone 12: Project README maintainer hardening
+
+Scope:
+
+- Fix destructive rewrite behavior in `maintain-project-readme`.
+- Bring the root repo README back to current-state guidance instead of transition-heavy legacy notes.
+- Track the next maturity work for project README automation beyond the initial scripted maintainer.
+
+Tickets:
+
+- [x] Preserve rich README preamble content during `maintain-project-readme` apply runs.
+- [x] Expand `maintain-project-readme` tests to cover preamble preservation and CLI exit behavior.
+- [x] Refresh the root `README.md` to remove retired guidance and reduce duplicate install instructions.
+- [ ] Add `maintain-project-readme` automation prompts/reference guidance comparable to the other mature maintainer skills.
+- [ ] Improve repo-profile normalization so profile-specific README structure can be added and normalized more deliberately.
+
+Exit criteria:
+
+- [x] `maintain-project-readme` no longer drops badges, callouts, or extra intro prose before the first H2 section.
+- [x] The root `README.md` describes only the current active skill surface and current install guidance.
+- [ ] `maintain-project-readme` has a documented automation-prompts surface.
+- [ ] Repo-profile normalization behavior is explicit, documented, and test-backed.
+
 ## Risks and mitigations
 
 - Risk: Users still invoke deprecated names.

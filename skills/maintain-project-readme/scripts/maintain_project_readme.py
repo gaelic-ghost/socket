@@ -154,6 +154,38 @@ def parse_title_and_value_prop(preamble: str) -> Tuple[Optional[str], Optional[s
     return title, value_prop
 
 
+def normalize_preamble(preamble: str, repo_name: str) -> str:
+    lines = [line.rstrip() for line in preamble.splitlines()]
+    while lines and not lines[0].strip():
+        lines.pop(0)
+
+    title_index: Optional[int] = None
+    for idx, line in enumerate(lines):
+        if line.startswith("# "):
+            title_index = idx
+            break
+
+    if title_index is None:
+        lines.insert(0, f"# {repo_name}")
+        title_index = 0
+
+    value_prop_index: Optional[int] = None
+    for idx in range(title_index + 1, len(lines)):
+        if lines[idx].strip():
+            value_prop_index = idx
+            break
+
+    if value_prop_index is None:
+        insert_at = title_index + 1
+        if insert_at >= len(lines) or lines[insert_at - 1].strip():
+            lines.insert(insert_at, "")
+            insert_at += 1
+        lines.insert(insert_at, f"Project documentation for {repo_name}.")
+
+    normalized = "\n".join(lines).strip()
+    return normalized
+
+
 def is_skills_or_plugin_repo(project_root: Path) -> bool:
     if (project_root / ".codex-plugin" / "plugin.json").is_file():
         return True
@@ -524,8 +556,8 @@ def build_toc(section_headings: Sequence[str]) -> str:
 
 
 def render_readme(
+    normalized_preamble: str,
     repo_name: str,
-    value_prop: str,
     profile: str,
     existing_sections: Sequence[Tuple[str, str]],
 ) -> str:
@@ -562,7 +594,7 @@ def render_readme(
         toc_body = build_toc([heading for heading, _body in sections])
         sections.insert(0, ("Table of Contents", toc_body))
 
-    rendered = [f"# {repo_name}", "", value_prop.strip()]
+    rendered = [normalized_preamble.strip()]
     for heading, body in sections:
         rendered.extend(["", f"## {heading}", "", body.strip()])
     return normalize_whitespace("\n".join(rendered))
@@ -571,11 +603,9 @@ def render_readme(
 def apply_fixes(project_root: Path, readme_path: Path, readme_text: str, profile_info: Dict[str, object]) -> Tuple[str, List[Dict[str, str]]]:
     preamble, sections = split_sections(readme_text)
     repo_name = project_root.name
-    title, value_prop = parse_title_and_value_prop(preamble)
-    final_title = title or repo_name
-    final_value_prop = value_prop or f"Project documentation for {repo_name}."
+    normalized_preamble = normalize_preamble(preamble, repo_name)
 
-    updated = render_readme(final_title, final_value_prop, profile_info["selected_profile"], sections)
+    updated = render_readme(normalized_preamble, repo_name, profile_info["selected_profile"], sections)
     actions: List[Dict[str, str]] = []
     if updated != normalize_whitespace(readme_text):
         write_text(readme_path, updated)
