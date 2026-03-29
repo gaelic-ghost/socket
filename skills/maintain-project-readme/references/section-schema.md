@@ -23,10 +23,16 @@
 ## Profile-Specific Additions
 
 - `library-package`
-  - optional `## API Notes`
+  - canonical additional section: `## API Notes`
 - `cli-tool`
-  - optional `## Command Reference`
+  - canonical additional section: `## Command Reference`
 - `app-service`
-  - optional `## Configuration`
+  - canonical additional section: `## Configuration`
 - `monorepo-workspace`
-  - optional `## Repository Layout`
+  - canonical additional section: `## Repository Layout`
+
+## Profile Normalization Rules
+
+- When repo-profile detection is clear, `apply` mode should add the canonical profile-specific section if it is missing.
+- When the profile-specific section already exists, keep its content and normalize its placement into the canonical order.
+- When repo-profile detection is ambiguous, report that ambiguity and do not create a new profile-specific section automatically.

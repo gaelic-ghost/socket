@@ -3,6 +3,7 @@
 ## Allowed Automatic Fixes
 
 - add missing required sections
+- add the canonical profile-specific section when repo-profile detection is clear
 - normalize section ordering
 - add or repair `### Motivation` under `## Overview`
 - add or refresh a compact H2-only table of contents when warranted
@@ -20,4 +21,5 @@
 
 - prefer preserving good existing prose over normalization for its own sake
 - prefer small structural edits over large rewrites
+- do not create new profile-specific sections when the repo profile is ambiguous
 - report unsupported command examples instead of guessing replacements

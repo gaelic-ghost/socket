@@ -281,15 +281,15 @@ Tickets:
 - [x] Preserve rich README preamble content during `maintain-project-readme` apply runs.
 - [x] Expand `maintain-project-readme` tests to cover preamble preservation and CLI exit behavior.
 - [x] Refresh the root `README.md` to remove retired guidance and reduce duplicate install instructions.
-- [ ] Add `maintain-project-readme` automation prompts/reference guidance comparable to the other mature maintainer skills.
-- [ ] Improve repo-profile normalization so profile-specific README structure can be added and normalized more deliberately.
+- [x] Add `maintain-project-readme` automation prompts/reference guidance comparable to the other mature maintainer skills.
+- [x] Improve repo-profile normalization so profile-specific README structure can be added and normalized more deliberately.
 
 Exit criteria:
 
 - [x] `maintain-project-readme` no longer drops badges, callouts, or extra intro prose before the first H2 section.
 - [x] The root `README.md` describes only the current active skill surface and current install guidance.
-- [ ] `maintain-project-readme` has a documented automation-prompts surface.
-- [ ] Repo-profile normalization behavior is explicit, documented, and test-backed.
+- [x] `maintain-project-readme` has a documented automation-prompts surface.
+- [x] Repo-profile normalization behavior is explicit, documented, and test-backed.
 
 ## Risks and mitigations
 

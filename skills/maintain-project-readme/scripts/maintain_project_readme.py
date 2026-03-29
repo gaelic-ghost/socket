@@ -209,6 +209,7 @@ def detect_profile(project_root: Path) -> Dict[str, object]:
         "app-service": [],
         "monorepo-workspace": [],
     }
+    pyproject_app_signal = False
 
     if has_file(project_root, "pnpm-workspace.yaml", "turbo.json", "nx.json"):
         candidates.append("monorepo-workspace")
@@ -233,7 +234,8 @@ def detect_profile(project_root: Path) -> Dict[str, object]:
         if any(token in raw_text for token in ["fastapi", "flask", "django", "uvicorn", "streamlit", "gradio"]):
             candidates.append("app-service")
             reasons["app-service"].append("application/service dependency detected in pyproject")
-        if "[project]" in raw_text or "[build-system]" in raw_text:
+            pyproject_app_signal = True
+        if ("[project]" in raw_text or "[build-system]" in raw_text) and not pyproject_app_signal:
             candidates.append("library-package")
             reasons["library-package"].append("pyproject project metadata detected")
 
@@ -258,7 +260,7 @@ def detect_profile(project_root: Path) -> Dict[str, object]:
         if any(token in deps_blob for token in ['"next"', '"react"', '"vite"', '"express"', '"nestjs"', '"astro"']):
             candidates.append("app-service")
             reasons["app-service"].append("application/service dependency detected in package.json")
-        else:
+        elif not package_json.get("bin") and not package_json.get("workspaces"):
             candidates.append("library-package")
             reasons["library-package"].append("package.json package metadata detected")
 
@@ -559,18 +561,25 @@ def render_readme(
     normalized_preamble: str,
     repo_name: str,
     profile: str,
+    profile_is_ambiguous: bool,
     existing_sections: Sequence[Tuple[str, str]],
 ) -> str:
     existing_lookup = section_map(existing_sections)
     existing_order = [heading for heading, _body in existing_sections]
-    include_toc = "Table of Contents" in existing_lookup or len(existing_sections) > 6
+    target_h2_headings: List[str] = [heading for heading in COMMON_SECTION_ORDER if heading != "Table of Contents"]
+    if not profile_is_ambiguous:
+        target_h2_headings.extend(PROFILE_SECTION_ORDER[profile])
+    for heading in existing_order:
+        if heading != "Table of Contents" and heading not in target_h2_headings:
+            target_h2_headings.append(heading)
+    include_toc = "Table of Contents" in existing_lookup or len(target_h2_headings) > 6
 
     ordered_headings: List[str] = []
     if include_toc:
         ordered_headings.append("Table of Contents")
     ordered_headings.extend([heading for heading in COMMON_SECTION_ORDER if heading != "Table of Contents"])
     for heading in PROFILE_SECTION_ORDER[profile]:
-        if heading in existing_lookup:
+        if heading in existing_lookup or not profile_is_ambiguous:
             ordered_headings.append(heading)
     for heading in existing_order:
         if heading not in ordered_headings:
@@ -586,7 +595,7 @@ def render_readme(
                 body = section_template(repo_name, profile, heading)
             elif "### Motivation" not in body:
                 body = body.rstrip() + "\n\n### Motivation\n\nDescribe why this project exists, who it helps, and what makes it worth using."
-        elif not body and heading in COMMON_SECTION_ORDER:
+        elif not body and (heading in COMMON_SECTION_ORDER or heading in PROFILE_SECTION_ORDER[profile]):
             body = section_template(repo_name, profile, heading)
         sections.append((heading, body))
 
@@ -605,7 +614,13 @@ def apply_fixes(project_root: Path, readme_path: Path, readme_text: str, profile
     repo_name = project_root.name
     normalized_preamble = normalize_preamble(preamble, repo_name)
 
-    updated = render_readme(normalized_preamble, repo_name, profile_info["selected_profile"], sections)
+    updated = render_readme(
+        normalized_preamble,
+        repo_name,
+        profile_info["selected_profile"],
+        bool(profile_info["ambiguous"]),
+        sections,
+    )
     actions: List[Dict[str, str]] = []
     if updated != normalize_whitespace(readme_text):
         write_text(readme_path, updated)

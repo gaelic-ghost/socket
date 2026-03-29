@@ -27,3 +27,13 @@
 - Prefer repo signals over user phrasing.
 - If multiple profiles match, select the most conservative valid profile and report the ambiguity.
 - Route skills/plugin repos away from this skill and into `maintain-skills-readme`.
+
+## Apply-Mode Normalization
+
+- Clear profile match:
+  - add the canonical profile-specific section if missing
+  - normalize it into canonical section order
+  - preserve any existing section content
+- Ambiguous profile match:
+  - keep reporting the ambiguity
+  - do not auto-create a new profile-specific section

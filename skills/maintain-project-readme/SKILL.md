@@ -51,3 +51,4 @@ Maintain ordinary software-project `README.md` files through one deterministic R
 - `references/fix-policies.md`
 - `references/style-rules.md`
 - `references/verification-checklist.md`
+- `references/project-readme-maintenance-automation-prompts.md`

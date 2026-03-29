@@ -501,6 +501,7 @@ demo-lib provides reusable helpers for the surrounding application code.
     assert "### Motivation" in updated_readme
     assert "## Setup" in updated_readme
     assert "## Verification" in updated_readme
+    assert "## API Notes" in updated_readme
     assert report["post_fix_status"] == []
     assert pyproject.read_text(encoding="utf-8") == original_pyproject
 
@@ -543,6 +544,341 @@ demo-lib provides reusable helpers for the surrounding application code.
     assert updated_readme.index("> Early access package. Interfaces may still evolve.") < updated_readme.index("## Overview")
 
 
+def test_apply_mode_adds_library_profile_section_when_profile_is_clear(tmp_path: Path) -> None:
+    write(
+        tmp_path / "pyproject.toml",
+        """
+[project]
+name = "demo-lib"
+version = "0.1.0"
+""".strip(),
+    )
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-lib
+
+A reusable Python package for demo purposes.
+
+## Overview
+
+demo-lib provides reusable helpers for the surrounding application code.
+
+### Motivation
+
+It keeps common Python behaviors in one package so downstream code stays simpler.
+
+## Setup
+
+```bash
+uv sync
+```
+
+## Usage
+
+Import the package from Python code that needs the shared helpers.
+
+## Development
+
+Make changes locally and keep the package behavior focused and testable.
+
+## Verification
+
+```bash
+uv run pytest
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert report["profile_assignment"]["selected_profile"] == "library-package"
+    assert "## API Notes" in updated
+    assert updated.index("## API Notes") > updated.index("## License")
+
+
+def test_apply_mode_adds_cli_profile_section_when_profile_is_clear(tmp_path: Path) -> None:
+    write(
+        tmp_path / "package.json",
+        json.dumps({"name": "demo-cli", "bin": {"demo": "./bin/demo.js"}}, indent=2),
+    )
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-cli
+
+A command-line tool for demo workflows.
+
+## Overview
+
+demo-cli wraps a focused command surface for local developer tasks.
+
+### Motivation
+
+It keeps common commands easy to discover and run from one CLI entrypoint.
+
+## Setup
+
+```bash
+pnpm install
+```
+
+## Usage
+
+```bash
+pnpm demo --help
+```
+
+## Development
+
+Iterate on command behavior locally and keep examples current with the shipped CLI.
+
+## Verification
+
+```bash
+pnpm test
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert report["profile_assignment"]["selected_profile"] == "cli-tool"
+    assert "## Command Reference" in updated
+
+
+def test_apply_mode_adds_app_service_profile_section_when_profile_is_clear(tmp_path: Path) -> None:
+    write(
+        tmp_path / "pyproject.toml",
+        """
+[project]
+name = "demo-service"
+version = "0.1.0"
+dependencies = ["fastapi", "uvicorn"]
+""".strip(),
+    )
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-service
+
+A small API service for demo requests.
+
+## Overview
+
+demo-service exposes a local API surface for development and testing.
+
+### Motivation
+
+It provides a stable local service shell for integrating and verifying API behavior.
+
+## Setup
+
+```bash
+uv sync
+```
+
+## Usage
+
+Run the service locally and send requests to its documented endpoints.
+
+## Development
+
+Keep local changes small and verify that handler behavior still matches the intended API.
+
+## Verification
+
+```bash
+uv run pytest
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert report["profile_assignment"]["selected_profile"] == "app-service"
+    assert "## Configuration" in updated
+
+
+def test_apply_mode_adds_monorepo_profile_section_when_profile_is_clear(tmp_path: Path) -> None:
+    write(tmp_path / "pnpm-workspace.yaml", "packages:\n  - apps/*\n  - packages/*\n")
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-workspace
+
+A multi-package workspace for demo apps and packages.
+
+## Overview
+
+demo-workspace groups related apps and packages in one repository.
+
+### Motivation
+
+It keeps shared tooling and changes coordinated across packages that ship together.
+
+## Setup
+
+```bash
+pnpm install
+```
+
+## Usage
+
+Use the workspace commands from the repository root.
+
+## Development
+
+Work within the relevant package or app while keeping shared workspace tooling green.
+
+## Verification
+
+```bash
+pnpm test
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert report["profile_assignment"]["selected_profile"] == "monorepo-workspace"
+    assert "## Repository Layout" in updated
+
+
+def test_apply_mode_preserves_existing_profile_section_without_duplication(tmp_path: Path) -> None:
+    write(
+        tmp_path / "package.json",
+        json.dumps({"name": "demo-cli", "bin": {"demo": "./bin/demo.js"}}, indent=2),
+    )
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-cli
+
+A command-line tool for demo workflows.
+
+## Overview
+
+demo-cli wraps a focused command surface for local developer tasks.
+
+### Motivation
+
+It keeps common commands easy to discover and run from one CLI entrypoint.
+
+## Setup
+
+```bash
+pnpm install
+```
+
+## Usage
+
+```bash
+pnpm demo --help
+```
+
+## Development
+
+Iterate on command behavior locally and keep examples current with the shipped CLI.
+
+## Verification
+
+```bash
+pnpm test
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+
+## Command Reference
+
+- `demo --help`
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert report["profile_assignment"]["selected_profile"] == "cli-tool"
+    assert updated.count("## Command Reference") == 1
+    assert "- `demo --help`" in updated
+
+
+def test_apply_mode_does_not_add_profile_section_when_profile_is_ambiguous(tmp_path: Path) -> None:
+    write(
+        tmp_path / "pyproject.toml",
+        """
+[project]
+name = "demo-hybrid"
+version = "0.1.0"
+dependencies = ["fastapi"]
+
+[project.scripts]
+demo = "demo:main"
+""".strip(),
+    )
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        """
+# demo-hybrid
+
+A hybrid repo for demo purposes.
+
+## Overview
+
+demo-hybrid mixes command and service entrypoints.
+
+### Motivation
+
+It supports both a CLI entrypoint and a local API shell.
+
+## Setup
+
+```bash
+uv sync
+```
+
+## Usage
+
+Run the command or the service entrypoint depending on the workflow.
+
+## Development
+
+Keep both surfaces consistent while changing shared code.
+
+## Verification
+
+```bash
+uv run pytest
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert report["profile_assignment"]["ambiguous"] is True
+    assert "## Command Reference" not in updated
+    assert "## Configuration" not in updated
 def test_main_prints_no_findings_for_clean_readme(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     write(
         tmp_path / "pyproject.toml",
