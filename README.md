@@ -1,6 +1,6 @@
 # productivity-skills
 
-Curated productivity skills for maintenance automation, code-understanding walkthroughs, operational hygiene, and reusable speech-output tasks. This repository supports two equally first-class installation paths: direct skill installation through the Vercel `skills` CLI / [skills.sh](https://skills.sh/) ecosystem, and bundled plugin installation in Codex through the repo-root plugin at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
+Curated productivity skills for maintenance automation, code-understanding walkthroughs, operational hygiene, and reusable speech-output tasks.
 
 For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
@@ -9,7 +9,6 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 - [What These Agent Skills Help With](#what-these-agent-skills-help-with)
 - [Skill Guide (When To Use What)](#skill-guide-when-to-use-what)
 - [Install with skills.sh / Vercel Skills CLI](#install-with-skillssh--vercel-skills-cli)
-- [Install as a Codex Plugin](#install-as-a-codex-plugin)
 - [Update Skills](#update-skills)
 - [More resources for similar Skills](#more-resources-for-similar-skills)
 - [Repository Layout](#repository-layout)
@@ -20,8 +19,6 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 ## What These Agent Skills Help With
 
 This repository packages reusable skills for project README maintenance, skills/plugin README maintenance, checklist roadmap maintenance, read-only workspace hygiene, code-slice walkthroughs, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
-
-The same skill set is available as either standalone installable skills or as a bundled Codex plugin, while keeping the underlying skill directories usable as normal repo-authored skills built on the open agent skills standard. Where platform-specific enhancements are useful, this repository intentionally preserves Codex/OpenAI-specific metadata and packaging surfaces instead of flattening everything down to the lowest common denominator.
 
 ## Skill Guide (When To Use What)
 
@@ -88,30 +85,6 @@ Current active skill names:
 - `things-digest-generator` for week-ahead Things planning digests
 - `speak-with-profile` for profile-aware speech output workflows
 
-## Install as a Codex Plugin
-
-Use the Codex plugin path when you want the whole repository bundled as one installable Codex package.
-
-This repository is organized around the Codex plugin model:
-
-- Skills remain the authoring unit.
-- Plugins are the bundled Codex distribution unit.
-- Active repo-authored skills live under [`skills/`](./skills/).
-- The repo root plugin manifest lives at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
-- The repo-scoped Codex marketplace file lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
-
-To install this plugin in Codex:
-
-1. Keep the repository checked out locally.
-2. Keep the repo marketplace file at `.agents/plugins/marketplace.json`; Codex reads repo-scoped marketplaces from that path.
-3. Restart Codex after adding or updating the marketplace file.
-4. Open the Codex plugin directory in the app, or run `codex` and then `/plugins` in the CLI, and select this repo marketplace.
-5. Install the `productivity-skills` plugin from that marketplace.
-
-The marketplace file is the Codex catalog surface, and `.codex-plugin/plugin.json` is the plugin package manifest. They are maintained together in this repository.
-
-For the current OpenAI plugin packaging model, see [Build plugins](https://developers.openai.com/codex/plugins/build) and [Plugins](https://developers.openai.com/codex/plugins/).
-
 ## Update Skills
 
 ```bash
@@ -143,7 +116,7 @@ Then ask your Agent for help finding a skill for "" or ""
 ### Release highlights
 
 - Latest release: [`v3.0.0`](https://github.com/gaelic-ghost/productivity-skills/releases/tag/v3.0.0)
-- Marks the breaking transition to the plugin-ready `skills/` layout, split docs-maintenance skills, and the matured project README maintainer workflow.
+- Marks the breaking transition to the `skills/` layout, split docs-maintenance skills, and the matured project README maintainer workflow.
 
 ### Leaderboard
 
@@ -155,10 +128,6 @@ Then ask your Agent for help finding a skill for "" or ""
 .
 ├── README.md
 ├── AGENTS.md
-├── .agents/
-│   └── plugins/
-│       └── marketplace.json
-├── .codex-plugin/
 ├── skills/
 │   ├── code-slice-explainer/
 │   ├── maintain-project-readme/
@@ -176,11 +145,6 @@ Then ask your Agent for help finding a skill for "" or ""
 
 ## Notes
 
-- Both standalone skills installation and Codex plugin installation are first-class supported paths in this repository.
-- Install and use skills individually when you want narrow workflow selection; use the Codex plugin path when you want the bundled package.
-- Active repo-authored skills live under `skills/`, and the repository root acts as the plugin root for Codex plugin packaging.
-- The repo marketplace file at `.agents/plugins/marketplace.json` is the Codex discovery/catalog surface for the repo-root plugin.
-- The standard skill core remains portable, and Codex/OpenAI-specific enhancements stay layered on where they improve install UX, metadata quality, or invocation ergonomics.
 - Prefer the current skill names in new prompts; retired compatibility names are no longer the active guidance surface.
 - `speak-with-profile` is the canonical speech workflow in this repository; prefer it over direct speech calls when profile resolution or manifest reporting matters.
 
