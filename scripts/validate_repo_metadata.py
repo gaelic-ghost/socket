@@ -22,7 +22,6 @@ README_REQUIRED_HEADINGS = [
     "## Bundled Skill Guide",
     "## Platform Direction",
     "## Install As Skills",
-    "## Local Plugin Testing",
     "## Plugin Structure",
     "## Maintainer Workflow",
     "## Notes",

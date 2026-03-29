@@ -10,7 +10,6 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 - [Bundled Skill Guide](#bundled-skill-guide)
 - [Platform Direction](#platform-direction)
 - [Install As Skills](#install-as-skills)
-- [Local Plugin Testing](#local-plugin-testing)
 - [Plugin Structure](#plugin-structure)
 - [Maintainer Workflow](#maintainer-workflow)
 - [Notes](#notes)
@@ -19,7 +18,7 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 
 ## What This Codex Plugin Includes
 
-This repository now ships as a plugin-first Codex bundle. The plugin root contains `.codex-plugin/plugin.json`, the bundled skills live under `skills/`, and the repo-local `.agents/plugins/marketplace.json` file lets Codex install the plugin directly from this checkout during local development.
+This repository ships the maintained skills under `skills/` and also includes Codex plugin packaging metadata at the repo root.
 
 Current scaffold defaults now include typed configuration via `pydantic-settings`, a committed `.env` for safe defaults, and an ignored `.env.local` for local or secret overrides.
 
@@ -82,26 +81,6 @@ done
 
 Codex supports symlinked skill folders, so symlinks are a good fit while developing or iterating on this repository. If a newly installed skill does not appear right away, restart Codex.
 
-## Local Plugin Testing
-
-Codex plugin packaging follows the OpenAI plugin and skills docs:
-
-- [Build plugins](https://developers.openai.com/codex/plugins/build)
-- [Agent Skills](https://developers.openai.com/codex/skills/)
-
-For this repository, the local testing flow is:
-
-```bash
-cat .agents/plugins/marketplace.json
-```
-
-1. Open or work from this repository as the Codex repo root.
-2. Keep `.agents/plugins/marketplace.json` in place; this repo-scoped marketplace is the file Codex reads for local plugin discovery.
-3. Restart Codex after adding or changing the plugin metadata so the local marketplace is reloaded.
-4. In the Codex plugin directory, verify that the `Local Python Skills` marketplace appears and that the `python-skills` plugin is available to install or enable.
-
-The marketplace entry is repo-local and targets the plugin root via `./`, so the bundled skills are discovered from `.codex-plugin/plugin.json` and `./skills/`. This follows the OpenAI repo-marketplace guidance, where Codex reads `$REPO_ROOT/.agents/plugins/marketplace.json` and resolves `source.path` relative to the marketplace root.
-
 ## Plugin Structure
 
 ```text
@@ -132,7 +111,7 @@ The marketplace entry is repo-local and targets the plugin root via `./`, so the
 
 ## Maintainer Workflow
 
-Keep the repo plugin-first:
+Keep the repo packaging and skill metadata consistent:
 
 - Maintain `.codex-plugin/plugin.json` as the plugin distribution contract.
 - Maintain `.agents/plugins/marketplace.json` for local Codex install and smoke testing.
@@ -151,7 +130,7 @@ uv run pytest
 ## Notes
 
 - Root docs are the canonical installation and discovery surface.
-- The repository is now plugin-first; active bundled skills live under `skills/`.
+- Active bundled skills live under `skills/`.
 - `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` are maintained surfaces, not generated throwaways.
 - Direct skill installs remain supported from the shared `skills/` tree through the standard `.agents/skills` locations.
 - OpenAI packaging is the active release surface today; Claude Code packaging is a planned follow-on surface, not a second live contract yet.
