@@ -124,8 +124,8 @@ Then ask your Agent for help finding a skill for "" or ""
 
 ### Release highlights
 
-- Latest release: [`v2.2.0`](https://github.com/gaelic-ghost/productivity-skills/releases/tag/v2.2.0)
-- Includes the new `code-slice-explainer` skill and the split README/roadmap maintenance surfaces under the plugin-ready `skills/` layout.
+- Latest release: [`v3.0.0`](https://github.com/gaelic-ghost/productivity-skills/releases/tag/v3.0.0)
+- Marks the breaking transition to the plugin-ready `skills/` layout, split docs-maintenance skills, and the matured project README maintainer workflow.
 
 ### Leaderboard
 

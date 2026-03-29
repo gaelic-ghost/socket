@@ -1,6 +1,6 @@
 {
   "name": "productivity-skills",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Reusable productivity skills for project and skills-repo docs maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
   "author": {
     "name": "Gale",

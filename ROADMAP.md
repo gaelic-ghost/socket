@@ -291,6 +291,63 @@ Exit criteria:
 - [x] `maintain-project-readme` has a documented automation-prompts surface.
 - [x] Repo-profile normalization behavior is explicit, documented, and test-backed.
 
+## Milestone 13: Codex plugin marketplace wiring
+
+Scope:
+
+- Add the Codex plugin marketplace file for this repository.
+- Make plugin-distribution metadata locally consumable in the expected marketplace surface.
+- Keep repo-root plugin packaging aligned with future marketplace usage.
+
+Tickets:
+
+- [ ] Add the repo-level Codex plugin marketplace file with this plugin registered.
+- [ ] Document marketplace-file expectations and ordering metadata for this repository.
+- [ ] Verify plugin-manifest and marketplace metadata stay in sync.
+
+Exit criteria:
+
+- [ ] A repo-local marketplace file exists and includes this plugin.
+- [ ] Repo guidance explains how the marketplace file relates to `.codex-plugin/plugin.json`.
+- [ ] Plugin packaging metadata and marketplace metadata are consistent.
+
+## Milestone 14: Claude Code optimization pass
+
+Scope:
+
+- Improve this repository’s skill surfaces for Claude Code routing and ergonomics.
+- Reconcile wording, references, and metadata where Claude-specific behavior benefits from tighter optimization.
+
+Tickets:
+
+- [ ] Audit skill trigger wording and references for Claude Code activation quality.
+- [ ] Add or refine Claude-facing guidance where Codex-first wording currently leaves avoidable ambiguity.
+- [ ] Review metadata and examples for Claude Code compatibility and discoverability.
+
+Exit criteria:
+
+- [ ] Active skills have Claude Code-aware trigger and usage guidance where it materially improves routing.
+- [ ] Claude-facing docs no longer lag behind the current skill layout and plugin-ready repo model.
+
+## Milestone 15: Claude plugin support
+
+Scope:
+
+- Add first-class Claude plugin packaging support alongside the Codex plugin-ready repo layout.
+- Define the repo surfaces needed to bundle and distribute this skill set for Claude plugin workflows.
+
+Tickets:
+
+- [ ] Add the canonical Claude plugin metadata/config surface for this repository.
+- [ ] Update docs to explain Codex plugin support and Claude plugin support side by side.
+- [ ] Verify active skills and metadata remain aligned across both plugin ecosystems.
+
+Exit criteria:
+
+- [ ] The repository contains a current Claude plugin packaging surface.
+- [ ] User-facing docs explain the Claude plugin path without conflicting with Codex plugin guidance.
+- [ ] Cross-ecosystem packaging guidance is internally consistent.
+
 ## Risks and mitigations
 
 - Risk: Users still invoke deprecated names.
