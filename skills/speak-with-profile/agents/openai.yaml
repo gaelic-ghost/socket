@@ -1,4 +1,0 @@
-interface:
-  display_name: "Speak With Profile"
-  short_description: "Profile-aware speech workflow for audio summaries, narrated notes, and hands-free review"
-  default_prompt: "Use $speak-with-profile to resolve explicit overrides, profiles-file settings, and workflow defaults for narrated notes, spoken drafts, audio summaries, accessibility reads, or other TTS requests; prefer `delegate`, include disclosure text, and report the resolved audio or manifest result."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Project Workspace Cleaner"
-  short_description: "Read-only workspace hygiene audit with ranked cleanup findings."
-  default_prompt: "Use $project-workspace-cleaner to resolve config precedence, run a read-only cleanup scan, and return ranked findings plus repo-level totals. If nothing crosses threshold, report `No findings.`."
