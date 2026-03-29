@@ -1,6 +1,6 @@
 # productivity-skills
 
-Curated Codex skills for productivity workflows, maintenance automation, code-understanding walkthroughs, operational hygiene, and reusable speech-output tasks.
+Curated Codex skills for productivity workflows, maintenance automation, code-understanding walkthroughs, operational hygiene, and reusable speech-output tasks. The repository now also doubles as a Codex plugin-ready package rooted at the repo, with active skills stored under [`skills/`](./skills/) and a plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
@@ -20,6 +20,8 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 ## What These Agent Skills Help With
 
 This repository packages reusable Codex skills for canonical docs maintenance, read-only workspace hygiene, code-slice walkthroughs, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
+
+It is also structured to be Codex plugin-ready for local or team installation, while keeping the skill directories usable as normal repo-authored skills.
 
 ## Skill Guide (When To Use What)
 
@@ -78,6 +80,17 @@ Install all skills from this repository:
 npx skills add gaelic-ghost/productivity-skills --all
 ```
 
+## Codex Plugin-Ready Layout
+
+This repository is now organized around the Codex plugin model:
+
+- Skills remain the authoring unit.
+- Plugins are the distribution unit for bundled skills and future integrations.
+- Active repo-authored skills live under [`skills/`](./skills/).
+- The repo root includes a plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
+
+Current OpenAI plugin publishing is still evolving, so this repository remains documented first as a source repo for reusable skills. For current plugin authoring guidance, see [Build plugins](https://developers.openai.com/codex/plugins/build).
+
 ## Install individually by Skill or Skill Pack
 
 ```bash
@@ -132,19 +145,24 @@ Then ask your Agent for help finding a skill for "" or ""
 .
 ├── README.md
 ├── AGENTS.md
-├── code-slice-explainer/
+├── .codex-plugin/
+├── skills/
+│   ├── code-slice-explainer/
+│   ├── project-docs-maintainer/
+│   ├── project-workspace-cleaner/
+│   ├── speak-with-profile/
+│   ├── things-digest-generator/
+│   └── things-reminders-manager/
 ├── docs/
 │   └── maintainers/
-├── project-docs-maintainer/
-├── project-workspace-cleaner/
-├── speak-with-profile/
-├── things-digest-generator/
-└── things-reminders-manager/
+├── ROADMAP.md
+└── pyproject.toml
 ```
 
 ## Notes
 
 - Install and use skills individually; do not assume access to repo-level maintainer docs.
+- Active repo-authored skills now live under `skills/`, and the repository root acts as the plugin root for Codex plugin packaging.
 - Prefer canonical skills over compatibility shims for new prompts.
 - `speak-with-profile` is the canonical speech workflow in this repository; prefer it over direct speech calls when profile resolution or manifest reporting matters.
 

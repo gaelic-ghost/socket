@@ -1,0 +1,38 @@
+{
+  "name": "productivity-skills",
+  "version": "2.2.0",
+  "description": "Reusable productivity skills for documentation maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/productivity-skills",
+  "repository": "https://github.com/gaelic-ghost/productivity-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "skills",
+    "productivity",
+    "things",
+    "speech"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Productivity Skills",
+    "shortDescription": "Reusable productivity workflows for Codex.",
+    "longDescription": "Bundle reusable productivity skills for documentation maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Audit a skills repo README and roadmap for drift.",
+      "Explain a code path from trigger to final output.",
+      "Generate a week-ahead Things planning digest."
+    ],
+    "brandColor": "#1F6FEB"
+  }
+}

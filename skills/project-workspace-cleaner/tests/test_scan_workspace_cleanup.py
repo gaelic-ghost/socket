@@ -29,7 +29,7 @@ def test_resolve_config_uses_template_defaults() -> None:
     assert settings["workspaceRoot"] == "~/Workspace"
     assert settings["minMb"] == 50
     assert active_path.name == "customization.yaml"
-    assert source.endswith("project-workspace-cleaner/config/customization.template.yaml")
+    assert source.endswith("skills/project-workspace-cleaner/config/customization.template.yaml")
 
 
 def test_require_yaml_points_to_root_dev_baseline(monkeypatch: pytest.MonkeyPatch) -> None:

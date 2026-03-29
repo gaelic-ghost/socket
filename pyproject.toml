@@ -13,8 +13,8 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = [
-  "project-docs-maintainer/tests",
-  "project-workspace-cleaner/tests",
-  "speak-with-profile/tests",
-  "things-digest-generator/tests",
+  "skills/project-docs-maintainer/tests",
+  "skills/project-workspace-cleaner/tests",
+  "skills/speak-with-profile/tests",
+  "skills/things-digest-generator/tests",
 ]

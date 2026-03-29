@@ -2,7 +2,7 @@
 
 ## Vision
 
-Maintain a focused set of reusable productivity skills with clear naming, deterministic workflows, direct standalone install surfaces, and cross-cutting speech output where audio delivery improves productivity.
+Maintain a focused set of reusable productivity skills with clear naming, deterministic workflows, plugin-ready packaging, direct standalone install surfaces, and cross-cutting speech output where audio delivery improves productivity.
 
 ## Product principles
 
@@ -22,6 +22,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [ ] Milestone 7: Cross-agent speech compatibility planning (planned)
 - [x] Milestone 8: Python tooling and test standardization (completed)
 - [x] Milestone 9: Code slice walkthrough skill (completed)
+- [x] Milestone 10: Codex plugin-ready repo layout (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -222,6 +223,28 @@ Exit criteria:
 - [x] The skill treats data shape first and execution flow second as the canonical explanation order.
 - [x] The skill documents a simple diagram format with branch and data-shape markers.
 
+## Milestone 10: Codex plugin-ready repo layout
+
+Scope:
+
+- Align the repository layout with the Codex plugins model while keeping skills as the authoring unit.
+- Normalize active skill directories under `skills/` and add a repo-root plugin manifest.
+- Update repo guidance to treat plugins as the bundle/distribution surface and skills as the workflow surface.
+
+Tickets:
+
+- [x] Add a repo-root Codex plugin manifest at `.codex-plugin/plugin.json`.
+- [x] Move active skill directories under the top-level `skills/` directory.
+- [x] Update repo docs and maintainer guidance for the new `skills/` layout.
+- [x] Update skill-splitting guidance to prefer separate skills bundled by the plugin when workflows are naturally distinct.
+- [x] Reconcile maintainer tooling and tests with the new directory layout.
+
+Exit criteria:
+
+- [x] The repository root is plugin-ready for Codex with a valid manifest and `skills/` path.
+- [x] No active repo guidance still presents top-level skill directories as the canonical layout.
+- [x] Maintainer docs describe plugins as the distribution unit and skills as the authoring unit.
+
 ## Risks and mitigations
 
 - Risk: Users still invoke deprecated names.
@@ -235,3 +258,4 @@ Exit criteria:
 - Add validation checks for README layout and skill inventory consistency.
 - Add broader automated testing for Things workflow surfaces, including deterministic validation paths where feasible.
 - Decide the `speak-with-profile` e2e test strategy, including whether to use a fake downstream CLI, real tool integration, or a bounded hybrid approach.
+- Revisit whether `project-docs-maintainer` should split into separately invokable docs-maintenance skills bundled by this plugin.

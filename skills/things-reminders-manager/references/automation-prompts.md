@@ -2,7 +2,7 @@
 
 ## Codex App Template
 
-Use [$things-reminders-manager](/Users/galew/Workspace/productivity-skills/things-reminders-manager/SKILL.md).
+Use [$things-reminders-manager](/Users/galew/Workspace/productivity-skills/skills/things-reminders-manager/SKILL.md).
 
 Process reminder requests for Things using one settings-driven workflow:
 1. Resolve current local date/time.

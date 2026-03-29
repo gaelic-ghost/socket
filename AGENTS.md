@@ -2,7 +2,7 @@
 
 ## Repository Expectations
 
-- For work in this repository, edit skills only under `/Users/galew/Workspace/productivity-skills`.
+- For work in this repository, edit skills only under `/Users/galew/Workspace/productivity-skills/skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
 - This file defines maintainer guidance for developing skills in this repository. Keep these links and rules at repo root for contributor workflows.
 
@@ -14,6 +14,8 @@ Consult these resources when creating, updating, reviewing, or sharing skills:
 - Vercel KB Guidance: [vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context](https://vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context)
 - Skill Creator workflow: [$skill-creator](/Users/galew/.codex/skills/.system/skill-creator/SKILL.md)
 - OpenAI Codex Skills: [developers.openai.com/codex/skills](https://developers.openai.com/codex/skills)
+- OpenAI Codex Plugins: [developers.openai.com/codex/plugins](https://developers.openai.com/codex/plugins)
+- OpenAI Codex Plugin authoring: [developers.openai.com/codex/plugins/build](https://developers.openai.com/codex/plugins/build)
 - OpenAI Codex AGENTS.md configuration: [developers.openai.com/codex/configuration/agents-md](https://developers.openai.com/codex/configuration/agents-md)
 - OpenAI Codex MCP documentation: [https://developers.openai.com/codex/mcp/](https://developers.openai.com/codex/mcp/)
 - Claude Code Features Overview: [code.claude.com/docs/en/features-overview](https://code.claude.com/docs/en/features-overview)
@@ -27,6 +29,7 @@ Applicability guidance:
 - Always consult the `$skill-creator` workflow for skill lifecycle work: [/Users/galew/.codex/skills/.system/skill-creator/SKILL.md](/Users/galew/.codex/skills/.system/skill-creator/SKILL.md)
 - Always consult Agent Skills Standard and Vercel guidance for cross-platform standards alignment.
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
+- When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs and treat the repository root as the plugin root.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
 
 ## Anatomy of an Agent Skill
@@ -88,13 +91,15 @@ Some alternatives for user customization/config include using their Agent's memo
 - Implement all applicable YAML fields in the Frontmatter.
 - Never auto-install skills; report required commands and wait for user confirmation.
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.
+- Keep active repo-authored skills under the top-level `skills/` directory so the repository can also serve as a Codex plugin root.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.
 - Use `docs/maintainers/reality-audit.md` as the maintainer operating guide for source-of-truth order, audit procedure, durable review criteria, and reusable repo-maintenance conventions.
 - Use `docs/maintainers/workflow-atlas.md` for repo-maintainer workflow diagrams, branch paths, workflow inputs/outputs, and Agent+Skill UX audits.
-- Prefer logically grouped skills over splitting adjacent workflows into separate skills.
-- Within a grouped skill, define one primary workflow path and keep variants subordinate to that path.
-- Do not create a separate skill for an adjacent workflow unless it has materially different tools, inputs, outputs, and audience.
+- Prefer one clear job per skill.
+- Plugins are the bundling and distribution unit; use them to group related skills instead of overloading one skill with unrelated or semi-related workflows.
+- Adjacent workflows may stay grouped only when they are truly one coherent job with one natural invocation surface.
+- If a skill depends on mode selection to cover workflows users would naturally ask for separately, prefer splitting those workflows into separate skills and bundling them in the plugin.
 - Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, references, automation prompts, and scripts.
 - If config changes workflow decisions or output contracts, surface that in the main workflow instead of hiding it only in references.
 - When docs and scripts disagree on a workflow contract, fix the script or explicitly narrow the documented contract so they match.

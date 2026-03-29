@@ -27,7 +27,7 @@ def test_resolve_settings_uses_template_defaults() -> None:
     assert settings["daysAhead"] == 4
     assert settings["outputStyle"] == "operational"
     assert active_path.name == "customization.yaml"
-    assert source.endswith("things-digest-generator/config/customization.template.yaml")
+    assert source.endswith("skills/things-digest-generator/config/customization.template.yaml")
 
 
 def test_read_items_missing_path_raises_input_error(tmp_path: Path) -> None:

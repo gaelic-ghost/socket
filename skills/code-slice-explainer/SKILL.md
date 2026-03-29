@@ -120,7 +120,7 @@ The writing should stay conversational and narrative-first. Avoid sterile dumps,
 
 ## Validation
 
-- Validate the skill with `uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py code-slice-explainer`.
+- Validate the skill with `uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/code-slice-explainer`.
 - Keep `agents/openai.yaml` aligned with the final trigger wording in this skill.
 - Use `references/trigger-eval.md` to audit whether the description is broad enough to catch natural phrasing and comparison requests.
 
