@@ -2,14 +2,15 @@
 
 ## Vision
 
-- Keep `python-skills` as a focused, durable Codex plugin bundle with deterministic local helpers, bundled skills under `skills/`, and docs that describe the shipped behavior exactly.
+- Keep `python-skills` as a focused, durable skills repository with one shared `skills/` surface, deterministic local helpers, OpenAI-first packaging today, and a clean path to Claude Code support without duplicating the skills themselves.
 
 ## Product principles
 
-- Keep the active public surface constrained to one plugin root that bundles four Python skills.
+- Keep the active public surface constrained to one shared `skills/` tree with thin vendor packaging layers on top.
 - Prefer deterministic local scripts and validation over implied behavior.
 - Keep skill docs, metadata, and script behavior synchronized.
 - Keep plugin packaging, marketplace metadata, and maintainer tooling simple and repo-local rather than adding new abstraction layers.
+- Prefer portable Agent Skills content first, then add vendor-specific optimizations only where they are materially useful.
 
 ## Milestone Progress
 
@@ -19,6 +20,8 @@
 - [x] Milestone 4: Standards alignment and maintainer contract
 - [x] Milestone 5: Validation expansion and release hardening
 - [x] Milestone 6: Codex plugin packaging
+- [ ] Milestone 7: Claude Code skill optimizations
+- [ ] Milestone 8: Claude plugin and marketplace support
 
 ## Milestone 1: Initial Python skill bundle
 
@@ -119,3 +122,40 @@ Tickets:
 Exit criteria:
 
 - [x] The repo validates as a Codex plugin root and the bundled-skill inventory matches the live `skills/` tree.
+
+## Milestone 7: Claude Code skill optimizations
+
+Scope:
+
+- [ ] Audit the shared `skills/` content for Claude Code compatibility and additive Claude-oriented improvements.
+
+Tickets:
+
+- [ ] Review each shipped `SKILL.md` against Claude Code skill behavior and supported frontmatter.
+- [ ] Make shared skill wording more vendor-neutral where that improves portability.
+- [ ] Define a maintainer policy for Claude-only skill optimizations so they stay additive rather than invasive.
+- [ ] Update maintainer docs to explain the shared-core versus vendor-layer split.
+
+Exit criteria:
+
+- [ ] Shared skills remain single-source and intentionally portable.
+- [ ] Claude-specific skill optimizations are documented or implemented without duplicating the skill tree.
+
+## Milestone 8: Claude plugin and marketplace support
+
+Scope:
+
+- [ ] Add Claude Code plugin packaging and local marketplace support on top of the shared `skills/` tree.
+
+Tickets:
+
+- [ ] Add `.claude-plugin/plugin.json`.
+- [ ] Add Claude marketplace metadata and maintainer install/testing guidance.
+- [ ] Extend validation to cover Claude packaging files and expected structure.
+- [ ] Add smoke coverage for the Claude packaging contract.
+- [ ] Document how OpenAI and Claude packaging surfaces coexist in one repository.
+
+Exit criteria:
+
+- [ ] The repository supports both OpenAI Codex and Claude Code plugin packaging from the same shared `skills/` tree.
+- [ ] Vendor packaging surfaces stay thin and do not duplicate the underlying skill content.

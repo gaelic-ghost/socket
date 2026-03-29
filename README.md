@@ -8,6 +8,7 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 
 - [What This Codex Plugin Includes](#what-this-codex-plugin-includes)
 - [Bundled Skill Guide](#bundled-skill-guide)
+- [Platform Direction](#platform-direction)
 - [Local Plugin Testing](#local-plugin-testing)
 - [Plugin Structure](#plugin-structure)
 - [Maintainer Workflow](#maintainer-workflow)
@@ -31,6 +32,19 @@ Current scaffold defaults now include typed configuration via `pydantic-settings
   - Create the shared `uv` package or workspace scaffolds used directly or as the basis for the higher-level bootstrap skills.
 - `uv-pytest-unit-testing`
   - Standardize pytest setup, package-targeted runs, and troubleshooting for `uv` projects and workspaces.
+
+## Platform Direction
+
+This repository is OpenAI-first today, with the active distribution surface centered on Codex plugin packaging and Codex-specific optimizations.
+
+The shared long-term direction across skills repositories is broader:
+
+- keep the actual skill content portable and rooted in the open Agent Skills format
+- keep OpenAI support and optimizations strong wherever they are applicable and useful
+- add Claude Code support and optimizations wherever they are applicable and useful
+- add vendor plugin packaging as a thin layer on top of the shared `skills/` tree instead of duplicating the skills themselves
+
+That means `skills/` is the shared workflow surface, while `.codex-plugin/` is the current active packaging layer. Future Claude support should add Claude-specific packaging and optimizations without forking the real skill bodies unless a genuine platform-specific divergence forces it.
 
 ## Local Plugin Testing
 
@@ -86,6 +100,8 @@ Keep the repo plugin-first:
 
 - Maintain `.codex-plugin/plugin.json` as the plugin distribution contract.
 - Maintain `.agents/plugins/marketplace.json` for local Codex install and smoke testing.
+- Keep `skills/` vendor-neutral by default, and localize vendor-specific packaging to thin top-level surfaces.
+- Treat OpenAI support as the current release target, while preserving a structure that can later add Claude Code skill and plugin support cleanly.
 - Keep bundled skills under `skills/` only; do not reintroduce a flat top-level skill layout.
 - Treat each skill's `SKILL.md` plus `agents/openai.yaml` as the canonical per-skill contract pair.
 - Run repo validation before commits:
@@ -100,6 +116,7 @@ uv run pytest
 - Root docs are the canonical installation and discovery surface.
 - The repository is now plugin-first; active bundled skills live under `skills/`.
 - `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` are maintained surfaces, not generated throwaways.
+- OpenAI packaging is the active release surface today; Claude Code packaging is a planned follow-on surface, not a second live contract yet.
 - Each skill’s maintained contract lives in `SKILL.md` plus `agents/openai.yaml`; per-skill `README.md` files are intentionally retired.
 - Generated bootstrap projects now ship `pydantic-settings`, a committed `.env`, and an ignored `.env.local`.
 - Maintainer-side validation is standardized on `uv run pytest` and `uv run scripts/validate_repo_metadata.py`.

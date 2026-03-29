@@ -10,6 +10,7 @@ Check that:
 
 - `README.md` uses the canonical `*-skills` section schema
 - `README.md` presents the repo as a plugin-first Codex bundle
+- `README.md` also states the OpenAI-first, future-Claude direction accurately
 - the active skill inventory matches the actual `skills/*/SKILL.md` directories
 - the repository layout snippet matches the real repo
 - `.codex-plugin/plugin.json` exists and points at `./skills/`
@@ -37,6 +38,12 @@ For each `agents/openai.yaml`:
 - `default_prompt` names the canonical skill and primary behavior accurately
 - `policy.allow_implicit_invocation` is present and reflects intended triggering behavior
 - any listed dependencies or policy knobs reflect real usage
+
+For repo-level packaging policy:
+
+- OpenAI packaging files are present, valid, and described as the active release surface
+- Claude packaging is not described as live until the repository actually ships the Claude plugin surface
+- shared skill content is still described as the single-source workflow surface
 
 ## Script Audit
 

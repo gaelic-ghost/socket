@@ -11,6 +11,8 @@
 
 These are the only active bundled skill surfaces that root docs, plugin metadata, and marketplace metadata should present.
 
+OpenAI packaging is the live release surface today. Claude Code compatibility should be preserved at the shared-skill layer where practical, but Claude-specific packaging is still a planned milestone rather than an active maintained contract.
+
 ## Skill Roles
 
 ### `bootstrap-uv-python-workspace`
@@ -66,6 +68,12 @@ Each active skill should maintain the full repo contract:
 - `AGENTS.md`: repo-local authoring and validation policy
 - `docs/maintainers/reality-audit.md`: audit checklist for shipped reality
 - `scripts/validate_repo_metadata.py`: mechanical validation for basic integrity
+
+Future vendor surfaces should follow the same split:
+
+- shared skill content stays under `skills/`
+- OpenAI-specific packaging stays in `.codex-plugin/` and repo plugin marketplace files
+- future Claude-specific packaging should live in Claude-specific top-level files instead of duplicating the `skills/` tree
 
 ## Validation Ownership
 
