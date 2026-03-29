@@ -28,9 +28,13 @@ Applicability guidance:
 
 - Always consult the `$skill-creator` workflow for skill lifecycle work: [/Users/galew/.codex/skills/.system/skill-creator/SKILL.md](/Users/galew/.codex/skills/.system/skill-creator/SKILL.md)
 - Always consult Agent Skills Standard and Vercel guidance for cross-platform standards alignment.
+- Treat support for the open agent skills standard as the repository foundation, and prefer standard-portable structures first.
+- Intend to support future open plugin or bundle standards as they emerge without sacrificing the standard-portable skill core.
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
-- When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs and treat the repository root as the plugin root.
+- When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs, treat the repository root as the plugin root, and keep the repo-scoped marketplace file aligned with the plugin manifest.
+- Preserve OpenAI/Codex-specific enhancements to the fullest where they materially improve packaging, install UX, invocation, routing, or metadata quality.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
+- Preserve Claude Code and Claude plugin enhancements to the fullest where they materially improve compatibility, routing, or install UX without weakening the standard-portable core.
 
 ## Anatomy of an Agent Skill
 
@@ -92,15 +96,18 @@ Some alternatives for user customization/config include using their Agent's memo
 - Never auto-install skills; report required commands and wait for user confirmation.
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.
 - Keep active repo-authored skills under the top-level `skills/` directory so the repository can also serve as a Codex plugin root.
+- Treat standard-portable skill structure as the canonical core, and treat platform-specific metadata or packaging surfaces as additive overlays instead of replacements.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.
 - Use `docs/maintainers/reality-audit.md` as the maintainer operating guide for source-of-truth order, audit procedure, durable review criteria, and reusable repo-maintenance conventions.
 - Use `docs/maintainers/workflow-atlas.md` for repo-maintainer workflow diagrams, branch paths, workflow inputs/outputs, and Agent+Skill UX audits.
 - Prefer one clear job per skill.
 - Plugins are the bundling and distribution unit; use them to group related skills instead of overloading one skill with unrelated or semi-related workflows.
+- Treat standalone skills installation and bundled plugin installation as equally supported distribution paths in repo docs when both paths exist.
 - Adjacent workflows may stay grouped only when they are truly one coherent job with one natural invocation surface.
 - If a skill depends on mode selection to cover workflows users would naturally ask for separately, prefer splitting those workflows into separate skills and bundling them in the plugin.
-- Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, references, automation prompts, and scripts.
+- Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, references, automation prompts, scripts, `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`, and future Claude plugin metadata/config.
+- Keep Codex/OpenAI-specific surfaces and Claude-specific surfaces synchronized with the standard skill core instead of letting one platform become the undocumented source of truth.
 - If config changes workflow decisions or output contracts, surface that in the main workflow instead of hiding it only in references.
 - When docs and scripts disagree on a workflow contract, fix the script or explicitly narrow the documented contract so they match.
 - When asked to report roadmap status, reconcile `ROADMAP.md` against completed repo work first or explicitly say the roadmap is stale before summarizing it.

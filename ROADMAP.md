@@ -24,6 +24,8 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 9: Code slice walkthrough skill (completed)
 - [x] Milestone 10: Codex plugin-ready repo layout (completed)
 - [x] Milestone 11: Docs skill split by document type (completed)
+- [x] Milestone 12: Project README maintainer hardening (completed)
+- [x] Milestone 13: Codex plugin marketplace wiring (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -297,19 +299,24 @@ Scope:
 
 - Add the Codex plugin marketplace file for this repository.
 - Make plugin-distribution metadata locally consumable in the expected marketplace surface.
-- Keep repo-root plugin packaging aligned with future marketplace usage.
+- Keep the repository root as the canonical plugin root instead of introducing a duplicate packaged copy.
+- Present bundled Codex plugin installation and direct standalone skill installation as equally supported user-facing paths.
 
 Tickets:
 
-- [ ] Add the repo-level Codex plugin marketplace file with this plugin registered.
-- [ ] Document marketplace-file expectations and ordering metadata for this repository.
-- [ ] Verify plugin-manifest and marketplace metadata stay in sync.
+- [x] Add the repo-level Codex marketplace file at `.agents/plugins/marketplace.json`.
+- [x] Register the repo-root `productivity-skills` plugin in that marketplace with a local `./` source path.
+- [x] Document how `.agents/plugins/marketplace.json` relates to `.codex-plugin/plugin.json` and the repo-root plugin layout.
+- [x] Rewrite the root `README.md` install guidance so Codex plugin installation and `skills` CLI installation are both first-class supported paths.
+- [x] Verify plugin-manifest and marketplace metadata stay in sync.
 
 Exit criteria:
 
-- [ ] A repo-local marketplace file exists and includes this plugin.
-- [ ] Repo guidance explains how the marketplace file relates to `.codex-plugin/plugin.json`.
-- [ ] Plugin packaging metadata and marketplace metadata are consistent.
+- [x] A repo-local marketplace file exists and includes this plugin.
+- [x] The repo-local marketplace entry points at the repo-root plugin rather than a duplicate plugin copy.
+- [x] Repo guidance explains how the marketplace file relates to `.codex-plugin/plugin.json`.
+- [x] The root `README.md` presents both supported install paths without treating either one as secondary.
+- [x] Plugin packaging metadata and marketplace metadata are consistent.
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -317,6 +324,7 @@ Scope:
 
 - Improve this repository’s skill surfaces for Claude Code routing and ergonomics.
 - Reconcile wording, references, and metadata where Claude-specific behavior benefits from tighter optimization.
+- Keep Claude-facing improvements additive to the shared standards-based skill core and the existing Codex/OpenAI overlays.
 
 Tickets:
 
@@ -335,6 +343,7 @@ Scope:
 
 - Add first-class Claude plugin packaging support alongside the Codex plugin-ready repo layout.
 - Define the repo surfaces needed to bundle and distribute this skill set for Claude plugin workflows.
+- Keep Claude plugin packaging aligned with the same repo-root source-of-truth model used for Codex where possible.
 
 Tickets:
 
