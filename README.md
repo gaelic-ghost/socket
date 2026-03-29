@@ -39,13 +39,18 @@ Codex plugin packaging follows the OpenAI plugin and skills docs:
 - [Build plugins](https://developers.openai.com/codex/plugins/build)
 - [Agent Skills](https://developers.openai.com/codex/skills/)
 
-From a local checkout, point Codex at this repository's marketplace file:
+For this repository, the local testing flow is:
 
 ```bash
 cat .agents/plugins/marketplace.json
 ```
 
-The marketplace entry is repo-local and targets the plugin root via `./`, so the bundled skills are discovered from `.codex-plugin/plugin.json` and `./skills/`.
+1. Open or work from this repository as the Codex repo root.
+2. Keep `.agents/plugins/marketplace.json` in place; this repo-scoped marketplace is the file Codex reads for local plugin discovery.
+3. Restart Codex after adding or changing the plugin metadata so the local marketplace is reloaded.
+4. In the Codex plugin directory, verify that the `Local Python Skills` marketplace appears and that the `python-skills` plugin is available to install or enable.
+
+The marketplace entry is repo-local and targets the plugin root via `./`, so the bundled skills are discovered from `.codex-plugin/plugin.json` and `./skills/`. This follows the OpenAI repo-marketplace guidance, where Codex reads `$REPO_ROOT/.agents/plugins/marketplace.json` and resolves `source.path` relative to the marketplace root.
 
 ## Plugin Structure
 
