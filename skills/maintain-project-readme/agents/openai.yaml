@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project README"
+  short_description: "Audit and improve ordinary software-project README.md files."
+  default_prompt: "Use $maintain-project-readme for an ordinary software-project README.md. Start by inspecting the current README and repo context, return audit findings first unless edits are requested, and redirect to $maintain-skills-readme if the repo is a skills or plugin repository."

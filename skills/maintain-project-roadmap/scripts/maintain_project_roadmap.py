@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Checklist ROADMAP maintainer with check-only and apply modes."""
+"""Checklist ROADMAP maintainer with deterministic check-only and apply modes."""
 
 from __future__ import annotations
 

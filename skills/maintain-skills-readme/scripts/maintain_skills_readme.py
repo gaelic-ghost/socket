@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Two-pass skills README maintenance workflow for *-skills repositories."""
+"""Two-pass README maintenance workflow for skills and plugin repositories."""
 
 from __future__ import annotations
 

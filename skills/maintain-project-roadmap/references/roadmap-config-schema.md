@@ -1,6 +1,6 @@
 # Roadmap Configuration Schema
 
-Persistent roadmap customization for `mode=roadmap_maintenance` is defined in:
+Persistent roadmap customization for `maintain-project-roadmap` is defined in:
 
 - Template defaults: `config/roadmap-customization.template.yaml`
 - User overrides: `config/roadmap-customization.yaml`

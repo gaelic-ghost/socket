@@ -23,6 +23,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 8: Python tooling and test standardization (completed)
 - [x] Milestone 9: Code slice walkthrough skill (completed)
 - [x] Milestone 10: Codex plugin-ready repo layout (completed)
+- [x] Milestone 11: Docs skill split by document type (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -245,12 +246,34 @@ Exit criteria:
 - [x] No active repo guidance still presents top-level skill directories as the canonical layout.
 - [x] Maintainer docs describe plugins as the distribution unit and skills as the authoring unit.
 
+## Milestone 11: Docs skill split by document type
+
+Scope:
+
+- Replace the umbrella docs-maintenance skill with separate README and roadmap skills.
+- Keep specialized README maintenance for skills/plugin repositories separate from general project README work.
+- Retire `project-docs-maintainer` as a canonical skill without leaving a wrapper behind.
+
+Tickets:
+
+- [x] Split the old roadmap workflow into `maintain-project-roadmap`.
+- [x] Split the old skills/plugin README workflow into `maintain-skills-readme`.
+- [x] Add `maintain-project-readme` as the general ordinary-project README skill.
+- [x] Update tests, metadata, and repo docs to use the new skills.
+- [x] Retire `project-docs-maintainer` from the active inventory and replace it with compatibility notes in docs.
+
+Exit criteria:
+
+- [x] No active repo docs present `project-docs-maintainer` as canonical.
+- [x] README and roadmap maintenance now route through separate skill names.
+- [x] General project README maintenance is separated from skills/plugin README maintenance.
+
 ## Risks and mitigations
 
 - Risk: Users still invoke deprecated names.
   Mitigation: keep canonical usage guidance explicit in repo docs and skill prompts.
-- Risk: Consolidated docs skill loses specificity.
-  Mitigation: enforce explicit mode selection in `project-docs-maintainer`.
+- Risk: Users may choose the wrong README-maintenance skill.
+  Mitigation: keep strong repo-genre routing guidance in `maintain-project-readme` and `maintain-skills-readme`.
 
 ## Backlog candidates
 
@@ -258,4 +281,3 @@ Exit criteria:
 - Add validation checks for README layout and skill inventory consistency.
 - Add broader automated testing for Things workflow surfaces, including deterministic validation paths where feasible.
 - Decide the `speak-with-profile` e2e test strategy, including whether to use a fake downstream CLI, real tool integration, or a bounded hybrid approach.
-- Revisit whether `project-docs-maintainer` should split into separately invokable docs-maintenance skills bundled by this plugin.

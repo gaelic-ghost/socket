@@ -37,8 +37,15 @@ All active repo-authored skills live under `skills/`.
 - `code-slice-explainer`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
-- `project-docs-maintainer`
-  - Scripts: `scripts/skills_readme_maintenance.py`, `scripts/roadmap_alignment_maintainer.py`
+- `maintain-project-readme`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`
+- `maintain-project-roadmap`
+  - Script: `scripts/maintain_project_roadmap.py`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
+- `maintain-skills-readme`
+  - Script: `scripts/maintain_skills_readme.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 - `project-workspace-cleaner`
@@ -164,6 +171,6 @@ Use these conventions when editing repo-maintainer guidance.
 
 - `project-workspace-cleaner` reserves exact `No findings.` for complete clean runs with no skipped paths.
 - `things-digest-generator` uses deterministic `Input error:` failures for missing or invalid JSON fallback inputs.
-- `project-docs-maintainer` is the canonical owner of `skills_readme_maintenance` and `roadmap_maintenance`.
+- `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
+- `maintain-skills-readme` is the canonical owner of skills/plugin repository `README.md` maintenance.
 - The repository root is the Codex plugin root, and active repo-authored skills are discovered from `skills/`.
-- Intentional compatibility mentions such as `skills_readme_alignment` are allowed and do not count as stale-name drift.

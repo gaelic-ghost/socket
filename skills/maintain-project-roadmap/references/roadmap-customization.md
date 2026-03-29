@@ -2,7 +2,7 @@
 
 ## Checklist Standard
 
-`mode=roadmap_maintenance` treats checklist-style `ROADMAP.md` as canonical:
+`maintain-project-roadmap` treats checklist-style `ROADMAP.md` as canonical:
 
 - `Vision`
 - `Product principles`

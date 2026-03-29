@@ -10,7 +10,7 @@ Use this section order in this file: Suitability, App template, CLI template, Pl
 ## Codex App Automation Prompt Template
 
 ```markdown
-Use $project-docs-maintainer with mode=roadmap_maintenance.
+Use $maintain-project-roadmap.
 
 Scope:
 - Project root: <PROJECT_ROOT_ABS_PATH>
@@ -54,7 +54,7 @@ Failure handling:
 Prompt template:
 
 ```markdown
-Use $project-docs-maintainer with mode=roadmap_maintenance.
+Use $maintain-project-roadmap.
 
 Check roadmap consistency at <ROADMAP_PATH_DEFAULT_PROJECT_ROOT_ROADMAP_MD> for project <PROJECT_ROOT_ABS_PATH>.
 Do not edit files.
@@ -77,7 +77,7 @@ Otherwise output a concise required-changes report.
 Prompt template:
 
 ```markdown
-Use $project-docs-maintainer with mode=roadmap_maintenance.
+Use $maintain-project-roadmap.
 
 Apply bounded updates to <ROADMAP_PATH_DEFAULT_PROJECT_ROOT_ROADMAP_MD> for project <PROJECT_ROOT_ABS_PATH>.
 Edit this file only.

@@ -8,8 +8,8 @@ import pytest
 
 
 def _load_module():
-    module_path = Path(__file__).resolve().parents[1] / "scripts" / "roadmap_alignment_maintainer.py"
-    spec = importlib.util.spec_from_file_location("roadmap_alignment_maintainer", module_path)
+    module_path = Path(__file__).resolve().parents[1] / "scripts" / "maintain_project_roadmap.py"
+    spec = importlib.util.spec_from_file_location("maintain_project_roadmap", module_path)
     assert spec is not None
     assert spec.loader is not None
     mod = importlib.util.module_from_spec(spec)
@@ -53,7 +53,7 @@ def test_main_invalid_project_root_returns_1(
         sys,
         "argv",
         [
-            "roadmap_alignment_maintainer.py",
+            "maintain_project_roadmap.py",
             "--project-root",
             str(missing_root),
             "--run-mode",
@@ -112,7 +112,7 @@ def test_main_check_only_valid_roadmap_reports_no_findings(
         sys,
         "argv",
         [
-            "roadmap_alignment_maintainer.py",
+            "maintain_project_roadmap.py",
             "--project-root",
             str(tmp_path),
             "--run-mode",

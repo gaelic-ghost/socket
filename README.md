@@ -19,15 +19,21 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
 ## What These Agent Skills Help With
 
-This repository packages reusable Codex skills for canonical docs maintenance, read-only workspace hygiene, code-slice walkthroughs, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
+This repository packages reusable Codex skills for project README maintenance, skills/plugin README maintenance, checklist roadmap maintenance, read-only workspace hygiene, code-slice walkthroughs, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
 
 It is also structured to be Codex plugin-ready for local or team installation, while keeping the skill directories usable as normal repo-authored skills.
 
 ## Skill Guide (When To Use What)
 
-- `project-docs-maintainer`
-  - Use when a `*-skills` repo needs README maintenance or checklist-style roadmap validation.
-  - Helps by providing one canonical doc-maintenance entrypoint with explicit modes.
+- `maintain-project-readme`
+  - Use when an ordinary software project `README.md` needs clearer overview, setup, usage, development, or verification guidance.
+  - Helps by keeping README maintenance focused on general project documentation instead of skills/plugin catalog rules.
+- `maintain-project-roadmap`
+  - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
+  - Helps by keeping roadmap maintenance deterministic through explicit `check-only` and `apply` modes.
+- `maintain-skills-readme`
+  - Use when an agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repo `README.md` needs auditing or bounded fixes.
+  - Helps by enforcing specialized install, discoverability, and catalog conventions for skills/plugin repositories.
 - `code-slice-explainer`
   - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
   - Helps by starting with data shape, then walking the full slice through branches, boundaries, transformations, and outputs.
@@ -53,7 +59,32 @@ Use the Vercel `skills` CLI to install from this repository.
 npx skills add gaelic-ghost/productivity-skills
 ```
 
-## Upgrade Note for v2.0.0
+## Current Skill Split
+
+- Removed skill surface:
+  - `project-docs-maintainer`
+- Use direct document-type skills instead:
+  - `maintain-project-readme`
+  - `maintain-project-roadmap`
+  - `maintain-skills-readme`
+- For ordinary software-project `README.md` files, use `maintain-project-readme`.
+- For skills/plugin repository `README.md` files, use `maintain-skills-readme`.
+- For checklist roadmap maintenance, use `maintain-project-roadmap`.
+
+Canonical installs:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
+npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme
+npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
+npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
+npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
+npx skills add gaelic-ghost/productivity-skills --skill things-digest-generator
+npx skills add gaelic-ghost/productivity-skills --skill speak-with-profile
+```
+
+## Historical Note for v2.0.0
 
 `v2.0.0` is a breaking release.
 
@@ -61,12 +92,14 @@ npx skills add gaelic-ghost/productivity-skills
   - `project-skills-orchestrator-agent`
   - `project-roadmap-maintainer`
 - Use direct standalone skill installs instead of orchestrator-first flows.
-- For roadmap maintenance, use `project-docs-maintainer` with `mode=roadmap_maintenance`.
+- For roadmap maintenance, use `maintain-project-roadmap`.
 
 Canonical installs:
 
 ```bash
-npx skills add gaelic-ghost/productivity-skills --skill project-docs-maintainer
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
+npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme
 npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
 npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
 npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
@@ -94,7 +127,9 @@ Current OpenAI plugin publishing is still evolving, so this repository remains d
 ## Install individually by Skill or Skill Pack
 
 ```bash
-npx skills add gaelic-ghost/productivity-skills --skill project-docs-maintainer
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
+npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme
 npx skills add gaelic-ghost/productivity-skills --skill code-slice-explainer
 npx skills add gaelic-ghost/productivity-skills --skill project-workspace-cleaner
 npx skills add gaelic-ghost/productivity-skills --skill things-reminders-manager
@@ -148,7 +183,9 @@ Then ask your Agent for help finding a skill for "" or ""
 ├── .codex-plugin/
 ├── skills/
 │   ├── code-slice-explainer/
-│   ├── project-docs-maintainer/
+│   ├── maintain-project-readme/
+│   ├── maintain-project-roadmap/
+│   ├── maintain-skills-readme/
 │   ├── project-workspace-cleaner/
 │   ├── speak-with-profile/
 │   ├── things-digest-generator/

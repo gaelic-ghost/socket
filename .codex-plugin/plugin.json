@@ -1,7 +1,7 @@
 {
   "name": "productivity-skills",
   "version": "2.2.0",
-  "description": "Reusable productivity skills for documentation maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
+  "description": "Reusable productivity skills for project and skills-repo docs maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Reusable productivity workflows for Codex.",
-    "longDescription": "Bundle reusable productivity skills for documentation maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
+    "longDescription": "Bundle reusable productivity skills for project and skills-repo docs maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [
@@ -29,9 +29,9 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Audit a skills repo README and roadmap for drift.",
-      "Explain a code path from trigger to final output.",
-      "Generate a week-ahead Things planning digest."
+      "Improve a project README without changing the code.",
+      "Audit a skills repo README for install and discoverability drift.",
+      "Explain a code path from trigger to final output."
     ],
     "brandColor": "#1F6FEB"
   }

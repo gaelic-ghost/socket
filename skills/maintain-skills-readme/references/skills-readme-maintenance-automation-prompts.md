@@ -8,7 +8,7 @@
 ## Codex App Automation Prompt Template
 
 ```markdown
-Use $project-docs-maintainer with mode=skills_readme_maintenance.
+Use $maintain-skills-readme.
 
 Scope:
 - Workspace root: <WORKSPACE_ROOT_ABS_PATH>
@@ -39,7 +39,7 @@ No-findings handling:
 ### Variant A: Audit-only
 
 ```markdown
-Use $project-docs-maintainer with mode=skills_readme_maintenance.
+Use $maintain-skills-readme.
 
 Audit skills README maintenance needs across `*-skills` under <WORKSPACE_ROOT_ABS_PATH>.
 Apply excludes: <EXCLUDE_PATHS_CSV_OR_NONE>.
@@ -51,7 +51,7 @@ If no issues remain, output exactly `No findings.`.
 ### Variant B: Audit + bounded fixes
 
 ```markdown
-Use $project-docs-maintainer with mode=skills_readme_maintenance.
+Use $maintain-skills-readme.
 
 Audit skills README maintenance needs across `*-skills` under <WORKSPACE_ROOT_ABS_PATH>.
 Apply excludes: <EXCLUDE_PATHS_CSV_OR_NONE>.

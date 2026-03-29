@@ -1,4 +1,0 @@
-interface:
-  display_name: "Project Docs Maintainer"
-  short_description: "Canonical maintainer for skills READMEs and checklist roadmap docs."
-  default_prompt: "Use $project-docs-maintainer with mode=skills_readme_maintenance or mode=roadmap_maintenance. Run the read-only variant first, keep fixes bounded to the selected mode, and return the matching Markdown plus JSON report."
