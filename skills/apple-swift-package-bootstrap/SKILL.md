@@ -26,6 +26,7 @@ Create a new Swift package repository with one top-level entry point and a simpl
    - `destination`
    - `platform`
    - `version_profile`
+   - optional `testing_mode`
    - optional `skip_validation`
 2. Normalize aliases exactly as `scripts/bootstrap_swift_package.sh` does:
    - `macos -> mac`
@@ -35,21 +36,28 @@ Create a new Swift package repository with one top-level entry point and a simpl
    - `minus-one -> current-minus-one`
    - `minus-two -> current-minus-two`
 3. Run `scripts/run_workflow.py` so documented defaults are loaded from customization state and normalized into one JSON contract.
-4. Let the wrapper invoke the bundled script:
+4. Select testing mode before scaffold creation:
+   - prefer `swift-testing` on current toolchains
+   - use `xctest` when explicitly requested or when older toolchains require it
+   - stop with a clear toolchain error instead of pretending Swift Testing is available when the local `swift package init` command cannot select it
+5. Let the wrapper invoke the bundled script:
    ```bash
-   scripts/bootstrap_swift_package.sh --name <Name> --type <library|executable|tool> --destination <dir> --platform <mac|macos|mobile|ios|multiplatform|both> --version-profile <latest-major|current-minus-one|current-minus-two|latest|minus-one|minus-two>
+   scripts/bootstrap_swift_package.sh --name <Name> --type <library|executable|tool> --destination <dir> --platform <mac|macos|mobile|ios|multiplatform|both> --version-profile <latest-major|current-minus-one|current-minus-two|latest|minus-one|minus-two> --testing-mode <swift-testing|xctest>
    ```
-5. Verify the generated repository:
+6. Verify the generated repository:
    - `Package.swift`
    - `.git`
    - `AGENTS.md`
    - `Tests/`
    - `swift build` and `swift test` unless `--skip-validation` was requested
-6. Ensure the generated guidance encodes the shared Swift policy:
+7. Ensure the generated guidance encodes the shared Swift policy:
    - apply the detailed local policy in `references/snippets/apple-swift-core.md`
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
    - preserve the project-appropriate logging, telemetry, and SwiftUI architecture guidance from that snippet
-7. Return one JSON execution summary with the created path, normalized options, and validation result.
+8. Hand off package execution guidance cleanly:
+   - use `swift build` and `swift test` by default
+   - recommend `apple-xcode-workflow` for package builds that need Xcode-managed toolchain behavior, such as package builds that depend on Xcode-provided Metal or other Apple-managed build assets
+9. Return one JSON execution summary with the created path, normalized options, and validation result.
 
 ## Inputs
 
@@ -58,6 +66,7 @@ Create a new Swift package repository with one top-level entry point and a simpl
 - `destination`: parent directory for the new package.
 - `platform`: `mac`, `mobile`, or `multiplatform`, with aliases normalized by the script.
 - `version_profile`: `latest-major`, `current-minus-one`, or `current-minus-two`, with aliases normalized by the script.
+- `testing_mode`: `swift-testing` or `xctest`.
 - `skip_validation`: optional flag to skip `swift build` and `swift test`.
 - `dry_run`: optional flag to resolve defaults and emit the normalized command contract without creating files.
 - Defaults:
@@ -66,6 +75,7 @@ Create a new Swift package repository with one top-level entry point and a simpl
   - `destination` defaults to `.`
   - `platform` defaults to `multiplatform`
   - `version_profile` defaults to `current-minus-one`
+  - `testing_mode` defaults to `swift-testing`
   - validation runs unless `--skip-validation` is passed
 
 ## Outputs
@@ -96,7 +106,9 @@ Create a new Swift package repository with one top-level entry point and a simpl
 - Preferred path is always `scripts/bootstrap_swift_package.sh`.
 - Use manual `swift package init` guidance only when the script is unavailable or the user explicitly asks for the manual path.
 - `tool` is an advanced explicit passthrough, not a default branch of the workflow.
-- After a successful scaffold, hand off build, test, or Apple-platform execution tasks to `apple-xcode-workflow`.
+- After a successful scaffold, hand off build, test, or Xcode-managed package execution tasks to `apple-xcode-workflow`.
+- For ordinary package work, prefer `swift build` and `swift test`.
+- For package builds that need Xcode-managed SDK or toolchain behavior, use `apple-xcode-workflow` and `xcodebuild` guidance instead of stretching the bootstrap skill into an execution skill.
 - Recommend `apple-dash-docsets` directly when the user’s next step is Dash docset or cheatsheet management.
 - `scripts/run_workflow.py` is the top-level runtime entrypoint and converts the shell script result into the documented JSON contract.
 

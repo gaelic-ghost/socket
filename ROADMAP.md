@@ -26,6 +26,8 @@
 - [x] Milestone 11: Documentation Maintenance Cadence
 - [ ] Milestone 12: Deferred Audit Reporting and Future Swift Direction
 - [ ] Milestone 13: SwiftPM Bootstrap Parity
+- [ ] Milestone 14: Dedicated Xcode macOS App Project Skill
+- [ ] Milestone 15: Dedicated Xcode iOS/iPadOS App Project Skill
 
 ## Milestone 1: Initial Apple Skill Bundle
 
@@ -220,15 +222,53 @@ Scope:
 Tickets:
 
 - [ ] Audit current SwiftPM `swift package init` flags and template behavior on supported toolchains.
-- [ ] Update the bootstrap workflow to use current testing options instead of backfilling stale XCTest scaffolding when Swift Testing is requested.
+- [ ] Update the bootstrap workflow to use current `swift package init` testing options and keep generated tests aligned with the selected testing mode.
 - [ ] Document how the skill should choose between `swift package init` flags and follow-up package edits when toolchain support differs.
+- [ ] Document when Swift packages should stay on `swift build` and when they should hand off to `xcodebuild` through `apple-xcode-workflow`.
 - [ ] Add validation coverage for executable-package bootstrap output so generated tests and package shape match documented expectations.
 
 Exit criteria:
 
 - [ ] The bootstrap skill matches current SwiftPM testing options and generated package behavior on supported toolchains.
 - [ ] Maintainer docs explain the expected fallback behavior when older toolchains lack newer `swift package init` options.
+- [ ] Maintainer docs explain when Swift package builds should use `xcodebuild` because Xcode-managed toolchain behavior is required.
 - [ ] Validation catches drift between documented bootstrap behavior and actual generated package output.
+
+## Milestone 14: Dedicated Xcode macOS App Project Skill
+
+Scope:
+
+- [ ] Add a future dedicated skill for Xcode macOS app-project collaboration without overloading the generic Xcode workflow skill.
+
+Tickets:
+
+- [ ] Define the top-level macOS app-project skill contract, inputs, outputs, fallbacks, and handoffs.
+- [ ] Document MCP-first macOS app-project execution with official `xcodebuild` fallback for app targets, schemes, and test flows.
+- [ ] Add Apple-docs-first guidance for macOS app architecture, lifecycle, and app-project mutation safety.
+- [ ] Add references and validation coverage for macOS app-project workflows, including signing/build-setting awareness where relevant.
+
+Exit criteria:
+
+- [ ] A shipped top-level skill exists for Xcode macOS app projects with the same contract quality as the current active skills.
+- [ ] The skill can guide macOS app-project inspection, diagnostics, build, test, and run collaboration without relying on `apple-xcode-workflow` as the only app-project surface.
+
+## Milestone 15: Dedicated Xcode iOS/iPadOS App Project Skill
+
+Scope:
+
+- [ ] Add a future dedicated skill for Xcode iOS and iPadOS app-project collaboration with explicit simulator- and destination-aware workflows.
+
+Tickets:
+
+- [ ] Define the top-level iOS/iPadOS app-project skill contract, inputs, outputs, fallbacks, and handoffs.
+- [ ] Document MCP-first mobile app-project execution with official `xcodebuild` fallback for simulator, destination, scheme, and test flows.
+- [ ] Add Apple-docs-first guidance for UIKit and SwiftUI mobile app architecture, lifecycle, and app-project mutation safety.
+- [ ] Add references and validation coverage for iOS/iPadOS app-project workflows, including simulator-oriented troubleshooting and destination selection guidance.
+
+Exit criteria:
+
+- [ ] A shipped top-level skill exists for Xcode iOS/iPadOS app projects with the same contract quality as the current active skills.
+- [ ] The skill can guide mobile app-project inspection, diagnostics, build, test, and run collaboration without collapsing macOS and iOS/iPadOS concerns into one generic app skill.
 
 ## Historical Notes
 

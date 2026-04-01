@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Usage:
-  bootstrap_swift_package.sh --name <PackageName> [--type library|executable|tool] [--destination <dir>] [--platform mac|macos|mobile|ios|multiplatform|both] [--version-profile latest-major|current-minus-one|current-minus-two|latest|minus-one|minus-two] [--skip-validation] [--skip-git-init] [--skip-copy-agents]
+  bootstrap_swift_package.sh --name <PackageName> [--type library|executable|tool] [--destination <dir>] [--platform mac|macos|mobile|ios|multiplatform|both] [--version-profile latest-major|current-minus-one|current-minus-two|latest|minus-one|minus-two] [--testing-mode swift-testing|xctest] [--skip-validation] [--skip-git-init] [--skip-copy-agents]
 
 Examples:
   bootstrap_swift_package.sh --name MyLibrary
@@ -21,6 +21,7 @@ pkg_type="library"
 destination="."
 platform_mode="multiplatform"
 version_profile="current-minus-one"
+testing_mode="swift-testing"
 run_validation="true"
 initialize_git="true"
 copy_agents="true"
@@ -109,6 +110,110 @@ EOF
   esac
 }
 
+swift_package_init_supports() {
+  local flag="$1"
+  swift package init --help 2>/dev/null | grep -Fq -- "$flag"
+}
+
+write_swift_testing_test_file() {
+  local file_path="$1"
+  local module_name="$2"
+  cat > "$file_path" <<EOF
+import Testing
+@testable import $module_name
+
+@Test func example() async throws {
+    // Write your test here and use APIs like \`#expect(...)\` to check expected conditions.
+}
+EOF
+}
+
+write_xctest_test_file() {
+  local file_path="$1"
+  local module_name="$2"
+  cat > "$file_path" <<EOF
+import XCTest
+@testable import $module_name
+
+final class ${module_name}Tests: XCTestCase {
+    func testExample() throws {
+        // XCTest Documentation
+        // https://developer.apple.com/documentation/xctest
+    }
+}
+EOF
+}
+
+configure_testing_mode() {
+  local requested_mode="$1"
+  local supports_swift_testing="false"
+  local supports_disable_swift_testing="false"
+  local supports_enable_xctest="false"
+  local supports_disable_xctest="false"
+  local args=()
+
+  if swift_package_init_supports "--enable-swift-testing"; then
+    supports_swift_testing="true"
+  fi
+  if swift_package_init_supports "--disable-swift-testing"; then
+    supports_disable_swift_testing="true"
+  fi
+  if swift_package_init_supports "--enable-xctest"; then
+    supports_enable_xctest="true"
+  fi
+  if swift_package_init_supports "--disable-xctest"; then
+    supports_disable_xctest="true"
+  fi
+
+  case "$requested_mode" in
+    swift-testing)
+      if [[ "$supports_swift_testing" != "true" ]]; then
+        echo "The active 'swift package init' command does not support Swift Testing selection flags. Choose --testing-mode xctest or use a newer Swift toolchain." >&2
+        exit 1
+      fi
+      args+=(--enable-swift-testing)
+      if [[ "$supports_disable_xctest" == "true" ]]; then
+        args+=(--disable-xctest)
+      fi
+      ;;
+    xctest)
+      if [[ "$supports_enable_xctest" == "true" ]]; then
+        args+=(--enable-xctest)
+      fi
+      if [[ "$supports_disable_swift_testing" == "true" ]]; then
+        args+=(--disable-swift-testing)
+      fi
+      ;;
+    *)
+      echo "Unsupported --testing-mode: $requested_mode" >&2
+      exit 1
+      ;;
+  esac
+
+  printf '%s\n' "${args[@]}"
+}
+
+ensure_test_target() {
+  local requested_mode="$1"
+  local module_name="$2"
+  local test_dir="Tests/${module_name}Tests"
+  local test_file="$test_dir/${module_name}Tests.swift"
+
+  if [[ ! -d Tests ]]; then
+    swift package add-target "${module_name}Tests" --type test --dependencies "$module_name" >/dev/null
+  fi
+
+  mkdir -p "$test_dir"
+  case "$requested_mode" in
+    swift-testing)
+      write_swift_testing_test_file "$test_file" "$module_name"
+      ;;
+    xctest)
+      write_xctest_test_file "$test_file" "$module_name"
+      ;;
+  esac
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --name)
@@ -129,6 +234,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --version-profile)
       version_profile="${2:-}"
+      shift 2
+      ;;
+    --testing-mode)
+      testing_mode="${2:-}"
       shift 2
       ;;
     --skip-validation)
@@ -200,6 +309,11 @@ if [[ "$version_profile" != "latest-major" && "$version_profile" != "current-min
   exit 1
 fi
 
+if [[ "$testing_mode" != "swift-testing" && "$testing_mode" != "xctest" ]]; then
+  echo "--testing-mode must be 'swift-testing' or 'xctest'" >&2
+  exit 1
+fi
+
 if [[ ! "$name" =~ ^[A-Za-z][A-Za-z0-9_-]*$ ]]; then
   echo "--name must start with a letter and contain only letters, numbers, underscore, or hyphen" >&2
   exit 1
@@ -235,10 +349,15 @@ if [[ -e "$target_dir" ]] && directory_has_non_ignorable_entries "$target_dir"; 
 fi
 
 set_version_targets
+init_testing_args=()
+while IFS= read -r arg; do
+  [[ -n "$arg" ]] || continue
+  init_testing_args+=("$arg")
+done < <(configure_testing_mode "$testing_mode")
 mkdir -p "$target_dir"
 (
   cd "$target_dir"
-  swift package init --name "$name" --type "$pkg_type"
+  swift package init --name "$name" --type "$pkg_type" "${init_testing_args[@]}"
 
   if ! grep -Eq '^[[:space:]]*platforms:[[:space:]]*\[' Package.swift; then
     snippet="$(platforms_snippet)"
@@ -264,9 +383,7 @@ mkdir -p "$target_dir"
     cp "$agents_template" AGENTS.md
   fi
 
-  if [[ ! -d Tests ]]; then
-    swift package add-target "${name}Tests" --type test --dependencies "$name" >/dev/null
-  fi
+  ensure_test_target "$testing_mode" "$name"
 
   if [[ ! -f Package.swift ]]; then
     echo "Validation failed: Package.swift missing after initialization." >&2
@@ -303,6 +420,7 @@ echo "Created Swift package: $target_dir"
 echo "Type: $pkg_type"
 echo "Platform: $platform_mode"
 echo "Version profile: $version_profile (iOS $ios_version, macOS $macos_version)"
+echo "Testing mode: $testing_mode"
 if [[ "$initialize_git" == "true" ]]; then
   echo "Git: initialized"
 else

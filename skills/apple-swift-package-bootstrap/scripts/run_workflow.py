@@ -31,6 +31,7 @@ def parse_output(stdout: str) -> dict:
         "validation_result": None,
         "git_initialized": None,
         "agents_copied": None,
+        "testing_mode": None,
     }
     for line in stdout.splitlines():
         if line.startswith("Created Swift package: "):
@@ -41,6 +42,8 @@ def parse_output(stdout: str) -> dict:
             result["git_initialized"] = line.endswith("initialized")
         elif line.startswith("AGENTS: "):
             result["agents_copied"] = line.endswith("copied")
+        elif line.startswith("Testing mode: "):
+            result["testing_mode"] = line.split(": ", 1)[1].strip()
     return result
 
 
@@ -51,6 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--destination")
     parser.add_argument("--platform")
     parser.add_argument("--version-profile")
+    parser.add_argument("--testing-mode")
     parser.add_argument("--skip-validation", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser
@@ -66,6 +70,7 @@ def main() -> int:
     destination = args.destination or "."
     platform = args.platform or str(settings.get("defaultPlatformPreset", "multiplatform"))
     version_profile = args.version_profile or str(settings.get("defaultVersionProfile", "current-minus-one"))
+    testing_mode = args.testing_mode or str(settings.get("defaultTestingMode", "swift-testing"))
     initialize_git = bool(settings.get("initializeGit", True))
     copy_agents = bool(settings.get("copyAgentsMd", True))
 
@@ -75,6 +80,7 @@ def main() -> int:
         "destination": destination,
         "platform": platform,
         "version_profile": version_profile,
+        "testing_mode": testing_mode,
         "skip_validation": args.skip_validation,
         "initialize_git": initialize_git,
         "copy_agents_md": copy_agents,
@@ -117,6 +123,8 @@ def main() -> int:
         platform,
         "--version-profile",
         version_profile,
+        "--testing-mode",
+        testing_mode,
     ]
     if args.skip_validation:
         command.append("--skip-validation")
@@ -148,10 +156,11 @@ def main() -> int:
         "validation_result": parsed["validation_result"],
         "git_initialized": parsed["git_initialized"],
         "agents_copied": parsed["agents_copied"],
+        "testing_mode": parsed["testing_mode"],
         "stdout": proc.stdout,
         "stderr": proc.stderr,
         "next_step": (
-            "Use apple-xcode-workflow for build, test, or Apple-platform execution work."
+            "Use apple-xcode-workflow for build, test, or xcodebuild-based package work when Xcode-managed tooling is required."
             if proc.returncode == 0
             else "Fix the bootstrap error and rerun the workflow."
         ),

@@ -51,6 +51,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
                     "defaultPackageType": "executable",
                     "defaultPlatformPreset": "mac",
                     "defaultVersionProfile": "latest-major",
+                    "defaultTestingMode": "xctest",
                     "initializeGit": False,
                     "copyAgentsMd": False,
                 },
@@ -62,8 +63,11 @@ class BootstrapWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["normalized_inputs"]["type"], "executable")
             self.assertEqual(payload["normalized_inputs"]["platform"], "mac")
             self.assertEqual(payload["normalized_inputs"]["version_profile"], "latest-major")
+            self.assertEqual(payload["normalized_inputs"]["testing_mode"], "xctest")
             self.assertFalse(payload["normalized_inputs"]["initialize_git"])
             self.assertFalse(payload["normalized_inputs"]["copy_agents_md"])
+            self.assertIn("--testing-mode", payload["command"])
+            self.assertIn("xctest", payload["command"])
             self.assertIn("--skip-git-init", payload["command"])
             self.assertIn("--skip-copy-agents", payload["command"])
 
@@ -89,6 +93,8 @@ class BootstrapWorkflowTests(unittest.TestCase):
                 "mobile",
                 "--version-profile",
                 "current-minus-two",
+                "--testing-mode",
+                "swift-testing",
                 "--dry-run",
                 env=env,
             )
@@ -96,6 +102,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["normalized_inputs"]["type"], "tool")
             self.assertEqual(payload["normalized_inputs"]["platform"], "mobile")
             self.assertEqual(payload["normalized_inputs"]["version_profile"], "current-minus-two")
+            self.assertEqual(payload["normalized_inputs"]["testing_mode"], "swift-testing")
 
     def test_wrapper_normalizes_shell_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -125,6 +132,27 @@ class BootstrapWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
             self.assertTrue(payload["resolved_path"].endswith("DemoPkg"))
+            self.assertEqual(payload["testing_mode"], "swift-testing")
+
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for executable bootstrap coverage")
+    def test_executable_bootstrap_creates_swift_testing_test_target(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = self.run_script(
+                "--name",
+                "DemoPkg",
+                "--type",
+                "executable",
+                "--destination",
+                tmpdir,
+                "--skip-validation",
+            )
+            self.assertEqual(code, 0)
+            package_dir = Path(payload["resolved_path"])
+            test_file = package_dir / "Tests" / "DemoPkgTests" / "DemoPkgTests.swift"
+            self.assertTrue(test_file.is_file())
+            test_text = test_file.read_text(encoding="utf-8")
+            self.assertIn("import Testing", test_text)
+            self.assertIn("@Test", test_text)
 
 
 if __name__ == "__main__":

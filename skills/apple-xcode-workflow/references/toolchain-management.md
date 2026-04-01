@@ -23,3 +23,5 @@
 
 - Prefer explicit output of versions and selected developer dir before diagnosing build/test failures.
 - Keep fallback commands deterministic and project-local.
+- When a Swift package build appears to depend on Xcode-managed assets or components, verify the active Xcode toolchain before defaulting to `swift build`.
+- `xcodebuild` may expose Apple-managed toolchain paths, including components like the Metal toolchain, that do not show up the same way through plain SwiftPM invocation.

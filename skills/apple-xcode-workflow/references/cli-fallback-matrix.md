@@ -29,6 +29,11 @@
   - `swift package resolve`
   - `swift package update`
   - `swift package test` (alias behavior varies by toolchain; prefer `swift test` for test execution)
+- Xcode-managed package fallback when the package needs Xcode SDK or toolchain behavior:
+  - confirm package scheme discovery first with `xcodebuild -list -json`
+  - build with `xcodebuild -scheme <PackageName> -destination 'generic/platform=macOS' build`
+  - test with `xcodebuild -scheme <PackageName> -destination 'platform=macOS' test`
+  - use this path when plain SwiftPM invocation is insufficient for Apple-managed toolchain components or build assets surfaced through Xcode
 
 ## Fallback message content
 
