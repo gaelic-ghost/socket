@@ -1,6 +1,369 @@
+import Foundation
+import Hummingbird
+import HummingbirdTesting
+import NIOCore
+import SpeakSwiftlyCore
 import Testing
 @testable import SpeakSwiftlyServer
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@available(macOS 14, *)
+actor MockRuntime: ServerRuntimeProtocol {
+    enum SpeakBehavior: Sendable {
+        case completeImmediately
+        case holdOpen
+    }
+
+    var profiles: [ProfileSummary]
+    var speakBehavior: SpeakBehavior
+    private var statusContinuation: AsyncStream<WorkerStatusEvent>.Continuation?
+    private var heldContinuations: [String: AsyncThrowingStream<WorkerRequestStreamEvent, Error>.Continuation] = [:]
+
+    init(
+        profiles: [ProfileSummary] = [sampleProfile()],
+        speakBehavior: SpeakBehavior = .completeImmediately
+    ) {
+        self.profiles = profiles
+        self.speakBehavior = speakBehavior
+    }
+
+    func start() {}
+
+    func shutdown() async {
+        statusContinuation?.finish()
+        for continuation in heldContinuations.values {
+            continuation.finish()
+        }
+        heldContinuations.removeAll()
+    }
+
+    func statusEvents() -> AsyncStream<WorkerStatusEvent> {
+        AsyncStream { continuation in
+            self.statusContinuation = continuation
+        }
+    }
+
+    func submit(_ request: WorkerRequest) async -> RuntimeRequestHandle {
+        switch request {
+        case .listProfiles:
+            return RuntimeRequestHandle(
+                id: request.id,
+                request: request,
+                events: AsyncThrowingStream<WorkerRequestStreamEvent, Error> { continuation in
+                    continuation.yield(.completed(WorkerSuccessResponse(id: request.id, profiles: profiles)))
+                    continuation.finish()
+                }
+            )
+
+        case .speakLiveBackground:
+            var heldContinuation: AsyncThrowingStream<WorkerRequestStreamEvent, Error>.Continuation?
+            let speakBehavior = self.speakBehavior
+            let events = AsyncThrowingStream<WorkerRequestStreamEvent, Error> { continuation in
+                continuation.yield(.acknowledged(.init(id: request.id)))
+                continuation.yield(.started(.init(id: request.id, op: request.opName)))
+                if speakBehavior == .completeImmediately {
+                    continuation.yield(.progress(.init(id: request.id, stage: .startingPlayback)))
+                    continuation.yield(.completed(.init(id: request.id)))
+                    continuation.finish()
+                } else {
+                    heldContinuation = continuation
+                }
+            }
+            if let heldContinuation {
+                heldContinuations[request.id] = heldContinuation
+            }
+            return RuntimeRequestHandle(id: request.id, request: request, events: events)
+
+        case .createProfile(_, let profileName, let text, let voiceDescription, _):
+            profiles.append(
+                ProfileSummary(
+                    profileName: profileName,
+                    createdAt: Date(),
+                    voiceDescription: voiceDescription,
+                    sourceText: text
+                )
+            )
+            return RuntimeRequestHandle(
+                id: request.id,
+                request: request,
+                events: AsyncThrowingStream<WorkerRequestStreamEvent, Error> { continuation in
+                    continuation.yield(.completed(WorkerSuccessResponse(id: request.id, profileName: profileName)))
+                    continuation.finish()
+                }
+            )
+
+        case .removeProfile(_, let profileName):
+            profiles.removeAll { $0.profileName == profileName }
+            return RuntimeRequestHandle(
+                id: request.id,
+                request: request,
+                events: AsyncThrowingStream<WorkerRequestStreamEvent, Error> { continuation in
+                    continuation.yield(.completed(WorkerSuccessResponse(id: request.id, profileName: profileName)))
+                    continuation.finish()
+                }
+            )
+
+        case .speakLive:
+            return RuntimeRequestHandle(
+                id: request.id,
+                request: request,
+                events: AsyncThrowingStream<WorkerRequestStreamEvent, Error> { continuation in
+                    continuation.finish(throwing: WorkerError(
+                        code: .invalidRequest,
+                        message: "MockRuntime only supports background playback in these tests."
+                    ))
+                }
+            )
+        }
+    }
+
+    func publishStatus(_ stage: WorkerStatusStage) {
+        statusContinuation?.yield(.init(stage: stage))
+    }
+
+    func finishHeldSpeak(id: String) {
+        guard let continuation = heldContinuations.removeValue(forKey: id) else { return }
+        continuation.yield(.progress(.init(id: id, stage: .playbackFinished)))
+        continuation.yield(.completed(.init(id: id)))
+        continuation.finish()
+    }
+}
+
+@Test func configurationLoadsDefaultsAndRejectsInvalidValues() throws {
+    let defaults = try ServerConfiguration.load(environment: [:])
+    #expect(defaults.host == "127.0.0.1")
+    #expect(defaults.port == 7337)
+    #expect(defaults.sseHeartbeatSeconds == 10)
+    #expect(defaults.completedJobTTLSeconds == 900)
+
+    do {
+        _ = try ServerConfiguration.load(environment: ["APP_PORT": "zero"])
+        Issue.record("Expected invalid APP_PORT to throw a configuration error.")
+    } catch let error as ServerConfigurationError {
+        #expect(error.message.contains("APP_PORT"))
+    }
+}
+
+@available(macOS 14, *)
+@Test func stateCompletesBackgroundJobsAndPrunesExpiredEntries() async throws {
+    let runtime = MockRuntime()
+    let state = ServerState(
+        configuration: testConfiguration(completedJobTTLSeconds: 0.05, jobPruneIntervalSeconds: 0.02),
+        runtime: runtime,
+        makeRuntime: { runtime }
+    )
+
+    await state.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(state)
+
+    let jobID = try await state.submitSpeak(text: "Hello from the test suite", profileName: "default", background: true)
+    let snapshot = try await waitForJobSnapshot(jobID, on: state)
+
+    #expect(snapshot.jobID == jobID)
+    #expect(snapshot.status == "completed")
+    #expect(snapshot.terminalEvent != nil)
+    #expect(snapshot.history.count >= 3)
+
+    try await Task.sleep(for: .milliseconds(120))
+    try await waitUntilJobDisappears(jobID, on: state)
+
+    await state.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func sseReplayIncludesWorkerStatusHistoryAndHeartbeat() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let state = ServerState(
+        configuration: testConfiguration(sseHeartbeatSeconds: 0.02),
+        runtime: runtime,
+        makeRuntime: { runtime }
+    )
+
+    await state.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(state)
+
+    let jobID = try await state.submitSpeak(text: "Keep speaking", profileName: "default", background: true)
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = try await state.jobSnapshot(id: jobID)
+        return snapshot.history.count >= 2 ? snapshot : nil
+    }
+
+    let stream = try await state.sseStream(for: jobID)
+    var iterator = stream.makeAsyncIterator()
+    let first = try #require(await iterator.next())
+    let second = try #require(await iterator.next())
+    let third = try #require(await iterator.next())
+
+    #expect(string(from: first).contains("event: worker_status"))
+    #expect(string(from: second).contains("event: message"))
+    #expect(string(from: third).contains("event: started"))
+
+    var heartbeat: String?
+    for _ in 0..<20 {
+        guard let chunk = await iterator.next() else { break }
+        let text = string(from: chunk)
+        if text == ": keep-alive\n\n" {
+            heartbeat = text
+            break
+        }
+    }
+    #expect(heartbeat == ": keep-alive\n\n")
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await state.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func routesExposeHealthProfilesAndJobLifecycle() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = ServerState(
+        configuration: configuration,
+        runtime: runtime,
+        makeRuntime: { runtime }
+    )
+
+    await state.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(state)
+
+    let app = makeApplication(configuration: configuration, state: state)
+    try await app.test(.router) { client in
+        let healthResponse = try await client.execute(uri: "/healthz", method: .get)
+        let healthJSON = try jsonObject(from: healthResponse.body)
+        #expect(healthResponse.status == .ok)
+        #expect(healthJSON["status"] as? String == "ok")
+        #expect(healthJSON["worker_ready"] as? Bool == true)
+
+        let profilesResponse = try await client.execute(uri: "/profiles", method: .get)
+        let profilesJSON = try jsonObject(from: profilesResponse.body)
+        let profiles = try #require(profilesJSON["profiles"] as? [[String: Any]])
+        #expect(profiles.count == 1)
+        #expect(profiles.first?["profile_name"] as? String == "default")
+
+        let speakResponse = try await client.execute(
+            uri: "/speak",
+            method: .post,
+            headers: [.contentType: "application/json"],
+            body: byteBuffer(#"{"text":"Route test","profile_name":"default"}"#)
+        )
+        let speakJSON = try jsonObject(from: speakResponse.body)
+        let jobID = try #require(speakJSON["job_id"] as? String)
+        #expect(speakResponse.status == .accepted)
+        #expect((speakJSON["job_url"] as? String)?.contains(jobID) == true)
+        #expect((speakJSON["events_url"] as? String)?.contains(jobID) == true)
+        #expect((speakJSON["job_url"] as? String)?.hasPrefix("http://") == true)
+
+        _ = try await waitForJobSnapshot(jobID, on: state)
+        let jobResponse = try await client.execute(uri: "/jobs/\(jobID)", method: .get)
+        let jobJSON = try jsonObject(from: jobResponse.body)
+        #expect(jobResponse.status == .ok)
+        #expect(jobJSON["job_id"] as? String == jobID)
+        #expect(jobJSON["status"] as? String == "completed")
+    }
+
+    await state.shutdown()
+}
+
+private func testConfiguration(
+    sseHeartbeatSeconds: Double = 0.05,
+    completedJobTTLSeconds: Double = 30,
+    completedJobMaxCount: Int = 20,
+    jobPruneIntervalSeconds: Double = 0.05
+) -> ServerConfiguration {
+    .init(
+        name: "speak-swiftly-server-tests",
+        environment: "test",
+        host: "127.0.0.1",
+        port: 7337,
+        sseHeartbeatSeconds: sseHeartbeatSeconds,
+        completedJobTTLSeconds: completedJobTTLSeconds,
+        completedJobMaxCount: completedJobMaxCount,
+        jobPruneIntervalSeconds: jobPruneIntervalSeconds
+    )
+}
+
+private func sampleProfile() -> ProfileSummary {
+    .init(
+        profileName: "default",
+        createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+        voiceDescription: "Warm and clear",
+        sourceText: "A reference voice sample."
+    )
+}
+
+@available(macOS 14, *)
+private func waitUntilReady(_ state: ServerState) async throws {
+    _ = try await waitUntil(timeout: .seconds(1), pollInterval: .milliseconds(10)) {
+        let (ready, _) = await state.readinessSnapshot()
+        return ready ? true : nil
+    }
+}
+
+@available(macOS 14, *)
+private func waitForJobSnapshot(_ jobID: String, on state: ServerState) async throws -> JobSnapshot {
+    try await waitUntil(timeout: .seconds(1), pollInterval: .milliseconds(10)) {
+        do {
+            let snapshot = try await state.jobSnapshot(id: jobID)
+            return snapshot.terminalEvent == nil ? nil : snapshot
+        } catch {
+            return nil
+        }
+    }
+}
+
+@available(macOS 14, *)
+private func waitUntilJobDisappears(_ jobID: String, on state: ServerState) async throws {
+    let _: Bool = try await waitUntil(timeout: .seconds(1), pollInterval: .milliseconds(10)) {
+        do {
+            _ = try await state.jobSnapshot(id: jobID)
+            return nil
+        } catch {
+            return true
+        }
+    }
+}
+
+private func waitUntil<T: Sendable>(
+    timeout: Duration,
+    pollInterval: Duration,
+    condition: @escaping @Sendable () async throws -> T?
+) async throws -> T {
+    let deadline = ContinuousClock.now + timeout
+    while ContinuousClock.now < deadline {
+        if let value = try await condition() {
+            return value
+        }
+        try await Task.sleep(for: pollInterval)
+    }
+    throw TimeoutError()
+}
+
+private struct TimeoutError: Error {}
+
+private func byteBuffer(_ string: String) -> ByteBuffer {
+    var buffer = ByteBufferAllocator().buffer(capacity: string.utf8.count)
+    buffer.writeString(string)
+    return buffer
+}
+
+private func string(from buffer: ByteBuffer) -> String {
+    String(decoding: buffer.readableBytesView, as: UTF8.self)
+}
+
+private func jsonObject(from buffer: ByteBuffer) throws -> [String: Any] {
+    let data = Data(buffer.readableBytesView)
+    let json = try JSONSerialization.jsonObject(with: data)
+    guard let dictionary = json as? [String: Any] else {
+        throw JSONError.notDictionary
+    }
+    return dictionary
+}
+
+private enum JSONError: Error {
+    case notDictionary
 }

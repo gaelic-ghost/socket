@@ -1,16 +1,16 @@
 # SpeakSwiftlyServer
 
-Swift executable package for a localhost HTTP server that will expose `SpeakSwiftly` over a small, app-friendly API.
+Swift executable package for a localhost HTTP server that exposes `SpeakSwiftlyCore` over a small, app-friendly API.
 
 ## Overview
 
-This repository is the Swift-native sibling to `../speak-to-user-server`. The goal is to replace that Python host with a Hummingbird-based macOS service that serves the same HTTP surface, including job-style request handling and SSE progress streaming, while staying tightly aligned with `SpeakSwiftly` as the source of truth for speech, profile management, and playback progress semantics.
+This repository is the Swift-native sibling to `../speak-to-user-server`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host a localhost macOS HTTP service with in-memory job tracking and server-sent events, while delegating speech, profile management, and worker lifecycle to the typed `SpeakSwiftlyCore` runtime.
 
 ### Motivation
 
-The long-term target is a thin Swift server that a macOS app can install and manage as a LaunchAgent without needing a separate Python runtime. This package is intentionally starting as a small SwiftPM executable scaffold first so the repository, roadmap, and GitHub home are in place before the server implementation lands.
+The target is a thin Swift service that a forthcoming macOS app can install and manage as a LaunchAgent without needing a separate Python runtime. Matching the existing Python server’s HTTP contract keeps the app-facing integration stable while moving the runtime path fully into Swift.
 
-At the moment, the package is still in bootstrap state. The actual Hummingbird server, the matching HTTP routes, and the `SpeakSwiftly` integration are still ahead of us.
+That means this package intentionally stays narrow: Hummingbird for HTTP, `SpeakSwiftlyCore` for speech and profile operations, and a small amount of server state to translate typed worker events into job snapshots and SSE replay.
 
 ## Setup
 
@@ -28,13 +28,24 @@ swift test
 
 ## Usage
 
-The current executable is only a scaffold entrypoint. Running it today just exercises the placeholder binary:
+Run the server locally:
 
 ```bash
 swift run SpeakSwiftlyServer
 ```
 
-The intended end state is a localhost HTTP service that mirrors the API shape of `../speak-to-user-server`, including:
+The service binds to `127.0.0.1:7337` by default and supports these environment variables:
+
+- `APP_NAME`
+- `APP_ENVIRONMENT`
+- `APP_HOST`
+- `APP_PORT`
+- `APP_SSE_HEARTBEAT_SECONDS`
+- `APP_COMPLETED_JOB_TTL_SECONDS`
+- `APP_COMPLETED_JOB_MAX_COUNT`
+- `APP_JOB_PRUNE_INTERVAL_SECONDS`
+
+The current HTTP surface is:
 
 - `GET /healthz`
 - `GET /readyz`
@@ -46,20 +57,18 @@ The intended end state is a localhost HTTP service that mirrors the API shape of
 - `GET /jobs/{job_id}`
 - `GET /jobs/{job_id}/events`
 
-Those routes are planned, not implemented yet.
+`POST /speak`, `POST /profiles`, and `DELETE /profiles/{profile_name}` return job metadata immediately. Progress, worker status changes, acknowledgements, and terminal results are exposed through `GET /jobs/{job_id}/events` as SSE.
 
 ## Development
 
-The current package is a clean SwiftPM executable scaffold with generated test support and project guidance in [`AGENTS.md`](/Users/galew/Workspace/SpeakSwiftlyServer/AGENTS.md).
+The executable entrypoint lives in [`Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift). The server itself stays intentionally small:
 
-Near-term implementation work is expected to cover:
+- [`ServerApp.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/ServerApp.swift) wires Hummingbird routes.
+- [`ServerState.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/ServerState.swift) tracks worker readiness, cached profiles, job history, SSE subscribers, and retention.
+- [`ServerRuntimeBridge.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/ServerRuntimeBridge.swift) keeps the runtime boundary thin around `SpeakSwiftlyCore`.
+- [`ServerModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/ServerModels.swift) defines request and response payloads.
 
-- adding Hummingbird as the HTTP server dependency
-- modeling the Python host's in-memory job and SSE behavior in Swift
-- deciding whether the first Swift server talks to `SpeakSwiftly` through a subprocess contract or through a future library product
-- keeping the public HTTP contract aligned with `../speak-to-user-server`
-
-Because `SpeakSwiftly` does not yet vend a library product, direct package import from this server is not available today. Until that changes, the integration strategy remains an explicit implementation milestone rather than a completed dependency.
+The design is deliberately direct. Adding extra wrappers, managers, or intermediate layers here would be easy, but it would also be the kind of unnecessary complexity that makes a small localhost service harder to reason about, so the server is kept close to the typed runtime API on purpose.
 
 ## Verification
 
@@ -70,7 +79,7 @@ swift build
 swift test
 ```
 
-Additional verification still needs to be added once the server implementation exists, especially for route behavior, SSE streaming, and `SpeakSwiftly` integration.
+The current test suite covers configuration parsing, background job completion and pruning, SSE replay and heartbeat behavior, and route-level health, profile, and job lifecycle responses against a controlled typed runtime.
 
 ## Roadmap
 
