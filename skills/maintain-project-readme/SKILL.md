@@ -20,7 +20,7 @@ Maintain ordinary software-project `README.md` files through one deterministic R
 3. In `check-only`, audit title/value proposition, common README sections, the required `Overview > Motivation` structure, and command integrity.
 4. In `apply`, keep edits bounded to the target `README.md` while repairing missing structure and grounded wording.
 5. Re-run the same audit to confirm post-fix status.
-6. If the repository is a skills or plugin repo with specialized install and discoverability conventions, use `maintain-skills-readme` instead.
+6. If the repository is a skills or plugin repo with specialized install and discoverability conventions, use the dedicated `maintain-skills-readme` skill from `/Users/galew/Workspace/agent-plugin-skills` instead.
 
 ## Output Contract
 
@@ -40,7 +40,7 @@ Maintain ordinary software-project `README.md` files through one deterministic R
 - Never auto-commit, auto-push, or open a PR.
 - Never invent commands, setup steps, or support claims that are not grounded in the repo.
 - Never edit files other than the target `README.md`.
-- Do not use this skill for agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repositories. Use `maintain-skills-readme` instead.
+- Do not use this skill for agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repositories. Use the dedicated `maintain-skills-readme` skill from `/Users/galew/Workspace/agent-plugin-skills` instead.
 
 ## References
 

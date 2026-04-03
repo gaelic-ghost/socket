@@ -35,7 +35,7 @@ If two layers disagree, fix the lower-trust layer or narrow its claims.
 - `productivity-skills` is now the global, broadly useful plugin.
 - Language-, framework-, stack-, and repository-specific maintainer workflows should prefer dedicated plugins intended for project-level or repo-level install.
 - Agent-skills and agent-plugin repository maintainer workflows now have a dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills`.
-- Transitional copies may still exist here, but that sibling repo is the canonical future home for that domain.
+- That sibling repo is the canonical home for that domain; this repository should not keep shipping local copies of those skills.
 
 ### Skill Runtime Surfaces
 
@@ -50,21 +50,6 @@ All active repo-authored skills live under `skills/`.
   - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-project-roadmap`
   - Script: `scripts/maintain_project_roadmap.py`
-  - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`, `references/*`
-- `maintain-skills-readme`
-  - Transition note: future home is `/Users/galew/Workspace/agent-plugin-skills`
-  - Script: `scripts/maintain_skills_readme.py`
-  - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`, `references/*`
-- `sync-skills-repo-guidance`
-  - Transition note: future home is `/Users/galew/Workspace/agent-plugin-skills`
-  - Script: `scripts/sync_skills_repo_guidance.py`
-  - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`, `references/*`
-- `bootstrap-skills-plugin-repo`
-  - Transition note: future home is `/Users/galew/Workspace/agent-plugin-skills`
-  - Script: `scripts/bootstrap_skills_plugin_repo.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 
@@ -187,12 +172,10 @@ Use these conventions when editing repo-maintainer guidance.
 ## Current Invariants
 
 - `maintain-project-roadmap` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
-- `bootstrap-skills-plugin-repo` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
-- `maintain-project-readme` and `maintain-skills-readme` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
-- `sync-skills-repo-guidance` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
+- `maintain-project-readme` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
 - In this repo, `maintain-project-readme` and `maintain-project-roadmap` are the strategic maintainer skills for ordinary project docs.
-- `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` remain present here during transition, but their canonical future home is `/Users/galew/Workspace/agent-plugin-skills`.
+- Agent-stack repo-maintainer skills now live in `/Users/galew/Workspace/agent-plugin-skills`, not in this repository.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude plugin metadata.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.

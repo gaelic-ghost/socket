@@ -17,7 +17,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - This repository now optimizes for globally useful skills that make sense to install broadly.
 - Dedicated language-, stack-, or repository-specific bundles should increasingly live in separate plugins intended for project-level or repo-level install.
 - Agent-skills and agent-plugin repository maintenance now has a dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills`.
-- The three agent-stack maintainer skills listed here remain part of the current repo inventory, but they are no longer the preferred long-term expansion lane for this repository.
+- Those agent-stack maintainer skills are now out of this repo's active inventory and belong in the sibling repo instead.
 
 ## Repo-Wide Conventions
 
@@ -35,50 +35,6 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
-| `maintain-skills-readme` | Transitional specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
-| `bootstrap-skills-plugin-repo` | Transitional repo bootstrap and structural alignment for skills/plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
-| `sync-skills-repo-guidance` | Transitional repo-wide guidance reconciler for skills/plugin repos | `check-only`, audit plus bounded fixes, upstream-doc refresh, misroute/defer handling |
-
-## `bootstrap-skills-plugin-repo`
-
-### Workflow: `check-only`
-
-**Overview**
-
-- Triggered when the user wants to audit or plan the structural bootstrap of a skills/plugin repository.
-- Primary workflow.
-- `read-only`
-
-**Inputs**
-
-- Required: `--repo-root <path>`
-- Required: `--run-mode check-only`
-- Optional: `--plugin-name <name>`
-- Tool/script input: `scripts/bootstrap_skills_plugin_repo.py`
-
-**Outputs**
-
-- Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `created_paths`, `errors`
-- Exact clean-run text: `No findings.`
-
-### Workflow: `apply`
-
-**Overview**
-
-- Triggered when the user wants missing repo structure created or aligned.
-- Variant workflow.
-- `bounded-write`
-
-**Inputs**
-
-- Required: `--repo-root <path>`
-- Required: `--run-mode apply`
-- Optional: `--plugin-name <name>`
-
-**Outputs**
-
-- Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `created_paths`, `errors`
-- Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
 
 ## `explain-code-slice`
 
@@ -120,7 +76,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Branch Conditions**
 
-- Skills/plugin repo detected: reject and redirect to `maintain-skills-readme`
+- Skills/plugin repo detected: reject and redirect to the dedicated `maintain-skills-readme` skill in `/Users/galew/Workspace/agent-plugin-skills`
 - Multiple repo profiles match: report ambiguity while selecting the conservative valid profile
 - README already sound: exact clean-run text
 
@@ -189,88 +145,10 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `errors`
 - Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
 
-## `maintain-skills-readme`
+## Related External Skills
 
-### Workflow: audit-only
+The following workflows were incubated here but now live in `/Users/galew/Workspace/agent-plugin-skills`:
 
-**Overview**
-
-- Triggered when the user wants `README.md` maintenance for a skills/plugin repository without applying fixes.
-- Primary workflow.
-- `read-only`
-
-**Inputs**
-
-- Required: `--workspace <path>`
-- Optional: `--repo-glob <glob>`
-- Optional: repeatable `--exclude <path>`
-- Tool/script input: `scripts/maintain_skills_readme.py`
-
-**Outputs**
-
-- Markdown plus JSON with `run_context`, `repos_scanned`, `profile_assignments`, `schema_violations`, `command_integrity_issues`, `fixes_applied`, `post_fix_status`, `errors`
-- Exact clean-run text: `No findings.`
-
-### Workflow: audit plus bounded fixes
-
-**Overview**
-
-- Triggered when the user wants README fixes for a skills/plugin repository.
-- Variant workflow.
-- `bounded-write`
-
-**Inputs**
-
-- Same inputs as audit-only
-- Explicit write trigger: `--apply-fixes`
-
-**Outputs**
-
-- Same Markdown plus JSON report shape as audit-only
-- Exact clean-run text: `No findings.` when no issues and no errors remain
-
-## `sync-skills-repo-guidance`
-
-### Workflow: `check-only`
-
-**Overview**
-
-- Triggered when the user wants a repo-wide guidance audit for an existing skills/plugin repository.
-- Primary workflow.
-- `read-only`
-
-**Inputs**
-
-- Required: `--repo-root <path>`
-- Required: `--run-mode check-only`
-- Optional: `--plugin-name <name>`
-- Tool/script input: `scripts/sync_skills_repo_guidance.py`
-
-**Branch Conditions**
-
-- README-only request: defer to `maintain-skills-readme`
-- roadmap-only request: defer to `maintain-project-roadmap`
-- upstream docs changed materially: report dated findings before narrowing or applying fixes
-
-**Outputs**
-
-- Markdown plus JSON with `run_context`, `findings`, `errors`
-- Exact clean-run text: `No findings.`
-
-### Workflow: `audit plus bounded fixes`
-
-**Overview**
-
-- Triggered when the user wants repo-wide guidance drift corrected after the audit.
-- Variant workflow.
-- `bounded-write`
-
-**Inputs**
-
-- Same inputs as `check-only`
-- Requires official-doc refresh before applying repo-wide guidance changes
-
-**Outputs**
-
-- Same Markdown plus JSON report shape as `check-only`
-- Exact clean-run text: `No findings.` when no issues and no errors remain
+- `maintain-skills-readme`
+- `bootstrap-skills-plugin-repo`
+- `sync-skills-repo-guidance`

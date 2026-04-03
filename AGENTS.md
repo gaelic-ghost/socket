@@ -34,7 +34,7 @@ Applicability guidance:
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
 - When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs, treat `plugins/productivity-skills/` as the plugin packaging root, and keep the repo-scoped marketplace file aligned with that plugin subtree.
 - For Gale's repos, keep the source-of-truth plugin, marketplace, MCP, app, and hook manifests inside `plugins/` and `.agents/plugins/`, not mixed into root `skills/`.
-- For agent-skills and agent-plugin repository maintainer workflows, prefer the dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills` as the canonical future home. This repository may carry transitional copies, but it is not the primary expansion path for that domain anymore.
+- For agent-skills and agent-plugin repository maintainer workflows, prefer the dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills` as the canonical home. Do not reintroduce local copies of those skills into this repository unless Gale explicitly asks for temporary incubation here.
 - Preserve OpenAI/Codex-specific enhancements to the fullest where they materially improve packaging, install UX, invocation, routing, or metadata quality.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
 - Preserve Claude Code and Claude plugin enhancements to the fullest where they materially improve compatibility, routing, or install UX without weakening the standard-portable core.
@@ -67,7 +67,7 @@ Applicability guidance:
   - Codex-specific
   - Claude-specific
 - This repository's source of truth remains the shipped skill assets under root `skills/`. Plugin manifests, marketplaces, and future subagent definitions are packaging or delegation layers around that canonical skill surface.
-- Transitional note: `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were incubated here but now belong conceptually to the dedicated agent-plugin maintainer repo.
+- Historical note: `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were incubated here but now belong in the dedicated agent-plugin maintainer repo and should be treated as moved.
 
 ## Anatomy of an Agent Skill
 

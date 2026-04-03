@@ -26,7 +26,7 @@
 
 - Prefer repo signals over user phrasing.
 - If multiple profiles match, select the most conservative valid profile and report the ambiguity.
-- Route skills/plugin repos away from this skill and into `maintain-skills-readme`.
+- Route skills/plugin repos away from this skill and into the dedicated `maintain-skills-readme` skill in `/Users/galew/Workspace/agent-plugin-skills`.
 
 ## Apply-Mode Normalization
 

@@ -27,8 +27,8 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 9: Codex plugin marketplace wiring (completed)
 - [x] Milestone 10: Inventory cleanup after Things and speech split (completed)
 - [x] Milestone 11: Plugin-first packaging alignment (completed)
-- [x] Milestone 12: `sync-skills-repo-guidance` (moved to `agent-plugin-skills`)
-- [x] Milestone 13: `bootstrap-skills-plugin-repo` (moved to `agent-plugin-skills`)
+- [x] Milestone 12: `sync-skills-repo-guidance` (moved to `agent-plugin-skills` and removed from local inventory)
+- [x] Milestone 13: `bootstrap-skills-plugin-repo` (moved to `agent-plugin-skills` and removed from local inventory)
 - [ ] Milestone 14: Claude Code optimization pass
 - [x] Milestone 15: Claude plugin support (completed)
 
@@ -187,7 +187,7 @@ Scope:
 Tickets:
 
 - [x] Split the old roadmap workflow into `maintain-project-roadmap`.
-- [x] Split the old skills/plugin README workflow into `maintain-skills-readme`.
+- [x] Split the old skills/plugin README workflow into `maintain-skills-readme`, then moved it to `agent-plugin-skills`.
 - [x] Add `maintain-project-readme` as the general ordinary-project README skill.
 - [x] Update tests, metadata, and repo docs to use the new skills.
 - [x] Retire `project-docs-maintainer` from the active inventory and replace it with compatibility notes in docs.

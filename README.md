@@ -17,10 +17,10 @@ That split now exists in practice as well:
 - this repo remains the home for widely useful global skills
 - the sibling repo [`../agent-plugin-skills`](../agent-plugin-skills) is now the dedicated home for agent-skills and agent-plugin repository maintainer workflows
 
-Current migration note:
+Current split:
 
-- `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were developed here and now have a dedicated future home in [`../agent-plugin-skills`](../agent-plugin-skills)
-- they remain present here for the moment, but this repository no longer treats agent-stack repo maintenance as its primary expansion path
+- `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were incubated here and now live in [`../agent-plugin-skills`](../agent-plugin-skills)
+- this repository no longer ships agent-stack repo-maintainer skills as part of its active local inventory
 
 ## Active Skills
 
@@ -153,17 +153,14 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 ├── skills/
 │   ├── explain-code-slice/
 │   ├── maintain-project-readme/
-│   ├── maintain-project-roadmap/
-│   ├── maintain-skills-readme/
-│   ├── bootstrap-skills-plugin-repo/
-│   └── sync-skills-repo-guidance/
+│   └── maintain-project-roadmap/
 ├── docs/
 │   └── maintainers/
 ├── ROADMAP.md
 └── pyproject.toml
 ```
 
-The canonical workflow content still lives under root `skills/`. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved. Some agent-stack maintainer skills remain here during transition, but the long-term expansion path for that domain is now [`../agent-plugin-skills`](../agent-plugin-skills).
+The canonical workflow content still lives under root `skills/`. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved. Agent-stack repo-maintainer workflows now live in [`../agent-plugin-skills`](../agent-plugin-skills) instead of this plugin.
 
 ## License
 

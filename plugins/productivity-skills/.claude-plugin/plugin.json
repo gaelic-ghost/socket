@@ -1,7 +1,7 @@
 {
   "name": "productivity-skills",
   "description": "Broadly useful productivity skills packaged for Claude Code.",
-  "version": "4.0.0-rc.1",
+  "version": "4.0.0-rc.3",
   "author": {
     "name": "Gale"
   },

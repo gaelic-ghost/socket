@@ -1,4 +1,0 @@
-interface:
-  display_name: "Maintain Skills README"
-  short_description: "Audit and fix README.md files for skills and plugin repositories."
-  default_prompt: "Use $maintain-skills-readme to audit a skills or plugin repository README.md, run the read-only pass first, apply bounded fixes only when requested, and return the Markdown plus JSON report. Do not use this for ordinary software project READMEs."
