@@ -1,7 +1,7 @@
 {
   "name": "productivity-skills",
   "version": "3.0.0",
-  "description": "Reusable productivity skills for project and skills-repo docs maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
+  "description": "Reusable productivity skills for project and skills-repo docs maintenance, roadmap upkeep, and code walkthroughs.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -14,14 +14,14 @@
     "codex",
     "skills",
     "productivity",
-    "things",
-    "speech"
+    "readme",
+    "roadmap"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Reusable productivity workflows for Codex.",
-    "longDescription": "Bundle reusable productivity skills for project and skills-repo docs maintenance, code walkthroughs, workspace hygiene, Things workflows, and profile-aware speech output.",
+    "longDescription": "Bundle reusable productivity skills for project and skills-repo docs maintenance, roadmap upkeep, and code walkthroughs.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [

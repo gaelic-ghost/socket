@@ -2,7 +2,7 @@
 
 ## Vision
 
-Maintain a focused set of reusable productivity skills with clear naming, deterministic workflows, plugin-ready packaging, direct standalone install surfaces, and cross-cutting speech output where audio delivery improves productivity.
+Maintain a focused set of reusable productivity skills with clear naming, deterministic workflows, plugin-ready packaging, and direct standalone install surfaces.
 
 ## Product principles
 
@@ -16,16 +16,13 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 1: Docs skill consolidation and canonical maintenance entrypoints (completed)
 - [x] Milestone 2: Validation hardening and maintainer-doc cleanup (completed)
 - [x] Milestone 3: Standalone top-level skill recentering (completed)
-- [x] Milestone 4: Speech workflow expansion (completed)
-- [ ] Milestone 5: Speech summarization planning (planned)
-- [ ] Milestone 6: Default profile expansion planning (planned)
-- [ ] Milestone 7: Cross-agent speech compatibility planning (planned)
-- [x] Milestone 8: Python tooling and test standardization (completed)
-- [x] Milestone 9: Code slice walkthrough skill (completed)
-- [x] Milestone 10: Codex plugin-ready repo layout (completed)
-- [x] Milestone 11: Docs skill split by document type (completed)
-- [x] Milestone 12: Project README maintainer hardening (completed)
-- [x] Milestone 13: Codex plugin marketplace wiring (completed)
+- [x] Milestone 4: Python tooling and test standardization (completed)
+- [x] Milestone 5: Code slice walkthrough skill (completed)
+- [x] Milestone 6: Codex plugin-ready repo layout (completed)
+- [x] Milestone 7: Docs skill split by document type (completed)
+- [x] Milestone 8: Project README maintainer hardening (completed)
+- [x] Milestone 9: Codex plugin marketplace wiring (completed)
+- [x] Milestone 10: Inventory cleanup after Things and speech split (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -104,86 +101,7 @@ Exit criteria:
 - [x] Maintainer docs describe the current post-router skill inventory.
 - [x] Roadmap maintenance is presented only through the canonical docs-maintainer entrypoint.
 
-## Milestone 4: Speech workflow expansion
-
-Scope:
-
-- Add a canonical speech workflow that fits the repo's standalone skill model.
-- Keep repo messaging centered on productivity workflows while broadening the inventory to include audio-output use cases.
-
-Tickets:
-
-- [x] Migrate `speak-with-profile` into this repository as a standalone top-level skill.
-- [x] Reframe the moved skill around narrated notes, spoken drafts, audio summaries, and hands-free review.
-- [x] Keep profile-based accessibility options and disclosure policy as part of the canonical speech workflow.
-- [x] Update public install guidance and repo inventory to include the new speech skill.
-
-Exit criteria:
-
-- [x] `speak-with-profile` is listed alongside the other standalone skills in repo docs.
-- [x] The moved skill metadata and runtime docs describe a productivity-first speech workflow.
-- [x] Repo-level docs no longer imply that productivity workflows exclude speech-output tasks.
-
-## Milestone 5: Speech summarization planning
-
-Scope:
-
-- Plan the next speech feature set around summarize-then-speak workflows without changing the current public skill contract.
-- Define the intended planning surface for summarization modes, targeting, and safety constraints before implementation starts.
-
-Tickets:
-
-- [ ] Define the planning envelope for summarize-then-speak workflows in `speak-with-profile`.
-- [ ] Identify candidate summarize modes and their intended use cases for productivity listening.
-- [ ] Plan length-targeting and output-shaping behavior for audio summaries.
-- [ ] Plan safety constraints for summaries that must preserve entities, numbers, and ordered steps.
-- [ ] Define the validation and regression-test strategy for summarize-then-speak behavior.
-
-Exit criteria:
-
-- [ ] The roadmap describes summarize-then-speak as a concrete planned milestone with bounded tickets.
-- [ ] No implementation claims are made for summarization features that do not exist yet.
-
-## Milestone 6: Default profile expansion planning
-
-Scope:
-
-- Plan a broader starter profile set for common productivity listening tasks beyond the current baseline examples.
-- Keep accessibility-conscious defaults as part of the canonical speech workflow while expanding productivity-oriented options.
-
-Tickets:
-
-- [ ] Define the first additional default profiles to add beyond the current baseline.
-- [ ] Plan profile coverage for narrated notes, spoken drafts, audio summaries, and review-oriented listening.
-- [ ] Plan how new defaults should balance general productivity use with accessibility-friendly listening needs.
-- [ ] Define the documentation and example updates required when new default profiles are introduced.
-
-Exit criteria:
-
-- [ ] The roadmap names the next profile-expansion work as a planned milestone.
-- [ ] The milestone identifies a small curated default-profile expansion rather than an open-ended profile catalog.
-
-## Milestone 7: Cross-agent speech compatibility planning
-
-Scope:
-
-- Plan paths for `speak-with-profile` compatibility beyond Codex's built-in `$speech` workflow.
-- Explore multiple agent surfaces without promising implementation until target-specific constraints are understood.
-
-Tickets:
-
-- [ ] Evaluate Claude Code compatibility for speech-oriented workflows and delegation patterns.
-- [ ] Evaluate Claude Desktop compatibility for profile-aware speech workflows.
-- [ ] Evaluate OpenCode as an initial open-source coding-agent target.
-- [ ] Evaluate Aider as a backup open-source compatibility candidate.
-- [ ] Identify adapter and documentation constraints needed to support multiple agent speech capabilities without fragmenting the canonical skill.
-
-Exit criteria:
-
-- [ ] The roadmap explicitly names Claude Code, Claude Desktop, OpenCode, and Aider as initial planning targets.
-- [ ] The milestone remains planning-only and does not imply existing multi-agent support.
-
-## Milestone 8: Python tooling and test standardization
+## Milestone 4: Python tooling and test standardization
 
 Scope:
 
@@ -204,7 +122,7 @@ Exit criteria:
 - [x] Python-backed skills with scripts have at least minimal deterministic smoke-test coverage.
 - [x] Repo docs and script dependency messages no longer point at ad hoc `uv --with ...` execution for maintained paths.
 
-## Milestone 9: Code slice walkthrough skill
+## Milestone 5: Code slice walkthrough skill
 
 Scope:
 
@@ -226,7 +144,7 @@ Exit criteria:
 - [x] The skill treats data shape first and execution flow second as the canonical explanation order.
 - [x] The skill documents a simple diagram format with branch and data-shape markers.
 
-## Milestone 10: Codex plugin-ready repo layout
+## Milestone 6: Codex plugin-ready repo layout
 
 Scope:
 
@@ -248,7 +166,7 @@ Exit criteria:
 - [x] No active repo guidance still presents top-level skill directories as the canonical layout.
 - [x] Maintainer docs describe plugins as the distribution unit and skills as the authoring unit.
 
-## Milestone 11: Docs skill split by document type
+## Milestone 7: Docs skill split by document type
 
 Scope:
 
@@ -270,12 +188,12 @@ Exit criteria:
 - [x] README and roadmap maintenance now route through separate skill names.
 - [x] General project README maintenance is separated from skills/plugin README maintenance.
 
-## Milestone 12: Project README maintainer hardening
+## Milestone 8: Project README maintainer hardening
 
 Scope:
 
 - Fix destructive rewrite behavior in `maintain-project-readme`.
-- Bring the root repo README back to current-state guidance instead of transition-heavy legacy notes.
+- Bring the root `README.md` back to current-state guidance instead of transition-heavy legacy notes.
 - Track the next maturity work for project README automation beyond the initial scripted maintainer.
 
 Tickets:
@@ -293,7 +211,7 @@ Exit criteria:
 - [x] `maintain-project-readme` has a documented automation-prompts surface.
 - [x] Repo-profile normalization behavior is explicit, documented, and test-backed.
 
-## Milestone 13: Codex plugin marketplace wiring
+## Milestone 9: Codex plugin marketplace wiring
 
 Scope:
 
@@ -317,6 +235,27 @@ Exit criteria:
 - [x] Repo guidance explains how the marketplace file relates to `.codex-plugin/plugin.json`.
 - [x] The root `README.md` presents both supported install paths without treating either one as secondary.
 - [x] Plugin packaging metadata and marketplace metadata are consistent.
+
+## Milestone 10: Inventory cleanup after Things and speech split
+
+Scope:
+
+- Restore `code-slice-explainer` after its accidental removal.
+- Remove speech, workspace-cleanup, and Things workflow claims from the active repo inventory.
+- Recenter this repository on the four surviving maintainer and code-walkthrough skills.
+
+Tickets:
+
+- [x] Restore `code-slice-explainer` from the last pre-deletion commit.
+- [x] Move `things-digest-generator` and `things-reminders-manager` into `../things-app/skills`.
+- [x] Remove stale active-inventory references to `project-workspace-cleaner`, `speak-with-profile`, and the moved Things skills.
+- [x] Update plugin metadata and maintainer tooling to match the current skill inventory.
+
+Exit criteria:
+
+- [x] `code-slice-explainer` is present again in `skills/`.
+- [x] The active inventory is limited to the four surviving skills.
+- [x] Repo docs and plugin metadata no longer advertise removed or relocated skills.
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -368,5 +307,3 @@ Exit criteria:
 
 - Add lightweight validation tooling for SKILL/frontmatter/openai.yaml alignment.
 - Add validation checks for README layout and skill inventory consistency.
-- Add broader automated testing for Things workflow surfaces, including deterministic validation paths where feasible.
-- Decide the `speak-with-profile` e2e test strategy, including whether to use a fake downstream CLI, real tool integration, or a bounded hybrid approach.

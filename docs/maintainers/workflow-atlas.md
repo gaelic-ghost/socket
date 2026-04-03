@@ -21,9 +21,6 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-skills-readme` | Specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
-| `project-workspace-cleaner` | Read-only cleanup audit | findings path, clean run, partial-results branch |
-| `things-digest-generator` | Things planning digest builder | MCP-first, JSON fallback, executive output, clean run, missing-input failure |
-| `things-reminders-manager` | Things reminder mutation workflow | create, update, `duplicatePolicy=ask-first`, `onUpdateWithoutToken` variants, blocked/disambiguation |
 
 ## `code-slice-explainer`
 
@@ -173,31 +170,3 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 - Same Markdown plus JSON report shape as audit-only
 - Exact clean-run text: `No findings.` when no issues and no errors remain
-
-## `project-workspace-cleaner`
-
-### Workflow: read-only scan with findings
-
-**Overview**
-
-- Triggered when the user wants cleanup findings across a workspace.
-- Primary workflow.
-- `read-only`
-
-## `things-digest-generator`
-
-### Workflow: planning digest generation
-
-**Overview**
-
-- Triggered when the user wants a week-ahead planning digest from Things data.
-- Primary workflow.
-
-## `things-reminders-manager`
-
-### Workflow: reminder mutation
-
-**Overview**
-
-- Triggered when the user wants deterministic reminder creation or update handling for Things.
-- Primary workflow.

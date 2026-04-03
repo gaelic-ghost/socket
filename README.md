@@ -1,6 +1,6 @@
 # productivity-skills
 
-Curated productivity skills for maintenance automation, code-understanding walkthroughs, operational hygiene, and reusable speech-output tasks.
+Curated productivity skills for maintenance automation and code-understanding walkthroughs.
 
 For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
@@ -18,7 +18,7 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
 ## What These Agent Skills Help With
 
-This repository packages reusable skills for project README maintenance, skills/plugin README maintenance, checklist roadmap maintenance, read-only workspace hygiene, code-slice walkthroughs, Things planning/reminder workflows, and profile-aware speech generation for narrated work.
+This repository packages reusable skills for project README maintenance, skills/plugin README maintenance, checklist roadmap maintenance, and code-slice walkthroughs.
 
 ## Skill Guide (When To Use What)
 
@@ -34,18 +34,6 @@ This repository packages reusable skills for project README maintenance, skills/
 - `code-slice-explainer`
   - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
   - Helps by starting with data shape, then walking the full slice through branches, boundaries, transformations, and outputs.
-- `project-workspace-cleaner`
-  - Use when a workspace needs a read-only cleanup audit.
-  - Helps by ranking cleanup chores and surfacing repo-level hygiene hotspots.
-- `things-reminders-manager`
-  - Use when Things reminders need deterministic create or update handling.
-  - Helps by applying duplicate checks and date-safety guardrails.
-- `things-digest-generator`
-  - Use when you want a week-ahead Things planning digest.
-  - Helps by summarizing active work and generating prioritized next-step suggestions.
-- `speak-with-profile`
-  - Use when speech output needs reusable profiles, disclosure, and reproducible reporting.
-  - Helps by routing narrated notes, spoken drafts, audio summaries, and accessibility reads through one profile-aware workflow.
 
 ## Install with skills.sh / Vercel Skills CLI
 
@@ -80,10 +68,6 @@ Current active skill names:
 - `maintain-skills-readme` for skills/plugin repository `README.md` maintenance
 - `maintain-project-roadmap` for checklist-style `ROADMAP.md` maintenance
 - `code-slice-explainer` for end-to-end code walkthroughs
-- `project-workspace-cleaner` for read-only workspace cleanup audits
-- `things-reminders-manager` for deterministic Things reminder create/update workflows
-- `things-digest-generator` for week-ahead Things planning digests
-- `speak-with-profile` for profile-aware speech output workflows
 
 ## Update Skills
 
@@ -99,9 +83,8 @@ npx skills update
 ```bash
 npx skills find "skills readme maintenance"
 npx skills find "code slice walkthrough"
-npx skills find "workspace cleanup automation"
-npx skills find "things productivity automation"
-npx skills find "text to speech workflow"
+npx skills find "project roadmap maintenance"
+npx skills find "plugin readme audit"
 ```
 
 ### Find Skills like these with the `Find Skills` Agent Skill by Vercel — [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)
@@ -132,11 +115,7 @@ Then ask your Agent for help finding a skill for "" or ""
 │   ├── code-slice-explainer/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
-│   ├── maintain-skills-readme/
-│   ├── project-workspace-cleaner/
-│   ├── speak-with-profile/
-│   ├── things-digest-generator/
-│   └── things-reminders-manager/
+│   └── maintain-skills-readme/
 ├── docs/
 │   └── maintainers/
 ├── ROADMAP.md
@@ -146,11 +125,11 @@ Then ask your Agent for help finding a skill for "" or ""
 ## Notes
 
 - Prefer the current skill names in new prompts; retired compatibility names are no longer the active guidance surface.
-- `speak-with-profile` is the canonical speech workflow in this repository; prefer it over direct speech calls when profile resolution or manifest reporting matters.
+- The Things-focused skills now live in `../things-app/skills` rather than in this repository.
 
 ## Keywords
 
-Codex skills, code walkthrough, slice explanation, execution flow, request lifecycle, pipeline explanation, data flow, skills README maintenance, roadmap maintenance, workspace cleanup, Things reminders, Things digest, productivity automation, text-to-speech, audio summaries, narrated notes.
+Codex skills, code walkthrough, slice explanation, execution flow, request lifecycle, pipeline explanation, data flow, skills README maintenance, roadmap maintenance, productivity automation.
 
 ## License
 

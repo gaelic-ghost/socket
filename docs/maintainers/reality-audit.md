@@ -49,18 +49,6 @@ All active repo-authored skills live under `skills/`.
   - Script: `scripts/maintain_skills_readme.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
-- `project-workspace-cleaner`
-  - Script: `scripts/scan_workspace_cleanup.py`
-  - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`, `references/*`
-- `things-digest-generator`
-  - Script: `scripts/build_digest.py`
-  - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`, `references/*`
-- `things-reminders-manager`
-  - MCP sequence is the source of truth
-  - Metadata: `agents/openai.yaml`
-  - Runtime docs: `SKILL.md`, `references/*`
 
 ### Maintainer Surfaces
 
@@ -170,8 +158,8 @@ Use these conventions when editing repo-maintainer guidance.
 
 ## Current Invariants
 
-- `project-workspace-cleaner` reserves exact `No findings.` for complete clean runs with no skipped paths.
-- `things-digest-generator` uses deterministic `Input error:` failures for missing or invalid JSON fallback inputs.
+- `maintain-project-roadmap` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
+- `maintain-project-readme` and `maintain-skills-readme` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
 - `maintain-skills-readme` is the canonical owner of skills/plugin repository `README.md` maintenance.
 - The repository root is the Codex plugin root, and active repo-authored skills are discovered from `skills/`.

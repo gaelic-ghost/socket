@@ -16,7 +16,4 @@ testpaths = [
   "skills/maintain-project-readme/tests",
   "skills/maintain-project-roadmap/tests",
   "skills/maintain-skills-readme/tests",
-  "skills/project-workspace-cleaner/tests",
-  "skills/speak-with-profile/tests",
-  "skills/things-digest-generator/tests",
 ]
