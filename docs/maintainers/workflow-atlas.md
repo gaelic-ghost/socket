@@ -12,6 +12,13 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - `plugins/productivity-skills/skills` mirrors root `skills/` for local plugin packaging alignment.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree rather than at the repository root.
 
+## Product Direction
+
+- This repository now optimizes for globally useful skills that make sense to install broadly.
+- Dedicated language-, stack-, or repository-specific bundles should increasingly live in separate plugins intended for project-level or repo-level install.
+- Agent-skills and agent-plugin repository maintenance now has a dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills`.
+- The three agent-stack maintainer skills listed here remain part of the current repo inventory, but they are no longer the preferred long-term expansion lane for this repository.
+
 ## Repo-Wide Conventions
 
 - `Workflow`: a logically grouped, user-meaningful path inside a skill.
@@ -25,12 +32,12 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
-| `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills/plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
-| `maintain-skills-readme` | Specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
-| `sync-skills-repo-guidance` | Repo-wide guidance reconciler for skills/plugin repos | `check-only`, audit plus bounded fixes, upstream-doc refresh, misroute/defer handling |
+| `maintain-skills-readme` | Transitional specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
+| `bootstrap-skills-plugin-repo` | Transitional repo bootstrap and structural alignment for skills/plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
+| `sync-skills-repo-guidance` | Transitional repo-wide guidance reconciler for skills/plugin repos | `check-only`, audit plus bounded fixes, upstream-doc refresh, misroute/defer handling |
 
 ## `bootstrap-skills-plugin-repo`
 

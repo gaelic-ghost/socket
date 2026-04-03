@@ -5,6 +5,7 @@
 - For work in this repository, edit skills only under `/Users/galew/Workspace/productivity-skills/skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
 - This file defines maintainer guidance for developing skills in this repository. Keep these links and rules at repo root for contributor workflows.
+- Repository direction: keep this repo focused on broadly useful global-install skills. Prefer dedicated stack- or repo-specific plugins for language/framework/repository workflows that make more sense at project-level install scope.
 
 ## Standards and Guidance
 
@@ -33,6 +34,7 @@ Applicability guidance:
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
 - When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs, treat `plugins/productivity-skills/` as the plugin packaging root, and keep the repo-scoped marketplace file aligned with that plugin subtree.
 - For Gale's repos, keep the source-of-truth plugin, marketplace, MCP, app, and hook manifests inside `plugins/` and `.agents/plugins/`, not mixed into root `skills/`.
+- For agent-skills and agent-plugin repository maintainer workflows, prefer the dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills` as the canonical future home. This repository may carry transitional copies, but it is not the primary expansion path for that domain anymore.
 - Preserve OpenAI/Codex-specific enhancements to the fullest where they materially improve packaging, install UX, invocation, routing, or metadata quality.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
 - Preserve Claude Code and Claude plugin enhancements to the fullest where they materially improve compatibility, routing, or install UX without weakening the standard-portable core.
@@ -46,6 +48,7 @@ Applicability guidance:
   - a `subagent` is a delegated runtime worker with its own context and tool policy
 - For Codex, treat skills as the primary authoring format and plugins as the installable distribution unit that can bundle skills, apps, and MCP servers.
 - For Codex work in this repository, keep root `skills/` as the canonical workflow-authoring surface and treat `plugins/productivity-skills/` as the plugin packaging root.
+- Philosophically, this repository is for global-install productivity workflows. Language-, framework-, stack-, or repository-specific bundles should generally live in dedicated plugins intended for project- or repo-level install.
 - Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors instead of duplicate skill trees:
   - `.agents/skills -> ../skills`
   - `.claude/skills -> ../skills`
@@ -64,6 +67,7 @@ Applicability guidance:
   - Codex-specific
   - Claude-specific
 - This repository's source of truth remains the shipped skill assets under root `skills/`. Plugin manifests, marketplaces, and future subagent definitions are packaging or delegation layers around that canonical skill surface.
+- Transitional note: `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were incubated here but now belong conceptually to the dedicated agent-plugin maintainer repo.
 
 ## Anatomy of an Agent Skill
 

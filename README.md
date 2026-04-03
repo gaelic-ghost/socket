@@ -4,22 +4,40 @@ Canonical productivity skills with a plugin-first packaging layout for Codex and
 
 For maintainer guidance, standards references, and cross-ecosystem packaging policy, see [AGENTS.md](./AGENTS.md).
 
+## Repo Direction
+
+This repository is now explicitly the global, broadly useful side of Gale's skills ecosystem.
+
+- keep `productivity-skills` focused on skills that make sense to install globally
+- prefer dedicated language-, stack-, or repo-specific plugins for project-level or repository-level install
+- treat agent-stack maintainer workflows as a separate product line instead of mixing them into the long-term core identity of this repo
+
+That split now exists in practice as well:
+
+- this repo remains the home for widely useful global skills
+- the sibling repo [`../agent-plugin-skills`](../agent-plugin-skills) is now the dedicated home for agent-skills and agent-plugin repository maintainer workflows
+
+Current migration note:
+
+- `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were developed here and now have a dedicated future home in [`../agent-plugin-skills`](../agent-plugin-skills)
+- they remain present here for the moment, but this repository no longer treats agent-stack repo maintenance as its primary expansion path
+
 ## Active Skills
 
+- `explain-code-slice`
+  - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
 - `maintain-project-readme`
   - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
 - `maintain-project-roadmap`
   - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
-- `maintain-skills-readme`
-  - Use when an agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repo `README.md` needs auditing or bounded fixes.
-- `bootstrap-skills-plugin-repo`
-  - Use when creating or structurally aligning a skills repository to the shared plugin-first layout with maintainer docs and POSIX discovery mirrors.
-- `sync-skills-repo-guidance`
-  - Use when an existing skills repository needs repo-wide guidance reconciliation across docs, AGENTS policy, symlink mirrors, and plugin metadata.
-- `explain-code-slice`
-  - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
 
 Maintainer-facing workflow maps, audit procedure, and source-of-truth rules live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md) and [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
+
+Agent-stack repo-maintainer skills now live in [`../agent-plugin-skills`](../agent-plugin-skills):
+
+- [`maintain-skills-readme`](../agent-plugin-skills/skills/maintain-skills-readme/SKILL.md)
+- [`bootstrap-skills-plugin-repo`](../agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md)
+- [`sync-skills-repo-guidance`](../agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md)
 
 ## Packaging and Delegation
 
@@ -34,6 +52,12 @@ Shared guidance across both ecosystems:
   - `.agents/skills -> ../skills`
   - `.claude/skills -> ../skills`
   - `plugins/productivity-skills/skills -> ../../skills`
+
+Packaging philosophy going forward:
+
+- global plugins should bundle skills that are broadly useful across many repos
+- language-, framework-, stack-, or repository-specific skills should increasingly live in dedicated plugins that are installed at the project or repo level
+- this keeps global installs lighter and makes stack-specific guidance easier to evolve without turning one plugin into a grab bag
 
 Current packaging scaffolding lives under:
 
@@ -93,20 +117,18 @@ npx skills add gaelic-ghost/productivity-skills --all
 
 Common starting points:
 
+- code walkthrough work:
+  `npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice`
 - README work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme`
 - roadmap work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap`
-- skills/plugin README work:
-  `npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme`
-- repo bootstrap or structural alignment:
-  `npx skills add gaelic-ghost/productivity-skills --skill bootstrap-skills-plugin-repo`
-- repo-wide guidance sync:
-  `npx skills add gaelic-ghost/productivity-skills --skill sync-skills-repo-guidance`
-- code walkthrough work:
-  `npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice`
 
-Use the narrower skills when the task is README-only or roadmap-only. Use the repo bootstrap or sync skills when the task spans structure, manifests, `AGENTS.md`, maintainer docs, or cross-surface guidance drift.
+For agent-skills or plugin repository maintenance, use the dedicated sibling repo instead:
+
+- `npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-skills-readme`
+- `npx skills add gaelic-ghost/agent-plugin-skills --skill bootstrap-skills-plugin-repo`
+- `npx skills add gaelic-ghost/agent-plugin-skills --skill sync-skills-repo-guidance`
 
 ## Repository Layout
 
@@ -129,11 +151,11 @@ Use the narrower skills when the task is README-only or roadmap-only. Use the re
 │       ├── hooks/
 │       └── skills -> ../../skills
 ├── skills/
-│   ├── bootstrap-skills-plugin-repo/
 │   ├── explain-code-slice/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
 │   ├── maintain-skills-readme/
+│   ├── bootstrap-skills-plugin-repo/
 │   └── sync-skills-repo-guidance/
 ├── docs/
 │   └── maintainers/
@@ -141,7 +163,7 @@ Use the narrower skills when the task is README-only or roadmap-only. Use the re
 └── pyproject.toml
 ```
 
-The canonical workflow content still lives under root `skills/`. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved.
+The canonical workflow content still lives under root `skills/`. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved. Some agent-stack maintainer skills remain here during transition, but the long-term expansion path for that domain is now [`../agent-plugin-skills`](../agent-plugin-skills).
 
 ## License
 

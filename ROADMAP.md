@@ -9,6 +9,9 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - Keep skill names clear, stable, and domain-grouped.
 - Keep workflow instructions deterministic and safety-forward.
 - Keep docs and metadata synchronized with the active skill set.
+- Keep this repository focused on broadly useful global-install skills.
+- Prefer dedicated language-, framework-, stack-, or repository-specific plugins for project-level or repo-level install.
+- Treat agent-skills and agent-plugin repository maintenance as a distinct product line now housed in `/Users/galew/Workspace/agent-plugin-skills`.
 
 ## Milestone Progress
 
@@ -24,8 +27,8 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 9: Codex plugin marketplace wiring (completed)
 - [x] Milestone 10: Inventory cleanup after Things and speech split (completed)
 - [x] Milestone 11: Plugin-first packaging alignment (completed)
-- [ ] Milestone 12: `sync-skills-repo-guidance` (planned)
-- [ ] Milestone 13: `bootstrap-skills-plugin-repo` (planned)
+- [x] Milestone 12: `sync-skills-repo-guidance` (moved to `agent-plugin-skills`)
+- [x] Milestone 13: `bootstrap-skills-plugin-repo` (moved to `agent-plugin-skills`)
 - [ ] Milestone 14: Claude Code optimization pass
 - [x] Milestone 15: Claude plugin support (completed)
 
@@ -292,39 +295,37 @@ Exit criteria:
 
 Scope:
 
-- Add a productivity skill for reconciling repo guidance across `README.md`, `AGENTS.md`, roadmap notes, maintainer docs, and plugin-packaging metadata in skills repositories.
-- Focus the workflow on canonical naming, install-surface accuracy, doc-link accuracy, and packaging-surface drift.
+- Historical note: this milestone was incubated here and then moved into the dedicated agent-plugin maintainer repo at `/Users/galew/Workspace/agent-plugin-skills`.
+- `productivity-skills` no longer treats repo-wide agent-stack guidance synchronization as part of its primary growth lane.
 
 Tickets:
 
 - [x] Define the skill scope and trigger surface for skills-repo guidance synchronization.
-- [x] Decide which repo surfaces are canonical inputs versus synchronized outputs.
-- [x] Add deterministic validation guidance for link drift, packaging drift, and stale-name drift.
-- [x] Document when this skill should defer to narrower README- or roadmap-specific skills.
+- [x] Move the skill and its future roadmap ownership into `/Users/galew/Workspace/agent-plugin-skills`.
+- [x] Update `productivity-skills` docs to point new agent-stack maintainer work at the dedicated repo.
 
 Exit criteria:
 
-- [x] The repository contains a planned skill contract for cross-surface guidance sync in skills/plugin repos.
-- [x] The skill has a clear non-overlapping role relative to `maintain-project-readme`, `maintain-project-roadmap`, and `maintain-skills-readme`.
+- [x] `productivity-skills` no longer presents this milestone as part of its primary future expansion path.
+- [x] The dedicated maintainer repo owns the future roadmap for this workflow.
 
 ## Milestone 13: `bootstrap-skills-plugin-repo`
 
 Scope:
 
-- Add a productivity skill for bootstrapping a new skills/plugin repository with standard-portable skill layout plus Codex and Claude packaging scaffolds.
-- Make plugin-first packaging the default repo bootstrap model while preserving root `skills/` as canonical authoring.
+- Historical note: this milestone was incubated here and then moved into the dedicated agent-plugin maintainer repo at `/Users/galew/Workspace/agent-plugin-skills`.
+- `productivity-skills` no longer treats repo bootstrap for agent-stack repositories as part of its primary future expansion path.
 
 Tickets:
 
 - [x] Define the generated repository layout, including `skills/`, `plugins/<repo>/`, marketplace wiring, and maintainer docs.
-- [x] Decide which metadata and placeholder files are required for a minimal cross-ecosystem bootstrap.
-- [x] Add deterministic bootstrap validation for manifest presence, directory layout, and docs alignment.
-- [x] Document how the bootstrap skill composes with `$skill-creator` rather than replacing it.
+- [x] Move the skill and its future roadmap ownership into `/Users/galew/Workspace/agent-plugin-skills`.
+- [x] Update `productivity-skills` docs to point new agent-stack repo bootstrap work at the dedicated repo.
 
 Exit criteria:
 
-- [x] The repository contains a planned skill contract for bootstrapping cross-ecosystem skills/plugin repositories.
-- [x] The bootstrap workflow clearly distinguishes canonical skill-authoring surfaces from packaging scaffolds.
+- [x] `productivity-skills` no longer presents this milestone as part of its primary future expansion path.
+- [x] The dedicated maintainer repo owns the future roadmap for this workflow.
 
 ## Milestone 14: Claude Code optimization pass
 
