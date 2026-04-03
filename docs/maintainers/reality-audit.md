@@ -194,7 +194,7 @@ Use these conventions when editing repo-maintainer guidance.
 - In this repo, `maintain-project-readme` and `maintain-project-roadmap` are the strategic maintainer skills for ordinary project docs.
 - `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` remain present here during transition, but their canonical future home is `/Users/galew/Workspace/agent-plugin-skills`.
 - Root `skills/` is the canonical workflow-authoring surface.
-- `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude scaffolding.
+- `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude plugin metadata.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
 - `plugins/productivity-skills/skills` is a POSIX symlink mirror into root `skills/`.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/productivity-skills/`.

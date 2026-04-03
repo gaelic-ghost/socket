@@ -59,7 +59,7 @@ Packaging philosophy going forward:
 - language-, framework-, stack-, or repository-specific skills should increasingly live in dedicated plugins that are installed at the project or repo level
 - this keeps global installs lighter and makes stack-specific guidance easier to evolve without turning one plugin into a grab bag
 
-Current packaging scaffolding lives under:
+Current packaging surfaces live under:
 
 - [`plugins/productivity-skills/.codex-plugin/plugin.json`](./plugins/productivity-skills/.codex-plugin/plugin.json)
 - [`plugins/productivity-skills/.claude-plugin/plugin.json`](./plugins/productivity-skills/.claude-plugin/plugin.json)
@@ -69,7 +69,7 @@ Current packaging scaffolding lives under:
 - [`.claude/skills`](./.claude/skills)
 - [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
 
-The plugin scaffold is intentionally conservative:
+The plugin package is intentionally conservative:
 
 - Codex-compatible common denominator first
 - Claude-only extras layered on top under `plugins/productivity-skills/.claude-plugin`, `hooks/`, and `bin/`

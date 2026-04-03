@@ -1,7 +1,7 @@
 {
   "name": "productivity-skills",
-  "version": "0.0.0-local",
-  "description": "In-development productivity plugin bundling skills, future hooks, and install-surface metadata.",
+  "version": "4.0.0-rc.1",
+  "description": "Broadly useful productivity skills packaged for Codex and Claude Code.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -21,8 +21,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Productivity Skills",
-    "shortDescription": "Plugin scaffold for productivity workflows.",
-    "longDescription": "In-development plugin scaffold for productivity workflows shared across Codex and Claude Code.",
+    "shortDescription": "Broadly useful productivity workflows for global install.",
+    "longDescription": "Prerelease plugin packaging for globally useful productivity workflows shared across Codex and Claude Code.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [

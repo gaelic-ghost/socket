@@ -1,7 +1,7 @@
 {
   "name": "productivity-skills",
-  "description": "In-development productivity plugin scaffold for skills, future hooks, and packaging metadata.",
-  "version": "0.0.0",
+  "description": "Broadly useful productivity skills packaged for Claude Code.",
+  "version": "4.0.0-rc.1",
   "author": {
     "name": "Gale"
   },
