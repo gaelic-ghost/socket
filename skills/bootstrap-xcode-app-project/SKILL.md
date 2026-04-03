@@ -17,7 +17,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
 - Use this skill when a brand-new app repo should also get baseline repo guidance such as `AGENTS.md`.
 - Do not use this skill for ordinary collaboration inside an existing Xcode project.
 - Do not use this skill for plain Swift packages, libraries, or tools that are not native Apple apps.
-- Recommend `apple-swift-package-bootstrap` when the user wants a regular SwiftPM package instead of a native Apple app.
+- Recommend `bootstrap-swift-package` when the user wants a regular SwiftPM package instead of a native Apple app.
 - Recommend `apple-xcode-workflow` when the project already exists and the task is execution, diagnostics, docs lookup, mutation, build, test, or run work inside that existing project.
 
 ## Single-Path Workflow
@@ -119,7 +119,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
 - Preferred implementation path in the first iteration is `XcodeGen` plus generated scaffold files.
 - Use the standard Xcode-created-project path only as a guided fallback for now.
 - After a successful bootstrap, hand off to `sync-xcode-project-guidance` for repo-guidance alignment when needed, then to `apple-xcode-workflow` for build, test, run, diagnostics, mutation, and docs work.
-- Recommend `apple-swift-package-bootstrap` directly when the task is really package bootstrap.
+- Recommend `bootstrap-swift-package` directly when the task is really package bootstrap.
 - Recommend `sync-xcode-project-guidance` when the repo already exists and only needs repo-guidance or documentation alignment.
 
 ## Customization

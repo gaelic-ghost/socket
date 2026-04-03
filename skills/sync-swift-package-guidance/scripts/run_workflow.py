@@ -118,7 +118,7 @@ def main() -> int:
                 blocked_payload(
                     str(repo_root),
                     detected_state,
-                    "Use apple-swift-package-bootstrap for new package creation, or rerun this skill on an existing Swift package repo.",
+                    "Use bootstrap-swift-package for new package creation, or rerun this skill on an existing Swift package repo.",
                     stderr="The repository does not contain a Package.swift manifest at the requested root.",
                 ),
                 indent=2,

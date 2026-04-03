@@ -139,7 +139,7 @@ def main() -> int:
     if project_kind != "app":
         payload = blocked_payload(
             normalized_inputs,
-            "Use apple-swift-package-bootstrap for package bootstrap or rerun with --project-kind app.",
+            "Use bootstrap-swift-package for package bootstrap or rerun with --project-kind app.",
             stderr="bootstrap-xcode-app-project only supports native Apple app bootstrap.",
         )
         print(json.dumps(payload, indent=2, sort_keys=True))

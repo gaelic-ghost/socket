@@ -93,7 +93,7 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
         )
         self.assertEqual(code, 1)
         self.assertEqual(payload["status"], "blocked")
-        self.assertIn("apple-swift-package-bootstrap", payload["next_step"])
+        self.assertIn("bootstrap-swift-package", payload["next_step"])
 
     def test_blocks_when_platform_is_unresolved(self) -> None:
         code, payload = self.run_script(

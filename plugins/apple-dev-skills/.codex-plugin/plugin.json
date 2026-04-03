@@ -1,6 +1,6 @@
 {
   "name": "apple-dev-skills",
-  "version": "0.0.0-local",
+  "version": "3.9.9",
   "description": "In-development Apple development plugin bundling skills, future MCP servers, and install-surface metadata.",
   "author": {
     "name": "Gale",

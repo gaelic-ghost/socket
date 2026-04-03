@@ -1,7 +1,7 @@
 ## Swift Package Workflow
 
 - Use `swift build` and `swift test` as the default first-pass validation commands for this package.
-- Use `apple-swift-package-bootstrap` when a new Swift package repo still needs to be created from scratch.
+- Use `bootstrap-swift-package` when a new Swift package repo still needs to be created from scratch.
 - Use `sync-swift-package-guidance` when the repo guidance for this package drifts and needs to be refreshed or merged forward.
 - Read relevant SwiftPM, Swift, and Apple documentation before proposing package-structure, dependency, manifest, concurrency, or architecture changes.
 - Prefer Dash or local Swift docs first, then official Swift or Apple docs when local docs are insufficient.

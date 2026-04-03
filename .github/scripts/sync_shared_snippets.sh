@@ -33,7 +33,7 @@ sync_one \
 
 sync_one \
   "$ROOT_DIR/shared/agents-snippets/apple-swift-package-core.md" \
-  "$ROOT_DIR/skills/apple-swift-package-bootstrap/references/snippets/apple-swift-package-core.md" \
+  "$ROOT_DIR/skills/bootstrap-swift-package/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/sync-swift-package-guidance/references/snippets/apple-swift-package-core.md"
 
 echo "Synchronized shared snippet set to skill-local copies."

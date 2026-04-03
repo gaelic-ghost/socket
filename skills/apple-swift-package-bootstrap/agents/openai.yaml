@@ -1,4 +1,4 @@
 interface:
-  display_name: "Apple Swift Package Bootstrap"
-  short_description: "Bootstrap Swift packages with defaults and validation"
-  default_prompt: "Use $apple-swift-package-bootstrap to create a new Swift package with consistent defaults, generated AGENTS guidance, and immediate validation."
+  display_name: "Apple Swift Package Bootstrap (Deprecated)"
+  short_description: "Deprecated redirect to Swift package bootstrap skill"
+  default_prompt: "Tell the user that $apple-swift-package-bootstrap is deprecated, recommend $bootstrap-swift-package instead, and mention Gale's GitHub repo install option when useful."

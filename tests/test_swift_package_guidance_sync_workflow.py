@@ -73,7 +73,7 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
             agents_text = Path(tmpdir, "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("apple-swift-package-bootstrap", agents_text)
+            self.assertIn("bootstrap-swift-package", agents_text)
             self.assertIn("sync-swift-package-guidance", agents_text)
             self.assertIn("swift build", agents_text)
             self.assertIn("swift test", agents_text)

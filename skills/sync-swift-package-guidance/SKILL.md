@@ -17,7 +17,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
 - Do not use this skill for brand-new package creation from nothing.
 - Do not use this skill for ordinary package development, builds, tests, diagnostics, or dependency changes.
 - Do not use this skill for Xcode app repos, workspaces, or native Apple app projects.
-- Recommend `apple-swift-package-bootstrap` when the package repo does not exist yet.
+- Recommend `bootstrap-swift-package` when the package repo does not exist yet.
 - Recommend `apple-xcode-workflow` when the task is active execution, diagnostics, or Xcode-managed package work rather than repo guidance sync.
 - Recommend `sync-xcode-project-guidance` when the repo is an Xcode app project instead of a plain Swift package.
 
@@ -51,13 +51,13 @@ Bring an existing Swift package repository up to the expected guidance baseline 
    - if `AGENTS.md` exists but lacks the managed section, append `assets/append-section.md` as a bounded section
 7. Validate the synced repo guidance:
    - verify `AGENTS.md` exists
-   - verify the synced file mentions `apple-swift-package-bootstrap`
+   - verify the synced file mentions `bootstrap-swift-package`
    - verify the synced file mentions `sync-swift-package-guidance`
    - verify the synced file preserves `swift build` and `swift test` as default validation paths
 8. Hand off ongoing package work cleanly:
    - prefer `swift build` and `swift test` for ordinary package work after guidance sync
    - recommend `apple-xcode-workflow` only when package work needs Xcode-managed SDK or toolchain behavior
-   - recommend `apple-swift-package-bootstrap` only when the user actually needs a fresh repo instead of guidance sync
+   - recommend `bootstrap-swift-package` only when the user actually needs a fresh repo instead of guidance sync
 
 ## Inputs
 
@@ -101,7 +101,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
 - The only current fallback is a non-mutating dry-run or guided result that explains what the sync would do.
 - After a successful sync, use `swift build` and `swift test` for ordinary package work by default.
 - Recommend `apple-xcode-workflow` when package work needs Xcode-managed SDK or toolchain behavior.
-- Recommend `apple-swift-package-bootstrap` when the repository still needs to be created from scratch.
+- Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.
 - Recommend `sync-xcode-project-guidance` when the repo root is really an Xcode app project rather than a plain Swift package.
 
 ## Customization

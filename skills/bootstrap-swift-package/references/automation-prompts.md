@@ -38,7 +38,7 @@ Provide one consistent automation contract for deterministic Swift package scaff
 ## Codex App Prompt Template
 
 ```text
-Use $apple-swift-package-bootstrap.
+Use $bootstrap-swift-package.
 
 Run this workflow only when a package scaffold is explicitly requested.
 
@@ -69,7 +69,7 @@ Return the documented contract only:
 ## Codex CLI Prompt Template
 
 ```text
-Use $apple-swift-package-bootstrap for a deterministic CLI automation run.
+Use $bootstrap-swift-package for a deterministic CLI automation run.
 
 Task:
 Bootstrap one Swift package using `scripts/bootstrap_swift_package.sh` with:

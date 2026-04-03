@@ -56,7 +56,7 @@ workflow_doc="docs/maintainers/workflow-atlas.md"
 require_contains "$workflow_doc" "## Repo Workflow Map"
 require_contains "$workflow_doc" '## `apple-xcode-workflow`'
 require_contains "$workflow_doc" '## `explore-apple-swift-docs`'
-require_contains "$workflow_doc" '## `apple-swift-package-bootstrap`'
+require_contains "$workflow_doc" '## `bootstrap-swift-package`'
 require_contains "$workflow_doc" '## `bootstrap-xcode-app-project`'
 require_contains "$workflow_doc" '## `sync-xcode-project-guidance`'
 require_contains "$workflow_doc" '## `sync-swift-package-guidance`'
@@ -71,7 +71,7 @@ echo "Validating skill directory layout..."
 active_skill_mds=(
   "./skills/apple-xcode-workflow/SKILL.md"
   "./skills/explore-apple-swift-docs/SKILL.md"
-  "./skills/apple-swift-package-bootstrap/SKILL.md"
+  "./skills/bootstrap-swift-package/SKILL.md"
   "./skills/bootstrap-xcode-app-project/SKILL.md"
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
@@ -81,6 +81,9 @@ active_skill_mds=(
 [[ -f "./skills/apple-dash-docsets/SKILL.md" ]] || fail "Missing deprecated compatibility skill ./skills/apple-dash-docsets/SKILL.md"
 require_contains "./skills/apple-dash-docsets/SKILL.md" "deprecated"
 require_contains "./skills/apple-dash-docsets/SKILL.md" "explore-apple-swift-docs"
+[[ -f "./skills/apple-swift-package-bootstrap/SKILL.md" ]] || fail "Missing deprecated compatibility skill ./skills/apple-swift-package-bootstrap/SKILL.md"
+require_contains "./skills/apple-swift-package-bootstrap/SKILL.md" "deprecated"
+require_contains "./skills/apple-swift-package-bootstrap/SKILL.md" "bootstrap-swift-package"
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -114,7 +117,7 @@ for skill_md in "${active_skill_mds[@]}"; do
   fi
 
   case "$skill_dir" in
-    ./skills/apple-swift-package-bootstrap|./skills/sync-swift-package-guidance)
+    ./skills/bootstrap-swift-package|./skills/sync-swift-package-guidance)
       local_snippet="$skill_dir/references/snippets/apple-swift-package-core.md"
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'

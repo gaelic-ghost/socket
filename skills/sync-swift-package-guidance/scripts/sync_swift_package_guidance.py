@@ -12,7 +12,7 @@ from pathlib import Path
 
 
 REQUIRED_STRINGS = [
-    "apple-swift-package-bootstrap",
+    "bootstrap-swift-package",
     "sync-swift-package-guidance",
     "swift build",
     "swift test",

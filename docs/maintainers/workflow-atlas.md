@@ -21,12 +21,12 @@ flowchart TD
     U["User request"] --> A["Agent classifies request"]
     A --> X["apple-xcode-workflow"]
     A --> D["explore-apple-swift-docs"]
-    A --> B["apple-swift-package-bootstrap"]
+    A --> B["bootstrap-swift-package"]
     A --> AX["bootstrap-xcode-app-project"]
     A --> SX["sync-xcode-project-guidance"]
     A --> SP["sync-swift-package-guidance"]
     X --> XD["May recommend explore-apple-swift-docs"]
-    X --> XB["May recommend apple-swift-package-bootstrap"]
+    X --> XB["May recommend bootstrap-swift-package"]
     X --> XS["May recommend bootstrap-xcode-app-project only when the user actually means new-project creation"]
     X --> SG["May recommend sync-xcode-project-guidance for repo guidance alignment"]
     D --> DX["May recommend apple-xcode-workflow"]
@@ -376,7 +376,7 @@ flowchart TD
 
 - `success` + `primary`: repo guidance sync completed
 
-## `apple-swift-package-bootstrap`
+## `bootstrap-swift-package`
 
 ### Purpose
 
@@ -437,7 +437,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - This skill is intentionally bounded to repo-guidance alignment for plain Swift packages.
-- New-package creation still belongs to `apple-swift-package-bootstrap`.
+- New-package creation still belongs to `bootstrap-swift-package`.
 - Xcode-managed package execution may still belong to `apple-xcode-workflow`.
 
 ### Agent ↔ User UX

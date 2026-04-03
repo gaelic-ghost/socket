@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "skills/apple-swift-package-bootstrap/scripts/run_workflow.py"
+SCRIPT = ROOT / "skills/bootstrap-swift-package/scripts/run_workflow.py"
 
 
 def write_config(tmpdir: str, skill: str, settings: dict) -> None:
@@ -60,7 +60,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             write_config(
                 tmpdir,
-                "apple-swift-package-bootstrap",
+                "bootstrap-swift-package",
                 {
                     "defaultPackageType": "executable",
                     "defaultPlatformPreset": "mac",
@@ -89,7 +89,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             write_config(
                 tmpdir,
-                "apple-swift-package-bootstrap",
+                "bootstrap-swift-package",
                 {
                     "defaultPackageType": "library",
                     "defaultPlatformPreset": "multiplatform",
