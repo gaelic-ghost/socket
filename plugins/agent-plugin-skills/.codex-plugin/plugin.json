@@ -1,7 +1,7 @@
 {
   "name": "agent-plugin-skills",
-  "version": "0.0.0-local",
-  "description": "In-development maintainer plugin for agent-skills and agent-plugin repositories.",
+  "version": "0.1.0",
+  "description": "Maintainer plugin for agent-skills and agent-plugin repositories.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Agent Plugin Skills",
     "shortDescription": "Maintainer workflows for agent-skills and plugin repositories.",
-    "longDescription": "In-development maintainer plugin for bootstrapping, auditing, and evolving agent-skills and agent-plugin repositories across OpenAI Codex and Claude Code packaging surfaces.",
+    "longDescription": "Maintainer plugin for bootstrapping, auditing, and evolving agent-skills and agent-plugin repositories across OpenAI Codex and Claude Code packaging surfaces.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [
