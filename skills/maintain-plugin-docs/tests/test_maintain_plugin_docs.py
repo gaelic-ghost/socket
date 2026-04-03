@@ -203,3 +203,48 @@ def test_apply_fixes_for_repo_normalizes_legacy_install_syntax(tmp_path: Path) -
     assert "npx skills add gaelic-ghost/productivity-skills --skill example-skill" in updated
     assert "@example-skill" not in updated
     assert any(fix["rule"] == "normalize-skills-add-syntax" for fix in fixes)
+
+
+def test_validate_roadmap_flags_missing_required_sections(tmp_path: Path) -> None:
+    repo = tmp_path / "plugin-skills"
+    repo.mkdir()
+    roadmap = """# Project Roadmap
+
+## Vision
+
+- Example vision.
+"""
+
+    findings = m.validate_roadmap(repo, roadmap)
+
+    issue_ids = {issue.issue_id for issue in findings}
+    assert "roadmap-missing-section-product-principles" in issue_ids
+    assert "roadmap-missing-section-milestone-progress" in issue_ids
+    assert "roadmap-missing-milestones" in issue_ids
+
+
+def test_apply_fixes_for_roadmap_creates_default_when_missing(tmp_path: Path) -> None:
+    repo = tmp_path / "plugin-skills"
+    repo.mkdir()
+
+    changed, fixes, reason = m.apply_fixes_for_roadmap(repo)
+
+    assert changed is True
+    assert reason is None
+    roadmap = (repo / "ROADMAP.md").read_text(encoding="utf-8")
+    assert "## Product Principles" in roadmap
+    assert "## Milestone Progress" in roadmap
+    assert any(fix["rule"] == "create-missing-roadmap" for fix in fixes)
+
+
+def test_check_cross_doc_consistency_flags_legacy_skill_name(tmp_path: Path) -> None:
+    repo = tmp_path / "plugin-skills"
+    repo.mkdir()
+
+    findings = m.check_cross_doc_consistency(
+        repo,
+        "Use maintain-skills-readme here.",
+        "Milestone notes still mention maintain-plugin-docs.",
+    )
+
+    assert any(issue.issue_id == "cross-doc-legacy-skill-name" for issue in findings)

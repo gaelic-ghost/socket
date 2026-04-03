@@ -61,10 +61,22 @@ Tickets:
 - [x] Rename the skill surface from `maintain-skills-readme` to `maintain-plugin-docs`.
 - [x] Clarify current README-only behavior versus planned wider docs-maintainer scope in repo docs.
 - [x] Clarify that `sync-skills-repo-guidance` currently owns ongoing guidance alignment while wider docs-maintainer work is still planned.
-- [ ] Define the widened scope and new trigger surface for plugin-repo documentation maintenance.
-- [ ] Implement the checklist-style roadmap maintenance path inside `maintain-plugin-docs`.
+- [x] Add a `--doc-scope <readme|roadmap|all>` interface to `maintain-plugin-docs`.
+- [x] Keep the existing README maintenance path as the `readme` scope without changing its bounded-write guarantees.
+- [x] Implement a checklist-style `ROADMAP.md` validator for the `roadmap` scope.
+- [x] Implement bounded `ROADMAP.md` apply behavior for the `roadmap` scope, modeled on `maintain-project-roadmap`.
+- [ ] Enforce canonical roadmap structure: `Vision`, `Product Principles`, `Milestone Progress`, and milestone sections with `Scope`, `Tickets`, and `Exit criteria`.
+- [ ] Validate that `Milestone Progress` reflects milestone-level reality.
+- [ ] Validate markdown checkbox syntax and deterministic milestone ordering.
+- [ ] Treat legacy roadmap formats as migration targets in apply mode and as reported findings in check-only mode.
+- [x] Add `all` scope behavior that runs README and ROADMAP audits together in one pass.
+- [ ] Add cross-doc consistency checks between `README.md` and `ROADMAP.md` for current skill names, current-versus-planned scope wording, and install-surface priorities.
 - [ ] Add deterministic validation for README sections, docs links, install examples, and docs-adjacent maintainer snippets.
 - [ ] Rebalance README install guidance so Codex Plugin and Claude Code Plugin installs are primary and Vercel `skills` CLI installs are secondary.
+- [x] Update the JSON and Markdown output contract to report `readme_findings`, `roadmap_findings`, and `cross_doc_findings`.
+- [ ] Update prompt templates and references so automation and subagents can target `readme`, `roadmap`, or `all`.
+- [x] Add tests for README-only, ROADMAP-only, and combined `all` mode runs.
+- [ ] Add tests for cross-doc drift detection and install-surface ordering checks.
 - [ ] Document deferral boundaries relative to `sync-skills-repo-guidance`.
 
 Exit criteria:

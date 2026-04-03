@@ -17,7 +17,7 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
 | `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
-| `maintain-plugin-docs` | Current plugin-docs maintainer for stack-specific skills and plugin repos | README audit-only, README audit plus bounded fixes, future roadmap maintenance |
+| `maintain-plugin-docs` | Current plugin-docs maintainer for stack-specific skills and plugin repos | README audit/apply, ROADMAP audit/apply, combined docs passes |
 | `sync-skills-repo-guidance` | Current guidance-alignment owner for skills and plugin repos | `check-only` script audit, maintainer-driven guidance reconciliation, misroute and defer handling |
 
 ## `bootstrap-skills-plugin-repo`
@@ -56,8 +56,8 @@ Outputs:
 Current-state note:
 
 - This skill is the current stack-specific docs-maintenance surface for plugin-development repos in this family.
-- The implemented automation currently owns `README.md` maintenance only.
-- The intended scope is broader: it should eventually pair that README behavior with checklist-style `ROADMAP.md` maintenance following the same model as `maintain-project-roadmap`.
+- The implemented automation owns `README.md`, `ROADMAP.md`, and combined docs passes through `--doc-scope`.
+- The intended scope is broader in policy and refinement, but the checklist-style `ROADMAP.md` maintenance path now exists in the same skill surface.
 - For repo guidance, Codex Plugin and Claude Code Plugin install paths should be treated as the primary install surface and Vercel `skills` CLI installs as the secondary surface.
 
 ### Workflow: audit-only
@@ -69,13 +69,14 @@ Current-state note:
 Inputs:
 
 - Required: `--workspace <path>`
+- Optional: `--doc-scope <readme|roadmap|all>`
 - Optional: `--repo-glob <glob>`
 - Optional: repeatable `--exclude <path>`
 - Tool or script input: `scripts/maintain_plugin_docs.py`
 
 Outputs:
 
-- Markdown plus JSON with `run_context`, `repos_scanned`, `profile_assignments`, `schema_violations`, `command_integrity_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Markdown plus JSON with `run_context`, `repos_scanned`, `profile_assignments`, `readme_findings`, `roadmap_findings`, `cross_doc_findings`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.`
 
 ### Workflow: audit plus bounded fixes
@@ -88,6 +89,12 @@ Outputs:
 
 - Same Markdown plus JSON report shape as audit-only
 - Exact clean-run text: `No findings.` when no issues and no errors remain
+
+### Workflow: ROADMAP audit/apply
+
+- Triggered when the user wants checklist-style `ROADMAP.md` maintenance in a plugin-development repo.
+- Supports `check-only` and bounded `apply` behavior through `--doc-scope roadmap`.
+- In combined runs, `--doc-scope all` audits both surfaces and reports cross-doc drift.
 
 ## `sync-skills-repo-guidance`
 

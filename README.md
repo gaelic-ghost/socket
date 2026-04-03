@@ -7,7 +7,7 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 ## Active Skills
 
 - `maintain-plugin-docs`
-  - Current implementation: audit and bounded fixes for `README.md` in stack-specific skills and plugin repositories.
+  - Current implementation: audit and bounded fixes for `README.md`, `ROADMAP.md`, or both in stack-specific skills and plugin repositories.
   - Intended scope: become the combined docs maintainer for plugin-development repos here, pairing the current specialized README maintenance with the same checklist-style roadmap maintenance model used by `maintain-project-roadmap`.
   - Install guidance should prioritize Codex Plugin and Claude Code Plugin setup first, with `npx skills` per-skill and `--all` installs treated as secondary.
 - `bootstrap-skills-plugin-repo`

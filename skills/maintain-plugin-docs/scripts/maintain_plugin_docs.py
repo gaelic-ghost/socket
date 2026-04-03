@@ -20,6 +20,43 @@ PRIVATE_REPOS = {"private-skills"}
 BOOTSTRAP_REPOS = {"a11y-skills"}
 
 EXPECTED_OWNER = "gaelic-ghost"
+DEFAULT_DOC_SCOPE = "readme"
+
+ROADMAP_DEFAULT_TEMPLATE = """# Project Roadmap
+
+## Vision
+
+- Define the long-term outcome for this plugin-development repository.
+
+## Product Principles
+
+- Keep plugin-development docs deterministic, reviewable, and aligned with real repo behavior.
+
+## Milestone Progress
+
+- [ ] Milestone 0: Foundation
+
+## Milestone 0: Foundation
+
+Scope:
+
+- [ ] Define initial plugin-development scope.
+
+Tickets:
+
+- [ ] Add the first implementation task.
+
+Exit criteria:
+
+- [ ] Scope, tickets, and validation are complete.
+"""
+
+ROADMAP_REQUIRED_TOP_LEVEL = ["Vision", "Product Principles", "Milestone Progress"]
+ROADMAP_REQUIRED_TOP_LEVEL_ALIASES = {"Product principles": "Product Principles"}
+ROADMAP_REQUIRED_MILESTONE_SUBSECTIONS = ["Scope", "Tickets", "Exit criteria"]
+ROADMAP_CHECKBOX_RE = re.compile(r"^\s*-\s+\[( |x)\]\s+.+$")
+ROADMAP_ANY_CHECKBOX_RE = re.compile(r"^\s*-\s+\[[^\]]\]\s+.+$")
+ROADMAP_MILESTONE_HEADING_RE = re.compile(r"^##\s+Milestone\s+(\d+)\s*:\s*(.+?)\s*$")
 
 CORE_SECTION_KEYS = [
     "toc",
@@ -288,8 +325,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--workspace", required=True, help="Workspace root")
     parser.add_argument("--repo-glob", default="*-skills", help="Repo directory glob")
+    parser.add_argument(
+        "--doc-scope",
+        choices=["readme", "roadmap", "all"],
+        default=DEFAULT_DOC_SCOPE,
+        help="Document surface to audit and optionally fix",
+    )
     parser.add_argument("--exclude", action="append", default=[], help="Path to exclude (repeatable)")
-    parser.add_argument("--apply-fixes", action="store_true", help="Apply bounded README fixes")
+    parser.add_argument("--apply-fixes", action="store_true", help="Apply bounded docs fixes for the selected scope")
     parser.add_argument("--json-out", help="Write JSON report path")
     parser.add_argument("--md-out", help="Write Markdown report path")
     parser.add_argument("--print-json", action="store_true", help="Print JSON report")
@@ -1617,6 +1660,346 @@ def apply_fixes_for_repo(repo: Path, profile: str, skill_dirs: List[str]) -> Tup
     return True, fixes, None
 
 
+def split_roadmap_sections(text: str) -> List[Tuple[str, List[str]]]:
+    lines = text.splitlines()
+    sections: List[Tuple[str, List[str]]] = []
+    current_heading = "__preamble__"
+    current_lines: List[str] = []
+
+    for line in lines:
+        if line.startswith("## "):
+            sections.append((current_heading, current_lines))
+            current_heading = line[3:].strip()
+            current_lines = []
+        else:
+            current_lines.append(line)
+    sections.append((current_heading, current_lines))
+    return sections
+
+
+def roadmap_milestone_sections(sections: Sequence[Tuple[str, List[str]]]) -> List[Tuple[int, str, List[str]]]:
+    result: List[Tuple[int, str, List[str]]] = []
+    for heading, lines in sections:
+        match = ROADMAP_MILESTONE_HEADING_RE.match(f"## {heading}")
+        if match:
+            result.append((int(match.group(1)), match.group(2).strip(), lines))
+    return result
+
+
+def has_legacy_roadmap_format(text: str) -> bool:
+    if re.search(r"^##\s+Current Milestone\s*$", text, flags=re.MULTILINE):
+        return True
+    if re.search(r"^##\s+Milestones\s*$", text, flags=re.MULTILINE) and "|" in text:
+        return True
+    if re.search(r"\|\s*Milestone\s*\|", text, flags=re.IGNORECASE):
+        return True
+    return False
+
+
+def parse_legacy_roadmap_milestones(text: str) -> List[Tuple[int, str, str]]:
+    rows: List[Tuple[int, str, str]] = []
+    lines = text.splitlines()
+    in_table = False
+    for line in lines:
+        if re.match(r"^\|\s*Milestone\s*\|", line, flags=re.IGNORECASE):
+            in_table = True
+            continue
+        if in_table and re.match(r"^\|\s*[-:]+\s*\|", line):
+            continue
+        if in_table and line.strip().startswith("|"):
+            cols = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cols) >= 2:
+                name = cols[0]
+                status = cols[1]
+                match = re.search(r"(\d+)", name)
+                idx = int(match.group(1)) if match else len(rows)
+                title = re.sub(r"^Milestone\s*\d+\s*[:\-]?\s*", "", name, flags=re.IGNORECASE).strip() or name
+                rows.append((idx, title, status))
+        elif in_table and line.strip() == "":
+            in_table = False
+    return sorted(rows, key=lambda item: item[0])
+
+
+def roadmap_status_to_checkbox(status: str) -> str:
+    lowered = status.lower()
+    if any(token in lowered for token in ["done", "complete", "completed", "shipped"]):
+        return "[x]"
+    return "[ ]"
+
+
+def validate_roadmap(repo: Path, text: str) -> List[Issue]:
+    roadmap_path = repo / "ROADMAP.md"
+    findings: List[Issue] = []
+    lines = text.splitlines()
+    first_non_empty = next((line.strip() for line in lines if line.strip()), "")
+    if first_non_empty != "# Project Roadmap":
+        findings.append(
+            Issue(
+                issue_id="roadmap-title",
+                category="roadmap-violation",
+                severity="high",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence="ROADMAP must start with `# Project Roadmap`.",
+                recommended_fix="Normalize the roadmap title to `# Project Roadmap`.",
+                auto_fixable=True,
+            )
+        )
+
+    sections = split_roadmap_sections(text)
+    headings = {heading for heading, _body in sections}
+    normalized_headings = {ROADMAP_REQUIRED_TOP_LEVEL_ALIASES.get(heading, heading) for heading in headings}
+    for required in ROADMAP_REQUIRED_TOP_LEVEL:
+        if required not in normalized_headings:
+            findings.append(
+                Issue(
+                    issue_id=f"roadmap-missing-section-{required.lower().replace(' ', '-')}",
+                    category="roadmap-violation",
+                    severity="high",
+                    repo=repo.name,
+                    doc_file=str(roadmap_path),
+                    evidence=f"Missing required roadmap section: {required}",
+                    recommended_fix=f"Add the `{required}` section.",
+                    auto_fixable=True,
+                )
+            )
+
+    milestones = roadmap_milestone_sections(sections)
+    if not milestones:
+        findings.append(
+            Issue(
+                issue_id="roadmap-missing-milestones",
+                category="roadmap-violation",
+                severity="high",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence="No milestone sections found.",
+                recommended_fix="Add milestone sections with headings like `## Milestone N: Name`.",
+                auto_fixable=True,
+            )
+        )
+    else:
+        ordered = [item[0] for item in milestones]
+        if ordered != sorted(ordered):
+            findings.append(
+                Issue(
+                    issue_id="roadmap-milestone-order",
+                    category="roadmap-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(roadmap_path),
+                    evidence="Milestone sections are not in ascending order.",
+                    recommended_fix="Reorder milestone sections into deterministic ascending order.",
+                    auto_fixable=True,
+                )
+            )
+
+        for idx, _title, body in milestones:
+            joined = "\n".join(body)
+            for subsection in ROADMAP_REQUIRED_MILESTONE_SUBSECTIONS:
+                if f"{subsection}:" not in joined:
+                    findings.append(
+                        Issue(
+                            issue_id=f"roadmap-milestone-{idx}-missing-{subsection.lower().replace(' ', '-')}",
+                            category="roadmap-violation",
+                            severity="high",
+                            repo=repo.name,
+                            doc_file=str(roadmap_path),
+                            evidence=f"Milestone {idx} is missing subsection `{subsection}:`.",
+                            recommended_fix=f"Add the `{subsection}:` block to milestone {idx}.",
+                            auto_fixable=True,
+                        )
+                    )
+
+    for line_no, line in enumerate(lines, start=1):
+        if ROADMAP_ANY_CHECKBOX_RE.match(line) and not ROADMAP_CHECKBOX_RE.match(line):
+            findings.append(
+                Issue(
+                    issue_id=f"roadmap-invalid-checkbox-{line_no}",
+                    category="roadmap-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(roadmap_path),
+                    evidence=f"Invalid checkbox syntax on line {line_no}: `{line.strip()}`",
+                    recommended_fix="Use only `[ ]` or `[x]` checkbox syntax.",
+                    auto_fixable=True,
+                )
+            )
+
+    progress_lines = []
+    progress_range = find_section_line_range(lines, r"^##\s+Milestone Progress\s*$")
+    if progress_range is not None:
+        start_idx, end_idx = progress_range
+        progress_lines = [line for line in lines[start_idx + 1 : end_idx] if line.strip()]
+    milestone_progress_count = len([line for line in progress_lines if line.strip().startswith("- [")])
+    if milestones and milestone_progress_count != len(milestones):
+        findings.append(
+            Issue(
+                issue_id="roadmap-progress-count-mismatch",
+                category="roadmap-violation",
+                severity="medium",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence="`Milestone Progress` count does not match the number of milestone sections.",
+                recommended_fix="Update `Milestone Progress` so it reflects all milestone sections.",
+                auto_fixable=True,
+            )
+        )
+
+    if has_legacy_roadmap_format(text):
+        findings.append(
+            Issue(
+                issue_id="roadmap-legacy-format",
+                category="roadmap-violation",
+                severity="medium",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence="Legacy roadmap format detected.",
+                recommended_fix="Migrate the roadmap to checklist-style milestone sections.",
+                auto_fixable=True,
+            )
+        )
+
+    return findings
+
+
+def build_roadmap_from_legacy(text: str) -> str:
+    rows = parse_legacy_roadmap_milestones(text)
+    if not rows:
+        rows = [(0, "Foundation", "Planned")]
+
+    out_lines: List[str] = [
+        "# Project Roadmap",
+        "",
+        "## Vision",
+        "",
+        "- Preserved from legacy roadmap during checklist migration.",
+        "",
+        "## Product Principles",
+        "",
+        "- Keep plugin-development roadmap sections checklist-based and deterministic.",
+        "",
+        "## Milestone Progress",
+        "",
+    ]
+
+    for idx, title, status in rows:
+        out_lines.append(f"- {roadmap_status_to_checkbox(status)} Milestone {idx}: {title} ({status})")
+
+    out_lines.append("")
+
+    for idx, title, status in rows:
+        out_lines.extend(
+            [
+                f"## Milestone {idx}: {title}",
+                "",
+                "Scope:",
+                "",
+                f"- [ ] Preserve legacy scope details for status: {status}.",
+                "",
+                "Tickets:",
+                "",
+                "- [ ] Add or reconcile milestone tasks.",
+                "",
+                "Exit criteria:",
+                "",
+                "- [ ] Milestone checklist is complete and validated.",
+                "",
+            ]
+        )
+
+    return "\n".join(out_lines).strip() + "\n"
+
+
+def ensure_roadmap_apply_shape(text: str) -> str:
+    if has_legacy_roadmap_format(text):
+        return build_roadmap_from_legacy(text)
+
+    sections = split_roadmap_sections(text)
+    normalized_lines = text.splitlines()
+
+    for idx, line in enumerate(normalized_lines):
+        if line.strip() == "## Product principles":
+            normalized_lines[idx] = "## Product Principles"
+
+    text = "\n".join(normalized_lines)
+    if normalized_lines and text and text[-1] != "\n":
+        text += "\n"
+
+    sections = split_roadmap_sections(text)
+    headings = [heading for heading, _body in sections]
+    if "# Project Roadmap" not in text.splitlines()[:3]:
+        text = ROADMAP_DEFAULT_TEMPLATE if not text.strip() else "# Project Roadmap\n\n" + text.lstrip("# \n")
+
+    if "Vision" not in headings:
+        text += "\n## Vision\n\n- Define the long-term outcome for this plugin-development repository.\n"
+    if "Product Principles" not in headings and "Product principles" not in headings:
+        text += "\n## Product Principles\n\n- Keep plugin-development docs deterministic, reviewable, and aligned with real repo behavior.\n"
+    if "Milestone Progress" not in headings:
+        text += "\n## Milestone Progress\n\n- [ ] Milestone 0: Foundation\n"
+    if not roadmap_milestone_sections(split_roadmap_sections(text)):
+        text += "\n## Milestone 0: Foundation\n\nScope:\n\n- [ ] Define initial plugin-development scope.\n\nTickets:\n\n- [ ] Add the first implementation task.\n\nExit criteria:\n\n- [ ] Scope, tickets, and validation are complete.\n"
+
+    return text.rstrip() + "\n"
+
+
+def apply_fixes_for_roadmap(repo: Path) -> Tuple[bool, List[Dict[str, object]], Optional[str]]:
+    fixes: List[Dict[str, object]] = []
+    roadmap = repo / "ROADMAP.md"
+
+    if not roadmap.exists():
+        write_text(roadmap, ROADMAP_DEFAULT_TEMPLATE)
+        fixes.append(
+            {
+                "repo": repo.name,
+                "file": str(roadmap),
+                "rule": "create-missing-roadmap",
+                "status": "applied",
+                "reason": "created canonical checklist roadmap",
+            }
+        )
+        return True, fixes, None
+
+    before = read_text(roadmap)
+    after = ensure_roadmap_apply_shape(before)
+    if after == before:
+        return False, fixes, "no bounded roadmap fix applied"
+
+    write_text(roadmap, after)
+    fixes.append(
+        {
+            "repo": repo.name,
+            "file": str(roadmap),
+            "rule": "normalize-roadmap-structure",
+            "status": "applied",
+            "reason": "normalized roadmap to checklist structure",
+        }
+    )
+    return True, fixes, None
+
+
+def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_text: Optional[str]) -> List[Issue]:
+    issues: List[Issue] = []
+    if not readme_text or not roadmap_text:
+        return issues
+
+    if "maintain-skills-readme" in readme_text or "maintain-skills-readme" in roadmap_text:
+        issues.append(
+            Issue(
+                issue_id="cross-doc-legacy-skill-name",
+                category="cross-doc-violation",
+                severity="medium",
+                repo=repo.name,
+                doc_file=str(repo),
+                evidence="Legacy skill name `maintain-skills-readme` still appears in current docs.",
+                recommended_fix="Rename legacy references to `maintain-plugin-docs`.",
+                auto_fixable=False,
+            )
+        )
+
+    return issues
+
+
 def summarize_markdown(report: Dict[str, object]) -> str:
     lines: List[str] = []
     rc = report["run_context"]
@@ -1624,6 +2007,7 @@ def summarize_markdown(report: Dict[str, object]) -> str:
     lines.append(f"- Timestamp: {rc['timestamp_utc']}")
     lines.append(f"- Workspace: {rc['workspace']}")
     lines.append(f"- Repo glob: {rc['repo_glob']}")
+    lines.append(f"- Doc scope: {rc['doc_scope']}")
     lines.append(f"- Apply fixes: {rc['apply_fixes']}")
     lines.append("")
 
@@ -1637,19 +2021,27 @@ def summarize_markdown(report: Dict[str, object]) -> str:
         lines.append(f"- {name}: {profile}")
     lines.append("")
 
-    lines.append("## Schema Violations")
-    if not report["schema_violations"]:
+    lines.append("## README Findings")
+    if not report["readme_findings"]:
         lines.append("- None")
     else:
-        for i in report["schema_violations"]:
+        for i in report["readme_findings"]:
             lines.append(f"- [{i['severity']}] {i['repo']}: {i['evidence']}")
     lines.append("")
 
-    lines.append("## Command Integrity Issues")
-    if not report["command_integrity_issues"]:
+    lines.append("## ROADMAP Findings")
+    if not report["roadmap_findings"]:
         lines.append("- None")
     else:
-        for i in report["command_integrity_issues"]:
+        for i in report["roadmap_findings"]:
+            lines.append(f"- [{i['severity']}] {i['repo']}: {i['evidence']}")
+    lines.append("")
+
+    lines.append("## Cross-Doc Findings")
+    if not report["cross_doc_findings"]:
+        lines.append("- None")
+    else:
+        for i in report["cross_doc_findings"]:
             lines.append(f"- [{i['severity']}] {i['repo']}: {i['evidence']}")
     lines.append("")
 
@@ -1688,80 +2080,134 @@ def main() -> int:
     repos = discover_repos(workspace, args.repo_glob, excludes)
 
     profile_assignments: Dict[str, str] = {}
-    schema_issues: List[Issue] = []
-    command_issues: List[Issue] = []
+    readme_findings: List[Issue] = []
+    roadmap_findings: List[Issue] = []
+    cross_doc_findings: List[Issue] = []
     errors: List[Dict[str, str]] = []
     fixes_applied: List[Dict[str, object]] = []
+    wants_readme = args.doc_scope in {"readme", "all"}
+    wants_roadmap = args.doc_scope in {"roadmap", "all"}
 
     for repo in repos:
         profile = detect_profile(repo.name)
         profile_assignments[repo.name] = profile
 
         readme = repo / "README.md"
+        roadmap = repo / "ROADMAP.md"
         skill_dirs = find_skill_dirs(repo)
+        readme_text: Optional[str] = None
+        roadmap_text: Optional[str] = None
 
-        if not readme.exists():
-            schema_issues.append(
-                Issue(
-                    issue_id="missing-readme",
-                    category="schema-violation",
-                    severity="high",
-                    repo=repo.name,
-                    doc_file=str(readme),
-                    evidence="README.md is missing.",
-                    recommended_fix="Create README using profile-appropriate template.",
-                    auto_fixable=(profile == "bootstrap"),
+        if wants_readme:
+            if not readme.exists():
+                readme_findings.append(
+                    Issue(
+                        issue_id="missing-readme",
+                        category="schema-violation",
+                        severity="high",
+                        repo=repo.name,
+                        doc_file=str(readme),
+                        evidence="README.md is missing.",
+                        recommended_fix="Create README using profile-appropriate template.",
+                        auto_fixable=(profile == "bootstrap"),
+                    )
                 )
-            )
-            continue
+            else:
+                readme_text = read_text(readme)
+                readme_findings.extend(check_sections(repo, profile, readme_text))
+                readme_findings.extend(find_todo_issues(repo, readme_text))
+                readme_findings.extend(check_links(repo, readme_text))
+                readme_findings.extend(check_commands(repo, profile, readme_text, skill_dirs))
 
-        text = read_text(readme)
-        schema_issues.extend(check_sections(repo, profile, text))
-        schema_issues.extend(find_todo_issues(repo, text))
-        schema_issues.extend(check_links(repo, text))
-        command_issues.extend(check_commands(repo, profile, text, skill_dirs))
+        if wants_roadmap:
+            if not roadmap.exists():
+                roadmap_findings.append(
+                    Issue(
+                        issue_id="missing-roadmap",
+                        category="roadmap-violation",
+                        severity="high",
+                        repo=repo.name,
+                        doc_file=str(roadmap),
+                        evidence="ROADMAP.md is missing.",
+                        recommended_fix="Create a canonical checklist-style roadmap.",
+                        auto_fixable=True,
+                    )
+                )
+            else:
+                roadmap_text = read_text(roadmap)
+                roadmap_findings.extend(validate_roadmap(repo, roadmap_text))
 
-    initial_unresolved = len(schema_issues) + len(command_issues)
+        if wants_readme and wants_roadmap:
+            if readme_text is None and readme.exists():
+                readme_text = read_text(readme)
+            if roadmap_text is None and roadmap.exists():
+                roadmap_text = read_text(roadmap)
+            cross_doc_findings.extend(check_cross_doc_consistency(repo, readme_text, roadmap_text))
+
+    initial_unresolved = len(readme_findings) + len(roadmap_findings) + len(cross_doc_findings)
 
     if args.apply_fixes:
         for repo in repos:
             profile = profile_assignments[repo.name]
             skill_dirs = find_skill_dirs(repo)
             try:
-                changed, fixes, reason = apply_fixes_for_repo(repo, profile, skill_dirs)
-                if fixes:
-                    fixes_applied.extend(fixes)
-                elif reason:
-                    fixes_applied.append({"repo": repo.name, "file": str(repo / "README.md"), "rule": "no-op", "status": "skipped", "reason": reason})
-                if changed:
-                    # Re-evaluate repo after fix.
-                    readme = repo / "README.md"
-                    text = read_text(readme)
-                    schema_issues = [i for i in schema_issues if i.repo != repo.name]
-                    command_issues = [i for i in command_issues if i.repo != repo.name]
-                    schema_issues.extend(check_sections(repo, profile, text))
-                    schema_issues.extend(find_todo_issues(repo, text))
-                    schema_issues.extend(check_links(repo, text))
-                    command_issues.extend(check_commands(repo, profile, text, skill_dirs))
+                if wants_readme:
+                    changed, fixes, reason = apply_fixes_for_repo(repo, profile, skill_dirs)
+                    if fixes:
+                        fixes_applied.extend(fixes)
+                    elif reason:
+                        fixes_applied.append({"repo": repo.name, "file": str(repo / "README.md"), "rule": "no-op", "status": "skipped", "reason": reason})
+                    if changed:
+                        readme = repo / "README.md"
+                        text = read_text(readme)
+                        readme_findings = [i for i in readme_findings if i.repo != repo.name]
+                        readme_findings.extend(check_sections(repo, profile, text))
+                        readme_findings.extend(find_todo_issues(repo, text))
+                        readme_findings.extend(check_links(repo, text))
+                        readme_findings.extend(check_commands(repo, profile, text, skill_dirs))
+
+                if wants_roadmap:
+                    changed, fixes, reason = apply_fixes_for_roadmap(repo)
+                    if fixes:
+                        fixes_applied.extend(fixes)
+                    elif reason:
+                        fixes_applied.append({"repo": repo.name, "file": str(repo / "ROADMAP.md"), "rule": "no-op", "status": "skipped", "reason": reason})
+                    if changed:
+                        roadmap = repo / "ROADMAP.md"
+                        text = read_text(roadmap)
+                        roadmap_findings = [i for i in roadmap_findings if i.repo != repo.name]
+                        roadmap_findings.extend(validate_roadmap(repo, text))
+
+                if wants_readme and wants_roadmap:
+                    cross_doc_findings = [i for i in cross_doc_findings if i.repo != repo.name]
+                    readme_text = read_text(repo / "README.md") if (repo / "README.md").exists() else None
+                    roadmap_text = read_text(repo / "ROADMAP.md") if (repo / "ROADMAP.md").exists() else None
+                    cross_doc_findings.extend(check_cross_doc_consistency(repo, readme_text, roadmap_text))
             except Exception as exc:
                 errors.append({"repo": repo.name, "message": f"fix error: {exc}"})
 
-    unresolved = len(schema_issues) + len(command_issues)
+    unresolved = len(readme_findings) + len(roadmap_findings) + len(cross_doc_findings)
 
-    repos_with_issues = sorted({i.repo for i in schema_issues + command_issues})
+    repos_with_issues = sorted({i.repo for i in readme_findings + roadmap_findings + cross_doc_findings})
 
     report: Dict[str, object] = {
         "run_context": {
             "timestamp_utc": datetime.now(timezone.utc).isoformat(),
             "workspace": str(workspace),
             "repo_glob": args.repo_glob,
+            "doc_scope": args.doc_scope,
             "apply_fixes": args.apply_fixes,
             "exclusions": [str(e) for e in excludes],
         },
         "repos_scanned": [str(r) for r in repos],
         "profile_assignments": profile_assignments,
-        "schema_violations": [i.to_dict() for i in schema_issues],
-        "command_integrity_issues": [i.to_dict() for i in command_issues],
+        "readme_findings": [i.to_dict() for i in readme_findings],
+        "roadmap_findings": [i.to_dict() for i in roadmap_findings],
+        "cross_doc_findings": [i.to_dict() for i in cross_doc_findings],
+        "schema_violations": [i.to_dict() for i in readme_findings],
+        "command_integrity_issues": [
+            i.to_dict() for i in readme_findings if i.category == "command-integrity"
+        ],
         "repos_with_issues": repos_with_issues,
         "fixes_applied": fixes_applied,
         "post_fix_status": {
