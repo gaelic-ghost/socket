@@ -1,0 +1,4 @@
+interface:
+  display_name: "Things Reminders Manager"
+  short_description: "Deterministic Things reminder workflow with update-first duplicate handling."
+  default_prompt: "Use $things-reminders-manager to resolve the current local date/time, load effective settings (`timezone`, `defaultReminderTime`, `duplicatePolicy`, `onUpdateWithoutToken`, `requireAbsoluteDateInConfirmation`), check Things auth readiness, apply one deterministic mutation path, and return `created`, `updated`, or `blocked` with the required absolute confirmation."
