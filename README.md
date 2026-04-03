@@ -20,6 +20,18 @@ Every active skill now follows the same documentation contract:
 
 Maintainer-facing workflow diagrams, input/output contracts, and Agent ↔ User UX maps live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md). Audit procedure and source-of-truth guidance live in [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
 
+## Packaging and Delegation
+
+This repository currently ships skills as its canonical public surface. It does not currently ship a Codex plugin manifest, a Codex marketplace entry, or Claude Code subagent definitions.
+
+Maintainer guidance for those adjacent surfaces now exists in [AGENTS.md](./AGENTS.md):
+
+- Codex plugins are the installable distribution layer that can bundle skills, apps, and MCP servers.
+- Claude Code plugins are a broader distribution layer that may bundle skills, commands, hooks, MCP or LSP config, and plugin-scoped subagents.
+- Codex and Claude subagents are delegation/runtime workers, not replacements for repo guidance or top-level skills.
+
+If this repo later adds plugin or subagent packaging, the shipped skills under `skills/` should remain the authoring source of truth unless the repository guidance is intentionally changed.
+
 ## Maintainer Python Tooling
 
 This repository standardizes maintainer-side Python tooling around `uv`.

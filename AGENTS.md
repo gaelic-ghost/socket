@@ -49,6 +49,29 @@ Applicability guidance:
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
 
+## Plugins and Subagents
+
+- Keep the terminology straight across ecosystems and docs:
+  - a `skill` is the reusable authoring unit for workflow guidance
+  - a `plugin` is a distribution bundle
+  - a `subagent` is a delegated runtime worker with its own context and tool policy
+- For Codex, treat skills as the primary authoring format and plugins as the installable distribution unit that can bundle skills, apps, and MCP servers.
+- For Codex work, prefer starting with a local skill when iterating on one workflow in one repository. Escalate to plugin packaging only when the workflow should be distributed across teams, published through a marketplace, or shipped together with app integrations or MCP configuration.
+- For Claude Code, keep in mind that plugins can package more than skills alone. Claude plugins may bundle commands, hooks, MCP or LSP configuration, skills, and plugin-scoped subagents.
+- For Claude Code subagents, treat them as Markdown-plus-frontmatter runtime personas with their own prompts, tool access, and context window. They are not a replacement for shared skills or repo guidance.
+- For Codex subagents, treat them as explicit delegation infrastructure for bounded parallel or specialized work. They should not be assumed to exist unless the host supports them and the task actually benefits from delegation.
+- Use subagents for noisy or separable work such as exploration, triage, tests, audits, or summarization. Be cautious with parallel write-heavy workflows because coordination cost and edit conflicts can outweigh the benefit.
+- Do not blur these layers in repo docs:
+  - `AGENTS.md` defines durable behavior and project policy
+  - skills define reusable workflows
+  - plugins package installable distribution surfaces
+  - subagents define runtime delegation behavior
+- When documenting cross-platform compatibility, say explicitly whether guidance is:
+  - shared between Codex and Claude
+  - Codex-specific
+  - Claude-specific
+- This repository's source of truth remains the shipped skill assets under `skills/`. If plugin manifests, marketplaces, or subagent definitions are added later, document them as packaging or delegation layers around the skills rather than as replacements for the canonical skill surface.
+
 ## Skill Runtime Model
 
 - A skill is an instruction and workflow-guidance layer. It teaches and structured tool use; it does not become the tool runtime.

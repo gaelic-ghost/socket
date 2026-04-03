@@ -37,6 +37,18 @@ flowchart TD
 - Cross-skill recommendation is decentralized inside each skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 
+### Packaging and Delegation Notes
+
+- The current shipped surface in this repository is a skill bundle, not a plugin marketplace.
+- If this repository adds Codex plugin packaging later, treat that as a distribution wrapper around the existing skills, with optional bundled apps or MCP servers.
+- If this repository adds Claude plugin packaging later, treat that as a distribution wrapper that may also carry plugin-scoped subagents or other Claude-specific integration files.
+- Subagents in either ecosystem are runtime delegation helpers with separate context and tool policy. They are not the canonical authoring format for the repo's Apple workflows.
+- Repo docs should keep the layers explicit:
+  - `AGENTS.md` for durable policy
+  - `skills/` for reusable workflow authoring
+  - plugin files for installable distribution
+  - subagent files for delegated runtime behavior
+
 ### Agent ↔ User UX
 
 - Entry:
