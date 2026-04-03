@@ -1,0 +1,39 @@
+{
+  "name": "things-app",
+  "version": "0.1.0",
+  "description": "Things.app skills and a bundled local MCP server for reminders, planning digests, and structured task workflows.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/things-app",
+  "repository": "https://github.com/gaelic-ghost/things-app",
+  "keywords": [
+    "things-app",
+    "mcp",
+    "fastmcp",
+    "codex",
+    "claude-code",
+    "productivity"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Things App",
+    "shortDescription": "Things workflows plus a bundled local MCP server.",
+    "longDescription": "Bundle Things.app reminder workflows, planning-digest skills, and a local MCP server for structured task automation on macOS.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Plan my next week from my Things data.",
+      "Fix or reschedule a Things reminder safely.",
+      "Use the bundled Things MCP tools in this repo."
+    ],
+    "brandColor": "#2563EB"
+  }
+}
