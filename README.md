@@ -79,7 +79,15 @@ swift build
 swift test
 ```
 
-The current test suite covers configuration parsing, background job completion and pruning, SSE replay and heartbeat behavior, and route-level health, profile, and job lifecycle responses against a controlled typed runtime.
+The current automated suite covers configuration parsing, background job completion and pruning, SSE replay and heartbeat behavior, route-level health, profile, and job lifecycle responses against a controlled typed runtime, plus an opt-in live end-to-end path against a real `SpeakSwiftlyCore` runtime:
+
+```bash
+SPEAKSWIFTLYSERVER_E2E=1 swift test --filter SpeakSwiftlyServerE2ETests
+```
+
+That live path expects the sibling [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout to have already been built with Xcode at least once so `../SpeakSwiftly/.derived/Build/Products/Debug/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib` exists for the server process.
+
+The remaining test gaps are the startup-failure path before the worker ever becomes ready and runtime degradation while background jobs are still in flight. Those are tracked in [`ROADMAP.md`](/Users/galew/Workspace/SpeakSwiftlyServer/ROADMAP.md).
 
 ## Roadmap
 

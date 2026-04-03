@@ -5,6 +5,11 @@ import SpeakSwiftlyCore
 // MARK: - Server State
 
 actor ServerState {
+    private static let mutationRefreshRetryDelays: [Duration] = [
+        .milliseconds(50),
+        .milliseconds(100),
+    ]
+
     struct JobRecord: Sendable {
         let jobID: String
         let op: String
@@ -337,7 +342,13 @@ actor ServerState {
         request: WorkerRequest
     ) async {
         do {
-            let profiles = try await refreshProfiles(reason: "\(request.opName):\(requestID)")
+            let previousProfiles = profileCache
+            let profiles = try await reconcileProfilesAfterMutation(
+                op: request.opName,
+                requestID: requestID,
+                success: success,
+                previousProfiles: previousProfiles
+            )
             self.profileCache = profiles
             self.profileCacheState = "fresh"
             self.profileCacheWarning = nil
@@ -358,6 +369,42 @@ actor ServerState {
             )
             await record(.failed(failure), for: requestID, terminal: true)
         }
+    }
+
+    private func reconcileProfilesAfterMutation(
+        op: String,
+        requestID: String,
+        success: WorkerSuccessResponse,
+        previousProfiles: [ProfileSnapshot]
+    ) async throws -> [ProfileSnapshot] {
+        guard let profileName = success.profileName, !profileName.isEmpty else {
+            throw WorkerError(
+                code: .internalError,
+                message: "SpeakSwiftly returned a successful \(op) payload for request '\(requestID)', but it did not include a usable profile name for cache reconciliation."
+            )
+        }
+
+        let retryDelays = Self.mutationRefreshRetryDelays
+        for attempt in 0...retryDelays.count {
+            let refreshedProfiles = try await refreshProfiles(reason: "\(op):\(requestID):\(attempt)")
+            if profilesMatchExpectedMutation(
+                op: op,
+                profileName: profileName,
+                previousProfiles: previousProfiles,
+                refreshedProfiles: refreshedProfiles
+            ) {
+                return refreshedProfiles
+            }
+
+            if attempt < retryDelays.count {
+                try await Task.sleep(for: retryDelays[attempt])
+            }
+        }
+
+        throw WorkerError(
+            code: .internalError,
+            message: "SpeakSwiftly refreshed the profile cache after \(op) for profile '\(profileName)', but the list still did not reflect the expected mutation."
+        )
     }
 
     private func refreshProfiles(reason: String) async throws -> [ProfileSnapshot] {
@@ -395,6 +442,25 @@ actor ServerState {
         self.lastProfileRefreshAt = Date()
         self.profileCacheState = "fresh"
         self.profileCacheWarning = nil
+    }
+
+    private func profilesMatchExpectedMutation(
+        op: String,
+        profileName: String,
+        previousProfiles: [ProfileSnapshot],
+        refreshedProfiles: [ProfileSnapshot]
+    ) -> Bool {
+        let previousNames = Set(previousProfiles.map(\.profileName))
+        let refreshedNames = Set(refreshedProfiles.map(\.profileName))
+
+        switch op {
+        case "create_profile":
+            return refreshedNames.contains(profileName) && refreshedNames != previousNames
+        case "remove_profile":
+            return !refreshedNames.contains(profileName) && refreshedNames != previousNames
+        default:
+            return false
+        }
     }
 
     private func handle(status: WorkerStatusEvent) async {

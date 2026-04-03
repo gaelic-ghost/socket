@@ -39,8 +39,9 @@
 - [x] Add unit tests for in-memory job retention and pruning.
 - [x] Add route tests for health, readiness, profile, and job endpoints.
 - [x] Add SSE tests for initial worker status replay, progress history, and keep-alive behavior.
-- [ ] Add failure-path tests for worker startup failure, runtime degradation, and expired jobs.
-- [ ] Add end-to-end verification against a real or controlled `SpeakSwiftly` runtime.
+- [x] Add end-to-end verification against a real `SpeakSwiftly` runtime.
+- [ ] Add failure-path tests for worker startup failure before the runtime ever becomes ready.
+- [ ] Add failure-path tests for runtime degradation while background jobs are still in flight.
 
 ## Milestone 5: Library Integration Follow-Through
 

@@ -13,17 +13,25 @@ actor MockRuntime: ServerRuntimeProtocol {
         case holdOpen
     }
 
+    enum MutationRefreshBehavior: Sendable {
+        case applyMutations
+        case leaveProfilesUnchanged
+    }
+
     var profiles: [ProfileSummary]
     var speakBehavior: SpeakBehavior
+    var mutationRefreshBehavior: MutationRefreshBehavior
     private var statusContinuation: AsyncStream<WorkerStatusEvent>.Continuation?
     private var heldContinuations: [String: AsyncThrowingStream<WorkerRequestStreamEvent, Error>.Continuation] = [:]
 
     init(
         profiles: [ProfileSummary] = [sampleProfile()],
-        speakBehavior: SpeakBehavior = .completeImmediately
+        speakBehavior: SpeakBehavior = .completeImmediately,
+        mutationRefreshBehavior: MutationRefreshBehavior = .applyMutations
     ) {
         self.profiles = profiles
         self.speakBehavior = speakBehavior
+        self.mutationRefreshBehavior = mutationRefreshBehavior
     }
 
     func start() {}
@@ -74,14 +82,16 @@ actor MockRuntime: ServerRuntimeProtocol {
             return RuntimeRequestHandle(id: request.id, request: request, events: events)
 
         case .createProfile(_, let profileName, let text, let voiceDescription, _):
-            profiles.append(
-                ProfileSummary(
-                    profileName: profileName,
-                    createdAt: Date(),
-                    voiceDescription: voiceDescription,
-                    sourceText: text
+            if mutationRefreshBehavior == .applyMutations {
+                profiles.append(
+                    ProfileSummary(
+                        profileName: profileName,
+                        createdAt: Date(),
+                        voiceDescription: voiceDescription,
+                        sourceText: text
+                    )
                 )
-            )
+            }
             return RuntimeRequestHandle(
                 id: request.id,
                 request: request,
@@ -92,7 +102,9 @@ actor MockRuntime: ServerRuntimeProtocol {
             )
 
         case .removeProfile(_, let profileName):
-            profiles.removeAll { $0.profileName == profileName }
+            if mutationRefreshBehavior == .applyMutations {
+                profiles.removeAll { $0.profileName == profileName }
+            }
             return RuntimeRequestHandle(
                 id: request.id,
                 request: request,
@@ -166,6 +178,36 @@ actor MockRuntime: ServerRuntimeProtocol {
 
     try await Task.sleep(for: .milliseconds(120))
     try await waitUntilJobDisappears(jobID, on: state)
+
+    await state.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func statePrunesOldestCompletedJobsWhenMaxCountIsExceeded() async throws {
+    let runtime = MockRuntime()
+    let state = ServerState(
+        configuration: testConfiguration(completedJobTTLSeconds: 60, completedJobMaxCount: 2),
+        runtime: runtime,
+        makeRuntime: { runtime }
+    )
+
+    await state.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(state)
+
+    let first = try await state.submitSpeak(text: "One", profileName: "default", background: true)
+    let second = try await state.submitSpeak(text: "Two", profileName: "default", background: true)
+    let third = try await state.submitSpeak(text: "Three", profileName: "default", background: true)
+
+    _ = try await waitForJobSnapshot(first, on: state)
+    _ = try await waitForJobSnapshot(second, on: state)
+    _ = try await waitForJobSnapshot(third, on: state)
+
+    try await waitUntilJobDisappears(first, on: state)
+    let secondSnapshot = try await state.jobSnapshot(id: second)
+    let thirdSnapshot = try await state.jobSnapshot(id: third)
+    #expect(secondSnapshot.status == "completed")
+    #expect(thirdSnapshot.status == "completed")
 
     await state.shutdown()
 }
@@ -265,6 +307,88 @@ actor MockRuntime: ServerRuntimeProtocol {
         #expect(jobJSON["job_id"] as? String == jobID)
         #expect(jobJSON["status"] as? String == "completed")
     }
+
+    await state.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func routesReportNotReadyAndMissingJobsClearly() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = ServerState(
+        configuration: configuration,
+        runtime: runtime,
+        makeRuntime: { runtime }
+    )
+
+    await state.start()
+
+    let app = makeApplication(configuration: configuration, state: state)
+    try await app.test(.router) { client in
+        let readyResponse = try await client.execute(uri: "/readyz", method: .get)
+        let readyJSON = try jsonObject(from: readyResponse.body)
+        #expect(readyResponse.status == .serviceUnavailable)
+        #expect(readyJSON["status"] as? String == "not_ready")
+
+        let speakResponse = try await client.execute(
+            uri: "/speak",
+            method: .post,
+            headers: [.contentType: "application/json"],
+            body: byteBuffer(#"{"text":"Too soon","profile_name":"default"}"#)
+        )
+        let speakJSON = try jsonObject(from: speakResponse.body)
+        #expect(speakResponse.status == .serviceUnavailable)
+        let speakError = try #require(speakJSON["error"] as? [String: Any])
+        #expect((speakError["message"] as? String)?.contains("cannot accept new work") == true)
+
+        let missingJob = try await client.execute(uri: "/jobs/missing-job", method: .get)
+        let missingJSON = try jsonObject(from: missingJob.body)
+        #expect(missingJob.status == .notFound)
+        let missingJobError = try #require(missingJSON["error"] as? [String: Any])
+        #expect((missingJobError["message"] as? String)?.contains("expired from in-memory retention") == true)
+
+        let missingEvents = try await client.execute(uri: "/jobs/missing-job/events", method: .get)
+        let missingEventsJSON = try jsonObject(from: missingEvents.body)
+        #expect(missingEvents.status == .notFound)
+        let missingEventsError = try #require(missingEventsJSON["error"] as? [String: Any])
+        #expect((missingEventsError["message"] as? String)?.contains("expired from in-memory retention") == true)
+    }
+
+    await state.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func profileMutationFailureMarksCacheStaleAndFailsJob() async throws {
+    let runtime = MockRuntime(mutationRefreshBehavior: .leaveProfilesUnchanged)
+    let state = ServerState(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        makeRuntime: { runtime }
+    )
+
+    await state.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(state)
+
+    let jobID = try await state.submitCreateProfile(
+        profileName: "bright-guide",
+        text: "Hello there",
+        voiceDescription: "Warm and bright",
+        outputPath: nil
+    )
+    let snapshot = try await waitForJobSnapshot(jobID, on: state)
+
+    switch snapshot.terminalEvent {
+    case .failed(let failure):
+        #expect(failure.code == "profile_refresh_mismatch")
+        #expect(failure.message.contains("could not confirm the profile list"))
+    default:
+        Issue.record("Expected create_profile reconciliation failure to produce a failed terminal event.")
+    }
+
+    let status = await state.statusSnapshot()
+    #expect(status.profileCacheState == "stale")
+    #expect(status.profileCacheWarning?.contains("could not confirm the refreshed profile list") == true)
 
     await state.shutdown()
 }
