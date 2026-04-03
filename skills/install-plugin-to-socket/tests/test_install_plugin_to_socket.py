@@ -113,6 +113,68 @@ def test_apply_install_personal_scope_uses_home_relative_paths(tmp_path: Path, m
     assert entry["source"]["path"] == "./.codex/plugins/example-plugin"
 
 
+def test_personal_scope_install_and_detach_testing_plugin_round_trip(tmp_path: Path, monkeypatch) -> None:
+    fake_home = tmp_path / "home"
+    fake_home.mkdir()
+    monkeypatch.setattr(m.Path, "home", lambda: fake_home)
+    source_plugin = _write_source_plugin(tmp_path / "source", plugin_name="testing-plugin")
+    marketplace_path = fake_home / ".agents" / "plugins" / "marketplace.json"
+    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.write_text(
+        json.dumps(
+            {
+                "name": "personal-testing-marketplace",
+                "plugins": [
+                    {
+                        "name": "other-plugin",
+                        "source": {"source": "local", "path": "./.codex/plugins/other-plugin"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    }
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    install_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="personal",
+        action="install",
+        repo_root=None,
+    )
+
+    assert not errors
+    assert any(action["action"] == "copy-plugin-tree" for action in install_actions)
+    assert any(action["action"] == "write-marketplace-entry" for action in install_actions)
+    assert target_plugin_root == fake_home / ".codex" / "plugins" / "testing-plugin"
+    assert (target_plugin_root / ".codex-plugin" / "plugin.json").exists()
+    assert (target_plugin_root / "skills" / "hello" / "SKILL.md").exists()
+
+    install_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    assert [item["name"] for item in install_marketplace["plugins"]] == ["other-plugin", "testing-plugin"]
+    installed_entry = install_marketplace["plugins"][1]
+    assert installed_entry["source"]["path"] == "./.codex/plugins/testing-plugin"
+    assert installed_entry["policy"]["installation"] == "AVAILABLE"
+
+    detach_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="personal",
+        action="detach",
+        repo_root=None,
+    )
+
+    assert not errors
+    assert any(action["action"] == "remove-plugin-tree" for action in detach_actions)
+    assert any(action["action"] == "remove-marketplace-entry" for action in detach_actions)
+    assert not target_plugin_root.exists()
+
+    detach_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    assert [item["name"] for item in detach_marketplace["plugins"]] == ["other-plugin"]
+
+
 def test_apply_refresh_rewrites_marketplace_entry_without_dropping_other_plugins(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
