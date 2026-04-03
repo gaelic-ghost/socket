@@ -1,9 +1,9 @@
 ---
-name: code-slice-explainer
+name: explain-code-slice
 description: Use this skill when the user wants a code path, flow, pipeline, request lifecycle, trace, walkthrough, or part of a system explained step by step from start to finish. Explain where data comes from, what shape it has, who sends it, why it enters the flow, what calls what next, where branches and boundaries happen, how data transforms, and what comes out at the end. Also use this when the user asks things like “walk me through this,” “follow this through the code,” “show me the path,” “what calls this,” “where does this data come from,” “where does it go next,” “why is this shaped like this,” “how does this part work,” or when they want two flows compared.
 ---
 
-# Code Slice Explainer
+# Explain Code Slice
 
 Use this skill when the user wants one bounded walkthrough of how part of a system works from start to finish. The canonical term is `slice`.
 
@@ -120,7 +120,7 @@ The writing should stay conversational and narrative-first. Avoid sterile dumps,
 
 ## Validation
 
-- Validate the skill with `uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/code-slice-explainer`.
+- Validate the skill with `uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/explain-code-slice`.
 - Keep `agents/openai.yaml` aligned with the final trigger wording in this skill.
 - Use `references/trigger-eval.md` to audit whether the description is broad enough to catch natural phrasing and comparison requests.
 

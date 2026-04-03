@@ -3,7 +3,7 @@
 ## Single-slice walkthrough
 
 ```text
-Use $code-slice-explainer to explain the slice for saving a new reminder. Start with the incoming data shape and who creates it, then walk every meaningful step through validation, storage, and final UI update. Use standard detail.
+Use $explain-code-slice to explain the slice for saving a new reminder. Start with the incoming data shape and who creates it, then walk every meaningful step through validation, storage, and final UI update. Use standard detail.
 ```
 
 ## Quick orientation
@@ -35,7 +35,7 @@ Walk me through this slice in thorough detail. I want the data shape first, then
 ## Debugging-oriented slice
 
 ```text
-Use $code-slice-explainer to explain the file-upload slice with a debugging focus. Show the exact path the data takes, where shape changes happen, and where I should inspect if the final URL is wrong.
+Use $explain-code-slice to explain the file-upload slice with a debugging focus. Show the exact path the data takes, where shape changes happen, and where I should inspect if the final URL is wrong.
 ```
 
 ## Compare two slices

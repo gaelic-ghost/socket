@@ -34,7 +34,7 @@ If two layers disagree, fix the lower-trust layer or narrow its claims.
 
 All active repo-authored skills live under `skills/`.
 
-- `code-slice-explainer`
+- `explain-code-slice`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-project-readme`

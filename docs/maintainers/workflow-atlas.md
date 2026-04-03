@@ -17,12 +17,12 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
-| `code-slice-explainer` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
+| `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-skills-readme` | Specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
 
-## `code-slice-explainer`
+## `explain-code-slice`
 
 ### Workflow: `explain a slice`
 

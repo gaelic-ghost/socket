@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain Code Slice"
+  short_description: "Explain one code path or slice step by step."
+  default_prompt: "Use $explain-code-slice to explain or compare a code path from trigger to final output. Start with incoming data shape and purpose, then walk every meaningful step in order, including branches, boundaries, transformations, and a simple diagram with notes."

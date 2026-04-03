@@ -8,6 +8,7 @@ For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
 
 - [What These Agent Skills Help With](#what-these-agent-skills-help-with)
 - [Skill Guide (When To Use What)](#skill-guide-when-to-use-what)
+- [Codex Plugin Packaging](#codex-plugin-packaging)
 - [Install with skills.sh / Vercel Skills CLI](#install-with-skillssh--vercel-skills-cli)
 - [Update Skills](#update-skills)
 - [More resources for similar Skills](#more-resources-for-similar-skills)
@@ -31,9 +32,18 @@ This repository packages reusable skills for project README maintenance, skills/
 - `maintain-skills-readme`
   - Use when an agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repo `README.md` needs auditing or bounded fixes.
   - Helps by enforcing specialized install, discoverability, and catalog conventions for skills/plugin repositories.
-- `code-slice-explainer`
+- `explain-code-slice`
   - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
   - Helps by starting with data shape, then walking the full slice through branches, boundaries, transformations, and outputs.
+
+## Codex Plugin Packaging
+
+This repository is also packaged as a Codex plugin root.
+
+- Plugin manifest: [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json)
+- Local marketplace entry: [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+
+Use those files when wiring the whole repository into a Codex plugin workflow, and use the `skills` CLI commands below when you want documented standalone skill installation.
 
 ## Install with skills.sh / Vercel Skills CLI
 
@@ -51,7 +61,7 @@ npx skills add gaelic-ghost/productivity-skills --all
 
 ```bash
 # Install one specific skill
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
+npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
 ```
 
 ```bash
@@ -67,7 +77,7 @@ Current active skill names:
 - `maintain-project-readme` for ordinary software-project `README.md` maintenance
 - `maintain-skills-readme` for skills/plugin repository `README.md` maintenance
 - `maintain-project-roadmap` for checklist-style `ROADMAP.md` maintenance
-- `code-slice-explainer` for end-to-end code walkthroughs
+- `explain-code-slice` for end-to-end code walkthroughs
 
 ## Update Skills
 
@@ -94,7 +104,7 @@ npx skills find "plugin readme audit"
 npx skills add vercel-labs/agent-skills --skill find-skills
 ```
 
-Then ask your Agent for help finding a skill for "" or ""
+Then ask your Agent for help finding a skill for project roadmap maintenance, code walkthroughs, or README auditing.
 
 ### Release highlights
 
@@ -112,7 +122,7 @@ Then ask your Agent for help finding a skill for "" or ""
 ├── README.md
 ├── AGENTS.md
 ├── skills/
-│   ├── code-slice-explainer/
+│   ├── explain-code-slice/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
 │   └── maintain-skills-readme/

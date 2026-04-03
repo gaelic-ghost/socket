@@ -132,7 +132,7 @@ Scope:
 
 Tickets:
 
-- [x] Add standalone `code-slice-explainer` skill with a canonical slice vocabulary.
+- [x] Add standalone `explain-code-slice` skill with a canonical slice vocabulary.
 - [x] Define a structured narrative output contract with summary, walkthrough, diagram, and notes.
 - [x] Add detail-level guidance for `quick`, `standard`, and `thorough` without allowing omitted meaningful steps.
 - [x] Add a slice-comparison workflow for old/new or side-by-side path explanation.
@@ -240,20 +240,20 @@ Exit criteria:
 
 Scope:
 
-- Restore `code-slice-explainer` after its accidental removal.
+- Restore `explain-code-slice` after its accidental removal.
 - Remove speech, workspace-cleanup, and Things workflow claims from the active repo inventory.
 - Recenter this repository on the four surviving maintainer and code-walkthrough skills.
 
 Tickets:
 
-- [x] Restore `code-slice-explainer` from the last pre-deletion commit.
+- [x] Restore `explain-code-slice` from the last pre-deletion commit.
 - [x] Move `things-digest-generator` and `things-reminders-manager` into `../things-app/skills`.
 - [x] Remove stale active-inventory references to `project-workspace-cleaner`, `speak-with-profile`, and the moved Things skills.
 - [x] Update plugin metadata and maintainer tooling to match the current skill inventory.
 
 Exit criteria:
 
-- [x] `code-slice-explainer` is present again in `skills/`.
+- [x] `explain-code-slice` is present again in `skills/`.
 - [x] The active inventory is limited to the four surviving skills.
 - [x] Repo docs and plugin metadata no longer advertise removed or relocated skills.
 
