@@ -87,9 +87,11 @@ Required checks:
 
 - `bootstrap-skills-plugin-repo` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
 - `maintain-skills-readme` and `sync-skills-repo-guidance` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
-- `maintain-skills-readme` is currently the canonical owner of README-only maintenance for skills and plugin repositories.
+- `maintain-skills-readme` is currently the canonical owner of README-only maintenance for stack-specific skills and plugin repositories in this repo family.
+- `maintain-skills-readme` is a current-state skill name, not the settled long-term docs-maintainer name. The roadmap currently points toward a wider successor, likely `maintain-plugin-docs`, but that successor does not exist yet.
 - `bootstrap-skills-plugin-repo` is the canonical owner of repo bootstrap and structural alignment for this repo pattern.
-- `sync-skills-repo-guidance` is the canonical owner of repo-wide guidance synchronization for this repo pattern.
+- `sync-skills-repo-guidance` is the canonical owner of ongoing guidance alignment for this repo pattern.
+- `sync-skills-repo-guidance` currently combines a narrow local audit script with broader maintainer-driven review of docs wording, guidance drift, and docs links. Do not describe the script alone as if it already performs full repo-wide remediation or upstream-doc intake.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/agent-plugin-skills/` is the plugin packaging root for Codex and Claude scaffolding.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.

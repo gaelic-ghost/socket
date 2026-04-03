@@ -52,12 +52,15 @@ Exit criteria:
 Scope:
 
 - Re-scope `maintain-skills-readme` from a narrow README maintainer into a skills-repo docs maintainer with clearer stack-specific boundaries.
+- Use the eventual wider skill as the stack-specific, plugin-repo-local docs maintainer for agent-skills and agent-plugin development repositories.
 - Preserve explicit deferral to repo-wide sync and bootstrap workflows.
 
 Tickets:
 
+- [x] Clarify current `maintain-skills-readme` behavior versus planned wider docs-maintainer scope in repo docs.
+- [x] Clarify that `sync-skills-repo-guidance` currently owns ongoing guidance alignment while wider docs-maintainer work is still planned.
 - [ ] Define the widened scope and new trigger surface for skills-repo documentation maintenance.
-- [ ] Decide whether the skill should rename or keep the current name as a compatibility surface.
+- [ ] Decide whether the successor should ship as `maintain-plugin-docs` or keep `maintain-skills-readme` as the durable installed name with compatibility guidance.
 - [ ] Add deterministic validation for README sections, docs links, install examples, and docs-adjacent maintainer snippets.
 - [ ] Document deferral boundaries relative to `sync-skills-repo-guidance`.
 
@@ -123,6 +126,7 @@ Exit criteria:
 Scope:
 
 - Add durable process support for noticing changes in the Agent Skills standard, OpenAI docs, and Claude docs and turning those changes into actionable repo maintenance.
+- Keep `sync-skills-repo-guidance` focused on guidance alignment unless a stronger case emerges for folding upstream-doc intake directly into that skill.
 
 Tickets:
 

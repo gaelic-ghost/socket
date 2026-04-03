@@ -7,6 +7,12 @@ description: Audit and reconcile guidance across README.md, AGENTS.md, ROADMAP.m
 
 Audit and reconcile an existing skills repository against the current house guidance and upstream standards.
 
+Current scope note:
+
+- This skill currently owns ongoing guidance alignment for this repo pattern.
+- The script-backed audit is narrower than the full maintainer workflow.
+- Today, the script checks local guidance snippets and discovery mirrors, while broader docs-link review, wording updates, and cross-doc reconciliation remain maintainer-driven.
+
 ## Inputs
 
 - Required: target repository root
@@ -26,10 +32,11 @@ Audit and reconcile an existing skills repository against the current house guid
    - Agent Skills standard
    - OpenAI Codex Skills and Plugins docs
    - Claude Code Skills and Plugins docs
-4. Run `scripts/sync_skills_repo_guidance.py` in `check-only` mode to detect local structure or wording drift.
-5. Apply bounded fixes to repo docs, manifests, and symlink mirrors when the request includes changes.
-6. Re-run the same audit to confirm remaining findings.
-7. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
+4. Run `scripts/sync_skills_repo_guidance.py` in `check-only` mode to detect current local guidance-snippet and symlink drift.
+5. Interpret that audit together with the current repo docs and any upstream guidance reviewed in step 3.
+6. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
+7. Re-run the same audit to confirm remaining findings.
+8. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
 
 ## Output Contract
 
@@ -45,6 +52,7 @@ Audit and reconcile an existing skills repository against the current house guid
 - Never replace specialized README-only or roadmap-only maintenance skills when the request is narrow.
 - Never claim upstream guidance is timeless. Date the audit when official docs were consulted.
 - Never flatten repo-specific maintainer policy while syncing missing shared guidance.
+- Never describe the current script as if it already performs full repo-wide remediation, plugin-metadata drift repair, or automated upstream-doc intake.
 
 ## References
 

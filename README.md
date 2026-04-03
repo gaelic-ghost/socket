@@ -7,11 +7,13 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 ## Active Skills
 
 - `maintain-skills-readme`
-  - Use when a skills, plugin, MCP-app, or similar agent-stack repository `README.md` needs auditing or bounded fixes.
+  - Current scope: audit and bounded fixes for `README.md` in stack-specific skills and plugin repositories.
+  - Planned direction: evolve into a broader stack-specific docs maintainer skill, likely `maintain-plugin-docs`, while preserving a clean boundary from repo-wide guidance sync.
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `sync-skills-repo-guidance`
-  - Use when an existing skills or plugin repository needs repo-wide guidance reconciliation across docs, `AGENTS.md`, symlink mirrors, and plugin metadata.
+  - Current scope: ongoing maintenance and alignment of agent-skills and plugin-development guidance, maintainer docs, discovery mirrors, and related docs links for this repo pattern.
+  - Current automation is narrower than the long-term intent: the script audits local guidance snippets and symlink mirrors, while broader link and policy reconciliation is still maintainer-driven.
 
 ## Repo Purpose
 

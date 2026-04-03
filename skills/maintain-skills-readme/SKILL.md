@@ -7,6 +7,12 @@ description: Maintain README.md files for agent-skills, Codex plugin, Claude plu
 
 Maintain specialized README.md files for skills and plugin repositories through one deterministic workflow.
 
+Current scope note:
+
+- This skill is intentionally README-only today.
+- It is the current stack-specific docs-maintenance entrypoint for this repo family, but only for `README.md`.
+- The roadmap may replace or widen it into a broader stack-specific docs maintainer, likely `maintain-plugin-docs`, after the wider workflow and boundaries are defined.
+
 ## Inputs
 
 - Required: `--workspace <path>`

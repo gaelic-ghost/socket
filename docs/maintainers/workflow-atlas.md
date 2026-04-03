@@ -17,8 +17,8 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
 | `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
-| `maintain-skills-readme` | README maintainer for skills and plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
-| `sync-skills-repo-guidance` | Repo-wide guidance reconciler for skills and plugin repos | `check-only`, audit plus bounded fixes, upstream-doc refresh, misroute and defer handling |
+| `maintain-skills-readme` | Current README maintainer for stack-specific skills and plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
+| `sync-skills-repo-guidance` | Current guidance-alignment owner for skills and plugin repos | `check-only` script audit, maintainer-driven guidance reconciliation, misroute and defer handling |
 
 ## `bootstrap-skills-plugin-repo`
 
@@ -53,6 +53,12 @@ Outputs:
 
 ## `maintain-skills-readme`
 
+Current-state note:
+
+- This skill is intentionally narrower than the roadmap direction.
+- It currently owns `README.md` maintenance only.
+- The roadmap may replace or widen it into a stack-specific docs maintainer such as `maintain-plugin-docs`, but that broader skill is not implemented yet.
+
 ### Workflow: audit-only
 
 - Triggered when the user wants `README.md` maintenance for a skills, plugin, or similar agent-stack repository without applying fixes.
@@ -84,6 +90,12 @@ Outputs:
 
 ## `sync-skills-repo-guidance`
 
+Current-state note:
+
+- This skill currently owns ongoing guidance alignment for this repo pattern.
+- Its script coverage is narrower than the full maintainer workflow.
+- The current script audits local guidance snippets and discovery mirrors. Broader docs-link maintenance, policy wording changes, and cross-doc reconciliation are still maintainer-driven.
+
 ### Workflow: `check-only`
 
 - Triggered when the user wants a repo-wide guidance audit for an existing skills or plugin repository.
@@ -101,14 +113,14 @@ Branch conditions:
 
 - README-only request: defer to `maintain-skills-readme`
 - bootstrap request: defer to `bootstrap-skills-plugin-repo`
-- upstream docs changed materially: report dated findings before narrowing or applying fixes
+- upstream docs changed materially: report dated findings before narrowing or changing repo guidance
 
 Outputs:
 
 - Markdown plus JSON with `run_context`, `findings`, `errors`
 - Exact clean-run text: `No findings.`
 
-### Workflow: `audit plus bounded fixes`
+### Workflow: maintainer-driven guidance fixes
 
 - Triggered when the user wants repo-wide guidance drift corrected after the audit.
 - Variant workflow.
@@ -116,5 +128,5 @@ Outputs:
 
 Outputs:
 
-- Same Markdown plus JSON report shape as `check-only`
-- Exact clean-run text: `No findings.` when no issues and no errors remain
+- The script still emits the same JSON report shape as `check-only`.
+- Actual doc fixes are currently applied by the maintainer after interpreting the audit and broader repo context.
