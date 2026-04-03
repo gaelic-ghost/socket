@@ -116,6 +116,11 @@ Tickets:
 - [x] Add a bounded refresh path for updating an already wired local development plugin after source changes.
 - [x] Add a bounded uninstall or detach path that can remove the local plugin directory and marketplace entry for one plugin without disturbing others.
 - [ ] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
+- [ ] Add optional config-state management for Codex plugin enable or disable behavior in `~/.codex/config.toml` once the repo wants that broader contract.
+- [ ] Add a verification-oriented mode that audits an already installed local plugin and reports marketplace drift, missing copied files, and likely restart state.
+- [ ] Add a safer overwrite policy for personal-scope refreshes so maintainers can choose between replace, backup-then-replace, or fail-on-existing behavior.
+- [ ] Add support for promoting or mirroring a plugin between repo and personal scope without forcing the maintainer to rerun separate install and detach flows manually.
+- [ ] Add richer manifest-aware checks for optional plugin surfaces such as `.mcp.json`, `.app.json`, hooks, and install-surface assets before copying them into place.
 - [x] Return a structured report with:
   - `run_context`
   - `scope`
@@ -131,8 +136,8 @@ Tickets:
 
 Exit criteria:
 
-- [ ] Maintainers can wire an in-development Codex plugin into repo or personal scope without hand-editing marketplace JSON.
-- [ ] The skill stays honest about the documented local-plugin contract and does not claim unsupported cache or installed-state control.
+- [x] Maintainers can wire an in-development Codex plugin into repo or personal scope without hand-editing marketplace JSON.
+- [x] The skill stays honest about the documented local-plugin contract and does not claim unsupported cache or installed-state control.
 - [ ] The workflow reduces the repetitive manual loop of copying plugin files, updating marketplace metadata, restarting Codex, and checking discovery paths.
 
 ## Milestone 3: install-surface and metadata validation skill
