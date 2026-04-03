@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sync Skills Repo Guidance"
+  short_description: "Audit and reconcile repo-wide guidance for skills repositories."
+  default_prompt: "Use $sync-skills-repo-guidance to audit this existing skills repository against current local guidance and the latest Agent Skills, OpenAI Codex, and Claude Code docs. Check the repo surfaces first, refresh official sources, report drift, and apply bounded repo-wide guidance fixes only when requested. Defer narrow README-only or roadmap-only work to the specialized maintainer skills."
