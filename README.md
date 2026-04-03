@@ -6,9 +6,10 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 
 ## Active Skills
 
-- `maintain-skills-readme`
-  - Current scope: audit and bounded fixes for `README.md` in stack-specific skills and plugin repositories.
-  - Planned direction: evolve into a broader stack-specific docs maintainer skill, likely `maintain-plugin-docs`, while preserving a clean boundary from repo-wide guidance sync.
+- `maintain-plugin-docs`
+  - Current implementation: audit and bounded fixes for `README.md` in stack-specific skills and plugin repositories.
+  - Intended scope: become the combined docs maintainer for plugin-development repos here, pairing the current specialized README maintenance with the same checklist-style roadmap maintenance model used by `maintain-project-roadmap`.
+  - Install guidance should prioritize Codex Plugin and Claude Code Plugin setup first, with `npx skills` per-skill and `--all` installs treated as secondary.
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `sync-skills-repo-guidance`
@@ -29,6 +30,8 @@ It is for maintainers working on repositories that package agent capabilities su
 - cross-ecosystem docs and guidance drift
 
 It is not meant to be a general productivity helper pack. That boundary keeps this repo coherent and makes global install intent clearer.
+
+These skills are meant to be installed repo-locally into a repository where an agent-skills plugin is being developed. They are designed to support Gale or another coding agent working inside that target repo, including automation and subagent-style maintenance passes.
 
 ## Packaging And Discovery
 
@@ -74,7 +77,7 @@ uv run --group dev pytest
 Quick validation examples:
 
 ```bash
-uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/maintain-skills-readme
+uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/maintain-plugin-docs
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/bootstrap-skills-plugin-repo
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/sync-skills-repo-guidance
 ```
@@ -84,7 +87,7 @@ uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scrip
 Install one skill through the Vercel `skills` CLI:
 
 ```bash
-npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-skills-readme
+npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-plugin-docs
 ```
 
 Install all active skills:
@@ -95,8 +98,8 @@ npx skills add gaelic-ghost/agent-plugin-skills --all
 
 Common starting points:
 
-- README-only maintenance:
-  `npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-skills-readme`
+- plugin-docs maintenance:
+  `npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-plugin-docs`
 - repo bootstrap or structural alignment:
   `npx skills add gaelic-ghost/agent-plugin-skills --skill bootstrap-skills-plugin-repo`
 - repo-wide guidance sync:
@@ -124,7 +127,7 @@ Common starting points:
 │       └── skills -> ../../skills
 ├── skills/
 │   ├── bootstrap-skills-plugin-repo/
-│   ├── maintain-skills-readme/
+│   ├── maintain-plugin-docs/
 │   └── sync-skills-repo-guidance/
 ├── docs/
 │   └── maintainers/

@@ -18,7 +18,7 @@
 ## Milestone Progress
 
 - [x] Milestone 0: Foundation bootstrap
-- [ ] Milestone 1: `maintain-skills-readme` evolution
+- [ ] Milestone 1: `maintain-plugin-docs` evolution
 - [ ] Milestone 2: install-surface and metadata validation skill
 - [ ] Milestone 3: MCP and app packaging maintainer skill
 - [ ] Milestone 4: skills repo migration and split support
@@ -35,7 +35,7 @@ Scope:
 
 Tickets:
 
-- [x] Add `maintain-skills-readme`.
+- [x] Add the predecessor README-maintenance skill that now evolves into `maintain-plugin-docs`.
 - [x] Add `bootstrap-skills-plugin-repo`.
 - [x] Add `sync-skills-repo-guidance`.
 - [x] Add plugin manifests, marketplace wiring, maintainer docs, and POSIX symlink mirrors.
@@ -47,21 +47,24 @@ Exit criteria:
 - [x] Root `skills/` is canonical and mirrored into project-level discovery paths with symlinks.
 - [x] Active skills, docs, and packaging metadata describe the same repo model.
 
-## Milestone 1: `maintain-skills-readme` evolution
+## Milestone 1: `maintain-plugin-docs` evolution
 
 Scope:
 
-- Re-scope `maintain-skills-readme` from a narrow README maintainer into a skills-repo docs maintainer with clearer stack-specific boundaries.
-- Use the eventual wider skill as the stack-specific, plugin-repo-local docs maintainer for agent-skills and agent-plugin development repositories.
+- Rename the current README-maintenance skill to `maintain-plugin-docs`.
+- Re-scope it from a narrow README maintainer into the stack-specific, plugin-repo-local docs maintainer for agent-skills and agent-plugin development repositories.
+- Combine the current specialized README maintenance behavior with the same checklist-style roadmap maintenance model used by `maintain-project-roadmap`.
 - Preserve explicit deferral to repo-wide sync and bootstrap workflows.
 
 Tickets:
 
-- [x] Clarify current `maintain-skills-readme` behavior versus planned wider docs-maintainer scope in repo docs.
+- [x] Rename the skill surface from `maintain-skills-readme` to `maintain-plugin-docs`.
+- [x] Clarify current README-only behavior versus planned wider docs-maintainer scope in repo docs.
 - [x] Clarify that `sync-skills-repo-guidance` currently owns ongoing guidance alignment while wider docs-maintainer work is still planned.
-- [ ] Define the widened scope and new trigger surface for skills-repo documentation maintenance.
-- [ ] Decide whether the successor should ship as `maintain-plugin-docs` or keep `maintain-skills-readme` as the durable installed name with compatibility guidance.
+- [ ] Define the widened scope and new trigger surface for plugin-repo documentation maintenance.
+- [ ] Implement the checklist-style roadmap maintenance path inside `maintain-plugin-docs`.
 - [ ] Add deterministic validation for README sections, docs links, install examples, and docs-adjacent maintainer snippets.
+- [ ] Rebalance README install guidance so Codex Plugin and Claude Code Plugin installs are primary and Vercel `skills` CLI installs are secondary.
 - [ ] Document deferral boundaries relative to `sync-skills-repo-guidance`.
 
 Exit criteria:

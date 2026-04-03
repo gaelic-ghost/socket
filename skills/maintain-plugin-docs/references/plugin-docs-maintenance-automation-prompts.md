@@ -1,4 +1,4 @@
-# Skills README Maintenance Automation Prompt Templates
+# Plugin Docs Maintenance Automation Prompt Templates
 
 ## Suitability
 
@@ -8,7 +8,7 @@
 ## Codex App Automation Prompt Template
 
 ```markdown
-Use $maintain-skills-readme.
+Use $maintain-plugin-docs.
 
 Scope:
 - Workspace root: <WORKSPACE_ROOT_ABS_PATH>
@@ -31,7 +31,7 @@ Output contract:
   - <REPORT_JSON_PATH>
 
 No-findings handling:
-- If there are no README maintenance issues and no errors, output exactly `No findings.`.
+- If there are no current plugin-docs maintenance issues and no errors, output exactly `No findings.`.
 ```
 
 ## Codex CLI Automation Prompt Template
@@ -39,9 +39,9 @@ No-findings handling:
 ### Variant A: Audit-only
 
 ```markdown
-Use $maintain-skills-readme.
+Use $maintain-plugin-docs.
 
-Audit skills README maintenance needs across `*-skills` under <WORKSPACE_ROOT_ABS_PATH>.
+Audit plugin-docs maintenance needs across `*-skills` under <WORKSPACE_ROOT_ABS_PATH>.
 Apply excludes: <EXCLUDE_PATHS_CSV_OR_NONE>.
 Run audit only (no fixes).
 Write outputs to <REPORT_MD_PATH> and <REPORT_JSON_PATH>.
@@ -51,9 +51,9 @@ If no issues remain, output exactly `No findings.`.
 ### Variant B: Audit + bounded fixes
 
 ```markdown
-Use $maintain-skills-readme.
+Use $maintain-plugin-docs.
 
-Audit skills README maintenance needs across `*-skills` under <WORKSPACE_ROOT_ABS_PATH>.
+Audit plugin-docs maintenance needs across `*-skills` under <WORKSPACE_ROOT_ABS_PATH>.
 Apply excludes: <EXCLUDE_PATHS_CSV_OR_NONE>.
 Run audit pass first, then bounded README fixes and re-check.
 Only edit AGENTS.md for targeted snippet insertion after explicit user approval.

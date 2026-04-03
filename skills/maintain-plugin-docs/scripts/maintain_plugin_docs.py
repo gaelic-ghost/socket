@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Two-pass README maintenance workflow for skills and plugin repositories."""
+"""Two-pass plugin-docs maintenance workflow for skills and plugin repositories."""
 
 from __future__ import annotations
 
@@ -284,7 +284,7 @@ class SkillsAddCommand:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Audit and optionally apply skills README maintenance for *-skills repos"
+        description="Audit and optionally apply plugin-docs maintenance for stack-specific skills and plugin repos"
     )
     parser.add_argument("--workspace", required=True, help="Workspace root")
     parser.add_argument("--repo-glob", default="*-skills", help="Repo directory glob")

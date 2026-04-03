@@ -49,7 +49,7 @@ Current scope note:
 ## Guardrails
 
 - Never use this skill for ordinary software-project repos.
-- Never replace specialized README-only or roadmap-only maintenance skills when the request is narrow.
+- Never replace specialized `maintain-plugin-docs` work when the request is narrow and docs-focused.
 - Never claim upstream guidance is timeless. Date the audit when official docs were consulted.
 - Never flatten repo-specific maintainer policy while syncing missing shared guidance.
 - Never describe the current script as if it already performs full repo-wide remediation, plugin-metadata drift repair, or automated upstream-doc intake.

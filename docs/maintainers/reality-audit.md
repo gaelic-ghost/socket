@@ -38,8 +38,8 @@ All active repo-authored skills live under `skills/`.
   - Script: `scripts/bootstrap_skills_plugin_repo.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
-- `maintain-skills-readme`
-  - Script: `scripts/maintain_skills_readme.py`
+- `maintain-plugin-docs`
+  - Script: `scripts/maintain_plugin_docs.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 - `sync-skills-repo-guidance`
@@ -86,9 +86,9 @@ Required checks:
 ## Current Invariants
 
 - `bootstrap-skills-plugin-repo` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
-- `maintain-skills-readme` and `sync-skills-repo-guidance` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
-- `maintain-skills-readme` is currently the canonical owner of README-only maintenance for stack-specific skills and plugin repositories in this repo family.
-- `maintain-skills-readme` is a current-state skill name, not the settled long-term docs-maintainer name. The roadmap currently points toward a wider successor, likely `maintain-plugin-docs`, but that successor does not exist yet.
+- `maintain-plugin-docs` and `sync-skills-repo-guidance` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
+- `maintain-plugin-docs` is currently the canonical owner of plugin-repo docs maintenance for this repo family, but the implemented automation is still README-only today.
+- `maintain-plugin-docs` is intended to grow into a combined README plus checklist-style roadmap maintainer for plugin-development repos in this family.
 - `bootstrap-skills-plugin-repo` is the canonical owner of repo bootstrap and structural alignment for this repo pattern.
 - `sync-skills-repo-guidance` is the canonical owner of ongoing guidance alignment for this repo pattern.
 - `sync-skills-repo-guidance` currently combines a narrow local audit script with broader maintainer-driven review of docs wording, guidance drift, and docs links. Do not describe the script alone as if it already performs full repo-wide remediation or upstream-doc intake.

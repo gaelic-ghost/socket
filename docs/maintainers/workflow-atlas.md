@@ -17,7 +17,7 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
 | `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
-| `maintain-skills-readme` | Current README maintainer for stack-specific skills and plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
+| `maintain-plugin-docs` | Current plugin-docs maintainer for stack-specific skills and plugin repos | README audit-only, README audit plus bounded fixes, future roadmap maintenance |
 | `sync-skills-repo-guidance` | Current guidance-alignment owner for skills and plugin repos | `check-only` script audit, maintainer-driven guidance reconciliation, misroute and defer handling |
 
 ## `bootstrap-skills-plugin-repo`
@@ -51,17 +51,18 @@ Outputs:
 - Same Markdown plus JSON shape as `check-only`
 - Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
 
-## `maintain-skills-readme`
+## `maintain-plugin-docs`
 
 Current-state note:
 
-- This skill is intentionally narrower than the roadmap direction.
-- It currently owns `README.md` maintenance only.
-- The roadmap may replace or widen it into a stack-specific docs maintainer such as `maintain-plugin-docs`, but that broader skill is not implemented yet.
+- This skill is the current stack-specific docs-maintenance surface for plugin-development repos in this family.
+- The implemented automation currently owns `README.md` maintenance only.
+- The intended scope is broader: it should eventually pair that README behavior with checklist-style `ROADMAP.md` maintenance following the same model as `maintain-project-roadmap`.
+- For repo guidance, Codex Plugin and Claude Code Plugin install paths should be treated as the primary install surface and Vercel `skills` CLI installs as the secondary surface.
 
 ### Workflow: audit-only
 
-- Triggered when the user wants `README.md` maintenance for a skills, plugin, or similar agent-stack repository without applying fixes.
+- Triggered when the user wants plugin-repo docs maintenance and the current request is still `README.md`-only or README-first.
 - Primary workflow.
 - `read-only`
 
@@ -70,7 +71,7 @@ Inputs:
 - Required: `--workspace <path>`
 - Optional: `--repo-glob <glob>`
 - Optional: repeatable `--exclude <path>`
-- Tool or script input: `scripts/maintain_skills_readme.py`
+- Tool or script input: `scripts/maintain_plugin_docs.py`
 
 Outputs:
 
@@ -111,7 +112,7 @@ Inputs:
 
 Branch conditions:
 
-- README-only request: defer to `maintain-skills-readme`
+- README-only request: defer to `maintain-plugin-docs`
 - bootstrap request: defer to `bootstrap-skills-plugin-repo`
 - upstream docs changed materially: report dated findings before narrowing or changing repo guidance
 

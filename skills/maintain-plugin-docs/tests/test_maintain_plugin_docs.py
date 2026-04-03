@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 def _load_module():
-    module_path = Path(__file__).resolve().parents[1] / "scripts" / "maintain_skills_readme.py"
-    spec = importlib.util.spec_from_file_location("maintain_skills_readme", module_path)
+    module_path = Path(__file__).resolve().parents[1] / "scripts" / "maintain_plugin_docs.py"
+    spec = importlib.util.spec_from_file_location("maintain_plugin_docs", module_path)
     assert spec is not None
     assert spec.loader is not None
     mod = importlib.util.module_from_spec(spec)
