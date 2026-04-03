@@ -8,6 +8,8 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude scaffolds.
+- `.agents/skills` and `.claude/skills` mirror root `skills/` for local project discovery on macOS and Linux.
+- `plugins/productivity-skills/skills` mirrors root `skills/` for local plugin packaging alignment.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree rather than at the repository root.
 
 ## Repo-Wide Conventions
@@ -23,10 +25,53 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
+| `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills/plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-skills-readme` | Specialized README maintainer for skills/plugin repos | audit-only, audit plus bounded fixes, clean run, error path |
+| `sync-skills-repo-guidance` | Repo-wide guidance reconciler for skills/plugin repos | `check-only`, audit plus bounded fixes, upstream-doc refresh, misroute/defer handling |
+
+## `bootstrap-skills-plugin-repo`
+
+### Workflow: `check-only`
+
+**Overview**
+
+- Triggered when the user wants to audit or plan the structural bootstrap of a skills/plugin repository.
+- Primary workflow.
+- `read-only`
+
+**Inputs**
+
+- Required: `--repo-root <path>`
+- Required: `--run-mode check-only`
+- Optional: `--plugin-name <name>`
+- Tool/script input: `scripts/bootstrap_skills_plugin_repo.py`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `created_paths`, `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `apply`
+
+**Overview**
+
+- Triggered when the user wants missing repo structure created or aligned.
+- Variant workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Required: `--repo-root <path>`
+- Required: `--run-mode apply`
+- Optional: `--plugin-name <name>`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `created_paths`, `errors`
+- Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
 
 ## `explain-code-slice`
 
@@ -175,4 +220,50 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 **Outputs**
 
 - Same Markdown plus JSON report shape as audit-only
+- Exact clean-run text: `No findings.` when no issues and no errors remain
+
+## `sync-skills-repo-guidance`
+
+### Workflow: `check-only`
+
+**Overview**
+
+- Triggered when the user wants a repo-wide guidance audit for an existing skills/plugin repository.
+- Primary workflow.
+- `read-only`
+
+**Inputs**
+
+- Required: `--repo-root <path>`
+- Required: `--run-mode check-only`
+- Optional: `--plugin-name <name>`
+- Tool/script input: `scripts/sync_skills_repo_guidance.py`
+
+**Branch Conditions**
+
+- README-only request: defer to `maintain-skills-readme`
+- roadmap-only request: defer to `maintain-project-roadmap`
+- upstream docs changed materially: report dated findings before narrowing or applying fixes
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `findings`, `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `audit plus bounded fixes`
+
+**Overview**
+
+- Triggered when the user wants repo-wide guidance drift corrected after the audit.
+- Variant workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Same inputs as `check-only`
+- Requires official-doc refresh before applying repo-wide guidance changes
+
+**Outputs**
+
+- Same Markdown plus JSON report shape as `check-only`
 - Exact clean-run text: `No findings.` when no issues and no errors remain

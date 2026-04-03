@@ -32,9 +32,11 @@ Applicability guidance:
 - Intend to support future open plugin or bundle standards as they emerge without sacrificing the standard-portable skill core.
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
 - When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs, treat `plugins/productivity-skills/` as the plugin packaging root, and keep the repo-scoped marketplace file aligned with that plugin subtree.
+- For Gale's repos, keep the source-of-truth plugin, marketplace, MCP, app, and hook manifests inside `plugins/` and `.agents/plugins/`, not mixed into root `skills/`.
 - Preserve OpenAI/Codex-specific enhancements to the fullest where they materially improve packaging, install UX, invocation, routing, or metadata quality.
 - Consult Claude docs when behavior is Claude skills/plugins specific.
 - Preserve Claude Code and Claude plugin enhancements to the fullest where they materially improve compatibility, routing, or install UX without weakening the standard-portable core.
+- Default to full coverage of applicable supported metadata fields across the Agent Skills standard, skill frontmatter, `agents/openai.yaml`, Codex plugin manifests, Claude plugin manifests, MCP surfaces, and app metadata. Leave a field out only when it is truly unsupported, inapplicable, or unverifiable.
 
 ## Plugins and Subagents
 
@@ -44,6 +46,11 @@ Applicability guidance:
   - a `subagent` is a delegated runtime worker with its own context and tool policy
 - For Codex, treat skills as the primary authoring format and plugins as the installable distribution unit that can bundle skills, apps, and MCP servers.
 - For Codex work in this repository, keep root `skills/` as the canonical workflow-authoring surface and treat `plugins/productivity-skills/` as the plugin packaging root.
+- Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors instead of duplicate skill trees:
+  - `.agents/skills -> ../skills`
+  - `.claude/skills -> ../skills`
+  - `plugins/productivity-skills/skills -> ../../skills`
+- Treat those symlink mirrors as discovery and packaging conveniences, not as independent sources of truth.
 - For Claude Code, keep in mind that plugins can package more than skills alone. Claude plugins may bundle commands, hooks, MCP or LSP configuration, skills, and plugin-scoped subagents.
 - For Claude Code subagents, treat them as runtime personas with their own prompts, tool access, and context windows. They are not a replacement for shared skills or repo guidance.
 - For Codex subagents, treat them as explicit delegation infrastructure for bounded parallel or specialized work. They should not replace repo guidance or plugin packaging docs.
@@ -118,6 +125,7 @@ Some alternatives for user customization/config include using their Agent's memo
 - Never auto-install skills; report required commands and wait for user confirmation.
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.
 - Keep active repo-authored skills under the top-level `skills/` directory, and keep install packaging surfaces under `plugins/productivity-skills/`.
+- Prefer symlinks over hardlinks for discovery mirrors in these repos. Hardlinks are not a durable repository contract.
 - Treat standard-portable skill structure as the canonical core, and treat platform-specific metadata or packaging surfaces as additive overlays instead of replacements.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.

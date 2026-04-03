@@ -18,6 +18,7 @@
     "readme",
     "roadmap"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Plugin scaffold for productivity workflows.",

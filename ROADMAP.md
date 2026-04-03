@@ -297,15 +297,15 @@ Scope:
 
 Tickets:
 
-- [ ] Define the skill scope and trigger surface for skills-repo guidance synchronization.
-- [ ] Decide which repo surfaces are canonical inputs versus synchronized outputs.
-- [ ] Add deterministic validation guidance for link drift, packaging drift, and stale-name drift.
-- [ ] Document when this skill should defer to narrower README- or roadmap-specific skills.
+- [x] Define the skill scope and trigger surface for skills-repo guidance synchronization.
+- [x] Decide which repo surfaces are canonical inputs versus synchronized outputs.
+- [x] Add deterministic validation guidance for link drift, packaging drift, and stale-name drift.
+- [x] Document when this skill should defer to narrower README- or roadmap-specific skills.
 
 Exit criteria:
 
-- [ ] The repository contains a planned skill contract for cross-surface guidance sync in skills/plugin repos.
-- [ ] The skill has a clear non-overlapping role relative to `maintain-project-readme`, `maintain-project-roadmap`, and `maintain-skills-readme`.
+- [x] The repository contains a planned skill contract for cross-surface guidance sync in skills/plugin repos.
+- [x] The skill has a clear non-overlapping role relative to `maintain-project-readme`, `maintain-project-roadmap`, and `maintain-skills-readme`.
 
 ## Milestone 13: `bootstrap-skills-plugin-repo`
 
@@ -316,15 +316,15 @@ Scope:
 
 Tickets:
 
-- [ ] Define the generated repository layout, including `skills/`, `plugins/<repo>/`, marketplace wiring, and maintainer docs.
-- [ ] Decide which metadata and placeholder files are required for a minimal cross-ecosystem bootstrap.
-- [ ] Add deterministic bootstrap validation for manifest presence, directory layout, and docs alignment.
-- [ ] Document how the bootstrap skill composes with `$skill-creator` rather than replacing it.
+- [x] Define the generated repository layout, including `skills/`, `plugins/<repo>/`, marketplace wiring, and maintainer docs.
+- [x] Decide which metadata and placeholder files are required for a minimal cross-ecosystem bootstrap.
+- [x] Add deterministic bootstrap validation for manifest presence, directory layout, and docs alignment.
+- [x] Document how the bootstrap skill composes with `$skill-creator` rather than replacing it.
 
 Exit criteria:
 
-- [ ] The repository contains a planned skill contract for bootstrapping cross-ecosystem skills/plugin repositories.
-- [ ] The bootstrap workflow clearly distinguishes canonical skill-authoring surfaces from packaging scaffolds.
+- [x] The repository contains a planned skill contract for bootstrapping cross-ecosystem skills/plugin repositories.
+- [x] The bootstrap workflow clearly distinguishes canonical skill-authoring surfaces from packaging scaffolds.
 
 ## Milestone 14: Claude Code optimization pass
 

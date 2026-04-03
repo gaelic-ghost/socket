@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bootstrap Skills Plugin Repo"
+  short_description: "Create or align a skills repository to the shared plugin-first structure."
+  default_prompt: "Use $bootstrap-skills-plugin-repo to audit this skills repository first, then create or align the plugin-first repo structure with root skills authoring, plugin packaging under plugins/, POSIX symlink mirrors, maintainer docs, and AGENTS guidance. Defer narrow README-only or roadmap-only requests to the specialized maintainer skills."

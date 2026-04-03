@@ -34,6 +34,10 @@ If two layers disagree, fix the lower-trust layer or narrow its claims.
 
 All active repo-authored skills live under `skills/`.
 
+- `bootstrap-skills-plugin-repo`
+  - Script: `scripts/bootstrap_skills_plugin_repo.py`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
 - `explain-code-slice`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
@@ -49,12 +53,19 @@ All active repo-authored skills live under `skills/`.
   - Script: `scripts/maintain_skills_readme.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
+- `sync-skills-repo-guidance`
+  - Script: `scripts/sync_skills_repo_guidance.py`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
 
 ### Packaging Surfaces
 
 - `plugins/productivity-skills/.codex-plugin/plugin.json`
 - `plugins/productivity-skills/.claude-plugin/plugin.json`
+- `plugins/productivity-skills/skills`
 - `plugins/productivity-skills/hooks/hooks.json`
+- `.agents/skills`
+- `.claude/skills`
 - `.agents/plugins/marketplace.json`
 
 ### Maintainer Surfaces
@@ -166,9 +177,15 @@ Use these conventions when editing repo-maintainer guidance.
 ## Current Invariants
 
 - `maintain-project-roadmap` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
+- `bootstrap-skills-plugin-repo` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
 - `maintain-project-readme` and `maintain-skills-readme` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
+- `sync-skills-repo-guidance` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
 - `maintain-skills-readme` is the canonical owner of skills/plugin repository `README.md` maintenance.
+- `bootstrap-skills-plugin-repo` is the canonical owner of repo bootstrap and structural alignment for this repo pattern.
+- `sync-skills-repo-guidance` is the canonical owner of repo-wide guidance synchronization for this repo pattern.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude scaffolding.
+- `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
+- `plugins/productivity-skills/skills` is a POSIX symlink mirror into root `skills/`.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/productivity-skills/`.

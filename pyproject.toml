@@ -13,7 +13,9 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = [
+  "skills/bootstrap-skills-plugin-repo/tests",
   "skills/maintain-project-readme/tests",
   "skills/maintain-project-roadmap/tests",
   "skills/maintain-skills-readme/tests",
+  "skills/sync-skills-repo-guidance/tests",
 ]
