@@ -50,6 +50,13 @@ All active repo-authored skills live under `skills/`.
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 
+### Packaging Surfaces
+
+- `plugins/productivity-skills/.codex-plugin/plugin.json`
+- `plugins/productivity-skills/.claude-plugin/plugin.json`
+- `plugins/productivity-skills/hooks/hooks.json`
+- `.agents/plugins/marketplace.json`
+
 ### Maintainer Surfaces
 
 - `AGENTS.md`
@@ -162,4 +169,6 @@ Use these conventions when editing repo-maintainer guidance.
 - `maintain-project-readme` and `maintain-skills-readme` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
 - `maintain-skills-readme` is the canonical owner of skills/plugin repository `README.md` maintenance.
-- The repository root is the Codex plugin root, and active repo-authored skills are discovered from `skills/`.
+- Root `skills/` is the canonical workflow-authoring surface.
+- `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude scaffolding.
+- `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/productivity-skills/`.

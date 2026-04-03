@@ -23,6 +23,11 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 8: Project README maintainer hardening (completed)
 - [x] Milestone 9: Codex plugin marketplace wiring (completed)
 - [x] Milestone 10: Inventory cleanup after Things and speech split (completed)
+- [x] Milestone 11: Plugin-first packaging alignment (completed)
+- [ ] Milestone 12: `sync-skills-repo-guidance` (planned)
+- [ ] Milestone 13: `bootstrap-skills-plugin-repo` (planned)
+- [ ] Milestone 14: Claude Code optimization pass
+- [x] Milestone 15: Claude plugin support (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -148,6 +153,8 @@ Exit criteria:
 
 Scope:
 
+- Historical note: this milestone captured the earlier repo-root Codex plugin layout and was later superseded by Milestone 11's plugin-subtree packaging model.
+
 - Align the repository layout with the Codex plugins model while keeping skills as the authoring unit.
 - Normalize active skill directories under `skills/` and add a repo-root plugin manifest.
 - Update repo guidance to treat plugins as the bundle/distribution surface and skills as the workflow surface.
@@ -215,6 +222,8 @@ Exit criteria:
 
 Scope:
 
+- Historical note: this milestone captured the earlier repo-root marketplace wiring and was later superseded by Milestone 11's plugin-subtree packaging model.
+
 - Add the Codex plugin marketplace file for this repository.
 - Make plugin-distribution metadata locally consumable in the expected marketplace surface.
 - Keep the repository root as the canonical plugin root instead of introducing a duplicate packaged copy.
@@ -257,6 +266,66 @@ Exit criteria:
 - [x] The active inventory is limited to the four surviving skills.
 - [x] Repo docs and plugin metadata no longer advertise removed or relocated skills.
 
+## Milestone 11: Plugin-first packaging alignment
+
+Scope:
+
+- Move plugin packaging off the repository root and into a dedicated plugin subtree.
+- Align Codex and Claude packaging docs around a shared plugin-first story while keeping root `skills/` canonical.
+- Point local marketplace metadata at the packaged plugin subtree instead of the repository root.
+
+Tickets:
+
+- [x] Add `plugins/productivity-skills/` as the packaging root.
+- [x] Move the Codex plugin manifest into the plugin subtree.
+- [x] Add the parallel Claude plugin manifest and hooks scaffold.
+- [x] Update repo docs and maintainer docs to describe plugin-first packaging with root `skills/` as the authoring source.
+- [x] Retarget `.agents/plugins/marketplace.json` to the plugin subtree.
+
+Exit criteria:
+
+- [x] Codex and Claude packaging manifests live under `plugins/productivity-skills/`.
+- [x] The repository no longer documents the repo root as the plugin root.
+- [x] README, AGENTS, and maintainer docs describe the same packaging model.
+
+## Milestone 12: `sync-skills-repo-guidance`
+
+Scope:
+
+- Add a productivity skill for reconciling repo guidance across `README.md`, `AGENTS.md`, roadmap notes, maintainer docs, and plugin-packaging metadata in skills repositories.
+- Focus the workflow on canonical naming, install-surface accuracy, doc-link accuracy, and packaging-surface drift.
+
+Tickets:
+
+- [ ] Define the skill scope and trigger surface for skills-repo guidance synchronization.
+- [ ] Decide which repo surfaces are canonical inputs versus synchronized outputs.
+- [ ] Add deterministic validation guidance for link drift, packaging drift, and stale-name drift.
+- [ ] Document when this skill should defer to narrower README- or roadmap-specific skills.
+
+Exit criteria:
+
+- [ ] The repository contains a planned skill contract for cross-surface guidance sync in skills/plugin repos.
+- [ ] The skill has a clear non-overlapping role relative to `maintain-project-readme`, `maintain-project-roadmap`, and `maintain-skills-readme`.
+
+## Milestone 13: `bootstrap-skills-plugin-repo`
+
+Scope:
+
+- Add a productivity skill for bootstrapping a new skills/plugin repository with standard-portable skill layout plus Codex and Claude packaging scaffolds.
+- Make plugin-first packaging the default repo bootstrap model while preserving root `skills/` as canonical authoring.
+
+Tickets:
+
+- [ ] Define the generated repository layout, including `skills/`, `plugins/<repo>/`, marketplace wiring, and maintainer docs.
+- [ ] Decide which metadata and placeholder files are required for a minimal cross-ecosystem bootstrap.
+- [ ] Add deterministic bootstrap validation for manifest presence, directory layout, and docs alignment.
+- [ ] Document how the bootstrap skill composes with `$skill-creator` rather than replacing it.
+
+Exit criteria:
+
+- [ ] The repository contains a planned skill contract for bootstrapping cross-ecosystem skills/plugin repositories.
+- [ ] The bootstrap workflow clearly distinguishes canonical skill-authoring surfaces from packaging scaffolds.
+
 ## Milestone 14: Claude Code optimization pass
 
 Scope:
@@ -282,19 +351,19 @@ Scope:
 
 - Add first-class Claude plugin packaging support alongside the Codex plugin-ready repo layout.
 - Define the repo surfaces needed to bundle and distribute this skill set for Claude plugin workflows.
-- Keep Claude plugin packaging aligned with the same repo-root source-of-truth model used for Codex where possible.
+- Keep Claude plugin packaging aligned with the same root-`skills/` source-of-truth model used for Codex packaging.
 
 Tickets:
 
-- [ ] Add the canonical Claude plugin metadata/config surface for this repository.
-- [ ] Update docs to explain Codex plugin support and Claude plugin support side by side.
-- [ ] Verify active skills and metadata remain aligned across both plugin ecosystems.
+- [x] Add the canonical Claude plugin metadata/config surface for this repository.
+- [x] Update docs to explain Codex plugin support and Claude plugin support side by side.
+- [x] Verify active skills and metadata remain aligned across both plugin ecosystems.
 
 Exit criteria:
 
-- [ ] The repository contains a current Claude plugin packaging surface.
-- [ ] User-facing docs explain the Claude plugin path without conflicting with Codex plugin guidance.
-- [ ] Cross-ecosystem packaging guidance is internally consistent.
+- [x] The repository contains a current Claude plugin packaging surface.
+- [x] User-facing docs explain the Claude plugin path without conflicting with Codex plugin guidance.
+- [x] Cross-ecosystem packaging guidance is internally consistent.
 
 ## Risks and mitigations
 

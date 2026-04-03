@@ -4,6 +4,12 @@ This document is maintainer-only. It is the repo-level workflow reference for ev
 
 It diagrams real current workflows, captures their inputs and outputs, and describes the public Agent+Skill UX. Audit procedure, review criteria, and maintainer operating rules live in `docs/maintainers/reality-audit.md`.
 
+## Packaging Context
+
+- Root `skills/` is the canonical workflow-authoring surface.
+- `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude scaffolds.
+- `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree rather than at the repository root.
+
 ## Repo-Wide Conventions
 
 - `Workflow`: a logically grouped, user-meaningful path inside a skill.

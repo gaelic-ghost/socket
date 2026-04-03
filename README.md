@@ -1,126 +1,122 @@
 # productivity-skills
 
-Curated productivity skills for maintenance automation and code-understanding walkthroughs.
+Canonical productivity skills with a plugin-first packaging layout for Codex and Claude Code.
 
-For standards and applicability guidance, see [AGENTS.md](./AGENTS.md).
+For maintainer guidance, standards references, and cross-ecosystem packaging policy, see [AGENTS.md](./AGENTS.md).
 
-## Table of Contents
-
-- [What These Agent Skills Help With](#what-these-agent-skills-help-with)
-- [Skill Guide (When To Use What)](#skill-guide-when-to-use-what)
-- [Codex Plugin Packaging](#codex-plugin-packaging)
-- [Install with skills.sh / Vercel Skills CLI](#install-with-skillssh--vercel-skills-cli)
-- [Update Skills](#update-skills)
-- [More resources for similar Skills](#more-resources-for-similar-skills)
-- [Repository Layout](#repository-layout)
-- [Notes](#notes)
-- [Keywords](#keywords)
-- [License](#license)
-
-## What These Agent Skills Help With
-
-This repository packages reusable skills for project README maintenance, skills/plugin README maintenance, checklist roadmap maintenance, and code-slice walkthroughs.
-
-## Skill Guide (When To Use What)
+## Active Skills
 
 - `maintain-project-readme`
   - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
-  - Helps by applying a shared README schema, repo-profile detection, and README-only fixes instead of skills/plugin catalog rules.
 - `maintain-project-roadmap`
   - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
-  - Helps by keeping roadmap maintenance deterministic through explicit `check-only` and `apply` modes.
 - `maintain-skills-readme`
   - Use when an agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repo `README.md` needs auditing or bounded fixes.
-  - Helps by enforcing specialized install, discoverability, and catalog conventions for skills/plugin repositories.
 - `explain-code-slice`
   - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
-  - Helps by starting with data shape, then walking the full slice through branches, boundaries, transformations, and outputs.
 
-## Codex Plugin Packaging
+Maintainer-facing workflow maps, audit procedure, and source-of-truth rules live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md) and [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
 
-This repository is also packaged as a Codex plugin root.
+## Packaging and Delegation
 
-- Plugin manifest: [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json)
-- Local marketplace entry: [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+This repository now uses a plugin-first packaging layout while keeping root [`skills/`](./skills/) as the canonical workflow-authoring surface.
 
-Use those files when wiring the whole repository into a Codex plugin workflow, and use the `skills` CLI commands below when you want documented standalone skill installation.
+Shared guidance across both ecosystems:
 
-## Install with skills.sh / Vercel Skills CLI
+- keep reusable workflow behavior in root `skills/`
+- keep deterministic helper logic skill-scoped so both Codex and Claude can rely on it
+- treat plugin manifests, hooks, and marketplace wiring as install-surface metadata, not as the workflow source of truth
 
-Use the Vercel `skills` CLI when you want one or more standalone skills from this repository.
+Current packaging scaffolding lives under:
+
+- [`plugins/productivity-skills/.codex-plugin/plugin.json`](./plugins/productivity-skills/.codex-plugin/plugin.json)
+- [`plugins/productivity-skills/.claude-plugin/plugin.json`](./plugins/productivity-skills/.claude-plugin/plugin.json)
+- [`plugins/productivity-skills/hooks/hooks.json`](./plugins/productivity-skills/hooks/hooks.json)
+- [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+
+The plugin scaffold is intentionally conservative:
+
+- Codex-compatible common denominator first
+- Claude-only extras layered on top under `plugins/productivity-skills/.claude-plugin`, `hooks/`, and `bin/`
+- no essential workflow behavior should depend on plugin-only extras
+
+Helpful docs for this packaging model:
+
+- OpenAI Codex Skills: [developers.openai.com/codex/skills](https://developers.openai.com/codex/skills)
+- OpenAI Codex customization: [developers.openai.com/codex/concepts/customization](https://developers.openai.com/codex/concepts/customization/)
+- OpenAI Codex plugins overview: [developers.openai.com/codex/plugins](https://developers.openai.com/codex/plugins)
+- OpenAI Codex plugin authoring: [developers.openai.com/codex/plugins/build](https://developers.openai.com/codex/plugins/build)
+- Claude Code Skills: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills)
+- Claude Code Plugins: [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)
+
+## Maintainer Python Tooling
+
+This repository standardizes maintainer-side Python tooling around `uv`.
 
 ```bash
-# Install from this repository with the interactive picker
-npx skills add gaelic-ghost/productivity-skills
+uv sync --dev
+uv run --group dev pytest
 ```
 
-```bash
-# Install every skill from this repository
-npx skills add gaelic-ghost/productivity-skills --all
-```
+Use the skill entrypoints directly when you need focused validation, for example:
 
 ```bash
-# Install one specific skill
+uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/explain-code-slice
+```
+
+## Install
+
+Plugin-first installation and local marketplace wiring now target [`plugins/productivity-skills/`](./plugins/productivity-skills). Standalone skill installation through the Vercel `skills` CLI remains supported and is the documented direct-install path today.
+
+Install one skill:
+
+```bash
 npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
 ```
 
-```bash
-# Install a selected skill pack in one command
-npx skills add gaelic-ghost/productivity-skills \
-  --skill maintain-project-readme \
-  --skill maintain-project-roadmap \
-  --skill maintain-skills-readme
-```
-
-Current active skill names:
-
-- `maintain-project-readme` for ordinary software-project `README.md` maintenance
-- `maintain-skills-readme` for skills/plugin repository `README.md` maintenance
-- `maintain-project-roadmap` for checklist-style `ROADMAP.md` maintenance
-- `explain-code-slice` for end-to-end code walkthroughs
-
-## Update Skills
+Install all active skills:
 
 ```bash
-npx skills check
-npx skills update
+npx skills add gaelic-ghost/productivity-skills --all
 ```
 
-## More resources for similar Skills
+Common starting points:
 
-### Find Skills like these with the `skills` CLI by Vercel — [vercel-labs/skills](https://github.com/vercel-labs/skills)
+- README work:
+  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme`
+- roadmap work:
+  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap`
+- skills/plugin README work:
+  `npx skills add gaelic-ghost/productivity-skills --skill maintain-skills-readme`
+- code walkthrough work:
+  `npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice`
 
-```bash
-npx skills find "skills readme maintenance"
-npx skills find "code slice walkthrough"
-npx skills find "project roadmap maintenance"
-npx skills find "plugin readme audit"
-```
+## Planned Expansion
 
-### Find Skills like these with the `Find Skills` Agent Skill by Vercel — [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)
+The next planned repo-surface expansion adds two skills focused on maintaining skills repositories and plugin packaging guidance:
 
-```bash
-# `Find Skills` is a part of Vercel's `agent-skills` repo
-npx skills add vercel-labs/agent-skills --skill find-skills
-```
+- `sync-skills-repo-guidance`
+- `bootstrap-skills-plugin-repo`
 
-Then ask your Agent for help finding a skill for project roadmap maintenance, code walkthroughs, or README auditing.
-
-### Release highlights
-
-- Latest release: [`v3.0.0`](https://github.com/gaelic-ghost/productivity-skills/releases/tag/v3.0.0)
-- Marks the breaking transition to the `skills/` layout, split docs-maintenance skills, and the matured project README maintainer workflow.
-
-### Leaderboard
-
-- Skills catalog: [skills.sh](https://skills.sh/)
+See [ROADMAP.md](./ROADMAP.md) for the milestone plan.
 
 ## Repository Layout
 
 ```text
 .
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json
 ├── README.md
 ├── AGENTS.md
+├── plugins/
+│   └── productivity-skills/
+│       ├── .codex-plugin/
+│       ├── .claude-plugin/
+│       ├── assets/
+│       ├── bin/
+│       ├── hooks/
+│       └── skills/
 ├── skills/
 │   ├── explain-code-slice/
 │   ├── maintain-project-readme/
@@ -132,14 +128,7 @@ Then ask your Agent for help finding a skill for project roadmap maintenance, co
 └── pyproject.toml
 ```
 
-## Notes
-
-- Prefer the current skill names in new prompts; retired compatibility names are no longer the active guidance surface.
-- The Things-focused skills now live in `../things-app/skills` rather than in this repository.
-
-## Keywords
-
-Codex skills, code walkthrough, slice explanation, execution flow, request lifecycle, pipeline explanation, data flow, skills README maintenance, roadmap maintenance, productivity automation.
+The plugin directories are packaging scaffolds. The canonical workflow content still lives under root `skills/`.
 
 ## License
 

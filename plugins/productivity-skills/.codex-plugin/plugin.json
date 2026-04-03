@@ -1,7 +1,7 @@
 {
   "name": "productivity-skills",
-  "version": "3.0.0",
-  "description": "Reusable productivity skills for project and skills-repo docs maintenance, roadmap upkeep, and code walkthroughs.",
+  "version": "0.0.0-local",
+  "description": "In-development productivity plugin bundling skills, future hooks, and install-surface metadata.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -12,27 +12,23 @@
   "license": "Apache-2.0",
   "keywords": [
     "codex",
+    "plugin",
     "skills",
     "productivity",
     "readme",
     "roadmap"
   ],
-  "skills": "./skills/",
   "interface": {
     "displayName": "Productivity Skills",
-    "shortDescription": "Reusable productivity workflows for Codex.",
-    "longDescription": "Bundle reusable productivity skills for project and skills-repo docs maintenance, roadmap upkeep, and code walkthroughs.",
+    "shortDescription": "Plugin scaffold for productivity workflows.",
+    "longDescription": "In-development plugin scaffold for productivity workflows shared across Codex and Claude Code.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [
       "Read",
       "Write"
     ],
-    "defaultPrompt": [
-      "Improve a project README without changing the code.",
-      "Audit a skills repo README for install and discoverability drift.",
-      "Explain a code path from trigger to final output."
-    ],
+    "websiteURL": "https://github.com/gaelic-ghost/productivity-skills",
     "brandColor": "#1F6FEB"
   }
 }

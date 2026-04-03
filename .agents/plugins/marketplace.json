@@ -8,10 +8,10 @@
       "name": "productivity-skills",
       "source": {
         "source": "local",
-        "path": "./"
+        "path": "./plugins/productivity-skills"
       },
       "policy": {
-        "installation": "AVAILABLE",
+        "installation": "NOT_AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity"

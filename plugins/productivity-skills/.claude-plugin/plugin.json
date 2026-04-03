@@ -1,0 +1,10 @@
+{
+  "name": "productivity-skills",
+  "description": "In-development productivity plugin scaffold for skills, future hooks, and packaging metadata.",
+  "version": "0.0.0",
+  "author": {
+    "name": "Gale"
+  },
+  "repository": "https://github.com/gaelic-ghost/productivity-skills",
+  "license": "Apache-2.0"
+}
