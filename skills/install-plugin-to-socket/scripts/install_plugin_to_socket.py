@@ -244,6 +244,8 @@ def audit_install(
 
 
 def _copy_plugin_tree(source_plugin_root: Path, target_plugin_root: Path) -> None:
+    if source_plugin_root.resolve() == target_plugin_root.resolve():
+        return
     target_plugin_root.parent.mkdir(parents=True, exist_ok=True)
     if target_plugin_root.exists():
         shutil.rmtree(target_plugin_root)
@@ -269,8 +271,17 @@ def apply_install(
     payload = ensure_marketplace_shape(existing_marketplace, scope, plugin_name)
 
     if action in {"install", "refresh"}:
-        _copy_plugin_tree(source_plugin_root, target_plugin_root)
-        apply_actions.append({"action": "copy-plugin-tree", "path": str(target_plugin_root)})
+        if source_plugin_root.resolve() == target_plugin_root.resolve():
+            apply_actions.append(
+                {
+                    "action": "use-existing-plugin-tree",
+                    "path": str(target_plugin_root),
+                    "reason": "Source plugin root already matches the repo-scoped install target.",
+                }
+            )
+        else:
+            _copy_plugin_tree(source_plugin_root, target_plugin_root)
+            apply_actions.append({"action": "copy-plugin-tree", "path": str(target_plugin_root)})
         payload, changed = merge_marketplace_entry(payload, expected_entry)
         if changed or not marketplace_path.exists():
             _write_json(marketplace_path, payload)

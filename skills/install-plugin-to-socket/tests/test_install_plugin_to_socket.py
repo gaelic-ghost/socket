@@ -208,3 +208,22 @@ def test_apply_detach_removes_plugin_tree_and_marketplace_entry(tmp_path: Path) 
     assert not target_plugin_root.exists()
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     assert [item["name"] for item in marketplace["plugins"]] == ["other-plugin"]
+
+
+def test_apply_install_repo_scope_uses_existing_tree_when_source_matches_target(tmp_path: Path) -> None:
+    repo_root = tmp_path / "repo"
+    source_plugin = _write_source_plugin(repo_root / "plugins")
+
+    apply_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+    )
+
+    assert not errors
+    assert any(action["action"] == "use-existing-plugin-tree" for action in apply_actions)
+    assert not any(action["action"] == "copy-plugin-tree" for action in apply_actions)
+    assert target_plugin_root == source_plugin
+    marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
