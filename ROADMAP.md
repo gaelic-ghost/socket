@@ -4,7 +4,7 @@
 
 - Build a focused maintainer toolkit for agent-skills and agent-plugin repositories.
 - Keep the open Agent Skills standard as the portable core while fully adopting useful OpenAI Codex and Claude Code extensions.
-- Make repo bootstrap, guidance sync, docs maintenance, packaging validation, install-surface auditing, and skill evaluation first-class maintainable workflows.
+- Make repo bootstrap, guidance sync, docs maintenance, local plugin install wiring, packaging validation, install-surface auditing, and skill evaluation first-class maintainable workflows.
 
 ## Product Principles
 
@@ -12,6 +12,7 @@
 - Packaging and discovery metadata stay under `plugins/` and `.agents/plugins/`.
 - POSIX symlink mirrors are explicit, documented, and validated.
 - Narrow file-level maintainers and broader repo-level maintainers should stay distinct.
+- Action-oriented local install wiring should stay distinct from audit-only metadata validation.
 - Upstream docs drift is expected and should be audited deliberately.
 - Skill behavior on real agents should be evaluated deliberately instead of inferred from static docs alone.
 
@@ -19,11 +20,12 @@
 
 - [x] Milestone 0: Foundation bootstrap
 - [ ] Milestone 1: `maintain-plugin-docs` evolution
-- [ ] Milestone 2: install-surface and metadata validation skill
-- [ ] Milestone 3: MCP and app packaging maintainer skill
-- [ ] Milestone 4: skills repo migration and split support
-- [ ] Milestone 5: upstream docs watch and change intake
-- [ ] Milestone 6: `skill-evals`
+- [ ] Milestone 2: `install-plugin-to-socket`
+- [ ] Milestone 3: install-surface and metadata validation skill
+- [ ] Milestone 4: MCP and app packaging maintainer skill
+- [ ] Milestone 5: skills repo migration and split support
+- [ ] Milestone 6: upstream docs watch and change intake
+- [ ] Milestone 7: `skill-evals`
 
 ## Milestone 0: Foundation bootstrap
 
@@ -84,7 +86,56 @@ Exit criteria:
 - [ ] The docs-maintainer role for skills/plugin repos is clearer than README-only maintenance.
 - [ ] The skill has an explicit non-overlapping boundary relative to repo-wide sync work.
 
-## Milestone 2: install-surface and metadata validation skill
+## Milestone 2: `install-plugin-to-socket`
+
+Scope:
+
+- Add a skill for wiring an in-development Codex plugin into a local Codex install surface at repo scope or personal scope.
+- Keep the skill aligned to the documented OpenAI local-plugin flow: scope-local plugin directory plus marketplace wiring, followed by restart and verification guidance.
+- Treat repo scope and personal scope as the primary supported targets:
+  - repo scope: `$REPO_ROOT/plugins/<plugin-name>` plus `$REPO_ROOT/.agents/plugins/marketplace.json`
+  - personal scope: `~/.codex/plugins/<plugin-name>` plus `~/.agents/plugins/marketplace.json`
+- Keep plugin source inspection manifest-aware so the installer can infer the plugin name, version, category, and install-surface metadata from `.codex-plugin/plugin.json`.
+- Avoid pretending to control undocumented Codex installed-state internals. In the current docs-supported model, the skill should make the plugin installable and discoverable locally, then guide restart and verification.
+
+Tickets:
+
+- [ ] Define the user-facing contract around the phrase "install to socket" so the skill is explicit that it targets Codex local plugin discovery surfaces.
+- [ ] Add a deterministic source audit for:
+  - `.codex-plugin/plugin.json`
+  - plugin name and version
+  - optional `skills/`, `.mcp.json`, `.app.json`, and `assets/`
+- [ ] Support repo-scoped install planning and apply behavior.
+- [ ] Support personal-scoped install planning and apply behavior.
+- [ ] Preserve and merge existing marketplace entries instead of overwriting marketplace catalogs wholesale.
+- [ ] Enforce documented `source.path` rules:
+  - path stays relative to the marketplace root
+  - path starts with `./`
+  - path stays inside the chosen marketplace root
+- [ ] Default to docs-aligned local copy or sync behavior into the chosen scope-local plugin directory instead of inventing an unsupported direct-external-path install mode.
+- [ ] Add a bounded refresh path for updating an already wired local development plugin after source changes.
+- [ ] Add a bounded uninstall or detach path that can remove the local plugin directory and marketplace entry for one plugin without disturbing others.
+- [ ] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
+- [ ] Return a structured report with:
+  - `run_context`
+  - `scope`
+  - `source_plugin`
+  - `target_plugin_root`
+  - `marketplace_path`
+  - `findings`
+  - `apply_actions`
+  - `restart_required`
+  - `verification_steps`
+  - `errors`
+- [ ] Add tests for repo scope, personal scope, refresh, detach, and marketplace merge behavior.
+
+Exit criteria:
+
+- [ ] Maintainers can wire an in-development Codex plugin into repo or personal scope without hand-editing marketplace JSON.
+- [ ] The skill stays honest about the documented local-plugin contract and does not claim unsupported cache or installed-state control.
+- [ ] The workflow reduces the repetitive manual loop of copying plugin files, updating marketplace metadata, restarting Codex, and checking discovery paths.
+
+## Milestone 3: install-surface and metadata validation skill
 
 Scope:
 
@@ -102,7 +153,7 @@ Exit criteria:
 - [ ] Maintainers can run one bounded workflow to detect install-surface drift.
 - [ ] The audit distinguishes canonical authored surfaces from packaging mirrors.
 
-## Milestone 3: MCP and app packaging maintainer skill
+## Milestone 4: MCP and app packaging maintainer skill
 
 Scope:
 
@@ -120,7 +171,7 @@ Exit criteria:
 - [ ] Maintainers have a dedicated workflow for plugin-side MCP and app packaging surfaces.
 - [ ] The repo can evolve beyond skills-only packaging cleanly.
 
-## Milestone 4: skills repo migration and split support
+## Milestone 5: skills repo migration and split support
 
 Scope:
 
@@ -136,7 +187,7 @@ Exit criteria:
 
 - [ ] Maintainers can move skills between repos without manual cross-surface cleanup.
 
-## Milestone 5: upstream docs watch and change intake
+## Milestone 6: upstream docs watch and change intake
 
 Scope:
 
@@ -153,7 +204,7 @@ Exit criteria:
 
 - [ ] Upstream ecosystem drift can be tracked deliberately instead of ad hoc.
 
-## Milestone 6: `skill-evals`
+## Milestone 7: `skill-evals`
 
 Scope:
 
