@@ -12,6 +12,10 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
   - Install guidance should prioritize Codex Plugin and Claude Code Plugin setup first, with `npx skills` per-skill and `--all` installs treated as secondary.
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
+- `install-plugin-to-socket`
+  - Current implementation: audit, install, refresh, or detach an in-development Codex plugin at repo or personal scope with bounded marketplace merging.
+  - It follows the documented Codex local-plugin flow: local plugin directory plus marketplace wiring, then restart and verification.
+  - It stays honest about scope and does not claim undocumented control over Codex's installed-plugin cache internals.
 - `sync-skills-repo-guidance`
   - Current scope: ongoing maintenance and alignment of agent-skills and plugin-development guidance, maintainer docs, discovery mirrors, and related docs links for this repo pattern.
   - Current automation is narrower than the long-term intent: the script audits local guidance snippets and symlink mirrors, while broader link and policy reconciliation is still maintainer-driven.
@@ -79,6 +83,7 @@ Quick validation examples:
 ```bash
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/maintain-plugin-docs
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/bootstrap-skills-plugin-repo
+uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/install-plugin-to-socket
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/sync-skills-repo-guidance
 ```
 
@@ -102,6 +107,8 @@ Common starting points:
   `npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-plugin-docs`
 - repo bootstrap or structural alignment:
   `npx skills add gaelic-ghost/agent-plugin-skills --skill bootstrap-skills-plugin-repo`
+- local Codex plugin wiring for repo or personal scope:
+  `npx skills add gaelic-ghost/agent-plugin-skills --skill install-plugin-to-socket`
 - repo-wide guidance sync:
   `npx skills add gaelic-ghost/agent-plugin-skills --skill sync-skills-repo-guidance`
 
@@ -127,6 +134,7 @@ Common starting points:
 │       └── skills -> ../../skills
 ├── skills/
 │   ├── bootstrap-skills-plugin-repo/
+│   ├── install-plugin-to-socket/
 │   ├── maintain-plugin-docs/
 │   └── sync-skills-repo-guidance/
 ├── docs/

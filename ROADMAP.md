@@ -100,23 +100,23 @@ Scope:
 
 Tickets:
 
-- [ ] Define the user-facing contract around the phrase "install to socket" so the skill is explicit that it targets Codex local plugin discovery surfaces.
-- [ ] Add a deterministic source audit for:
+- [x] Define the user-facing contract around the phrase "install to socket" so the skill is explicit that it targets Codex local plugin discovery surfaces.
+- [x] Add a deterministic source audit for:
   - `.codex-plugin/plugin.json`
   - plugin name and version
   - optional `skills/`, `.mcp.json`, `.app.json`, and `assets/`
-- [ ] Support repo-scoped install planning and apply behavior.
-- [ ] Support personal-scoped install planning and apply behavior.
-- [ ] Preserve and merge existing marketplace entries instead of overwriting marketplace catalogs wholesale.
-- [ ] Enforce documented `source.path` rules:
+- [x] Support repo-scoped install planning and apply behavior.
+- [x] Support personal-scoped install planning and apply behavior.
+- [x] Preserve and merge existing marketplace entries instead of overwriting marketplace catalogs wholesale.
+- [x] Enforce documented `source.path` rules:
   - path stays relative to the marketplace root
   - path starts with `./`
   - path stays inside the chosen marketplace root
-- [ ] Default to docs-aligned local copy or sync behavior into the chosen scope-local plugin directory instead of inventing an unsupported direct-external-path install mode.
-- [ ] Add a bounded refresh path for updating an already wired local development plugin after source changes.
-- [ ] Add a bounded uninstall or detach path that can remove the local plugin directory and marketplace entry for one plugin without disturbing others.
+- [x] Default to docs-aligned local copy or sync behavior into the chosen scope-local plugin directory instead of inventing an unsupported direct-external-path install mode.
+- [x] Add a bounded refresh path for updating an already wired local development plugin after source changes.
+- [x] Add a bounded uninstall or detach path that can remove the local plugin directory and marketplace entry for one plugin without disturbing others.
 - [ ] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
-- [ ] Return a structured report with:
+- [x] Return a structured report with:
   - `run_context`
   - `scope`
   - `source_plugin`
@@ -127,7 +127,7 @@ Tickets:
   - `restart_required`
   - `verification_steps`
   - `errors`
-- [ ] Add tests for repo scope, personal scope, refresh, detach, and marketplace merge behavior.
+- [x] Add tests for repo scope, personal scope, refresh, detach, and marketplace merge behavior.
 
 Exit criteria:
 
