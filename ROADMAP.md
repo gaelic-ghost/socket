@@ -4,7 +4,7 @@
 
 - Build a focused maintainer toolkit for agent-skills and agent-plugin repositories.
 - Keep the open Agent Skills standard as the portable core while fully adopting useful OpenAI Codex and Claude Code extensions.
-- Make repo bootstrap, guidance sync, docs maintenance, packaging validation, and install-surface auditing first-class maintainable workflows.
+- Make repo bootstrap, guidance sync, docs maintenance, packaging validation, install-surface auditing, and skill evaluation first-class maintainable workflows.
 
 ## Product Principles
 
@@ -13,6 +13,7 @@
 - POSIX symlink mirrors are explicit, documented, and validated.
 - Narrow file-level maintainers and broader repo-level maintainers should stay distinct.
 - Upstream docs drift is expected and should be audited deliberately.
+- Skill behavior on real agents should be evaluated deliberately instead of inferred from static docs alone.
 
 ## Milestone Progress
 
@@ -22,6 +23,7 @@
 - [ ] Milestone 3: MCP and app packaging maintainer skill
 - [ ] Milestone 4: skills repo migration and split support
 - [ ] Milestone 5: upstream docs watch and change intake
+- [ ] Milestone 6: `skill-evals`
 
 ## Milestone 0: Foundation bootstrap
 
@@ -131,3 +133,23 @@ Tickets:
 Exit criteria:
 
 - [ ] Upstream ecosystem drift can be tracked deliberately instead of ad hoc.
+
+## Milestone 6: `skill-evals`
+
+Scope:
+
+- Add a skill for evaluating and testing skills against real agent runtimes such as Codex and Claude Code.
+- Make it easier to validate trigger quality, workflow fidelity, instruction clarity, and output contracts with reproducible eval runs instead of ad hoc spot checks.
+
+Tickets:
+
+- [ ] Define the eval targets and supported runtimes, including Codex and Claude Code.
+- [ ] Define the eval artifact set, including prompts, expected behaviors, failure notes, and dated run summaries.
+- [ ] Add deterministic guidance for comparing trigger activation, tool usage, and final output shape against the intended skill contract.
+- [ ] Decide whether this skill is audit-only, report-generating, or can also scaffold eval fixtures and cases.
+- [ ] Document how `skill-evals` composes with `$skill-creator`, `sync-skills-repo-guidance`, and future metadata-validation skills.
+
+Exit criteria:
+
+- [ ] Maintainers can run one coherent workflow to evaluate a skill on real agent surfaces instead of relying only on static review.
+- [ ] The repo has a durable place for testing trigger behavior and workflow fidelity across supported agents.
