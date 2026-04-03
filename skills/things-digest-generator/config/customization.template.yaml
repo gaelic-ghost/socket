@@ -1,0 +1,17 @@
+schemaVersion: 1
+isCustomized: false
+profile: default
+settings:
+  dueSoonDays: 3
+  daysAhead: 4
+  topProjects: 3
+  topAreas: 2
+  maxSuggestions: 5
+  openCountCap: 10
+  outputStyle: operational
+  scoringWeights:
+    completed7d: 3.0
+    dueSoon: 2.0
+    overdue: 3.0
+    openCountWeight: 0.5
+    checklistHints: 1.5
