@@ -125,3 +125,16 @@ def test_detects_bad_marketplace_path_and_wrong_symlink(tmp_path: Path) -> None:
     issue_ids = {item.issue_id for item in metadata + mirrors}
     assert "marketplace-nonrelative-source-path" in issue_ids
     assert "wrong-symlink-target" in issue_ids
+
+
+def test_detects_marketplace_root_source_path_as_invalid(tmp_path: Path) -> None:
+    repo = make_valid_repo(tmp_path)
+    (repo / ".agents" / "plugins" / "marketplace.json").write_text(
+        '{\n  "plugins": [\n    {\n      "name": "agent-plugin-skills",\n      "source": {"path": "./"}\n    }\n  ]\n}\n',
+        encoding="utf-8",
+    )
+
+    metadata = m.audit_marketplace(repo, m.plugin_roots(repo))
+    issue_ids = {item.issue_id for item in metadata}
+
+    assert "marketplace-empty-relative-source-path" in issue_ids

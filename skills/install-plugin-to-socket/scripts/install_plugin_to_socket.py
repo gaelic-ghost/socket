@@ -645,6 +645,89 @@ def _audit_install_surface(
                 findings.append(Finding(str(marketplace_path), "missing-marketplace-entry", "Marketplace does not include an entry for this plugin."))
 
 
+def _audit_marketplace_payload(
+    findings: list[Finding],
+    marketplace_path: Path,
+    scope_root: Path,
+    existing_marketplace: dict[str, object] | None,
+) -> None:
+    if existing_marketplace is None:
+        return
+    plugins = existing_marketplace.get("plugins")
+    if not isinstance(plugins, list):
+        findings.append(
+            Finding(
+                str(marketplace_path),
+                "invalid-marketplace-plugins",
+                "Marketplace file must define a `plugins` array so Codex can load local plugins from this scope.",
+            )
+        )
+        return
+
+    for entry in plugins:
+        if not isinstance(entry, dict):
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "invalid-marketplace-entry",
+                    "Marketplace contains a non-object plugin entry, so Codex may skip the entire marketplace.",
+                )
+            )
+            continue
+        name = entry.get("name")
+        display_name = name if isinstance(name, str) and name else "<unnamed-plugin>"
+        source = entry.get("source")
+        if not isinstance(source, dict):
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "invalid-marketplace-entry-source",
+                    f"Marketplace entry `{display_name}` is missing a valid `source` mapping, so Codex may skip the entire marketplace.",
+                )
+            )
+            continue
+        path = source.get("path")
+        if not isinstance(path, str):
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "invalid-marketplace-entry-source-path",
+                    f"Marketplace entry `{display_name}` is missing a string `source.path`, so Codex may skip the entire marketplace.",
+                )
+            )
+            continue
+        if not path.startswith("./"):
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "invalid-marketplace-entry-source-path-prefix",
+                    f"Marketplace entry `{display_name}` must use a `./`-prefixed local source path. Codex may skip the entire marketplace until that entry is repaired.",
+                )
+            )
+            continue
+        if path == "./":
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "invalid-marketplace-entry-empty-relative-source-path",
+                    f"Marketplace entry `{display_name}` points at the marketplace root with `./`, but Codex requires a non-empty local plugin source path and may skip the entire marketplace until that entry is repaired.",
+                )
+            )
+            continue
+        resolved = (scope_root / path.removeprefix("./")).resolve()
+        try:
+            resolved.relative_to(scope_root)
+        except ValueError:
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "invalid-marketplace-entry-source-path-escapes-root",
+                    f"Marketplace entry `{display_name}` resolves outside the chosen scope root, so Codex may skip the entire marketplace until that entry is repaired.",
+                )
+            )
+            continue
+
+
 def _audit_plugin_config_state(
     findings: list[Finding],
     config_path: Path,
@@ -719,6 +802,7 @@ def audit_install(
         findings.append(Finding(str(marketplace_path), "invalid-source-path-prefix", "Marketplace source path must start with `./`."))
     if relative_path.is_absolute():
         findings.append(Finding(str(marketplace_path), "absolute-source-path", "Marketplace source path must remain relative to the marketplace root."))
+    _audit_marketplace_payload(findings, marketplace_path, scope_root, existing_marketplace)
 
     _audit_install_surface(
         findings=findings,

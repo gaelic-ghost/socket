@@ -308,6 +308,16 @@ def audit_marketplace(repo_root: Path, plugin_dirs: list[Path]) -> list[Finding]
                 )
             )
             continue
+        if path == "./":
+            findings.append(
+                Finding(
+                    relative_to_repo(repo_root, marketplace),
+                    "marketplace-empty-relative-source-path",
+                    f"Marketplace entry `{name}` points at the marketplace root with `./`, but Codex local plugin source paths must point at a non-empty staged plugin directory.",
+                    "metadata",
+                )
+            )
+            continue
         resolved = (repo_root / path.removeprefix("./")).resolve()
         try:
             resolved.relative_to(repo_root)

@@ -341,6 +341,65 @@ def test_apply_install_repo_scope_uses_existing_tree_when_source_matches_target(
     assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
 
 
+def test_repo_scope_verify_flags_invalid_sibling_marketplace_entry(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source", plugin_name="agent-plugin-skills")
+    repo_root = tmp_path / "repo"
+    target_plugin_root = repo_root / "plugins" / "agent-plugin-skills"
+    (target_plugin_root / ".codex-plugin").mkdir(parents=True)
+    (target_plugin_root / ".codex-plugin" / "plugin.json").write_text(
+        json.dumps(
+            {
+                "name": "agent-plugin-skills",
+                "version": "0.1.0",
+                "description": "Installed plugin.",
+                "skills": "./skills/",
+                "interface": {"displayName": "Agent Plugin Skills", "category": "Productivity"},
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (repo_root / ".agents" / "plugins").mkdir(parents=True)
+    (repo_root / ".agents" / "plugins" / "marketplace.json").write_text(
+        json.dumps(
+            {
+                "name": "local-repo",
+                "plugins": [
+                    {
+                        "name": "repo-plugin",
+                        "source": {"source": "local", "path": "./"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    },
+                    {
+                        "name": "agent-plugin-skills",
+                        "source": {"source": "local", "path": "./plugins/agent-plugin-skills"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    },
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    findings, _source_summary, _target_plugin_root, marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="verify",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    issue_ids = {finding.issue_id for finding in findings}
+    assert "invalid-marketplace-entry-empty-relative-source-path" in issue_ids
+    assert str(marketplace_path) in {finding.path for finding in findings}
+
+
 def test_repo_scope_defaults_to_current_working_directory(tmp_path: Path, monkeypatch) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
