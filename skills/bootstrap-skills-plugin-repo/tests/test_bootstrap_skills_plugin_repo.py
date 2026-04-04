@@ -50,6 +50,16 @@ def test_apply_repo_creates_marketplace_with_available_policy(tmp_path: Path) ->
     assert marketplace["plugins"][0]["policy"]["installation"] == "AVAILABLE"
 
 
+def test_apply_repo_creates_repo_root_claude_marketplace(tmp_path: Path) -> None:
+    m.apply_repo(tmp_path, "example-skills")
+
+    marketplace = json.loads((tmp_path / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+
+    assert marketplace["name"] == "example-skills"
+    assert marketplace["plugins"][0]["name"] == "example-skills"
+    assert marketplace["plugins"][0]["source"] == "./plugins/example-skills"
+
+
 def test_apply_repo_seeds_python_tooling_guidance(tmp_path: Path) -> None:
     m.apply_repo(tmp_path, "example-skills")
 

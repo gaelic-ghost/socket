@@ -124,4 +124,5 @@ def test_audit_repo_flags_missing_guidance_and_symlink_drift(tmp_path: Path) -> 
     issue_ids = {finding.issue_id for finding in findings}
     assert "readme-missing-snippet" in issue_ids
     assert "agents-missing-snippet" in issue_ids
+    assert "missing-path" in issue_ids
     assert "missing-symlink" in issue_ids
