@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 import shutil
+import subprocess
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -200,6 +201,27 @@ def _target_matches_install_mode(target_plugin_root: Path, source_plugin_root: P
     raise ValueError(f"Unsupported install mode: {install_mode}")
 
 
+def _tracked_tree_blocks_symlink_mode(scope: str, scope_root: Path, target_plugin_root: Path) -> bool:
+    if scope != "repo":
+        return False
+    git_dir = scope_root / ".git"
+    if not git_dir.exists():
+        return False
+    target_relpath = target_plugin_root.absolute().relative_to(scope_root.absolute()).as_posix()
+    result = subprocess.run(
+        ["git", "-C", str(scope_root), "ls-files", "--", target_relpath],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return False
+    tracked_paths = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if not tracked_paths:
+        return False
+    return tracked_paths != [target_relpath]
+
+
 def audit_install(
     source_plugin_root: Path,
     scope: str,
@@ -236,6 +258,8 @@ def audit_install(
     existing_marketplace = _load_json(marketplace_path) if marketplace_path.exists() else None
 
     if action in {"install", "refresh"}:
+        if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(scope, scope_root, target_plugin_root):
+            findings.append(Finding(str(target_plugin_root), "tracked-target-tree-blocks-symlink", "Repo scope symlink mode would replace a git-tracked plugin tree at the staged target path. Use copy mode for this repo, or migrate the tracked tree deliberately before switching to symlink mode."))
         if not target_plugin_root.exists():
             findings.append(Finding(str(target_plugin_root), "missing-target-plugin-root", "Staged plugin path is missing for the chosen scope."))
         elif not (target_plugin_root / ".codex-plugin" / "plugin.json").exists():
@@ -324,6 +348,9 @@ def apply_install(
     payload = ensure_marketplace_shape(existing_marketplace, scope, plugin_name)
 
     if action in {"install", "refresh"}:
+        if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(scope, scope_root, target_plugin_root):
+            errors.append("Repo scope symlink mode is blocked because the staged target path is a git-tracked plugin tree. Use copy mode for this repo, or migrate the tracked tree deliberately before switching to symlink mode.")
+            return apply_actions, source_summary, target_plugin_root, marketplace_path, errors
         if _is_same_path(source_plugin_root, target_plugin_root):
             apply_actions.append(
                 {

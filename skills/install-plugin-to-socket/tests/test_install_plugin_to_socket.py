@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -46,6 +47,12 @@ def _write_source_plugin(root: Path, plugin_name: str = "example-plugin") -> Pat
         encoding="utf-8",
     )
     return plugin_root
+
+
+def _init_git_repo(root: Path) -> None:
+    subprocess.run(["git", "init"], cwd=root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=root, check=True, capture_output=True, text=True)
 
 
 def test_repo_scope_audit_reports_missing_targets(tmp_path: Path) -> None:
@@ -392,3 +399,49 @@ def test_detach_removes_staged_symlink_without_touching_source(tmp_path: Path) -
     assert source_plugin.exists()
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     assert marketplace["plugins"] == []
+
+
+def test_audit_reports_tracked_tree_blocking_symlink_mode(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    _init_git_repo(repo_root)
+    tracked_plugin = _write_source_plugin(repo_root / "plugins")
+    subprocess.run(["git", "add", "."], cwd=repo_root, check=True, capture_output=True, text=True)
+
+    findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, errors = m.audit_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="refresh",
+        repo_root=repo_root,
+        install_mode="symlink",
+    )
+
+    assert not errors
+    issue_ids = {finding.issue_id for finding in findings}
+    assert "tracked-target-tree-blocks-symlink" in issue_ids
+    assert tracked_plugin.exists()
+
+
+def test_apply_refuses_symlink_mode_for_tracked_tree(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    _init_git_repo(repo_root)
+    tracked_plugin = _write_source_plugin(repo_root / "plugins")
+    subprocess.run(["git", "add", "."], cwd=repo_root, check=True, capture_output=True, text=True)
+
+    apply_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="refresh",
+        repo_root=repo_root,
+        install_mode="symlink",
+    )
+
+    assert not apply_actions
+    assert errors
+    assert "git-tracked plugin tree" in errors[0]
+    assert target_plugin_root == tracked_plugin
+    assert not marketplace_path.exists()
+    assert not target_plugin_root.is_symlink()
