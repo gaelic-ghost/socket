@@ -35,6 +35,8 @@
 - [ ] Milestone 20: Customization Consolidation Review
 - [ ] Milestone 21: MCP App UI for Configuration and Customization
 - [ ] Milestone 22: macOS Menu Bar Extra for Skill Controls
+- [ ] Milestone 23: Dash Direct MCP and Call Library
+- [ ] Milestone 24: Repo Self-Compliance and Install-Surface Audit
 
 ## Milestone 1: Initial Apple Skill Bundle
 
@@ -362,6 +364,25 @@ Tickets:
 - [ ] Identify knobs that should become opinionated defaults instead of user-facing customization.
 - [ ] Identify knobs that can be inferred from repo type, file layout, active IDE state, tool availability, stored agent preferences, or project-level guidance.
 - [ ] Propose a smaller long-term customization surface with a clear split between runtime-enforced settings and policy-only defaults.
+- [ ] Track the repo-shape inference candidates already identified:
+  - bootstrap app defaults such as project kind, platform, and often UI stack
+  - bootstrap package defaults such as package type, platform preset, and often testing mode
+  - style-tooling defaults such as tool selection, preferred surface, checked-in config posture, and plugin-vs-script preference
+  - docs troubleshooting preference when the failure mode itself already makes the best recovery path obvious
+- [ ] Track the environment-inference candidates already identified:
+  - SwiftFormat host-app export preference based on whether the host app or shared defaults domain exists
+  - SwiftLint plugin preference based on package-manager compatibility and config placement
+  - Xcode fallback-command profile based on workspace type, MCP availability, and available CLIs
+- [ ] Track the simplification candidates already identified:
+  - collapse sync-skill booleans into a smaller write-mode model
+  - replace low-value explicit defaults with inference-first behavior and rare escape hatches
+  - separate maintainer-tuning knobs from user-meaningful customization
+  - centralize duplicated customization helper plumbing only if that remains the right architecture after the surface is reduced
+- [ ] Break the work into phases:
+  - audit and classify knobs
+  - decide what to remove, infer, or keep
+  - implement the smaller surface
+  - update tests, validators, and maintainer docs to match
 
 Exit criteria:
 
@@ -402,3 +423,45 @@ Tickets:
 Exit criteria:
 
 - [ ] Maintainers have a documented plan for whether to build the menu bar app, what it should own, and where it should live.
+
+## Milestone 23: Dash Direct MCP and Call Library
+
+Scope:
+
+- [ ] Remove avoidable indirection in the Dash-docsets workflow by teaching direct MCP usage first and documenting the Dash.app localhost HTTP call structure as a direct fallback surface.
+
+Tickets:
+
+- [ ] Audit the current `explore-apple-swift-docs` skill for places where local helper-script indirection is standing in for direct MCP usage that the agent could perform itself.
+- [ ] Teach the skill to prefer direct Dash MCP calls when the MCP service is available instead of routing ordinary search behavior through wrapper scripts.
+- [ ] Document the Dash.app localhost HTTP call structure clearly enough that the agent can use it directly when MCP is unavailable or incomplete.
+- [ ] Design and provide a compact library of common Dash example calls:
+  - most common search calls
+  - most popular docsets
+  - most common frameworks and ecosystems to query through Dash
+  - strict versus snippet-rich search shapes
+- [ ] Keep the example-call library small, high-signal, and organized for quick agent pickup instead of encyclopedic coverage.
+- [ ] Reconcile `explore-apple-swift-docs` references and runtime helpers so the documented primary path and the actual preferred path match again.
+
+Exit criteria:
+
+- [ ] The Dash workflow teaches direct MCP usage first, documents the localhost HTTP structure as a real fallback, and ships a practical library of common example calls and docset targets.
+
+## Milestone 24: Repo Self-Compliance and Install-Surface Audit
+
+Scope:
+
+- [ ] Check this repository against its own skill, symlink, plugin-install, and local-discovery guidance and close any real gaps in Codex or plugin-to-socket discoverability.
+
+Tickets:
+
+- [ ] Audit the repo against its own documented symlink expectations for `.agents/skills`, `.claude/skills`, and `plugins/apple-dev-skills/skills`.
+- [ ] Audit the repo against its own documented local plugin install expectations for `plugins/apple-dev-skills/` and repo-local marketplace wiring.
+- [ ] Verify whether Codex can discover the packaged plugin from the documented marketplace entry after a restart, not just whether the files exist on disk.
+- [ ] Verify whether the `install-plugin-to-socket` workflow can reliably wire sibling plugins into this repo's local install surface without hand edits.
+- [ ] Document any mismatch between “files exist in the right place” and “Codex actually discovers the plugin” so install guidance reflects operational reality instead of filesystem assumptions.
+- [ ] Add a maintainer smoke-test flow for local plugin discovery and install-surface verification.
+
+Exit criteria:
+
+- [ ] Maintainers have a verified, reality-based local discovery and install story for this repo, with docs and tooling updated to match what Codex actually honors.
