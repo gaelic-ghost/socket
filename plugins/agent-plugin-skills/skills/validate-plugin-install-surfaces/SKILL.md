@@ -66,7 +66,7 @@ Current scope note:
 - Never edit plugin manifests, README files, marketplace metadata, or symlink surfaces.
 - Never claim that mirrors are canonical. Root `skills/` remains canonical.
 - Never replace `maintain-plugin-docs` for README or roadmap maintenance.
-- Never replace `install-plugin-to-socket` for install, refresh, or detach operations.
+- Never replace `install-plugin-to-socket` for install, update, uninstall, verify, enable, disable, or promote operations.
 - Never flatten repo-specific maintainer policy while validating shared install surfaces.
 
 ## References

@@ -36,4 +36,4 @@
 
 - README install examples should point at real repo surfaces.
 - `npx skills add <owner/repo> --skill <skill-name>` should reference real skill directories.
-- When Codex or Claude plugin packaging exists, README install guidance should reference those surfaces explicitly.
+- When Codex or Claude plugin packaging exists, README install guidance should reference Codex local plugin installs and Claude Code plugin usage explicitly.

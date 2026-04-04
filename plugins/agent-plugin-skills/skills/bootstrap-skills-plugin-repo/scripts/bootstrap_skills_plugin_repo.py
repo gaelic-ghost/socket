@@ -29,9 +29,37 @@ def expected_files(repo_root: Path, plugin_name: str) -> dict[Path, str]:
     plugin_root = repo_root / "plugins" / plugin_name
     plugin_title = _pretty_slug(plugin_name)
     return {
+        repo_root / ".gitignore": (
+            ".venv/\n"
+            "__pycache__/\n"
+            ".pytest_cache/\n"
+            "*.pyc\n"
+            "\n"
+            "# Agent plugin repo local runtime state\n"
+            ".codex/plugins/\n"
+            ".codex/plugins/**\n"
+            ".claude/settings.local.json\n"
+            ".claude/local-settings.json\n"
+            ".claude/.local/\n"
+        ),
         repo_root / "README.md": (
             f"# {repo_root.name}\n\n"
             f"Canonical skill repository with plugin packaging under `plugins/{plugin_name}/`.\n\n"
+            "## Codex Local Plugin Surfaces\n\n"
+            f"- Repo-local packaged plugin surface: `plugins/{plugin_name}/`\n"
+            "- Repo-local marketplace surface: `.agents/plugins/marketplace.json`\n"
+            f"- Personal Codex installs live outside the repo at `~/.codex/plugins/{plugin_name}` with `~/.agents/plugins/marketplace.json`\n\n"
+            "## Codex Troubleshooting\n\n"
+            "- Fully restart Codex after repo-local marketplace changes.\n"
+            "- Check `~/.codex/log/codex-tui.log` when Codex appears to skip a marketplace.\n"
+            "- Explain repo scope versus personal scope clearly in install guidance.\n"
+            "- Note that `/plugins` ordering may be non-intuitive.\n\n"
+            "## Claude Plugin Surfaces\n\n"
+            f"- Local Claude development should load the tracked plugin source directly with `claude --plugin-dir /absolute/path/to/plugins/{plugin_name}`\n"
+            "- If this repo should be shareable as a Claude marketplace, track `.claude-plugin/marketplace.json` at the repo root\n\n"
+            "## Git Tracking Guidance\n\n"
+            "- Track canonical plugin source trees and shared marketplace catalogs in git.\n"
+            "- Do not track consumer-side install copies, caches, or local-only runtime state.\n\n"
             "## Maintainer Python Tooling\n\n"
             "```bash\n"
             "uv sync --dev\n"
@@ -44,18 +72,25 @@ def expected_files(repo_root: Path, plugin_name: str) -> dict[Path, str]:
             "# AGENTS.md\n\n"
             "Use root `skills/` as the canonical authored skill surface.\n"
             f"Keep plugin packaging metadata under `plugins/{plugin_name}/`.\n"
+            "Keep repo-local Codex marketplace wiring under `.agents/plugins/marketplace.json`.\n"
+            f"Document personal Codex installs separately at `~/.codex/plugins/{plugin_name}` with `~/.agents/plugins/marketplace.json`.\n"
+            "If the repo itself is meant to be addable as a Claude marketplace, keep `.claude-plugin/marketplace.json` at the repo root.\n"
             "Use POSIX symlink mirrors for `.agents/skills` and `.claude/skills`.\n"
+            "Track shared marketplace catalogs and canonical plugin sources in git.\n"
+            "Ignore local install copies, caches, and local-only runtime settings.\n"
             "Keep `ruff` and `mypy` available as `uv`-managed tools by default.\n"
         ),
         repo_root / "ROADMAP.md": "# Project Roadmap\n\n## Milestone Progress\n\n- [ ] Milestone 0: Foundation\n",
         repo_root / "docs" / "maintainers" / "reality-audit.md": (
             "# Repo Reality Audit\n\n"
             "Root `skills/` is canonical. Plugin metadata lives under `plugins/`.\n"
+            "Shared marketplace catalogs belong in git when the repo is itself a distribution surface.\n"
             "Maintainer Python tooling should keep `ruff` and `mypy` installed via `uv tool install`.\n"
         ),
         repo_root / "docs" / "maintainers" / "workflow-atlas.md": (
             "# Workflow Atlas\n\n"
             "Bootstrap repos first, then author individual skills.\n"
+            "Track shared marketplace catalogs and canonical plugin sources in git.\n"
             "After bootstrap, install `ruff` and `mypy` with `uv tool install` before regular validation work.\n"
         ),
         plugin_root / ".codex-plugin" / "plugin.json": json.dumps(
@@ -78,6 +113,21 @@ def expected_files(repo_root: Path, plugin_name: str) -> dict[Path, str]:
                 "name": plugin_name,
                 "description": f"{plugin_title} plugin scaffold.",
                 "version": "0.0.0",
+            },
+            indent=2,
+        )
+        + "\n",
+        repo_root / ".claude-plugin" / "marketplace.json": json.dumps(
+            {
+                "name": plugin_name,
+                "owner": {"name": plugin_title},
+                "plugins": [
+                    {
+                        "name": plugin_name,
+                        "source": f"./plugins/{plugin_name}",
+                        "description": f"{plugin_title} plugin scaffold.",
+                    }
+                ],
             },
             indent=2,
         )

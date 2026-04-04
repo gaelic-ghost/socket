@@ -308,6 +308,16 @@ def audit_marketplace(repo_root: Path, plugin_dirs: list[Path]) -> list[Finding]
                 )
             )
             continue
+        if path == "./":
+            findings.append(
+                Finding(
+                    relative_to_repo(repo_root, marketplace),
+                    "marketplace-empty-relative-source-path",
+                    f"Marketplace entry `{name}` points at the marketplace root with `./`, but Codex local plugin source paths must point at a non-empty staged plugin directory.",
+                    "metadata",
+                )
+            )
+            continue
         resolved = (repo_root / path.removeprefix("./")).resolve()
         try:
             resolved.relative_to(repo_root)
@@ -424,7 +434,7 @@ def audit_install_surfaces(repo_root: Path, skill_dirs: list[Path], plugin_dirs:
                 Finding(
                     relative_to_repo(repo_root, readme),
                     "missing-claude-install-surface-docs",
-                    "README should document the Claude Code Plugin install surface when `.claude-plugin/plugin.json` exists.",
+                    "README should document Claude Code plugin usage guidance when `.claude-plugin/plugin.json` exists.",
                     "install-surface",
                 )
             )

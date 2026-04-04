@@ -2444,7 +2444,7 @@ def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_
                     repo=repo.name,
                     doc_file=str(repo / "README.md"),
                     evidence="README install section does not document the Codex Plugin install surface.",
-                    recommended_fix="Lead the install section with Codex Plugin guidance before secondary CLI installs.",
+                    recommended_fix="Lead the install section with Codex local plugin install guidance before secondary CLI installs.",
                     auto_fixable=False,
                 )
             )
@@ -2457,7 +2457,7 @@ def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_
                     repo=repo.name,
                     doc_file=str(repo / "README.md"),
                     evidence="README install section does not document the Claude Code Plugin install surface.",
-                    recommended_fix="Lead the install section with Claude Code Plugin guidance before secondary CLI installs.",
+                    recommended_fix="Lead the install section with Claude Code plugin usage guidance before secondary CLI installs.",
                     auto_fixable=False,
                 )
             )
@@ -2471,7 +2471,7 @@ def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_
                     repo=repo.name,
                     doc_file=str(repo / "README.md"),
                     evidence="README install section presents the Vercel `skills` CLI before the primary Codex/Claude plugin install surfaces.",
-                    recommended_fix="Document Codex Plugin and Claude Code Plugin installs before secondary Vercel `skills` CLI examples.",
+                    recommended_fix="Document Codex local plugin installs and Claude Code plugin usage before secondary Vercel `skills` CLI examples.",
                     auto_fixable=False,
                 )
             )

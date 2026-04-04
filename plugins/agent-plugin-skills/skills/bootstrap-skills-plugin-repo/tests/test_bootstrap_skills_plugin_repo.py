@@ -38,6 +38,7 @@ def test_apply_repo_creates_expected_symlinks(tmp_path: Path) -> None:
     assert (tmp_path / ".claude" / "skills").is_symlink()
     assert (tmp_path / "plugins" / "example-skills" / "skills").is_symlink()
     assert "plugins/example-skills/.codex-plugin/plugin.json" in created_paths
+    assert ".claude-plugin/marketplace.json" in created_paths
 
 
 def test_apply_repo_creates_marketplace_with_available_policy(tmp_path: Path) -> None:
@@ -49,13 +50,30 @@ def test_apply_repo_creates_marketplace_with_available_policy(tmp_path: Path) ->
     assert marketplace["plugins"][0]["policy"]["installation"] == "AVAILABLE"
 
 
+def test_apply_repo_creates_repo_root_claude_marketplace(tmp_path: Path) -> None:
+    m.apply_repo(tmp_path, "example-skills")
+
+    marketplace = json.loads((tmp_path / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+
+    assert marketplace["name"] == "example-skills"
+    assert marketplace["plugins"][0]["name"] == "example-skills"
+    assert marketplace["plugins"][0]["source"] == "./plugins/example-skills"
+
+
 def test_apply_repo_seeds_python_tooling_guidance(tmp_path: Path) -> None:
     m.apply_repo(tmp_path, "example-skills")
 
     readme = (tmp_path / "README.md").read_text(encoding="utf-8")
     agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    gitignore = (tmp_path / ".gitignore").read_text(encoding="utf-8")
 
     assert "uv tool install ruff" in readme
     assert "uv tool install mypy" in readme
     assert "uv run --group dev pytest" in readme
+    assert "restart Codex" in readme
+    assert "codex-tui.log" in readme
+    assert "/plugins" in readme
     assert "`uv`-managed tools" in agents
+    assert ".claude-plugin/marketplace.json" in readme
+    assert ".codex/plugins/" in gitignore
+    assert ".claude/settings.local.json" in gitignore

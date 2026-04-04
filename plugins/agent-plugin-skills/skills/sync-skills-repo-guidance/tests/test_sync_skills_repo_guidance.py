@@ -23,12 +23,20 @@ m = _load_module()
 def _write_repo(repo_root: Path, plugin_name: str) -> None:
     (repo_root / "plugins" / plugin_name).mkdir(parents=True)
     (repo_root / "docs" / "maintainers").mkdir(parents=True)
+    (repo_root / ".claude-plugin").mkdir()
     (repo_root / "README.md").write_text(
         "\n".join(
             [
                 "root `skills/` as the canonical authoring surface",
                 "plugins/",
                 ".agents/plugins/marketplace.json",
+                "~/.codex/plugins/",
+                "restart Codex",
+                "codex-tui.log",
+                "/plugins",
+                ".claude-plugin/marketplace.json",
+                "claude --plugin-dir",
+                "Track canonical plugin source trees and shared marketplace catalogs in git.",
                 "OpenAI Codex Skills",
                 "Claude Code Plugins",
                 "uv tool install ruff",
@@ -44,7 +52,37 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
                 "canonical workflow-authoring surface",
                 "plugin packaging root",
                 ".agents/plugins/marketplace.json",
+                ".claude-plugin/marketplace.json",
+                "Track canonical plugin source trees and shared marketplace catalogs in git.",
                 "uv-managed tools",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (repo_root / ".gitignore").write_text(
+        "\n".join(
+            [
+                "# Agent plugin repo local runtime state",
+                ".codex/plugins/",
+                ".claude/settings.local.json",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (repo_root / ".claude-plugin" / "marketplace.json").write_text(
+        "\n".join(
+            [
+                "{",
+                f'  "name": "{plugin_name}",',
+                '  "plugins": [',
+                "    {",
+                f'      "name": "{plugin_name}",',
+                f'      "source": "./plugins/{plugin_name}"',
+                "    }",
+                "  ]",
+                "}",
             ]
         )
         + "\n",
@@ -54,6 +92,7 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
         "\n".join(
             [
                 "Root `skills/` is the canonical workflow-authoring surface.",
+                ".claude-plugin/marketplace.json",
                 "plugin packaging root",
                 "uv tool install",
             ]
@@ -88,4 +127,5 @@ def test_audit_repo_flags_missing_guidance_and_symlink_drift(tmp_path: Path) -> 
     issue_ids = {finding.issue_id for finding in findings}
     assert "readme-missing-snippet" in issue_ids
     assert "agents-missing-snippet" in issue_ids
+    assert "missing-path" in issue_ids
     assert "missing-symlink" in issue_ids

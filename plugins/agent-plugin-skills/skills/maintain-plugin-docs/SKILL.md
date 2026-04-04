@@ -13,7 +13,7 @@ Current scope note:
 - It is meant to be installed repo-locally into a plugin-development repository and used there by Gale, another coding agent, or an automation-oriented subagent.
 - The intended long-term scope combines the README-oriented behavior from the old `maintain-skills-readme` skill with the checklist-style roadmap maintenance shape from `maintain-project-roadmap`.
 - The current implementation supports `README.md`, `ROADMAP.md`, and combined docs passes through explicit scope selection.
-- For install guidance in this repo family, Codex Plugin and Claude Code Plugin installation should be treated as the primary path. Individual and `--all` installs via the Vercel `skills` CLI are the secondary path.
+- For install guidance in this repo family, document Codex local plugin installs and Claude Code plugin usage before secondary Vercel `skills` CLI examples.
 
 ## Inputs
 
@@ -31,7 +31,7 @@ Current scope note:
 3. In `readme` scope, check README structure, plugin and skills install guidance, skill inventory wording, and repo discoverability rules.
 4. In `roadmap` scope, validate checklist-style `ROADMAP.md` structure, milestone ordering, checkbox syntax, and legacy-format migration needs.
 5. In `all` scope, run both audits and report cross-doc consistency findings together.
-6. Treat plugin-level install guidance for Codex Plugin and Claude Code Plugin as the primary install surface when describing or evolving this repo pattern.
+6. Treat Codex local plugin install guidance and Claude Code plugin usage guidance as the primary documented surfaces when describing or evolving this repo pattern.
 7. Treat Vercel `skills` CLI per-skill and `--all` installs as the secondary install surface.
 8. If the user requested edits, apply bounded fixes with `--apply-fixes`.
 9. Re-run the same audit to confirm remaining issues.
