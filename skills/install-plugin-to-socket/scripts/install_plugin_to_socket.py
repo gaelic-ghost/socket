@@ -41,7 +41,7 @@ def _relative_to_root(path: Path, root: Path) -> str:
 
 def _path_within_root(path: Path, root: Path) -> bool:
     try:
-        path.resolve().relative_to(root.resolve())
+        path.absolute().relative_to(root.absolute())
         return True
     except ValueError:
         return False
