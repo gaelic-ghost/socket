@@ -32,6 +32,9 @@
 - [x] Milestone 17: Existing Skill Rename and Install-Surface Cleanup
 - [ ] Milestone 18: Claude Code Plugin Extras
 - [x] Milestone 19: Swift Style Tooling Workflow
+- [ ] Milestone 20: Customization Consolidation Review
+- [ ] Milestone 21: MCP App UI for Configuration and Customization
+- [ ] Milestone 22: macOS Menu Bar Extra for Skill Controls
 
 ## Milestone 1: Initial Apple Skill Bundle
 
@@ -319,6 +322,15 @@ Scope:
 
 Tickets:
 
+- [ ] Flesh out `hooks/` for Claude-only automation where it clearly helps maintainers or end users.
+- [ ] Add `bin/` helpers only for Claude-only convenience wrappers that do not become required for the shared workflow contract.
+- [ ] Document which Claude-only extras are optional sugar versus canonical workflow behavior.
+- [ ] Validate that Claude-only extras degrade gracefully when absent from Codex.
+
+Exit criteria:
+
+- [ ] Claude-only plugin extras exist as clearly separated enhancements, and the core workflow remains usable through the shared skill surface in both ecosystems.
+
 ## Milestone 19: Swift Style Tooling Workflow
 
 Scope:
@@ -337,11 +349,56 @@ Exit criteria:
 
 - [x] The repo ships a first-class style-tooling skill with explicit surface boundaries, deterministic SwiftFormat config export support, and fully updated maintainer and validation docs.
 
-- [ ] Flesh out `hooks/` for Claude-only automation where it clearly helps maintainers or end users.
-- [ ] Add `bin/` helpers only for Claude-only convenience wrappers that do not become required for the shared workflow contract.
-- [ ] Document which Claude-only extras are optional sugar versus canonical workflow behavior.
-- [ ] Validate that Claude-only extras degrade gracefully when absent from Codex.
+## Milestone 20: Customization Consolidation Review
+
+Scope:
+
+- [ ] Evaluate whether the current per-skill customization system should be consolidated, simplified, or made more inference-driven.
+
+Tickets:
+
+- [ ] Audit all active customization knobs for duplication, overlap, and repo-shape inferability.
+- [ ] Evaluate consolidating duplicated `customization_config.py` helpers into a shared maintainer implementation or generator path.
+- [ ] Identify knobs that should become opinionated defaults instead of user-facing customization.
+- [ ] Identify knobs that can be inferred from repo type, file layout, active IDE state, tool availability, stored agent preferences, or project-level guidance.
+- [ ] Propose a smaller long-term customization surface with a clear split between runtime-enforced settings and policy-only defaults.
 
 Exit criteria:
 
-- [ ] Claude-only plugin extras exist as clearly separated enhancements, and the core workflow remains usable through the shared skill surface in both ecosystems.
+- [ ] Maintainers have a written decision on whether to keep, consolidate, or shrink the customization system, with a concrete follow-up plan for any approved architecture change.
+
+## Milestone 21: MCP App UI for Configuration and Customization
+
+Scope:
+
+- [ ] Add an MCP App surface for inspecting and adjusting skill configuration and customization state without hand-editing YAML.
+
+Tickets:
+
+- [ ] Design the MCP App scope for viewing effective customization state across skills.
+- [ ] Define which edits should remain metadata-only versus which should affect runtime-enforced behavior.
+- [ ] Add UI resources and tool wiring for reading templates, durable overrides, and effective merged config.
+- [ ] Validate that MCP App edits preserve the same contracts as the script-based customization flow.
+- [ ] Document the relationship between skill-local scripts and the MCP App surface so the UI does not become a shadow workflow.
+
+Exit criteria:
+
+- [ ] The repo ships a documented MCP App path for viewing and editing customization state, or has an explicit bounded design that is ready for implementation.
+
+## Milestone 22: macOS Menu Bar Extra for Skill Controls
+
+Scope:
+
+- [ ] Explore a native macOS menu bar utility for local maintainer workflows around skill installation, customization, and quick actions.
+
+Tickets:
+
+- [ ] Define the minimum viable menu bar feature set for local maintainer use.
+- [ ] Evaluate whether the app should be a thin shell around existing scripts and MCP surfaces or a richer native controller.
+- [ ] Identify which repo-local actions are safe and useful from a menu bar context, such as showing effective customization, opening maintainer docs, or triggering local plugin refresh.
+- [ ] Document how the menu bar app would coexist with Codex plugin wiring and any future MCP App customization UI.
+- [ ] Decide whether the menu bar app belongs in this repo, a sibling repo, or a plugin-bundled local-development surface.
+
+Exit criteria:
+
+- [ ] Maintainers have a documented plan for whether to build the menu bar app, what it should own, and where it should live.
