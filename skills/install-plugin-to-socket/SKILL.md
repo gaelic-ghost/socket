@@ -16,10 +16,14 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - `repo`
   - `personal`
 - Optional: target repo root when `scope=repo`
+  - default: current working directory when the helper is run from the target repo
 - Optional: action
   - `install`
   - `refresh`
   - `detach`
+- Optional: install mode
+  - `copy`
+  - `symlink`
 - Optional: whether the request is check-only planning or real apply behavior
 
 ## Workflow
@@ -35,9 +39,14 @@ This skill is for local Codex plugin development workflows. It does not publish 
    - `~/.agents/plugins/marketplace.json`
 6. Keep marketplace `source.path` relative to the marketplace root, prefixed with `./`, and inside that root.
 7. Merge one plugin entry into the marketplace without overwriting unrelated entries.
-8. For `install` and `refresh`, copy the plugin into the chosen local scope and update the marketplace entry.
-9. For `detach`, remove only the matching marketplace entry and the matching local plugin directory when it belongs to that install target.
-10. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
+8. Default to the documented Codex local-plugin flow:
+   - stage the plugin at the repo or personal plugin path
+   - point the marketplace entry at that staged path
+9. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs.
+10. Use `symlink` mode when the source plugin lives in an adjacent in-development repo and the maintainer wants the staged plugin path to track live source changes without repeated refresh copies.
+11. For `install` and `refresh`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
+12. For `detach`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
+13. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
 
 ## Output Contract
 
@@ -45,6 +54,7 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - `run_context`
   - `scope`
   - `action`
+  - `install_mode`
   - `source_plugin`
   - `target_plugin_root`
   - `marketplace_path`
@@ -59,6 +69,8 @@ This skill is for local Codex plugin development workflows. It does not publish 
 
 - Never overwrite an existing marketplace catalog wholesale.
 - Never point `source.path` outside the marketplace root.
+- Never point a repo marketplace directly at an adjacent plugin repo outside the chosen marketplace root; use a staged copy or a staged symlink path inside the scope root instead.
+- Never delete the source plugin repo during detach; only remove the staged install target path.
 - Never claim that updating the marketplace file alone installs a plugin into undocumented Codex internals.
 - Never use this skill to publish a plugin publicly.
 - Never touch Claude plugin wiring here; this skill is for Codex local plugin development surfaces.

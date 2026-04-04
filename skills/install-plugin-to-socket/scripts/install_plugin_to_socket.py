@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -35,7 +36,7 @@ def _pretty_plugin_title(name: str) -> str:
 
 
 def _relative_to_root(path: Path, root: Path) -> str:
-    return str(path.resolve().relative_to(root.resolve()))
+    return str(path.absolute().relative_to(root.absolute()))
 
 
 def _path_within_root(path: Path, root: Path) -> bool:
@@ -44,6 +45,10 @@ def _path_within_root(path: Path, root: Path) -> bool:
         return True
     except ValueError:
         return False
+
+
+def _is_same_path(left: Path, right: Path) -> bool:
+    return left.resolve() == right.resolve()
 
 
 def load_plugin_manifest(source_plugin_root: Path) -> dict[str, object]:
@@ -80,9 +85,7 @@ def build_source_plugin_summary(source_plugin_root: Path, manifest: dict[str, ob
 
 def scope_paths(scope: str, plugin_name: str, repo_root: Path | None) -> tuple[Path, Path, Path]:
     if scope == "repo":
-        if repo_root is None:
-            raise ValueError("Repository root is required for repo scope.")
-        scope_root = repo_root.resolve()
+        scope_root = repo_root.resolve() if repo_root is not None else Path.cwd().resolve()
         target_plugin_root = scope_root / "plugins" / plugin_name
         marketplace_path = scope_root / ".agents" / "plugins" / "marketplace.json"
         return scope_root, target_plugin_root, marketplace_path
@@ -170,11 +173,37 @@ def build_verification_steps(scope: str, target_plugin_root: Path, marketplace_p
     ]
 
 
+def _describe_target_materialization(target_plugin_root: Path) -> tuple[str, Path | None]:
+    if not target_plugin_root.exists() and not target_plugin_root.is_symlink():
+        return "missing", None
+    if target_plugin_root.is_symlink():
+        try:
+            link_target = Path(os.readlink(target_plugin_root))
+        except OSError:
+            return "broken-symlink", None
+        if not link_target.is_absolute():
+            link_target = (target_plugin_root.parent / link_target).resolve()
+        return "symlink", link_target
+    return "copy", None
+
+
+def _target_matches_install_mode(target_plugin_root: Path, source_plugin_root: Path, install_mode: str) -> bool:
+    target_kind, link_target = _describe_target_materialization(target_plugin_root)
+    if target_kind == "missing":
+        return False
+    if install_mode == "copy":
+        return target_kind == "copy"
+    if install_mode == "symlink":
+        return target_kind == "symlink" and link_target is not None and _is_same_path(link_target, source_plugin_root)
+    raise ValueError(f"Unsupported install mode: {install_mode}")
+
+
 def audit_install(
     source_plugin_root: Path,
     scope: str,
     action: str,
     repo_root: Path | None,
+    install_mode: str,
 ) -> tuple[list[Finding], dict[str, object], Path, Path, Path, list[str]]:
     findings: list[Finding] = []
     errors: list[str] = []
@@ -206,13 +235,18 @@ def audit_install(
 
     if action in {"install", "refresh"}:
         if not target_plugin_root.exists():
-            findings.append(Finding(str(target_plugin_root), "missing-target-plugin-root", "Local plugin copy is missing for the chosen scope."))
+            findings.append(Finding(str(target_plugin_root), "missing-target-plugin-root", "Staged plugin path is missing for the chosen scope."))
         elif not (target_plugin_root / ".codex-plugin" / "plugin.json").exists():
             findings.append(Finding(str(target_plugin_root), "missing-target-manifest", "Target plugin root exists but does not contain `.codex-plugin/plugin.json`."))
         elif action == "refresh":
             target_manifest = load_plugin_manifest(target_plugin_root)
             if infer_plugin_name(target_plugin_root, target_manifest) != plugin_name:
                 findings.append(Finding(str(target_plugin_root), "target-plugin-name-mismatch", "Target plugin root does not match the source plugin name."))
+        if target_plugin_root.exists() and not _target_matches_install_mode(target_plugin_root, source_plugin_root, install_mode):
+            if install_mode == "copy":
+                findings.append(Finding(str(target_plugin_root), "stale-target-materialization", "Target plugin root is symlinked, but the requested install mode expects a copied plugin tree."))
+            else:
+                findings.append(Finding(str(target_plugin_root), "stale-target-materialization", "Target plugin root is not a symlink to the requested source plugin root."))
 
         if existing_marketplace is None:
             findings.append(Finding(str(marketplace_path), "missing-marketplace", "Marketplace file is missing for the chosen scope."))
@@ -243,13 +277,29 @@ def audit_install(
     return findings, source_summary, target_plugin_root, marketplace_path, scope_root, errors
 
 
+def _remove_target_path(target_plugin_root: Path) -> None:
+    if not target_plugin_root.exists() and not target_plugin_root.is_symlink():
+        return
+    if target_plugin_root.is_symlink() or target_plugin_root.is_file():
+        target_plugin_root.unlink()
+        return
+    shutil.rmtree(target_plugin_root)
+
+
 def _copy_plugin_tree(source_plugin_root: Path, target_plugin_root: Path) -> None:
-    if source_plugin_root.resolve() == target_plugin_root.resolve():
+    if _is_same_path(source_plugin_root, target_plugin_root):
         return
     target_plugin_root.parent.mkdir(parents=True, exist_ok=True)
-    if target_plugin_root.exists():
-        shutil.rmtree(target_plugin_root)
+    _remove_target_path(target_plugin_root)
     shutil.copytree(source_plugin_root, target_plugin_root)
+
+
+def _symlink_plugin_tree(source_plugin_root: Path, target_plugin_root: Path) -> None:
+    if _is_same_path(source_plugin_root, target_plugin_root):
+        return
+    target_plugin_root.parent.mkdir(parents=True, exist_ok=True)
+    _remove_target_path(target_plugin_root)
+    target_plugin_root.symlink_to(source_plugin_root, target_is_directory=True)
 
 
 def apply_install(
@@ -257,6 +307,7 @@ def apply_install(
     scope: str,
     action: str,
     repo_root: Path | None,
+    install_mode: str,
 ) -> tuple[list[dict[str, str]], dict[str, object], Path, Path, list[str]]:
     apply_actions: list[dict[str, str]] = []
     errors: list[str] = []
@@ -271,7 +322,7 @@ def apply_install(
     payload = ensure_marketplace_shape(existing_marketplace, scope, plugin_name)
 
     if action in {"install", "refresh"}:
-        if source_plugin_root.resolve() == target_plugin_root.resolve():
+        if _is_same_path(source_plugin_root, target_plugin_root):
             apply_actions.append(
                 {
                     "action": "use-existing-plugin-tree",
@@ -279,16 +330,27 @@ def apply_install(
                     "reason": "Source plugin root already matches the repo-scoped install target.",
                 }
             )
-        else:
+        elif install_mode == "copy":
             _copy_plugin_tree(source_plugin_root, target_plugin_root)
             apply_actions.append({"action": "copy-plugin-tree", "path": str(target_plugin_root)})
+        elif install_mode == "symlink":
+            _symlink_plugin_tree(source_plugin_root, target_plugin_root)
+            apply_actions.append(
+                {
+                    "action": "symlink-plugin-tree",
+                    "path": str(target_plugin_root),
+                    "source": str(source_plugin_root),
+                }
+            )
+        else:
+            errors.append(f"Unsupported install mode: {install_mode}")
         payload, changed = merge_marketplace_entry(payload, expected_entry)
         if changed or not marketplace_path.exists():
             _write_json(marketplace_path, payload)
             apply_actions.append({"action": "write-marketplace-entry", "path": str(marketplace_path)})
     elif action == "detach":
-        if target_plugin_root.exists():
-            shutil.rmtree(target_plugin_root)
+        if target_plugin_root.exists() or target_plugin_root.is_symlink():
+            _remove_target_path(target_plugin_root)
             apply_actions.append({"action": "remove-plugin-tree", "path": str(target_plugin_root)})
         payload, changed = remove_marketplace_entry(payload, plugin_name)
         if changed:
@@ -305,6 +367,7 @@ def build_report(
     scope: str,
     action: str,
     run_mode: str,
+    install_mode: str,
     target_plugin_root: Path,
     marketplace_path: Path,
     findings: list[Finding],
@@ -318,6 +381,7 @@ def build_report(
         },
         "scope": scope,
         "action": action,
+        "install_mode": install_mode,
         "source_plugin": source_plugin,
         "target_plugin_root": str(target_plugin_root),
         "marketplace_path": str(marketplace_path),
@@ -338,6 +402,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--action", choices=("install", "refresh", "detach"), required=True)
     parser.add_argument("--run-mode", choices=("check-only", "apply"), required=True)
     parser.add_argument("--repo-root")
+    parser.add_argument("--install-mode", choices=("copy", "symlink"), default="copy")
     parser.add_argument("--print-md", action="store_true")
     return parser.parse_args()
 
@@ -352,6 +417,7 @@ def main() -> int:
         scope=args.scope,
         action=args.action,
         repo_root=repo_root,
+        install_mode=args.install_mode,
     )
 
     apply_actions: list[dict[str, str]] = []
@@ -361,6 +427,7 @@ def main() -> int:
             scope=args.scope,
             action=args.action,
             repo_root=repo_root,
+            install_mode=args.install_mode,
         )
         errors.extend(apply_errors)
         findings, source_summary, target_plugin_root, marketplace_path, _scope_root, post_errors = audit_install(
@@ -368,6 +435,7 @@ def main() -> int:
             scope=args.scope,
             action=args.action,
             repo_root=repo_root,
+            install_mode=args.install_mode,
         )
         errors.extend(post_errors)
 
@@ -376,6 +444,7 @@ def main() -> int:
         scope=args.scope,
         action=args.action,
         run_mode=args.run_mode,
+        install_mode=args.install_mode,
         target_plugin_root=target_plugin_root,
         marketplace_path=marketplace_path,
         findings=findings,
