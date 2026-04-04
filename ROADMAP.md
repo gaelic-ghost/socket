@@ -148,6 +148,7 @@ Exit criteria:
 Scope:
 
 - Add a skill for auditing skill frontmatter, `agents/openai.yaml`, plugin manifests, marketplace metadata, discovery mirrors, and install examples together.
+- Keep `validate-plugin-install-surfaces` explicitly represented in the roadmap so the active skill inventory and milestone plan stay aligned.
 
 Tickets:
 

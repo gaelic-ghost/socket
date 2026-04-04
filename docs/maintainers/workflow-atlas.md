@@ -17,8 +17,10 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
 | `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
+| `install-plugin-to-socket` | Bounded local Codex plugin install wiring for plugin-development repos | `check-only`, `apply`, install, update, uninstall, scope-resolution from profile defaults |
 | `maintain-plugin-docs` | Current plugin-docs maintainer for stack-specific skills and plugin repos | README audit/apply, ROADMAP audit/apply, combined docs passes |
 | `sync-skills-repo-guidance` | Current guidance-alignment owner for skills and plugin repos | `check-only` script audit, maintainer-driven guidance reconciliation, misroute and defer handling |
+| `validate-plugin-install-surfaces` | Audit-only validator for plugin metadata, marketplace wiring, install docs, and mirrors | audit-only validation, grouped findings, no mutation |
 
 ## `bootstrap-skills-plugin-repo`
 
@@ -96,6 +98,47 @@ Outputs:
 - Supports `check-only` and bounded `apply` behavior through `--doc-scope roadmap`.
 - In combined runs, `--doc-scope all` audits both surfaces and reports cross-doc drift.
 
+## `install-plugin-to-socket`
+
+Current-state note:
+
+- This skill is the current bounded local Codex plugin installer for this repo family.
+- It supports personal-scope and repo-scope installs, persistent default-scope preferences, staged-copy updates, and bounded uninstalls.
+- It does not manage Claude install surfaces and does not yet manage Codex enable or disable state in `config.toml`.
+
+### Workflow: audit-only
+
+- Triggered when the user wants to inspect local Codex plugin wiring before applying changes.
+- Primary workflow.
+- `read-only`
+
+Inputs:
+
+- Required: `--source-plugin-root <path>`
+- Required: `--action <install|update|uninstall>`
+- Required: `--run-mode check-only`
+- Optional: `--scope <personal|repo>`
+- Optional: `--repo-root <path>`
+- Optional: `--config <path>`
+- Optional: `--install-mode <copy|symlink>`
+- Tool or script input: `scripts/install_plugin_to_socket.py`
+
+Outputs:
+
+- JSON report with `run_context`, `scope`, `action`, `install_mode`, `source_plugin`, `target_plugin_root`, `marketplace_path`, `findings`, `apply_actions`, `restart_required`, `verification_steps`, and `errors`
+- Exact clean-run text: `No findings.` when the script is called with `--print-md` and there are no findings, apply actions, or errors
+
+### Workflow: apply
+
+- Triggered when the user wants local Codex plugin wiring created, updated, or removed.
+- Variant workflow.
+- `bounded-write`
+
+Outputs:
+
+- Same JSON report shape as audit-only
+- Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
+
 ## `sync-skills-repo-guidance`
 
 Current-state note:
@@ -138,3 +181,32 @@ Outputs:
 
 - The script still emits the same JSON report shape as `check-only`.
 - Actual doc fixes are currently applied by the maintainer after interpreting the audit and broader repo context.
+
+## `validate-plugin-install-surfaces`
+
+Current-state note:
+
+- This skill is the current audit-only validator for install surfaces, plugin manifests, and metadata overlays in this repo family.
+- It intentionally reports drift without mutating files.
+
+### Workflow: audit-only
+
+- Triggered when the user wants one bounded validation pass over plugin manifests, marketplace wiring, README install docs, and discovery mirrors.
+- Primary workflow.
+- `read-only`
+
+Inputs:
+
+- Required: `--repo-root <path>`
+- Optional: `--plugin-name <name>`
+- Optional: `--print-md`
+- Optional: `--print-json`
+- Optional: `--md-out <path>`
+- Optional: `--json-out <path>`
+- Optional: `--fail-on-findings`
+- Tool or script input: `scripts/validate_plugin_install_surfaces.py`
+
+Outputs:
+
+- Markdown plus JSON with `run_context`, `canonical_skill_dirs`, `plugin_roots`, `metadata_findings`, `install_surface_findings`, `mirror_findings`, and `errors`
+- Exact clean-run text: `No findings.`
