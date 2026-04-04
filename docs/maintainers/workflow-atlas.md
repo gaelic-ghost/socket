@@ -11,6 +11,8 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 - `.agents/skills` and `.claude/skills` mirror root `skills/` for local project discovery on macOS and Linux.
 - `plugins/agent-plugin-skills/skills` mirrors root `skills/` for local plugin packaging alignment.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree.
+- `.claude-plugin/marketplace.json` is the Git-backed Claude marketplace catalog for sharing this repo's tracked plugin sources.
+- Canonical plugin source trees and shared marketplace catalogs belong in git. Downstream install copies, caches, and local-only runtime state do not.
 
 ## Skill Index
 

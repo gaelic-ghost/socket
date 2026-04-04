@@ -59,6 +59,7 @@ All active repo-authored skills live under `skills/`.
 
 - `plugins/agent-plugin-skills/.codex-plugin/plugin.json`
 - `plugins/agent-plugin-skills/.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`
 - `plugins/agent-plugin-skills/skills`
 - `plugins/agent-plugin-skills/hooks/hooks.json`
 - `.agents/skills`
@@ -109,3 +110,5 @@ Required checks:
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
 - `plugins/agent-plugin-skills/skills` is a POSIX symlink mirror into root `skills/`.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/agent-plugin-skills/`.
+- `.claude-plugin/marketplace.json` is the tracked Git-backed Claude marketplace catalog for this repository.
+- Shared marketplace catalogs and canonical plugin source trees belong in git. Consumer-side install copies, caches, and local-only runtime state do not.

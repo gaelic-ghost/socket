@@ -33,6 +33,7 @@ Applicability guidance:
 - Root `skills/` is the canonical authored skill surface. This is the canonical workflow-authoring surface.
 - `plugins/agent-plugin-skills/` is the plugin packaging root for this repository.
 - Keep `.agents/plugins/marketplace.json` aligned with that plugin packaging root.
+- If the repo itself should be shareable as a Claude marketplace, keep a repo-root `.claude-plugin/marketplace.json` aligned with the tracked plugin packaging roots.
 - Keep source-of-truth plugin, marketplace, MCP, app, and hook manifests inside `plugins/` and `.agents/plugins/`.
 - Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors instead of duplicate skill trees:
   - `.agents/skills -> ../skills`
@@ -40,6 +41,8 @@ Applicability guidance:
   - `plugins/agent-plugin-skills/skills -> ../../skills`
 - Treat those symlink mirrors as discovery and packaging conveniences, not as independent sources of truth.
 - Prefer symlinks over hardlinks for discovery mirrors. Hardlinks are not a durable repository contract.
+- Track canonical plugin source trees and shared marketplace catalogs in git. For this repo shape that usually includes root `skills/`, `plugins/<plugin-name>/`, `.agents/plugins/marketplace.json`, and repo-root `.claude-plugin/marketplace.json` when the repo is meant to be addable as a Claude marketplace.
+- Do not track consumer-side install copies, caches, or local runtime state in git. Personal Codex installs under `~/.codex/plugins/`, Codex cache copies, and Claude local-only settings belong outside the repo or in `.gitignore`.
 
 ## Repo-local Passive Standards
 

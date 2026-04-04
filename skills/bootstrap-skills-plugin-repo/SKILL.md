@@ -31,12 +31,17 @@ Bootstrap or align a skills repository to the house layout used for Gale's skill
    - repo-local packaged plugin: `plugins/<plugin-name>/`
    - repo-local marketplace: `.agents/plugins/marketplace.json`
    - personal Codex installs live outside the repo at `~/.codex/plugins/<plugin-name>` with `~/.agents/plugins/marketplace.json`
-8. Make repo guidance clear that repo bootstrap owns repo-local packaging structure, while ongoing local Codex install, update, uninstall, enable, disable, verify, and promote workflows belong to `install-plugin-to-socket` or equivalent maintainer tooling.
-9. Preserve existing repo-specific guidance. Merge missing house guidance into docs and `AGENTS.md` without flattening local policy.
-10. Seed maintainer Python tooling guidance so bootstrapped repos call out `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`.
-11. Use `$skill-creator` for individual skill authoring. This skill owns repo structure, not per-skill content design.
-12. Validate the resulting repo layout, symlinks, manifests, and docs alignment before closing.
-13. Create POSIX symlink mirrors for local discovery:
+8. Keep the Claude plugin sharing shape explicit in repo guidance:
+   - local Claude development should load the tracked plugin source directly with `claude --plugin-dir /absolute/path/to/plugins/<plugin-name>`
+   - if the repo itself should be shareable as a Claude marketplace, track `.claude-plugin/marketplace.json` at the repo root
+   - Claude marketplace relative paths resolve from the marketplace root and must stay inside that root
+9. Add or preserve a shared `.gitignore` snippet that ignores accidental in-repo local install surfaces and Claude local-only settings, while keeping canonical plugin source trees and shared marketplace catalogs tracked.
+10. Make repo guidance clear that repo bootstrap owns repo-local packaging structure, while ongoing local Codex install, update, uninstall, enable, disable, verify, and promote workflows belong to `install-plugin-to-socket` or equivalent maintainer tooling.
+11. Preserve existing repo-specific guidance. Merge missing house guidance into docs and `AGENTS.md` without flattening local policy.
+12. Seed maintainer Python tooling guidance so bootstrapped repos call out `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`.
+13. Use `$skill-creator` for individual skill authoring. This skill owns repo structure, not per-skill content design.
+14. Validate the resulting repo layout, symlinks, manifests, marketplace catalogs, `.gitignore`, and docs alignment before closing.
+15. Create POSIX symlink mirrors for local discovery:
    - `.agents/skills -> ../skills`
    - `.claude/skills -> ../skills`
    - `plugins/<plugin-name>/skills -> ../../skills`

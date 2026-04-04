@@ -14,6 +14,9 @@ README_SNIPPETS = [
     "plugins/",
     ".agents/plugins/marketplace.json",
     "~/.codex/plugins/",
+    ".claude-plugin/marketplace.json",
+    "claude --plugin-dir",
+    "Track canonical plugin source trees and shared marketplace catalogs in git.",
     "OpenAI Codex Skills",
     "Claude Code Plugins",
     "uv tool install ruff",
@@ -24,13 +27,22 @@ AGENTS_SNIPPETS = [
     "canonical workflow-authoring surface",
     "plugin packaging root",
     ".agents/plugins/marketplace.json",
+    ".claude-plugin/marketplace.json",
+    "Track canonical plugin source trees and shared marketplace catalogs in git.",
     "uv-managed tools",
 ]
 
 AUDIT_SNIPPETS = [
     "Root `skills/` is the canonical workflow-authoring surface.",
+    ".claude-plugin/marketplace.json",
     "plugin packaging root",
     "uv tool install",
+]
+
+GITIGNORE_SNIPPETS = [
+    "# Agent plugin repo local runtime state",
+    ".codex/plugins/",
+    ".claude/settings.local.json",
 ]
 
 
@@ -79,6 +91,15 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     findings: list[Finding] = []
     findings.extend(_check_file_contains(repo_root, repo_root / "README.md", README_SNIPPETS, "readme"))
     findings.extend(_check_file_contains(repo_root, repo_root / "AGENTS.md", AGENTS_SNIPPETS, "agents"))
+    findings.extend(_check_file_contains(repo_root, repo_root / ".gitignore", GITIGNORE_SNIPPETS, "gitignore"))
+    findings.extend(
+        _check_file_contains(
+            repo_root,
+            repo_root / ".claude-plugin" / "marketplace.json",
+            [plugin_name, f"./plugins/{plugin_name}"],
+            "claude-marketplace",
+        )
+    )
     findings.extend(
         _check_file_contains(
             repo_root,

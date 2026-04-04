@@ -2,3 +2,10 @@
 __pycache__/
 .pytest_cache/
 *.pyc
+
+# Agent plugin repo local runtime state
+.codex/plugins/
+.codex/plugins/**
+.claude/settings.local.json
+.claude/local-settings.json
+.claude/.local/

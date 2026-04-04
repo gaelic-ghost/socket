@@ -38,13 +38,21 @@ Current scope note:
    - repo-local packaged plugin surface: `plugins/<plugin-name>/`
    - repo-local marketplace: `.agents/plugins/marketplace.json`
    - personal installs live outside the repo at `~/.codex/plugins/<plugin-name>` with `~/.agents/plugins/marketplace.json`
-7. Make repo guidance explicit about which workflow owns what:
+7. Keep Claude guidance consistent across repo docs:
+   - local Claude development should point `claude --plugin-dir` at the tracked plugin source root
+   - if the repo itself is shareable as a Claude marketplace, it should track `.claude-plugin/marketplace.json` at the repo root
+   - Claude marketplace relative paths must stay inside the marketplace root
+8. Keep git-tracking guidance consistent across repo docs:
+   - canonical plugin source trees and shared marketplace catalogs belong in git
+   - install copies, caches, and local-only runtime state do not
+   - the shared `.gitignore` snippet for local runtime state is present unless stricter ignores already cover it
+9. Make repo guidance explicit about which workflow owns what:
    - bootstrap and sync own repo-local structure and guidance
    - `install-plugin-to-socket` owns local Codex install lifecycle work such as install, update, uninstall, verify, enable, disable, and promote
-8. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
-9. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
-10. Re-run the same audit to confirm remaining findings.
-11. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
+10. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
+11. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
+12. Re-run the same audit to confirm remaining findings.
+13. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
 
 ## Output Contract
 

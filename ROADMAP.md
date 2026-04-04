@@ -27,6 +27,7 @@
 - [ ] Milestone 6: upstream docs watch and change intake
 - [ ] Milestone 7: `skill-evals`
 - [ ] Milestone 8: customization systems guidance
+- [ ] Milestone 9: end-user docs visibility
 
 ## Milestone 0: Foundation bootstrap
 
@@ -252,3 +253,22 @@ Exit criteria:
 
 - [ ] Maintainers have one documented customization pattern to follow instead of ad hoc per-skill config behavior.
 - [ ] Relevant skills in this repo can converge on the same customization vocabulary, path layout, and documentation shape.
+
+## Milestone 9: end-user docs visibility
+
+Scope:
+
+- Improve how end users of this plugin discover the right docs and install path without having to read maintainer-oriented repo internals first.
+- Make Codex and Claude install and sharing guidance easier to find from top-level repo surfaces.
+- Clarify what belongs in git, what is local-only runtime state, and which workflow owns each install or sharing step.
+
+Tickets:
+
+- [ ] Add clearer end-user doc entrypoints for Codex local plugins, Claude `--plugin-dir` development, and Claude marketplace sharing.
+- [ ] Audit whether install, update, uninstall, enable, disable, verify, and promote workflows are discoverable from user-facing docs rather than only maintainer references.
+- [ ] Add or refine doc cross-links so users can move cleanly between plugin install guidance, marketplace guidance, and skill-specific workflows.
+- [ ] Check whether plugin README examples and metadata surfaces surface the right docs for users before maintainers.
+
+Exit criteria:
+
+- [ ] End users can find the right install and sharing path quickly without reading maintainer-only documentation first.

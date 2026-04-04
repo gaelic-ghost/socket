@@ -47,6 +47,8 @@ Root [`skills/`](./skills/) is the canonical authored skill surface. In repo-pol
 
 Plugin, marketplace, MCP, app, and hook manifests stay under [`plugins/`](./plugins/) and [`.agents/plugins/`](./.agents/plugins/).
 
+This repo also tracks a repo-root Claude marketplace file at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) so the repository itself can be shared as a Git-backed Claude marketplace, while the actual plugin source of truth stays under [`plugins/agent-plugin-skills/`](./plugins/agent-plugin-skills/).
+
 For local project discovery on macOS and Linux, including WSL 2 when Windows is involved, this repo uses POSIX symlink mirrors instead of duplicate skill trees:
 
 - [`.agents/skills`](./.agents/skills) -> `../skills`
@@ -57,8 +59,51 @@ Current packaging surfaces:
 
 - [`plugins/agent-plugin-skills/.codex-plugin/plugin.json`](./plugins/agent-plugin-skills/.codex-plugin/plugin.json)
 - [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json)
+- [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
 - [`plugins/agent-plugin-skills/hooks/hooks.json`](./plugins/agent-plugin-skills/hooks/hooks.json)
 - [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+
+## What Belongs In Git
+
+Official docs plus repo-maintainer judgment lead to a simple split:
+
+- Track canonical plugin source trees and shared marketplace catalogs in git.
+- Do not track consumer-side install copies, caches, or local-only runtime state.
+
+In this repo shape, that means the tracked surfaces usually are:
+
+- root [`skills/`](./skills/)
+- tracked plugin package roots under [`plugins/`](./plugins/)
+- repo-scoped Codex marketplace catalogs under [`.agents/plugins/`](./.agents/plugins/)
+- repo-root Claude marketplace catalogs under [`.claude-plugin/`](./.claude-plugin/)
+- shared plugin assets, hooks, MCP manifests, and app manifests that are part of the published plugin
+
+Local-only or generated surfaces should stay out of git:
+
+- personal Codex install copies under `~/.codex/plugins/`
+- Codex installed cache state under `~/.codex/plugins/cache/`
+- Claude local settings and other machine-local runtime state
+- accidental in-repo local install copies or caches
+
+This follows the current docs:
+
+- Codex local plugins are loaded from a marketplace entry and then copied into the Codex cache, so the canonical source repo should track the source plugin and any repo-curated marketplace catalog, not the downstream cache copy.
+- Claude plugin development uses `claude --plugin-dir` directly from source, while Claude marketplace distribution is Git-oriented and expects a tracked repo-root `.claude-plugin/marketplace.json` when you want the repository itself to be addable as a marketplace.
+
+## Shared `.gitignore` Snippet
+
+For skills and plugin development repos, merge this baseline snippet unless the repo already has stricter local-runtime ignores:
+
+```gitignore
+# Agent plugin repo local runtime state
+.codex/plugins/
+.codex/plugins/**
+.claude/settings.local.json
+.claude/local-settings.json
+.claude/.local/
+```
+
+This snippet is intentionally narrow. It ignores accidental in-repo local install surfaces and Claude local-only settings, but it does not ignore tracked plugin manifests, marketplace catalogs, or canonical plugin source directories.
 
 ## Standards And Docs
 
@@ -175,6 +220,8 @@ uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.p
 
 This repository also ships a Claude plugin manifest at [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json).
 
+For Git-backed sharing, the repository also includes a tracked Claude marketplace catalog at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json). That catalog points at the tracked plugin source under [`plugins/agent-plugin-skills/`](./plugins/agent-plugin-skills/), which matches Claude's documented relative-path marketplace model for plugins in the same repository.
+
 For local Claude Code development, test the plugin directly from the source repo with `claude --plugin-dir /absolute/path/to/plugins/agent-plugin-skills`. The repo-local [`.claude/skills`](./.claude/skills) mirror remains here for standalone project discovery, but the Codex installer skill in this repo does not manage Claude install surfaces.
 
 ### Vercel `skills` CLI
@@ -214,6 +261,8 @@ Common starting points:
 │       └── marketplace.json
 ├── .claude/
 │   └── skills -> ../skills
+├── .claude-plugin/
+│   └── marketplace.json
 ├── README.md
 ├── AGENTS.md
 ├── plugins/

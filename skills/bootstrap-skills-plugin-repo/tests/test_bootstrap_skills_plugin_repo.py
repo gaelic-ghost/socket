@@ -38,6 +38,7 @@ def test_apply_repo_creates_expected_symlinks(tmp_path: Path) -> None:
     assert (tmp_path / ".claude" / "skills").is_symlink()
     assert (tmp_path / "plugins" / "example-skills" / "skills").is_symlink()
     assert "plugins/example-skills/.codex-plugin/plugin.json" in created_paths
+    assert ".claude-plugin/marketplace.json" in created_paths
 
 
 def test_apply_repo_creates_marketplace_with_available_policy(tmp_path: Path) -> None:
@@ -54,8 +55,12 @@ def test_apply_repo_seeds_python_tooling_guidance(tmp_path: Path) -> None:
 
     readme = (tmp_path / "README.md").read_text(encoding="utf-8")
     agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    gitignore = (tmp_path / ".gitignore").read_text(encoding="utf-8")
 
     assert "uv tool install ruff" in readme
     assert "uv tool install mypy" in readme
     assert "uv run --group dev pytest" in readme
     assert "`uv`-managed tools" in agents
+    assert ".claude-plugin/marketplace.json" in readme
+    assert ".codex/plugins/" in gitignore
+    assert ".claude/settings.local.json" in gitignore
