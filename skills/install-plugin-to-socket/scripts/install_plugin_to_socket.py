@@ -139,8 +139,11 @@ def _discover_plugin_roots_under(repo_root: Path) -> list[Path]:
     return sorted(path for path in plugins_dir.iterdir() if _plugin_manifest_path(path).is_file())
 
 
-def resolve_source_plugin_root(requested_root: Path) -> Path:
+def resolve_source_plugin_root(requested_root: Path, *, allow_repo_root_resolution: bool = False) -> Path:
     if _plugin_manifest_path(requested_root).is_file():
+        return requested_root
+
+    if not allow_repo_root_resolution:
         return requested_root
 
     marketplace_path = requested_root / ".agents" / "plugins" / "marketplace.json"
@@ -884,14 +887,19 @@ def audit_install(
 ) -> tuple[list[Finding], dict[str, object], Path, Path, Path, Path, str | None, list[str]]:
     findings: list[Finding] = []
     errors: list[str] = []
-    source_plugin_root = resolve_source_plugin_root(requested_source_root)
+    source_plugin_root = resolve_source_plugin_root(
+        requested_source_root,
+        allow_repo_root_resolution=action == "verify",
+    )
     manifest_path = _plugin_manifest_path(source_plugin_root)
     if not source_plugin_root.exists() or not source_plugin_root.is_dir():
         errors.append("Source plugin root does not exist or is not a directory.")
         fallback = requested_source_root
         return findings, {}, fallback, fallback, fallback, codex_config_path(codex_config_override), None, errors
     if not manifest_path.exists():
-        errors.append("Source plugin is missing `.codex-plugin/plugin.json`.")
+        errors.append(
+            "Source plugin is missing `.codex-plugin/plugin.json`. For mutating actions, `--source-plugin-root` must point at the canonical plugin root itself; repo-root auto-detection is only supported for `verify`."
+        )
         fallback = source_plugin_root
         return findings, {}, fallback, fallback, fallback, codex_config_path(codex_config_override), None, errors
 
@@ -1058,7 +1066,22 @@ def apply_install(
     apply_actions: list[dict[str, str]] = []
     errors: list[str] = []
 
-    source_plugin_root = resolve_source_plugin_root(requested_source_root)
+    source_plugin_root = resolve_source_plugin_root(
+        requested_source_root,
+        allow_repo_root_resolution=action == "verify",
+    )
+    manifest_path = _plugin_manifest_path(source_plugin_root)
+    if not source_plugin_root.exists() or not source_plugin_root.is_dir():
+        errors.append("Source plugin root does not exist or is not a directory.")
+        fallback = requested_source_root
+        return apply_actions, {}, fallback, fallback, codex_config_path(codex_config_override), None, errors
+    if not manifest_path.exists():
+        errors.append(
+            "Source plugin is missing `.codex-plugin/plugin.json`. For mutating actions, `--source-plugin-root` must point at the canonical plugin root itself; repo-root auto-detection is only supported for `verify`."
+        )
+        fallback = source_plugin_root
+        return apply_actions, {}, fallback, fallback, codex_config_path(codex_config_override), None, errors
+
     manifest = load_plugin_manifest(source_plugin_root)
     plugin_name = infer_plugin_name(source_plugin_root, manifest)
     source_summary = build_source_plugin_summary(requested_source_root, source_plugin_root, manifest, plugin_name)

@@ -12,8 +12,8 @@ This skill is for local Codex plugin development workflows. It does not publish 
 ## Inputs
 
 - Required: source plugin directory
-  - preferred: the plugin root containing `.codex-plugin/plugin.json`
-  - accepted convenience input: a repo root that contains exactly one staged plugin under `plugins/` or exactly one marketplace-resolved plugin root
+  - for mutating actions, this must be the plugin root containing `.codex-plugin/plugin.json`
+  - `verify` may also accept a repo root that contains exactly one staged plugin under `plugins/` or exactly one marketplace-resolved plugin root
 - Optional: scope
   - default: `personal`
   - `repo`
@@ -46,6 +46,8 @@ This skill is for local Codex plugin development workflows. It does not publish 
 
 1. Confirm the task is local Codex plugin wiring, not generic plugin authoring or metadata review.
 2. Resolve the effective source plugin root and read the plugin manifest at `.codex-plugin/plugin.json`.
+   - Keep repo-root source auto-detection as a `verify`-only convenience.
+   - For `install`, `update`, `uninstall`, `repair`, `enable`, `disable`, and `promote`, require the canonical plugin root directly.
 3. Infer the plugin name, version, description, interface metadata, and optional plugin surfaces from that manifest.
 3. Use `scripts/install_plugin_to_socket.py` in `check-only` mode first.
 4. Resolve the effective install scope in this order:

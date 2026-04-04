@@ -788,7 +788,90 @@ def test_resolve_source_plugin_root_from_repo_root_marketplace(tmp_path: Path) -
         encoding="utf-8",
     )
 
-    assert m.resolve_source_plugin_root(repo_root) == source_plugin
+    assert m.resolve_source_plugin_root(repo_root, allow_repo_root_resolution=True) == source_plugin
+
+
+def test_resolve_source_plugin_root_does_not_auto_detect_repo_root_without_opt_in(tmp_path: Path) -> None:
+    repo_root = tmp_path / "repo"
+    source_plugin = _write_source_plugin(repo_root / "plugins")
+    marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
+    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.write_text(
+        json.dumps(
+            {
+                "name": "repo-marketplace",
+                "plugins": [
+                    {
+                        "name": "example-plugin",
+                        "source": {"source": "local", "path": "./plugins/example-plugin"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    }
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    assert m.resolve_source_plugin_root(repo_root) == repo_root
+    assert source_plugin.exists()
+
+
+def test_mutating_actions_reject_repo_root_convenience_input(tmp_path: Path) -> None:
+    repo_root = tmp_path / "repo"
+    source_plugin = _write_source_plugin(repo_root / "plugins")
+    marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
+    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.write_text(
+        json.dumps(
+            {
+                "name": "repo-marketplace",
+                "plugins": [
+                    {
+                        "name": "example-plugin",
+                        "source": {"source": "local", "path": "./plugins/example-plugin"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    }
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    findings, source_summary, target_plugin_root, audit_marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
+        requested_source_root=repo_root,
+        scope="repo",
+        action="update",
+        repo_root=tmp_path / "target-repo",
+        install_mode="copy",
+    )
+
+    assert findings == []
+    assert source_summary == {}
+    assert target_plugin_root == repo_root
+    assert audit_marketplace_path == repo_root
+    assert errors
+    assert "canonical plugin root itself" in errors[0]
+
+    apply_actions, source_summary, target_plugin_root, apply_marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
+        requested_source_root=repo_root,
+        scope="repo",
+        action="update",
+        repo_root=tmp_path / "target-repo",
+        install_mode="copy",
+    )
+
+    assert apply_actions == []
+    assert source_summary == {}
+    assert target_plugin_root == repo_root
+    assert apply_marketplace_path == repo_root
+    assert errors
+    assert "canonical plugin root itself" in errors[0]
 
 
 def test_enable_and_disable_manage_plugin_config_state(tmp_path: Path, monkeypatch) -> None:

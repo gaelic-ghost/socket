@@ -152,7 +152,7 @@ For Codex local installs, the documented staged paths are:
 
 Use `install-plugin-to-socket` to merge the marketplace entry safely and stage a copied plugin tree at those paths. Personal scope is the default recommendation unless a repository explicitly needs repo-local plugin wiring.
 
-The installer accepts either the plugin root itself or a repo root that resolves to exactly one staged plugin under `plugins/`.
+For `install`, `update`, `uninstall`, `repair`, `enable`, `disable`, and `promote`, pass the canonical plugin root itself. Repo-root convenience input is only supported for `verify`.
 
 You can persist that default preference through:
 
