@@ -188,6 +188,8 @@ def _describe_target_materialization(target_plugin_root: Path) -> tuple[str, Pat
 
 
 def _target_matches_install_mode(target_plugin_root: Path, source_plugin_root: Path, install_mode: str) -> bool:
+    if _is_same_path(target_plugin_root, source_plugin_root):
+        return True
     target_kind, link_target = _describe_target_materialization(target_plugin_root)
     if target_kind == "missing":
         return False
