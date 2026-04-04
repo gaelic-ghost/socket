@@ -103,8 +103,8 @@ Outputs:
 Current-state note:
 
 - This skill is the current bounded local Codex plugin installer for this repo family.
-- It supports personal-scope and repo-scope installs, persistent default-scope preferences, staged-copy updates, and bounded uninstalls.
-- It does not manage Claude install surfaces and does not yet manage Codex enable or disable state in `config.toml`.
+- It supports personal-scope and repo-scope installs, persistent default-scope preferences, staged-copy updates, bounded uninstalls, audit-style verify runs, Codex config-state enable or disable actions, and repo-to-personal promote behavior.
+- It does not manage Claude install surfaces.
 
 ### Workflow: audit-only
 
@@ -115,17 +115,18 @@ Current-state note:
 Inputs:
 
 - Required: `--source-plugin-root <path>`
-- Required: `--action <install|update|uninstall>`
+- Required: `--action <install|update|uninstall|verify|enable|disable|promote>`
 - Required: `--run-mode check-only`
 - Optional: `--scope <personal|repo>`
 - Optional: `--repo-root <path>`
 - Optional: `--config <path>`
+- Optional: `--codex-config-path <path>`
 - Optional: `--install-mode <copy|symlink>`
 - Tool or script input: `scripts/install_plugin_to_socket.py`
 
 Outputs:
 
-- JSON report with `run_context`, `scope`, `action`, `install_mode`, `source_plugin`, `target_plugin_root`, `marketplace_path`, `findings`, `apply_actions`, `restart_required`, `verification_steps`, and `errors`
+- JSON report with `run_context`, `scope`, `action`, `install_mode`, `source_plugin`, `target_plugin_root`, `marketplace_path`, `codex_config_path`, `plugin_config_key`, `findings`, `apply_actions`, `restart_required`, `verification_steps`, and `errors`
 - Exact clean-run text: `No findings.` when the script is called with `--print-md` and there are no findings, apply actions, or errors
 
 ### Workflow: apply

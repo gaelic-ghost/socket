@@ -32,6 +32,10 @@ def expected_files(repo_root: Path, plugin_name: str) -> dict[Path, str]:
         repo_root / "README.md": (
             f"# {repo_root.name}\n\n"
             f"Canonical skill repository with plugin packaging under `plugins/{plugin_name}/`.\n\n"
+            "## Codex Local Plugin Surfaces\n\n"
+            f"- Repo-local packaged plugin surface: `plugins/{plugin_name}/`\n"
+            "- Repo-local marketplace surface: `.agents/plugins/marketplace.json`\n"
+            f"- Personal Codex installs live outside the repo at `~/.codex/plugins/{plugin_name}` with `~/.agents/plugins/marketplace.json`\n\n"
             "## Maintainer Python Tooling\n\n"
             "```bash\n"
             "uv sync --dev\n"
@@ -44,6 +48,8 @@ def expected_files(repo_root: Path, plugin_name: str) -> dict[Path, str]:
             "# AGENTS.md\n\n"
             "Use root `skills/` as the canonical authored skill surface.\n"
             f"Keep plugin packaging metadata under `plugins/{plugin_name}/`.\n"
+            "Keep repo-local Codex marketplace wiring under `.agents/plugins/marketplace.json`.\n"
+            f"Document personal Codex installs separately at `~/.codex/plugins/{plugin_name}` with `~/.agents/plugins/marketplace.json`.\n"
             "Use POSIX symlink mirrors for `.agents/skills` and `.claude/skills`.\n"
             "Keep `ruff` and `mypy` available as `uv`-managed tools by default.\n"
         ),

@@ -29,6 +29,7 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
                 "root `skills/` as the canonical authoring surface",
                 "plugins/",
                 ".agents/plugins/marketplace.json",
+                "~/.codex/plugins/",
                 "OpenAI Codex Skills",
                 "Claude Code Plugins",
                 "uv tool install ruff",

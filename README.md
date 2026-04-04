@@ -13,7 +13,7 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `install-plugin-to-socket`
-  - Current implementation: audit, install, update, or uninstall an in-development Codex plugin at repo or personal scope with bounded marketplace merging.
+  - Current implementation: audit, install, update, uninstall, verify, enable, disable, or promote an in-development Codex plugin at repo or personal scope with bounded marketplace merging and Codex config-state management.
   - It follows the documented Codex local-plugin flow: local plugin directory plus marketplace wiring, then restart and verification.
   - It is also the repair surface for drifted local installs, such as missing staged plugin paths, stale marketplace entries, or the wrong staged materialization mode.
   - It stays honest about scope and does not claim undocumented control over Codex's installed-plugin cache internals.
@@ -107,6 +107,8 @@ For Codex local installs, the documented staged paths are:
 
 Use `install-plugin-to-socket` to merge the marketplace entry safely and stage a copied plugin tree at those paths. Personal scope is the default recommendation unless a repository explicitly needs repo-local plugin wiring.
 
+The installer accepts either the plugin root itself or a repo root that resolves to exactly one staged plugin under `plugins/`.
+
 You can persist that default preference through:
 
 - repo profile: `.codex/profiles/install-plugin-to-socket/customization.yaml`
@@ -130,7 +132,7 @@ uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.p
   --action install \
   --run-mode apply
 
-# Refresh the staged copied install after local source changes
+# Update the staged copied install after local source changes
 uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
   --source-plugin-root plugins/agent-plugin-skills \
   --action update \
@@ -140,6 +142,32 @@ uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.p
 uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
   --source-plugin-root plugins/agent-plugin-skills \
   --action uninstall \
+  --run-mode apply
+
+# Verify a wired install without mutating it
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --action verify \
+  --run-mode check-only \
+  --print-md
+
+# Enable or disable the plugin in Codex config
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --action enable \
+  --run-mode apply
+
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --action disable \
+  --run-mode apply
+
+# Promote a repo-local install into personal scope
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --scope repo \
+  --repo-root /path/to/target-repo \
+  --action promote \
   --run-mode apply
 ```
 

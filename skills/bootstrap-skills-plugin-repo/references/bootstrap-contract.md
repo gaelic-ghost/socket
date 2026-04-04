@@ -16,6 +16,13 @@ Packaging and discovery mirrors:
 - `.agents/skills`
 - `.claude/skills`
 
+Codex install guidance to preserve in repo docs:
+
+- repo-local packaged plugin surface: `plugins/<plugin-name>/`
+- repo-local marketplace surface: `.agents/plugins/marketplace.json`
+- personal Codex install surface lives outside the repo at `~/.codex/plugins/<plugin-name>` with `~/.agents/plugins/marketplace.json`
+- repo bootstrap owns the repo-local structure; ongoing local Codex install and lifecycle workflows belong to `install-plugin-to-socket` or equivalent maintainer tooling
+
 Required bootstrap outputs:
 
 - root `skills/`

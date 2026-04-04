@@ -11,7 +11,9 @@ This skill is for local Codex plugin development workflows. It does not publish 
 
 ## Inputs
 
-- Required: source plugin directory containing `.codex-plugin/plugin.json`
+- Required: source plugin directory
+  - preferred: the plugin root containing `.codex-plugin/plugin.json`
+  - accepted convenience input: a repo root that contains exactly one staged plugin under `plugins/` or exactly one marketplace-resolved plugin root
 - Optional: scope
   - default: `personal`
   - `repo`
@@ -27,16 +29,23 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - `install`
   - `update`
   - `uninstall`
+  - `verify`
+  - `enable`
+  - `disable`
+  - `promote`
 - Optional: install mode
   - default: `copy`
   - `copy`
   - `symlink`
+- Optional: Codex config path override
+  - `--codex-config-path <path>`
 - Optional: whether the request is check-only planning or real apply behavior
 
 ## Workflow
 
 1. Confirm the task is local Codex plugin wiring, not generic plugin authoring or metadata review.
-2. Read the plugin manifest at `.codex-plugin/plugin.json` and infer the plugin name, version, description, and interface metadata.
+2. Resolve the effective source plugin root and read the plugin manifest at `.codex-plugin/plugin.json`.
+3. Infer the plugin name, version, description, interface metadata, and optional plugin surfaces from that manifest.
 3. Use `scripts/install_plugin_to_socket.py` in `check-only` mode first.
 4. Resolve the effective install scope in this order:
    - explicit `--scope`
@@ -57,10 +66,13 @@ This skill is for local Codex plugin development workflows. It does not publish 
    - point the marketplace entry at that staged path
 10. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs and gives Codex a stable staged plugin tree to recache from.
 11. Treat `update` as the update workflow when the source clone is ahead of the staged install copy. It should recopy the source plugin tree into the staged path and rewrite the marketplace entry if needed.
-12. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
-13. For `install` and `update`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
-14. For `uninstall`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
-15. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
+12. Treat `verify` as the audit-oriented workflow for checking whether the staged plugin tree, marketplace entry, optional plugin surfaces, and config-state expectations still match the source plugin.
+13. Treat `enable` and `disable` as Codex config-state workflows backed by `~/.codex/config.toml` entries in the form `[plugins."plugin-name@marketplace-name"]`.
+14. Treat `promote` as the bounded workflow that copies the source plugin into personal scope, writes the personal marketplace entry, carries forward the repo install's enabled-state if present, and then removes the repo-local install surface.
+15. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
+16. For `install` and `update`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
+17. For `uninstall`, remove only the matching marketplace entry, staged plugin path, and matching plugin config-state entry for that install target.
+18. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory or reflects the intended enabled-state.
 
 ## Usage Examples
 
@@ -72,6 +84,13 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action update --run-mode apply`
 - Remove a local install cleanly:
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action uninstall --run-mode apply`
+- Verify an already wired install without mutating it:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action verify --run-mode check-only --print-md`
+- Enable or disable a wired plugin in Codex config:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action enable --run-mode apply`
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action disable --run-mode apply`
+- Promote a repo-local install into personal scope:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action promote --run-mode apply`
 
 ## Repairing Drifted Installs
 
@@ -94,19 +113,30 @@ Common repair cases:
 - `stale-target-copy`
   - The staged plugin tree is a copied install, but its contents no longer match the current source plugin tree.
   - Fix: rerun `update` in `copy` mode so the staged Codex install path is updated from the source clone.
+- `missing-plugin-enabled-state`
+  - Codex config does not include an explicit enabled-state entry for the plugin key.
+  - Fix: rerun `enable` or `disable`, depending on the intended state.
+- `stale-plugin-enabled-state`
+  - Codex config includes a plugin entry, but the enabled-state does not match the requested workflow.
+  - Fix: rerun `enable` or `disable`, depending on the intended state.
+- `missing-mcp-surface`, `missing-app-surface`, `missing-hooks-config`, `missing-interface-asset`
+  - The source plugin manifest or optional plugin packaging surfaces are incomplete.
+  - Fix: repair the plugin packaging before trusting the staged local install.
 
 Preferred repair flow:
 
 1. Run the helper in `check-only` mode first.
 2. Confirm the intended scope and install mode.
 3. Use `update` when the staged path and marketplace entry should continue to exist but need to be rewritten.
-4. Use `uninstall` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
-5. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.
+4. Use `enable` or `disable` when marketplace wiring is correct but Codex config-state drifted.
+5. Use `promote` when a repo-local install should become the personal default install surface instead.
+6. Use `uninstall` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
+7. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.
 
-## Not Yet In Scope
+## Remaining Gaps
 
-- First-class promote behavior from repo-local scope into personal scope is still planned roadmap work.
-- This skill should not claim promote support until it can copy or move the staged plugin tree into personal scope and optionally uninstall the repo-local install in one bounded workflow.
+- This skill now manages Codex plugin enable or disable state through `~/.codex/config.toml`, but it does not try to manage project-scoped `.codex/config.toml` overrides.
+- The current overwrite policy still uses replace-in-place semantics for staged targets; backup and fail-on-existing variants remain planned work.
 
 ## Output Contract
 
@@ -119,6 +149,8 @@ Preferred repair flow:
   - `source_plugin`
   - `target_plugin_root`
   - `marketplace_path`
+  - `codex_config_path`
+  - `plugin_config_key`
   - `findings`
   - `apply_actions`
   - `restart_required`

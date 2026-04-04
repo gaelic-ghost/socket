@@ -100,7 +100,7 @@ Required checks:
 - `maintain-plugin-docs` is currently the canonical owner of plugin-repo docs maintenance for this repo family.
 - `maintain-plugin-docs` is intended to grow into a combined README plus checklist-style roadmap maintainer for plugin-development repos in this family.
 - `bootstrap-skills-plugin-repo` is the canonical owner of repo bootstrap and structural alignment for this repo pattern.
-- `install-plugin-to-socket` is the canonical owner of bounded local Codex plugin install, update, and uninstall wiring in this repo family.
+- `install-plugin-to-socket` is the canonical owner of bounded local Codex plugin install, update, uninstall, verify, enable, disable, and promote wiring in this repo family.
 - `sync-skills-repo-guidance` is the canonical owner of ongoing guidance alignment for this repo pattern.
 - `sync-skills-repo-guidance` currently combines a narrow local audit script with broader maintainer-driven review of docs wording, guidance drift, and docs links. Do not describe the script alone as if it already performs full repo-wide remediation or upstream-doc intake.
 - `validate-plugin-install-surfaces` is the canonical audit-only validator for plugin manifests, marketplace wiring, README install references, and POSIX discovery mirrors in this repo family.

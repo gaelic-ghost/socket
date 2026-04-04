@@ -18,6 +18,8 @@ Check these policy points:
 
 - root `skills/` is canonical
 - plugin, marketplace, MCP, and app manifests live under `plugins/` and `.agents/plugins/`
+- repo guidance distinguishes repo-local Codex packaging (`plugins/<plugin-name>/` plus `.agents/plugins/marketplace.json`) from personal Codex installs (`~/.codex/plugins/<plugin-name>` plus `~/.agents/plugins/marketplace.json`)
+- repo guidance names the workflow owner for Codex install lifecycle work instead of implying bootstrap or sync scripts perform install, update, uninstall, verify, enable, disable, or promote operations themselves
 - POSIX symlink mirrors are explicit and documented
 - maintainer Python tooling guidance keeps `ruff` and `mypy` available through `uv tool install`
 - standalone skill install guidance matches `npx skills add`

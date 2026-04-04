@@ -13,6 +13,7 @@ README_SNIPPETS = [
     "root `skills/` as the canonical",
     "plugins/",
     ".agents/plugins/marketplace.json",
+    "~/.codex/plugins/",
     "OpenAI Codex Skills",
     "Claude Code Plugins",
     "uv tool install ruff",

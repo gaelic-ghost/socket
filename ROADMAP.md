@@ -117,13 +117,13 @@ Tickets:
 - [x] Add a bounded update path for updating an already wired local development plugin after source changes.
 - [x] Add a bounded uninstall path that can remove the local plugin directory and marketplace entry for one plugin without disturbing others.
 - [x] Add a persistent default install-scope preference with repo-profile and global-profile resolution before the built-in default.
-- [ ] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
-- [ ] Add optional config-state management for Codex plugin enable or disable behavior in `~/.codex/config.toml` once the repo wants that broader contract.
-- [ ] Add a verification-oriented mode that audits an already installed local plugin and reports marketplace drift, missing copied files, and likely restart state.
+- [x] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
+- [x] Add optional config-state management for Codex plugin enable or disable behavior in `~/.codex/config.toml` once the repo wants that broader contract.
+- [x] Add a verification-oriented mode that audits an already installed local plugin and reports marketplace drift, missing copied files, and likely restart state.
 - [ ] Add a safer overwrite policy for personal-scope updates so maintainers can choose between replace, backup-then-replace, or fail-on-existing behavior.
 - [x] Document install, update, and uninstall usage examples so update and remove workflows are explicit in repo guidance.
-- [ ] Add support for promoting a plugin from repo-local scope into personal scope in one bounded workflow without forcing the maintainer to rerun separate install and uninstall flows manually.
-- [ ] Add richer manifest-aware checks for optional plugin surfaces such as `.mcp.json`, `.app.json`, hooks, and install-surface assets before copying them into place.
+- [x] Add support for promoting a plugin from repo-local scope into personal scope in one bounded workflow without forcing the maintainer to rerun separate install and uninstall flows manually.
+- [x] Add richer manifest-aware checks for optional plugin surfaces such as `.mcp.json`, `.app.json`, hooks, and install-surface assets before copying them into place.
 - [x] Return a structured report with:
   - `run_context`
   - `scope`

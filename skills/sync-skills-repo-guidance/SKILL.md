@@ -34,10 +34,17 @@ Current scope note:
    - Claude Code Skills and Plugins docs
 4. Run `scripts/sync_skills_repo_guidance.py` in `check-only` mode to detect current local guidance-snippet and symlink drift.
 5. Interpret that audit together with the current repo docs and any upstream guidance reviewed in step 3.
-6. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
-7. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
-8. Re-run the same audit to confirm remaining findings.
-9. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
+6. Keep Codex install guidance consistent across repo docs:
+   - repo-local packaged plugin surface: `plugins/<plugin-name>/`
+   - repo-local marketplace: `.agents/plugins/marketplace.json`
+   - personal installs live outside the repo at `~/.codex/plugins/<plugin-name>` with `~/.agents/plugins/marketplace.json`
+7. Make repo guidance explicit about which workflow owns what:
+   - bootstrap and sync own repo-local structure and guidance
+   - `install-plugin-to-socket` owns local Codex install lifecycle work such as install, update, uninstall, verify, enable, disable, and promote
+8. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
+9. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
+10. Re-run the same audit to confirm remaining findings.
+11. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
 
 ## Output Contract
 
