@@ -24,7 +24,7 @@
 - [x] Milestone 9: AGENTS Sync Skill Retirement
 - [x] Milestone 10: Top-Level Skill Reset
 - [x] Milestone 11: Documentation Maintenance Cadence
-- [ ] Milestone 12: Deferred Audit Reporting and Future Swift Direction
+- [x] Milestone 12: Deferred Audit Reporting and Future Swift Direction
 - [x] Milestone 13: SwiftPM Bootstrap Parity
 - [x] Milestone 14: Plugin-First Packaging Foundation
 - [x] Milestone 15: Xcode App Bootstrap and Guidance Sync Skills
@@ -202,20 +202,20 @@ Exit criteria:
 
 Scope:
 
-- [ ] Keep future roadmap work explicitly deferred until there is a concrete operational need.
+- [x] Convert the old deferred bucket into concrete hardening coverage plus one explicit future-direction placeholder.
 
 Tickets:
 
-- [ ] Defer recurring maintainer audit/report cadence refinement until it has a clearer operational need.
-- [ ] Park follow-up roadmap/reporting cleanup that is not required for the current shipped surface.
-- [ ] Hold a placeholder for future non-Xcode Swift skill design direction.
-- [ ] Add Dash end-to-end coverage for real install and fallback flows beyond dry-run and blocked-path assertions.
-- [ ] Add Xcode end-to-end coverage for real MCP or CLI fallback execution beyond policy-shaping tests.
-- [ ] Add broader bootstrap coverage for blocked-vs-failed negative paths, alternate testing modes, and dry-run toolchain-validation behavior beyond the immediate SwiftPM parity fixes.
+- [x] Defer recurring maintainer audit/report cadence refinement until it has a clearer operational need.
+- [x] Park follow-up roadmap/reporting cleanup that is not required for the current shipped surface.
+- [x] Hold a placeholder for future non-Xcode Swift skill design direction.
+- [x] Add Dash end-to-end coverage for real install and fallback flows beyond dry-run and blocked-path assertions.
+- [x] Add Xcode end-to-end coverage for real MCP or CLI fallback execution beyond policy-shaping tests.
+- [x] Add broader bootstrap coverage for blocked-vs-failed negative paths, alternate testing modes, and dry-run toolchain-validation behavior beyond the immediate SwiftPM parity fixes.
 
 Exit criteria:
 
-- [ ] A future roadmap update intentionally reactivates this milestone with concrete implementation work and validation criteria.
+- [x] The repo contains the missing docs and Xcode workflow hardening coverage, and maintainer docs hold one explicit placeholder for future non-Xcode Swift expansion instead of an unbounded deferred bucket.
 
 ## Milestone 13: SwiftPM Bootstrap Parity
 

@@ -454,3 +454,9 @@ flowchart TD
 ### Failure / Fallback / Handoff States
 
 - `success` + `primary`: repo guidance sync completed
+
+## Future Direction Placeholder
+
+- Keep future non-Xcode Swift expansion explicitly out of the active surface until there is a concrete operational need that differs materially from plain SwiftPM bootstrap, SwiftPM guidance sync, and Xcode-managed execution.
+- The current placeholder direction is cross-platform or server-side Swift workflows that would not naturally belong to `xcode-app-project-workflow`.
+- Do not create that skill family speculatively; reactivate it only when the repo needs a clearly separate Swift workflow with different tools, inputs, and validation.

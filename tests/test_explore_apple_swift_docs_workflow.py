@@ -5,6 +5,7 @@ import os
 import subprocess
 import tempfile
 import unittest
+from contextlib import contextmanager
 from pathlib import Path
 
 
@@ -25,6 +26,19 @@ def write_config(tmpdir: str, skill: str, settings: dict) -> None:
             raw = f'"{value}"'
         lines.append(f"  {key}: {raw}")
     target.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+@contextmanager
+def fake_open_in_path(script_body: str):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        bin_dir = Path(tmpdir) / "bin"
+        bin_dir.mkdir()
+        open_path = bin_dir / "open"
+        open_path.write_text(script_body, encoding="utf-8")
+        open_path.chmod(0o755)
+        env = dict(os.environ)
+        env["PATH"] = f"{bin_dir}:{env['PATH']}"
+        yield env
 
 
 class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
@@ -125,12 +139,63 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
 
+    def test_dash_install_launches_open_when_approved(self) -> None:
+        script_body = """#!/bin/sh
+printf '%s\n' "$1" > "${TMPDIR:-/tmp}/apple-dev-skills-open-arg.txt"
+exit 0
+"""
+        with tempfile.TemporaryDirectory() as tmpdir, fake_open_in_path(script_body) as env:
+            env["TMPDIR"] = tmpdir
+            code, payload = self.run_script(
+                "--mode",
+                "dash-install",
+                "--docset-request",
+                "Swift",
+                "--yes",
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(payload["install_result"]["returncode"], 0)
+            self.assertTrue(payload["install_result"]["launched"])
+            launched_url = Path(tmpdir, "apple-dev-skills-open-arg.txt").read_text(encoding="utf-8").strip()
+            self.assertTrue(launched_url.startswith("dash-install://?"))
+
+    def test_dash_install_handoffs_to_generation_when_no_match_exists(self) -> None:
+        code, payload = self.run_script(
+            "--mode",
+            "dash-install",
+            "--docset-request",
+            "DefinitelyNotARealDocsetName",
+            "--dry-run",
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(payload["status"], "handoff")
+        self.assertIn("dash-generate", payload["next_step"])
+
     def test_dash_generate_returns_structured_guidance(self) -> None:
         code, payload = self.run_script("--mode", "dash-generate", "--docset-request", "Swift", "--dry-run")
         self.assertEqual(code, 0)
         self.assertEqual(payload["status"], "success")
         self.assertIn("guidance", payload)
         self.assertEqual(payload["source_path"], "automation-guidance")
+
+    def test_dash_generate_can_emit_manual_fallback_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            write_config(tmpdir, "explore-apple-swift-docs", {"dashGenerationPolicy": "manual-first"})
+            env = dict(os.environ)
+            env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
+            code, payload = self.run_script(
+                "--mode",
+                "dash-generate",
+                "--docset-request",
+                "Swift",
+                "--dry-run",
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["path_type"], "fallback")
+            self.assertEqual(payload["guidance"]["policy"], "manual-first")
 
 
 if __name__ == "__main__":

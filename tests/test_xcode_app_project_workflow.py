@@ -109,6 +109,57 @@ class XcodeWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["path_type"], "fallback")
             self.assertIn("swift build", payload["fallback_commands"])
 
+    def test_test_operation_prefers_workspace_and_project_fallbacks(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Demo.xcworkspace").mkdir()
+            Path(tmpdir, "Demo.xcodeproj").mkdir()
+            code, payload = self.run_script(
+                "--operation-type",
+                "test",
+                "--workspace-path",
+                tmpdir,
+                "--mcp-failure-reason",
+                "timeout",
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["path_type"], "fallback")
+            joined = "\n".join(payload["fallback_commands"])
+            self.assertIn("xcodebuild test -workspace", joined)
+            self.assertIn("xcodebuild test -project", joined)
+
+    def test_package_toolchain_management_lists_swift_and_xcode_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// test\n", encoding="utf-8")
+            code, payload = self.run_script(
+                "--operation-type",
+                "package-toolchain-management",
+                "--workspace-path",
+                tmpdir,
+                "--mcp-failure-reason",
+                "session-missing",
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["path_type"], "fallback")
+            self.assertIn("swift package describe", payload["fallback_commands"])
+            self.assertIn("xcrun --find swift", payload["fallback_commands"])
+            self.assertIn("xcrun --find xcodebuild", payload["fallback_commands"])
+
+    def test_blocked_mutation_does_not_switch_to_cli_fallback_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Demo.xcodeproj").mkdir()
+            code, payload = self.run_script(
+                "--operation-type",
+                "mutation",
+                "--workspace-path",
+                tmpdir,
+                "--mcp-failure-reason",
+                "timeout",
+            )
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertEqual(payload["path_type"], "primary")
+            self.assertIn("MCP mutation tools", payload["next_step"])
+
 
 if __name__ == "__main__":
     unittest.main()
