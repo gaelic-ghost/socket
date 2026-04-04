@@ -8,8 +8,12 @@ import NIOCore
 
 struct MCPSurface {
     private let configuration: MCPConfig
+    private let host: ServerHost
     private let transport: StatefulHTTPServerTransport
     private let server: Server
+    private let subscriptionBroker: MCPSubscriptionBroker
+
+    // MARK: - Construction
 
     static func build(
         configuration: MCPConfig,
@@ -20,13 +24,22 @@ struct MCPSurface {
         }
 
         let transport = StatefulHTTPServerTransport()
-        let server = await buildServer(configuration: configuration, host: host)
+        let subscriptionBroker = MCPSubscriptionBroker()
+        let server = await buildServer(
+            configuration: configuration,
+            host: host,
+            subscriptionBroker: subscriptionBroker
+        )
         return .init(
             configuration: configuration,
+            host: host,
             transport: transport,
-            server: server
+            server: server,
+            subscriptionBroker: subscriptionBroker
         )
     }
+
+    // MARK: - Lifecycle
 
     func mount(on router: Router<BasicRequestContext>) {
         let mcpPath = RouterPath(configuration.path)
@@ -52,9 +65,11 @@ struct MCPSurface {
 
     func start() async throws {
         try await server.start(transport: transport)
+        await subscriptionBroker.start(host: host, server: server)
     }
 
     func stop() async {
+        await subscriptionBroker.stop()
         await server.stop()
     }
 
@@ -62,9 +77,12 @@ struct MCPSurface {
         await transport.handleRequest(request)
     }
 
+    // MARK: - Server Assembly
+
     private static func buildServer(
         configuration: MCPConfig,
-        host: ServerHost
+        host: ServerHost,
+        subscriptionBroker: MCPSubscriptionBroker
     ) async -> Server {
         let server = Server(
             name: configuration.serverName,
@@ -74,10 +92,12 @@ struct MCPSurface {
             Shared-process SpeakSwiftly MCP surface backed by the same ServerHost used by the app-facing HTTP API. Read status and runtime resources for operator-visible state, and use the tools to queue speech, inspect queues, control playback, and manage profiles without starting a second runtime owner.
             """,
             capabilities: .init(
-                resources: .init(subscribe: false, listChanged: false),
+                resources: .init(subscribe: true, listChanged: false),
                 tools: .init(listChanged: false)
             )
         )
+
+        // MARK: - Tool Methods
 
         await server.withMethodHandler(ListTools.self) { _ in
             .init(tools: MCPToolCatalog.definitions)
@@ -165,12 +185,26 @@ struct MCPSurface {
             }
         }
 
+        // MARK: - Resource Methods
+
         await server.withMethodHandler(ListResources.self) { _ in
             .init(resources: MCPResourceCatalog.resources)
         }
 
         await server.withMethodHandler(ListResourceTemplates.self) { _ in
             .init(templates: [])
+        }
+
+        await server.withMethodHandler(ResourceSubscribe.self) { params in
+            try ensureKnownResourceURI(params.uri)
+            await subscriptionBroker.subscribe(to: params.uri)
+            return Empty()
+        }
+
+        await server.withMethodHandler(ResourceUnsubscribe.self) { params in
+            try ensureKnownResourceURI(params.uri)
+            await subscriptionBroker.unsubscribe(from: params.uri)
+            return Empty()
         }
 
         await server.withMethodHandler(ReadResource.self) { params in
@@ -194,6 +228,80 @@ struct MCPSurface {
         return server
     }
 }
+
+// MARK: - Subscription Handling
+
+private actor MCPSubscriptionBroker {
+    private var subscribedResourceURIs = Set<String>()
+    private var eventTask: Task<Void, Never>?
+
+    func start(host: ServerHost, server: Server) {
+        guard eventTask == nil else {
+            return
+        }
+
+        let updates = Task { await host.eventUpdates() }
+        eventTask = Task {
+            let events = await updates.value
+            for await event in events {
+                if Task.isCancelled {
+                    break
+                }
+                let updatedURIs = resourceURIsToNotify(for: event)
+                guard updatedURIs.isEmpty == false else {
+                    continue
+                }
+                for uri in updatedURIs {
+                    do {
+                        try await server.notify(ResourceUpdatedNotification.message(.init(uri: uri)))
+                    } catch {
+                        // The shared transport may be stopping or may not have a connected SSE stream yet.
+                        continue
+                    }
+                }
+            }
+        }
+    }
+
+    func stop() {
+        eventTask?.cancel()
+        eventTask = nil
+        subscribedResourceURIs.removeAll()
+    }
+
+    func subscribe(to uri: String) {
+        subscribedResourceURIs.insert(uri)
+    }
+
+    func unsubscribe(from uri: String) {
+        subscribedResourceURIs.remove(uri)
+    }
+
+    private func resourceURIsToNotify(for event: HostEvent) -> [String] {
+        let candidateURIs: Set<String>
+        switch event {
+        case .transportChanged, .jobChanged, .playbackChanged, .recentErrorRecorded:
+            candidateURIs = ["speak://status", "speak://runtime"]
+        case .profileCacheChanged:
+            candidateURIs = ["speak://status", "speak://runtime", "speak://profiles"]
+        }
+        return candidateURIs
+            .intersection(subscribedResourceURIs)
+            .sorted()
+    }
+}
+
+// MARK: - Resource Validation
+
+private func ensureKnownResourceURI(_ uri: String) throws {
+    guard MCPResourceCatalog.resourceURIs.contains(uri) else {
+        throw MCPError.invalidRequest(
+            "Resource '\(uri)' is not available on this embedded SpeakSwiftly MCP surface."
+        )
+    }
+}
+
+// MARK: - HTTP Bridge
 
 private enum MCPHTTPBridge {
     static func makeHTTPRequest(from request: Request) async throws -> MCP.HTTPRequest {
@@ -259,6 +367,8 @@ private enum MCPHTTPBridge {
     }
 }
 
+// MARK: - Result Encoding
+
 private func toolResult<Output: Encodable>(_ output: Output) throws -> CallTool.Result {
     let data = try JSONEncoder().encode(output)
     let json = String(decoding: data, as: UTF8.self)
@@ -273,6 +383,8 @@ private func resourceResult<Output: Encodable>(
     let json = String(decoding: data, as: UTF8.self)
     return .init(contents: [.text(json, uri: uri, mimeType: "application/json")])
 }
+
+// MARK: - Argument Parsing
 
 private func requiredString(_ key: String, in arguments: [String: Value]) throws -> String {
     guard let value = arguments[key]?.stringValue, value.isEmpty == false else {

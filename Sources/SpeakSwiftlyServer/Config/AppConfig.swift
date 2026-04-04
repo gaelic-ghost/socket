@@ -8,6 +8,8 @@ struct AppConfig: Sendable {
     let http: HTTPConfig
     let mcp: MCPConfig
 
+    // MARK: - Loading
+
     static func load(environment: [String: String] = ProcessInfo.processInfo.environment) async throws -> AppConfig {
         let store = try await ConfigStore(environment: environment)
         let config = store.reader.scoped(to: "app")

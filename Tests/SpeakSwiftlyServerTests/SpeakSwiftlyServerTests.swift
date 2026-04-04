@@ -906,6 +906,91 @@ actor MockRuntime: ServerRuntimeProtocol {
 }
 
 @available(macOS 14, *)
+@Test func embeddedMCPResourceSubscriptionsEmitUpdatedNotifications() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-swiftly-test-mcp",
+            title: "SpeakSwiftly Test MCP"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+    await host.markTransportStarting(name: "http")
+    await host.markTransportStarting(name: "mcp")
+
+    let mcpSurface = try #require(
+        await MCPSurface.build(
+            configuration: .init(
+                enabled: true,
+                path: "/mcp",
+                serverName: "speak-swiftly-test-mcp",
+                title: "SpeakSwiftly Test MCP"
+            ),
+            host: host
+        )
+    )
+
+    try await mcpSurface.start()
+    await host.markTransportListening(name: "mcp")
+
+    let initializeResponse = await mcpSurface.handle(mcpPOSTRequest(body: mcpInitializeRequestJSON()))
+    let sessionID = try #require(mcpSessionID(from: initializeResponse))
+    try await drainMCPResponse(initializeResponse)
+
+    let initializedNotificationResponse = await mcpSurface.handle(
+        mcpPOSTRequest(
+            body: mcpInitializedNotificationJSON(),
+            sessionID: sessionID
+        )
+    )
+    #expect(mcpStatusCode(from: initializedNotificationResponse) == 202)
+
+    let streamResponse = await mcpSurface.handle(mcpGETRequest(sessionID: sessionID))
+    guard case .stream(let stream, _) = streamResponse else {
+        Issue.record("Expected the embedded MCP GET transport to return a standalone streaming response.")
+        await mcpSurface.stop()
+        await host.shutdown()
+        return
+    }
+    var streamIterator = stream.makeAsyncIterator()
+    _ = try await nextMCPStreamEnvelope(from: &streamIterator)
+
+    let subscribeEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpSubscribeResourceRequestJSON(uri: "speak://runtime"),
+                sessionID: sessionID
+            )
+        )
+    )
+    #expect(subscribeEnvelope["result"] != nil)
+
+    await host.markTransportFailed(
+        name: "http",
+        message: "SpeakSwiftlyServer test transport failure for MCP resource subscription coverage."
+    )
+
+    let updatedNotification = try await nextMCPStreamEnvelope(from: &streamIterator)
+    #expect(updatedNotification["method"] as? String == "notifications/resources/updated")
+    let notificationParams = try #require(updatedNotification["params"] as? [String: Any])
+    #expect(notificationParams["uri"] as? String == "speak://runtime")
+
+    await mcpSurface.stop()
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
 @Test func routesExposeQueueInspectionAndControlOperations() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
@@ -1436,6 +1521,18 @@ private func mcpPOSTRequest(body: String, sessionID: String? = nil) -> MCP.HTTPR
     )
 }
 
+private func mcpGETRequest(sessionID: String) -> MCP.HTTPRequest {
+    MCP.HTTPRequest(
+        method: "GET",
+        headers: [
+            "Accept": "application/json, text/event-stream",
+            "Mcp-Session-Id": sessionID,
+        ],
+        body: nil,
+        path: "/mcp"
+    )
+}
+
 private func mcpSessionID(from response: MCP.HTTPResponse) -> String? {
     response.headers.first { $0.key.caseInsensitiveCompare("Mcp-Session-Id") == .orderedSame }?.value
 }
@@ -1466,6 +1563,31 @@ private func mcpStatusToolRequestJSON() -> String {
 
 private func mcpReadResourceRequestJSON(uri: String) -> String {
     #"{"jsonrpc":"2.0","id":"read-resource-1","method":"resources/read","params":{"uri":"\#(uri)"}}"#
+}
+
+private func mcpSubscribeResourceRequestJSON(uri: String) -> String {
+    #"{"jsonrpc":"2.0","id":"subscribe-resource-1","method":"resources/subscribe","params":{"uri":"\#(uri)"}}"#
+}
+
+private func nextMCPStreamEnvelope(
+    from iterator: inout AsyncThrowingStream<Data, Error>.AsyncIterator
+) async throws -> [String: Any] {
+    while let chunk = try await iterator.next() {
+        let body = String(decoding: chunk, as: UTF8.self)
+        if let dataLine = body
+            .split(separator: "\n")
+            .reversed()
+            .first(where: { $0.hasPrefix("data: ") })
+        {
+            let payload = dataLine.dropFirst("data: ".count)
+            if payload.isEmpty {
+                return [:]
+            }
+            return try jsonObject(from: Data(payload.utf8))
+        }
+    }
+
+    throw JSONError.emptyBody("The embedded MCP standalone stream ended before it delivered a JSON payload.")
 }
 
 private enum JSONError: Error {

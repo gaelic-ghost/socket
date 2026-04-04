@@ -175,6 +175,12 @@ enum MCPToolCatalog {
 }
 
 enum MCPResourceCatalog {
+    static let resourceURIs = Set([
+        "speak://status",
+        "speak://profiles",
+        "speak://runtime",
+    ])
+
     static let resources: [Resource] = [
         Resource(
             name: "Speak Status",

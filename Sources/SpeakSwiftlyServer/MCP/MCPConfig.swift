@@ -9,6 +9,8 @@ struct MCPConfig: Sendable {
     let serverName: String
     let title: String
 
+    // MARK: - Initialization
+
     init(
         enabled: Bool,
         path: String,

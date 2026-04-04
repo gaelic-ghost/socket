@@ -2,7 +2,7 @@ import Foundation
 import Hummingbird
 import SpeakSwiftlyCore
 
-// MARK: - API Models
+// MARK: - Request Models
 
 struct SpeakRequestPayload: Decodable {
     let text: String
@@ -40,6 +40,8 @@ struct JobCreatedResponse: ResponseEncodable, Sendable {
     }
 }
 
+// MARK: - Profile Models
+
 struct ProfileSnapshot: Codable, Sendable, Equatable {
     let profileName: String
     let createdAt: String
@@ -64,6 +66,8 @@ struct ProfileSnapshot: Codable, Sendable, Equatable {
 struct ProfileListResponse: ResponseEncodable, Sendable {
     let profiles: [ProfileSnapshot]
 }
+
+// MARK: - Queue Models
 
 struct ActiveRequestSnapshot: Codable, Sendable, Equatable {
     let id: String
@@ -156,6 +160,8 @@ struct QueueCancellationResponse: ResponseEncodable, Sendable {
         case cancelledRequestID = "cancelled_request_id"
     }
 }
+
+// MARK: - Status Models
 
 struct HealthSnapshot: ResponseEncodable, Sendable {
     let status: String

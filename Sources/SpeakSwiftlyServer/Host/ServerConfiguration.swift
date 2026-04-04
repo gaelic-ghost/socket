@@ -13,6 +13,8 @@ struct ServerConfiguration: Sendable {
     let completedJobMaxCount: Int
     let jobPruneIntervalSeconds: Double
 
+    // MARK: - Initialization
+
     init(
         name: String,
         environment: String,
@@ -63,6 +65,8 @@ struct ServerConfiguration: Sendable {
         }
     }
 
+    // MARK: - Validation
+
     private static func requirePositive(_ value: Int, key: String) throws -> Int {
         guard value > 0 else {
             throw ServerConfigurationError(
@@ -85,6 +89,8 @@ struct ServerConfiguration: Sendable {
 struct ServerConfigurationError: Error, Sendable, CustomStringConvertible {
     let message: String
 
+    // MARK: - Initialization
+
     init(_ message: String) {
         self.message = message
     }
@@ -92,6 +98,8 @@ struct ServerConfigurationError: Error, Sendable, CustomStringConvertible {
     init(key: String, underlyingError: any Error) {
         self.message = "Configuration value '\(key)' could not be loaded: \(underlyingError)."
     }
+
+    // MARK: - CustomStringConvertible
 
     var description: String { message }
 }

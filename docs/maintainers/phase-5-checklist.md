@@ -95,4 +95,4 @@ These events should complement the existing `HostStateSnapshot`, not replace it.
 
 ## Status
 
-Phase 5 is now in progress. The first implementation slice has landed the transport lifecycle-truth fix and the initial typed host event surface.
+Phase 5 is now landed for the initial host-events and selective live-update slice. The shared host reports transport `listening` only after the Hummingbird process is actually serving traffic, `ServerHost` now exposes a typed host event surface alongside stable host snapshots, and the embedded MCP surface supports selective live resource notifications for `speak://status`, `speak://profiles`, and `speak://runtime`.

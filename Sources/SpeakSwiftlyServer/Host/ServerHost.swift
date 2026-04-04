@@ -80,6 +80,8 @@ actor ServerHost {
     private var jobs = [String: JobRecord]()
     private var hasRequestedStartupProfileRefresh = false
 
+    // MARK: - Construction
+
     static func live(appConfig: AppConfig, state: ServerState) async -> ServerHost {
         let runtime = await WorkerRuntime.live()
         let host = ServerHost(
@@ -172,6 +174,8 @@ actor ServerHost {
         self.encoder.outputFormatting = [.sortedKeys]
     }
 
+    // MARK: - Lifecycle
+
     func start() async {
         self.publishTask = Task {
             let immediateRequests = self.immediatePublishRequests
@@ -225,30 +229,17 @@ actor ServerHost {
         hostEventContinuation.finish()
     }
 
+    // MARK: - Live Updates
+
     func stateUpdates() -> AsyncStream<HostStateSnapshot> {
-        let sharedUpdates = makeSharedStateUpdates()
-        let latestPublishedState = self.latestPublishedState
-        return AsyncStream { continuation in
-            if let latestPublishedState {
-                continuation.yield(latestPublishedState)
-            }
-
-            let task = Task {
-                for await snapshot in sharedUpdates {
-                    continuation.yield(snapshot)
-                }
-                continuation.finish()
-            }
-
-            continuation.onTermination = { _ in
-                task.cancel()
-            }
-        }
+        makeSharedStateUpdates()
     }
 
     func eventUpdates() -> AsyncStream<HostEvent> {
         makeSharedHostEvents()
     }
+
+    // MARK: - Transport Lifecycle
 
     func markTransportStarting(name: String) async {
         updateTransportStatus(named: name, state: "starting")
@@ -275,6 +266,8 @@ actor ServerHost {
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
     }
 
+    // MARK: - Shared Snapshots
+
     func hostStateSnapshot() -> HostStateSnapshot {
         let overview = HostOverviewSnapshot(
             service: configuration.name,
@@ -300,6 +293,8 @@ actor ServerHost {
             recentErrors: recentErrors
         )
     }
+
+    // MARK: - Health and Readiness
 
     func healthSnapshot() -> HealthSnapshot {
         let overview = hostStateSnapshot().overview
@@ -335,6 +330,8 @@ actor ServerHost {
             )
         )
     }
+
+    // MARK: - Public Query Surface
 
     func statusSnapshot() -> StatusSnapshot {
         let hostState = hostStateSnapshot()
@@ -374,6 +371,8 @@ actor ServerHost {
         )
     }
 
+    // MARK: - Job Submission
+
     func submitSpeak(text: String, profileName: String) async throws -> String {
         try ensureWorkerReady()
         let requestID = UUID().uuidString
@@ -405,6 +404,8 @@ actor ServerHost {
         let handle = await runtime.removeProfileHandle(profileName: profileName, id: requestID)
         return await enqueuePublicJob(handle)
     }
+
+    // MARK: - Immediate Control Operations
 
     func queueSnapshot(queueType: WorkerQueueType) async throws -> QueueSnapshotResponse {
         let requestID = UUID().uuidString
@@ -460,6 +461,8 @@ actor ServerHost {
         }
         return .init(cancelledRequestID: cancelledRequestID)
     }
+
+    // MARK: - Job Inspection and SSE
 
     func jobSnapshot(id: String) throws -> JobSnapshot {
         pruneCompletedJobs()
@@ -554,6 +557,8 @@ actor ServerHost {
         return handle.id
     }
 
+    // MARK: - Job Event Consumption
+
     private func consume(handle: RuntimeRequestHandle) async {
         do {
             for try await event in handle.events {
@@ -599,6 +604,8 @@ actor ServerHost {
             await record(.failed(failure), for: handle.id, terminal: true)
         }
     }
+
+    // MARK: - Profile Cache Reconciliation
 
     private func finalizeMutationSuccess(
         success: WorkerSuccessResponse,
@@ -729,6 +736,8 @@ actor ServerHost {
         }
     }
 
+    // MARK: - Worker Status Handling
+
     private func handle(status: WorkerStatusEvent) async {
         switch status.stage {
         case .warmingResidentModel:
@@ -798,6 +807,8 @@ actor ServerHost {
         }
         await requestPublish(mode: terminal ? .immediate : .coalesced, refreshRuntimeState: true)
     }
+
+    // MARK: - Job Subscribers
 
     private func addSubscriber(
         _ continuation: AsyncStream<ByteBuffer>.Continuation,
@@ -870,6 +881,8 @@ actor ServerHost {
         }
     }
 
+    // MARK: - Publish Flow
+
     private func requestPublish(mode: PublishMode, refreshRuntimeState: Bool) async {
         pendingRuntimeRefresh = pendingRuntimeRefresh || refreshRuntimeState
         switch mode {
@@ -904,6 +917,8 @@ actor ServerHost {
             state.jobsByID = jobsByID
         }
     }
+
+    // MARK: - Runtime-Derived State
 
     private func refreshRuntimeDerivedState() async {
         let previousPlaybackStatus = playbackStatus
@@ -955,6 +970,8 @@ actor ServerHost {
         }
     }
 
+    // MARK: - Runtime Snapshot Fetches
+
     private func fetchQueueStatus(_ queueType: WorkerQueueType) async throws -> QueueStatusSnapshot {
         let requestID = UUID().uuidString
         let handle = await runtime.listQueueHandle(queueType, id: requestID)
@@ -993,6 +1010,8 @@ actor ServerHost {
             activeRequest: playbackState.activeRequest.map(ActiveRequestSnapshot.init(summary:))
         )
     }
+
+    // MARK: - Derived Snapshot Helpers
 
     private func currentGenerationJobSnapshot() -> CurrentGenerationJobSnapshot? {
         guard let job = currentGenerationJobRecord() else { return nil }
@@ -1090,6 +1109,8 @@ actor ServerHost {
         ["http", "mcp"].compactMap { transportStatuses[$0] }
     }
 
+    // MARK: - Transport and Error Tracking
+
     private func updateTransportStatus(named name: String, state: String) {
         guard let current = transportStatuses[name], current.enabled else {
             return
@@ -1172,6 +1193,8 @@ actor ServerHost {
         )
     }
 
+    // MARK: - Event Mapping and Encoding
+
     private func mapQueuedEvent(_ event: WorkerQueuedEvent) -> ServerJobEvent {
         .queued(
             .init(
@@ -1229,6 +1252,8 @@ actor ServerHost {
         buffer.writeString("\n\n")
         return buffer
     }
+
+    // MARK: - Immediate Control Helpers
 
     private func encodeHeartbeatBuffer() -> ByteBuffer {
         var buffer = byteBufferAllocator.buffer(capacity: 15)

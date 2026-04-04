@@ -139,6 +139,8 @@ The first embedded MCP resources are:
 
 Those MCP tools and resources are intentionally thin adapters over the same `ServerHost` snapshots and mutations used by the HTTP API and the app-facing `ServerState`.
 
+The embedded MCP surface now also supports resource subscriptions for those URIs. Clients connected to the standalone MCP event stream can subscribe to `speak://status`, `speak://profiles`, and `speak://runtime` and receive `notifications/resources/updated` when shared host events change the underlying state.
+
 Transport lifecycle snapshots are now intentionally tied to the shared Hummingbird process rather than static config alone. `listening` means the shared HTTP host has actually reached Hummingbird's `onServerRunning` boundary, so HTTP and MCP surface status now describe real network availability instead of only configuration intent.
 
 ## Development

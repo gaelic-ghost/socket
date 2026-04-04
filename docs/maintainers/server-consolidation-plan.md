@@ -91,4 +91,4 @@ Phase 4 is now landed. `SpeakSwiftlyServer` mounts an embedded MCP surface throu
 - Pull over only the remaining host-worthy MCP pieces from `SpeakSwiftlyMCP`, not the old standalone host shape.
 - Deprecate or thin out the standalone `SpeakSwiftlyMCP` host package.
 
-Phase 5 is now in progress. The first slice corrects the `listening` boundary by using Hummingbird's real `onServerRunning` hook and introduces a typed `HostEvent` surface alongside the existing shared host snapshot stream.
+Phase 5 is now landed for the initial live-update slice. The host now exposes typed `HostEvent` updates alongside the stable `HostStateSnapshot` surface, the `listening` boundary is tied to Hummingbird's real `onServerRunning` lifecycle hook, and the embedded MCP surface can subscribe clients to `speak://status`, `speak://profiles`, and `speak://runtime` without introducing a second runtime-owning state model.

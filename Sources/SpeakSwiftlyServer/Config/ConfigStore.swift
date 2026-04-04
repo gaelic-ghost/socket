@@ -7,6 +7,8 @@ import SystemPackage
 struct ConfigStore: Sendable {
     let reader: ConfigReader
 
+    // MARK: - Initialization
+
     init(environment: [String: String] = ProcessInfo.processInfo.environment) async throws {
         var providers: [any ConfigProvider] = [
             EnvironmentVariablesProvider(environmentVariables: environment),
@@ -19,6 +21,8 @@ struct ConfigStore: Sendable {
         providers.append(InMemoryProvider(values: Self.defaults))
         self.reader = ConfigReader(providers: providers)
     }
+
+    // MARK: - Defaults
 
     private static let defaults: [AbsoluteConfigKey: ConfigValue] = [
         .init(["app", "name"]): "speak-swiftly-server",

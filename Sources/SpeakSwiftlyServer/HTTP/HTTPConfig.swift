@@ -9,6 +9,8 @@ struct HTTPConfig: Sendable {
     let port: Int
     let sseHeartbeatSeconds: Double
 
+    // MARK: - Initialization
+
     init(
         enabled: Bool,
         host: String,
@@ -37,6 +39,8 @@ struct HTTPConfig: Sendable {
             throw ServerConfigurationError(key: "APP_HTTP_*", underlyingError: error)
         }
     }
+
+    // MARK: - Validation
 
     private static func requirePositive(_ value: Int, key: String) throws -> Int {
         guard value > 0 else {

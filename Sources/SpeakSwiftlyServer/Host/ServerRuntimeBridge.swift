@@ -9,6 +9,8 @@ struct RuntimeRequestHandle: Sendable {
     let profileName: String?
     let events: AsyncThrowingStream<WorkerRequestStreamEvent, Error>
 
+    // MARK: - Initialization
+
     init(
         id: String,
         operationName: String,
@@ -29,6 +31,8 @@ struct RuntimeRequestHandle: Sendable {
     }
 }
 
+// MARK: - Runtime Protocol
+
 protocol ServerRuntimeProtocol: Actor {
     func start()
     func shutdown() async
@@ -48,6 +52,8 @@ protocol ServerRuntimeProtocol: Actor {
     func clearQueueHandle(id requestID: String) async -> RuntimeRequestHandle
     func cancelRequestHandle(with id: String, requestID: String) async -> RuntimeRequestHandle
 }
+
+// MARK: - Runtime Adapter
 
 extension WorkerRuntime: ServerRuntimeProtocol {
     func queueSpeechHandle(text: String, profileName: String, as jobType: SpeechJobType, id: String) async -> RuntimeRequestHandle {
