@@ -89,6 +89,20 @@ uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scrip
 
 ## Install
 
+### Codex Plugin
+
+This repository ships a Codex plugin package at [`plugins/agent-plugin-skills/.codex-plugin/plugin.json`](./plugins/agent-plugin-skills/.codex-plugin/plugin.json), with the local marketplace entry already wired in [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
+
+For local development, the primary Codex install path is the plugin surface rooted at [`plugins/agent-plugin-skills`](./plugins/agent-plugin-skills). To mirror that plugin into another repo-scoped or personal Codex install surface, use the `install-plugin-to-socket` skill from this repo.
+
+### Claude Code Plugin
+
+This repository also ships a Claude plugin manifest at [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json), and keeps the canonical authored skills mirrored into [`.claude/skills`](./.claude/skills) for Claude Code discovery.
+
+Use those plugin and discovery surfaces as the primary Claude Code installation path for this repo family before reaching for secondary distribution channels.
+
+### Vercel `skills` CLI
+
 Install one skill through the Vercel `skills` CLI:
 
 ```bash

@@ -109,19 +109,83 @@ See [LICENSE](./LICENSE).
 """
 
 
+VALID_PLUGIN_MAINTAINER_README = """# agent-plugin-skills
+
+Canonical repo-maintainer skills for building, aligning, and evolving agent-skills and agent-plugin repositories.
+
+## Active Skills
+
+- `maintain-plugin-docs`
+  - Current implementation: audit and bounded fixes for `README.md`, `ROADMAP.md`, or both.
+  - Intended scope: become the combined docs maintainer for plugin-development repos here.
+
+## Repo Purpose
+
+This repository is intentionally stack-specific.
+
+## Packaging And Discovery
+
+Root [`skills/`](./skills/) is the canonical authored skill surface.
+
+## Standards And Docs
+
+- Agent Skills Standard: [agentskills.io/home](https://agentskills.io/home)
+
+## Maintainer Python Tooling
+
+```bash
+uv sync --dev
+uv run --group dev pytest
+```
+
+## Install
+
+### Codex Plugin
+
+Use the plugin package in [`plugins/agent-plugin-skills/.codex-plugin/plugin.json`](./plugins/agent-plugin-skills/.codex-plugin/plugin.json).
+
+### Claude Code Plugin
+
+Use the plugin package in [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json).
+
+### Vercel `skills` CLI
+
+```bash
+npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-plugin-docs
+```
+
+## Repository Layout
+
+```text
+.
+├── skills/
+└── plugins/
+```
+
+## License
+
+See [LICENSE](./LICENSE).
+"""
+
+
 def test_discover_repos_and_detect_profile(tmp_path: Path) -> None:
     public_repo = tmp_path / "productivity-skills"
     bootstrap_repo = tmp_path / "a11y-skills"
+    plugin_repo = tmp_path / "agent-plugin-skills"
     ignored_repo = tmp_path / "notes"
     public_repo.mkdir()
     bootstrap_repo.mkdir()
+    (plugin_repo / "skills").mkdir(parents=True)
+    (plugin_repo / "plugins" / "agent-plugin-skills" / ".codex-plugin").mkdir(parents=True)
+    (plugin_repo / "plugins" / "agent-plugin-skills" / ".codex-plugin" / "plugin.json").write_text("{}", encoding="utf-8")
     ignored_repo.mkdir()
 
     repos = m.discover_repos(tmp_path, "*-skills", [])
 
-    assert repos == [bootstrap_repo, public_repo]
-    assert m.detect_profile("productivity-skills") == "public-curated"
-    assert m.detect_profile("a11y-skills") == "bootstrap"
+    assert repos == [bootstrap_repo, plugin_repo, public_repo]
+    assert m.detect_profile(public_repo) == "public-curated"
+    assert m.detect_profile(bootstrap_repo) == "bootstrap"
+    assert m.detect_profile(plugin_repo) == "plugin-maintainer"
 
 
 def test_check_sections_accepts_minimal_valid_public_readme(tmp_path: Path) -> None:
@@ -129,6 +193,15 @@ def test_check_sections_accepts_minimal_valid_public_readme(tmp_path: Path) -> N
     repo.mkdir()
 
     issues = m.check_sections(repo, "public-curated", VALID_PUBLIC_README)
+
+    assert issues == []
+
+
+def test_check_sections_accepts_plugin_maintainer_readme(tmp_path: Path) -> None:
+    repo = tmp_path / "agent-plugin-skills"
+    repo.mkdir()
+
+    issues = m.check_sections(repo, "plugin-maintainer", VALID_PLUGIN_MAINTAINER_README)
 
     assert issues == []
 
@@ -248,3 +321,152 @@ def test_check_cross_doc_consistency_flags_legacy_skill_name(tmp_path: Path) -> 
     )
 
     assert any(issue.issue_id == "cross-doc-legacy-skill-name" for issue in findings)
+
+
+def test_validate_roadmap_flags_progress_reality_mismatch_and_bad_format(tmp_path: Path) -> None:
+    repo = tmp_path / "plugin-skills"
+    repo.mkdir()
+    roadmap = """# Project Roadmap
+
+## Vision
+
+- Example vision.
+
+## Product Principles
+
+- Example principle.
+
+## Milestone Progress
+
+- [x] Milestone 0: Foundation
+- [ ] Wrong freeform status line
+
+## Milestone 0: Foundation
+
+Scope:
+
+- Foundation scope.
+
+Tickets:
+
+- [ ] Add implementation.
+
+Exit criteria:
+
+- [ ] Validate milestone.
+"""
+
+    findings = m.validate_roadmap(repo, roadmap)
+
+    issue_ids = {issue.issue_id for issue in findings}
+    assert "roadmap-progress-reality-mismatch-0" in issue_ids
+    assert "roadmap-progress-entry-format-14" in issue_ids
+
+
+def test_apply_fixes_for_roadmap_normalizes_progress_and_subsection_order(tmp_path: Path) -> None:
+    repo = tmp_path / "plugin-skills"
+    repo.mkdir()
+    roadmap = repo / "ROADMAP.md"
+    roadmap.write_text(
+        """# Project Roadmap
+
+## Product principles
+
+- Keep docs aligned.
+
+## Vision
+
+- Build the repo.
+
+## Milestone 1: Finish
+
+Exit criteria:
+
+- [x] Exit.
+
+Scope:
+
+- Scope item.
+
+Tickets:
+
+- [x] Ticket item.
+""",
+        encoding="utf-8",
+    )
+
+    changed, fixes, reason = m.apply_fixes_for_roadmap(repo)
+
+    assert changed is True
+    assert reason is None
+    updated = roadmap.read_text(encoding="utf-8")
+    assert "## Vision" in updated
+    assert "## Product Principles" in updated
+    assert "## Milestone Progress" in updated
+    assert "- [x] Milestone 1: Finish" in updated
+    assert updated.index("## Vision") < updated.index("## Product Principles") < updated.index("## Milestone Progress") < updated.index("## Milestone 1: Finish")
+    assert updated.index("Scope:") < updated.index("Tickets:") < updated.index("Exit criteria:")
+    assert any(fix["rule"] == "normalize-roadmap-structure" for fix in fixes)
+
+
+def test_check_cross_doc_consistency_flags_missing_plugin_sections(tmp_path: Path) -> None:
+    repo = tmp_path / "agent-plugin-skills"
+    repo.mkdir()
+    skill_root = repo / "skills" / "maintain-plugin-docs"
+    skill_root.mkdir(parents=True)
+    (skill_root / "SKILL.md").write_text("---\nname: maintain-plugin-docs\ndescription: Example.\n---\n", encoding="utf-8")
+    codex_manifest = repo / "plugins" / "agent-plugin-skills" / ".codex-plugin"
+    claude_manifest = repo / "plugins" / "agent-plugin-skills" / ".claude-plugin"
+    codex_manifest.mkdir(parents=True)
+    claude_manifest.mkdir(parents=True)
+    (codex_manifest / "plugin.json").write_text("{}", encoding="utf-8")
+    (claude_manifest / "plugin.json").write_text("{}", encoding="utf-8")
+
+    readme = """## Active Skills
+
+- `maintain-plugin-docs`
+  - Current implementation: docs checks.
+  - Intended scope: wider docs maintainer.
+
+## Install
+
+Install one skill through the Vercel `skills` CLI:
+
+```bash
+npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-plugin-docs
+```
+"""
+    roadmap = """# Project Roadmap
+
+## Vision
+
+- Example vision.
+
+## Product Principles
+
+- Example principle.
+
+## Milestone Progress
+
+- [ ] Milestone 1: `maintain-plugin-docs` evolution
+
+## Milestone 1: `maintain-plugin-docs` evolution
+
+Scope:
+
+- Example scope.
+
+Tickets:
+
+- [ ] Rebalance README install guidance so Codex Plugin and Claude Code Plugin installs are primary.
+
+Exit criteria:
+
+- [ ] Scope is complete.
+"""
+
+    findings = m.check_cross_doc_consistency(repo, readme, roadmap)
+
+    issue_ids = {issue.issue_id for issue in findings}
+    assert "cross-doc-missing-codex-plugin-install" in issue_ids
+    assert "cross-doc-missing-claude-plugin-install" in issue_ids

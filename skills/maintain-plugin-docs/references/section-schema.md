@@ -7,14 +7,28 @@
 3. `## Table of Contents` (compact, H2 links only)
 4. `## What These Agent Skills Help With`
 5. `## Skill Guide (When To Use What)`
-6. `## Quick Start (Vercel Skills CLI)`
-7. `## Install individually by Skill or Skill Pack`
-8. `## Update Skills`
-9. `## More resources for similar Skills`
-10. `## Repository Layout`
-11. `## Notes`
-12. `## Keywords`
-13. `## License`
+6. `## Install`
+7. `## Quick Start (Vercel Skills CLI)` when Vercel `skills` CLI guidance is still documented
+8. `## Install individually by Skill or Skill Pack` when individual `skills` CLI examples are documented
+9. `## Update Skills` when `skills` CLI upkeep is documented
+10. `## More resources for similar Skills`
+11. `## Repository Layout`
+12. `## Notes`
+13. `## Keywords`
+14. `## License`
+
+## Plugin Maintainer Sections
+
+1. `# <repo-name>`
+2. one-line maintainer-facing value proposition
+3. `## Active Skills`
+4. `## Repo Purpose`
+5. `## Packaging And Discovery`
+6. `## Standards And Docs`
+7. `## Maintainer Python Tooling`
+8. `## Install`
+9. `## Repository Layout`
+10. `## License`
 
 ## Table of Contents Rules
 
@@ -27,6 +41,7 @@
 
 ## Public Profile Additions
 
+- when Codex Plugin or Claude Code plugin packaging is present in the repo, `## Install` should lead with those primary install surfaces before secondary Vercel `skills` CLI examples
 - under `## More resources for similar Skills`, require:
   - `### Find Skills like these with the \`skills\` CLI by Vercel — [vercel-labs/skills](https://github.com/vercel-labs/skills)`
   - `### Find Skills like these with the \`Find Skills\` Agent Skill by Vercel — [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)`
@@ -39,3 +54,9 @@
   - one skill: `npx skills add <owner/repo> --skill <skill-name>`
 - release highlights/history (for active release repos)
 - `## Keywords`
+
+## Plugin Maintainer Additions
+
+- keep the README maintainer-facing rather than converting it into the public skill-pack schema
+- document canonical `skills/` authoring, plugin packaging roots, and discovery mirrors explicitly
+- document Codex Plugin and Claude Code Plugin installation before secondary Vercel `skills` CLI distribution paths

@@ -5,11 +5,12 @@
 1. Run Context
 2. Discovery Summary
 3. Profile Assignments
-4. Schema Violations
-5. Command Integrity Issues
-6. Fixes Applied
-7. Post-Fix Status
-8. Errors
+4. README Findings
+5. ROADMAP Findings
+6. Cross-Doc Findings
+7. Fixes Applied
+8. Post-Fix Status
+9. Errors
 
 ## JSON Top-Level Keys
 
@@ -17,8 +18,9 @@
 - `repos_scanned`
 - `repos_with_issues`
 - `profile_assignments`
-- `schema_violations`
-- `command_integrity_issues`
+- `readme_findings`
+- `roadmap_findings`
+- `cross_doc_findings`
 - `fixes_applied`
 - `post_fix_status`
 - `errors`

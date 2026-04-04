@@ -57,6 +57,8 @@ ROADMAP_REQUIRED_MILESTONE_SUBSECTIONS = ["Scope", "Tickets", "Exit criteria"]
 ROADMAP_CHECKBOX_RE = re.compile(r"^\s*-\s+\[( |x)\]\s+.+$")
 ROADMAP_ANY_CHECKBOX_RE = re.compile(r"^\s*-\s+\[[^\]]\]\s+.+$")
 ROADMAP_MILESTONE_HEADING_RE = re.compile(r"^##\s+Milestone\s+(\d+)\s*:\s*(.+?)\s*$")
+ROADMAP_PROGRESS_ENTRY_RE = re.compile(r"^\s*-\s+\[( |x)\]\s+Milestone\s+(\d+)\s*:\s*(.+?)\s*$")
+ROADMAP_SUBSECTION_LABEL_RE = re.compile(r"^(Scope|Tickets|Exit criteria):\s*$")
 
 CORE_SECTION_KEYS = [
     "toc",
@@ -72,7 +74,24 @@ CORE_SECTION_KEYS = [
     "license",
 ]
 
+PLUGIN_MAINTAINER_SECTION_KEYS = [
+    "active_skills",
+    "repo_purpose",
+    "packaging",
+    "standards",
+    "tooling",
+    "install",
+    "layout",
+    "license",
+]
+
 SECTION_CANONICAL_HEADINGS = {
+    "active_skills": "Active Skills",
+    "repo_purpose": "Repo Purpose",
+    "packaging": "Packaging And Discovery",
+    "standards": "Standards And Docs",
+    "tooling": "Maintainer Python Tooling",
+    "install": "Install",
     "toc": "Table of Contents",
     "what": "What These Agent Skills Help With",
     "guide": "Skill Guide (When To Use What)",
@@ -87,6 +106,12 @@ SECTION_CANONICAL_HEADINGS = {
 }
 
 SECTION_PATTERNS = {
+    "active_skills": r"^##\s+Active Skills\s*$",
+    "repo_purpose": r"^##\s+Repo Purpose\s*$",
+    "packaging": r"^##\s+Packaging And Discovery\s*$",
+    "standards": r"^##\s+Standards And Docs\s*$",
+    "tooling": r"^##\s+Maintainer Python Tooling\s*$",
+    "install": r"^##\s+Install\s*$",
     "toc": r"^##\s+Table of Contents\s*$",
     "what": r"^##\s+What These Agent Skills Help With\s*$",
     "guide": r"^##\s+Skill Guide \(When To Use What\)\s*$",
@@ -136,6 +161,12 @@ LEGACY_MORE_RESOURCES_TOP_LEVEL_PATTERNS = {
 MORE_RESOURCES_ANCHOR_LINE = 'Then ask your Agent for help finding a skill for "" or ""'
 
 HEADING_ALIASES = {
+    "active skills": "active_skills",
+    "repo purpose": "repo_purpose",
+    "packaging and discovery": "packaging",
+    "standards and docs": "standards",
+    "maintainer python tooling": "tooling",
+    "install": "install",
     "table of contents": "toc",
     "how to add (skills cli)": "quickstart",
     "how to add (vercel skills cli)": "quickstart",
@@ -155,6 +186,12 @@ HEADING_ALIASES = {
 }
 
 HIGH_CONFIDENCE_HEADING_PATTERNS = [
+    ("active_skills", re.compile(r"^active\s+skills$", re.IGNORECASE)),
+    ("repo_purpose", re.compile(r"^repo\s+purpose$", re.IGNORECASE)),
+    ("packaging", re.compile(r"^packaging\s+and\s+discovery$", re.IGNORECASE)),
+    ("standards", re.compile(r"^standards\s+and\s+docs$", re.IGNORECASE)),
+    ("tooling", re.compile(r"^maintainer\s+python\s+tooling$", re.IGNORECASE)),
+    ("install", re.compile(r"^install$", re.IGNORECASE)),
     ("toc", re.compile(r"^table\s+of\s+contents$", re.IGNORECASE)),
     ("quickstart", re.compile(r"^quick\s*start.*skills\s*cli$", re.IGNORECASE)),
     ("quickstart", re.compile(r"^how\s+to\s+add.*skills\s*cli$", re.IGNORECASE)),
@@ -179,6 +216,12 @@ MORE_RESOURCES_SUBSECTION_HIGH_CONFIDENCE_PATTERNS = [
 ]
 
 SECTION_TEMPLATES = {
+    "active_skills": "## Active Skills\n\n- `<skill-name>`\n  - Current implementation: ...\n  - Intended scope: ...\n",
+    "repo_purpose": "## Repo Purpose\n\nDescribe the maintainer-facing purpose of this skills or plugin repository.\n",
+    "packaging": "## Packaging And Discovery\n\nSummarize the canonical `skills/` surface, plugin packaging roots, and discovery mirrors.\n",
+    "standards": "## Standards And Docs\n\nList the primary standard and platform-specific references for this repo family.\n",
+    "tooling": "## Maintainer Python Tooling\n\n```bash\nuv sync --dev\nuv run --group dev pytest\n```\n",
+    "install": "## Install\n\nDocument the primary plugin install surfaces first, then any secondary distribution paths.\n",
     "toc": (
         "## Table of Contents\n\n"
         "- [What These Agent Skills Help With](#what-these-agent-skills-help-with)\n"
@@ -387,21 +430,35 @@ def discover_repos(workspace: Path, repo_glob: str, excludes: Sequence[Path]) ->
     return repos
 
 
-def detect_profile(repo_name: str) -> str:
+def repo_has_plugin_packaging(repo: Path) -> bool:
+    return any(repo.glob("plugins/*/.codex-plugin/plugin.json")) or any(
+        repo.glob("plugins/*/.claude-plugin/plugin.json")
+    )
+
+
+def detect_profile(repo: Path) -> str:
+    repo_name = repo.name
     if repo_name in PUBLIC_REPOS:
         return "public-curated"
     if repo_name in PRIVATE_REPOS:
         return "private-internal"
     if repo_name in BOOTSTRAP_REPOS:
         return "bootstrap"
+    if (repo / "skills").is_dir() and repo_has_plugin_packaging(repo):
+        return "plugin-maintainer"
     return "generic"
 
 
 def find_skill_dirs(repo: Path) -> List[str]:
     skills: List[str] = []
-    for p in sorted(repo.glob("*/SKILL.md")):
-        if p.parent.name not in {"scripts", "references", "assets", "agents"}:
-            skills.append(p.parent.name)
+    seen: set[str] = set()
+    for pattern in ("*/SKILL.md", "skills/*/SKILL.md"):
+        for p in sorted(repo.glob(pattern)):
+            if p.parent.name in {"scripts", "references", "assets", "agents"}:
+                continue
+            if p.parent.name not in seen:
+                skills.append(p.parent.name)
+                seen.add(p.parent.name)
     return skills
 
 
@@ -433,6 +490,8 @@ def expected_section_keys(profile: str) -> List[str]:
             "keywords",
             "license",
         ]
+    if profile == "plugin-maintainer":
+        return list(PLUGIN_MAINTAINER_SECTION_KEYS)
     return list(CORE_SECTION_KEYS)
 
 
@@ -1727,6 +1786,85 @@ def roadmap_status_to_checkbox(status: str) -> str:
     return "[ ]"
 
 
+def canonicalize_roadmap_heading(heading: str) -> str:
+    return ROADMAP_REQUIRED_TOP_LEVEL_ALIASES.get(heading, heading)
+
+
+def parse_roadmap_progress_entries(lines: Sequence[str]) -> Tuple[List[Tuple[int, bool, int, str]], List[Tuple[int, str]]]:
+    entries: List[Tuple[int, bool, int, str]] = []
+    invalid: List[Tuple[int, str]] = []
+    progress_range = find_section_line_range(lines, r"^##\s+Milestone Progress\s*$")
+    if progress_range is None:
+        return entries, invalid
+
+    start_idx, end_idx = progress_range
+    for idx in range(start_idx + 1, end_idx):
+        stripped = lines[idx].strip()
+        if not stripped:
+            continue
+        match = ROADMAP_PROGRESS_ENTRY_RE.match(stripped)
+        if not match:
+            invalid.append((idx + 1, stripped))
+            continue
+        entries.append((idx + 1, match.group(1) == "x", int(match.group(2)), match.group(3).strip()))
+    return entries, invalid
+
+
+def parse_milestone_subsections(body_lines: Sequence[str]) -> Dict[str, List[str]]:
+    sections: Dict[str, List[str]] = {name: [] for name in ROADMAP_REQUIRED_MILESTONE_SUBSECTIONS}
+    preamble: List[str] = []
+    current: Optional[str] = None
+
+    for line in body_lines:
+        label_match = ROADMAP_SUBSECTION_LABEL_RE.match(line.strip())
+        if label_match:
+            current = label_match.group(1)
+            continue
+        if current is None:
+            preamble.append(line)
+            continue
+        sections[current].append(line)
+
+    if preamble:
+        sections["Scope"] = preamble + ([""] if preamble and sections["Scope"] else []) + sections["Scope"]
+    return sections
+
+
+def trim_blank_lines(lines: Sequence[str]) -> List[str]:
+    trimmed = list(lines)
+    while trimmed and not trimmed[0].strip():
+        trimmed.pop(0)
+    while trimmed and not trimmed[-1].strip():
+        trimmed.pop()
+    return trimmed
+
+
+def default_milestone_subsection_lines(subsection: str) -> List[str]:
+    if subsection == "Scope":
+        return ["- [ ] Define milestone scope."]
+    if subsection == "Tickets":
+        return ["- [ ] Add milestone implementation tasks."]
+    return ["- [ ] Define milestone exit criteria."]
+
+
+def normalize_milestone_body(body_lines: Sequence[str]) -> List[str]:
+    parsed = parse_milestone_subsections(body_lines)
+    out: List[str] = []
+    for subsection in ROADMAP_REQUIRED_MILESTONE_SUBSECTIONS:
+        content = trim_blank_lines(parsed[subsection])
+        if not content:
+            content = default_milestone_subsection_lines(subsection)
+        out.extend([f"{subsection}:", "", *content, ""])
+    return out[:-1]
+
+
+def milestone_is_complete(body_lines: Sequence[str]) -> bool:
+    checkbox_lines = [line for line in body_lines if ROADMAP_CHECKBOX_RE.match(line)]
+    if not checkbox_lines:
+        return False
+    return all("[x]" in line.lower() for line in checkbox_lines)
+
+
 def validate_roadmap(repo: Path, text: str) -> List[Issue]:
     roadmap_path = repo / "ROADMAP.md"
     findings: List[Issue] = []
@@ -1764,6 +1902,39 @@ def validate_roadmap(repo: Path, text: str) -> List[Issue]:
                 )
             )
 
+    ordered_headings = [canonicalize_roadmap_heading(heading) for heading, _body in sections if heading != "__preamble__"]
+    required_positions = [ordered_headings.index(required) for required in ROADMAP_REQUIRED_TOP_LEVEL if required in ordered_headings]
+    if required_positions and required_positions != sorted(required_positions):
+        findings.append(
+            Issue(
+                issue_id="roadmap-top-level-order",
+                category="roadmap-violation",
+                severity="medium",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence="`Vision`, `Product Principles`, and `Milestone Progress` are not in canonical order.",
+                recommended_fix="Order the roadmap as `Vision`, `Product Principles`, `Milestone Progress`, then milestone sections.",
+                auto_fixable=True,
+            )
+        )
+
+    for heading, _body in sections:
+        canonical_heading = canonicalize_roadmap_heading(heading)
+        if heading == "__preamble__" or heading == canonical_heading:
+            continue
+        findings.append(
+            Issue(
+                issue_id=f"roadmap-section-misnamed-{canonical_heading.lower().replace(' ', '-')}",
+                category="roadmap-violation",
+                severity="low",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence=f"Section heading `## {heading}` should be `## {canonical_heading}`.",
+                recommended_fix=f"Rename `## {heading}` to `## {canonical_heading}`.",
+                auto_fixable=True,
+            )
+        )
+
     milestones = roadmap_milestone_sections(sections)
     if not milestones:
         findings.append(
@@ -1793,9 +1964,36 @@ def validate_roadmap(repo: Path, text: str) -> List[Issue]:
                     auto_fixable=True,
                 )
             )
+        if len(set(ordered)) != len(ordered):
+            findings.append(
+                Issue(
+                    issue_id="roadmap-milestone-duplicate-index",
+                    category="roadmap-violation",
+                    severity="high",
+                    repo=repo.name,
+                    doc_file=str(roadmap_path),
+                    evidence="Duplicate milestone numbers found in milestone headings.",
+                    recommended_fix="Use each milestone number exactly once.",
+                    auto_fixable=True,
+                )
+            )
+        if ordered and ordered != list(range(ordered[0], ordered[0] + len(ordered))):
+            findings.append(
+                Issue(
+                    issue_id="roadmap-milestone-sequence",
+                    category="roadmap-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(roadmap_path),
+                    evidence="Milestone numbers are not deterministic and sequential.",
+                    recommended_fix="Use a contiguous milestone sequence without gaps or jumps.",
+                    auto_fixable=True,
+                )
+            )
 
         for idx, _title, body in milestones:
             joined = "\n".join(body)
+            subsection_order: List[int] = []
             for subsection in ROADMAP_REQUIRED_MILESTONE_SUBSECTIONS:
                 if f"{subsection}:" not in joined:
                     findings.append(
@@ -1810,6 +2008,21 @@ def validate_roadmap(repo: Path, text: str) -> List[Issue]:
                             auto_fixable=True,
                         )
                     )
+                    continue
+                subsection_order.append(joined.index(f"{subsection}:"))
+            if subsection_order and subsection_order != sorted(subsection_order):
+                findings.append(
+                    Issue(
+                        issue_id=f"roadmap-milestone-{idx}-subsection-order",
+                        category="roadmap-violation",
+                        severity="medium",
+                        repo=repo.name,
+                        doc_file=str(roadmap_path),
+                        evidence=f"Milestone {idx} subsections are not in `Scope`, `Tickets`, `Exit criteria` order.",
+                        recommended_fix=f"Reorder milestone {idx} subsections to the canonical order.",
+                        auto_fixable=True,
+                    )
+                )
 
     for line_no, line in enumerate(lines, start=1):
         if ROADMAP_ANY_CHECKBOX_RE.match(line) and not ROADMAP_CHECKBOX_RE.match(line):
@@ -1826,12 +2039,21 @@ def validate_roadmap(repo: Path, text: str) -> List[Issue]:
                 )
             )
 
-    progress_lines = []
-    progress_range = find_section_line_range(lines, r"^##\s+Milestone Progress\s*$")
-    if progress_range is not None:
-        start_idx, end_idx = progress_range
-        progress_lines = [line for line in lines[start_idx + 1 : end_idx] if line.strip()]
-    milestone_progress_count = len([line for line in progress_lines if line.strip().startswith("- [")])
+    progress_entries, invalid_progress_entries = parse_roadmap_progress_entries(lines)
+    for line_no, line in invalid_progress_entries:
+        findings.append(
+            Issue(
+                issue_id=f"roadmap-progress-entry-format-{line_no}",
+                category="roadmap-violation",
+                severity="medium",
+                repo=repo.name,
+                doc_file=str(roadmap_path),
+                evidence=f"Invalid `Milestone Progress` entry on line {line_no}: `{line}`",
+                recommended_fix="Use `- [ ] Milestone N: Title` or `- [x] Milestone N: Title` entries only.",
+                auto_fixable=True,
+            )
+        )
+    milestone_progress_count = len(progress_entries)
     if milestones and milestone_progress_count != len(milestones):
         findings.append(
             Issue(
@@ -1845,6 +2067,52 @@ def validate_roadmap(repo: Path, text: str) -> List[Issue]:
                 auto_fixable=True,
             )
         )
+    if milestones and progress_entries:
+        milestone_index_map = {idx: (title, body) for idx, title, body in milestones}
+        for _line_no, checked, idx, title in progress_entries:
+            milestone = milestone_index_map.get(idx)
+            if milestone is None:
+                findings.append(
+                    Issue(
+                        issue_id=f"roadmap-progress-missing-milestone-{idx}",
+                        category="roadmap-violation",
+                        severity="medium",
+                        repo=repo.name,
+                        doc_file=str(roadmap_path),
+                        evidence=f"`Milestone Progress` includes Milestone {idx}, but no matching milestone section exists.",
+                        recommended_fix="Keep `Milestone Progress` entries aligned with real milestone sections.",
+                        auto_fixable=True,
+                    )
+                )
+                continue
+            milestone_title, body = milestone
+            if title != milestone_title:
+                findings.append(
+                    Issue(
+                        issue_id=f"roadmap-progress-title-mismatch-{idx}",
+                        category="roadmap-violation",
+                        severity="medium",
+                        repo=repo.name,
+                        doc_file=str(roadmap_path),
+                        evidence=f"`Milestone Progress` labels Milestone {idx} as `{title}`, but the milestone heading uses `{milestone_title}`.",
+                        recommended_fix="Use the same milestone title in `Milestone Progress` and the milestone heading.",
+                        auto_fixable=True,
+                    )
+                )
+            milestone_complete = milestone_is_complete(normalize_milestone_body(body))
+            if checked != milestone_complete:
+                findings.append(
+                    Issue(
+                        issue_id=f"roadmap-progress-reality-mismatch-{idx}",
+                        category="roadmap-violation",
+                        severity="medium",
+                        repo=repo.name,
+                        doc_file=str(roadmap_path),
+                        evidence=f"`Milestone Progress` marks Milestone {idx} as {'complete' if checked else 'incomplete'}, but the milestone checklist state says it is {'complete' if milestone_complete else 'incomplete'}.",
+                        recommended_fix="Make the `Milestone Progress` checkbox reflect the milestone checklist state.",
+                        auto_fixable=True,
+                    )
+                )
 
     if has_legacy_roadmap_format(text):
         findings.append(
@@ -1911,36 +2179,101 @@ def build_roadmap_from_legacy(text: str) -> str:
     return "\n".join(out_lines).strip() + "\n"
 
 
-def ensure_roadmap_apply_shape(text: str) -> str:
+def build_canonical_roadmap(text: str) -> str:
     if has_legacy_roadmap_format(text):
         return build_roadmap_from_legacy(text)
 
-    sections = split_roadmap_sections(text)
-    normalized_lines = text.splitlines()
+    original_sections = split_roadmap_sections(text)
+    section_map = {
+        canonicalize_roadmap_heading(heading): body
+        for heading, body in original_sections
+        if heading != "__preamble__"
+    }
+    milestone_sections = roadmap_milestone_sections(
+        [(canonicalize_roadmap_heading(heading), body) for heading, body in original_sections]
+    )
+    milestone_sections = sorted(milestone_sections, key=lambda item: item[0])
 
-    for idx, line in enumerate(normalized_lines):
-        if line.strip() == "## Product principles":
-            normalized_lines[idx] = "## Product Principles"
+    if not milestone_sections:
+        milestone_sections = [
+            (
+                0,
+                "Foundation",
+                [
+                    "Scope:",
+                    "",
+                    "- [ ] Define initial plugin-development scope.",
+                    "",
+                    "Tickets:",
+                    "",
+                    "- [ ] Add the first implementation task.",
+                    "",
+                    "Exit criteria:",
+                    "",
+                    "- [ ] Scope, tickets, and validation are complete.",
+                ],
+            )
+        ]
 
-    text = "\n".join(normalized_lines)
-    if normalized_lines and text and text[-1] != "\n":
-        text += "\n"
+    vision_body = trim_blank_lines(section_map.get("Vision", [])) or [
+        "- Define the long-term outcome for this plugin-development repository."
+    ]
+    product_body = trim_blank_lines(section_map.get("Product Principles", [])) or [
+        "- Keep plugin-development docs deterministic, reviewable, and aligned with real repo behavior."
+    ]
 
-    sections = split_roadmap_sections(text)
-    headings = [heading for heading, _body in sections]
-    if "# Project Roadmap" not in text.splitlines()[:3]:
-        text = ROADMAP_DEFAULT_TEMPLATE if not text.strip() else "# Project Roadmap\n\n" + text.lstrip("# \n")
+    out_lines: List[str] = [
+        "# Project Roadmap",
+        "",
+        "## Vision",
+        "",
+        *vision_body,
+        "",
+        "## Product Principles",
+        "",
+        *product_body,
+        "",
+        "## Milestone Progress",
+        "",
+    ]
 
-    if "Vision" not in headings:
-        text += "\n## Vision\n\n- Define the long-term outcome for this plugin-development repository.\n"
-    if "Product Principles" not in headings and "Product principles" not in headings:
-        text += "\n## Product Principles\n\n- Keep plugin-development docs deterministic, reviewable, and aligned with real repo behavior.\n"
-    if "Milestone Progress" not in headings:
-        text += "\n## Milestone Progress\n\n- [ ] Milestone 0: Foundation\n"
-    if not roadmap_milestone_sections(split_roadmap_sections(text)):
-        text += "\n## Milestone 0: Foundation\n\nScope:\n\n- [ ] Define initial plugin-development scope.\n\nTickets:\n\n- [ ] Add the first implementation task.\n\nExit criteria:\n\n- [ ] Scope, tickets, and validation are complete.\n"
+    for idx, title, body in milestone_sections:
+        normalized_body = normalize_milestone_body(body)
+        checkbox = "[x]" if milestone_is_complete(normalized_body) else "[ ]"
+        out_lines.append(f"- {checkbox} Milestone {idx}: {title}")
 
-    return text.rstrip() + "\n"
+    out_lines.append("")
+
+    for idx, title, body in milestone_sections:
+        out_lines.extend(
+            [
+                f"## Milestone {idx}: {title}",
+                "",
+                *normalize_milestone_body(body),
+                "",
+            ]
+        )
+
+    extra_sections = [
+        (canonicalize_roadmap_heading(heading), body)
+        for heading, body in original_sections
+        if heading not in {"__preamble__", "Vision", "Product Principles", "Milestone Progress"}
+        and not ROADMAP_MILESTONE_HEADING_RE.match(f"## {canonicalize_roadmap_heading(heading)}")
+    ]
+    for heading, body in extra_sections:
+        trimmed_body = trim_blank_lines(body)
+        out_lines.extend([f"## {heading}", ""])
+        if trimmed_body:
+            out_lines.extend(trimmed_body)
+            out_lines.append("")
+
+    return "\n".join(out_lines).rstrip() + "\n"
+
+
+def ensure_roadmap_apply_shape(text: str) -> str:
+    if not text.strip():
+        return ROADMAP_DEFAULT_TEMPLATE
+    return build_canonical_roadmap(text)
 
 
 def apply_fixes_for_roadmap(repo: Path) -> Tuple[bool, List[Dict[str, object]], Optional[str]]:
@@ -1983,7 +2316,14 @@ def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_
     if not readme_text or not roadmap_text:
         return issues
 
-    if "maintain-skills-readme" in readme_text or "maintain-skills-readme" in roadmap_text:
+    sanitized_readme = readme_text
+    sanitized_roadmap = re.sub(
+        r"Rename the skill surface from `maintain-skills-readme` to `maintain-plugin-docs`\.",
+        "",
+        roadmap_text,
+    )
+
+    if "maintain-skills-readme" in sanitized_readme or "maintain-skills-readme" in sanitized_roadmap:
         issues.append(
             Issue(
                 issue_id="cross-doc-legacy-skill-name",
@@ -1996,6 +2336,100 @@ def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_
                 auto_fixable=False,
             )
         )
+
+    skill_dirs = find_skill_dirs(repo)
+    for skill in skill_dirs:
+        if skill not in readme_text:
+            issues.append(
+                Issue(
+                    issue_id=f"cross-doc-readme-missing-skill-{skill}",
+                    category="cross-doc-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo / "README.md"),
+                    evidence=f"README does not mention active skill `{skill}`.",
+                    recommended_fix="Keep the README active skill inventory aligned with the real skill directories.",
+                    auto_fixable=False,
+                )
+            )
+        if skill not in roadmap_text:
+            issues.append(
+                Issue(
+                    issue_id=f"cross-doc-roadmap-missing-skill-{skill}",
+                    category="cross-doc-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo / "ROADMAP.md"),
+                    evidence=f"ROADMAP does not mention active skill `{skill}`.",
+                    recommended_fix="Mention every active skill somewhere in the roadmap or milestone plan.",
+                    auto_fixable=False,
+                )
+            )
+
+    if "## Milestone 1: `maintain-plugin-docs` evolution" in roadmap_text:
+        if "Current implementation:" not in readme_text or "Intended scope:" not in readme_text:
+            issues.append(
+                Issue(
+                    issue_id="cross-doc-scope-wording",
+                    category="cross-doc-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo),
+                    evidence="ROADMAP tracks current-versus-planned `maintain-plugin-docs` scope, but README does not present both `Current implementation` and `Intended scope` wording.",
+                    recommended_fix="Keep README and ROADMAP aligned about current versus planned docs-maintainer scope.",
+                    auto_fixable=False,
+                )
+            )
+
+    install_range = find_section_line_range(readme_text.splitlines(), r"^##\s+Install\s*$")
+    has_codex_plugin = any(repo.glob("plugins/*/.codex-plugin/plugin.json"))
+    has_claude_plugin = any(repo.glob("plugins/*/.claude-plugin/plugin.json"))
+    if install_range is not None and (has_codex_plugin or has_claude_plugin):
+        start_idx, end_idx = install_range
+        install_text = "\n".join(readme_text.splitlines()[start_idx:end_idx])
+        codex_pos = install_text.find("Codex Plugin")
+        claude_pos = install_text.find("Claude Code Plugin")
+        cli_pos = install_text.find("Vercel `skills` CLI")
+        if has_codex_plugin and codex_pos == -1:
+            issues.append(
+                Issue(
+                    issue_id="cross-doc-missing-codex-plugin-install",
+                    category="cross-doc-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo / "README.md"),
+                    evidence="README install section does not document the Codex Plugin install surface.",
+                    recommended_fix="Lead the install section with Codex Plugin guidance before secondary CLI installs.",
+                    auto_fixable=False,
+                )
+            )
+        if has_claude_plugin and claude_pos == -1:
+            issues.append(
+                Issue(
+                    issue_id="cross-doc-missing-claude-plugin-install",
+                    category="cross-doc-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo / "README.md"),
+                    evidence="README install section does not document the Claude Code Plugin install surface.",
+                    recommended_fix="Lead the install section with Claude Code Plugin guidance before secondary CLI installs.",
+                    auto_fixable=False,
+                )
+            )
+        primary_positions = [pos for pos in (codex_pos, claude_pos) if pos != -1]
+        if cli_pos != -1 and primary_positions and cli_pos < min(primary_positions):
+            issues.append(
+                Issue(
+                    issue_id="cross-doc-install-priority",
+                    category="cross-doc-violation",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo / "README.md"),
+                    evidence="README install section presents the Vercel `skills` CLI before the primary Codex/Claude plugin install surfaces.",
+                    recommended_fix="Document Codex Plugin and Claude Code Plugin installs before secondary Vercel `skills` CLI examples.",
+                    auto_fixable=False,
+                )
+            )
 
     return issues
 
@@ -2089,7 +2523,7 @@ def main() -> int:
     wants_roadmap = args.doc_scope in {"roadmap", "all"}
 
     for repo in repos:
-        profile = detect_profile(repo.name)
+        profile = detect_profile(repo)
         profile_assignments[repo.name] = profile
 
         readme = repo / "README.md"
@@ -2204,10 +2638,6 @@ def main() -> int:
         "readme_findings": [i.to_dict() for i in readme_findings],
         "roadmap_findings": [i.to_dict() for i in roadmap_findings],
         "cross_doc_findings": [i.to_dict() for i in cross_doc_findings],
-        "schema_violations": [i.to_dict() for i in readme_findings],
-        "command_integrity_issues": [
-            i.to_dict() for i in readme_findings if i.category == "command-integrity"
-        ],
         "repos_with_issues": repos_with_issues,
         "fixes_applied": fixes_applied,
         "post_fix_status": {

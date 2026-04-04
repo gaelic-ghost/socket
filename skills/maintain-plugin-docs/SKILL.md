@@ -56,6 +56,7 @@ Current scope note:
 - Never edit source code, manifests, lockfiles, or CI files.
 - Keep edits bounded to `README.md`, `ROADMAP.md`, and explicitly approved snippet insertions into `AGENTS.md`.
 - Do not use this skill for ordinary software project docs. Use `maintain-project-readme` or `maintain-project-roadmap` instead.
+- Leave repo-wide policy reconciliation, broad maintainer-doc alignment, and packaging-surface drift beyond docs wording to `sync-skills-repo-guidance`.
 
 ## References
 
