@@ -22,6 +22,9 @@ Current repo guidance for this skill:
 
 - Prefer personal scope by default so one maintained local Codex plugin install can be reused across repositories.
 - Use repo scope only when a repository genuinely needs its own repo-local plugin catalog.
+- Allow persistent default-scope preferences through:
+  - `.codex/profiles/install-plugin-to-socket/customization.yaml`
+  - `~/.config/gaelic-ghost/agent-plugin-skills/install-plugin-to-socket/customization.yaml`
 - Default to `copy` mode because it matches the documented OpenAI examples for local plugin installs.
 - Treat `refresh` in `copy` mode as the normal update workflow when the source clone is ahead of the staged install copy.
 - Keep `symlink` mode as an advanced maintainer override for local development only; it is not the primary documented Codex install model.
@@ -36,3 +39,7 @@ Relevant docs:
 - `https://developers.openai.com/codex/plugins`
 - `https://developers.openai.com/codex/plugins/build`
 - `https://developers.openai.com/codex/config-advanced/#project-config-files-codexconfigtoml`
+
+Related local references:
+
+- `customization-schema.md`

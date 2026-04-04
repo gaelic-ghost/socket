@@ -16,6 +16,11 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - default: `personal`
   - `repo`
   - `personal`
+- Optional: config path override
+  - `--config <path>`
+  - when omitted, resolve defaults from:
+    - `.codex/profiles/install-plugin-to-socket/customization.yaml`
+    - `~/.config/gaelic-ghost/agent-plugin-skills/install-plugin-to-socket/customization.yaml`
 - Optional: target repo root when `scope=repo`
   - default: current working directory when the helper is run from the target repo
 - Optional: action
@@ -33,7 +38,12 @@ This skill is for local Codex plugin development workflows. It does not publish 
 1. Confirm the task is local Codex plugin wiring, not generic plugin authoring or metadata review.
 2. Read the plugin manifest at `.codex-plugin/plugin.json` and infer the plugin name, version, description, and interface metadata.
 3. Use `scripts/install_plugin_to_socket.py` in `check-only` mode first.
-4. Prefer `personal` scope unless the user explicitly wants repo-local plugin wiring.
+4. Resolve the effective install scope in this order:
+   - explicit `--scope`
+   - explicit `--config`
+   - repo profile
+   - global profile
+   - built-in default `personal`
 5. For `personal` scope, target:
    - `~/.codex/plugins/<plugin-name>`
    - `~/.agents/plugins/marketplace.json`
@@ -51,6 +61,17 @@ This skill is for local Codex plugin development workflows. It does not publish 
 13. For `install` and `refresh`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
 14. For `detach`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
 15. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
+
+## Usage Examples
+
+- Personal install:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root plugins/agent-plugin-skills --action install --run-mode apply`
+- Repo-local install:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action install --run-mode apply`
+- Update a staged copied install after source changes:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action refresh --run-mode apply`
+- Remove a local install cleanly:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action detach --run-mode apply`
 
 ## Repairing Drifted Installs
 
@@ -82,10 +103,16 @@ Preferred repair flow:
 4. Use `detach` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
 5. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.
 
+## Not Yet In Scope
+
+- First-class promote behavior from repo-local scope into personal scope is still planned roadmap work.
+- This skill should not claim promote support until it can copy the staged plugin tree into personal scope and optionally detach the repo-local install in one bounded workflow.
+
 ## Output Contract
 
 - Return a short summary plus JSON with:
   - `run_context`
+    - include config resolution context such as `config_path` and `scope_source`
   - `scope`
   - `action`
   - `install_mode`
@@ -111,4 +138,5 @@ Preferred repair flow:
 
 ## References
 
+- `references/customization-schema.md`
 - `references/local-plugin-install-notes.md`

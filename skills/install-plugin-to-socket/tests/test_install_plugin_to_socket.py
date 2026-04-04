@@ -346,8 +346,64 @@ def test_parse_args_defaults_scope_to_personal(tmp_path: Path) -> None:
     ):
         args = m.parse_args()
 
-    assert args.scope == "personal"
+    assert args.scope is None
     assert args.install_mode == "copy"
+
+
+def test_resolve_scope_defaults_to_personal_without_config(tmp_path: Path) -> None:
+    scope, config, errors = m.resolve_scope(None, tmp_path, None)
+
+    assert not errors
+    assert scope == "personal"
+    assert config["source"] == "default"
+
+
+def test_resolve_scope_uses_repo_profile_preference(tmp_path: Path) -> None:
+    profile_path = tmp_path / ".codex" / "profiles" / "install-plugin-to-socket" / "customization.yaml"
+    profile_path.parent.mkdir(parents=True)
+    profile_path.write_text(
+        "schemaVersion: 1\nprofile: repo-local-defaults\ndefaultInstallScope: repo-local\n",
+        encoding="utf-8",
+    )
+
+    scope, config, errors = m.resolve_scope(None, tmp_path, None)
+
+    assert not errors
+    assert scope == "repo"
+    assert config["source"] == "config"
+    assert config["config_path"] == str(profile_path)
+
+
+def test_resolve_scope_prefers_cli_over_profile(tmp_path: Path) -> None:
+    profile_path = tmp_path / ".codex" / "profiles" / "install-plugin-to-socket" / "customization.yaml"
+    profile_path.parent.mkdir(parents=True)
+    profile_path.write_text("defaultInstallScope: repo\n", encoding="utf-8")
+
+    scope, config, errors = m.resolve_scope("personal", tmp_path, None)
+
+    assert not errors
+    assert scope == "personal"
+    assert config["source"] == "cli"
+
+
+def test_resolve_scope_reports_invalid_profile_value(tmp_path: Path) -> None:
+    profile_path = tmp_path / ".codex" / "profiles" / "install-plugin-to-socket" / "customization.yaml"
+    profile_path.parent.mkdir(parents=True)
+    profile_path.write_text("defaultInstallScope: moon-base\n", encoding="utf-8")
+
+    scope, config, errors = m.resolve_scope(None, tmp_path, None)
+
+    assert scope == "personal"
+    assert config["source"] == "invalid-config"
+    assert errors
+
+
+def test_resolve_scope_reports_missing_explicit_config(tmp_path: Path) -> None:
+    scope, config, errors = m.resolve_scope(None, tmp_path, str(tmp_path / "missing.yaml"))
+
+    assert scope == "personal"
+    assert config["source"] == "invalid-config"
+    assert "does not exist" in errors[0]
 
 
 def test_apply_install_repo_scope_can_stage_symlink(tmp_path: Path) -> None:

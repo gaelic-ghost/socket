@@ -107,6 +107,42 @@ For Codex local installs, the documented staged paths are:
 
 Use `install-plugin-to-socket` to merge the marketplace entry safely and stage a copied plugin tree at those paths. Personal scope is the default recommendation unless a repository explicitly needs repo-local plugin wiring.
 
+You can persist that default preference through:
+
+- repo profile: `.codex/profiles/install-plugin-to-socket/customization.yaml`
+- global profile: `~/.config/gaelic-ghost/agent-plugin-skills/install-plugin-to-socket/customization.yaml`
+
+Example:
+
+```yaml
+schemaVersion: 1
+profile: personal-first
+isCustomized: true
+defaultInstallScope: personal
+```
+
+Common workflows:
+
+```bash
+# Install into personal scope using the default resolution chain
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --action install \
+  --run-mode apply
+
+# Refresh the staged copied install after local source changes
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --action refresh \
+  --run-mode apply
+
+# Remove the local Codex install surface for one plugin
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --action detach \
+  --run-mode apply
+```
+
 ### Claude Code Plugin
 
 This repository also ships a Claude plugin manifest at [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json).

@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 from dataclasses import asdict, dataclass
@@ -13,6 +14,8 @@ from pathlib import Path
 EXACT_NO_FINDINGS = "No findings."
 DEFAULT_SCOPE = "personal"
 DEFAULT_INSTALL_MODE = "copy"
+REPO_CONFIG_RELATIVE_PATH = Path(".codex") / "profiles" / "install-plugin-to-socket" / "customization.yaml"
+GLOBAL_CONFIG_RELATIVE_PATH = Path(".config") / "gaelic-ghost" / "agent-plugin-skills" / "install-plugin-to-socket" / "customization.yaml"
 
 
 @dataclass
@@ -35,6 +38,10 @@ def _write_json(path: Path, payload: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
+
 def _pretty_plugin_title(name: str) -> str:
     return name.replace("-", " ").title()
 
@@ -53,6 +60,64 @@ def _path_within_root(path: Path, root: Path) -> bool:
 
 def _is_same_path(left: Path, right: Path) -> bool:
     return left.resolve() == right.resolve()
+
+
+def _normalize_scope(raw_scope: str | None) -> str | None:
+    if raw_scope is None:
+        return None
+    normalized = raw_scope.strip().lower()
+    if normalized in {"personal", "global"}:
+        return "personal"
+    if normalized in {"repo", "repo-local"}:
+        return "repo"
+    return None
+
+
+def read_optional_config(project_root: Path, config_override: str | None) -> dict[str, object]:
+    config_paths: list[Path] = []
+    if config_override:
+        override_path = Path(config_override).expanduser().resolve()
+        if not override_path.is_file():
+            return {
+                "config_path": str(override_path),
+                "config_error": "Requested `--config` path does not exist.",
+            }
+        config_paths.append(override_path)
+    else:
+        config_paths.append((project_root / REPO_CONFIG_RELATIVE_PATH).resolve())
+        config_paths.append((_resolve_home() / GLOBAL_CONFIG_RELATIVE_PATH).resolve())
+
+    for path in config_paths:
+        if not path.is_file():
+            continue
+        text = _read_text(path)
+        result: dict[str, object] = {"config_path": str(path)}
+        for key in ["schemaVersion", "profile", "isCustomized", "defaultInstallScope"]:
+            match = re.search(rf"^\s*{key}\s*:\s*(.+?)\s*$", text, flags=re.MULTILINE)
+            if match:
+                result[key] = match.group(1).strip().strip('"').strip("'")
+        return result
+    return {"config_path": "none"}
+
+
+def resolve_scope(scope_arg: str | None, project_root: Path, config_override: str | None) -> tuple[str, dict[str, object], list[str]]:
+    config = read_optional_config(project_root, config_override)
+    errors: list[str] = []
+    if isinstance(config, dict) and config.get("config_error") is not None:
+        errors.append(str(config["config_error"]))
+        return DEFAULT_SCOPE, {"source": "invalid-config", **config}, errors
+    if scope_arg is not None:
+        return scope_arg, {"source": "cli", **config}, errors
+
+    configured_scope = _normalize_scope(config.get("defaultInstallScope") if isinstance(config, dict) else None)
+    if isinstance(config, dict) and config.get("defaultInstallScope") is not None and configured_scope is None:
+        errors.append(
+            "Installer config sets `defaultInstallScope` to an unsupported value. Use `personal`, `global`, `repo`, or `repo-local`."
+        )
+        return DEFAULT_SCOPE, {"source": "invalid-config", **config}, errors
+    if configured_scope is not None:
+        return configured_scope, {"source": "config", **config}, errors
+    return DEFAULT_SCOPE, {"source": "default", **config}, errors
 
 
 def load_plugin_manifest(source_plugin_root: Path) -> dict[str, object]:
@@ -429,6 +494,8 @@ def build_report(
     install_mode: str,
     target_plugin_root: Path,
     marketplace_path: Path,
+    config_path: str,
+    scope_source: str,
     findings: list[Finding],
     apply_actions: list[dict[str, str]],
     errors: list[str],
@@ -437,6 +504,8 @@ def build_report(
     return {
         "run_context": {
             "run_mode": run_mode,
+            "config_path": config_path,
+            "scope_source": scope_source,
         },
         "scope": scope,
         "action": action,
@@ -457,10 +526,11 @@ def parse_args() -> argparse.Namespace:
         description="Audit and apply local Codex plugin install wiring at repo or personal scope"
     )
     parser.add_argument("--source-plugin-root", required=True)
-    parser.add_argument("--scope", choices=("repo", "personal"), default=DEFAULT_SCOPE)
+    parser.add_argument("--scope", choices=("repo", "personal"))
     parser.add_argument("--action", choices=("install", "refresh", "detach"), required=True)
     parser.add_argument("--run-mode", choices=("check-only", "apply"), required=True)
     parser.add_argument("--repo-root")
+    parser.add_argument("--config")
     parser.add_argument("--install-mode", choices=("copy", "symlink"), default=DEFAULT_INSTALL_MODE)
     parser.add_argument("--print-md", action="store_true")
     return parser.parse_args()
@@ -469,21 +539,24 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     source_plugin_root = Path(args.source_plugin_root).resolve()
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else None
+    project_root = Path(args.repo_root).resolve() if args.repo_root else Path.cwd().resolve()
+    scope, scope_context, scope_errors = resolve_scope(args.scope, project_root, args.config)
+    repo_root = project_root if scope == "repo" else (Path(args.repo_root).resolve() if args.repo_root else None)
 
     findings, source_summary, target_plugin_root, marketplace_path, _scope_root, errors = audit_install(
         source_plugin_root=source_plugin_root,
-        scope=args.scope,
+        scope=scope,
         action=args.action,
         repo_root=repo_root,
         install_mode=args.install_mode,
     )
+    errors.extend(scope_errors)
 
     apply_actions: list[dict[str, str]] = []
     if not errors and args.run_mode == "apply":
         apply_actions, source_summary, target_plugin_root, marketplace_path, apply_errors = apply_install(
             source_plugin_root=source_plugin_root,
-            scope=args.scope,
+            scope=scope,
             action=args.action,
             repo_root=repo_root,
             install_mode=args.install_mode,
@@ -491,7 +564,7 @@ def main() -> int:
         errors.extend(apply_errors)
         findings, source_summary, target_plugin_root, marketplace_path, _scope_root, post_errors = audit_install(
             source_plugin_root=source_plugin_root,
-            scope=args.scope,
+            scope=scope,
             action=args.action,
             repo_root=repo_root,
             install_mode=args.install_mode,
@@ -500,12 +573,14 @@ def main() -> int:
 
     report = build_report(
         source_plugin=source_summary,
-        scope=args.scope,
+        scope=scope,
         action=args.action,
         run_mode=args.run_mode,
         install_mode=args.install_mode,
         target_plugin_root=target_plugin_root,
         marketplace_path=marketplace_path,
+        config_path=str(scope_context.get("config_path", "none")),
+        scope_source=str(scope_context.get("source", "default")),
         findings=findings,
         apply_actions=apply_actions,
         errors=errors,

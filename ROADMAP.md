@@ -26,6 +26,7 @@
 - [ ] Milestone 5: skills repo migration and split support
 - [ ] Milestone 6: upstream docs watch and change intake
 - [ ] Milestone 7: `skill-evals`
+- [ ] Milestone 8: customization systems guidance
 
 ## Milestone 0: Foundation bootstrap
 
@@ -115,11 +116,13 @@ Tickets:
 - [x] Default to docs-aligned local copy or sync behavior into the chosen scope-local plugin directory instead of inventing an unsupported direct-external-path install mode.
 - [x] Add a bounded refresh path for updating an already wired local development plugin after source changes.
 - [x] Add a bounded uninstall or detach path that can remove the local plugin directory and marketplace entry for one plugin without disturbing others.
+- [x] Add a persistent default install-scope preference with repo-profile and global-profile resolution before the built-in default.
 - [ ] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
 - [ ] Add optional config-state management for Codex plugin enable or disable behavior in `~/.codex/config.toml` once the repo wants that broader contract.
 - [ ] Add a verification-oriented mode that audits an already installed local plugin and reports marketplace drift, missing copied files, and likely restart state.
 - [ ] Add a safer overwrite policy for personal-scope refreshes so maintainers can choose between replace, backup-then-replace, or fail-on-existing behavior.
-- [ ] Add support for promoting or mirroring a plugin between repo and personal scope without forcing the maintainer to rerun separate install and detach flows manually.
+- [x] Document install, refresh, and detach usage examples so update and remove workflows are explicit in repo guidance.
+- [ ] Add support for promoting a plugin from repo-local scope into personal scope in one bounded workflow without forcing the maintainer to rerun separate install and detach flows manually.
 - [ ] Add richer manifest-aware checks for optional plugin surfaces such as `.mcp.json`, `.app.json`, hooks, and install-surface assets before copying them into place.
 - [x] Return a structured report with:
   - `run_context`
@@ -228,3 +231,23 @@ Exit criteria:
 
 - [ ] Maintainers can run one coherent workflow to evaluate a skill on real agent surfaces instead of relying only on static review.
 - [ ] The repo has a durable place for testing trigger behavior and workflow fidelity across supported agents.
+
+## Milestone 8: customization systems guidance
+
+Scope:
+
+- Add durable maintainer guidance for how skills in this repo should expose persistent customization without inventing one-off config surfaces each time.
+- Standardize repo-profile and global-profile conventions where they make sense for maintainer workflows in this repository.
+- Make it easier to tell which skills should adopt persistent customization, which should stay argument-only, and how those decisions should be documented.
+
+Tickets:
+
+- [ ] Define the canonical customization guidance for this repo family, including repo-profile and global-profile path conventions.
+- [ ] Document when a skill should add persistent customization versus keeping defaults inline and CLI-only.
+- [ ] Add shared guidance for documenting config schema, precedence order, and example customization files in relevant skills here.
+- [ ] Audit the relevant existing skills in this repo and note which ones should adopt or explicitly avoid persistent customization.
+
+Exit criteria:
+
+- [ ] Maintainers have one documented customization pattern to follow instead of ad hoc per-skill config behavior.
+- [ ] Relevant skills in this repo can converge on the same customization vocabulary, path layout, and documentation shape.
