@@ -1,6 +1,6 @@
 # python-skills
 
-Codex plugin bundle for Python bootstrapping, testing, FastAPI service setup, and FastMCP scaffolding with `uv`-first workflows.
+Python skills repository for `uv`-first bootstrapping, testing, FastAPI service setup, and FastMCP scaffolding, with shared skill content at root and thin plugin packaging layers on top.
 
 For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 
@@ -18,7 +18,9 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 
 ## What This Codex Plugin Includes
 
-This repository ships the maintained skills under `skills/` and also includes Codex plugin packaging metadata at the repo root.
+This repository ships the maintained skills under `skills/`, and root `skills/` is the canonical workflow-authoring surface.
+
+The active packaged plugin surface lives under `plugins/python-skills/`, while shared marketplace catalogs live at `.agents/plugins/marketplace.json` for Codex and `.claude-plugin/marketplace.json` for Claude sharing.
 
 Current scaffold defaults now include typed configuration via `pydantic-settings`, a committed `.env` for safe defaults, and an ignored `.env.local` for local or secret overrides.
 
@@ -44,14 +46,14 @@ The shared long-term direction across skills repositories is broader:
 - add Claude Code support and optimizations wherever they are applicable and useful
 - add vendor plugin packaging as a thin layer on top of the shared `skills/` tree instead of duplicating the skills themselves
 
-That means `skills/` is the shared workflow surface, while `.codex-plugin/` is the current active packaging layer. Future Claude support should add Claude-specific packaging and optimizations without forking the real skill bodies unless a genuine platform-specific divergence forces it.
+That means root `skills/` stays canonical, while `plugins/python-skills/` is the plugin packaging root for this repository. OpenAI Codex Skills and Claude Code Plugins should remain thin vendor layers over the same skill bodies rather than separate skill trees.
 
 ## Install As Skills
 
 OpenAI's skills docs still support direct skill installation and local discovery through standard `.agents/skills` locations:
 
-- [Agent Skills](https://developers.openai.com/codex/skills/)
-- [Where to save skills](https://developers.openai.com/codex/skills/#where-to-save-skills)
+- [OpenAI Codex Skills](https://developers.openai.com/codex/concepts/customization/#skills)
+- [Where to save skills](https://developers.openai.com/codex/concepts/customization/#skills)
 
 This repository supports that path too. The shared skills live under `./skills/`, so you can install one, several, or all of them by symlinking or copying those skill directories into a supported skill location such as `~/.agents/skills/`.
 
@@ -81,6 +83,16 @@ done
 
 Codex supports symlinked skill folders, so symlinks are a good fit while developing or iterating on this repository. If a newly installed skill does not appear right away, restart Codex.
 
+For repo-local Codex plugin development, use the tracked plugin source root at `plugins/python-skills/` together with `.agents/plugins/marketplace.json`. For personal Codex installs, stage the plugin outside the repo at `~/.codex/plugins/python-skills` and register it in `~/.agents/plugins/marketplace.json`.
+
+For Claude development, point the CLI at the tracked plugin source root:
+
+```bash
+claude --plugin-dir ./plugins/python-skills
+```
+
+If this repository is shared as a Claude marketplace, keep `.claude-plugin/marketplace.json` in git and keep plugin-relative paths inside that marketplace root.
+
 ## Plugin Structure
 
 ```text
@@ -88,11 +100,14 @@ Codex supports symlinked skill folders, so symlinks are a good fit while develop
 ├── README.md
 ├── ROADMAP.md
 ├── AGENTS.md
-├── .codex-plugin/
-│   └── plugin.json
 ├── .agents/
+│   ├── skills -> ../skills
 │   └── plugins/
 │       └── marketplace.json
+├── .claude/
+│   └── skills -> ../skills
+├── .claude-plugin/
+│   └── marketplace.json
 ├── docs/
 │   └── maintainers/
 │       ├── reality-audit.md
@@ -102,6 +117,13 @@ Codex supports symlinked skill folders, so symlinks are a good fit while develop
 │       └── validate_repo_docs.sh
 ├── scripts/
 │   └── validate_repo_metadata.py
+├── plugins/
+│   └── python-skills/
+│       ├── .codex-plugin/
+│       │   └── plugin.json
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       └── skills -> ../../skills
 └── skills/
     ├── bootstrap-python-mcp-service/
     ├── bootstrap-python-service/
@@ -113,16 +135,24 @@ Codex supports symlinked skill folders, so symlinks are a good fit while develop
 
 Keep the repo packaging and skill metadata consistent:
 
-- Maintain `.codex-plugin/plugin.json` as the plugin distribution contract.
-- Maintain `.agents/plugins/marketplace.json` for local Codex install and smoke testing.
+- Keep root `skills/` as the canonical workflow-authoring surface.
+- Maintain `plugins/python-skills/.codex-plugin/plugin.json` and `plugins/python-skills/.claude-plugin/plugin.json` as the packaged plugin manifests.
+- Maintain `.agents/plugins/marketplace.json` for repo-local Codex install and smoke testing.
+- Maintain `.claude-plugin/marketplace.json` for repo-shared Claude marketplace wiring.
 - Keep `skills/` vendor-neutral by default, and localize vendor-specific packaging to thin top-level surfaces.
-- Treat OpenAI support as the current release target, while preserving a structure that can later add Claude Code skill and plugin support cleanly.
 - Keep direct skill install guidance accurate too; this repo supports both plugin installs and direct skill installs from the shared `skills/` tree.
 - Keep bundled skills under `skills/` only; do not reintroduce a flat top-level skill layout.
 - Treat each skill's `SKILL.md` plus `agents/openai.yaml` as the canonical per-skill contract pair.
-- Run repo validation before commits:
+- Route ongoing install, update, uninstall, verify, enable, disable, and promote workflows through `install-plugin-to-socket` rather than implying the repo-sync workflow owns those lifecycle actions.
+- Track canonical plugin source trees and shared marketplace catalogs in git.
+- Do not track consumer-side install copies, caches, or machine-local runtime state.
+- Keep maintainer Python tooling explicit and repo-local:
 
 ```bash
+uv sync --dev
+uv tool install ruff
+uv tool install mypy
+uv run --group dev pytest
 uv run scripts/validate_repo_metadata.py
 uv run pytest
 ```
@@ -131,9 +161,10 @@ uv run pytest
 
 - Root docs are the canonical installation and discovery surface.
 - Active bundled skills live under `skills/`.
-- `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` are maintained surfaces, not generated throwaways.
+- `plugins/python-skills/` is the plugin packaging root for this repository.
+- `.agents/plugins/marketplace.json` and `.claude-plugin/marketplace.json` are maintained shared catalogs, not generated throwaways.
 - Direct skill installs remain supported from the shared `skills/` tree through the standard `.agents/skills` locations.
-- OpenAI packaging is the active release surface today; Claude Code packaging is a planned follow-on surface, not a second live contract yet.
+- OpenAI packaging is the active release surface today, and Claude packaging is kept as a thin additive surface over the same shared skills.
 - Each skill’s maintained contract lives in `SKILL.md` plus `agents/openai.yaml`; per-skill `README.md` files are intentionally retired.
 - Generated bootstrap projects now ship `pydantic-settings`, a committed `.env`, and an ignored `.env.local`.
 - Maintainer-side validation is standardized on `uv run pytest` and `uv run scripts/validate_repo_metadata.py`.

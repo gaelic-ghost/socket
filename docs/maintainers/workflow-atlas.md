@@ -2,7 +2,7 @@
 
 ## Active Surface
 
-`python-skills` now ships as a Codex plugin root with four bundled skills under `skills/`:
+`python-skills` now ships with four bundled skills under root `skills/` and thin packaged plugin manifests under `plugins/python-skills/`:
 
 - `bootstrap-python-mcp-service`
 - `bootstrap-python-service`
@@ -11,12 +11,12 @@
 
 These are the only active bundled skill surfaces that root docs, plugin metadata, and marketplace metadata should present.
 
-OpenAI packaging is the live release surface today. Claude Code compatibility should be preserved at the shared-skill layer where practical, but Claude-specific packaging is still a planned milestone rather than an active maintained contract.
+OpenAI packaging is the live release surface today. Claude Code compatibility and packaging should stay additive over the same shared skill bodies rather than creating a second authored surface.
 
 The repository should still support both user-facing install paths:
 
 - direct skill installation from `skills/` into standard `.agents/skills` locations
-- Codex plugin installation through `.codex-plugin/plugin.json` and marketplace metadata
+- plugin installation through `plugins/python-skills/` plus marketplace metadata
 
 ## Skill Roles
 
@@ -67,8 +67,11 @@ Each active skill should maintain the full repo contract:
 ## Repo-Level Sources Of Truth
 
 - Root `README.md`: install surface and discovery guidance
-- `.codex-plugin/plugin.json`: plugin distribution contract
-- `.agents/plugins/marketplace.json`: local plugin install and smoke-test contract
+- `skills/`: canonical workflow-authoring surface
+- `plugins/python-skills/.codex-plugin/plugin.json`: Codex plugin distribution contract
+- `plugins/python-skills/.claude-plugin/plugin.json`: Claude plugin distribution contract
+- `.agents/plugins/marketplace.json`: repo-local Codex plugin install and smoke-test contract
+- `.claude-plugin/marketplace.json`: repo-shared Claude marketplace contract
 - `ROADMAP.md`: milestone history and near-term intent
 - `AGENTS.md`: repo-local authoring and validation policy
 - `docs/maintainers/reality-audit.md`: audit checklist for shipped reality
@@ -77,8 +80,9 @@ Each active skill should maintain the full repo contract:
 Future vendor surfaces should follow the same split:
 
 - shared skill content stays under `skills/`
-- OpenAI-specific packaging stays in `.codex-plugin/` and repo plugin marketplace files
-- future Claude-specific packaging should live in Claude-specific top-level files instead of duplicating the `skills/` tree
+- OpenAI-specific packaging stays under `plugins/python-skills/.codex-plugin/` with repo-root marketplace catalogs
+- Claude-specific packaging stays under `plugins/python-skills/.claude-plugin/` and the repo-root `.claude-plugin/marketplace.json`
+- discovery mirrors stay explicit through `.agents/skills`, `.claude/skills`, and `plugins/python-skills/skills`
 
 ## Validation Ownership
 

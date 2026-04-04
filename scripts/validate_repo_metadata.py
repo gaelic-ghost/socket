@@ -62,6 +62,7 @@ PLUGIN_INTERFACE_REQUIRED_FIELDS = [
     "defaultPrompt",
     "brandColor",
 ]
+PLUGIN_DIR_NAME = "python-skills"
 
 
 @dataclass
@@ -265,9 +266,14 @@ def validate_skill_dir(repo_root: Path, skill_dir: Path) -> list[Finding]:
     return findings
 
 
-def validate_plugin_manifest(repo_root: Path) -> list[Finding]:
+def validate_plugin_manifest(
+    repo_root: Path,
+    manifest_path: Path,
+    *,
+    expected_name: str,
+    require_skills_interface: bool,
+) -> list[Finding]:
     findings: list[Finding] = []
-    manifest_path = repo_root / ".codex-plugin" / "plugin.json"
     rel_path = str(manifest_path.relative_to(repo_root))
 
     if not manifest_path.exists():
@@ -278,7 +284,8 @@ def validate_plugin_manifest(repo_root: Path) -> list[Finding]:
     except (ValueError, json.JSONDecodeError) as exc:
         return [Finding(rel_path, str(exc))]
 
-    for field in PLUGIN_REQUIRED_FIELDS:
+    required_fields = PLUGIN_REQUIRED_FIELDS if require_skills_interface else ["name", "version", "description"]
+    for field in required_fields:
         value = manifest.get(field)
         if value is None or (isinstance(value, str) and not value.strip()):
             findings.append(Finding(rel_path, f"missing required plugin field: {field}"))
@@ -286,6 +293,8 @@ def validate_plugin_manifest(repo_root: Path) -> list[Finding]:
     plugin_name = manifest.get("name")
     if not isinstance(plugin_name, str) or not NAME_RE.fullmatch(plugin_name):
         findings.append(Finding(rel_path, "plugin name must match Codex plugin naming rules"))
+    elif plugin_name != expected_name:
+        findings.append(Finding(rel_path, f"plugin name must match {expected_name}"))
 
     version = manifest.get("version")
     if not isinstance(version, str) or not re.fullmatch(r"^\d+\.\d+\.\d+(?:[-+][A-Za-z0-9.\-]+)?$", version):
@@ -304,45 +313,46 @@ def validate_plugin_manifest(repo_root: Path) -> list[Finding]:
     if license_value is not None and (not isinstance(license_value, str) or not license_value.strip()):
         findings.append(Finding(rel_path, "license must be a non-empty string when present"))
 
-    skills_path_value = manifest.get("skills")
-    if not isinstance(skills_path_value, str) or not skills_path_value.startswith("./"):
-        findings.append(Finding(rel_path, "skills must be a plugin-relative path starting with ./"))
-    else:
-        skills_path = (repo_root / skills_path_value.removeprefix("./")).resolve()
-        expected_skills_root = (repo_root / "skills").resolve()
-        if skills_path != expected_skills_root:
-            findings.append(Finding(rel_path, "skills path must resolve to the repository skills/ directory"))
-        if not skills_path.is_dir():
-            findings.append(Finding(rel_path, "skills path does not resolve to an existing directory"))
+    if require_skills_interface:
+        skills_path_value = manifest.get("skills")
+        if not isinstance(skills_path_value, str) or not skills_path_value.startswith("./"):
+            findings.append(Finding(rel_path, "skills must be a plugin-relative path starting with ./"))
+        else:
+            skills_path = (repo_root / skills_path_value.removeprefix("./")).resolve()
+            expected_skills_root = (repo_root / "skills").resolve()
+            if skills_path != expected_skills_root:
+                findings.append(Finding(rel_path, "skills path must resolve to the repository skills/ directory"))
+            if not skills_path.is_dir():
+                findings.append(Finding(rel_path, "skills path does not resolve to an existing directory"))
 
-    interface = manifest.get("interface")
-    if not isinstance(interface, dict):
-        findings.append(Finding(rel_path, "interface must be a mapping"))
-    else:
-        for field in PLUGIN_INTERFACE_REQUIRED_FIELDS:
-            value = interface.get(field)
-            if field == "capabilities":
-                if not isinstance(value, list) or not value or not all(
-                    isinstance(item, str) and item.strip() for item in value
-                ):
-                    findings.append(Finding(rel_path, "interface.capabilities must be a non-empty list of strings"))
-                continue
-            if field == "defaultPrompt":
-                if not isinstance(value, list) or not value or not all(
-                    isinstance(item, str) and item.strip() for item in value
-                ):
-                    findings.append(Finding(rel_path, "interface.defaultPrompt must be a non-empty list of strings"))
-                continue
-            if not isinstance(value, str) or not value.strip():
-                findings.append(Finding(rel_path, f"missing or empty interface.{field}"))
+        interface = manifest.get("interface")
+        if not isinstance(interface, dict):
+            findings.append(Finding(rel_path, "interface must be a mapping"))
+        else:
+            for field in PLUGIN_INTERFACE_REQUIRED_FIELDS:
+                value = interface.get(field)
+                if field == "capabilities":
+                    if not isinstance(value, list) or not value or not all(
+                        isinstance(item, str) and item.strip() for item in value
+                    ):
+                        findings.append(Finding(rel_path, "interface.capabilities must be a non-empty list of strings"))
+                    continue
+                if field == "defaultPrompt":
+                    if not isinstance(value, list) or not value or not all(
+                        isinstance(item, str) and item.strip() for item in value
+                    ):
+                        findings.append(Finding(rel_path, "interface.defaultPrompt must be a non-empty list of strings"))
+                    continue
+                if not isinstance(value, str) or not value.strip():
+                    findings.append(Finding(rel_path, f"missing or empty interface.{field}"))
 
-        brand_color = interface.get("brandColor")
-        if isinstance(brand_color, str) and not HEX_COLOR_RE.fullmatch(brand_color):
-            findings.append(Finding(rel_path, "interface.brandColor must be a 6-digit hex color"))
+            brand_color = interface.get("brandColor")
+            if isinstance(brand_color, str) and not HEX_COLOR_RE.fullmatch(brand_color):
+                findings.append(Finding(rel_path, "interface.brandColor must be a 6-digit hex color"))
 
-        website_url = interface.get("websiteURL")
-        if isinstance(website_url, str) and not is_http_url(website_url):
-            findings.append(Finding(rel_path, "interface.websiteURL must be an http or https URL"))
+            website_url = interface.get("websiteURL")
+            if isinstance(website_url, str) and not is_http_url(website_url):
+                findings.append(Finding(rel_path, "interface.websiteURL must be an http or https URL"))
 
     return findings
 
@@ -385,8 +395,9 @@ def validate_marketplace(repo_root: Path) -> list[Finding]:
             findings.append(Finding(rel_path, "plugin source.path must be a relative local path starting with ./"))
         else:
             plugin_root = (repo_root / source_path_value.removeprefix("./")).resolve()
-            if plugin_root != repo_root.resolve():
-                findings.append(Finding(rel_path, "plugin source.path must resolve to the repository root"))
+            expected_plugin_root = (repo_root / "plugins" / PLUGIN_DIR_NAME).resolve()
+            if plugin_root != expected_plugin_root:
+                findings.append(Finding(rel_path, f"plugin source.path must resolve to plugins/{PLUGIN_DIR_NAME}"))
             if not (plugin_root / ".codex-plugin" / "plugin.json").exists():
                 findings.append(Finding(rel_path, "plugin source.path does not point at a valid plugin root"))
 
@@ -403,6 +414,63 @@ def validate_marketplace(repo_root: Path) -> list[Finding]:
     if not isinstance(category, str) or not category.strip():
         findings.append(Finding(rel_path, "plugin category must be a non-empty string"))
 
+    return findings
+
+
+def validate_claude_marketplace(repo_root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    marketplace_path = repo_root / ".claude-plugin" / "marketplace.json"
+    rel_path = str(marketplace_path.relative_to(repo_root))
+
+    if not marketplace_path.exists():
+        return [Finding(rel_path, "missing Claude marketplace file")]
+
+    try:
+        marketplace = load_json(marketplace_path)
+    except (ValueError, json.JSONDecodeError) as exc:
+        return [Finding(rel_path, str(exc))]
+
+    plugins = marketplace.get("plugins")
+    if not isinstance(plugins, list) or not plugins:
+        return [Finding(rel_path, "plugins must be a non-empty list")]
+
+    matched_plugin = None
+    for plugin in plugins:
+        if isinstance(plugin, dict) and plugin.get("name") == PLUGIN_DIR_NAME:
+            matched_plugin = plugin
+            break
+
+    if matched_plugin is None:
+        return [Finding(rel_path, f"Claude marketplace must include a {PLUGIN_DIR_NAME} plugin entry")]
+
+    source = matched_plugin.get("source")
+    if source != f"./plugins/{PLUGIN_DIR_NAME}":
+        findings.append(Finding(rel_path, f"Claude marketplace source must be ./plugins/{PLUGIN_DIR_NAME}"))
+
+    plugin_root = repo_root / "plugins" / PLUGIN_DIR_NAME
+    if not (plugin_root / ".claude-plugin" / "plugin.json").exists():
+        findings.append(Finding(rel_path, "Claude marketplace source does not point at a valid plugin root"))
+
+    return findings
+
+
+def validate_skill_mirrors(repo_root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    expected_symlinks = {
+        repo_root / ".agents" / "skills": "../skills",
+        repo_root / ".claude" / "skills": "../skills",
+        repo_root / "plugins" / PLUGIN_DIR_NAME / "skills": "../../skills",
+    }
+    for path, target in expected_symlinks.items():
+        rel_path = str(path.relative_to(repo_root))
+        if not path.exists() and not path.is_symlink():
+            findings.append(Finding(rel_path, f"missing symlink to {target}"))
+            continue
+        if not path.is_symlink():
+            findings.append(Finding(rel_path, f"expected POSIX symlink to {target}"))
+            continue
+        if path.readlink().as_posix() != target:
+            findings.append(Finding(rel_path, f"symlink target must be {target}"))
     return findings
 
 
@@ -425,8 +493,26 @@ def run(repo_root: Path) -> list[Finding]:
         findings.append(Finding("skills", "no bundled skill directories found under skills/"))
     findings.extend(validate_readme(repo_root))
     findings.extend(validate_roadmap(repo_root))
-    findings.extend(validate_plugin_manifest(repo_root))
+    plugin_root = repo_root / "plugins" / PLUGIN_DIR_NAME
+    findings.extend(
+        validate_plugin_manifest(
+            repo_root,
+            plugin_root / ".codex-plugin" / "plugin.json",
+            expected_name=PLUGIN_DIR_NAME,
+            require_skills_interface=True,
+        )
+    )
+    findings.extend(
+        validate_plugin_manifest(
+            repo_root,
+            plugin_root / ".claude-plugin" / "plugin.json",
+            expected_name=PLUGIN_DIR_NAME,
+            require_skills_interface=False,
+        )
+    )
     findings.extend(validate_marketplace(repo_root))
+    findings.extend(validate_claude_marketplace(repo_root))
+    findings.extend(validate_skill_mirrors(repo_root))
     findings.extend(validate_doc_inventory(repo_root, skill_dirs))
     for skill_dir in skill_dirs:
         findings.extend(validate_skill_dir(repo_root, skill_dir))
