@@ -48,6 +48,33 @@ This skill is for local Codex plugin development workflows. It does not publish 
 12. For `detach`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
 13. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
 
+## Repairing Drifted Installs
+
+Use this skill as the repair surface for bad or stale local Codex plugin installs.
+
+Common repair cases:
+
+- `missing-target-plugin-root`
+  - The marketplace entry exists, but the staged plugin path is missing.
+  - Fix: rerun `install` in the intended mode.
+- `missing-marketplace-entry`
+  - The staged plugin path exists, but the marketplace does not expose it.
+  - Fix: rerun `install` in the intended mode.
+- `stale-marketplace-entry`
+  - The marketplace entry points at the wrong staged path or has stale metadata.
+  - Fix: rerun `refresh` in the intended mode.
+- `stale-target-materialization`
+  - The staged plugin path is present, but its materialization does not match the requested mode.
+  - Fix: rerun `refresh` with the intended `copy` or `symlink` mode.
+
+Preferred repair flow:
+
+1. Run the helper in `check-only` mode first.
+2. Confirm the intended scope and install mode.
+3. Use `refresh` when the staged path and marketplace entry should continue to exist but need to be rewritten.
+4. Use `detach` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
+5. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.
+
 ## Output Contract
 
 - Return a short summary plus JSON with:

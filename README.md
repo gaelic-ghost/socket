@@ -15,6 +15,7 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 - `install-plugin-to-socket`
   - Current implementation: audit, install, refresh, or detach an in-development Codex plugin at repo or personal scope with bounded marketplace merging.
   - It follows the documented Codex local-plugin flow: local plugin directory plus marketplace wiring, then restart and verification.
+  - It is also the repair surface for drifted local installs, such as missing staged plugin paths, stale marketplace entries, or the wrong staged materialization mode.
   - It stays honest about scope and does not claim undocumented control over Codex's installed-plugin cache internals.
 - `sync-skills-repo-guidance`
   - Current scope: ongoing maintenance and alignment of agent-skills and plugin-development guidance, maintainer docs, discovery mirrors, and related docs links for this repo pattern.

@@ -23,6 +23,10 @@ Current repo guidance for this skill:
 - Default to `copy` mode because it matches the documented OpenAI examples for local plugin installs.
 - Offer `symlink` mode for adjacent or otherwise local in-development plugin repos when the maintainer wants the staged plugin path inside the chosen marketplace root to follow live source changes.
 - Do not point a repo marketplace directly at a sibling repo outside the marketplace root. Stage a copy or symlink at the in-scope plugin path instead.
+- Treat `install-plugin-to-socket` as the repair surface for drifted local installs:
+  - rerun `install` when the staged path or marketplace entry is missing
+  - rerun `refresh` when the marketplace entry is stale or the staged path needs to be rematerialized in the chosen mode
+  - use `detach` then `install` when the wrong plugin tree was staged into the target path
 
 Relevant docs:
 
