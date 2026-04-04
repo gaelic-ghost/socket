@@ -392,6 +392,8 @@ private actor MCPSubscriptionBroker {
         switch event {
         case .transportChanged, .playbackChanged, .recentErrorRecorded:
             candidateURIs = ["speak://status", "speak://runtime"]
+        case .jobEvent:
+            candidateURIs = []
         case .jobChanged(let snapshot):
             candidateURIs = [
                 "speak://status",

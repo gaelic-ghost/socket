@@ -645,6 +645,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     var sawTransportChange = false
     var sawProfileCacheChange = false
     var sawJobChange = false
+    var sawJobEvent = false
     var sawPlaybackChange = false
 
     let deadline = ContinuousClock.now + .seconds(1)
@@ -663,6 +664,10 @@ actor MockRuntime: ServerRuntimeProtocol {
             if snapshot.jobID == jobID {
                 sawJobChange = true
             }
+        case .jobEvent(let update):
+            if update.jobID == jobID {
+                sawJobEvent = true
+            }
         case .playbackChanged(let snapshot):
             if snapshot.state == "playing" {
                 sawPlaybackChange = true
@@ -671,7 +676,7 @@ actor MockRuntime: ServerRuntimeProtocol {
             break
         }
 
-        if sawTransportChange, sawProfileCacheChange, sawJobChange, sawPlaybackChange {
+        if sawTransportChange, sawProfileCacheChange, sawJobChange, sawJobEvent, sawPlaybackChange {
             break
         }
     }
@@ -679,6 +684,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     #expect(sawTransportChange)
     #expect(sawProfileCacheChange)
     #expect(sawJobChange)
+    #expect(sawJobEvent)
     #expect(sawPlaybackChange)
 
     await runtime.finishHeldSpeak(id: jobID)

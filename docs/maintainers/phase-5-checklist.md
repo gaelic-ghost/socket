@@ -99,9 +99,8 @@ Phase 5 is now landed for the initial host-events and selective live-update slic
 
 The following items remain deliberately deferred rather than accidentally unfinished:
 
-- converging the existing job-specific HTTP SSE route onto the newer host event surface
 - migrating playback-job MCP resources until the shared host naturally earns those concepts
 - copying the rest of the old standalone MCP prompt catalog over for parity alone
 - defining live config reloading policy or in-place config mutation
 
-The most likely next implementation step is selective HTTP SSE convergence once the adjacent `SpeakSwiftly` API layer settles enough that the shared host event model can be widened confidently without fighting churn in the runtime-facing package.
+That selective HTTP SSE convergence work is now tracked and landed in Phase 6.

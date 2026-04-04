@@ -16,9 +16,17 @@ struct ProfileCacheStatusSnapshot: Codable, Sendable, Equatable {
     }
 }
 
+struct JobEventUpdate: Sendable, Equatable {
+    let jobID: String
+    let event: ServerJobEvent
+    let historyIndex: Int
+    let terminal: Bool
+}
+
 enum HostEvent: Sendable {
     case transportChanged(TransportStatusSnapshot)
     case jobChanged(JobSnapshot)
+    case jobEvent(JobEventUpdate)
     case playbackChanged(PlaybackStatusSnapshot)
     case profileCacheChanged(ProfileCacheStatusSnapshot)
     case recentErrorRecorded(RecentErrorSnapshot)

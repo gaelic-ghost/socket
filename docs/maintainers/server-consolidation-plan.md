@@ -97,17 +97,14 @@ Phase 5 is now landed for the initial live-update slice. The host now exposes ty
 
 The following items are still intentionally deferred:
 
-- converging the existing job-specific HTTP SSE stream onto the host event surface
 - rebuilding playback-job MCP resources before the shared host naturally owns those concepts
 - importing the rest of the old standalone MCP prompt catalog for parity alone
 - defining live config reloading semantics or in-place config mutation policy
 
-These are not cleanup misses from Phases 1 through 5. They are consciously deferred scope boundaries.
+These are not cleanup misses from Phases 1 through 6. They are consciously deferred scope boundaries.
 
 ## Next Likely Phase
 
-The next likely host-level phase is selective HTTP SSE convergence.
+Phase 6 is now landed. The existing HTTP SSE route kept its job-specific shape, but it now follows the shared host event backbone instead of maintaining a separate subscriber registry and heartbeat bookkeeping inside `ServerHost`. The host also now exposes a dedicated per-job event update payload so HTTP and MCP can share the same non-UI live-update model without collapsing everything into full-state snapshots.
 
-That work would keep `ServerHost` as the only source of transport truth, preserve `ServerState` as the SwiftUI-facing projection, and decide where the existing job-specific SSE route should continue to stay specialized versus where it should begin consuming the newer host event surface.
-
-That phase should wait for the adjacent `SpeakSwiftly` API layer to settle enough that widening the host event model does not create unnecessary churn across repositories.
+The next likely host-level phase is deciding whether any playback-job-style MCP surface still earns a host-native shared model, or whether the shared `jobs` resources have fully replaced that older namespace.

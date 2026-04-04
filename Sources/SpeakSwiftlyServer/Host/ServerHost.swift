@@ -27,8 +27,6 @@ actor ServerHost {
         var latestEvent: ServerJobEvent?
         var terminalEvent: ServerJobEvent?
         var history: [ServerJobEvent] = []
-        var subscribers: [UUID: AsyncStream<ByteBuffer>.Continuation] = [:]
-        var heartbeatTasks: [UUID: Task<Void, Never>] = [:]
 
         var snapshot: JobSnapshot {
             .init(
@@ -217,9 +215,6 @@ actor ServerHost {
             updateTransportStatus(named: "mcp", state: "stopped")
         }
 
-        for jobID in jobs.keys {
-            finishSubscribers(for: jobID)
-        }
         pendingRuntimeRefresh = false
         await publishState()
         self.publishTask?.cancel()
@@ -493,6 +488,7 @@ actor ServerHost {
 
     func sseStream(for jobID: String) throws -> AsyncStream<ByteBuffer> {
         pruneCompletedJobs()
+        let updates = eventUpdates()
         guard let job = jobs[jobID] else {
             throw HTTPError(
                 .notFound,
@@ -503,6 +499,7 @@ actor ServerHost {
         let history = job.history
         let terminalEvent = job.terminalEvent
         let workerStatusEvent = currentWorkerStatusEvent()
+        let replayedHistoryCount = history.count
 
         return AsyncStream { continuation in
             continuation.yield(self.encodeSSEBuffer(for: workerStatusEvent))
@@ -515,28 +512,41 @@ actor ServerHost {
                 return
             }
 
-            let subscriberID = UUID()
             let heartbeatTask = Task {
                 while !Task.isCancelled {
                     try? await Task.sleep(for: .seconds(self.configuration.sseHeartbeatSeconds))
-                    self.emitHeartbeat(jobID: jobID, subscriberID: subscriberID)
+                    continuation.yield(self.encodeHeartbeatBuffer())
                 }
             }
 
-            Task {
-                self.addSubscriber(
-                    continuation,
-                    heartbeatTask: heartbeatTask,
-                    to: jobID,
-                    subscriberID: subscriberID
-                )
+            let eventTask = Task {
+                var iterator = updates.makeAsyncIterator()
+                var lastDeliveredHistoryIndex = replayedHistoryCount
+
+                while !Task.isCancelled, let update = await iterator.next() {
+                    guard case .jobEvent(let jobUpdate) = update else {
+                        continue
+                    }
+                    guard jobUpdate.jobID == jobID else {
+                        continue
+                    }
+                    guard jobUpdate.historyIndex > lastDeliveredHistoryIndex else {
+                        continue
+                    }
+
+                    lastDeliveredHistoryIndex = jobUpdate.historyIndex
+                    continuation.yield(self.encodeSSEBuffer(for: jobUpdate.event))
+
+                    if jobUpdate.terminal {
+                        continuation.finish()
+                        break
+                    }
+                }
             }
 
             continuation.onTermination = { _ in
                 heartbeatTask.cancel()
-                Task {
-                    await self.removeSubscriber(jobID: jobID, subscriberID: subscriberID)
-                }
+                eventTask.cancel()
             }
         }
     }
@@ -799,16 +809,23 @@ actor ServerHost {
             job.startedAt = Date()
         }
         job.history.append(event)
+        let historyIndex = job.history.count
         if terminal {
             job.terminalEvent = event
             job.terminalAt = Date()
         }
         jobs[jobID] = job
         hostEventContinuation.yield(.jobChanged(job.snapshot))
-
-        for continuation in job.subscribers.values {
-            continuation.yield(encodeSSEBuffer(for: event))
-        }
+        hostEventContinuation.yield(
+            .jobEvent(
+                .init(
+                    jobID: jobID,
+                    event: event,
+                    historyIndex: historyIndex,
+                    terminal: terminal
+                )
+            )
+        )
 
         if terminal {
             if case .failed(let failure) = event {
@@ -818,53 +835,9 @@ actor ServerHost {
                     message: failure.message
                 )
             }
-            finishSubscribers(for: jobID)
             pruneCompletedJobs()
         }
         await requestPublish(mode: terminal ? .immediate : .coalesced, refreshRuntimeState: true)
-    }
-
-    // MARK: - Job Subscribers
-
-    private func addSubscriber(
-        _ continuation: AsyncStream<ByteBuffer>.Continuation,
-        heartbeatTask: Task<Void, Never>,
-        to jobID: String,
-        subscriberID: UUID
-    ) {
-        guard var job = jobs[jobID] else {
-            continuation.finish()
-            heartbeatTask.cancel()
-            return
-        }
-        job.subscribers[subscriberID] = continuation
-        job.heartbeatTasks[subscriberID] = heartbeatTask
-        jobs[jobID] = job
-    }
-
-    private func removeSubscriber(jobID: String, subscriberID: UUID) {
-        guard var job = jobs[jobID] else { return }
-        job.subscribers.removeValue(forKey: subscriberID)
-        job.heartbeatTasks.removeValue(forKey: subscriberID)?.cancel()
-        jobs[jobID] = job
-    }
-
-    private func emitHeartbeat(jobID: String, subscriberID: UUID) {
-        guard let continuation = jobs[jobID]?.subscribers[subscriberID] else { return }
-        continuation.yield(encodeHeartbeatBuffer())
-    }
-
-    private func finishSubscribers(for jobID: String) {
-        guard var job = jobs[jobID] else { return }
-        for task in job.heartbeatTasks.values {
-            task.cancel()
-        }
-        for continuation in job.subscribers.values {
-            continuation.finish()
-        }
-        job.subscribers.removeAll()
-        job.heartbeatTasks.removeAll()
-        jobs[jobID] = job
     }
 
     private func pruneCompletedJobs() {
@@ -875,7 +848,6 @@ actor ServerHost {
             return age > configuration.completedJobTTLSeconds ? jobID : nil
         }
         for jobID in expiredIDs {
-            finishSubscribers(for: jobID)
             jobs.removeValue(forKey: jobID)
         }
 
@@ -892,7 +864,6 @@ actor ServerHost {
         let overflow = completed.count - configuration.completedJobMaxCount
         guard overflow > 0 else { return }
         for job in completed.prefix(overflow) {
-            finishSubscribers(for: job.jobID)
             jobs.removeValue(forKey: job.jobID)
         }
     }
