@@ -9,12 +9,51 @@ enum SpeakSwiftlyServer {
         let config = try await AppConfig.load()
         let state = await MainActor.run { ServerState() }
         let host = await ServerHost.live(appConfig: config, state: state)
-        let app = assembleHBApp(configuration: config.http, host: host)
+        let mcpSurface = await MCPSurface.build(configuration: config.mcp, host: host)
+        let app = assembleHBApp(configuration: config.http, host: host, mcpSurface: mcpSurface)
         defer {
             Task {
                 await host.shutdown()
             }
         }
-        try await app.runService()
+
+        if config.http.enabled {
+            await host.markTransportStarting(name: "http")
+        }
+        if config.mcp.enabled {
+            await host.markTransportStarting(name: "mcp")
+        }
+
+        do {
+            if let mcpSurface {
+                try await mcpSurface.start()
+                await host.markTransportListening(name: "mcp")
+            }
+            if config.http.enabled {
+                await host.markTransportListening(name: "http")
+            }
+            try await app.runService()
+            if config.http.enabled {
+                await host.markTransportStopped(name: "http")
+            }
+            if config.mcp.enabled {
+                await host.markTransportStopped(name: "mcp")
+            }
+            if let mcpSurface {
+                await mcpSurface.stop()
+            }
+        } catch {
+            let message = "SpeakSwiftlyServer could not keep the shared Hummingbird transport process running. Likely cause: \(error.localizedDescription)"
+            if config.http.enabled {
+                await host.markTransportFailed(name: "http", message: message)
+            }
+            if config.mcp.enabled {
+                await host.markTransportFailed(name: "mcp", message: message)
+            }
+            if let mcpSurface {
+                await mcpSurface.stop()
+            }
+            throw error
+        }
     }
 }

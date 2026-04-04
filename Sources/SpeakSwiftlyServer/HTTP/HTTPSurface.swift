@@ -6,10 +6,26 @@ import SpeakSwiftlyCore
 
 func assembleHBApp(
     configuration: HTTPConfig,
-    host: ServerHost
+    host: ServerHost,
+    mcpSurface: MCPSurface? = nil
 ) -> Application<Router<BasicRequestContext>.Responder> {
     let router = Router()
+    if configuration.enabled {
+        registerHTTPRoutes(on: router, configuration: configuration, host: host)
+    }
+    mcpSurface?.mount(on: router)
 
+    return Application(
+        router: router,
+        configuration: .init(address: .hostname(configuration.host, port: configuration.port))
+    )
+}
+
+private func registerHTTPRoutes(
+    on router: Router<BasicRequestContext>,
+    configuration: HTTPConfig,
+    host: ServerHost
+) {
     router.get("healthz") { _, _ -> HealthSnapshot in
         await host.healthSnapshot()
     }
@@ -99,11 +115,6 @@ func assembleHBApp(
         headers[.connection] = "keep-alive"
         return Response(status: .ok, headers: headers, body: body)
     }
-
-    return Application(
-        router: router,
-        configuration: .init(address: .hostname(configuration.host, port: configuration.port))
-    )
 }
 
 private func buildAcceptedJobResponse(

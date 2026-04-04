@@ -2,7 +2,7 @@
 
 ## Overview
 
-`SpeakSwiftlyServer` is becoming the single runtime-owning host for both the app-facing HTTP API and a future MCP surface.
+`SpeakSwiftlyServer` is now the single runtime-owning host for both the app-facing HTTP API and the first embedded MCP surface.
 
 The goal is to remove the current split where separate hosts can each create their own in-process `SpeakSwiftlyCore` runtime. After consolidation, one process will own one `WorkerRuntime`, one playback controller, one queue view, one readiness state, and one profile cache.
 
@@ -17,7 +17,7 @@ The target architecture has three layers:
    The HTTP surface remains a thin Hummingbird adapter over `ServerHost`. It owns route registration, request decoding, HTTP status and header shaping, accepted job URL building, and SSE response framing.
 
 3. `MCP`
-   The MCP surface will be a sibling adapter over `ServerHost`. It will own tool, resource, and prompt registration plus MCP-specific request and response shaping.
+   The MCP surface is now a sibling adapter over `ServerHost`. It owns embedded MCP transport mounting plus MCP-specific tool, resource, and response shaping without creating a second runtime-owning host.
 
 ## State Model
 
@@ -80,6 +80,8 @@ Phase 3 will adopt [`apple/swift-configuration`](https://github.com/apple/swift-
 - Route MCP through `ServerHost` instead of creating a second runtime-owning host.
 - Keep the first integrated MCP scope focused on host-backed tools and resources that already map cleanly onto current server snapshots.
 - Make transport-state reporting runtime-aware so app UI and MCP see actual adapter lifecycle instead of only config intent.
+
+Phase 4 is now landed. `SpeakSwiftlyServer` mounts an embedded MCP surface through `MCPSurface`, the first MCP tool and resource catalog now rides the same `ServerHost` used by HTTP and app UI, and transport snapshots now report lifecycle states like `stopped`, `starting`, `listening`, and `failed` instead of only config-derived intent.
 
 ### Phase 5
 

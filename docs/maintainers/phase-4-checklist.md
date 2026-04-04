@@ -117,6 +117,10 @@ These should be deferred to Phase 5 unless the host grows the right backing data
 - The mounted MCP surface exposes the agreed first-pass tools and resources.
 - `swift build` and `swift test` remain green after integration.
 
+## Status
+
+Phase 4 is now implemented in `SpeakSwiftlyServer`.
+
 ## Follow-On Work
 
 - Phase 5 should decide which standalone `SpeakSwiftlyMCP` resources, prompts, and playback-job concepts still earn migration into the shared host.

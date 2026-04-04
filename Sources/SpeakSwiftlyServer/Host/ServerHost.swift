@@ -71,6 +71,7 @@ actor ServerHost {
     private var generationQueueStatus = QueueStatusSnapshot(queueType: "generation", activeCount: 0, queuedCount: 0, activeRequest: nil)
     private var playbackQueueStatus = QueueStatusSnapshot(queueType: "playback", activeCount: 0, queuedCount: 0, activeRequest: nil)
     private var playbackStatus = PlaybackStatusSnapshot(state: PlaybackState.idle.rawValue, activeRequest: nil)
+    private var transportStatuses = [String: TransportStatusSnapshot]()
     private var recentErrors = [RecentErrorSnapshot]()
     private var latestPublishedState: HostStateSnapshot?
     private var pendingRuntimeRefresh = true
@@ -126,6 +127,7 @@ actor ServerHost {
         )
         self.runtime = runtime
         self.state = state
+        self.transportStatuses = Self.initialTransportStatuses(httpConfig: self.httpConfig, mcpConfig: self.mcpConfig)
         self.immediatePublishRequests = immediatePublishRequests
         self.immediatePublishContinuation = immediatePublishContinuation
         self.coalescedPublishRequests = coalescedPublishRequests
@@ -182,6 +184,12 @@ actor ServerHost {
         await runtime.shutdown()
         self.workerMode = "stopped"
         self.workerStage = "stopped"
+        if httpConfig.enabled {
+            updateTransportStatus(named: "http", state: "stopped")
+        }
+        if mcpConfig.enabled {
+            updateTransportStatus(named: "mcp", state: "stopped")
+        }
 
         for jobID in jobs.keys {
             finishSubscribers(for: jobID)
@@ -213,6 +221,31 @@ actor ServerHost {
                 task.cancel()
             }
         }
+    }
+
+    func markTransportStarting(name: String) async {
+        updateTransportStatus(named: name, state: "starting")
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+    }
+
+    func markTransportListening(name: String) async {
+        updateTransportStatus(named: name, state: "listening")
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+    }
+
+    func markTransportStopped(name: String) async {
+        updateTransportStatus(named: name, state: "stopped")
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+    }
+
+    func markTransportFailed(name: String, message: String) async {
+        updateTransportStatus(named: name, state: "failed")
+        recordRecentError(
+            source: "transport:\(name)",
+            code: "transport_failed",
+            message: message
+        )
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
     }
 
     func hostStateSnapshot() -> HostStateSnapshot {
@@ -1014,25 +1047,49 @@ actor ServerHost {
     }
 
     private func transportSnapshots() -> [TransportStatusSnapshot] {
-        [
-            .init(
-                name: "http",
-                enabled: httpConfig.enabled,
-                state: httpConfig.enabled ? "configured" : "disabled",
-                host: httpConfig.enabled ? httpConfig.host : nil,
-                port: httpConfig.enabled ? httpConfig.port : nil,
-                path: nil,
-                advertisedAddress: httpConfig.enabled ? "http://\(httpConfig.host):\(httpConfig.port)" : nil
-            ),
-            .init(
-                name: "mcp",
-                enabled: mcpConfig.enabled,
-                state: mcpConfig.enabled ? "configured" : "disabled",
-                host: mcpConfig.enabled ? httpConfig.host : nil,
-                port: mcpConfig.enabled ? httpConfig.port : nil,
-                path: mcpConfig.enabled ? mcpConfig.path : nil,
-                advertisedAddress: mcpConfig.enabled ? "http://\(httpConfig.host):\(httpConfig.port)\(mcpConfig.path)" : nil
-            ),
+        ["http", "mcp"].compactMap { transportStatuses[$0] }
+    }
+
+    private func updateTransportStatus(named name: String, state: String) {
+        guard let current = transportStatuses[name], current.enabled else {
+            return
+        }
+        transportStatuses[name] = .init(
+            name: current.name,
+            enabled: current.enabled,
+            state: state,
+            host: current.host,
+            port: current.port,
+            path: current.path,
+            advertisedAddress: current.advertisedAddress
+        )
+    }
+
+    private static func initialTransportStatuses(
+        httpConfig: HTTPConfig,
+        mcpConfig: MCPConfig
+    ) -> [String: TransportStatusSnapshot] {
+        let http = TransportStatusSnapshot(
+            name: "http",
+            enabled: httpConfig.enabled,
+            state: httpConfig.enabled ? "stopped" : "disabled",
+            host: httpConfig.enabled ? httpConfig.host : nil,
+            port: httpConfig.enabled ? httpConfig.port : nil,
+            path: nil,
+            advertisedAddress: httpConfig.enabled ? "http://\(httpConfig.host):\(httpConfig.port)" : nil
+        )
+        let mcp = TransportStatusSnapshot(
+            name: "mcp",
+            enabled: mcpConfig.enabled,
+            state: mcpConfig.enabled ? "stopped" : "disabled",
+            host: mcpConfig.enabled ? httpConfig.host : nil,
+            port: mcpConfig.enabled ? httpConfig.port : nil,
+            path: mcpConfig.enabled ? mcpConfig.path : nil,
+            advertisedAddress: mcpConfig.enabled ? "http://\(httpConfig.host):\(httpConfig.port)\(mcpConfig.path)" : nil
+        )
+        return [
+            http.name: http,
+            mcp.name: mcp,
         ]
     }
 

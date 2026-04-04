@@ -12,6 +12,7 @@ let package = Package(
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
         .package(path: "../SpeakSwiftly"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "1.1.0"),
+        .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.10.0"),
         .package(
             url: "https://github.com/apple/swift-configuration",
             from: "1.2.0",
@@ -27,6 +28,7 @@ let package = Package(
                 .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
                 .product(name: "Configuration", package: "swift-configuration"),
                 .product(name: "Hummingbird", package: "hummingbird"),
+                .product(name: "MCP", package: "swift-sdk"),
                 .product(name: "SpeakSwiftlyCore", package: "SpeakSwiftly"),
             ]
         ),
@@ -36,6 +38,7 @@ let package = Package(
                 "SpeakSwiftlyServer",
                 .product(name: "Hummingbird", package: "hummingbird"),
                 .product(name: "HummingbirdTesting", package: "hummingbird"),
+                .product(name: "MCP", package: "swift-sdk"),
             ]
         ),
     ],

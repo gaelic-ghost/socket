@@ -1,6 +1,8 @@
 import Foundation
 import Hummingbird
 import HummingbirdTesting
+import HTTPTypes
+import MCP
 import NIOCore
 import SpeakSwiftlyCore
 import Testing
@@ -606,6 +608,36 @@ actor MockRuntime: ServerRuntimeProtocol {
 }
 
 @available(macOS 14, *)
+@Test func hostTracksTransportLifecycleBeyondStaticConfiguration() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-to-user-mcp",
+            title: "SpeakSwiftlyMCP"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    let initial = await host.hostStateSnapshot()
+    #expect(initial.transports.contains { $0.name == "http" && $0.state == "stopped" })
+    #expect(initial.transports.contains { $0.name == "mcp" && $0.state == "stopped" })
+
+    await host.markTransportStarting(name: "http")
+    await host.markTransportListening(name: "mcp")
+
+    let updated = await host.hostStateSnapshot()
+    #expect(updated.transports.contains { $0.name == "http" && $0.state == "starting" })
+    #expect(updated.transports.contains { $0.name == "mcp" && $0.state == "listening" })
+}
+
+@available(macOS 14, *)
 @Test func routesExposeHealthProfilesAndQueuedSpeechJobLifecycle() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration()
@@ -659,6 +691,147 @@ actor MockRuntime: ServerRuntimeProtocol {
         #expect(foregroundHistory.filter { $0["ok"] as? Bool == true }.count == 2)
     }
 
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func embeddedMCPRoutesListToolsAndReadSharedHostResources() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-swiftly-test-mcp",
+            title: "SpeakSwiftly Test MCP"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+    await host.markTransportStarting(name: "http")
+    await host.markTransportStarting(name: "mcp")
+
+    let mcpSurface = try #require(
+        await MCPSurface.build(
+            configuration: .init(
+                enabled: true,
+                path: "/mcp",
+                serverName: "speak-swiftly-test-mcp",
+                title: "SpeakSwiftly Test MCP"
+            ),
+            host: host
+        )
+    )
+
+    try await mcpSurface.start()
+    await host.markTransportListening(name: "mcp")
+    let initializeMCPResponse = await mcpSurface.handle(mcpPOSTRequest(body: mcpInitializeRequestJSON()))
+    let initializeSessionID = try #require(mcpSessionID(from: initializeMCPResponse))
+    try await drainMCPResponse(initializeMCPResponse)
+
+    let initializedNotificationResponse = await mcpSurface.handle(
+        mcpPOSTRequest(
+            body: mcpInitializedNotificationJSON(),
+            sessionID: initializeSessionID
+        )
+    )
+    #expect(mcpStatusCode(from: initializedNotificationResponse) == 202)
+
+    let listToolsEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpListToolsRequestJSON(),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let listToolsResult = try #require(mcpResultPayload(from: listToolsEnvelope))
+    let tools = try #require(listToolsResult["tools"] as? [[String: Any]])
+    #expect(tools.contains { $0["name"] as? String == "queue_speech_live" })
+    #expect(tools.contains { $0["name"] as? String == "status" })
+
+    let listResourcesEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpListResourcesRequestJSON(),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let listResourcesResult = try #require(mcpResultPayload(from: listResourcesEnvelope))
+    let resources = try #require(listResourcesResult["resources"] as? [[String: Any]])
+    #expect(resources.contains { $0["uri"] as? String == "speak://status" })
+    #expect(resources.contains { $0["uri"] as? String == "speak://runtime" })
+
+    let statusToolEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpStatusToolRequestJSON(),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let statusToolPayload = try mcpToolPayload(from: statusToolEnvelope)
+    #expect(statusToolPayload["worker_mode"] as? String == "ready")
+    let transports = try #require(statusToolPayload["transports"] as? [[String: Any]])
+    #expect(transports.contains { $0["name"] as? String == "mcp" && $0["state"] as? String == "listening" })
+
+    let runtimeResourceEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpReadResourceRequestJSON(uri: "speak://runtime"),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let runtimeResourceResult = try #require(mcpResultPayload(from: runtimeResourceEnvelope))
+    let contents = try #require(runtimeResourceResult["contents"] as? [[String: Any]])
+    let firstContent = try #require(contents.first)
+    let runtimeText = try #require(firstContent["text"] as? String)
+    let runtimePayload = try jsonObject(from: Data(runtimeText.utf8))
+    let runtimeTransports = try #require(runtimePayload["transports"] as? [[String: Any]])
+    #expect(runtimeTransports.contains { $0["name"] as? String == "mcp" && $0["advertised_address"] as? String == "http://127.0.0.1:7337/mcp" })
+
+    let smokeSurface = try #require(
+        await MCPSurface.build(
+            configuration: .init(
+                enabled: true,
+                path: "/mcp",
+                serverName: "speak-swiftly-test-mcp-smoke",
+                title: "SpeakSwiftly Test MCP Smoke"
+            ),
+            host: host
+        )
+    )
+    let smokeApp = assembleHBApp(
+        configuration: testHTTPConfig(configuration),
+        host: host,
+        mcpSurface: smokeSurface
+    )
+    try await smokeSurface.start()
+    try await smokeApp.test(.router) { client in
+        let initializeResponse = try await client.execute(
+            uri: "/mcp",
+            method: .post,
+            headers: [
+                .contentType: "application/json",
+                .accept: "application/json, text/event-stream",
+            ],
+            body: byteBuffer(mcpInitializeRequestJSON(id: "initialize-smoke"))
+        )
+        #expect(initializeResponse.status == .ok)
+        #expect(mcpSessionID(from: initializeResponse)?.isEmpty == false)
+    }
+    await smokeSurface.stop()
+
+    await mcpSurface.stop()
     await host.shutdown()
 }
 
@@ -1076,6 +1249,10 @@ private func string(from buffer: ByteBuffer) -> String {
 
 private func jsonObject(from buffer: ByteBuffer) throws -> [String: Any] {
     let data = Data(buffer.readableBytesView)
+    return try jsonObject(from: data)
+}
+
+private func jsonObject(from data: Data) throws -> [String: Any] {
     let json = try JSONSerialization.jsonObject(with: data)
     guard let dictionary = json as? [String: Any] else {
         throw JSONError.notDictionary
@@ -1083,6 +1260,145 @@ private func jsonObject(from buffer: ByteBuffer) throws -> [String: Any] {
     return dictionary
 }
 
+private func mcpSessionID(from response: TestResponse) -> String? {
+    guard let headerName = HTTPField.Name("Mcp-Session-Id") else {
+        return nil
+    }
+    return response.headers[headerName]
+}
+
+private func mcpHeaders(sessionID: String) -> HTTPFields {
+    var headers = HTTPFields()
+    headers[.contentType] = "application/json"
+    headers[.accept] = "application/json, text/event-stream"
+    if let sessionHeader = HTTPField.Name("Mcp-Session-Id") {
+        headers[sessionHeader] = sessionID
+    }
+    return headers
+}
+
+private func mcpEnvelope(from buffer: ByteBuffer) throws -> [String: Any] {
+    try mcpEnvelope(from: Data(buffer.readableBytesView))
+}
+
+private func mcpEnvelope(from response: MCP.HTTPResponse) async throws -> [String: Any] {
+    switch response {
+    case .stream(let stream, _):
+        var data = Data()
+        for try await chunk in stream {
+            data.append(chunk)
+        }
+        guard data.isEmpty == false else {
+            throw JSONError.emptyBody("The embedded MCP surface returned an empty streaming body for a JSON-RPC request.")
+        }
+        return try mcpEnvelope(from: data)
+
+    case .data(let data, _):
+        guard data.isEmpty == false else {
+            throw JSONError.emptyBody("The embedded MCP surface returned an empty data body for a JSON-RPC request.")
+        }
+        return try mcpEnvelope(from: data)
+
+    case .error:
+        let data = response.bodyData ?? Data()
+        guard data.isEmpty == false else {
+            throw JSONError.emptyBody("The embedded MCP surface returned an empty error body for a JSON-RPC request.")
+        }
+        return try mcpEnvelope(from: data)
+
+    case .accepted, .ok:
+        throw JSONError.emptyBody("The embedded MCP surface returned status \(response.statusCode) without a JSON body.")
+    }
+}
+
+private func drainMCPResponse(_ response: MCP.HTTPResponse) async throws {
+    switch response {
+    case .stream(let stream, _):
+        for try await _ in stream {}
+    case .data, .accepted, .ok, .error:
+        return
+    }
+}
+
+private func mcpEnvelope(from data: Data) throws -> [String: Any] {
+    let body = String(decoding: data, as: UTF8.self)
+    if let dataLine = body
+        .split(separator: "\n")
+        .reversed()
+        .first(where: {
+            $0.hasPrefix("data: ")
+                && $0.dropFirst("data: ".count).isEmpty == false
+        })
+    {
+        let payload = dataLine.dropFirst("data: ".count)
+        guard payload.isEmpty == false else {
+            throw JSONError.emptyBody("The embedded MCP response contained an empty data: payload. Raw body: \(body)")
+        }
+        return try jsonObject(from: Data(payload.utf8))
+    }
+    return try jsonObject(from: data)
+}
+
+private func mcpToolPayload(from envelope: [String: Any]) throws -> [String: Any] {
+    let result = try #require(mcpResultPayload(from: envelope))
+    let content = try #require(result["content"] as? [[String: Any]])
+    let text = try #require(content.first?["text"] as? String)
+    return try jsonObject(from: Data(text.utf8))
+}
+
+private func mcpResultPayload(from envelope: [String: Any]) -> [String: Any]? {
+    (envelope["result"] as? [String: Any]) ?? envelope
+}
+
+private func mcpPOSTRequest(body: String, sessionID: String? = nil) -> MCP.HTTPRequest {
+    var headers = [
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+    ]
+    if let sessionID {
+        headers["Mcp-Session-Id"] = sessionID
+    }
+    return MCP.HTTPRequest(
+        method: "POST",
+        headers: headers,
+        body: Data(body.utf8),
+        path: "/mcp"
+    )
+}
+
+private func mcpSessionID(from response: MCP.HTTPResponse) -> String? {
+    response.headers.first { $0.key.caseInsensitiveCompare("Mcp-Session-Id") == .orderedSame }?.value
+}
+
+private func mcpStatusCode(from response: MCP.HTTPResponse) -> Int {
+    response.statusCode
+}
+
+private func mcpInitializeRequestJSON(id: String = "initialize-1") -> String {
+    #"{"jsonrpc":"2.0","id":"\#(id)","method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"SpeakSwiftlyServerTests","version":"1.0"}}}"#
+}
+
+private func mcpInitializedNotificationJSON() -> String {
+    #"{"jsonrpc":"2.0","method":"notifications/initialized"}"#
+}
+
+private func mcpListToolsRequestJSON() -> String {
+    #"{"jsonrpc":"2.0","id":"tools-1","method":"tools/list","params":{}}"#
+}
+
+private func mcpListResourcesRequestJSON() -> String {
+    #"{"jsonrpc":"2.0","id":"resources-1","method":"resources/list","params":{}}"#
+}
+
+private func mcpStatusToolRequestJSON() -> String {
+    #"{"jsonrpc":"2.0","id":"status-1","method":"tools/call","params":{"name":"status","arguments":{}}}"#
+}
+
+private func mcpReadResourceRequestJSON(uri: String) -> String {
+    #"{"jsonrpc":"2.0","id":"read-resource-1","method":"resources/read","params":{"uri":"\#(uri)"}}"#
+}
+
 private enum JSONError: Error {
     case notDictionary
+    case emptyBody(String)
 }

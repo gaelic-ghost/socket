@@ -1,10 +1,10 @@
 # SpeakSwiftlyServer
 
-Swift executable package for a localhost HTTP server that exposes `SpeakSwiftlyCore` over a small, app-friendly API.
+Swift executable package for a shared localhost host process that exposes `SpeakSwiftlyCore` through an app-friendly HTTP API and an optional MCP surface.
 
 ## Overview
 
-This repository is the Swift-native sibling to `../speak-to-user-server`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host a localhost macOS HTTP service with in-memory job tracking and server-sent events, while delegating speech, profile management, and worker lifecycle to the typed `SpeakSwiftlyCore` runtime.
+This repository is the Swift-native sibling to `../speak-to-user-server`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host one localhost macOS process with in-memory job tracking and server-sent events, while delegating speech, profile management, and worker lifecycle to the typed `SpeakSwiftlyCore` runtime. That shared process can now mount both the HTTP API and an MCP surface without creating duplicate `WorkerRuntime` instances.
 
 ### Deployment Targets
 
@@ -47,7 +47,7 @@ Run the server locally:
 swift run SpeakSwiftlyServer
 ```
 
-The service binds to `127.0.0.1:7337` by default and supports these environment variables:
+The shared server binds to `127.0.0.1:7337` by default and supports these environment variables:
 
 - `APP_CONFIG_FILE`
 - `APP_NAME`
@@ -116,14 +116,39 @@ The queue and playback control routes are immediate control operations rather th
 
 The route surface now mirrors the current `SpeakSwiftlyCore` control model directly instead of preserving the older foreground/background split. The remaining alignment work is narrower: re-checking any app-facing payload details that still matter outside this repository and deciding whether any server-local translation code should disappear now that `SpeakSwiftlyCore` is more expressive.
 
+The current MCP surface is optional and mounts on the same host and port at `APP_MCP_PATH` when `APP_MCP_ENABLED=true`. The first embedded MCP pass exposes these tools:
+
+- `queue_speech_live`
+- `create_profile`
+- `list_profiles`
+- `remove_profile`
+- `list_queue_generation`
+- `list_queue_playback`
+- `playback_pause`
+- `playback_resume`
+- `playback_state`
+- `clear_queue`
+- `cancel_request`
+- `status`
+
+The first embedded MCP resources are:
+
+- `speak://status`
+- `speak://profiles`
+- `speak://runtime`
+
+Those MCP tools and resources are intentionally thin adapters over the same `ServerHost` snapshots and mutations used by the HTTP API and the app-facing `ServerState`.
+
 ## Development
 
-The executable entrypoint lives in [`Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift). The server itself stays intentionally small:
+The executable entrypoint lives in [`Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift). The shared host process stays intentionally small:
 
-- [`HTTPSurface.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/HTTP/HTTPSurface.swift) assembles the Hummingbird HTTP surface.
+- [`HTTPSurface.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/HTTP/HTTPSurface.swift) assembles and conditionally mounts the HTTP surface.
+- [`MCPSurface.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/MCP/MCPSurface.swift) mounts the embedded MCP transport and registers tools and resources against `ServerHost`.
+- [`MCPModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/MCP/MCPModels.swift) defines the thin MCP-specific catalog and result wrappers that stay at the transport edge.
 - [`ServerHost.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerHost.swift) owns runtime lifecycle, request orchestration, shared host state, and server-side update flow.
 - [`ServerState.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerState.swift) is the `@Observable` SwiftUI-facing projection of host state.
-- [`HostStateModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/HostStateModels.swift) defines the shared host-native snapshots used by app UI, HTTP, and future MCP consumers.
+- [`HostStateModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/HostStateModels.swift) defines the shared host-native snapshots used by app UI, HTTP, and MCP consumers.
 - [`ServerRuntimeBridge.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerRuntimeBridge.swift) keeps the runtime boundary thin around `SpeakSwiftlyCore`.
 - [`ServerModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerModels.swift) defines request and response payloads.
 
@@ -138,7 +163,7 @@ swift build
 swift test
 ```
 
-The current automated suite covers configuration parsing, queued live speech job completion semantics, generation and playback queue inspection, playback control routes, queue cancellation routes, startup failure before readiness, runtime degradation while active and queued speech jobs are in flight, in-memory retention and pruning, SSE replay and heartbeat behavior, route-level health, profile, and job lifecycle responses against a controlled typed runtime, plus an opt-in live end-to-end path against a real `SpeakSwiftlyCore` runtime:
+The current automated suite covers configuration parsing, queued live speech job completion semantics, generation and playback queue inspection, playback control routes, queue cancellation routes, startup failure before readiness, runtime degradation while active and queued speech jobs are in flight, in-memory retention and pruning, SSE replay and heartbeat behavior, route-level health, profile, and job lifecycle responses against a controlled typed runtime, the embedded MCP tool and resource surface, plus an opt-in live end-to-end path against a real `SpeakSwiftlyCore` runtime:
 
 ```bash
 SPEAKSWIFTLYSERVER_E2E=1 swift test --filter SpeakSwiftlyServerE2ETests
