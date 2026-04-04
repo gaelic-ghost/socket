@@ -157,8 +157,8 @@ This repo previously experimented with a router layer and later removed it.
 | `apple-skills-router` | removed |
 | `apple-xcode-workflow-execute` | `xcode-app-project-workflow` |
 | `apple-dash-docset-manage` | `explore-apple-swift-docs` |
-| `apple-dash-docsets` | removed in `v4.0.0-rc.1`; use `explore-apple-swift-docs` |
-| `apple-swift-package-bootstrap` | removed in `v4.0.0-rc.1`; use `bootstrap-swift-package` |
+| `apple-dash-docsets` | removed in `v4.0.0`; use `explore-apple-swift-docs` |
+| `apple-swift-package-bootstrap` | removed in `v4.0.0`; use `bootstrap-swift-package` |
 
 The current active skill surface now includes both guidance-sync skills alongside the app and package bootstrap surfaces.
 
