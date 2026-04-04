@@ -320,6 +320,126 @@ def expected_marketplace_entry(scope_root: Path, target_plugin_root: Path, plugi
     }
 
 
+def _manifest_relative_paths(manifest: dict[str, object]) -> list[str]:
+    paths: list[str] = []
+    for key in ("skills", "mcpServers", "apps"):
+        raw_path = manifest.get(key)
+        if isinstance(raw_path, str) and raw_path.strip():
+            paths.append(raw_path.strip())
+
+    if isinstance(manifest.get("interface"), dict):
+        interface = manifest["interface"]
+        for field_name in ("composerIcon", "logo"):
+            raw_path = interface.get(field_name)
+            if isinstance(raw_path, str) and raw_path.strip():
+                paths.append(raw_path.strip())
+        screenshots = interface.get("screenshots")
+        if isinstance(screenshots, list):
+            for raw_path in screenshots:
+                if isinstance(raw_path, str) and raw_path.strip():
+                    paths.append(raw_path.strip())
+    return paths
+
+
+def _manifest_path_is_relative(raw_path: str) -> bool:
+    return not Path(raw_path).is_absolute()
+
+
+def _relative_link_target(link_path: Path, target_path: Path) -> str:
+    return os.path.relpath(target_path, start=link_path.parent)
+
+
+def _ensure_symlink(path: Path, target_path: Path) -> bool:
+    expected_target = _relative_link_target(path, target_path)
+    if path.is_symlink() and os.readlink(path) == expected_target:
+        return False
+    if path.exists() or path.is_symlink():
+        _remove_target_path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.symlink_to(expected_target, target_is_directory=target_path.is_dir())
+    return True
+
+
+def _copy_repo_root_plugin_manifest(repo_root: Path, plugin_root: Path) -> bool:
+    root_manifest_path = _plugin_manifest_path(repo_root)
+    if not root_manifest_path.is_file():
+        return False
+    destination = _plugin_manifest_path(plugin_root)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    current = destination.read_text(encoding="utf-8") if destination.is_file() else None
+    updated = root_manifest_path.read_text(encoding="utf-8")
+    if current == updated:
+        return False
+    destination.write_text(updated, encoding="utf-8")
+    return True
+
+
+def _repair_repo_root_plugin_surface(
+    apply_actions: list[dict[str, str]],
+    repo_root: Path,
+    payload: dict[str, object],
+) -> tuple[dict[str, object], bool]:
+    root_manifest_path = _plugin_manifest_path(repo_root)
+    if not root_manifest_path.is_file():
+        return payload, False
+
+    manifest = load_plugin_manifest(repo_root)
+    plugin_name = infer_plugin_name(repo_root, manifest)
+    plugins = payload.get("plugins")
+    if not isinstance(plugins, list):
+        return payload, False
+
+    target_entry: dict[str, object] | None = None
+    for item in plugins:
+        if isinstance(item, dict) and item.get("name") == plugin_name:
+            source = item.get("source")
+            if isinstance(source, dict) and source.get("path") == "./":
+                target_entry = item
+                break
+    if target_entry is None:
+        return payload, False
+
+    plugin_root = repo_root / "plugins" / plugin_name
+    changed = False
+    if _copy_repo_root_plugin_manifest(repo_root, plugin_root):
+        apply_actions.append({"action": "repair-root-plugin-manifest", "path": str(_plugin_manifest_path(plugin_root))})
+        changed = True
+
+    relative_paths = _manifest_relative_paths(manifest)
+    if (repo_root / "hooks").exists():
+        relative_paths.append("./hooks")
+
+    for raw_path in relative_paths:
+        if not _manifest_path_is_relative(raw_path):
+            continue
+        source_path = (repo_root / raw_path).resolve()
+        if not source_path.exists():
+            continue
+        target_path = plugin_root / raw_path
+        if _ensure_symlink(target_path, source_path):
+            apply_actions.append(
+                {
+                    "action": "repair-root-plugin-symlink",
+                    "path": str(target_path),
+                    "source": str(source_path),
+                }
+            )
+            changed = True
+
+    expected_entry = expected_marketplace_entry(repo_root, plugin_root, plugin_name, infer_category(manifest))
+    payload, entry_changed = merge_marketplace_entry(payload, expected_entry)
+    if entry_changed:
+        apply_actions.append(
+            {
+                "action": "repair-root-plugin-marketplace-entry",
+                "path": str(repo_root / ".agents" / "plugins" / "marketplace.json"),
+                "plugin": plugin_name,
+            }
+        )
+        changed = True
+    return payload, changed
+
+
 def expected_marketplace_name(scope: str) -> str:
     if scope == "repo":
         return DEFAULT_REPO_MARKETPLACE_NAME
@@ -587,7 +707,7 @@ def _audit_install_surface(
     action: str,
     scope_root: Path,
 ) -> None:
-    if action in {"install", "update", "verify", "enable", "disable"}:
+    if action in {"install", "update", "verify", "enable", "disable", "repair"}:
         if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(scope, scope_root, target_plugin_root):
             findings.append(
                 Finding(
@@ -600,7 +720,7 @@ def _audit_install_surface(
             findings.append(Finding(str(target_plugin_root), "missing-target-plugin-root", "Staged plugin path is missing for the chosen scope."))
         elif not _plugin_manifest_path(target_plugin_root).exists():
             findings.append(Finding(str(target_plugin_root), "missing-target-manifest", "Target plugin root exists but does not contain `.codex-plugin/plugin.json`."))
-        elif action in {"update", "verify", "enable", "disable"}:
+        elif action in {"update", "verify", "enable", "disable", "repair"}:
             target_manifest = load_plugin_manifest(target_plugin_root)
             if infer_plugin_name(target_plugin_root, target_manifest) != plugin_name:
                 findings.append(Finding(str(target_plugin_root), "target-plugin-name-mismatch", "Target plugin root does not match the source plugin name."))
@@ -957,7 +1077,7 @@ def apply_install(
     marketplace_name = marketplace_name_from_payload(payload, install_scope)
     plugin_key: str | None = plugin_config_key(plugin_name, marketplace_name)
 
-    if action in {"install", "update"}:
+    if action in {"install", "update", "repair"}:
         if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(install_scope, scope_root, target_plugin_root):
             errors.append("Repo scope symlink mode is blocked because the staged target path is a git-tracked plugin tree. Use copy mode for this repo, or migrate the tracked tree deliberately before switching to symlink mode.")
             return apply_actions, source_summary, target_plugin_root, marketplace_path, config_path, plugin_key, errors
@@ -966,10 +1086,13 @@ def apply_install(
         except ValueError as exc:
             errors.append(str(exc))
             return apply_actions, source_summary, target_plugin_root, marketplace_path, config_path, plugin_key, errors
+        repair_changed = False
+        if action == "repair" and install_scope == "repo":
+            payload, repair_changed = _repair_repo_root_plugin_surface(apply_actions, scope_root, payload)
         payload, changed = merge_marketplace_entry(payload, expected_entry)
         marketplace_name = marketplace_name_from_payload(payload, install_scope)
         plugin_key = plugin_config_key(plugin_name, marketplace_name)
-        if changed or not marketplace_path.exists():
+        if changed or repair_changed or not marketplace_path.exists():
             _write_json(marketplace_path, payload)
             apply_actions.append({"action": "write-marketplace-entry", "path": str(marketplace_path)})
 
@@ -1099,7 +1222,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--source-plugin-root", required=True)
     parser.add_argument("--scope", choices=("repo", "personal"))
-    parser.add_argument("--action", choices=("install", "update", "uninstall", "verify", "enable", "disable", "promote"), required=True)
+    parser.add_argument("--action", choices=("install", "update", "uninstall", "verify", "repair", "enable", "disable", "promote"), required=True)
     parser.add_argument("--run-mode", choices=("check-only", "apply"), required=True)
     parser.add_argument("--repo-root")
     parser.add_argument("--config")

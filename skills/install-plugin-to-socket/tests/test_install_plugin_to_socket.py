@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -398,6 +399,92 @@ def test_repo_scope_verify_flags_invalid_sibling_marketplace_entry(tmp_path: Pat
     issue_ids = {finding.issue_id for finding in findings}
     assert "invalid-marketplace-entry-empty-relative-source-path" in issue_ids
     assert str(marketplace_path) in {finding.path for finding in findings}
+
+
+def test_repo_scope_repair_normalizes_repo_root_plugin_entry(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source", plugin_name="agent-plugin-skills")
+    repo_root = tmp_path / "repo"
+    (repo_root / "skills" / "hello").mkdir(parents=True)
+    (repo_root / "skills" / "hello" / "SKILL.md").write_text(
+        "---\nname: hello\ndescription: Say hello.\n---\n\nSay hello.\n",
+        encoding="utf-8",
+    )
+    (repo_root / ".codex-plugin").mkdir(parents=True)
+    (repo_root / ".codex-plugin" / "plugin.json").write_text(
+        json.dumps(
+            {
+                "name": "repo-plugin",
+                "version": "1.0.0",
+                "description": "Repo root plugin.",
+                "skills": "./skills/",
+                "interface": {"displayName": "Repo Plugin", "category": "Productivity"},
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (repo_root / ".agents" / "plugins").mkdir(parents=True)
+    (repo_root / ".agents" / "plugins" / "marketplace.json").write_text(
+        json.dumps(
+            {
+                "name": "local-repo",
+                "plugins": [
+                    {
+                        "name": "repo-plugin",
+                        "source": {"source": "local", "path": "./"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    },
+                    {
+                        "name": "agent-plugin-skills",
+                        "source": {"source": "local", "path": "./plugins/agent-plugin-skills"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    },
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    apply_actions, _source_summary, _target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="repair",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    action_names = {action["action"] for action in apply_actions}
+    assert "repair-root-plugin-manifest" in action_names
+    assert "repair-root-plugin-symlink" in action_names
+    assert "repair-root-plugin-marketplace-entry" in action_names
+    assert "copy-plugin-tree" in action_names
+
+    repaired_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    entries = {item["name"]: item for item in repaired_marketplace["plugins"]}
+    assert entries["repo-plugin"]["source"]["path"] == "./plugins/repo-plugin"
+    assert entries["agent-plugin-skills"]["source"]["path"] == "./plugins/agent-plugin-skills"
+
+    repaired_root_plugin = repo_root / "plugins" / "repo-plugin"
+    assert (repaired_root_plugin / ".codex-plugin" / "plugin.json").is_file()
+    assert (repaired_root_plugin / "skills").is_symlink()
+    assert os.readlink(repaired_root_plugin / "skills") == "../../skills"
+
+    findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="verify",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    assert findings == []
 
 
 def test_repo_scope_defaults_to_current_working_directory(tmp_path: Path, monkeypatch) -> None:

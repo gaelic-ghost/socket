@@ -13,7 +13,7 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `install-plugin-to-socket`
-  - Current implementation: audit, install, update, uninstall, verify, enable, disable, or promote an in-development Codex plugin at repo or personal scope with bounded marketplace merging and Codex config-state management.
+  - Current implementation: audit, install, update, uninstall, verify, repair, enable, disable, or promote an in-development Codex plugin at repo or personal scope with bounded marketplace merging and Codex config-state management.
   - It follows the documented Codex local-plugin flow: local plugin directory plus marketplace wiring, then restart and verification.
   - It is also the repair surface for drifted local installs, such as missing staged plugin paths, stale marketplace entries, or the wrong staged materialization mode.
   - It stays honest about scope and does not claim undocumented control over Codex's installed-plugin cache internals.
@@ -196,6 +196,14 @@ uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.p
   --run-mode check-only \
   --print-md
 
+# Repair a drifted repo-local install surface in one pass
+uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
+  --source-plugin-root plugins/agent-plugin-skills \
+  --scope repo \
+  --repo-root /path/to/target-repo \
+  --action repair \
+  --run-mode apply
+
 # Enable or disable the plugin in Codex config
 uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
   --source-plugin-root plugins/agent-plugin-skills \
@@ -215,6 +223,13 @@ uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.p
   --action promote \
   --run-mode apply
 ```
+
+Troubleshooting:
+
+- Fully restart Codex after repo-local marketplace changes. A still-open workspace can keep using the marketplace view it loaded before `install`, `update`, or `repair`.
+- Repo scope only makes the plugin available in that repo. Use personal scope when the plugin should appear broadly across unrelated repos.
+- If a staged repo-local plugin still does not appear after restart, check `~/.codex/log/codex-tui.log` for warnings like `skipping marketplace` or `local plugin source path must not be empty`.
+- The Codex `/plugins` slash command list order may not be intuitive, so scan the whole list before concluding a plugin is missing.
 
 ### Claude Code Plugin
 

@@ -48,11 +48,16 @@ Current scope note:
    - the shared `.gitignore` snippet for local runtime state is present unless stricter ignores already cover it
 9. Make repo guidance explicit about which workflow owns what:
    - bootstrap and sync own repo-local structure and guidance
-   - `install-plugin-to-socket` owns local Codex install lifecycle work such as install, update, uninstall, verify, enable, disable, and promote
-10. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
-11. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
-12. Re-run the same audit to confirm remaining findings.
-13. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
+   - `install-plugin-to-socket` owns local Codex install lifecycle work such as install, update, uninstall, verify, repair, enable, disable, and promote
+10. Keep user-facing troubleshooting consistent across repo docs:
+   - fully restart Codex after marketplace changes
+   - inspect `~/.codex/log/codex-tui.log` when Codex appears to skip a marketplace
+   - explain repo scope versus personal scope clearly
+   - note that `/plugins` ordering may be non-intuitive
+11. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
+12. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
+13. Re-run the same audit to confirm remaining findings.
+14. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
 
 ## Output Contract
 

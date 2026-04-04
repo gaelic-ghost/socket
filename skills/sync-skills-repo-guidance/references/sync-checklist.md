@@ -24,7 +24,8 @@ Check these policy points:
 - repo guidance distinguishes direct Claude `--plugin-dir` development from Git-backed Claude marketplace sharing through repo-root `.claude-plugin/marketplace.json`
 - repo guidance says which shared marketplace catalogs belong in git and which install copies and caches do not
 - the shared `.gitignore` snippet for local runtime state is present or deliberately superseded by stricter ignores
-- repo guidance names the workflow owner for Codex install lifecycle work instead of implying bootstrap or sync scripts perform install, update, uninstall, verify, enable, disable, or promote operations themselves
+- repo guidance names the workflow owner for Codex install lifecycle work instead of implying bootstrap or sync scripts perform install, update, uninstall, verify, repair, enable, disable, or promote operations themselves
+- troubleshooting guidance tells users to restart Codex after marketplace changes, inspect `~/.codex/log/codex-tui.log` for skipped-marketplace warnings, and not assume `/plugins` ordering is intuitive
 - POSIX symlink mirrors are explicit and documented
 - maintainer Python tooling guidance keeps `ruff` and `mypy` available through `uv tool install`
 - standalone skill install guidance matches `npx skills add`

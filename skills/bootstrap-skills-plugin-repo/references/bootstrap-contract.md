@@ -23,6 +23,7 @@ Codex install guidance to preserve in repo docs:
 - repo-local marketplace surface: `.agents/plugins/marketplace.json`
 - personal Codex install surface lives outside the repo at `~/.codex/plugins/<plugin-name>` with `~/.agents/plugins/marketplace.json`
 - repo bootstrap owns the repo-local structure; ongoing local Codex install and lifecycle workflows belong to `install-plugin-to-socket` or equivalent maintainer tooling
+- docs should tell users to fully restart Codex after marketplace changes, to check `~/.codex/log/codex-tui.log` for skipped-marketplace warnings, and to expect `/plugins` ordering to be non-intuitive at times
 
 Claude plugin guidance to preserve in repo docs:
 

@@ -70,6 +70,9 @@ def test_apply_repo_seeds_python_tooling_guidance(tmp_path: Path) -> None:
     assert "uv tool install ruff" in readme
     assert "uv tool install mypy" in readme
     assert "uv run --group dev pytest" in readme
+    assert "restart Codex" in readme
+    assert "codex-tui.log" in readme
+    assert "/plugins" in readme
     assert "`uv`-managed tools" in agents
     assert ".claude-plugin/marketplace.json" in readme
     assert ".codex/plugins/" in gitignore
