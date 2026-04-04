@@ -1,0 +1,8 @@
+schemaVersion: 1
+isCustomized: false
+settings:
+  defaultToolSelection: "both"
+  defaultSurface: "cli"
+  preferSwiftLintPlugins: true
+  preferProjectRootConfigFiles: true
+  preferSwiftFormatHostAppExport: true

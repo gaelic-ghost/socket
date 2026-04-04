@@ -74,6 +74,7 @@ workflow_doc="docs/maintainers/workflow-atlas.md"
 require_contains "$workflow_doc" "## Repo Workflow Map"
 require_contains "$workflow_doc" '## `xcode-app-project-workflow`'
 require_contains "$workflow_doc" '## `explore-apple-swift-docs`'
+require_contains "$workflow_doc" '## `swift-style-tooling-workflow`'
 require_contains "$workflow_doc" '## `bootstrap-swift-package`'
 require_contains "$workflow_doc" '## `bootstrap-xcode-app-project`'
 require_contains "$workflow_doc" '## `sync-xcode-project-guidance`'
@@ -89,12 +90,13 @@ echo "Validating skill directory layout..."
 active_skill_mds=(
   "./skills/xcode-app-project-workflow/SKILL.md"
   "./skills/explore-apple-swift-docs/SKILL.md"
+  "./skills/swift-style-tooling-workflow/SKILL.md"
   "./skills/bootstrap-swift-package/SKILL.md"
   "./skills/bootstrap-xcode-app-project/SKILL.md"
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 6 ]] || fail "Expected exactly 6 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 7 ]] || fail "Expected exactly 7 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"

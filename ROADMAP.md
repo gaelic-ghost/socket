@@ -31,6 +31,7 @@
 - [x] Milestone 16: Apple and Swift Docs Skill Extraction
 - [x] Milestone 17: Existing Skill Rename and Install-Surface Cleanup
 - [ ] Milestone 18: Claude Code Plugin Extras
+- [x] Milestone 19: Swift Style Tooling Workflow
 
 ## Milestone 1: Initial Apple Skill Bundle
 
@@ -317,6 +318,24 @@ Scope:
 - [ ] Add Claude-only plugin enhancements on top of the shared Codex/Claude common denominator without making cross-ecosystem workflows depend on them.
 
 Tickets:
+
+## Milestone 19: Swift Style Tooling Workflow
+
+Scope:
+
+- [x] Add a dedicated active skill for SwiftLint and SwiftFormat integration instead of scattering style-tooling guidance across bootstrap, sync, and execution surfaces.
+
+Tickets:
+
+- [x] Ship `swift-style-tooling-workflow` as the active skill for SwiftLint and SwiftFormat setup across CLI, Xcode, SwiftPM, Git hooks, and GitHub Actions.
+- [x] Document the actual support matrix so unsupported tool-and-surface combinations are blocked instead of implied.
+- [x] Add a deterministic helper for exporting SwiftFormat for Xcode shared settings into a checked-in `.swiftformat` file.
+- [x] Update README, maintainer docs, validation, and tests to treat `swift-style-tooling-workflow` as part of the active public skill surface.
+- [x] Narrow the future-direction placeholder so style-tooling is no longer treated as deferred non-Xcode Swift expansion.
+
+Exit criteria:
+
+- [x] The repo ships a first-class style-tooling skill with explicit surface boundaries, deterministic SwiftFormat config export support, and fully updated maintainer and validation docs.
 
 - [ ] Flesh out `hooks/` for Claude-only automation where it clearly helps maintainers or end users.
 - [ ] Add `bin/` helpers only for Claude-only convenience wrappers that do not become required for the shared workflow contract.

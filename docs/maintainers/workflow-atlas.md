@@ -21,15 +21,20 @@ flowchart TD
     U["User request"] --> A["Agent classifies request"]
     A --> X["xcode-app-project-workflow"]
     A --> D["explore-apple-swift-docs"]
+    A --> ST["swift-style-tooling-workflow"]
     A --> B["bootstrap-swift-package"]
     A --> AX["bootstrap-xcode-app-project"]
     A --> SX["sync-xcode-project-guidance"]
     A --> SP["sync-swift-package-guidance"]
     X --> XD["May recommend explore-apple-swift-docs"]
+    X --> XT["May recommend swift-style-tooling-workflow for SwiftLint or SwiftFormat setup"]
     X --> XB["May recommend bootstrap-swift-package"]
     X --> XS["May recommend bootstrap-xcode-app-project only when the user actually means new-project creation"]
     X --> SG["May recommend sync-xcode-project-guidance for repo guidance alignment"]
     D --> DX["May recommend xcode-app-project-workflow"]
+    D --> DT["May recommend swift-style-tooling-workflow when docs work turns into style-tooling setup"]
+    ST --> SXD["May recommend xcode-app-project-workflow when setup becomes active Xcode work"]
+    ST --> STB["May recommend bootstrap skills when the user actually needs a full project scaffold"]
     D --> DB["May recommend bootstrap-xcode-app-project"]
     B --> BX["May recommend xcode-app-project-workflow"]
     B --> BS["May recommend sync-swift-package-guidance after bootstrap or later repo-guidance drift"]
@@ -41,7 +46,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - The repo has no Apple router or orchestrator layer.
-- The six active skills are parallel top-level entry points for different situations.
+- The seven active skills are parallel top-level entry points for different situations.
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
@@ -77,9 +82,9 @@ flowchart TD
 - Agent behavior:
   - The agent chooses the best matching top-level skill directly and may recommend another top-level skill if the task shifts.
 - User-visible response:
-  - The user sees direct progress inside one of the six top-level skills, or a direct recommendation to switch to another skill.
+  - The user sees direct progress inside one of the seven top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-  - The repo-level UX is a bundle of six parallel top-level skills, with plugin packaging layered around them as the install surface.
+  - The repo-level UX is a bundle of seven parallel top-level skills, with plugin packaging layered around them as the install surface.
 
 ## `xcode-app-project-workflow`
 
@@ -263,6 +268,56 @@ flowchart TD
 - `success` + `fallback`: selected mode completed on a documented fallback path
 - `handoff`: supporting context passed to the next docs mode
 - `blocked`: no usable docs source, missing approval, or missing mode input
+
+## `swift-style-tooling-workflow`
+
+### Purpose
+
+Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, and SwiftFormat config export from the Xcode host app or shared defaults.
+
+### Workflow Diagram
+
+```mermaid
+flowchart TD
+    I["Style-tooling input"] --> T["Classify tool selection"]
+    T --> S["Classify integration surface"]
+    S --> M["Check integration-matrix.md"]
+    M --> OK{"Supported tool + surface?"}
+    OK -->|No| BL["Blocked"]
+    OK -->|Yes| PATH{"SwiftFormat Xcode config export?"}
+    PATH -->|No| REF["Use tool-specific references"]
+    PATH -->|Yes| PREF{"Host app export acceptable?"}
+    PREF -->|Yes| HOST["Use host app export path"]
+    PREF -->|No| SCRIPT["Run export_swiftformat_xcode_config.py"]
+    REF --> OUT1["Success / primary or fallback"]
+    HOST --> OUT2["Success / primary"]
+    SCRIPT --> OUT3["Success / fallback"]
+```
+
+### Branch and Path Notes
+
+- This skill is intentionally about style-tooling setup and maintenance, not general repo bootstrap or Xcode execution.
+- The support matrix is part of the contract and should be checked before proposing a path.
+- The preferred SwiftFormat settings-export path is the host app export flow.
+- The shared-defaults export script is a deterministic fallback for cases where a checked-in `.swiftformat` file is needed from existing host-app settings.
+
+### Agent ↔ User UX
+
+- Entry:
+  - The user asks to add, compare, or maintain SwiftLint or SwiftFormat in a Swift repository.
+- Agent behavior:
+  - The agent picks the requested tool or tools, resolves the integration surface, checks whether that combination is actually supported, then returns one recommended path plus caveats.
+- User-visible response:
+  - On success: the user sees the supported path, expected config files, and one verification step.
+  - On fallback: the user sees why a secondary path was chosen.
+  - On blocked: the user sees the exact unsupported combination or missing prerequisite.
+
+### Failure / Fallback / Handoff States
+
+- `success` + `primary`: a documented preferred path was selected
+- `success` + `fallback`: a documented secondary path was selected, such as the SwiftFormat shared-defaults export script
+- `handoff`: bootstrap, sync, or Xcode execution should take over next
+- `blocked`: the requested tool and surface combination is unsupported or the export prerequisites are missing
 
 ## `bootstrap-xcode-app-project`
 
@@ -457,6 +512,6 @@ flowchart TD
 
 ## Future Direction Placeholder
 
-- Keep future non-Xcode Swift expansion explicitly out of the active surface until there is a concrete operational need that differs materially from plain SwiftPM bootstrap, SwiftPM guidance sync, and Xcode-managed execution.
-- The current placeholder direction is cross-platform or server-side Swift workflows that would not naturally belong to `xcode-app-project-workflow`.
+- Keep future broader non-Xcode Swift execution expansion explicitly out of the active surface until there is a concrete operational need that differs materially from plain SwiftPM bootstrap, SwiftPM guidance sync, style-tooling setup, and Xcode-managed execution.
+- The current placeholder direction is cross-platform or server-side Swift execution workflows that would not naturally belong to `xcode-app-project-workflow` or `swift-style-tooling-workflow`.
 - Do not create that skill family speculatively; reactivate it only when the repo needs a clearly separate Swift workflow with different tools, inputs, and validation.

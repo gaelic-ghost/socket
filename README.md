@@ -8,6 +8,8 @@ Canonical Apple development skills with a plugin-first packaging layout for Code
   - Top-level Apple and Swift execution skill for Xcode work, diagnostics, toolchains, mutation decisions, and guarded fallback planning.
 - `explore-apple-swift-docs`
   - Top-level docs skill for Apple and Swift docs exploration across Xcode MCP docs, Dash, and official web docs, with optional Dash follow-up when needed.
+- `swift-style-tooling-workflow`
+  - Top-level skill for integrating SwiftLint and SwiftFormat across CLI, Xcode, SwiftPM, Git hooks, GitHub Actions, and SwiftFormat config export.
 - `bootstrap-swift-package`
   - Top-level skill for new Swift package scaffolding only, with verification and `AGENTS.md` generation.
 - `bootstrap-xcode-app-project`
@@ -138,6 +140,8 @@ Common starting points:
   `npx skills add gaelic-ghost/apple-dev-skills --skill xcode-app-project-workflow`
 - Apple or Swift docs exploration:
   `npx skills add gaelic-ghost/apple-dev-skills --skill explore-apple-swift-docs`
+- SwiftLint and SwiftFormat integration:
+  `npx skills add gaelic-ghost/apple-dev-skills --skill swift-style-tooling-workflow`
 - New Swift package bootstrap:
   `npx skills add gaelic-ghost/apple-dev-skills --skill bootstrap-swift-package`
 - New native Apple app bootstrap:
@@ -173,6 +177,7 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
 
 - Each active skill ships the local snippet copy that matches its workflow surface so individually installed skills can recommend it directly.
 - For Apple or Swift docs exploration, prefer `explore-apple-swift-docs` over older Dash-specific guidance.
+- For SwiftLint or SwiftFormat setup and config-export workflows, prefer `swift-style-tooling-workflow` over scattering style-tooling snippets across unrelated skills.
 - For new Swift package repositories, `bootstrap-swift-package` copies its full `assets/AGENTS.md` template, which already incorporates the Swift-package baseline.
 - For existing Xcode app repositories, prefer `sync-xcode-project-guidance` over manual snippet merging when the goal is to align repo guidance.
 - For existing Swift package repositories, prefer `sync-swift-package-guidance` over manual snippet merging when the goal is to align repo guidance.
@@ -211,6 +216,7 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
     ├── bootstrap-xcode-app-project/
     ├── bootstrap-swift-package/
     ├── explore-apple-swift-docs/
+    ├── swift-style-tooling-workflow/
     ├── sync-swift-package-guidance/
     ├── sync-xcode-project-guidance/
     └── xcode-app-project-workflow/
