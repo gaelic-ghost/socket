@@ -21,7 +21,7 @@
 - [x] Milestone 0: Foundation bootstrap
 - [x] Milestone 1: `maintain-plugin-docs` evolution
 - [ ] Milestone 2: `install-plugin-to-socket`
-- [ ] Milestone 3: install-surface and metadata validation skill
+- [x] Milestone 3: install-surface and metadata validation skill
 - [ ] Milestone 4: MCP and app packaging maintainer skill
 - [ ] Milestone 5: skills repo migration and split support
 - [ ] Milestone 6: upstream docs watch and change intake
@@ -148,15 +148,15 @@ Scope:
 
 Tickets:
 
-- [ ] Define the validation surface across the Agent Skills standard plus OpenAI and Claude overlays.
-- [ ] Add deterministic checks for missing or stale metadata fields.
-- [ ] Add install-command and discovery-path validation.
-- [ ] Decide whether this skill should mutate or remain audit-only.
+- [x] Define the validation surface across the Agent Skills standard plus OpenAI and Claude overlays.
+- [x] Add deterministic checks for missing or stale metadata fields.
+- [x] Add install-command and discovery-path validation.
+- [x] Decide whether this skill should mutate or remain audit-only.
 
 Exit criteria:
 
-- [ ] Maintainers can run one bounded workflow to detect install-surface drift.
-- [ ] The audit distinguishes canonical authored surfaces from packaging mirrors.
+- [x] Maintainers can run one bounded workflow to detect install-surface drift.
+- [x] The audit distinguishes canonical authored surfaces from packaging mirrors.
 
 ## Milestone 4: MCP and app packaging maintainer skill
 

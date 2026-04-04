@@ -1,3 +1,4 @@
+---
 name: maintain-plugin-docs
 description: Maintain docs for agent-skills, Codex plugin, Claude Code plugin, and similar agent-plugin repositories through deterministic audits and bounded fixes. Use when a stack-specific plugin or skills repo needs README or roadmap maintenance. Do not use this for ordinary software project docs.
 ---

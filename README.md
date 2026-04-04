@@ -19,6 +19,9 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 - `sync-skills-repo-guidance`
   - Current scope: ongoing maintenance and alignment of agent-skills and plugin-development guidance, maintainer docs, discovery mirrors, and related docs links for this repo pattern.
   - Current automation is narrower than the long-term intent: the script audits local guidance snippets and symlink mirrors, while broader link and policy reconciliation is still maintainer-driven.
+- `validate-plugin-install-surfaces`
+  - Current implementation: audit-only validation for skill metadata overlays, plugin manifests, marketplace wiring, discovery mirrors, and README install examples.
+  - It treats root `skills/` as canonical and reports structural drift without mutating the repo.
 
 ## Repo Purpose
 
@@ -85,6 +88,7 @@ uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scrip
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/bootstrap-skills-plugin-repo
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/install-plugin-to-socket
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/sync-skills-repo-guidance
+uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/validate-plugin-install-surfaces
 ```
 
 ## Install
@@ -125,6 +129,8 @@ Common starting points:
   `npx skills add gaelic-ghost/agent-plugin-skills --skill install-plugin-to-socket`
 - repo-wide guidance sync:
   `npx skills add gaelic-ghost/agent-plugin-skills --skill sync-skills-repo-guidance`
+- install-surface and metadata validation:
+  `npx skills add gaelic-ghost/agent-plugin-skills --skill validate-plugin-install-surfaces`
 
 ## Repository Layout
 
@@ -150,7 +156,8 @@ Common starting points:
 │   ├── bootstrap-skills-plugin-repo/
 │   ├── install-plugin-to-socket/
 │   ├── maintain-plugin-docs/
-│   └── sync-skills-repo-guidance/
+│   ├── sync-skills-repo-guidance/
+│   └── validate-plugin-install-surfaces/
 ├── docs/
 │   └── maintainers/
 ├── ROADMAP.md
