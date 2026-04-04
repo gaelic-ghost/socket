@@ -350,14 +350,14 @@ def audit_install(
 
     existing_marketplace = _load_json(marketplace_path) if marketplace_path.exists() else None
 
-    if action in {"install", "refresh"}:
+    if action in {"install", "update"}:
         if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(scope, scope_root, target_plugin_root):
             findings.append(Finding(str(target_plugin_root), "tracked-target-tree-blocks-symlink", "Repo scope symlink mode would replace a git-tracked plugin tree at the staged target path. Use copy mode for this repo, or migrate the tracked tree deliberately before switching to symlink mode."))
         if not target_plugin_root.exists():
             findings.append(Finding(str(target_plugin_root), "missing-target-plugin-root", "Staged plugin path is missing for the chosen scope."))
         elif not (target_plugin_root / ".codex-plugin" / "plugin.json").exists():
             findings.append(Finding(str(target_plugin_root), "missing-target-manifest", "Target plugin root exists but does not contain `.codex-plugin/plugin.json`."))
-        elif action == "refresh":
+        elif action == "update":
             target_manifest = load_plugin_manifest(target_plugin_root)
             if infer_plugin_name(target_plugin_root, target_manifest) != plugin_name:
                 findings.append(Finding(str(target_plugin_root), "target-plugin-name-mismatch", "Target plugin root does not match the source plugin name."))
@@ -367,7 +367,7 @@ def audit_install(
             else:
                 findings.append(Finding(str(target_plugin_root), "stale-target-materialization", "Target plugin root is not a symlink to the requested source plugin root."))
         if install_mode == "copy" and _copy_tree_is_stale(source_plugin_root, target_plugin_root):
-            findings.append(Finding(str(target_plugin_root), "stale-target-copy", "Staged plugin copy does not match the current source plugin tree. Run `refresh` to copy the updated plugin contents into the staged Codex install path."))
+            findings.append(Finding(str(target_plugin_root), "stale-target-copy", "Staged plugin copy does not match the current source plugin tree. Run `update` to copy the updated plugin contents into the staged Codex install path."))
 
         if existing_marketplace is None:
             findings.append(Finding(str(marketplace_path), "missing-marketplace", "Marketplace file is missing for the chosen scope."))
@@ -384,9 +384,9 @@ def audit_install(
             elif match != expected_entry:
                 findings.append(Finding(str(marketplace_path), "stale-marketplace-entry", "Marketplace entry does not match the expected local plugin wiring."))
 
-    if action == "detach":
+    if action == "uninstall":
         if not target_plugin_root.exists():
-            findings.append(Finding(str(target_plugin_root), "missing-detach-target", "Target plugin root is already absent for the chosen scope."))
+            findings.append(Finding(str(target_plugin_root), "missing-uninstall-target", "Target plugin root is already absent for the chosen scope."))
         if existing_marketplace is None:
             findings.append(Finding(str(marketplace_path), "missing-marketplace", "Marketplace file is missing for the chosen scope."))
         else:
@@ -442,7 +442,7 @@ def apply_install(
     existing_marketplace = _load_json(marketplace_path) if marketplace_path.exists() else None
     payload = ensure_marketplace_shape(existing_marketplace, scope, plugin_name)
 
-    if action in {"install", "refresh"}:
+    if action in {"install", "update"}:
         if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(scope, scope_root, target_plugin_root):
             errors.append("Repo scope symlink mode is blocked because the staged target path is a git-tracked plugin tree. Use copy mode for this repo, or migrate the tracked tree deliberately before switching to symlink mode.")
             return apply_actions, source_summary, target_plugin_root, marketplace_path, errors
@@ -472,14 +472,14 @@ def apply_install(
         if changed or not marketplace_path.exists():
             _write_json(marketplace_path, payload)
             apply_actions.append({"action": "write-marketplace-entry", "path": str(marketplace_path)})
-    elif action == "detach":
+    elif action == "uninstall":
         if target_plugin_root.exists() or target_plugin_root.is_symlink():
             _remove_target_path(target_plugin_root)
-            apply_actions.append({"action": "remove-plugin-tree", "path": str(target_plugin_root)})
+            apply_actions.append({"action": "uninstall-plugin-tree", "path": str(target_plugin_root)})
         payload, changed = remove_marketplace_entry(payload, plugin_name)
         if changed:
             _write_json(marketplace_path, payload)
-            apply_actions.append({"action": "remove-marketplace-entry", "path": str(marketplace_path)})
+            apply_actions.append({"action": "uninstall-marketplace-entry", "path": str(marketplace_path)})
     else:
         errors.append(f"Unsupported action: {action}")
 
@@ -527,7 +527,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--source-plugin-root", required=True)
     parser.add_argument("--scope", choices=("repo", "personal"))
-    parser.add_argument("--action", choices=("install", "refresh", "detach"), required=True)
+    parser.add_argument("--action", choices=("install", "update", "uninstall"), required=True)
     parser.add_argument("--run-mode", choices=("check-only", "apply"), required=True)
     parser.add_argument("--repo-root")
     parser.add_argument("--config")

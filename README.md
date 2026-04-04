@@ -13,7 +13,7 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `install-plugin-to-socket`
-  - Current implementation: audit, install, refresh, or detach an in-development Codex plugin at repo or personal scope with bounded marketplace merging.
+  - Current implementation: audit, install, update, or uninstall an in-development Codex plugin at repo or personal scope with bounded marketplace merging.
   - It follows the documented Codex local-plugin flow: local plugin directory plus marketplace wiring, then restart and verification.
   - It is also the repair surface for drifted local installs, such as missing staged plugin paths, stale marketplace entries, or the wrong staged materialization mode.
   - It stays honest about scope and does not claim undocumented control over Codex's installed-plugin cache internals.
@@ -133,13 +133,13 @@ uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.p
 # Refresh the staged copied install after local source changes
 uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
   --source-plugin-root plugins/agent-plugin-skills \
-  --action refresh \
+  --action update \
   --run-mode apply
 
 # Remove the local Codex install surface for one plugin
 uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py \
   --source-plugin-root plugins/agent-plugin-skills \
-  --action detach \
+  --action uninstall \
   --run-mode apply
 ```
 

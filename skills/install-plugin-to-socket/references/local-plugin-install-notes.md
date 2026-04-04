@@ -26,13 +26,13 @@ Current repo guidance for this skill:
   - `.codex/profiles/install-plugin-to-socket/customization.yaml`
   - `~/.config/gaelic-ghost/agent-plugin-skills/install-plugin-to-socket/customization.yaml`
 - Default to `copy` mode because it matches the documented OpenAI examples for local plugin installs.
-- Treat `refresh` in `copy` mode as the normal update workflow when the source clone is ahead of the staged install copy.
+- Treat `update` in `copy` mode as the normal update workflow when the source clone is ahead of the staged install copy.
 - Keep `symlink` mode as an advanced maintainer override for local development only; it is not the primary documented Codex install model.
 - Do not point a repo marketplace directly at a sibling repo outside the marketplace root. Stage a copy or symlink at the in-scope plugin path instead.
 - Treat `install-plugin-to-socket` as the repair surface for drifted local installs:
   - rerun `install` when the staged path or marketplace entry is missing
-  - rerun `refresh` when the marketplace entry is stale, the staged path needs to be rematerialized in the chosen mode, or the copied staged tree no longer matches the source plugin tree
-  - use `detach` then `install` when the wrong plugin tree was staged into the target path
+  - rerun `update` when the marketplace entry is stale, the staged path needs to be rematerialized in the chosen mode, or the copied staged tree no longer matches the source plugin tree
+  - use `uninstall` then `install` when the wrong plugin tree was staged into the target path
 
 Relevant docs:
 

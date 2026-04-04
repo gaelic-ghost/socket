@@ -1,6 +1,6 @@
 ---
 name: install-plugin-to-socket
-description: Install, refresh, or detach an in-development Codex plugin in a local Codex install surface at personal or repo scope. Use when a local plugin needs marketplace wiring for Codex app or CLI discovery without hand-editing marketplace JSON.
+description: Install, update, or uninstall an in-development Codex plugin in a local Codex install surface at personal or repo scope. Use when a local plugin needs marketplace wiring for Codex app or CLI discovery without hand-editing marketplace JSON.
 ---
 
 # Install Plugin To Socket
@@ -25,8 +25,8 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - default: current working directory when the helper is run from the target repo
 - Optional: action
   - `install`
-  - `refresh`
-  - `detach`
+  - `update`
+  - `uninstall`
 - Optional: install mode
   - default: `copy`
   - `copy`
@@ -56,10 +56,10 @@ This skill is for local Codex plugin development workflows. It does not publish 
    - stage the plugin at the repo or personal plugin path
    - point the marketplace entry at that staged path
 10. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs and gives Codex a stable staged plugin tree to recache from.
-11. Treat `refresh` as the update workflow when the source clone is ahead of the staged install copy. It should recopy the source plugin tree into the staged path and rewrite the marketplace entry if needed.
+11. Treat `update` as the update workflow when the source clone is ahead of the staged install copy. It should recopy the source plugin tree into the staged path and rewrite the marketplace entry if needed.
 12. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
-13. For `install` and `refresh`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
-14. For `detach`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
+13. For `install` and `update`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
+14. For `uninstall`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
 15. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
 
 ## Usage Examples
@@ -69,9 +69,9 @@ This skill is for local Codex plugin development workflows. It does not publish 
 - Repo-local install:
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action install --run-mode apply`
 - Update a staged copied install after source changes:
-  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action refresh --run-mode apply`
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action update --run-mode apply`
 - Remove a local install cleanly:
-  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action detach --run-mode apply`
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action uninstall --run-mode apply`
 
 ## Repairing Drifted Installs
 
@@ -87,26 +87,26 @@ Common repair cases:
   - Fix: rerun `install` in the intended mode.
 - `stale-marketplace-entry`
   - The marketplace entry points at the wrong staged path or has stale metadata.
-  - Fix: rerun `refresh` in the intended mode.
+  - Fix: rerun `update` in the intended mode.
 - `stale-target-materialization`
   - The staged plugin path is present, but its materialization does not match the requested mode.
-  - Fix: rerun `refresh` with the intended `copy` or `symlink` mode.
+  - Fix: rerun `update` with the intended `copy` or `symlink` mode.
 - `stale-target-copy`
   - The staged plugin tree is a copied install, but its contents no longer match the current source plugin tree.
-  - Fix: rerun `refresh` in `copy` mode so the staged Codex install path is updated from the source clone.
+  - Fix: rerun `update` in `copy` mode so the staged Codex install path is updated from the source clone.
 
 Preferred repair flow:
 
 1. Run the helper in `check-only` mode first.
 2. Confirm the intended scope and install mode.
-3. Use `refresh` when the staged path and marketplace entry should continue to exist but need to be rewritten.
-4. Use `detach` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
+3. Use `update` when the staged path and marketplace entry should continue to exist but need to be rewritten.
+4. Use `uninstall` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
 5. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.
 
 ## Not Yet In Scope
 
 - First-class promote behavior from repo-local scope into personal scope is still planned roadmap work.
-- This skill should not claim promote support until it can copy the staged plugin tree into personal scope and optionally detach the repo-local install in one bounded workflow.
+- This skill should not claim promote support until it can copy or move the staged plugin tree into personal scope and optionally uninstall the repo-local install in one bounded workflow.
 
 ## Output Contract
 
@@ -131,7 +131,7 @@ Preferred repair flow:
 - Never overwrite an existing marketplace catalog wholesale.
 - Never point `source.path` outside the marketplace root.
 - Never point a repo marketplace directly at an adjacent plugin repo outside the chosen marketplace root; use a staged copy or a staged symlink path inside the scope root instead.
-- Never delete the source plugin repo during detach; only remove the staged install target path.
+- Never delete the source plugin repo during uninstall; only remove the staged install target path.
 - Never claim that updating the marketplace file alone installs a plugin into undocumented Codex internals.
 - Never use this skill to publish a plugin publicly.
 - Never touch Claude plugin wiring here; this skill is for Codex local plugin development surfaces.

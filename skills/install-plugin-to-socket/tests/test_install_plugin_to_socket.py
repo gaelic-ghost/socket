@@ -124,7 +124,7 @@ def test_apply_install_personal_scope_uses_home_relative_paths(tmp_path: Path, m
     assert entry["source"]["path"] == "./.codex/plugins/example-plugin"
 
 
-def test_personal_scope_install_and_detach_testing_plugin_round_trip(tmp_path: Path, monkeypatch) -> None:
+def test_personal_scope_install_and_uninstall_testing_plugin_round_trip(tmp_path: Path, monkeypatch) -> None:
     fake_home = tmp_path / "home"
     fake_home.mkdir()
     monkeypatch.setattr(m.Path, "home", lambda: fake_home)
@@ -171,24 +171,24 @@ def test_personal_scope_install_and_detach_testing_plugin_round_trip(tmp_path: P
     assert installed_entry["source"]["path"] == "./.codex/plugins/testing-plugin"
     assert installed_entry["policy"]["installation"] == "AVAILABLE"
 
-    detach_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
+    uninstall_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
         source_plugin_root=source_plugin,
         scope="personal",
-        action="detach",
+        action="uninstall",
         repo_root=None,
         install_mode="copy",
     )
 
     assert not errors
-    assert any(action["action"] == "remove-plugin-tree" for action in detach_actions)
-    assert any(action["action"] == "remove-marketplace-entry" for action in detach_actions)
+    assert any(action["action"] == "uninstall-plugin-tree" for action in uninstall_actions)
+    assert any(action["action"] == "uninstall-marketplace-entry" for action in uninstall_actions)
     assert not target_plugin_root.exists()
 
-    detach_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
-    assert [item["name"] for item in detach_marketplace["plugins"]] == ["other-plugin"]
+    uninstall_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    assert [item["name"] for item in uninstall_marketplace["plugins"]] == ["other-plugin"]
 
 
-def test_apply_refresh_rewrites_marketplace_entry_without_dropping_other_plugins(tmp_path: Path) -> None:
+def test_apply_update_rewrites_marketplace_entry_without_dropping_other_plugins(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
     (repo_root / ".agents" / "plugins").mkdir(parents=True)
@@ -222,7 +222,7 @@ def test_apply_refresh_rewrites_marketplace_entry_without_dropping_other_plugins
     apply_actions, _source_summary, _target_plugin_root, marketplace_path, errors = m.apply_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="refresh",
+        action="update",
         repo_root=repo_root,
         install_mode="copy",
     )
@@ -235,7 +235,7 @@ def test_apply_refresh_rewrites_marketplace_entry_without_dropping_other_plugins
     assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
 
 
-def test_apply_detach_removes_plugin_tree_and_marketplace_entry(tmp_path: Path) -> None:
+def test_apply_uninstall_removes_plugin_tree_and_marketplace_entry(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
     target_plugin_root = repo_root / "plugins" / "example-plugin"
@@ -274,14 +274,14 @@ def test_apply_detach_removes_plugin_tree_and_marketplace_entry(tmp_path: Path) 
     apply_actions, _source_summary, _target_plugin_root, marketplace_path, errors = m.apply_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="detach",
+        action="uninstall",
         repo_root=repo_root,
         install_mode="copy",
     )
 
     assert not errors
-    assert any(action["action"] == "remove-plugin-tree" for action in apply_actions)
-    assert any(action["action"] == "remove-marketplace-entry" for action in apply_actions)
+    assert any(action["action"] == "uninstall-plugin-tree" for action in apply_actions)
+    assert any(action["action"] == "uninstall-marketplace-entry" for action in apply_actions)
     assert not target_plugin_root.exists()
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     assert [item["name"] for item in marketplace["plugins"]] == ["other-plugin"]
@@ -427,7 +427,7 @@ def test_apply_install_repo_scope_can_stage_symlink(tmp_path: Path) -> None:
     assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
 
 
-def test_audit_refresh_reports_symlink_mode_drift(tmp_path: Path) -> None:
+def test_audit_update_reports_symlink_mode_drift(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -442,7 +442,7 @@ def test_audit_refresh_reports_symlink_mode_drift(tmp_path: Path) -> None:
     findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, errors = m.audit_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="refresh",
+        action="update",
         repo_root=repo_root,
         install_mode="symlink",
     )
@@ -451,7 +451,7 @@ def test_audit_refresh_reports_symlink_mode_drift(tmp_path: Path) -> None:
     assert "stale-target-materialization" in {finding.issue_id for finding in findings}
 
 
-def test_audit_refresh_reports_stale_copied_tree(tmp_path: Path) -> None:
+def test_audit_update_reports_stale_copied_tree(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -472,7 +472,7 @@ def test_audit_refresh_reports_stale_copied_tree(tmp_path: Path) -> None:
     findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, errors = m.audit_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="refresh",
+        action="update",
         repo_root=repo_root,
         install_mode="copy",
     )
@@ -481,7 +481,7 @@ def test_audit_refresh_reports_stale_copied_tree(tmp_path: Path) -> None:
     assert "stale-target-copy" in {finding.issue_id for finding in findings}
 
 
-def test_apply_refresh_recopies_stale_tree(tmp_path: Path) -> None:
+def test_apply_update_recopies_stale_tree(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -499,7 +499,7 @@ def test_apply_refresh_recopies_stale_tree(tmp_path: Path) -> None:
     apply_actions, _source_summary, target_plugin_root, _marketplace_path, errors = m.apply_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="refresh",
+        action="update",
         repo_root=repo_root,
         install_mode="copy",
     )
@@ -509,7 +509,7 @@ def test_apply_refresh_recopies_stale_tree(tmp_path: Path) -> None:
     assert (target_plugin_root / "skills" / "hello" / "SKILL.md").read_text(encoding="utf-8") == updated_content
 
 
-def test_detach_removes_staged_symlink_without_touching_source(tmp_path: Path) -> None:
+def test_uninstall_removes_staged_symlink_without_touching_source(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -525,13 +525,13 @@ def test_detach_removes_staged_symlink_without_touching_source(tmp_path: Path) -
     apply_actions, _source_summary, _target_plugin_root, marketplace_path, errors = m.apply_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="detach",
+        action="uninstall",
         repo_root=repo_root,
         install_mode="symlink",
     )
 
     assert not errors
-    assert any(action["action"] == "remove-plugin-tree" for action in apply_actions)
+    assert any(action["action"] == "uninstall-plugin-tree" for action in apply_actions)
     assert not target_plugin_root.exists()
     assert source_plugin.exists()
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
@@ -549,7 +549,7 @@ def test_audit_reports_tracked_tree_blocking_symlink_mode(tmp_path: Path) -> Non
     findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, errors = m.audit_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="refresh",
+        action="update",
         repo_root=repo_root,
         install_mode="symlink",
     )
@@ -571,7 +571,7 @@ def test_apply_refuses_symlink_mode_for_tracked_tree(tmp_path: Path) -> None:
     apply_actions, _source_summary, target_plugin_root, marketplace_path, errors = m.apply_install(
         source_plugin_root=source_plugin,
         scope="repo",
-        action="refresh",
+        action="update",
         repo_root=repo_root,
         install_mode="symlink",
     )
