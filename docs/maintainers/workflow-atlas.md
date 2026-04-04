@@ -388,7 +388,7 @@ Provide the canonical new Swift package bootstrap workflow with one runtime-poli
 flowchart TD
     I["Bootstrap input"] --> C["Classify Swift package bootstrap request"]
     C --> RW["run_workflow.py"]
-    RW --> GEN["bootstrap_swift_package.py"]
+    RW --> GEN["bootstrap_swift_package.sh"]
     GEN --> VALIDATE{"Package validation success?"}
     VALIDATE -->|Yes| OUT["Success / primary"]
     VALIDATE -->|No| FAIL["Failed"]
@@ -397,6 +397,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - This skill is bounded to plain Swift package creation.
+- Within the supported `Swift 5.10+` floor, it prefers current `swift package init` testing-selection flags and only relies on the older default XCTest template when `xctest` is requested and the local CLI exposes no testing-selection flags at all.
 - Existing-package guidance sync belongs to `sync-swift-package-guidance`.
 - Xcode-specific execution after bootstrap may belong to `xcode-app-project-workflow`.
 

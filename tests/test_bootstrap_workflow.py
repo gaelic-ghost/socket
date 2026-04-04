@@ -80,6 +80,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["normalized_inputs"]["testing_mode"], "xctest")
             self.assertFalse(payload["normalized_inputs"]["initialize_git"])
             self.assertFalse(payload["normalized_inputs"]["copy_agents_md"])
+            self.assertEqual(payload["testing_strategy"], "init-flags")
             self.assertIn("--testing-mode", payload["command"])
             self.assertIn("xctest", payload["command"])
             self.assertIn("--skip-git-init", payload["command"])
@@ -117,6 +118,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["normalized_inputs"]["platform"], "mobile")
             self.assertEqual(payload["normalized_inputs"]["version_profile"], "current-minus-two")
             self.assertEqual(payload["normalized_inputs"]["testing_mode"], "swift-testing")
+            self.assertEqual(payload["testing_strategy"], "init-flags")
 
     def test_wrapper_normalizes_shell_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -170,6 +172,76 @@ class BootstrapWorkflowTests(unittest.TestCase):
         self.assertEqual(payload["status"], "blocked")
         self.assertIn("input validation issue", payload["next_step"])
         self.assertIn("--version-profile must be", payload["stderr"])
+
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for testing strategy coverage")
+    def test_dry_run_uses_default_template_strategy_for_xctest_without_selection_flags(self) -> None:
+        real_swift = shutil.which("swift")
+        assert real_swift is not None
+        script_body = f"""#!/bin/sh
+if [ "$1" = "--version" ]; then
+  cat <<'EOF'
+Apple Swift version 5.10 (swift-5.10-RELEASE)
+Target: arm64-apple-macosx14.0
+EOF
+  exit 0
+fi
+if [ "$1" = "package" ] && [ "$2" = "init" ] && [ "$3" = "--help" ]; then
+  cat <<'EOF'
+OVERVIEW: Initialize a new package.
+
+USAGE: swift package init [--type <type>] [--name <name>]
+EOF
+  exit 0
+fi
+exec "{real_swift}" "$@"
+"""
+        with fake_swift_in_path(script_body) as env:
+            code, payload = self.run_script(
+                "--name",
+                "DemoPkg",
+                "--testing-mode",
+                "xctest",
+                "--dry-run",
+                env=env,
+            )
+        self.assertEqual(code, 0)
+        self.assertEqual(payload["status"], "success")
+        self.assertEqual(payload["testing_strategy"], "default-template")
+
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for testing strategy coverage")
+    def test_dry_run_blocks_xctest_when_partial_selection_flags_cannot_force_it(self) -> None:
+        real_swift = shutil.which("swift")
+        assert real_swift is not None
+        script_body = f"""#!/bin/sh
+if [ "$1" = "--version" ]; then
+  cat <<'EOF'
+Apple Swift version 6.0 (swift-6.0-RELEASE)
+Target: arm64-apple-macosx15.0
+EOF
+  exit 0
+fi
+if [ "$1" = "package" ] && [ "$2" = "init" ] && [ "$3" = "--help" ]; then
+  cat <<'EOF'
+OVERVIEW: Initialize a new package.
+
+USAGE: swift package init [--type <type>] [--enable-swift-testing] [--name <name>]
+EOF
+  exit 0
+fi
+exec "{real_swift}" "$@"
+"""
+        with fake_swift_in_path(script_body) as env:
+            code, payload = self.run_script(
+                "--name",
+                "DemoPkg",
+                "--testing-mode",
+                "xctest",
+                "--dry-run",
+                env=env,
+            )
+        self.assertEqual(code, 1)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("cannot force XCTest mode", payload["stderr"])
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain compatibility coverage")
     def test_dry_run_rejects_unsupported_swift_testing_selection(self) -> None:
@@ -333,6 +405,9 @@ exec "{real_swift}" "$@"
             test_text = test_file.read_text(encoding="utf-8")
             self.assertIn("import XCTest", test_text)
             self.assertIn("XCTestCase", test_text)
+            manifest_text = (package_dir / "Package.swift").read_text(encoding="utf-8")
+            self.assertIn(".executableTarget(", manifest_text)
+            self.assertIn(".testTarget(", manifest_text)
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for end-to-end bootstrap success")
     def test_wrapper_normalizes_shell_success(self) -> None:
@@ -348,6 +423,8 @@ exec "{real_swift}" "$@"
             self.assertEqual(payload["status"], "success")
             self.assertTrue(payload["resolved_path"].endswith("DemoPkg"))
             self.assertEqual(payload["testing_mode"], "swift-testing")
+            self.assertEqual(payload["testing_strategy"], "init-flags")
+            self.assertEqual(payload["swift_toolchain"], "6.3")
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for executable bootstrap coverage")
     def test_executable_bootstrap_creates_swift_testing_test_target(self) -> None:
@@ -368,6 +445,31 @@ exec "{real_swift}" "$@"
             test_text = test_file.read_text(encoding="utf-8")
             self.assertIn("import Testing", test_text)
             self.assertIn("@Test", test_text)
+
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for tool bootstrap coverage")
+    def test_tool_bootstrap_captures_argument_parser_and_platforms(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = self.run_script(
+                "--name",
+                "DemoTool",
+                "--type",
+                "tool",
+                "--platform",
+                "mac",
+                "--version-profile",
+                "latest-major",
+                "--destination",
+                tmpdir,
+                "--skip-validation",
+            )
+            self.assertEqual(code, 0)
+            package_dir = Path(payload["resolved_path"])
+            manifest_text = (package_dir / "Package.swift").read_text(encoding="utf-8")
+            self.assertIn("swift-argument-parser", manifest_text)
+            self.assertIn('.macOS("26.0")', manifest_text)
+            self.assertNotIn('.iOS("26.0")', manifest_text)
+            self.assertTrue((package_dir / ".git").is_dir())
+            self.assertTrue((package_dir / "AGENTS.md").is_file())
 
 
 if __name__ == "__main__":
