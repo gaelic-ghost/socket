@@ -85,5 +85,10 @@ Phase 4 is now landed. `SpeakSwiftlyServer` mounts an embedded MCP surface throu
 
 ### Phase 5
 
-- Pull over the remaining host-worthy MCP pieces from `SpeakSwiftlyMCP`.
+- Correct the remaining transport lifecycle-truth gap so `listening` means the shared Hummingbird process is actually serving traffic.
+- Introduce a host-owned event surface alongside stable host snapshots.
+- Use `swift-async-algorithms` more deliberately for host subscriptions and fan-out where it removes bespoke stream plumbing.
+- Pull over only the remaining host-worthy MCP pieces from `SpeakSwiftlyMCP`, not the old standalone host shape.
 - Deprecate or thin out the standalone `SpeakSwiftlyMCP` host package.
+
+Phase 5 is now in progress. The first slice corrects the `listening` boundary by using Hummingbird's real `onServerRunning` hook and introduces a typed `HostEvent` surface alongside the existing shared host snapshot stream.

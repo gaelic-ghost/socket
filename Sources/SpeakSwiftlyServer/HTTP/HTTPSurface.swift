@@ -17,7 +17,15 @@ func assembleHBApp(
 
     return Application(
         router: router,
-        configuration: .init(address: .hostname(configuration.host, port: configuration.port))
+        configuration: .init(address: .hostname(configuration.host, port: configuration.port)),
+        onServerRunning: { _ in
+            if configuration.enabled {
+                await host.markTransportListening(name: "http")
+            }
+            if mcpSurface != nil {
+                await host.markTransportListening(name: "mcp")
+            }
+        }
     )
 }
 

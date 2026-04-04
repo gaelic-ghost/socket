@@ -139,6 +139,8 @@ The first embedded MCP resources are:
 
 Those MCP tools and resources are intentionally thin adapters over the same `ServerHost` snapshots and mutations used by the HTTP API and the app-facing `ServerState`.
 
+Transport lifecycle snapshots are now intentionally tied to the shared Hummingbird process rather than static config alone. `listening` means the shared HTTP host has actually reached Hummingbird's `onServerRunning` boundary, so HTTP and MCP surface status now describe real network availability instead of only configuration intent.
+
 ## Development
 
 The executable entrypoint lives in [`Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift). The shared host process stays intentionally small:
@@ -149,6 +151,7 @@ The executable entrypoint lives in [`Sources/SpeakSwiftlyServer/SpeakSwiftlyServ
 - [`ServerHost.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerHost.swift) owns runtime lifecycle, request orchestration, shared host state, and server-side update flow.
 - [`ServerState.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerState.swift) is the `@Observable` SwiftUI-facing projection of host state.
 - [`HostStateModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/HostStateModels.swift) defines the shared host-native snapshots used by app UI, HTTP, and MCP consumers.
+- [`HostEvents.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/HostEvents.swift) defines the typed host event surface used by non-UI consumers that need live change notifications without depending on SwiftUI observation.
 - [`ServerRuntimeBridge.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerRuntimeBridge.swift) keeps the runtime boundary thin around `SpeakSwiftlyCore`.
 - [`ServerModels.swift`](/Users/galew/Workspace/SpeakSwiftlyServer/Sources/SpeakSwiftlyServer/Host/ServerModels.swift) defines request and response payloads.
 
@@ -163,7 +166,7 @@ swift build
 swift test
 ```
 
-The current automated suite covers configuration parsing, queued live speech job completion semantics, generation and playback queue inspection, playback control routes, queue cancellation routes, startup failure before readiness, runtime degradation while active and queued speech jobs are in flight, in-memory retention and pruning, SSE replay and heartbeat behavior, route-level health, profile, and job lifecycle responses against a controlled typed runtime, the embedded MCP tool and resource surface, plus an opt-in live end-to-end path against a real `SpeakSwiftlyCore` runtime:
+The current automated suite covers configuration parsing, queued live speech job completion semantics, generation and playback queue inspection, playback control routes, queue cancellation routes, startup failure before readiness, runtime degradation while active and queued speech jobs are in flight, in-memory retention and pruning, SSE replay and heartbeat behavior, route-level health, profile, and job lifecycle responses against a controlled typed runtime, the embedded MCP tool and resource surface, the shared host snapshot stream and typed host event stream, plus an opt-in live end-to-end path against a real `SpeakSwiftlyCore` runtime:
 
 ```bash
 SPEAKSWIFTLYSERVER_E2E=1 swift test --filter SpeakSwiftlyServerE2ETests

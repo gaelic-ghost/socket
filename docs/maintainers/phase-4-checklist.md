@@ -121,6 +121,8 @@ These should be deferred to Phase 5 unless the host grows the right backing data
 
 Phase 4 is now implemented in `SpeakSwiftlyServer`.
 
+The original Phase 4 landing left one follow-up mismatch: transport snapshots could flip to `listening` before the shared Hummingbird process had actually bound and started serving traffic. That lifecycle-truth gap is now treated as the first Phase 5 cleanup item rather than being left implicit.
+
 ## Follow-On Work
 
 - Phase 5 should decide which standalone `SpeakSwiftlyMCP` resources, prompts, and playback-job concepts still earn migration into the shared host.

@@ -608,6 +608,76 @@ actor MockRuntime: ServerRuntimeProtocol {
 }
 
 @available(macOS 14, *)
+@Test func hostPublishesTypedEventsForServerConsumers() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-to-user-mcp",
+            title: "SpeakSwiftlyMCP"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    let events = await host.eventUpdates()
+    var iterator = events.makeAsyncIterator()
+
+    await host.start()
+    await host.markTransportStarting(name: "http")
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+    let jobID = try await host.submitSpeak(text: "Observe my events", profileName: "default")
+
+    var sawTransportChange = false
+    var sawProfileCacheChange = false
+    var sawJobChange = false
+    var sawPlaybackChange = false
+
+    let deadline = ContinuousClock.now + .seconds(1)
+    while ContinuousClock.now < deadline {
+        guard let event = await iterator.next() else { break }
+        switch event {
+        case .transportChanged(let snapshot):
+            if snapshot.name == "http", snapshot.state == "starting" {
+                sawTransportChange = true
+            }
+        case .profileCacheChanged(let snapshot):
+            if snapshot.state == "fresh", snapshot.profileCount == 1 {
+                sawProfileCacheChange = true
+            }
+        case .jobChanged(let snapshot):
+            if snapshot.jobID == jobID {
+                sawJobChange = true
+            }
+        case .playbackChanged(let snapshot):
+            if snapshot.state == "playing" {
+                sawPlaybackChange = true
+            }
+        case .recentErrorRecorded:
+            break
+        }
+
+        if sawTransportChange, sawProfileCacheChange, sawJobChange, sawPlaybackChange {
+            break
+        }
+    }
+
+    #expect(sawTransportChange)
+    #expect(sawProfileCacheChange)
+    #expect(sawJobChange)
+    #expect(sawPlaybackChange)
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
 @Test func hostTracksTransportLifecycleBeyondStaticConfiguration() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration()

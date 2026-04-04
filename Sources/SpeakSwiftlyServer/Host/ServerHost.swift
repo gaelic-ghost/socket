@@ -55,6 +55,8 @@ actor ServerHost {
     private let coalescedPublishContinuation: AsyncStream<Void>.Continuation
     private let publishedStateContinuation: AsyncStream<HostStateSnapshot>.Continuation
     private let makeSharedStateUpdates: @Sendable () -> AsyncStream<HostStateSnapshot>
+    private let hostEventContinuation: AsyncStream<HostEvent>.Continuation
+    private let makeSharedHostEvents: @Sendable () -> AsyncStream<HostEvent>
     private let encoder = JSONEncoder()
     private let byteBufferAllocator = ByteBufferAllocator()
 
@@ -110,7 +112,12 @@ actor ServerHost {
             of: HostStateSnapshot.self,
             bufferingPolicy: .bufferingNewest(1)
         )
+        let (hostEventStream, hostEventContinuation) = AsyncStream.makeStream(
+            of: HostEvent.self,
+            bufferingPolicy: .bufferingNewest(32)
+        )
         let sharedPublishedStates = publishedStateStream.share(bufferingPolicy: .bufferingLatest(1))
+        let sharedHostEvents = hostEventStream.share(bufferingPolicy: .bufferingLatest(32))
 
         self.configuration = configuration
         self.httpConfig = httpConfig ?? .init(
@@ -133,11 +140,26 @@ actor ServerHost {
         self.coalescedPublishRequests = coalescedPublishRequests
         self.coalescedPublishContinuation = coalescedPublishContinuation
         self.publishedStateContinuation = publishedStateContinuation
+        self.hostEventContinuation = hostEventContinuation
         self.makeSharedStateUpdates = { [sharedPublishedStates] in
             AsyncStream { continuation in
                 let task = Task {
                     for await snapshot in sharedPublishedStates {
                         continuation.yield(snapshot)
+                    }
+                    continuation.finish()
+                }
+
+                continuation.onTermination = { _ in
+                    task.cancel()
+                }
+            }
+        }
+        self.makeSharedHostEvents = { [sharedHostEvents] in
+            AsyncStream { continuation in
+                let task = Task {
+                    for await event in sharedHostEvents {
+                        continuation.yield(event)
                     }
                     continuation.finish()
                 }
@@ -200,6 +222,7 @@ actor ServerHost {
         immediatePublishContinuation.finish()
         coalescedPublishContinuation.finish()
         publishedStateContinuation.finish()
+        hostEventContinuation.finish()
     }
 
     func stateUpdates() -> AsyncStream<HostStateSnapshot> {
@@ -221,6 +244,10 @@ actor ServerHost {
                 task.cancel()
             }
         }
+    }
+
+    func eventUpdates() -> AsyncStream<HostEvent> {
+        makeSharedHostEvents()
     }
 
     func markTransportStarting(name: String) async {
@@ -604,6 +631,7 @@ actor ServerHost {
         } catch {
             self.profileCacheState = "stale"
             self.profileCacheWarning = "SpeakSwiftly reported a successful profile mutation, but the server could not confirm the refreshed profile list afterward. The cached profile list may be stale. Likely cause: \(error.localizedDescription)"
+            emitProfileCacheChanged()
             recordRecentError(
                 source: "profile_cache",
                 code: "profile_refresh_mismatch",
@@ -667,6 +695,7 @@ actor ServerHost {
         self.lastProfileRefreshAt = Date()
         self.profileCacheState = "fresh"
         self.profileCacheWarning = nil
+        emitProfileCacheChanged()
         _ = reason
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return profiles
@@ -677,6 +706,7 @@ actor ServerHost {
         self.lastProfileRefreshAt = Date()
         self.profileCacheState = "fresh"
         self.profileCacheWarning = nil
+        emitProfileCacheChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
     }
 
@@ -716,6 +746,7 @@ actor ServerHost {
                 } catch {
                     self.profileCacheState = "stale"
                     self.profileCacheWarning = "SpeakSwiftly became ready, but the server could not refresh the initial profile cache. Likely cause: \(error.localizedDescription)"
+                    emitProfileCacheChanged()
                 }
             }
         case .residentModelFailed:
@@ -748,6 +779,7 @@ actor ServerHost {
             job.terminalAt = Date()
         }
         jobs[jobID] = job
+        hostEventContinuation.yield(.jobChanged(job.snapshot))
 
         for continuation in job.subscribers.values {
             continuation.yield(encodeSSEBuffer(for: event))
@@ -874,10 +906,14 @@ actor ServerHost {
     }
 
     private func refreshRuntimeDerivedState() async {
+        let previousPlaybackStatus = playbackStatus
         guard workerMode == "ready" else {
             generationQueueStatus = deriveGenerationQueueStatusFallback()
             playbackQueueStatus = derivePlaybackQueueStatusFallback()
             playbackStatus = derivePlaybackStatusFallback()
+            if playbackStatus != previousPlaybackStatus {
+                hostEventContinuation.yield(.playbackChanged(playbackStatus))
+            }
             return
         }
 
@@ -912,6 +948,10 @@ actor ServerHost {
                 message: "SpeakSwiftlyServer could not refresh the playback state snapshot. Likely cause: \(error.localizedDescription)"
             )
             playbackStatus = derivePlaybackStatusFallback()
+        }
+
+        if playbackStatus != previousPlaybackStatus {
+            hostEventContinuation.yield(.playbackChanged(playbackStatus))
         }
     }
 
@@ -1054,7 +1094,7 @@ actor ServerHost {
         guard let current = transportStatuses[name], current.enabled else {
             return
         }
-        transportStatuses[name] = .init(
+        let updated = TransportStatusSnapshot(
             name: current.name,
             enabled: current.enabled,
             state: state,
@@ -1063,6 +1103,11 @@ actor ServerHost {
             path: current.path,
             advertisedAddress: current.advertisedAddress
         )
+        guard updated != current else {
+            return
+        }
+        transportStatuses[name] = updated
+        hostEventContinuation.yield(.transportChanged(updated))
     }
 
     private static func initialTransportStatuses(
@@ -1111,6 +1156,20 @@ actor ServerHost {
         if recentErrors.count > Self.recentErrorLimit {
             recentErrors.removeFirst(recentErrors.count - Self.recentErrorLimit)
         }
+        hostEventContinuation.yield(.recentErrorRecorded(snapshot))
+    }
+
+    private func emitProfileCacheChanged() {
+        hostEventContinuation.yield(
+            .profileCacheChanged(
+                .init(
+                    state: profileCacheState,
+                    warning: profileCacheWarning,
+                    profileCount: profileCache.count,
+                    lastRefreshAt: lastProfileRefreshAt.map(TimestampFormatter.string(from:))
+                )
+            )
+        )
     }
 
     private func mapQueuedEvent(_ event: WorkerQueuedEvent) -> ServerJobEvent {

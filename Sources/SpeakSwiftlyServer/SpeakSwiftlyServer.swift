@@ -27,10 +27,6 @@ enum SpeakSwiftlyServer {
         do {
             if let mcpSurface {
                 try await mcpSurface.start()
-                await host.markTransportListening(name: "mcp")
-            }
-            if config.http.enabled {
-                await host.markTransportListening(name: "http")
             }
             try await app.runService()
             if config.http.enabled {
