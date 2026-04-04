@@ -45,6 +45,7 @@ Applicability guidance:
 
 - Prefer `uv run` for Python command execution in examples and scripts.
 - Prefer a minimal root Python tool configuration so maintainers can run `uv run --group dev pytest` without ad hoc dependency flags.
+- Keep `ruff` and `mypy` available as uv-managed tools in maintainer workflows, and document that baseline with `uv tool install ruff` and `uv tool install mypy` where repo-level Python tooling guidance is described.
 - Keep skill instructions deterministic, concise, and safety-forward.
 - Implement all applicable YAML fields in the frontmatter.
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.

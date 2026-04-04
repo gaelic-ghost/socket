@@ -46,6 +46,10 @@ All active repo-authored skills live under `skills/`.
   - Script: `scripts/sync_skills_repo_guidance.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
+- `validate-plugin-install-surfaces`
+  - Script: `scripts/validate_plugin_install_surfaces.py`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
 
 ### Packaging Surfaces
 
@@ -82,6 +86,7 @@ Required checks:
 - exact phrases like `No findings.` match actual output
 - trigger wording is broad enough to match intended natural-language request shapes
 - packaging docs distinguish canonical authored surfaces from symlink mirrors and plugin metadata
+- maintainer Python tooling guidance stays aligned with the repo baseline of `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`
 
 ## Current Invariants
 
@@ -92,6 +97,7 @@ Required checks:
 - `bootstrap-skills-plugin-repo` is the canonical owner of repo bootstrap and structural alignment for this repo pattern.
 - `sync-skills-repo-guidance` is the canonical owner of ongoing guidance alignment for this repo pattern.
 - `sync-skills-repo-guidance` currently combines a narrow local audit script with broader maintainer-driven review of docs wording, guidance drift, and docs links. Do not describe the script alone as if it already performs full repo-wide remediation or upstream-doc intake.
+- `validate-plugin-install-surfaces` is the canonical audit-only validator for plugin manifests, marketplace wiring, README install references, and POSIX discovery mirrors in this repo family.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/agent-plugin-skills/` is the plugin packaging root for Codex and Claude scaffolding.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
