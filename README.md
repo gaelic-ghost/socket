@@ -9,7 +9,7 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
 - `maintain-plugin-docs`
   - Current implementation: audit and bounded fixes for `README.md`, `ROADMAP.md`, or both in stack-specific skills and plugin repositories.
   - Intended scope: become the combined docs maintainer for plugin-development repos here, pairing the current specialized README maintenance with the same checklist-style roadmap maintenance model used by `maintain-project-roadmap`.
-  - Install guidance should prioritize Codex Plugin and Claude Code Plugin setup first, with `npx skills` per-skill and `--all` installs treated as secondary.
+  - Install guidance should prioritize Codex local plugin installs and Claude Code plugin usage first, with `npx skills` per-skill and `--all` installs treated as secondary.
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `install-plugin-to-socket`
@@ -100,13 +100,18 @@ uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scrip
 
 This repository ships a Codex plugin package at [`plugins/agent-plugin-skills/.codex-plugin/plugin.json`](./plugins/agent-plugin-skills/.codex-plugin/plugin.json), with the local marketplace entry already wired in [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
 
-For local development, the primary Codex install path is the plugin surface rooted at [`plugins/agent-plugin-skills`](./plugins/agent-plugin-skills). To mirror that plugin into another repo-scoped or personal Codex install surface, use the `install-plugin-to-socket` skill from this repo.
+For Codex local installs, the documented staged paths are:
+
+- personal scope: `~/.codex/plugins/agent-plugin-skills` with `~/.agents/plugins/marketplace.json`
+- repo scope: `$REPO_ROOT/plugins/agent-plugin-skills` with `$REPO_ROOT/.agents/plugins/marketplace.json`
+
+Use `install-plugin-to-socket` to merge the marketplace entry safely and stage a copied plugin tree at those paths. Personal scope is the default recommendation unless a repository explicitly needs repo-local plugin wiring.
 
 ### Claude Code Plugin
 
-This repository also ships a Claude plugin manifest at [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json), and keeps the canonical authored skills mirrored into [`.claude/skills`](./.claude/skills) for Claude Code discovery.
+This repository also ships a Claude plugin manifest at [`plugins/agent-plugin-skills/.claude-plugin/plugin.json`](./plugins/agent-plugin-skills/.claude-plugin/plugin.json).
 
-Use those plugin and discovery surfaces as the primary Claude Code installation path for this repo family before reaching for secondary distribution channels.
+For local Claude Code development, test the plugin directly from the source repo with `claude --plugin-dir /absolute/path/to/plugins/agent-plugin-skills`. The repo-local [`.claude/skills`](./.claude/skills) mirror remains here for standalone project discovery, but the Codex installer skill in this repo does not manage Claude install surfaces.
 
 ### Vercel `skills` CLI
 

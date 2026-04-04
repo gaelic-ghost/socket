@@ -50,4 +50,4 @@ Requirements:
 - `## Repository Layout`
 - `## License`
 - `## Maintainer Python Tooling` should document `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`
-- primary Codex Plugin and Claude Code Plugin install surfaces documented before secondary Vercel `skills` CLI examples
+- Codex local plugin installs and Claude Code plugin usage documented before secondary Vercel `skills` CLI examples

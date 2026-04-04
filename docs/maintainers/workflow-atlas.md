@@ -58,7 +58,7 @@ Current-state note:
 - This skill is the current stack-specific docs-maintenance surface for plugin-development repos in this family.
 - The implemented automation owns `README.md`, `ROADMAP.md`, and combined docs passes through `--doc-scope`.
 - The intended scope is broader in policy and refinement, but the checklist-style `ROADMAP.md` maintenance path now exists in the same skill surface.
-- For repo guidance, Codex Plugin and Claude Code Plugin install paths should be treated as the primary install surface and Vercel `skills` CLI installs as the secondary surface.
+- For repo guidance, Codex local plugin install guidance and Claude Code plugin usage guidance should be treated as the primary documented surfaces, with Vercel `skills` CLI installs as the secondary surface.
 
 ### Workflow: audit-only
 

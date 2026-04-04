@@ -1,6 +1,6 @@
 ---
 name: install-plugin-to-socket
-description: Install, refresh, or detach an in-development Codex plugin in a local Codex install surface at repo or personal scope. Use when a local plugin needs marketplace wiring for Codex app or CLI discovery without hand-editing marketplace JSON.
+description: Install, refresh, or detach an in-development Codex plugin in a local Codex install surface at personal or repo scope. Use when a local plugin needs marketplace wiring for Codex app or CLI discovery without hand-editing marketplace JSON.
 ---
 
 # Install Plugin To Socket
@@ -12,7 +12,8 @@ This skill is for local Codex plugin development workflows. It does not publish 
 ## Inputs
 
 - Required: source plugin directory containing `.codex-plugin/plugin.json`
-- Required: scope
+- Optional: scope
+  - default: `personal`
   - `repo`
   - `personal`
 - Optional: target repo root when `scope=repo`
@@ -22,6 +23,7 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - `refresh`
   - `detach`
 - Optional: install mode
+  - default: `copy`
   - `copy`
   - `symlink`
 - Optional: whether the request is check-only planning or real apply behavior
@@ -31,22 +33,24 @@ This skill is for local Codex plugin development workflows. It does not publish 
 1. Confirm the task is local Codex plugin wiring, not generic plugin authoring or metadata review.
 2. Read the plugin manifest at `.codex-plugin/plugin.json` and infer the plugin name, version, description, and interface metadata.
 3. Use `scripts/install_plugin_to_socket.py` in `check-only` mode first.
-4. For `repo` scope, target:
-   - `$REPO_ROOT/plugins/<plugin-name>`
-   - `$REPO_ROOT/.agents/plugins/marketplace.json`
+4. Prefer `personal` scope unless the user explicitly wants repo-local plugin wiring.
 5. For `personal` scope, target:
    - `~/.codex/plugins/<plugin-name>`
    - `~/.agents/plugins/marketplace.json`
-6. Keep marketplace `source.path` relative to the marketplace root, prefixed with `./`, and inside that root.
-7. Merge one plugin entry into the marketplace without overwriting unrelated entries.
-8. Default to the documented Codex local-plugin flow:
+6. For `repo` scope, target:
+   - `$REPO_ROOT/plugins/<plugin-name>`
+   - `$REPO_ROOT/.agents/plugins/marketplace.json`
+7. Keep marketplace `source.path` relative to the marketplace root, prefixed with `./`, and inside that root.
+8. Merge one plugin entry into the marketplace without overwriting unrelated entries.
+9. Default to the documented Codex local-plugin flow:
    - stage the plugin at the repo or personal plugin path
    - point the marketplace entry at that staged path
-9. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs.
-10. Use `symlink` mode when the source plugin lives in an adjacent in-development repo and the maintainer wants the staged plugin path to track live source changes without repeated refresh copies.
-11. For `install` and `refresh`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
-12. For `detach`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
-13. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
+10. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs and gives Codex a stable staged plugin tree to recache from.
+11. Treat `refresh` as the update workflow when the source clone is ahead of the staged install copy. It should recopy the source plugin tree into the staged path and rewrite the marketplace entry if needed.
+12. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
+13. For `install` and `refresh`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
+14. For `detach`, remove only the matching marketplace entry and the matching staged plugin path for that install target.
+15. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory.
 
 ## Repairing Drifted Installs
 
@@ -66,6 +70,9 @@ Common repair cases:
 - `stale-target-materialization`
   - The staged plugin path is present, but its materialization does not match the requested mode.
   - Fix: rerun `refresh` with the intended `copy` or `symlink` mode.
+- `stale-target-copy`
+  - The staged plugin tree is a copied install, but its contents no longer match the current source plugin tree.
+  - Fix: rerun `refresh` in `copy` mode so the staged Codex install path is updated from the source clone.
 
 Preferred repair flow:
 

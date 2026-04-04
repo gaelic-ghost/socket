@@ -5,6 +5,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 
 def _load_module():
@@ -327,6 +328,28 @@ def test_repo_scope_defaults_to_current_working_directory(tmp_path: Path, monkey
     assert marketplace_path == repo_root / ".agents" / "plugins" / "marketplace.json"
 
 
+def test_parse_args_defaults_scope_to_personal(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+
+    with patch.object(
+        sys,
+        "argv",
+        [
+            "install_plugin_to_socket.py",
+            "--source-plugin-root",
+            str(source_plugin),
+            "--action",
+            "install",
+            "--run-mode",
+            "check-only",
+        ],
+    ):
+        args = m.parse_args()
+
+    assert args.scope == "personal"
+    assert args.install_mode == "copy"
+
+
 def test_apply_install_repo_scope_can_stage_symlink(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
@@ -370,6 +393,64 @@ def test_audit_refresh_reports_symlink_mode_drift(tmp_path: Path) -> None:
 
     assert not errors
     assert "stale-target-materialization" in {finding.issue_id for finding in findings}
+
+
+def test_audit_refresh_reports_stale_copied_tree(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    updated_skill = source_plugin / "skills" / "hello" / "SKILL.md"
+    updated_skill.write_text(
+        "---\nname: hello\ndescription: Say hello with updates.\n---\n\nSay hello with updates.\n",
+        encoding="utf-8",
+    )
+
+    findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, errors = m.audit_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="refresh",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    assert "stale-target-copy" in {finding.issue_id for finding in findings}
+
+
+def test_apply_refresh_recopies_stale_tree(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+    updated_skill = source_plugin / "skills" / "hello" / "SKILL.md"
+    updated_content = "---\nname: hello\ndescription: Say hello with updates.\n---\n\nSay hello with updates.\n"
+    updated_skill.write_text(updated_content, encoding="utf-8")
+
+    apply_actions, _source_summary, target_plugin_root, _marketplace_path, errors = m.apply_install(
+        source_plugin_root=source_plugin,
+        scope="repo",
+        action="refresh",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    assert any(action["action"] == "copy-plugin-tree" for action in apply_actions)
+    assert (target_plugin_root / "skills" / "hello" / "SKILL.md").read_text(encoding="utf-8") == updated_content
 
 
 def test_detach_removes_staged_symlink_without_touching_source(tmp_path: Path) -> None:

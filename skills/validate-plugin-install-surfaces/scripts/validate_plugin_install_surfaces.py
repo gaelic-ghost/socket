@@ -424,7 +424,7 @@ def audit_install_surfaces(repo_root: Path, skill_dirs: list[Path], plugin_dirs:
                 Finding(
                     relative_to_repo(repo_root, readme),
                     "missing-claude-install-surface-docs",
-                    "README should document the Claude Code Plugin install surface when `.claude-plugin/plugin.json` exists.",
+                    "README should document Claude Code plugin usage guidance when `.claude-plugin/plugin.json` exists.",
                     "install-surface",
                 )
             )

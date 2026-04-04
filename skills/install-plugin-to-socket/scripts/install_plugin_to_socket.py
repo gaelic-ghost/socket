@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -10,6 +11,8 @@ from pathlib import Path
 
 
 EXACT_NO_FINDINGS = "No findings."
+DEFAULT_SCOPE = "personal"
+DEFAULT_INSTALL_MODE = "copy"
 
 
 @dataclass
@@ -188,6 +191,31 @@ def _describe_target_materialization(target_plugin_root: Path) -> tuple[str, Pat
     return "copy", None
 
 
+def _tree_digest(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            digest.update(f"symlink:{relative}:".encode("utf-8"))
+            digest.update(os.readlink(path).encode("utf-8"))
+            continue
+        if path.is_dir():
+            digest.update(f"dir:{relative}".encode("utf-8"))
+            continue
+        if path.is_file():
+            digest.update(f"file:{relative}:".encode("utf-8"))
+            digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def _copy_tree_is_stale(source_plugin_root: Path, target_plugin_root: Path) -> bool:
+    if _is_same_path(source_plugin_root, target_plugin_root):
+        return False
+    if not target_plugin_root.exists() or target_plugin_root.is_symlink():
+        return False
+    return _tree_digest(source_plugin_root) != _tree_digest(target_plugin_root)
+
+
 def _target_matches_install_mode(target_plugin_root: Path, source_plugin_root: Path, install_mode: str) -> bool:
     if _is_same_path(target_plugin_root, source_plugin_root):
         return True
@@ -273,6 +301,8 @@ def audit_install(
                 findings.append(Finding(str(target_plugin_root), "stale-target-materialization", "Target plugin root is symlinked, but the requested install mode expects a copied plugin tree."))
             else:
                 findings.append(Finding(str(target_plugin_root), "stale-target-materialization", "Target plugin root is not a symlink to the requested source plugin root."))
+        if install_mode == "copy" and _copy_tree_is_stale(source_plugin_root, target_plugin_root):
+            findings.append(Finding(str(target_plugin_root), "stale-target-copy", "Staged plugin copy does not match the current source plugin tree. Run `refresh` to copy the updated plugin contents into the staged Codex install path."))
 
         if existing_marketplace is None:
             findings.append(Finding(str(marketplace_path), "missing-marketplace", "Marketplace file is missing for the chosen scope."))
@@ -427,11 +457,11 @@ def parse_args() -> argparse.Namespace:
         description="Audit and apply local Codex plugin install wiring at repo or personal scope"
     )
     parser.add_argument("--source-plugin-root", required=True)
-    parser.add_argument("--scope", choices=("repo", "personal"), required=True)
+    parser.add_argument("--scope", choices=("repo", "personal"), default=DEFAULT_SCOPE)
     parser.add_argument("--action", choices=("install", "refresh", "detach"), required=True)
     parser.add_argument("--run-mode", choices=("check-only", "apply"), required=True)
     parser.add_argument("--repo-root")
-    parser.add_argument("--install-mode", choices=("copy", "symlink"), default="copy")
+    parser.add_argument("--install-mode", choices=("copy", "symlink"), default=DEFAULT_INSTALL_MODE)
     parser.add_argument("--print-md", action="store_true")
     return parser.parse_args()
 

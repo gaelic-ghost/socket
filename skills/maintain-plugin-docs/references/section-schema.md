@@ -41,7 +41,7 @@
 
 ## Public Profile Additions
 
-- when Codex Plugin or Claude Code plugin packaging is present in the repo, `## Install` should lead with those primary install surfaces before secondary Vercel `skills` CLI examples
+- when Codex Plugin or Claude Code plugin packaging is present in the repo, `## Install` should lead with Codex local plugin install guidance and Claude Code plugin usage guidance before secondary Vercel `skills` CLI examples
 - under `## More resources for similar Skills`, require:
   - `### Find Skills like these with the \`skills\` CLI by Vercel — [vercel-labs/skills](https://github.com/vercel-labs/skills)`
   - `### Find Skills like these with the \`Find Skills\` Agent Skill by Vercel — [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills)`
@@ -60,4 +60,4 @@
 - keep the README maintainer-facing rather than converting it into the public skill-pack schema
 - document canonical `skills/` authoring, plugin packaging roots, and discovery mirrors explicitly
 - under `## Maintainer Python Tooling`, document `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`
-- document Codex Plugin and Claude Code Plugin installation before secondary Vercel `skills` CLI distribution paths
+- document Codex local plugin installs and Claude Code plugin usage before secondary Vercel `skills` CLI distribution paths

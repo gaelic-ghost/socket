@@ -2,12 +2,12 @@
 
 This skill follows the documented OpenAI Codex local plugin flow:
 
-- Repo scope uses:
-  - `$REPO_ROOT/plugins/<plugin-name>`
-  - `$REPO_ROOT/.agents/plugins/marketplace.json`
 - Personal scope uses:
   - `~/.codex/plugins/<plugin-name>`
   - `~/.agents/plugins/marketplace.json`
+- Repo scope uses:
+  - `$REPO_ROOT/plugins/<plugin-name>`
+  - `$REPO_ROOT/.agents/plugins/marketplace.json`
 
 OpenAI docs note that:
 
@@ -20,12 +20,15 @@ OpenAI docs note that:
 
 Current repo guidance for this skill:
 
+- Prefer personal scope by default so one maintained local Codex plugin install can be reused across repositories.
+- Use repo scope only when a repository genuinely needs its own repo-local plugin catalog.
 - Default to `copy` mode because it matches the documented OpenAI examples for local plugin installs.
-- Offer `symlink` mode for adjacent or otherwise local in-development plugin repos when the maintainer wants the staged plugin path inside the chosen marketplace root to follow live source changes.
+- Treat `refresh` in `copy` mode as the normal update workflow when the source clone is ahead of the staged install copy.
+- Keep `symlink` mode as an advanced maintainer override for local development only; it is not the primary documented Codex install model.
 - Do not point a repo marketplace directly at a sibling repo outside the marketplace root. Stage a copy or symlink at the in-scope plugin path instead.
 - Treat `install-plugin-to-socket` as the repair surface for drifted local installs:
   - rerun `install` when the staged path or marketplace entry is missing
-  - rerun `refresh` when the marketplace entry is stale or the staged path needs to be rematerialized in the chosen mode
+  - rerun `refresh` when the marketplace entry is stale, the staged path needs to be rematerialized in the chosen mode, or the copied staged tree no longer matches the source plugin tree
   - use `detach` then `install` when the wrong plugin tree was staged into the target path
 
 Relevant docs:
