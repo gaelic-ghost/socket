@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install Plugin To Socket"
+  short_description: "Wire an in-development Codex plugin into repo or personal local install surfaces."
+  default_prompt: "Use $install-plugin-to-socket to install, refresh, or detach an in-development Codex plugin at repo or personal scope. Start with a read-only audit, infer plugin metadata from `.codex-plugin/plugin.json`, copy the plugin into the chosen local scope, merge the marketplace entry safely, keep `source.path` relative to the marketplace root, and report restart plus verification guidance instead of claiming undocumented installed-state control."

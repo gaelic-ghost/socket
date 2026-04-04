@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sync Skills Repo Guidance"
+  short_description: "Audit and reconcile repo-wide guidance for skills repositories."
+  default_prompt: "Use $sync-skills-repo-guidance to handle ongoing guidance alignment for this existing skills repository. Start with the current local audit script for repo guidance snippets and discovery mirrors, refresh official sources before making policy claims, then apply bounded maintainer-driven guidance fixes only when requested. Defer narrow docs-only work to $maintain-plugin-docs, and do not overstate the current script's automation scope."
