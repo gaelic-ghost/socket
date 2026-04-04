@@ -32,8 +32,9 @@ Bootstrap or align a skills repository to the house layout used for Gale's skill
    - `.claude/skills -> ../skills`
    - `plugins/<plugin-name>/skills -> ../../skills`
 8. Preserve existing repo-specific guidance. Merge missing house guidance into docs and `AGENTS.md` without flattening local policy.
-9. Use `$skill-creator` for individual skill authoring. This skill owns repo structure, not per-skill content design.
-10. Validate the resulting repo layout, symlinks, manifests, and docs alignment before closing.
+9. Seed maintainer Python tooling guidance so bootstrapped repos call out `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`.
+10. Use `$skill-creator` for individual skill authoring. This skill owns repo structure, not per-skill content design.
+11. Validate the resulting repo layout, symlinks, manifests, and docs alignment before closing.
 
 ## Output Contract
 

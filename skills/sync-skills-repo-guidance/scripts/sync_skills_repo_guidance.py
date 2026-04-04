@@ -15,17 +15,21 @@ README_SNIPPETS = [
     ".agents/plugins/marketplace.json",
     "OpenAI Codex Skills",
     "Claude Code Plugins",
+    "uv tool install ruff",
+    "uv tool install mypy",
 ]
 
 AGENTS_SNIPPETS = [
     "canonical workflow-authoring surface",
     "plugin packaging root",
     ".agents/plugins/marketplace.json",
+    "uv-managed tools",
 ]
 
 AUDIT_SNIPPETS = [
     "Root `skills/` is the canonical workflow-authoring surface.",
     "plugin packaging root",
+    "uv tool install",
 ]
 
 

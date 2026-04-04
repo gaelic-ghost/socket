@@ -160,6 +160,13 @@ LEGACY_MORE_RESOURCES_TOP_LEVEL_PATTERNS = {
 
 MORE_RESOURCES_ANCHOR_LINE = 'Then ask your Agent for help finding a skill for "" or ""'
 
+TOOLING_REQUIRED_SNIPPETS = [
+    "uv sync --dev",
+    "uv tool install ruff",
+    "uv tool install mypy",
+    "uv run --group dev pytest",
+]
+
 HEADING_ALIASES = {
     "active skills": "active_skills",
     "repo purpose": "repo_purpose",
@@ -220,7 +227,15 @@ SECTION_TEMPLATES = {
     "repo_purpose": "## Repo Purpose\n\nDescribe the maintainer-facing purpose of this skills or plugin repository.\n",
     "packaging": "## Packaging And Discovery\n\nSummarize the canonical `skills/` surface, plugin packaging roots, and discovery mirrors.\n",
     "standards": "## Standards And Docs\n\nList the primary standard and platform-specific references for this repo family.\n",
-    "tooling": "## Maintainer Python Tooling\n\n```bash\nuv sync --dev\nuv run --group dev pytest\n```\n",
+    "tooling": (
+        "## Maintainer Python Tooling\n\n"
+        "```bash\n"
+        "uv sync --dev\n"
+        "uv tool install ruff\n"
+        "uv tool install mypy\n"
+        "uv run --group dev pytest\n"
+        "```\n"
+    ),
     "install": "## Install\n\nDocument the primary plugin install surfaces first, then any secondary distribution paths.\n",
     "toc": (
         "## Table of Contents\n\n"
@@ -710,6 +725,35 @@ def find_section_line_range(lines: Sequence[str], section_pattern: str) -> Optio
     return start_idx, end_idx
 
 
+def check_tooling_section(repo: Path, profile: str, lines: Sequence[str]) -> List[Issue]:
+    if profile != "plugin-maintainer":
+        return []
+
+    section_range = find_section_line_range(lines, SECTION_PATTERNS["tooling"])
+    if section_range is None:
+        return []
+
+    start_idx, end_idx = section_range
+    section_text = "\n".join(lines[start_idx:end_idx])
+    issues: List[Issue] = []
+    for snippet in TOOLING_REQUIRED_SNIPPETS:
+        if snippet in section_text:
+            continue
+        issues.append(
+            Issue(
+                issue_id="tooling-guidance-missing-snippet",
+                category="schema-violation",
+                severity="medium",
+                repo=repo.name,
+                doc_file=str(repo / "README.md"),
+                evidence=f"`## Maintainer Python Tooling` is missing `{snippet}`.",
+                recommended_fix="Document the default maintainer Python baseline with uv sync, uv-managed ruff and mypy tools, and pytest.",
+                auto_fixable=True,
+            )
+        )
+    return issues
+
+
 def check_more_resources_subsections(repo: Path, profile: str, lines: Sequence[str]) -> List[Issue]:
     if profile != "public-curated":
         return []
@@ -969,6 +1013,7 @@ def check_sections(repo: Path, profile: str, text: str) -> List[Issue]:
 
     issues.extend(check_more_resources_subsections(repo, profile, all_lines))
     issues.extend(check_compact_toc(repo, text))
+    issues.extend(check_tooling_section(repo, profile, all_lines))
 
     return issues
 

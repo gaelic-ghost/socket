@@ -29,21 +29,34 @@ def expected_files(repo_root: Path, plugin_name: str) -> dict[Path, str]:
     plugin_root = repo_root / "plugins" / plugin_name
     plugin_title = _pretty_slug(plugin_name)
     return {
-        repo_root / "README.md": f"# {repo_root.name}\n\nCanonical skill repository with plugin packaging under `plugins/{plugin_name}/`.\n",
+        repo_root / "README.md": (
+            f"# {repo_root.name}\n\n"
+            f"Canonical skill repository with plugin packaging under `plugins/{plugin_name}/`.\n\n"
+            "## Maintainer Python Tooling\n\n"
+            "```bash\n"
+            "uv sync --dev\n"
+            "uv tool install ruff\n"
+            "uv tool install mypy\n"
+            "uv run --group dev pytest\n"
+            "```\n"
+        ),
         repo_root / "AGENTS.md": (
             "# AGENTS.md\n\n"
             "Use root `skills/` as the canonical authored skill surface.\n"
             f"Keep plugin packaging metadata under `plugins/{plugin_name}/`.\n"
             "Use POSIX symlink mirrors for `.agents/skills` and `.claude/skills`.\n"
+            "Keep `ruff` and `mypy` available as `uv`-managed tools by default.\n"
         ),
         repo_root / "ROADMAP.md": "# Project Roadmap\n\n## Milestone Progress\n\n- [ ] Milestone 0: Foundation\n",
         repo_root / "docs" / "maintainers" / "reality-audit.md": (
             "# Repo Reality Audit\n\n"
             "Root `skills/` is canonical. Plugin metadata lives under `plugins/`.\n"
+            "Maintainer Python tooling should keep `ruff` and `mypy` installed via `uv tool install`.\n"
         ),
         repo_root / "docs" / "maintainers" / "workflow-atlas.md": (
             "# Workflow Atlas\n\n"
             "Bootstrap repos first, then author individual skills.\n"
+            "After bootstrap, install `ruff` and `mypy` with `uv tool install` before regular validation work.\n"
         ),
         plugin_root / ".codex-plugin" / "plugin.json": json.dumps(
             {

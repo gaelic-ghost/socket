@@ -31,6 +31,8 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
                 ".agents/plugins/marketplace.json",
                 "OpenAI Codex Skills",
                 "Claude Code Plugins",
+                "uv tool install ruff",
+                "uv tool install mypy",
             ]
         )
         + "\n",
@@ -42,6 +44,7 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
                 "canonical workflow-authoring surface",
                 "plugin packaging root",
                 ".agents/plugins/marketplace.json",
+                "uv-managed tools",
             ]
         )
         + "\n",
@@ -52,6 +55,7 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
             [
                 "Root `skills/` is the canonical workflow-authoring surface.",
                 "plugin packaging root",
+                "uv tool install",
             ]
         )
         + "\n",

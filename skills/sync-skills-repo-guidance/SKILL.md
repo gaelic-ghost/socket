@@ -35,8 +35,9 @@ Current scope note:
 4. Run `scripts/sync_skills_repo_guidance.py` in `check-only` mode to detect current local guidance-snippet and symlink drift.
 5. Interpret that audit together with the current repo docs and any upstream guidance reviewed in step 3.
 6. Apply bounded maintainer fixes to repo docs and related guidance surfaces when the request includes changes.
-7. Re-run the same audit to confirm remaining findings.
-8. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
+7. Ensure repo-level maintainer Python guidance stays explicit about `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest` where that baseline is documented.
+8. Re-run the same audit to confirm remaining findings.
+9. Record any upstream-docs findings with dates when behavior appears changed or ambiguous.
 
 ## Output Contract
 

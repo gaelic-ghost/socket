@@ -135,6 +135,8 @@ Root [`skills/`](./skills/) is the canonical authored skill surface.
 
 ```bash
 uv sync --dev
+uv tool install ruff
+uv tool install mypy
 uv run --group dev pytest
 ```
 
@@ -204,6 +206,16 @@ def test_check_sections_accepts_plugin_maintainer_readme(tmp_path: Path) -> None
     issues = m.check_sections(repo, "plugin-maintainer", VALID_PLUGIN_MAINTAINER_README)
 
     assert issues == []
+
+
+def test_check_sections_flags_missing_tooling_guidance_snippets(tmp_path: Path) -> None:
+    repo = tmp_path / "agent-plugin-skills"
+    repo.mkdir()
+    broken = VALID_PLUGIN_MAINTAINER_README.replace("uv tool install ruff\nuv tool install mypy\n", "")
+
+    issues = m.check_sections(repo, "plugin-maintainer", broken)
+
+    assert any(issue.issue_id == "tooling-guidance-missing-snippet" for issue in issues)
 
 
 def test_check_sections_flags_missing_required_section(tmp_path: Path) -> None:

@@ -78,6 +78,8 @@ Key references:
 
 ```bash
 uv sync --dev
+uv tool install ruff
+uv tool install mypy
 uv run --group dev pytest
 ```
 

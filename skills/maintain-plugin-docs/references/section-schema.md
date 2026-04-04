@@ -59,4 +59,5 @@
 
 - keep the README maintainer-facing rather than converting it into the public skill-pack schema
 - document canonical `skills/` authoring, plugin packaging roots, and discovery mirrors explicitly
+- under `## Maintainer Python Tooling`, document `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`
 - document Codex Plugin and Claude Code Plugin installation before secondary Vercel `skills` CLI distribution paths

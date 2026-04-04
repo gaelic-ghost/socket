@@ -47,3 +47,15 @@ def test_apply_repo_creates_marketplace_with_available_policy(tmp_path: Path) ->
 
     assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-skills"
     assert marketplace["plugins"][0]["policy"]["installation"] == "AVAILABLE"
+
+
+def test_apply_repo_seeds_python_tooling_guidance(tmp_path: Path) -> None:
+    m.apply_repo(tmp_path, "example-skills")
+
+    readme = (tmp_path / "README.md").read_text(encoding="utf-8")
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+
+    assert "uv tool install ruff" in readme
+    assert "uv tool install mypy" in readme
+    assert "uv run --group dev pytest" in readme
+    assert "`uv`-managed tools" in agents

@@ -19,6 +19,7 @@ Check these policy points:
 - root `skills/` is canonical
 - plugin, marketplace, MCP, and app manifests live under `plugins/` and `.agents/plugins/`
 - POSIX symlink mirrors are explicit and documented
+- maintainer Python tooling guidance keeps `ruff` and `mypy` available through `uv tool install`
 - standalone skill install guidance matches `npx skills add`
 - OpenAI and Claude docs links are current and accurate
 - README-only or roadmap-only maintenance still routes to the narrower skills

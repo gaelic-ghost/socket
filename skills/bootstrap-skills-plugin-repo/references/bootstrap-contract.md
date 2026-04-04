@@ -27,6 +27,7 @@ Required bootstrap outputs:
 - `README.md`
 - `AGENTS.md`
 - `ROADMAP.md`
+- maintainer Python tooling guidance that installs `ruff` and `mypy` with `uv tool install`
 
 This skill composes with `$skill-creator`:
 
