@@ -107,6 +107,7 @@ for skill_md in "${active_skill_mds[@]}"; do
   skill_dir="${skill_md%/SKILL.md}"
   [[ -f "$skill_dir/agents/openai.yaml" ]] || fail "Missing $skill_dir/agents/openai.yaml"
   [[ -f "$skill_dir/references/customization.template.yaml" ]] || fail "Missing $skill_dir/references/customization.template.yaml"
+  [[ -f "$skill_dir/references/customization-flow.md" ]] || fail "Missing $skill_dir/references/customization-flow.md"
   [[ -f "$skill_dir/scripts/customization_config.py" ]] || fail "Missing $skill_dir/scripts/customization_config.py"
   [[ -d "$skill_dir/references" ]] || fail "Missing $skill_dir/references/"
 
