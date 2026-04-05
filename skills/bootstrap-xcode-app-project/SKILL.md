@@ -50,7 +50,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
 5. Run `scripts/run_workflow.py` to normalize inputs, load customization state, and select the supported bootstrap path.
 6. Resolve the generator path:
-   - prefer `xcodegen` only when the user asked for it or customization selects it
+   - prefer `xcodegen` only when the user asked for it explicitly
    - use `xcode` only when the user explicitly prefers the standard Xcode project-creation flow
    - if the generator setting is `ask`, stop with a clear next step rather than guessing
 7. Create the project:
@@ -80,7 +80,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
   - runtime entrypoint: executable `scripts/run_workflow.py`
   - `project_kind` defaults to `app`
   - `destination` defaults to `.`
-  - `platform` defaults to `ask` through customization unless explicitly set
+  - `platform` defaults to `ask` unless explicitly set
   - `ui_stack` defaults to `swiftui`
   - `project_generator` defaults to `ask`
   - `copy_agents_md` defaults to `true`
