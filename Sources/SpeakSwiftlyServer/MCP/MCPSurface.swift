@@ -152,6 +152,61 @@ struct MCPSurface {
             case "list_profiles":
                 return try toolResult(await host.cachedProfiles())
 
+            case "list_text_profiles":
+                return try toolResult(await host.textProfilesSnapshot())
+
+            case "create_text_profile":
+                return try toolResult(
+                    try await host.createTextProfile(
+                        id: requiredString("id", in: arguments),
+                        name: requiredString("name", in: arguments),
+                        replacements: try decodeOptionalArgument("replacements", in: arguments, default: [TextReplacementSnapshot]())
+                            .map { try $0.model() }
+                    )
+                )
+
+            case "store_text_profile":
+                let profile: TextProfileSnapshot = try decodeArgument("profile", in: arguments)
+                return try toolResult(try await host.storeTextProfile(try profile.model()))
+
+            case "use_text_profile":
+                let profile: TextProfileSnapshot = try decodeArgument("profile", in: arguments)
+                return try toolResult(try await host.useTextProfile(try profile.model()))
+
+            case "remove_text_profile":
+                return try toolResult(
+                    try await host.removeTextProfile(named: requiredString("profile_id", in: arguments))
+                )
+
+            case "reset_text_profile":
+                return try toolResult(try await host.resetTextProfile())
+
+            case "add_text_replacement":
+                let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
+                return try toolResult(
+                    try await host.addTextReplacement(
+                        try replacement.model(),
+                        toStoredTextProfileNamed: optionalString("profile_id", in: arguments)
+                    )
+                )
+
+            case "replace_text_replacement":
+                let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
+                return try toolResult(
+                    try await host.replaceTextReplacement(
+                        try replacement.model(),
+                        inStoredTextProfileNamed: optionalString("profile_id", in: arguments)
+                    )
+                )
+
+            case "remove_text_replacement":
+                return try toolResult(
+                    try await host.removeTextReplacement(
+                        id: requiredString("replacement_id", in: arguments),
+                        fromStoredTextProfileNamed: optionalString("profile_id", in: arguments)
+                    )
+                )
+
             case "remove_profile":
                 let jobID = try await host.submitRemoveProfile(
                     profileName: requiredString("profile_name", in: arguments)
@@ -228,6 +283,18 @@ struct MCPSurface {
             case "speak://profiles":
                 return try resourceResult(uri: params.uri, payload: await host.cachedProfiles())
 
+            case "speak://text-profiles":
+                return try resourceResult(uri: params.uri, payload: await host.textProfilesSnapshot())
+
+            case "speak://text-profiles/base":
+                return try resourceResult(uri: params.uri, payload: (await host.textProfilesSnapshot()).baseProfile)
+
+            case "speak://text-profiles/active":
+                return try resourceResult(uri: params.uri, payload: (await host.textProfilesSnapshot()).activeProfile)
+
+            case "speak://text-profiles/effective":
+                return try resourceResult(uri: params.uri, payload: await host.effectiveTextProfile(nil))
+
             case "speak://jobs":
                 return try resourceResult(uri: params.uri, payload: await host.jobSnapshots())
 
@@ -242,6 +309,19 @@ struct MCPSurface {
                         )
                     }
                     return try resourceResult(uri: params.uri, payload: profile)
+                }
+
+                if let profileID = storedTextProfileID(from: params.uri) {
+                    guard let profile = await host.storedTextProfile(profileID) else {
+                        throw MCPError.invalidRequest(
+                            "No stored SpeakSwiftly text profile matched that profile id. Read speak://text-profiles first to inspect the current stored profile set."
+                        )
+                    }
+                    return try resourceResult(uri: params.uri, payload: profile)
+                }
+
+                if let profileID = effectiveTextProfileID(from: params.uri) {
+                    return try resourceResult(uri: params.uri, payload: await host.effectiveTextProfile(profileID))
                 }
 
                 if let jobID = jobID(from: params.uri) {
@@ -421,6 +501,16 @@ private actor MCPSubscriptionBroker {
                     "speak://profiles",
                 ] + subscribedResourceURIs.filter(isProfileDetailURI)
             )
+        case .textProfilesChanged:
+            candidateURIs = Set(
+                [
+                    "speak://text-profiles",
+                    "speak://text-profiles/base",
+                    "speak://text-profiles/active",
+                    "speak://text-profiles/effective",
+                ] + subscribedResourceURIs.filter(isStoredTextProfileURI)
+                    + subscribedResourceURIs.filter(isEffectiveTextProfileURI)
+            )
         }
         return candidateURIs
             .intersection(subscribedResourceURIs)
@@ -433,6 +523,8 @@ private actor MCPSubscriptionBroker {
 private func ensureKnownResourceURI(_ uri: String) throws {
     guard MCPResourceCatalog.resourceURIs.contains(uri)
         || profileDetailName(from: uri) != nil
+        || storedTextProfileID(from: uri) != nil
+        || effectiveTextProfileID(from: uri) != nil
         || jobID(from: uri) != nil
     else {
         throw MCPError.invalidRequest(
@@ -542,6 +634,29 @@ private func optionalString(_ key: String, in arguments: [String: Value]) -> Str
     return value
 }
 
+private func decodeArgument<T: Decodable>(
+    _ key: String,
+    in arguments: [String: Value]
+) throws -> T {
+    guard let value = arguments[key] else {
+        throw MCPError.invalidParams(
+            "Tool arguments are missing the required field '\(key)'."
+        )
+    }
+    return try decodeValue(value, fieldName: key)
+}
+
+private func decodeOptionalArgument<T: Decodable>(
+    _ key: String,
+    in arguments: [String: Value],
+    default defaultValue: T
+) throws -> T {
+    guard let value = arguments[key] else {
+        return defaultValue
+    }
+    return try decodeValue(value, fieldName: key)
+}
+
 private func normalizationContext(in arguments: [String: Value]) -> SpeechNormalizationContext? {
     let context = SpeechNormalizationContext(
         cwd: optionalString("cwd", in: arguments),
@@ -597,8 +712,39 @@ private func isProfileDetailURI(_ uri: String) -> Bool {
     profileDetailName(from: uri) != nil
 }
 
+private func storedTextProfileID(from uri: String) -> String? {
+    let prefix = "speak://text-profiles/stored/"
+    guard uri.hasPrefix(prefix) else { return nil }
+    return String(uri.dropFirst(prefix.count))
+}
+
+private func isStoredTextProfileURI(_ uri: String) -> Bool {
+    storedTextProfileID(from: uri) != nil
+}
+
+private func effectiveTextProfileID(from uri: String) -> String? {
+    let prefix = "speak://text-profiles/effective/"
+    guard uri.hasPrefix(prefix) else { return nil }
+    return String(uri.dropFirst(prefix.count))
+}
+
+private func isEffectiveTextProfileURI(_ uri: String) -> Bool {
+    effectiveTextProfileID(from: uri) != nil
+}
+
 private func jobID(from uri: String) -> String? {
     let prefix = "speak://jobs/"
     guard uri.hasPrefix(prefix) else { return nil }
     return String(uri.dropFirst(prefix.count))
+}
+
+private func decodeValue<T: Decodable>(_ value: Value, fieldName: String) throws -> T {
+    do {
+        let data = try JSONEncoder().encode(value)
+        return try JSONDecoder().decode(T.self, from: data)
+    } catch {
+        throw MCPError.invalidParams(
+            "Tool argument '\(fieldName)' could not be decoded into the expected payload shape. Likely cause: \(error.localizedDescription)"
+        )
+    }
 }

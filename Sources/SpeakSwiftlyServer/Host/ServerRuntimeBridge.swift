@@ -66,6 +66,23 @@ protocol ServerRuntimeProtocol: Actor {
     func playbackHandle(_ action: SpeakSwiftly.PlaybackAction, id requestID: String) async -> RuntimeRequestHandle
     func clearQueueHandle(id requestID: String) async -> RuntimeRequestHandle
     func cancelRequestHandle(with id: String, requestID: String) async -> RuntimeRequestHandle
+    func activeTextProfile() -> TextForSpeech.Profile
+    func baseTextProfile() -> TextForSpeech.Profile
+    func textProfile(named profileID: String) -> TextForSpeech.Profile?
+    func textProfiles() -> [TextForSpeech.Profile]
+    func effectiveTextProfile(named profileID: String?) -> TextForSpeech.Profile
+    func textProfilePersistenceURL() -> URL?
+    func createTextProfile(id: String, named name: String, replacements: [TextForSpeech.Replacement]) throws -> TextForSpeech.Profile
+    func storeTextProfile(_ profile: TextForSpeech.Profile) throws
+    func useTextProfile(_ profile: TextForSpeech.Profile) throws
+    func removeTextProfile(named profileID: String) throws
+    func resetTextProfile() throws
+    func addTextReplacement(_ replacement: TextForSpeech.Replacement) throws -> TextForSpeech.Profile
+    func addTextReplacement(_ replacement: TextForSpeech.Replacement, toStoredTextProfileNamed profileID: String) throws -> TextForSpeech.Profile
+    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) throws -> TextForSpeech.Profile
+    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement, inStoredTextProfileNamed profileID: String) throws -> TextForSpeech.Profile
+    func removeTextReplacement(id replacementID: String) throws -> TextForSpeech.Profile
+    func removeTextReplacement(id replacementID: String, fromStoredTextProfileNamed profileID: String) throws -> TextForSpeech.Profile
 }
 
 // MARK: - Runtime Adapter

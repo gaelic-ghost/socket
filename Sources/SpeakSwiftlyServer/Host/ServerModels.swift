@@ -96,6 +96,134 @@ struct ProfileListResponse: ResponseEncodable, Sendable {
     let profiles: [ProfileSnapshot]
 }
 
+// MARK: - Text Profile Models
+
+struct TextReplacementSnapshot: Codable, Sendable, Equatable {
+    let id: String
+    let text: String
+    let replacement: String
+    let match: String
+    let phase: String
+    let isCaseSensitive: Bool
+    let formats: [String]
+    let priority: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case replacement
+        case match
+        case phase
+        case isCaseSensitive = "is_case_sensitive"
+        case formats
+        case priority
+    }
+
+    init(replacement: TextForSpeech.Replacement) {
+        self.id = replacement.id
+        self.text = replacement.text
+        self.replacement = replacement.replacement
+        self.match = replacement.match.rawValue
+        self.phase = replacement.phase.rawValue
+        self.isCaseSensitive = replacement.isCaseSensitive
+        self.formats = replacement.formats.map(\.rawValue).sorted()
+        self.priority = replacement.priority
+    }
+
+    func model() throws -> TextForSpeech.Replacement {
+        guard let match = TextForSpeech.Replacement.Match(rawValue: match) else {
+            throw HTTPError(
+                .badRequest,
+                message: "Text replacement '\(id)' used unsupported match '\(match)'. Expected one of: exact_phrase, whole_token."
+            )
+        }
+        guard let phase = TextForSpeech.Replacement.Phase(rawValue: phase) else {
+            throw HTTPError(
+                .badRequest,
+                message: "Text replacement '\(id)' used unsupported phase '\(phase)'. Expected one of: before_built_ins, after_built_ins."
+            )
+        }
+
+        let resolvedFormats = try Set(formats.map(resolveTextFormat(_:)))
+        return TextForSpeech.Replacement(
+            text,
+            with: replacement,
+            id: id,
+            as: match,
+            in: phase,
+            caseSensitive: isCaseSensitive,
+            for: resolvedFormats,
+            priority: priority
+        )
+    }
+}
+
+struct TextProfileSnapshot: Codable, Sendable, Equatable {
+    let id: String
+    let name: String
+    let replacements: [TextReplacementSnapshot]
+
+    init(profile: TextForSpeech.Profile) {
+        self.id = profile.id
+        self.name = profile.name
+        self.replacements = profile.replacements.map(TextReplacementSnapshot.init(replacement:))
+    }
+
+    func model() throws -> TextForSpeech.Profile {
+        try .init(
+            id: id,
+            name: name,
+            replacements: replacements.map { try $0.model() }
+        )
+    }
+}
+
+struct TextProfilesSnapshot: ResponseEncodable, Sendable, Equatable {
+    let persistenceURL: String?
+    let baseProfile: TextProfileSnapshot
+    let activeProfile: TextProfileSnapshot
+    let storedProfiles: [TextProfileSnapshot]
+    let effectiveProfile: TextProfileSnapshot
+
+    enum CodingKeys: String, CodingKey {
+        case persistenceURL = "persistence_url"
+        case baseProfile = "base_profile"
+        case activeProfile = "active_profile"
+        case storedProfiles = "stored_profiles"
+        case effectiveProfile = "effective_profile"
+    }
+}
+
+struct TextProfileListResponse: ResponseEncodable, Sendable {
+    let textProfiles: TextProfilesSnapshot
+
+    enum CodingKeys: String, CodingKey {
+        case textProfiles = "text_profiles"
+    }
+}
+
+struct TextProfileResponse: ResponseEncodable, Sendable {
+    let profile: TextProfileSnapshot
+}
+
+struct CreateTextProfileRequestPayload: Decodable {
+    let id: String
+    let name: String
+    let replacements: [TextReplacementSnapshot]
+}
+
+struct StoreTextProfileRequestPayload: Decodable {
+    let profile: TextProfileSnapshot
+}
+
+struct UseTextProfileRequestPayload: Decodable {
+    let profile: TextProfileSnapshot
+}
+
+struct TextReplacementRequestPayload: Decodable {
+    let replacement: TextReplacementSnapshot
+}
+
 // MARK: - Queue Models
 
 struct ActiveRequestSnapshot: Codable, Sendable, Equatable {
@@ -441,4 +569,15 @@ enum TimestampFormatter {
         let formatter = ISO8601DateFormatter()
         return formatter.string(from: date)
     }
+}
+
+private func resolveTextFormat(_ rawValue: String) throws -> TextForSpeech.Format {
+    guard let format = TextForSpeech.Format(rawValue: rawValue) else {
+        let supportedFormats = TextForSpeech.Format.allCases.map(\.rawValue).joined(separator: ", ")
+        throw HTTPError(
+            .badRequest,
+            message: "Text replacement format '\(rawValue)' is not supported. Expected one of: \(supportedFormats)."
+        )
+    }
+    return format
 }

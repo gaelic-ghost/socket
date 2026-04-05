@@ -57,10 +57,10 @@
 - [x] Switch this package from subprocess-style integration to direct `SpeakSwiftly` package import when that library product exists.
 - [x] Collapse temporary integration-only scaffolding that became unnecessary after direct import.
 - [x] Align the runtime bridge with the public `SpeakSwiftly` library surface instead of constructing raw worker requests across the library boundary.
-- [ ] Re-align this package with the repackaged `SpeakSwiftly` plus direct `TextForSpeech` dependency surface so `swift build` and `swift test` work against the current sibling checkout again.
-- [ ] Adopt the updated `SpeakSwiftly.Runtime.speak(..., textProfileName:textContext:id:)` signature and remove assumptions about older normalization-only entrypoints.
-- [ ] Add the new voice-clone creation flow across host, HTTP, MCP, and tests.
-- [ ] Expose the new text-profile inspection and editing helpers across HTTP and MCP with a transport model that stays distinct from stored voice-profile jobs.
+- [x] Re-align this package with the repackaged `SpeakSwiftly` plus direct `TextForSpeech` dependency surface so `swift build` and `swift test` work against the current sibling checkout again.
+- [x] Adopt the updated `SpeakSwiftly.Runtime.speak(..., textProfileName:textContext:id:)` signature and remove assumptions about older normalization-only entrypoints.
+- [x] Add the new voice-clone creation flow across host, HTTP, MCP, and tests.
+- [x] Expose the new text-profile inspection and editing helpers across HTTP and MCP with a transport model that stays distinct from stored voice-profile jobs.
 - [ ] Re-verify that adjacent consumers still agree with the current public HTTP API surface.
 - [ ] Remove any remaining server-local transport translation that `SpeakSwiftly` can now express directly without making the server harder to reason about.
 - [x] Re-check the host bridge and docs against the sibling `SpeakSwiftly v0.9.1` public library surface.

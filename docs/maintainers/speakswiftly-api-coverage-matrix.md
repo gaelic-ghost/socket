@@ -12,14 +12,14 @@ It is meant to answer three concrete questions:
 
 Current baseline checked against sibling tag `v0.9.1`.
 
-The sibling `SpeakSwiftly` checkout has since moved forward with a repackaged public dependency surface plus new runtime helpers for voice cloning and text-profile management. The next server follow-through pass should intentionally cover three categories of change together instead of treating them like unrelated patches:
+The sibling `SpeakSwiftly` checkout has since moved forward with a repackaged public dependency surface plus new runtime helpers for voice cloning and text-profile management. That follow-through pass is now landed here:
 
 1. package and import alignment
-   `SpeakSwiftlyServer` still assumes the sibling package re-exports `TextForSpeech`, but the repackaged sibling manifest now exports `SpeakSwiftlyCore` and the CLI product only
+   `SpeakSwiftlyServer` now depends on `TextForSpeech` directly instead of assuming the sibling package re-exports it
 2. runtime-call alignment
-   the server bridge should adopt the current `speak(..., textProfileName:textContext:id:)` signature directly instead of preserving the older normalization-only call shape
+   the server bridge now uses the current `speak(..., textContext:id:)` shape that the current sibling runtime exposes for this flow
 3. transport-surface expansion
-   the new `createClone(...)` and text-profile helpers should be exposed thoughtfully through both HTTP and MCP
+   `createClone(...)` plus the new text-profile inspection and editing helpers now have first-class HTTP and MCP coverage
 
 ## Summary
 
@@ -47,8 +47,21 @@ That means the server is best understood as a transport-oriented adapter over th
 | `SpeakSwiftly.Runtime.statusEvents()` | Adapted | `GET /healthz`, `GET /readyz`, `GET /status`, `GET /jobs/{job_id}/events` | `status` tool, `speak://status`, `speak://runtime`, subscriptions | Exposed as derived host snapshots and worker-status events rather than raw stream subscription. |
 | `SpeakSwiftly.Runtime.speak(text:with:as:context:id:)` | Full for current public job cases | `POST /speak` | `queue_speech_live` | `job` is fixed to `.live`, which matches current public enum cases. Normalization context is exposed through `cwd` and `repo_root`. |
 | `SpeakSwiftly.Runtime.createProfile(named:from:voice:outputPath:id:)` | Full | `POST /profiles` | `create_profile` | Full control-plane exposure. |
+| `SpeakSwiftly.Runtime.createClone(named:from:transcript:id:)` | Full | `POST /profiles/clone` | `create_clone` | Exposed as a retained voice-profile job flow just like profile creation and removal. |
 | `SpeakSwiftly.Runtime.profiles(id:)` | Full | `GET /profiles` | `list_profiles`, `speak://profiles` | Exposed as cached host view rather than raw request handle. Appropriate. |
 | `SpeakSwiftly.Runtime.removeProfile(named:id:)` | Full | `DELETE /profiles/{profile_name}` | `remove_profile` | Full control-plane exposure. |
+| `SpeakSwiftly.Runtime.activeTextProfile()` | Full | `GET /text-profiles`, `GET /text-profiles/active` | `list_text_profiles`, `speak://text-profiles`, `speak://text-profiles/active` | Exposed as synchronous text-profile state, intentionally separate from retained voice-profile jobs. |
+| `SpeakSwiftly.Runtime.baseTextProfile()` | Full | `GET /text-profiles`, `GET /text-profiles/base` | `list_text_profiles`, `speak://text-profiles`, `speak://text-profiles/base` | Full read-model exposure. |
+| `SpeakSwiftly.Runtime.textProfiles()` | Full | `GET /text-profiles`, `GET /text-profiles/stored/{profile_id}` | `list_text_profiles`, `speak://text-profiles`, `speak://text-profiles/stored/{profile_id}` | Full read-model exposure for stored text profiles. |
+| `SpeakSwiftly.Runtime.effectiveTextProfile(named:)` | Full | `GET /text-profiles/effective`, `GET /text-profiles/effective/{profile_id}` | `speak://text-profiles/effective`, `speak://text-profiles/effective/{profile_id}` | Exposed as the merged base-plus-selected-profile snapshot. |
+| `SpeakSwiftly.Runtime.createTextProfile(id:named:replacements:)` | Full | `POST /text-profiles/stored` | `create_text_profile` | Stored text-profile creation is synchronous, not job-based. |
+| `SpeakSwiftly.Runtime.storeTextProfile(_:)` | Full | `PUT /text-profiles/stored/{profile_id}` | `store_text_profile` | Full whole-profile persistence path. |
+| `SpeakSwiftly.Runtime.useTextProfile(_:)` | Full | `PUT /text-profiles/active` | `use_text_profile` | Active custom text-profile selection is synchronous state mutation. |
+| `SpeakSwiftly.Runtime.removeTextProfile(named:)` | Full | `DELETE /text-profiles/stored/{profile_id}` | `remove_text_profile` | Full stored-profile removal path. |
+| `SpeakSwiftly.Runtime.resetTextProfile()` | Full | `POST /text-profiles/active/reset` | `reset_text_profile` | Full active-profile reset path. |
+| `SpeakSwiftly.Runtime.addTextReplacement(...)` | Full | `POST /text-profiles/active/replacements`, `POST /text-profiles/stored/{profile_id}/replacements` | `add_text_replacement` | Full replacement-add path for both active and stored text profiles. |
+| `SpeakSwiftly.Runtime.replaceTextReplacement(...)` | Full | `PUT /text-profiles/active/replacements/{replacement_id}`, `PUT /text-profiles/stored/{profile_id}/replacements/{replacement_id}` | `replace_text_replacement` | Full replacement-update path for both active and stored text profiles. |
+| `SpeakSwiftly.Runtime.removeTextReplacement(...)` | Full | `DELETE /text-profiles/active/replacements/{replacement_id}`, `DELETE /text-profiles/stored/{profile_id}/replacements/{replacement_id}` | `remove_text_replacement` | Full replacement-removal path for both active and stored text profiles. |
 | `SpeakSwiftly.Runtime.queue(_:id:)` for `.generation` | Full | `GET /queue/generation` | `list_queue_generation` | Full control-plane exposure. |
 | `SpeakSwiftly.Runtime.queue(_:id:)` for `.playback` | Full | `GET /queue/playback` | `list_queue_playback` | Full control-plane exposure. |
 | `SpeakSwiftly.Runtime.playback(.pause/.resume/.state,id:)` | Full | `GET /playback`, `POST /playback/pause`, `POST /playback/resume` | `playback_state`, `playback_pause`, `playback_resume` | Full control-plane exposure. |
@@ -150,21 +163,20 @@ Main weaknesses:
 
 ## Recommended Next Moves
 
-The three highest-value client-surface follow-ups from the previous review are now landed:
+The highest-value library-alignment follow-through items from the previous review are now landed:
 
 1. `POST /speak` and `queue_speech_live` both accept normalization context through `cwd` and `repo_root`.
 2. HTTP now exposes `GET /jobs`.
 3. Accepted-job MCP results now include `job_resource_uri`.
+4. Voice clone creation now has matching HTTP and MCP job flows.
+5. Text-profile inspection and replacement editing now have matching HTTP routes, MCP tools, and MCP resources.
 
 At this point, the remaining differences are mostly intentional transport adaptations rather than missing runtime capabilities.
 
 ## Next Follow-Through Slice
 
-The next library-alignment pass should land in this order:
+The next library-alignment pass should focus on downstream contract verification and cleanup instead of new feature reach:
 
-1. fix the package graph and imports so this repository builds against the current sibling `SpeakSwiftly` checkout again
-2. update the runtime bridge, host adapter, and tests for the current `speak` signature and any related public-type drift
-3. add `createClone(...)` as a first-class voice-profile job flow in HTTP and MCP
-4. add a parallel text-profile surface for inspection, active-profile selection, reset, create/remove, and replacement editing
-
-The text-profile work should remain a separate transport concept from stored voice profiles. Voice profiles are long-running worker jobs with retained-job semantics; text profiles are synchronous text-normalization state and replacement editing. Keeping those concepts separate in the transport layer will make the server easier to reason about and keep HTTP and MCP from inheriting a blurry "everything is a profile job" model.
+1. verify adjacent HTTP consumers agree with the new voice-clone and text-profile route family
+2. decide whether any remaining low-level MCP tool names should be promoted to more product-shaped names
+3. remove any server-local transport translation that is still redundant now that both `SpeakSwiftly` and `TextForSpeech` are wired through directly

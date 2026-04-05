@@ -399,6 +399,110 @@ actor ServerHost {
         profileCache.first { $0.profileName == profileName }
     }
 
+    func textProfilesSnapshot() async -> TextProfilesSnapshot {
+        .init(
+            persistenceURL: await runtime.textProfilePersistenceURL()?.path,
+            baseProfile: .init(profile: await runtime.baseTextProfile()),
+            activeProfile: .init(profile: await runtime.activeTextProfile()),
+            storedProfiles: await runtime.textProfiles().map(TextProfileSnapshot.init(profile:)),
+            effectiveProfile: .init(profile: await runtime.effectiveTextProfile(named: nil))
+        )
+    }
+
+    func storedTextProfile(_ profileID: String) async -> TextProfileSnapshot? {
+        await runtime.textProfile(named: profileID).map(TextProfileSnapshot.init(profile:))
+    }
+
+    func effectiveTextProfile(_ profileID: String?) async -> TextProfileSnapshot {
+        .init(profile: await runtime.effectiveTextProfile(named: profileID))
+    }
+
+    func createTextProfile(
+        id: String,
+        name: String,
+        replacements: [TextForSpeech.Replacement]
+    ) async throws -> TextProfileSnapshot {
+        let profile = try await runtime.createTextProfile(id: id, named: name, replacements: replacements)
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: profile)
+    }
+
+    func storeTextProfile(_ profile: TextForSpeech.Profile) async throws -> TextProfileSnapshot {
+        try await runtime.storeTextProfile(profile)
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: profile)
+    }
+
+    func useTextProfile(_ profile: TextForSpeech.Profile) async throws -> TextProfileSnapshot {
+        try await runtime.useTextProfile(profile)
+        let activeProfile = await runtime.activeTextProfile()
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: activeProfile)
+    }
+
+    func removeTextProfile(named profileID: String) async throws -> TextProfilesSnapshot {
+        try await runtime.removeTextProfile(named: profileID)
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return await textProfilesSnapshot()
+    }
+
+    func resetTextProfile() async throws -> TextProfileSnapshot {
+        try await runtime.resetTextProfile()
+        let activeProfile = await runtime.activeTextProfile()
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: activeProfile)
+    }
+
+    func addTextReplacement(
+        _ replacement: TextForSpeech.Replacement,
+        toStoredTextProfileNamed profileID: String? = nil
+    ) async throws -> TextProfileSnapshot {
+        let profile: TextForSpeech.Profile
+        if let profileID {
+            profile = try await runtime.addTextReplacement(replacement, toStoredTextProfileNamed: profileID)
+        } else {
+            profile = try await runtime.addTextReplacement(replacement)
+        }
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: profile)
+    }
+
+    func replaceTextReplacement(
+        _ replacement: TextForSpeech.Replacement,
+        inStoredTextProfileNamed profileID: String? = nil
+    ) async throws -> TextProfileSnapshot {
+        let profile: TextForSpeech.Profile
+        if let profileID {
+            profile = try await runtime.replaceTextReplacement(replacement, inStoredTextProfileNamed: profileID)
+        } else {
+            profile = try await runtime.replaceTextReplacement(replacement)
+        }
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: profile)
+    }
+
+    func removeTextReplacement(
+        id replacementID: String,
+        fromStoredTextProfileNamed profileID: String? = nil
+    ) async throws -> TextProfileSnapshot {
+        let profile: TextForSpeech.Profile
+        if let profileID {
+            profile = try await runtime.removeTextReplacement(id: replacementID, fromStoredTextProfileNamed: profileID)
+        } else {
+            profile = try await runtime.removeTextReplacement(id: replacementID)
+        }
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(profile: profile)
+    }
+
     func jobSnapshots() -> [JobSnapshot] {
         pruneCompletedJobs()
         return jobs.values
@@ -1310,6 +1414,20 @@ actor ServerHost {
                     warning: profileCacheWarning,
                     profileCount: profileCache.count,
                     lastRefreshAt: lastProfileRefreshAt.map(TimestampFormatter.string(from:))
+                )
+            )
+        )
+    }
+
+    private func emitTextProfilesChanged() async {
+        let activeProfile = await runtime.activeTextProfile()
+        let storedProfiles = await runtime.textProfiles()
+        hostEventContinuation.yield(
+            .textProfilesChanged(
+                .init(
+                    activeProfileID: activeProfile.id,
+                    storedProfileCount: storedProfiles.count,
+                    persistenceURL: await runtime.textProfilePersistenceURL()?.path
                 )
             )
         )

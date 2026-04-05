@@ -75,6 +75,110 @@ enum MCPToolCatalog {
             )
         ),
         Tool(
+            name: "list_text_profiles",
+            description: "Return the current SpeakSwiftly text-profile state, including the base, active, stored, and effective profiles.",
+            inputSchema: [
+                "type": "object",
+                "properties": [:],
+            ],
+            annotations: .init(
+                readOnlyHint: true,
+                destructiveHint: false,
+                idempotentHint: true,
+                openWorldHint: false
+            )
+        ),
+        Tool(
+            name: "create_text_profile",
+            description: "Create a stored SpeakSwiftly text profile with the provided id, display name, and optional replacement rules.",
+            inputSchema: [
+                "type": "object",
+                "required": ["id", "name"],
+                "properties": [
+                    "id": ["type": "string"],
+                    "name": ["type": "string"],
+                    "replacements": ["type": "array"],
+                ],
+            ]
+        ),
+        Tool(
+            name: "store_text_profile",
+            description: "Store or replace one persisted SpeakSwiftly text profile by passing the full profile payload.",
+            inputSchema: [
+                "type": "object",
+                "required": ["profile"],
+                "properties": [
+                    "profile": ["type": "object"],
+                ],
+            ]
+        ),
+        Tool(
+            name: "use_text_profile",
+            description: "Replace the active SpeakSwiftly custom text profile with the provided full profile payload.",
+            inputSchema: [
+                "type": "object",
+                "required": ["profile"],
+                "properties": [
+                    "profile": ["type": "object"],
+                ],
+            ]
+        ),
+        Tool(
+            name: "remove_text_profile",
+            description: "Remove one stored SpeakSwiftly text profile by profile id.",
+            inputSchema: [
+                "type": "object",
+                "required": ["profile_id"],
+                "properties": [
+                    "profile_id": ["type": "string"],
+                ],
+            ]
+        ),
+        Tool(
+            name: "reset_text_profile",
+            description: "Reset the active SpeakSwiftly custom text profile back to the library default.",
+            inputSchema: [
+                "type": "object",
+                "properties": [:],
+            ]
+        ),
+        Tool(
+            name: "add_text_replacement",
+            description: "Add one text replacement rule to the active custom text profile or to a stored text profile when profile_id is provided.",
+            inputSchema: [
+                "type": "object",
+                "required": ["replacement"],
+                "properties": [
+                    "profile_id": ["type": "string"],
+                    "replacement": ["type": "object"],
+                ],
+            ]
+        ),
+        Tool(
+            name: "replace_text_replacement",
+            description: "Replace one existing text replacement rule in the active custom text profile or in a stored text profile when profile_id is provided.",
+            inputSchema: [
+                "type": "object",
+                "required": ["replacement"],
+                "properties": [
+                    "profile_id": ["type": "string"],
+                    "replacement": ["type": "object"],
+                ],
+            ]
+        ),
+        Tool(
+            name: "remove_text_replacement",
+            description: "Remove one text replacement rule from the active custom text profile or from a stored text profile when profile_id is provided.",
+            inputSchema: [
+                "type": "object",
+                "required": ["replacement_id"],
+                "properties": [
+                    "profile_id": ["type": "string"],
+                    "replacement_id": ["type": "string"],
+                ],
+            ]
+        ),
+        Tool(
             name: "remove_profile",
             description: "Remove a stored SpeakSwiftly voice profile through the shared server host.",
             inputSchema: [
@@ -195,6 +299,10 @@ enum MCPResourceCatalog {
     static let resourceURIs = Set([
         "speak://status",
         "speak://profiles",
+        "speak://text-profiles",
+        "speak://text-profiles/base",
+        "speak://text-profiles/active",
+        "speak://text-profiles/effective",
         "speak://jobs",
         "speak://runtime",
     ])
@@ -210,6 +318,30 @@ enum MCPResourceCatalog {
             name: "Cached Profiles",
             uri: "speak://profiles",
             description: "Current cached SpeakSwiftly profile snapshot from the shared server host.",
+            mimeType: "application/json"
+        ),
+        Resource(
+            name: "Text Profiles",
+            uri: "speak://text-profiles",
+            description: "Current SpeakSwiftly text-profile state, including the base, active, stored, and effective profiles.",
+            mimeType: "application/json"
+        ),
+        Resource(
+            name: "Base Text Profile",
+            uri: "speak://text-profiles/base",
+            description: "The immutable base text profile that SpeakSwiftly merges into every effective text profile.",
+            mimeType: "application/json"
+        ),
+        Resource(
+            name: "Active Text Profile",
+            uri: "speak://text-profiles/active",
+            description: "The current active custom text profile that SpeakSwiftly uses for default normalization.",
+            mimeType: "application/json"
+        ),
+        Resource(
+            name: "Effective Text Profile",
+            uri: "speak://text-profiles/effective",
+            description: "The effective text profile SpeakSwiftly applies by default after merging the base and active custom text profiles.",
             mimeType: "application/json"
         ),
         Resource(
@@ -231,6 +363,18 @@ enum MCPResourceCatalog {
             uriTemplate: "speak://profiles/{profile_name}/detail",
             name: "Profile Detail",
             description: "Detailed cached SpeakSwiftly profile information for one profile.",
+            mimeType: "application/json"
+        ),
+        Resource.Template(
+            uriTemplate: "speak://text-profiles/stored/{profile_id}",
+            name: "Stored Text Profile",
+            description: "One persisted SpeakSwiftly text profile by profile id.",
+            mimeType: "application/json"
+        ),
+        Resource.Template(
+            uriTemplate: "speak://text-profiles/effective/{profile_id}",
+            name: "Effective Stored Text Profile",
+            description: "The effective SpeakSwiftly text profile produced by merging the base profile with one stored profile.",
             mimeType: "application/json"
         ),
         Resource.Template(

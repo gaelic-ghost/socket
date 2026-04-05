@@ -56,6 +56,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     private var queuedSpeechInvocations = [QueuedSpeechInvocation]()
     private var createCloneInvocations = [CreateCloneInvocation]()
     private var playbackState: SpeakSwiftly.PlaybackState = .idle
+    private var textRuntime = TextForSpeechRuntime()
 
     // MARK: - Lifecycle
 
@@ -306,6 +307,87 @@ actor MockRuntime: ServerRuntimeProtocol {
             }
             return RuntimeRequestHandle(id: requestID, operationName: "cancel_request", profileName: nil, events: events)
         }
+    }
+
+    func activeTextProfile() -> TextForSpeech.Profile {
+        textRuntime.customProfile
+    }
+
+    func baseTextProfile() -> TextForSpeech.Profile {
+        textRuntime.baseProfile
+    }
+
+    func textProfile(named profileID: String) -> TextForSpeech.Profile? {
+        textRuntime.profile(named: profileID)
+    }
+
+    func textProfiles() -> [TextForSpeech.Profile] {
+        textRuntime.storedProfiles()
+    }
+
+    func effectiveTextProfile(named profileID: String?) -> TextForSpeech.Profile {
+        textRuntime.effectiveProfile(named: profileID)
+    }
+
+    func textProfilePersistenceURL() -> URL? {
+        URL(fileURLWithPath: "/tmp/mock-text-profiles.json")
+    }
+
+    func createTextProfile(
+        id: String,
+        named name: String,
+        replacements: [TextForSpeech.Replacement]
+    ) throws -> TextForSpeech.Profile {
+        try textRuntime.createProfile(id: id, named: name, replacements: replacements)
+    }
+
+    func storeTextProfile(_ profile: TextForSpeech.Profile) throws {
+        textRuntime.store(profile)
+    }
+
+    func useTextProfile(_ profile: TextForSpeech.Profile) throws {
+        textRuntime.use(profile)
+    }
+
+    func removeTextProfile(named profileID: String) throws {
+        textRuntime.removeProfile(named: profileID)
+    }
+
+    func resetTextProfile() throws {
+        textRuntime.reset()
+    }
+
+    func addTextReplacement(_ replacement: TextForSpeech.Replacement) throws -> TextForSpeech.Profile {
+        textRuntime.addReplacement(replacement)
+    }
+
+    func addTextReplacement(
+        _ replacement: TextForSpeech.Replacement,
+        toStoredTextProfileNamed profileID: String
+    ) throws -> TextForSpeech.Profile {
+        try textRuntime.addReplacement(replacement, toStoredProfileNamed: profileID)
+    }
+
+    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) throws -> TextForSpeech.Profile {
+        try textRuntime.replaceReplacement(replacement)
+    }
+
+    func replaceTextReplacement(
+        _ replacement: TextForSpeech.Replacement,
+        inStoredTextProfileNamed profileID: String
+    ) throws -> TextForSpeech.Profile {
+        try textRuntime.replaceReplacement(replacement, inStoredProfileNamed: profileID)
+    }
+
+    func removeTextReplacement(id replacementID: String) throws -> TextForSpeech.Profile {
+        try textRuntime.removeReplacement(id: replacementID)
+    }
+
+    func removeTextReplacement(
+        id replacementID: String,
+        fromStoredTextProfileNamed profileID: String
+    ) throws -> TextForSpeech.Profile {
+        try textRuntime.removeReplacement(id: replacementID, fromStoredProfileNamed: profileID)
     }
 
     // MARK: - Test Control
@@ -805,6 +887,8 @@ actor MockRuntime: ServerRuntimeProtocol {
             if snapshot.state == "playing" {
                 sawPlaybackChange = true
             }
+        case .textProfilesChanged:
+            break
         case .recentErrorRecorded:
             break
         }
@@ -973,6 +1057,52 @@ actor MockRuntime: ServerRuntimeProtocol {
         let profiles = try #require(profilesJSON["profiles"] as? [[String: Any]])
         #expect(profiles.count == 1)
         #expect(profiles.first?["profile_name"] as? String == "default")
+
+        let createTextProfileResponse = try await client.execute(
+            uri: "/text-profiles/stored",
+            method: .post,
+            headers: [.contentType: "application/json"],
+            body: byteBuffer(
+                #"{"id":"swift-docs","name":"Swift Docs","replacements":[{"id":"replace-1","text":"SPM","replacement":"Swift Package Manager","match":"whole_token","phase":"before_built_ins","is_case_sensitive":false,"formats":["swift_source"],"priority":3}]}"#
+            )
+        )
+        let createTextProfileJSON = try jsonObject(from: createTextProfileResponse.body)
+        let createdTextProfile = try #require(createTextProfileJSON["profile"] as? [String: Any])
+        #expect(createTextProfileResponse.status == .ok)
+        #expect(createdTextProfile["id"] as? String == "swift-docs")
+
+        let textProfilesResponse = try await client.execute(uri: "/text-profiles", method: .get)
+        let textProfilesJSON = try jsonObject(from: textProfilesResponse.body)
+        let textProfiles = try #require(textProfilesJSON["text_profiles"] as? [String: Any])
+        let storedTextProfiles = try #require(textProfiles["stored_profiles"] as? [[String: Any]])
+        #expect(storedTextProfiles.contains { $0["id"] as? String == "swift-docs" })
+
+        let useTextProfileResponse = try await client.execute(
+            uri: "/text-profiles/active",
+            method: .put,
+            headers: [.contentType: "application/json"],
+            body: byteBuffer(
+                #"{"profile":{"id":"operator","name":"Operator","replacements":[{"id":"replace-2","text":"MCP","replacement":"Model Context Protocol","match":"exact_phrase","phase":"after_built_ins","is_case_sensitive":false,"formats":[],"priority":2}]}}"#
+            )
+        )
+        let useTextProfileJSON = try jsonObject(from: useTextProfileResponse.body)
+        let activeTextProfile = try #require(useTextProfileJSON["profile"] as? [String: Any])
+        #expect(activeTextProfile["id"] as? String == "operator")
+
+        let effectiveTextProfileResponse = try await client.execute(uri: "/text-profiles/effective/swift-docs", method: .get)
+        let effectiveTextProfileJSON = try jsonObject(from: effectiveTextProfileResponse.body)
+        let effectiveTextProfile = try #require(effectiveTextProfileJSON["profile"] as? [String: Any])
+        let effectiveReplacements = try #require(effectiveTextProfile["replacements"] as? [[String: Any]])
+        #expect(effectiveReplacements.contains { $0["id"] as? String == "replace-1" })
+
+        let removeTextReplacementResponse = try await client.execute(
+            uri: "/text-profiles/stored/swift-docs/replacements/replace-1",
+            method: .delete
+        )
+        let removeTextReplacementJSON = try jsonObject(from: removeTextReplacementResponse.body)
+        let trimmedTextProfile = try #require(removeTextReplacementJSON["profile"] as? [String: Any])
+        let trimmedReplacements = try #require(trimmedTextProfile["replacements"] as? [[String: Any]])
+        #expect(trimmedReplacements.isEmpty)
 
         let cloneResponse = try await client.execute(
             uri: "/profiles/clone",
@@ -1157,6 +1287,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     let listResourcesResult = try #require(mcpResultPayload(from: listResourcesEnvelope))
     let resources = try #require(listResourcesResult["resources"] as? [[String: Any]])
     #expect(resources.contains { $0["uri"] as? String == "speak://status" })
+    #expect(resources.contains { $0["uri"] as? String == "speak://text-profiles" })
     #expect(resources.contains { $0["uri"] as? String == "speak://jobs" })
     #expect(resources.contains { $0["uri"] as? String == "speak://runtime" })
 
@@ -1171,7 +1302,34 @@ actor MockRuntime: ServerRuntimeProtocol {
     let listResourceTemplatesResult = try #require(mcpResultPayload(from: listResourceTemplatesEnvelope))
     let templates = try #require(listResourceTemplatesResult["resourceTemplates"] as? [[String: Any]])
     #expect(templates.contains { $0["uriTemplate"] as? String == "speak://profiles/{profile_name}/detail" })
+    #expect(templates.contains { $0["uriTemplate"] as? String == "speak://text-profiles/stored/{profile_id}" })
     #expect(templates.contains { $0["uriTemplate"] as? String == "speak://jobs/{job_id}" })
+
+    let createTextProfileEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: #"{"jsonrpc":"2.0","id":"tool-text-profile-1","method":"tools/call","params":{"name":"create_text_profile","arguments":{"id":"mcp-text","name":"MCP Text","replacements":[{"id":"mcp-replacement","text":"CLI","replacement":"command line interface","match":"whole_token","phase":"before_built_ins","is_case_sensitive":false,"formats":["cli_output"],"priority":1}]}}}"#,
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let createTextProfilePayload = try mcpToolPayload(from: createTextProfileEnvelope)
+    #expect(createTextProfilePayload["id"] as? String == "mcp-text")
+
+    let listTextProfilesEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpCallToolRequestJSON(
+                    name: "list_text_profiles",
+                    arguments: [:]
+                ),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let listTextProfilesPayload = try mcpToolPayload(from: listTextProfilesEnvelope)
+    let listTextStoredProfiles = try #require(listTextProfilesPayload["stored_profiles"] as? [[String: Any]])
+    #expect(listTextStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
 
     let listPromptsEnvelope = try await mcpEnvelope(
         from: await mcpSurface.handle(
@@ -1262,6 +1420,35 @@ actor MockRuntime: ServerRuntimeProtocol {
     let profileDetailText = try #require(profileDetailContents.first?["text"] as? String)
     let profileDetailPayload = try jsonObject(from: Data(profileDetailText.utf8))
     #expect(profileDetailPayload["profile_name"] as? String == "default")
+
+    let textProfilesResourceEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpReadResourceRequestJSON(uri: "speak://text-profiles"),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let textProfilesResourceResult = try #require(mcpResultPayload(from: textProfilesResourceEnvelope))
+    let textProfilesContents = try #require(textProfilesResourceResult["contents"] as? [[String: Any]])
+    let textProfilesText = try #require(textProfilesContents.first?["text"] as? String)
+    let textProfilesPayload = try jsonObject(from: Data(textProfilesText.utf8))
+    let storedProfilesPayload = try #require(textProfilesPayload["stored_profiles"] as? [[String: Any]])
+    #expect(storedProfilesPayload.contains { $0["id"] as? String == "mcp-text" })
+
+    let storedTextProfileEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpReadResourceRequestJSON(uri: "speak://text-profiles/stored/mcp-text"),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let storedTextProfileResult = try #require(mcpResultPayload(from: storedTextProfileEnvelope))
+    let storedTextProfileContents = try #require(storedTextProfileResult["contents"] as? [[String: Any]])
+    let storedTextProfileText = try #require(storedTextProfileContents.first?["text"] as? String)
+    let storedTextProfilePayload = try jsonObject(from: Data(storedTextProfileText.utf8))
+    #expect(storedTextProfilePayload["id"] as? String == "mcp-text")
 
     let jobDetailEnvelope = try await mcpEnvelope(
         from: await mcpSurface.handle(
