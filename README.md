@@ -2,6 +2,18 @@
 
 Swift executable package for a shared localhost host process that exposes the public `SpeakSwiftly` runtime surface through an app-friendly HTTP API and an optional MCP surface.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Development](#development)
+- [Repository Layout](#repository-layout)
+- [Verification](#verification)
+- [Roadmap](#roadmap)
+- [License](#license)
+
 ## Overview
 
 This repository is the standalone Swift service for `SpeakSwiftly`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host one localhost macOS process with in-memory job tracking and server-sent events, while delegating speech, voice-profile management, and worker lifecycle to the typed `SpeakSwiftly` runtime. That shared process can mount both the HTTP API and the MCP surface without creating duplicate `SpeakSwiftly.Runtime` owners.
@@ -48,7 +60,9 @@ That narrowness also informs platform policy. The package should prefer maintain
 
 ## Setup
 
-Build the package with SwiftPM:
+This package currently depends on a sibling local [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout via `.package(path: "../SpeakSwiftly")` in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift). Local builds and tests expect that checkout to exist at exactly `../SpeakSwiftly` relative to this repository root.
+
+Build the package with SwiftPM once that sibling checkout is present:
 
 ```bash
 swift build
@@ -68,7 +82,11 @@ Run the server locally:
 swift run SpeakSwiftlyServer
 ```
 
-The shared server binds to `127.0.0.1:7337` by default and supports these environment variables:
+The shared server binds to `127.0.0.1:7337` by default.
+
+## Configuration
+
+The shared server supports these environment variables:
 
 - `APP_CONFIG_FILE`
 - `APP_NAME`
@@ -213,6 +231,16 @@ The executable entrypoint lives in [`Sources/SpeakSwiftlyServer/SpeakSwiftlyServ
 - [`ServerModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ServerModels.swift) defines request and response payloads.
 
 The design is deliberately direct. Adding extra wrappers, managers, or intermediate layers here would be easy, but it would also be the kind of unnecessary complexity that makes a small localhost service harder to reason about, so the server is kept close to the typed runtime API on purpose. As of sibling `SpeakSwiftly v0.9.1`, that means the service talks to the public `SpeakSwiftly.Runtime` surface and its public event and summary types instead of reaching through the library boundary to construct raw worker requests itself.
+
+For repository maintenance, treat this standalone repository as the source of truth for package development, tags, and releases. When the `speak-to-user` monorepo adopts a new server version, prefer bumping that submodule pointer to a tagged `SpeakSwiftlyServer` release rather than a floating branch tip.
+
+## Repository Layout
+
+- `Sources/` contains the executable target and the HTTP, MCP, and host layers that share one runtime owner.
+- `Tests/` contains the package test suite, including the opt-in end-to-end coverage paths.
+- `docs/` holds repo-local supporting documentation.
+- `plugins/apple-dev-skills/` is the in-development plugin copy that this repository publishes through the local marketplace file.
+- `.agents/plugins/marketplace.json` points local Codex discovery at the in-repo plugin source during development.
 
 ## Verification
 
