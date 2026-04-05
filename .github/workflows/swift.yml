@@ -8,8 +8,8 @@ on:
 
 jobs:
   build-and-test:
-    name: Swift on macOS 15
-    runs-on: macos-15
+    name: Swift on macOS 26
+    runs-on: macos-26
 
     steps:
       - name: Check out repository
