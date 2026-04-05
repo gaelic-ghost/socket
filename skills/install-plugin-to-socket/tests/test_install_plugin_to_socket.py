@@ -915,6 +915,48 @@ def test_enable_and_disable_manage_plugin_config_state(tmp_path: Path, monkeypat
     assert m.read_plugin_enabled_state(config_path, plugin_key) is False
 
 
+def test_personal_install_enables_plugin_by_default(tmp_path: Path, monkeypatch) -> None:
+    fake_home = tmp_path / "home"
+    fake_home.mkdir()
+    monkeypatch.setattr(m.Path, "home", lambda: fake_home)
+    source_plugin = _write_source_plugin(tmp_path / "source")
+
+    apply_actions, _summary, _target, _marketplace, config_path, plugin_key, errors = m.apply_install(
+        requested_source_root=source_plugin,
+        scope="personal",
+        action="install",
+        repo_root=None,
+        install_mode="copy",
+    )
+
+    assert not errors
+    assert plugin_key == "example-plugin@local-personal"
+    assert any(action["action"] == "write-plugin-enabled-state" and action["enabled"] == "true" for action in apply_actions)
+    assert m.read_plugin_enabled_state(config_path, plugin_key) is True
+
+
+def test_repo_install_does_not_enable_plugin_by_default(tmp_path: Path, monkeypatch) -> None:
+    fake_home = tmp_path / "home"
+    fake_home.mkdir()
+    monkeypatch.setattr(m.Path, "home", lambda: fake_home)
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+
+    apply_actions, _summary, _target, _marketplace, config_path, plugin_key, errors = m.apply_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    assert plugin_key == "example-plugin@local-repo"
+    assert not any(action["action"] == "write-plugin-enabled-state" for action in apply_actions)
+    assert m.read_plugin_enabled_state(config_path, plugin_key) is None
+
+
 def test_promote_moves_repo_install_to_personal_scope(tmp_path: Path, monkeypatch) -> None:
     fake_home = tmp_path / "home"
     fake_home.mkdir()
@@ -960,7 +1002,7 @@ def test_promote_moves_repo_install_to_personal_scope(tmp_path: Path, monkeypatc
     assert m.read_plugin_enabled_state(config_path, "example-plugin@local-repo") is None
 
 
-def test_verify_reports_missing_enabled_state_for_config_toggle_workflows(tmp_path: Path, monkeypatch) -> None:
+def test_verify_personal_install_satisfies_default_enabled_state_for_enable_workflow(tmp_path: Path, monkeypatch) -> None:
     fake_home = tmp_path / "home"
     fake_home.mkdir()
     monkeypatch.setattr(m.Path, "home", lambda: fake_home)
@@ -985,6 +1027,36 @@ def test_verify_reports_missing_enabled_state_for_config_toggle_workflows(tmp_pa
     assert not errors
     assert config_path == fake_home / ".codex" / "config.toml"
     assert plugin_key == "example-plugin@local-personal"
+    assert "missing-plugin-enabled-state" not in {finding.issue_id for finding in findings}
+
+
+def test_verify_repo_install_reports_missing_enabled_state_for_enable_workflow(tmp_path: Path, monkeypatch) -> None:
+    fake_home = tmp_path / "home"
+    fake_home.mkdir()
+    monkeypatch.setattr(m.Path, "home", lambda: fake_home)
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+
+    m.apply_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    findings, _summary, _target, _marketplace, _scope_root, config_path, plugin_key, errors = m.audit_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="enable",
+        repo_root=repo_root,
+        install_mode="copy",
+    )
+
+    assert not errors
+    assert config_path == fake_home / ".codex" / "config.toml"
+    assert plugin_key == "example-plugin@local-repo"
     assert "missing-plugin-enabled-state" in {finding.issue_id for finding in findings}
 
 

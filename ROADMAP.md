@@ -120,6 +120,7 @@ Tickets:
 - [x] Add a persistent default install-scope preference with repo-profile and global-profile resolution before the built-in default.
 - [x] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
 - [x] Add optional config-state management for Codex plugin enable or disable behavior in `~/.codex/config.toml` once the repo wants that broader contract.
+- [x] Make personal-scope `install` enable the plugin by default so a new global install is active after restart without requiring a separate `enable` pass.
 - [x] Add a verification-oriented mode that audits an already installed local plugin and reports marketplace drift, missing copied files, and likely restart state.
 - [x] Add a bounded repair workflow that can normalize a drifted install surface in one pass, including the common legacy repo-root plugin case where a repo-local marketplace entry still points at `./`.
 - [ ] Add a safer overwrite policy for personal-scope updates so maintainers can choose between replace, backup-then-replace, or fail-on-existing behavior.

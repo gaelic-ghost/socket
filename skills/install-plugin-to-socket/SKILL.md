@@ -67,21 +67,24 @@ This skill is for local Codex plugin development workflows. It does not publish 
 9. Default to the documented Codex local-plugin flow:
    - stage the plugin at the repo or personal plugin path
    - point the marketplace entry at that staged path
+   - for personal-scope `install`, also write the plugin enabled state to `~/.codex/config.toml` with `enabled = true`
 10. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs and gives Codex a stable staged plugin tree to recache from.
 11. Treat `update` as the update workflow when the source clone is ahead of the staged install copy. It should recopy the source plugin tree into the staged path and rewrite the marketplace entry if needed.
 12. Treat `verify` as the audit-oriented workflow for checking whether the staged plugin tree, marketplace entry, optional plugin surfaces, and config-state expectations still match the source plugin.
 13. Treat `repair` as the bounded repair workflow when the intended staged plugin should keep its current scope, but the local install surface drifted. In repo scope, it may also normalize the common legacy case where the repo's own plugin marketplace entry still points at `./` instead of `./plugins/<plugin-name>`.
-14. Treat `enable` and `disable` as Codex config-state workflows backed by `~/.codex/config.toml` entries in the form `[plugins."plugin-name@marketplace-name"]`.
+14. Treat `enable` and `disable` as explicit Codex config-state workflows backed by `~/.codex/config.toml` entries in the form `[plugins."plugin-name@marketplace-name"]`.
 15. Treat `promote` as the bounded workflow that copies the source plugin into personal scope, writes the personal marketplace entry, carries forward the repo install's enabled-state if present, and then removes the repo-local install surface.
 16. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
 17. For `install`, `update`, and `repair`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
-18. For `uninstall`, remove only the matching marketplace entry, staged plugin path, and matching plugin config-state entry for that install target.
-19. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory or reflects the intended enabled-state.
+18. For personal-scope `install`, enable the plugin by default in `~/.codex/config.toml` after wiring the staged plugin tree and marketplace entry.
+19. For `uninstall`, remove only the matching marketplace entry, staged plugin path, and matching plugin config-state entry for that install target.
+20. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory or reflects the intended enabled-state.
 
 ## Usage Examples
 
 - Personal install:
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root plugins/agent-plugin-skills --action install --run-mode apply`
+  - this now enables the personal-scope plugin by default in `~/.codex/config.toml`
 - Repo-local install:
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action install --run-mode apply`
 - Update a staged copied install after source changes:
@@ -124,7 +127,7 @@ Common repair cases:
   - Fix: run `repair` in repo scope so the repo's own plugin is restaged under `plugins/<plugin-name>/` and the marketplace entry is rewritten to that staged path.
 - `missing-plugin-enabled-state`
   - Codex config does not include an explicit enabled-state entry for the plugin key.
-  - Fix: rerun `enable` or `disable`, depending on the intended state.
+  - Fix: rerun `install` for a missing personal install default-enable, or rerun `enable` / `disable` when the intended state differs.
 - `stale-plugin-enabled-state`
   - Codex config includes a plugin entry, but the enabled-state does not match the requested workflow.
   - Fix: rerun `enable` or `disable`, depending on the intended state.
@@ -138,7 +141,7 @@ Preferred repair flow:
 2. Confirm the intended scope and install mode.
 3. Use `update` when the staged path and marketplace entry should continue to exist but need to be rewritten.
 4. Use `repair` when the drift includes invalid repo-local marketplace wiring, a missing staged plugin root, or a legacy repo-root plugin entry that should be normalized to `plugins/<plugin-name>/`.
-5. Use `enable` or `disable` when marketplace wiring is correct but Codex config-state drifted.
+5. Use `install` when a new personal install should take the default enabled path, and use `enable` or `disable` when marketplace wiring is correct but Codex config-state needs an explicit follow-up change.
 6. Use `promote` when a repo-local install should become the personal default install surface instead.
 7. Use `uninstall` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
 8. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.

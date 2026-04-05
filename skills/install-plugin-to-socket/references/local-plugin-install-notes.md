@@ -22,6 +22,7 @@ OpenAI docs note that:
 Current repo guidance for this skill:
 
 - Prefer personal scope by default so one maintained local Codex plugin install can be reused across repositories.
+- Personal-scope `install` should also write `enabled = true` for the plugin key by default so a new global install is immediately active after restart.
 - Use repo scope only when a repository genuinely needs its own repo-local plugin catalog.
 - Allow persistent default-scope preferences through:
   - `.codex/profiles/install-plugin-to-socket/customization.yaml`
@@ -30,12 +31,13 @@ Current repo guidance for this skill:
 - Treat `update` in `copy` mode as the normal update workflow when the source clone is ahead of the staged install copy.
 - Treat `verify` as the read-only audit workflow for checking staged plugin drift, marketplace drift, optional plugin-surface drift, and config-state expectations.
 - Treat `repair` as the bounded workflow for drifted install surfaces, including the common repo-local case where a legacy marketplace entry still points at `./` instead of `./plugins/<plugin-name>`.
-- Treat `enable` and `disable` as config-state workflows for the plugin key under `~/.codex/config.toml`.
+- Treat personal-scope `install` as the default-enable workflow for a new global install, and use `enable` / `disable` when you need to change the config state after the install is already wired.
 - Treat `promote` as the bounded workflow that carries a repo-local install into personal scope and then removes the repo-local install surface.
 - Keep `symlink` mode as an advanced maintainer override for local development only; it is not the primary documented Codex install model.
 - Do not point a repo marketplace directly at a sibling repo outside the marketplace root. Stage a copy or symlink at the in-scope plugin path instead.
 - Treat `install-plugin-to-socket` as the repair surface for drifted local installs:
   - rerun `install` when the staged path or marketplace entry is missing
+  - rerun `install` when a personal install is missing its default enabled-state entry
   - rerun `update` when the marketplace entry is stale, the staged path needs to be rematerialized in the chosen mode, or the copied staged tree no longer matches the source plugin tree
   - rerun `repair` when the repo-local marketplace contains an invalid `./` plugin path or a legacy repo-root plugin surface needs to be normalized to `plugins/<plugin-name>/`
   - rerun `enable` or `disable` when Codex config-state drifted

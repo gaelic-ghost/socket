@@ -1118,6 +1118,11 @@ def apply_install(
         if changed or repair_changed or not marketplace_path.exists():
             _write_json(marketplace_path, payload)
             apply_actions.append({"action": "write-marketplace-entry", "path": str(marketplace_path)})
+        if action == "install" and install_scope == "personal" and plugin_key is not None:
+            write_plugin_enabled_state(config_path, plugin_key, True)
+            apply_actions.append(
+                {"action": "write-plugin-enabled-state", "path": str(config_path), "plugin_key": plugin_key, "enabled": "true"}
+            )
 
     elif action == "uninstall":
         if target_plugin_root.exists() or target_plugin_root.is_symlink():

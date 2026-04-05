@@ -1,7 +1,7 @@
 {
   "name": "agent-plugin-skills",
   "description": "Maintainer plugin for agent-skills and agent-plugin repositories.",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "author": {
     "name": "Gale"
   },
