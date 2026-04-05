@@ -6,8 +6,9 @@ This skill follows the documented OpenAI Codex local plugin flow:
   - `~/.codex/plugins/<plugin-name>`
   - `~/.agents/plugins/marketplace.json`
 - Repo scope uses:
-  - `$REPO_ROOT/plugins/<plugin-name>`
-  - `$REPO_ROOT/.agents/plugins/marketplace.json`
+  - `$REPO_ROOT/.codex/plugins/<plugin-name>`
+  - `$REPO_ROOT/.codex/plugins/marketplace.json`
+  - `$REPO_ROOT/.codex/config.toml`
 
 OpenAI docs note that:
 
@@ -24,7 +25,7 @@ Current repo guidance for this skill:
 - Prefer personal scope by default so one maintained local Codex plugin install can be reused across repositories.
 - Personal-scope `install` should also write `enabled = true` for the plugin key by default so a new global install is immediately active after restart.
 - Personal-scope `install`, `update`, `repair`, and `promote` should also prefer Codex's own app-server `plugin/install` RPC so the plugin becomes truly installed instead of merely available.
-- Use repo scope only when a repository genuinely needs its own repo-local plugin catalog.
+- Use repo scope when a repository needs a repo-local plugin install surface without mutating that repo's tracked product marketplace metadata.
 - Allow persistent default-scope preferences through:
   - `.codex/profiles/install-plugin-to-socket/customization.yaml`
   - `~/.config/gaelic-ghost/agent-plugin-skills/install-plugin-to-socket/customization.yaml`
@@ -32,17 +33,17 @@ Current repo guidance for this skill:
 - Treat `update` in `copy` mode as the normal update workflow when the source clone is ahead of the staged install copy.
 - Treat `verify` as the read-only audit workflow for checking staged plugin drift, marketplace drift, optional plugin-surface drift, and config-state expectations.
 - Treat `verify` as the read-only audit workflow for checking staged plugin drift, marketplace drift, optional plugin-surface drift, config-state expectations, and whether Codex still reports the plugin as uninstalled.
-- Treat `repair` as the bounded workflow for drifted install surfaces, including the common repo-local case where a legacy marketplace entry still points at `./` instead of `./plugins/<plugin-name>`.
+- Treat `repair` as the bounded workflow for drifted install surfaces, including the legacy repo-local case where an external plugin was previously advertised through the repo's tracked `.agents/plugins/marketplace.json`.
 - Treat personal-scope `install` as the default-enable workflow for a new global install, and use `enable` / `disable` when you need to change the config state after the install is already wired.
 - Treat personal-scope `uninstall` as the matching Codex-cache removal workflow when the local build exposes app-server `plugin/uninstall`; otherwise fall back to staged-tree and marketplace removal only.
 - Treat `promote` as the bounded workflow that carries a repo-local install into personal scope and then removes the repo-local install surface.
 - Keep `symlink` mode as an advanced maintainer override for local development only; it is not the primary documented Codex install model.
-- Do not point a repo marketplace directly at a sibling repo outside the marketplace root. Stage a copy or symlink at the in-scope plugin path instead.
+- Do not mutate a target repo's tracked `.agents/plugins/marketplace.json` just to make an external plugin usable in that repo.
 - Treat `install-plugin-to-socket` as the repair surface for drifted local installs:
   - rerun `install` when the staged path or marketplace entry is missing
   - rerun `install` when a personal install is missing its default enabled-state entry
   - rerun `update` when the marketplace entry is stale, the staged path needs to be rematerialized in the chosen mode, or the copied staged tree no longer matches the source plugin tree
-  - rerun `repair` when the repo-local marketplace contains an invalid `./` plugin path or a legacy repo-root plugin surface needs to be normalized to `plugins/<plugin-name>/`
+  - rerun `repair` when the repo-private install surface drifted or a legacy tracked repo marketplace entry still advertises the external plugin
   - rerun `enable` or `disable` when Codex config-state drifted
   - rerun `verify` when you need an audit-only report before changing anything
   - rerun `promote` when a repo-local install should become the personal default install surface
@@ -50,10 +51,10 @@ Current repo guidance for this skill:
 
 Troubleshooting notes:
 
-- Fully restart Codex after repo-local marketplace changes. An already-open workspace can keep the marketplace view it loaded before `install`, `update`, or `repair`.
+- Fully restart Codex after repo-local install-surface changes. An already-open workspace can keep the installed-plugin and marketplace state it loaded before `install`, `update`, or `repair`.
 - If the helper reports a personal-scope app-server fallback instead of a successful `plugin/install`, the plugin may still appear as available rather than installed until you install it once through Codex's plugin browser.
 - When a staged repo-local plugin still does not show up, inspect `~/.codex/log/codex-tui.log` for marketplace warnings such as `skipping marketplace`.
-- Repo-local scope only affects the repo that owns `.agents/plugins/marketplace.json`. Personal scope is the right path when the same plugin should be broadly available across repos.
+- Repo-local scope now uses the repo-private `.codex` install surface and project-scoped `.codex/config.toml`, so it no longer turns the target repo's tracked `.agents/plugins/marketplace.json` into an install inventory for external plugins.
 - The Codex `/plugins` slash command list order may not be intuitive, so scan the full list before assuming a plugin is missing.
 
 Relevant docs:

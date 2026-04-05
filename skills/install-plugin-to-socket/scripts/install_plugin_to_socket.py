@@ -14,8 +14,8 @@ from pathlib import Path
 EXACT_NO_FINDINGS = "No findings."
 DEFAULT_SCOPE = "personal"
 DEFAULT_INSTALL_MODE = "copy"
-DEFAULT_REPO_MARKETPLACE_NAME = "local-repo"
 DEFAULT_PERSONAL_MARKETPLACE_NAME = "local-personal"
+REPO_PRIVATE_MARKETPLACE_PREFIX = "local-repo-install"
 REPO_CONFIG_RELATIVE_PATH = Path(".codex") / "profiles" / "install-plugin-to-socket" / "customization.yaml"
 GLOBAL_CONFIG_RELATIVE_PATH = Path(".config") / "gaelic-ghost" / "agent-plugin-skills" / "install-plugin-to-socket" / "customization.yaml"
 CODEX_CONFIG_RELATIVE_PATH = Path(".codex") / "config.toml"
@@ -73,6 +73,22 @@ def _is_same_path(left: Path, right: Path) -> bool:
 
 def _plugin_manifest_path(root: Path) -> Path:
     return root / ".codex-plugin" / "plugin.json"
+
+
+def _repo_private_marketplace_path(repo_root: Path) -> Path:
+    return repo_root / ".codex" / "plugins" / "marketplace.json"
+
+
+def _repo_private_plugin_root(repo_root: Path, plugin_name: str) -> Path:
+    return repo_root / ".codex" / "plugins" / plugin_name
+
+
+def _legacy_repo_marketplace_path(repo_root: Path) -> Path:
+    return repo_root / ".agents" / "plugins" / "marketplace.json"
+
+
+def _legacy_repo_plugin_root(repo_root: Path, plugin_name: str) -> Path:
+    return repo_root / "plugins" / plugin_name
 
 
 def _normalize_scope(raw_scope: str | None) -> str | None:
@@ -147,30 +163,33 @@ def resolve_source_plugin_root(requested_root: Path, *, allow_repo_root_resoluti
     if not allow_repo_root_resolution:
         return requested_root
 
-    marketplace_path = requested_root / ".agents" / "plugins" / "marketplace.json"
-    if marketplace_path.is_file():
+    candidates: list[Path] = []
+    for marketplace_path in (_repo_private_marketplace_path(requested_root), _legacy_repo_marketplace_path(requested_root)):
+        if not marketplace_path.is_file():
+            continue
         try:
             payload = _load_json(marketplace_path)
         except json.JSONDecodeError:
             payload = {}
         plugins = payload.get("plugins", [])
-        candidates: list[Path] = []
-        if isinstance(plugins, list):
-            for plugin in plugins:
-                if not isinstance(plugin, dict):
-                    continue
-                source = plugin.get("source")
-                if not isinstance(source, dict):
-                    continue
-                raw_path = source.get("path")
-                if not isinstance(raw_path, str) or not raw_path.startswith("./"):
-                    continue
-                candidate = (requested_root / raw_path[2:]).resolve()
-                if _plugin_manifest_path(candidate).is_file():
-                    candidates.append(candidate)
-        unique_candidates = sorted({candidate for candidate in candidates})
-        if len(unique_candidates) == 1:
-            return unique_candidates[0]
+        if not isinstance(plugins, list):
+            continue
+        scope_root = marketplace_path.parent.parent.parent
+        for plugin in plugins:
+            if not isinstance(plugin, dict):
+                continue
+            source = plugin.get("source")
+            if not isinstance(source, dict):
+                continue
+            raw_path = source.get("path")
+            if not isinstance(raw_path, str) or not raw_path.startswith("./"):
+                continue
+            candidate = (scope_root / raw_path[2:]).resolve()
+            if _plugin_manifest_path(candidate).is_file():
+                candidates.append(candidate)
+    unique_candidates = sorted({candidate for candidate in candidates})
+    if len(unique_candidates) == 1:
+        return unique_candidates[0]
 
     discovered = _discover_plugin_roots_under(requested_root)
     if len(discovered) == 1:
@@ -297,8 +316,8 @@ def build_source_plugin_summary(
 def scope_paths(scope: str, plugin_name: str, repo_root: Path | None) -> tuple[Path, Path, Path]:
     if scope == "repo":
         scope_root = repo_root.resolve() if repo_root is not None else Path.cwd().resolve()
-        target_plugin_root = scope_root / "plugins" / plugin_name
-        marketplace_path = scope_root / ".agents" / "plugins" / "marketplace.json"
+        target_plugin_root = _repo_private_plugin_root(scope_root, plugin_name)
+        marketplace_path = _repo_private_marketplace_path(scope_root)
         return scope_root, target_plugin_root, marketplace_path
     if scope == "personal":
         scope_root = _resolve_home()
@@ -306,6 +325,12 @@ def scope_paths(scope: str, plugin_name: str, repo_root: Path | None) -> tuple[P
         marketplace_path = scope_root / ".agents" / "plugins" / "marketplace.json"
         return scope_root, target_plugin_root, marketplace_path
     raise ValueError(f"Unsupported scope: {scope}")
+
+
+def _repo_private_marketplace_name(repo_root: Path) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", repo_root.name.lower()).strip("-") or "repo"
+    digest = hashlib.sha256(str(repo_root).encode("utf-8")).hexdigest()[:8]
+    return f"{REPO_PRIVATE_MARKETPLACE_PREFIX}-{slug}-{digest}"
 
 
 def expected_marketplace_entry(scope_root: Path, target_plugin_root: Path, plugin_name: str, category: str) -> dict[str, object]:
@@ -324,135 +349,20 @@ def expected_marketplace_entry(scope_root: Path, target_plugin_root: Path, plugi
     }
 
 
-def _manifest_relative_paths(manifest: dict[str, object]) -> list[str]:
-    paths: list[str] = []
-    for key in ("skills", "mcpServers", "apps"):
-        raw_path = manifest.get(key)
-        if isinstance(raw_path, str) and raw_path.strip():
-            paths.append(raw_path.strip())
-
-    if isinstance(manifest.get("interface"), dict):
-        interface = manifest["interface"]
-        for field_name in ("composerIcon", "logo"):
-            raw_path = interface.get(field_name)
-            if isinstance(raw_path, str) and raw_path.strip():
-                paths.append(raw_path.strip())
-        screenshots = interface.get("screenshots")
-        if isinstance(screenshots, list):
-            for raw_path in screenshots:
-                if isinstance(raw_path, str) and raw_path.strip():
-                    paths.append(raw_path.strip())
-    return paths
-
-
-def _manifest_path_is_relative(raw_path: str) -> bool:
-    return not Path(raw_path).is_absolute()
-
-
-def _relative_link_target(link_path: Path, target_path: Path) -> str:
-    return os.path.relpath(target_path, start=link_path.parent)
-
-
-def _ensure_symlink(path: Path, target_path: Path) -> bool:
-    expected_target = _relative_link_target(path, target_path)
-    if path.is_symlink() and os.readlink(path) == expected_target:
-        return False
-    if path.exists() or path.is_symlink():
-        _remove_target_path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.symlink_to(expected_target, target_is_directory=target_path.is_dir())
-    return True
-
-
-def _copy_repo_root_plugin_manifest(repo_root: Path, plugin_root: Path) -> bool:
-    root_manifest_path = _plugin_manifest_path(repo_root)
-    if not root_manifest_path.is_file():
-        return False
-    destination = _plugin_manifest_path(plugin_root)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    current = destination.read_text(encoding="utf-8") if destination.is_file() else None
-    updated = root_manifest_path.read_text(encoding="utf-8")
-    if current == updated:
-        return False
-    destination.write_text(updated, encoding="utf-8")
-    return True
-
-
-def _repair_repo_root_plugin_surface(
-    apply_actions: list[dict[str, str]],
-    repo_root: Path,
-    payload: dict[str, object],
-) -> tuple[dict[str, object], bool]:
-    root_manifest_path = _plugin_manifest_path(repo_root)
-    if not root_manifest_path.is_file():
-        return payload, False
-
-    manifest = load_plugin_manifest(repo_root)
-    plugin_name = infer_plugin_name(repo_root, manifest)
-    plugins = payload.get("plugins")
-    if not isinstance(plugins, list):
-        return payload, False
-
-    target_entry: dict[str, object] | None = None
-    for item in plugins:
-        if isinstance(item, dict) and item.get("name") == plugin_name:
-            source = item.get("source")
-            if isinstance(source, dict) and source.get("path") == "./":
-                target_entry = item
-                break
-    if target_entry is None:
-        return payload, False
-
-    plugin_root = repo_root / "plugins" / plugin_name
-    changed = False
-    if _copy_repo_root_plugin_manifest(repo_root, plugin_root):
-        apply_actions.append({"action": "repair-root-plugin-manifest", "path": str(_plugin_manifest_path(plugin_root))})
-        changed = True
-
-    relative_paths = _manifest_relative_paths(manifest)
-    if (repo_root / "hooks").exists():
-        relative_paths.append("./hooks")
-
-    for raw_path in relative_paths:
-        if not _manifest_path_is_relative(raw_path):
-            continue
-        source_path = (repo_root / raw_path).resolve()
-        if not source_path.exists():
-            continue
-        target_path = plugin_root / raw_path
-        if _ensure_symlink(target_path, source_path):
-            apply_actions.append(
-                {
-                    "action": "repair-root-plugin-symlink",
-                    "path": str(target_path),
-                    "source": str(source_path),
-                }
-            )
-            changed = True
-
-    expected_entry = expected_marketplace_entry(repo_root, plugin_root, plugin_name, infer_category(manifest))
-    payload, entry_changed = merge_marketplace_entry(payload, expected_entry)
-    if entry_changed:
-        apply_actions.append(
-            {
-                "action": "repair-root-plugin-marketplace-entry",
-                "path": str(repo_root / ".agents" / "plugins" / "marketplace.json"),
-                "plugin": plugin_name,
-            }
-        )
-        changed = True
-    return payload, changed
-
-
 def expected_marketplace_name(scope: str) -> str:
     if scope == "repo":
-        return DEFAULT_REPO_MARKETPLACE_NAME
+        raise ValueError("Repo scope marketplace names depend on the repo root.")
     return DEFAULT_PERSONAL_MARKETPLACE_NAME
 
 
-def ensure_marketplace_shape(existing: dict[str, object] | None, scope: str) -> dict[str, object]:
+def ensure_marketplace_shape(existing: dict[str, object] | None, scope: str, scope_root: Path | None = None) -> dict[str, object]:
     if existing is None:
-        marketplace_name = expected_marketplace_name(scope)
+        if scope == "repo":
+            if scope_root is None:
+                raise ValueError("Repo scope marketplace creation requires the repo root.")
+            marketplace_name = _repo_private_marketplace_name(scope_root)
+        else:
+            marketplace_name = expected_marketplace_name(scope)
         return {
             "name": marketplace_name,
             "interface": {
@@ -462,7 +372,12 @@ def ensure_marketplace_shape(existing: dict[str, object] | None, scope: str) -> 
         }
     payload = dict(existing)
     if not isinstance(payload.get("name"), str) or not str(payload["name"]).strip():
-        payload["name"] = expected_marketplace_name(scope)
+        if scope == "repo":
+            if scope_root is None:
+                raise ValueError("Repo scope marketplace creation requires the repo root.")
+            payload["name"] = _repo_private_marketplace_name(scope_root)
+        else:
+            payload["name"] = expected_marketplace_name(scope)
     plugins = payload.get("plugins")
     if not isinstance(plugins, list):
         payload["plugins"] = []
@@ -504,9 +419,45 @@ def remove_marketplace_entry(payload: dict[str, object], plugin_name: str) -> tu
     return payload, changed
 
 
+def _legacy_repo_install_entry_for_external_plugin(
+    repo_root: Path,
+    source_plugin_root: Path,
+    plugin_name: str,
+) -> tuple[Path, dict[str, object] | None, dict[str, object] | None]:
+    marketplace_path = _legacy_repo_marketplace_path(repo_root)
+    if _path_within_root(source_plugin_root, repo_root):
+        return marketplace_path, None, None
+    if not marketplace_path.is_file():
+        return marketplace_path, None, None
+    payload = _load_json(marketplace_path)
+    plugins = payload.get("plugins", [])
+    if not isinstance(plugins, list):
+        return marketplace_path, payload, None
+    for item in plugins:
+        if not isinstance(item, dict) or item.get("name") != plugin_name:
+            continue
+        source = item.get("source")
+        if not isinstance(source, dict):
+            continue
+        path = source.get("path")
+        if path == f"./plugins/{plugin_name}":
+            return marketplace_path, payload, item
+    return marketplace_path, payload, None
+
+
 def codex_config_path(config_override: str | None = None) -> Path:
     if config_override is not None:
         return Path(config_override).expanduser().resolve()
+    return (_resolve_home() / CODEX_CONFIG_RELATIVE_PATH).resolve()
+
+
+def scope_codex_config_path(scope: str, repo_root: Path | None, config_override: str | None = None) -> Path:
+    if config_override is not None:
+        return Path(config_override).expanduser().resolve()
+    if scope == "repo":
+        if repo_root is None:
+            repo_root = Path.cwd().resolve()
+        return (repo_root / CODEX_CONFIG_RELATIVE_PATH).resolve()
     return (_resolve_home() / CODEX_CONFIG_RELATIVE_PATH).resolve()
 
 
@@ -578,7 +529,7 @@ def _run_codex_app_server_request(method: str, params: dict[str, object]) -> tup
     return None, f"Codex app-server did not return a `{method}` response."
 
 
-def _read_personal_plugin_state_via_codex_app_server(marketplace_path: Path, plugin_name: str) -> tuple[dict[str, object] | None, str | None]:
+def _read_plugin_state_via_codex_app_server(marketplace_path: Path, plugin_name: str) -> tuple[dict[str, object] | None, str | None]:
     result, error = _run_codex_app_server_request("plugin/list", {"limit": 200})
     if error is not None or result is None:
         return None, error
@@ -613,7 +564,7 @@ def _read_personal_plugin_state_via_codex_app_server(marketplace_path: Path, plu
     return None, f"Codex app-server did not find marketplace `{marketplace_path}`."
 
 
-def _install_personal_plugin_via_codex_app_server(marketplace_path: Path, plugin_name: str) -> str | None:
+def _install_plugin_via_codex_app_server(marketplace_path: Path, plugin_name: str) -> str | None:
     _result, error = _run_codex_app_server_request(
         "plugin/install",
         {
@@ -624,7 +575,7 @@ def _install_personal_plugin_via_codex_app_server(marketplace_path: Path, plugin
     return error
 
 
-def _uninstall_personal_plugin_via_codex_app_server(plugin_key: str) -> str | None:
+def _uninstall_plugin_via_codex_app_server(plugin_key: str) -> str | None:
     _result, error = _run_codex_app_server_request(
         "plugin/uninstall",
         {
@@ -1016,13 +967,13 @@ def audit_install(
     if not source_plugin_root.exists() or not source_plugin_root.is_dir():
         errors.append("Source plugin root does not exist or is not a directory.")
         fallback = requested_source_root
-        return findings, {}, fallback, fallback, fallback, codex_config_path(codex_config_override), None, errors
+        return findings, {}, fallback, fallback, fallback, scope_codex_config_path(scope, repo_root, codex_config_override), None, errors
     if not manifest_path.exists():
         errors.append(
             "Source plugin is missing `.codex-plugin/plugin.json`. For mutating actions, `--source-plugin-root` must point at the canonical plugin root itself; repo-root auto-detection is only supported for `verify`."
         )
         fallback = source_plugin_root
-        return findings, {}, fallback, fallback, fallback, codex_config_path(codex_config_override), None, errors
+        return findings, {}, fallback, fallback, fallback, scope_codex_config_path(scope, repo_root, codex_config_override), None, errors
 
     manifest = load_plugin_manifest(source_plugin_root)
     plugin_name = infer_plugin_name(source_plugin_root, manifest)
@@ -1033,17 +984,17 @@ def audit_install(
     if action == "promote" and scope != "repo":
         errors.append("Promote requires repo scope as the source install surface.")
         fallback = source_plugin_root
-        return findings, source_summary, fallback, fallback, fallback, codex_config_path(codex_config_override), None, errors
+        return findings, source_summary, fallback, fallback, fallback, scope_codex_config_path(scope, repo_root, codex_config_override), None, errors
 
     install_scope = "personal" if action == "promote" else scope
     scope_root, target_plugin_root, marketplace_path = scope_paths(install_scope, plugin_name, repo_root)
 
     if not _path_within_root(target_plugin_root, scope_root):
         errors.append("Target plugin root resolves outside the chosen scope root.")
-        return findings, source_summary, target_plugin_root, marketplace_path, scope_root, codex_config_path(codex_config_override), None, errors
+        return findings, source_summary, target_plugin_root, marketplace_path, scope_root, scope_codex_config_path(install_scope, repo_root, codex_config_override), None, errors
 
     existing_marketplace = _load_json(marketplace_path) if marketplace_path.exists() else None
-    payload = ensure_marketplace_shape(existing_marketplace, install_scope)
+    payload = ensure_marketplace_shape(existing_marketplace, install_scope, scope_root)
     marketplace_name = marketplace_name_from_payload(payload, install_scope)
     expected_entry = expected_marketplace_entry(scope_root, target_plugin_root, plugin_name, infer_category(manifest))
     relative_path = Path(expected_entry["source"]["path"][2:])
@@ -1068,13 +1019,13 @@ def audit_install(
     )
 
     effective_plugin_key: str | None = plugin_config_key(plugin_name, marketplace_name)
-    config_path = codex_config_path(codex_config_override)
+    config_path = scope_codex_config_path(install_scope, repo_root, codex_config_override)
 
     if action in {"enable", "disable"}:
         _audit_plugin_config_state(findings, config_path, effective_plugin_key, desired_enabled=action == "enable")
 
-    if install_scope == "personal" and action in {"install", "update", "verify", "repair", "enable", "disable"}:
-        plugin_state, _plugin_state_error = _read_personal_plugin_state_via_codex_app_server(marketplace_path, plugin_name)
+    if action in {"install", "update", "verify", "repair", "enable", "disable"}:
+        plugin_state, _plugin_state_error = _read_plugin_state_via_codex_app_server(marketplace_path, plugin_name)
         if isinstance(plugin_state, dict) and plugin_state.get("installed") is False:
             findings.append(
                 Finding(
@@ -1084,10 +1035,25 @@ def audit_install(
                 )
             )
 
+    if install_scope == "repo":
+        legacy_marketplace_path, _legacy_payload, legacy_entry = _legacy_repo_install_entry_for_external_plugin(
+            scope_root,
+            source_plugin_root,
+            plugin_name,
+        )
+        if legacy_entry is not None:
+            findings.append(
+                Finding(
+                    str(legacy_marketplace_path),
+                    "legacy-repo-marketplace-entry",
+                    f"Repo product marketplace still advertises installed plugin `{plugin_name}`. Run `repair` to remove that repo-local advertising entry.",
+                )
+            )
+
     if action == "promote":
         repo_scope_root, repo_target_plugin_root, repo_marketplace_path = scope_paths("repo", plugin_name, repo_root)
         repo_existing_marketplace = _load_json(repo_marketplace_path) if repo_marketplace_path.exists() else None
-        repo_payload = ensure_marketplace_shape(repo_existing_marketplace, "repo")
+        repo_payload = ensure_marketplace_shape(repo_existing_marketplace, "repo", repo_scope_root)
         repo_expected_entry = expected_marketplace_entry(repo_scope_root, repo_target_plugin_root, plugin_name, infer_category(manifest))
         _audit_install_surface(
             findings=findings,
@@ -1104,10 +1070,11 @@ def audit_install(
         )
         repo_marketplace_name = marketplace_name_from_payload(repo_payload, "repo")
         repo_plugin_key = plugin_config_key(plugin_name, repo_marketplace_name)
-        if read_plugin_enabled_state(config_path, repo_plugin_key) is None:
+        repo_config_path = scope_codex_config_path("repo", repo_scope_root, codex_config_override)
+        if read_plugin_enabled_state(repo_config_path, repo_plugin_key) is None:
             findings.append(
                 Finding(
-                    str(config_path),
+                    str(repo_config_path),
                     "missing-plugin-enabled-state",
                     f"Codex config does not include an explicit enabled state for `{repo_plugin_key}`. Promote will default the personal install to enabled unless you set it first.",
                 )
@@ -1206,30 +1173,30 @@ def apply_install(
     if not source_plugin_root.exists() or not source_plugin_root.is_dir():
         errors.append("Source plugin root does not exist or is not a directory.")
         fallback = requested_source_root
-        return apply_actions, {}, fallback, fallback, codex_config_path(codex_config_override), None, errors
+        return apply_actions, {}, fallback, fallback, scope_codex_config_path(scope, repo_root, codex_config_override), None, errors
     if not manifest_path.exists():
         errors.append(
             "Source plugin is missing `.codex-plugin/plugin.json`. For mutating actions, `--source-plugin-root` must point at the canonical plugin root itself; repo-root auto-detection is only supported for `verify`."
         )
         fallback = source_plugin_root
-        return apply_actions, {}, fallback, fallback, codex_config_path(codex_config_override), None, errors
+        return apply_actions, {}, fallback, fallback, scope_codex_config_path(scope, repo_root, codex_config_override), None, errors
 
     manifest = load_plugin_manifest(source_plugin_root)
     plugin_name = infer_plugin_name(source_plugin_root, manifest)
     source_summary = build_source_plugin_summary(requested_source_root, source_plugin_root, manifest, plugin_name)
-    config_path = codex_config_path(codex_config_override)
 
     if action == "promote" and scope != "repo":
         errors.append("Promote requires repo scope as the source install surface.")
         fallback = source_plugin_root
-        return apply_actions, source_summary, fallback, fallback, config_path, None, errors
+        return apply_actions, source_summary, fallback, fallback, scope_codex_config_path(scope, repo_root, codex_config_override), None, errors
 
     install_scope = "personal" if action == "promote" else scope
     scope_root, target_plugin_root, marketplace_path = scope_paths(install_scope, plugin_name, repo_root)
     existing_marketplace = _load_json(marketplace_path) if marketplace_path.exists() else None
-    payload = ensure_marketplace_shape(existing_marketplace, install_scope)
+    payload = ensure_marketplace_shape(existing_marketplace, install_scope, scope_root)
     expected_entry = expected_marketplace_entry(scope_root, target_plugin_root, plugin_name, infer_category(manifest))
     marketplace_name = marketplace_name_from_payload(payload, install_scope)
+    config_path = scope_codex_config_path(install_scope, repo_root, codex_config_override)
     plugin_key: str | None = plugin_config_key(plugin_name, marketplace_name)
 
     if action in {"install", "update", "repair"}:
@@ -1241,43 +1208,50 @@ def apply_install(
         except ValueError as exc:
             errors.append(str(exc))
             return apply_actions, source_summary, target_plugin_root, marketplace_path, config_path, plugin_key, errors
-        repair_changed = False
-        if action == "repair" and install_scope == "repo":
-            payload, repair_changed = _repair_repo_root_plugin_surface(apply_actions, scope_root, payload)
         payload, changed = merge_marketplace_entry(payload, expected_entry)
         marketplace_name = marketplace_name_from_payload(payload, install_scope)
         plugin_key = plugin_config_key(plugin_name, marketplace_name)
-        if changed or repair_changed or not marketplace_path.exists():
+        if changed or not marketplace_path.exists():
             _write_json(marketplace_path, payload)
             apply_actions.append({"action": "write-marketplace-entry", "path": str(marketplace_path)})
-        if action == "install" and install_scope == "personal" and plugin_key is not None:
+        if action == "install" and plugin_key is not None:
             write_plugin_enabled_state(config_path, plugin_key, True)
             apply_actions.append(
                 {"action": "write-plugin-enabled-state", "path": str(config_path), "plugin_key": plugin_key, "enabled": "true"}
             )
-        if install_scope == "personal":
-            install_error = _install_personal_plugin_via_codex_app_server(marketplace_path, plugin_name)
-            if install_error is None:
-                apply_actions.append(
-                    {
-                        "action": "codex-plugin-install",
-                        "path": str(marketplace_path),
-                        "plugin_name": plugin_name,
-                    }
-                )
-            else:
-                apply_actions.append(
-                    {
-                        "action": "codex-plugin-install-fallback",
-                        "path": str(marketplace_path),
-                        "plugin_name": plugin_name,
-                        "message": install_error,
-                    }
-                )
+        install_error = _install_plugin_via_codex_app_server(marketplace_path, plugin_name)
+        if install_error is None:
+            apply_actions.append(
+                {
+                    "action": "codex-plugin-install",
+                    "path": str(marketplace_path),
+                    "plugin_name": plugin_name,
+                }
+            )
+        else:
+            apply_actions.append(
+                {
+                    "action": "codex-plugin-install-fallback",
+                    "path": str(marketplace_path),
+                    "plugin_name": plugin_name,
+                    "message": install_error,
+                }
+            )
+        if install_scope == "repo":
+            legacy_marketplace_path, legacy_payload, legacy_entry = _legacy_repo_install_entry_for_external_plugin(
+                scope_root,
+                source_plugin_root,
+                plugin_name,
+            )
+            if legacy_payload is not None and legacy_entry is not None:
+                legacy_payload, legacy_changed = remove_marketplace_entry(legacy_payload, plugin_name)
+                if legacy_changed:
+                    _write_json(legacy_marketplace_path, legacy_payload)
+                    apply_actions.append({"action": "remove-legacy-repo-marketplace-entry", "path": str(legacy_marketplace_path)})
 
     elif action == "uninstall":
-        if install_scope == "personal" and plugin_key is not None:
-            uninstall_error = _uninstall_personal_plugin_via_codex_app_server(plugin_key)
+        if plugin_key is not None:
+            uninstall_error = _uninstall_plugin_via_codex_app_server(plugin_key)
             if uninstall_error is None:
                 apply_actions.append({"action": "codex-plugin-uninstall", "plugin_key": plugin_key})
             else:
@@ -1295,6 +1269,17 @@ def apply_install(
         if changed:
             _write_json(marketplace_path, payload)
             apply_actions.append({"action": "uninstall-marketplace-entry", "path": str(marketplace_path)})
+        if install_scope == "repo":
+            legacy_marketplace_path, legacy_payload, legacy_entry = _legacy_repo_install_entry_for_external_plugin(
+                scope_root,
+                source_plugin_root,
+                plugin_name,
+            )
+            if legacy_payload is not None and legacy_entry is not None:
+                legacy_payload, legacy_changed = remove_marketplace_entry(legacy_payload, plugin_name)
+                if legacy_changed:
+                    _write_json(legacy_marketplace_path, legacy_payload)
+                    apply_actions.append({"action": "remove-legacy-repo-marketplace-entry", "path": str(legacy_marketplace_path)})
         if plugin_key is not None and remove_plugin_enabled_state(config_path, plugin_key):
             apply_actions.append({"action": "remove-plugin-enabled-state", "path": str(config_path), "plugin_key": plugin_key})
 
@@ -1309,10 +1294,11 @@ def apply_install(
     elif action == "promote":
         repo_scope_root, repo_target_plugin_root, repo_marketplace_path = scope_paths("repo", plugin_name, repo_root)
         repo_existing_marketplace = _load_json(repo_marketplace_path) if repo_marketplace_path.exists() else None
-        repo_payload = ensure_marketplace_shape(repo_existing_marketplace, "repo")
+        repo_payload = ensure_marketplace_shape(repo_existing_marketplace, "repo", repo_scope_root)
         repo_marketplace_name = marketplace_name_from_payload(repo_payload, "repo")
         repo_plugin_key = plugin_config_key(plugin_name, repo_marketplace_name)
-        repo_enabled_state = read_plugin_enabled_state(config_path, repo_plugin_key)
+        repo_config_path = scope_codex_config_path("repo", repo_scope_root, codex_config_override)
+        repo_enabled_state = read_plugin_enabled_state(repo_config_path, repo_plugin_key)
 
         if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode("personal", _resolve_home(), target_plugin_root):
             errors.append("Personal scope symlink mode is blocked by the current staged target path.")
@@ -1340,7 +1326,7 @@ def apply_install(
                 "enabled": "true" if repo_enabled_state is None else ("true" if repo_enabled_state else "false"),
             }
         )
-        install_error = _install_personal_plugin_via_codex_app_server(marketplace_path, plugin_name)
+        install_error = _install_plugin_via_codex_app_server(marketplace_path, plugin_name)
         if install_error is None:
             apply_actions.append(
                 {
@@ -1367,8 +1353,18 @@ def apply_install(
             if repo_changed:
                 _write_json(repo_marketplace_path, repo_payload)
                 apply_actions.append({"action": "uninstall-marketplace-entry", "path": str(repo_marketplace_path)})
-        if remove_plugin_enabled_state(config_path, repo_plugin_key):
-            apply_actions.append({"action": "remove-plugin-enabled-state", "path": str(config_path), "plugin_key": repo_plugin_key})
+        if remove_plugin_enabled_state(repo_config_path, repo_plugin_key):
+            apply_actions.append({"action": "remove-plugin-enabled-state", "path": str(repo_config_path), "plugin_key": repo_plugin_key})
+        legacy_marketplace_path, legacy_payload, legacy_entry = _legacy_repo_install_entry_for_external_plugin(
+            repo_scope_root,
+            source_plugin_root,
+            plugin_name,
+        )
+        if legacy_payload is not None and legacy_entry is not None:
+            legacy_payload, legacy_changed = remove_marketplace_entry(legacy_payload, plugin_name)
+            if legacy_changed:
+                _write_json(legacy_marketplace_path, legacy_payload)
+                apply_actions.append({"action": "remove-legacy-repo-marketplace-entry", "path": str(legacy_marketplace_path)})
 
     elif action == "verify":
         pass
