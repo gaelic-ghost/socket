@@ -20,8 +20,16 @@ REQUIRED_STRINGS = [
 
 
 def discover_xcode_state(repo_root: Path) -> dict:
-    workspaces = sorted(str(path) for path in repo_root.rglob("*.xcworkspace"))
-    projects = sorted(str(path) for path in repo_root.rglob("*.xcodeproj"))
+    workspaces = sorted(
+        str(path)
+        for path in repo_root.iterdir()
+        if path.suffix == ".xcworkspace"
+    )
+    projects = sorted(
+        str(path)
+        for path in repo_root.iterdir()
+        if path.suffix == ".xcodeproj"
+    )
     return {
         "workspace": workspaces[0] if workspaces else None,
         "project": projects[0] if projects else None,

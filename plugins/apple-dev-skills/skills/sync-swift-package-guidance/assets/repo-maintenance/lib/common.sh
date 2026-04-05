@@ -1,8 +1,15 @@
 #!/usr/bin/env sh
 set -eu
 
-COMMON_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-REPO_MAINTENANCE_ROOT=$(CDPATH= cd -- "$COMMON_DIR/.." && pwd)
+COMMON_DIR=${SELF_DIR:-$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)}
+case "$(basename -- "$COMMON_DIR")" in
+  repo-maintenance)
+    REPO_MAINTENANCE_ROOT=$COMMON_DIR
+    ;;
+  *)
+    REPO_MAINTENANCE_ROOT=$(CDPATH= cd -- "$COMMON_DIR/.." && pwd)
+    ;;
+esac
 REPO_ROOT=$(CDPATH= cd -- "$REPO_MAINTENANCE_ROOT/../.." && pwd)
 
 log() {

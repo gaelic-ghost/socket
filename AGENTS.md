@@ -12,6 +12,7 @@
 - Prefer `swift package` CLI commands for structural changes whenever the command exists.
 - Use `swift package add-dependency` to add dependencies instead of hand-editing package graphs.
 - Use `swift package add-target` to add library, executable, or test targets.
+- Use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, and `scripts/repo-maintenance/release.sh` for releases.
 - For package configuration not covered by CLI commands, update `Package.swift` intentionally and keep edits minimal.
 - Keep package graph updates together in the same change (`Package.swift`, `Package.resolved`, and target/test layout when applicable).
 - Validate package changes with:

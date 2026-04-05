@@ -4,6 +4,7 @@
 
 - Treat `Package.swift` at the requested repo root as the primary package marker.
 - Treat `.xcodeproj` or `.xcworkspace` markers at the same repo root as an ambiguity signal, not as a package-sync success condition.
+- Ignore dependency and build-artifact directories such as `.build/` when looking for Xcode markers so SwiftPM checkouts do not falsely block guidance sync.
 - Prefer an explicit package-root path when a larger mono-repo contains both app and package surfaces.
 
 ## Boundaries

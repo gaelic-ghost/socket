@@ -25,8 +25,16 @@ def load_effective_config() -> dict:
 
 
 def discover_repo_state(repo_root: Path) -> dict:
-    workspaces = sorted(str(path) for path in repo_root.rglob("*.xcworkspace"))
-    projects = sorted(str(path) for path in repo_root.rglob("*.xcodeproj"))
+    workspaces = sorted(
+        str(path)
+        for path in repo_root.iterdir()
+        if path.suffix == ".xcworkspace"
+    )
+    projects = sorted(
+        str(path)
+        for path in repo_root.iterdir()
+        if path.suffix == ".xcodeproj"
+    )
     return {
         "package_manifest": str(repo_root / "Package.swift") if (repo_root / "Package.swift").exists() else None,
         "workspace": workspaces[0] if workspaces else None,

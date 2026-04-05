@@ -293,6 +293,8 @@ The design is deliberately direct. Adding extra wrappers, managers, or intermedi
 
 For repository maintenance, treat this standalone repository as the source of truth for package development, tags, and releases. When the `speak-to-user` monorepo adopts a new server version, prefer bumping that submodule pointer to a tagged `SpeakSwiftlyServer` release rather than a floating branch tip.
 
+The repo-maintenance toolkit is now the maintainer-facing wrapper around that release flow. Use `scripts/repo-maintenance/validate-all.sh` for local validation, `scripts/repo-maintenance/sync-shared.sh` for deterministic repo-local sync hooks, and `scripts/repo-maintenance/release.sh` for the tagged release path after verification passes.
+
 ## Repository Layout
 
 - `Sources/` contains the executable target and the HTTP, MCP, and host layers that share one runtime owner.
@@ -303,7 +305,13 @@ For repository maintenance, treat this standalone repository as the source of tr
 
 ## Verification
 
-Current baseline checks:
+Current local maintainer baseline:
+
+```bash
+scripts/repo-maintenance/validate-all.sh
+```
+
+The package-level verification path that toolkit wraps is still:
 
 ```bash
 swift build
@@ -325,6 +333,8 @@ That serialized live suite now mirrors the main `SpeakSwiftly` sequential workfl
 If you want the underlying playback trace logs too, add `SPEAKSWIFTLY_PLAYBACK_TRACE=1` to that same command.
 
 That live path expects the sibling [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout to have already been built with Xcode at least once so `../SpeakSwiftly/.derived/Build/Products/Debug/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib` exists for the server process.
+
+After the live suite passes, use `scripts/repo-maintenance/release.sh` for the tagged release flow so local validation, tag creation, push, and GitHub release creation stay on the same documented path.
 
 The remaining coverage work is now narrower and more cleanup-focused. The main open checks are trimming any transport-local wrappers that no longer buy clarity and expanding end-to-end assertions when the sibling runtime surface settles again.
 
