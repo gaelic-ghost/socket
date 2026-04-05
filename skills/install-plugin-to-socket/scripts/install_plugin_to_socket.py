@@ -480,7 +480,7 @@ def _run_codex_app_server_request(method: str, params: dict[str, object]) -> tup
                         "clientInfo": {
                             "name": "agent-plugin-skills",
                             "title": "Agent Plugin Skills",
-                            "version": "0.4.8",
+                            "version": "0.4.9",
                         }
                     },
                 }
