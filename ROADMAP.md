@@ -41,6 +41,7 @@
 - [ ] Milestone 26: Swift and Xcode Testing Offload Workflow
 - [x] Milestone 27: Customization Surface Simplification Implementation
 - [x] Milestone 28: Repo Maintenance Toolkit Skill
+- [x] Milestone 29: Shared Toolkit Extraction to `productivity-skills`
 
 ## Milestone 1: Initial Apple Skill Bundle
 
@@ -543,11 +544,11 @@ Exit criteria:
 
 Scope:
 
-- Add a reusable local-first maintainer toolkit skill for Swift and Xcode repositories, then wire the bootstrap and guidance-sync skills to install or refresh that toolkit in target repos.
+- Add a reusable local-first maintainer toolkit integration for Swift and Xcode repositories, then wire the bootstrap and guidance-sync skills to install or refresh that toolkit in target repos.
 
 Tickets:
 
-- Add `repo-maintenance-toolkit` as an active top-level skill with a managed `scripts/repo-maintenance/` asset tree.
+- Add a managed `scripts/repo-maintenance/` asset tree and thin GitHub workflow wrapper for Apple repo bootstraps and guidance-sync runs.
 - Ship a thin GitHub workflow wrapper that calls the local validation entrypoint instead of owning logic itself.
 - Add standard and submodule-aware release flows to the managed toolkit.
 - Update bootstrap and guidance-sync skills to install or refresh the toolkit in target repos.
@@ -555,7 +556,28 @@ Tickets:
 
 Exit criteria:
 
-- The repo ships an independently usable `repo-maintenance-toolkit` skill.
 - Successful bootstrap and guidance-sync runs install or refresh the managed toolkit in target repos.
-- Root docs, maintainer docs, and validation all describe the same eight-skill active surface.
-- Completed 2026-04-05 by shipping the toolkit skill, adding managed repo-maintenance assets, and wiring bootstrap and sync workflows to install or refresh them.
+- The Apple repo keeps a canonical vendored toolkit snapshot for its integration surfaces.
+- Root docs, maintainer docs, and validation all describe the same Apple-specific integration surface.
+- Completed 2026-04-05 by shipping the toolkit assets, adding managed repo-maintenance resources, and wiring bootstrap and sync workflows to install or refresh them.
+
+## Milestone 29: Shared Toolkit Extraction to `productivity-skills`
+
+Scope:
+
+- Move the standalone shared `repo-maintenance-toolkit` skill into `../productivity-skills` because it is globally useful rather than Apple-specific.
+- Keep `apple-dev-skills` focused on Apple workflow skills while preserving self-contained bootstrap and guidance-sync integrations.
+
+Tickets:
+
+- Add `repo-maintenance-toolkit` as an active shared skill in `../productivity-skills`.
+- Remove `repo-maintenance-toolkit` from the Apple repo's active skill inventory.
+- Vendor the managed toolkit snapshot under `shared/repo-maintenance-toolkit/` so Apple bootstrap and sync workflows stay independently usable.
+- Realign docs, roadmap notes, validators, and tests in both repos to match the new ownership boundary.
+
+Exit criteria:
+
+- `productivity-skills` is the canonical home of the standalone `repo-maintenance-toolkit` skill.
+- Successful bootstrap and guidance-sync runs install or refresh the managed toolkit in target repos.
+- `apple-dev-skills` no longer presents the toolkit as an active top-level skill, but still keeps the vendored integration snapshot needed for standalone Apple workflows.
+- Completed 2026-04-05 by extracting the shared skill to `productivity-skills`, vendoring the Apple snapshot under `shared/repo-maintenance-toolkit/`, and re-aligning both repos' docs and tests.

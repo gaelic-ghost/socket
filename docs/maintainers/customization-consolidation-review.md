@@ -8,12 +8,12 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 
 ## Current State Summary
 
-- The active skill surface ships `8` separate `references/customization.template.yaml` files.
-- The active skill surface ships `8` separate `scripts/customization_config.py` entrypoints.
+- The active skill surface ships `7` separate `references/customization.template.yaml` files.
+- The active skill surface ships `7` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `12` knobs total:
+- The current templates expose `11` knobs total:
   - `10` are documented as `runtime-enforced`
-  - `2` are documented as `policy-only`
+  - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference
   - inference candidate
@@ -68,9 +68,6 @@ The decision is:
   - `writeMode`
 - `sync-swift-package-guidance`
   - `writeMode`
-- `repo-maintenance-toolkit`
-  - `defaultReleaseMode`
-
 These are the knobs most likely to reflect real user preference instead of hidden implementation detail.
 
 ### Implemented As Inference, Fixed Workflow Defaults, Or Explicit Invocation Inputs
@@ -150,6 +147,13 @@ If the repo still wants less duplication after the surface shrinks, the approved
 - keep one canonical maintainer source template
 - generate or sync local per-skill `customization_config.py` copies during maintainer work
 - keep the installed skill self-contained
+
+## Post-Extraction Note
+
+The shared `repo-maintenance-toolkit` skill was later extracted into `../productivity-skills` because it is globally useful rather than Apple-specific.
+
+- `apple-dev-skills` no longer counts that skill in its active customization surface
+- this repo still vendors the managed toolkit snapshot under `shared/repo-maintenance-toolkit/` so the Apple bootstrap and guidance-sync skills can stay independently usable
 
 ## Follow-Up Plan
 

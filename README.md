@@ -10,8 +10,6 @@ Canonical Apple development skills with a plugin-first packaging layout for Code
   - Top-level docs skill for Apple and Swift docs exploration across Xcode MCP docs, Dash, and official web docs, with optional Dash follow-up when needed.
 - `swift-style-tooling-workflow`
   - Top-level skill for integrating SwiftLint and SwiftFormat across CLI, Xcode, SwiftPM, Git hooks, GitHub Actions, and SwiftFormat config export.
-- `repo-maintenance-toolkit`
-  - Top-level skill for installing or refreshing a local-first repo-maintenance toolkit with validate, sync, and release entrypoints plus a thin GitHub workflow wrapper.
 - `bootstrap-swift-package`
   - Top-level skill for new Swift package scaffolding only, with verification and `AGENTS.md` generation.
 - `bootstrap-xcode-app-project`
@@ -176,8 +174,8 @@ Common starting points:
   `npx skills add gaelic-ghost/apple-dev-skills --skill sync-xcode-project-guidance`
 - Existing Swift package repo guidance sync:
   `npx skills add gaelic-ghost/apple-dev-skills --skill sync-swift-package-guidance`
-- Local-first repo-maintenance toolkit:
-  `npx skills add gaelic-ghost/apple-dev-skills --skill repo-maintenance-toolkit`
+- Shared repo-maintenance toolkit:
+  `npx skills add gaelic-ghost/productivity-skills --skill repo-maintenance-toolkit`
 
 ## Migration
 
@@ -192,7 +190,7 @@ This repo previously experimented with a router layer and later removed it.
 | `apple-dash-docsets` | removed in `v4.0.0`; use `explore-apple-swift-docs` |
 | `apple-swift-package-bootstrap` | removed in `v4.0.0`; use `bootstrap-swift-package` |
 
-The current active skill surface now includes the repo-maintenance toolkit alongside the guidance-sync and bootstrap surfaces.
+The shared repo-maintenance toolkit now lives in `../productivity-skills`. This repository keeps a vendored toolkit snapshot under `shared/repo-maintenance-toolkit/` so the Apple bootstrap and guidance-sync skills can still install or refresh the same managed file set without depending on a second repo at runtime.
 
 ## AGENTS Guidance
 
@@ -239,14 +237,14 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
 │       ├── hooks/
 │       └── skills -> ../../skills
 ├── shared/
-│   └── agents-snippets/
-│       ├── apple-swift-package-core.md
-│       └── apple-xcode-project-core.md
+│   ├── agents-snippets/
+│   │   ├── apple-swift-package-core.md
+│   │   └── apple-xcode-project-core.md
+│   └── repo-maintenance-toolkit/
 └── skills/
     ├── bootstrap-xcode-app-project/
     ├── bootstrap-swift-package/
     ├── explore-apple-swift-docs/
-    ├── repo-maintenance-toolkit/
     ├── swift-style-tooling-workflow/
     ├── sync-swift-package-guidance/
     ├── sync-xcode-project-guidance/

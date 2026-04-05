@@ -22,7 +22,6 @@ flowchart TD
     A --> X["xcode-app-project-workflow"]
     A --> D["explore-apple-swift-docs"]
     A --> ST["swift-style-tooling-workflow"]
-    A --> RM["repo-maintenance-toolkit"]
     A --> B["bootstrap-swift-package"]
     A --> AX["bootstrap-xcode-app-project"]
     A --> SX["sync-xcode-project-guidance"]
@@ -36,7 +35,6 @@ flowchart TD
     D --> DT["May recommend swift-style-tooling-workflow when docs work turns into style-tooling setup"]
     ST --> SXD["May recommend xcode-app-project-workflow when setup becomes active Xcode work"]
     ST --> STB["May recommend bootstrap skills when the user actually needs a full project scaffold"]
-    RM --> RMD["May recommend bootstrap or sync skills when the repo still lacks baseline project or AGENTS setup"]
     D --> DB["May recommend bootstrap-xcode-app-project"]
     B --> BX["May recommend xcode-app-project-workflow"]
     B --> BS["May recommend sync-swift-package-guidance after bootstrap or later repo-guidance drift"]
@@ -52,10 +50,11 @@ flowchart TD
 ### Branch and Path Notes
 
 - The repo has no Apple router or orchestrator layer.
-- The eight active skills are parallel top-level entry points for different situations.
+- The seven active skills are parallel top-level entry points for different situations.
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
+- The shared repo-maintenance toolkit is now external to the active Apple skill surface and is vendored locally under `shared/repo-maintenance-toolkit/` so bootstrap and sync skills can keep installing the same managed file set without a cross-repo runtime dependency.
 
 ### Packaging and Delegation Notes
 
@@ -91,7 +90,7 @@ flowchart TD
 - User-visible response:
   - The user sees direct progress inside one of the eight top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-  - The repo-level UX is a bundle of eight parallel top-level skills, with plugin packaging layered around them as the install surface.
+  - The repo-level UX is a bundle of seven parallel top-level skills, with plugin packaging layered around them as the install surface.
 
 ## `xcode-app-project-workflow`
 
@@ -325,79 +324,6 @@ flowchart TD
 - `success` + `fallback`: a documented secondary path was selected, such as the SwiftFormat shared-defaults export script
 - `handoff`: bootstrap, sync, or Xcode execution should take over next
 - `blocked`: the requested tool and surface combination is unsupported or the export prerequisites are missing
-
-## `repo-maintenance-toolkit`
-
-### Purpose
-
-Install or refresh a reusable local-first maintainer toolkit so validation, shared-sync work, and release flows live in repo-owned scripts instead of CI-only wrappers.
-
-### Workflow Diagram
-
-```mermaid
-flowchart TD
-    I["Repo-maintenance input"] --> RW["run_workflow.py"]
-    RW --> C{"Operation"}
-    C -->|install or refresh| INST["install_repo_maintenance_toolkit.py"]
-    C -->|report-only| REP["Non-mutating report"]
-    INST --> OK{"Managed files safe to write?"}
-    OK -->|Yes| OUT1["Success / primary"]
-    OK -->|No| BL["Blocked"]
-    REP --> OUT2["Success / fallback"]
-```
-
-### Branch and Path Notes
-
-- `scripts/run_workflow.py` is the local runtime entrypoint.
-- `scripts/install_repo_maintenance_toolkit.py` owns the managed file list and preserves repo-specific extra files.
-- The toolkit installs `scripts/repo-maintenance/` plus a thin `.github/workflows/validate-repo-maintenance.yml` wrapper by default.
-- The release entrypoint supports both `standard` and `submodule` modes.
-
-### Inputs
-
-- Required:
-  - `repo_root`
-- Optional:
-  - `operation`
-  - `skip_github_workflow`
-  - `dry_run`
-- Defaults:
-  - repo-maintainer runtime entrypoint `scripts/run_workflow.py`
-  - `operation=install`
-  - GitHub workflow wrapper installation enabled
-
-### Outputs
-
-- `status`
-  - `success`
-  - `blocked`
-- `path_type`
-  - `primary`
-  - `fallback`
-- Primary output fields:
-  - repo root
-  - managed file list
-  - applied or planned actions
-  - next step
-
-### Agent ↔ User UX
-
-- Entry:
-  - The user asks for reusable repo-maintenance scripts, local-first validation, or a standard release flow.
-- Agent behavior:
-  - The agent runs `run_workflow.py`, applies the managed toolkit when allowed, and explains the resulting local entrypoints.
-- User-visible response:
-  - On success: the user sees which files were installed or refreshed and which local commands now own validation and release work.
-  - On fallback: the user sees the planned file set without mutation.
-  - On blocked: the user sees the exact path conflict or repo-root problem.
-- Interaction style:
-  - Local-first maintainer toolkit installer with a thin CI wrapper.
-
-### Failure / Fallback / Handoff States
-
-- `success` + `primary`: managed toolkit files were installed or refreshed
-- `success` + `fallback`: report-only result returned without mutation
-- `blocked`: repo-root or managed-path precondition failed
 
 ## `bootstrap-xcode-app-project`
 
