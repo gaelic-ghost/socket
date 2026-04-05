@@ -1,0 +1,13 @@
+{
+  "name": "productivity-skills",
+  "owner": {
+    "name": "Gale"
+  },
+  "plugins": [
+    {
+      "name": "productivity-skills",
+      "source": "./plugins/productivity-skills",
+      "description": "Broadly useful productivity workflows for Codex and Claude Code."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "productivity-skills",
-  "version": "4.0.0-rc.3",
+  "version": "4.0.0",
   "description": "Broadly useful productivity skills packaged for Codex and Claude Code.",
   "author": {
     "name": "Gale",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Broadly useful productivity workflows for global install.",
-    "longDescription": "Prerelease plugin packaging for globally useful productivity workflows shared across Codex and Claude Code.",
+    "longDescription": "Plugin packaging for globally useful productivity workflows shared across Codex and Claude Code.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [

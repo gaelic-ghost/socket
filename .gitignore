@@ -1,2 +1,5 @@
 tts_outputs/
 **/config/customization.yaml
+# Agent plugin repo local runtime state
+.codex/plugins/
+.claude/settings.local.json

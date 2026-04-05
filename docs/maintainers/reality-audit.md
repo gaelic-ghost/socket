@@ -62,6 +62,7 @@ All active repo-authored skills live under `skills/`.
 - `.agents/skills`
 - `.claude/skills`
 - `.agents/plugins/marketplace.json`
+- `.claude-plugin/marketplace.json`
 
 ### Maintainer Surfaces
 
@@ -143,6 +144,7 @@ Use these conventions when editing repo-maintainer guidance.
 ### Python execution baseline
 
 - Use `uv run` for Python commands. In this repository, prefer the root dev baseline for maintainer workflows (`uv run --group dev pytest`, `uv run --group dev python`) unless project docs explicitly require otherwise.
+- Keep `ruff` and `mypy` available through `uv tool install` when maintainer validation needs standalone lint or type-check passes.
 
 ### Safety defaults
 
@@ -181,3 +183,4 @@ Use these conventions when editing repo-maintainer guidance.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
 - `plugins/productivity-skills/skills` is a POSIX symlink mirror into root `skills/`.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/productivity-skills/`.
+- `.claude-plugin/marketplace.json` is the repo-root Claude marketplace catalog for Git-backed sharing of this repository's tracked plugin roots.

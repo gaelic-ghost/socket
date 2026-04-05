@@ -11,6 +11,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - `.agents/skills` and `.claude/skills` mirror root `skills/` for local project discovery on macOS and Linux.
 - `plugins/productivity-skills/skills` mirrors root `skills/` for local plugin packaging alignment.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree rather than at the repository root.
+- `.claude-plugin/marketplace.json` is the repo-root Claude marketplace catalog for Git-backed sharing, while direct local Claude development still uses `claude --plugin-dir`.
 
 ## Product Direction
 

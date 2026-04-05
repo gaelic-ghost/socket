@@ -31,6 +31,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 13: `bootstrap-skills-plugin-repo` (moved to `agent-plugin-skills` and removed from local inventory)
 - [ ] Milestone 14: Claude Code optimization pass
 - [x] Milestone 15: Claude plugin support (completed)
+- [x] Milestone 16: Use `agent-plugin-skills` plugin to align repo with skills/plugin repo standards (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -377,3 +378,20 @@ Exit criteria:
 
 - Add lightweight validation tooling for SKILL/frontmatter/openai.yaml alignment.
 - Add validation checks for README layout and skill inventory consistency.
+
+## Milestone 16: Use `agent-plugin-skills` plugin to align repo with skills/plugin repo standards
+
+Scope:
+
+- Use the repo-scoped `agent-plugin-skills` plugin to audit and align this repository with the current shared skills/plugin repo standards.
+
+Tickets:
+
+- [x] Use the repo-local `sync-skills-repo-guidance` workflow from `plugins/agent-plugin-skills/` to audit the current repo surfaces.
+- [x] Add the missing repo-root Claude marketplace catalog and document `claude --plugin-dir` versus Git-backed marketplace sharing.
+- [x] Align repo docs, packaging surfaces, ignore rules, and maintainer Python guidance with the current shared standards without flattening repo-specific policy.
+
+Exit criteria:
+
+- [x] The repository validates cleanly against the current shared skills/plugin repo standards.
+- [x] Repo docs, plugin packaging, marketplace wiring, and maintainer guidance describe the same live behavior.

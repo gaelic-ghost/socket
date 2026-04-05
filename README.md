@@ -84,12 +84,29 @@ Helpful docs for this packaging model:
 - Claude Code Skills: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills)
 - Claude Code Plugins: [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)
 
+## Install Surfaces
+
+Repo-local packaging and personal local installs are different surfaces and the docs should keep them separate:
+
+- repo-local packaged plugin root: `plugins/productivity-skills/`
+- repo-local Codex marketplace: `.agents/plugins/marketplace.json`
+- personal Codex install root: `~/.codex/plugins/productivity-skills`
+- personal Codex marketplace: `~/.agents/plugins/marketplace.json`
+
+This repository also tracks a repo-root Claude marketplace catalog at `.claude-plugin/marketplace.json` for Git-backed sharing, while direct local Claude development should still use `claude --plugin-dir /absolute/path/to/plugins/productivity-skills`.
+
+Track canonical plugin source trees and shared marketplace catalogs in git. Keep consumer-side install copies, caches, and machine-local runtime state out of git.
+
+Local Codex install lifecycle work such as install, update, uninstall, verify, enable, disable, and promote belongs to the dedicated maintainer workflow in `install-plugin-to-socket`, not to this repository's bootstrap or sync guidance.
+
 ## Maintainer Python Tooling
 
 This repository standardizes maintainer-side Python tooling around `uv`.
 
 ```bash
 uv sync --dev
+uv tool install ruff
+uv tool install mypy
 uv run --group dev pytest
 ```
 
@@ -102,6 +119,8 @@ uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scrip
 ## Install
 
 Standalone skill installation is handled through the Vercel `skills` CLI against root [`skills/`](./skills). Plugin packaging and local marketplace wiring target [`plugins/productivity-skills/`](./plugins/productivity-skills). For local project discovery on macOS and Linux, this repo also exposes `.agents/skills` and `.claude/skills` as symlink mirrors into root `skills/`.
+
+For local Codex plugin development, use the repo-local marketplace path through [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) and the packaged plugin root at [`plugins/productivity-skills/`](./plugins/productivity-skills). For direct local Claude development, use `claude --plugin-dir /absolute/path/to/plugins/productivity-skills`. If this repository is being shared as a Claude marketplace, keep plugin paths relative to [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
 
 Install one skill:
 

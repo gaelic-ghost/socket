@@ -33,6 +33,7 @@ Applicability guidance:
 - Intend to support future open plugin or bundle standards as they emerge without sacrificing the standard-portable skill core.
 - When OpenAI/Codex product behavior or APIs are involved, consult the built-in `openaiDeveloperDocs` MCP server and `$openai-docs` skill before using secondary sources.
 - When packaging or distributing repo skills for Codex installation, consult the Codex plugins docs, treat `plugins/productivity-skills/` as the plugin packaging root, and keep the repo-scoped marketplace file aligned with that plugin subtree.
+- When packaging or distributing repo skills for Claude marketplace sharing, keep the repo-root `.claude-plugin/marketplace.json` aligned with the tracked plugin roots and keep relative plugin paths inside that marketplace root.
 - For Gale's repos, keep the source-of-truth plugin, marketplace, MCP, app, and hook manifests inside `plugins/` and `.agents/plugins/`, not mixed into root `skills/`.
 - For agent-skills and agent-plugin repository maintainer workflows, prefer the dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills` as the canonical home. Do not reintroduce local copies of those skills into this repository unless Gale explicitly asks for temporary incubation here.
 - Preserve OpenAI/Codex-specific enhancements to the fullest where they materially improve packaging, install UX, invocation, routing, or metadata quality.
@@ -54,6 +55,7 @@ Applicability guidance:
   - `.claude/skills -> ../skills`
   - `plugins/productivity-skills/skills -> ../../skills`
 - Treat those symlink mirrors as discovery and packaging conveniences, not as independent sources of truth.
+- Track canonical plugin source trees and shared marketplace catalogs in git.
 - For Claude Code, keep in mind that plugins can package more than skills alone. Claude plugins may bundle commands, hooks, MCP or LSP configuration, skills, and plugin-scoped subagents.
 - For Claude Code subagents, treat them as runtime personas with their own prompts, tool access, and context windows. They are not a replacement for shared skills or repo guidance.
 - For Codex subagents, treat them as explicit delegation infrastructure for bounded parallel or specialized work. They should not replace repo guidance or plugin packaging docs.
@@ -123,6 +125,7 @@ Some alternatives for user customization/config include using their Agent's memo
 ## Repo-local Passive Standards
 
 - Prefer `uv run` for Python command execution in examples and scripts.
+- Prefer uv-managed tools for maintainer-only linters and type checkers such as `ruff` and `mypy`.
 - Prefer a minimal root Python tool configuration when the repo contains Python-backed skills, so maintainers can run `uv run --group dev pytest ...` without ad hoc dependency flags.
 - Keep skill instructions deterministic, concise, and safety-forward.
 - Implement all applicable YAML fields in the Frontmatter.
