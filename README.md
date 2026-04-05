@@ -30,6 +30,8 @@ Current split:
   - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
 - `maintain-project-roadmap`
   - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
+- `repo-maintenance-toolkit`
+  - Use when a repository needs reusable local maintainer scripts for validation, shared sync work, and releases instead of CI-only glue.
 
 Maintainer-facing workflow maps, audit procedure, and source-of-truth rules live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md) and [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
 
@@ -142,6 +144,8 @@ Common starting points:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme`
 - roadmap work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap`
+- repo-maintenance toolkit work:
+  `npx skills add gaelic-ghost/productivity-skills --skill repo-maintenance-toolkit`
 
 For agent-skills or plugin repository maintenance, use the dedicated sibling repo instead:
 
@@ -172,7 +176,8 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 ├── skills/
 │   ├── explain-code-slice/
 │   ├── maintain-project-readme/
-│   └── maintain-project-roadmap/
+│   ├── maintain-project-roadmap/
+│   └── repo-maintenance-toolkit/
 ├── docs/
 │   └── maintainers/
 ├── ROADMAP.md

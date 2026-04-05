@@ -32,6 +32,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [ ] Milestone 14: Claude Code optimization pass
 - [x] Milestone 15: Claude plugin support (completed)
 - [x] Milestone 16: Use `agent-plugin-skills` plugin to align repo with skills/plugin repo standards (completed)
+- [x] Milestone 17: Shared repo-maintenance toolkit skill (completed)
 
 ## Milestone 0: Naming and structural refactor
 
@@ -395,3 +396,24 @@ Exit criteria:
 
 - [x] The repository validates cleanly against the current shared skills/plugin repo standards.
 - [x] Repo docs, plugin packaging, marketplace wiring, and maintainer guidance describe the same live behavior.
+
+## Milestone 17: Shared repo-maintenance toolkit skill
+
+Scope:
+
+- Add a broadly reusable maintainer-toolkit skill that installs repo-owned validation, sync, and release entrypoints for ordinary software repositories.
+- Keep the toolkit skill globally useful instead of leaving it stranded inside a stack-specific plugin.
+- Preserve the distinction between the shared toolkit skill and any stack-specific bootstrap or guidance-sync integrations that may vendor its managed asset tree elsewhere.
+
+Tickets:
+
+- [x] Add `repo-maintenance-toolkit` as a first-class active skill in this repository.
+- [x] Ship the managed `scripts/repo-maintenance/` asset tree, thin GitHub workflow wrapper, and skill-local installer/runtime scripts.
+- [x] Add skill-local deterministic test coverage for install, refresh, and report-only behavior.
+- [x] Update root docs and maintainer docs to describe the expanded four-skill active surface.
+
+Exit criteria:
+
+- [x] `productivity-skills` ships `repo-maintenance-toolkit` as a broadly reusable global skill.
+- [x] Repo docs, maintainer docs, and tests describe the same four-skill active surface.
+- [x] The shared toolkit can be consumed by other skill repos without making this repository responsible for their stack-specific integrations.

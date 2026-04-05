@@ -36,6 +36,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
+| `repo-maintenance-toolkit` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
 
 ## `explain-code-slice`
 
@@ -145,6 +146,51 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 - Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `errors`
 - Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
+
+## `repo-maintenance-toolkit`
+
+### Workflow: `install` / `refresh`
+
+**Overview**
+
+- Triggered when the user wants reusable local maintainer scripts instead of CI-only helper glue.
+- Primary workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Required: `--repo-root <path>`
+- Optional: `--operation install|refresh`
+- Optional: `--skip-github-workflow`
+- Optional: `--dry-run`
+- Tool/script input: `scripts/run_workflow.py`
+
+**Branch Conditions**
+
+- Managed path conflict: block when a required managed path cannot be updated safely
+- GitHub workflow skip: keep toolkit install but omit the thin workflow wrapper
+
+**Outputs**
+
+- JSON with `status`, `path_type`, `output`, `managed_files`, `applied_actions`, `next_step`
+
+### Workflow: `report-only`
+
+**Overview**
+
+- Triggered when the user wants the planned toolkit file set without mutating the repo.
+- Variant workflow.
+- `read-only`
+
+**Inputs**
+
+- Required: `--repo-root <path>`
+- Required: `--operation report-only`
+- Optional: `--skip-github-workflow`
+
+**Outputs**
+
+- JSON with `status`, `path_type`, `output`, `managed_files`, `planned_actions`, `next_step`
 
 ## Related External Skills
 

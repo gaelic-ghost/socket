@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo Maintenance Toolkit"
+  short_description: "Install local-first validation, sync, and release scripts"
+  default_prompt: "Use $repo-maintenance-toolkit to install or refresh a local-first repo-maintenance toolkit with validate, sync, and release entrypoints plus thin CI wrappers."

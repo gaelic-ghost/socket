@@ -15,4 +15,5 @@ dev = [
 testpaths = [
   "skills/maintain-project-readme/tests",
   "skills/maintain-project-roadmap/tests",
+  "skills/repo-maintenance-toolkit/tests",
 ]
