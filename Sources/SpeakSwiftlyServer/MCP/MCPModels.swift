@@ -103,6 +103,22 @@ enum MCPToolCatalog {
             ]
         ),
         Tool(
+            name: "load_text_profiles",
+            description: "Reload persisted SpeakSwiftly text profiles from the configured persistence file and return the refreshed text-profile snapshot. Use this when another process edited the persistence file or when the operator wants to discard in-memory drift and re-read the saved source of truth.",
+            inputSchema: [
+                "type": "object",
+                "properties": [:],
+            ]
+        ),
+        Tool(
+            name: "save_text_profiles",
+            description: "Persist the current SpeakSwiftly text-profile state to disk and return the latest text-profile snapshot. Use this after a batch of text-profile edits when the operator wants an explicit save step instead of relying on later persistence hooks.",
+            inputSchema: [
+                "type": "object",
+                "properties": [:],
+            ]
+        ),
+        Tool(
             name: "store_text_profile",
             description: "Store or replace one persisted SpeakSwiftly text profile by passing the full profile payload. Use this when the agent has already drafted or edited the complete profile shape and wants one full-write operation instead of incremental edits.",
             inputSchema: [

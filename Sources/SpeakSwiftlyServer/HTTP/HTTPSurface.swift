@@ -97,6 +97,14 @@ private func registerHTTPRoutes(
         return .init(profile: profile)
     }
 
+    router.post("text-profiles/load") { _, _ -> TextProfileListResponse in
+        .init(textProfiles: try await host.loadTextProfiles())
+    }
+
+    router.post("text-profiles/save") { _, _ -> TextProfileListResponse in
+        .init(textProfiles: try await host.saveTextProfiles())
+    }
+
     router.put("text-profiles/stored/:profile_id") { request, context -> TextProfileResponse in
         let profileID = try context.parameters.require("profile_id")
         let payload = try await request.decode(as: StoreTextProfileRequestPayload.self, context: context)

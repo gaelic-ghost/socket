@@ -166,6 +166,12 @@ struct MCPSurface {
                     )
                 )
 
+            case "load_text_profiles":
+                return try toolResult(try await host.loadTextProfiles())
+
+            case "save_text_profiles":
+                return try toolResult(try await host.saveTextProfiles())
+
             case "store_text_profile":
                 let profile: TextProfileSnapshot = try decodeArgument("profile", in: arguments)
                 return try toolResult(try await host.storeTextProfile(try profile.model()))
@@ -498,7 +504,7 @@ struct MCPSurface {
                 Available action families:
                 - voice profile creation: create_profile, create_clone, list_profiles, remove_profile, speak://profiles, speak://profiles/guide
                 - speech submission: queue_speech_live, speak://jobs/{job_id}, speak://status
-                - text normalization: list_text_profiles, create_text_profile, store_text_profile, use_text_profile, reset_text_profile, add_text_replacement, replace_text_replacement, remove_text_replacement, speak://text-profiles, speak://text-profiles/guide
+                - text normalization: list_text_profiles, load_text_profiles, save_text_profiles, create_text_profile, store_text_profile, use_text_profile, reset_text_profile, add_text_replacement, replace_text_replacement, remove_text_replacement, speak://text-profiles, speak://text-profiles/guide
                 - playback and queue control: list_queue_generation, list_queue_playback, playback_state, playback_pause, playback_resume, clear_queue, cancel_request, speak://playback/guide
                 - drafting help: draft_profile_voice_description, draft_profile_source_text, draft_text_profile, draft_text_replacement, draft_voice_design_instruction, draft_queue_playback_notice
                 Return concise JSON with keys action_type, target_name, why, and suggested_follow_up. action_type must be one of tool, resource, or prompt.
@@ -806,7 +812,8 @@ private func textProfilesGuideMarkdown() -> String {
     2. Draft or edit rules with the `draft_text_profile` and `draft_text_replacement` prompts when a user needs help authoring replacements.
     3. Store reusable policies with `create_text_profile` or `store_text_profile`.
     4. Use `use_text_profile` when the downstream app wants a temporary active custom profile, or pass `text_profile_name` on one speech request when the caller wants stored-profile selection without mutating the active profile.
-    5. Read `speak://text-profiles/effective/{profile_id}` before queuing speech if the user wants to verify what normalization will really happen.
+    5. Use `save_text_profiles` when the operator wants an explicit persistence checkpoint, and `load_text_profiles` when another process changed the persistence file and the in-memory state should be refreshed from disk.
+    6. Read `speak://text-profiles/effective/{profile_id}` before queuing speech if the user wants to verify what normalization will really happen.
 
     Replacement guidance:
 

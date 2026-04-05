@@ -428,6 +428,20 @@ actor ServerHost {
         return .init(profile: profile)
     }
 
+    func loadTextProfiles() async throws -> TextProfilesSnapshot {
+        try await runtime.loadTextProfiles()
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return await textProfilesSnapshot()
+    }
+
+    func saveTextProfiles() async throws -> TextProfilesSnapshot {
+        try await runtime.saveTextProfiles()
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return await textProfilesSnapshot()
+    }
+
     func storeTextProfile(_ profile: TextForSpeech.Profile) async throws -> TextProfileSnapshot {
         try await runtime.storeTextProfile(profile)
         await emitTextProfilesChanged()

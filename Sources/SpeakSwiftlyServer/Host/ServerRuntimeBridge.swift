@@ -73,6 +73,8 @@ protocol ServerRuntimeProtocol: Actor {
     func textProfiles() async -> [TextForSpeech.Profile]
     func effectiveTextProfile(named profileID: String?) async -> TextForSpeech.Profile
     func textProfilePersistenceURL() async -> URL?
+    func loadTextProfiles() async throws
+    func saveTextProfiles() async throws
     func createTextProfile(id: String, named name: String, replacements: [TextForSpeech.Replacement]) async throws -> TextForSpeech.Profile
     func storeTextProfile(_ profile: TextForSpeech.Profile) async throws
     func useTextProfile(_ profile: TextForSpeech.Profile) async throws
@@ -189,6 +191,14 @@ extension SpeakSwiftly.Runtime: ServerRuntimeProtocol {
 
     func textProfilePersistenceURL() async -> URL? {
         await normalizer.persistenceURL()
+    }
+
+    func loadTextProfiles() async throws {
+        try await normalizer.loadProfiles()
+    }
+
+    func saveTextProfiles() async throws {
+        try await normalizer.saveProfiles()
     }
 
     func createTextProfile(
