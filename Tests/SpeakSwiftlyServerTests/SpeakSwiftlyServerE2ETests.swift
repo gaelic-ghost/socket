@@ -5,219 +5,752 @@ import Testing
 
 @Suite(.serialized)
 struct SpeakSwiftlyServerE2ETests {
-    private static let profileName = "e2e-voice"
-    private static let profileText = "Hello there from the SpeakSwiftlyServer live HTTP end-to-end test."
-    private static let voiceDescription = "A calm, warm, steady speaking voice."
-    private static let playbackText = """
-    Hello from the live SpeakSwiftlyServer end-to-end path. This request exercises the real localhost HTTP surface, the direct SpeakSwiftlyCore runtime, profile reconciliation, queued live speech submission, and terminal job capture without falling back to the mock runtime.
+    // MARK: Test Fixtures
+
+    private static let testingProfileText = "Hello there from SpeakSwiftlyServer end-to-end coverage."
+    private static let testingProfileVoiceDescription = "A generic, warm, masculine, slow speaking voice."
+    fileprivate static let testingCloneSourceText = """
+    This imported reference audio should let SpeakSwiftlyServer build a clone profile for end to end coverage with a clean transcript and steady speech.
+    """
+    private static let testingPlaybackText = """
+    Hello from the real resident SpeakSwiftlyServer playback path. This end to end test uses a longer utterance so we can observe startup buffering, queue floor recovery, drain timing, and steady streaming behavior with enough generated audio to make the diagnostics useful instead of noisy.
     """
 
-    // MARK: - Tests
+    // MARK: Sequential End-to-End Workflows
 
-    @Test func liveServerRunsCreateProfileAndQueuedSpeechEndToEnd() async throws {
+    @Test func httpVoiceDesignLaneRunsSequentialSilentAndAudibleCoverage() async throws {
         guard Self.isE2EEnabled else { return }
+        try await Self.runVoiceDesignLane(using: .http)
+    }
 
+    @Test func httpCloneLaneWithProvidedTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
+        guard Self.isE2EEnabled else { return }
+        try await Self.runCloneLane(using: .http, transcriptMode: .provided)
+    }
+
+    @Test func httpCloneLaneWithInferredTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
+        guard Self.isE2EEnabled else { return }
+        try await Self.runCloneLane(using: .http, transcriptMode: .inferred)
+    }
+
+    @Test func mcpVoiceDesignLaneRunsSequentialSilentAndAudibleCoverage() async throws {
+        guard Self.isE2EEnabled else { return }
+        try await Self.runVoiceDesignLane(using: .mcp)
+    }
+
+    @Test func mcpCloneLaneWithProvidedTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
+        guard Self.isE2EEnabled else { return }
+        try await Self.runCloneLane(using: .mcp, transcriptMode: .provided)
+    }
+
+    @Test func mcpCloneLaneWithInferredTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
+        guard Self.isE2EEnabled else { return }
+        try await Self.runCloneLane(using: .mcp, transcriptMode: .inferred)
+    }
+
+    // MARK: Lane Workflows
+
+    private static func runVoiceDesignLane(using transport: E2ETransport) async throws {
         let sandbox = try ServerE2ESandbox()
         defer { sandbox.cleanup() }
 
-        let dependencyProductsURL = try Self.speakSwiftlyProductsURL()
-        let serverExecutableURL = try Self.serverExecutableURL()
-        try Self.stageMetallibForServerBinary(
-            from: dependencyProductsURL,
-            serverExecutableURL: serverExecutableURL
-        )
-
-        let port = 59_000 + Int.random(in: 0..<500)
-        let client = E2EHTTPClient(baseURL: URL(string: "http://127.0.0.1:\(port)")!)
-        let server = try ServerProcess(
-            executableURL: serverExecutableURL,
-            dependencyProductsURL: dependencyProductsURL,
-            profileRootURL: sandbox.profileRootURL,
-            port: port,
-            silentPlayback: true
-        )
-
-        try server.start()
-        defer { server.stop() }
+        let profileName = "\(transport.profilePrefix)-voice-design-profile"
 
         do {
-            try await waitUntilWorkerReady(using: client, timeout: .seconds(180), server: server)
-
-            let createResponse = try await client.request(
-                path: "/profiles",
-                method: "POST",
-                jsonBody: [
-                    "profile_name": Self.profileName,
-                    "text": Self.profileText,
-                    "voice_description": Self.voiceDescription,
-                ]
+            let server = try makeServer(
+                port: randomPort(in: 59_000..<59_200),
+                profileRootURL: sandbox.profileRootURL,
+                silentPlayback: true,
+                mcpEnabled: transport == .mcp
             )
-            #expect(createResponse.statusCode == 202)
+            try server.start()
+            defer { server.stop() }
 
-            let createJobID = try decode(E2EJobCreatedResponse.self, from: createResponse.data).jobID
-            let createSnapshot = try await waitForTerminalJob(
-                id: createJobID,
-                using: client,
-                timeout: .seconds(240),
-                server: server
+            switch transport {
+            case .http:
+                let client = E2EHTTPClient(baseURL: server.baseURL)
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
+                try await createVoiceDesignProfile(
+                    using: client,
+                    server: server,
+                    profileName: profileName,
+                    text: testingProfileText,
+                    voiceDescription: testingProfileVoiceDescription
+                )
+                try await assertProfileIsVisible(using: client, profileName: profileName)
+                try await runSilentSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: profileName
+                )
+
+            case .mcp:
+                let client = try await E2EMCPClient.connect(
+                    baseURL: server.baseURL,
+                    path: "/mcp",
+                    timeout: e2eTimeout,
+                    server: server
+                )
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
+                try await createVoiceDesignProfile(
+                    using: client,
+                    server: server,
+                    profileName: profileName,
+                    text: testingProfileText,
+                    voiceDescription: testingProfileVoiceDescription
+                )
+                try await assertProfileIsVisible(using: client, profileName: profileName)
+                try await runSilentSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: profileName
+                )
+            }
+        }
+
+        do {
+            let server = try makeServer(
+                port: randomPort(in: 59_200..<59_400),
+                profileRootURL: sandbox.profileRootURL,
+                silentPlayback: false,
+                playbackTrace: isPlaybackTraceEnabled,
+                mcpEnabled: transport == .mcp
             )
-            #expect(createSnapshot.status == "completed")
-            #expect(createSnapshot.terminalEvent?.ok == true)
+            try server.start()
+            defer { server.stop() }
 
-            let profilesResponse = try await client.request(path: "/profiles", method: "GET")
-            #expect(profilesResponse.statusCode == 200)
-            let profiles = try decode(E2EProfileListResponse.self, from: profilesResponse.data).profiles
-            #expect(profiles.contains { $0.profileName == Self.profileName })
+            switch transport {
+            case .http:
+                let client = E2EHTTPClient(baseURL: server.baseURL)
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
 
-            let foregroundSpeakResponse = try await client.request(
-                path: "/speak",
-                method: "POST",
-                jsonBody: [
-                    "text": Self.playbackText,
-                    "profile_name": Self.profileName,
-                ]
-            )
-            #expect(foregroundSpeakResponse.statusCode == 202)
+                try await runAudibleSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: profileName
+                )
 
-            let foregroundSpeakJobID = try decode(E2EJobCreatedResponse.self, from: foregroundSpeakResponse.data).jobID
-            let foregroundSpeakSnapshot = try await waitForTerminalJob(
-                id: foregroundSpeakJobID,
-                using: client,
-                timeout: .seconds(240),
-                server: server
-            )
-            #expect(foregroundSpeakSnapshot.status == "completed")
-            #expect(foregroundSpeakSnapshot.terminalEvent?.ok == true)
-            #expect(foregroundSpeakSnapshot.history.filter { $0.ok == true }.count == 2)
+            case .mcp:
+                let client = try await E2EMCPClient.connect(
+                    baseURL: server.baseURL,
+                    path: "/mcp",
+                    timeout: e2eTimeout,
+                    server: server
+                )
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
 
-            let foregroundEventsResponse = try await client.request(
-                path: "/jobs/\(foregroundSpeakJobID)/events",
-                method: "GET"
-            )
-            #expect(foregroundEventsResponse.statusCode == 200)
-            #expect(foregroundEventsResponse.text.contains("event: worker_status"))
-            #expect(foregroundEventsResponse.text.contains(#""event":"started""#))
-            #expect(foregroundEventsResponse.text.contains(#""ok":true"#))
-            #expect(!foregroundEventsResponse.text.contains(#""event":"queued""#))
-
-        } catch {
-            Issue.record("Live server log output before failure:\n\(server.combinedOutput)")
-            throw error
+                try await runAudibleSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: profileName
+                )
+            }
         }
     }
 
-    @Test func liveServerRunsForegroundPlaybackEndToEndWithRealPlaybackPath() async throws {
-        guard Self.isE2EEnabled, Self.isRealPlaybackE2EEnabled else { return }
-
+    private static func runCloneLane(
+        using transport: E2ETransport,
+        transcriptMode: CloneTranscriptMode
+    ) async throws {
         let sandbox = try ServerE2ESandbox()
         defer { sandbox.cleanup() }
 
-        let dependencyProductsURL = try Self.speakSwiftlyProductsURL()
-        let serverExecutableURL = try Self.serverExecutableURL()
-        try Self.stageMetallibForServerBinary(
-            from: dependencyProductsURL,
-            serverExecutableURL: serverExecutableURL
-        )
-
-        let port = 59_500 + Int.random(in: 0..<400)
-        let client = E2EHTTPClient(baseURL: URL(string: "http://127.0.0.1:\(port)")!)
-        let server = try ServerProcess(
-            executableURL: serverExecutableURL,
-            dependencyProductsURL: dependencyProductsURL,
-            profileRootURL: sandbox.profileRootURL,
-            port: port,
-            silentPlayback: false,
-            playbackTrace: Self.isPlaybackTraceEnabled
-        )
-
-        try server.start()
-        defer { server.stop() }
+        let fixtureProfileName = "\(transport.profilePrefix)-\(transcriptMode.slug)-clone-source-profile"
+        let cloneProfileName = "\(transport.profilePrefix)-\(transcriptMode.slug)-clone-profile"
+        let referenceAudioURL = sandbox.rootURL.appendingPathComponent("\(transport.profilePrefix)-\(transcriptMode.slug)-reference.wav")
 
         do {
-            try await waitUntilWorkerReady(using: client, timeout: .seconds(180), server: server)
+            let server = try makeServer(
+                port: randomPort(in: 59_400..<59_600),
+                profileRootURL: sandbox.profileRootURL,
+                silentPlayback: true,
+                mcpEnabled: transport == .mcp
+            )
+            try server.start()
+            defer { server.stop() }
 
-            let engineReadyLog = try await server.waitForStderrLine(timeout: .seconds(60)) { line in
-                line.contains(#""event":"playback_engine_ready""#)
-                    && line.contains(#""process_phys_footprint_bytes""#)
-                    && line.contains(#""mlx_active_memory_bytes""#)
+            switch transport {
+            case .http:
+                let client = E2EHTTPClient(baseURL: server.baseURL)
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
+                try await createVoiceDesignProfile(
+                    using: client,
+                    server: server,
+                    profileName: fixtureProfileName,
+                    text: testingCloneSourceText,
+                    voiceDescription: testingProfileVoiceDescription,
+                    outputPath: referenceAudioURL.path
+                )
+                #expect(FileManager.default.fileExists(atPath: referenceAudioURL.path))
+
+                try await createCloneProfile(
+                    using: client,
+                    server: server,
+                    profileName: cloneProfileName,
+                    referenceAudioPath: referenceAudioURL.path,
+                    transcript: transcriptMode.providedTranscript,
+                    expectTranscription: transcriptMode.expectTranscription
+                )
+                try await assertProfileIsVisible(using: client, profileName: cloneProfileName)
+
+            case .mcp:
+                let client = try await E2EMCPClient.connect(
+                    baseURL: server.baseURL,
+                    path: "/mcp",
+                    timeout: e2eTimeout,
+                    server: server
+                )
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
+                try await createVoiceDesignProfile(
+                    using: client,
+                    server: server,
+                    profileName: fixtureProfileName,
+                    text: testingCloneSourceText,
+                    voiceDescription: testingProfileVoiceDescription,
+                    outputPath: referenceAudioURL.path
+                )
+                #expect(FileManager.default.fileExists(atPath: referenceAudioURL.path))
+
+                try await createCloneProfile(
+                    using: client,
+                    server: server,
+                    profileName: cloneProfileName,
+                    referenceAudioPath: referenceAudioURL.path,
+                    transcript: transcriptMode.providedTranscript,
+                    expectTranscription: transcriptMode.expectTranscription
+                )
+                try await assertProfileIsVisible(using: client, profileName: cloneProfileName)
             }
-            #expect(engineReadyLog.contains(#""event":"playback_engine_ready""#))
 
-            let createResponse = try await client.request(
-                path: "/profiles",
-                method: "POST",
-                jsonBody: [
-                    "profile_name": Self.profileName,
-                    "text": Self.profileText,
-                    "voice_description": Self.voiceDescription,
-                ]
+            let storedProfile = try loadStoredProfileManifest(
+                named: cloneProfileName,
+                from: sandbox.profileRootURL
             )
-            #expect(createResponse.statusCode == 202)
-
-            let createJobID = try decode(E2EJobCreatedResponse.self, from: createResponse.data).jobID
-            let createSnapshot = try await waitForTerminalJob(
-                id: createJobID,
-                using: client,
-                timeout: .seconds(240),
-                server: server
-            )
-            #expect(createSnapshot.terminalEvent?.ok == true)
-
-            let foregroundSpeakResponse = try await client.request(
-                path: "/speak",
-                method: "POST",
-                jsonBody: [
-                    "text": Self.playbackText,
-                    "profile_name": Self.profileName,
-                ]
-            )
-            #expect(foregroundSpeakResponse.statusCode == 202)
-
-            let foregroundSpeakJobID = try decode(E2EJobCreatedResponse.self, from: foregroundSpeakResponse.data).jobID
-
-            let playbackStartedLog = try await server.waitForStderrLine(timeout: .seconds(240)) { line in
-                line.contains(#""event":"playback_started""#)
-                    && line.contains(#""request_id":"\#(foregroundSpeakJobID)""#)
-                    && line.contains(#""text_complexity_class""#)
+            switch transcriptMode {
+            case .provided:
+                #expect(storedProfile.sourceText == testingCloneSourceText)
+            case .inferred:
+                let inferredTranscript = storedProfile.sourceText.trimmingCharacters(in: .whitespacesAndNewlines)
+                #expect(!inferredTranscript.isEmpty)
+                #expect(transcriptLooksCloseToCloneSource(inferredTranscript))
             }
-            #expect(playbackStartedLog.contains(#""event":"playback_started""#))
 
-            let playbackFinishedLog = try await server.waitForStderrLine(timeout: .seconds(240)) { line in
-                line.contains(#""event":"playback_finished""#)
-                    && line.contains(#""request_id":"\#(foregroundSpeakJobID)""#)
-                    && line.contains(#""time_to_first_chunk_ms""#)
-                    && line.contains(#""played_back_callback_count""#)
+            switch transport {
+            case .http:
+                let client = E2EHTTPClient(baseURL: server.baseURL)
+                try await runSilentSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: cloneProfileName
+                )
+
+            case .mcp:
+                let client = try await E2EMCPClient.connect(
+                    baseURL: server.baseURL,
+                    path: "/mcp",
+                    timeout: e2eTimeout,
+                    server: server
+                )
+                try await runSilentSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: cloneProfileName
+                )
             }
-            #expect(playbackFinishedLog.contains(#""event":"playback_finished""#))
+        }
 
-            let foregroundSpeakSnapshot = try await waitForTerminalJob(
-                id: foregroundSpeakJobID,
-                using: client,
-                timeout: .seconds(240),
-                server: server
+        do {
+            let server = try makeServer(
+                port: randomPort(in: 59_600..<59_800),
+                profileRootURL: sandbox.profileRootURL,
+                silentPlayback: false,
+                playbackTrace: isPlaybackTraceEnabled,
+                mcpEnabled: transport == .mcp
             )
-            #expect(foregroundSpeakSnapshot.status == "completed")
-            #expect(foregroundSpeakSnapshot.terminalEvent?.ok == true)
-            #expect(foregroundSpeakSnapshot.history.filter { $0.ok == true }.count == 2)
-        } catch {
-            Issue.record("Live server log output before failure:\n\(server.combinedOutput)")
-            throw error
+            try server.start()
+            defer { server.stop() }
+
+            switch transport {
+            case .http:
+                let client = E2EHTTPClient(baseURL: server.baseURL)
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
+                try await runAudibleSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: cloneProfileName
+                )
+
+            case .mcp:
+                let client = try await E2EMCPClient.connect(
+                    baseURL: server.baseURL,
+                    path: "/mcp",
+                    timeout: e2eTimeout,
+                    server: server
+                )
+                try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
+                try await runAudibleSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: cloneProfileName
+                )
+            }
         }
     }
 
-    private static var isE2EEnabled: Bool {
-        ProcessInfo.processInfo.environment["SPEAKSWIFTLYSERVER_E2E"] == "1"
+    // MARK: HTTP Lane Helpers
+
+    private static func createVoiceDesignProfile(
+        using client: E2EHTTPClient,
+        server: ServerProcess,
+        profileName: String,
+        text: String,
+        voiceDescription: String,
+        outputPath: String? = nil
+    ) async throws {
+        var body: [String: Any] = [
+            "profile_name": profileName,
+            "text": text,
+            "voice_description": voiceDescription,
+        ]
+        if let outputPath {
+            body["output_path"] = outputPath
+        }
+
+        let response = try await client.request(path: "/profiles", method: "POST", jsonBody: body)
+        #expect(response.statusCode == 202)
+
+        let createJobID = try decode(E2EJobCreatedResponse.self, from: response.data).jobID
+        let snapshot = try await waitForTerminalJob(
+            id: createJobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+        #expect(snapshot.status == "completed")
+        #expect(snapshot.terminalEvent?.ok == true)
+        if let outputPath {
+            #expect(snapshot.terminalEvent?.profilePath == outputPath)
+        }
     }
 
-    private static var isRealPlaybackE2EEnabled: Bool {
-        ProcessInfo.processInfo.environment["SPEAKSWIFTLYSERVER_E2E_REAL_PLAYBACK"] == "1"
+    private static func createCloneProfile(
+        using client: E2EHTTPClient,
+        server: ServerProcess,
+        profileName: String,
+        referenceAudioPath: String,
+        transcript: String?,
+        expectTranscription: Bool
+    ) async throws {
+        var body: [String: Any] = [
+            "profile_name": profileName,
+            "reference_audio_path": referenceAudioPath,
+        ]
+        if let transcript {
+            body["transcript"] = transcript
+        }
+
+        let response = try await client.request(path: "/profiles/clone", method: "POST", jsonBody: body)
+        #expect(response.statusCode == 202)
+
+        let cloneJobID = try decode(E2EJobCreatedResponse.self, from: response.data).jobID
+        let snapshot = try await waitForTerminalJob(
+            id: cloneJobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+        #expect(snapshot.status == "completed")
+        #expect(snapshot.terminalEvent?.ok == true)
+        #expect(snapshot.terminalEvent?.profileName == profileName)
+
+        assertCloneTranscriptionStages(
+            in: snapshot,
+            expectTranscription: expectTranscription
+        )
     }
 
-    private static var isPlaybackTraceEnabled: Bool {
-        ProcessInfo.processInfo.environment["SPEAKSWIFTLY_PLAYBACK_TRACE"] == "1"
+    private static func assertProfileIsVisible(
+        using client: E2EHTTPClient,
+        profileName: String
+    ) async throws {
+        let profilesResponse = try await client.request(path: "/profiles", method: "GET")
+        #expect(profilesResponse.statusCode == 200)
+        let profiles = try decode(E2EProfileListResponse.self, from: profilesResponse.data).profiles
+        #expect(profiles.contains { $0.profileName == profileName })
     }
 
-    // MARK: - Build Artifacts
+    private static func runSilentSpeech(
+        using client: E2EHTTPClient,
+        server: ServerProcess,
+        text: String,
+        profileName: String
+    ) async throws {
+        let response = try await client.request(
+            path: "/speak",
+            method: "POST",
+            jsonBody: [
+                "text": text,
+                "profile_name": profileName,
+            ]
+        )
+        #expect(response.statusCode == 202)
+
+        let jobID = try decode(E2EJobCreatedResponse.self, from: response.data).jobID
+        let snapshot = try await waitForTerminalJob(
+            id: jobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+
+        assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
+        #expect(snapshot.history.contains { $0.event == "started" && $0.op == "queue_speech_live" })
+        #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "playback_finished" })
+        #expect(!snapshot.history.contains { $0.event == "queued" })
+
+        let eventsResponse = try await client.request(path: "/jobs/\(jobID)/events", method: "GET")
+        #expect(eventsResponse.statusCode == 200)
+        #expect(eventsResponse.text.contains("event: worker_status"))
+        #expect(eventsResponse.text.contains(#""event":"started""#))
+        #expect(eventsResponse.text.contains(#""ok":true"#))
+        #expect(!eventsResponse.text.contains(#""event":"queued""#))
+    }
+
+    private static func runAudibleSpeech(
+        using client: E2EHTTPClient,
+        server: ServerProcess,
+        text: String,
+        profileName: String
+    ) async throws {
+        let engineReadyLog = try await server.waitForStderrJSONObject(timeout: .seconds(120)) {
+            guard
+                $0["event"] as? String == "playback_engine_ready",
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            return details["process_phys_footprint_bytes"] as? Int != nil
+                && details["mlx_active_memory_bytes"] as? Int != nil
+        }
+        #expect(engineReadyLog["event"] as? String == "playback_engine_ready")
+
+        let response = try await client.request(
+            path: "/speak",
+            method: "POST",
+            jsonBody: [
+                "text": text,
+                "profile_name": profileName,
+            ]
+        )
+        #expect(response.statusCode == 202)
+
+        let jobID = try decode(E2EJobCreatedResponse.self, from: response.data).jobID
+
+        _ = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
+            guard
+                $0["event"] as? String == "playback_started",
+                $0["request_id"] as? String == jobID,
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            let textComplexityClass = details["text_complexity_class"] as? String
+            return ["compact", "balanced", "extended"].contains(textComplexityClass)
+                && details["startup_buffer_target_ms"] as? Int != nil
+                && details["startup_buffered_audio_ms"] as? Int != nil
+                && details["process_phys_footprint_bytes"] as? Int != nil
+                && details["mlx_active_memory_bytes"] as? Int != nil
+        }
+
+        _ = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
+            guard
+                $0["event"] as? String == "playback_finished",
+                $0["request_id"] as? String == jobID,
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            let textComplexityClass = details["text_complexity_class"] as? String
+            return ["compact", "balanced", "extended"].contains(textComplexityClass)
+                && details["time_to_first_chunk_ms"] as? Int != nil
+                && details["played_back_callback_count"] as? Int != nil
+                && details["startup_buffer_target_ms"] as? Int != nil
+                && details["low_water_target_ms"] as? Int != nil
+                && details["process_phys_footprint_bytes"] as? Int != nil
+                && details["mlx_active_memory_bytes"] as? Int != nil
+        }
+
+        let snapshot = try await waitForTerminalJob(
+            id: jobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+
+        assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
+        #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "preroll_ready" })
+        #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "playback_finished" })
+    }
+
+    // MARK: MCP Lane Helpers
+
+    private static func createVoiceDesignProfile(
+        using client: E2EMCPClient,
+        server: ServerProcess,
+        profileName: String,
+        text: String,
+        voiceDescription: String,
+        outputPath: String? = nil
+    ) async throws {
+        var arguments = [
+            "profile_name": profileName,
+            "text": text,
+            "voice_description": voiceDescription,
+        ]
+        if let outputPath {
+            arguments["output_path"] = outputPath
+        }
+
+        let payload = try await client.callTool(name: "create_profile", arguments: arguments)
+        let jobID = try requireString("job_id", in: payload)
+        #expect(payload["job_resource_uri"] as? String == "speak://jobs/\(jobID)")
+
+        let snapshot = try await waitForTerminalJob(
+            id: jobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+        #expect(snapshot.status == "completed")
+        #expect(snapshot.terminalEvent?.ok == true)
+        if let outputPath {
+            #expect(snapshot.terminalEvent?.profilePath == outputPath)
+        }
+    }
+
+    private static func createCloneProfile(
+        using client: E2EMCPClient,
+        server: ServerProcess,
+        profileName: String,
+        referenceAudioPath: String,
+        transcript: String?,
+        expectTranscription: Bool
+    ) async throws {
+        var arguments = [
+            "profile_name": profileName,
+            "reference_audio_path": referenceAudioPath,
+        ]
+        if let transcript {
+            arguments["transcript"] = transcript
+        }
+
+        let payload = try await client.callTool(name: "create_clone", arguments: arguments)
+        let jobID = try requireString("job_id", in: payload)
+        #expect(payload["job_resource_uri"] as? String == "speak://jobs/\(jobID)")
+
+        let snapshot = try await waitForTerminalJob(
+            id: jobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+        #expect(snapshot.status == "completed")
+        #expect(snapshot.terminalEvent?.ok == true)
+        #expect(snapshot.terminalEvent?.profileName == profileName)
+
+        assertCloneTranscriptionStages(
+            in: snapshot,
+            expectTranscription: expectTranscription
+        )
+    }
+
+    private static func assertProfileIsVisible(
+        using client: E2EMCPClient,
+        profileName: String
+    ) async throws {
+        let payload = try await client.callTool(name: "list_profiles", arguments: [:])
+        let profiles = try requireProfiles(from: payload)
+        #expect(profiles.contains { $0.profileName == profileName })
+    }
+
+    private static func runSilentSpeech(
+        using client: E2EMCPClient,
+        server: ServerProcess,
+        text: String,
+        profileName: String
+    ) async throws {
+        let payload = try await client.callTool(
+            name: "queue_speech_live",
+            arguments: [
+                "text": text,
+                "profile_name": profileName,
+            ]
+        )
+        let jobID = try requireString("job_id", in: payload)
+        #expect(payload["job_resource_uri"] as? String == "speak://jobs/\(jobID)")
+
+        let snapshot = try await waitForTerminalJob(
+            id: jobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+
+        assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
+        #expect(snapshot.history.contains { $0.event == "started" && $0.op == "queue_speech_live" })
+        #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "playback_finished" })
+        #expect(!snapshot.history.contains { $0.event == "queued" })
+    }
+
+    private static func runAudibleSpeech(
+        using client: E2EMCPClient,
+        server: ServerProcess,
+        text: String,
+        profileName: String
+    ) async throws {
+        let engineReadyLog = try await server.waitForStderrJSONObject(timeout: .seconds(120)) {
+            guard
+                $0["event"] as? String == "playback_engine_ready",
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            return details["process_phys_footprint_bytes"] as? Int != nil
+                && details["mlx_active_memory_bytes"] as? Int != nil
+        }
+        #expect(engineReadyLog["event"] as? String == "playback_engine_ready")
+
+        let payload = try await client.callTool(
+            name: "queue_speech_live",
+            arguments: [
+                "text": text,
+                "profile_name": profileName,
+            ]
+        )
+        let jobID = try requireString("job_id", in: payload)
+        #expect(payload["job_resource_uri"] as? String == "speak://jobs/\(jobID)")
+
+        _ = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
+            guard
+                $0["event"] as? String == "playback_started",
+                $0["request_id"] as? String == jobID,
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            let textComplexityClass = details["text_complexity_class"] as? String
+            return ["compact", "balanced", "extended"].contains(textComplexityClass)
+                && details["startup_buffer_target_ms"] as? Int != nil
+                && details["startup_buffered_audio_ms"] as? Int != nil
+                && details["process_phys_footprint_bytes"] as? Int != nil
+                && details["mlx_active_memory_bytes"] as? Int != nil
+        }
+
+        _ = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
+            guard
+                $0["event"] as? String == "playback_finished",
+                $0["request_id"] as? String == jobID,
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            let textComplexityClass = details["text_complexity_class"] as? String
+            return ["compact", "balanced", "extended"].contains(textComplexityClass)
+                && details["time_to_first_chunk_ms"] as? Int != nil
+                && details["played_back_callback_count"] as? Int != nil
+                && details["startup_buffer_target_ms"] as? Int != nil
+                && details["low_water_target_ms"] as? Int != nil
+                && details["process_phys_footprint_bytes"] as? Int != nil
+                && details["mlx_active_memory_bytes"] as? Int != nil
+        }
+
+        let snapshot = try await waitForTerminalJob(
+            id: jobID,
+            using: client,
+            timeout: e2eTimeout,
+            server: server
+        )
+
+        assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
+        #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "preroll_ready" })
+        #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "playback_finished" })
+    }
+
+    // MARK: Shared Assertions
+
+    private static func assertSpeechJobCompleted(_ snapshot: E2EJobSnapshot, expectedJobID jobID: String) {
+        #expect(snapshot.status == "completed")
+        #expect(snapshot.terminalEvent?.id == jobID)
+        #expect(snapshot.terminalEvent?.ok == true)
+        #expect(snapshot.history.contains { $0.ok == true })
+    }
+
+    private static func assertCloneTranscriptionStages(
+        in snapshot: E2EJobSnapshot,
+        expectTranscription: Bool
+    ) {
+        let sawLoading = snapshot.history.contains {
+            $0.event == "progress" && $0.stage == "loading_clone_transcription_model"
+        }
+        let sawTranscribing = snapshot.history.contains {
+            $0.event == "progress" && $0.stage == "transcribing_clone_audio"
+        }
+
+        if expectTranscription {
+            #expect(sawLoading)
+            #expect(sawTranscribing)
+        } else {
+            #expect(!sawLoading)
+            #expect(!sawTranscribing)
+        }
+    }
+
+    private static func transcriptLooksCloseToCloneSource(_ transcript: String) -> Bool {
+        let expectedTokens = normalizedTranscriptTokens(from: testingCloneSourceText)
+        let actualTokens = normalizedTranscriptTokens(from: transcript)
+
+        guard !expectedTokens.isEmpty, !actualTokens.isEmpty else {
+            return false
+        }
+
+        let sharedTokens = expectedTokens.intersection(actualTokens)
+        let recall = Double(sharedTokens.count) / Double(expectedTokens.count)
+        let precision = Double(sharedTokens.count) / Double(actualTokens.count)
+
+        return recall >= 0.7 && precision >= 0.6
+    }
+
+    private static func normalizedTranscriptTokens(from text: String) -> Set<String> {
+        let scalars = text.lowercased().unicodeScalars.map { scalar -> Character in
+            if CharacterSet.alphanumerics.contains(scalar) {
+                return Character(scalar)
+            }
+            return " "
+        }
+        let normalized = String(scalars)
+        return Set(
+            normalized
+                .split(whereSeparator: \.isWhitespace)
+                .map(String.init)
+                .filter { !$0.isEmpty }
+        )
+    }
+
+    // MARK: Build Artifacts
 
     private static func speakSwiftlyProductsURL() throws -> URL {
         let serverRootURL = URL(fileURLWithPath: #filePath)
@@ -232,7 +765,7 @@ struct SpeakSwiftlyServerE2ETests {
             .appendingPathComponent("mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib", isDirectory: false)
         guard FileManager.default.fileExists(atPath: metallibURL.path) else {
             throw SpeakSwiftlyBuildError(
-                "The live HTTP end-to-end test requires the Xcode-built SpeakSwiftly products at '\(productsURL.path)'. Build ../SpeakSwiftly with Xcode first so `default.metallib` is available."
+                "The live SpeakSwiftlyServer end-to-end suite requires the Xcode-built SpeakSwiftly products at '\(productsURL.path)'. Build ../SpeakSwiftly with Xcode first so `default.metallib` is available."
             )
         }
         return productsURL
@@ -248,7 +781,7 @@ struct SpeakSwiftlyServerE2ETests {
 
         guard FileManager.default.isExecutableFile(atPath: executableURL.path) else {
             throw SpeakSwiftlyBuildError(
-                "The SpeakSwiftlyServer executable was expected at '\(executableURL.path)', but it was not present. Run `swift build` before the live HTTP end-to-end test."
+                "The SpeakSwiftlyServer executable was expected at '\(executableURL.path)', but it was not present. Run `swift build` before the live end-to-end suite."
             )
         }
         return executableURL
@@ -271,9 +804,96 @@ struct SpeakSwiftlyServerE2ETests {
         }
         try FileManager.default.copyItem(at: sourceURL, to: targetURL)
     }
+
+    private static func makeServer(
+        port: Int,
+        profileRootURL: URL,
+        silentPlayback: Bool,
+        playbackTrace: Bool = false,
+        mcpEnabled: Bool
+    ) throws -> ServerProcess {
+        let dependencyProductsURL = try speakSwiftlyProductsURL()
+        let executableURL = try serverExecutableURL()
+        try stageMetallibForServerBinary(
+            from: dependencyProductsURL,
+            serverExecutableURL: executableURL
+        )
+
+        return try ServerProcess(
+            executableURL: executableURL,
+            dependencyProductsURL: dependencyProductsURL,
+            profileRootURL: profileRootURL,
+            port: port,
+            silentPlayback: silentPlayback,
+            playbackTrace: playbackTrace,
+            mcpEnabled: mcpEnabled
+        )
+    }
+
+    private static func randomPort(in range: Range<Int>) -> Int {
+        Int.random(in: range)
+    }
+
+    private static var isE2EEnabled: Bool {
+        ProcessInfo.processInfo.environment["SPEAKSWIFTLYSERVER_E2E"] == "1"
+    }
+
+    private static var isPlaybackTraceEnabled: Bool {
+        ProcessInfo.processInfo.environment["SPEAKSWIFTLY_PLAYBACK_TRACE"] == "1"
+    }
+
+    private static var e2eTimeout: Duration {
+        .seconds(1_200)
+    }
 }
 
 // MARK: - End-to-End Helpers
+
+private enum E2ETransport: Sendable {
+    case http
+    case mcp
+
+    var profilePrefix: String {
+        switch self {
+        case .http:
+            "http"
+        case .mcp:
+            "mcp"
+        }
+    }
+}
+
+private enum CloneTranscriptMode: Sendable {
+    case provided
+    case inferred
+
+    var slug: String {
+        switch self {
+        case .provided:
+            "provided-transcript"
+        case .inferred:
+            "inferred-transcript"
+        }
+    }
+
+    var providedTranscript: String? {
+        switch self {
+        case .provided:
+            SpeakSwiftlyServerE2ETests.testingCloneSourceText
+        case .inferred:
+            nil
+        }
+    }
+
+    var expectTranscription: Bool {
+        switch self {
+        case .provided:
+            false
+        case .inferred:
+            true
+        }
+    }
+}
 
 private struct ServerE2ESandbox {
     let rootURL: URL
@@ -301,14 +921,22 @@ private final class ServerProcess: @unchecked Sendable {
     private var stdoutTask: Task<Void, Never>?
     private var stderrTask: Task<Void, Never>?
 
+    let baseURL: URL
+
     init(
         executableURL: URL,
         dependencyProductsURL: URL,
         profileRootURL: URL,
         port: Int,
         silentPlayback: Bool,
-        playbackTrace: Bool = false
+        playbackTrace: Bool = false,
+        mcpEnabled: Bool
     ) throws {
+        guard let baseURL = URL(string: "http://127.0.0.1:\(port)") else {
+            throw E2ETransportError("The live end-to-end suite could not construct a localhost base URL for port '\(port)'.")
+        }
+        self.baseURL = baseURL
+
         process.executableURL = executableURL
         process.currentDirectoryURL = executableURL.deletingLastPathComponent()
         process.standardOutput = stdoutPipe
@@ -317,6 +945,10 @@ private final class ServerProcess: @unchecked Sendable {
         var environment = ProcessInfo.processInfo.environment
         environment["APP_PORT"] = String(port)
         environment["SPEAKSWIFTLY_PROFILE_ROOT"] = profileRootURL.path
+        environment["APP_MCP_ENABLED"] = mcpEnabled ? "true" : "false"
+        environment["APP_MCP_PATH"] = "/mcp"
+        environment["APP_MCP_SERVER_NAME"] = "speak-swiftly-server-e2e"
+        environment["APP_MCP_TITLE"] = "SpeakSwiftlyServer E2E MCP"
         if silentPlayback {
             environment["SPEAKSWIFTLY_SILENT_PLAYBACK"] = "1"
         } else {
@@ -352,6 +984,27 @@ private final class ServerProcess: @unchecked Sendable {
         stdoutRecorder.contents + (stdoutRecorder.isEmpty || stderrRecorder.isEmpty ? "" : "\n") + stderrRecorder.contents
     }
 
+    func waitForStderrJSONObject(
+        timeout: Duration,
+        matching predicate: @escaping @Sendable ([String: Any]) -> Bool
+    ) async throws -> [String: Any] {
+        try await e2eWaitUntil(timeout: timeout, pollInterval: .milliseconds(100)) {
+            for line in self.stderrRecorder.snapshot {
+                guard let data = line.data(using: .utf8) else { continue }
+                guard let json = try? JSONSerialization.jsonObject(with: data) else { continue }
+                guard let object = json as? [String: Any], predicate(object) else { continue }
+                return object
+            }
+
+            guard self.isStillRunning else {
+                throw E2ETransportError(
+                    "The live SpeakSwiftlyServer process exited before the expected stderr JSON log was observed.\n\(self.combinedOutput)"
+                )
+            }
+            return nil
+        }
+    }
+
     private func captureLines(
         from handle: FileHandle,
         recordingInto recorder: SynchronizedLogBuffer
@@ -368,21 +1021,6 @@ private final class ServerProcess: @unchecked Sendable {
                     "Server process log capture stopped after an unexpected stream error: \(error.localizedDescription)"
                 )
             }
-        }
-    }
-
-    func waitForStderrLine(
-        timeout: Duration,
-        matching predicate: @escaping @Sendable (String) -> Bool
-    ) async throws -> String {
-        try await e2eWaitUntil(timeout: timeout, pollInterval: .milliseconds(100)) {
-            for line in self.stderrRecorder.snapshot where predicate(line) {
-                return line
-            }
-            guard self.isStillRunning else {
-                throw E2EHTTPError("The live SpeakSwiftlyServer process exited before the expected stderr playback log was observed.\n\(self.combinedOutput)")
-            }
-            return nil
         }
     }
 
@@ -419,16 +1057,19 @@ private final class ServerProcess: @unchecked Sendable {
     }
 }
 
+// MARK: - HTTP Client
+
 private struct E2EHTTPClient {
     let baseURL: URL
 
     func request(
         path: String,
         method: String,
-        jsonBody: [String: String]? = nil
+        jsonBody: [String: Any]? = nil
     ) async throws -> E2EHTTPResponse {
         var request = URLRequest(url: baseURL.appending(path: path))
         request.httpMethod = method
+        request.setValue("application/json, text/event-stream", forHTTPHeaderField: "Accept")
         if let jsonBody {
             request.httpBody = try JSONSerialization.data(withJSONObject: jsonBody)
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -436,20 +1077,164 @@ private struct E2EHTTPClient {
 
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw E2EHTTPError("The live HTTP end-to-end request to '\(path)' did not return an HTTPURLResponse.")
+            throw E2ETransportError("The live HTTP request to '\(path)' did not return an HTTPURLResponse.")
         }
-        return E2EHTTPResponse(statusCode: httpResponse.statusCode, data: data)
+        return E2EHTTPResponse(statusCode: httpResponse.statusCode, headers: httpResponse.allHeaderFields, data: data)
     }
 }
 
 private struct E2EHTTPResponse {
     let statusCode: Int
+    let headers: [AnyHashable: Any]
     let data: Data
 
     var text: String {
         String(decoding: data, as: UTF8.self)
     }
 }
+
+// MARK: - MCP Client
+
+private struct E2EMCPClient {
+    let baseURL: URL
+    let path: String
+    let sessionID: String
+
+    static func connect(
+        baseURL: URL,
+        path: String,
+        timeout: Duration,
+        server: ServerProcess
+    ) async throws -> E2EMCPClient {
+        try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
+            guard server.isStillRunning else {
+                throw E2ETransportError(
+                    "The live SpeakSwiftlyServer process exited before the MCP transport became available.\n\(server.combinedOutput)"
+                )
+            }
+
+            do {
+                return try await connectNow(baseURL: baseURL, path: path)
+            } catch {
+                if isRetryableConnectionDuringStartup(error) {
+                    return nil
+                }
+                return nil
+            }
+        }
+    }
+
+    private static func connectNow(baseURL: URL, path: String) async throws -> E2EMCPClient {
+        let initializeBody: [String: Any] = [
+            "jsonrpc": "2.0",
+            "id": "initialize-1",
+            "method": "initialize",
+            "params": [
+                "protocolVersion": "2025-11-25",
+                "capabilities": [:],
+                "clientInfo": [
+                    "name": "SpeakSwiftlyServerE2ETests",
+                    "version": "1.0",
+                ],
+            ],
+        ]
+
+        let initializeResponse = try await post(
+            baseURL: baseURL,
+            path: path,
+            jsonBody: initializeBody,
+            sessionID: nil
+        )
+        let sessionID = try requireMCPHeader("Mcp-Session-Id", in: initializeResponse.headers)
+        _ = try parseMCPEnvelope(from: initializeResponse.data)
+
+        let initializedBody: [String: Any] = [
+            "jsonrpc": "2.0",
+            "method": "notifications/initialized",
+        ]
+        let initializedResponse = try await post(
+            baseURL: baseURL,
+            path: path,
+            jsonBody: initializedBody,
+            sessionID: sessionID
+        )
+        #expect((200...299).contains(initializedResponse.statusCode))
+
+        return .init(baseURL: baseURL, path: path, sessionID: sessionID)
+    }
+
+    func callTool(name: String, arguments: [String: String]) async throws -> [String: Any] {
+        let response = try await Self.post(
+            baseURL: baseURL,
+            path: path,
+            jsonBody: [
+                "jsonrpc": "2.0",
+                "id": UUID().uuidString,
+                "method": "tools/call",
+                "params": [
+                    "name": name,
+                    "arguments": arguments,
+                ],
+            ],
+            sessionID: sessionID
+        )
+        let envelope = try parseMCPEnvelope(from: response.data)
+        if let error = envelope["error"] as? [String: Any] {
+            throw E2ETransportError("The live MCP tools/call request for '\(name)' failed with payload: \(error)")
+        }
+        let result = try requireDictionary("result", in: envelope)
+        let content = try requireArray("content", in: result)
+        let first = try requireFirstDictionary(in: content)
+        let text = try requireString("text", in: first)
+        return try jsonObject(from: Data(text.utf8))
+    }
+
+    func readResourceText(uri: String) async throws -> String {
+        let response = try await Self.post(
+            baseURL: baseURL,
+            path: path,
+            jsonBody: [
+                "jsonrpc": "2.0",
+                "id": UUID().uuidString,
+                "method": "resources/read",
+                "params": ["uri": uri],
+            ],
+            sessionID: sessionID
+        )
+        let envelope = try parseMCPEnvelope(from: response.data)
+        if let error = envelope["error"] as? [String: Any] {
+            throw E2ETransportError("The live MCP resources/read request for '\(uri)' failed with payload: \(error)")
+        }
+        let result = try requireDictionary("result", in: envelope)
+        let contents = try requireArray("contents", in: result)
+        let first = try requireFirstDictionary(in: contents)
+        return try requireString("text", in: first)
+    }
+
+    private static func post(
+        baseURL: URL,
+        path: String,
+        jsonBody: [String: Any],
+        sessionID: String?
+    ) async throws -> E2EHTTPResponse {
+        var request = URLRequest(url: baseURL.appending(path: path))
+        request.httpMethod = "POST"
+        request.httpBody = try JSONSerialization.data(withJSONObject: jsonBody)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json, text/event-stream", forHTTPHeaderField: "Accept")
+        if let sessionID {
+            request.setValue(sessionID, forHTTPHeaderField: "Mcp-Session-Id")
+        }
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw E2ETransportError("The live MCP transport did not return an HTTPURLResponse.")
+        }
+        return E2EHTTPResponse(statusCode: httpResponse.statusCode, headers: httpResponse.allHeaderFields, data: data)
+    }
+}
+
+// MARK: - Transport Waiters
 
 private func waitUntilWorkerReady(
     using client: E2EHTTPClient,
@@ -458,7 +1243,9 @@ private func waitUntilWorkerReady(
 ) async throws {
     let _: Bool = try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
         guard server.isStillRunning else {
-            throw E2EHTTPError("The live SpeakSwiftlyServer process exited before `/readyz` reported readiness.\n\(server.combinedOutput)")
+            throw E2ETransportError(
+                "The live SpeakSwiftlyServer process exited before `/readyz` reported readiness.\n\(server.combinedOutput)"
+            )
         }
 
         let response: E2EHTTPResponse
@@ -476,6 +1263,24 @@ private func waitUntilWorkerReady(
     }
 }
 
+private func waitUntilWorkerReady(
+    using client: E2EMCPClient,
+    timeout: Duration,
+    server: ServerProcess
+) async throws {
+    let _: Bool = try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
+        guard server.isStillRunning else {
+            throw E2ETransportError(
+                "The live SpeakSwiftlyServer process exited before the MCP status tool reported readiness.\n\(server.combinedOutput)"
+            )
+        }
+
+        let payload = try await client.callTool(name: "status", arguments: [:])
+        guard payload["worker_mode"] as? String == "ready" else { return nil }
+        return true
+    }
+}
+
 private func waitForTerminalJob(
     id jobID: String,
     using client: E2EHTTPClient,
@@ -484,7 +1289,9 @@ private func waitForTerminalJob(
 ) async throws -> E2EJobSnapshot {
     try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
         guard server.isStillRunning else {
-            throw E2EHTTPError("The live SpeakSwiftlyServer process exited before job '\(jobID)' reached a terminal state.\n\(server.combinedOutput)")
+            throw E2ETransportError(
+                "The live SpeakSwiftlyServer process exited before job '\(jobID)' reached a terminal state.\n\(server.combinedOutput)"
+            )
         }
 
         let response = try await client.request(path: "/jobs/\(jobID)", method: "GET")
@@ -494,10 +1301,29 @@ private func waitForTerminalJob(
     }
 }
 
-private func e2eWaitUntil<T: Sendable>(
+private func waitForTerminalJob(
+    id jobID: String,
+    using client: E2EMCPClient,
+    timeout: Duration,
+    server: ServerProcess
+) async throws -> E2EJobSnapshot {
+    try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
+        guard server.isStillRunning else {
+            throw E2ETransportError(
+                "The live SpeakSwiftlyServer process exited before MCP job resource '\(jobID)' reached a terminal state.\n\(server.combinedOutput)"
+            )
+        }
+
+        let text = try await client.readResourceText(uri: "speak://jobs/\(jobID)")
+        let snapshot = try decode(E2EJobSnapshot.self, from: Data(text.utf8))
+        return snapshot.terminalEvent == nil ? nil : snapshot
+    }
+}
+
+private func e2eWaitUntil<T>(
     timeout: Duration,
     pollInterval: Duration,
-    condition: @escaping @Sendable () async throws -> T?
+    condition: @escaping () async throws -> T?
 ) async throws -> T {
     let deadline = ContinuousClock.now + timeout
     while ContinuousClock.now < deadline {
@@ -509,8 +1335,105 @@ private func e2eWaitUntil<T: Sendable>(
     throw E2ETimeoutError()
 }
 
+// MARK: - Stored Profile Helpers
+
+private struct StoredProfileManifest: Decodable, Sendable {
+    let profileName: String
+    let sourceText: String
+
+    enum CodingKeys: String, CodingKey {
+        case profileName = "profile_name"
+        case sourceText = "source_text"
+    }
+}
+
+private func loadStoredProfileManifest(named profileName: String, from rootURL: URL) throws -> StoredProfileManifest {
+    let manifestURL = rootURL
+        .appendingPathComponent(profileName, isDirectory: true)
+        .appendingPathComponent("profile.json", isDirectory: false)
+    let data = try Data(contentsOf: manifestURL)
+    return try decode(StoredProfileManifest.self, from: data)
+}
+
+// MARK: - JSON Helpers
+
 private func decode<Value: Decodable>(_ type: Value.Type, from data: Data) throws -> Value {
     try JSONDecoder().decode(Value.self, from: data)
+}
+
+private func jsonObject(from data: Data) throws -> [String: Any] {
+    let json = try JSONSerialization.jsonObject(with: data)
+    guard let dictionary = json as? [String: Any] else {
+        throw E2ETransportError("Expected a top-level JSON object in the live end-to-end helper, but received '\(type(of: json))'.")
+    }
+    return dictionary
+}
+
+private func parseMCPEnvelope(from data: Data) throws -> [String: Any] {
+    let body = String(decoding: data, as: UTF8.self)
+    if let dataLine = body
+        .split(separator: "\n")
+        .reversed()
+        .first(where: {
+            $0.hasPrefix("data: ")
+                && $0.dropFirst("data: ".count).isEmpty == false
+        })
+    {
+        let payload = dataLine.dropFirst("data: ".count)
+        guard payload.isEmpty == false else {
+            throw E2ETransportError("The live MCP response contained an empty `data:` payload. Raw body: \(body)")
+        }
+        return try jsonObject(from: Data(payload.utf8))
+    }
+    return try jsonObject(from: data)
+}
+
+private func requireMCPHeader(_ name: String, in headers: [AnyHashable: Any]) throws -> String {
+    for (key, value) in headers {
+        if String(describing: key).caseInsensitiveCompare(name) == .orderedSame,
+           let stringValue = value as? String,
+           stringValue.isEmpty == false
+        {
+            return stringValue
+        }
+    }
+    throw E2ETransportError("The live MCP initialize response was missing the required '\(name)' header.")
+}
+
+private func requireDictionary(_ key: String, in object: [String: Any]) throws -> [String: Any] {
+    guard let value = object[key] as? [String: Any] else {
+        throw E2ETransportError("The live end-to-end helper expected '\(key)' to be a JSON object.")
+    }
+    return value
+}
+
+private func requireArray(_ key: String, in object: [String: Any]) throws -> [[String: Any]] {
+    guard let value = object[key] as? [[String: Any]] else {
+        throw E2ETransportError("The live end-to-end helper expected '\(key)' to be an array of JSON objects.")
+    }
+    return value
+}
+
+private func requireFirstDictionary(in array: [[String: Any]]) throws -> [String: Any] {
+    guard let first = array.first else {
+        throw E2ETransportError("The live end-to-end helper expected at least one object in the MCP content array.")
+    }
+    return first
+}
+
+private func requireString(_ key: String, in object: [String: Any]) throws -> String {
+    guard let value = object[key] as? String, value.isEmpty == false else {
+        throw E2ETransportError("The live end-to-end helper expected '\(key)' to be a non-empty string.")
+    }
+    return value
+}
+
+private func requireProfiles(from payload: [String: Any]) throws -> [E2EProfileSnapshot] {
+    guard let profiles = payload["profiles"] else {
+        throw E2ETransportError("The live end-to-end helper expected the profile list payload to contain 'profiles'.")
+    }
+    let data = try JSONSerialization.data(withJSONObject: ["profiles": profiles])
+    return try decode(E2EProfileListResponse.self, from: data).profiles
 }
 
 private extension NSLock {
@@ -521,8 +1444,11 @@ private extension NSLock {
     }
 }
 
+// MARK: - Error Helpers
+
 private struct E2ETimeoutError: Error {}
-private struct E2EHTTPError: Error, CustomStringConvertible {
+
+private struct E2ETransportError: Error, CustomStringConvertible {
     let description: String
 
     init(_ description: String) {
@@ -543,6 +1469,8 @@ private func isRetryableConnectionDuringStartup(_ error: Error) -> Bool {
     guard nsError.domain == NSURLErrorDomain else { return false }
     return nsError.code == NSURLErrorCannotConnectToHost || nsError.code == NSURLErrorNetworkConnectionLost
 }
+
+// MARK: - Decodable Transport Models
 
 private struct E2EReadinessSnapshot: Decodable, Sendable {
     let workerReady: Bool
@@ -573,22 +1501,39 @@ private struct E2EProfileSnapshot: Decodable, Sendable {
 }
 
 private struct E2EJobSnapshot: Decodable, Sendable {
+    let jobID: String
     let status: String
-    let history: [E2EHistoryEvent]
-    let terminalEvent: E2ESuccessEvent?
+    let history: [E2EJobEvent]
+    let terminalEvent: E2EJobEvent?
 
     enum CodingKeys: String, CodingKey {
+        case jobID = "job_id"
         case status
         case history
         case terminalEvent = "terminal_event"
     }
 }
 
-private struct E2EHistoryEvent: Decodable, Sendable {
+private struct E2EJobEvent: Decodable, Sendable {
+    let id: String?
+    let event: String?
+    let op: String?
+    let stage: String?
     let ok: Bool?
-}
+    let profileName: String?
+    let profilePath: String?
+    let message: String?
+    let code: String?
 
-private struct E2ESuccessEvent: Decodable, Sendable {
-    let id: String
-    let ok: Bool
+    enum CodingKeys: String, CodingKey {
+        case id
+        case event
+        case op
+        case stage
+        case ok
+        case profileName = "profile_name"
+        case profilePath = "profile_path"
+        case message
+        case code
+    }
 }

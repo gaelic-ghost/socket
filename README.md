@@ -310,19 +310,19 @@ swift build
 swift test
 ```
 
-The current automated suite covers configuration parsing, queued live speech job completion semantics, generation and playback queue inspection, playback control routes, queue cancellation routes, startup failure before readiness, runtime degradation while active and queued speech jobs are in flight, in-memory retention and pruning, SSE replay and heartbeat behavior, route-level health, profile, clone, text-profile, and job lifecycle responses against a controlled typed runtime, the embedded MCP tool, prompt, and resource surface, the shared host snapshot stream and typed host event stream, plus an opt-in live end-to-end path against a real `SpeakSwiftly` runtime:
+The current automated suite covers configuration parsing, queued live speech job completion semantics, generation and playback queue inspection, playback control routes, queue cancellation routes, startup failure before readiness, runtime degradation while active and queued speech jobs are in flight, in-memory retention and pruning, SSE replay and heartbeat behavior, route-level health, profile, clone, text-profile, and job lifecycle responses against a controlled typed runtime, the embedded MCP tool, prompt, and resource surface, the shared host snapshot stream and typed host event stream, plus an opt-in live end-to-end suite against a real `SpeakSwiftly` runtime:
 
 ```bash
 SPEAKSWIFTLYSERVER_E2E=1 swift test --filter SpeakSwiftlyServerE2ETests
 ```
 
-There is also a second opt-in live pass that exercises the actual playback path instead of the silent playback controller. It still drives the full localhost HTTP surface, but it additionally waits for the runtime's structured `playback_engine_ready`, `playback_started`, and `playback_finished` log events:
+That serialized live suite now mirrors the main `SpeakSwiftly` sequential workflows across both HTTP and MCP:
 
-```bash
-SPEAKSWIFTLYSERVER_E2E=1 SPEAKSWIFTLYSERVER_E2E_REAL_PLAYBACK=1 swift test --filter SpeakSwiftlyServerE2ETests
-```
+- voice-design profile creation, then silent playback, then audible playback
+- clone creation with a provided transcript, then silent playback, then audible playback
+- clone creation with inferred transcript loading, then silent playback, then audible playback
 
-If you want the underlying playback trace logs too, add `SPEAKSWIFTLY_PLAYBACK_TRACE=1`.
+If you want the underlying playback trace logs too, add `SPEAKSWIFTLY_PLAYBACK_TRACE=1` to that same command.
 
 That live path expects the sibling [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout to have already been built with Xcode at least once so `../SpeakSwiftly/.derived/Build/Products/Debug/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib` exists for the server process.
 
