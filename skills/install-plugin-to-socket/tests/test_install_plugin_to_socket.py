@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -142,6 +143,12 @@ def test_apply_install_personal_scope_uses_home_relative_paths(tmp_path: Path, m
     fake_home.mkdir()
     monkeypatch.setattr(m.Path, "home", lambda: fake_home)
     source_plugin = _write_source_plugin(tmp_path / "source")
+    install_calls: list[tuple[Path, str]] = []
+    monkeypatch.setattr(
+        m,
+        "_install_personal_plugin_via_codex_app_server",
+        lambda marketplace_path, plugin_name: install_calls.append((marketplace_path, plugin_name)) or None,
+    )
 
     apply_actions, _source_summary, target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
         requested_source_root=source_plugin,
@@ -157,6 +164,8 @@ def test_apply_install_personal_scope_uses_home_relative_paths(tmp_path: Path, m
     entry = marketplace["plugins"][0]
     assert target_plugin_root == fake_home / ".codex" / "plugins" / "example-plugin"
     assert entry["source"]["path"] == "./.codex/plugins/example-plugin"
+    assert install_calls == [(marketplace_path, "example-plugin")]
+    assert any(action["action"] == "codex-plugin-install" for action in apply_actions)
 
 
 def test_personal_scope_install_and_uninstall_testing_plugin_round_trip(tmp_path: Path, monkeypatch) -> None:
@@ -164,6 +173,18 @@ def test_personal_scope_install_and_uninstall_testing_plugin_round_trip(tmp_path
     fake_home.mkdir()
     monkeypatch.setattr(m.Path, "home", lambda: fake_home)
     source_plugin = _write_source_plugin(tmp_path / "source", plugin_name="testing-plugin")
+    install_calls: list[tuple[Path, str]] = []
+    uninstall_calls: list[str] = []
+    monkeypatch.setattr(
+        m,
+        "_install_personal_plugin_via_codex_app_server",
+        lambda marketplace_path, plugin_name: install_calls.append((marketplace_path, plugin_name)) or None,
+    )
+    monkeypatch.setattr(
+        m,
+        "_uninstall_personal_plugin_via_codex_app_server",
+        lambda plugin_key: uninstall_calls.append(plugin_key) or None,
+    )
     marketplace_path = fake_home / ".agents" / "plugins" / "marketplace.json"
     marketplace_path.parent.mkdir(parents=True)
     marketplace_path.write_text(
@@ -205,6 +226,7 @@ def test_personal_scope_install_and_uninstall_testing_plugin_round_trip(tmp_path
     installed_entry = install_marketplace["plugins"][1]
     assert installed_entry["source"]["path"] == "./.codex/plugins/testing-plugin"
     assert installed_entry["policy"]["installation"] == "AVAILABLE"
+    assert install_calls == [(marketplace_path, "testing-plugin")]
 
     uninstall_actions, _source_summary, target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
         requested_source_root=source_plugin,
@@ -218,9 +240,61 @@ def test_personal_scope_install_and_uninstall_testing_plugin_round_trip(tmp_path
     assert any(action["action"] == "uninstall-plugin-tree" for action in uninstall_actions)
     assert any(action["action"] == "uninstall-marketplace-entry" for action in uninstall_actions)
     assert not target_plugin_root.exists()
+    assert uninstall_calls == ["testing-plugin@personal-testing-marketplace"]
+    assert any(action["action"] == "codex-plugin-uninstall" for action in uninstall_actions)
 
     uninstall_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     assert [item["name"] for item in uninstall_marketplace["plugins"]] == ["other-plugin"]
+
+
+def test_audit_verify_reports_missing_personal_plugin_installed_cache(tmp_path: Path, monkeypatch) -> None:
+    fake_home = tmp_path / "home"
+    fake_home.mkdir()
+    monkeypatch.setattr(m.Path, "home", lambda: fake_home)
+    source_plugin = _write_source_plugin(tmp_path / "source")
+
+    target_plugin_root = fake_home / ".codex" / "plugins" / "example-plugin"
+    shutil_target = target_plugin_root
+    shutil_target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source_plugin, shutil_target)
+
+    marketplace_path = fake_home / ".agents" / "plugins" / "marketplace.json"
+    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.write_text(
+        json.dumps(
+            {
+                "name": "local-personal",
+                "plugins": [
+                    {
+                        "name": "example-plugin",
+                        "source": {"source": "local", "path": "./.codex/plugins/example-plugin"},
+                        "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+                        "category": "Productivity",
+                    }
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        m,
+        "_read_personal_plugin_state_via_codex_app_server",
+        lambda marketplace_path, plugin_name: ({"name": plugin_name, "installed": False}, None),
+    )
+
+    findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
+        requested_source_root=source_plugin,
+        scope="personal",
+        action="verify",
+        repo_root=None,
+        install_mode="copy",
+    )
+
+    assert not errors
+    issue_ids = {finding.issue_id for finding in findings}
+    assert "missing-plugin-installed-cache" in issue_ids
 
 
 def test_apply_update_rewrites_marketplace_entry_without_dropping_other_plugins(tmp_path: Path) -> None:

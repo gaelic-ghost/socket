@@ -19,6 +19,7 @@ DEFAULT_PERSONAL_MARKETPLACE_NAME = "local-personal"
 REPO_CONFIG_RELATIVE_PATH = Path(".codex") / "profiles" / "install-plugin-to-socket" / "customization.yaml"
 GLOBAL_CONFIG_RELATIVE_PATH = Path(".config") / "gaelic-ghost" / "agent-plugin-skills" / "install-plugin-to-socket" / "customization.yaml"
 CODEX_CONFIG_RELATIVE_PATH = Path(".codex") / "config.toml"
+CODEX_APP_SERVER_TIMEOUT_SECONDS = 20
 
 
 @dataclass
@@ -513,6 +514,126 @@ def plugin_config_key(plugin_name: str, marketplace_name: str) -> str:
     return f"{plugin_name}@{marketplace_name}"
 
 
+def _run_codex_app_server_request(method: str, params: dict[str, object]) -> tuple[dict[str, object] | None, str | None]:
+    codex_binary = shutil.which("codex")
+    if codex_binary is None:
+        return None, "Codex CLI is not available on PATH, so app-server plugin sync was skipped."
+
+    payload = "\n".join(
+        [
+            json.dumps(
+                {
+                    "method": "initialize",
+                    "id": 1,
+                    "params": {
+                        "clientInfo": {
+                            "name": "agent-plugin-skills",
+                            "title": "Agent Plugin Skills",
+                            "version": "0.4.7",
+                        }
+                    },
+                }
+            ),
+            json.dumps({"method": "initialized", "params": {}}),
+            json.dumps({"method": method, "id": 2, "params": params}),
+            "",
+        ]
+    )
+
+    try:
+        completed = subprocess.run(
+            [codex_binary, "app-server"],
+            input=payload,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=CODEX_APP_SERVER_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        return None, f"Codex app-server did not answer `{method}` within {CODEX_APP_SERVER_TIMEOUT_SECONDS} seconds."
+    except OSError as exc:
+        return None, f"Codex app-server could not be started for `{method}`: {exc}"
+
+    for line in completed.stdout.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        try:
+            message = json.loads(stripped)
+        except json.JSONDecodeError:
+            continue
+        if message.get("id") != 2:
+            continue
+        if "result" in message and isinstance(message["result"], dict):
+            return message["result"], None
+        if "error" in message and isinstance(message["error"], dict):
+            error_message = message["error"].get("message")
+            if isinstance(error_message, str) and error_message.strip():
+                return None, f"Codex app-server rejected `{method}`: {error_message.strip()}"
+            return None, f"Codex app-server rejected `{method}`."
+
+    stderr = completed.stderr.strip()
+    if stderr:
+        return None, f"Codex app-server did not return a `{method}` response. stderr: {stderr}"
+    return None, f"Codex app-server did not return a `{method}` response."
+
+
+def _read_personal_plugin_state_via_codex_app_server(marketplace_path: Path, plugin_name: str) -> tuple[dict[str, object] | None, str | None]:
+    result, error = _run_codex_app_server_request("plugin/list", {"limit": 200})
+    if error is not None or result is None:
+        return None, error
+
+    marketplaces = result.get("marketplaces")
+    if not isinstance(marketplaces, list):
+        return None, "Codex app-server returned an unexpected `plugin/list` payload without marketplaces."
+
+    target_marketplace = marketplace_path.resolve()
+    for marketplace in marketplaces:
+        if not isinstance(marketplace, dict):
+            continue
+        raw_path = marketplace.get("path")
+        if not isinstance(raw_path, str):
+            continue
+        try:
+            resolved_marketplace_path = Path(raw_path).resolve()
+        except OSError:
+            continue
+        if resolved_marketplace_path != target_marketplace:
+            continue
+        plugins = marketplace.get("plugins")
+        if not isinstance(plugins, list):
+            return None, "Codex app-server returned marketplace data without a plugin list."
+        for plugin in plugins:
+            if not isinstance(plugin, dict):
+                continue
+            if plugin.get("name") == plugin_name:
+                return plugin, None
+        return None, f"Codex app-server did not find `{plugin_name}` in marketplace `{marketplace_path}`."
+
+    return None, f"Codex app-server did not find marketplace `{marketplace_path}`."
+
+
+def _install_personal_plugin_via_codex_app_server(marketplace_path: Path, plugin_name: str) -> str | None:
+    _result, error = _run_codex_app_server_request(
+        "plugin/install",
+        {
+            "marketplacePath": str(marketplace_path.resolve()),
+            "pluginName": plugin_name,
+        },
+    )
+    return error
+
+
+def _uninstall_personal_plugin_via_codex_app_server(plugin_key: str) -> str | None:
+    _result, error = _run_codex_app_server_request(
+        "plugin/uninstall",
+        {
+            "pluginId": plugin_key,
+        },
+    )
+    return error
+
+
 def _plugin_section_pattern(plugin_key: str) -> re.Pattern[str]:
     return re.compile(
         rf'(?ms)^\[plugins\."{re.escape(plugin_key)}"\]\n(?P<body>(?:^(?!\[).*\n?)*)'
@@ -952,6 +1073,17 @@ def audit_install(
     if action in {"enable", "disable"}:
         _audit_plugin_config_state(findings, config_path, effective_plugin_key, desired_enabled=action == "enable")
 
+    if install_scope == "personal" and action in {"install", "update", "verify", "repair", "enable", "disable"}:
+        plugin_state, _plugin_state_error = _read_personal_plugin_state_via_codex_app_server(marketplace_path, plugin_name)
+        if isinstance(plugin_state, dict) and plugin_state.get("installed") is False:
+            findings.append(
+                Finding(
+                    str(marketplace_path),
+                    "missing-plugin-installed-cache",
+                    f"Codex still reports `{plugin_name}` as available but not installed in its local plugin cache.",
+                )
+            )
+
     if action == "promote":
         repo_scope_root, repo_target_plugin_root, repo_marketplace_path = scope_paths("repo", plugin_name, repo_root)
         repo_existing_marketplace = _load_json(repo_marketplace_path) if repo_marketplace_path.exists() else None
@@ -1123,8 +1255,39 @@ def apply_install(
             apply_actions.append(
                 {"action": "write-plugin-enabled-state", "path": str(config_path), "plugin_key": plugin_key, "enabled": "true"}
             )
+        if install_scope == "personal":
+            install_error = _install_personal_plugin_via_codex_app_server(marketplace_path, plugin_name)
+            if install_error is None:
+                apply_actions.append(
+                    {
+                        "action": "codex-plugin-install",
+                        "path": str(marketplace_path),
+                        "plugin_name": plugin_name,
+                    }
+                )
+            else:
+                apply_actions.append(
+                    {
+                        "action": "codex-plugin-install-fallback",
+                        "path": str(marketplace_path),
+                        "plugin_name": plugin_name,
+                        "message": install_error,
+                    }
+                )
 
     elif action == "uninstall":
+        if install_scope == "personal" and plugin_key is not None:
+            uninstall_error = _uninstall_personal_plugin_via_codex_app_server(plugin_key)
+            if uninstall_error is None:
+                apply_actions.append({"action": "codex-plugin-uninstall", "plugin_key": plugin_key})
+            else:
+                apply_actions.append(
+                    {
+                        "action": "codex-plugin-uninstall-fallback",
+                        "plugin_key": plugin_key,
+                        "message": uninstall_error,
+                    }
+                )
         if target_plugin_root.exists() or target_plugin_root.is_symlink():
             _remove_target_path(target_plugin_root)
             apply_actions.append({"action": "uninstall-plugin-tree", "path": str(target_plugin_root)})
@@ -1177,6 +1340,24 @@ def apply_install(
                 "enabled": "true" if repo_enabled_state is None else ("true" if repo_enabled_state else "false"),
             }
         )
+        install_error = _install_personal_plugin_via_codex_app_server(marketplace_path, plugin_name)
+        if install_error is None:
+            apply_actions.append(
+                {
+                    "action": "codex-plugin-install",
+                    "path": str(marketplace_path),
+                    "plugin_name": plugin_name,
+                }
+            )
+        else:
+            apply_actions.append(
+                {
+                    "action": "codex-plugin-install-fallback",
+                    "path": str(marketplace_path),
+                    "plugin_name": plugin_name,
+                    "message": install_error,
+                }
+            )
 
         if repo_target_plugin_root.exists() or repo_target_plugin_root.is_symlink():
             _remove_target_path(repo_target_plugin_root)

@@ -121,7 +121,9 @@ Tickets:
 - [x] Decide whether disable or enable behavior belongs in v1 through `~/.codex/config.toml`, or whether v1 should stay focused on marketplace wiring only.
 - [x] Add optional config-state management for Codex plugin enable or disable behavior in `~/.codex/config.toml` once the repo wants that broader contract.
 - [x] Make personal-scope `install` enable the plugin by default so a new global install is active after restart without requiring a separate `enable` pass.
+- [x] Prefer Codex app-server `plugin/install` and `plugin/uninstall` RPCs for personal-scope cache sync when the local Codex build exposes them, while keeping staged-surface fallback behavior for older or missing app-server paths.
 - [x] Add a verification-oriented mode that audits an already installed local plugin and reports marketplace drift, missing copied files, and likely restart state.
+- [x] Extend personal-scope verification so it can report when Codex still sees the plugin as available but not installed in its own local cache.
 - [x] Add a bounded repair workflow that can normalize a drifted install surface in one pass, including the common legacy repo-root plugin case where a repo-local marketplace entry still points at `./`.
 - [ ] Add a safer overwrite policy for personal-scope updates so maintainers can choose between replace, backup-then-replace, or fail-on-existing behavior.
 - [x] Document install, update, and uninstall usage examples so update and remove workflows are explicit in repo guidance.
