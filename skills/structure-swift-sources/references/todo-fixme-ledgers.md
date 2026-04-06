@@ -34,3 +34,8 @@ Each ledger entry should include:
 
 - When normalizing TODO or FIXME comments, update both the source file and the ledger file in the same pass.
 - If line numbers change later, refresh the ledger entry rather than creating a duplicate ticket.
+
+## Deterministic Helper
+
+- Use `scripts/normalize_todo_fixme_ledgers.py --apply` when the task is specifically about normalizing single-line Swift `// TODO:` or `// FIXME:` comments into the ledger format above.
+- Use the script without `--apply` for a report-only preview.

@@ -367,11 +367,28 @@ Tickets:
 - [x] Rename `swift-style-tooling-workflow` to `format-swift-sources`.
 - [x] Add `structure-swift-sources` as the active skill for file splitting, source moves, MARK normalization, DocC coverage, and TODO/FIXME ledger policy.
 - [x] Cross-link the formatting and structure skills so formatting is the canonical first and last pass around structural mutation.
+- [x] Add a deterministic helper for normalizing Swift TODO/FIXME comments into `TODO.md` and `FIXME.md`.
 - [x] Update README, maintainer docs, roadmap entries, and tests to treat both skills as part of the active public skill surface.
 
 Exit criteria:
 
 - [x] The repo ships distinct formatting and structural Swift cleanup skills with clear boundaries and shared choreography.
+
+## Milestone 29: Swift Cleanup Automation Exploration
+
+Scope:
+
+- [ ] Explore a larger maintainer automation flow for the `format-swift-sources` -> `structure-swift-sources` -> `format-swift-sources` choreography without overclaiming determinism for agent-driven file splits.
+
+Tickets:
+
+- [ ] Evaluate a `codex exec`-friendly maintainer wrapper for sequential formatting and structure passes.
+- [ ] Decide whether the automation should live as a maintainer helper script, Codex GUI automation, or documented manual sequence.
+- [ ] Keep file splitting and concern detection agent-driven unless a later design proves a safer deterministic boundary.
+
+Exit criteria:
+
+- [ ] The repo has a written decision and an approved implementation direction for higher-level Swift cleanup automation.
 
 ## Milestone 20: Customization Consolidation Review
 
