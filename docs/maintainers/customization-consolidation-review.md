@@ -62,7 +62,7 @@ The decision is:
   - `copyAgentsMd`
 - `explore-apple-swift-docs`
   - `defaultSourceOrder`
-- `swift-style-tooling-workflow`
+- `format-swift-sources`
   - `defaultToolSelection`
 - `sync-xcode-project-guidance`
   - `writeMode`
@@ -79,7 +79,7 @@ These are the knobs most likely to reflect real user preference instead of hidde
   - `defaultProjectGenerator`
 - `explore-apple-swift-docs`
   - `troubleshootingPreference`
-- `swift-style-tooling-workflow`
+- `format-swift-sources`
   - `defaultSurface`
   - `preferSwiftLintPlugins`
   - `preferSwiftFormatHostAppExport`
@@ -100,7 +100,7 @@ These are now better derived from request wording, available tools, repo shape, 
   - `dashInstallSourcePriority`
   - `requireExplicitApprovalForDashInstallYes`
   - `dashGenerationPolicy`
-- `swift-style-tooling-workflow`
+- `format-swift-sources`
   - `preferProjectRootConfigFiles`
 - `sync-xcode-project-guidance`
   - `validationMode`

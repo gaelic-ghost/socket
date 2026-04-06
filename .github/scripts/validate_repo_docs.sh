@@ -77,7 +77,8 @@ workflow_doc="docs/maintainers/workflow-atlas.md"
 require_contains "$workflow_doc" "## Repo Workflow Map"
 require_contains "$workflow_doc" '## `xcode-app-project-workflow`'
 require_contains "$workflow_doc" '## `explore-apple-swift-docs`'
-require_contains "$workflow_doc" '## `swift-style-tooling-workflow`'
+require_contains "$workflow_doc" '## `format-swift-sources`'
+require_contains "$workflow_doc" '## `structure-swift-sources`'
 require_contains "$workflow_doc" '## `bootstrap-swift-package`'
 require_contains "$workflow_doc" '## `bootstrap-xcode-app-project`'
 require_contains "$workflow_doc" '## `sync-xcode-project-guidance`'
@@ -107,13 +108,14 @@ echo "Validating skill directory layout..."
 active_skill_mds=(
   "./skills/xcode-app-project-workflow/SKILL.md"
   "./skills/explore-apple-swift-docs/SKILL.md"
-  "./skills/swift-style-tooling-workflow/SKILL.md"
+  "./skills/format-swift-sources/SKILL.md"
+  "./skills/structure-swift-sources/SKILL.md"
   "./skills/bootstrap-swift-package/SKILL.md"
   "./skills/bootstrap-xcode-app-project/SKILL.md"
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 7 ]] || fail "Expected exactly 7 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 8 ]] || fail "Expected exactly 8 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -123,10 +125,17 @@ shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
 for skill_md in "${active_skill_mds[@]}"; do
   skill_dir="${skill_md%/SKILL.md}"
   [[ -f "$skill_dir/agents/openai.yaml" ]] || fail "Missing $skill_dir/agents/openai.yaml"
-  [[ -f "$skill_dir/references/customization.template.yaml" ]] || fail "Missing $skill_dir/references/customization.template.yaml"
-  [[ -f "$skill_dir/references/customization-flow.md" ]] || fail "Missing $skill_dir/references/customization-flow.md"
-  [[ -f "$skill_dir/scripts/customization_config.py" ]] || fail "Missing $skill_dir/scripts/customization_config.py"
   [[ -d "$skill_dir/references" ]] || fail "Missing $skill_dir/references/"
+
+  case "$skill_dir" in
+    ./skills/structure-swift-sources)
+      ;;
+    *)
+      [[ -f "$skill_dir/references/customization.template.yaml" ]] || fail "Missing $skill_dir/references/customization.template.yaml"
+      [[ -f "$skill_dir/references/customization-flow.md" ]] || fail "Missing $skill_dir/references/customization-flow.md"
+      [[ -f "$skill_dir/scripts/customization_config.py" ]] || fail "Missing $skill_dir/scripts/customization_config.py"
+      ;;
+  esac
 
   for heading in \
     "^## Purpose$" \
@@ -152,6 +161,11 @@ for skill_md in "${active_skill_mds[@]}"; do
       local_snippet="$skill_dir/references/snippets/apple-swift-package-core.md"
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'
+      ;;
+    ./skills/structure-swift-sources)
+      local_snippet=""
+      shared_snippet=""
+      snippet_ref=""
       ;;
     *)
       local_snippet="$skill_dir/references/snippets/apple-xcode-project-core.md"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Format Swift Sources"
+  short_description: "Integrate SwiftLint and SwiftFormat across Apple workflows"
+  default_prompt: "Use $format-swift-sources first to choose the right SwiftLint or SwiftFormat integration path for CLI, Xcode, SwiftPM, Git hooks, GitHub Actions, or SwiftFormat config export. If the request expands into file splitting or source reorganization, hand off to $structure-swift-sources and return here afterward for cleanup."

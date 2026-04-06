@@ -21,20 +21,25 @@ flowchart TD
     U["User request"] --> A["Agent classifies request"]
     A --> X["xcode-app-project-workflow"]
     A --> D["explore-apple-swift-docs"]
-    A --> ST["swift-style-tooling-workflow"]
+    A --> ST["format-swift-sources"]
+    A --> SS["structure-swift-sources"]
     A --> B["bootstrap-swift-package"]
     A --> AX["bootstrap-xcode-app-project"]
     A --> SX["sync-xcode-project-guidance"]
     A --> SP["sync-swift-package-guidance"]
     X --> XD["May recommend explore-apple-swift-docs"]
-    X --> XT["May recommend swift-style-tooling-workflow for SwiftLint or SwiftFormat setup"]
+    X --> XT["May recommend format-swift-sources for SwiftLint or SwiftFormat setup"]
+    X --> XSRC["May recommend structure-swift-sources for source cleanup"]
     X --> XB["May recommend bootstrap-swift-package"]
     X --> XS["May recommend bootstrap-xcode-app-project only when the user actually means new-project creation"]
     X --> SG["May recommend sync-xcode-project-guidance for repo guidance alignment"]
     D --> DX["May recommend xcode-app-project-workflow"]
-    D --> DT["May recommend swift-style-tooling-workflow when docs work turns into style-tooling setup"]
+    D --> DT["May recommend format-swift-sources when docs work turns into style-tooling setup"]
     ST --> SXD["May recommend xcode-app-project-workflow when setup becomes active Xcode work"]
     ST --> STB["May recommend bootstrap skills when the user actually needs a full project scaffold"]
+    ST --> STS["May recommend structure-swift-sources when the task becomes source cleanup"]
+    SS --> SSF["Uses format-swift-sources before and after structure work"]
+    SS --> SSX["May recommend xcode-app-project-workflow when file moves need guarded Xcode follow-through"]
     D --> DB["May recommend bootstrap-xcode-app-project"]
     B --> BX["May recommend xcode-app-project-workflow"]
     B --> BS["May recommend sync-swift-package-guidance after bootstrap or later repo-guidance drift"]
@@ -50,7 +55,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - The repo has no Apple router or orchestrator layer.
-- The seven active skills are parallel top-level entry points for different situations.
+- The eight active skills are parallel top-level entry points for different situations.
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
@@ -90,7 +95,7 @@ flowchart TD
 - User-visible response:
   - The user sees direct progress inside one of the eight top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-  - The repo-level UX is a bundle of seven parallel top-level skills, with plugin packaging layered around them as the install surface.
+  - The repo-level UX is a bundle of eight parallel top-level skills, with plugin packaging layered around them as the install surface.
 
 ## `xcode-app-project-workflow`
 
@@ -275,11 +280,11 @@ flowchart TD
 - `handoff`: supporting context passed to the next docs mode
 - `blocked`: no usable docs source, missing approval, or missing mode input
 
-## `swift-style-tooling-workflow`
+## `format-swift-sources`
 
 ### Purpose
 
-Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, and SwiftFormat config export from the Xcode host app or shared defaults.
+Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, SwiftFormat config export from the Xcode host app or shared defaults, and the pre/post formatting bracket around `structure-swift-sources`.
 
 ### Workflow Diagram
 
@@ -306,6 +311,7 @@ flowchart TD
 - The support matrix is part of the contract and should be checked before proposing a path.
 - The preferred SwiftFormat settings-export path is the host app export flow.
 - The shared-defaults export script is a deterministic fallback for cases where a checked-in `.swiftformat` file is needed from existing host-app settings.
+- When a request also includes source cleanup, this skill is the first pass and the final cleanup pass around `structure-swift-sources`.
 
 ### Agent ↔ User UX
 
@@ -324,6 +330,52 @@ flowchart TD
 - `success` + `fallback`: a documented secondary path was selected, such as the SwiftFormat shared-defaults export script
 - `handoff`: bootstrap, sync, or Xcode execution should take over next
 - `blocked`: the requested tool and surface combination is unsupported or the export prerequisites are missing
+
+## `structure-swift-sources`
+
+### Purpose
+
+Provide the canonical structural-cleanup workflow for Swift repositories, including file splitting, layout normalization, MARK grouping, DocC coverage, and TODO/FIXME ledger extraction.
+
+### Workflow Diagram
+
+```mermaid
+flowchart TD
+    I["Structure input"] --> F1["Run format-swift-sources first"]
+    F1 --> C["Classify cleanup kind"]
+    C --> R["Read structure references"]
+    R --> SHAPE["Resolve repo shape"]
+    SHAPE --> WORK["Apply split, move, MARK, DocC, and ledger rules"]
+    WORK --> X{"Needs guarded Xcode follow-through?"}
+    X -->|Yes| H["Handoff to xcode-app-project-workflow"]
+    X -->|No| F2["Run format-swift-sources again"]
+    H --> F2
+    F2 --> OUT["Success / primary or fallback"]
+```
+
+### Branch and Path Notes
+
+- This skill owns source layout and source-organization policy, not formatter or linter integration.
+- File splitting stays agent-driven because concern detection and access-control-safe extraction require reasoning.
+- The preferred choreography is `format-swift-sources` -> `structure-swift-sources` -> `format-swift-sources`.
+
+### Agent ↔ User UX
+
+- Entry:
+  - The user asks to split large Swift files, normalize Swift repo layout, add DocC comments, add MARK sections, or move TODO/FIXME text into ledger files.
+- Agent behavior:
+  - The agent confirms the formatting baseline, resolves the repo shape, chooses the structural path, and only then performs the cleanup or recommends the narrower safe scope.
+- User-visible response:
+  - On success: the user sees the structural path, affected layout targets, ledger files, and one verification step.
+  - On fallback: the user sees why the scope narrowed to one file or one feature area.
+  - On handoff: the user sees why guarded Xcode follow-through is required.
+
+### Failure / Fallback / Handoff States
+
+- `success` + `primary`: the planned structure pass completed
+- `success` + `fallback`: a narrower or safer structure pass completed
+- `handoff`: Xcode execution or repo-guidance sync should take over next
+- `blocked`: the repo shape or mutation safety constraints prevented a clean structure path
 
 ## `bootstrap-xcode-app-project`
 
@@ -519,5 +571,5 @@ flowchart TD
 ## Future Direction Placeholder
 
 - Keep future broader non-Xcode Swift execution expansion explicitly out of the active surface until there is a concrete operational need that differs materially from plain SwiftPM bootstrap, SwiftPM guidance sync, style-tooling setup, and Xcode-managed execution.
-- The current placeholder direction is cross-platform or server-side Swift execution workflows that would not naturally belong to `xcode-app-project-workflow` or `swift-style-tooling-workflow`.
+- The current placeholder direction is cross-platform or server-side Swift execution workflows that would not naturally belong to `xcode-app-project-workflow`, `format-swift-sources`, or `structure-swift-sources`.
 - Do not create that skill family speculatively; reactivate it only when the repo needs a clearly separate Swift workflow with different tools, inputs, and validation.

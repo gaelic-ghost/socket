@@ -338,7 +338,7 @@ Exit criteria:
 
 - [ ] Claude-only plugin extras exist as clearly separated enhancements, and the core workflow remains usable through the shared skill surface in both ecosystems.
 
-## Milestone 19: Swift Style Tooling Workflow
+## Milestone 19: Format Swift Sources
 
 Scope:
 
@@ -346,15 +346,32 @@ Scope:
 
 Tickets:
 
-- [x] Ship `swift-style-tooling-workflow` as the active skill for SwiftLint and SwiftFormat setup across CLI, Xcode, SwiftPM, Git hooks, and GitHub Actions.
+- [x] Ship `format-swift-sources` as the active skill for SwiftLint and SwiftFormat setup across CLI, Xcode, SwiftPM, Git hooks, and GitHub Actions.
 - [x] Document the actual support matrix so unsupported tool-and-surface combinations are blocked instead of implied.
 - [x] Add a deterministic helper for exporting SwiftFormat for Xcode shared settings into a checked-in `.swiftformat` file.
-- [x] Update README, maintainer docs, validation, and tests to treat `swift-style-tooling-workflow` as part of the active public skill surface.
+- [x] Update README, maintainer docs, validation, and tests to treat `format-swift-sources` as part of the active public skill surface.
 - [x] Narrow the future-direction placeholder so style-tooling is no longer treated as deferred non-Xcode Swift expansion.
 
 Exit criteria:
 
 - [x] The repo ships a first-class style-tooling skill with explicit surface boundaries, deterministic SwiftFormat config export support, and fully updated maintainer and validation docs.
+
+## Milestone 28: Structure Swift Sources
+
+Scope:
+
+- [x] Add a dedicated active skill for structural Swift source cleanup instead of overloading the formatting skill with file-splitting and source-layout policy.
+
+Tickets:
+
+- [x] Rename `swift-style-tooling-workflow` to `format-swift-sources`.
+- [x] Add `structure-swift-sources` as the active skill for file splitting, source moves, MARK normalization, DocC coverage, and TODO/FIXME ledger policy.
+- [x] Cross-link the formatting and structure skills so formatting is the canonical first and last pass around structural mutation.
+- [x] Update README, maintainer docs, roadmap entries, and tests to treat both skills as part of the active public skill surface.
+
+Exit criteria:
+
+- [x] The repo ships distinct formatting and structural Swift cleanup skills with clear boundaries and shared choreography.
 
 ## Milestone 20: Customization Consolidation Review
 

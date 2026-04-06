@@ -24,7 +24,7 @@ Use `scripts/export_swiftformat_xcode_config.py` when you need a scriptable expo
 Example:
 
 ```bash
-skills/swift-style-tooling-workflow/scripts/export_swiftformat_xcode_config.py --output .swiftformat
+skills/format-swift-sources/scripts/export_swiftformat_xcode_config.py --output .swiftformat
 ```
 
 The script reads the shared UserDefaults suite `com.charcoaldesign.SwiftFormat` and reconstructs a config file from:

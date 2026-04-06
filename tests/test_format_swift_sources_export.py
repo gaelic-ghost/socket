@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_PATH = ROOT / "skills/swift-style-tooling-workflow/scripts/export_swiftformat_xcode_config.py"
+MODULE_PATH = ROOT / "skills/format-swift-sources/scripts/export_swiftformat_xcode_config.py"
 
 
 def load_module(module_path: Path):
@@ -20,7 +20,7 @@ def load_module(module_path: Path):
     return module
 
 
-class SwiftStyleToolingExportTests(unittest.TestCase):
+class FormatSwiftSourcesExportTests(unittest.TestCase):
     def setUp(self) -> None:
         self.module = load_module(MODULE_PATH)
 

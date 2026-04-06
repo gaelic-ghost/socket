@@ -8,8 +8,10 @@ Canonical Apple development skills with a plugin-first packaging layout for Code
   - Top-level Apple and Swift execution skill for Xcode work, diagnostics, toolchains, mutation decisions, and guarded fallback planning.
 - `explore-apple-swift-docs`
   - Top-level docs skill for Apple and Swift docs exploration across Xcode MCP docs, Dash, and official web docs, with optional Dash follow-up when needed.
-- `swift-style-tooling-workflow`
+- `format-swift-sources`
   - Top-level skill for integrating SwiftLint and SwiftFormat across CLI, Xcode, SwiftPM, Git hooks, GitHub Actions, and SwiftFormat config export.
+- `structure-swift-sources`
+  - Top-level skill for splitting, moving, grouping, and documenting Swift source files after a formatting baseline is in place.
 - `bootstrap-swift-package`
   - Top-level skill for new Swift package scaffolding only, with verification and `AGENTS.md` generation.
 - `bootstrap-xcode-app-project`
@@ -24,7 +26,7 @@ Every active skill now follows the same documentation contract:
 - one primary workflow per request type
 - explicit `inputs`, `defaults`, `status`, `path_type`, and `output`
 - named `fallback` and `handoff` behavior
-- customization knobs labeled `policy-only` unless runtime enforcement exists
+- a clear customization stance, including explicit `policy-only` knobs or an explicit “no durable customization surface” statement
 
 Maintainer-facing workflow diagrams, input and output contracts, and Agent ↔ User UX maps live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md). Audit procedure and source-of-truth guidance live in [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md). The current customization-system decision and follow-up plan live in [docs/maintainers/customization-consolidation-review.md](./docs/maintainers/customization-consolidation-review.md).
 
@@ -165,7 +167,9 @@ Common starting points:
 - Apple or Swift docs exploration:
   `npx skills add gaelic-ghost/apple-dev-skills --skill explore-apple-swift-docs`
 - SwiftLint and SwiftFormat integration:
-  `npx skills add gaelic-ghost/apple-dev-skills --skill swift-style-tooling-workflow`
+  `npx skills add gaelic-ghost/apple-dev-skills --skill format-swift-sources`
+- Swift source organization and file-splitting cleanup:
+  `npx skills add gaelic-ghost/apple-dev-skills --skill structure-swift-sources`
 - New Swift package bootstrap:
   `npx skills add gaelic-ghost/apple-dev-skills --skill bootstrap-swift-package`
 - New native Apple app bootstrap:
@@ -201,9 +205,10 @@ Repository-consumable Swift and Apple baseline policy snippets:
 
 Use these snippets for cross-project standards that belong in end-user `AGENTS.md`.
 
-- Each active skill ships the local snippet copy that matches its workflow surface so individually installed skills can recommend it directly.
+- Skills that need end-user repo-guidance snippets ship the local snippet copy that matches their workflow surface so individually installed skills can recommend it directly.
 - For Apple or Swift docs exploration, prefer `explore-apple-swift-docs` over older Dash-specific guidance.
-- For SwiftLint or SwiftFormat setup and config-export workflows, prefer `swift-style-tooling-workflow` over scattering style-tooling snippets across unrelated skills.
+- For SwiftLint or SwiftFormat setup and config-export workflows, prefer `format-swift-sources` over scattering style-tooling snippets across unrelated skills.
+- For file splitting, MARK normalization, DocC coverage, and TODO or FIXME ledger cleanup, prefer `structure-swift-sources`, usually bracketed by `format-swift-sources` before and after.
 - For new Swift package repositories, `bootstrap-swift-package` copies its full `assets/AGENTS.md` template, which already incorporates the Swift-package baseline.
 - For existing Xcode app repositories, prefer `sync-xcode-project-guidance` over manual snippet merging when the goal is to align repo guidance.
 - For existing Swift package repositories, prefer `sync-swift-package-guidance` over manual snippet merging when the goal is to align repo guidance.
@@ -245,7 +250,8 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
     ├── bootstrap-xcode-app-project/
     ├── bootstrap-swift-package/
     ├── explore-apple-swift-docs/
-    ├── swift-style-tooling-workflow/
+    ├── format-swift-sources/
+    ├── structure-swift-sources/
     ├── sync-swift-package-guidance/
     ├── sync-xcode-project-guidance/
     └── xcode-app-project-workflow/

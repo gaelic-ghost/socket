@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL_MODULES = {
     "xcode-app-project-workflow": ROOT / "skills/xcode-app-project-workflow/scripts/customization_config.py",
     "explore-apple-swift-docs": ROOT / "skills/explore-apple-swift-docs/scripts/customization_config.py",
-    "swift-style-tooling-workflow": ROOT / "skills/swift-style-tooling-workflow/scripts/customization_config.py",
+    "format-swift-sources": ROOT / "skills/format-swift-sources/scripts/customization_config.py",
     "bootstrap-swift-package": ROOT / "skills/bootstrap-swift-package/scripts/customization_config.py",
     "bootstrap-xcode-app-project": ROOT / "skills/bootstrap-xcode-app-project/scripts/customization_config.py",
     "sync-xcode-project-guidance": ROOT / "skills/sync-xcode-project-guidance/scripts/customization_config.py",

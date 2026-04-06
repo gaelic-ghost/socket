@@ -39,7 +39,7 @@ Provide one consistent automation contract for selecting and applying a supporte
 ## Codex App Prompt Template
 
 ```text
-Use $swift-style-tooling-workflow.
+Use $format-swift-sources.
 
 Choose one supported SwiftLint and/or SwiftFormat setup path with:
 - Tool selection: <TOOL_SELECTION>
@@ -69,7 +69,7 @@ Return the documented contract only:
 ## Codex CLI Prompt Template
 
 ```text
-Use $swift-style-tooling-workflow for a deterministic style-tooling setup pass.
+Use $format-swift-sources for a deterministic style-tooling setup pass.
 
 Task:
 Set up or explain one supported path for:
