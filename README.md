@@ -390,4 +390,4 @@ Planned work is tracked in [`ROADMAP.md`](https://github.com/gaelic-ghost/SpeakS
 
 ## License
 
-A project license has not been added yet.
+This repository is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). See [LICENSE](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/LICENSE).

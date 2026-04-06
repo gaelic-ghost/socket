@@ -5,9 +5,8 @@
 - [x] Scaffold the Swift executable package.
 - [x] Add project-level guidance in `AGENTS.md`.
 - [x] Write an initial `README.md` that reflects the real current state.
-- [ ] Add a project license.
+- [x] Add a project license.
 - [x] Replace the placeholder executable body with the first real server startup path.
-- [ ] Add package formatting and linting tooling such as SwiftFormat and/or SwiftLint.
 
 ## Milestone 2: Hummingbird HTTP Server
 
@@ -88,3 +87,15 @@
 - [x] Apply the safe host-level subset live through `ServerHost`.
 - [x] Surface restart-required config changes through the shared recent-error model.
 - [ ] Decide whether transport bind settings should remain restart-only permanently or earn a coordinated live-rebind model later.
+
+## Milestone 9: Formatting And Linting
+
+- [ ] Add SwiftFormat configuration and a maintainer-facing formatting command.
+- [ ] Decide whether SwiftLint should join SwiftFormat as a required local and CI check.
+- [ ] Wire the chosen formatting and linting checks into repo-maintenance validation and GitHub Actions.
+
+## Milestone 10: Swift Package Index Readiness
+
+- [ ] Add a project `.spi.yml` file with an intentionally minimal initial configuration.
+- [ ] Re-check README, package metadata, and release guidance against Swift Package Index expectations after `.spi.yml` lands.
+- [ ] Submit the package to Swift Package Index once license, metadata, and CI state are ready.
