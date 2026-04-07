@@ -397,23 +397,23 @@ Exit criteria:
 
 Scope:
 
-- [ ] Expand the deterministic TODO/FIXME helper so it is useful across expected Swift and Objective-C source patterns, while keeping source rewriting and ledger rendering deterministic.
+- [x] Expand the deterministic TODO/FIXME helper so it is useful across expected Swift and Objective-C source patterns, while keeping source rewriting and ledger rendering deterministic.
 
 Tickets:
 
-- [ ] Extend source discovery beyond `.swift` to include Objective-C source files such as `.h`, `.m`, and `.mm`.
-- [ ] Support line-comment TODO/FIXME forms and compiler-warning forms that are common in Swift and Objective-C sources.
-- [ ] Preserve existing ticket IDs when source comments already reference a normalized `TODO-####` or `FIXME-####` ticket.
-- [ ] Add deterministic metadata to ledger entries for source syntax kind so future tooling can distinguish line comments from warning directives.
-- [ ] Add deterministic roadmap-link support by parsing explicit milestone or ticket references from source comments and resolving them into `ROADMAP.md` links in the corresponding ledger entries.
-- [ ] Add deterministic saved-plan-doc link support by parsing explicit references to related planning documents from source comments and rendering those links into the ledger entries.
-- [ ] Keep the helper reportable in JSON so higher-level tooling can reuse the scan and rewrite summary safely.
-- [ ] Add focused tests for Swift line comments, Objective-C line comments, compiler-warning forms, roadmap-link extraction, and saved-plan-doc link extraction.
-- [ ] Update skill references so the helper contract documents the expanded source coverage and ledger schema clearly.
+- [x] Extend source discovery beyond `.swift` to include Objective-C source files such as `.h`, `.m`, and `.mm`.
+- [x] Support line-comment TODO/FIXME forms and compiler-warning forms that are common in Swift and Objective-C sources.
+- [x] Preserve existing ticket IDs when source comments already reference a normalized `TODO-####` or `FIXME-####` ticket.
+- [x] Add deterministic metadata to ledger entries for source syntax kind so future tooling can distinguish line comments from warning directives.
+- [x] Add deterministic roadmap-link support by parsing explicit milestone or ticket references from source comments and resolving them into `ROADMAP.md` links in the corresponding ledger entries.
+- [x] Add deterministic saved-plan-doc link support by parsing explicit references to related planning documents from source comments and rendering those links into the ledger entries.
+- [x] Keep the helper reportable in JSON so higher-level tooling can reuse the scan and rewrite summary safely.
+- [x] Add focused tests for Swift line comments, Objective-C line comments, compiler-warning forms, roadmap-link extraction, and saved-plan-doc link extraction.
+- [x] Update skill references so the helper contract documents the expanded source coverage and ledger schema clearly.
 
 Exit criteria:
 
-- [ ] The helper can normalize supported Swift and Objective-C TODO/FIXME forms into stable ledger entries with source-location data, syntax metadata, and optional deterministic links to roadmap milestones or related saved plan docs.
+- [x] The helper can normalize supported Swift and Objective-C TODO/FIXME forms into stable ledger entries with source-location data, syntax metadata, and optional deterministic links to roadmap milestones or related saved plan docs.
 
 ## Milestone 20: Customization Consolidation Review
 

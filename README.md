@@ -97,6 +97,7 @@ uv run --group dev pytest
 ```
 
 Use the executable skill entrypoints directly, for example `skills/xcode-app-project-workflow/scripts/run_workflow.py`.
+For Python wrapper and customization entrypoints that declare inline `uv` dependencies such as `PyYAML`, prefer `uv run scripts/run_workflow.py ...` and `uv run scripts/customization_config.py ...` in consuming repos instead of assuming a plain `python` environment has those dependencies available.
 Use targeted `uv run --group dev pytest tests/...` runs while iterating and a full `uv run --group dev pytest` pass before finalizing repo-wide maintenance.
 Keep `ruff` and `mypy` available as maintainer-side `uv` tools even when a given repo pass only needs the test suite.
 
