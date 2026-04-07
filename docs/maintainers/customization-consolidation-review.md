@@ -11,8 +11,8 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 - The active skill surface ships `8` separate `references/customization.template.yaml` files.
 - The active skill surface ships `8` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `11` knobs total:
-  - `10` are documented as `runtime-enforced`
+- The current templates expose `13` knobs total:
+  - `12` are documented as `runtime-enforced`
   - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference
@@ -83,8 +83,6 @@ These are the knobs most likely to reflect real user preference instead of hidde
   - `defaultSurface`
   - `preferSwiftLintPlugins`
   - `preferSwiftFormatHostAppExport`
-- `xcode-app-project-workflow`
-  - `fallbackCommandMappingProfile`
 - `swift-package-workflow`
   - no ordinary user-facing knobs
 
@@ -108,12 +106,16 @@ These are now better derived from request wording, available tools, repo shape, 
   - `validationMode`
 - `sync-swift-package-guidance`
   - `validationMode`
-- `xcode-app-project-workflow`
-  - `mcpRetryCount`
-  - `requireExplicitMutationOptInForFilesystemFallback`
-  - `advisoryCooldownDays`
 
 These are either safety policy, implementation tuning, or maintainer defaults that should not be presented as if they were equally meaningful end-user preference.
+
+### Reintroduced Runtime Tuning Where It Changes Real Behavior
+
+- `xcode-app-project-workflow`
+  - `mcpRetryCount`
+  - `fallbackCommandMappingProfile`
+
+These remain because they now change actual runtime behavior without weakening the workflow's hard `.pbxproj` safety boundary.
 
 ## Sync Skill Simplification Decision
 
@@ -191,4 +193,4 @@ Status: not started
 
 Milestone 20 is complete once the roadmap reflects this review and the repository treats this document as the source of truth for the next implementation pass.
 
-Milestone 27 is complete once the live customization templates, flow docs, runtime wrappers, tests, and roadmap all match the reduced surface described here. That implementation pass is now in place.
+Milestone 27 is complete once the live customization templates, flow docs, runtime wrappers, tests, and roadmap all match the reduced surface described here. That implementation pass is now in place, with the current Xcode workflow keeping only the retry-count and fallback-profile runtime knobs plus the hard `.pbxproj` warning boundary.

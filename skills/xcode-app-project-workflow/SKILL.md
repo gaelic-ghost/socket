@@ -7,13 +7,13 @@ description: Guide development work in or around existing Xcode-managed projects
 
 ## Purpose
 
-Use this skill as the top-level entry point for execution work in or around Xcode-managed projects and workspaces. The skill guides agent-side tool use and applies the shared simplicity-first Swift policy, while `scripts/run_workflow.py` enforces local policy, mutation guards, advisory cooldown behavior, and structured fallback planning. Keep this workflow focused on Xcode-aware execution instead of stretching it into docs-management, package-first execution, or repo-sync responsibilities. Codex Plugin and Claude Code Plugin installs for the bundled Apple skill set are now the preferred install path going forward.
+Use this skill as the top-level entry point for execution work in or around Xcode-managed projects and workspaces. The skill guides agent-side tool use and applies the shared simplicity-first Swift policy, while `scripts/run_workflow.py` enforces local policy, `.pbxproj` edit safeguards, and structured fallback planning. Keep this workflow focused on Xcode-aware execution instead of stretching it into docs-management, package-first execution, or repo-sync responsibilities. Codex Plugin and Claude Code Plugin installs for the bundled Apple skill set are now the preferred install path going forward.
 
 ## When To Use
 
 - Use this skill for Xcode workspace inspection, read or search, diagnostics, build, test, run, preview, and navigator-issue tasks.
 - Use this skill for Xcode MCP operations, scheme-aware execution, and official Apple CLI fallback.
-- Use this skill when direct filesystem mutation in an Xcode-managed scope may be required.
+- Use this skill when direct filesystem mutation around an Xcode-managed project may be required.
 - Use this skill after Apple or Swift docs have already been gathered through `explore-apple-swift-docs` and the work has shifted into Xcode-aware execution or implementation.
 - Do not use this skill as the default path for ordinary Swift package development when `Package.swift` is the source of truth and Xcode-managed behavior is not the main concern.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift documentation lookup, source selection, Dash compatibility, or docs install follow-up rather than execution work.
@@ -43,7 +43,7 @@ Use this skill as the top-level entry point for execution work in or around Xcod
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
-4. Run `scripts/run_workflow.py` to apply runtime configuration, mutation-guard checks, advisory cooldown, and CLI fallback planning.
+4. Run `scripts/run_workflow.py` to apply runtime configuration, `.pbxproj` edit safeguards, and CLI fallback planning.
 5. Use the guidance in `references/mcp-tool-matrix.md` for agent-executed MCP operations.
 6. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
 7. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
@@ -54,19 +54,18 @@ Use this skill as the top-level entry point for execution work in or around Xcod
 - `workspace_path`: optional absolute path for the target Xcode or Swift workspace.
 - `tab_identifier`: optional MCP tab identifier when already known.
 - `mcp_failure_reason`: optional input when continuing from an earlier MCP failure.
-- `filesystem_fallback_opt_in`: optional explicit opt-in when planning direct filesystem fallback in Xcode-managed scope.
+- `direct_pbxproj_edit`: optional flag when the requested mutation would directly edit a `.pbxproj` file.
+- `direct_pbxproj_edit_opt_in`: optional explicit opt-in after the user has been warned about direct `.pbxproj` edit risks.
 - Defaults:
   - runtime entrypoint: executable `scripts/run_workflow.py`
   - agent-side MCP retries once for transient failures
-  - advisory cooldown is `21` days
-  - mutation operations require the explicit guard in Xcode-managed scope
+  - direct edits are allowed by default when they do not directly edit `.pbxproj`
 
 ## Outputs
 
 - `status`
   - `success`: the workflow completed on its primary or fallback path
   - `blocked`: prerequisites, policy, or mutation safeguards prevented completion
-  - `handoff`: the workflow is handing off supporting context to another step or skill
 - `path_type`
   - `primary`: the guided agent-side MCP path completed successfully
   - `fallback`: the official CLI fallback path completed successfully
@@ -74,13 +73,12 @@ Use this skill as the top-level entry point for execution work in or around Xcod
   - operation type
   - `guard_result`
   - `fallback_commands`
-  - advisory status
-  - one next step or handoff payload when needed
+  - one next step payload when needed
 
 ## Guards and Stop Conditions
 
-- Apply the mutation guard from `references/mutation-risk-policy.md` only when the operation type is `mutation`.
-- Do not skip the mutation guard for direct filesystem edits inside Xcode-managed scope.
+- Apply the mutation safeguard from `references/mutation-risk-policy.md` only when the operation type is `mutation`.
+- Do not skip the explicit warning path for direct `.pbxproj` edits.
 - Stop with `blocked` when the required workspace context cannot be resolved and the operation cannot safely continue.
 - Stop with `blocked` when allowlist or sandbox rules prevent the official CLI fallback and no safe alternative exists.
 
@@ -101,7 +99,7 @@ Use this skill as the top-level entry point for execution work in or around Xcod
 
 - Use `references/customization-flow.md`.
 - `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` still reads customization state, but the current workflow uses fixed safety defaults rather than ordinary user-facing customization knobs.
+- `scripts/run_workflow.py` reads customization state for the remaining user-facing execution knobs.
 - MCP tool execution itself remains agent-side and is not performed by the local runtime entrypoint or by the skill as a direct runtime.
 
 ## References
@@ -129,13 +127,11 @@ Use this skill as the top-level entry point for execution work in or around Xcod
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs to add or merge the shared Xcode-project guidance into an end-user repo.
 - `references/allowlist-guidance.md`
 - `references/skills-installation.md`
-- `references/mcp-setup-advisory.md`
 - `references/skills-discovery.md`
 - `references/snippets/apple-xcode-project-core.md`
 
 ### Script Inventory
 
 - `scripts/run_workflow.py`
-- `scripts/advisory_cooldown.py`
 - `scripts/detect_xcode_managed_scope.sh`
 - `scripts/customization_config.py`

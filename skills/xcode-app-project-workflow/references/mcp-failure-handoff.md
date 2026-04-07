@@ -1,6 +1,6 @@
-# MCP Failure Handoff Contract
+# MCP Failure Fallback Contract
 
-Use this payload shape when `xcode-app-project-workflow` hands off from an MCP attempt to the official CLI fallback or to a follow-up workflow.
+Use this payload shape when `xcode-app-project-workflow` falls back from an MCP attempt to the official CLI path.
 
 ## Inputs
 
@@ -13,7 +13,7 @@ Use this payload shape when `xcode-app-project-workflow` hands off from an MCP a
 ## Output
 
 ```text
-status: <success|handoff|blocked>
+status: <success|blocked>
 path_type: <primary|fallback>
 intent: <build|test|run|package|toolchain|docs|mutation|read-search>
 workspace_path: <absolute-path-or-unknown>
@@ -23,7 +23,6 @@ attempts: <count>
 fallback_commands:
   - <official-command-1>
   - <official-command-2>
-advisory_eligible: <yes|no>
 next_step: <short-text>
 ```
 

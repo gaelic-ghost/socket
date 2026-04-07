@@ -52,9 +52,10 @@ class XcodeWorkflowTests(unittest.TestCase):
                 tmpdir,
                 env=env,
             )
-            self.assertEqual(code, 1)
-            self.assertEqual(payload["status"], "blocked")
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
             self.assertTrue(payload["guard_result"]["managed_scope"])
+            self.assertTrue(payload["guard_result"]["direct_edits_allowed"])
 
     def test_mutation_guard_allows_non_managed_scope(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -67,32 +68,34 @@ class XcodeWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
             self.assertFalse(payload["guard_result"]["managed_scope"])
+            self.assertFalse(payload["guard_result"]["direct_pbxproj_edit_warning_required"])
 
-    def test_advisory_cooldown_and_retry_count_use_fixed_defaults(self) -> None:
+    def test_customization_can_change_retry_count_and_mapping_profile(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// test\n", encoding="utf-8")
             write_config(
                 tmpdir,
                 "xcode-app-project-workflow",
                 {
-                    "advisoryCooldownDays": 30,
                     "mcpRetryCount": 2,
+                    "fallbackCommandMappingProfile": "xcode-only",
                 },
             )
-            state_file = Path(tmpdir) / "cooldown.json"
-            state_file.write_text('{"mcp-fallback-advisory":"2999-01-01T00:00:00Z"}\n', encoding="utf-8")
             env = dict(os.environ)
             env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
             code, payload = self.run_script(
                 "--operation-type",
                 "build",
-                "--advisory-state-file",
-                str(state_file),
+                "--workspace-path",
+                tmpdir,
+                "--mcp-failure-reason",
+                "xcode-mcp-unavailable",
                 env=env,
             )
             self.assertEqual(code, 0)
-            self.assertEqual(payload["retry_count"], 1)
-            self.assertEqual(payload["advisory"]["cooldown_days"], 21)
-            self.assertFalse(payload["advisory"]["should_emit"])
+            self.assertEqual(payload["retry_count"], 2)
+            self.assertEqual(payload["path_type"], "fallback")
+            self.assertNotIn("swift build", payload["fallback_commands"])
 
     def test_fallback_commands_follow_mapping_profile(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -144,21 +147,36 @@ class XcodeWorkflowTests(unittest.TestCase):
             self.assertIn("xcrun --find swift", payload["fallback_commands"])
             self.assertIn("xcrun --find xcodebuild", payload["fallback_commands"])
 
-    def test_blocked_mutation_does_not_switch_to_cli_fallback_path(self) -> None:
+    def test_direct_pbxproj_edit_requires_explicit_opt_in(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "Demo.xcodeproj").mkdir()
+            Path(tmpdir, "project.pbxproj").write_text("// !$*UTF8*$!\n", encoding="utf-8")
             code, payload = self.run_script(
                 "--operation-type",
                 "mutation",
                 "--workspace-path",
                 tmpdir,
-                "--mcp-failure-reason",
-                "timeout",
+                "--direct-pbxproj-edit",
             )
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
             self.assertEqual(payload["path_type"], "primary")
-            self.assertIn("MCP mutation tools", payload["next_step"])
+            self.assertTrue(payload["guard_result"]["direct_pbxproj_edit_warning_required"])
+            self.assertIn("Warn the user", payload["next_step"])
+
+    def test_direct_pbxproj_edit_can_proceed_after_opt_in(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "project.pbxproj").write_text("// !$*UTF8*$!\n", encoding="utf-8")
+            code, payload = self.run_script(
+                "--operation-type",
+                "mutation",
+                "--workspace-path",
+                tmpdir,
+                "--direct-pbxproj-edit",
+                "--direct-pbxproj-edit-opt-in",
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertTrue(payload["guard_result"]["direct_pbxproj_edit_warning_required"])
 
 
 if __name__ == "__main__":

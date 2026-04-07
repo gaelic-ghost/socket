@@ -1,27 +1,20 @@
 # Mutation Risk Policy for Xcode-Managed Projects
 
-## Detect managed scope
+## Safe direct-edit states
 
-Treat scope as managed if project context includes any of:
-- `*.xcodeproj`
-- `*.xcworkspace`
-- `*.pbxproj`
+Treat direct source and project-adjacent filesystem edits as safe when either of these is true:
+- Xcode is closed
+- Xcode is open, but the current project or workspace being edited is not open in Xcode
 
-Use `scripts/detect_xcode_managed_scope.sh` to probe quickly.
+These safe states also allow normal CLI workflows such as `xcodebuild`, `swift`, and `xcrun`.
 
-## Safer alternatives to offer first
+## Direct `.pbxproj` warning path
 
-1. Xcode MCP mutation tools (`XcodeWrite`, `XcodeUpdate`, `XcodeMV`, `XcodeRM`, `XcodeMakeDir`).
-2. Official CLI workflows (`xcodebuild`, `swift`, `xcrun`) where applicable.
-3. User-performed changes in Xcode UI when direct file edits are risky.
+Direct `.pbxproj` edits are the only mutation path that still requires an explicit warning.
 
-## Last-resort direct edit conditions
+Before directly editing `.pbxproj`:
+- warn the user that project-file corruption or membership drift is possible
+- prefer Xcode MCP mutation tools or user-performed Xcode UI changes first when they are practical
+- require explicit user approval before continuing with the direct `.pbxproj` edit
 
-Direct mutation is allowed only if:
-- user received explicit risk warning,
-- safer method was offered,
-- tooling setup/allowlist path was offered,
-- user explicitly opted in,
-- Xcode.app is closed during direct edits.
-
-If these conditions are not met, stop and ask for missing requirement.
+Do not apply this warning path to ordinary source edits, asset edits, package work, or other direct filesystem changes that do not touch `.pbxproj`.

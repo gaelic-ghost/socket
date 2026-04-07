@@ -63,26 +63,6 @@ def detect_managed_scope(workspace_path: str | None) -> dict:
     return payload
 
 
-def advisory_status(cooldown_days: int, state_file: str | None) -> dict:
-    script_path = Path(__file__).with_name("advisory_cooldown.py")
-    command = [
-        sys.executable,
-        str(script_path),
-        "should-emit",
-        "--cooldown-days",
-        str(cooldown_days),
-    ]
-    if state_file:
-        command.extend(["--state-file", state_file])
-    proc = subprocess.run(command, capture_output=True, text=True, check=False)
-    should_emit = proc.returncode == 0
-    return {
-        "cooldown_days": cooldown_days,
-        "should_emit": should_emit,
-        "state_file": state_file,
-    }
-
-
 def discover_workspace_state(workspace_path: str | None) -> dict:
     if not workspace_path:
         return {"workspace": None, "project": None, "swift_package": False}
@@ -108,23 +88,21 @@ def shell_join(parts: list[str]) -> str:
 def build_fallback_commands(operation_type: str, workspace_path: str | None, mapping_profile: str) -> list[str]:
     state = discover_workspace_state(workspace_path)
     commands: list[str] = []
-
-    if mapping_profile != "official-default":
-        mapping_profile = "official-default"
+    include_swift_package = mapping_profile != "xcode-only"
 
     if operation_type in {"workspace-inspection", "session-inspection", "read-search-diagnostics"}:
         if state["workspace"]:
             commands.append(shell_join(["xcodebuild", "-workspace", state["workspace"], "-list"]))
         if state["project"]:
             commands.append(shell_join(["xcodebuild", "-project", state["project"], "-list"]))
-        if state["swift_package"]:
+        if include_swift_package and state["swift_package"]:
             commands.append("swift package describe")
     elif operation_type == "build":
         if state["workspace"]:
             commands.append(shell_join(["xcodebuild", "-workspace", state["workspace"], "-scheme", "<scheme>", "build"]))
         if state["project"]:
             commands.append(shell_join(["xcodebuild", "-project", state["project"], "-scheme", "<scheme>", "build"]))
-        if state["swift_package"]:
+        if include_swift_package and state["swift_package"]:
             commands.append("swift build")
     elif operation_type == "test":
         if state["workspace"]:
@@ -157,14 +135,14 @@ def build_fallback_commands(operation_type: str, workspace_path: str | None, map
                     ]
                 )
             )
-        if state["swift_package"]:
+        if include_swift_package and state["swift_package"]:
             commands.append("swift test")
     elif operation_type == "run":
-        if state["swift_package"]:
+        if include_swift_package and state["swift_package"]:
             commands.append("swift run <target>")
         commands.append("xcrun simctl list")
     elif operation_type == "package-toolchain-management":
-        if state["swift_package"]:
+        if include_swift_package and state["swift_package"]:
             commands.extend(["swift package describe", "swift package resolve", "swift package update"])
         commands.extend(["xcrun --find swift", "xcrun --find xcodebuild"])
     return commands
@@ -177,8 +155,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tab-identifier")
     parser.add_argument("--mcp-failure-reason")
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--filesystem-fallback-opt-in", action="store_true")
-    parser.add_argument("--advisory-state-file")
+    parser.add_argument("--direct-pbxproj-edit", action="store_true")
+    parser.add_argument("--direct-pbxproj-edit-opt-in", action="store_true")
     return parser
 
 
@@ -187,11 +165,10 @@ def main() -> int:
     config = load_effective_config()
     settings = config["settings"]
 
-    advisory = advisory_status(21, args.advisory_state_file)
     fallback_commands = build_fallback_commands(
         args.operation_type,
         args.workspace_path,
-        "official-default",
+        str(settings.get("fallbackCommandMappingProfile", "official-default")),
     )
 
     guard_result = {
@@ -206,20 +183,22 @@ def main() -> int:
 
     if args.operation_type == "mutation":
         scope = detect_managed_scope(args.workspace_path)
+        markers = scope.get("markers", [])
+        has_pbxproj_marker = any(str(marker).endswith(".pbxproj") for marker in markers)
         guard_result = {
             "applied": True,
             "managed_scope": bool(scope.get("managed")),
-            "filesystem_fallback_allowed": True,
-            "reason": "mcp-or-explicit-opt-in",
-            "markers": scope.get("markers", []),
+            "direct_edits_allowed": True,
+            "direct_pbxproj_edit_warning_required": False,
+            "reason": "ordinary-direct-edits-allowed",
+            "markers": markers,
         }
-        if scope.get("managed"):
-            guard_result["filesystem_fallback_allowed"] = bool(args.filesystem_fallback_opt_in)
-            if not args.filesystem_fallback_opt_in:
+        if args.direct_pbxproj_edit or has_pbxproj_marker:
+            guard_result["direct_pbxproj_edit_warning_required"] = True
+            guard_result["reason"] = "direct-pbxproj-edit-warning-required"
+            if args.direct_pbxproj_edit and not args.direct_pbxproj_edit_opt_in:
                 status = "blocked"
-                next_step = "Use MCP mutation tools or rerun with --filesystem-fallback-opt-in for direct filesystem fallback planning."
-        elif not scope.get("managed"):
-            guard_result["reason"] = "non-managed-scope"
+                next_step = "Warn the user about direct .pbxproj edit risks and rerun with --direct-pbxproj-edit-opt-in only if they explicitly approve that path."
 
     if args.mcp_failure_reason and status != "blocked":
         path_type = "fallback"
@@ -237,9 +216,8 @@ def main() -> int:
         "tab_identifier": args.tab_identifier,
         "mcp_failure_reason": args.mcp_failure_reason,
         "guard_result": guard_result,
-        "advisory": advisory,
         "fallback_commands": fallback_commands,
-        "retry_count": 1,
+        "retry_count": int(settings.get("mcpRetryCount", 1)),
         "next_step": next_step,
         "execution_model": "agent-mcp-orchestrated",
         "dry_run": args.dry_run,

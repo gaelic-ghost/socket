@@ -154,18 +154,19 @@ flowchart LR
   - `workspace_path`
   - `tab_identifier`
   - `mcp_failure_reason`
-  - `filesystem_fallback_opt_in`
+  - `direct_pbxproj_edit`
+  - `direct_pbxproj_edit_opt_in`
 - Defaults:
   - repo-maintainer runtime entrypoint `scripts/run_workflow.py`
   - one retry for transient MCP failure
-  - advisory cooldown `21` days
-  - mutation operations require the explicit guard in Xcode-managed scope
+  - fallback command profile `official-default`
+  - ordinary direct edits are allowed
+  - direct `.pbxproj` edits require an explicit warning and opt-in
 
 ### Outputs
 
 - `status`
   - `success`
-  - `handoff`
   - `blocked`
 - `path_type`
   - `primary`
@@ -174,7 +175,7 @@ flowchart LR
   - operation type
   - `guard_result`
   - `fallback_commands`
-  - next step or handoff payload
+  - next step payload
 
 ### Agent ↔ User UX
 
@@ -184,18 +185,16 @@ flowchart LR
   - The agent classifies the operation, runs `run_workflow.py` for local policy and fallback planning, then uses MCP tools or the planned fallback path.
 - User-visible response:
   - On success: the user sees the completed path and what ran.
-  - On fallback: the user sees that CLI was used and why.
-  - On handoff: the user sees the next-step payload or supporting guidance.
+  - On fallback: the user sees that CLI was used because MCP did not complete.
   - On blocked: the user sees the exact reason the workflow could not continue.
 - Interaction style:
-  - Execution engine with guards and a single official fallback path.
+  - Execution engine with a narrow `.pbxproj` safety boundary and a single official fallback path.
 
 ### Failure / Fallback / Handoff States
 
 - `success` + `primary`: agent-side MCP path completed
 - `success` + `fallback`: official CLI fallback completed
-- `handoff`: supporting context passed to a later step or another skill
-- `blocked`: mutation guard failed, context missing, or safe fallback unavailable
+- `blocked`: direct `.pbxproj` warning boundary not yet satisfied, context missing, or safe fallback unavailable
 
 ## `swift-package-workflow`
 
