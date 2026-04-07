@@ -38,7 +38,7 @@ That means this package intentionally stays narrow: Hummingbird for transport ho
 
 ### Current SpeakSwiftly Alignment
 
-This server is aligned to the current public library surface in the sibling [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout rather than an older private worker boundary.
+This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) package dependency rather than an older private worker boundary.
 
 Today the server talks directly to:
 
@@ -81,7 +81,7 @@ That narrowness also informs platform policy. The package should prefer maintain
 
 ## Setup
 
-This package now resolves its SwiftPM dependencies from tagged GitHub releases in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift). The one current exception is [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly), which is pinned to a specific Git revision until the latest tagged release can be consumed through a normal semver range again.
+This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` is currently pinned to the exact tagged release declared there rather than to a local checkout.
 
 Build the package with SwiftPM:
 
@@ -431,11 +431,11 @@ That serialized live suite now mirrors the main `SpeakSwiftly` sequential workfl
 
 If you want the underlying playback trace logs too, add `SPEAKSWIFTLY_PLAYBACK_TRACE=1` to that same command.
 
-That live path expects the sibling [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout to have already been built with Xcode at least once so `../SpeakSwiftly/.derived/Build/Products/Debug/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib` exists for the server process.
+That live path currently expects a local Xcode-built [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) checkout only as the source for `default.metallib`, so `../SpeakSwiftly/.derived/Build/Products/Debug/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib` must exist for the server process. That runtime-artifact requirement is separate from SwiftPM dependency resolution, which still comes from `Package.swift` and `Package.resolved`.
 
 After the live suite passes, use `scripts/repo-maintenance/release.sh` for the tagged release flow so local validation, release artifact staging, tag creation, push, and GitHub release creation stay on the same documented path.
 
-The remaining coverage work is now narrower and more cleanup-focused. The main open checks are trimming any transport-local wrappers that no longer buy clarity and expanding end-to-end assertions when the sibling runtime surface settles again.
+The remaining coverage work is now narrower and more cleanup-focused. The main open checks are trimming any transport-local wrappers that no longer buy clarity and expanding end-to-end assertions when the resolved runtime dependency surface shifts again.
 
 ## Roadmap
 

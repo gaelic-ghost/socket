@@ -72,7 +72,7 @@ find_speak_swiftly_metallib() {
     fi
   done
 
-  die "Could not find SpeakSwiftly's default.metallib in the expected sibling Xcode build locations under $speak_swiftly_root."
+  die "Could not find SpeakSwiftly's default.metallib in the expected local Xcode build locations under $speak_swiftly_root. This metallib lookup is only for staging runtime resources; this repository's SwiftPM dependency still resolves from Package.swift and Package.resolved."
 }
 
 run_dispatch_dir() {

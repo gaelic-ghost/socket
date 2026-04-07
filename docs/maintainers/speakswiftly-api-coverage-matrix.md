@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document compares the public `SpeakSwiftly` library surface in the sibling `../SpeakSwiftly` checkout against the client-facing surfaces implemented by `SpeakSwiftlyServer`.
+This document compares the public `SpeakSwiftly` library surface resolved by this repository's current package dependency against the client-facing surfaces implemented by `SpeakSwiftlyServer`.
 
 It is meant to answer three concrete questions:
 
@@ -10,9 +10,9 @@ It is meant to answer three concrete questions:
 2. Which public capabilities are only partially exposed or intentionally hidden?
 3. Which surface is the more appropriate client contract for each capability: HTTP, MCP, both, or neither?
 
-Current baseline checked against the current sibling `../SpeakSwiftly` checkout on `2026-04-05`.
+Current baseline checked against the `SpeakSwiftly` version resolved in this repository on `2026-04-05`.
 
-The sibling `SpeakSwiftly` checkout has since moved forward with a repackaged public dependency surface, one-shot `textProfileName` speech selection, and a public text-normalization API hanging off the runtime normalizer. That follow-through pass is now landed here:
+The resolved `SpeakSwiftly` dependency had moved forward with a repackaged public dependency surface, one-shot `textProfileName` speech selection, and a public text-normalization API hanging off the runtime normalizer. That follow-through pass is now landed here:
 
 1. package and import alignment
    `SpeakSwiftlyServer` now depends on `TextForSpeech` directly instead of assuming the sibling package re-exports it
@@ -174,5 +174,5 @@ At this point, the remaining differences are mostly intentional transport adapta
 The next library-alignment pass should stay inside this repository and focus on cleanup and operator clarity rather than new feature reach:
 
 1. decide whether any remaining low-level MCP tool names should be promoted to more product-shaped names
-2. tighten the README and maintainer docs whenever the sibling runtime surface shifts again
+2. tighten the README and maintainer docs whenever the resolved runtime dependency surface shifts again
 3. remove any server-local transport translation that is still redundant now that both `SpeakSwiftly` and `TextForSpeech` are wired through directly

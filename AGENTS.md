@@ -22,7 +22,9 @@
 ## Repository-Specific Workflow
 
 - Treat the standalone `SpeakSwiftlyServer` repository as the source of truth for package development, tags, and releases.
-- Treat the sibling `../SpeakSwiftly` checkout as a required local package dependency for normal `swift build` and `swift test` runs in this repository unless the manifest is intentionally changed.
+- Treat the `SpeakSwiftly` dependency declared in `Package.swift` and locked in `Package.resolved` as the source of truth for normal `swift build` and `swift test` runs in this repository.
+- Do not retarget this repository to a local `../SpeakSwiftly` checkout unless the manifest is intentionally changed for an explicit local-integration task.
+- If unreleased `SpeakSwiftly` changes need to land here, prefer stabilizing and tagging them in `SpeakSwiftly` first, then update this repository to that tagged release instead of integrating against half-finished local checkout work.
 - Treat `macOS 15` as the current baseline deployment target for the standalone server package.
 - Keep the host and state architecture friendly to a near-future `iOS 18` reuse path even while the executable package remains macOS-only.
 - Prefer maintainable Apple-platform architecture for the current macOS plus near-future iOS use cases over speculative Linux abstraction.

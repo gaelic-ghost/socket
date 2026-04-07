@@ -771,7 +771,7 @@ struct SpeakSwiftlyServerE2ETests {
             .appendingPathComponent("mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib", isDirectory: false)
         guard FileManager.default.fileExists(atPath: metallibURL.path) else {
             throw SpeakSwiftlyBuildError(
-                "The live SpeakSwiftlyServer end-to-end suite requires the Xcode-built SpeakSwiftly products at '\(productsURL.path)'. Build ../SpeakSwiftly with Xcode first so `default.metallib` is available."
+                "The live SpeakSwiftlyServer end-to-end suite requires the Xcode-built SpeakSwiftly products at '\(productsURL.path)' so `default.metallib` is available at runtime. That local build is only an artifact source for the live suite, not this repository's SwiftPM dependency source."
             )
         }
         return productsURL
