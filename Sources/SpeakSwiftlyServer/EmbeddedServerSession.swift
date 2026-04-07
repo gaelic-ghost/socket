@@ -10,26 +10,25 @@ import ServiceLifecycle
 /// `@Observable` `ServerState` projection that app UI can read directly.
 @MainActor
 public final class EmbeddedServerSession {
+    struct LifecycleHooks {
+        let requestStop: @MainActor @Sendable () async -> Void
+        let waitUntilStopped: @MainActor @Sendable () async throws -> Void
+    }
+
     /// The app-facing observable projection of the embedded host state.
     public let state: ServerState
 
-    private let serviceGroup: ServiceGroup
-    private let configWatchTask: Task<Void, Never>
-    private let runTask: Task<Void, Error>
+    private let lifecycle: LifecycleHooks
     private var didRequestStop = false
 
     // MARK: - Initialization
 
     private init(
         state: ServerState,
-        serviceGroup: ServiceGroup,
-        configWatchTask: Task<Void, Never>,
-        runTask: Task<Void, Error>
+        lifecycle: LifecycleHooks
     ) {
         self.state = state
-        self.serviceGroup = serviceGroup
-        self.configWatchTask = configWatchTask
-        self.runTask = runTask
+        self.lifecycle = lifecycle
     }
 
     // MARK: - Lifecycle
@@ -38,9 +37,24 @@ public final class EmbeddedServerSession {
     public static func start(
         environment: [String: String] = ProcessInfo.processInfo.environment
     ) async throws -> EmbeddedServerSession {
+        try await start(environment: environment, bootstrap: liveBootstrap)
+    }
+
+    static func start(
+        environment: [String: String],
+        bootstrap: @escaping @Sendable ([String: String], ServerState) async throws -> LifecycleHooks
+    ) async throws -> EmbeddedServerSession {
+        let state = ServerState()
+        let lifecycle = try await bootstrap(environment, state)
+        return EmbeddedServerSession(state: state, lifecycle: lifecycle)
+    }
+
+    private static func liveBootstrap(
+        environment: [String: String],
+        state: ServerState
+    ) async throws -> LifecycleHooks {
         let configStore = try await ConfigStore(environment: environment)
         let config = try configStore.loadAppConfig()
-        let state = ServerState()
         let host = await ServerHost.live(appConfig: config, state: state)
         let mcpSurface = await MCPSurface.build(configuration: config.mcp, host: host)
         let app = assembleHBApp(
@@ -114,11 +128,14 @@ public final class EmbeddedServerSession {
             }
         }
 
-        return EmbeddedServerSession(
-            state: state,
-            serviceGroup: serviceGroup,
-            configWatchTask: configWatchTask,
-            runTask: runTask
+        return LifecycleHooks(
+            requestStop: {
+                configWatchTask.cancel()
+                await serviceGroup.triggerGracefulShutdown()
+            },
+            waitUntilStopped: {
+                _ = try await runTask.value
+            }
         )
     }
 
@@ -130,14 +147,13 @@ public final class EmbeddedServerSession {
         }
 
         didRequestStop = true
-        configWatchTask.cancel()
-        await serviceGroup.triggerGracefulShutdown()
+        await lifecycle.requestStop()
         try await waitUntilStopped()
     }
 
     // MARK: - Internal Lifecycle
 
     func waitUntilStopped() async throws {
-        _ = try await runTask.value
+        try await lifecycle.waitUntilStopped()
     }
 }

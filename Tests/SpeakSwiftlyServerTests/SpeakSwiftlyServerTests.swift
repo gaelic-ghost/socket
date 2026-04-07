@@ -851,6 +851,94 @@ actor MockRuntime: ServerRuntimeProtocol {
 }
 
 @available(macOS 14, *)
+@Test func embeddedServerSessionPublishesObservableStateForAppConsumers() async throws {
+    let session = try await EmbeddedServerSession.start(environment: ["APP_ENV": "test"]) { environment, state in
+        #expect(environment["APP_ENV"] == "test")
+
+        await MainActor.run {
+            state.overview = HostOverviewSnapshot(
+                service: "speak-swiftly-server-tests",
+                environment: "test",
+                serverMode: "ready",
+                workerMode: "resident",
+                workerStage: "resident_model_ready",
+                workerReady: true,
+                startupError: nil,
+                profileCacheState: "fresh",
+                profileCacheWarning: nil,
+                profileCount: 1,
+                lastProfileRefreshAt: "2026-04-07T12:00:00Z"
+            )
+            state.playback = PlaybackStatusSnapshot(
+                state: "playing",
+                activeRequest: .init(id: "req-1", op: "speak", profileName: "default")
+            )
+            state.currentGenerationJob = CurrentGenerationJobSnapshot(
+                jobID: "job-1",
+                op: "speak",
+                profileName: "default",
+                submittedAt: "2026-04-07T12:00:00Z",
+                startedAt: "2026-04-07T12:00:01Z",
+                latestStage: "speaking",
+                elapsedGenerationSeconds: 0.25
+            )
+            state.transports = [
+                .init(
+                    name: "http",
+                    enabled: true,
+                    state: "listening",
+                    host: "127.0.0.1",
+                    port: 7337,
+                    path: nil,
+                    advertisedAddress: "http://127.0.0.1:7337"
+                ),
+            ]
+        }
+
+        return .init(
+            requestStop: {},
+            waitUntilStopped: {}
+        )
+    }
+
+    let state = await MainActor.run { session.state }
+    let overview = await MainActor.run { state.overview }
+    let currentGenerationJob = await MainActor.run { state.currentGenerationJob }
+    let playback = await MainActor.run { state.playback }
+    let transports = await MainActor.run { state.transports }
+
+    #expect(overview.workerReady == true)
+    #expect(overview.profileCount == 1)
+    #expect(currentGenerationJob?.jobID == "job-1")
+    #expect(playback.state == "playing")
+    #expect(transports.contains { $0.name == "http" && $0.state == "listening" })
+
+    try await session.stop()
+}
+
+@available(macOS 14, *)
+@Test func embeddedServerSessionRequestsGracefulStopOnlyOnce() async throws {
+    let probe = EmbeddedSessionLifecycleProbe()
+    let session = try await EmbeddedServerSession.start(environment: [:]) { _, _ in
+        .init(
+            requestStop: {
+                await probe.recordRequestStop()
+            },
+            waitUntilStopped: {
+                await probe.recordWaitUntilStopped()
+            }
+        )
+    }
+
+    try await session.stop()
+    try await session.stop()
+
+    let counts = await probe.counts()
+    #expect(counts.requestStop == 1)
+    #expect(counts.waitUntilStopped == 2)
+}
+
+@available(macOS 14, *)
 @Test func hostPublishesTypedEventsForServerConsumers() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
@@ -2294,6 +2382,24 @@ actor MockRuntime: ServerRuntimeProtocol {
     #expect(status.profileCacheWarning?.contains("could not confirm the refreshed profile list") == true)
 
     await host.shutdown()
+}
+
+@available(macOS 14, *)
+private actor EmbeddedSessionLifecycleProbe {
+    private var requestStopCallCount = 0
+    private var waitUntilStoppedCallCount = 0
+
+    func recordRequestStop() {
+        requestStopCallCount += 1
+    }
+
+    func recordWaitUntilStopped() {
+        waitUntilStoppedCallCount += 1
+    }
+
+    func counts() -> (requestStop: Int, waitUntilStopped: Int) {
+        (requestStopCallCount, waitUntilStoppedCallCount)
+    }
 }
 
 private func testConfiguration(
