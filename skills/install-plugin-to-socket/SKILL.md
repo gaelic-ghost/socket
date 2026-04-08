@@ -38,6 +38,10 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - default: `copy`
   - `copy`
   - `symlink`
+- Optional: repo install tracking policy when `scope=repo`
+  - default: `local-only`
+  - `tracked`
+  - `local-only`
 - Optional: Codex config path override
   - `--codex-config-path <path>`
 - Optional: whether the request is check-only planning or real apply behavior
@@ -77,10 +81,14 @@ This skill is for local Codex plugin development workflows. It does not publish 
 16. Treat `enable` and `disable` as explicit Codex config-state workflows backed by the active scope's `config.toml` entries in the form `[plugins."plugin-name@marketplace-name"]`.
 17. Treat `promote` as the bounded workflow that copies the source plugin into personal scope, writes the personal marketplace entry, carries forward the repo install's enabled-state if present in Codex's active config scope, runs the Codex-side personal install step, and then removes the repo-local staged install surface.
 18. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
-19. For `install`, `update`, and `repair`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
-20. For repo-scope installs, use the documented repo-marketplace surface so the target repo can expose that local plugin install through `.agents/plugins/marketplace.json`.
-21. For `uninstall`, try Codex's own app-server `plugin/uninstall` RPC as a best-effort cache cleanup before removing the matching marketplace entry, staged plugin path, and matching plugin config-state entry.
-22. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory or reflects the intended enabled-state.
+19. Treat repo-scope install tracking as a maintainer policy choice, not as a second filesystem shape:
+   - `tracked`: the repo-scoped staged plugin tree and marketplace change are intentional shared repo state that may be committed and synced
+   - `local-only`: the repo-scoped staged plugin tree and marketplace change are local dev wiring that should stay uncommitted unless the repo explicitly chooses otherwise
+20. For repo-scope installs marked as `tracked`, require `copy` mode. A symlinked repo-scope target is local-only by nature and should not be presented as shared git state.
+21. For `install`, `update`, and `repair`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
+22. For repo-scope installs, use the documented repo-marketplace surface so the target repo can expose that local plugin install through `.agents/plugins/marketplace.json`.
+23. For `uninstall`, try Codex's own app-server `plugin/uninstall` RPC as a best-effort cache cleanup before removing the matching marketplace entry, staged plugin path, and matching plugin config-state entry.
+24. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory or reflects the intended enabled-state.
 
 ## Usage Examples
 
@@ -88,7 +96,9 @@ This skill is for local Codex plugin development workflows. It does not publish 
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root plugins/agent-plugin-skills --action install --run-mode apply`
   - this now enables the personal-scope plugin by default in `~/.codex/config.toml` and asks Codex's app-server to mark the plugin installed when that RPC is available locally
 - Repo-local install:
-  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action install --run-mode apply`
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action install --run-mode apply --repo-install-tracking local-only`
+- Repo-local install intended to stay tracked in git:
+  - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --scope repo --repo-root /path/to/target-repo --action install --run-mode apply --repo-install-tracking tracked --install-mode copy`
 - Update a staged copied install after source changes:
   - `uv run python skills/install-plugin-to-socket/scripts/install_plugin_to_socket.py --source-plugin-root /path/to/plugin --action update --run-mode apply`
 - Remove a local install cleanly:
@@ -153,12 +163,14 @@ Preferred repair flow:
 6. Use `promote` when a repo-local install should become the personal default install surface instead.
 7. Use `uninstall` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
 8. Restart Codex after the repair so the local marketplace view and installed cache pick up the staged plugin changes.
+9. For repo-scope installs, confirm whether the staged plugin tree and marketplace change are meant to be `tracked` shared repo state or `local-only` uncommitted wiring before you finalize the repair.
 
 ## Troubleshooting
 
 - If a repo-local plugin still does not show up after `install`, `update`, or `repair`, fully restart Codex in that repo. A live workspace can continue using the installed-plugin and marketplace state it loaded before the install surface changed.
 - If `/plugins` still looks wrong after restart, check `~/.codex/log/codex-tui.log` for marketplace warnings such as `skipping marketplace` or `local plugin source path must not be empty`.
 - Repo-local plugin visibility now comes from the documented repo marketplace at `.agents/plugins/marketplace.json` plus the staged plugin tree under `plugins/`.
+- Repo-scope tracking is a repo policy choice. `tracked` repo installs still use the same documented repo paths as `local-only` installs; the difference is whether the working-tree change is meant to be committed and shared.
 - The `/plugins` slash command ordering may not be intuitive or obviously alphabetical, so scan the full list before concluding a plugin is missing.
 
 ## Remaining Gaps
@@ -174,6 +186,7 @@ Preferred repair flow:
   - `scope`
   - `action`
   - `install_mode`
+  - `repo_install_tracking`
   - `source_plugin`
   - `target_plugin_root`
   - `marketplace_path`

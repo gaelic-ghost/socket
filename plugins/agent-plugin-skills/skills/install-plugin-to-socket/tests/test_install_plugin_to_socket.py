@@ -572,6 +572,7 @@ def test_parse_args_defaults_scope_to_personal(tmp_path: Path) -> None:
 
     assert args.scope is None
     assert args.install_mode == "copy"
+    assert args.repo_install_tracking is None
 
 
 def test_resolve_scope_defaults_to_personal_without_config(tmp_path: Path) -> None:
@@ -630,6 +631,43 @@ def test_resolve_scope_reports_missing_explicit_config(tmp_path: Path) -> None:
     assert "does not exist" in errors[0]
 
 
+def test_resolve_repo_install_tracking_defaults_to_local_only_for_repo_scope() -> None:
+    tracking, source, errors = m.resolve_repo_install_tracking(None, "repo", {"source": "default"})
+
+    assert not errors
+    assert tracking == "local-only"
+    assert source == "default"
+
+
+def test_resolve_repo_install_tracking_uses_profile_preference(tmp_path: Path) -> None:
+    profile_path = tmp_path / ".codex" / "profiles" / "install-plugin-to-socket" / "customization.yaml"
+    profile_path.parent.mkdir(parents=True)
+    profile_path.write_text("repoInstallTracking: tracked\n", encoding="utf-8")
+
+    _scope, config, _errors = m.resolve_scope(None, tmp_path, None)
+    tracking, source, errors = m.resolve_repo_install_tracking(None, "repo", config)
+
+    assert not errors
+    assert tracking == "tracked"
+    assert source == "config"
+
+
+def test_resolve_repo_install_tracking_prefers_cli_value() -> None:
+    tracking, source, errors = m.resolve_repo_install_tracking("tracked", "repo", {"repoInstallTracking": "local-only"})
+
+    assert not errors
+    assert tracking == "tracked"
+    assert source == "cli"
+
+
+def test_resolve_repo_install_tracking_reports_invalid_profile_value() -> None:
+    tracking, source, errors = m.resolve_repo_install_tracking(None, "repo", {"repoInstallTracking": "moon-base"})
+
+    assert tracking == "local-only"
+    assert source == "invalid-config"
+    assert errors
+
+
 def test_apply_install_repo_scope_can_stage_symlink(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
@@ -649,6 +687,45 @@ def test_apply_install_repo_scope_can_stage_symlink(tmp_path: Path) -> None:
     assert target_plugin_root.resolve() == source_plugin.resolve()
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
+
+
+def test_audit_reports_tracked_repo_install_prefers_copy_mode(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+
+    findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+        install_mode="symlink",
+        repo_install_tracking="tracked",
+    )
+
+    assert not errors
+    assert "tracked-repo-install-prefers-copy" in {finding.issue_id for finding in findings}
+
+
+def test_apply_install_refuses_symlink_mode_for_tracked_repo_install(tmp_path: Path) -> None:
+    source_plugin = _write_source_plugin(tmp_path / "source")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+
+    apply_actions, _source_summary, target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
+        requested_source_root=source_plugin,
+        scope="repo",
+        action="install",
+        repo_root=repo_root,
+        install_mode="symlink",
+        repo_install_tracking="tracked",
+    )
+
+    assert not apply_actions
+    assert errors
+    assert "must use copy mode" in errors[0]
+    assert target_plugin_root == repo_root / "plugins" / "example-plugin"
+    assert not marketplace_path.exists()
 
 
 def test_audit_update_reports_symlink_mode_drift(tmp_path: Path) -> None:

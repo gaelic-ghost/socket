@@ -14,6 +14,7 @@ from pathlib import Path
 EXACT_NO_FINDINGS = "No findings."
 DEFAULT_SCOPE = "personal"
 DEFAULT_INSTALL_MODE = "copy"
+DEFAULT_REPO_INSTALL_TRACKING = "local-only"
 DEFAULT_PERSONAL_MARKETPLACE_NAME = "local-personal"
 DEFAULT_REPO_MARKETPLACE_NAME = "local-repo"
 REPO_CONFIG_RELATIVE_PATH = Path(".codex") / "profiles" / "install-plugin-to-socket" / "customization.yaml"
@@ -102,6 +103,17 @@ def _normalize_scope(raw_scope: str | None) -> str | None:
     return None
 
 
+def _normalize_repo_install_tracking(raw_tracking: str | None) -> str | None:
+    if raw_tracking is None:
+        return None
+    normalized = raw_tracking.strip().lower()
+    if normalized in {"tracked", "shared", "committed"}:
+        return "tracked"
+    if normalized in {"local-only", "local", "untracked"}:
+        return "local-only"
+    return None
+
+
 def read_optional_config(project_root: Path, config_override: str | None) -> dict[str, object]:
     config_paths: list[Path] = []
     if config_override:
@@ -121,7 +133,7 @@ def read_optional_config(project_root: Path, config_override: str | None) -> dic
             continue
         text = _read_text(path)
         result: dict[str, object] = {"config_path": str(path)}
-        for key in ["schemaVersion", "profile", "isCustomized", "defaultInstallScope"]:
+        for key in ["schemaVersion", "profile", "isCustomized", "defaultInstallScope", "repoInstallTracking"]:
             match = re.search(rf"^\s*{key}\s*:\s*(.+?)\s*$", text, flags=re.MULTILINE)
             if match:
                 result[key] = match.group(1).strip().strip('"').strip("'")
@@ -147,6 +159,33 @@ def resolve_scope(scope_arg: str | None, project_root: Path, config_override: st
     if configured_scope is not None:
         return configured_scope, {"source": "config", **config}, errors
     return DEFAULT_SCOPE, {"source": "default", **config}, errors
+
+
+def resolve_repo_install_tracking(
+    tracking_arg: str | None,
+    scope: str,
+    scope_context: dict[str, object],
+) -> tuple[str | None, str, list[str]]:
+    errors: list[str] = []
+    if scope != "repo":
+        return None, "not-applicable", errors
+
+    if tracking_arg is not None:
+        normalized = _normalize_repo_install_tracking(tracking_arg)
+        if normalized is None:
+            errors.append("Installer repo install tracking must be `tracked` or `local-only`.")
+            return DEFAULT_REPO_INSTALL_TRACKING, "invalid-cli", errors
+        return normalized, "cli", errors
+
+    configured_tracking = _normalize_repo_install_tracking(
+        scope_context.get("repoInstallTracking") if isinstance(scope_context, dict) else None
+    )
+    if isinstance(scope_context, dict) and scope_context.get("repoInstallTracking") is not None and configured_tracking is None:
+        errors.append("Installer config sets `repoInstallTracking` to an unsupported value. Use `tracked` or `local-only`.")
+        return DEFAULT_REPO_INSTALL_TRACKING, "invalid-config", errors
+    if configured_tracking is not None:
+        return configured_tracking, "config", errors
+    return DEFAULT_REPO_INSTALL_TRACKING, "default", errors
 
 
 def _discover_plugin_roots_under(repo_root: Path) -> list[Path]:
@@ -643,6 +682,7 @@ def build_verification_steps(
     action: str,
     plugin_key: str | None,
     config_path: Path | None,
+    repo_install_tracking: str | None,
 ) -> list[str]:
     scope_label = "repo" if scope == "repo" else "personal"
     steps = [
@@ -656,6 +696,10 @@ def build_verification_steps(
         steps.append(f"Confirm the plugin config entry `{plugin_key}` now has the intended enabled state in `{config_path}`.")
     if action == "promote":
         steps.append("Confirm the repo-local install surface no longer exposes this plugin if the promote workflow removed that staged install.")
+    if scope == "repo" and repo_install_tracking == "tracked":
+        steps.append("Treat the repo-scope plugin tree and marketplace change as intentional shared repo state, and commit those changes only if this repository wants repo-local plugin installs synced through git.")
+    if scope == "repo" and repo_install_tracking == "local-only":
+        steps.append("Treat the repo-scope plugin tree and marketplace change as local dev wiring unless this repository explicitly wants to share it, and avoid committing it by accident.")
     return steps
 
 
@@ -936,6 +980,7 @@ def audit_install(
     action: str,
     repo_root: Path | None,
     install_mode: str,
+    repo_install_tracking: str | None = None,
     codex_config_override: str | None = None,
 ) -> tuple[list[Finding], dict[str, object], Path, Path, Path, Path, str | None, list[str]]:
     findings: list[Finding] = []
@@ -1015,6 +1060,15 @@ def audit_install(
                     f"Codex still reports `{plugin_name}` as available but not installed in its local plugin cache.",
                 )
             )
+
+    if install_scope == "repo" and repo_install_tracking == "tracked" and install_mode == "symlink":
+        findings.append(
+            Finding(
+                str(target_plugin_root),
+                "tracked-repo-install-prefers-copy",
+                "Repo-scope installs marked as tracked should use copy mode so the staged plugin tree can be shared through git. Symlink mode is local-only.",
+            )
+        )
 
     if install_scope == "repo":
         legacy_plugin_root, legacy_marketplace_path = _legacy_repo_private_surface_paths(scope_root, plugin_name)
@@ -1139,6 +1193,7 @@ def apply_install(
     action: str,
     repo_root: Path | None,
     install_mode: str,
+    repo_install_tracking: str | None = None,
     codex_config_override: str | None = None,
 ) -> tuple[list[dict[str, str]], dict[str, object], Path, Path, Path, str | None, list[str]]:
     apply_actions: list[dict[str, str]] = []
@@ -1179,6 +1234,9 @@ def apply_install(
     plugin_key: str | None = plugin_config_key(plugin_name, marketplace_name)
 
     if action in {"install", "update", "repair"}:
+        if install_scope == "repo" and repo_install_tracking == "tracked" and install_mode == "symlink":
+            errors.append("Repo scope installs marked as tracked must use copy mode so the staged plugin tree can be shared through git. Symlink mode is local-only.")
+            return apply_actions, source_summary, target_plugin_root, marketplace_path, config_path, plugin_key, errors
         if install_mode == "symlink" and _tracked_tree_blocks_symlink_mode(install_scope, scope_root, target_plugin_root):
             errors.append("Repo scope symlink mode is blocked because the staged target path is a git-tracked plugin tree. Use copy mode for this repo, or migrate the tracked tree deliberately before switching to symlink mode.")
             return apply_actions, source_summary, target_plugin_root, marketplace_path, config_path, plugin_key, errors
@@ -1360,10 +1418,12 @@ def build_report(
     action: str,
     run_mode: str,
     install_mode: str,
+    repo_install_tracking: str | None,
     target_plugin_root: Path,
     marketplace_path: Path,
     config_path: str,
     scope_source: str,
+    repo_install_tracking_source: str,
     plugin_config_key_name: str | None,
     findings: list[Finding],
     apply_actions: list[dict[str, str]],
@@ -1375,10 +1435,12 @@ def build_report(
             "run_mode": run_mode,
             "config_path": config_path,
             "scope_source": scope_source,
+            "repo_install_tracking_source": repo_install_tracking_source,
         },
         "scope": scope,
         "action": action,
         "install_mode": install_mode,
+        "repo_install_tracking": repo_install_tracking,
         "source_plugin": source_plugin,
         "target_plugin_root": str(target_plugin_root),
         "marketplace_path": str(marketplace_path),
@@ -1395,6 +1457,7 @@ def build_report(
             action=action,
             plugin_key=plugin_config_key_name,
             config_path=Path(config_path),
+            repo_install_tracking=repo_install_tracking,
         ),
         "errors": errors,
     }
@@ -1412,6 +1475,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config")
     parser.add_argument("--codex-config-path")
     parser.add_argument("--install-mode", choices=("copy", "symlink"), default=DEFAULT_INSTALL_MODE)
+    parser.add_argument("--repo-install-tracking", choices=("tracked", "local-only"))
     parser.add_argument("--print-md", action="store_true")
     return parser.parse_args()
 
@@ -1421,6 +1485,11 @@ def main() -> int:
     requested_source_root = Path(args.source_plugin_root).resolve()
     project_root = Path(args.repo_root).resolve() if args.repo_root else Path.cwd().resolve()
     scope, scope_context, scope_errors = resolve_scope(args.scope, project_root, args.config)
+    repo_install_tracking, repo_install_tracking_source, tracking_errors = resolve_repo_install_tracking(
+        args.repo_install_tracking,
+        scope,
+        scope_context,
+    )
     repo_root = project_root if scope == "repo" else (Path(args.repo_root).resolve() if args.repo_root else None)
 
     findings, source_summary, target_plugin_root, marketplace_path, _scope_root, config_path, plugin_key, errors = audit_install(
@@ -1429,9 +1498,11 @@ def main() -> int:
         action=args.action,
         repo_root=repo_root,
         install_mode=args.install_mode,
+        repo_install_tracking=repo_install_tracking,
         codex_config_override=args.codex_config_path,
     )
     errors.extend(scope_errors)
+    errors.extend(tracking_errors)
 
     apply_actions: list[dict[str, str]] = []
     if not errors and args.run_mode == "apply":
@@ -1441,6 +1512,7 @@ def main() -> int:
             action=args.action,
             repo_root=repo_root,
             install_mode=args.install_mode,
+            repo_install_tracking=repo_install_tracking,
             codex_config_override=args.codex_config_path,
         )
         errors.extend(apply_errors)
@@ -1450,6 +1522,7 @@ def main() -> int:
             action=args.action,
             repo_root=repo_root,
             install_mode=args.install_mode,
+            repo_install_tracking=repo_install_tracking,
             codex_config_override=args.codex_config_path,
         )
         errors.extend(post_errors)
@@ -1460,10 +1533,12 @@ def main() -> int:
         action=args.action,
         run_mode=args.run_mode,
         install_mode=args.install_mode,
+        repo_install_tracking=repo_install_tracking,
         target_plugin_root=target_plugin_root,
         marketplace_path=marketplace_path,
         config_path=str(config_path),
         scope_source=str(scope_context.get("source", "default")),
+        repo_install_tracking_source=repo_install_tracking_source,
         plugin_config_key_name=plugin_key,
         findings=findings,
         apply_actions=apply_actions,

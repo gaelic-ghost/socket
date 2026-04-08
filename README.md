@@ -94,6 +94,11 @@ This follows the current docs:
 - Codex local plugins are loaded from a marketplace entry and then copied into the Codex cache, so the canonical source repo should track the source plugin and any repo-curated marketplace catalog, not the downstream cache copy.
 - Claude plugin development uses `claude --plugin-dir` directly from source, while Claude marketplace distribution is Git-oriented and expects a tracked repo-root `.claude-plugin/marketplace.json` when you want the repository itself to be addable as a marketplace.
 
+For repo-scoped Codex local installs, the documented filesystem paths stay the same either way:
+
+- tracked repo install: the staged plugin tree under `plugins/<plugin-name>/` and the repo marketplace change under `.agents/plugins/marketplace.json` are intentional shared repo state
+- local-only repo install: those same documented repo paths are used, but the resulting working-tree changes are local dev wiring and should stay uncommitted unless the repo explicitly chooses to share them
+
 ## Shared `.gitignore` Snippet
 
 For skills and plugin development repos, merge this baseline snippet unless the repo already has stricter local-runtime ignores:
@@ -107,7 +112,7 @@ For skills and plugin development repos, merge this baseline snippet unless the 
 .claude/.local/
 ```
 
-This snippet is intentionally narrow. It ignores accidental in-repo local install surfaces and Claude local-only settings, but it does not ignore tracked plugin manifests, marketplace catalogs, or canonical plugin source directories.
+This snippet is intentionally narrow. It ignores accidental in-repo local install surfaces and Claude local-only settings, but it does not ignore tracked plugin manifests, marketplace catalogs, or canonical plugin source directories. If a repo intentionally shares repo-scoped Codex local installs through git, do not add ignore rules for `plugins/<plugin-name>/` or `.agents/plugins/marketplace.json`. If a repo wants repo-scoped installs to stay local-only, confirm that policy explicitly and avoid committing those working-tree changes by accident.
 
 ## Standards And Docs
 
@@ -155,7 +160,7 @@ For Codex local installs, the documented staged paths are:
 - personal scope: `~/.codex/plugins/agent-plugin-skills` with `~/.agents/plugins/marketplace.json`
 - repo scope: `$REPO_ROOT/plugins/agent-plugin-skills` with `$REPO_ROOT/.agents/plugins/marketplace.json`
 
-Use `install-plugin-to-socket` to merge the marketplace entry safely and stage a copied plugin tree at those paths. Personal scope is the default recommendation unless a repository explicitly needs repo-local plugin wiring.
+Use `install-plugin-to-socket` to merge the marketplace entry safely and stage a copied plugin tree at those paths. Personal scope is the default recommendation unless a repository explicitly needs repo-local plugin wiring. For repo scope, confirm whether that staged plugin tree is meant to be `tracked` shared repo state or `local-only` working-tree state before you install it.
 
 For `install`, `update`, `uninstall`, `repair`, `enable`, `disable`, and `promote`, pass the canonical plugin root itself. Repo-root convenience input is only supported for `verify`.
 
