@@ -82,12 +82,12 @@ final class ServerProcess: @unchecked Sendable {
 
     init(
         executableURL: URL,
-        dependencyProductsURL: URL,
         profileRootURL: URL,
         port: Int,
         silentPlayback: Bool,
         playbackTrace: Bool = false,
-        mcpEnabled: Bool
+        mcpEnabled: Bool,
+        speechBackend: String? = nil
     ) throws {
         guard let baseURL = URL(string: "http://127.0.0.1:\(port)") else {
             throw E2ETransportError("The live end-to-end suite could not construct a localhost base URL for port '\(port)'.")
@@ -114,7 +114,12 @@ final class ServerProcess: @unchecked Sendable {
         if playbackTrace {
             environment["SPEAKSWIFTLY_PLAYBACK_TRACE"] = "1"
         }
-        environment["DYLD_FRAMEWORK_PATH"] = dependencyProductsURL.path
+        if let speechBackend {
+            environment["SPEAKSWIFTLY_SPEECH_BACKEND"] = speechBackend
+        } else {
+            environment.removeValue(forKey: "SPEAKSWIFTLY_SPEECH_BACKEND")
+        }
+        environment["DYLD_FRAMEWORK_PATH"] = executableURL.deletingLastPathComponent().path
         process.environment = environment
     }
 
@@ -612,7 +617,8 @@ private actor E2ENotificationBuffer {
 func waitUntilWorkerReady(
     using client: E2EHTTPClient,
     timeout: Duration,
-    server: ServerProcess
+    server: ServerProcess,
+    expectPlaybackEngine: Bool = false
 ) async throws {
     let _: Bool = try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
         guard server.isStillRunning else {
@@ -634,12 +640,27 @@ func waitUntilWorkerReady(
         let readiness = try decode(E2EReadinessSnapshot.self, from: response.data)
         return readiness.workerReady ? true : nil
     }
+
+    guard expectPlaybackEngine else { return }
+
+    _ = try await server.waitForStderrJSONObject(timeout: timeout) {
+        guard
+            $0["event"] as? String == "playback_engine_ready",
+            let details = $0["details"] as? [String: Any]
+        else {
+            return false
+        }
+
+        return details["process_phys_footprint_bytes"] as? Int != nil
+            && details["mlx_active_memory_bytes"] as? Int != nil
+    }
 }
 
 func waitUntilWorkerReady(
     using client: E2EMCPClient,
     timeout: Duration,
-    server: ServerProcess
+    server: ServerProcess,
+    expectPlaybackEngine: Bool = false
 ) async throws {
     let _: Bool = try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
         guard server.isStillRunning else {
@@ -651,6 +672,20 @@ func waitUntilWorkerReady(
         let payload = try await client.callTool(name: "status", arguments: [:])
         guard payload["worker_mode"] as? String == "ready" else { return nil }
         return true
+    }
+
+    guard expectPlaybackEngine else { return }
+
+    _ = try await server.waitForStderrJSONObject(timeout: timeout) {
+        guard
+            $0["event"] as? String == "playback_engine_ready",
+            let details = $0["details"] as? [String: Any]
+        else {
+            return false
+        }
+
+        return details["process_phys_footprint_bytes"] as? Int != nil
+            && details["mlx_active_memory_bytes"] as? Int != nil
     }
 }
 

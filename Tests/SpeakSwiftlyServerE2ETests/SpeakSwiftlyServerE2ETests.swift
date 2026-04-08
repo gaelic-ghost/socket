@@ -52,6 +52,14 @@ struct SpeakSwiftlyServerE2ETests {
         try await Self.runCloneLane(using: .mcp, transcriptMode: .inferred)
     }
 
+    @Test func httpMarvisVoiceDesignProfilesRunAudibleLivePlaybackAcrossAllVibes() async throws {
+        try await Self.runMarvisTripletLane(using: .http)
+    }
+
+    @Test func mcpMarvisVoiceDesignProfilesRunAudibleLivePlaybackAcrossAllVibes() async throws {
+        try await Self.runMarvisTripletLane(using: .mcp)
+    }
+
     @Test func httpOperatorControlSurfaceCoversReadQueuePlaybackAndRemovalFlows() async throws {
         let sandbox = try ServerE2ESandbox()
         defer { sandbox.cleanup() }
@@ -921,7 +929,7 @@ struct SpeakSwiftlyServerE2ETests {
                 let client = E2EHTTPClient(baseURL: server.baseURL)
                 try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
 
-                try await runAudibleSpeech(
+                _ = try await runAudibleSpeech(
                     using: client,
                     server: server,
                     text: testingPlaybackText,
@@ -937,7 +945,7 @@ struct SpeakSwiftlyServerE2ETests {
                 )
                 try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
 
-                try await runAudibleSpeech(
+                _ = try await runAudibleSpeech(
                     using: client,
                     server: server,
                     text: testingPlaybackText,
@@ -1075,7 +1083,7 @@ struct SpeakSwiftlyServerE2ETests {
             case .http:
                 let client = E2EHTTPClient(baseURL: server.baseURL)
                 try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
-                try await runAudibleSpeech(
+                _ = try await runAudibleSpeech(
                     using: client,
                     server: server,
                     text: testingPlaybackText,
@@ -1090,11 +1098,148 @@ struct SpeakSwiftlyServerE2ETests {
                     server: server
                 )
                 try await waitUntilWorkerReady(using: client, timeout: e2eTimeout, server: server)
-                try await runAudibleSpeech(
+                _ = try await runAudibleSpeech(
                     using: client,
                     server: server,
                     text: testingPlaybackText,
                     profileName: cloneProfileName
+                )
+            }
+        }
+    }
+
+    private static func runMarvisTripletLane(using transport: E2ETransport) async throws {
+        struct MarvisProfileLane {
+            let profileName: String
+            let vibe: String
+            let voiceDescription: String
+            let expectedVoice: String
+        }
+
+        let sandbox = try ServerE2ESandbox()
+        defer { sandbox.cleanup() }
+
+        let prefix = transport.profilePrefix
+        let lanes = [
+            MarvisProfileLane(
+                profileName: "\(prefix)-marvis-triplet-femme-profile",
+                vibe: "femme",
+                voiceDescription: "A warm, bright, feminine narrator voice.",
+                expectedVoice: "conversational_a"
+            ),
+            MarvisProfileLane(
+                profileName: "\(prefix)-marvis-triplet-masc-profile",
+                vibe: "masc",
+                voiceDescription: "A grounded, rich, masculine speaking voice.",
+                expectedVoice: "conversational_b"
+            ),
+            MarvisProfileLane(
+                profileName: "\(prefix)-marvis-triplet-androgenous-profile",
+                vibe: "androgenous",
+                voiceDescription: "A calm, balanced, and gentle speaking voice.",
+                expectedVoice: "conversational_a"
+            ),
+        ]
+
+        let server = try makeServer(
+            port: randomPort(in: 58_800..<59_000),
+            profileRootURL: sandbox.profileRootURL,
+            silentPlayback: false,
+            playbackTrace: isPlaybackTraceEnabled,
+            mcpEnabled: transport == .mcp,
+            speechBackend: "marvis"
+        )
+        try server.start()
+        defer { server.stop() }
+
+        switch transport {
+        case .http:
+            let client = E2EHTTPClient(baseURL: server.baseURL)
+            try await waitUntilWorkerReady(
+                using: client,
+                timeout: e2eTimeout,
+                server: server,
+                expectPlaybackEngine: true
+            )
+
+            for lane in lanes {
+                try await createVoiceDesignProfile(
+                    using: client,
+                    server: server,
+                    profileName: lane.profileName,
+                    vibe: lane.vibe,
+                    text: testingProfileText,
+                    voiceDescription: lane.voiceDescription
+                )
+            }
+
+            let profilesResponse = try await client.request(path: "/profiles", method: "GET")
+            #expect(profilesResponse.statusCode == 200)
+            let profiles = try decode(E2EProfileListResponse.self, from: profilesResponse.data).profiles
+            for lane in lanes {
+                #expect(profiles.contains {
+                    $0.profileName == lane.profileName && $0.vibe == lane.vibe
+                })
+            }
+
+            for lane in lanes {
+                let jobID = try await runAudibleSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: lane.profileName
+                )
+                try await expectMarvisVoiceSelection(
+                    on: server,
+                    requestID: jobID,
+                    expectedVoice: lane.expectedVoice
+                )
+            }
+
+        case .mcp:
+            let client = try await E2EMCPClient.connect(
+                baseURL: server.baseURL,
+                path: "/mcp",
+                timeout: e2eTimeout,
+                server: server
+            )
+            try await waitUntilWorkerReady(
+                using: client,
+                timeout: e2eTimeout,
+                server: server,
+                expectPlaybackEngine: true
+            )
+
+            for lane in lanes {
+                try await createVoiceDesignProfile(
+                    using: client,
+                    server: server,
+                    profileName: lane.profileName,
+                    vibe: lane.vibe,
+                    text: testingProfileText,
+                    voiceDescription: lane.voiceDescription
+                )
+            }
+
+            let profilesPayload = try await client.callToolJSON(name: "list_profiles", arguments: [:])
+            let profiles = try requireProfiles(from: profilesPayload)
+            for lane in lanes {
+                #expect(profiles.contains {
+                    $0.profileName == lane.profileName && $0.vibe == lane.vibe
+                })
+            }
+
+            for lane in lanes {
+                let jobID = try await runAudibleSpeech(
+                    using: client,
+                    server: server,
+                    text: testingPlaybackText,
+                    profileName: lane.profileName
+                )
+                try await expectMarvisVoiceSelection(
+                    on: server,
+                    requestID: jobID,
+                    expectedVoice: lane.expectedVoice
                 )
             }
         }
@@ -1239,7 +1384,7 @@ struct SpeakSwiftlyServerE2ETests {
         server: ServerProcess,
         text: String,
         profileName: String
-    ) async throws {
+    ) async throws -> String {
         let engineReadyLog = try await server.waitForStderrJSONObject(timeout: .seconds(120)) {
             guard
                 $0["event"] as? String == "playback_engine_ready",
@@ -1311,6 +1456,7 @@ struct SpeakSwiftlyServerE2ETests {
         assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
         #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "preroll_ready" })
         #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "playback_finished" })
+        return jobID
     }
 
     private static func submitSpeechJob(
@@ -1476,7 +1622,7 @@ struct SpeakSwiftlyServerE2ETests {
         server: ServerProcess,
         text: String,
         profileName: String
-    ) async throws {
+    ) async throws -> String {
         let engineReadyLog = try await server.waitForStderrJSONObject(timeout: .seconds(120)) {
             guard
                 $0["event"] as? String == "playback_engine_ready",
@@ -1546,6 +1692,27 @@ struct SpeakSwiftlyServerE2ETests {
         assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
         #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "preroll_ready" })
         #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "playback_finished" })
+        return jobID
+    }
+
+    private static func expectMarvisVoiceSelection(
+        on server: ServerProcess,
+        requestID: String,
+        expectedVoice: String
+    ) async throws {
+        let log = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
+            guard
+                $0["event"] as? String == "marvis_voice_selected",
+                $0["request_id"] as? String == requestID,
+                let details = $0["details"] as? [String: Any]
+            else {
+                return false
+            }
+
+            return details["speech_backend"] as? String == "marvis"
+                && details["marvis_voice"] as? String == expectedVoice
+        }
+        #expect(log["event"] as? String == "marvis_voice_selected")
     }
 
     private static func waitForMCPPlaybackState(
@@ -1748,7 +1915,8 @@ struct SpeakSwiftlyServerE2ETests {
         profileRootURL: URL,
         silentPlayback: Bool,
         playbackTrace: Bool = false,
-        mcpEnabled: Bool
+        mcpEnabled: Bool,
+        speechBackend: String? = nil
     ) throws -> ServerProcess {
         let dependencyProductsURL = try speakSwiftlyProductsURL()
         let executableURL = try serverToolExecutableURL()
@@ -1759,12 +1927,12 @@ struct SpeakSwiftlyServerE2ETests {
 
         return try ServerProcess(
             executableURL: executableURL,
-            dependencyProductsURL: dependencyProductsURL,
             profileRootURL: profileRootURL,
             port: port,
             silentPlayback: silentPlayback,
             playbackTrace: playbackTrace,
-            mcpEnabled: mcpEnabled
+            mcpEnabled: mcpEnabled,
+            speechBackend: speechBackend
         )
     }
 

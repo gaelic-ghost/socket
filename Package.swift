@@ -22,8 +22,9 @@ let package = Package(
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.21.1"),
         .package(
             url: "https://github.com/gaelic-ghost/SpeakSwiftly.git",
-            exact: "0.11.0"
+            exact: "1.0.0-rc.1"
         ),
+        .package(url: "https://github.com/ml-explore/mlx-swift-lm.git", exact: "2.30.6"),
         .package(url: "https://github.com/gaelic-ghost/TextForSpeech.git", from: "0.9.3"),
         .package(url: "https://github.com/apple/swift-async-algorithms", from: "1.1.3"),
         .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.12.0"),
@@ -68,6 +69,10 @@ let package = Package(
         .testTarget(
             name: "SpeakSwiftlyServerE2ETests",
             dependencies: [
+                // Keep the live Marvis server suite on the same MLX runtime stack as
+                // SpeakSwiftly's upstream Marvis e2e coverage so model-loading behavior
+                // stays deterministic across the two repositories.
+                .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
                 "SpeakSwiftlyServer",
                 .product(name: "MCP", package: "swift-sdk"),
                 .product(name: "TextForSpeech", package: "TextForSpeech"),

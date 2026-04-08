@@ -1,5 +1,5 @@
 {
-  "originHash" : "d864c4a50189cfad07ad32af1de934dd4fed9532d9f7eaef09c7fdd72ddabf50",
+  "originHash" : "9b3ebbe1611f35e8714ad5b5ce5fce71093f76519646b2237ba7f621aa2d7e04",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ml-explore/mlx-swift.git",
       "state" : {
-        "revision" : "61b9e011e09a62b489f6bd647958f1555bdf2896",
-        "version" : "0.31.3"
+        "revision" : "6ba4827fb82c97d012eec9ab4b2de21f85c3b33d",
+        "version" : "0.30.6"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ml-explore/mlx-swift-lm.git",
       "state" : {
-        "revision" : "25b00d4e22e61ec9c41efda47990cd2084ec87ff",
-        "version" : "2.31.3"
+        "revision" : "7e19e09027923d89ac47dd087d9627f610e5a91a",
+        "version" : "2.30.6"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gaelic-ghost/SpeakSwiftly.git",
       "state" : {
-        "revision" : "161802076273dc176546f204351c8d29ea1c53e8",
-        "version" : "0.11.0"
+        "revision" : "51f5c13e3f9903a5eeccb159bc453137c54688d5",
+        "version" : "1.0.0-rc.1"
       }
     },
     {
@@ -294,8 +294,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/huggingface/swift-transformers.git",
       "state" : {
-        "revision" : "58c4bc11963a140358d791f678a60a2745a23146",
-        "version" : "1.2.1"
+        "revision" : "150169bfba0889c229a2ce7494cf8949f18e6906",
+        "version" : "1.1.9"
       }
     },
     {
