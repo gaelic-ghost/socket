@@ -5,7 +5,7 @@
 - For work in this repository, edit skills only under `/Users/galew/Workspace/productivity-skills/skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
 - This file defines maintainer guidance for developing skills in this repository. Keep these links and rules at repo root for contributor workflows.
-- Repository direction: keep this repo focused on broadly useful global-install skills. Prefer dedicated stack- or repo-specific plugins for language/framework/repository workflows that make more sense at project-level install scope.
+- Repository direction: keep this repo focused on broadly useful global-install skills and on the canonical general-purpose baseline versions of workflow families that may later specialize into stack- or language-specific plugins. Prefer dedicated stack- or repo-specific plugins for workflows whose best version depends on stronger project-level assumptions.
 
 ## Standards and Guidance
 
@@ -49,7 +49,7 @@ Applicability guidance:
   - a `subagent` is a delegated runtime worker with its own context and tool policy
 - For Codex, treat skills as the primary authoring format and plugins as the installable distribution unit that can bundle skills, apps, and MCP servers.
 - For Codex work in this repository, keep root `skills/` as the canonical workflow-authoring surface and treat `plugins/productivity-skills/` as the plugin packaging root.
-- Philosophically, this repository is for global-install productivity workflows. Language-, framework-, stack-, or repository-specific bundles should generally live in dedicated plugins intended for project- or repo-level install.
+- Philosophically, this repository is both the home for global-install productivity workflows and the superclass layer for broadly reusable workflow families. Language-, framework-, stack-, or repository-specific bundles should generally live in dedicated plugins intended for project- or repo-level install when stronger assumptions materially improve the workflow.
 - Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors instead of duplicate skill trees:
   - `.agents/skills -> ../skills`
   - `.claude/skills -> ../skills`

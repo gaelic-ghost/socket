@@ -6,21 +6,39 @@ For maintainer guidance, standards references, and cross-ecosystem packaging pol
 
 ## Repo Direction
 
-This repository is now explicitly the global, broadly useful side of Gale's skills ecosystem.
+This repository serves two intentional roles in Gale's skills ecosystem:
+
+- it is the public home of a globally installable productivity-skills plugin that other people can use directly
+- it is the canonical general-purpose baseline layer for skill families that later narrow into stack-specific plugins such as `apple-dev-skills` and `python-skills`
 
 - keep `productivity-skills` focused on skills that make sense to install globally
+- keep this repo as the superclass layer for broad workflows before they are specialized into stronger stack-specific variants elsewhere
 - prefer dedicated language-, stack-, or repo-specific plugins for project-level or repository-level install
 - treat agent-stack maintainer workflows as a separate product line instead of mixing them into the long-term core identity of this repo
 
 That split now exists in practice as well:
 
 - this repo remains the home for widely useful global skills
+- this repo is also the home for the broad reusable versions of workflow families that may later gain stronger assumptions in specialized plugins
 - the sibling repo [`../agent-plugin-skills`](../agent-plugin-skills) is now the dedicated home for agent-skills and agent-plugin repository maintainer workflows
 
 Current split:
 
 - `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were incubated here and now live in [`../agent-plugin-skills`](../agent-plugin-skills)
 - this repository no longer ships agent-stack repo-maintainer skills as part of its active local inventory
+
+## Layering Model
+
+Use this repo when the workflow should stay broad, portable, and reusable across many repositories.
+
+Use a specialized plugin when the best version of the workflow depends on stronger assumptions about one stack, language, toolchain, or operating environment.
+
+In practice, that means:
+
+- `productivity-skills` holds the durable general-purpose baseline
+- stack-specific plugins refine or extend these workflows when tighter defaults produce better results
+- specialization is intentional, not a sign that the general version here is unfinished
+- the general version here should stay coherent on its own rather than becoming a thin router to every specialized plugin
 
 ## Active Skills
 
@@ -60,8 +78,9 @@ Shared guidance across both ecosystems:
 Packaging philosophy going forward:
 
 - global plugins should bundle skills that are broadly useful across many repos
+- this global plugin should also hold the canonical general-purpose versions of workflow families that later specialize elsewhere
 - language-, framework-, stack-, or repository-specific skills should increasingly live in dedicated plugins that are installed at the project or repo level
-- this keeps global installs lighter and makes stack-specific guidance easier to evolve without turning one plugin into a grab bag
+- this keeps global installs lighter, gives specialized plugins room for stronger assumptions, and preserves this repo as the stable superclass layer instead of turning it into a grab bag
 
 Current packaging surfaces live under:
 

@@ -32,8 +32,9 @@ If two layers disagree, fix the lower-trust layer or narrow its claims.
 
 ### Product Boundary
 
-- `productivity-skills` is now the global, broadly useful plugin.
+- `productivity-skills` is the global, broadly useful plugin and the canonical general-purpose baseline layer for workflow families that may later specialize into narrower plugins.
 - Language-, framework-, stack-, and repository-specific maintainer workflows should prefer dedicated plugins intended for project-level or repo-level install.
+- Specialization should be treated as a refinement layer over the baseline here, not as evidence that the baseline repo is temporary or incomplete.
 - Agent-skills and agent-plugin repository maintainer workflows now have a dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills`.
 - That sibling repo is the canonical home for that domain; this repository should not keep shipping local copies of those skills.
 

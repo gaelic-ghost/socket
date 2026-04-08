@@ -16,7 +16,9 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 ## Product Direction
 
 - This repository now optimizes for globally useful skills that make sense to install broadly.
+- This repository is also the canonical general-purpose baseline layer for workflow families that may later narrow into stack-specific plugins.
 - Dedicated language-, stack-, or repository-specific bundles should increasingly live in separate plugins intended for project-level or repo-level install.
+- Those narrower plugins should refine or extend the workflows here when stronger assumptions improve the result, rather than turning this repo into a passive router.
 - Agent-skills and agent-plugin repository maintenance now has a dedicated sibling repo at `/Users/galew/Workspace/agent-plugin-skills`.
 - Those agent-stack maintainer skills are now out of this repo's active inventory and belong in the sibling repo instead.
 

@@ -9,7 +9,7 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - Keep skill names clear, stable, and domain-grouped.
 - Keep workflow instructions deterministic and safety-forward.
 - Keep docs and metadata synchronized with the active skill set.
-- Keep this repository focused on broadly useful global-install skills.
+- Keep this repository focused on broadly useful global-install skills and the canonical general-purpose baseline versions of workflow families that later specialize elsewhere.
 - Prefer dedicated language-, framework-, stack-, or repository-specific plugins for project-level or repo-level install.
 - Treat agent-skills and agent-plugin repository maintenance as a distinct product line now housed in `/Users/galew/Workspace/agent-plugin-skills`.
 
@@ -34,6 +34,27 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 16: Use `agent-plugin-skills` plugin to align repo with skills/plugin repo standards (completed)
 - [x] Milestone 17: Shared repo-maintenance toolkit skill (completed)
 - [x] Milestone 18: Project CONTRIBUTING maintainer skill (completed)
+- [x] Milestone 19: Repo role clarification and contributor guide (completed)
+
+## Milestone 19: Repo role clarification and contributor guide
+
+Scope:
+
+- Clarify that this repository is both the global-install plugin and the canonical general-purpose baseline layer for workflow families that later specialize into narrower plugins.
+- Move contributor workflow guidance into a dedicated `CONTRIBUTING.md` so `README.md` can stay more public-facing.
+- Keep maintainer docs aligned with the new role language.
+
+Tickets:
+
+- [x] Update public-facing README language to explain the global-plus-superclass role.
+- [x] Add a canonical `CONTRIBUTING.md` for repo contribution workflow.
+- [x] Align `AGENTS.md` and maintainer docs with the revised product-boundary wording.
+
+Exit criteria:
+
+- [x] Public docs describe this repo as both a global plugin and a general-purpose baseline layer.
+- [x] The repo has a canonical `CONTRIBUTING.md`.
+- [x] Maintainer docs use the same product-boundary language as the public docs.
 
 ## Milestone 18: Project CONTRIBUTING maintainer skill
 
