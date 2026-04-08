@@ -88,6 +88,72 @@ def detect_managed_scope(workspace_path: str | None) -> dict:
     return payload
 
 
+def discover_workspace_state(workspace_path: str | None) -> dict:
+    if not workspace_path:
+        return {
+            "workspace": None,
+            "project": None,
+            "requested_root": None,
+            "resolved_root": None,
+            "xctestplans": [],
+            "scheme_hints": [],
+        }
+
+    requested = Path(workspace_path).expanduser().resolve()
+    existing = requested
+    while not existing.exists() and existing != existing.parent:
+        existing = existing.parent
+    if not existing.exists():
+        return {
+            "workspace": None,
+            "project": None,
+            "requested_root": str(requested),
+            "resolved_root": None,
+            "xctestplans": [],
+            "scheme_hints": [],
+        }
+
+    candidate = existing if existing.is_dir() else existing.parent
+    workspace = requested if requested.suffix == ".xcworkspace" and requested.exists() else None
+    project = requested if requested.suffix == ".xcodeproj" and requested.exists() else None
+
+    if not workspace:
+        matches = sorted(candidate.rglob("*.xcworkspace"), key=str)
+        if matches:
+            workspace = matches[0]
+    if not project:
+        matches = sorted(candidate.rglob("*.xcodeproj"), key=str)
+        if matches:
+            project = matches[0]
+
+    scan_root = candidate
+    if workspace:
+        scan_root = workspace.parent
+    elif project:
+        scan_root = project.parent
+    xctestplans = sorted(str(path) for path in scan_root.rglob("*.xctestplan"))
+    scheme_hints = []
+    if workspace:
+        scheme_hints.append(workspace.stem)
+    if project:
+        scheme_hints.append(project.stem)
+    scheme_hints.extend(Path(path).stem for path in xctestplans)
+    scheme_hints = sorted(dict.fromkeys(scheme_hints))
+    return {
+        "requested_root": str(requested),
+        "resolved_root": str(scan_root),
+        "workspace": str(workspace) if workspace else None,
+        "project": str(project) if project else None,
+        "xctestplans": xctestplans,
+        "scheme_hints": scheme_hints,
+    }
+
+
+def inferred_scheme(state: dict) -> str | None:
+    hints = state.get("scheme_hints", [])
+    return hints[0] if hints else None
+
+
 def recommended_skill(operation_type: str) -> str:
     if operation_type == "test":
         return "xcode-testing-workflow"
@@ -112,6 +178,7 @@ def main() -> int:
     load_effective_config()
     inferred_operation_type = infer_operation_type_from_request(args.request)
     operation_type = args.operation_type or inferred_operation_type
+    workspace_state = discover_workspace_state(args.workspace_path)
 
     if operation_type is None:
         payload = {
@@ -121,6 +188,7 @@ def main() -> int:
                 "operation_type": None,
                 "operation_type_source": "missing",
                 "workspace_path": args.workspace_path,
+                "workspace_state": workspace_state,
                 "tab_identifier": args.tab_identifier,
                 "mcp_failure_reason": args.mcp_failure_reason,
                 "guard_result": {
@@ -174,10 +242,15 @@ def main() -> int:
             "operation_type": operation_type,
             "operation_type_source": "explicit" if args.operation_type else "inferred",
             "workspace_path": args.workspace_path,
+            "workspace_state": workspace_state,
             "tab_identifier": args.tab_identifier,
             "mcp_failure_reason": args.mcp_failure_reason,
             "guard_result": guard_result,
             "fallback_commands": [],
+            "inferred_context": {
+                "scheme_hint": inferred_scheme(workspace_state),
+                "has_xcode_test_plan": bool(workspace_state.get("xctestplans")),
+            },
             "recommended_skill": recommended,
             "next_step": next_step,
         },

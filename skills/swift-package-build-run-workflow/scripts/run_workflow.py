@@ -149,6 +149,27 @@ def inferred_package_name(repo_shape: dict) -> str | None:
     return Path(root).name if root else None
 
 
+def request_mentions_resources(request: str | None) -> bool:
+    text = normalize_request_text(request)
+    padded = f" {text} "
+    return any(
+        needle in padded
+        for needle in (
+            " resource",
+            " resources",
+            " bundle.module",
+            " process(",
+            " copy(",
+            " embedincode",
+            " asset",
+            " assets",
+            " fixture",
+            " fixtures",
+            " metallib",
+        )
+    )
+
+
 def infer_build_run_handoff(repo_shape: dict, request: str | None, operation_type: str) -> str | None:
     text = normalize_request_text(request)
     if operation_type in {"build", "run", "toolchain-management", "manifest-dependencies"}:
@@ -166,29 +187,52 @@ def infer_build_run_handoff(repo_shape: dict, request: str | None, operation_typ
             return "Use xcode-build-run-workflow because this request touches Metal compilation or Apple-managed Metal toolchain behavior."
         if repo_shape["xctestplans"] and "test plan" in text:
             return "Use xcode-build-run-workflow because this package repo already carries .xctestplan coverage and the request is crossing into Xcode-managed package behavior."
+        if repo_shape["xcode_markers"] and any(
+            token in text
+            for token in (
+                " xcode target",
+                " target membership",
+                " build phase",
+                " resource inclusion",
+                " copy into app",
+                " bundle in app",
+            )
+        ):
+            return "Use xcode-build-run-workflow because this package-resource request is crossing into Xcode-managed target or bundle integration."
     return None
 
 
-def build_commands(operation_type: str, repo_shape: dict) -> list[str]:
+def build_commands(operation_type: str, repo_shape: dict, request: str | None) -> list[str]:
     inferred_target = repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else "<target>"
+    resource_focused = request_mentions_resources(request)
     if operation_type == "package-inspection":
         return ["swift package describe", "swift package dump-package"]
     if operation_type == "read-search":
         return ["swift package describe"]
     if operation_type == "manifest-dependencies":
-        return [
+        commands = [
             "swift package dump-package",
             "swift package add-dependency <url>",
             "swift package resolve",
             "swift package update",
         ]
+        if resource_focused:
+            commands.append("Review Package.swift resource declarations and keep Bundle.module access aligned with the owning target.")
+        return commands
     if operation_type == "build":
         commands = ["swift build"]
+        if resource_focused:
+            commands.append("swift package dump-package")
+            commands.append("Verify Package.swift resource declarations for Resource.process(...), Resource.copy(...), or Resource.embedInCode(...).")
+            commands.append("Verify resource loading paths use Bundle.module and that test fixtures stay under the owning test target.")
         if repo_shape["metal_libraries"]:
             commands.append("Verify bundled .metallib resources are declared intentionally in Package.swift and loaded through Bundle.module.")
         return commands
     if operation_type == "run":
-        return [f"swift run {inferred_target}"]
+        commands = [f"swift run {inferred_target}"]
+        if resource_focused:
+            commands.append("swift package dump-package")
+        return commands
     if operation_type == "plugin":
         return ["swift package plugin --list"]
     if operation_type == "toolchain-management":
@@ -277,13 +321,14 @@ def main() -> int:
             "operation_type": operation_type,
             "operation_type_source": "explicit" if args.operation_type else "inferred",
             "repo_shape": repo_shape,
-            "planned_commands": build_commands(operation_type, repo_shape),
+            "planned_commands": build_commands(operation_type, repo_shape, args.request),
             "inferred_context": {
                 "package_name": inferred_package_name(repo_shape),
                 "primary_target": repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else None,
                 "has_xcode_test_plan": bool(repo_shape["xctestplans"]),
                 "has_metal_sources": bool(repo_shape["metal_sources"]),
                 "has_bundled_metallib": bool(repo_shape["metal_libraries"]),
+                "resource_request": request_mentions_resources(args.request),
             },
             "next_step": next_step,
         },

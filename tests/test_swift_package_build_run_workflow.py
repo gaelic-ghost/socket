@@ -75,6 +75,20 @@ class SwiftPackageBuildRunWorkflowTests(unittest.TestCase):
             self.assertTrue(payload["output"]["inferred_context"]["has_metal_sources"])
             self.assertIn("Metal", payload["output"]["next_step"])
 
+    def test_resource_focused_request_adds_resource_validation_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            package_root = Path(tmpdir)
+            (package_root / "Sources" / "DemoPkg").mkdir(parents=True)
+            (package_root / "Tests" / "DemoPkgTests").mkdir(parents=True)
+            (package_root / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            code, payload = self.run_script("--request", "verify package resources and Bundle.module loading", "--repo-root", tmpdir)
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertTrue(payload["output"]["inferred_context"]["resource_request"])
+            joined = "\n".join(payload["output"]["planned_commands"])
+            self.assertIn("swift package dump-package", joined)
+            self.assertIn("Bundle.module", joined)
+
     def test_blocks_when_no_operation_or_request_is_provided(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")

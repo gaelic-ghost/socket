@@ -42,6 +42,18 @@ class XcodeWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "handoff")
             self.assertEqual(payload["output"]["recommended_skill"], "xcode-testing-workflow")
 
+    def test_exposes_workspace_context_for_nested_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "App" / "Demo.xcodeproj").mkdir(parents=True)
+            (repo_root / "App" / "Demo.xctestplan").write_text("{}", encoding="utf-8")
+            code, payload = self.run_script("--operation-type", "build", "--workspace-path", str(repo_root / "App" / "Sources"))
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "handoff")
+            self.assertEqual(payload["output"]["inferred_context"]["scheme_hint"], "Demo")
+            self.assertTrue(payload["output"]["inferred_context"]["has_xcode_test_plan"])
+            self.assertTrue(payload["output"]["workspace_state"]["project"].endswith("Demo.xcodeproj"))
+
     def test_direct_pbxproj_edit_requires_explicit_opt_in(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "project.pbxproj").write_text("// !$*UTF8*$!\n", encoding="utf-8")
