@@ -303,6 +303,31 @@ enum MCPToolCatalog {
             )
         ),
         Tool(
+            name: "get_runtime_config",
+            description: "Return the persisted SpeakSwiftly runtime-configuration snapshot, including the active backend, the next-start backend, any environment override, and the saved configuration file path.",
+            inputSchema: [
+                "type": "object",
+                "properties": [:],
+            ],
+            annotations: .init(
+                readOnlyHint: true,
+                destructiveHint: false,
+                idempotentHint: true,
+                openWorldHint: false
+            )
+        ),
+        Tool(
+            name: "set_runtime_config",
+            description: "Persist one SpeakSwiftly runtime configuration update for the next runtime start. Use this to change the saved speech backend without editing configuration files manually, and read the returned snapshot to see whether an environment override will still win.",
+            inputSchema: [
+                "type": "object",
+                "required": ["speech_backend"],
+                "properties": [
+                    "speech_backend": ["type": "string", "enum": ["qwen3", "marvis"]],
+                ],
+            ]
+        ),
+        Tool(
             name: "status",
             description: "Report worker readiness, cached profiles, queue state, playback state, recent errors, and transport status from the shared server host. This is the best first read when an agent needs orientation before choosing other tools.",
             inputSchema: [
@@ -322,6 +347,7 @@ enum MCPToolCatalog {
 enum MCPResourceCatalog {
     static let resourceURIs = Set([
         "speak://status",
+        "speak://runtime-config",
         "speak://profiles",
         "speak://profiles/guide",
         "speak://text-profiles",
@@ -339,6 +365,12 @@ enum MCPResourceCatalog {
             name: "Speak Status",
             uri: "speak://status",
             description: "Operational summary from the shared SpeakSwiftly server host.",
+            mimeType: "application/json"
+        ),
+        Resource(
+            name: "Runtime Configuration",
+            uri: "speak://runtime-config",
+            description: "Persisted SpeakSwiftly runtime configuration snapshot, including the active backend, the next-start backend, and any environment override.",
             mimeType: "application/json"
         ),
         Resource(

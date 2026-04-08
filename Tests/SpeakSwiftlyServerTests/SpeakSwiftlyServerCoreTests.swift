@@ -149,6 +149,45 @@ import TextForSpeech
     #expect(initialConfig.server.completedJobMaxCount == 25)
 }
 
+@Test func hostReportsAndPersistsRuntimeConfigurationState() async throws {
+    let runtime = MockRuntime()
+    let state = await MainActor.run { ServerState() }
+    let profileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
+    let configurationStore = RuntimeConfigurationStore(
+        environment: ["SPEAKSWIFTLY_PROFILE_ROOT": profileRootURL.path],
+        activeRuntimeSpeechBackend: .qwen3
+    )
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: configurationStore,
+        state: state
+    )
+
+    let initialSnapshot = await host.runtimeConfigurationSnapshot()
+    #expect(initialSnapshot.activeRuntimeSpeechBackend == "qwen3")
+    #expect(initialSnapshot.nextRuntimeSpeechBackend == "qwen3")
+    #expect(initialSnapshot.persistedConfigurationExists == false)
+    #expect(initialSnapshot.persistedConfigurationState == "missing")
+    #expect(initialSnapshot.persistedConfigurationWillAffectNextRuntimeStart == true)
+
+    let updatedSnapshot = try await host.saveRuntimeConfiguration(speechBackend: .marvis)
+    #expect(updatedSnapshot.activeRuntimeSpeechBackend == "qwen3")
+    #expect(updatedSnapshot.nextRuntimeSpeechBackend == "marvis")
+    #expect(updatedSnapshot.persistedSpeechBackend == "marvis")
+    #expect(updatedSnapshot.persistedConfigurationExists == true)
+    #expect(updatedSnapshot.persistedConfigurationState == "loaded")
+    #expect(updatedSnapshot.activeRuntimeMatchesNextRuntime == false)
+
+    let statusSnapshot = await host.statusSnapshot()
+    #expect(statusSnapshot.runtimeConfiguration == updatedSnapshot)
+
+    let hostStateSnapshot = await host.hostStateSnapshot()
+    #expect(hostStateSnapshot.runtimeConfiguration == updatedSnapshot)
+}
+
 @available(macOS 14, *)
 @Test func stateCompletesQueuedSpeechJobsAndPrunesExpiredEntries() async throws {
     let runtime = MockRuntime()
@@ -455,6 +494,8 @@ import TextForSpeech
                 sawPlaybackChange = true
             }
         case .textProfilesChanged:
+            break
+        case .runtimeConfigurationChanged:
             break
         case .recentErrorRecorded:
             break

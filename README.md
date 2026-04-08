@@ -301,6 +301,7 @@ The current HTTP surface is:
 - `GET /healthz`
 - `GET /readyz`
 - `GET /status`
+- `GET /runtime-config`
 - `GET /profiles`
 - `POST /profiles/clone`
 - `GET /jobs`
@@ -332,6 +333,7 @@ The current HTTP surface is:
 - `PUT /text-profiles/active`
 - `PUT /text-profiles/active/replacements/{replacement_id}`
 - `PUT /text-profiles/stored/{profile_id}/replacements/{replacement_id}`
+- `PUT /runtime-config`
 - `POST /speak`
 - `GET /jobs/{job_id}`
 - `GET /jobs/{job_id}/events`
@@ -342,6 +344,8 @@ The `/text-profiles` route family is intentionally synchronous and state-oriente
 
 The queue and playback control routes are immediate control operations rather than long-running jobs. `GET /queue/generation` and `GET /queue/playback` expose the generation and playback queues separately so the HTTP layer matches the runtime's split control surface. `GET /playback`, `POST /playback/pause`, and `POST /playback/resume` expose the current playback state and let clients control it directly. `DELETE /queue` clears queued work and returns the number of cancelled queued requests. `DELETE /queue/{request_id}` cancels one active or queued request and returns the cancelled request ID.
 
+The runtime-configuration routes are also synchronous and state-oriented. `GET /runtime-config` returns the active runtime backend, the backend that would win on the next runtime start, the persisted configuration file path, the saved backend if one exists, and any active environment override that still takes precedence. `PUT /runtime-config` persists one `speech_backend` value for the next runtime start. It does not hot-swap the already-running worker backend, so the returned snapshot explicitly tells you whether the saved configuration will affect the next start or whether an environment override will still win.
+
 The route surface now mirrors the current `SpeakSwiftly` control model directly instead of preserving the older foreground/background split. The remaining alignment work is narrower: keeping the transport docs accurate as the sibling runtime evolves and deciding whether any server-local transport shaping should disappear now that the public library surface is more expressive.
 
 The current MCP surface is optional and mounts on the same shared Hummingbird process at `APP_MCP_PATH` when `APP_MCP_ENABLED=true`. It currently exposes these tools:
@@ -349,6 +353,8 @@ The current MCP surface is optional and mounts on the same shared Hummingbird pr
 - `queue_speech_live`
 - `create_profile`
 - `create_clone`
+- `get_runtime_config`
+- `set_runtime_config`
 - `list_profiles`
 - `remove_profile`
 - `list_queue_generation`
@@ -374,6 +380,7 @@ The current MCP surface is optional and mounts on the same shared Hummingbird pr
 The embedded MCP resources are:
 
 - `speak://status`
+- `speak://runtime-config`
 - `speak://profiles`
 - `speak://profiles/guide`
 - `speak://profiles/{profile_name}/detail`
@@ -405,7 +412,7 @@ The embedded MCP surface also now carries a small prompt catalog migrated from t
 
 The text-profile prompts and the `speak://text-profiles/guide` resource are there so an app-hosted or MCP-hosted agent can help a user author replacements deliberately instead of treating normalization rules like hidden implementation detail. That parity is intentional because text profiles are meant to be downstream-user-facing, whether the downstream caller is a SwiftUI app, an MCP client, or a local HTTP consumer.
 
-The embedded MCP surface now also supports resource subscriptions for the live state resources and templates backed by shared host updates. Clients connected to the standalone MCP event stream can subscribe to `speak://status`, `speak://profiles`, `speak://profiles/{profile_name}/detail`, `speak://jobs`, `speak://jobs/{job_id}`, `speak://runtime`, `speak://text-profiles`, `speak://text-profiles/base`, `speak://text-profiles/active`, `speak://text-profiles/effective`, `speak://text-profiles/effective/{profile_id}`, and `speak://text-profiles/stored/{profile_id}` and receive `notifications/resources/updated` when shared host events change the underlying state.
+The embedded MCP surface now also supports resource subscriptions for the live state resources and templates backed by shared host updates. Clients connected to the standalone MCP event stream can subscribe to `speak://status`, `speak://runtime-config`, `speak://profiles`, `speak://profiles/{profile_name}/detail`, `speak://jobs`, `speak://jobs/{job_id}`, `speak://runtime`, `speak://text-profiles`, `speak://text-profiles/base`, `speak://text-profiles/active`, `speak://text-profiles/effective`, `speak://text-profiles/effective/{profile_id}`, and `speak://text-profiles/stored/{profile_id}` and receive `notifications/resources/updated` when shared host events change the underlying state.
 
 Transport lifecycle snapshots are now intentionally tied to the shared Hummingbird process rather than static config alone. `listening` means the shared HTTP host has actually reached Hummingbird's `onServerRunning` boundary, so HTTP and MCP surface status now describe real network availability instead of only configuration intent.
 

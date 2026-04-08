@@ -242,6 +242,16 @@ struct MCPSurface {
                     )
                 )
 
+            case "get_runtime_config":
+                return try toolResult(await host.runtimeConfigurationSnapshot())
+
+            case "set_runtime_config":
+                return try toolResult(
+                    try await host.saveRuntimeConfiguration(
+                        speechBackend: try requiredSpeechBackend("speech_backend", in: arguments)
+                    )
+                )
+
             case "status":
                 return try toolResult(await host.statusSnapshot())
 
@@ -278,6 +288,9 @@ struct MCPSurface {
             switch params.uri {
             case "speak://status":
                 return try resourceResult(uri: params.uri, payload: await host.statusSnapshot())
+
+            case "speak://runtime-config":
+                return try resourceResult(uri: params.uri, payload: await host.runtimeConfigurationSnapshot())
 
             case "speak://profiles":
                 return try resourceResult(uri: params.uri, payload: await host.cachedProfiles())
@@ -767,6 +780,12 @@ private actor MCPSubscriptionBroker {
                 ] + subscribedResourceURIs.filter(isStoredTextProfileURI)
                     + subscribedResourceURIs.filter(isEffectiveTextProfileURI)
             )
+        case .runtimeConfigurationChanged:
+            candidateURIs = [
+                "speak://status",
+                "speak://runtime",
+                "speak://runtime-config",
+            ]
         }
         return candidateURIs
             .intersection(subscribedResourceURIs)
@@ -995,6 +1014,20 @@ private func requiredVibe(
         )
     }
     return vibe
+}
+
+private func requiredSpeechBackend(
+    _ key: String,
+    in arguments: [String: Value]
+) throws -> SpeakSwiftly.SpeechBackend {
+    let rawValue = try requiredString(key, in: arguments)
+    guard let speechBackend = SpeakSwiftly.SpeechBackend(rawValue: rawValue) else {
+        let acceptedValues = SpeakSwiftly.SpeechBackend.allCases.map(\.rawValue).joined(separator: ", ")
+        throw MCPError.invalidParams(
+            "Tool argument '\(key)' used unsupported value '\(rawValue)'. Expected one of: \(acceptedValues)."
+        )
+    }
+    return speechBackend
 }
 
 private func legacyRequestTextFormat(for format: TextForSpeech.Format) -> TextForSpeech.TextFormat? {

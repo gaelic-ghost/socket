@@ -117,7 +117,7 @@ Post-1.0 note: distribution polish for discovery and packaging, not part of the 
 Post-1.0 note: this is the current alignment plan for the newer `SpeakSwiftly` runtime surface after the dependency bump to `0.11.0`.
 
 - [x] Bump the resolved `SpeakSwiftly` dependency to `0.11.0` and carry explicit `vibe` through the existing profile and clone creation surfaces instead of preserving the older implicit-profile behavior.
-- [ ] Expose the persisted `SpeakSwiftly.Configuration` surface across host state, HTTP, and MCP so operators can inspect and change the active speech backend without reaching into the runtime process manually.
+- [x] Expose the persisted `SpeakSwiftly.Configuration` surface across host state, HTTP, and MCP so operators can inspect and change the active speech backend without reaching into the runtime process manually.
 - [ ] Add generated-file reads across host, HTTP, MCP, and shared resources so saved artifacts can be listed and fetched through the server instead of only inside the sibling library.
 - [ ] Add generation-job reads and expiry controls across host, HTTP, MCP, and shared resources so persisted file and batch jobs can be inspected and managed directly.
 - [ ] Add batch-generation submission plus batch-read surfaces across host, HTTP, MCP, and shared resources, including artifact-id shaping and the existing text-format / source-format context support for each batch item.

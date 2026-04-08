@@ -1,4 +1,5 @@
 import Foundation
+import Hummingbird
 
 // MARK: - Host State Models
 
@@ -108,12 +109,54 @@ public struct RecentErrorSnapshot: Codable, Sendable, Equatable {
     }
 }
 
+public struct RuntimeConfigurationSnapshot: Codable, ResponseEncodable, Sendable, Equatable {
+    public let activeRuntimeSpeechBackend: String
+    public let nextRuntimeSpeechBackend: String
+    public let environmentSpeechBackendOverride: String?
+    public let persistedSpeechBackend: String?
+    public let profileRootPath: String
+    public let persistedConfigurationPath: String
+    public let persistedConfigurationExists: Bool
+    public let persistedConfigurationState: String
+    public let persistedConfigurationError: String?
+    public let persistedConfigurationAppliesOnRestart: Bool
+    public let activeRuntimeMatchesNextRuntime: Bool
+    public let persistedConfigurationWillAffectNextRuntimeStart: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case activeRuntimeSpeechBackend = "active_runtime_speech_backend"
+        case nextRuntimeSpeechBackend = "next_runtime_speech_backend"
+        case environmentSpeechBackendOverride = "environment_speech_backend_override"
+        case persistedSpeechBackend = "persisted_speech_backend"
+        case profileRootPath = "profile_root_path"
+        case persistedConfigurationPath = "persisted_configuration_path"
+        case persistedConfigurationExists = "persisted_configuration_exists"
+        case persistedConfigurationState = "persisted_configuration_state"
+        case persistedConfigurationError = "persisted_configuration_error"
+        case persistedConfigurationAppliesOnRestart = "persisted_configuration_applies_on_restart"
+        case activeRuntimeMatchesNextRuntime = "active_runtime_matches_next_runtime"
+        case persistedConfigurationWillAffectNextRuntimeStart = "persisted_configuration_will_affect_next_runtime_start"
+    }
+}
+
 public struct HostStateSnapshot: Codable, Sendable, Equatable {
     public let overview: HostOverviewSnapshot
     public let generationQueue: QueueStatusSnapshot
     public let playbackQueue: QueueStatusSnapshot
     public let playback: PlaybackStatusSnapshot
     public let currentGenerationJob: CurrentGenerationJobSnapshot?
+    public let runtimeConfiguration: RuntimeConfigurationSnapshot
     public let transports: [TransportStatusSnapshot]
     public let recentErrors: [RecentErrorSnapshot]
+
+    enum CodingKeys: String, CodingKey {
+        case overview
+        case generationQueue = "generation_queue"
+        case playbackQueue = "playback_queue"
+        case playback
+        case currentGenerationJob = "current_generation_job"
+        case runtimeConfiguration = "runtime_configuration"
+        case transports
+        case recentErrors = "recent_errors"
+    }
 }

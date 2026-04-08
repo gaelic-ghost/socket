@@ -51,6 +51,15 @@ private func registerHTTPRoutes(
         await host.statusSnapshot()
     }
 
+    router.get("runtime-config") { _, _ -> RuntimeConfigurationSnapshot in
+        await host.runtimeConfigurationSnapshot()
+    }
+
+    router.put("runtime-config") { request, context -> RuntimeConfigurationSnapshot in
+        let payload = try await request.decode(as: RuntimeConfigurationUpdatePayload.self, context: context)
+        return try await host.saveRuntimeConfiguration(speechBackend: payload.speechBackendModel())
+    }
+
     router.get("profiles") { _, _ -> ProfileListResponse in
         .init(profiles: await host.cachedProfiles())
     }

@@ -592,9 +592,16 @@ actor MockRuntime: ServerRuntimeProtocol {
     let runtime = MockRuntime()
     let configuration = testConfiguration()
     let state = await MainActor.run { ServerState() }
+    let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,
+        runtimeConfigurationStore: .init(
+            environment: ["SPEAKSWIFTLY_PROFILE_ROOT": runtimeProfileRootURL.path],
+            activeRuntimeSpeechBackend: .qwen3
+        ),
         state: state
     )
 
@@ -609,6 +616,26 @@ actor MockRuntime: ServerRuntimeProtocol {
         #expect(healthResponse.status == .ok)
         #expect(healthJSON["status"] as? String == "ok")
         #expect(healthJSON["worker_ready"] as? Bool == true)
+
+        let runtimeConfigResponse = try await client.execute(uri: "/runtime-config", method: .get)
+        let runtimeConfigJSON = try jsonObject(from: runtimeConfigResponse.body)
+        #expect(runtimeConfigResponse.status == .ok)
+        #expect(runtimeConfigJSON["active_runtime_speech_backend"] as? String == "qwen3")
+        #expect(runtimeConfigJSON["next_runtime_speech_backend"] as? String == "qwen3")
+        #expect(runtimeConfigJSON["persisted_configuration_state"] as? String == "missing")
+
+        let updateRuntimeConfigResponse = try await client.execute(
+            uri: "/runtime-config",
+            method: .put,
+            headers: [.contentType: "application/json"],
+            body: byteBuffer(#"{"speech_backend":"marvis"}"#)
+        )
+        let updateRuntimeConfigJSON = try jsonObject(from: updateRuntimeConfigResponse.body)
+        #expect(updateRuntimeConfigResponse.status == .ok)
+        #expect(updateRuntimeConfigJSON["active_runtime_speech_backend"] as? String == "qwen3")
+        #expect(updateRuntimeConfigJSON["next_runtime_speech_backend"] as? String == "marvis")
+        #expect(updateRuntimeConfigJSON["persisted_speech_backend"] as? String == "marvis")
+        #expect(updateRuntimeConfigJSON["persisted_configuration_state"] as? String == "loaded")
 
         let profilesResponse = try await client.execute(uri: "/profiles", method: .get)
         let profilesJSON = try jsonObject(from: profilesResponse.body)
@@ -749,6 +776,9 @@ actor MockRuntime: ServerRuntimeProtocol {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
     let state = await MainActor.run { ServerState() }
+    let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
     let host = ServerHost(
         configuration: configuration,
         httpConfig: testHTTPConfig(configuration),
@@ -759,6 +789,10 @@ actor MockRuntime: ServerRuntimeProtocol {
             title: "SpeakSwiftly Test MCP"
         ),
         runtime: runtime,
+        runtimeConfigurationStore: .init(
+            environment: ["SPEAKSWIFTLY_PROFILE_ROOT": runtimeProfileRootURL.path],
+            activeRuntimeSpeechBackend: .qwen3
+        ),
         state: state
     )
 
@@ -808,6 +842,8 @@ actor MockRuntime: ServerRuntimeProtocol {
     #expect(toolNames == Set(MCPToolCatalog.definitions.map(\.name)))
     #expect(tools.contains { $0["name"] as? String == "queue_speech_live" })
     #expect(tools.contains { $0["name"] as? String == "create_clone" })
+    #expect(tools.contains { $0["name"] as? String == "get_runtime_config" })
+    #expect(tools.contains { $0["name"] as? String == "set_runtime_config" })
     #expect(tools.contains { $0["name"] as? String == "status" })
 
     let queueSpeechToolEnvelope = try await mcpEnvelope(
@@ -892,6 +928,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     #expect(resources.contains { $0["uri"] as? String == "speak://text-profiles/guide" })
     #expect(resources.contains { $0["uri"] as? String == "speak://playback/guide" })
     #expect(resources.contains { $0["uri"] as? String == "speak://jobs" })
+    #expect(resources.contains { $0["uri"] as? String == "speak://runtime-config" })
     #expect(resources.contains { $0["uri"] as? String == "speak://runtime" })
 
     let listResourceTemplatesEnvelope = try await mcpEnvelope(
@@ -1037,8 +1074,38 @@ actor MockRuntime: ServerRuntimeProtocol {
     )
     let statusToolPayload = try mcpToolPayload(from: statusToolEnvelope)
     #expect(statusToolPayload["worker_mode"] as? String == "ready")
+    let statusRuntimeConfiguration = try #require(statusToolPayload["runtime_configuration"] as? [String: Any])
+    #expect(statusRuntimeConfiguration["active_runtime_speech_backend"] as? String == "qwen3")
     let transports = try #require(statusToolPayload["transports"] as? [[String: Any]])
     #expect(transports.contains { $0["name"] as? String == "mcp" && $0["state"] as? String == "listening" })
+
+    let getRuntimeConfigEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpCallToolRequestJSON(name: "get_runtime_config", arguments: [:]),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let getRuntimeConfigPayload = try mcpToolPayload(from: getRuntimeConfigEnvelope)
+    #expect(getRuntimeConfigPayload["active_runtime_speech_backend"] as? String == "qwen3")
+    #expect(getRuntimeConfigPayload["next_runtime_speech_backend"] as? String == "qwen3")
+
+    let setRuntimeConfigEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpCallToolRequestJSON(
+                    name: "set_runtime_config",
+                    arguments: ["speech_backend": "marvis"]
+                ),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let setRuntimeConfigPayload = try mcpToolPayload(from: setRuntimeConfigEnvelope)
+    #expect(setRuntimeConfigPayload["active_runtime_speech_backend"] as? String == "qwen3")
+    #expect(setRuntimeConfigPayload["next_runtime_speech_backend"] as? String == "marvis")
+    #expect(setRuntimeConfigPayload["persisted_speech_backend"] as? String == "marvis")
 
     let runtimeResourceEnvelope = try await mcpEnvelope(
         from: await mcpSurface.handle(
@@ -1055,6 +1122,22 @@ actor MockRuntime: ServerRuntimeProtocol {
     let runtimePayload = try jsonObject(from: Data(runtimeText.utf8))
     let runtimeTransports = try #require(runtimePayload["transports"] as? [[String: Any]])
     #expect(runtimeTransports.contains { $0["name"] as? String == "mcp" && $0["advertised_address"] as? String == "http://127.0.0.1:7337/mcp" })
+    let runtimeConfiguration = try #require(runtimePayload["runtime_configuration"] as? [String: Any])
+    #expect(runtimeConfiguration["next_runtime_speech_backend"] as? String == "marvis")
+
+    let runtimeConfigResourceEnvelope = try await mcpEnvelope(
+        from: await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpReadResourceRequestJSON(uri: "speak://runtime-config"),
+                sessionID: initializeSessionID
+            )
+        )
+    )
+    let runtimeConfigResourceResult = try #require(mcpResultPayload(from: runtimeConfigResourceEnvelope))
+    let runtimeConfigContents = try #require(runtimeConfigResourceResult["contents"] as? [[String: Any]])
+    let runtimeConfigText = try #require(runtimeConfigContents.first?["text"] as? String)
+    let runtimeConfigPayload = try jsonObject(from: Data(runtimeConfigText.utf8))
+    #expect(runtimeConfigPayload["next_runtime_speech_backend"] as? String == "marvis")
 
     let jobsResourceEnvelope = try await mcpEnvelope(
         from: await mcpSurface.handle(

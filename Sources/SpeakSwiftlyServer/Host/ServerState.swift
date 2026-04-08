@@ -40,6 +40,20 @@ public final class ServerState {
     )
 
     public internal(set) var currentGenerationJob: CurrentGenerationJobSnapshot?
+    public internal(set) var runtimeConfiguration = RuntimeConfigurationSnapshot(
+        activeRuntimeSpeechBackend: "qwen3",
+        nextRuntimeSpeechBackend: "qwen3",
+        environmentSpeechBackendOverride: nil,
+        persistedSpeechBackend: nil,
+        profileRootPath: "",
+        persistedConfigurationPath: "",
+        persistedConfigurationExists: false,
+        persistedConfigurationState: "missing",
+        persistedConfigurationError: nil,
+        persistedConfigurationAppliesOnRestart: true,
+        activeRuntimeMatchesNextRuntime: true,
+        persistedConfigurationWillAffectNextRuntimeStart: true
+    )
     public internal(set) var transports = [TransportStatusSnapshot]()
     public internal(set) var recentErrors = [RecentErrorSnapshot]()
     public internal(set) var jobsByID: [String: JobSnapshot] = [:]

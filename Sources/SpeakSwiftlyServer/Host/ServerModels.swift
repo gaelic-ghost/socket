@@ -95,6 +95,18 @@ struct CreateCloneRequestPayload: Decodable {
     }
 }
 
+struct RuntimeConfigurationUpdatePayload: Decodable {
+    let speechBackend: String
+
+    enum CodingKeys: String, CodingKey {
+        case speechBackend = "speech_backend"
+    }
+
+    func speechBackendModel() throws -> SpeakSwiftly.SpeechBackend {
+        try resolveSpeechBackend(speechBackend, fieldName: "speech_backend")
+    }
+}
+
 struct JobCreatedResponse: ResponseEncodable, Sendable {
     let jobID: String
     let jobURL: String
@@ -430,6 +442,7 @@ struct StatusSnapshot: ResponseEncodable, Sendable {
     let playbackQueue: QueueStatusSnapshot
     let playback: PlaybackStatusSnapshot
     let currentGenerationJob: CurrentGenerationJobSnapshot?
+    let runtimeConfiguration: RuntimeConfigurationSnapshot
     let transports: [TransportStatusSnapshot]
     let recentErrors: [RecentErrorSnapshot]
 
@@ -450,6 +463,7 @@ struct StatusSnapshot: ResponseEncodable, Sendable {
         case playbackQueue = "playback_queue"
         case playback
         case currentGenerationJob = "current_generation_job"
+        case runtimeConfiguration = "runtime_configuration"
         case transports
         case recentErrors = "recent_errors"
     }
@@ -671,6 +685,20 @@ private func resolveVibe(
         )
     }
     return vibe
+}
+
+private func resolveSpeechBackend(
+    _ rawValue: String,
+    fieldName: String
+) throws -> SpeakSwiftly.SpeechBackend {
+    guard let speechBackend = SpeakSwiftly.SpeechBackend(rawValue: rawValue) else {
+        let supportedBackends = SpeakSwiftly.SpeechBackend.allCases.map(\.rawValue).joined(separator: ", ")
+        throw HTTPError(
+            .badRequest,
+            message: "Runtime configuration field '\(fieldName)' used unsupported value '\(rawValue)'. Expected one of: \(supportedBackends)."
+        )
+    }
+    return speechBackend
 }
 
 private func legacyRequestTextFormat(for format: TextForSpeech.Format) -> TextForSpeech.TextFormat? {

@@ -47,6 +47,7 @@ actor ServerHost {
     private var httpConfig: HTTPConfig
     private var mcpConfig: MCPConfig
     private let runtime: any ServerRuntimeProtocol
+    private let runtimeConfigurationStore: RuntimeConfigurationStore
     private let state: ServerState
     private let immediatePublishRequests: AsyncStream<Void>
     private let immediatePublishContinuation: AsyncStream<Void>.Continuation
@@ -82,12 +83,14 @@ actor ServerHost {
     // MARK: - Construction
 
     static func live(appConfig: AppConfig, state: ServerState) async -> ServerHost {
+        let runtimeConfigurationStore = RuntimeConfigurationStore()
         let runtime = ServerRuntimeAdapter(runtime: await SpeakSwiftly.live())
         let host = ServerHost(
             configuration: appConfig.server,
             httpConfig: appConfig.http,
             mcpConfig: appConfig.mcp,
             runtime: runtime,
+            runtimeConfigurationStore: runtimeConfigurationStore,
             state: state
         )
         await host.start()
@@ -99,6 +102,7 @@ actor ServerHost {
         httpConfig: HTTPConfig? = nil,
         mcpConfig: MCPConfig? = nil,
         runtime: any ServerRuntimeProtocol,
+        runtimeConfigurationStore: RuntimeConfigurationStore = .init(),
         state: ServerState
     ) {
         let (immediatePublishRequests, immediatePublishContinuation) = AsyncStream.makeStream(
@@ -134,6 +138,7 @@ actor ServerHost {
             title: "SpeakSwiftly"
         )
         self.runtime = runtime
+        self.runtimeConfigurationStore = runtimeConfigurationStore
         self.state = state
         self.transportStatuses = Self.initialTransportStatuses(httpConfig: self.httpConfig, mcpConfig: self.mcpConfig)
         self.immediatePublishRequests = immediatePublishRequests
@@ -322,6 +327,7 @@ actor ServerHost {
             playbackQueue: playbackQueueStatus,
             playback: playbackStatus,
             currentGenerationJob: currentGenerationJobSnapshot(),
+            runtimeConfiguration: runtimeConfigurationStore.snapshot(),
             transports: transportSnapshots(),
             recentErrors: recentErrors
         )
@@ -386,9 +392,23 @@ actor ServerHost {
             playbackQueue: hostState.playbackQueue,
             playback: hostState.playback,
             currentGenerationJob: hostState.currentGenerationJob,
+            runtimeConfiguration: hostState.runtimeConfiguration,
             transports: hostState.transports,
             recentErrors: hostState.recentErrors
         )
+    }
+
+    func runtimeConfigurationSnapshot() -> RuntimeConfigurationSnapshot {
+        runtimeConfigurationStore.snapshot()
+    }
+
+    func saveRuntimeConfiguration(
+        speechBackend: SpeakSwiftly.SpeechBackend
+    ) async throws -> RuntimeConfigurationSnapshot {
+        let snapshot = try runtimeConfigurationStore.save(speechBackend: speechBackend)
+        emitRuntimeConfigurationChanged(snapshot)
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return snapshot
     }
 
     func cachedProfiles() -> [ProfileSnapshot] {
@@ -1092,6 +1112,7 @@ actor ServerHost {
             state.playbackQueue = hostState.playbackQueue
             state.playback = hostState.playback
             state.currentGenerationJob = hostState.currentGenerationJob
+            state.runtimeConfiguration = hostState.runtimeConfiguration
             state.transports = hostState.transports
             state.recentErrors = hostState.recentErrors
             state.jobsByID = jobsByID
@@ -1454,6 +1475,21 @@ actor ServerHost {
                     activeProfileID: activeProfile.id,
                     storedProfileCount: storedProfiles.count,
                     persistenceURL: await runtime.textProfilePersistenceURL()?.path
+                )
+            )
+        )
+    }
+
+    private func emitRuntimeConfigurationChanged(_ snapshot: RuntimeConfigurationSnapshot) {
+        hostEventContinuation.yield(
+            .runtimeConfigurationChanged(
+                .init(
+                    activeRuntimeSpeechBackend: snapshot.activeRuntimeSpeechBackend,
+                    nextRuntimeSpeechBackend: snapshot.nextRuntimeSpeechBackend,
+                    persistedSpeechBackend: snapshot.persistedSpeechBackend,
+                    environmentSpeechBackendOverride: snapshot.environmentSpeechBackendOverride,
+                    persistedConfigurationPath: snapshot.persistedConfigurationPath,
+                    persistedConfigurationState: snapshot.persistedConfigurationState
                 )
             )
         )
