@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "description": "Apple development plugin scaffold for skills, future hooks, and MCP packaging.",
-  "version": "4.7.0",
+  "version": "5.0.0-rc.1",
   "author": {
     "name": "Gale"
   },
