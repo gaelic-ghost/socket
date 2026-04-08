@@ -35,6 +35,27 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 17: Shared repo-maintenance toolkit skill (completed)
 - [x] Milestone 18: Project CONTRIBUTING maintainer skill (completed)
 - [x] Milestone 19: Repo role clarification and contributor guide (completed)
+- [x] Milestone 20: Rename `repo-maintenance-toolkit` to `maintain-project-repo` (completed)
+
+## Milestone 20: Rename `repo-maintenance-toolkit` to `maintain-project-repo`
+
+Scope:
+
+- Rename the repo-maintenance toolkit skill to the canonical `maintain-project-repo` name.
+- Keep the installed toolkit behavior unchanged while updating the skill's invocation surface and docs.
+- Remove the old skill name from canonical repo surfaces instead of leaving a compatibility alias behind.
+
+Tickets:
+
+- [x] Rename the skill directory and frontmatter name to `maintain-project-repo`.
+- [x] Update metadata, tests, and root pytest discovery to the new skill path.
+- [x] Update README, maintainer docs, roadmap, and checked-in release notes to the new canonical name.
+
+Exit criteria:
+
+- [x] The canonical skill name is `maintain-project-repo`.
+- [x] Canonical repo docs no longer present `repo-maintenance-toolkit` as the active skill name.
+- [x] Root test discovery points at `skills/maintain-project-repo/tests`.
 
 ## Milestone 19: Repo role clarification and contributor guide
 

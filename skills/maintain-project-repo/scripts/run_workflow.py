@@ -5,7 +5,7 @@
 #   "PyYAML>=6.0.2,<7",
 # ]
 # ///
-"""Unified runtime entrypoint for repo-maintenance-toolkit."""
+"""Unified runtime entrypoint for maintain-project-repo."""
 
 from __future__ import annotations
 

@@ -86,7 +86,7 @@ def copy_file(source: Path, target: Path) -> None:
 def render_profile_env(profile: str) -> str:
     description = PROFILE_CHOICES[profile]
     return (
-        "# Managed by repo-maintenance-toolkit. Do not hand-edit unless you also control the installer contract.\n"
+        "# Managed by maintain-project-repo. Do not hand-edit unless you also control the installer contract.\n"
         f'REPO_MAINTENANCE_PROFILE="{profile}"\n'
         f'REPO_MAINTENANCE_PROFILE_DESCRIPTION="{description}"\n'
     )

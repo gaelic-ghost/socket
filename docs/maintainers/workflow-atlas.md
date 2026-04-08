@@ -39,7 +39,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
 | `maintain-project-contributing` | General CONTRIBUTING maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
-| `repo-maintenance-toolkit` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
+| `maintain-project-repo` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
 
 ## `explain-code-slice`
 
@@ -196,7 +196,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - Markdown plus JSON with `run_context`, `findings`, `apply_actions`, `errors`
 - Exact clean-run text: `No findings.` when no findings, no apply actions, and no errors remain
 
-## `repo-maintenance-toolkit`
+## `maintain-project-repo`
 
 ### Workflow: `install` / `refresh`
 

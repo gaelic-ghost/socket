@@ -1,12 +1,12 @@
 ---
-name: repo-maintenance-toolkit
+name: maintain-project-repo
 description: Install or refresh a profile-aware local-first repo-maintenance toolkit for Swift, Xcode, and general repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
 license: MIT
 metadata:
   semver: 0.1.0
 ---
 
-# Repo Maintenance Toolkit
+# Maintain Project Repo
 
 ## Purpose
 

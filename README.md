@@ -50,7 +50,7 @@ In practice, that means:
   - Use when an ordinary software project `CONTRIBUTING.md` needs deterministic auditing or bounded fixes for contributor workflow, local setup, naming conventions, verification, or pull request expectations.
 - `maintain-project-roadmap`
   - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
-- `repo-maintenance-toolkit`
+- `maintain-project-repo`
   - Use when a repository needs reusable local maintainer scripts for validation, shared sync work, and releases instead of CI-only glue, with explicit `generic`, `swift-package`, or `xcode-app` profile installs.
 
 Maintainer-facing workflow maps, audit procedure, and source-of-truth rules live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md) and [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
@@ -168,7 +168,7 @@ Common starting points:
 - roadmap work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap`
 - repo-maintenance toolkit work:
-  `npx skills add gaelic-ghost/productivity-skills --skill repo-maintenance-toolkit`
+  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-repo`
 
 For agent-skills or plugin repository maintenance, use the dedicated sibling repo instead:
 
@@ -201,7 +201,7 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 │   ├── maintain-project-contributing/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
-│   └── repo-maintenance-toolkit/
+│   └── maintain-project-repo/
 ├── docs/
 │   └── maintainers/
 ├── ROADMAP.md

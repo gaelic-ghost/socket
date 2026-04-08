@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[3]
-SCRIPT = ROOT / "skills/repo-maintenance-toolkit/scripts/run_workflow.py"
+SCRIPT = ROOT / "skills/maintain-project-repo/scripts/run_workflow.py"
 
 
 class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):

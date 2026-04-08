@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project Repo"
+  short_description: "Install local-first validation, sync, and release scripts"
+  default_prompt: "Use $maintain-project-repo to install or refresh a local-first repo-maintenance toolkit with validate, sync, and release entrypoints plus thin CI wrappers."

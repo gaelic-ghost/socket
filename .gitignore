@@ -1,5 +1,7 @@
 tts_outputs/
 **/config/customization.yaml
+__pycache__/
+*.pyc
 # Agent plugin repo local runtime state
 .codex/plugins/
 .claude/settings.local.json
