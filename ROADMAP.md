@@ -691,6 +691,7 @@ Exit criteria:
 - [x] Continued 2026-04-07 Xcode-side by adding `xcode-build-run-workflow` and `xcode-testing-workflow`, converting `xcode-app-project-workflow` into a compatibility surface, and updating the surrounding docs, sync assets, validators, and tests.
 - [x] Continued 2026-04-08 by teaching the narrower wrappers to infer nested package and Xcode roots, scheme and target hints, test-plan context, UI-test surfaces, and Metal-related signals, with richer payload context and fallback commands.
 - [x] Continued 2026-04-08 by adding specialized package-resource fallback guidance, `.xctestplan`-aware compatibility routing, Xcode bundle-integration handoffs, and richer inferred context in the compatibility surfaces.
+- [x] Continued 2026-04-08 by thinning the compatibility surfaces themselves so they stay routing-focused, with the package compatibility wrapper returning routing context instead of shadow command planning.
 
 ## Milestone 33: Swift/Xcode Repo-Maintenance Toolkit Profiles
 

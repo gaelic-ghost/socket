@@ -7,7 +7,7 @@ description: Compatibility workflow surface for broad or legacy Swift Package Ma
 
 ## Purpose
 
-Use this skill as a compatibility surface for older references to `swift-package-workflow` while the repo transitions to narrower package execution skills. The real long-term owners are `swift-package-build-run-workflow` for build/run and manifest work and `swift-package-testing-workflow` for testing work. `scripts/run_workflow.py` still performs repo-shape checks and compatibility routing so older flows continue to work during the migration window.
+Use this skill as a compatibility surface for older references to `swift-package-workflow` while the repo transitions to narrower package execution skills. The real long-term owners are `swift-package-build-run-workflow` for build/run and manifest work and `swift-package-testing-workflow` for testing work. `scripts/run_workflow.py` now stays intentionally thin: it performs repo-shape checks, preserves mixed-root and Xcode handoff boundaries, and returns routing context rather than trying to keep a second full execution-planning surface alive.
 
 ## When To Use
 
@@ -48,7 +48,7 @@ Use this skill as a compatibility surface for older references to `swift-package
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its package-appropriate logging, telemetry, and testing guidance
 4. Run `scripts/run_workflow.py` to resolve repo shape, detect whether the root is a plain package repo, and route the request toward the narrower package build/run or testing skill.
-5. Use `references/cli-command-matrix.md` and `references/package-resources-testing-and-builds.md` only as compatibility aids when an older flow still needs them before the narrower skill takes over.
+5. Use `references/cli-command-matrix.md` and `references/package-resources-testing-and-builds.md` only to explain why the narrower skill should take over; do not rebuild a second command-planning surface here.
 6. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-build-run-workflow` or `xcode-testing-workflow` as appropriate.
 7. Report the docs relied on, the repo-shape result, and the recommended narrower skill or Xcode handoff.
 
@@ -78,7 +78,8 @@ Use this skill as a compatibility surface for older references to `swift-package
   - operation type
   - resolved repo root
   - repo-shape result
-  - `planned_commands`
+  - `routing_summary`
+  - inferred context that helps the narrower skill or the caller understand why the handoff happened
   - `recommended_skill`
   - one concise next step or handoff payload
 
@@ -92,9 +93,9 @@ Use this skill as a compatibility surface for older references to `swift-package
 
 ## Fallbacks and Handoffs
 
-- SwiftPM and ordinary filesystem edits remain the compatibility execution surface for older flows that still land here.
 - The primary job of this skill now is to route to the narrower package skills while preserving the mixed-root Xcode handoff boundary.
-- The only current fallback is a non-mutating planned command result when the user asked for guidance rather than immediate execution.
+- Do not keep a second package command matrix alive in this compatibility surface; the narrower skill should own concrete execution planning.
+- The only current compatibility payload here is routing context, inferred repo shape, and one concise next step.
 - Hand off to `swift-package-build-run-workflow` when the request is primarily about package build/run, manifest, dependency, plugin, resource, or Metal-distribution work.
 - Hand off to `swift-package-testing-workflow` when the request is primarily about tests, test plans, fixtures, or package test diagnosis.
 - Hand off to `xcode-build-run-workflow` when package work depends on:
@@ -113,7 +114,7 @@ Use this skill as a compatibility surface for older references to `swift-package
 
 - Use `references/customization.template.yaml`.
 - `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` reads customization state, but the current workflow keeps a fixed SwiftPM-first policy and does not expose ordinary user-facing knobs yet.
+- `scripts/run_workflow.py` reads customization state, but the current workflow keeps a fixed routing policy and does not expose ordinary user-facing knobs.
 - Run the Python wrapper and customization entrypoints through `uv`, because they rely on inline `PyYAML` script metadata rather than a repo-global Python environment.
 
 ## References

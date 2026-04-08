@@ -41,7 +41,7 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "handoff")
             self.assertEqual(payload["path_type"], "primary")
             self.assertEqual(payload["output"]["recommended_skill"], "swift-package-build-run-workflow")
-            self.assertEqual(payload["output"]["planned_commands"], ["swift build"])
+            self.assertIn("build-run skill", payload["output"]["routing_summary"])
             self.assertFalse(payload["output"]["repo_shape"]["mixed_root"])
 
     def test_handoffs_mixed_root_without_opt_in(self) -> None:
@@ -80,7 +80,7 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["output"]["operation_type"], "test")
             self.assertEqual(payload["output"]["operation_type_source"], "inferred")
             self.assertEqual(payload["output"]["recommended_skill"], "swift-package-testing-workflow")
-            self.assertEqual(payload["output"]["planned_commands"], ["swift test"])
+            self.assertIn("testing skill", payload["output"]["routing_summary"])
 
     def test_resource_request_exposes_inferred_context(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

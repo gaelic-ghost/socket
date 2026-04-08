@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import shlex
 import sys
 from pathlib import Path
 
@@ -64,10 +63,6 @@ def load_effective_config() -> dict:
         customization_config.load_template(),
         customization_config.load_durable(),
     )
-
-
-def shell_join(parts: list[str]) -> str:
-    return " ".join(shlex.quote(part) for part in parts)
 
 
 def first_matching_file(root: Path, pattern: str) -> list[str]:
@@ -170,61 +165,6 @@ def request_mentions_resources(request: str | None) -> bool:
     )
 
 
-def build_commands(operation_type: str, repo_shape: dict, request: str | None) -> list[str]:
-    inferred_target = repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else "<target>"
-    resource_focused = request_mentions_resources(request)
-    if operation_type == "package-inspection":
-        return ["swift package describe", "swift package dump-package"]
-    if operation_type == "read-search":
-        return ["swift package describe"]
-    if operation_type == "manifest-dependencies":
-        commands = [
-            "swift package dump-package",
-            "swift package add-dependency <url>",
-            "swift package resolve",
-            "swift package update",
-        ]
-        if resource_focused:
-            commands.append("Review Package.swift resource declarations and keep Bundle.module access aligned with the owning target.")
-        return commands
-    if operation_type == "build":
-        commands = ["swift build"]
-        if resource_focused:
-            commands.extend(
-                [
-                    "swift package dump-package",
-                    "Verify Package.swift resource declarations for Resource.process(...), Resource.copy(...), or Resource.embedInCode(...).",
-                    "Verify resource loading paths use Bundle.module and that test fixtures stay under the owning test target.",
-                ]
-            )
-        if repo_shape["metal_libraries"]:
-            commands.append("Verify bundled .metallib resources are declared intentionally in Package.swift and loaded through Bundle.module.")
-        return commands
-    if operation_type == "test":
-        commands = ["swift test"]
-        if repo_shape["xctestplans"]:
-            commands.append(f"xcodebuild -scheme {Path(repo_shape['xctestplans'][0]).stem} -showTestPlans")
-        return commands
-    if operation_type == "run":
-        commands = [f"swift run {inferred_target}"]
-        if resource_focused:
-            commands.append("swift package dump-package")
-        return commands
-    if operation_type == "plugin":
-        return ["swift package plugin --list"]
-    if operation_type == "toolchain-management":
-        commands = ["swift --version", "swift package --help", "xcrun --find swift"]
-        if repo_shape["metal_sources"] or repo_shape["metal_libraries"]:
-            commands.append("xcrun --find metal")
-        return commands
-    if operation_type == "mutation":
-        return [
-            "Edit package sources or Package.swift directly when the change stays inside SwiftPM-managed scope.",
-            shell_join(["swift", "package", "dump-package"]),
-        ]
-    return []
-
-
 def specialized_handoff(operation_type: str, repo_shape: dict, request: str | None, mixed_root_opt_in: bool) -> tuple[str | None, str | None]:
     text = normalize_request_text(request)
     if repo_shape["mixed_root"] and not mixed_root_opt_in:
@@ -252,6 +192,26 @@ def recommended_skill(operation_type: str) -> str:
     return "swift-package-build-run-workflow"
 
 
+def routing_summary(operation_type: str, repo_shape: dict, request: str | None) -> str:
+    resource_focused = request_mentions_resources(request)
+    target = repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else None
+    if operation_type == "test":
+        if repo_shape["xctestplans"]:
+            return "Package testing request with existing .xctestplan context; prefer the narrower testing skill so it can decide whether plain swift test or Xcode-native test-plan handling is the better fit."
+        return "Package testing request; prefer the narrower testing skill so Swift Testing, XCTest holdouts, fixtures, and flake diagnosis stay in one place."
+    if operation_type in {"build", "run", "manifest-dependencies", "plugin", "toolchain-management", "mutation"}:
+        if resource_focused and repo_shape["xcode_markers"]:
+            return "Package resource request with nearby Xcode markers; prefer the narrower build-run skill so it can either stay on SwiftPM or escalate cleanly into Xcode-managed bundle integration."
+        if resource_focused:
+            return "Package resource request; prefer the narrower build-run skill so Bundle.module, Package.swift resources, fixtures, and Metal-distribution checks stay with the real execution owner."
+        if repo_shape["metal_sources"] or repo_shape["metal_libraries"]:
+            return "Package build-run request with Metal-related signals; prefer the narrower build-run skill so SwiftPM-first behavior and Xcode-aware Metal escalation stay consistent."
+        if target:
+            return f"Package execution request with a single inferred source target `{target}`; prefer the narrower build-run skill so target-aware planning happens in the long-term owner."
+        return "Package build-run request; prefer the narrower build-run skill so manifest, dependency, plugin, and execution guidance stays in the long-term owner."
+    return "Broad package request; prefer the narrower package skill that owns the actual execution path."
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--operation-type", choices=sorted(VALID_OPERATION_TYPES))
@@ -277,7 +237,7 @@ def main() -> int:
                 "operation_type": None,
                 "operation_type_source": "missing",
                 "repo_shape": discover_repo_shape(args.repo_root),
-                "planned_commands": [],
+                "routing_summary": None,
                 "next_step": "Pass --operation-type explicitly or provide --request text that makes the intended SwiftPM workflow obvious.",
             },
         }
@@ -316,7 +276,7 @@ def main() -> int:
             "operation_type": operation_type,
             "operation_type_source": "explicit" if args.operation_type else "inferred",
             "repo_shape": repo_shape,
-            "planned_commands": build_commands(operation_type, repo_shape, args.request),
+            "routing_summary": routing_summary(operation_type, repo_shape, args.request),
             "inferred_context": {
                 "package_name": inferred_package_name(repo_shape),
                 "primary_target": repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else None,

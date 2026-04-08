@@ -7,7 +7,7 @@ description: Compatibility workflow surface for broad or legacy Xcode execution 
 
 ## Purpose
 
-Use this skill as a compatibility surface for older references to `xcode-app-project-workflow` while the repo transitions to narrower Xcode execution skills. The real long-term owners are `xcode-build-run-workflow` for build, run, diagnostics, toolchain, and guarded mutation work and `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, and `.xctestplan` work. `scripts/run_workflow.py` still performs compatibility routing and preserves the direct `.pbxproj` warning boundary so older flows continue to work during the migration window.
+Use this skill as a compatibility surface for older references to `xcode-app-project-workflow` while the repo transitions to narrower Xcode execution skills. The real long-term owners are `xcode-build-run-workflow` for build, run, diagnostics, toolchain, and guarded mutation work and `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, and `.xctestplan` work. `scripts/run_workflow.py` is intentionally routing-only now: it infers enough workspace context to choose the real owner and preserves the direct `.pbxproj` warning boundary so older flows continue to work during the migration window.
 
 ## When To Use
 
@@ -45,7 +45,7 @@ Use this skill as a compatibility surface for older references to `xcode-app-pro
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
 4. Run `scripts/run_workflow.py` to preserve the direct `.pbxproj` warning safeguard and route the request toward the narrower Xcode build/run or testing skill.
-5. Use `references/mcp-tool-matrix.md`, `references/cli-fallback-matrix.md`, and `references/testing-plans-file-membership-and-configurations.md` only as compatibility aids when an older flow still needs them before the narrower skill takes over.
+5. Use `references/mcp-tool-matrix.md`, `references/cli-fallback-matrix.md`, and `references/testing-plans-file-membership-and-configurations.md` only to explain why the narrower skill should take over; do not rebuild a second Xcode execution-planning surface here.
 6. Report the Apple docs relied on, the direct `.pbxproj` warning result when relevant, and the recommended narrower skill.
 
 ## Inputs
@@ -85,6 +85,7 @@ Use this skill as a compatibility surface for older references to `xcode-app-pro
 ## Fallbacks and Handoffs
 
 - This skill now routes to the narrower Xcode execution skills rather than acting as the primary execution owner itself.
+- Do not let this compatibility surface regrow concrete Xcode command-planning logic; keep it limited to routing context, the `.pbxproj` safeguard, and one concise next step.
 - Hand off to `xcode-build-run-workflow` when the request is primarily about workspace inspection, diagnostics, build, run, previews, file membership, toolchains, Metal-aware execution, or guarded mutation.
 - Hand off to `xcode-testing-workflow` when the request is primarily about Swift Testing, XCTest, XCUITest, `.xctestplan`, flaky tests, retries, or test filtering.
 - Recommend `explore-apple-swift-docs` directly when the task becomes Apple or Swift docs exploration work.

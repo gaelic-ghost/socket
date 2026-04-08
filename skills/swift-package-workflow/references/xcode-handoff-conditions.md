@@ -8,4 +8,4 @@ Hand off to `xcode-build-run-workflow` when:
 - package work is being exercised through Xcode rather than through plain SwiftPM
 - the requested mutation crosses into `.xcodeproj`, `.xcworkspace`, or `.pbxproj` managed scope
 
-Do not hand off just because the package is Apple-platform-related. Plain SwiftPM build, test, manifest, dependency, and source work should stay in `swift-package-workflow`.
+Do not hand off just because the package is Apple-platform-related. Plain SwiftPM build, manifest, dependency, plugin, resource, and source work should stay with `swift-package-build-run-workflow`, and plain package testing should stay with `swift-package-testing-workflow`.
