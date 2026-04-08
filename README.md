@@ -46,6 +46,8 @@ In practice, that means:
   - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
 - `maintain-project-readme`
   - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
+- `maintain-project-agents`
+  - Use when an ordinary project-local `AGENTS.md` needs deterministic auditing or bounded fixes for workflow guidance, validation commands, architecture boundaries, or agent safety rules.
 - `maintain-project-contributing`
   - Use when an ordinary software project `CONTRIBUTING.md` needs deterministic auditing or bounded fixes for contributor workflow, local setup, naming conventions, verification, or pull request expectations.
 - `maintain-project-roadmap`
@@ -163,6 +165,8 @@ Common starting points:
   `npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice`
 - README work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme`
+- AGENTS work:
+  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-agents`
 - contributing guide work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-contributing`
 - roadmap work:
@@ -199,6 +203,7 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 ├── skills/
 │   ├── explain-code-slice/
 │   ├── maintain-project-contributing/
+│   ├── maintain-project-agents/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
 │   └── maintain-project-repo/

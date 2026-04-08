@@ -36,6 +36,27 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 18: Project CONTRIBUTING maintainer skill (completed)
 - [x] Milestone 19: Repo role clarification and contributor guide (completed)
 - [x] Milestone 20: Rename `repo-maintenance-toolkit` to `maintain-project-repo` (completed)
+- [x] Milestone 21: Project AGENTS maintainer skill (completed)
+
+## Milestone 21: Project AGENTS maintainer skill
+
+Scope:
+
+- Add a dedicated skill for canonical project-local `AGENTS.md` maintenance in ordinary repositories.
+- Keep AGENTS maintenance separate from README, CONTRIBUTING, and ROADMAP maintenance.
+- Use a lighter schema that still strongly audits workflow drift, validation drift, and safety boundaries.
+
+Tickets:
+
+- [x] Add standalone `maintain-project-agents` with deterministic `check-only` and `apply` modes.
+- [x] Add Python-backed tests and root pytest discovery for the new skill.
+- [x] Update repo inventory and maintainer docs to include the new skill.
+
+Exit criteria:
+
+- [x] The repository contains a standalone canonical `AGENTS.md` maintainer skill.
+- [x] The skill audits workflow guidance, validation commands, and safety boundaries separately.
+- [x] Repo inventory and maintainer docs list the new skill as part of the project-doc maintainer family.
 
 ## Milestone 20: Rename `repo-maintenance-toolkit` to `maintain-project-repo`
 

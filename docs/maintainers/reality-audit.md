@@ -49,6 +49,10 @@ All active repo-authored skills live under `skills/`.
   - Script: `scripts/maintain_project_readme.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
+- `maintain-project-agents`
+  - Script: `scripts/maintain_project_agents.py`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-project-contributing`
   - Script: `scripts/maintain_project_contributing.py`
   - Metadata: `agents/openai.yaml`
@@ -185,10 +189,12 @@ Use these conventions when editing repo-maintainer guidance.
 
 - `maintain-project-roadmap` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
 - `maintain-project-readme` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
+- `maintain-project-agents` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-contributing` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
+- `maintain-project-agents` is the canonical owner of ordinary project-local `AGENTS.md` maintenance.
 - `maintain-project-contributing` is the canonical owner of ordinary-project `CONTRIBUTING.md` maintenance.
-- In this repo, `maintain-project-readme`, `maintain-project-contributing`, and `maintain-project-roadmap` are the strategic maintainer skills for ordinary project docs.
+- In this repo, `maintain-project-readme`, `maintain-project-agents`, `maintain-project-contributing`, and `maintain-project-roadmap` are the strategic maintainer skills for ordinary project docs.
 - Agent-stack repo-maintainer skills now live in `/Users/galew/Workspace/agent-plugin-skills`, not in this repository.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude plugin metadata.
