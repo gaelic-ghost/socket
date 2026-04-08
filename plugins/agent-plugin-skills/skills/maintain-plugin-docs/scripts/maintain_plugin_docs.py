@@ -1020,7 +1020,27 @@ def check_sections(repo: Path, profile: str, text: str) -> List[Issue]:
 
 def find_todo_issues(repo: Path, text: str) -> List[Issue]:
     issues: List[Issue] = []
-    if re.search(r"\b(TODO|TBD|todo)\b", text):
+    placeholder_pattern = re.compile(r"\b(TODO|TBD|todo)\b")
+    allowed_context_markers = (
+        "FIXME",
+        "ledger",
+        "TODO.md",
+        "FIXME.md",
+        "TODO-",
+        "FIXME-",
+        "TODO/FIXME",
+        "todo/fixme",
+    )
+    has_placeholder = False
+    for line in text.splitlines():
+        if not placeholder_pattern.search(line):
+            continue
+        if any(marker in line for marker in allowed_context_markers):
+            continue
+        has_placeholder = True
+        break
+
+    if has_placeholder:
         issues.append(
             Issue(
                 issue_id="todo-placeholder",

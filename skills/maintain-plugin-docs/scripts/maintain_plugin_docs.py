@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
-PUBLIC_REPOS = {"apple-dev-skills", "productivity-skills", "python-skills"}
+PUBLIC_REPOS = {"productivity-skills", "python-skills"}
 PRIVATE_REPOS = {"private-skills"}
 BOOTSTRAP_REPOS = {"a11y-skills"}
 
@@ -1020,7 +1020,27 @@ def check_sections(repo: Path, profile: str, text: str) -> List[Issue]:
 
 def find_todo_issues(repo: Path, text: str) -> List[Issue]:
     issues: List[Issue] = []
-    if re.search(r"\b(TODO|TBD|todo)\b", text):
+    placeholder_pattern = re.compile(r"\b(TODO|TBD|todo)\b")
+    allowed_context_markers = (
+        "FIXME",
+        "ledger",
+        "TODO.md",
+        "FIXME.md",
+        "TODO-",
+        "FIXME-",
+        "TODO/FIXME",
+        "todo/fixme",
+    )
+    has_placeholder = False
+    for line in text.splitlines():
+        if not placeholder_pattern.search(line):
+            continue
+        if any(marker in line for marker in allowed_context_markers):
+            continue
+        has_placeholder = True
+        break
+
+    if has_placeholder:
         issues.append(
             Issue(
                 issue_id="todo-placeholder",
@@ -2432,8 +2452,20 @@ def check_cross_doc_consistency(repo: Path, readme_text: Optional[str], roadmap_
     if install_range is not None and (has_codex_plugin or has_claude_plugin):
         start_idx, end_idx = install_range
         install_text = "\n".join(readme_text.splitlines()[start_idx:end_idx])
-        codex_pos = install_text.find("Codex Plugin")
-        claude_pos = install_text.find("Claude Code Plugin")
+        codex_markers = (
+            "Codex Plugin",
+            "Local Plugin Development Install",
+            "Codex local installs",
+            "repo-local packaged plugin root",
+        )
+        claude_markers = (
+            "Claude Code Plugin",
+            "Claude Marketplace Development",
+            "direct local Claude work",
+            "claude --plugin-dir",
+        )
+        codex_pos = min((pos for pos in (install_text.find(marker) for marker in codex_markers) if pos != -1), default=-1)
+        claude_pos = min((pos for pos in (install_text.find(marker) for marker in claude_markers) if pos != -1), default=-1)
         cli_pos = install_text.find("Vercel `skills` CLI")
         if has_codex_plugin and codex_pos == -1:
             issues.append(
