@@ -364,6 +364,7 @@ Scope:
 - Move plugin packaging off the repository root and into a dedicated plugin subtree.
 - Align Codex and Claude packaging docs around a shared plugin-first story while keeping root `skills/` canonical.
 - Point local marketplace metadata at the packaged plugin subtree instead of the repository root.
+- Historical note: this subtree-packaging model was later retired in favor of direct marketplace pointers to root `skills/` with no nested `plugins/` packaging copy.
 
 Tickets:
 

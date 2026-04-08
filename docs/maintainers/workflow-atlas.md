@@ -7,11 +7,9 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 ## Packaging Context
 
 - Root `skills/` is the canonical workflow-authoring surface.
-- `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude plugin metadata.
 - `.agents/skills` and `.claude/skills` mirror root `skills/` for local project discovery on macOS and Linux.
-- `plugins/productivity-skills/skills` mirrors root `skills/` for local plugin packaging alignment.
-- `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree rather than at the repository root.
-- `.claude-plugin/marketplace.json` is the repo-root Claude marketplace catalog for Git-backed sharing, while direct local Claude development still uses `claude --plugin-dir`.
+- `.agents/plugins/marketplace.json` points local Codex discovery directly at root `skills/`.
+- `.claude-plugin/marketplace.json` points the repo-root Claude marketplace catalog directly at root `skills/`.
 
 ## Product Direction
 

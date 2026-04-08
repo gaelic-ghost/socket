@@ -1,6 +1,6 @@
 # productivity-skills
 
-Canonical productivity skills with a plugin-first packaging layout for Codex and Claude Code.
+Canonical productivity skills for broad standalone installation and repo-local marketplace discovery.
 
 For maintainer guidance, standards references, and cross-ecosystem packaging policy, see [AGENTS.md](./AGENTS.md).
 
@@ -63,44 +63,40 @@ Agent-stack repo-maintainer skills now live in [`../agent-plugin-skills`](../age
 - [`bootstrap-skills-plugin-repo`](../agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md)
 - [`sync-skills-repo-guidance`](../agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md)
 
-## Packaging and Delegation
+## Discovery and Delegation
 
-This repository now uses a plugin-first packaging layout while keeping root [`skills/`](./skills/) as the canonical workflow-authoring surface. In repo-policy shorthand, keep root `skills/` as the canonical authoring surface.
+This repository keeps root [`skills/`](./skills/) as the canonical workflow-authoring surface.
 
 Shared guidance across both ecosystems:
 
 - keep reusable workflow behavior in root `skills/`
 - keep deterministic helper logic skill-scoped so both Codex and Claude can rely on it
-- treat plugin manifests, hooks, and marketplace wiring as install-surface metadata, not as the workflow source of truth
+- treat marketplace wiring as install-surface metadata, not as the workflow source of truth
 - use POSIX symlink mirrors for local Codex and Claude project discovery on macOS and Linux:
   - `.agents/skills -> ../skills`
   - `.claude/skills -> ../skills`
-  - `plugins/productivity-skills/skills -> ../../skills`
 
-Packaging philosophy going forward:
+Layering philosophy going forward:
 
 - global plugins should bundle skills that are broadly useful across many repos
 - this global plugin should also hold the canonical general-purpose versions of workflow families that later specialize elsewhere
 - language-, framework-, stack-, or repository-specific skills should increasingly live in dedicated plugins that are installed at the project or repo level
 - this keeps global installs lighter, gives specialized plugins room for stronger assumptions, and preserves this repo as the stable superclass layer instead of turning it into a grab bag
 
-Current packaging surfaces live under:
+Current discovery surfaces live under:
 
-- [`plugins/productivity-skills/.codex-plugin/plugin.json`](./plugins/productivity-skills/.codex-plugin/plugin.json)
-- [`plugins/productivity-skills/.claude-plugin/plugin.json`](./plugins/productivity-skills/.claude-plugin/plugin.json)
-- [`plugins/productivity-skills/skills`](./plugins/productivity-skills/skills)
-- [`plugins/productivity-skills/hooks/hooks.json`](./plugins/productivity-skills/hooks/hooks.json)
 - [`.agents/skills`](./.agents/skills)
 - [`.claude/skills`](./.claude/skills)
 - [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+- [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
 
-The plugin package is intentionally conservative:
+The repo-local marketplace catalogs are intentionally thin:
 
-- Codex-compatible common denominator first
-- Claude-only extras layered on top under `plugins/productivity-skills/.claude-plugin`, `hooks/`, and `bin/`
-- no essential workflow behavior should depend on plugin-only extras
+- point directly at root `skills/`
+- avoid nested packaged plugin copies inside this repository
+- keep essential workflow behavior in the skill directories themselves
 
-Helpful docs for this packaging model:
+Helpful docs for this discovery model:
 
 - OpenAI Codex Skills: [developers.openai.com/codex/skills](https://developers.openai.com/codex/skills)
 - OpenAI Codex customization: [developers.openai.com/codex/concepts/customization](https://developers.openai.com/codex/concepts/customization/)
@@ -111,18 +107,14 @@ Helpful docs for this packaging model:
 
 ## Install Surfaces
 
-Repo-local packaging and personal local installs are different surfaces and the docs should keep them separate:
+Repo-local discovery and personal installs are different surfaces and the docs should keep them separate:
 
-- repo-local packaged plugin root: `plugins/productivity-skills/`
 - repo-local Codex marketplace: `.agents/plugins/marketplace.json`
-- personal Codex install root: `~/.codex/plugins/productivity-skills`
+- repo-local Claude marketplace: `.claude-plugin/marketplace.json`
+- canonical authored skills: `skills/`
 - personal Codex marketplace: `~/.agents/plugins/marketplace.json`
 
-This repository also tracks a repo-root Claude marketplace catalog at `.claude-plugin/marketplace.json` for Git-backed sharing, while direct local Claude development should still use `claude --plugin-dir /absolute/path/to/plugins/productivity-skills`.
-
-Track canonical plugin source trees and shared marketplace catalogs in git. Keep consumer-side install copies, caches, and machine-local runtime state out of git.
-
-Local Codex install lifecycle work such as install, update, uninstall, verify, enable, disable, and promote belongs to the dedicated maintainer workflow in `install-plugin-to-socket`, not to this repository's bootstrap or sync guidance.
+Track the repo-scoped marketplace catalogs in git. Keep consumer-side install copies, caches, and machine-local runtime state out of git.
 
 ## Maintainer Python Tooling
 
@@ -143,9 +135,7 @@ uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scrip
 
 ## Install
 
-Standalone skill installation is handled through the Vercel `skills` CLI against root [`skills/`](./skills). Plugin packaging and local marketplace wiring target [`plugins/productivity-skills/`](./plugins/productivity-skills). For local project discovery on macOS and Linux, this repo also exposes `.agents/skills` and `.claude/skills` as symlink mirrors into root `skills/`.
-
-For local Codex plugin development, use the repo-local marketplace path through [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) and the packaged plugin root at [`plugins/productivity-skills/`](./plugins/productivity-skills). For direct local Claude development, use `claude --plugin-dir /absolute/path/to/plugins/productivity-skills`. If this repository is being shared as a Claude marketplace, keep plugin paths relative to [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
+Standalone skill installation is handled through the Vercel `skills` CLI against root [`skills/`](./skills). Repo-local marketplace catalogs also point directly at [`skills/`](./skills) for local discovery without carrying a nested packaged plugin copy. For local project discovery on macOS and Linux, this repo also exposes `.agents/skills` and `.claude/skills` as symlink mirrors into root `skills/`.
 
 Install one skill:
 
@@ -190,16 +180,10 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 │       └── marketplace.json
 ├── .claude/
 │   └── skills -> ../skills
+├── .claude-plugin/
+│   └── marketplace.json
 ├── README.md
 ├── AGENTS.md
-├── plugins/
-│   └── productivity-skills/
-│       ├── .codex-plugin/
-│       ├── .claude-plugin/
-│       ├── assets/
-│       ├── bin/
-│       ├── hooks/
-│       └── skills -> ../../skills
 ├── skills/
 │   ├── explain-code-slice/
 │   ├── maintain-project-contributing/
@@ -213,7 +197,7 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 └── pyproject.toml
 ```
 
-The canonical workflow content still lives under root `skills/`. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved. Agent-stack repo-maintainer workflows now live in [`../agent-plugin-skills`](../agent-plugin-skills) instead of this plugin.
+The canonical workflow content lives under root `skills/`. The discovery mirrors and marketplace catalogs point at that same source tree directly on macOS and Linux, including WSL 2 when Windows is involved. Agent-stack repo-maintainer workflows now live in [`../agent-plugin-skills`](../agent-plugin-skills) instead of this plugin.
 
 ## License
 

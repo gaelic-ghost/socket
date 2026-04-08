@@ -8,7 +8,7 @@
       "name": "productivity-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/productivity-skills"
+        "path": "./skills"
       },
       "policy": {
         "installation": "AVAILABLE",

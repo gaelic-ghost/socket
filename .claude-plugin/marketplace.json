@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "productivity-skills",
-      "source": "./plugins/productivity-skills",
+      "source": "./skills",
       "description": "Broadly useful productivity workflows for Codex and Claude Code."
     }
   ]

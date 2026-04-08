@@ -19,7 +19,7 @@ Use this guide when adding or revising skills in this repository. `productivity-
 uv sync --dev
 ```
 
-No long-lived app configuration is required for ordinary maintainer work in this repository. Use the root `pyproject.toml` as the Python tooling baseline, and keep plugin packaging metadata under `plugins/productivity-skills/` aligned with the skill source of truth under `skills/`.
+No long-lived app configuration is required for ordinary maintainer work in this repository. Use the root `pyproject.toml` as the Python tooling baseline, and keep the repo-scoped marketplace catalogs aligned directly with the skill source of truth under `skills/`.
 
 ### Runtime Behavior
 
@@ -28,7 +28,7 @@ This repository does not have a service-style runtime. The main contributor loop
 ## Naming Conventions
 
 - Keep skill names clear, stable, and domain-grouped, usually in `<category>-<domain>-<purpose>` form.
-- Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, scripts, references, plugin metadata, marketplace metadata, and maintainer docs.
+- Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, scripts, references, marketplace metadata, and maintainer docs.
 - Treat `productivity-skills` as the general-purpose or superclass layer in docs and contributor notes; reserve specialization language for plugins that truly narrow the workflow.
 - Do not rename fields, files, or workflow concepts casually when the underlying meaning has not changed.
 

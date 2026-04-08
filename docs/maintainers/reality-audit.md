@@ -67,12 +67,8 @@ All active repo-authored skills live under `skills/`.
   - Runtime docs: `SKILL.md`, `references/*`
   - Assets: `assets/repo-maintenance/*`, `assets/github/repo-maintenance-workflows/validate-repo-maintenance.yml`
 
-### Packaging Surfaces
+### Discovery Surfaces
 
-- `plugins/productivity-skills/.codex-plugin/plugin.json`
-- `plugins/productivity-skills/.claude-plugin/plugin.json`
-- `plugins/productivity-skills/skills`
-- `plugins/productivity-skills/hooks/hooks.json`
 - `.agents/skills`
 - `.claude/skills`
 - `.agents/plugins/marketplace.json`
@@ -197,8 +193,6 @@ Use these conventions when editing repo-maintainer guidance.
 - In this repo, `maintain-project-readme`, `maintain-project-agents`, `maintain-project-contributing`, and `maintain-project-roadmap` are the strategic maintainer skills for ordinary project docs.
 - Agent-stack repo-maintainer skills now live in `/Users/galew/Workspace/agent-plugin-skills`, not in this repository.
 - Root `skills/` is the canonical workflow-authoring surface.
-- `plugins/productivity-skills/` is the plugin packaging root for Codex and Claude plugin metadata.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
-- `plugins/productivity-skills/skills` is a POSIX symlink mirror into root `skills/`.
-- `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/productivity-skills/`.
-- `.claude-plugin/marketplace.json` is the repo-root Claude marketplace catalog for Git-backed sharing of this repository's tracked plugin roots.
+- `.agents/plugins/marketplace.json` points local Codex discovery directly at root `skills/`.
+- `.claude-plugin/marketplace.json` points the repo-root Claude marketplace catalog directly at root `skills/`.
