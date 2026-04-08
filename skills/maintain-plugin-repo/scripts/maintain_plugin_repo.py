@@ -43,6 +43,10 @@ def _skill_root() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
+def _skills_root() -> Path:
+    return _skill_root().parent
+
+
 def _repo_root(path: str) -> Path:
     return Path(path).expanduser().resolve()
 
@@ -78,7 +82,7 @@ def _run_json_script(name: str, script_path: Path, args: list[str]) -> ScriptRes
 
 
 def run_validator(repo_root: Path, plugin_name: str | None) -> ScriptResult:
-    script = _repo_root(str(_skill_root().parents[1] / "validate-plugin-install-surfaces" / "scripts" / "validate_plugin_install_surfaces.py"))
+    script = _skills_root() / "validate-plugin-install-surfaces" / "scripts" / "validate_plugin_install_surfaces.py"
     args = ["--repo-root", str(repo_root), "--print-json"]
     if plugin_name:
         args.extend(["--plugin-name", plugin_name])
@@ -86,7 +90,7 @@ def run_validator(repo_root: Path, plugin_name: str | None) -> ScriptResult:
 
 
 def run_docs(repo_root: Path, doc_scope: str, apply_fixes: bool) -> ScriptResult:
-    script = _repo_root(str(_skill_root().parents[1] / "maintain-plugin-docs" / "scripts" / "maintain_plugin_docs.py"))
+    script = _skills_root() / "maintain-plugin-docs" / "scripts" / "maintain_plugin_docs.py"
     args = [
         "--workspace",
         str(repo_root.parent),
@@ -102,7 +106,7 @@ def run_docs(repo_root: Path, doc_scope: str, apply_fixes: bool) -> ScriptResult
 
 
 def run_install(source_plugin_root: Path, install_scope: str, target_repo_root: Path, install_mode: str, apply_repairs: bool) -> ScriptResult:
-    script = _repo_root(str(_skill_root().parents[1] / "install-plugin-to-socket" / "scripts" / "install_plugin_to_socket.py"))
+    script = _skills_root() / "install-plugin-to-socket" / "scripts" / "install_plugin_to_socket.py"
     args = [
         "--source-plugin-root",
         str(source_plugin_root),

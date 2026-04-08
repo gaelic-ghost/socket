@@ -203,6 +203,7 @@ Tickets:
 - [ ] Add guidance for when packaging data belongs in plugin metadata versus repo docs.
 - [ ] Add deterministic validation for missing or stale MCP or app references.
 - [ ] Document boundaries relative to bootstrap and repo-guidance sync.
+- [ ] Teach `maintain-plugin-repo` to classify MCP and app packaging drift explicitly and defer it to the Milestone 5 owner instead of leaving that surface as an unnamed follow-up.
 
 Exit criteria:
 
