@@ -28,6 +28,8 @@ Current split:
   - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
 - `maintain-project-readme`
   - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
+- `maintain-project-contributing`
+  - Use when an ordinary software project `CONTRIBUTING.md` needs deterministic auditing or bounded fixes for contributor workflow, local setup, naming conventions, verification, or pull request expectations.
 - `maintain-project-roadmap`
   - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
 - `repo-maintenance-toolkit`
@@ -142,6 +144,8 @@ Common starting points:
   `npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice`
 - README work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme`
+- contributing guide work:
+  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-contributing`
 - roadmap work:
   `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap`
 - repo-maintenance toolkit work:
@@ -175,6 +179,7 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 │       └── skills -> ../../skills
 ├── skills/
 │   ├── explain-code-slice/
+│   ├── maintain-project-contributing/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
 │   └── repo-maintenance-toolkit/

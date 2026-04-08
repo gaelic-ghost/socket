@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project Contributing"
+  short_description: "Audit and apply bounded fixes to canonical CONTRIBUTING.md files."
+  default_prompt: "Use $maintain-project-contributing for an ordinary software-project CONTRIBUTING.md. Detect the repo profile first, enforce the shared contribution-guide schema including Local Setup with Runtime Config and Runtime Behavior plus a Naming Conventions section, return audit findings in check-only mode, and in apply mode keep edits bounded to grounded contributor guidance only."

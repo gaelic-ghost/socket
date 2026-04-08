@@ -35,6 +35,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | --- | --- | --- |
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
+| `maintain-project-contributing` | General CONTRIBUTING maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `repo-maintenance-toolkit` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
 
@@ -100,6 +101,52 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - Required: `--project-root <path>`
 - Required: `--run-mode apply`
 - Optional: `--readme-path <path>`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
+
+## `maintain-project-contributing`
+
+### Workflow: `check-only`
+
+**Overview**
+
+- Triggered when the user wants deterministic auditing for an ordinary software-project `CONTRIBUTING.md`.
+- Primary workflow.
+- `read-only`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode check-only`
+- Optional: `--contributing-path <path>`
+- Tool/script input: `scripts/maintain_project_contributing.py`
+
+**Branch Conditions**
+
+- Multiple repo profiles match: report ambiguity while selecting the conservative valid profile
+- Contribution guide already sound: exact clean-run text
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `apply`
+
+**Overview**
+
+- Triggered when the user wants bounded `CONTRIBUTING.md` normalization, repair, or creation.
+- Variant workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode apply`
+- Optional: `--contributing-path <path>`
 
 **Outputs**
 

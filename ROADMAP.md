@@ -33,6 +33,29 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 - [x] Milestone 15: Claude plugin support (completed)
 - [x] Milestone 16: Use `agent-plugin-skills` plugin to align repo with skills/plugin repo standards (completed)
 - [x] Milestone 17: Shared repo-maintenance toolkit skill (completed)
+- [x] Milestone 18: Project CONTRIBUTING maintainer skill (completed)
+
+## Milestone 18: Project CONTRIBUTING maintainer skill
+
+Scope:
+
+- Add a dedicated skill for canonical `CONTRIBUTING.md` maintenance in ordinary software projects.
+- Keep contribution-guide maintenance separate from README and roadmap maintenance.
+- Require a dedicated naming-conventions section and explicit runtime-config/runtime-behavior setup guidance.
+
+Tickets:
+
+- [x] Add standalone `maintain-project-contributing` with deterministic `check-only` and `apply` modes.
+- [x] Require `Local Setup` to contain `Runtime Config` and `Runtime Behavior` subsections.
+- [x] Require a dedicated `Naming Conventions` section in the canonical schema.
+- [x] Add Python-backed tests and repo test discovery for the new skill.
+- [x] Update repo inventory and maintainer docs to include the new skill.
+
+Exit criteria:
+
+- [x] The repository contains a standalone canonical `CONTRIBUTING.md` maintainer skill.
+- [x] The skill enforces `Local Setup > Runtime Config` and `Local Setup > Runtime Behavior`.
+- [x] The skill enforces a dedicated `Naming Conventions` section.
 
 ## Milestone 0: Naming and structural refactor
 
