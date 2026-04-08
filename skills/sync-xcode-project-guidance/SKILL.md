@@ -13,7 +13,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
 
 - Use this skill when an existing macOS, iOS, or iPadOS app repo needs `AGENTS.md` added, refreshed, or merged with the current Xcode workflow baseline.
 - Use this skill when the repository already has an `.xcodeproj` or `.xcworkspace` and the user wants project guidance, onboarding rules, or workflow policy brought up to date.
-- Use this skill when the user wants the repo guidance that used to be implied by `xcode-app-project-workflow` to be made explicit in the repo itself.
+- Use this skill when the user wants the repo guidance for the current narrower Xcode execution skills to be made explicit in the repo itself.
 - Do not use this skill for new-project creation from nothing.
 - Do not use this skill for ordinary build, test, run, diagnostics, docs lookup, or mutation work inside an existing Xcode project.
 - Do not use this skill for plain Swift packages, libraries, or tools that are not native Apple apps.

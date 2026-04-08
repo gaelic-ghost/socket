@@ -101,12 +101,11 @@ Applicability guidance:
 
 - Keep `xcode-build-run-workflow` focused on execution, diagnostics, mutation safety, file-membership follow-through, and fallback planning for existing Xcode-managed or Xcode-adjacent build and run work.
 - Keep `xcode-testing-workflow` focused on Swift Testing, XCTest, XCUITest, `.xctestplan`, filtering, retries, and test diagnosis in existing Xcode-managed or Xcode-adjacent work.
-- Keep `xcode-app-project-workflow` as a compatibility-routing surface while the narrower Xcode execution skills take over.
 - Keep `swift-package-build-run-workflow` focused on package build/run, manifest, dependency, plugin, resource, Metal-distribution, and Release-versus-Debug work in SwiftPM repos.
 - Keep `swift-package-testing-workflow` focused on Swift Testing, XCTest holdouts, `.xctestplan`, fixtures, async test guidance, and test diagnosis in SwiftPM repos.
-- Keep `swift-package-workflow` as a compatibility-routing surface while the narrower package execution skills take over.
+- Keep `xcode-app-project-workflow` and `swift-package-workflow` as legacy compatibility-routing surfaces only while migration references still exist; do not treat them as primary execution owners in new docs, prompts, or generated guidance.
 - Keep `explore-apple-swift-docs` focused on Apple and Swift docs exploration across Xcode MCP docs, Dash, and official web docs.
-- When an execution workflow needs documentation context, prefer entering or recommending `explore-apple-swift-docs` first rather than rebuilding docs-source selection inside `xcode-build-run-workflow`, `xcode-testing-workflow`, or `xcode-app-project-workflow`.
+- When an execution workflow needs documentation context, prefer entering or recommending `explore-apple-swift-docs` first rather than rebuilding docs-source selection inside the execution skills.
 
 ## Anatomy of an Agent Skill
 

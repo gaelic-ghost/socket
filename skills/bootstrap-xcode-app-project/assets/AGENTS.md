@@ -2,7 +2,6 @@
 
 - Use `xcode-build-run-workflow` for normal Xcode build, run, diagnostics, preview, file-membership, and guarded mutation work inside this existing project.
 - Use `xcode-testing-workflow` when the task is primarily about Swift Testing, XCTest, XCUITest, `.xctestplan`, flaky tests, retries, or test diagnosis.
-- Use `xcode-app-project-workflow` only as a compatibility surface when older prompts or docs still point at the older broad Xcode workflow name.
 - Use `sync-xcode-project-guidance` when this repo's local workflow guidance drifts and should be refreshed or merged forward.
 - Re-run `sync-xcode-project-guidance` after substantial Xcode-workflow or plugin updates so local guidance stays aligned.
 - Use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, and `scripts/repo-maintenance/release.sh` for releases.
