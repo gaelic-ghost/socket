@@ -10,7 +10,8 @@
 
 - Root `skills/` stays canonical.
 - Packaging and discovery metadata stay under `plugins/` and `.agents/plugins/`.
-- POSIX symlink mirrors are explicit, documented, and validated.
+- POSIX discovery mirrors are explicit, documented, and validated.
+- Bundled plugin-root skills directories are explicit, documented, and kept in sync with root `skills/`.
 - Narrow file-level maintainers and broader repo-level maintainers should stay distinct.
 - Action-oriented local install wiring should stay distinct from audit-only metadata validation.
 - Upstream docs drift is expected and should be audited deliberately.
@@ -42,13 +43,13 @@ Tickets:
 - [x] Add the predecessor README-maintenance skill that now evolves into `maintain-plugin-docs`.
 - [x] Add `bootstrap-skills-plugin-repo`.
 - [x] Add `sync-skills-repo-guidance`.
-- [x] Add plugin manifests, marketplace wiring, maintainer docs, and POSIX symlink mirrors.
+- [x] Add plugin manifests, marketplace wiring, maintainer docs, repo-level discovery mirrors, and bundled plugin skills directories.
 - [x] Add maintainer Python tooling baseline and tests.
 
 Exit criteria:
 
 - [x] The repository has a coherent stack-specific purpose.
-- [x] Root `skills/` is canonical and mirrored into project-level discovery paths with symlinks.
+- [x] Root `skills/` is canonical, repo-level discovery paths use symlinks, and plugin packaging keeps a bundled `skills/` directory.
 - [x] Active skills, docs, and packaging metadata describe the same repo model.
 
 ## Milestone 1: `maintain-plugin-docs` evolution

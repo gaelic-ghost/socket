@@ -9,7 +9,7 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/agent-plugin-skills/` is the plugin packaging root for Codex and Claude scaffolds.
 - `.agents/skills` and `.claude/skills` mirror root `skills/` for local project discovery on macOS and Linux.
-- `plugins/agent-plugin-skills/skills` mirrors root `skills/` for local plugin packaging alignment.
+- `plugins/agent-plugin-skills/skills/` is a bundled plugin directory kept in sync with root `skills/` for shipped plugin packaging.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at the plugin subtree.
 - `.claude-plugin/marketplace.json` is the Git-backed Claude marketplace catalog for sharing this repo's tracked plugin sources.
 - Canonical plugin source trees and shared marketplace catalogs belong in git. Downstream install copies, caches, and local-only runtime state do not.
@@ -18,11 +18,11 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
-| `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, symlink mirror alignment |
+| `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, discovery-mirror alignment, bundled plugin skills sync |
 | `install-plugin-to-socket` | Bounded local Codex plugin install wiring for plugin-development repos | `check-only`, `apply`, install, update, uninstall, scope-resolution from profile defaults |
 | `maintain-plugin-docs` | Current plugin-docs maintainer for stack-specific skills and plugin repos | README audit/apply, ROADMAP audit/apply, combined docs passes |
 | `sync-skills-repo-guidance` | Current guidance-alignment owner for skills and plugin repos | `check-only` script audit, maintainer-driven guidance reconciliation, misroute and defer handling |
-| `validate-plugin-install-surfaces` | Audit-only validator for plugin metadata, marketplace wiring, install docs, and mirrors | audit-only validation, grouped findings, no mutation |
+| `validate-plugin-install-surfaces` | Audit-only validator for plugin metadata, marketplace wiring, install docs, discovery mirrors, and bundled plugin skills | audit-only validation, grouped findings, no mutation |
 
 ## `bootstrap-skills-plugin-repo`
 

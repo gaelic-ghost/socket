@@ -49,11 +49,12 @@ Plugin, marketplace, MCP, app, and hook manifests stay under [`plugins/`](./plug
 
 This repo also tracks a repo-root Claude marketplace file at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) so the repository itself can be shared as a Git-backed Claude marketplace, while the actual plugin source of truth stays under [`plugins/agent-plugin-skills/`](./plugins/agent-plugin-skills/).
 
-For local project discovery on macOS and Linux, including WSL 2 when Windows is involved, this repo uses POSIX symlink mirrors instead of duplicate skill trees:
+For local project discovery on macOS and Linux, including WSL 2 when Windows is involved, this repo uses POSIX symlink mirrors for repo-level discovery:
 
 - [`.agents/skills`](./.agents/skills) -> `../skills`
 - [`.claude/skills`](./.claude/skills) -> `../skills`
-- [`plugins/agent-plugin-skills/skills`](./plugins/agent-plugin-skills/skills) -> `../../skills`
+
+The shipped plugin bundle keeps a real [`plugins/agent-plugin-skills/skills/`](./plugins/agent-plugin-skills/skills) directory. That packaged tree is a bundled copy of root [`skills/`](./skills/) and must stay in sync with the canonical authored surface, because Codex installs and loads a cached plugin copy rather than reading directly from the marketplace source path.
 
 Current packaging surfaces:
 
@@ -287,7 +288,7 @@ Common starting points:
 │       ├── assets/
 │       ├── bin/
 │       ├── hooks/
-│       └── skills -> ../../skills
+│       └── skills/
 ├── skills/
 │   ├── bootstrap-skills-plugin-repo/
 │   ├── install-plugin-to-socket/

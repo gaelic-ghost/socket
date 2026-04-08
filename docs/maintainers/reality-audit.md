@@ -90,7 +90,7 @@ Required checks:
 - output contracts match text and JSON emitted by code
 - exact phrases like `No findings.` match actual output
 - trigger wording is broad enough to match intended natural-language request shapes
-- packaging docs distinguish canonical authored surfaces from symlink mirrors and plugin metadata
+- packaging docs distinguish canonical authored surfaces, repo-level discovery mirrors, bundled plugin skills directories, and plugin metadata
 - maintainer Python tooling guidance stays aligned with the repo baseline of `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`
 
 ## Current Invariants
@@ -104,11 +104,21 @@ Required checks:
 - `install-plugin-to-socket` is the canonical owner of bounded local Codex plugin install, update, uninstall, verify, enable, disable, and promote wiring in this repo family.
 - `sync-skills-repo-guidance` is the canonical owner of ongoing guidance alignment for this repo pattern.
 - `sync-skills-repo-guidance` currently combines a narrow local audit script with broader maintainer-driven review of docs wording, guidance drift, and docs links. Do not describe the script alone as if it already performs full repo-wide remediation or upstream-doc intake.
-- `validate-plugin-install-surfaces` is the canonical audit-only validator for plugin manifests, marketplace wiring, README install references, and POSIX discovery mirrors in this repo family.
+- `validate-plugin-install-surfaces` is the canonical audit-only validator for plugin manifests, marketplace wiring, README install references, repo-level discovery mirrors, and bundled plugin skills directories in this repo family.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `plugins/agent-plugin-skills/` is the plugin packaging root for Codex and Claude scaffolding.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
-- `plugins/agent-plugin-skills/skills` is a POSIX symlink mirror into root `skills/`.
+- `plugins/agent-plugin-skills/skills/` is a real bundled directory kept in sync with root `skills/`.
 - `.agents/plugins/marketplace.json` points local Codex plugin discovery at `plugins/agent-plugin-skills/`.
 - `.claude-plugin/marketplace.json` is the tracked Git-backed Claude marketplace catalog for this repository.
 - Shared marketplace catalogs and canonical plugin source trees belong in git. Consumer-side install copies, caches, and local-only runtime state do not.
+
+## Plugin Smoke Test Flow
+
+Run this after packaging-contract changes or before calling the plugin bundle ready for distribution:
+
+1. Run the repo validation scripts and tests.
+2. Confirm `.agents/skills` and `.claude/skills` are still symlinks to `../skills`.
+3. Confirm `plugins/agent-plugin-skills/skills/` is a real directory, not a symlink.
+4. Confirm the bundled plugin `skills/` tree matches root `skills/`.
+5. Restart Codex and verify the plugin still appears through `/plugins`.
