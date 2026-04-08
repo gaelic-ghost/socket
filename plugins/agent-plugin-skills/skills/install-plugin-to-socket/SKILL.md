@@ -7,7 +7,7 @@ description: Install, update, uninstall, verify, repair, or promote an in-develo
 
 Wire an in-development Codex plugin into Codex's documented local plugin surfaces.
 
-This skill is for local Codex plugin development workflows. It does not publish plugins, does not manage the official plugin directory, and only uses documented or schema-backed Codex app-server plugin install or uninstall RPCs when they are available in the local Codex build.
+This skill is for local Codex plugin development workflows. It does not publish plugins, does not manage the official plugin directory, and only uses app-server plugin install or uninstall RPCs as best-effort extras when they happen to be available in the local Codex build.
 
 ## Inputs
 
@@ -60,27 +60,26 @@ This skill is for local Codex plugin development workflows. It does not publish 
    - `~/.codex/plugins/<plugin-name>`
    - `~/.agents/plugins/marketplace.json`
 6. For `repo` scope, target:
-   - `$REPO_ROOT/.codex/plugins/<plugin-name>`
-   - `$REPO_ROOT/.codex/plugins/marketplace.json`
-   - `$REPO_ROOT/.codex/config.toml`
+   - `$REPO_ROOT/plugins/<plugin-name>`
+   - `$REPO_ROOT/.agents/plugins/marketplace.json`
 7. Keep marketplace `source.path` relative to the marketplace root, prefixed with `./`, and inside that root.
 8. Merge one plugin entry into the marketplace without overwriting unrelated entries.
 9. Default to the documented Codex local-plugin flow:
    - stage the plugin at the repo or personal plugin path
    - point the marketplace entry at that staged path
-   - write the plugin enabled state into the active Codex config scope with `enabled = true` on install
+   - write the plugin enabled state into Codex's active config scope with `enabled = true` on install
 10. Use `copy` mode as the default because it matches the current OpenAI examples for local plugin installs and gives Codex a stable staged plugin tree to recache from.
-11. After `install`, `update`, `repair`, or `promote`, prefer Codex's own app-server `plugin/install` RPC against the resolved marketplace path so the plugin becomes truly installed in Codex's local cache instead of only available through marketplace wiring.
+11. After `install`, `update`, `repair`, or `promote`, try Codex's own app-server `plugin/install` RPC against the resolved marketplace path only as a best-effort cache-sync optimization.
 12. If the local Codex build does not expose a working app-server `plugin/install` path, keep the staged tree, marketplace entry, and config-state wiring anyway, and report that Codex-side installed-cache sync fell back to the documented restart-plus-plugin-browser path.
 13. Treat `update` as the update workflow when the source clone is ahead of the staged install copy. It should recopy the source plugin tree into the staged path, rewrite the marketplace entry if needed, and re-run the Codex-side install step when applicable.
 14. Treat `verify` as the audit-oriented workflow for checking whether the staged plugin tree, marketplace entry, optional plugin surfaces, config-state expectations, and installed-cache state still match the source plugin.
-15. Treat `repair` as the bounded workflow when the intended staged plugin should keep its current scope, but the local install surface drifted. In repo scope, it should also remove any legacy repo-product marketplace entry that still advertises an externally installed plugin through `$REPO_ROOT/.agents/plugins/marketplace.json`.
+15. Treat `repair` as the bounded workflow when the intended staged plugin should keep its current scope, but the local install surface drifted. In repo scope, it should also remove any legacy repo-private `.codex/plugins/` copy or matching legacy repo-private marketplace entry left behind by older helper behavior.
 16. Treat `enable` and `disable` as explicit Codex config-state workflows backed by the active scope's `config.toml` entries in the form `[plugins."plugin-name@marketplace-name"]`.
-17. Treat `promote` as the bounded workflow that copies the source plugin into personal scope, writes the personal marketplace entry, carries forward the repo install's enabled-state if present from `$REPO_ROOT/.codex/config.toml`, runs the Codex-side personal install step, and then removes the repo-local private install surface.
+17. Treat `promote` as the bounded workflow that copies the source plugin into personal scope, writes the personal marketplace entry, carries forward the repo install's enabled-state if present in Codex's active config scope, runs the Codex-side personal install step, and then removes the repo-local staged install surface.
 18. Treat `symlink` mode as an advanced local-dev override only when a maintainer explicitly wants a staged in-scope symlink instead of the documented copied tree.
 19. For `install`, `update`, and `repair`, materialize the staged plugin path in the chosen mode and update the marketplace entry.
-20. For repo-scope installs, use a repo-private install surface so the target repo does not advertise the installed plugin as one of its own shipped marketplace entries.
-21. For `uninstall`, prefer Codex's own app-server `plugin/uninstall` RPC before removing the matching marketplace entry, staged plugin path, and matching plugin config-state entry.
+20. For repo-scope installs, use the documented repo-marketplace surface so the target repo can expose that local plugin install through `.agents/plugins/marketplace.json`.
+21. For `uninstall`, try Codex's own app-server `plugin/uninstall` RPC as a best-effort cache cleanup before removing the matching marketplace entry, staged plugin path, and matching plugin config-state entry.
 22. After apply behavior, tell the maintainer to restart Codex and verify that the plugin appears in the plugin directory or reflects the intended enabled-state.
 
 ## Usage Examples
@@ -128,9 +127,9 @@ Common repair cases:
 - `invalid-marketplace-entry-empty-relative-source-path`
   - A repo-local marketplace entry points at `./`, which Codex may reject for the whole marketplace.
   - Fix: repair the repo's own product marketplace separately. This installer no longer treats repo product marketplace files as the repo-scope install surface for external plugin installs.
-- `legacy-repo-marketplace-entry`
-  - The target repo's tracked product marketplace still advertises an externally installed plugin through `$REPO_ROOT/.agents/plugins/marketplace.json`.
-  - Fix: run `repair` in repo scope so the external install is kept in the repo-private `.codex` surface and the legacy repo-product marketplace entry is removed.
+- `legacy-repo-private-install-surface`
+  - The target repo still has old repo-private install wiring under `$REPO_ROOT/.codex/plugins/`.
+  - Fix: run `repair` in repo scope so the documented repo-marketplace install stays in place and the old repo-private `.codex/plugins` surface is removed.
 - `missing-plugin-enabled-state`
   - Codex config does not include an explicit enabled-state entry for the plugin key.
   - Fix: rerun `install` for a missing personal install default-enable, or rerun `enable` / `disable` when the intended state differs.
@@ -149,7 +148,7 @@ Preferred repair flow:
 1. Run the helper in `check-only` mode first.
 2. Confirm the intended scope and install mode.
 3. Use `update` when the staged path and marketplace entry should continue to exist but need to be rewritten.
-4. Use `repair` when the drift includes missing staged repo-private files, stale repo-private marketplace wiring, or a legacy tracked repo-product marketplace entry that still advertises an externally installed plugin.
+4. Use `repair` when the drift includes legacy repo-private `.codex/plugins` files or a matching legacy repo-private marketplace entry from older helper behavior.
 5. Use `install` when a new personal install should take the default enabled path, and use `enable` or `disable` when marketplace wiring is correct but Codex config-state needs an explicit follow-up change.
 6. Use `promote` when a repo-local install should become the personal default install surface instead.
 7. Use `uninstall` and then `install` when the staged path belongs to the wrong source plugin, the wrong scope, or the wrong plugin name.
@@ -159,12 +158,12 @@ Preferred repair flow:
 
 - If a repo-local plugin still does not show up after `install`, `update`, or `repair`, fully restart Codex in that repo. A live workspace can continue using the installed-plugin and marketplace state it loaded before the install surface changed.
 - If `/plugins` still looks wrong after restart, check `~/.codex/log/codex-tui.log` for marketplace warnings such as `skipping marketplace` or `local plugin source path must not be empty`.
-- Repo-local plugin visibility now comes from the repo-private `.codex` install surface plus project-scoped `.codex/config.toml`, not from the repo's tracked `.agents/plugins/marketplace.json`.
+- Repo-local plugin visibility now comes from the documented repo marketplace at `.agents/plugins/marketplace.json` plus the staged plugin tree under `plugins/`.
 - The `/plugins` slash command ordering may not be intuitive or obviously alphabetical, so scan the full list before concluding a plugin is missing.
 
 ## Remaining Gaps
 
-- This skill now manages Codex plugin enable or disable state through the active scope's `config.toml`, including repo-local `.codex/config.toml`, and it prefers app-server plugin install or uninstall RPCs for cache sync when the local Codex build exposes them.
+- This skill now manages Codex plugin enable or disable state through Codex's active `config.toml`, and it treats app-server plugin install or uninstall RPCs as optional cache-sync helpers when the local Codex build exposes them.
 - The current overwrite policy still uses replace-in-place semantics for staged targets; backup and fail-on-existing variants remain planned work.
 
 ## Output Contract
@@ -191,7 +190,6 @@ Preferred repair flow:
 
 - Never overwrite an existing marketplace catalog wholesale.
 - Never point `source.path` outside the marketplace root.
-- Never mutate a target repo's tracked `.agents/plugins/marketplace.json` just to make an external plugin usable in that repo.
 - Never delete the source plugin repo during uninstall; only remove the staged install target path.
 - Never claim that updating the marketplace file alone installs a plugin into undocumented Codex internals.
 - Never claim that the app-server install or uninstall RPC is universally available across Codex versions; when it is missing or fails, fall back to staged install surfaces and say so plainly.

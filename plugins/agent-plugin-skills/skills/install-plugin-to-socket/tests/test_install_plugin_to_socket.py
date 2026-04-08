@@ -23,12 +23,12 @@ def _load_module():
 m = _load_module()
 
 
-def _repo_private_marketplace_name(repo_root: Path) -> str:
-    return m._repo_private_marketplace_name(repo_root.resolve())
+def _repo_marketplace_name() -> str:
+    return m.DEFAULT_REPO_MARKETPLACE_NAME
 
 
-def _repo_private_plugin_key(repo_root: Path, plugin_name: str) -> str:
-    return f"{plugin_name}@{_repo_private_marketplace_name(repo_root)}"
+def _repo_plugin_key(plugin_name: str) -> str:
+    return f"{plugin_name}@{_repo_marketplace_name()}"
 
 
 def _write_source_plugin(root: Path, plugin_name: str = "example-plugin") -> Path:
@@ -117,8 +117,8 @@ def test_repo_scope_audit_reports_missing_targets(tmp_path: Path) -> None:
     assert "missing-target-plugin-root" in issue_ids
     assert "missing-marketplace" in issue_ids
     assert source_summary["name"] == "example-plugin"
-    assert target_plugin_root == repo_root / ".codex" / "plugins" / "example-plugin"
-    assert marketplace_path == repo_root / ".codex" / "plugins" / "marketplace.json"
+    assert target_plugin_root == repo_root / "plugins" / "example-plugin"
+    assert marketplace_path == repo_root / ".agents" / "plugins" / "marketplace.json"
 
 
 def test_apply_install_repo_scope_copies_plugin_and_writes_marketplace(tmp_path: Path) -> None:
@@ -141,8 +141,8 @@ def test_apply_install_repo_scope_copies_plugin_and_writes_marketplace(tmp_path:
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     entry = marketplace["plugins"][0]
     assert entry["name"] == "example-plugin"
-    assert entry["source"]["path"] == "./.codex/plugins/example-plugin"
-    assert marketplace["name"] == _repo_private_marketplace_name(repo_root)
+    assert entry["source"]["path"] == "./plugins/example-plugin"
+    assert marketplace["name"] == _repo_marketplace_name()
     assert source_summary["version"] == "0.1.0"
 
 
@@ -194,7 +194,7 @@ def test_personal_scope_install_and_uninstall_testing_plugin_round_trip(tmp_path
         lambda plugin_key: uninstall_calls.append(plugin_key) or None,
     )
     marketplace_path = fake_home / ".agents" / "plugins" / "marketplace.json"
-    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
@@ -267,7 +267,7 @@ def test_audit_verify_reports_missing_personal_plugin_installed_cache(tmp_path: 
     shutil.copytree(source_plugin, shutil_target)
 
     marketplace_path = fake_home / ".agents" / "plugins" / "marketplace.json"
-    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
@@ -310,22 +310,22 @@ def test_apply_update_rewrites_marketplace_entry_without_dropping_other_plugins(
     repo_root = tmp_path / "repo"
     (repo_root / ".agents" / "plugins").mkdir(parents=True)
     (repo_root / "plugins" / "example-plugin").mkdir(parents=True)
-    marketplace_path = repo_root / ".codex" / "plugins" / "marketplace.json"
-    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
+    marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
-                "name": _repo_private_marketplace_name(repo_root),
+                "name": _repo_marketplace_name(),
                 "plugins": [
                     {
                         "name": "example-plugin",
-                        "source": {"source": "local", "path": "./.codex/plugins/wrong-path"},
+                        "source": {"source": "local", "path": "./plugins/wrong-path"},
                         "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
                         "category": "Productivity",
                     },
                     {
                         "name": "other-plugin",
-                        "source": {"source": "local", "path": "./.codex/plugins/other-plugin"},
+                        "source": {"source": "local", "path": "./plugins/other-plugin"},
                         "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
                         "category": "Productivity",
                     },
@@ -350,34 +350,34 @@ def test_apply_update_rewrites_marketplace_entry_without_dropping_other_plugins(
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     names = [item["name"] for item in marketplace["plugins"]]
     assert names == ["example-plugin", "other-plugin"]
-    assert marketplace["plugins"][0]["source"]["path"] == "./.codex/plugins/example-plugin"
+    assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
 
 
 def test_apply_uninstall_removes_plugin_tree_and_marketplace_entry(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source")
     repo_root = tmp_path / "repo"
-    target_plugin_root = repo_root / ".codex" / "plugins" / "example-plugin"
+    target_plugin_root = repo_root / "plugins" / "example-plugin"
     (target_plugin_root / ".codex-plugin").mkdir(parents=True)
     (target_plugin_root / ".codex-plugin" / "plugin.json").write_text(
         (source_plugin / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8"),
         encoding="utf-8",
     )
-    marketplace_path = repo_root / ".codex" / "plugins" / "marketplace.json"
+    marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
     marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
-                "name": _repo_private_marketplace_name(repo_root),
+                "name": _repo_marketplace_name(),
                 "plugins": [
                     {
                         "name": "example-plugin",
-                        "source": {"source": "local", "path": "./.codex/plugins/example-plugin"},
+                        "source": {"source": "local", "path": "./plugins/example-plugin"},
                         "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
                         "category": "Productivity",
                     },
                     {
                         "name": "other-plugin",
-                        "source": {"source": "local", "path": "./.codex/plugins/other-plugin"},
+                        "source": {"source": "local", "path": "./plugins/other-plugin"},
                         "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
                         "category": "Productivity",
                     },
@@ -407,7 +407,7 @@ def test_apply_uninstall_removes_plugin_tree_and_marketplace_entry(tmp_path: Pat
 
 def test_apply_install_repo_scope_uses_existing_tree_when_source_matches_target(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
-    source_plugin = _write_source_plugin(repo_root / ".codex" / "plugins")
+    source_plugin = _write_source_plugin(repo_root / "plugins")
 
     apply_actions, _source_summary, target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
         requested_source_root=source_plugin,
@@ -422,7 +422,7 @@ def test_apply_install_repo_scope_uses_existing_tree_when_source_matches_target(
     assert not any(action["action"] == "copy-plugin-tree" for action in apply_actions)
     assert target_plugin_root == source_plugin
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
-    assert marketplace["plugins"][0]["source"]["path"] == "./.codex/plugins/example-plugin"
+    assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
 
 
 def test_repo_scope_verify_flags_legacy_repo_marketplace_entry_for_external_plugin(tmp_path: Path) -> None:
@@ -474,22 +474,22 @@ def test_repo_scope_verify_flags_legacy_repo_marketplace_entry_for_external_plug
 
     assert not errors
     issue_ids = {finding.issue_id for finding in findings}
-    assert "legacy-repo-marketplace-entry" in issue_ids
-    assert str(repo_root / ".agents" / "plugins" / "marketplace.json") in {finding.path for finding in findings}
+    assert "legacy-repo-private-install-surface" in issue_ids
+    assert str(repo_root / ".codex" / "plugins" / "marketplace.json") in {finding.path for finding in findings}
 
 
 def test_repo_scope_repair_removes_legacy_repo_marketplace_entry_for_external_plugin(tmp_path: Path) -> None:
     source_plugin = _write_source_plugin(tmp_path / "source", plugin_name="agent-plugin-skills")
     repo_root = tmp_path / "repo"
-    (repo_root / ".agents" / "plugins").mkdir(parents=True)
-    (repo_root / ".agents" / "plugins" / "marketplace.json").write_text(
+    (repo_root / ".codex" / "plugins").mkdir(parents=True)
+    (repo_root / ".codex" / "plugins" / "marketplace.json").write_text(
         json.dumps(
             {
-                "name": "local-repo",
+                "name": "legacy-repo-private",
                 "plugins": [
                     {
                         "name": "agent-plugin-skills",
-                        "source": {"source": "local", "path": "./plugins/agent-plugin-skills"},
+                        "source": {"source": "local", "path": "./.codex/plugins/agent-plugin-skills"},
                         "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
                         "category": "Productivity",
                     },
@@ -512,12 +512,12 @@ def test_repo_scope_repair_removes_legacy_repo_marketplace_entry_for_external_pl
     assert not errors
     action_names = {action["action"] for action in apply_actions}
     assert "copy-plugin-tree" in action_names
-    assert "remove-legacy-repo-marketplace-entry" in action_names
+    assert "remove-legacy-repo-private-marketplace-entry" in action_names
 
-    repaired_marketplace = json.loads((repo_root / ".agents" / "plugins" / "marketplace.json").read_text(encoding="utf-8"))
+    repaired_marketplace = json.loads((repo_root / ".codex" / "plugins" / "marketplace.json").read_text(encoding="utf-8"))
     assert repaired_marketplace["plugins"] == []
-    private_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
-    assert private_marketplace["plugins"][0]["source"]["path"] == "./.codex/plugins/agent-plugin-skills"
+    repo_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    assert repo_marketplace["plugins"][0]["source"]["path"] == "./plugins/agent-plugin-skills"
 
     findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
         requested_source_root=source_plugin,
@@ -548,8 +548,8 @@ def test_repo_scope_defaults_to_current_working_directory(tmp_path: Path, monkey
     assert not errors
     assert {finding.issue_id for finding in findings} == {"missing-target-plugin-root", "missing-marketplace"}
     assert scope_root == repo_root
-    assert target_plugin_root == repo_root / ".codex" / "plugins" / "example-plugin"
-    assert marketplace_path == repo_root / ".codex" / "plugins" / "marketplace.json"
+    assert target_plugin_root == repo_root / "plugins" / "example-plugin"
+    assert marketplace_path == repo_root / ".agents" / "plugins" / "marketplace.json"
 
 
 def test_parse_args_defaults_scope_to_personal(tmp_path: Path) -> None:
@@ -648,7 +648,7 @@ def test_apply_install_repo_scope_can_stage_symlink(tmp_path: Path) -> None:
     assert target_plugin_root.is_symlink()
     assert target_plugin_root.resolve() == source_plugin.resolve()
     marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
-    assert marketplace["plugins"][0]["source"]["path"] == "./.codex/plugins/example-plugin"
+    assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-plugin"
 
 
 def test_audit_update_reports_symlink_mode_drift(tmp_path: Path) -> None:
@@ -744,7 +744,7 @@ def test_uninstall_removes_staged_symlink_without_touching_source(tmp_path: Path
         repo_root=repo_root,
         install_mode="symlink",
     )
-    target_plugin_root = repo_root / ".codex" / "plugins" / "example-plugin"
+    target_plugin_root = repo_root / "plugins" / "example-plugin"
 
     apply_actions, _source_summary, _target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
         requested_source_root=source_plugin,
@@ -767,7 +767,7 @@ def test_audit_reports_tracked_tree_blocking_symlink_mode(tmp_path: Path) -> Non
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     _init_git_repo(repo_root)
-    tracked_plugin = _write_source_plugin(repo_root / ".codex" / "plugins")
+    tracked_plugin = _write_source_plugin(repo_root / "plugins")
     subprocess.run(["git", "add", "."], cwd=repo_root, check=True, capture_output=True, text=True)
 
     findings, _source_summary, _target_plugin_root, _marketplace_path, _scope_root, _config_path, _plugin_key, errors = m.audit_install(
@@ -789,7 +789,7 @@ def test_apply_refuses_symlink_mode_for_tracked_tree(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     _init_git_repo(repo_root)
-    tracked_plugin = _write_source_plugin(repo_root / ".codex" / "plugins")
+    tracked_plugin = _write_source_plugin(repo_root / "plugins")
     subprocess.run(["git", "add", "."], cwd=repo_root, check=True, capture_output=True, text=True)
 
     apply_actions, _source_summary, target_plugin_root, marketplace_path, _config_path, _plugin_key, errors = m.apply_install(
@@ -812,7 +812,7 @@ def test_resolve_source_plugin_root_from_repo_root_marketplace(tmp_path: Path) -
     repo_root = tmp_path / "repo"
     source_plugin = _write_source_plugin(repo_root / "plugins")
     marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
-    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
@@ -839,7 +839,7 @@ def test_resolve_source_plugin_root_does_not_auto_detect_repo_root_without_opt_i
     repo_root = tmp_path / "repo"
     source_plugin = _write_source_plugin(repo_root / "plugins")
     marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
-    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
@@ -867,7 +867,7 @@ def test_mutating_actions_reject_repo_root_convenience_input(tmp_path: Path) -> 
     repo_root = tmp_path / "repo"
     _write_source_plugin(repo_root / "plugins")
     marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
-    marketplace_path.parent.mkdir(parents=True)
+    marketplace_path.parent.mkdir(parents=True, exist_ok=True)
     marketplace_path.write_text(
         json.dumps(
             {
@@ -996,8 +996,8 @@ def test_repo_install_enables_plugin_in_project_config_by_default(tmp_path: Path
     )
 
     assert not errors
-    assert config_path == repo_root / ".codex" / "config.toml"
-    assert plugin_key == _repo_private_plugin_key(repo_root, "example-plugin")
+    assert config_path == fake_home / ".codex" / "config.toml"
+    assert plugin_key == _repo_plugin_key("example-plugin")
     assert any(action["action"] == "write-plugin-enabled-state" and action["enabled"] == "true" for action in apply_actions)
     assert m.read_plugin_enabled_state(config_path, plugin_key) is True
 
@@ -1036,15 +1036,15 @@ def test_promote_moves_repo_install_to_personal_scope(tmp_path: Path, monkeypatc
     assert not errors
     assert target_plugin_root == fake_home / ".codex" / "plugins" / "example-plugin"
     assert target_plugin_root.exists()
-    assert not (repo_root / ".codex" / "plugins" / "example-plugin").exists()
-    assert any(action["action"] == "uninstall-plugin-tree" and action["path"].endswith("/.codex/plugins/example-plugin") for action in apply_actions)
+    assert not (repo_root / "plugins" / "example-plugin").exists()
+    assert any(action["action"] == "uninstall-plugin-tree" and action["path"].endswith("/plugins/example-plugin") for action in apply_actions)
     personal_marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
     assert [item["name"] for item in personal_marketplace["plugins"]] == ["example-plugin"]
-    repo_marketplace = json.loads((repo_root / ".codex" / "plugins" / "marketplace.json").read_text(encoding="utf-8"))
+    repo_marketplace = json.loads((repo_root / ".agents" / "plugins" / "marketplace.json").read_text(encoding="utf-8"))
     assert repo_marketplace["plugins"] == []
     assert plugin_key == "example-plugin@local-personal"
     assert m.read_plugin_enabled_state(config_path, plugin_key) is False
-    assert m.read_plugin_enabled_state(repo_root / ".codex" / "config.toml", _repo_private_plugin_key(repo_root, "example-plugin")) is None
+    assert m.read_plugin_enabled_state(fake_home / ".codex" / "config.toml", _repo_plugin_key("example-plugin")) is None
 
 
 def test_verify_personal_install_satisfies_default_enabled_state_for_enable_workflow(tmp_path: Path, monkeypatch) -> None:
@@ -1100,8 +1100,8 @@ def test_verify_repo_install_reports_missing_enabled_state_for_enable_workflow(t
     )
 
     assert not errors
-    assert config_path == repo_root / ".codex" / "config.toml"
-    assert plugin_key == _repo_private_plugin_key(repo_root, "example-plugin")
+    assert config_path == fake_home / ".codex" / "config.toml"
+    assert plugin_key == _repo_plugin_key("example-plugin")
     assert "missing-plugin-enabled-state" not in {finding.issue_id for finding in findings}
 
 
