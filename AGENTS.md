@@ -57,15 +57,12 @@ Applicability guidance:
   - a `subagent` is a delegated runtime worker with its own context and tool policy
 - For Codex, treat skills as the primary authoring format and plugins as the installable distribution unit that can bundle skills, apps, and MCP servers.
 - For Codex work, prefer starting with a local skill when iterating on one workflow in one repository. Escalate to plugin packaging only when the workflow should be distributed across teams, published through a marketplace, or shipped together with app integrations or MCP configuration.
-- For Codex work in this repository, keep root `skills/` as the canonical workflow-authoring surface and treat `plugins/apple-dev-skills/` as the plugin packaging root.
-- For local Codex plugin smoke tests or consumer-repo installs, treat `plugins/apple-dev-skills/` as the packaged plugin root and prefer the official marketplace-based plugin install flow documented in the Codex plugin docs. Gale-local helpers may be used as optional convenience shortcuts, but they are not the canonical repository contract.
-- Keep repo-local Codex marketplace wiring under `.agents/plugins/marketplace.json` and Git-backed Claude marketplace sharing under repo-root `.claude-plugin/marketplace.json`.
-- Track canonical plugin source trees and shared marketplace catalogs in git.
+- For Codex and Claude work in this repository, the canonical export surface is top-level `skills/` today. If top-level `mcps/` or `apps/` are added later, those top-level directories are the only other valid export surfaces.
+- This repository must not reintroduce a nested packaged plugin tree, repo-local installer workflow, or any other second export surface under `plugins/`.
 - Do not track consumer-side install copies, caches, or machine-local runtime state in this repository.
-- Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors for local discovery, while keeping the shipped plugin bundle self-contained:
+- Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors for local discovery:
   - `.agents/skills -> ../skills`
   - `.claude/skills -> ../skills`
-- Keep `plugins/apple-dev-skills/skills/` as a real bundled copy of the shipped skill tree.
 - Treat the local discovery mirrors as conveniences, not as independent sources of truth.
 - For Claude Code, keep in mind that plugins can package more than skills alone. Claude plugins may bundle commands, hooks, MCP or LSP configuration, skills, and plugin-scoped subagents.
 - For Claude Code subagents, treat them as Markdown-plus-frontmatter runtime personas with their own prompts, tool access, and context window. They are not a replacement for shared skills or repo guidance.
@@ -167,7 +164,7 @@ Some alternatives for user customization/config include using their Agent's memo
 - Implement all applicable YAML fields in the Frontmatter.
 - Never auto-install skills; report required commands and wait for user confirmation.
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.
-- Keep active repo-authored skills under the top-level `skills/` directory, and keep install packaging surfaces under `plugins/apple-dev-skills/`.
+- Keep active repo-authored export surfaces at the repository top level: `skills/` today, plus `mcps/` or `apps/` only if those top-level directories are added later.
 - Prefer symlinks over hardlinks for discovery mirrors in this repository. Hardlinks are not a durable repository contract.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.

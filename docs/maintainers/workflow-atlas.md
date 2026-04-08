@@ -100,27 +100,15 @@ flowchart TD
 
 ### Packaging and Delegation Notes
 
-- The repository is moving to a plugin-first install model while keeping root `skills/` as the authoring source of truth.
-- The Codex-documented common denominator is:
-  - `.codex-plugin/plugin.json`
-  - `skills/`
-  - optional `.app.json`
-  - optional `.mcp.json`
-  - optional `assets/`
-- Claude Code supports a broader plugin surface and may also carry:
-  - `hooks/`
-  - `bin/`
-  - `settings.json`
-  - plugin-scoped subagents or other Claude-specific integration files
-- Git-backed Claude marketplace sharing in this repo is represented by repo-root `.claude-plugin/marketplace.json`, while direct local Claude development should keep using `claude --plugin-dir` against `plugins/apple-dev-skills/`.
+- The repository currently exports only from top-level `skills/`.
+- If this repository later grows top-level `mcps/` or `apps/`, those directories are valid export surfaces too.
+- The repository must not reintroduce a nested packaged plugin tree or any other second export surface under `plugins/`.
 - Shared workflow behavior should remain skill-scoped so both ecosystems can use the same deterministic scripts and references.
 - Claude-only extras should remain optional convenience layers rather than canonical workflow requirements.
-- For local Codex plugin verification, the supported maintainer path is to install `plugins/apple-dev-skills/` through the official marketplace-based plugin flow. Gale-local helpers may exist as convenience shortcuts, but they are not the canonical repository contract.
 - Subagents in either ecosystem are runtime delegation helpers with separate context and tool policy. They are not the canonical authoring format for the repo's Apple workflows.
 - Repo docs should keep the layers explicit:
   - `AGENTS.md` for durable policy
   - `skills/` for reusable workflow authoring
-  - plugin files for installable distribution
   - subagent files for delegated runtime behavior
 
 ### Agent ↔ User UX
@@ -132,7 +120,7 @@ flowchart TD
 - User-visible response:
   - The user sees direct progress inside one of the nine top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-- The repo-level UX is a bundle of thirteen active skills, with plugin packaging layered around them as the install surface.
+- The repo-level UX is a bundle of thirteen active skills exported from the top-level `skills/` surface.
 
 ## `xcode-build-run-workflow`
 

@@ -22,7 +22,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
 - Recommend `xcode-testing-workflow` when the task is primarily about Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis inside an existing Xcode project.
 - Recommend `sync-swift-package-guidance` when the repo is a plain Swift package instead of an Xcode app project.
 - After updating this plugin's Xcode-policy surfaces, recommend rerunning `sync-xcode-project-guidance` in downstream repos so their `AGENTS.md` and repo-maintenance toolkit stay aligned.
-- For local Codex installs of this plugin, mention that `install-plugin-to-socket` is a useful maintainer shortcut for install, update, verify, and repair work.
+- For maintainer notes about this repository itself, say plainly that the repo exports from top-level `skills/` today and does not ship repo-local installer workflows.
 
 ## Single-Path Workflow
 

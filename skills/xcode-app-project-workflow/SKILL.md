@@ -95,7 +95,7 @@ Use this skill as a compatibility surface for older references to `xcode-app-pro
 - Recommend `bootstrap-swift-package` directly when the task becomes new-package scaffolding.
 - Recommend `sync-xcode-project-guidance` directly when the repo needs Xcode-specific guidance sync rather than execution.
 - `scripts/run_workflow.py` preserves the direct `.pbxproj` warning path while routing toward the narrower skill that should really own the work.
-- When maintaining this plugin itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the local plugin install current; `install-plugin-to-socket` is a useful maintainer shortcut for install, update, verify, and repair work.
+- When maintaining this repository itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
 ## Customization
 

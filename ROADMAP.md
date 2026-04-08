@@ -147,7 +147,7 @@ Scope:
 
 Tickets:
 
-- [x] Add grouped nested plugin manifest support.
+- [x] Close out the grouped nested plugin manifest experiment and record that it is not part of the enduring repository contract.
 
 Exit criteria:
 
@@ -258,23 +258,23 @@ Exit criteria:
 - [x] Maintainer docs explain when Swift package builds should use `xcodebuild` because Xcode-managed toolchain behavior is required.
 - [x] Validation catches drift between documented bootstrap behavior and actual generated package output.
 
-## Milestone 14: Plugin-First Packaging Foundation
+## Milestone 14: Top-Level Export Surface Foundation
 
 Scope:
 
-- [x] Establish the repository's plugin-first install shape while keeping root `skills/` as the workflow-authoring source of truth.
+- [x] Establish the repository's top-level export shape while keeping root `skills/` as the workflow-authoring source of truth.
 
 Tickets:
 
-- [x] Add a repo-local Codex plugin scaffold with `.codex-plugin/plugin.json` and a local marketplace entry.
-- [x] Add a repo-local Claude Code plugin scaffold with `.claude-plugin/plugin.json`.
-- [x] Document the supported common-denominator plugin structure shared by Codex and Claude.
-- [x] Document which plugin surfaces are Codex-only, Claude-only, or shared.
-- [x] Keep plugin packaging metadata and assets in sync with the canonical root skills as that packaging layer grows.
+- [x] Define top-level `skills/` as the active export surface.
+- [x] Keep local discovery mirrors explicit without treating them as second sources of truth.
+- [x] Document that future `mcps/` or `apps/` must also live at the repository top level.
+- [x] Remove stale nested packaging language from the enduring repository contract.
+- [x] Keep root docs and validation aligned with the top-level export model.
 
 Exit criteria:
 
-- [x] The repository contains a documented plugin scaffold for both ecosystems, and maintainers can point to one canonical packaging plan without implying unsupported Codex plugin behavior.
+- [x] The repository contains one clear top-level export model and does not imply a nested packaged plugin tree is still active.
 
 ## Milestone 15: Xcode App Bootstrap and Guidance Sync Skills
 
@@ -322,7 +322,7 @@ Tickets:
 - [x] Audit the current skill names for the plugin-first install model and Codex/Claude search surfaces.
 - [x] Rename any retained `apple-*` skills whose names no longer carry useful disambiguation once the plugin name already provides Apple scope.
 - [x] Update README, roadmap, marketplace entries, plugin manifests, and install examples to the new names.
-- [x] Document the concrete local Codex plugin install flow for `plugins/apple-dev-skills/`, keeping the official marketplace-based path canonical and any Gale-local helpers optional.
+- [x] Document the final exported skill names without tying them to a nested packaged plugin tree.
 - [x] Preserve migration notes for any renamed skill IDs so maintainers can map old references cleanly.
 
 Exit criteria:
@@ -525,33 +525,32 @@ Exit criteria:
 
 Scope:
 
-- [ ] Check this repository against its own skill, symlink, plugin-install, and local-discovery guidance and close any real gaps in Codex or plugin-to-socket discoverability.
+- [ ] Check this repository against its own skill, symlink, export-surface, and local-discovery guidance and close any real gaps between docs and the actual top-level export model.
 
 Tickets:
 
-- [x] Audit the repo against its own documented symlink expectations for `.agents/skills`, `.claude/skills`, and `plugins/apple-dev-skills/skills`.
-- [x] Audit the repo against its own documented local plugin install expectations for `plugins/apple-dev-skills/` and repo-local marketplace wiring.
-- [ ] Verify whether Codex can discover the packaged plugin from the documented marketplace entry after a restart, not just whether the files exist on disk.
-- [ ] Verify whether the personal-scope `install-plugin-to-socket` workflow can keep sibling maintainer plugins available for work on this repo without touching this repo's tracked marketplace.
-- [ ] Document any mismatch between “files exist in the right place” and “Codex actually discovers the plugin” so install guidance reflects operational reality instead of filesystem assumptions.
-- [x] Add a maintainer smoke-test flow for local plugin discovery and install-surface verification.
+- [x] Audit the repo against its documented symlink expectations for `.agents/skills` and `.claude/skills`.
+- [x] Audit the repo against its documented top-level export model and remove the nested packaging tree.
+- [ ] Verify that root docs, maintainer docs, and skill docs all stay aligned with the top-level export model after future refactors.
+- [ ] Document any mismatch between repo docs and the actual top-level export surface so guidance reflects operational reality instead of stale packaging assumptions.
+- [x] Add a maintainer smoke-test flow for local discovery and top-level export-surface verification.
 
 Exit criteria:
 
-- [ ] Maintainers have a verified, reality-based local discovery and install story for this repo, with docs and tooling updated to match what Codex actually honors.
+- [ ] Maintainers have a verified, reality-based local discovery and top-level export story for this repo, with docs and tooling updated to match what the repository actually ships.
 
 ## Milestone 28: Use `Agent Dev Skills` plugin to align repo with skills/plugin repo standards
 
 Scope:
 
-- Use the adjacent `agent-plugin-skills` maintainer plugin workflow to audit and align this repository with the current shared skills/plugin repo standards, while keeping this repository's tracked repo marketplace focused on exporting only `apple-dev-skills`.
+- Use the adjacent `agent-plugin-skills` maintainer workflow to audit and align this repository with the current shared skills/plugin repo standards, while keeping this repository's own contract focused on top-level exports only.
 
 Tickets:
 
-- Confirm the personal-scope maintainer install of `agent-plugin-skills` stays current for work on this repository without turning this repo's tracked marketplace into a second published plugin catalog.
-- Use `maintain-plugin-repo` as the repo-wide audit and coordination entrypoint, with `validate-plugin-install-surfaces`, `maintain-plugin-docs`, and `install-plugin-to-socket` as routed specialist owners where relevant.
-- Align repo docs, packaging surfaces, marketplaces, ignores, and maintainer guidance with the current shared standards without flattening repo-specific policy.
-- Remove tracked vendored maintainer-plugin copies from this repo and keep the adjacent standards source plus personal-scope maintainer install path as the maintainer-only setup.
+- Confirm the personal-scope maintainer install of `agent-plugin-skills` stays current for work on this repository without reintroducing a nested packaged plugin tree here.
+- Use `maintain-plugin-repo` as the repo-wide audit and coordination entrypoint, with `maintain-plugin-docs` as the routed doc-maintenance owner where relevant.
+- Align repo docs, export surfaces, ignores, and maintainer guidance with the current shared standards without flattening repo-specific policy.
+- Remove tracked vendored maintainer-plugin copies and stale nested packaging language from this repo while keeping the adjacent standards source as the maintainer-only setup.
 
 Exit criteria:
 

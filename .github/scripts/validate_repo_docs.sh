@@ -15,6 +15,12 @@ require_contains() {
   grep -Fq -- "$needle" "$file" || fail "Missing required string in $file: $needle"
 }
 
+require_not_contains() {
+  local file="$1"
+  local needle="$2"
+  ! grep -Fq -- "$needle" "$file" || fail "Unexpected stale string in $file: $needle"
+}
+
 echo "Validating roadmap presence..."
 [[ -f ROADMAP.md ]] || fail "Missing ROADMAP.md at repo root."
 
@@ -31,9 +37,7 @@ echo "Validating local discovery mirrors..."
 [[ "$(readlink .agents/skills)" == "../skills" ]] || fail "Expected .agents/skills -> ../skills"
 [[ -L ".claude/skills" ]] || fail "Expected .claude/skills to be a symlink to ../skills"
 [[ "$(readlink .claude/skills)" == "../skills" ]] || fail "Expected .claude/skills -> ../skills"
-[[ -d "plugins/apple-dev-skills/skills" ]] || fail "Expected plugins/apple-dev-skills/skills to be a bundled skills directory."
-[[ ! -L "plugins/apple-dev-skills/skills" ]] || fail "Expected plugins/apple-dev-skills/skills to be a real bundled directory, not a symlink."
-diff -qr "skills" "plugins/apple-dev-skills/skills" >/dev/null || fail "Bundled plugin skills drift detected between skills/ and plugins/apple-dev-skills/skills/"
+[[ ! -e "plugins/apple-dev-skills" ]] || fail "Did not expect a nested plugins/apple-dev-skills tree."
 
 echo "Validating authoritative resource links in root docs..."
 required_resource_strings=(
@@ -61,8 +65,10 @@ require_contains "README.md" 'docs/maintainers/customization-consolidation-revie
 require_contains "README.md" 'docs/maintainers/execution-split-and-inference-plan.md'
 require_contains "README.md" '.agents/skills -> ../skills'
 require_contains "README.md" '.claude/skills -> ../skills'
-require_contains "README.md" 'plugins/apple-dev-skills/skills/` as a real bundled copy'
+require_contains "README.md" 'top-level `skills/`'
 require_contains "README.md" 'The Apple plugin now ships its repo-maintenance toolkit contract directly.'
+require_not_contains "README.md" 'plugins/apple-dev-skills/'
+require_not_contains "README.md" 'install-plugin-to-socket'
 
 echo "Validating AGENTS maintainer pointers..."
 require_contains "AGENTS.md" 'docs/maintainers/reality-audit.md'
@@ -71,11 +77,8 @@ require_contains "AGENTS.md" 'docs/maintainers/customization-consolidation-revie
 require_contains "AGENTS.md" 'docs/maintainers/execution-split-and-inference-plan.md'
 require_contains "AGENTS.md" '.agents/skills -> ../skills'
 require_contains "AGENTS.md" '.claude/skills -> ../skills'
-require_contains "AGENTS.md" 'plugins/apple-dev-skills/skills/` as a real bundled copy'
-
-echo "Validating plugin and marketplace metadata..."
-require_contains "plugins/apple-dev-skills/.codex-plugin/plugin.json" '"skills": "./skills/"'
-require_contains ".agents/plugins/marketplace.json" '"installation": "AVAILABLE"'
+require_contains "AGENTS.md" 'top-level `skills/`'
+require_not_contains "AGENTS.md" 'plugins/apple-dev-skills/'
 
 echo "Validating workflow document structure..."
 workflow_doc="docs/maintainers/workflow-atlas.md"
@@ -98,9 +101,10 @@ echo "Validating reality audit guide..."
 audit_doc="docs/maintainers/reality-audit.md"
 require_contains "$audit_doc" "## Source-of-Truth Order"
 require_contains "$audit_doc" "## Audit Procedure"
-require_contains "$audit_doc" "## Plugin Smoke Test Flow"
+require_contains "$audit_doc" "## Local Discovery Smoke Test Flow"
 require_contains "$audit_doc" "## Reporting Shape"
 require_contains "$audit_doc" 'this repository'"'"'s shipped Apple plugin owns the end-user toolkit contract'
+require_not_contains "$audit_doc" 'plugins/apple-dev-skills/'
 
 echo "Validating customization consolidation review..."
 customization_review_doc="docs/maintainers/customization-consolidation-review.md"
@@ -208,6 +212,23 @@ for skill_md in "${active_skill_mds[@]}"; do
     grep -Fq "$snippet_ref" "$skill_md" || fail "Missing local snippet reference in $skill_md"
     grep -Eiq "recommend.{0,120}$snippet_ref|$snippet_ref.{0,120}recommend" "$skill_md" || fail "Missing snippet recommendation guidance in $skill_md"
   fi
+done
+
+echo "Validating stale installer and nested-packaging guidance is gone..."
+for file in \
+  "skills/swift-package-workflow/SKILL.md" \
+  "skills/swift-package-testing-workflow/SKILL.md" \
+  "skills/swift-package-build-run-workflow/SKILL.md" \
+  "skills/xcode-app-project-workflow/SKILL.md" \
+  "skills/xcode-testing-workflow/SKILL.md" \
+  "skills/xcode-build-run-workflow/SKILL.md" \
+  "skills/sync-swift-package-guidance/SKILL.md" \
+  "skills/sync-xcode-project-guidance/SKILL.md" \
+  "docs/maintainers/workflow-atlas.md" \
+  "ROADMAP.md"
+do
+  require_not_contains "$file" 'install-plugin-to-socket'
+  require_not_contains "$file" 'plugins/apple-dev-skills/'
 done
 
 echo "Validating repo-maintenance toolkit asset copies..."

@@ -101,7 +101,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Hand off to `xcode-build-run-workflow` when package test work instead crosses into direct changes inside `.xcodeproj`, `.xcworkspace`, or `.pbxproj` managed scope.
 - Recommend `sync-swift-package-guidance` when the request is really about repo guidance instead of execution.
 - Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.
-- When maintaining this plugin itself, refresh guidance-sync consumers after substantial package-testing policy changes and keep the local plugin install current; `install-plugin-to-socket` is a useful maintainer shortcut for install, update, verify, and repair work.
+- When maintaining this repository itself, refresh guidance-sync consumers after substantial package-testing policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
 ## Customization
 

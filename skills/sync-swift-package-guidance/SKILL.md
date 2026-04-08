@@ -23,7 +23,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
 - Recommend `xcode-testing-workflow` when the task is Xcode-managed package test execution or test diagnosis rather than repo guidance sync.
 - Recommend `sync-xcode-project-guidance` when the repo is an Xcode app project instead of a plain Swift package.
 - After updating this plugin's package-policy surfaces, recommend rerunning `sync-swift-package-guidance` in downstream repos so their `AGENTS.md` and repo-maintenance toolkit stay aligned.
-- For local Codex installs of this plugin, mention that `install-plugin-to-socket` is a useful maintainer shortcut for install, update, verify, and repair work.
+- For maintainer notes about this repository itself, say plainly that the repo exports from top-level `skills/` today and does not ship repo-local installer workflows.
 
 ## Single-Path Workflow
 

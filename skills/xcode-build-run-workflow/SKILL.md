@@ -97,7 +97,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Recommend `bootstrap-swift-package` directly when the task becomes new-package scaffolding.
 - Recommend `sync-xcode-project-guidance` directly when the repo needs Xcode-specific guidance sync rather than execution.
 - `scripts/run_workflow.py` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
-- When maintaining this plugin itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the local plugin install current; `install-plugin-to-socket` is a useful maintainer shortcut for install, update, verify, and repair work.
+- When maintaining this repository itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
 ## Customization
 
