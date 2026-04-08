@@ -20,6 +20,7 @@ Audit procedure, review criteria, and maintainer operating rules live in `docs/m
 | --- | --- | --- |
 | `bootstrap-skills-plugin-repo` | Repo bootstrap and structural alignment for skills and plugin repos | `check-only`, `apply`, scaffold creation, discovery-mirror alignment, bundled plugin skills sync |
 | `install-plugin-to-socket` | Bounded local Codex plugin install wiring for plugin-development repos | `check-only`, `apply`, install, update, uninstall, scope-resolution from profile defaults |
+| `maintain-plugin-repo` | Repo-level maintainer orchestrator for plugin-development repos | `audit-only`, `apply-safe-fixes`, validator-plus-docs synthesis, optional install-repair routing |
 | `maintain-plugin-docs` | Current plugin-docs maintainer for stack-specific skills and plugin repos | README audit/apply, ROADMAP audit/apply, combined docs passes |
 | `sync-skills-repo-guidance` | Current guidance-alignment owner for skills and plugin repos | `check-only` script audit, maintainer-driven guidance reconciliation, misroute and defer handling |
 | `validate-plugin-install-surfaces` | Audit-only validator for plugin metadata, marketplace wiring, install docs, discovery mirrors, and bundled plugin skills | audit-only validation, grouped findings, no mutation |
@@ -99,6 +100,54 @@ Outputs:
 - Triggered when the user wants checklist-style `ROADMAP.md` maintenance in a plugin-development repo.
 - Supports `check-only` and bounded `apply` behavior through `--doc-scope roadmap`.
 - In combined runs, `--doc-scope all` audits both surfaces and reports cross-doc drift.
+
+## `maintain-plugin-repo`
+
+Current-state note:
+
+- This skill is the current repo-level maintainer orchestrator for plugin-development repos in this family.
+- It does not replace the existing specialists. It coordinates them.
+- Version 1 always runs `validate-plugin-install-surfaces` first, always runs `maintain-plugin-docs`, and only routes install-surface repair into `install-plugin-to-socket` when explicit install inputs are supplied.
+
+### Workflow: `audit-only`
+
+- Triggered when the user wants one bounded plugin-repo health pass without mutating the repo.
+- Primary workflow.
+- `read-only`
+
+Inputs:
+
+- Required: `--repo-root <path>`
+- Optional: `--plugin-name <name>`
+- Optional: `--doc-scope <readme|roadmap|all>`
+- Optional: `--source-plugin-root <path>`
+- Optional: `--install-scope <personal|repo>`
+- Optional: `--target-repo-root <path>`
+- Optional: `--install-mode <copy|symlink>`
+- Tool or script input: `scripts/maintain_plugin_repo.py`
+
+Outputs:
+
+- Markdown plus JSON with `run_context`, `repo_root`, `workflow`, `owner_assignments`, `validation_findings`, `docs_findings`, `install_findings`, `fixes_applied`, `deferred_findings`, `post_fix_status`, and `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `apply-safe-fixes`
+
+- Triggered when the user wants one bounded repo-maintenance pass that applies safe docs fixes and, when explicitly requested, local Codex install-surface repairs.
+- Variant workflow.
+- `bounded-write`
+
+Branch conditions:
+
+- validation findings always shape the owner routing and deferred-work report
+- docs maintenance is always routed through `maintain-plugin-docs`
+- install repair is only attempted when `--source-plugin-root` is supplied and install repair is explicitly enabled
+- broader manifest or packaging rewrites outside the existing specialist owners must be deferred instead of guessed
+
+Outputs:
+
+- Same Markdown plus JSON report shape as `audit-only`
+- Exact clean-run text: `No findings.` when the post-fix pass finishes without remaining findings, deferred work, or errors
 
 ## `install-plugin-to-socket`
 

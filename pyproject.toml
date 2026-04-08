@@ -16,6 +16,7 @@ testpaths = [
   "skills/bootstrap-skills-plugin-repo/tests",
   "skills/install-plugin-to-socket/tests",
   "skills/maintain-plugin-docs/tests",
+  "skills/maintain-plugin-repo/tests",
   "skills/sync-skills-repo-guidance/tests",
   "skills/validate-plugin-install-surfaces/tests",
 ]

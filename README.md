@@ -10,6 +10,9 @@ For maintainer policy, source-of-truth order, and standards references, see [AGE
   - Current implementation: audit and bounded fixes for `README.md`, `ROADMAP.md`, or both in stack-specific skills and plugin repositories.
   - Intended scope: become the combined docs maintainer for plugin-development repos here, pairing the current specialized README maintenance with the same checklist-style roadmap maintenance model used by `maintain-project-roadmap`.
   - Install guidance should prioritize Codex local plugin installs and Claude Code plugin usage first, with `npx skills` per-skill and `--all` installs treated as secondary.
+- `maintain-plugin-repo`
+  - Current implementation: audit-first repo-level maintainer orchestrator that combines validator output, docs maintenance, and optional local Codex install repair into one bounded report.
+  - Intended scope: become the main maintainer entrypoint when a plugin-development repo feels drifted overall and the maintainer wants one workflow instead of manually coordinating multiple specialist skills.
 - `bootstrap-skills-plugin-repo`
   - Use when creating or structurally aligning a skills or plugin repository to the shared plugin-first layout.
 - `install-plugin-to-socket`
@@ -134,6 +137,7 @@ Quick validation examples:
 
 ```bash
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/maintain-plugin-docs
+uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/maintain-plugin-repo
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/bootstrap-skills-plugin-repo
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/install-plugin-to-socket
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/sync-skills-repo-guidance

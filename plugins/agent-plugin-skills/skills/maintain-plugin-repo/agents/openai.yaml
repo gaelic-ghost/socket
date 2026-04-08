@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Plugin Repo"
+  short_description: "Audit and coordinate bounded fixes across plugin-repo packaging, docs, and local Codex install surfaces."
+  default_prompt: "Use $maintain-plugin-repo when a skills or plugin repository feels drifted overall and a maintainer wants one audit-first workflow instead of manually coordinating multiple specialist skills. Start with the repo validator, classify findings by owner, route docs fixes through `maintain-plugin-docs`, route local Codex install repair through `install-plugin-to-socket` only when explicit install inputs were provided, and return one combined maintainer report with fixes applied, deferred work, and unresolved findings."

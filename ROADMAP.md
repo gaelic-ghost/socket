@@ -23,12 +23,13 @@
 - [x] Milestone 1: `maintain-plugin-docs` evolution
 - [ ] Milestone 2: `install-plugin-to-socket`
 - [x] Milestone 3: install-surface and metadata validation skill
-- [ ] Milestone 4: MCP and app packaging maintainer skill
-- [ ] Milestone 5: skills repo migration and split support
-- [ ] Milestone 6: upstream docs watch and change intake
-- [ ] Milestone 7: `skill-evals`
-- [ ] Milestone 8: customization systems guidance
-- [ ] Milestone 9: end-user docs visibility
+- [x] Milestone 4: `maintain-plugin-repo`
+- [ ] Milestone 5: MCP and app packaging maintainer skill
+- [ ] Milestone 6: skills repo migration and split support
+- [ ] Milestone 7: upstream docs watch and change intake
+- [ ] Milestone 8: `skill-evals`
+- [ ] Milestone 9: customization systems guidance
+- [ ] Milestone 10: end-user docs visibility
 
 ## Milestone 0: Foundation bootstrap
 
@@ -168,7 +169,29 @@ Exit criteria:
 - [x] Maintainers can run one bounded workflow to detect install-surface drift.
 - [x] The audit distinguishes canonical authored surfaces from packaging mirrors.
 
-## Milestone 4: MCP and app packaging maintainer skill
+## Milestone 4: `maintain-plugin-repo`
+
+Scope:
+
+- Add a repo-level maintainer orchestrator for plugin-development repos that feels drifted overall.
+- Keep the skill audit-first and route to existing specialist owners instead of replacing them.
+- Version 1 should always run install-surface validation first, always include docs maintenance signals, and only attempt local Codex install repair when explicit install inputs are provided.
+
+Tickets:
+
+- [x] Define the repo-level role and boundaries relative to `validate-plugin-install-surfaces`, `maintain-plugin-docs`, and `install-plugin-to-socket`.
+- [x] Add a bounded `audit-only` workflow that returns one grouped report for validation findings, docs findings, install findings, deferred work, and owner assignments.
+- [x] Add a bounded `apply-safe-fixes` workflow that routes docs maintenance through `maintain-plugin-docs`.
+- [x] Keep install repair explicitly opt-in and route it through `install-plugin-to-socket` instead of duplicating installer logic.
+- [x] Document the output contract and owner-routing rules inside the skill runtime surface.
+- [x] Add tests for clean runs, deferred install repair, exact `No findings.` behavior, and apply-mode routing.
+
+Exit criteria:
+
+- [x] Maintainers have one bounded entrypoint for repo-level plugin maintenance instead of manually coordinating multiple specialist skills.
+- [x] The skill stays honest about what it coordinates versus what it directly fixes.
+
+## Milestone 5: MCP and app packaging maintainer skill
 
 Scope:
 
@@ -186,7 +209,7 @@ Exit criteria:
 - [ ] Maintainers have a dedicated workflow for plugin-side MCP and app packaging surfaces.
 - [ ] The repo can evolve beyond skills-only packaging cleanly.
 
-## Milestone 5: skills repo migration and split support
+## Milestone 6: skills repo migration and split support
 
 Scope:
 
@@ -202,7 +225,7 @@ Exit criteria:
 
 - [ ] Maintainers can move skills between repos without manual cross-surface cleanup.
 
-## Milestone 6: upstream docs watch and change intake
+## Milestone 7: upstream docs watch and change intake
 
 Scope:
 
@@ -219,7 +242,7 @@ Exit criteria:
 
 - [ ] Upstream ecosystem drift can be tracked deliberately instead of ad hoc.
 
-## Milestone 7: `skill-evals`
+## Milestone 8: `skill-evals`
 
 Scope:
 
@@ -239,7 +262,7 @@ Exit criteria:
 - [ ] Maintainers can run one coherent workflow to evaluate a skill on real agent surfaces instead of relying only on static review.
 - [ ] The repo has a durable place for testing trigger behavior and workflow fidelity across supported agents.
 
-## Milestone 8: customization systems guidance
+## Milestone 9: customization systems guidance
 
 Scope:
 
@@ -259,7 +282,7 @@ Exit criteria:
 - [ ] Maintainers have one documented customization pattern to follow instead of ad hoc per-skill config behavior.
 - [ ] Relevant skills in this repo can converge on the same customization vocabulary, path layout, and documentation shape.
 
-## Milestone 9: end-user docs visibility
+## Milestone 10: end-user docs visibility
 
 Scope:
 

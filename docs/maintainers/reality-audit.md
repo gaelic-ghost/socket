@@ -38,6 +38,10 @@ All active repo-authored skills live under `skills/`.
   - Script: `scripts/bootstrap_skills_plugin_repo.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
+- `maintain-plugin-repo`
+  - Script: `scripts/maintain_plugin_repo.py`
+  - Metadata: `agents/openai.yaml`
+  - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-plugin-docs`
   - Script: `scripts/maintain_plugin_docs.py`
   - Metadata: `agents/openai.yaml`
@@ -98,6 +102,11 @@ Required checks:
 - `bootstrap-skills-plugin-repo` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
 - `install-plugin-to-socket` reserves exact `No findings.` for complete clean runs with no remaining findings, apply actions, or errors.
 - `maintain-plugin-docs` and `sync-skills-repo-guidance` reserve exact `No findings.` for clean runs that finish without remaining issues or errors.
+- `maintain-plugin-repo` reserves exact `No findings.` for clean runs that finish without remaining findings, deferred work, or errors.
+- `maintain-plugin-repo` is the canonical repo-level maintainer orchestrator for this repo family.
+- `maintain-plugin-repo` must route to specialist owners rather than absorbing their implementation responsibilities.
+- `maintain-plugin-repo` always runs `validate-plugin-install-surfaces` before building owner assignments or deciding what can be fixed safely in one pass.
+- `maintain-plugin-repo` currently routes docs maintenance through `maintain-plugin-docs` and only routes local Codex install repair through `install-plugin-to-socket` when explicit install inputs are supplied.
 - `maintain-plugin-docs` is currently the canonical owner of plugin-repo docs maintenance for this repo family.
 - `maintain-plugin-docs` is intended to grow into a combined README plus checklist-style roadmap maintainer for plugin-development repos in this family.
 - `bootstrap-skills-plugin-repo` is the canonical owner of repo bootstrap and structural alignment for this repo pattern.
