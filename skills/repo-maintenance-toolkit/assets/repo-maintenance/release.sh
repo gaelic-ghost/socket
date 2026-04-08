@@ -4,6 +4,7 @@ set -eu
 SELF_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 . "$SELF_DIR/lib/common.sh"
 
+load_profile_env
 load_env_file "$SELF_DIR/config/release.env"
 
 mode="${REPO_MAINTENANCE_DEFAULT_RELEASE_MODE:-standard}"
@@ -58,7 +59,7 @@ if [ "$skip_validate" != "true" ]; then
   sh "$SELF_DIR/validate-all.sh"
 fi
 
-log "Running repo-maintenance release flow in $REPO_MAINTENANCE_RELEASE_MODE mode for $RELEASE_TAG"
+log "Running repo-maintenance release flow in $REPO_MAINTENANCE_RELEASE_MODE mode for $RELEASE_TAG with the $REPO_MAINTENANCE_PROFILE profile."
 run_dispatch_dir "$SELF_DIR/release" "release"
 
 if [ "$REPO_MAINTENANCE_RELEASE_MODE" = "submodule" ]; then

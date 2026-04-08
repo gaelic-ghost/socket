@@ -1,6 +1,6 @@
 ---
 name: repo-maintenance-toolkit
-description: Install or refresh a local-first repo-maintenance toolkit for Swift and Xcode repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
+description: Install or refresh a profile-aware local-first repo-maintenance toolkit for Swift, Xcode, and general repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
 license: MIT
 metadata:
   semver: 0.1.0
@@ -10,7 +10,7 @@ metadata:
 
 ## Purpose
 
-Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_repo_maintenance_toolkit.py` applies the managed file set.
+Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a general, SwiftPM, or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_repo_maintenance_toolkit.py` applies the managed file set, writes `scripts/repo-maintenance/config/profile.env`, and keeps the installed toolkit profile explicit.
 
 ## When To Use
 
@@ -30,8 +30,11 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift
    - optional `operation`
    - optional `skip_github_workflow`
    - optional `dry_run`
-2. Classify the repo:
-   - prefer this toolkit for SwiftPM repos, Xcode app repos, and mixed Apple repos that need local maintainer automation
+2. Classify the repo and profile:
+   - prefer this toolkit for SwiftPM repos, Xcode app repos, mixed Apple repos, and general software repos that need local maintainer automation
+   - choose `swift-package` for plain Swift package repos
+   - choose `xcode-app` for native Apple app repos
+   - choose `generic` when no stronger Swift or Xcode profile applies
    - stop if the requested path is not a repository root
 3. Explain the architecture boundary before mutating anything:
    - this is a durable building-block change because it creates one repo-owned maintainer surface that bootstrap, sync, validation, CI, and release flows can all share
@@ -40,6 +43,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift
 4. Run `scripts/run_workflow.py` to normalize the inputs and choose the installer path.
 5. Apply the managed toolkit files:
    - install or refresh `scripts/repo-maintenance/`
+   - install or refresh `scripts/repo-maintenance/config/profile.env` for the selected profile
    - install or refresh the thin workflow wrapper at `.github/workflows/validate-repo-maintenance.yml` unless disabled
    - preserve repo-specific scripts or files that are not part of the managed file set
 6. Verify the installed toolkit:
@@ -56,12 +60,14 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift
 
 - `repo_root`: optional absolute or relative path to the repository root; defaults to `.`
 - `operation`: `install`, `refresh`, or `report-only`
+- `profile`: `generic`, `swift-package`, or `xcode-app`
 - `skip_github_workflow`: optional flag to skip `.github/workflows/validate-repo-maintenance.yml`
 - `dry_run`: optional flag to report the managed actions without writing files
 - Defaults:
   - runtime entrypoint: executable `scripts/run_workflow.py`
   - `repo_root=.` when omitted
   - `operation=install`
+  - `profile=generic`
   - GitHub workflow installation is enabled unless explicitly skipped
 
 ## Outputs
@@ -76,6 +82,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift
 - `output`
   - resolved repo root
   - normalized inputs
+  - selected profile
   - managed file list
   - planned or applied actions
   - one concise next step
@@ -91,6 +98,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift
 
 - `report-only` is the non-mutating fallback path.
 - The installer preserves repo-specific extra files under `scripts/repo-maintenance/`, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
+- The installer keeps the selected toolkit profile explicit via `scripts/repo-maintenance/config/profile.env`.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the repo still needs to be created.
 - Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after the toolkit is present.
 
@@ -98,7 +106,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a Swift
 
 - Use `references/customization-flow.md`.
 - `scripts/customization_config.py` stores and reports customization state.
-- The current customization surface is one policy-only default for release mode preference. Installation shape and managed file selection are explicit workflow behavior, not durable runtime customization.
+- The current customization surface is one policy-only default for release mode preference. Installation shape, profile selection, and managed file selection are explicit workflow behavior, not durable runtime customization.
 
 ## References
 

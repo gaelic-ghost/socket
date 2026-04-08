@@ -415,5 +415,6 @@ Tickets:
 Exit criteria:
 
 - [x] `productivity-skills` ships `repo-maintenance-toolkit` as a broadly reusable global skill.
+- [x] `repo-maintenance-toolkit` now supports explicit `generic`, `swift-package`, and `xcode-app` install profiles with a concrete `scripts/repo-maintenance/config/profile.env` marker.
 - [x] Repo docs, maintainer docs, and tests describe the same four-skill active surface.
 - [x] The shared toolkit can be consumed by other skill repos without making this repository responsible for their stack-specific integrations.

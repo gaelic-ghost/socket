@@ -12,6 +12,11 @@ import shutil
 from pathlib import Path
 
 
+PROFILE_CHOICES = {
+    "generic": "Generic repo-maintenance baseline with no Swift or Xcode specialization.",
+    "swift-package": "Swift Package Manager repo-maintenance profile for library, tool, and package repos.",
+    "xcode-app": "Xcode app repo-maintenance profile for native Apple app repositories.",
+}
 MANAGED_TOOLKIT_FILES = [
     ("repo-maintenance/validate-all.sh", "scripts/repo-maintenance/validate-all.sh"),
     ("repo-maintenance/sync-shared.sh", "scripts/repo-maintenance/sync-shared.sh"),
@@ -30,6 +35,7 @@ MANAGED_TOOLKIT_FILES = [
     ("repo-maintenance/hooks/pre-commit.sample", "scripts/repo-maintenance/hooks/pre-commit.sample"),
 ]
 MANAGED_WORKFLOW_FILE = ".github/workflows/validate-repo-maintenance.yml"
+MANAGED_PROFILE_FILE = Path("scripts/repo-maintenance/config/profile.env")
 EXECUTABLE_SUFFIXES = {".sh", ".py", ".sample"}
 
 
@@ -37,6 +43,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", required=True)
     parser.add_argument("--operation", choices=("install", "refresh", "report-only"), default="install")
+    parser.add_argument("--profile", choices=sorted(PROFILE_CHOICES), default="generic")
     parser.add_argument("--skip-github-workflow", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser
@@ -76,11 +83,27 @@ def copy_file(source: Path, target: Path) -> None:
         target.chmod(0o755)
 
 
+def render_profile_env(profile: str) -> str:
+    description = PROFILE_CHOICES[profile]
+    return (
+        "# Managed by repo-maintenance-toolkit. Do not hand-edit unless you also control the installer contract.\n"
+        f'REPO_MAINTENANCE_PROFILE="{profile}"\n'
+        f'REPO_MAINTENANCE_PROFILE_DESCRIPTION="{description}"\n'
+    )
+
+
+def write_profile_env(repo_root: Path, profile: str) -> None:
+    target = repo_root / MANAGED_PROFILE_FILE
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(render_profile_env(profile), encoding="utf-8")
+
+
 def main() -> int:
     args = build_parser().parse_args()
     repo_root = Path(args.repo_root).expanduser().resolve()
     actions: list[str] = []
     managed_files = [relative.as_posix() for _, relative in target_pairs(args.skip_github_workflow)]
+    managed_files.append(MANAGED_PROFILE_FILE.as_posix())
 
     if not repo_root.exists():
         print(
@@ -121,6 +144,7 @@ def main() -> int:
     try:
         for _, relative_target in target_pairs(args.skip_github_workflow):
             ensure_safe_target(repo_root, relative_target)
+        ensure_safe_target(repo_root, MANAGED_PROFILE_FILE)
     except RuntimeError as exc:
         print(
             json.dumps(
@@ -146,12 +170,18 @@ def main() -> int:
                 actions.append(f"refresh {relative_target.as_posix()} from {source.relative_to(assets_root()).as_posix()}")
             else:
                 actions.append(f"install {relative_target.as_posix()} from {source.relative_to(assets_root()).as_posix()}")
+        profile_target = repo_root / MANAGED_PROFILE_FILE
+        if profile_target.exists():
+            actions.append(f"refresh {MANAGED_PROFILE_FILE.as_posix()} for {args.profile} profile")
+        else:
+            actions.append(f"install {MANAGED_PROFILE_FILE.as_posix()} for {args.profile} profile")
         print(
             json.dumps(
                 {
                     "status": "success",
                     "path_type": "fallback",
                     "repo_root": str(repo_root),
+                    "profile": args.profile,
                     "managed_files": managed_files,
                     "actions": actions,
                     "validation_result": "skipped (--dry-run)" if args.dry_run else "skipped (report-only)",
@@ -168,6 +198,10 @@ def main() -> int:
         action = "refreshed" if target.exists() else "installed"
         copy_file(source, target)
         actions.append(f"{action} {relative_target.as_posix()}")
+    profile_target = repo_root / MANAGED_PROFILE_FILE
+    profile_action = "refreshed" if profile_target.exists() else "installed"
+    write_profile_env(repo_root, args.profile)
+    actions.append(f"{profile_action} {MANAGED_PROFILE_FILE.as_posix()} for {args.profile} profile")
 
     print(
         json.dumps(
@@ -175,6 +209,7 @@ def main() -> int:
                 "status": "success",
                 "path_type": "primary",
                 "repo_root": str(repo_root),
+                "profile": args.profile,
                 "managed_files": managed_files,
                 "actions": actions,
                 "validation_result": "managed files synced",

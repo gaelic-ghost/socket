@@ -12,3 +12,11 @@ fi
 agents_path="$REPO_ROOT/AGENTS.md"
 [ -f "$agents_path" ] || die "Expected $agents_path to exist so the repo-maintenance toolkit has repo guidance to complement."
 [ -s "$agents_path" ] || die "Expected $agents_path to be non-empty."
+
+for needle in \
+  "scripts/repo-maintenance/validate-all.sh" \
+  "scripts/repo-maintenance/sync-shared.sh" \
+  "scripts/repo-maintenance/release.sh"
+do
+  grep -F "$needle" "$agents_path" >/dev/null 2>&1 || die "Expected $agents_path to mention $needle so the maintainer validation, sync, and release entrypoints stay discoverable."
+done

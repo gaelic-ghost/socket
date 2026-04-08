@@ -161,6 +161,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 - Required: `--repo-root <path>`
 - Optional: `--operation install|refresh`
+- Optional: `--profile generic|swift-package|xcode-app`
 - Optional: `--skip-github-workflow`
 - Optional: `--dry-run`
 - Tool/script input: `scripts/run_workflow.py`
@@ -172,7 +173,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Outputs**
 
-- JSON with `status`, `path_type`, `output`, `managed_files`, `applied_actions`, `next_step`
+- JSON with `status`, `path_type`, `output`, `profile`, `managed_files`, `applied_actions`, `next_step`
 
 ### Workflow: `report-only`
 

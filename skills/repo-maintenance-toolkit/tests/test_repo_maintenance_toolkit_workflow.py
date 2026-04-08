@@ -34,14 +34,18 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["path_type"], "fallback")
             self.assertIn("scripts/repo-maintenance/validate-all.sh", payload["managed_files"])
             self.assertIn(".github/workflows/validate-repo-maintenance.yml", payload["managed_files"])
+            self.assertIn("scripts/repo-maintenance/config/profile.env", payload["managed_files"])
+            self.assertEqual(payload["profile"], "generic")
 
     def test_install_writes_toolkit_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")
+            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install", "--profile", "swift-package")
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
+            self.assertIn('REPO_MAINTENANCE_PROFILE="swift-package"', Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"))
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
 
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
@@ -57,6 +61,16 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
             self.assertTrue(custom_script.is_file())
+
+    def test_report_only_can_select_xcode_profile(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "report-only", "--profile", "xcode-app")
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(payload["profile"], "xcode-app")
+            joined = "\n".join(payload["actions"])
+            self.assertIn("profile.env", joined)
+            self.assertIn("xcode-app profile", joined)
 
 
 if __name__ == "__main__":

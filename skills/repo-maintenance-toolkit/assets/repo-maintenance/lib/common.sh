@@ -4,6 +4,8 @@ set -eu
 COMMON_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 REPO_MAINTENANCE_ROOT=$(CDPATH= cd -- "$COMMON_DIR/.." && pwd)
 REPO_ROOT=$(CDPATH= cd -- "$REPO_MAINTENANCE_ROOT/../.." && pwd)
+REPO_MAINTENANCE_PROFILE="generic"
+REPO_MAINTENANCE_PROFILE_DESCRIPTION="Generic repo-maintenance baseline with no Swift or Xcode specialization."
 
 log() {
   printf '%s\n' "$*"
@@ -25,6 +27,10 @@ load_env_file() {
   # shellcheck disable=SC1090
   . "$env_file"
   set +a
+}
+
+load_profile_env() {
+  load_env_file "$REPO_MAINTENANCE_ROOT/config/profile.env"
 }
 
 ensure_git_repo() {

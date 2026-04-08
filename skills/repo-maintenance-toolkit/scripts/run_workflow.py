@@ -19,6 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root")
     parser.add_argument("--operation", choices=("install", "refresh", "report-only"))
+    parser.add_argument("--profile", choices=("generic", "swift-package", "xcode-app"))
     parser.add_argument("--skip-github-workflow", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser
@@ -28,9 +29,11 @@ def main() -> int:
     args = build_parser().parse_args()
     repo_root = str(Path(args.repo_root or ".").expanduser().resolve())
     operation = args.operation or "install"
+    profile = args.profile or "generic"
     normalized_inputs = {
         "repo_root": repo_root,
         "operation": operation,
+        "profile": profile,
         "skip_github_workflow": args.skip_github_workflow,
         "dry_run": args.dry_run,
     }
@@ -42,6 +45,8 @@ def main() -> int:
         repo_root,
         "--operation",
         operation,
+        "--profile",
+        profile,
     ]
     if args.skip_github_workflow:
         command.append("--skip-github-workflow")
