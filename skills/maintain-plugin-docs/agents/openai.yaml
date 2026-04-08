@@ -1,4 +1,3 @@
-interface:
-  display_name: "Maintain Plugin Docs"
-  short_description: "Audit and apply bounded docs fixes for stack-specific skills and plugin repositories."
-  default_prompt: "Use $maintain-plugin-docs for stack-specific docs maintenance in a skills or plugin repository. Select `readme`, `roadmap`, or `all` scope as appropriate, document Codex local plugin installs and Claude Code plugin usage before Vercel `skills` CLI examples, run the read-only pass first, and apply bounded docs fixes only when requested."
+schema_version: 1
+prompts:
+  default_prompt: "Use $maintain-plugin-docs for docs maintenance in a skills-export repository. Audit README.md, ROADMAP.md, and cross-doc wording first, keep the docs blunt about OpenAI's Codex plugin scoping limits, and never reintroduce installer guidance, install-validation guidance, repo marketplaces, or nested plugin-directory claims for this repo."

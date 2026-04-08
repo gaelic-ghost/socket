@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import importlib.util
 import os
-import shutil
 import sys
 from pathlib import Path
 
@@ -21,27 +20,15 @@ def _load_module():
 m = _load_module()
 
 
-def _write_repo(repo_root: Path, plugin_name: str) -> None:
+def _write_repo(repo_root: Path, _plugin_name: str) -> None:
     (repo_root / "skills" / "example-skill").mkdir(parents=True)
-    (repo_root / "plugins" / plugin_name).mkdir(parents=True)
     (repo_root / "docs" / "maintainers").mkdir(parents=True)
-    (repo_root / ".claude-plugin").mkdir()
     (repo_root / "README.md").write_text(
         "\n".join(
             [
-                "root `skills/` as the canonical authoring surface",
-                "bundled copy of root `skills/`",
-                "plugins/",
-                ".agents/plugins/marketplace.json",
-                "~/.codex/plugins/",
-                "restart Codex",
-                "codex-tui.log",
-                "/plugins",
-                ".claude-plugin/marketplace.json",
-                "claude --plugin-dir",
-                "Track canonical plugin source trees and shared marketplace catalogs in git.",
-                "OpenAI Codex Skills",
-                "Claude Code Plugins",
+                "Installable maintainer skills for skills-export repositories.",
+                "OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.",
+                "npx skills add gaelic-ghost/agent-plugin-skills --all",
                 "uv tool install ruff",
                 "uv tool install mypy",
             ]
@@ -52,54 +39,21 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
     (repo_root / "AGENTS.md").write_text(
         "\n".join(
             [
-                "canonical workflow-authoring surface",
-                "real bundled directory",
-                "plugin packaging root",
-                ".agents/plugins/marketplace.json",
-                ".claude-plugin/marketplace.json",
-                "Track canonical plugin source trees and shared marketplace catalogs in git.",
-                "uv-managed tools",
+                "Root `skills/` is the canonical authored and exported surface",
+                "Do not recreate nested plugin directories",
+                "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
             ]
         )
         + "\n",
         encoding="utf-8",
     )
-    (repo_root / ".gitignore").write_text(
-        "\n".join(
-            [
-                "# Agent plugin repo local runtime state",
-                ".codex/plugins/",
-                ".claude/settings.local.json",
-            ]
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    (repo_root / ".claude-plugin" / "marketplace.json").write_text(
-        "\n".join(
-            [
-                "{",
-                f'  "name": "{plugin_name}",',
-                '  "plugins": [',
-                "    {",
-                f'      "name": "{plugin_name}",',
-                f'      "source": "./plugins/{plugin_name}"',
-                "    }",
-                "  ]",
-                "}",
-            ]
-        )
-        + "\n",
-        encoding="utf-8",
-    )
+    (repo_root / ".gitignore").write_text(".claude/settings.local.json\n", encoding="utf-8")
     (repo_root / "docs" / "maintainers" / "reality-audit.md").write_text(
         "\n".join(
             [
-                "Root `skills/` is the canonical workflow-authoring surface.",
-                "real bundled directory",
-                ".claude-plugin/marketplace.json",
-                "plugin packaging root",
-                "uv tool install",
+                "This repository does not track a nested plugin directory for itself.",
+                "This repository does not ship `install-plugin-to-socket`.",
+                "This repository does not ship `validate-plugin-install-surfaces`.",
             ]
         )
         + "\n",
@@ -109,7 +63,6 @@ def _write_repo(repo_root: Path, plugin_name: str) -> None:
     (repo_root / ".claude").mkdir()
     os.symlink("../skills", repo_root / ".agents" / "skills")
     os.symlink("../skills", repo_root / ".claude" / "skills")
-    shutil.copytree(repo_root / "skills", repo_root / "plugins" / plugin_name / "skills")
 
 
 def test_audit_repo_accepts_expected_repo_shape(tmp_path: Path) -> None:
@@ -120,9 +73,9 @@ def test_audit_repo_accepts_expected_repo_shape(tmp_path: Path) -> None:
     assert findings == []
 
 
-def test_audit_repo_flags_missing_guidance_and_bundle_drift(tmp_path: Path) -> None:
-    (tmp_path / "plugins" / "example-skills").mkdir(parents=True)
-    (tmp_path / "README.md").write_text("plugins/\n", encoding="utf-8")
+def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) -> None:
+    (tmp_path / "plugins").mkdir(parents=True)
+    (tmp_path / "README.md").write_text(".agents/plugins/marketplace.json\n", encoding="utf-8")
     (tmp_path / "AGENTS.md").write_text("", encoding="utf-8")
     (tmp_path / "docs" / "maintainers").mkdir(parents=True)
     (tmp_path / "docs" / "maintainers" / "reality-audit.md").write_text("", encoding="utf-8")
@@ -130,8 +83,7 @@ def test_audit_repo_flags_missing_guidance_and_bundle_drift(tmp_path: Path) -> N
     findings = m.audit_repo(tmp_path, "example-skills")
 
     issue_ids = {finding.issue_id for finding in findings}
-    assert "readme-missing-snippet" in issue_ids
+    assert "readme-forbidden-snippet" in issue_ids
     assert "agents-missing-snippet" in issue_ids
-    assert "missing-path" in issue_ids
     assert "missing-symlink" in issue_ids
-    assert "missing-packaged-skills-dir" in issue_ids
+    assert "forbidden-path" in issue_ids

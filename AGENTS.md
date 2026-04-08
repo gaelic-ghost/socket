@@ -4,7 +4,7 @@
 
 - For work in this repository, edit skills only under `/Users/galew/Workspace/agent-plugin-skills/skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
-- This repository is for stack-specific maintainer skills focused on agent-skills and agent-plugin repositories.
+- This repository is for maintainer skills that are exported for global installation.
 
 ## Standards And Guidance
 
@@ -14,8 +14,7 @@ Consult these resources when creating, updating, reviewing, or sharing skills in
 - Vercel KB Guidance: [vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context](https://vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context)
 - Skill Creator workflow: [$skill-creator](/Users/galew/.codex/skills/.system/skill-creator/SKILL.md)
 - OpenAI Codex Skills: [developers.openai.com/codex/skills](https://developers.openai.com/codex/skills)
-- OpenAI Codex Plugins: [developers.openai.com/codex/plugins](https://developers.openai.com/codex/plugins)
-- OpenAI Codex Plugin authoring: [developers.openai.com/codex/plugins/build](https://developers.openai.com/codex/plugins/build)
+- OpenAI Codex plugin build docs: [developers.openai.com/codex/plugins/build](https://developers.openai.com/codex/plugins/build)
 - Claude Code Skills: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills)
 - Claude Code Plugins: [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)
 - Anthropic Agent Skills Best Practices: [platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
@@ -23,26 +22,27 @@ Consult these resources when creating, updating, reviewing, or sharing skills in
 Applicability guidance:
 
 - Treat the open Agent Skills standard as the repository foundation.
-- Preserve OpenAI/Codex-specific and Claude-specific enhancements where they materially improve packaging, install UX, invocation, routing, or metadata quality.
-- Default to full coverage of applicable supported metadata fields across skill frontmatter, `agents/openai.yaml`, Codex plugin manifests, Claude plugin manifests, MCP surfaces, and app metadata.
-- When OpenAI/Codex behavior is involved, consult the `openaiDeveloperDocs` MCP server and official OpenAI docs before secondary sources.
+- Preserve OpenAI/Codex-specific and Claude-specific guidance where it materially affects workflow honesty.
+- When OpenAI/Codex behavior is involved, consult official OpenAI docs before secondary sources.
 - When Claude behavior is involved, consult Claude and Anthropic official docs before secondary sources.
 
 ## Repo Model
 
-- Root `skills/` is the canonical authored skill surface. This is the canonical workflow-authoring surface.
-- `plugins/agent-plugin-skills/` is the plugin packaging root for this repository.
-- Keep `.agents/plugins/marketplace.json` aligned with that plugin packaging root.
-- If the repo itself should be shareable as a Claude marketplace, keep a repo-root `.claude-plugin/marketplace.json` aligned with the tracked plugin packaging roots.
-- Keep source-of-truth plugin, marketplace, MCP, app, and hook manifests inside `plugins/` and `.agents/plugins/`.
-- Follow canonical Codex and Claude project-level discovery guidance on macOS and Linux through POSIX symlink mirrors for repo-level discovery:
-  - `.agents/skills -> ../skills`
-  - `.claude/skills -> ../skills`
-- Keep `plugins/agent-plugin-skills/skills/` as a real bundled plugin directory that stays in sync with root `skills/`.
-- Treat the repo-level symlink mirrors as local discovery conveniences, and treat the plugin-root `skills/` directory as the shipped install surface.
-- Prefer symlinks over hardlinks for discovery mirrors. Hardlinks are not a durable repository contract.
-- Track canonical plugin source trees and shared marketplace catalogs in git. For this repo shape that usually includes root `skills/`, `plugins/<plugin-name>/`, `.agents/plugins/marketplace.json`, and repo-root `.claude-plugin/marketplace.json` when the repo is meant to be addable as a Claude marketplace.
-- Do not track consumer-side install copies, caches, or local runtime state in git. Personal Codex installs under `~/.codex/plugins/`, Codex cache copies, and Claude local-only settings belong outside the repo or in `.gitignore`.
+- Root `skills/` is the canonical authored and exported surface for this repository.
+- `.agents/skills` and `.claude/skills` are repo-local discovery mirrors into root `skills/`.
+- This repository intentionally does not track a nested Codex plugin copy of itself.
+- This repository intentionally does not track a repo-local Codex marketplace file for itself.
+- Do not recreate nested plugin directories, repo marketplaces, or installer workflows in this repository unless Gale explicitly asks for that architectural reversal.
+- Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`.
+
+## Codex Limitation Policy
+
+- Treat OpenAI's documented Codex plugin system as severely limited for scoping.
+- The documented Codex model exposes one repo marketplace at `$REPO_ROOT/.agents/plugins/marketplace.json` and one personal marketplace at `~/.agents/plugins/marketplace.json`.
+- Do not imply that Codex supports hidden repo-local plugin installs, private scoped plugin packs, or a second repo marketplace file for repo scope.
+- When a skill in this repo discusses Codex plugin export boundaries, it must warn plainly that repo-visible plugins are exposed through the repo marketplace described by OpenAI's docs.
+- Keep responsibility clear in docs and skill wording: this limitation comes from OpenAI's documented Codex plugin model and shipped product behavior, not from this repository.
+- Do not bury this warning in optional notes. Put it in the main workflow whenever Codex plugin scoping claims are discussed.
 
 ## Repo-local Passive Standards
 
@@ -54,7 +54,7 @@ Applicability guidance:
 - Keep skill runtime resources inside the skill directory: `SKILL.md`, `agents/openai.yaml`, `scripts/`, `references/`, and `assets/`.
 - Do not make installed skills depend on repo-level docs under `docs/`.
 - Repo-maintainer docs live under `docs/maintainers/`.
-- Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, references, automation prompts, scripts, plugin manifests, and marketplace metadata.
+- Use the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, references, automation prompts, and scripts.
 - When docs and scripts disagree on a workflow contract, fix the script or narrow the documented claim so they match.
 - After completing milestone work, update `ROADMAP.md` in the same change unless explicitly told not to.
 

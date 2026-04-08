@@ -3,53 +3,34 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import filecmp
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
 
 EXACT_NO_FINDINGS = "No findings."
-
 README_SNIPPETS = [
-    "root `skills/` as the canonical",
-    "bundled copy of root",
-    "plugins/",
-    ".agents/plugins/marketplace.json",
-    "~/.codex/plugins/",
-    "restart Codex",
-    "codex-tui.log",
-    "/plugins",
-    ".claude-plugin/marketplace.json",
-    "claude --plugin-dir",
-    "Track canonical plugin source trees and shared marketplace catalogs in git.",
-    "OpenAI Codex Skills",
-    "Claude Code Plugins",
+    "Installable maintainer skills for skills-export repositories.",
+    "OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.",
+    "npx skills add gaelic-ghost/agent-plugin-skills --all",
     "uv tool install ruff",
     "uv tool install mypy",
 ]
-
 AGENTS_SNIPPETS = [
-    "canonical workflow-authoring surface",
-    "real bundled directory",
-    "plugin packaging root",
+    "Root `skills/` is the canonical authored and exported surface",
+    "Do not recreate nested plugin directories",
+    "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
+]
+AUDIT_SNIPPETS = [
+    "This repository does not track a nested plugin directory for itself.",
+    "This repository does not ship `install-plugin-to-socket`.",
+    "This repository does not ship `validate-plugin-install-surfaces`.",
+]
+GITIGNORE_SNIPPETS = [".claude/settings.local.json"]
+FORBIDDEN_SNIPPETS = [
     ".agents/plugins/marketplace.json",
     ".claude-plugin/marketplace.json",
-    "Track canonical plugin source trees and shared marketplace catalogs in git.",
-    "uv-managed tools",
-]
-
-AUDIT_SNIPPETS = [
-    "Root `skills/` is the canonical workflow-authoring surface.",
-    "real bundled directory",
-    ".claude-plugin/marketplace.json",
-    "plugin packaging root",
-    "uv tool install",
-]
-
-GITIGNORE_SNIPPETS = [
-    "# Agent plugin repo local runtime state",
-    ".codex/plugins/",
-    ".claude/settings.local.json",
+    "claude --plugin-dir",
+    "~/.codex/plugins/",
 ]
 
 
@@ -72,13 +53,10 @@ def _check_file_contains(repo_root: Path, path: Path, snippets: list[str], issue
     text = path.read_text(encoding="utf-8")
     for snippet in snippets:
         if snippet not in text:
-            findings.append(
-                Finding(
-                    str(path.relative_to(repo_root)),
-                    f"{issue_prefix}-missing-snippet",
-                    f"Expected to mention: {snippet}",
-                )
-            )
+            findings.append(Finding(str(path.relative_to(repo_root)), f"{issue_prefix}-missing-snippet", f"Expected to mention: {snippet}"))
+    for snippet in FORBIDDEN_SNIPPETS:
+        if snippet in text:
+            findings.append(Finding(str(path.relative_to(repo_root)), f"{issue_prefix}-forbidden-snippet", f"Forbidden snippet still present: {snippet}"))
     return findings
 
 
@@ -94,80 +72,21 @@ def _check_symlink(repo_root: Path, path: Path, target: str) -> list[Finding]:
     return []
 
 
-def _compare_directory_trees(source: Path, target: Path, prefix: str = "") -> list[str]:
-    comparison = filecmp.dircmp(source, target)
-    mismatches: list[str] = []
-    for name in sorted(comparison.left_only):
-        mismatches.append(f"missing bundled entry `{prefix}{name}`")
-    for name in sorted(comparison.right_only):
-        mismatches.append(f"unexpected bundled entry `{prefix}{name}`")
-    _matches, mismatch, errors = filecmp.cmpfiles(source, target, comparison.common_files, shallow=False)
-    for name in sorted(mismatch):
-        mismatches.append(f"content differs for `{prefix}{name}`")
-    for name in sorted(errors):
-        mismatches.append(f"comparison failed for `{prefix}{name}`")
-    for name in sorted(comparison.common_dirs):
-        mismatches.extend(_compare_directory_trees(source / name, target / name, prefix=f"{prefix}{name}/"))
-    return mismatches
-
-
-def _check_packaged_skills(repo_root: Path, plugin_name: str) -> list[Finding]:
-    source = repo_root / "skills"
-    target = repo_root / "plugins" / plugin_name / "skills"
-    rel = str(target.relative_to(repo_root))
-    if not target.exists() and not target.is_symlink():
-        return [Finding(rel, "missing-packaged-skills-dir", "Expected bundled plugin `skills/` directory.")]
-    if target.is_symlink():
-        return [Finding(rel, "packaged-skills-is-symlink", "Expected a real bundled plugin `skills/` directory, not a symlink.")]
-    if not target.is_dir():
-        return [Finding(rel, "packaged-skills-not-directory", "Expected bundled plugin `skills/` path to be a directory.")]
-    if source.is_dir():
-        mismatches = _compare_directory_trees(source, target)
-        if mismatches:
-            preview = "; ".join(mismatches[:5])
-            if len(mismatches) > 5:
-                preview += f"; plus {len(mismatches) - 5} more"
-            return [Finding(rel, "packaged-skills-drift", f"Bundled plugin `skills/` directory is out of sync with root `skills/`: {preview}.")]
-    return []
-
-
 def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     findings: list[Finding] = []
     findings.extend(_check_file_contains(repo_root, repo_root / "README.md", README_SNIPPETS, "readme"))
     findings.extend(_check_file_contains(repo_root, repo_root / "AGENTS.md", AGENTS_SNIPPETS, "agents"))
     findings.extend(_check_file_contains(repo_root, repo_root / ".gitignore", GITIGNORE_SNIPPETS, "gitignore"))
-    findings.extend(
-        _check_file_contains(
-            repo_root,
-            repo_root / ".claude-plugin" / "marketplace.json",
-            [plugin_name, f"./plugins/{plugin_name}"],
-            "claude-marketplace",
-        )
-    )
-    findings.extend(
-        _check_file_contains(
-            repo_root,
-            repo_root / "docs" / "maintainers" / "reality-audit.md",
-            AUDIT_SNIPPETS,
-            "reality-audit",
-        )
-    )
+    findings.extend(_check_file_contains(repo_root, repo_root / "docs" / "maintainers" / "reality-audit.md", AUDIT_SNIPPETS, "reality-audit"))
     findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))
     findings.extend(_check_symlink(repo_root, repo_root / ".claude" / "skills", "../skills"))
-    findings.extend(_check_packaged_skills(repo_root, plugin_name))
+    if (repo_root / "plugins").exists():
+        findings.append(Finding("plugins", "forbidden-path", "Nested plugin directories are forbidden for this repo model."))
     return findings
 
 
 def build_report(repo_root: Path, plugin_name: str, run_mode: str, findings: list[Finding], errors: list[str]) -> dict[str, object]:
-    return {
-        "run_context": {
-            "repo_root": str(repo_root),
-            "plugin_name": plugin_name,
-            "run_mode": run_mode,
-        },
-        "findings": [asdict(item) for item in findings],
-        "errors": errors,
-    }
+    return {"run_context": {"repo_root": str(repo_root), "plugin_name": plugin_name, "run_mode": run_mode}, "findings": [asdict(item) for item in findings], "errors": errors}
 
 
 def parse_args() -> argparse.Namespace:
@@ -187,9 +106,8 @@ def main() -> int:
         return 1
     plugin_name = infer_plugin_name(repo_root, args.plugin_name)
     findings = audit_repo(repo_root, plugin_name)
-    errors: list[str] = []
-    report = build_report(repo_root, plugin_name, args.run_mode, findings, errors)
-    if args.print_md and not findings and not errors:
+    report = build_report(repo_root, plugin_name, args.run_mode, findings, [])
+    if args.print_md and not findings:
         print(EXACT_NO_FINDINGS)
     else:
         print(json.dumps(report, indent=2))

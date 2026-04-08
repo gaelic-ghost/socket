@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import os
 import sys
 from pathlib import Path
@@ -27,61 +26,22 @@ def test_audit_repo_flags_missing_paths(tmp_path: Path) -> None:
     issue_ids = {finding.issue_id for finding in findings}
     assert "missing-path" in issue_ids
     assert "missing-symlink" in issue_ids
-    assert "missing-packaged-skills-dir" in issue_ids
 
 
-def test_apply_repo_creates_expected_discovery_mirrors_and_bundled_skills(tmp_path: Path) -> None:
-    skill_dir = tmp_path / "skills" / "hello"
-    skill_dir.mkdir(parents=True)
-    (skill_dir / "SKILL.md").write_text("---\nname: hello\ndescription: Say hello.\n---\n", encoding="utf-8")
-
+def test_apply_repo_creates_expected_discovery_mirrors(tmp_path: Path) -> None:
     actions, created_paths = m.apply_repo(tmp_path, "example-skills")
 
     assert any(action["action"] == "create-symlink" for action in actions)
-    assert any(action["action"] == "sync-packaged-skills" for action in actions)
     assert (tmp_path / ".agents" / "skills").is_symlink()
     assert os.readlink(tmp_path / ".agents" / "skills") == "../skills"
     assert (tmp_path / ".claude" / "skills").is_symlink()
-    assert (tmp_path / "plugins" / "example-skills" / "skills").is_dir()
-    assert not (tmp_path / "plugins" / "example-skills" / "skills").is_symlink()
-    assert (tmp_path / "plugins" / "example-skills" / "skills" / "hello" / "SKILL.md").exists()
-    assert "plugins/example-skills/.codex-plugin/plugin.json" in created_paths
-    assert ".claude-plugin/marketplace.json" in created_paths
+    assert "README.md" in created_paths
+    assert "AGENTS.md" in created_paths
 
 
-def test_apply_repo_creates_marketplace_with_available_policy(tmp_path: Path) -> None:
-    m.apply_repo(tmp_path, "example-skills")
+def test_audit_repo_flags_forbidden_nested_plugin_dir(tmp_path: Path) -> None:
+    (tmp_path / "plugins").mkdir(parents=True)
 
-    marketplace = json.loads((tmp_path / ".agents" / "plugins" / "marketplace.json").read_text(encoding="utf-8"))
+    findings = m.audit_repo(tmp_path, "example-skills")
 
-    assert marketplace["plugins"][0]["source"]["path"] == "./plugins/example-skills"
-    assert marketplace["plugins"][0]["policy"]["installation"] == "AVAILABLE"
-
-
-def test_apply_repo_creates_repo_root_claude_marketplace(tmp_path: Path) -> None:
-    m.apply_repo(tmp_path, "example-skills")
-
-    marketplace = json.loads((tmp_path / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-
-    assert marketplace["name"] == "example-skills"
-    assert marketplace["plugins"][0]["name"] == "example-skills"
-    assert marketplace["plugins"][0]["source"] == "./plugins/example-skills"
-
-
-def test_apply_repo_seeds_python_tooling_guidance(tmp_path: Path) -> None:
-    m.apply_repo(tmp_path, "example-skills")
-
-    readme = (tmp_path / "README.md").read_text(encoding="utf-8")
-    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
-    gitignore = (tmp_path / ".gitignore").read_text(encoding="utf-8")
-
-    assert "uv tool install ruff" in readme
-    assert "uv tool install mypy" in readme
-    assert "uv run --group dev pytest" in readme
-    assert "restart Codex" in readme
-    assert "codex-tui.log" in readme
-    assert "/plugins" in readme
-    assert "`uv`-managed tools" in agents
-    assert ".claude-plugin/marketplace.json" in readme
-    assert ".codex/plugins/" in gitignore
-    assert ".claude/settings.local.json" in gitignore
+    assert any(finding.issue_id == "forbidden-path" for finding in findings)

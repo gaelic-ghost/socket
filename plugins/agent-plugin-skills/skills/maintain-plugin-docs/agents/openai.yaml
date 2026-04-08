@@ -1,4 +1,0 @@
-interface:
-  display_name: "Maintain Plugin Docs"
-  short_description: "Audit and apply bounded docs fixes for stack-specific skills and plugin repositories."
-  default_prompt: "Use $maintain-plugin-docs for stack-specific docs maintenance in a skills or plugin repository. Select `readme`, `roadmap`, or `all` scope as appropriate, document Codex local plugin installs and Claude Code plugin usage before Vercel `skills` CLI examples, run the read-only pass first, and apply bounded docs fixes only when requested."

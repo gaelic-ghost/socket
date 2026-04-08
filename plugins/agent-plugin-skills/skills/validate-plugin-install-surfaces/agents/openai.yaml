@@ -1,4 +1,0 @@
-interface:
-  display_name: "Validate Plugin Install Surfaces"
-  short_description: "Audit metadata overlays, install surfaces, marketplace wiring, and discovery mirrors."
-  default_prompt: "Use $validate-plugin-install-surfaces to audit an agent-skills or agent-plugin repository. Treat root `skills/` as canonical, check `SKILL.md` frontmatter, `agents/openai.yaml`, plugin manifests, `.agents/plugins/marketplace.json`, repo-level discovery mirrors, the bundled plugin-root `skills/` directory, and README install examples, then return grouped findings without mutating the repo."
