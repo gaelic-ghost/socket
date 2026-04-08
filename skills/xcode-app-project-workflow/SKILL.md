@@ -54,6 +54,7 @@ Use this skill as the top-level entry point for execution work in or around Xcod
 ## Inputs
 
 - `operation_type`: one of the operation types listed above.
+- `request`: optional short natural-language request text used to infer `operation_type` when the explicit operation is omitted.
 - `workspace_path`: optional absolute path for the target Xcode or Swift workspace.
 - `tab_identifier`: optional MCP tab identifier when already known.
 - `mcp_failure_reason`: optional input when continuing from an earlier MCP failure.
@@ -61,6 +62,7 @@ Use this skill as the top-level entry point for execution work in or around Xcod
 - `direct_pbxproj_edit_opt_in`: optional explicit opt-in after the user has been warned about direct `.pbxproj` edit risks.
 - Defaults:
   - runtime entrypoint: executable `scripts/run_workflow.py`
+  - the runtime may infer `operation_type` from `--request` text when the request wording is clear enough
   - agent-side MCP retries once for transient failures
   - direct edits are allowed by default when they do not directly edit `.pbxproj`
 

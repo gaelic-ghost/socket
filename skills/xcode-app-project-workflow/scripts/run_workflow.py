@@ -31,6 +31,32 @@ VALID_OPERATION_TYPES = {
 }
 
 
+def normalize_request_text(text: str | None) -> str:
+    return " ".join((text or "").strip().lower().split())
+
+
+def infer_operation_type_from_request(request: str | None) -> str | None:
+    text = normalize_request_text(request)
+    if not text:
+        return None
+
+    checks: list[tuple[str, tuple[str, ...]]] = [
+        ("test", (" test", " tests", "testing", "xctest", "xcuitest", "ui test", "ui tests", "xctestplan")),
+        ("run", (" run", "launch", "open simulator", "simulator", "device", "preview")),
+        ("build", ("build", "compile", "archive", "release build", "debug build", "artifact")),
+        ("package-toolchain-management", ("toolchain", "xcode-select", "swift version", "xcrun", "metal toolchain", "sdk", "package resolve", "dependency update")),
+        ("read-search-diagnostics", ("diagnostic", "diagnostics", "error", "warning", "issue", "issues", "grep", "search", "find", "read", "navigator")),
+        ("workspace-inspection", ("workspace", "scheme list", "inspect project", "inspect workspace", "session")),
+        ("mutation", ("edit", "change", "modify", "rewrite", "refactor", "rename", "move file", "add file", "target membership", "pbxproj")),
+    ]
+
+    padded = f" {text} "
+    for operation_type, needles in checks:
+        if any(needle in padded for needle in needles):
+            return operation_type
+    return None
+
+
 def load_effective_config() -> dict:
     return customization_config.merge_configs(
         customization_config.load_template(),
@@ -150,7 +176,8 @@ def build_fallback_commands(operation_type: str, workspace_path: str | None, map
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--operation-type", required=True, choices=sorted(VALID_OPERATION_TYPES))
+    parser.add_argument("--operation-type", choices=sorted(VALID_OPERATION_TYPES))
+    parser.add_argument("--request")
     parser.add_argument("--workspace-path")
     parser.add_argument("--tab-identifier")
     parser.add_argument("--mcp-failure-reason")
@@ -164,9 +191,35 @@ def main() -> int:
     args = build_parser().parse_args()
     config = load_effective_config()
     settings = config["settings"]
+    inferred_operation_type = infer_operation_type_from_request(args.request)
+    operation_type = args.operation_type or inferred_operation_type
+
+    if operation_type is None:
+        payload = {
+            "status": "blocked",
+            "path_type": "primary",
+            "operation_type": None,
+            "operation_type_source": "missing",
+            "workspace_path": args.workspace_path,
+            "tab_identifier": args.tab_identifier,
+            "mcp_failure_reason": args.mcp_failure_reason,
+            "guard_result": {
+                "applied": False,
+                "managed_scope": False,
+                "filesystem_fallback_allowed": True,
+                "reason": "not-applicable",
+            },
+            "fallback_commands": [],
+            "retry_count": int(settings.get("mcpRetryCount", 1)),
+            "next_step": "Pass --operation-type explicitly or provide --request text that makes the intended Xcode workflow obvious.",
+            "execution_model": "agent-mcp-orchestrated",
+            "dry_run": args.dry_run,
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     fallback_commands = build_fallback_commands(
-        args.operation_type,
+        operation_type,
         args.workspace_path,
         str(settings.get("fallbackCommandMappingProfile", "official-default")),
     )
@@ -181,7 +234,7 @@ def main() -> int:
     path_type = "primary"
     next_step = "Proceed with the agent-side MCP path."
 
-    if args.operation_type == "mutation":
+    if operation_type == "mutation":
         scope = detect_managed_scope(args.workspace_path)
         markers = scope.get("markers", [])
         has_pbxproj_marker = any(str(marker).endswith(".pbxproj") for marker in markers)
@@ -211,7 +264,8 @@ def main() -> int:
     payload = {
         "status": status,
         "path_type": path_type,
-        "operation_type": args.operation_type,
+        "operation_type": operation_type,
+        "operation_type_source": "explicit" if args.operation_type else "inferred",
         "workspace_path": args.workspace_path,
         "tab_identifier": args.tab_identifier,
         "mcp_failure_reason": args.mcp_failure_reason,

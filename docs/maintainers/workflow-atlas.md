@@ -66,6 +66,18 @@ flowchart TD
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
 - The shared repo-maintenance toolkit is now external to the active Apple skill surface and is vendored locally under `shared/repo-maintenance-toolkit/` so bootstrap and sync skills can keep installing the same managed file set without a cross-repo runtime dependency.
+- A later execution-skill split is planned so build-run and testing concerns become separate Xcode and SwiftPM execution skills, while preserving all current execution guidance through shared references, narrower skills, or synced `AGENTS.md` policy.
+
+## Planned Execution Split
+
+- Planned replacement execution matrix:
+  - `xcode-build-run-workflow`
+  - `xcode-testing-workflow`
+  - `swift-package-build-run-workflow`
+  - `swift-package-testing-workflow`
+- The current `xcode-app-project-workflow` and `swift-package-workflow` remain the active shipped execution surfaces until that split lands.
+- The split must preserve all current execution guidance, either directly in the narrower replacement skills, in shared references, or in synced and bootstrapped `AGENTS.md` output where the guidance is really durable repo policy.
+- The active planning source for that work is `docs/maintainers/execution-split-and-inference-plan.md`.
 
 ### Packaging and Delegation Notes
 

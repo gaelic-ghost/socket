@@ -24,6 +24,7 @@ echo "Validating root docs presence..."
 [[ -f docs/maintainers/workflow-atlas.md ]] || fail "Missing docs/maintainers/workflow-atlas.md."
 [[ -f docs/maintainers/reality-audit.md ]] || fail "Missing docs/maintainers/reality-audit.md."
 [[ -f docs/maintainers/customization-consolidation-review.md ]] || fail "Missing docs/maintainers/customization-consolidation-review.md."
+[[ -f docs/maintainers/execution-split-and-inference-plan.md ]] || fail "Missing docs/maintainers/execution-split-and-inference-plan.md."
 
 echo "Validating local discovery mirrors..."
 [[ -L ".agents/skills" ]] || fail "Expected .agents/skills to be a symlink to ../skills"
@@ -56,6 +57,7 @@ require_contains "README.md" 'Maintainers: authoritative skill-authoring resourc
 require_contains "README.md" 'docs/maintainers/workflow-atlas.md'
 require_contains "README.md" 'docs/maintainers/reality-audit.md'
 require_contains "README.md" 'docs/maintainers/customization-consolidation-review.md'
+require_contains "README.md" 'docs/maintainers/execution-split-and-inference-plan.md'
 require_contains "README.md" '.agents/skills -> ../skills'
 require_contains "README.md" '.claude/skills -> ../skills'
 require_contains "README.md" 'plugins/apple-dev-skills/skills -> ../../skills'
@@ -64,6 +66,7 @@ echo "Validating AGENTS maintainer pointers..."
 require_contains "AGENTS.md" 'docs/maintainers/reality-audit.md'
 require_contains "AGENTS.md" 'docs/maintainers/workflow-atlas.md'
 require_contains "AGENTS.md" 'docs/maintainers/customization-consolidation-review.md'
+require_contains "AGENTS.md" 'docs/maintainers/execution-split-and-inference-plan.md'
 require_contains "AGENTS.md" '.agents/skills -> ../skills'
 require_contains "AGENTS.md" '.claude/skills -> ../skills'
 require_contains "AGENTS.md" 'plugins/apple-dev-skills/skills -> ../../skills'
@@ -101,9 +104,18 @@ require_contains "$customization_review_doc" "## Follow-Up Plan"
 require_contains "$customization_review_doc" "Milestone 20 concludes that the repo should shrink the customization surface rather than expand it."
 require_contains "$customization_review_doc" "## Sync Skill Simplification Decision"
 require_contains "$customization_review_doc" 'implemented replacement: `writeMode`'
+execution_split_doc="docs/maintainers/execution-split-and-inference-plan.md"
+require_contains "$execution_split_doc" "## Target Skill Matrix"
+require_contains "$execution_split_doc" "## Guidance Preservation Contract"
+require_contains "$execution_split_doc" "## AGENTS Expansion Strategy"
+require_contains "$execution_split_doc" "## Repo-Maintenance Toolkit Direction"
+require_contains "$execution_split_doc" "## Implementation Plan"
 require_contains "ROADMAP.md" "- [x] Milestone 20: Customization Consolidation Review"
 require_contains "ROADMAP.md" "- [x] Milestone 27: Customization Surface Simplification Implementation"
 require_contains "ROADMAP.md" "## Milestone 27: Customization Surface Simplification Implementation"
+require_contains "ROADMAP.md" "- [ ] Milestone 32: Execution Skill Split and Inference Refactor"
+require_contains "ROADMAP.md" "- [ ] Milestone 33: Swift/Xcode Repo-Maintenance Toolkit Profiles"
+require_contains "ROADMAP.md" "- [ ] Milestone 34: Guidance Preservation and AGENTS Expansion"
 
 echo "Validating skill directory layout..."
 active_skill_mds=(

@@ -68,6 +68,24 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertTrue(payload["output"]["repo_shape"]["mixed_root"])
 
+    def test_can_infer_test_operation_from_request(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            code, payload = self.run_script("--request", "run the package tests", "--repo-root", tmpdir)
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(payload["output"]["operation_type"], "test")
+            self.assertEqual(payload["output"]["operation_type_source"], "inferred")
+            self.assertEqual(payload["output"]["planned_commands"], ["swift test"])
+
+    def test_blocks_when_no_operation_or_request_is_provided(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            code, payload = self.run_script("--repo-root", tmpdir)
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertEqual(payload["output"]["operation_type_source"], "missing")
+
 
 if __name__ == "__main__":
     unittest.main()

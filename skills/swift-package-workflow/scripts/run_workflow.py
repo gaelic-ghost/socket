@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shlex
 import sys
 from pathlib import Path
@@ -29,6 +30,34 @@ VALID_OPERATION_TYPES = {
     "toolchain-management",
     "mutation",
 }
+
+
+def normalize_request_text(text: str | None) -> str:
+    return " ".join((text or "").strip().lower().split())
+
+
+def infer_operation_type_from_request(request: str | None) -> str | None:
+    text = normalize_request_text(request)
+    if not text:
+        return None
+
+    checks: list[tuple[str, tuple[str, ...]]] = [
+        ("test", (" test", " tests", "testing", "xctest", "swift testing", "xctestplan", "spec")),
+        ("run", (" run", "launch", "execute", "start")),
+        ("plugin", ("plugin", "plugins")),
+        ("toolchain-management", ("toolchain", "swift version", "xcrun", "xcodebuild", "metal toolchain", "sdk")),
+        ("manifest-dependencies", ("package.swift", "manifest", "dependency", "dependencies", "add package", "add target", "resolve", "update package", "package resource", "bundle.module", "metallib", "resource.")),
+        ("package-inspection", ("describe", "dump-package", "show dependencies", "inspect package", "inspect the package", "package graph")),
+        ("read-search", ("read", "search", "grep", "find", "lookup", "trace")),
+        ("build", ("build", "compile", "release build", "debug build", "artifact")),
+        ("mutation", ("edit", "change", "modify", "rewrite", "refactor", "rename", "move", "add file")),
+    ]
+
+    padded = f" {text} "
+    for operation_type, needles in checks:
+        if any(needle in padded for needle in needles):
+            return operation_type
+    return None
 
 
 def load_effective_config() -> dict:
@@ -102,7 +131,8 @@ def build_commands(operation_type: str) -> list[str]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--operation-type", required=True, choices=sorted(VALID_OPERATION_TYPES))
+    parser.add_argument("--operation-type", choices=sorted(VALID_OPERATION_TYPES))
+    parser.add_argument("--request")
     parser.add_argument("--repo-root")
     parser.add_argument("--mixed-root-opt-in", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
@@ -112,6 +142,24 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = build_parser().parse_args()
     load_effective_config()
+
+    inferred_operation_type = infer_operation_type_from_request(args.request)
+    operation_type = args.operation_type or inferred_operation_type
+
+    if operation_type is None:
+        payload = {
+            "status": "blocked",
+            "path_type": "primary",
+            "output": {
+                "operation_type": None,
+                "operation_type_source": "missing",
+                "repo_shape": discover_repo_shape(args.repo_root),
+                "planned_commands": [],
+                "next_step": "Pass --operation-type explicitly or provide --request text that makes the intended SwiftPM workflow obvious.",
+            },
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     repo_shape = discover_repo_shape(args.repo_root)
     status = "success"
@@ -132,9 +180,10 @@ def main() -> int:
         "status": status,
         "path_type": path_type,
         "output": {
-            "operation_type": args.operation_type,
+            "operation_type": operation_type,
+            "operation_type_source": "explicit" if args.operation_type else "inferred",
             "repo_shape": repo_shape,
-            "planned_commands": build_commands(args.operation_type),
+            "planned_commands": build_commands(operation_type),
             "next_step": next_step,
         },
     }

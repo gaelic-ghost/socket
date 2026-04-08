@@ -178,6 +178,30 @@ class XcodeWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertTrue(payload["guard_result"]["direct_pbxproj_edit_warning_required"])
 
+    def test_can_infer_test_operation_from_request(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Demo.xcodeproj").mkdir()
+            code, payload = self.run_script(
+                "--request",
+                "run the UI tests with the test plan",
+                "--workspace-path",
+                tmpdir,
+                "--mcp-failure-reason",
+                "timeout",
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["operation_type"], "test")
+            self.assertEqual(payload["operation_type_source"], "inferred")
+            self.assertEqual(payload["path_type"], "fallback")
+
+    def test_blocks_when_no_operation_or_request_is_provided(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Demo.xcodeproj").mkdir()
+            code, payload = self.run_script("--workspace-path", tmpdir)
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertEqual(payload["operation_type_source"], "missing")
+
 
 if __name__ == "__main__":
     unittest.main()

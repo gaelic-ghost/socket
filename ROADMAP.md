@@ -43,6 +43,9 @@
 - [x] Milestone 28: Repo Maintenance Toolkit Skill
 - [x] Milestone 29: Shared Toolkit Extraction to `productivity-skills`
 - [x] Milestone 31: Swift Package Execution Skill Split
+- [ ] Milestone 32: Execution Skill Split and Inference Refactor
+- [ ] Milestone 33: Swift/Xcode Repo-Maintenance Toolkit Profiles
+- [ ] Milestone 34: Guidance Preservation and AGENTS Expansion
 
 ## Milestone 1: Initial Apple Skill Bundle
 
@@ -660,3 +663,62 @@ Exit criteria:
 
 - [x] The repo ships a dedicated SwiftPM execution skill, the Xcode workflow is more tightly scoped, and package-facing docs consistently route ordinary package work through the new boundary.
 - [x] Completed 2026-04-07 by adding `swift-package-workflow`, tightening `xcode-app-project-workflow`, and updating package-facing handoffs and maintainer docs.
+
+## Milestone 32: Execution Skill Split and Inference Refactor
+
+Scope:
+
+- Split the current execution workflows into narrower build-run and testing skills with stronger runtime inference so agents need fewer manual routing decisions.
+
+Tickets:
+
+- [x] Document the planned execution split, inference direction, and guidance-preservation contract in maintainer docs.
+- [x] Start the first runtime-inference slice by teaching current execution wrappers to infer likely operation type from natural request text.
+- [ ] Add `xcode-build-run-workflow`.
+- [ ] Add `xcode-testing-workflow`.
+- [ ] Add `swift-package-build-run-workflow`.
+- [ ] Add `swift-package-testing-workflow`.
+- [ ] Convert `xcode-app-project-workflow` and `swift-package-workflow` into compatibility surfaces for one release cycle after the narrower skills land.
+- [ ] Strengthen repo-root, workspace, scheme, target, and test-surface inference in the new runtime wrappers.
+- [ ] Add specialized fallback inference for `.xctestplan`, package resources, and Metal-related signals.
+- [ ] Update docs, validators, and tests so the narrower execution matrix becomes the active long-term surface.
+
+Exit criteria:
+
+- [ ] The repo ships narrower execution skills with stronger inference, and the old monolithic execution skills are no longer the primary long-term workflow surfaces.
+
+## Milestone 33: Swift/Xcode Repo-Maintenance Toolkit Profiles
+
+Scope:
+
+- Promote a first-class Swift/Xcode-aware `repo-maintenance-toolkit` direction in `productivity-skills` so Apple workflow skills can rely on a cleaner shared maintainer contract.
+
+Tickets:
+
+- [x] Document the planned toolkit direction and profile model in maintainer docs.
+- [ ] Define the profile contract for `generic`, `swift-package`, and `xcode-app`.
+- [ ] Add the Swift/Xcode-aware toolkit profiles in `productivity-skills`.
+- [ ] Update Apple bootstrap and guidance-sync skills to consume the shared toolkit contract.
+- [ ] Reduce local vendored-toolkit duplication after the shared contract is proven and stable.
+
+Exit criteria:
+
+- [ ] The canonical Swift/Xcode-aware toolkit contract lives in `productivity-skills`, and Apple workflow skills consume it through a stable shared profile surface.
+
+## Milestone 34: Guidance Preservation and AGENTS Expansion
+
+Scope:
+
+- Ensure the execution-skill split does not lose any guidance from the current monolithic workflow skills, and promote durable policy into synced and bootstrapped `AGENTS.md` where that policy belongs.
+
+Tickets:
+
+- [x] Document the guidance-preservation contract and AGENTS expansion strategy in maintainer docs.
+- [ ] Audit all current `xcode-app-project-workflow` and `swift-package-workflow` guidance areas against the future narrower skills.
+- [ ] Promote durable testing, package-resource, Metal handoff, file-membership, and Debug-versus-Release guidance into synced and bootstrapped `AGENTS.md` where appropriate.
+- [ ] Keep transient runtime mechanics in skill-local docs and wrappers instead of pushing them into repo policy.
+- [ ] Add validation coverage that checks the preserved-guidance contract after the split lands.
+
+Exit criteria:
+
+- [ ] Every important guidance area from the current monolithic workflow skills still exists in one explicit maintained location after the split.

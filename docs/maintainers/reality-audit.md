@@ -68,6 +68,7 @@ Deprecated compatibility skills that remain on disk do not count as part of the 
 - Workflow diagrams and UX maps: `docs/maintainers/workflow-atlas.md`
 - Audit procedure and source-of-truth order: `docs/maintainers/reality-audit.md`
 - Customization-surface decision and follow-up plan: `docs/maintainers/customization-consolidation-review.md`
+- Execution-skill split, inference plan, and guidance-preservation contract: `docs/maintainers/execution-split-and-inference-plan.md`
 
 ## Reporting Shape
 

@@ -56,11 +56,13 @@ Use this skill as the top-level execution workflow for existing Swift Package Ma
 ## Inputs
 
 - `operation_type`: one of the operation types listed above.
+- `request`: optional short natural-language request text used to infer `operation_type` when the explicit operation is omitted.
 - `repo_root`: optional absolute path for the target package repo.
 - `mixed_root_opt_in`: optional explicit opt-in when the user wants a SwiftPM-first plan for a mixed root even though Xcode markers are present.
 - Defaults:
   - runtime entrypoint: executable `scripts/run_workflow.py`
   - `repo_root=.` when omitted
+  - the runtime may infer `operation_type` from `--request` text when the request wording is clear enough
   - package execution prefers `swift package`, `swift build`, `swift test`, and `swift run`
   - mixed roots hand off by default unless `--mixed-root-opt-in` is passed
 
