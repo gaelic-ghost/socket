@@ -84,6 +84,45 @@ There are two plausible explanations that still need to be separated:
 2. The secondary bug is queue/lifecycle mismatch.
    Generation-side work may be allowed to advance independently of playback completion, which may be correct internally but still leaves the server-side retained request lifecycle inconsistent with the E2E expectation that a queued-live request becomes terminal after playback finishes.
 
+## Source-Level Findings
+
+The current `SpeakSwiftly` `2.0.0` runtime semantics narrow the likely fault domain further:
+
+- Live speech generation is intentionally non-terminal when generation ends.
+  In `.build/checkouts/SpeakSwiftly/Sources/SpeakSwiftly/Runtime/WorkerRuntime.swift`, the `.queueSpeech(... jobType: .live ...)` path calls `handleQueueSpeechLiveGeneration(...)` and then records `GenerationCompletionDisposition.requestStillPendingPlayback(id)`.
+- Live speech only becomes terminal through playback completion.
+  In `.build/checkouts/SpeakSwiftly/Sources/SpeakSwiftly/Playback/PlaybackOperations.swift`, `completePlaybackJob(_:result:)` reconstructs the live `queueSpeech` request and calls `completeRequest(...)`, which is what should eventually deliver the terminal `.completed` event that `SpeakSwiftlyServer` records.
+- `preroll_ready` is only a mid-flight playback progress event.
+  In `.build/checkouts/SpeakSwiftly/Sources/SpeakSwiftly/Playback/PlaybackOperations.swift`, `.prerollReady(...)` maps to `progress.preroll_ready` plus the `playback_started` log event, but not terminal completion.
+- Final success still depends on playback drain.
+  In `.build/checkouts/SpeakSwiftly/Sources/SpeakSwiftly/Playback/PlaybackController.swift`, the live playback path calls `waitForPlaybackDrain(...)` after generation finishes. That drain wait only completes when queued audio reaches zero, or fails with `audioPlaybackTimeout` if the local audio player stops reporting drain progress.
+- The server is not adding an extra terminality rule here.
+  In `Sources/SpeakSwiftlyServer/Host/ServerHost.swift`, retained request snapshots only become terminal when the runtime request stream emits a `.completed` or `.failed` event.
+
+## Important Runtime Asymmetry
+
+One upstream runtime rule explains part of the confusing queued state without fully explaining the stall:
+
+- Live speech does require playback ownership.
+  In `.build/checkouts/SpeakSwiftly/Sources/SpeakSwiftly/Runtime/WorkerProtocol.swift`, `requiresPlayback` is `true` for `.queueSpeech(... jobType: .live ...)`.
+- But live speech does not require playback drain before later generation starts.
+  In that same file, `requiresPlaybackDrainBeforeStart` is only `true` for `switchSpeechBackend`, `reloadModels`, and `unloadModels`, not for live speech.
+
+That means the runtime is explicitly allowed to start generation for later queued live requests while an earlier live request is still active in playback. The focused rerun showed exactly that behavior. By itself, that concurrency is not necessarily a bug. The bug is that the earlier playback-owned request still failed to emit `playback_finished` and terminal completion.
+
+## Upstream Test Expectation
+
+This repository's E2E expectation still matches upstream `SpeakSwiftly` tests:
+
+- `.build/checkouts/SpeakSwiftly/Tests/SpeakSwiftlyTests/Runtime/WorkerRuntimePlaybackTests.swift`
+  `speakLiveBackgroundAcknowledgesQueueBeforePlaybackStartsAndOnlySucceedsOnce()`
+  proves a queued live request should eventually emit `playback_finished` and then a single terminal success.
+- `.build/checkouts/SpeakSwiftly/Tests/SpeakSwiftlyTests/E2E/MarvisWorkflowE2ETests.swift`
+  `marvisAudibleLivePlaybackPrequeuesThreeJobsAndDrainsInOrder()`
+  expects all three queued Marvis live requests to complete audibly in order.
+
+So the server-side E2E lane is not asserting a novel contract here. It is exposing a case where the local live server integration does not reach the terminal behavior that upstream v2 still expects.
+
 ## Focused Lane Rerun
 
 A later focused rerun of only `httpMarvisQueuedLivePlaybackDrainsInOrder` produced a stronger signal:
@@ -109,6 +148,6 @@ That focused rerun shifts the problem statement:
 
 ## Likely Next Checks
 
-1. Trace where `generate_speech_live` is expected to emit `playback_finished` and `completed` for each queued-live request after `preroll_ready`.
-2. Verify whether queued live speech is allowed to overlap generation progress for later requests before the active playback request becomes terminal.
-3. Decide whether the server should continue treating queued-live request completion as a strict terminal playback boundary, or whether the retained-job model needs to distinguish generation completion from playback completion more explicitly.
+1. Capture one more focused stalled run and confirm whether the stuck request ever emits a raw runtime `.completed` event or a `playback_finished` stderr log event before the server snapshot stalls.
+2. Trace why `waitForPlaybackDrain(...)` is not resuming or timing out for the stuck Marvis request even though a later queued-live request has already advanced.
+3. If the runtime stream does emit terminal completion but the server snapshot stays `running`, narrow the fault to `ServerHost.consume(handle:)`; otherwise, treat this as an upstream `SpeakSwiftly` Marvis playback-drain bug and patch or report it there first.
