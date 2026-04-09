@@ -34,6 +34,7 @@
 
 1. `docs/maintainers/subtree-migration-plan.md`
 2. `docs/maintainers/subtree-workflow.md`
-3. `docs/maintainers/plugin-packaging-strategy.md`
-4. root repo files in this superproject
-5. imported subtree directories under `plugins/`
+3. `docs/maintainers/plugin-alignment-plan.md`
+4. `docs/maintainers/plugin-packaging-strategy.md`
+5. root repo files in this superproject
+6. imported subtree directories under `plugins/`

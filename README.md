@@ -31,6 +31,7 @@ This repo is now in first-pass imported-monorepo shape.
 - the target layout is documented in [docs/maintainers/subtree-migration-plan.md](./docs/maintainers/subtree-migration-plan.md)
 - the packaging direction is documented in [docs/maintainers/plugin-packaging-strategy.md](./docs/maintainers/plugin-packaging-strategy.md)
 - the day-to-day subtree maintenance workflow is documented in [docs/maintainers/subtree-workflow.md](./docs/maintainers/subtree-workflow.md)
+- the cross-repo standards alignment plan is documented in [docs/maintainers/plugin-alignment-plan.md](./docs/maintainers/plugin-alignment-plan.md)
 - `plugins/` is reserved for subtree imports
 - `.agents/plugins/marketplace.json` is reserved for the repo-root Codex marketplace catalog
 - the repo-root marketplace currently lists independently packaged child plugins only
@@ -52,6 +53,11 @@ The current subtree-managed child repositories are:
 - `things-app`
 
 Each child repository keeps its own source-of-truth docs and history inside its imported subtree. `socket` is responsible for the superproject concerns around import shape, root marketplace wiring, and cross-repo maintenance workflow.
+
+Public source repositories that now back the rebuilt minimal child repos:
+
+- [`gaelic-ghost/speak-to-user-skills`](https://github.com/gaelic-ghost/speak-to-user-skills)
+- [`gaelic-ghost/web-dev-skills`](https://github.com/gaelic-ghost/web-dev-skills)
 
 ## Marketplace Shape
 
@@ -96,6 +102,7 @@ The current superproject validation surface is lightweight and structural:
 │       └── marketplace.json
 ├── docs/
 │   └── maintainers/
+│       ├── plugin-alignment-plan.md
 │       ├── plugin-packaging-strategy.md
 │       ├── subtree-migration-plan.md
 │       └── subtree-workflow.md

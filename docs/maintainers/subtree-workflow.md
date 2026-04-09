@@ -45,6 +45,11 @@ Current child-repo remotes:
 
 If a new child repository is imported later, add its matching named remote first.
 
+The rebuilt minimal subtree source repos now also have public GitHub homes:
+
+- [`gaelic-ghost/speak-to-user-skills`](https://github.com/gaelic-ghost/speak-to-user-skills)
+- [`gaelic-ghost/web-dev-skills`](https://github.com/gaelic-ghost/web-dev-skills)
+
 ## Import A New Child Repository
 
 Use a dedicated commit for each new subtree import.
