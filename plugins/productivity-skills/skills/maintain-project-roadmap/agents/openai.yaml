@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project Roadmap"
+  short_description: "Validate and normalize checklist-style ROADMAP.md files."
+  default_prompt: "Use $maintain-project-roadmap to validate or update a checklist-style ROADMAP.md. Use --run-mode check-only for audits, --run-mode apply for bounded changes, and return the Markdown plus JSON roadmap report."

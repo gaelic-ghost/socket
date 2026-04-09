@@ -1,0 +1,21 @@
+[project]
+name = "productivity-skills-maintenance"
+version = "4.3.0"
+description = "Maintainer-only Python tooling baseline for productivity-skills."
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.0",
+  "PyYAML>=6.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "skills/maintain-project-agents/tests",
+  "skills/maintain-project-readme/tests",
+  "skills/maintain-project-contributing/tests",
+  "skills/maintain-project-roadmap/tests",
+  "skills/maintain-project-repo/tests",
+]

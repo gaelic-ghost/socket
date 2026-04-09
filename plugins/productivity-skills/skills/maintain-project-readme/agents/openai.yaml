@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project README"
+  short_description: "Audit and apply bounded fixes to ordinary software-project README.md files."
+  default_prompt: "Use $maintain-project-readme for an ordinary software-project README.md. Detect the repo profile first, enforce the shared README schema including Overview plus Motivation, return audit findings in check-only mode, and in apply mode keep edits bounded to README structure and grounded wording only. Redirect skills/plugin repos to the dedicated maintain-skills-readme skill in /Users/galew/Workspace/agent-plugin-skills."

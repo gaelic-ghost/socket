@@ -1,0 +1,30 @@
+schemaVersion: 1
+isCustomized: false
+profile: default
+settings:
+  statusValues:
+    - Planned
+    - In Progress
+    - Completed
+    - Blocked
+    - De-scoped
+  planHistoryVerbosity: standard
+  changeLogVerbosity: standard
+
+  # Deprecated compatibility keys below (legacy migration hints only).
+  milestoneIdStyle: M
+  targetStyle: semver
+  includeOwnerField: false
+  includeDependencyField: false
+  enableSubMilestones: false
+  subMilestoneIdStyle: hierarchical
+  subMilestonePrefix: T
+  subMilestonePadWidth: 2
+  subMilestoneDelimiter: "."
+  allowExternalTrackerIds: false
+  subMilestoneStatusValues:
+    - Planned
+    - In Progress
+    - Completed
+    - Blocked
+    - De-scoped
