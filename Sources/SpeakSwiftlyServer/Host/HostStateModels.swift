@@ -1,5 +1,6 @@
 import Foundation
 import Hummingbird
+import SpeakSwiftlyCore
 
 // MARK: - Host State Models
 
@@ -36,22 +37,57 @@ public struct QueueStatusSnapshot: Codable, Sendable, Equatable {
     public let activeCount: Int
     public let queuedCount: Int
     public let activeRequest: ActiveRequestSnapshot?
+    public let activeRequests: [ActiveRequestSnapshot]
 
     enum CodingKeys: String, CodingKey {
         case queueType = "queue_type"
         case activeCount = "active_count"
         case queuedCount = "queued_count"
         case activeRequest = "active_request"
+        case activeRequests = "active_requests"
     }
 }
 
 public struct PlaybackStatusSnapshot: Codable, Sendable, Equatable {
     public let state: String
     public let activeRequest: ActiveRequestSnapshot?
+    public let isStableForConcurrentGeneration: Bool
+    public let isRebuffering: Bool
+    public let stableBufferedAudioMS: Int?
+    public let stableBufferTargetMS: Int?
 
     enum CodingKeys: String, CodingKey {
         case state
         case activeRequest = "active_request"
+        case isStableForConcurrentGeneration = "is_stable_for_concurrent_generation"
+        case isRebuffering = "is_rebuffering"
+        case stableBufferedAudioMS = "stable_buffered_audio_ms"
+        case stableBufferTargetMS = "stable_buffer_target_ms"
+    }
+
+    init(
+        state: String,
+        activeRequest: ActiveRequestSnapshot?,
+        isStableForConcurrentGeneration: Bool,
+        isRebuffering: Bool,
+        stableBufferedAudioMS: Int?,
+        stableBufferTargetMS: Int?
+    ) {
+        self.state = state
+        self.activeRequest = activeRequest
+        self.isStableForConcurrentGeneration = isStableForConcurrentGeneration
+        self.isRebuffering = isRebuffering
+        self.stableBufferedAudioMS = stableBufferedAudioMS
+        self.stableBufferTargetMS = stableBufferTargetMS
+    }
+
+    init(summary: SpeakSwiftly.PlaybackStateSnapshot) {
+        self.state = summary.state.rawValue
+        self.activeRequest = summary.activeRequest.map(ActiveRequestSnapshot.init(summary:))
+        self.isStableForConcurrentGeneration = summary.isStableForConcurrentGeneration
+        self.isRebuffering = summary.isRebuffering
+        self.stableBufferedAudioMS = summary.stableBufferedAudioMS
+        self.stableBufferTargetMS = summary.stableBufferTargetMS
     }
 }
 
@@ -165,7 +201,7 @@ public struct HostStateSnapshot: Codable, Sendable, Equatable {
     public let generationQueue: QueueStatusSnapshot
     public let playbackQueue: QueueStatusSnapshot
     public let playback: PlaybackStatusSnapshot
-    public let currentGenerationJob: CurrentGenerationJobSnapshot?
+    public let currentGenerationJobs: [CurrentGenerationJobSnapshot]
     public let runtimeConfiguration: RuntimeConfigurationSnapshot
     public let transports: [TransportStatusSnapshot]
     public let recentErrors: [RecentErrorSnapshot]
@@ -176,7 +212,7 @@ public struct HostStateSnapshot: Codable, Sendable, Equatable {
         case generationQueue = "generation_queue"
         case playbackQueue = "playback_queue"
         case playback
-        case currentGenerationJob = "current_generation_job"
+        case currentGenerationJobs = "current_generation_jobs"
         case runtimeConfiguration = "runtime_configuration"
         case transports
         case recentErrors = "recent_errors"

@@ -151,3 +151,10 @@ That focused rerun shifts the problem statement:
 1. Capture one more focused stalled run and confirm whether the stuck request ever emits a raw runtime `.completed` event or a `playback_finished` stderr log event before the server snapshot stalls.
 2. Trace why `waitForPlaybackDrain(...)` is not resuming or timing out for the stuck Marvis request even though a later queued-live request has already advanced.
 3. If the runtime stream does emit terminal completion but the server snapshot stays `running`, narrow the fault to `ServerHost.consume(handle:)`; otherwise, treat this as an upstream `SpeakSwiftly` Marvis playback-drain bug and patch or report it there first.
+
+## Pending Upstream Alignment
+
+- Gale is actively simplifying and streamlining the upstream `SpeakSwiftly` surface to remove more server-side inference.
+- Once those upstream changes land, re-check this server before adding more local queue or playback heuristics.
+- Prefer deleting host inference and fallback shaping where the upstream runtime can expose the same truth directly in a clearer, typed form.
+- Treat upstream simplification as the preferred path for any remaining queue-state, playback-state, or multi-lane generation ambiguity in this repository.

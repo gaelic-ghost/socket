@@ -86,6 +86,7 @@ protocol ServerRuntimeProtocol: Actor {
     func switchSpeechBackend(to speechBackend: SpeakSwiftly.SpeechBackend) async -> RuntimeRequestHandle
     func reloadModels() async -> RuntimeRequestHandle
     func unloadModels() async -> RuntimeRequestHandle
+    func runtimeOverview() async -> RuntimeRequestHandle
     func generationQueue() async -> RuntimeRequestHandle
     func playbackQueue() async -> RuntimeRequestHandle
     func playbackState() async -> RuntimeRequestHandle
@@ -276,6 +277,10 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     func unloadModels() async -> RuntimeRequestHandle {
         let handle = await runtime.unloadModels()
         return .init(id: handle.id, operation: "unload_models", profileName: nil, events: handle.events)
+    }
+
+    func runtimeOverview() async -> RuntimeRequestHandle {
+        RuntimeRequestHandle(await runtime.overview())
     }
 
     func generationQueue() async -> RuntimeRequestHandle {

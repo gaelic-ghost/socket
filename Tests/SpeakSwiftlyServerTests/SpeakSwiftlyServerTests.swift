@@ -564,6 +564,27 @@ actor MockRuntime: ServerRuntimeProtocol {
         return RuntimeRequestHandle(id: requestID, operation: "unload_models", profileName: nil, events: events)
     }
 
+    func runtimeOverview() async -> RuntimeRequestHandle {
+        let requestID = UUID().uuidString
+        generationQueueRequestCount += 1
+        playbackQueueRequestCount += 1
+        playbackStateRequestCount += 1
+        let overview = runtimeOverviewSummary()
+        let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
+            continuation.yield(
+                .completed(
+                    SpeakSwiftly.Success(
+                        id: requestID,
+                        activeRequests: nil,
+                        runtimeOverview: overview
+                    )
+                )
+            )
+            continuation.finish()
+        }
+        return RuntimeRequestHandle(id: requestID, operation: "get_runtime_overview", profileName: nil, events: events)
+    }
+
     func generationQueue() async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         generationQueueRequestCount += 1
@@ -902,7 +923,40 @@ actor MockRuntime: ServerRuntimeProtocol {
     private func playbackStateSummary() -> SpeakSwiftly.PlaybackStateSnapshot {
         .init(
             state: playbackState,
-            activeRequest: playbackState == .idle ? nil : activeRequest.map(activeSummary(for:))
+            activeRequest: playbackState == .idle ? nil : activeRequest.map(activeSummary(for:)),
+            isStableForConcurrentGeneration: playbackState == .playing,
+            isRebuffering: false,
+            stableBufferedAudioMS: playbackState == .playing ? 320 : nil,
+            stableBufferTargetMS: playbackState == .playing ? 400 : nil
+        )
+    }
+
+    private func runtimeOverviewSummary() -> SpeakSwiftly.RuntimeOverview {
+        let generationActiveRequest = activeRequest.map(activeSummary(for:))
+        let generationQueue = SpeakSwiftly.QueueSnapshot(
+            queueType: "generation",
+            activeRequest: generationActiveRequest,
+            activeRequests: generationActiveRequest.map { [$0] },
+            queue: queuedSummaries()
+        )
+        let playbackActiveRequest = playbackState == .idle ? nil : activeRequest.map(activeSummary(for:))
+        let playbackQueue = SpeakSwiftly.QueueSnapshot(
+            queueType: "playback",
+            activeRequest: playbackActiveRequest,
+            activeRequests: playbackActiveRequest.map { [$0] },
+            queue: []
+        )
+        let status = SpeakSwiftly.StatusEvent(
+            stage: .residentModelReady,
+            residentState: .ready,
+            speechBackend: .qwen3
+        )
+        return .init(
+            status: status,
+            speechBackend: .qwen3,
+            generationQueue: generationQueue,
+            playbackQueue: playbackQueue,
+            playbackState: playbackStateSummary()
         )
     }
 
@@ -980,7 +1034,7 @@ actor MockRuntime: ServerRuntimeProtocol {
         let runtimeHostJSON = try jsonObject(from: runtimeHostResponse.body)
         let runtimeRefresh = try #require(runtimeHostJSON["runtime_refresh"] as? [String: Any])
         #expect((runtimeRefresh["sequence_id"] as? Int ?? 0) > 0)
-        #expect(runtimeRefresh["source"] as? String == "runtime")
+        #expect(runtimeRefresh["source"] as? String == "runtime_overview")
         #expect((runtimeRefresh["started_at"] as? String)?.isEmpty == false)
         #expect((runtimeRefresh["generation_queue_refreshed_at"] as? String)?.isEmpty == false)
         #expect((runtimeRefresh["playback_queue_refreshed_at"] as? String)?.isEmpty == false)
@@ -1494,7 +1548,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     #expect(runtimeTransports.contains { $0["name"] as? String == "mcp" && $0["advertised_address"] as? String == "http://127.0.0.1:7337/mcp" })
     let runtimeRefresh = try #require(runtimePayload["runtime_refresh"] as? [String: Any])
     #expect((runtimeRefresh["sequence_id"] as? Int ?? 0) > 0)
-    #expect(runtimeRefresh["source"] as? String == "fallback")
+    #expect(runtimeRefresh["source"] as? String == "runtime_overview")
     let runtimeConfiguration = try #require(runtimePayload["runtime_configuration"] as? [String: Any])
     #expect(runtimeConfiguration["next_runtime_speech_backend"] as? String == "marvis")
 
@@ -2048,6 +2102,9 @@ actor MockRuntime: ServerRuntimeProtocol {
         #expect(queueJSON["queue_type"] as? String == "generation")
         let activeRequest = try #require(queueJSON["active_request"] as? [String: Any])
         #expect(activeRequest["id"] as? String == activeJobID)
+        let activeRequests = try #require(queueJSON["active_requests"] as? [[String: Any]])
+        #expect(activeRequests.count == 1)
+        #expect(activeRequests.first?["id"] as? String == activeJobID)
         let queuedRequests = try #require(queueJSON["queue"] as? [[String: Any]])
         #expect(queuedRequests.count == 1)
         #expect(queuedRequests.first?["id"] as? String == queuedJobID)
@@ -2076,6 +2133,7 @@ actor MockRuntime: ServerRuntimeProtocol {
         #expect(playbackQueueResponse.status == .ok)
         #expect(playbackQueueJSON["queue_type"] as? String == "playback")
         #expect((playbackQueueJSON["active_request"] as? [String: Any])?["id"] as? String == activeJobID)
+        #expect((playbackQueueJSON["active_requests"] as? [[String: Any]])?.first?["id"] as? String == activeJobID)
         #expect((playbackQueueJSON["queue"] as? [[String: Any]])?.isEmpty == true)
 
         let cancelResponse = try await client.execute(uri: "/playback/requests/\(queuedJobID)", method: .delete)
@@ -2117,6 +2175,7 @@ actor MockRuntime: ServerRuntimeProtocol {
         let remainingQueue = try #require(emptyQueueJSON["queue"] as? [[String: Any]])
         #expect(remainingQueue.isEmpty)
         #expect((emptyQueueJSON["active_request"] as? [String: Any])?["id"] as? String == activeJobID)
+        #expect((emptyQueueJSON["active_requests"] as? [[String: Any]])?.first?["id"] as? String == activeJobID)
     }
 
     await runtime.finishHeldSpeak(id: try await waitForActiveRequestID(on: host))

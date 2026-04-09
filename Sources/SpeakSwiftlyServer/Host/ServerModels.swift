@@ -409,11 +409,13 @@ public struct QueuedRequestSnapshot: Codable, Sendable, Equatable {
 struct QueueSnapshotResponse: ResponseEncodable, Sendable {
     let queueType: String
     let activeRequest: ActiveRequestSnapshot?
+    let activeRequests: [ActiveRequestSnapshot]
     let queue: [QueuedRequestSnapshot]
 
     enum CodingKeys: String, CodingKey {
         case queueType = "queue_type"
         case activeRequest = "active_request"
+        case activeRequests = "active_requests"
         case queue
     }
 }
@@ -421,15 +423,27 @@ struct QueueSnapshotResponse: ResponseEncodable, Sendable {
 public struct PlaybackStateSnapshot: Codable, Sendable, Equatable {
     public let state: String
     public let activeRequest: ActiveRequestSnapshot?
+    public let isStableForConcurrentGeneration: Bool
+    public let isRebuffering: Bool
+    public let stableBufferedAudioMS: Int?
+    public let stableBufferTargetMS: Int?
 
     enum CodingKeys: String, CodingKey {
         case state
         case activeRequest = "active_request"
+        case isStableForConcurrentGeneration = "is_stable_for_concurrent_generation"
+        case isRebuffering = "is_rebuffering"
+        case stableBufferedAudioMS = "stable_buffered_audio_ms"
+        case stableBufferTargetMS = "stable_buffer_target_ms"
     }
 
     init(summary: SpeakSwiftly.PlaybackStateSnapshot) {
         self.state = summary.state.rawValue
         self.activeRequest = summary.activeRequest.map(ActiveRequestSnapshot.init(summary:))
+        self.isStableForConcurrentGeneration = summary.isStableForConcurrentGeneration
+        self.isRebuffering = summary.isRebuffering
+        self.stableBufferedAudioMS = summary.stableBufferedAudioMS
+        self.stableBufferTargetMS = summary.stableBufferTargetMS
     }
 }
 
@@ -520,7 +534,7 @@ struct StatusSnapshot: ResponseEncodable, Sendable {
     let generationQueue: QueueStatusSnapshot
     let playbackQueue: QueueStatusSnapshot
     let playback: PlaybackStatusSnapshot
-    let currentGenerationJob: CurrentGenerationJobSnapshot?
+    let currentGenerationJobs: [CurrentGenerationJobSnapshot]
     let runtimeConfiguration: RuntimeConfigurationSnapshot
     let transports: [TransportStatusSnapshot]
     let recentErrors: [RecentErrorSnapshot]
@@ -542,7 +556,7 @@ struct StatusSnapshot: ResponseEncodable, Sendable {
         case generationQueue = "generation_queue"
         case playbackQueue = "playback_queue"
         case playback
-        case currentGenerationJob = "current_generation_job"
+        case currentGenerationJobs = "current_generation_jobs"
         case runtimeConfiguration = "runtime_configuration"
         case transports
         case recentErrors = "recent_errors"
@@ -605,6 +619,7 @@ public struct ServerSuccessEvent: Encodable, Sendable, Equatable {
     public let textProfiles: [TextProfileSnapshot]?
     public let textProfilePath: String?
     public let activeRequest: ActiveRequestSnapshot?
+    public let activeRequests: [ActiveRequestSnapshot]?
     public let queue: [QueuedRequestSnapshot]?
     public let playbackState: PlaybackStateSnapshot?
     public let status: SpeakSwiftly.StatusEvent?
@@ -628,6 +643,7 @@ public struct ServerSuccessEvent: Encodable, Sendable, Equatable {
         case textProfiles = "text_profiles"
         case textProfilePath = "text_profile_path"
         case activeRequest = "active_request"
+        case activeRequests = "active_requests"
         case queue
         case playbackState = "playback_state"
         case status

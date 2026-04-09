@@ -71,9 +71,28 @@ actor ServerHost {
     private var profileCacheState = "uninitialized"
     private var profileCacheWarning: String?
     private var lastProfileRefreshAt: Date?
-    private var generationQueueStatus = QueueStatusSnapshot(queueType: "generation", activeCount: 0, queuedCount: 0, activeRequest: nil)
-    private var playbackQueueStatus = QueueStatusSnapshot(queueType: "playback", activeCount: 0, queuedCount: 0, activeRequest: nil)
-    private var playbackStatus = PlaybackStatusSnapshot(state: SpeakSwiftly.PlaybackState.idle.rawValue, activeRequest: nil)
+    private var generationQueueStatus = QueueStatusSnapshot(
+        queueType: "generation",
+        activeCount: 0,
+        queuedCount: 0,
+        activeRequest: nil,
+        activeRequests: []
+    )
+    private var playbackQueueStatus = QueueStatusSnapshot(
+        queueType: "playback",
+        activeCount: 0,
+        queuedCount: 0,
+        activeRequest: nil,
+        activeRequests: []
+    )
+    private var playbackStatus = PlaybackStatusSnapshot(
+        state: SpeakSwiftly.PlaybackState.idle.rawValue,
+        activeRequest: nil,
+        isStableForConcurrentGeneration: false,
+        isRebuffering: false,
+        stableBufferedAudioMS: nil,
+        stableBufferTargetMS: nil
+    )
     private var runtimeRefreshSnapshot: RuntimeRefreshSnapshot?
     private var transportStatuses = [String: TransportStatusSnapshot]()
     private var recentErrors = [RecentErrorSnapshot]()
@@ -335,7 +354,7 @@ actor ServerHost {
             generationQueue: generationQueueStatus,
             playbackQueue: playbackQueueStatus,
             playback: playbackStatus,
-            currentGenerationJob: currentGenerationJobSnapshot(),
+            currentGenerationJobs: currentGenerationJobSnapshots(),
             runtimeConfiguration: runtimeConfigurationSnapshot(),
             transports: transportSnapshots(),
             recentErrors: recentErrors
@@ -401,7 +420,7 @@ actor ServerHost {
             generationQueue: hostState.generationQueue,
             playbackQueue: hostState.playbackQueue,
             playback: hostState.playback,
-            currentGenerationJob: hostState.currentGenerationJob,
+            currentGenerationJobs: hostState.currentGenerationJobs,
             runtimeConfiguration: hostState.runtimeConfiguration,
             transports: hostState.transports,
             recentErrors: hostState.recentErrors
@@ -819,6 +838,7 @@ actor ServerHost {
         return .init(
             queueType: "generation",
             activeRequest: success.activeRequest.map(ActiveRequestSnapshot.init(summary:)),
+            activeRequests: queueActiveRequestSnapshots(from: success),
             queue: success.queue?.map(QueuedRequestSnapshot.init(summary:)) ?? []
         )
     }
@@ -845,6 +865,7 @@ actor ServerHost {
         return .init(
             queueType: "playback",
             activeRequest: success.activeRequest.map(ActiveRequestSnapshot.init(summary:)),
+            activeRequests: queueActiveRequestSnapshots(from: success),
             queue: success.queue?.map(QueuedRequestSnapshot.init(summary:)) ?? []
         )
     }
@@ -1063,6 +1084,7 @@ actor ServerHost {
                 textProfiles: success.textProfiles?.map(TextProfileSnapshot.init(profile:)),
                 textProfilePath: success.textProfilePath,
                 activeRequest: success.activeRequest.map(ActiveRequestSnapshot.init(summary:)),
+                activeRequests: success.activeRequests?.map(ActiveRequestSnapshot.init(summary:)),
                 queue: success.queue?.map(QueuedRequestSnapshot.init(summary:)),
                 playbackState: success.playbackState.map(PlaybackStateSnapshot.init(summary:)),
                 status: success.status,
@@ -1317,7 +1339,7 @@ actor ServerHost {
             state.generationQueue = hostState.generationQueue
             state.playbackQueue = hostState.playbackQueue
             state.playback = hostState.playback
-            state.currentGenerationJob = hostState.currentGenerationJob
+            state.currentGenerationJobs = hostState.currentGenerationJobs
             state.runtimeConfiguration = hostState.runtimeConfiguration
             state.transports = hostState.transports
             state.recentErrors = hostState.recentErrors
@@ -1334,9 +1356,9 @@ actor ServerHost {
         }
 
         switch event {
-        case .queued, .started:
+        case .queued, .started, .progress:
             return true
-        case .workerStatus, .acknowledged, .progress, .completed, .failed:
+        case .workerStatus, .acknowledged, .completed, .failed:
             return false
         }
     }
@@ -1357,78 +1379,37 @@ actor ServerHost {
             return
         }
 
-        if shouldUseFallbackRuntimeDerivedState() {
-            applyFallbackRuntimeDerivedState(
-                sequenceID: refreshSequenceID,
-                startedAt: startedAt,
-                previousPlaybackStatus: previousPlaybackStatus
-            )
-            return
-        }
-
         var usedFallback = false
-        var generationQueueRefreshedAt = Date()
+        var runtimeOverviewRefreshedAt = Date()
         do {
-            generationQueueStatus = try await fetchGenerationQueueStatus()
-            generationQueueRefreshedAt = Date()
+            try await applyRuntimeOverviewSnapshot()
+            runtimeOverviewRefreshedAt = Date()
         } catch {
             recordRecentError(
-                source: "queue:generation",
-                code: "queue_snapshot_failed",
-                message: "SpeakSwiftlyServer could not refresh the generation queue snapshot. Likely cause: \(error.localizedDescription)"
+                source: "runtime:overview",
+                code: "runtime_overview_failed",
+                message: "SpeakSwiftlyServer could not refresh the atomic runtime overview snapshot. Likely cause: \(error.localizedDescription)"
             )
+            runtimeOverviewRefreshedAt = Date()
             generationQueueStatus = deriveGenerationQueueStatusFallback()
-            generationQueueRefreshedAt = Date()
-            usedFallback = true
-        }
-
-        var playbackQueueRefreshedAt = Date()
-        do {
-            playbackQueueStatus = try await fetchPlaybackQueueStatus()
-            playbackQueueRefreshedAt = Date()
-        } catch {
-            recordRecentError(
-                source: "queue:playback",
-                code: "queue_snapshot_failed",
-                message: "SpeakSwiftlyServer could not refresh the playback queue snapshot. Likely cause: \(error.localizedDescription)"
-            )
             playbackQueueStatus = derivePlaybackQueueStatusFallback()
-            playbackQueueRefreshedAt = Date()
-            usedFallback = true
-        }
-
-        var playbackStateRefreshedAt = Date()
-        do {
-            playbackStatus = try await fetchPlaybackStatus()
-            playbackStateRefreshedAt = Date()
-        } catch {
-            recordRecentError(
-                source: "playback",
-                code: "playback_state_failed",
-                message: "SpeakSwiftlyServer could not refresh the playback state snapshot. Likely cause: \(error.localizedDescription)"
-            )
             playbackStatus = derivePlaybackStatusFallback()
-            playbackStateRefreshedAt = Date()
             usedFallback = true
         }
 
         runtimeRefreshSnapshot = .init(
             sequenceID: refreshSequenceID,
-            source: usedFallback ? "mixed" : "runtime",
+            source: usedFallback ? "fallback" : "runtime_overview",
             startedAt: TimestampFormatter.string(from: startedAt),
-            generationQueueRefreshedAt: TimestampFormatter.string(from: generationQueueRefreshedAt),
-            playbackQueueRefreshedAt: TimestampFormatter.string(from: playbackQueueRefreshedAt),
-            playbackStateRefreshedAt: TimestampFormatter.string(from: playbackStateRefreshedAt),
+            generationQueueRefreshedAt: TimestampFormatter.string(from: runtimeOverviewRefreshedAt),
+            playbackQueueRefreshedAt: TimestampFormatter.string(from: runtimeOverviewRefreshedAt),
+            playbackStateRefreshedAt: TimestampFormatter.string(from: runtimeOverviewRefreshedAt),
             completedAt: TimestampFormatter.string(from: Date())
         )
 
         if playbackStatus != previousPlaybackStatus {
             hostEventContinuation.yield(.playbackChanged(playbackStatus))
         }
-    }
-
-    private func shouldUseFallbackRuntimeDerivedState() -> Bool {
-        !currentLiveSpeechJobs().isEmpty
     }
 
     private func applyFallbackRuntimeDerivedState(
@@ -1456,103 +1437,58 @@ actor ServerHost {
 
     // MARK: - Runtime Snapshot Fetches
 
-    private func fetchGenerationQueueStatus() async throws -> QueueStatusSnapshot {
-        let handle = await runtime.generationQueue()
+    private func applyRuntimeOverviewSnapshot() async throws {
+        let handle = await runtime.runtimeOverview()
         let success = try await awaitImmediateSuccess(
             handle: handle,
-            missingTerminalMessage: "SpeakSwiftly finished the queue snapshot request without yielding a terminal success payload.",
-            unexpectedFailureMessagePrefix: "SpeakSwiftly failed while refreshing a queue snapshot."
+            missingTerminalMessage: "SpeakSwiftly finished the runtime overview request without yielding a terminal success payload.",
+            unexpectedFailureMessagePrefix: "SpeakSwiftly failed while refreshing the atomic runtime overview snapshot."
         )
-
-        return .init(
-            queueType: "generation",
-            activeCount: success.activeRequest == nil ? 0 : 1,
-            queuedCount: success.queue?.count ?? 0,
-            activeRequest: success.activeRequest.map(ActiveRequestSnapshot.init(summary:))
-        )
-    }
-
-    private func fetchPlaybackQueueStatus() async throws -> QueueStatusSnapshot {
-        let handle = await runtime.playbackQueue()
-        let success = try await awaitImmediateSuccess(
-            handle: handle,
-            missingTerminalMessage: "SpeakSwiftly finished the queue snapshot request without yielding a terminal success payload.",
-            unexpectedFailureMessagePrefix: "SpeakSwiftly failed while refreshing a queue snapshot."
-        )
-        return .init(
-            queueType: "playback",
-            activeCount: success.activeRequest == nil ? 0 : 1,
-            queuedCount: success.queue?.count ?? 0,
-            activeRequest: success.activeRequest.map(ActiveRequestSnapshot.init(summary:))
-        )
-    }
-
-    private func fetchPlaybackStatus() async throws -> PlaybackStatusSnapshot {
-        let handle = await runtime.playbackState()
-        let success = try await awaitImmediateSuccess(
-            handle: handle,
-            missingTerminalMessage: "SpeakSwiftly finished the playback state request without yielding a terminal success payload.",
-            unexpectedFailureMessagePrefix: "SpeakSwiftly failed while refreshing playback state."
-        )
-        guard let playbackState = success.playbackState else {
+        guard let overview = success.runtimeOverview else {
             throw SpeakSwiftly.Error(
                 code: .internalError,
-                message: "SpeakSwiftly accepted the playback state request, but it did not return a playback state payload."
+                message: "SpeakSwiftly accepted the runtime overview request, but it did not return a runtime_overview payload."
             )
         }
-
-        return .init(
-            state: playbackState.state.rawValue,
-            activeRequest: playbackState.activeRequest.map(ActiveRequestSnapshot.init(summary:))
-        )
+        generationQueueStatus = queueStatusSnapshot(from: overview.generationQueue)
+        playbackQueueStatus = queueStatusSnapshot(from: overview.playbackQueue)
+        playbackStatus = PlaybackStatusSnapshot(summary: overview.playbackState)
     }
 
     // MARK: - Derived Snapshot Helpers
 
-    private func currentGenerationJobSnapshot() -> CurrentGenerationJobSnapshot? {
-        guard let job = activeGenerationJobRecord() else { return nil }
-        return .init(
-            jobID: job.jobID,
-            op: job.op,
-            profileName: job.profileName,
-            submittedAt: TimestampFormatter.string(from: job.submittedAt),
-            startedAt: job.startedAt.map(TimestampFormatter.string(from:)),
-            latestStage: latestStage(for: job.latestEvent),
-            elapsedGenerationSeconds: job.startedAt.map { max(0, Date().timeIntervalSince($0)) }
-        )
+    private func currentGenerationJobSnapshots() -> [CurrentGenerationJobSnapshot] {
+        activeGenerationJobRecords().map { job in
+            .init(
+                jobID: job.jobID,
+                op: job.op,
+                profileName: job.profileName,
+                submittedAt: TimestampFormatter.string(from: job.submittedAt),
+                startedAt: job.startedAt.map(TimestampFormatter.string(from:)),
+                latestStage: latestStage(for: job.latestEvent),
+                elapsedGenerationSeconds: job.startedAt.map { max(0, Date().timeIntervalSince($0)) }
+            )
+        }
     }
 
-    private func activeGenerationJobRecord() -> JobRecord? {
-        if let activeRequest = generationQueueStatus.activeRequest,
-           let job = jobs[activeRequest.id],
-           isGenerationOperation(job.op),
-           job.terminalEvent == nil
-        {
+    private func activeGenerationJobRecords() -> [JobRecord] {
+        let runtimeActiveJobs: [JobRecord] = generationQueueStatus.activeRequests.compactMap { activeRequest in
+            guard let job = jobs[activeRequest.id], isGenerationOperation(job.op), job.terminalEvent == nil else {
+                return nil
+            }
             return job
         }
+        if runtimeActiveJobs.isEmpty == false {
+            return runtimeActiveJobs.sorted(by: generationJobOrdering)
+        }
 
-        return fallbackGenerationJobRecord()
+        return fallbackGenerationJobRecords()
     }
 
-    private func fallbackGenerationJobRecord() -> JobRecord? {
+    private func fallbackGenerationJobRecords() -> [JobRecord] {
         jobs.values
             .filter { isGenerationOperation($0.op) && $0.terminalEvent == nil }
-            .sorted { lhs, rhs in
-                let lhsPriority = generationPriority(for: lhs)
-                let rhsPriority = generationPriority(for: rhs)
-                if lhsPriority != rhsPriority {
-                    return lhsPriority > rhsPriority
-                }
-
-                let lhsActivity = lhs.startedAt ?? lhs.submittedAt
-                let rhsActivity = rhs.startedAt ?? rhs.submittedAt
-                if lhsActivity != rhsActivity {
-                    return lhsActivity > rhsActivity
-                }
-
-                return lhs.submittedAt > rhs.submittedAt
-            }
-            .first
+            .sorted(by: generationJobOrdering)
     }
 
     private func currentLiveSpeechJobs() -> [JobRecord] {
@@ -1581,6 +1517,9 @@ actor ServerHost {
 
     private func inferredPlaybackActiveRequest() -> ActiveRequestSnapshot? {
         if let activeRequest = playbackQueueStatus.activeRequest {
+            return activeRequest
+        }
+        if let activeRequest = playbackQueueStatus.activeRequests.first {
             return activeRequest
         }
 
@@ -1628,7 +1567,14 @@ actor ServerHost {
     }
 
     private func deriveGenerationQueueStatusFallback() -> QueueStatusSnapshot {
-        let activeJob = fallbackGenerationJobRecord()
+        let activeJobs = fallbackGenerationJobRecords().filter { job in
+            switch latestOperationalEvent(for: job) {
+            case .started, .progress:
+                return true
+            default:
+                return false
+            }
+        }
         let queuedCount = jobs.values.filter {
             guard isGenerationOperation($0.op), $0.terminalEvent == nil else {
                 return false
@@ -1641,9 +1587,12 @@ actor ServerHost {
 
         return .init(
             queueType: "generation",
-            activeCount: activeJob == nil ? 0 : 1,
+            activeCount: activeJobs.count,
             queuedCount: queuedCount,
-            activeRequest: activeJob.map {
+            activeRequest: activeJobs.first.map {
+                .init(id: $0.jobID, op: $0.op, profileName: $0.profileName)
+            },
+            activeRequests: activeJobs.map {
                 .init(id: $0.jobID, op: $0.op, profileName: $0.profileName)
             }
         )
@@ -1652,24 +1601,37 @@ actor ServerHost {
     private func derivePlaybackQueueStatusFallback() -> QueueStatusSnapshot {
         let liveJobs = currentLiveSpeechJobs()
         let activeRequest = inferredPlaybackActiveRequest()
+        let activeRequests = activeRequest.map { [$0] } ?? []
         let hasPlaybackWork = !liveJobs.isEmpty
         return .init(
             queueType: "playback",
-            activeCount: hasPlaybackWork ? 1 : 0,
+            activeCount: activeRequests.count,
             queuedCount: max(liveJobs.count - (hasPlaybackWork ? 1 : 0), 0),
-            activeRequest: activeRequest
+            activeRequest: activeRequest,
+            activeRequests: activeRequests
         )
     }
 
     private func derivePlaybackStatusFallback() -> PlaybackStatusSnapshot {
         if let activeRequest = inferredPlaybackActiveRequest() {
-            return .init(state: SpeakSwiftly.PlaybackState.playing.rawValue, activeRequest: activeRequest)
+            return .init(
+                state: SpeakSwiftly.PlaybackState.playing.rawValue,
+                activeRequest: activeRequest,
+                isStableForConcurrentGeneration: false,
+                isRebuffering: false,
+                stableBufferedAudioMS: nil,
+                stableBufferTargetMS: nil
+            )
         }
 
         let hasPlaybackCandidates = !playbackCandidateRecords().isEmpty
         return .init(
             state: hasPlaybackCandidates ? SpeakSwiftly.PlaybackState.playing.rawValue : SpeakSwiftly.PlaybackState.idle.rawValue,
-            activeRequest: nil
+            activeRequest: nil,
+            isStableForConcurrentGeneration: false,
+            isRebuffering: false,
+            stableBufferedAudioMS: nil,
+            stableBufferTargetMS: nil
         )
     }
 
@@ -1881,6 +1843,43 @@ actor ServerHost {
         .progress(.init(id: event.id, stage: event.stage.rawValue))
     }
 
+    private func queueActiveRequestSnapshots(from success: SpeakSwiftly.Success) -> [ActiveRequestSnapshot] {
+        let activeRequests = success.activeRequests?.map(ActiveRequestSnapshot.init(summary:)) ?? []
+        if activeRequests.isEmpty == false {
+            return activeRequests
+        }
+        return success.activeRequest.map { [ActiveRequestSnapshot(summary: $0)] } ?? []
+    }
+
+    private func queueStatusSnapshot(from summary: SpeakSwiftly.QueueSnapshot) -> QueueStatusSnapshot {
+        let activeRequests = summary.activeRequests?.map(ActiveRequestSnapshot.init(summary:))
+            ?? summary.activeRequest.map { [ActiveRequestSnapshot(summary: $0)] }
+            ?? []
+        return .init(
+            queueType: summary.queueType,
+            activeCount: activeRequests.count,
+            queuedCount: summary.queue.count,
+            activeRequest: activeRequests.first,
+            activeRequests: activeRequests
+        )
+    }
+
+    private func generationJobOrdering(lhs: JobRecord, rhs: JobRecord) -> Bool {
+        let lhsPriority = generationPriority(for: lhs)
+        let rhsPriority = generationPriority(for: rhs)
+        if lhsPriority != rhsPriority {
+            return lhsPriority > rhsPriority
+        }
+
+        let lhsActivity = lhs.startedAt ?? lhs.submittedAt
+        let rhsActivity = rhs.startedAt ?? rhs.submittedAt
+        if lhsActivity != rhsActivity {
+            return lhsActivity > rhsActivity
+        }
+
+        return lhs.submittedAt > rhs.submittedAt
+    }
+
     private func mapSuccessEvent(_ event: SpeakSwiftly.Success, acknowledged: Bool) -> ServerJobEvent {
         let success = ServerSuccessEvent(
             id: event.id,
@@ -1897,6 +1896,7 @@ actor ServerHost {
             textProfiles: event.textProfiles?.map(TextProfileSnapshot.init(profile:)),
             textProfilePath: event.textProfilePath,
             activeRequest: event.activeRequest.map(ActiveRequestSnapshot.init(summary:)),
+            activeRequests: event.activeRequests?.map(ActiveRequestSnapshot.init(summary:)),
             queue: event.queue?.map(QueuedRequestSnapshot.init(summary:)),
             playbackState: event.playbackState.map(PlaybackStateSnapshot.init(summary:)),
             status: event.status,

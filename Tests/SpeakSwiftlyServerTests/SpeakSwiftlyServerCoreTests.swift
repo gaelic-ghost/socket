@@ -354,7 +354,7 @@ import TextForSpeech
     var publishedState: HostStateSnapshot?
     while ContinuousClock.now < deadline {
         guard let snapshot = await iterator.next() else { break }
-        if snapshot.currentGenerationJob?.jobID == jobID,
+        if snapshot.currentGenerationJobs.contains(where: { $0.jobID == jobID }),
            snapshot.generationQueue.activeCount == 1
         {
             publishedState = snapshot
@@ -366,7 +366,7 @@ import TextForSpeech
     let runtimeRefresh = try #require(liveState.runtimeRefresh)
     #expect(liveState.playback.state == "playing")
     #expect(runtimeRefresh.sequenceID > 0)
-    #expect(runtimeRefresh.source == "fallback")
+    #expect(runtimeRefresh.source == "runtime_overview")
     #expect(runtimeRefresh.startedAt.isEmpty == false)
     #expect(runtimeRefresh.completedAt.isEmpty == false)
     #expect(liveState.transports.contains { $0.name == "http" && $0.advertisedAddress == "http://127.0.0.1:7337" })
@@ -374,11 +374,11 @@ import TextForSpeech
 
     let uiOverview = await MainActor.run { state.overview }
     let uiRuntimeRefresh = await MainActor.run { state.runtimeRefresh }
-    let uiCurrentJob = await MainActor.run { state.currentGenerationJob }
+    let uiCurrentJobs = await MainActor.run { state.currentGenerationJobs }
     let uiPlayback = await MainActor.run { state.playback }
     #expect(uiOverview.workerReady == true)
     #expect(uiRuntimeRefresh == runtimeRefresh)
-    #expect(uiCurrentJob?.jobID == jobID)
+    #expect(uiCurrentJobs.contains { $0.jobID == jobID })
     #expect(uiPlayback.state == "playing")
 
     await runtime.finishHeldSpeak(id: jobID)
@@ -386,7 +386,7 @@ import TextForSpeech
 }
 
 @available(macOS 14, *)
-@Test func hostUsesFallbackRuntimeSnapshotsForQueuedLiveSpeechJobs() async throws {
+@Test func hostUsesRuntimeSnapshotsForQueuedLiveSpeechJobs() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
     let state = await MainActor.run { ServerState() }
@@ -412,10 +412,11 @@ import TextForSpeech
     ) {
         let snapshot = await host.hostStateSnapshot()
         guard
-            snapshot.runtimeRefresh?.source == "fallback",
+            snapshot.runtimeRefresh?.source == "runtime_overview",
             snapshot.playback.activeRequest?.id == firstJobID,
             snapshot.playbackQueue.activeRequest?.id == firstJobID,
-            snapshot.generationQueue.queuedCount == 1
+            snapshot.generationQueue.queuedCount == 1,
+            snapshot.currentGenerationJobs.contains(where: { $0.jobID == firstJobID })
         else {
             return nil
         }
@@ -424,8 +425,10 @@ import TextForSpeech
     }
 
     let countsAfterQueuedLiveRequests = await runtime.runtimeRefreshActionCounts()
-    #expect(countsAfterQueuedLiveRequests == baselineRefreshCounts)
-    #expect(snapshot.currentGenerationJob?.jobID == firstJobID)
+    #expect(countsAfterQueuedLiveRequests.generationQueue > baselineRefreshCounts.generationQueue)
+    #expect(countsAfterQueuedLiveRequests.playbackQueue > baselineRefreshCounts.playbackQueue)
+    #expect(countsAfterQueuedLiveRequests.playbackState > baselineRefreshCounts.playbackState)
+    #expect(snapshot.currentGenerationJobs.contains { $0.jobID == firstJobID })
 
     let secondJobSnapshot = try await host.jobSnapshot(id: secondJobID)
     #expect(secondJobSnapshot.history.contains {
@@ -439,7 +442,7 @@ import TextForSpeech
 }
 
 @available(macOS 14, *)
-@Test func hostDoesNotRefreshRuntimeSnapshotsForHeldLiveProgressEvents() async throws {
+@Test func hostRefreshesRuntimeSnapshotsForHeldLiveProgressEvents() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
     let state = await MainActor.run { ServerState() }
@@ -480,7 +483,9 @@ import TextForSpeech
 
     try await Task.sleep(for: .milliseconds(50))
     let countsAfterProgress = await runtime.runtimeRefreshActionCounts()
-    #expect(countsAfterProgress == baselineRefreshCounts)
+    #expect(countsAfterProgress.generationQueue > baselineRefreshCounts.generationQueue)
+    #expect(countsAfterProgress.playbackQueue > baselineRefreshCounts.playbackQueue)
+    #expect(countsAfterProgress.playbackState > baselineRefreshCounts.playbackState)
 
     await runtime.finishHeldSpeak(id: jobID)
     await host.shutdown()
@@ -507,17 +512,23 @@ import TextForSpeech
             )
             state.playback = PlaybackStatusSnapshot(
                 state: "playing",
-                activeRequest: .init(id: "req-1", op: "speak", profileName: "default")
+                activeRequest: .init(id: "req-1", op: "speak", profileName: "default"),
+                isStableForConcurrentGeneration: true,
+                isRebuffering: false,
+                stableBufferedAudioMS: 320,
+                stableBufferTargetMS: 400
             )
-            state.currentGenerationJob = CurrentGenerationJobSnapshot(
-                jobID: "job-1",
-                op: "speak",
-                profileName: "default",
-                submittedAt: "2026-04-07T12:00:00Z",
-                startedAt: "2026-04-07T12:00:01Z",
-                latestStage: "speaking",
-                elapsedGenerationSeconds: 0.25
-            )
+            state.currentGenerationJobs = [
+                CurrentGenerationJobSnapshot(
+                    jobID: "job-1",
+                    op: "speak",
+                    profileName: "default",
+                    submittedAt: "2026-04-07T12:00:00Z",
+                    startedAt: "2026-04-07T12:00:01Z",
+                    latestStage: "speaking",
+                    elapsedGenerationSeconds: 0.25
+                ),
+            ]
             state.transports = [
                 .init(
                     name: "http",
@@ -539,13 +550,13 @@ import TextForSpeech
 
     let state = await MainActor.run { session.state }
     let overview = await MainActor.run { state.overview }
-    let currentGenerationJob = await MainActor.run { state.currentGenerationJob }
+    let currentGenerationJobs = await MainActor.run { state.currentGenerationJobs }
     let playback = await MainActor.run { state.playback }
     let transports = await MainActor.run { state.transports }
 
     #expect(overview.workerReady == true)
     #expect(overview.profileCount == 1)
-    #expect(currentGenerationJob?.jobID == "job-1")
+    #expect(currentGenerationJobs.contains { $0.jobID == "job-1" })
     #expect(playback.state == "playing")
     #expect(transports.contains { $0.name == "http" && $0.state == "listening" })
 

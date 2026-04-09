@@ -562,7 +562,7 @@ struct SpeakSwiftlyServerE2ETests {
         #expect(playbackGuide.contains("clear_playback_queue"))
 
         let eventStream = client.openEventStream()
-        eventStream.start()
+        try await eventStream.start()
         defer { eventStream.stop() }
 
         try await client.subscribe(to: "speak://text-profiles")
@@ -1453,7 +1453,10 @@ struct SpeakSwiftlyServerE2ETests {
                 )
                 assertSpeechJobCompleted(secondSnapshot, expectedJobID: jobIDs[1])
                 #expect(secondSnapshot.history.contains {
-                    $0.event == "queued" && $0.reason == "waiting_for_active_request"
+                    $0.event == "queued" && (
+                        $0.reason == "waiting_for_marvis_generation_lane"
+                            || $0.reason == "waiting_for_playback_stability"
+                    )
                 })
 
                 let thirdSnapshot = try await waitForTerminalJob(
@@ -1464,7 +1467,10 @@ struct SpeakSwiftlyServerE2ETests {
                 )
                 assertSpeechJobCompleted(thirdSnapshot, expectedJobID: jobIDs[2])
                 #expect(thirdSnapshot.history.contains {
-                    $0.event == "queued" && $0.reason == "waiting_for_active_request"
+                    $0.event == "queued" && (
+                        $0.reason == "waiting_for_marvis_generation_lane"
+                            || $0.reason == "waiting_for_playback_stability"
+                    )
                 })
             } catch {
                 await recordQueuedMarvisHTTPDiagnostics(
@@ -1551,7 +1557,10 @@ struct SpeakSwiftlyServerE2ETests {
             )
             assertSpeechJobCompleted(secondSnapshot, expectedJobID: jobIDs[1])
             #expect(secondSnapshot.history.contains {
-                $0.event == "queued" && $0.reason == "waiting_for_active_request"
+                $0.event == "queued" && (
+                    $0.reason == "waiting_for_marvis_generation_lane"
+                        || $0.reason == "waiting_for_playback_stability"
+                )
             })
 
             let thirdSnapshot = try await waitForTerminalJob(
@@ -1562,7 +1571,10 @@ struct SpeakSwiftlyServerE2ETests {
             )
             assertSpeechJobCompleted(thirdSnapshot, expectedJobID: jobIDs[2])
             #expect(thirdSnapshot.history.contains {
-                $0.event == "queued" && $0.reason == "waiting_for_active_request"
+                $0.event == "queued" && (
+                    $0.reason == "waiting_for_marvis_generation_lane"
+                        || $0.reason == "waiting_for_playback_stability"
+                )
             })
 
             try await assertMarvisPlaybackStartedInOrder(on: server, requestIDs: jobIDs)
@@ -2116,7 +2128,7 @@ struct SpeakSwiftlyServerE2ETests {
 
             let playbackQueue = try diagnosticJSONString(from: hostState["playback_queue"])
             let generationQueue = try diagnosticJSONString(from: hostState["generation_queue"])
-            let currentGenerationJob = try diagnosticJSONString(from: hostState["current_generation_job"])
+            let currentGenerationJobs = try diagnosticJSONString(from: hostState["current_generation_jobs"])
 
             Issue.record(
                 """
@@ -2125,7 +2137,7 @@ struct SpeakSwiftlyServerE2ETests {
                 request_ids: \(requestIDs.joined(separator: ", "))
                 playback_queue: \(playbackQueue)
                 generation_queue: \(generationQueue)
-                current_generation_job: \(currentGenerationJob)
+                current_generation_jobs: \(currentGenerationJobs)
                 retained_requests:
                 \(retainedRequests.isEmpty ? "none" : retainedRequests)
                 """

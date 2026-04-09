@@ -24,23 +24,29 @@ public final class ServerState {
         queueType: "generation",
         activeCount: 0,
         queuedCount: 0,
-        activeRequest: nil
+        activeRequest: nil,
+        activeRequests: []
     )
 
     public internal(set) var playbackQueue = QueueStatusSnapshot(
         queueType: "playback",
         activeCount: 0,
         queuedCount: 0,
-        activeRequest: nil
+        activeRequest: nil,
+        activeRequests: []
     )
 
     public internal(set) var playback = PlaybackStatusSnapshot(
         state: "idle",
-        activeRequest: nil
+        activeRequest: nil,
+        isStableForConcurrentGeneration: false,
+        isRebuffering: false,
+        stableBufferedAudioMS: nil,
+        stableBufferTargetMS: nil
     )
 
     public internal(set) var runtimeRefresh: RuntimeRefreshSnapshot?
-    public internal(set) var currentGenerationJob: CurrentGenerationJobSnapshot?
+    public internal(set) var currentGenerationJobs = [CurrentGenerationJobSnapshot]()
     public internal(set) var runtimeConfiguration = RuntimeConfigurationSnapshot(
         activeRuntimeSpeechBackend: "qwen3",
         nextRuntimeSpeechBackend: "qwen3",

@@ -509,15 +509,22 @@ final class E2EMCPEventStream: @unchecked Sendable {
     private let path: String
     private let sessionID: String
     private let buffer = E2ENotificationBuffer()
+    private let connectionState = E2EMCPEventStreamConnectionState()
+    private let urlSession: URLSession
     private var task: Task<Void, Never>?
 
     init(baseURL: URL, path: String, sessionID: String) {
         self.baseURL = baseURL
         self.path = path
         self.sessionID = sessionID
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.waitsForConnectivity = false
+        configuration.timeoutIntervalForRequest = 300
+        configuration.timeoutIntervalForResource = 300
+        self.urlSession = URLSession(configuration: configuration)
     }
 
-    func start() {
+    func start() async throws {
         guard task == nil else { return }
 
         task = Task {
@@ -527,8 +534,13 @@ final class E2EMCPEventStream: @unchecked Sendable {
             request.setValue(sessionID, forHTTPHeaderField: "Mcp-Session-Id")
 
             do {
-                let (bytes, response) = try await URLSession.shared.bytes(for: request)
+                let (bytes, response) = try await urlSession.bytes(for: request)
                 guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    await connectionState.finish(
+                        with: E2ETransportError(
+                            "The live MCP event stream did not open successfully for session '\(sessionID)'."
+                        )
+                    )
                     await buffer.finish(
                         with: E2ETransportError(
                             "The live MCP event stream did not open successfully for session '\(sessionID)'."
@@ -536,6 +548,7 @@ final class E2EMCPEventStream: @unchecked Sendable {
                     )
                     return
                 }
+                await connectionState.markConnected()
 
                 var dataLines = [String]()
                 for try await line in bytes.lines {
@@ -547,6 +560,9 @@ final class E2EMCPEventStream: @unchecked Sendable {
                         if dataLines.isEmpty == false {
                             let payload = dataLines.joined(separator: "\n")
                             dataLines.removeAll(keepingCapacity: true)
+                            guard payload.isEmpty == false else {
+                                continue
+                            }
                             if let data = payload.data(using: .utf8) {
                                 await buffer.append(data)
                             }
@@ -561,14 +577,21 @@ final class E2EMCPEventStream: @unchecked Sendable {
             } catch is CancellationError {
                 return
             } catch {
+                await connectionState.finish(with: error)
                 await buffer.finish(with: error)
             }
         }
+
+        let _: Bool = try await e2eWaitUntil(timeout: .seconds(10), pollInterval: .milliseconds(100)) {
+            try await self.connectionState.streamReady()
+        }
+        try await Task.sleep(for: .milliseconds(100))
     }
 
     func stop() {
         task?.cancel()
         task = nil
+        urlSession.invalidateAndCancel()
     }
 
     func waitForNotification(
@@ -587,6 +610,26 @@ final class E2EMCPEventStream: @unchecked Sendable {
             }
             return object
         }
+    }
+}
+
+private actor E2EMCPEventStreamConnectionState {
+    private var isConnected = false
+    private var terminalError: Error?
+
+    func markConnected() {
+        isConnected = true
+    }
+
+    func finish(with error: Error) {
+        terminalError = error
+    }
+
+    func streamReady() throws -> Bool? {
+        if let terminalError {
+            throw terminalError
+        }
+        return isConnected ? true : nil
     }
 }
 
@@ -1042,10 +1085,12 @@ struct E2EStatusSnapshot: Decodable, Sendable {
 
 struct E2EQueueStatusSnapshot: Decodable, Sendable {
     let activeRequest: E2EActiveRequestSnapshot?
+    let activeRequests: [E2EActiveRequestSnapshot]
     let queuedRequests: [E2EQueuedRequestSnapshot]
 
     enum CodingKeys: String, CodingKey {
         case activeRequest = "active_request"
+        case activeRequests = "active_requests"
         case queuedRequests = "queued_requests"
     }
 }
@@ -1089,11 +1134,13 @@ struct E2EQueuedRequestSnapshot: Decodable, Sendable, Equatable {
 struct E2EQueueSnapshotResponse: Decodable, Sendable {
     let queueType: String
     let activeRequest: E2EActiveRequestSnapshot?
+    let activeRequests: [E2EActiveRequestSnapshot]
     let queue: [E2EQueuedRequestSnapshot]
 
     enum CodingKeys: String, CodingKey {
         case queueType = "queue_type"
         case activeRequest = "active_request"
+        case activeRequests = "active_requests"
         case queue
     }
 }
