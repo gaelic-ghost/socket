@@ -29,6 +29,18 @@
       "category": "Developer Tools"
     },
     {
+      "name": "python-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/python-skills/plugins/python-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "rust-skills",
       "source": {
         "source": "local",
@@ -39,6 +51,18 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"
+    },
+    {
+      "name": "things-app",
+      "source": {
+        "source": "local",
+        "path": "./plugins/things-app/plugins/things-app"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
     }
   ]
 }

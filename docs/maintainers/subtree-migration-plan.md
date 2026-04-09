@@ -110,13 +110,13 @@ Status:
 ### Phase 2: wire the repo-root marketplace
 
 - add one marketplace entry per imported plugin repo that actually ships a `.codex-plugin/plugin.json`
-- keep marketplace entries pointed at subtree directories under `./plugins/`
+- point marketplace entries at the actual packaged plugin root under `./plugins/`, even when that plugin root lives inside a subtree's own nested `plugins/<plugin-name>/` directory
 - do not list non-plugin repositories in the marketplace catalog
 
-Current blocker:
+Current state:
 
-- most imported phase-one repos still do not track `.codex-plugin/plugin.json` or `.claude-plugin/plugin.json` in their source repositories
-- `agent-plugin-skills`, `dotnet-skills`, and `rust-skills` now do, so they can be listed independently in the repo-root marketplace
+- `agent-plugin-skills`, `dotnet-skills`, and `rust-skills` ship top-level `.codex-plugin/plugin.json` roots, so their socket marketplace entries point directly at the subtree root directories
+- `python-skills` and `things-app` now ship packaged plugin roots inside their subtree-managed repositories, so their socket marketplace entries point at `./plugins/python-skills/plugins/python-skills` and `./plugins/things-app/plugins/things-app`
 - `speak-to-user-skills` now has standalone plugin packaging, but marketplace listing can wait until it has real exported skill content
 - the other imported repos should remain unlisted until plugin packaging exists in their source trees or a deliberate packaging layer is added
 
