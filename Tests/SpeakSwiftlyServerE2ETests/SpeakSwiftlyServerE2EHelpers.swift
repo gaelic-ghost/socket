@@ -745,6 +745,7 @@ extension SpeakSwiftlyServerE2ETests {
         let launcherPath: String
         let metallibPath: String
         let aliasPath: String
+        let sourceRoot: String?
 
         enum CodingKeys: String, CodingKey {
             case buildConfiguration = "build_configuration"
@@ -753,10 +754,20 @@ extension SpeakSwiftlyServerE2ETests {
             case launcherPath = "launcher_path"
             case metallibPath = "metallib_path"
             case aliasPath = "alias_path"
+            case sourceRoot = "source_root"
         }
     }
 
-    private static func speakSwiftlyPublishedRuntimeMetadata(configuration: String) throws -> SpeakSwiftlyPublishedRuntimeMetadata {
+    private struct SpeakSwiftlyPublishedRuntimeArtifacts {
+        let metadataURL: URL
+        let metadata: SpeakSwiftlyPublishedRuntimeMetadata
+        let productsURL: URL
+        let executableURL: URL
+        let launcherURL: URL
+        let metallibURL: URL
+    }
+
+    private static func speakSwiftlyPublishedRuntimeArtifacts(configuration: String) throws -> SpeakSwiftlyPublishedRuntimeArtifacts {
         let serverRootURL = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
@@ -780,11 +791,43 @@ extension SpeakSwiftlyServerE2ETests {
             )
         }
 
-        let aliasURL = URL(fileURLWithPath: metadata.aliasPath, isDirectory: true)
-        let metallibURL = URL(fileURLWithPath: metadata.metallibPath, isDirectory: false)
-        let launcherURL = URL(fileURLWithPath: metadata.launcherPath, isDirectory: false)
-        let executableURL = URL(fileURLWithPath: metadata.executablePath, isDirectory: false)
-
+        let siblingSourceRootURL = metadataURL
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let localXcodeRootURL = siblingSourceRootURL
+            .appendingPathComponent(".local/xcode", isDirectory: true)
+        let productsURL = resolvedPublishedRuntimeURL(
+            recordedPath: metadata.productsPath,
+            recordedSourceRoot: metadata.sourceRoot,
+            actualSourceRootURL: siblingSourceRootURL,
+            fallbackURL: localXcodeRootURL.appendingPathComponent(configuration, isDirectory: true),
+            isDirectory: true
+        )
+        let executableURL = resolvedPublishedRuntimeURL(
+            recordedPath: metadata.executablePath,
+            recordedSourceRoot: metadata.sourceRoot,
+            actualSourceRootURL: siblingSourceRootURL,
+            fallbackURL: productsURL.appendingPathComponent("SpeakSwiftly", isDirectory: false),
+            isDirectory: false
+        )
+        let launcherURL = resolvedPublishedRuntimeURL(
+            recordedPath: metadata.launcherPath,
+            recordedSourceRoot: metadata.sourceRoot,
+            actualSourceRootURL: siblingSourceRootURL,
+            fallbackURL: productsURL.appendingPathComponent("run-speakswiftly", isDirectory: false),
+            isDirectory: false
+        )
+        let metallibURL = resolvedPublishedRuntimeURL(
+            recordedPath: metadata.metallibPath,
+            recordedSourceRoot: metadata.sourceRoot,
+            actualSourceRootURL: siblingSourceRootURL,
+            fallbackURL: productsURL.appendingPathComponent(
+                "mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib",
+                isDirectory: false
+            ),
+            isDirectory: false
+        )
         guard FileManager.default.fileExists(atPath: metallibURL.path) else {
             throw SpeakSwiftlyBuildError(
                 "The sibling SpeakSwiftly published runtime metadata pointed at a missing metallib path '\(metallibURL.path)'. Re-publish and verify the sibling \(configuration) runtime before running the live server suite."
@@ -800,13 +843,49 @@ extension SpeakSwiftlyServerE2ETests {
                 "The sibling SpeakSwiftly published runtime metadata pointed at a missing executable '\(executableURL.path)'. Re-publish and verify the sibling \(configuration) runtime before running the live server suite."
             )
         }
-        guard FileManager.default.fileExists(atPath: aliasURL.path) else {
-            throw SpeakSwiftlyBuildError(
-                "The sibling SpeakSwiftly published runtime metadata pointed at a missing stable alias '\(aliasURL.path)'. Re-publish and verify the sibling \(configuration) runtime before running the live server suite."
-            )
+
+        return .init(
+            metadataURL: metadataURL,
+            metadata: metadata,
+            productsURL: productsURL,
+            executableURL: executableURL,
+            launcherURL: launcherURL,
+            metallibURL: metallibURL
+        )
+    }
+
+    private static func resolvedPublishedRuntimeURL(
+        recordedPath: String,
+        recordedSourceRoot: String?,
+        actualSourceRootURL: URL,
+        fallbackURL: URL,
+        isDirectory: Bool
+    ) -> URL {
+        let recordedURL = URL(fileURLWithPath: recordedPath, isDirectory: isDirectory)
+        if FileManager.default.fileExists(atPath: recordedURL.path) {
+            return recordedURL
         }
 
-        return metadata
+        guard
+            let recordedSourceRoot,
+            recordedPath.hasPrefix(recordedSourceRoot)
+        else {
+            return fallbackURL
+        }
+
+        let relativeSuffix = String(recordedPath.dropFirst(recordedSourceRoot.count))
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        guard relativeSuffix.isEmpty == false else {
+            return fallbackURL
+        }
+
+        let rebasedURL = actualSourceRootURL
+            .appendingPathComponent(relativeSuffix, isDirectory: isDirectory)
+        if FileManager.default.fileExists(atPath: rebasedURL.path) {
+            return rebasedURL
+        }
+
+        return fallbackURL
     }
 
     static func serverToolExecutableURL() throws -> URL {
@@ -826,10 +905,9 @@ extension SpeakSwiftlyServerE2ETests {
     }
 
     private static func stageMetallibForServerBinary(
-        from publishedRuntimeMetadata: SpeakSwiftlyPublishedRuntimeMetadata,
+        sourceURL: URL,
         serverExecutableURL: URL
     ) throws {
-        let sourceURL = URL(fileURLWithPath: publishedRuntimeMetadata.metallibPath, isDirectory: false)
         let targetDirectoryURL = serverExecutableURL
             .deletingLastPathComponent()
             .appendingPathComponent("Resources", isDirectory: true)
@@ -850,10 +928,10 @@ extension SpeakSwiftlyServerE2ETests {
         mcpEnabled: Bool,
         speechBackend: String? = nil
     ) throws -> ServerProcess {
-        let publishedRuntimeMetadata = try speakSwiftlyPublishedRuntimeMetadata(configuration: "Debug")
+        let publishedRuntimeArtifacts = try speakSwiftlyPublishedRuntimeArtifacts(configuration: "Debug")
         let executableURL = try serverToolExecutableURL()
         try stageMetallibForServerBinary(
-            from: publishedRuntimeMetadata,
+            sourceURL: publishedRuntimeArtifacts.metallibURL,
             serverExecutableURL: executableURL
         )
 
