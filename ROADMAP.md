@@ -138,12 +138,14 @@ Exit criteria:
 Scope:
 
 - Add a skill for splitting, extracting, or re-homing skills between repositories while preserving docs and guidance.
+- Evaluate whether the maintainer skill set should grow support for subtree-managed superprojects that coordinate multiple child plugin repos.
 
 Tickets:
 
 - [ ] Define migration inputs and guardrails for moving one or more skills between repos.
 - [ ] Add guidance for updating install examples, docs, and roadmap references after a move.
 - [ ] Add deterministic validation for orphaned references and stale naming after migration.
+- [ ] Decide whether subtree-managed plugin superprojects such as `socket` should become an explicitly supported repo family in maintainer guidance.
 
 Exit criteria:
 
