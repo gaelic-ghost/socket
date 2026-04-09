@@ -1,0 +1,33 @@
+{
+  "name": "speak-to-user-skills",
+  "version": "0.1.0",
+  "description": "Standalone plugin repository for future speech-facing and spoken-reply Codex skills.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/speak-to-user-skills",
+  "repository": "https://github.com/gaelic-ghost/speak-to-user-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "speech",
+    "voice"
+  ],
+  "interface": {
+    "displayName": "Speak To User Skills",
+    "shortDescription": "Future speech-facing and spoken-reply Codex skills.",
+    "longDescription": "Standalone plugin repository for future speech-facing and spoken-reply Codex skills and maintainer workflows.",
+    "developerName": "Gale",
+    "category": "Accessibility",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/speak-to-user-skills",
+    "brandColor": "#FF6EC7"
+  }
+}
