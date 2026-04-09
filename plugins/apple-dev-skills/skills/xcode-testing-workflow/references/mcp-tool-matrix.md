@@ -7,6 +7,7 @@
 
 ## Discovery and read/search
 
+- `DocumentationSearch`
 - `XcodeLS`
 - `XcodeGlob`
 - `XcodeRead`
