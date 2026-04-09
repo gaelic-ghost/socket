@@ -1182,7 +1182,7 @@ actor ServerHost {
         for (jobID, job) in jobs where job.terminalEvent == nil {
             await record(event, for: jobID, terminal: false)
         }
-        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        await requestPublish(mode: .immediate, refreshRuntimeState: true)
     }
 
     private func record(_ event: ServerJobEvent, for jobID: String, terminal: Bool) async {
@@ -1220,7 +1220,10 @@ actor ServerHost {
             }
             pruneCompletedJobs()
         }
-        await requestPublish(mode: terminal ? .immediate : .coalesced, refreshRuntimeState: true)
+        await requestPublish(
+            mode: terminal ? .immediate : .coalesced,
+            refreshRuntimeState: shouldRefreshRuntimeDerivedState(after: event, terminal: terminal)
+        )
     }
 
     private func pruneCompletedJobs() {
@@ -1286,6 +1289,22 @@ actor ServerHost {
             state.transports = hostState.transports
             state.recentErrors = hostState.recentErrors
             state.jobsByID = jobsByID
+        }
+    }
+
+    private func shouldRefreshRuntimeDerivedState(
+        after event: ServerJobEvent,
+        terminal: Bool
+    ) -> Bool {
+        if terminal {
+            return true
+        }
+
+        switch event {
+        case .queued, .started:
+            return true
+        case .workerStatus, .acknowledged, .progress, .completed, .failed:
+            return false
         }
     }
 
@@ -1383,7 +1402,7 @@ actor ServerHost {
     // MARK: - Derived Snapshot Helpers
 
     private func currentGenerationJobSnapshot() -> CurrentGenerationJobSnapshot? {
-        guard let job = currentGenerationJobRecord() else { return nil }
+        guard let job = activeGenerationJobRecord() else { return nil }
         return .init(
             jobID: job.jobID,
             op: job.op,
@@ -1395,24 +1414,71 @@ actor ServerHost {
         )
     }
 
-    private func currentGenerationJobRecord() -> JobRecord? {
+    private func activeGenerationJobRecord() -> JobRecord? {
+        if let activeRequest = generationQueueStatus.activeRequest,
+           let job = jobs[activeRequest.id],
+           isGenerationOperation(job.op),
+           job.terminalEvent == nil
+        {
+            return job
+        }
+
+        return fallbackGenerationJobRecord()
+    }
+
+    private func fallbackGenerationJobRecord() -> JobRecord? {
         jobs.values
             .filter { isGenerationOperation($0.op) && $0.terminalEvent == nil }
             .sorted { lhs, rhs in
-                generationPriority(for: lhs) > generationPriority(for: rhs)
-                    || (
-                        generationPriority(for: lhs) == generationPriority(for: rhs)
-                        && lhs.submittedAt < rhs.submittedAt
-                    )
+                let lhsPriority = generationPriority(for: lhs)
+                let rhsPriority = generationPriority(for: rhs)
+                if lhsPriority != rhsPriority {
+                    return lhsPriority > rhsPriority
+                }
+
+                let lhsActivity = lhs.startedAt ?? lhs.submittedAt
+                let rhsActivity = rhs.startedAt ?? rhs.submittedAt
+                if lhsActivity != rhsActivity {
+                    return lhsActivity > rhsActivity
+                }
+
+                return lhs.submittedAt > rhs.submittedAt
             }
             .first
     }
 
-    private func currentLiveSpeechJobRecord() -> JobRecord? {
+    private func currentLiveSpeechJobs() -> [JobRecord] {
         jobs.values
             .filter { $0.op == "generate_speech_live" && $0.terminalEvent == nil }
             .sorted { lhs, rhs in lhs.submittedAt < rhs.submittedAt }
-            .first
+    }
+
+    private func playbackCandidateRecords() -> [JobRecord] {
+        currentLiveSpeechJobs().filter { job in
+            guard case .progress(let event) = job.latestEvent else {
+                return false
+            }
+
+            switch event.stage {
+            case "starting_playback", "buffering_audio", "preroll_ready", "playback_finished":
+                return true
+            default:
+                return false
+            }
+        }
+    }
+
+    private func inferredPlaybackActiveRequest() -> ActiveRequestSnapshot? {
+        if let activeRequest = playbackQueueStatus.activeRequest {
+            return activeRequest
+        }
+
+        let candidates = playbackCandidateRecords()
+        guard candidates.count == 1, let candidate = candidates.first else {
+            return nil
+        }
+
+        return .init(id: candidate.jobID, op: candidate.op, profileName: candidate.profileName)
     }
 
     private func generationPriority(for job: JobRecord) -> Int {
@@ -1442,7 +1508,7 @@ actor ServerHost {
     }
 
     private func deriveGenerationQueueStatusFallback() -> QueueStatusSnapshot {
-        let activeJob = currentGenerationJobRecord()
+        let activeJob = fallbackGenerationJobRecord()
         let queuedCount = jobs.values.filter {
             guard isGenerationOperation($0.op), $0.terminalEvent == nil else {
                 return false
@@ -1464,21 +1530,27 @@ actor ServerHost {
     }
 
     private func derivePlaybackQueueStatusFallback() -> QueueStatusSnapshot {
-        .init(
+        let liveJobs = currentLiveSpeechJobs()
+        let activeRequest = inferredPlaybackActiveRequest()
+        let hasPlaybackWork = !liveJobs.isEmpty
+        return .init(
             queueType: "playback",
-            activeCount: playbackStatus.state == SpeakSwiftly.PlaybackState.idle.rawValue ? 0 : 1,
-            queuedCount: 0,
-            activeRequest: playbackStatus.activeRequest
+            activeCount: hasPlaybackWork ? 1 : 0,
+            queuedCount: max(liveJobs.count - (hasPlaybackWork ? 1 : 0), 0),
+            activeRequest: activeRequest
         )
     }
 
     private func derivePlaybackStatusFallback() -> PlaybackStatusSnapshot {
-        if let activeRequest = currentLiveSpeechJobRecord().map({
-            ActiveRequestSnapshot(id: $0.jobID, op: $0.op, profileName: $0.profileName)
-        }) {
+        if let activeRequest = inferredPlaybackActiveRequest() {
             return .init(state: SpeakSwiftly.PlaybackState.playing.rawValue, activeRequest: activeRequest)
         }
-        return .init(state: SpeakSwiftly.PlaybackState.idle.rawValue, activeRequest: nil)
+
+        let hasPlaybackCandidates = !playbackCandidateRecords().isEmpty
+        return .init(
+            state: hasPlaybackCandidates ? SpeakSwiftly.PlaybackState.playing.rawValue : SpeakSwiftly.PlaybackState.idle.rawValue,
+            activeRequest: nil
+        )
     }
 
     private func transportSnapshots() -> [TransportStatusSnapshot] {

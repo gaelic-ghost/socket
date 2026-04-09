@@ -76,6 +76,9 @@ actor MockRuntime: ServerRuntimeProtocol {
     private var generatedFiles = [SpeakSwiftly.GeneratedFile]()
     private var generatedBatches = [SpeakSwiftly.GeneratedBatch]()
     private var generationJobs = [SpeakSwiftly.GenerationJob]()
+    private var generationQueueRequestCount = 0
+    private var playbackQueueRequestCount = 0
+    private var playbackStateRequestCount = 0
 
     // MARK: - Lifecycle
 
@@ -563,6 +566,12 @@ actor MockRuntime: ServerRuntimeProtocol {
 
     func queue(_ queueType: RuntimeQueueType) async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
+        switch queueType {
+        case .generation:
+            generationQueueRequestCount += 1
+        case .playback:
+            playbackQueueRequestCount += 1
+        }
         let activeRequest: SpeakSwiftly.ActiveRequest? =
             switch queueType {
             case .generation:
@@ -595,6 +604,9 @@ actor MockRuntime: ServerRuntimeProtocol {
 
     func playback(_ action: RuntimePlaybackAction) async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
+        if action == .state {
+            playbackStateRequestCount += 1
+        }
         switch action {
         case .pause:
             if activeRequest != nil {
@@ -788,6 +800,11 @@ actor MockRuntime: ServerRuntimeProtocol {
         startNextQueuedRequestIfNeeded()
     }
 
+    func publishHeldSpeakProgress(id: String, stage: SpeakSwiftly.ProgressStage) {
+        guard activeRequest?.id == id, let continuation = activeContinuation else { return }
+        continuation.yield(.progress(.init(id: id, stage: stage)))
+    }
+
     func latestQueuedSpeechInvocation() -> QueuedSpeechInvocation? {
         queuedSpeechInvocations.last
     }
@@ -802,6 +819,14 @@ actor MockRuntime: ServerRuntimeProtocol {
 
     func textProfilePersistenceActionCounts() -> (load: Int, save: Int) {
         (loadTextProfilesCallCount, saveTextProfilesCallCount)
+    }
+
+    func runtimeRefreshActionCounts() -> (generationQueue: Int, playbackQueue: Int, playbackState: Int) {
+        (
+            generationQueueRequestCount,
+            playbackQueueRequestCount,
+            playbackStateRequestCount
+        )
     }
 
     // MARK: - Internal Helpers
@@ -2196,6 +2221,10 @@ actor MockRuntime: ServerRuntimeProtocol {
     #expect(degradedReadiness.1.workerMode == "failed")
     #expect(degradedReadiness.1.workerStage == "resident_model_failed")
     #expect(degradedReadiness.1.startupError?.contains("startup failure") == true)
+
+    let degradedHostState = await host.hostStateSnapshot()
+    #expect(degradedHostState.playback.state == "playing")
+    #expect(degradedHostState.playbackQueue.activeRequest?.id == activeJobID)
 
     let activeSnapshot = try await waitUntil(timeout: .seconds(1), pollInterval: .milliseconds(10)) {
         let snapshot = try await host.jobSnapshot(id: activeJobID)

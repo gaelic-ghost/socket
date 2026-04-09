@@ -349,6 +349,54 @@ import TextForSpeech
 }
 
 @available(macOS 14, *)
+@Test func hostDoesNotRefreshRuntimeSnapshotsForHeldLiveProgressEvents() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let jobID = try await host.submitSpeak(text: "Hold steady", profileName: "default")
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = try await host.jobSnapshot(id: jobID)
+        return snapshot.history.count >= 2 ? snapshot : nil
+    }
+
+    try await Task.sleep(for: .milliseconds(50))
+    let baselineRefreshCounts = await runtime.runtimeRefreshActionCounts()
+
+    await runtime.publishHeldSpeakProgress(id: jobID, stage: .bufferingAudio)
+
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = try await host.jobSnapshot(id: jobID)
+        return snapshot.history.contains {
+            guard case .progress(let event) = $0 else { return false }
+            return event.stage == "buffering_audio"
+        } ? snapshot : nil
+    }
+
+    try await Task.sleep(for: .milliseconds(50))
+    let countsAfterProgress = await runtime.runtimeRefreshActionCounts()
+    #expect(countsAfterProgress == baselineRefreshCounts)
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
 @Test func embeddedServerSessionPublishesObservableStateForAppConsumers() async throws {
     let session = try await EmbeddedServerSession.start(environment: ["APP_ENV": "test"]) { environment, state in
         #expect(environment["APP_ENV"] == "test")
