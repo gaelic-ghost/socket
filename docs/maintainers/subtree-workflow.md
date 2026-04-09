@@ -39,7 +39,9 @@ Current child-repo remotes:
 - `productivity-skills`
 - `python-skills`
 - `rust-skills`
+- `speak-to-user-skills`
 - `things-app`
+- `web-dev-skills`
 
 If a new child repository is imported later, add its matching named remote first.
 
@@ -110,6 +112,7 @@ Use `vx.x.x` tags for socket releases.
 
 - A child repo is imported correctly, but the socket marketplace still points at the subtree root even though the real plugin root is nested.
 - A child repo vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
+- A child subtree exists in `socket`, but its matching named source remote is missing or points nowhere useful, which blocks future subtree pulls.
 - Socket docs describe an earlier migration assumption after the imported child repo has already changed packaging shape.
 - A subtree sync lands without a follow-up pass over root marketplace wiring and docs.
 

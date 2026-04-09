@@ -48,6 +48,7 @@ The current subtree-managed child repositories are:
 - `python-skills`
 - `rust-skills`
 - `speak-to-user-skills`
+- `web-dev-skills`
 - `things-app`
 
 Each child repository keeps its own source-of-truth docs and history inside its imported subtree. `socket` is responsible for the superproject concerns around import shape, root marketplace wiring, and cross-repo maintenance workflow.
@@ -107,6 +108,7 @@ The current superproject validation surface is lightweight and structural:
 │   ├── python-skills/
 │   ├── rust-skills/
 │   ├── speak-to-user-skills/
+│   ├── web-dev-skills/
 │   └── things-app/
 └── README.md
 ```

@@ -66,15 +66,11 @@ Immediate subtree candidates:
 - `private-skills`
 - `productivity-skills`
 - `python-skills`
+- `speak-to-user-skills`
 - `things-app`
 - `dotnet-skills` once bootstrapped as a real Git repo
 - `rust-skills` once bootstrapped as a real Git repo
-- `speak-to-user-skills` once bootstrapped as a real Git repo
-
-Candidates that need verification before import:
-
 - `web-dev-skills`
-  - appears to be a Git repo but did not show an `origin` remote in the initial audit
 
 Directories blocked from subtree import until they become real Git repos or are intentionally excluded:
 
@@ -93,6 +89,7 @@ Status:
   - `python-skills`
   - `rust-skills`
   - `speak-to-user-skills`
+  - `web-dev-skills`
   - `things-app`
 - initial subtree commits:
   - `c884399` `agent-plugin-skills`
@@ -102,10 +99,9 @@ Status:
   - `57698b8` `productivity-skills`
   - `516f256` `python-skills`
   - `fd77a92` `rust-skills`
-  - `f21998` `speak-to-user-skills`
+  - `6f63d61` `speak-to-user-skills` remake
+  - `f8cb4bd` `web-dev-skills`
   - `06ce077` `things-app`
-- still deferred:
-  - `web-dev-skills`
 
 ### Phase 2: wire the repo-root marketplace
 
@@ -118,6 +114,7 @@ Current state:
 - `agent-plugin-skills`, `dotnet-skills`, and `rust-skills` ship top-level `.codex-plugin/plugin.json` roots, so their socket marketplace entries point directly at the subtree root directories
 - `python-skills` and `things-app` now ship packaged plugin roots inside their subtree-managed repositories, so their socket marketplace entries point at `./plugins/python-skills/plugins/python-skills` and `./plugins/things-app/plugins/things-app`
 - `speak-to-user-skills` now has standalone plugin packaging, but marketplace listing can wait until it has real exported skill content
+- `web-dev-skills` now has standalone plugin packaging, but marketplace listing can wait until it has real exported skill content
 - the other imported repos should remain unlisted until plugin packaging exists in their source trees or a deliberate packaging layer is added
 
 ### Phase 3: validate Codex behavior
@@ -145,7 +142,6 @@ Possible outcomes:
 ## Open Questions
 
 - which imported repos actually ship Codex plugin packaging versus only skills or app code
-- whether `web-dev-skills` should be normalized as a real remote-backed Git repo before import
 - whether `things-app` should live beside the skills/plugin repos under `plugins/` or under a second top-level grouping later
 - whether the eventual plain monorepo path should preserve subtree history or eventually stop syncing to child remotes
 
@@ -163,6 +159,6 @@ Do not bulk-import everything in one pass.
 ## Implementation Notes
 
 - the first subtree import proved the Git shape works for the superproject
-- the next useful implementation step is to import the remaining Git-backed repos one by one
+- the next useful implementation step is to keep the new minimal subtree source repos real and syncable instead of letting placeholder imports drift away from live remotes
 - plugin packaging remains a separate track from subtree import
 - the marketplace now lists only independently packaged child repos and should not be populated speculatively beyond that
