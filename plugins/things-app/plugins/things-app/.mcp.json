@@ -1,0 +1,11 @@
+{
+  "things-app": {
+    "command": "uv",
+    "args": [
+      "run",
+      "python",
+      "app/server.py"
+    ],
+    "cwd": "../../mcp/things-app-mcp"
+  }
+}

@@ -1,0 +1,9 @@
+schemaVersion: 1
+isCustomized: false
+profile: default
+settings:
+  timezone: America/New_York
+  defaultReminderTime: "09:30"
+  duplicatePolicy: update-first
+  onUpdateWithoutToken: block-and-report
+  requireAbsoluteDateInConfirmation: true
