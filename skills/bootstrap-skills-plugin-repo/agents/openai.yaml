@@ -1,3 +1,2 @@
-schema_version: 1
-prompts:
+interface:
   default_prompt: "Use $bootstrap-skills-plugin-repo to audit a skills-export repository first, then create or align the source-first repo structure with root `skills/`, repo-local discovery mirrors, maintainer docs, AGENTS guidance, and explicit Codex limitation wording. Do not recreate nested plugin directories, repo marketplaces, installer workflows, or install-validation workflows for this repo family."

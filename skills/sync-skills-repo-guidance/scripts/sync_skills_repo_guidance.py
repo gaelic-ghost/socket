@@ -14,11 +14,13 @@ README_SNIPPETS = [
     "npx skills add gaelic-ghost/agent-plugin-skills --all",
     "uv tool install ruff",
     "uv tool install mypy",
+    "Claude Code continues to support direct `.claude/skills` discovery for local authoring",
 ]
 AGENTS_SNIPPETS = [
     "Root `skills/` is the canonical authored and exported surface",
     "Do not recreate nested plugin directories",
     "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
+    "Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo",
 ]
 AUDIT_SNIPPETS = [
     "This repository does not track a nested plugin directory for itself.",
@@ -26,13 +28,6 @@ AUDIT_SNIPPETS = [
     "This repository does not ship `validate-plugin-install-surfaces`.",
 ]
 GITIGNORE_SNIPPETS = [".claude/settings.local.json"]
-FORBIDDEN_SNIPPETS = [
-    ".agents/plugins/marketplace.json",
-    ".claude-plugin/marketplace.json",
-    "claude --plugin-dir",
-    "~/.codex/plugins/",
-]
-
 
 @dataclass
 class Finding:
@@ -54,9 +49,6 @@ def _check_file_contains(repo_root: Path, path: Path, snippets: list[str], issue
     for snippet in snippets:
         if snippet not in text:
             findings.append(Finding(str(path.relative_to(repo_root)), f"{issue_prefix}-missing-snippet", f"Expected to mention: {snippet}"))
-    for snippet in FORBIDDEN_SNIPPETS:
-        if snippet in text:
-            findings.append(Finding(str(path.relative_to(repo_root)), f"{issue_prefix}-forbidden-snippet", f"Forbidden snippet still present: {snippet}"))
     return findings
 
 

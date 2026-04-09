@@ -64,8 +64,14 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
             findings.append(Finding(rel, "wrong-symlink-target", f"Expected {target}, found {actual_target}."))
     if (repo_root / "plugins").exists():
         findings.append(Finding("plugins", "forbidden-path", "Nested plugin directories are forbidden for this repo model."))
-    if (repo_root / ".agents" / "plugins").exists():
-        findings.append(Finding(".agents/plugins", "forbidden-path", "Repo marketplaces are forbidden for this repo model."))
+    if (repo_root / ".agents" / "plugins" / "marketplace.json").exists():
+        findings.append(
+            Finding(
+                ".agents/plugins/marketplace.json",
+                "forbidden-path",
+                "Repo marketplace files are forbidden for this repo model.",
+            )
+        )
     return findings
 
 

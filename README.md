@@ -68,6 +68,8 @@ For local authoring work in this repository, the source skills are discoverable 
 
 Those mirrors exist so the source skills are usable while this repository is being developed. They are not a nested packaged plugin surface.
 
+Claude Code continues to support direct `.claude/skills` discovery for local authoring, while its documented plugin workflow is a separate `.claude-plugin/` packaging surface that you can test with `claude --plugin-dir`. This repository intentionally ships only the local `skills/` mirror for Claude authoring, not a bundled Claude plugin.
+
 ## Repository Layout
 
 ```text

@@ -6,10 +6,10 @@ This repository exports maintainer skills for skills-export repositories.
 
 | Skill | Role | Output |
 | --- | --- | --- |
-| `maintain-plugin-repo` | repo-level audit and bounded remediation entrypoint | grouped findings, owner assignments, bounded fixes |
-| `maintain-plugin-docs` | README, ROADMAP, and cross-doc maintenance | docs findings, fixes applied |
+| `maintain-plugin-repo` | repo-level audit and bounded docs-routing entrypoint | grouped findings, owner assignments, routed safe fixes when available |
+| `maintain-plugin-docs` | README, ROADMAP, and cross-doc maintenance | docs findings, narrow deterministic fixes when available |
 | `bootstrap-skills-plugin-repo` | bootstrap or align a clean skills-export repo shape | scaffold actions, findings |
-| `sync-skills-repo-guidance` | reconcile README, AGENTS, ROADMAP, maintainer docs, and discovery mirrors | guidance findings |
+| `sync-skills-repo-guidance` | audit README, AGENTS, maintainer docs, and discovery mirrors for guidance drift | guidance findings |
 
 ## Shared Boundary Rules
 

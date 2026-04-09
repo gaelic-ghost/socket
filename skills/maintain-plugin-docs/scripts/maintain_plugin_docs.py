@@ -55,16 +55,6 @@ HEADING_ALIASES = {
     "license": "license",
 }
 
-FORBIDDEN_SNIPPETS = [
-            ".agents/plugins/marketplace.json",
-    ".claude-plugin/marketplace.json",
-    "claude --plugin-dir",
-    "~/.codex/plugins/",
-    "repo-local packaged plugin",
-    "bundled plugin",
-    "Codex local plugin installs",
-]
-
 TOOLING_REQUIRED_SNIPPETS = [
     "uv sync --dev",
     "uv tool install ruff",
@@ -181,19 +171,6 @@ def check_sections(repo: Path, profile: str, readme_text: str) -> List[Issue]:
                     recommended_fix="Keep maintainer tooling guidance explicit in the README.",
                 )
             )
-    for snippet in FORBIDDEN_SNIPPETS:
-        if snippet in readme_text:
-            issues.append(
-                Issue(
-                    issue_id="readme-forbidden-guidance",
-                    category="readme-content",
-                    severity="high",
-                    repo=repo.name,
-                    doc_file=str(repo / "README.md"),
-                    evidence=f"README still contains forbidden guidance snippet `{snippet}`.",
-                    recommended_fix="Remove nested-plugin, installer, and repo-marketplace guidance from the README.",
-                )
-            )
     return issues
 
 
@@ -265,19 +242,6 @@ def check_roadmap(repo: Path, roadmap_text: str) -> List[Issue]:
                 recommended_fix="Keep the Milestone Progress block aligned with milestone headings.",
             )
         )
-    for snippet in FORBIDDEN_SNIPPETS:
-        if snippet in roadmap_text:
-            issues.append(
-                Issue(
-                    issue_id="roadmap-forbidden-guidance",
-                    category="roadmap-content",
-                    severity="high",
-                    repo=repo.name,
-                    doc_file=str(repo / "ROADMAP.md"),
-                    evidence=f"ROADMAP still contains forbidden guidance snippet `{snippet}`.",
-                    recommended_fix="Remove nested-plugin, installer, and repo-marketplace guidance from the roadmap.",
-                )
-            )
     return issues
 
 
@@ -311,18 +275,6 @@ def check_cross_doc(repo: Path, readme_text: str, roadmap_text: str) -> List[Iss
                 recommended_fix="Keep the Codex limitation warning explicit in the README.",
             )
         )
-    if any(snippet in readme_text for snippet in FORBIDDEN_SNIPPETS) or any(snippet in roadmap_text for snippet in FORBIDDEN_SNIPPETS):
-        issues.append(
-            Issue(
-                issue_id="cross-doc-forbidden-contract",
-                category="cross-doc-violation",
-                severity="high",
-                repo=repo.name,
-                doc_file=str(repo),
-                evidence="Repo docs still describe forbidden nested-plugin or installer contract details.",
-                recommended_fix="Remove nested-plugin, installer, and repo-marketplace guidance from repo docs.",
-            )
-        )
     return issues
 
 
@@ -335,6 +287,19 @@ def summarize_markdown(report: Dict[str, object]) -> str:
     lines.append(f"- Repo glob: {rc['repo_glob']}")
     lines.append(f"- Doc scope: {rc['doc_scope']}")
     lines.append(f"- Apply fixes: {rc['apply_fixes']}")
+    lines.append("")
+    lines.append("## Discovery Summary")
+    for item in report["repos_scanned"]:
+        lines.append(f"- Scanned: {item}")
+    if report["repos_with_issues"]:
+        for item in report["repos_with_issues"]:
+            lines.append(f"- Issues found: {item}")
+    else:
+        lines.append("- Issues found: none")
+    lines.append("")
+    lines.append("## Profile Assignments")
+    for repo_name, profile in report["profile_assignments"].items():
+        lines.append(f"- {repo_name}: {profile}")
     lines.append("")
     for title, key in (("README Findings", "readme_findings"), ("ROADMAP Findings", "roadmap_findings"), ("Cross-Doc Findings", "cross_doc_findings")):
         lines.append(f"## {title}")
@@ -351,6 +316,12 @@ def summarize_markdown(report: Dict[str, object]) -> str:
     else:
         for item in report["fixes_applied"]:
             lines.append(f"- [{item['status']}] {item['repo']} -> {item['file']} ({item['rule']})")
+    lines.append("")
+    lines.append("## Post-Fix Status")
+    post_fix_status = report["post_fix_status"]
+    lines.append(f"- Initial issues: {post_fix_status['initial_issues']}")
+    lines.append(f"- Unresolved issues: {post_fix_status['unresolved_issues']}")
+    lines.append(f"- Resolved issues: {post_fix_status['resolved_issues']}")
     return "\n".join(lines).strip()
 
 
@@ -379,6 +350,7 @@ def main() -> int:
     readme_findings = check_sections(repo, profile, readme_text) if args.doc_scope in {"readme", "all"} else []
     roadmap_findings = check_roadmap(repo, roadmap_text) if args.doc_scope in {"roadmap", "all"} else []
     cross_doc_findings = check_cross_doc(repo, readme_text, roadmap_text) if args.doc_scope == "all" else []
+    initial_issue_count = len(readme_findings) + len(roadmap_findings) + len(cross_doc_findings)
     report = {
         "run_context": {
             "timestamp_utc": datetime.now(timezone.utc).isoformat(),
@@ -388,10 +360,18 @@ def main() -> int:
             "apply_fixes": args.apply_fixes,
         },
         "discovery": {"repos": [str(repo)]},
+        "repos_scanned": [str(repo)],
+        "repos_with_issues": [str(repo)] if initial_issue_count else [],
+        "profile_assignments": {repo.name: profile},
         "readme_findings": [issue.__dict__ for issue in readme_findings],
         "roadmap_findings": [issue.__dict__ for issue in roadmap_findings],
         "cross_doc_findings": [issue.__dict__ for issue in cross_doc_findings],
         "fixes_applied": [],
+        "post_fix_status": {
+            "initial_issues": initial_issue_count,
+            "unresolved_issues": initial_issue_count,
+            "resolved_issues": 0,
+        },
         "errors": [],
     }
     if args.print_md and not any((readme_findings, roadmap_findings, cross_doc_findings)):

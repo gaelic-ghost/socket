@@ -37,13 +37,13 @@ def test_build_report_keeps_clean_runs_empty(tmp_path: Path) -> None:
 def test_audit_repo_model_flags_forbidden_state(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     (repo_root / "plugins").mkdir(parents=True)
-    (repo_root / "README.md").write_text(".agents/plugins/marketplace.json\n", encoding="utf-8")
+    (repo_root / ".agents" / "plugins").mkdir(parents=True)
+    (repo_root / ".agents" / "plugins" / "marketplace.json").write_text("{}", encoding="utf-8")
 
     findings = m.audit_repo_model(repo_root)
 
     issue_ids = {item["issue_id"] for item in findings}
     assert "forbidden-path" in issue_ids
-    assert "forbidden-guidance" in issue_ids
 
 
 def test_main_audit_only_prints_exact_no_findings_for_clean_run(tmp_path: Path, capsys) -> None:

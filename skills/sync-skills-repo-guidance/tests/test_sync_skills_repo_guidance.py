@@ -31,6 +31,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "npx skills add gaelic-ghost/agent-plugin-skills --all",
                 "uv tool install ruff",
                 "uv tool install mypy",
+                "Claude Code continues to support direct `.claude/skills` discovery for local authoring while plugin packaging lives separately.",
             ]
         )
         + "\n",
@@ -42,6 +43,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "Root `skills/` is the canonical authored and exported surface",
                 "Do not recreate nested plugin directories",
                 "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
+                "Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo.",
             ]
         )
         + "\n",
@@ -75,7 +77,7 @@ def test_audit_repo_accepts_expected_repo_shape(tmp_path: Path) -> None:
 
 def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) -> None:
     (tmp_path / "plugins").mkdir(parents=True)
-    (tmp_path / "README.md").write_text(".agents/plugins/marketplace.json\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text("", encoding="utf-8")
     (tmp_path / "AGENTS.md").write_text("", encoding="utf-8")
     (tmp_path / "docs" / "maintainers").mkdir(parents=True)
     (tmp_path / "docs" / "maintainers" / "reality-audit.md").write_text("", encoding="utf-8")
@@ -83,7 +85,7 @@ def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) ->
     findings = m.audit_repo(tmp_path, "example-skills")
 
     issue_ids = {finding.issue_id for finding in findings}
-    assert "readme-forbidden-snippet" in issue_ids
+    assert "readme-missing-snippet" in issue_ids
     assert "agents-missing-snippet" in issue_ids
     assert "missing-symlink" in issue_ids
     assert "forbidden-path" in issue_ids

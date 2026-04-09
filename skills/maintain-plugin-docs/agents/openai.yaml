@@ -1,3 +1,2 @@
-schema_version: 1
-prompts:
-  default_prompt: "Use $maintain-plugin-docs for docs maintenance in a skills-export repository. Audit README.md, ROADMAP.md, and cross-doc wording first, keep the docs blunt about OpenAI's Codex plugin scoping limits, and never reintroduce installer guidance, install-validation guidance, repo marketplaces, or nested plugin-directory claims for this repo."
+interface:
+  default_prompt: "Use $maintain-plugin-docs for docs maintenance in a skills-export repository. Audit README.md, ROADMAP.md, and cross-doc wording first, keep the docs blunt about OpenAI's Codex plugin scoping limits, keep automatic fixes narrow and deterministic, and never reintroduce installer guidance, install-validation guidance, or nested plugin-directory claims for this repo."

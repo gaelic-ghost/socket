@@ -9,9 +9,7 @@ Top-level keys:
 - `workflow`
 - `owner_assignments`
 - `validation_findings`
-  - `metadata`
-  - `install_surface`
-  - `mirror`
+  - `repo_model`
 - `docs_findings`
   - `readme`
   - `roadmap`

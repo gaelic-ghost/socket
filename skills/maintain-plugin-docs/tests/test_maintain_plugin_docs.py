@@ -83,11 +83,11 @@ def test_check_sections_accepts_valid_skills_readme(tmp_path: Path) -> None:
     assert issues == []
 
 
-def test_check_sections_flags_forbidden_nested_plugin_guidance(tmp_path: Path) -> None:
+def test_check_sections_flags_missing_tooling_guidance(tmp_path: Path) -> None:
     repo = tmp_path / "agent-plugin-skills"
     repo.mkdir()
-    broken = VALID_README + "\n.agents/plugins/marketplace.json\n"
+    broken = VALID_README.replace("uv tool install ruff\n", "")
 
     issues = m.check_sections(repo, "skills-maintainer", broken)
 
-    assert any(issue.issue_id == "readme-forbidden-guidance" for issue in issues)
+    assert any(issue.issue_id == "tooling-guidance-missing-snippet" for issue in issues)

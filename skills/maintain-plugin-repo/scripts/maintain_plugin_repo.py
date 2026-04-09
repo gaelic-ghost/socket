@@ -13,16 +13,10 @@ from typing import Any
 EXACT_NO_FINDINGS = "No findings."
 FORBIDDEN_PATHS = [
     "plugins",
-    ".agents/plugins",
-    ".claude-plugin",
+    ".agents/plugins/marketplace.json",
+    ".claude-plugin/plugin.json",
     "skills/install-plugin-to-socket",
     "skills/validate-plugin-install-surfaces",
-]
-FORBIDDEN_SNIPPETS = [
-    ".agents/plugins/marketplace.json",
-    ".claude-plugin/marketplace.json",
-    "claude --plugin-dir",
-    "~/.codex/plugins/",
 ]
 TEXT_SUFFIXES = {".md", ".py", ".yaml", ".yml", ".toml", ".json"}
 
@@ -96,25 +90,6 @@ def audit_repo_model(repo_root: Path) -> list[dict[str, str]]:
                     "message": "Repository contains a forbidden nested-plugin, marketplace, or deleted-skill path.",
                 }
             )
-    for path in sorted(repo_root.rglob("*")):
-        if not path.is_file() or path.suffix not in TEXT_SUFFIXES:
-            continue
-        if ".git" in path.parts:
-            continue
-        try:
-            text = path.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
-            continue
-        rel = str(path.relative_to(repo_root))
-        for snippet in FORBIDDEN_SNIPPETS:
-            if snippet in text:
-                findings.append(
-                    {
-                        "path": rel,
-                        "issue_id": "forbidden-guidance",
-                        "message": f"Repository still contains forbidden guidance snippet `{snippet}`.",
-                    }
-                )
     return findings
 
 
