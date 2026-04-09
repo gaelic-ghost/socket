@@ -126,6 +126,7 @@ Tickets:
 - [ ] Keep global-install guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
+- [x] Add an explicit Codex install-surface map that separates marketplace catalogs, staged plugin roots, installed cache paths, and config enabled-state.
 
 Exit criteria:
 

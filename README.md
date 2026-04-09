@@ -32,6 +32,65 @@ This repository does two honest things:
 
 It does not ship an installer skill. It does not ship an install-validation skill. It does not track a nested plugin directory for itself.
 
+## Codex Plugin Install Map
+
+Codex's documented plugin model splits plugin wiring across separate surfaces that do different jobs. Keeping them distinct makes local installs much easier to reason about.
+
+### The Four Surfaces
+
+1. Marketplace catalog
+   - A marketplace file is a catalog that Codex can read from.
+   - Personal marketplace: `~/.agents/plugins/marketplace.json`
+   - Repo marketplace: `$REPO_ROOT/.agents/plugins/marketplace.json`
+   - The marketplace entry says "this plugin exists in this marketplace" and points `source.path` at the staged plugin directory that Codex should read.
+2. Staged plugin directory
+   - This is the plugin payload on disk: `.codex-plugin/plugin.json`, `skills/`, optional hooks, apps, and MCP packaging.
+   - Common personal pattern: `~/.codex/plugins/<plugin-name>`
+   - Common repo pattern from the docs: `$REPO_ROOT/plugins/<plugin-name>`
+   - The marketplace points at this directory, but it is not the marketplace itself.
+3. Installed plugin cache
+   - Codex installs plugins into `~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/`.
+   - For local plugins, the docs say `$VERSION` is `local`.
+   - This is Codex's installed copy, not the source directory you usually edit directly.
+4. Enabled-state config
+   - Codex stores each plugin's on or off state in `~/.codex/config.toml`.
+   - Plugin keys are scoped by plugin name plus marketplace name, for example `[plugins."agent-plugin-skills@socket"]`.
+   - This answers "is this marketplace-scoped plugin enabled?" not "where is the plugin stored?"
+
+### Practical Mental Model
+
+- The marketplace is the catalog.
+- The staged plugin directory is the source payload the catalog points at.
+- The installed cache is Codex's installed copy.
+- `config.toml` is the per-plugin on or off switch.
+
+That means a personal marketplace file is not an "install destination". It is a catalog of plugins that your Codex install can see and install from. The actual personal staged plugin tree usually lives under `~/.codex/plugins/`, and Codex's installed cache lives under `~/.codex/plugins/cache/`.
+
+Likewise, a repo marketplace is still just a catalog. The difference is scope and visibility: it is attached to one repo, so plugins exposed there are visible in that repo's Codex context. If a repo tracks that marketplace in git, it is advertising those plugins as part of the repo-visible surface.
+
+Repo-local config is separate again. If a repo has a project-scoped `.codex/config.toml`, that file can override plugin enabled-state for that repo context. It does not replace the marketplace catalog. It answers whether a plugin identity such as `my-plugin@local-repo` should be enabled when Codex is running in that project.
+
+### Repo Scope vs Personal Scope
+
+- Personal scope
+  - Catalog: `~/.agents/plugins/marketplace.json`
+  - Common staged payload path: `~/.codex/plugins/<plugin-name>`
+  - Enabled-state: `~/.codex/config.toml`
+- Repo scope
+  - Catalog: `$REPO_ROOT/.agents/plugins/marketplace.json`
+  - Common staged payload path from the docs: `$REPO_ROOT/plugins/<plugin-name>`
+  - Optional repo-scoped enabled-state override: `$REPO_ROOT/.codex/config.toml`
+
+This repository intentionally stays source-first and does not ship a nested repo-local Codex plugin install surface for itself. Local authoring mirrors such as [`.agents/skills`](./.agents/skills) and [`.claude/skills`](./.claude/skills) are discovery mirrors for source skills, not packaged plugin install roots.
+
+Authoritative references for this model:
+
+- [OpenAI Codex plugin build docs](https://developers.openai.com/codex/plugins/build)
+- [How Codex uses marketplaces](https://developers.openai.com/codex/plugins/build#how-codex-uses-marketplaces)
+- [Install a local plugin manually](https://developers.openai.com/codex/plugins/build#install-a-local-plugin-manually)
+- [Marketplace metadata](https://developers.openai.com/codex/plugins/build#marketplace-metadata)
+- [Remove or turn off a plugin](https://developers.openai.com/codex/plugins#remove-or-turn-off-a-plugin)
+
 ## Exported Skills
 
 - `maintain-plugin-repo`
