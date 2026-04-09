@@ -13,7 +13,7 @@ Canonical Apple development skills exported from the repository top level for Co
 - `swift-package-testing-workflow`
   - Top-level SwiftPM-first skill for existing package repos when the work is primarily about Swift Testing, XCTest holdouts, `.xctestplan`, fixtures, async tests, and test diagnosis.
 - `explore-apple-swift-docs`
-  - Top-level docs skill for Apple and Swift docs exploration across Xcode MCP docs, Dash, and official web docs, with optional Dash follow-up when needed.
+  - Top-level docs skill for Apple and Swift docs exploration across Xcode MCP docs, Dash, and official web docs, with explicit Apple-framework source guidance, Dash triage guidance, and optional Dash follow-up when needed.
 - `format-swift-sources`
   - Top-level skill for integrating SwiftLint and SwiftFormat across CLI, Xcode, SwiftPM, Git hooks, GitHub Actions, and SwiftFormat config export.
 - `structure-swift-sources`
