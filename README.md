@@ -21,6 +21,7 @@ This repo is in migration-planning and early subtree-import phase.
 - the packaging direction is documented in [docs/maintainers/plugin-packaging-strategy.md](./docs/maintainers/plugin-packaging-strategy.md)
 - `plugins/` is reserved for subtree imports
 - `.agents/plugins/marketplace.json` is reserved for the repo-root Codex marketplace catalog
+- the repo-root marketplace currently lists independently packaged child plugins only
 - aggregate multi-repo plugins are explicitly deferred behind independent child plugin packaging
 
 ## Layout

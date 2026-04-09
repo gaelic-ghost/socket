@@ -69,6 +69,7 @@ Immediate subtree candidates:
 - `things-app`
 - `dotnet-skills` once bootstrapped as a real Git repo
 - `rust-skills` once bootstrapped as a real Git repo
+- `speak-to-user-skills` once bootstrapped as a real Git repo
 
 Candidates that need verification before import:
 
@@ -79,7 +80,6 @@ Directories blocked from subtree import until they become real Git repos or are 
 
 - `dotnet-skills`
 - `rust-skills`
-- `speak-to-user-skills`
 
 Status:
 
@@ -92,6 +92,7 @@ Status:
   - `productivity-skills`
   - `python-skills`
   - `rust-skills`
+  - `speak-to-user-skills`
   - `things-app`
 - initial subtree commits:
   - `c884399` `agent-plugin-skills`
@@ -101,10 +102,10 @@ Status:
   - `57698b8` `productivity-skills`
   - `516f256` `python-skills`
   - `fd77a92` `rust-skills`
+  - `f21998` `speak-to-user-skills`
   - `06ce077` `things-app`
 - still deferred:
   - `web-dev-skills`
-  - `speak-to-user-skills`
 
 ### Phase 2: wire the repo-root marketplace
 
@@ -115,7 +116,8 @@ Status:
 Current blocker:
 
 - most imported phase-one repos still do not track `.codex-plugin/plugin.json` or `.claude-plugin/plugin.json` in their source repositories
-- `dotnet-skills` and `rust-skills` now do, so they can be listed independently in the repo-root marketplace
+- `agent-plugin-skills`, `dotnet-skills`, and `rust-skills` now do, so they can be listed independently in the repo-root marketplace
+- `speak-to-user-skills` now has standalone plugin packaging, but marketplace listing can wait until it has real exported skill content
 - the other imported repos should remain unlisted until plugin packaging exists in their source trees or a deliberate packaging layer is added
 
 ### Phase 3: validate Codex behavior
