@@ -82,8 +82,25 @@ Directories blocked from subtree import until they become real Git repos or are 
 Status:
 
 - started
-- first successful subtree import: `agent-plugin-skills`
-- subtree commit: `c884399` `Add 'plugins/agent-plugin-skills/' from commit '6a0032df434bd6cfd338e7a2a640751473bad292'`
+- imported so far:
+  - `agent-plugin-skills`
+  - `apple-dev-skills`
+  - `private-skills`
+  - `productivity-skills`
+  - `python-skills`
+  - `things-app`
+- initial subtree commits:
+  - `c884399` `agent-plugin-skills`
+  - `38b095f` `apple-dev-skills`
+  - `b30dfc3` `private-skills`
+  - `57698b8` `productivity-skills`
+  - `516f256` `python-skills`
+  - `06ce077` `things-app`
+- still deferred:
+  - `web-dev-skills`
+  - `dotnet-skills`
+  - `rust-skills`
+  - `speak-to-user-skills`
 
 ### Phase 2: wire the repo-root marketplace
 
