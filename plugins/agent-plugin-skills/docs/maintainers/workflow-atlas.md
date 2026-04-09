@@ -17,7 +17,7 @@ For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-inst
 
 - Root `skills/` is canonical.
 - `.agents/skills` and `.claude/skills` are local discovery mirrors.
-- No skill in this repo should teach a nested plugin directory for this repo.
+- No skill in this repo should teach a nested staged plugin directory for this repo.
 - No skill in this repo should treat repo-local Codex plugin installs as proper private scoping.
 - No skill in this repo should resurrect installer or install-validation workflows.
 

@@ -42,7 +42,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         "\n".join(
             [
                 "Root `skills/` is the canonical authored and exported surface",
-                "Do not recreate nested plugin directories",
+                "Do not recreate nested staged plugin directories",
                 "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
                 "Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo.",
             ]
@@ -51,10 +51,12 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         encoding="utf-8",
     )
     (repo_root / ".gitignore").write_text(".claude/settings.local.json\n", encoding="utf-8")
+    (repo_root / ".codex-plugin").mkdir()
+    (repo_root / ".codex-plugin" / "plugin.json").write_text("{}\n", encoding="utf-8")
     (repo_root / "docs" / "maintainers" / "reality-audit.md").write_text(
         "\n".join(
             [
-                "This repository does not track a nested plugin directory for itself.",
+                "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
                 "This repository does not ship `install-plugin-to-socket`.",
                 "This repository does not ship `validate-plugin-install-surfaces`.",
             ]

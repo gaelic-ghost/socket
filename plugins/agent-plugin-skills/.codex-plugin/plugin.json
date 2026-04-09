@@ -1,0 +1,33 @@
+{
+  "name": "agent-plugin-skills",
+  "version": "1.2.0",
+  "description": "Installable maintainer skills for skills-export repositories.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/agent-plugin-skills",
+  "repository": "https://github.com/gaelic-ghost/agent-plugin-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "maintainer",
+    "agent-skills"
+  ],
+  "interface": {
+    "displayName": "Agent Plugin Skills",
+    "shortDescription": "Maintainer skills for skills-export repositories.",
+    "longDescription": "Installable maintainer skills for skills-export repositories, with blunt guidance about Codex plugin scoping limits and repo-shape maintenance workflows.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/agent-plugin-skills",
+    "brandColor": "#61AFEF"
+  }
+}

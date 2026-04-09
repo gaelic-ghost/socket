@@ -31,9 +31,9 @@ Applicability guidance:
 - Root `skills/` is the canonical authored and exported surface for this repository.
 - `.agents/skills` and `.claude/skills` are repo-local discovery mirrors into root `skills/`.
 - Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo. Keep `.claude-plugin/` packaging out of this repository unless Gale explicitly asks for that change.
-- This repository intentionally does not track a nested Codex plugin copy of itself.
+- This repository tracks first-class source-repo plugin packaging at `.codex-plugin/plugin.json`.
 - This repository intentionally does not track a repo-local Codex marketplace file for itself.
-- Do not recreate nested plugin directories, repo marketplaces, or installer workflows in this repository unless Gale explicitly asks for that architectural reversal.
+- Do not recreate nested staged plugin directories, repo marketplaces, or installer workflows in this repository unless Gale explicitly asks for that architectural reversal.
 - Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`.
 
 ## Codex Limitation Policy

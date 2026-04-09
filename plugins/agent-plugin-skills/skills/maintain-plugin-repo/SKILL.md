@@ -25,7 +25,7 @@ This skill does one honest job: maintain a skills-export repository.
 That includes:
 
 - auditing docs, discovery mirrors, and repo-model claims
-- flagging any nested plugin-directory or installer drift
+- flagging any nested staged plugin-directory, repo-marketplace, or installer drift
 - tightening misleading wording
 - fixing maintainer drift that makes a repo overpromise what Codex can do
 

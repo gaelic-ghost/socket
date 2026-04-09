@@ -16,7 +16,7 @@ OpenAI's current documented Codex plugin system is too restricted to provide pro
 - If that repo marketplace entry is tracked in git, the repo is advertising that plugin as part of the repo's exported product surface.
 - OpenAI does not document hidden repo-local plugin installs, private scoped plugin packs, or a second repo marketplace file that Codex will use for repo scope.
 
-This repository does not pretend otherwise. It is a global-install skills-export repository. It does not ship a nested repo-local Codex plugin copy of itself, and it does not ship workflows that normalize or hide those Codex limitations.
+This repository does not pretend otherwise. It is a source-first skills-export repository. It now ships first-class plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), but it does not ship a repo-local marketplace or a nested staged install surface for itself, and it does not ship workflows that normalize or hide Codex's scoping limits.
 
 Authoritative references:
 
@@ -32,7 +32,7 @@ This repository does two honest things:
 - exports installable maintainer skills from root [`skills/`](./skills/)
 - keeps those skills blunt about what OpenAI's documented Codex plugin system can and cannot do
 
-It does not ship an installer skill. It does not ship an install-validation skill. It does not track a nested plugin directory for itself.
+It does not ship an installer skill. It does not ship an install-validation skill. It does not track a repo-local marketplace or a nested staged plugin-install directory for itself.
 
 ## Codex Plugin Install Map
 
@@ -83,7 +83,7 @@ Repo-local config is separate again. If a repo has a project-scoped `.codex/conf
   - Common staged payload path from the docs: `$REPO_ROOT/plugins/<plugin-name>`
   - Optional repo-scoped enabled-state override: `$REPO_ROOT/.codex/config.toml`
 
-This repository intentionally stays source-first and does not ship a nested repo-local Codex plugin install surface for itself. Local authoring mirrors such as [`.agents/skills`](./.agents/skills) and [`.claude/skills`](./.claude/skills) are discovery mirrors for source skills, not packaged plugin install roots.
+This repository intentionally stays source-first. It ships root plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), but it does not ship a repo-local Codex marketplace or a nested staged plugin install surface for itself. Local authoring mirrors such as [`.agents/skills`](./.agents/skills) and [`.claude/skills`](./.claude/skills) are discovery mirrors for source skills, not packaged plugin install roots.
 
 Authoritative references for this model:
 
@@ -145,6 +145,8 @@ Claude Code continues to support direct `.claude/skills` discovery for local aut
 │   └── skills -> ../skills
 ├── .claude/
 │   └── skills -> ../skills
+├── .codex-plugin/
+│   └── plugin.json
 ├── README.md
 ├── AGENTS.md
 ├── skills/

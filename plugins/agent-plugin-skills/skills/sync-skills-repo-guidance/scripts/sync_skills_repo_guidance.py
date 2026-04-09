@@ -19,12 +19,12 @@ README_SNIPPETS = [
 ]
 AGENTS_SNIPPETS = [
     "Root `skills/` is the canonical authored and exported surface",
-    "Do not recreate nested plugin directories",
+    "Do not recreate nested staged plugin directories",
     "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
     "Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo",
 ]
 AUDIT_SNIPPETS = [
-    "This repository does not track a nested plugin directory for itself.",
+    "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
     "This repository does not ship `install-plugin-to-socket`.",
     "This repository does not ship `validate-plugin-install-surfaces`.",
 ]
@@ -73,8 +73,16 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     findings.extend(_check_file_contains(repo_root, repo_root / "docs" / "maintainers" / "reality-audit.md", AUDIT_SNIPPETS, "reality-audit"))
     findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))
     findings.extend(_check_symlink(repo_root, repo_root / ".claude" / "skills", "../skills"))
+    if not (repo_root / ".codex-plugin" / "plugin.json").exists():
+        findings.append(
+            Finding(
+                ".codex-plugin/plugin.json",
+                "missing-plugin-manifest",
+                "Expected source-repo plugin packaging at `.codex-plugin/plugin.json`.",
+            )
+        )
     if (repo_root / "plugins").exists():
-        findings.append(Finding("plugins", "forbidden-path", "Nested plugin directories are forbidden for this repo model."))
+        findings.append(Finding("plugins", "forbidden-path", "Nested staged plugin directories are forbidden for this repo model."))
     return findings
 
 

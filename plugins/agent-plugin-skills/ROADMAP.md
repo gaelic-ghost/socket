@@ -9,7 +9,7 @@
 ## Product Principles
 
 - Root `skills/` stays canonical.
-- This repository does not track a nested plugin directory for itself.
+- This repository ships root `.codex-plugin` packaging but does not track a repo-local marketplace or nested staged install surface for itself.
 - This repository does not ship an installer skill.
 - This repository does not ship an install-validation skill.
 - Codex limitation wording stays blunt and explicit.
@@ -22,7 +22,7 @@
 
 - [x] Milestone 0: Foundation bootstrap
 - [x] Milestone 1: `maintain-plugin-docs` evolution
-- [x] Milestone 2: remove nested plugin packaging and installer workflows
+- [x] Milestone 2: remove nested staged plugin packaging and installer workflows
 - [x] Milestone 3: `maintain-plugin-repo`
 - [ ] Milestone 4: docs visibility and wording hardening
 - [ ] Milestone 5: skills repo migration and split support
@@ -73,11 +73,11 @@ Exit criteria:
 - [x] The docs-maintainer role for skills-export repos is clear.
 - [x] The skill has an explicit non-overlapping boundary relative to repo-wide sync work.
 
-## Milestone 2: remove nested plugin packaging and installer workflows
+## Milestone 2: remove nested staged plugin packaging and installer workflows
 
 Scope:
 
-- Remove nested plugin-package guidance from this repository.
+- Remove nested staged plugin-package guidance from this repository.
 - Remove installer and install-validation workflows from this exported skill set.
 - Keep the repository blunt about the documented Codex limitation instead of normalizing around it.
 
@@ -85,13 +85,13 @@ Tickets:
 
 - [x] Remove `install-plugin-to-socket` from the exported skill surface.
 - [x] Remove `validate-plugin-install-surfaces` from the exported skill surface.
-- [x] Remove nested plugin-directory and repo-marketplace guidance from repo docs and skills.
+- [x] Remove nested staged plugin-directory and repo-marketplace guidance from repo docs and skills.
 - [x] Keep the Codex limitation wording blunt and explicit in repo docs and exported skills.
 
 Exit criteria:
 
 - [x] The repository no longer ships installer or install-validation workflows.
-- [x] The repository no longer teaches a nested plugin-directory model for itself.
+- [x] The repository no longer teaches a nested staged plugin-directory model for itself.
 - [x] Repo docs say plainly that proper plugin scoping is not something Codex currently supports.
 
 ## Milestone 3: `maintain-plugin-repo`
@@ -130,7 +130,7 @@ Tickets:
 
 Exit criteria:
 
-- [ ] End users can tell quickly that this repo exports installable skills, not a nested repo-local plugin product.
+- [ ] End users can tell quickly that this repo exports installable skills and ships root plugin packaging, not a repo-local staged plugin product.
 - [ ] Limitation messaging is consistent across exported skills and top-level docs.
 
 ## Milestone 5: skills repo migration and split support
@@ -138,12 +138,14 @@ Exit criteria:
 Scope:
 
 - Add a skill for splitting, extracting, or re-homing skills between repositories while preserving docs and guidance.
+- Evaluate whether the maintainer skill set should grow support for subtree-managed superprojects that coordinate multiple child plugin repos.
 
 Tickets:
 
 - [ ] Define migration inputs and guardrails for moving one or more skills between repos.
 - [ ] Add guidance for updating install examples, docs, and roadmap references after a move.
 - [ ] Add deterministic validation for orphaned references and stale naming after migration.
+- [ ] Decide whether subtree-managed plugin superprojects such as `socket` should become an explicitly supported repo family in maintainer guidance.
 
 Exit criteria:
 

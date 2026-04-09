@@ -21,4 +21,4 @@ When this skill touches Codex guidance, warn plainly that OpenAI's documented Co
 
 - it does not install anything
 - it does not validate repo-local plugin install surfaces
-- it does not normalize nested plugin-directory guidance for this repo
+- it does not normalize nested staged plugin-directory guidance or repo-marketplace guidance for this repo
