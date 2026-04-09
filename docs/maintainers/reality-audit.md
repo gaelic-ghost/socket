@@ -2,6 +2,8 @@
 
 Use this document as the source-of-truth checklist when auditing `agent-plugin-skills`.
 
+For the durable map of Codex plugin catalogs, staged payloads, installed cache paths, and config enabled-state, see [codex-plugin-install-surfaces.md](./codex-plugin-install-surfaces.md).
+
 ## Source Of Truth Order
 
 1. root `skills/`

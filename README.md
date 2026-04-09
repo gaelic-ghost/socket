@@ -4,6 +4,8 @@ Installable maintainer skills for skills-export repositories.
 
 For maintainer policy, source-of-truth order, and standards references, see [AGENTS.md](./AGENTS.md).
 
+For the durable maintainer map of Codex marketplace catalogs, staged plugin roots, installed cache paths, and config enabled-state, see [docs/maintainers/codex-plugin-install-surfaces.md](./docs/maintainers/codex-plugin-install-surfaces.md).
+
 ## Hard Codex Limitation
 
 OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.

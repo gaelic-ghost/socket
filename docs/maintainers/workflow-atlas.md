@@ -2,6 +2,8 @@
 
 This repository exports maintainer skills for skills-export repositories.
 
+For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-install-surfaces.md](./codex-plugin-install-surfaces.md).
+
 ## Active Skill Roles
 
 | Skill | Role | Output |
