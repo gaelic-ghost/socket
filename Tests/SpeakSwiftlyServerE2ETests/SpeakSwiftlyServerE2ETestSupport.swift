@@ -1145,14 +1145,12 @@ struct E2ETextProfileResponse: Decodable, Sendable {
 }
 
 struct E2ETextProfilesSnapshot: Decodable, Sendable {
-    let persistenceURL: String?
     let baseProfile: E2ETextProfileSnapshot
     let activeProfile: E2ETextProfileSnapshot
     let storedProfiles: [E2ETextProfileSnapshot]
     let effectiveProfile: E2ETextProfileSnapshot
 
     enum CodingKeys: String, CodingKey {
-        case persistenceURL = "persistence_url"
         case baseProfile = "base_profile"
         case activeProfile = "active_profile"
         case storedProfiles = "stored_profiles"

@@ -59,6 +59,7 @@ actor ServerHost {
     private let makeSharedHostEvents: @Sendable () -> AsyncStream<HostEvent>
     private let encoder = JSONEncoder()
     private let byteBufferAllocator = ByteBufferAllocator()
+    private var activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend
 
     private var statusTask: Task<Void, Never>?
     private var pruneTask: Task<Void, Never>?
@@ -84,13 +85,15 @@ actor ServerHost {
 
     static func live(appConfig: AppConfig, state: ServerState) async -> ServerHost {
         let runtimeConfigurationStore = RuntimeConfigurationStore()
-        let runtime = ServerRuntimeAdapter(runtime: await SpeakSwiftly.liftoff())
+        let startupConfiguration = runtimeConfigurationStore.startupConfiguration()
+        let runtime = ServerRuntimeAdapter(runtime: await SpeakSwiftly.liftoff(configuration: startupConfiguration))
         let host = ServerHost(
             configuration: appConfig.server,
             httpConfig: appConfig.http,
             mcpConfig: appConfig.mcp,
             runtime: runtime,
             runtimeConfigurationStore: runtimeConfigurationStore,
+            activeRuntimeSpeechBackend: startupConfiguration.speechBackend,
             state: state
         )
         await host.start()
@@ -103,6 +106,7 @@ actor ServerHost {
         mcpConfig: MCPConfig? = nil,
         runtime: any ServerRuntimeProtocol,
         runtimeConfigurationStore: RuntimeConfigurationStore = .init(),
+        activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend? = nil,
         state: ServerState
     ) {
         let (immediatePublishRequests, immediatePublishContinuation) = AsyncStream.makeStream(
@@ -139,6 +143,8 @@ actor ServerHost {
         )
         self.runtime = runtime
         self.runtimeConfigurationStore = runtimeConfigurationStore
+        self.activeRuntimeSpeechBackend = activeRuntimeSpeechBackend
+            ?? runtimeConfigurationStore.initialActiveRuntimeSpeechBackend()
         self.state = state
         self.transportStatuses = Self.initialTransportStatuses(httpConfig: self.httpConfig, mcpConfig: self.mcpConfig)
         self.immediatePublishRequests = immediatePublishRequests
@@ -327,7 +333,7 @@ actor ServerHost {
             playbackQueue: playbackQueueStatus,
             playback: playbackStatus,
             currentGenerationJob: currentGenerationJobSnapshot(),
-            runtimeConfiguration: runtimeConfigurationStore.snapshot(),
+            runtimeConfiguration: runtimeConfigurationSnapshot(),
             transports: transportSnapshots(),
             recentErrors: recentErrors
         )
@@ -399,13 +405,16 @@ actor ServerHost {
     }
 
     func runtimeConfigurationSnapshot() -> RuntimeConfigurationSnapshot {
-        runtimeConfigurationStore.snapshot()
+        runtimeConfigurationStore.snapshot(activeRuntimeSpeechBackend: activeRuntimeSpeechBackend)
     }
 
     func saveRuntimeConfiguration(
         speechBackend: SpeakSwiftly.SpeechBackend
     ) async throws -> RuntimeConfigurationSnapshot {
-        let snapshot = try runtimeConfigurationStore.save(speechBackend: speechBackend)
+        let snapshot = try runtimeConfigurationStore.save(
+            speechBackend: speechBackend,
+            activeRuntimeSpeechBackend: activeRuntimeSpeechBackend
+        )
         emitRuntimeConfigurationChanged(snapshot)
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return snapshot
@@ -421,7 +430,6 @@ actor ServerHost {
 
     func textProfilesSnapshot() async -> TextProfilesSnapshot {
         .init(
-            persistenceURL: await runtime.textProfilePersistenceURL()?.path,
             baseProfile: .init(profile: await runtime.baseTextProfile()),
             activeProfile: .init(profile: await runtime.activeTextProfile()),
             storedProfiles: (await runtime.textProfiles()).map(TextProfileSnapshot.init(profile:)),
@@ -477,7 +485,7 @@ actor ServerHost {
         return .init(profile: activeProfile)
     }
 
-    func removeTextProfile(named profileID: String) async throws -> TextProfilesSnapshot {
+    func removeTextProfile(id profileID: String) async throws -> TextProfilesSnapshot {
         try await runtime.removeTextProfile(id: profileID)
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
@@ -494,7 +502,7 @@ actor ServerHost {
 
     func addTextReplacement(
         _ replacement: TextForSpeech.Replacement,
-        toStoredTextProfileNamed profileID: String? = nil
+        toStoredTextProfileID profileID: String? = nil
     ) async throws -> TextProfileSnapshot {
         let profile: TextForSpeech.Profile
         if let profileID {
@@ -509,7 +517,7 @@ actor ServerHost {
 
     func replaceTextReplacement(
         _ replacement: TextForSpeech.Replacement,
-        inStoredTextProfileNamed profileID: String? = nil
+        inStoredTextProfileID profileID: String? = nil
     ) async throws -> TextProfileSnapshot {
         let profile: TextForSpeech.Profile
         if let profileID {
@@ -524,7 +532,7 @@ actor ServerHost {
 
     func removeTextReplacement(
         id replacementID: String,
-        fromStoredTextProfileNamed profileID: String? = nil
+        fromStoredTextProfileID profileID: String? = nil
     ) async throws -> TextProfileSnapshot {
         let profile: TextForSpeech.Profile
         if let profileID {
@@ -681,6 +689,12 @@ actor ServerHost {
                 message: "SpeakSwiftly accepted the speech-backend switch request, but it did not return a speech_backend payload."
             )
         }
+        activeRuntimeSpeechBackend = resolvedSpeechBackend
+        let runtimeConfigurationSnapshot = runtimeConfigurationStore.snapshot(
+            activeRuntimeSpeechBackend: resolvedSpeechBackend
+        )
+        emitRuntimeConfigurationChanged(runtimeConfigurationSnapshot)
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(speechBackend: resolvedSpeechBackend.rawValue)
     }
 
@@ -1720,8 +1734,7 @@ actor ServerHost {
             .textProfilesChanged(
                 .init(
                     activeProfileID: activeProfile.id,
-                    storedProfileCount: storedProfiles.count,
-                    persistenceURL: await runtime.textProfilePersistenceURL()?.path
+                    storedProfileCount: storedProfiles.count
                 )
             )
         )

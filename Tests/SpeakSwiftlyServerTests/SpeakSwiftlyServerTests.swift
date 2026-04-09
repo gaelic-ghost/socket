@@ -696,10 +696,6 @@ actor MockRuntime: ServerRuntimeProtocol {
         textRuntime.snapshot(named: profileID)
     }
 
-    func textProfilePersistenceURL() async -> URL? {
-        URL(fileURLWithPath: "/tmp/mock-text-profiles.json")
-    }
-
     func loadTextProfiles() async throws {
         loadTextProfilesCallCount += 1
     }
@@ -1005,7 +1001,6 @@ actor MockRuntime: ServerRuntimeProtocol {
         let textProfiles = try #require(textProfilesJSON["text_profiles"] as? [String: Any])
         let storedTextProfiles = try #require(textProfiles["stored_profiles"] as? [[String: Any]])
         #expect(storedTextProfiles.contains { $0["id"] as? String == "swift-docs" })
-        #expect(textProfiles["persistence_url"] as? String == "/tmp/mock-text-profiles.json")
 
         let loadTextProfilesResponse = try await client.execute(uri: "/normalizer/load", method: .post)
         let loadTextProfilesJSON = try jsonObject(from: loadTextProfilesResponse.body)
@@ -1016,7 +1011,8 @@ actor MockRuntime: ServerRuntimeProtocol {
         let saveTextProfilesResponse = try await client.execute(uri: "/normalizer/save", method: .post)
         let saveTextProfilesJSON = try jsonObject(from: saveTextProfilesResponse.body)
         let savedTextProfiles = try #require(saveTextProfilesJSON["text_profiles"] as? [String: Any])
-        #expect(savedTextProfiles["persistence_url"] as? String == "/tmp/mock-text-profiles.json")
+        let savedStoredProfiles = try #require(savedTextProfiles["stored_profiles"] as? [[String: Any]])
+        #expect(savedStoredProfiles.contains { $0["id"] as? String == "swift-docs" })
 
         let useTextProfileResponse = try await client.execute(
             uri: "/normalizer/active-profile",
@@ -1316,7 +1312,6 @@ actor MockRuntime: ServerRuntimeProtocol {
     let listTextProfilesPayload = try mcpToolPayload(from: listTextProfilesEnvelope)
     let listTextStoredProfiles = try #require(listTextProfilesPayload["stored_profiles"] as? [[String: Any]])
     #expect(listTextStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
-    #expect(listTextProfilesPayload["persistence_url"] as? String == "/tmp/mock-text-profiles.json")
 
     let loadTextProfilesEnvelope = try await mcpEnvelope(
         from: await mcpSurface.handle(
@@ -1345,7 +1340,8 @@ actor MockRuntime: ServerRuntimeProtocol {
         )
     )
     let saveTextProfilesPayload = try mcpToolPayload(from: saveTextProfilesEnvelope)
-    #expect(saveTextProfilesPayload["persistence_url"] as? String == "/tmp/mock-text-profiles.json")
+    let savedStoredProfiles = try #require(saveTextProfilesPayload["stored_profiles"] as? [[String: Any]])
+    #expect(savedStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
     let persistenceActionCounts = await runtime.textProfilePersistenceActionCounts()
     #expect(persistenceActionCounts.load == 1)
     #expect(persistenceActionCounts.save == 1)

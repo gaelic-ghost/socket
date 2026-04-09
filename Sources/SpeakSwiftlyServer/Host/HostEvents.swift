@@ -19,12 +19,10 @@ struct ProfileCacheStatusSnapshot: Codable, Sendable, Equatable {
 struct TextProfilesStatusSnapshot: Codable, Sendable, Equatable {
     let activeProfileID: String
     let storedProfileCount: Int
-    let persistenceURL: String?
 
     enum CodingKeys: String, CodingKey {
         case activeProfileID = "active_profile_id"
         case storedProfileCount = "stored_profile_count"
-        case persistenceURL = "persistence_url"
     }
 }
 

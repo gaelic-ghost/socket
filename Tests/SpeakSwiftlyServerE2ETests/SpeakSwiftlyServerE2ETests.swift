@@ -450,14 +450,12 @@ struct SpeakSwiftlyServerE2ETests {
             E2ETextProfileListResponse.self,
             from: try await client.request(path: "/normalizer/save", method: "POST").data
         ).textProfiles
-        #expect(savedSnapshot.persistenceURL?.isEmpty == false)
         #expect(savedSnapshot.storedProfiles.contains { $0.id == "http-text-profile" })
 
         let loadedSnapshot = try decode(
             E2ETextProfileListResponse.self,
             from: try await client.request(path: "/normalizer/load", method: "POST").data
         ).textProfiles
-        #expect(loadedSnapshot.persistenceURL == savedSnapshot.persistenceURL)
         #expect(loadedSnapshot.storedProfiles.contains { $0.id == "http-text-profile" })
 
         let resetProfile = try decode(
@@ -699,7 +697,8 @@ struct SpeakSwiftlyServerE2ETests {
         let savedTextProfiles = try Self.requireObjectPayload(
             from: try await client.callToolJSON(name: "save_text_profiles", arguments: [:])
         )
-        #expect((savedTextProfiles["persistence_url"] as? String)?.isEmpty == false)
+        let savedStoredProfiles = try requireArray("stored_profiles", in: savedTextProfiles)
+        #expect(savedStoredProfiles.contains { $0["id"] as? String == "mcp-text-profile" })
 
         let loadedTextProfiles = try Self.requireObjectPayload(
             from: try await client.callToolJSON(name: "load_text_profiles", arguments: [:])

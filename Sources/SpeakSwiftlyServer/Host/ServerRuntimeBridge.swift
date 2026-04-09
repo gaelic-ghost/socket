@@ -106,7 +106,6 @@ protocol ServerRuntimeProtocol: Actor {
     func textProfile(id profileID: String) async -> TextForSpeech.Profile?
     func textProfiles() async -> [TextForSpeech.Profile]
     func effectiveTextProfile(id profileID: String?) async -> TextForSpeech.Profile
-    func textProfilePersistenceURL() async -> URL?
     func loadTextProfiles() async throws
     func saveTextProfiles() async throws
     func createTextProfile(id: String, named name: String, replacements: [TextForSpeech.Replacement]) async throws -> TextForSpeech.Profile
@@ -195,20 +194,12 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         outputPath: String?,
         cwd: String?
     ) async -> RuntimeRequestHandle {
-        let currentDirectoryPath = FileManager.default.currentDirectoryPath
-        let previousDirectoryPath = currentDirectoryPath
-        if let cwd, !cwd.isEmpty {
-            FileManager.default.changeCurrentDirectoryPath(cwd)
-        }
-        defer {
-            FileManager.default.changeCurrentDirectoryPath(previousDirectoryPath)
-        }
         let handle = await runtime.voices.create(
             design: profileName,
             from: text,
             vibe: vibe,
             voice: voiceDescription,
-            outputPath: outputPath
+            outputPath: resolvedAbsoluteFilesystemPath(outputPath, cwd: cwd)
         )
         return .init(id: handle.id, operation: "create_voice_profile", profileName: profileName, events: handle.events)
     }
@@ -220,17 +211,10 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         transcript: String?,
         cwd: String?
     ) async -> RuntimeRequestHandle {
-        let currentDirectoryPath = FileManager.default.currentDirectoryPath
-        let previousDirectoryPath = currentDirectoryPath
-        if let cwd, !cwd.isEmpty {
-            FileManager.default.changeCurrentDirectoryPath(cwd)
-        }
-        defer {
-            FileManager.default.changeCurrentDirectoryPath(previousDirectoryPath)
-        }
+        let resolvedReferenceAudioPath = resolvedAbsoluteFilesystemPath(referenceAudioPath, cwd: cwd) ?? referenceAudioPath
         let handle = await runtime.voices.create(
             clone: profileName,
-            from: URL(fileURLWithPath: referenceAudioPath),
+            from: URL(fileURLWithPath: resolvedReferenceAudioPath),
             vibe: vibe,
             transcript: transcript
         )
@@ -350,10 +334,6 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         await runtime.normalizer.effectiveProfile(id: profileID)
     }
 
-    func textProfilePersistenceURL() async -> URL? {
-        nil
-    }
-
     func loadTextProfiles() async throws {
         try await runtime.normalizer.loadProfiles()
     }
@@ -417,5 +397,31 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         fromStoredTextProfileID profileID: String
     ) async throws -> TextForSpeech.Profile {
         try await runtime.normalizer.removeReplacement(id: replacementID, fromStoredProfileID: profileID)
+    }
+
+    private func resolvedAbsoluteFilesystemPath(
+        _ path: String?,
+        cwd: String?
+    ) -> String? {
+        guard let path else {
+            return nil
+        }
+
+        let trimmedPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedPath.isEmpty == false else {
+            return nil
+        }
+
+        if trimmedPath.hasPrefix("/") {
+            return URL(fileURLWithPath: trimmedPath).standardizedFileURL.path
+        }
+
+        let trimmedCWD = cwd?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let resolvedBasePath =
+            (trimmedCWD?.isEmpty == false ? trimmedCWD : nil)
+            ?? FileManager.default.currentDirectoryPath
+        return URL(fileURLWithPath: trimmedPath, relativeTo: URL(fileURLWithPath: resolvedBasePath, isDirectory: true))
+            .standardizedFileURL
+            .path
     }
 }

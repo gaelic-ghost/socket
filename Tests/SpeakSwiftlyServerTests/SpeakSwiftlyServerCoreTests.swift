@@ -188,6 +188,36 @@ import TextForSpeech
     #expect(hostStateSnapshot.runtimeConfiguration == updatedSnapshot)
 }
 
+@Test func hostReportsLiveBackendSwitchWithoutMutatingNextStartupConfiguration() async throws {
+    let runtime = MockRuntime()
+    let state = await MainActor.run { ServerState() }
+    let profileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
+    let configurationStore = RuntimeConfigurationStore(
+        environment: ["SPEAKSWIFTLY_PROFILE_ROOT": profileRootURL.path],
+        activeRuntimeSpeechBackend: .qwen3
+    )
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: configurationStore,
+        state: state
+    )
+
+    let response = try await host.switchSpeechBackend(to: .marvis)
+    #expect(response.speechBackend == "marvis")
+
+    let runtimeConfiguration = await host.runtimeConfigurationSnapshot()
+    #expect(runtimeConfiguration.activeRuntimeSpeechBackend == "marvis")
+    #expect(runtimeConfiguration.nextRuntimeSpeechBackend == "qwen3")
+    #expect(runtimeConfiguration.persistedSpeechBackend == nil)
+    #expect(runtimeConfiguration.activeRuntimeMatchesNextRuntime == false)
+
+    let statusSnapshot = await host.statusSnapshot()
+    #expect(statusSnapshot.runtimeConfiguration == runtimeConfiguration)
+}
+
 @available(macOS 14, *)
 @Test func stateCompletesQueuedSpeechJobsAndPrunesExpiredEntries() async throws {
     let runtime = MockRuntime()

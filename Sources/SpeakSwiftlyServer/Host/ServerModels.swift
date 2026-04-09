@@ -316,14 +316,12 @@ public struct TextProfileSnapshot: Codable, Sendable, Equatable {
 }
 
 struct TextProfilesSnapshot: ResponseEncodable, Sendable, Equatable {
-    let persistenceURL: String?
     let baseProfile: TextProfileSnapshot
     let activeProfile: TextProfileSnapshot
     let storedProfiles: [TextProfileSnapshot]
     let effectiveProfile: TextProfileSnapshot
 
     enum CodingKeys: String, CodingKey {
-        case persistenceURL = "persistence_url"
         case baseProfile = "base_profile"
         case activeProfile = "active_profile"
         case storedProfiles = "stored_profiles"

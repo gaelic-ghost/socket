@@ -242,7 +242,7 @@ struct MCPSurface {
 
             case "delete_text_profile":
                 return try toolResult(
-                    try await host.removeTextProfile(named: requiredString("profile_id", in: arguments))
+                    try await host.removeTextProfile(id: requiredString("profile_id", in: arguments))
                 )
 
             case "reset_active_text_profile":
@@ -253,7 +253,7 @@ struct MCPSurface {
                 return try toolResult(
                     try await host.addTextReplacement(
                         try replacement.model(),
-                        toStoredTextProfileNamed: optionalString("profile_id", in: arguments)
+                        toStoredTextProfileID: optionalString("profile_id", in: arguments)
                     )
                 )
 
@@ -262,7 +262,7 @@ struct MCPSurface {
                 return try toolResult(
                     try await host.replaceTextReplacement(
                         try replacement.model(),
-                        inStoredTextProfileNamed: optionalString("profile_id", in: arguments)
+                        inStoredTextProfileID: optionalString("profile_id", in: arguments)
                     )
                 )
 
@@ -270,7 +270,7 @@ struct MCPSurface {
                 return try toolResult(
                     try await host.removeTextReplacement(
                         id: requiredString("replacement_id", in: arguments),
-                        fromStoredTextProfileNamed: optionalString("profile_id", in: arguments)
+                        fromStoredTextProfileID: optionalString("profile_id", in: arguments)
                     )
                 )
 

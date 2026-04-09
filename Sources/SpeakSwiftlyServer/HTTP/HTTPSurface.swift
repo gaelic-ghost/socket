@@ -185,7 +185,7 @@ private func registerHTTPRoutes(
 
     router.delete("normalizer/stored-profiles/:profile_id") { _, context -> TextProfileListResponse in
         let profileID = try context.parameters.require("profile_id")
-        return .init(textProfiles: try await host.removeTextProfile(named: profileID))
+        return .init(textProfiles: try await host.removeTextProfile(id: profileID))
     }
 
     router.post("normalizer/active-profile/replacements") { request, context -> TextProfileResponse in
@@ -196,7 +196,7 @@ private func registerHTTPRoutes(
     router.post("normalizer/stored-profiles/:profile_id/replacements") { request, context -> TextProfileResponse in
         let profileID = try context.parameters.require("profile_id")
         let payload = try await request.decode(as: TextReplacementRequestPayload.self, context: context)
-        return .init(profile: try await host.addTextReplacement(try payload.replacement.model(), toStoredTextProfileNamed: profileID))
+        return .init(profile: try await host.addTextReplacement(try payload.replacement.model(), toStoredTextProfileID: profileID))
     }
 
     router.put("normalizer/active-profile/replacements/:replacement_id") { request, context -> TextProfileResponse in
@@ -221,7 +221,7 @@ private func registerHTTPRoutes(
                 message: "Stored text replacement route id '\(replacementID)' did not match body replacement id '\(payload.replacement.id)'."
             )
         }
-        return .init(profile: try await host.replaceTextReplacement(try payload.replacement.model(), inStoredTextProfileNamed: profileID))
+        return .init(profile: try await host.replaceTextReplacement(try payload.replacement.model(), inStoredTextProfileID: profileID))
     }
 
     router.delete("normalizer/active-profile/replacements/:replacement_id") { _, context -> TextProfileResponse in
@@ -232,7 +232,7 @@ private func registerHTTPRoutes(
     router.delete("normalizer/stored-profiles/:profile_id/replacements/:replacement_id") { _, context -> TextProfileResponse in
         let profileID = try context.parameters.require("profile_id")
         let replacementID = try context.parameters.require("replacement_id")
-        return .init(profile: try await host.removeTextReplacement(id: replacementID, fromStoredTextProfileNamed: profileID))
+        return .init(profile: try await host.removeTextReplacement(id: replacementID, fromStoredTextProfileID: profileID))
     }
 
     router.post("generation/live") { request, context -> Response in

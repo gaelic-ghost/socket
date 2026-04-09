@@ -61,7 +61,6 @@ For text normalization, the server stays on the public `TextForSpeech` model sur
 - `SpeakSwiftly.Runtime.normalizer.profile(named:)`
 - `SpeakSwiftly.Runtime.normalizer.profiles()`
 - `SpeakSwiftly.Runtime.normalizer.effectiveProfile(named:)`
-- `SpeakSwiftly.Runtime.normalizer.persistenceURL()`
 - `SpeakSwiftly.Runtime.normalizer.loadProfiles()`
 - `SpeakSwiftly.Runtime.normalizer.saveProfiles()`
 - `SpeakSwiftly.Runtime.normalizer.createProfile(id:named:replacements:)`

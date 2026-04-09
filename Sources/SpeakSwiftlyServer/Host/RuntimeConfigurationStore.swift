@@ -7,7 +7,7 @@ struct RuntimeConfigurationStore: Sendable {
     private let environment: [String: String]
     private let configurationURL: URL
     private let profileRootURL: URL
-    private let activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend
+    private let defaultActiveRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend?
 
     init(
         environment: [String: String] = ProcessInfo.processInfo.environment,
@@ -28,22 +28,29 @@ struct RuntimeConfigurationStore: Sendable {
             self.profileRootURL = layout.runtimeProfileRootURL
             self.configurationURL = layout.runtimeConfigurationFileURL
         }
-        self.activeRuntimeSpeechBackend = activeRuntimeSpeechBackend
-            ?? Self.resolveNextRuntimeSpeechBackend(
-                environment: environment,
-                configurationURL: configurationURL
-            ).speechBackend
+        self.defaultActiveRuntimeSpeechBackend = activeRuntimeSpeechBackend
     }
 
-    func snapshot() -> RuntimeConfigurationSnapshot {
+    func startupConfiguration() -> SpeakSwiftly.Configuration {
+        .init(speechBackend: resolvedNextRuntimeSpeechBackend())
+    }
+
+    func initialActiveRuntimeSpeechBackend() -> SpeakSwiftly.SpeechBackend {
+        defaultActiveRuntimeSpeechBackend ?? resolvedNextRuntimeSpeechBackend()
+    }
+
+    func snapshot(
+        activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend? = nil
+    ) -> RuntimeConfigurationSnapshot {
         let resolution = Self.resolveNextRuntimeSpeechBackend(
             environment: environment,
             configurationURL: configurationURL
         )
+        let resolvedActiveRuntimeSpeechBackend = activeRuntimeSpeechBackend ?? initialActiveRuntimeSpeechBackend()
         let environmentOverride = SpeakSwiftly.SpeechBackend.configured(in: environment)
 
         return .init(
-            activeRuntimeSpeechBackend: activeRuntimeSpeechBackend.rawValue,
+            activeRuntimeSpeechBackend: resolvedActiveRuntimeSpeechBackend.rawValue,
             nextRuntimeSpeechBackend: resolution.speechBackend.rawValue,
             environmentSpeechBackendOverride: environmentOverride?.rawValue,
             persistedSpeechBackend: resolution.persistedSpeechBackend?.rawValue,
@@ -53,12 +60,15 @@ struct RuntimeConfigurationStore: Sendable {
             persistedConfigurationState: resolution.configurationState.rawValue,
             persistedConfigurationError: resolution.configurationError,
             persistedConfigurationAppliesOnRestart: true,
-            activeRuntimeMatchesNextRuntime: activeRuntimeSpeechBackend == resolution.speechBackend,
+            activeRuntimeMatchesNextRuntime: resolvedActiveRuntimeSpeechBackend == resolution.speechBackend,
             persistedConfigurationWillAffectNextRuntimeStart: environmentOverride == nil
         )
     }
 
-    func save(speechBackend: SpeakSwiftly.SpeechBackend) throws -> RuntimeConfigurationSnapshot {
+    func save(
+        speechBackend: SpeakSwiftly.SpeechBackend,
+        activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend? = nil
+    ) throws -> RuntimeConfigurationSnapshot {
         do {
             try SpeakSwiftly.Configuration(speechBackend: speechBackend).save(to: configurationURL)
         } catch {
@@ -66,7 +76,14 @@ struct RuntimeConfigurationStore: Sendable {
                 "SpeakSwiftlyServer could not save the persisted runtime configuration to '\(configurationURL.path)'. Likely cause: \(error.localizedDescription)"
             )
         }
-        return snapshot()
+        return snapshot(activeRuntimeSpeechBackend: activeRuntimeSpeechBackend)
+    }
+
+    private func resolvedNextRuntimeSpeechBackend() -> SpeakSwiftly.SpeechBackend {
+        Self.resolveNextRuntimeSpeechBackend(
+            environment: environment,
+            configurationURL: configurationURL
+        ).speechBackend
     }
 }
 
