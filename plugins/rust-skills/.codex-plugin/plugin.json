@@ -1,0 +1,32 @@
+{
+  "name": "rust-skills",
+  "version": "0.1.0",
+  "description": "Standalone plugin repository for future Rust-focused Codex skills.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/rust-skills",
+  "repository": "https://github.com/gaelic-ghost/rust-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "rust"
+  ],
+  "interface": {
+    "displayName": "Rust Skills",
+    "shortDescription": "Future Rust-focused Codex skills.",
+    "longDescription": "Standalone plugin repository for future Rust-focused Codex skills and maintainer workflows.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/rust-skills",
+    "brandColor": "#CE422B"
+  }
+}
