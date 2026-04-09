@@ -29,6 +29,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "Installable maintainer skills for skills-export repositories.",
                 "OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.",
                 "npx skills add gaelic-ghost/agent-plugin-skills --all",
+                "https://skills.sh/",
                 "uv tool install ruff",
                 "uv tool install mypy",
                 "Claude Code continues to support direct `.claude/skills` discovery for local authoring while plugin packaging lives separately.",

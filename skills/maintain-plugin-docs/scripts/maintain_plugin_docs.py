@@ -62,6 +62,12 @@ TOOLING_REQUIRED_SNIPPETS = [
     "uv run --group dev pytest",
 ]
 
+INSTALL_REQUIRED_SNIPPETS = [
+    "https://skills.sh/",
+    "npx skills add",
+    "--all",
+]
+
 
 @dataclass
 class Issue:
@@ -169,6 +175,19 @@ def check_sections(repo: Path, profile: str, readme_text: str) -> List[Issue]:
                     doc_file=str(repo / "README.md"),
                     evidence=f"README is missing maintainer tooling snippet `{snippet}`.",
                     recommended_fix="Keep maintainer tooling guidance explicit in the README.",
+                )
+            )
+    for snippet in INSTALL_REQUIRED_SNIPPETS:
+        if snippet not in readme_text:
+            issues.append(
+                Issue(
+                    issue_id="install-guidance-missing-snippet",
+                    category="readme-content",
+                    severity="medium",
+                    repo=repo.name,
+                    doc_file=str(repo / "README.md"),
+                    evidence=f"README is missing install-guidance snippet `{snippet}` for all-skills installation.",
+                    recommended_fix="Add a skills.sh install section that shows how to install the full skills set with `npx skills add <owner/repo> --all`.",
                 )
             )
     return issues

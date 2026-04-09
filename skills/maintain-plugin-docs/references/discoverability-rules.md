@@ -2,6 +2,7 @@
 
 For public curated repos, include:
 
+- a skills.sh-oriented section for installing all exported skills at once
 - `npx skills add <owner/repo>`
 - `npx skills add <owner/repo> --all`
 - `npx skills add <owner/repo> --skill <skill-name>` for individual install examples

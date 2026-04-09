@@ -47,6 +47,12 @@ It does not ship an installer skill. It does not ship an install-validation skil
 
 ### Vercel `skills` CLI
 
+Install the full exported skills set at once through [skills.sh](https://skills.sh/):
+
+```bash
+npx skills add gaelic-ghost/agent-plugin-skills --all
+```
+
 Install one skill:
 
 ```bash

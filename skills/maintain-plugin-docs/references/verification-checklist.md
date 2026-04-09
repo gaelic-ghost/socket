@@ -4,6 +4,7 @@
 - Section presence/order matches profile requirements.
 - `## Table of Contents` exists where required and is compact (H2 links only, no nested bullets).
 - `## Install individually by Skill or Skill Pack` exists where required.
+- README includes a skills.sh install section for installing the full exported skill set at once.
 - `## Update Skills` exists and includes `npx skills check` plus `npx skills update`.
 - `## More resources for similar Skills` exists where required.
 - Required discoverability `###` subsections are present and canonically named.
@@ -11,6 +12,7 @@
 - `## Keywords` exists where required.
 - Install commands are syntactically valid.
 - Install commands use current syntax (`--all`, `--skill`); legacy `@skill` syntax is rewritten.
+- Full-set install guidance includes `npx skills add <owner/repo> --all` and a `skills.sh` link.
 - `--skill` references map to real `SKILL.md` directories.
 - Relative markdown links resolve.
 - No duplicated install blocks unless intentional.

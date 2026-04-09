@@ -40,6 +40,10 @@ This repository exports installable maintainer skills.
 
 ## Install Guidance
 
+Install all exported skills with the `skills.sh` flow:
+
+- [skills.sh](https://skills.sh/)
+
 ```bash
 npx skills add gaelic-ghost/agent-plugin-skills --all
 ```
@@ -91,3 +95,13 @@ def test_check_sections_flags_missing_tooling_guidance(tmp_path: Path) -> None:
     issues = m.check_sections(repo, "skills-maintainer", broken)
 
     assert any(issue.issue_id == "tooling-guidance-missing-snippet" for issue in issues)
+
+
+def test_check_sections_flags_missing_all_skills_install_guidance(tmp_path: Path) -> None:
+    repo = tmp_path / "agent-plugin-skills"
+    repo.mkdir()
+    broken = VALID_README.replace("- [skills.sh](https://skills.sh/)\n", "")
+
+    issues = m.check_sections(repo, "skills-maintainer", broken)
+
+    assert any(issue.issue_id == "install-guidance-missing-snippet" for issue in issues)
