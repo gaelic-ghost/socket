@@ -2,10 +2,11 @@
 
 ## Active Surface
 
-`python-skills` now ships with four bundled skills under root `skills/` and thin packaged plugin manifests under `plugins/python-skills/`:
+`python-skills` now ships with five bundled skills under root `skills/` and thin packaged plugin manifests under `plugins/python-skills/`:
 
 - `bootstrap-python-mcp-service`
 - `bootstrap-python-service`
+- `integrate-fastapi-fastmcp`
 - `bootstrap-uv-python-workspace`
 - `uv-pytest-unit-testing`
 

@@ -87,16 +87,17 @@ The first pass should focus on cross-repo clarity, not forced uniformity.
 ### High Priority
 
 - `apple-dev-skills`
-  - audit README, `AGENTS.md`, and packaging surfaces against the current `agent-plugin-skills` honesty rules
-  - decide whether to keep repo-local marketplaces as a conscious divergence or simplify the model
+  - [x] audit README, `AGENTS.md`, and packaging surfaces against the current `agent-plugin-skills` honesty rules
+  - [x] decide the repo-local marketplaces should point directly at root `skills/` rather than describe a nonexistent packaged plugin tree
 - `productivity-skills`
-  - run the same source-of-truth and packaging honesty audit
-  - check whether the current marketplace-heavy posture is still intentional
+  - [x] run the same source-of-truth and packaging honesty audit
+  - [x] tighten the README so the repo is described as root `skills/` plus thin marketplace metadata instead of as a separately staged packaged plugin tree
 - `python-skills`
-  - confirm the nested plugin-root model is still the intended long-term packaging shape
-  - align docs and maintainer guidance with that chosen shape
+  - [x] confirm the nested plugin-root model is still the intended long-term packaging shape
+  - [x] align docs and maintainer guidance with that chosen shape and active five-skill inventory
 - `things-app`
-  - verify that the mixed skills plus MCP plus nested plugin model is described plainly and consistently
+  - [x] verify that the mixed skills plus MCP plus nested plugin model is described plainly and consistently
+  - [x] strengthen maintainer guidance so the mixed repo model is explicit in `AGENTS.md`
 
 ### Medium Priority
 

@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "apple-dev-skills",
-      "source": "./plugins/apple-dev-skills",
+      "source": "./skills",
       "description": "Apple development workflows for Codex and Claude Code."
     }
   ]

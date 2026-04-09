@@ -68,7 +68,7 @@ For new installs, prompts, and examples, prefer the narrower execution-skill nam
 Maintainer guidance for those adjacent surfaces now exists in [AGENTS.md](./AGENTS.md):
 
 - Codex plugins are the installable distribution layer that can bundle skills, apps, and MCP servers.
-- This repository does not keep a nested packaged plugin copy of itself because that is not part of the enduring repo contract here.
+- In this repository, repo-scoped marketplace catalogs point directly at root `skills/` for local discovery instead of carrying a nested packaged plugin copy.
 - Claude Code plugins are a broader distribution layer that may bundle skills, commands, hooks, `bin/`, MCP or LSP config, and plugin-scoped subagents.
 - Codex and Claude subagents are delegation/runtime workers, not replacements for repo guidance or top-level skills.
 - Keep consumer-side install copies, caches, and machine-local runtime state out of git.
@@ -92,7 +92,7 @@ Maintainer-facing workflow diagrams, input and output contracts, and Agent ↔ U
 
 ### Install Surfaces
 
-This repository exports from top-level `skills/` today. If `mcps/` or `apps/` are added later, they must also live at the repository top level. Do not describe or recreate a nested packaged plugin tree, repo-local installer workflow, or repo-local install-validator workflow as part of this repository's contract.
+This repository exports from top-level `skills/` today. If `mcps/` or `apps/` are added later, they must also live at the repository top level. Keep repo-scoped marketplace catalogs aligned directly with root `skills/`, and do not describe or recreate a nested packaged plugin tree, repo-local installer workflow, or repo-local install-validator workflow as part of this repository's contract.
 
 Repo-wide standards audit and coordination for this repository belongs to the maintainer workflow in `maintain-plugin-repo`.
 
@@ -209,14 +209,6 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
 │   └── maintainers/
 │       ├── reality-audit.md
 │       └── workflow-atlas.md
-├── plugins/
-│   └── apple-dev-skills/
-│       ├── .codex-plugin/
-│       ├── .claude-plugin/
-│       ├── assets/
-│       ├── bin/
-│       ├── hooks/
-│       └── skills/
 ├── shared/
 │   ├── agents-snippets/
 │   │   ├── apple-swift-package-core.md
@@ -236,7 +228,7 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
     └── xcode-app-project-workflow/
 ```
 
-The canonical workflow content still lives under root `skills/`. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved.
+The canonical workflow content still lives under root `skills/`. Repo-scoped Codex and Claude marketplace catalogs also point directly at that same source tree for local discovery instead of staging a second packaged plugin copy. The discovery mirrors are local POSIX symlinks for macOS and Linux development, including WSL 2 when Windows is involved.
 
 Maintainers: authoritative skill-authoring resources live in `AGENTS.md`.
 

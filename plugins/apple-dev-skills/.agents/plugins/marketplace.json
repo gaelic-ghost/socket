@@ -8,7 +8,7 @@
       "name": "apple-dev-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/apple-dev-skills"
+        "path": "./skills"
       },
       "policy": {
         "installation": "AVAILABLE",

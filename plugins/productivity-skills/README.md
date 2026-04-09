@@ -8,7 +8,7 @@ For maintainer guidance, standards references, and cross-ecosystem packaging pol
 
 This repository serves two intentional roles in Gale's skills ecosystem:
 
-- it is the public home of a globally installable productivity-skills plugin that other people can use directly
+- it is the public home of broadly installable `productivity-skills` workflows that other people can use directly through skill installs and repo-scoped marketplace discovery
 - it is the canonical general-purpose baseline layer for skill families that later narrow into stack-specific plugins such as `apple-dev-skills` and `python-skills`
 
 - keep `productivity-skills` focused on skills that make sense to install globally
@@ -95,6 +95,8 @@ The repo-local marketplace catalogs are intentionally thin:
 - point directly at root `skills/`
 - avoid nested packaged plugin copies inside this repository
 - keep essential workflow behavior in the skill directories themselves
+
+That means this repository should be described as a root-`skills/` repo with thin marketplace metadata, not as a repo that stages a separate packaged plugin tree inside itself.
 
 Helpful docs for this discovery model:
 

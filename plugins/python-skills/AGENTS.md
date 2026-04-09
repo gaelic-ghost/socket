@@ -16,7 +16,7 @@
 
 ## Maintainer Defaults
 
-- Keep the active public surface limited to the four bundled skills shipped under `skills/` in this repository's plugin root.
+- Keep the active public surface limited to the five bundled skills shipped under `skills/` in this repository's plugin root.
 - Treat the root `README.md` as the canonical install and discovery surface for the repository.
 - Treat root `skills/` as the canonical workflow-authoring surface.
 - Treat `plugins/python-skills/` as the plugin packaging root for this repository.
