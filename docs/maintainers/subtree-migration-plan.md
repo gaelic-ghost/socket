@@ -67,6 +67,8 @@ Immediate subtree candidates:
 - `productivity-skills`
 - `python-skills`
 - `things-app`
+- `dotnet-skills` once bootstrapped as a real Git repo
+- `rust-skills` once bootstrapped as a real Git repo
 
 Candidates that need verification before import:
 
@@ -85,21 +87,23 @@ Status:
 - imported so far:
   - `agent-plugin-skills`
   - `apple-dev-skills`
+  - `dotnet-skills`
   - `private-skills`
   - `productivity-skills`
   - `python-skills`
+  - `rust-skills`
   - `things-app`
 - initial subtree commits:
   - `c884399` `agent-plugin-skills`
   - `38b095f` `apple-dev-skills`
+  - `5eabafe` `dotnet-skills`
   - `b30dfc3` `private-skills`
   - `57698b8` `productivity-skills`
   - `516f256` `python-skills`
+  - `fd77a92` `rust-skills`
   - `06ce077` `things-app`
 - still deferred:
   - `web-dev-skills`
-  - `dotnet-skills`
-  - `rust-skills`
   - `speak-to-user-skills`
 
 ### Phase 2: wire the repo-root marketplace
@@ -110,8 +114,9 @@ Status:
 
 Current blocker:
 
-- none of the phase-one candidate repos currently track `.codex-plugin/plugin.json` or `.claude-plugin/plugin.json` in their source repositories
-- that means subtree import can proceed now, but the repo-root marketplace should remain empty until plugin packaging exists in the imported source trees or a deliberate packaging layer is added
+- most imported phase-one repos still do not track `.codex-plugin/plugin.json` or `.claude-plugin/plugin.json` in their source repositories
+- `dotnet-skills` and `rust-skills` now do, so they can be listed independently in the repo-root marketplace
+- the other imported repos should remain unlisted until plugin packaging exists in their source trees or a deliberate packaging layer is added
 
 ### Phase 3: validate Codex behavior
 
@@ -157,4 +162,5 @@ Do not bulk-import everything in one pass.
 
 - the first subtree import proved the Git shape works for the superproject
 - the next useful implementation step is to import the remaining Git-backed repos one by one
-- plugin packaging is a separate follow-up track from subtree import; the marketplace should not be populated speculatively
+- plugin packaging remains a separate track from subtree import
+- the marketplace now lists only independently packaged child repos and should not be populated speculatively beyond that

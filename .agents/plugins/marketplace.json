@@ -3,5 +3,30 @@
     "displayName": "Socket"
   },
   "name": "socket",
-  "plugins": []
+  "plugins": [
+    {
+      "name": "dotnet-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dotnet-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "rust-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rust-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
 }
