@@ -1,0 +1,33 @@
+{
+  "name": "dotnet-skills",
+  "version": "0.1.0",
+  "description": "Standalone plugin repository for future .NET-focused Codex skills.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/dotnet-skills",
+  "repository": "https://github.com/gaelic-ghost/dotnet-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "dotnet",
+    "csharp"
+  ],
+  "interface": {
+    "displayName": "Dotnet Skills",
+    "shortDescription": "Future .NET-focused Codex skills.",
+    "longDescription": "Standalone plugin repository for future .NET-focused Codex skills and maintainer workflows.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/dotnet-skills",
+    "brandColor": "#512BD4"
+  }
+}
