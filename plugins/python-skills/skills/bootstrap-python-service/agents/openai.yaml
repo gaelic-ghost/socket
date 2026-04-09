@@ -1,0 +1,8 @@
+interface:
+  display_name: "Bootstrap Python Service"
+  short_description: "Bootstrap uv FastAPI projects and workspaces."
+  brand_color: "#0F766E"
+  default_prompt: "Use $bootstrap-python-service to create a uv FastAPI project or workspace, generate committed .env defaults plus ignored .env.local overrides, add pydantic-settings configuration, run the canonical shell entrypoint, and return the emitted run and validation commands."
+
+policy:
+  allow_implicit_invocation: true

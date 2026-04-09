@@ -1,0 +1,14 @@
+interface:
+  display_name: "Bootstrap Python MCP Service"
+  short_description: "Bootstrap uv FastMCP projects and workspaces."
+  brand_color: "#1D4ED8"
+  default_prompt: "Use $bootstrap-python-mcp-service to create a uv FastMCP project or workspace, generate committed .env defaults plus ignored .env.local overrides, add pydantic-settings configuration, run the canonical shell entrypoint, and optionally generate an OpenAPI or FastAPI mapping report with uv run."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "fastmcp_docs"
+      description: "FastMCP documentation search"
+
+policy:
+  allow_implicit_invocation: true

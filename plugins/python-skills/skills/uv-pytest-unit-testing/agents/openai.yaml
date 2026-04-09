@@ -1,0 +1,8 @@
+interface:
+  display_name: "Pytest for UV Workspaces"
+  short_description: "Set up and run pytest with uv."
+  brand_color: "#B45309"
+  default_prompt: "Use $uv-pytest-unit-testing to detect repo shape, optionally apply layered customization profiles, bootstrap pytest for a uv project or workspace, keep package targeting explicit, account for pydantic-settings-based configuration, and run tests through the canonical shell entrypoints."
+
+policy:
+  allow_implicit_invocation: true

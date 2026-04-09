@@ -1,0 +1,11 @@
+# bootstrap-uv-python-workspace workspace config profile
+# Use with: scripts/init_uv_python_workspace.sh --config <this-file>
+
+name: "my-workspace"
+path: "./my-workspace"
+members: "core-lib,api-service"
+profile_map: "core-lib=package,api-service=service"
+python: "3.13"
+force: false
+initial_commit: false
+no_git_init: false

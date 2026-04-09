@@ -1,0 +1,10 @@
+# bootstrap-uv-python-workspace project config profile
+# Use with: scripts/init_uv_python_project.sh --config <this-file>
+
+name: "my-project"
+path: "./my-project"
+profile: "package"
+python: "3.13"
+force: false
+initial_commit: false
+no_git_init: false

@@ -1,0 +1,15 @@
+# bootstrap-python-service config profile
+# Use with: scripts/init_python_service.sh --config <this-file>
+
+name: "my-service"
+mode: "project"
+path: "./my-service"
+python: "3.13"
+
+# Workspace-only fields:
+members: "core-lib,api-service"
+profile_map: "core-lib=package,api-service=service"
+
+force: false
+initial_commit: false
+no_git_init: false

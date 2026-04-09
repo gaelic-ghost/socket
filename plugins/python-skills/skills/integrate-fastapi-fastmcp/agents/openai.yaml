@@ -1,0 +1,15 @@
+interface:
+  display_name: "Integrate FastAPI and FastMCP"
+  short_description: "Combine FastAPI and FastMCP in uv projects."
+  brand_color: "#0E7490"
+  default_prompt: "Use $integrate-fastapi-fastmcp to choose the right FastAPI and FastMCP integration pattern for this uv-managed project, keep typed settings and shared domain logic coherent, and promote any auto-generated FastAPI-to-FastMCP surface into a curated MCP design when needed."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "fastmcp_docs"
+      description: "FastMCP documentation search"
+
+policy:
+  allow_implicit_invocation: true
+

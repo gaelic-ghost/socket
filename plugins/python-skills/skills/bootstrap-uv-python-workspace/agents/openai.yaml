@@ -1,0 +1,8 @@
+interface:
+  display_name: "Bootstrap UV Python Workspace"
+  short_description: "Bootstrap uv Python projects and workspaces."
+  brand_color: "#7C3AED"
+  default_prompt: "Use $bootstrap-uv-python-workspace to create a uv project or workspace with package or service profiles, generate committed .env defaults plus ignored .env.local overrides, add pydantic-settings configuration, run the canonical shell entrypoint, and return the emitted validation commands."
+
+policy:
+  allow_implicit_invocation: true

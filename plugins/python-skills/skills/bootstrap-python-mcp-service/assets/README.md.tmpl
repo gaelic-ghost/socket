@@ -1,0 +1,43 @@
+# __SERVICE_NAME__
+
+Starter Python MCP server scaffolded with `uv` and `FastMCP`.
+
+## Requirements
+
+- macOS
+- `uv`
+- Python 3.11+
+
+## Install dependencies
+
+```bash
+uv sync
+```
+
+## Configuration
+
+- `.env` is committed and intended for safe, non-secret defaults.
+- `.env.local` is ignored and intended for local or secret overrides.
+- `app/config.py` uses `pydantic-settings` to load `.env` and then `.env.local`.
+
+## Run locally
+
+```bash
+uv run python app/server.py
+```
+
+## Run tests
+
+```bash
+uv run pytest
+uv run ruff check .
+uv run mypy .
+```
+
+## Project layout
+
+- `app/server.py`: FastMCP server entrypoint
+- `app/config.py`: typed settings loaded from `.env` and `.env.local`
+- `app/tools.py`: reusable tool logic
+- `tests/test_tools.py`: baseline tool and settings checks
+- `pyproject.toml`: project metadata and dependencies

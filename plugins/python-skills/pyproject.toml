@@ -1,0 +1,18 @@
+[project]
+name = "python-skills-maintainer"
+version = "0.0.0"
+description = "Maintainer tooling for the python-skills repository"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4.1,<9",
+  "PyYAML>=6.0.2,<7",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv]
+package = false
