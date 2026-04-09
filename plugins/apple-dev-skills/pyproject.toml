@@ -1,0 +1,18 @@
+[project]
+name = "apple-dev-skills-maintainer"
+version = "5.0.0-rc.1"
+description = "Maintainer tooling for the apple-dev-skills repository"
+requires-python = ">=3.9"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4.1,<9",
+  "PyYAML>=6.0.2,<7",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.uv]
+package = false

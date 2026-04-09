@@ -1,0 +1,13 @@
+{
+  "name": "apple-dev-skills",
+  "owner": {
+    "name": "Apple Dev Skills"
+  },
+  "plugins": [
+    {
+      "name": "apple-dev-skills",
+      "source": "./plugins/apple-dev-skills",
+      "description": "Apple development workflows for Codex and Claude Code."
+    }
+  ]
+}

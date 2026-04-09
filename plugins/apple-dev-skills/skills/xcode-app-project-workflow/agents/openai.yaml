@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode App Project Workflow"
+  short_description: "Compatibility surface that routes broad Xcode work"
+  default_prompt: "Use $xcode-app-project-workflow only as a compatibility router when older references still point at that broad Xcode workflow name. Infer enough workspace and mutation context to choose the real owner quickly, then hand the request into $xcode-build-run-workflow or $xcode-testing-workflow while preserving the direct .pbxproj warning boundary and the docs-first rule."

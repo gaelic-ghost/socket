@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Package Build Run Workflow"
+  short_description: "Guide SwiftPM build, run, manifest, resource, and plugin work"
+  default_prompt: "Use $swift-package-build-run-workflow to inspect an existing Swift package, plan or run SwiftPM build and run commands, make manifest or dependency changes, work on package resources or Metal distribution, and hand off to $swift-package-testing-workflow or $xcode-build-run-workflow only when that narrower surface is actually required."

@@ -1,0 +1,20 @@
+name: Validate Docs And Skills
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "codex/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate roadmap and skill layout
+        run: bash .github/scripts/validate_repo_docs.sh

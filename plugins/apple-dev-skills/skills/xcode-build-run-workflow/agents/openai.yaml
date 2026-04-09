@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Build Run Workflow"
+  short_description: "Guide Xcode build, run, diagnostics, and mutation workflows"
+  default_prompt: "Use $xcode-build-run-workflow to inspect Xcode workspaces, run scheme-aware Apple builds, launches, previews, or project-integrity work, and choose the right Xcode-aware fallback path while keeping the direct .pbxproj warning boundary intact."

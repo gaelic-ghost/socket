@@ -1,0 +1,7 @@
+schemaVersion: 1
+isCustomized: false
+settings:
+  defaultVersionProfile: "current-minus-one"
+  defaultTestingMode: "swift-testing"
+  initializeGit: true
+  copyAgentsMd: true

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Package Testing Workflow"
+  short_description: "Guide package tests, xctestplan, and test diagnosis"
+  default_prompt: "Use $swift-package-testing-workflow to run or diagnose tests in an existing Swift package, apply Swift Testing or XCTest guidance, work with xctestplan follow-through when needed, and hand off to $swift-package-build-run-workflow, $xcode-testing-workflow, or $xcode-build-run-workflow only when the request stops being primarily about package testing."

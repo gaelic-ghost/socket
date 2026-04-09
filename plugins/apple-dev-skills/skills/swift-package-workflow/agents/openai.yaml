@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Package Workflow"
+  short_description: "Compatibility surface that routes broad package work"
+  default_prompt: "Use $swift-package-workflow only as a compatibility router when older references still point at that broad package workflow name. Infer repo shape and the likely narrower owner quickly, then hand the request into $swift-package-build-run-workflow or $swift-package-testing-workflow while preserving mixed-root handoff to $xcode-build-run-workflow or $xcode-testing-workflow."

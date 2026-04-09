@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+
+# Agent plugin repo local runtime state
+.codex/plugins/
+.claude/settings.local.json

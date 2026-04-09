@@ -1,0 +1,6 @@
+schemaVersion: 1
+isCustomized: false
+settings:
+  defaultPlatform: "ask"
+  defaultOrgIdentifier: "com.example"
+  copyAgentsMd: true

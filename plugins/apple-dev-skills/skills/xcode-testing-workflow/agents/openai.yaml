@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Testing Workflow"
+  short_description: "Guide Xcode test execution, plans, and diagnostics"
+  default_prompt: "Use $xcode-testing-workflow to run or diagnose Swift Testing, XCTest, XCUITest, or xctestplan work in Xcode-aware projects, and hand off to $xcode-build-run-workflow only when the request stops being primarily about testing."
