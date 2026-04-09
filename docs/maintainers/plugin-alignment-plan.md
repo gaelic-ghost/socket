@@ -62,11 +62,11 @@ That means the superproject is currently using the top-level imported `agent-plu
   - intentionally mixed repo with root `skills/`, bundled MCP server, and nested packaged plugin root
   - should align on honesty, source-of-truth wording, and packaging clarity, but should not be forced into a pure skills-export shape if that would erase the MCP-first repo reality
 
-### Needs Deliberate Scope Decisions First
+### Excluded From Public Socket
 
 - `private-skills`
-  - currently does not advertise a clear Codex plugin packaging surface in the imported subtree
-  - may be intentionally private, partial, or not yet ready for the same packaging expectations
+  - private repo that should stay outside the public `socket` superproject
+  - do not expose it through the root marketplace or public subtree inventory
 
 ## First Alignment Pass
 
@@ -111,11 +111,10 @@ The first pass should focus on cross-repo clarity, not forced uniformity.
 - `web-dev-skills`
   - keep it minimal until the first real web-focused skill exists
 
-### Deferred Until Scope Is Clear
+### Deferred Outside Socket
 
 - `private-skills`
-  - decide whether it should become a first-class packaged plugin repo in `socket`
-  - otherwise keep it out of the root marketplace and avoid speculative standardization work
+  - maintain it separately as a private repo instead of standardizing it inside public `socket`
 
 ## Practical Rule
 

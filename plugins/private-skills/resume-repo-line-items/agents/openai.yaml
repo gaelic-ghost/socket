@@ -1,4 +1,0 @@
-interface:
-  display_name: "Resume Repo Line Items"
-  short_description: "Generate resume bullets from qualified local repos"
-  default_prompt: "Scan ~/Workspace repos and generate plaintext resume line items for qualifying projects."

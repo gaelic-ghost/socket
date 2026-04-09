@@ -35,7 +35,6 @@ Current child-repo remotes:
 - `agent-plugin-skills`
 - `apple-dev-skills`
 - `dotnet-skills`
-- `private-skills`
 - `productivity-skills`
 - `python-skills`
 - `rust-skills`
@@ -94,8 +93,9 @@ The root marketplace lives at `.agents/plugins/marketplace.json`.
 
 Use these rules:
 
-- list only child repositories that already ship real Codex plugin packaging
-- point `source.path` at the actual packaged plugin root
+- list every non-private imported child plugin surface by default
+- keep private child repos out of both the public superproject tree and the root marketplace
+- point `source.path` at the actual child surface the imported repo treats as installable
 - do not invent a second socket-level plugin wrapper when the child repo already has one
 - do not leave stale marketplace entries behind after a packaging move or subtree removal
 - keep one surviving plugin identity for each real child plugin

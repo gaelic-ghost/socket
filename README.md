@@ -34,7 +34,7 @@ This repo is now in first-pass imported-monorepo shape.
 - the cross-repo standards alignment plan is documented in [docs/maintainers/plugin-alignment-plan.md](./docs/maintainers/plugin-alignment-plan.md)
 - `plugins/` is reserved for subtree imports
 - `.agents/plugins/marketplace.json` is reserved for the repo-root Codex marketplace catalog
-- the repo-root marketplace currently lists independently packaged child plugins only
+- the repo-root marketplace now lists every non-private child plugin surface by default
 - aggregate multi-repo plugins are explicitly deferred behind independent child plugin packaging
 
 ## Imported Repositories
@@ -44,7 +44,6 @@ The current subtree-managed child repositories are:
 - `agent-plugin-skills`
 - `apple-dev-skills`
 - `dotnet-skills`
-- `private-skills`
 - `productivity-skills`
 - `python-skills`
 - `rust-skills`
@@ -53,6 +52,8 @@ The current subtree-managed child repositories are:
 - `things-app`
 
 Each child repository keeps its own source-of-truth docs and history inside its imported subtree. `socket` is responsible for the superproject concerns around import shape, root marketplace wiring, and cross-repo maintenance workflow.
+
+`private-skills` is intentionally excluded from this public superproject and from the root marketplace. It remains a separate private repository.
 
 Public source repositories that now back the rebuilt minimal child repos:
 
@@ -63,15 +64,19 @@ Public source repositories that now back the rebuilt minimal child repos:
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
 
-`socket` lists only child repositories that already ship real Codex plugin packaging. Some children expose that packaging at the subtree root, while others keep their packaged plugin root inside their own nested `plugins/<plugin-name>/` directory. The socket marketplace points at the actual packaged plugin root in either case.
+`socket` lists every non-private child plugin surface by default. Some children expose a top-level `.codex-plugin/plugin.json`, some keep their packaged plugin root inside their own nested `plugins/<plugin-name>/` directory, and some intentionally expose root `skills/` through thin repo-local marketplace metadata. The socket marketplace points at the actual child surface that the imported repo treats as installable.
 
 Current listed plugin roots are:
 
 - `./plugins/agent-plugin-skills`
+- `./plugins/apple-dev-skills/skills`
 - `./plugins/dotnet-skills`
+- `./plugins/productivity-skills/skills`
 - `./plugins/python-skills/plugins/python-skills`
 - `./plugins/rust-skills`
+- `./plugins/speak-to-user-skills`
 - `./plugins/things-app/plugins/things-app`
+- `./plugins/web-dev-skills`
 
 ## Working In Socket
 
@@ -89,7 +94,7 @@ There is no single heavy repo-wide build or test pipeline for `socket` yet.
 The current superproject validation surface is lightweight and structural:
 
 - keep `.agents/plugins/marketplace.json` valid JSON
-- verify that every listed `source.path` contains a real `.codex-plugin/plugin.json`
+- verify that every listed `source.path` matches the real child surface the imported repo treats as installable
 - review child repository docs and packaging paths when imports or packaging layouts change
 - run child-repo-specific checks from the relevant imported subtree when the change is really about that child repo
 
@@ -110,7 +115,6 @@ The current superproject validation surface is lightweight and structural:
 │   ├── agent-plugin-skills/
 │   ├── apple-dev-skills/
 │   ├── dotnet-skills/
-│   ├── private-skills/
 │   ├── productivity-skills/
 │   ├── python-skills/
 │   ├── rust-skills/

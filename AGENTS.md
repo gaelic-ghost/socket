@@ -17,6 +17,7 @@
 - Keep `.agents/plugins/marketplace.json` as the repo-root Codex marketplace catalog for this superproject.
 - Keep socket-level docs grounded in the actual packaged plugin roots that exist inside imported subtrees. Do not assume every child repo exposes `.codex-plugin/plugin.json` at the subtree root.
 - When a child repo uses nested plugin packaging such as `plugins/<plugin-name>/`, point the socket marketplace at that actual packaged root instead of inventing a second packaging layer at the superproject root.
+- Do not import or retain private child repositories in this public `socket` superproject. Keep private repos excluded from both `plugins/` and the root marketplace.
 - Do not hand-edit or rewrite imported child repo history to make it look monorepo-native. Use subtree sync operations and explicit commits instead.
 - Do not re-vendor one child plugin repository inside another imported subtree when the top-level subtree already exists in `socket`. Keep one surviving copy at the superproject layer.
 

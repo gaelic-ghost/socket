@@ -38,7 +38,6 @@ Rationale:
 │   ├── apple-dev-skills/
 │   ├── productivity-skills/
 │   ├── python-skills/
-│   ├── private-skills/
 │   ├── things-app/
 │   └── ...
 └── README.md
@@ -63,7 +62,6 @@ Immediate subtree candidates:
 
 - `agent-plugin-skills`
 - `apple-dev-skills`
-- `private-skills`
 - `productivity-skills`
 - `python-skills`
 - `speak-to-user-skills`
@@ -76,6 +74,7 @@ Directories blocked from subtree import until they become real Git repos or are 
 
 - `dotnet-skills`
 - `rust-skills`
+- `private-skills`
 
 Status:
 
@@ -84,7 +83,6 @@ Status:
   - `agent-plugin-skills`
   - `apple-dev-skills`
   - `dotnet-skills`
-  - `private-skills`
   - `productivity-skills`
   - `python-skills`
   - `rust-skills`
@@ -95,7 +93,6 @@ Status:
   - `c884399` `agent-plugin-skills`
   - `38b095f` `apple-dev-skills`
   - `5eabafe` `dotnet-skills`
-  - `b30dfc3` `private-skills`
   - `57698b8` `productivity-skills`
   - `516f256` `python-skills`
   - `fd77a92` `rust-skills`
@@ -105,17 +102,16 @@ Status:
 
 ### Phase 2: wire the repo-root marketplace
 
-- add one marketplace entry per imported plugin repo that actually ships a `.codex-plugin/plugin.json`
-- point marketplace entries at the actual packaged plugin root under `./plugins/`, even when that plugin root lives inside a subtree's own nested `plugins/<plugin-name>/` directory
-- do not list non-plugin repositories in the marketplace catalog
+- add one marketplace entry per imported non-private child plugin surface
+- point marketplace entries at the actual installable child surface under `./plugins/`, even when that surface is a nested packaged plugin root or a root `skills/` directory the child repo intentionally exposes through thin marketplace metadata
+- keep private child repos out of the public superproject marketplace catalog
 
 Current state:
 
-- `agent-plugin-skills`, `dotnet-skills`, and `rust-skills` ship top-level `.codex-plugin/plugin.json` roots, so their socket marketplace entries point directly at the subtree root directories
-- `python-skills` and `things-app` now ship packaged plugin roots inside their subtree-managed repositories, so their socket marketplace entries point at `./plugins/python-skills/plugins/python-skills` and `./plugins/things-app/plugins/things-app`
-- `speak-to-user-skills` now has standalone plugin packaging, but marketplace listing can wait until it has real exported skill content
-- `web-dev-skills` now has standalone plugin packaging, but marketplace listing can wait until it has real exported skill content
-- the other imported repos should remain unlisted until plugin packaging exists in their source trees or a deliberate packaging layer is added
+- `agent-plugin-skills`, `dotnet-skills`, `rust-skills`, `speak-to-user-skills`, and `web-dev-skills` ship top-level `.codex-plugin/plugin.json` roots, so their socket marketplace entries point directly at the subtree root directories
+- `python-skills` and `things-app` ship packaged plugin roots inside their subtree-managed repositories, so their socket marketplace entries point at `./plugins/python-skills/plugins/python-skills` and `./plugins/things-app/plugins/things-app`
+- `apple-dev-skills` and `productivity-skills` intentionally expose root `skills/` through thin repo-local marketplace metadata, so their socket marketplace entries point at `./plugins/apple-dev-skills/skills` and `./plugins/productivity-skills/skills`
+- `private-skills` remains intentionally excluded from this public superproject and from the root marketplace
 
 ### Phase 3: validate Codex behavior
 
@@ -161,4 +157,4 @@ Do not bulk-import everything in one pass.
 - the first subtree import proved the Git shape works for the superproject
 - the next useful implementation step is to keep the new minimal subtree source repos real and syncable instead of letting placeholder imports drift away from live remotes
 - plugin packaging remains a separate track from subtree import
-- the marketplace now lists only independently packaged child repos and should not be populated speculatively beyond that
+- the marketplace now lists every non-private child plugin surface the superproject intentionally exposes and should continue excluding private repos
