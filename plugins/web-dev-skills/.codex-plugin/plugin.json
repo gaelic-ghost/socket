@@ -1,0 +1,33 @@
+{
+  "name": "web-dev-skills",
+  "version": "0.1.0",
+  "description": "Standalone plugin repository for future web-focused Codex skills.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/web-dev-skills",
+  "repository": "https://github.com/gaelic-ghost/web-dev-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "web",
+    "frontend"
+  ],
+  "interface": {
+    "displayName": "Web Dev Skills",
+    "shortDescription": "Future web-focused Codex skills.",
+    "longDescription": "Standalone plugin repository for future web-focused Codex skills and maintainer workflows.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/web-dev-skills",
+    "brandColor": "#38BDF8"
+  }
+}
