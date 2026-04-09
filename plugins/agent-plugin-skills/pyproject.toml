@@ -1,0 +1,20 @@
+[project]
+name = "agent-plugin-skills-maintenance"
+version = "1.0.0rc1"
+description = "Maintainer-only Python tooling baseline for agent-plugin-skills."
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.0",
+  "PyYAML>=6.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "skills/bootstrap-skills-plugin-repo/tests",
+  "skills/maintain-plugin-docs/tests",
+  "skills/maintain-plugin-repo/tests",
+  "skills/sync-skills-repo-guidance/tests",
+]

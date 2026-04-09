@@ -1,0 +1,29 @@
+# Workflow Atlas
+
+This repository exports maintainer skills for skills-export repositories.
+
+For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-install-surfaces.md](./codex-plugin-install-surfaces.md).
+
+## Active Skill Roles
+
+| Skill | Role | Output |
+| --- | --- | --- |
+| `maintain-plugin-repo` | repo-level audit and bounded docs-routing entrypoint | grouped findings, owner assignments, routed safe fixes when available |
+| `maintain-plugin-docs` | README, ROADMAP, and cross-doc maintenance | docs findings, narrow deterministic fixes when available |
+| `bootstrap-skills-plugin-repo` | bootstrap or align a clean skills-export repo shape | scaffold actions, findings |
+| `sync-skills-repo-guidance` | audit README, AGENTS, maintainer docs, and discovery mirrors for guidance drift | guidance findings |
+
+## Shared Boundary Rules
+
+- Root `skills/` is canonical.
+- `.agents/skills` and `.claude/skills` are local discovery mirrors.
+- No skill in this repo should teach a nested plugin directory for this repo.
+- No skill in this repo should treat repo-local Codex plugin installs as proper private scoping.
+- No skill in this repo should resurrect installer or install-validation workflows.
+
+## Recommended Flow
+
+1. Use `maintain-plugin-repo` when the repo feels drifted overall.
+2. Use `maintain-plugin-docs` for bounded README or ROADMAP work.
+3. Use `bootstrap-skills-plugin-repo` when creating or aligning a new skills-export repo.
+4. Use `sync-skills-repo-guidance` when the repo shape is right but the docs and mirrors have drifted.
