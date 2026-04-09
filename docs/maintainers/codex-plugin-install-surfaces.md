@@ -125,6 +125,7 @@ When a plugin looks wrong, inspect in this order:
 This repository is intentionally source-first.
 
 - Root `skills/` is canonical.
+- Root `.codex-plugin/plugin.json` is the packaged plugin manifest for this source repo.
 - `.agents/skills` and `.claude/skills` are local authoring mirrors.
 - This repository does not track a nested repo-local Codex plugin install surface for itself.
 - This repository does not track a repo-local marketplace file for itself.

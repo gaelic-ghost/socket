@@ -14,7 +14,7 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 
 ## Hard Boundaries
 
-- This repository does not track a nested plugin directory for itself.
+- This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.
 - This repository does not track a repo-local Codex marketplace file for itself.
 - This repository does not ship `install-plugin-to-socket`.
 - This repository does not ship `validate-plugin-install-surfaces`.
@@ -27,7 +27,7 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 - README and AGENTS say plainly that this repo exports installable skills and does not pretend Codex has proper repo-private plugin scope.
 - ROADMAP matches the live exported skill set.
 - Maintainer tooling guidance includes `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`.
-- No tracked file reintroduces nested plugin directories, repo-marketplace guidance for this repo, installer workflows, or install-validation workflows.
+- No tracked file reintroduces nested staged plugin directories, repo-marketplace guidance for this repo, installer workflows, or install-validation workflows.
 
 ## Specialist Owners
 

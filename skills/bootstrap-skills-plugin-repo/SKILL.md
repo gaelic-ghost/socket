@@ -9,7 +9,7 @@ Bootstrap or align a skills-export repository.
 
 ## Codex Limitation Warning
 
-Warn plainly that OpenAI's documented Codex plugin system does not provide proper repo-private plugin scoping. This repository pattern does not normalize nested plugin directories or repo marketplaces for itself.
+Warn plainly that OpenAI's documented Codex plugin system does not provide proper repo-private plugin scoping. This repository pattern allows root `.codex-plugin` packaging, but it does not normalize nested staged plugin directories or repo marketplaces for itself.
 
 ## Codex Install-Surface Map
 
