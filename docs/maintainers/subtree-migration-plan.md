@@ -52,6 +52,11 @@ Rationale:
 - add maintainer docs and the repo-root marketplace placeholder
 - classify candidate imports by Git readiness
 
+Status:
+
+- completed
+- scaffold commit: `3bbf8f0` `Scaffold socket superproject`
+
 ### Phase 1: import existing Git repos as subtrees
 
 Immediate subtree candidates:
@@ -74,11 +79,22 @@ Directories blocked from subtree import until they become real Git repos or are 
 - `rust-skills`
 - `speak-to-user-skills`
 
+Status:
+
+- started
+- first successful subtree import: `agent-plugin-skills`
+- subtree commit: `c884399` `Add 'plugins/agent-plugin-skills/' from commit '6a0032df434bd6cfd338e7a2a640751473bad292'`
+
 ### Phase 2: wire the repo-root marketplace
 
 - add one marketplace entry per imported plugin repo that actually ships a `.codex-plugin/plugin.json`
 - keep marketplace entries pointed at subtree directories under `./plugins/`
 - do not list non-plugin repositories in the marketplace catalog
+
+Current blocker:
+
+- none of the phase-one candidate repos currently track `.codex-plugin/plugin.json` or `.claude-plugin/plugin.json` in their source repositories
+- that means subtree import can proceed now, but the repo-root marketplace should remain empty until plugin packaging exists in the imported source trees or a deliberate packaging layer is added
 
 ### Phase 3: validate Codex behavior
 
@@ -119,3 +135,9 @@ The first implementation pass should do only this:
 4. add the initial marketplace entry only after an imported directory proves it ships a plugin root
 
 Do not bulk-import everything in one pass.
+
+## Implementation Notes
+
+- the first subtree import proved the Git shape works for the superproject
+- the next useful implementation step is to import the remaining Git-backed repos one by one
+- plugin packaging is a separate follow-up track from subtree import; the marketplace should not be populated speculatively
