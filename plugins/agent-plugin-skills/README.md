@@ -1,6 +1,6 @@
 # agent-plugin-skills
 
-Installable maintainer skills for skills-export repositories.
+Some skills I made for building Codex Plugins and packs of Agent Skills.
 
 For maintainer policy, source-of-truth order, and standards references, see [AGENTS.md](./AGENTS.md).
 
@@ -8,15 +8,7 @@ For the durable maintainer map of Codex marketplace catalogs, staged plugin root
 
 ## Hard Codex Limitation
 
-OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.
-
-- Codex documents one repo marketplace at `$REPO_ROOT/.agents/plugins/marketplace.json`.
-- Codex documents one personal marketplace at `~/.agents/plugins/marketplace.json`.
-- A repo-local plugin that Codex can discover is exposed through that repo marketplace.
-- If that repo marketplace entry is tracked in git, the repo is advertising that plugin as part of the repo's exported product surface.
-- OpenAI does not document hidden repo-local plugin installs, private scoped plugin packs, or a second repo marketplace file that Codex will use for repo scope.
-
-This repository does not pretend otherwise. It is a source-first skills-export repository. It now ships first-class plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), but it does not ship a repo-local marketplace or a nested staged install surface for itself, and it does not ship workflows that normalize or hide Codex's scoping limits.
+Codex's Plugin setup is early-days and kind of a mess rn, so I no longer ship an installer skill, or an install validation/repair skill. Once they sort that out, I'll get on-board with the completed system.
 
 Authoritative references:
 
@@ -24,15 +16,6 @@ Authoritative references:
 - [Install a local plugin manually](https://developers.openai.com/codex/plugins/build#install-a-local-plugin-manually)
 - [How Codex uses marketplaces](https://developers.openai.com/codex/plugins/build#how-codex-uses-marketplaces)
 - [OpenAI Codex skills docs](https://developers.openai.com/codex/skills)
-
-## Honest Scope
-
-This repository does two honest things:
-
-- exports installable maintainer skills from root [`skills/`](./skills/)
-- keeps those skills blunt about what OpenAI's documented Codex plugin system can and cannot do
-
-It does not ship an installer skill. It does not ship an install-validation skill. It does not track a repo-local marketplace or a nested staged plugin-install directory for itself.
 
 ## Codex Plugin Install Map
 
@@ -59,19 +42,6 @@ Codex's documented plugin model splits plugin wiring across separate surfaces th
    - Plugin keys are scoped by plugin name plus marketplace name, for example `[plugins."agent-plugin-skills@socket"]`.
    - This answers "is this marketplace-scoped plugin enabled?" not "where is the plugin stored?"
 
-### Practical Mental Model
-
-- The marketplace is the catalog.
-- The staged plugin directory is the source payload the catalog points at.
-- The installed cache is Codex's installed copy.
-- `config.toml` is the per-plugin on or off switch.
-
-That means a personal marketplace file is not an "install destination". It is a catalog of plugins that your Codex install can see and install from. The actual personal staged plugin tree usually lives under `~/.codex/plugins/`, and Codex's installed cache lives under `~/.codex/plugins/cache/`.
-
-Likewise, a repo marketplace is still just a catalog. The difference is scope and visibility: it is attached to one repo, so plugins exposed there are visible in that repo's Codex context. If a repo tracks that marketplace in git, it is advertising those plugins as part of the repo-visible surface.
-
-Repo-local config is separate again. If a repo has a project-scoped `.codex/config.toml`, that file can override plugin enabled-state for that repo context. It does not replace the marketplace catalog. It answers whether a plugin identity such as `my-plugin@local-repo` should be enabled when Codex is running in that project.
-
 ### Repo Scope vs Personal Scope
 
 - Personal scope
@@ -82,16 +52,6 @@ Repo-local config is separate again. If a repo has a project-scoped `.codex/conf
   - Catalog: `$REPO_ROOT/.agents/plugins/marketplace.json`
   - Common staged payload path from the docs: `$REPO_ROOT/plugins/<plugin-name>`
   - Optional repo-scoped enabled-state override: `$REPO_ROOT/.codex/config.toml`
-
-This repository intentionally stays source-first. It ships root plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), but it does not ship a repo-local Codex marketplace or a nested staged plugin install surface for itself. Local authoring mirrors such as [`.agents/skills`](./.agents/skills) and [`.claude/skills`](./.claude/skills) are discovery mirrors for source skills, not packaged plugin install roots.
-
-Authoritative references for this model:
-
-- [OpenAI Codex plugin build docs](https://developers.openai.com/codex/plugins/build)
-- [How Codex uses marketplaces](https://developers.openai.com/codex/plugins/build#how-codex-uses-marketplaces)
-- [Install a local plugin manually](https://developers.openai.com/codex/plugins/build#install-a-local-plugin-manually)
-- [Marketplace metadata](https://developers.openai.com/codex/plugins/build#marketplace-metadata)
-- [Remove or turn off a plugin](https://developers.openai.com/codex/plugins#remove-or-turn-off-a-plugin)
 
 ## Exported Skills
 
