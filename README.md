@@ -1,41 +1,18 @@
 # socket
 
-Superproject for Gale's local Codex plugin and skills monorepo experiment.
+Superproject for Codex Plugins and Agent Skills.
 
 ## Overview
 
-This repository is a durable building-block change, not a local convenience wrapper.
-
-It is intended to unlock:
-
-- one shared Codex repo root for plugin marketplace experiments
-- one place to stage adjacent `*-skills` and related plugin repositories as in-repo directories
-- a lower-maintenance path than submodules for evaluating whether Codex behaves better with a single repo root
-- a reversible path from separate repos toward a real monorepo if the subtree model proves worthwhile
+Some skills and plugins I've been building to make Codex better and more useful at stuff that's important to me. Claude Code compat is in-progress.
 
 ## Motivation
 
-`socket` exists because Codex's current marketplace behavior is still strongly repo-root scoped.
-
-Keeping the adjacent plugin and skills repositories under one Git root gives this experiment one clear place to:
-
-- expose a shared repo-root Codex marketplace
-- stage multiple child plugin repositories side by side without nested Git roots
-- validate whether repo-root discovery behaves better than personal-scope installs for Gale's actual day-to-day repos
-- keep a path back to independent child repositories if the experiment stops paying for itself
+`socket` exists because Codex's current plugin system is kind of a mess, tbh.
 
 ## Current Status
 
-This repo is now in first-pass imported-monorepo shape.
-
-- the target layout is documented in [docs/maintainers/subtree-migration-plan.md](./docs/maintainers/subtree-migration-plan.md)
-- the packaging direction is documented in [docs/maintainers/plugin-packaging-strategy.md](./docs/maintainers/plugin-packaging-strategy.md)
-- the day-to-day subtree maintenance workflow is documented in [docs/maintainers/subtree-workflow.md](./docs/maintainers/subtree-workflow.md)
-- the cross-repo standards alignment plan is documented in [docs/maintainers/plugin-alignment-plan.md](./docs/maintainers/plugin-alignment-plan.md)
-- `plugins/` is reserved for subtree imports
-- `.agents/plugins/marketplace.json` is reserved for the repo-root Codex marketplace catalog
-- the repo-root marketplace now lists every non-private child plugin surface by default
-- aggregate multi-repo plugins are explicitly deferred behind independent child plugin packaging
+Very WIP, moving stuff over slowly to become subtrees.
 
 ## Imported Repositories
 
@@ -53,18 +30,11 @@ The current subtree-managed child repositories are:
 
 Each child repository keeps its own source-of-truth docs and history inside its imported subtree. `socket` is responsible for the superproject concerns around import shape, root marketplace wiring, and cross-repo maintenance workflow.
 
-`private-skills` is intentionally excluded from this public superproject and from the root marketplace. It remains a separate private repository.
-
-Public source repositories that now back the rebuilt minimal child repos:
-
-- [`gaelic-ghost/speak-to-user-skills`](https://github.com/gaelic-ghost/speak-to-user-skills)
-- [`gaelic-ghost/web-dev-skills`](https://github.com/gaelic-ghost/web-dev-skills)
-
 ## Marketplace Shape
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
 
-`socket` lists every non-private child plugin surface by default. Some children expose a top-level `.codex-plugin/plugin.json`, some keep their packaged plugin root inside their own nested `plugins/<plugin-name>/` directory, and some intentionally expose root `skills/` through thin repo-local marketplace metadata. The socket marketplace points at the actual child surface that the imported repo treats as installable.
+`socket` lists public child plugin surfaces by default. Some children expose a top-level `.codex-plugin/plugin.json`, some keep their packaged plugin root inside their own nested `plugins/<plugin-name>/` directory, and some intentionally expose root `skills/` through a thin repo-local marketplace file. The socket marketplace points at the actual child surface that the imported repo treats as installable. I'll standardize this once there's something to standardize to.
 
 Current listed plugin roots are:
 
