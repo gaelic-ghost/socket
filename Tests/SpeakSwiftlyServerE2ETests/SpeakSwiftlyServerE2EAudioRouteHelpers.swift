@@ -218,14 +218,16 @@ extension SpeakSwiftlyServerE2ETests {
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain
         )
-        let status = AudioObjectGetPropertyData(
-            deviceID,
-            &address,
-            0,
-            nil,
-            &dataSize,
-            &name
-        )
+        let status = withUnsafeMutablePointer(to: &name) { pointer in
+            AudioObjectGetPropertyData(
+                deviceID,
+                &address,
+                0,
+                nil,
+                &dataSize,
+                UnsafeMutableRawPointer(pointer)
+            )
+        }
         guard status == noErr else {
             throw SpeakSwiftlyBuildError(
                 "The live audible end-to-end suite could not read the name for macOS audio device id '\(deviceID)'. CoreAudio status: \(status)."

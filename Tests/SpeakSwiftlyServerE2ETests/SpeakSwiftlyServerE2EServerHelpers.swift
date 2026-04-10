@@ -1,5 +1,8 @@
 import Foundation
 import Testing
+#if canImport(Darwin)
+import Darwin
+#endif
 
 // MARK: - Server Runtime Helpers
 
@@ -217,7 +220,14 @@ extension SpeakSwiftlyServerE2ETests {
     }
 
     static func randomPort(in range: Range<Int>) -> Int {
-        Int.random(in: range)
+        let shuffledCandidates = Array(range).shuffled()
+        if let availablePort = shuffledCandidates.first(where: isPortAvailable(_:)) {
+            return availablePort
+        }
+
+        fatalError(
+            "The live end-to-end suite could not find a free localhost port inside '\(range.lowerBound)..<\(range.upperBound)'."
+        )
     }
 
     static var isPlaybackTraceEnabled: Bool {
@@ -226,5 +236,41 @@ extension SpeakSwiftlyServerE2ETests {
 
     static var e2eTimeout: Duration {
         .seconds(1_200)
+    }
+
+    // MARK: - Port Selection
+
+    private static func isPortAvailable(_ port: Int) -> Bool {
+        #if canImport(Darwin)
+        let descriptor = socket(AF_INET, SOCK_STREAM, 0)
+        guard descriptor >= 0 else { return false }
+        defer { close(descriptor) }
+
+        var reuseAddress: Int32 = 1
+        guard setsockopt(
+            descriptor,
+            SOL_SOCKET,
+            SO_REUSEADDR,
+            &reuseAddress,
+            socklen_t(MemoryLayout<Int32>.size)
+        ) == 0 else {
+            return false
+        }
+
+        var address = sockaddr_in()
+        address.sin_len = UInt8(MemoryLayout<sockaddr_in>.stride)
+        address.sin_family = sa_family_t(AF_INET)
+        address.sin_port = in_port_t(UInt16(port).bigEndian)
+        address.sin_addr = in_addr(s_addr: inet_addr("127.0.0.1"))
+
+        let bindStatus = withUnsafePointer(to: &address) { pointer in
+            pointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { socketAddress in
+                bind(descriptor, socketAddress, socklen_t(MemoryLayout<sockaddr_in>.stride))
+            }
+        }
+        return bindStatus == 0
+        #else
+        return true
+        #endif
     }
 }
