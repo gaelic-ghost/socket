@@ -1,84 +1,9 @@
 import Foundation
 import Testing
-#if canImport(Darwin)
-import Darwin
-#endif
 
-// MARK: - End-to-End Tests
+// MARK: - End-to-End Operator Control Surface Tests
 
-/// Keep the suite type name stable so Xcode test plans can target it directly.
-@Suite(
-    .serialized,
-    .enabled(
-        if: ProcessInfo.processInfo.environment["SPEAKSWIFTLYSERVER_E2E"] == "1",
-        "Set SPEAKSWIFTLYSERVER_E2E=1 to run live end-to-end coverage."
-    )
-)
-struct SpeakSwiftlyServerE2ETests {
-    // MARK: Test Fixtures
-
-    static let testingProfileText = "Hello there from SpeakSwiftlyServer end-to-end coverage."
-    static let testingProfileVoiceDescription = "A generic, warm, masculine, slow speaking voice."
-    static let testingCloneSourceText = """
-    This imported reference audio should let SpeakSwiftlyServer build a clone profile for end to end coverage with a clean transcript and steady speech.
-    """
-    static let testingPlaybackText = """
-    Hello from the real resident SpeakSwiftlyServer playback path. This end to end test uses a longer utterance so we can observe startup buffering, queue floor recovery, drain timing, and steady streaming behavior with enough generated audio to make the diagnostics useful instead of noisy.
-    """
-    static let operatorControlPlaybackText = """
-    Hello from the SpeakSwiftlyServer operator control lane. This coverage keeps the first request alive long enough to exercise pause and resume without falling into a trivially short utterance. After the opening section, the text shifts topics so the generated audio does not just repeat one sentence over and over while we are listening for queue mutations. We then move into a calmer wrap up that still leaves enough duration for queued cancellation and queue clearing to happen while the first playback-owned request continues draining toward completion.
-    """
-
-    // MARK: Sequential End-to-End Workflows
-
-    @Test func httpVoiceDesignLaneRunsSequentialSilentAndAudibleCoverage() async throws {
-        try await Self.runVoiceDesignLane(using: .http)
-    }
-
-    @Test func httpCloneLaneWithProvidedTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
-        try await Self.runCloneLane(using: .http, transcriptMode: .provided)
-    }
-
-    @Test func httpCloneLaneWithInferredTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
-        try await Self.runCloneLane(using: .http, transcriptMode: .inferred)
-    }
-
-    @Test func mcpVoiceDesignLaneRunsSequentialSilentAndAudibleCoverage() async throws {
-        try await Self.runVoiceDesignLane(using: .mcp)
-    }
-
-    @Test func mcpCloneLaneWithProvidedTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
-        try await Self.runCloneLane(using: .mcp, transcriptMode: .provided)
-    }
-
-    @Test func mcpCloneLaneWithInferredTranscriptRunsSequentialSilentAndAudibleCoverage() async throws {
-        try await Self.runCloneLane(using: .mcp, transcriptMode: .inferred)
-    }
-
-    @Test func httpMarvisVoiceDesignProfilesRunAudibleLivePlaybackAcrossAllVibes() async throws {
-        try await Self.runMarvisTripletLane(using: .http)
-    }
-
-    @Test func mcpMarvisVoiceDesignProfilesRunAudibleLivePlaybackAcrossAllVibes() async throws {
-        try await Self.runMarvisTripletLane(using: .mcp)
-    }
-
-    @Test func httpMarvisQueuedLivePlaybackDrainsInOrder() async throws {
-        try await Self.runQueuedMarvisTripletLane(using: .http)
-    }
-
-    @Test func mcpMarvisQueuedLivePlaybackDrainsInOrder() async throws {
-        try await Self.runQueuedMarvisTripletLane(using: .mcp)
-    }
-
-    @Test func httpProfileAndCloneCreationResolveRelativePathsAgainstExplicitCallerWorkingDirectory() async throws {
-        try await Self.runRelativePathProfileAndCloneLane(using: .http)
-    }
-
-    @Test func mcpProfileAndCloneCreationResolveRelativePathsAgainstExplicitCallerWorkingDirectory() async throws {
-        try await Self.runRelativePathProfileAndCloneLane(using: .mcp)
-    }
-
+extension SpeakSwiftlyServerE2ETests {
     @Test func httpOperatorControlSurfaceCoversReadQueuePlaybackAndRemovalFlows() async throws {
         let sandbox = try ServerE2ESandbox()
         defer { sandbox.cleanup() }
