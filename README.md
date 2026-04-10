@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Canonical Apple development skills exported from the repository top level for Codex and Claude Code.
+Some skills I've been working on for Apple dev stuff, packaged as a Plugin for Codex and Claude Code.
 
 ## Active Skills
 
@@ -27,7 +27,7 @@ Canonical Apple development skills exported from the repository top level for Co
 - `sync-swift-package-guidance`
   - Top-level skill for bringing an existing Swift package repo's `AGENTS.md` and workflow guidance up to baseline.
 
-### Legacy Compatibility Skills
+### Legacy
 
 - `xcode-app-project-workflow`
   - Legacy compatibility entrypoint for older broad Xcode workflow references. Prefer `xcode-build-run-workflow` or `xcode-testing-workflow` for new installs, docs, and prompts.
@@ -40,10 +40,6 @@ Every active skill now follows the same documentation contract:
 - explicit `inputs`, `defaults`, `status`, `path_type`, and `output`
 - named `fallback` and `handoff` behavior
 - a clear customization stance, including explicit `policy-only` knobs or an explicit “no durable customization surface” statement
-
-## Repo Purpose
-
-This repository is the source-of-truth authoring repo for `apple-dev-skills`. It keeps Apple-focused skills, shared toolkit integrations, and maintainer validation in one place. The active installable surface is exported from top-level `skills/` today, with top-level `mcps/` or `apps/` reserved for future use if this repo grows into those surfaces.
 
 ## Packaging And Discovery
 
@@ -66,18 +62,6 @@ Current local discovery scaffolding lives under:
 For new installs, prompts, and examples, prefer the narrower execution-skill names over the legacy compatibility entrypoints.
 
 Maintainer guidance for those adjacent surfaces now exists in [AGENTS.md](./AGENTS.md):
-
-- Codex plugins are the installable distribution layer that can bundle skills, apps, and MCP servers.
-- In this repository, repo-scoped marketplace catalogs point directly at root `skills/` for local discovery instead of carrying a nested packaged plugin copy.
-- Claude Code plugins are a broader distribution layer that may bundle skills, commands, hooks, `bin/`, MCP or LSP config, and plugin-scoped subagents.
-- Codex and Claude subagents are delegation/runtime workers, not replacements for repo guidance or top-level skills.
-- Keep consumer-side install copies, caches, and machine-local runtime state out of git.
-
-The export model in this repo is intentionally narrow:
-
-- top-level `skills/` as the active surface today
-- top-level `mcps/` or `apps/` only if those top-level directories are added later
-- no nested packaged plugin copy and no repo-local installer workflow in this repository
 
 ## Standards And Docs
 
