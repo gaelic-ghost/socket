@@ -131,6 +131,8 @@ extension SpeakSwiftlyServerE2ETests {
         text: String,
         profileName: String
     ) async throws -> String {
+        try stabilizeBuiltInAudioRouteForAudiblePlayback()
+
         let engineReadyLog = try await server.waitForStderrJSONObject(timeout: .seconds(120)) {
             guard
                 $0["event"] as? String == "playback_engine_ready",

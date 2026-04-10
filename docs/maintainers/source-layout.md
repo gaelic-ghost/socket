@@ -52,6 +52,12 @@ This document is the maintainer map for the post-`SpeakSwiftly 2.2.1` source spl
   Keep the typed-runtime test double split by text profiles, speech generation, runtime controls, retained artifacts, and test-only control hooks.
 - `Tests/SpeakSwiftlyServerE2ETests/SpeakSwiftlyServerE2ESuite.swift` plus the `SpeakSwiftlyServerE2E*Lane.swift`, `SpeakSwiftlyServerE2E*Helpers.swift`, and `SpeakSwiftlyServerE2E*ControlSurfaceTests.swift` files
   Keep live workflow lanes, operator-control lanes, and helper/support code separate so the opt-in suite stays readable even as it grows.
+- `Tests/SpeakSwiftlyServerE2ETests/E2EHTTPClient.swift`, `E2EMCPClient.swift`, and `E2EMCPEventStream.swift`
+  Keep the live HTTP transport, MCP request transport, and MCP SSE stream handling separate so transport bugs do not regrow one giant helper file.
+- `Tests/SpeakSwiftlyServerE2ETests/E2EPayloadHelpers.swift` and `E2ETransportWaiters.swift`
+  Keep JSON or JSON-RPC decoding, polling waiters, and stored-profile manifest loading split by responsibility instead of mixing transport and payload utilities.
+- `Tests/SpeakSwiftlyServerE2ETests/SpeakSwiftlyServerE2EAudioRouteHelpers.swift`
+  Keeps audible-suite-only CoreAudio route stabilization out of the request and lane helpers so the machine-level workaround stays obvious and isolated.
 
 ## Current Cleanup Follow-Through
 

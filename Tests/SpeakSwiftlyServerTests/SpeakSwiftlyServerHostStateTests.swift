@@ -267,7 +267,20 @@ import Testing
         } ? snapshot : nil
     }
 
-    try await Task.sleep(for: .milliseconds(50))
+    let _: Bool = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let counts = await runtime.runtimeRefreshActionCounts()
+        guard
+            counts.generationQueue > baselineRefreshCounts.generationQueue,
+            counts.playbackQueue > baselineRefreshCounts.playbackQueue,
+            counts.playbackState > baselineRefreshCounts.playbackState
+        else {
+            return nil
+        }
+        return true
+    }
     let countsAfterProgress = await runtime.runtimeRefreshActionCounts()
     #expect(countsAfterProgress.generationQueue > baselineRefreshCounts.generationQueue)
     #expect(countsAfterProgress.playbackQueue > baselineRefreshCounts.playbackQueue)
