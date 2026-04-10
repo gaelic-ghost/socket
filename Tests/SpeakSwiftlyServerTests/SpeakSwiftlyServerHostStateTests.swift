@@ -1,0 +1,278 @@
+import Foundation
+import Testing
+@testable import SpeakSwiftlyServer
+
+// MARK: - Host State Tests
+
+@available(macOS 14, *)
+@Test func stateCompletesQueuedSpeechJobsAndPrunesExpiredEntries() async throws {
+    let runtime = MockRuntime()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: testConfiguration(completedJobTTLSeconds: 0.05, jobPruneIntervalSeconds: 0.02),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let jobID = try await host.submitSpeak(text: "Hello from the test suite", profileName: "default")
+    let snapshot = try await waitForJobSnapshot(jobID, on: host)
+
+    #expect(snapshot.jobID == jobID)
+    #expect(snapshot.status == "completed")
+    #expect(snapshot.terminalEvent != nil)
+    #expect(snapshot.history.count >= 3)
+
+    try await Task.sleep(for: .milliseconds(120))
+    try await waitUntilJobDisappears(jobID, on: host)
+
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func statePrunesOldestCompletedJobsWhenMaxCountIsExceeded() async throws {
+    let runtime = MockRuntime()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: testConfiguration(completedJobTTLSeconds: 60, completedJobMaxCount: 2),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let first = try await host.submitSpeak(text: "One", profileName: "default")
+    let second = try await host.submitSpeak(text: "Two", profileName: "default")
+    let third = try await host.submitSpeak(text: "Three", profileName: "default")
+
+    _ = try await waitForJobSnapshot(first, on: host)
+    _ = try await waitForJobSnapshot(second, on: host)
+    _ = try await waitForJobSnapshot(third, on: host)
+
+    try await waitUntilJobDisappears(first, on: host)
+    let secondSnapshot = try await host.jobSnapshot(id: second)
+    let thirdSnapshot = try await host.jobSnapshot(id: third)
+    #expect(secondSnapshot.status == "completed")
+    #expect(thirdSnapshot.status == "completed")
+
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func sseReplayIncludesWorkerStatusHistoryAndHeartbeat() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: testConfiguration(sseHeartbeatSeconds: 0.02),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let jobID = try await host.submitSpeak(text: "Keep speaking", profileName: "default")
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = try await host.jobSnapshot(id: jobID)
+        return snapshot.history.count >= 2 ? snapshot : nil
+    }
+
+    let stream = try await host.sseStream(for: jobID)
+    var iterator = stream.makeAsyncIterator()
+    let first = try #require(await iterator.next())
+    let second = try #require(await iterator.next())
+    let third = try #require(await iterator.next())
+
+    #expect(string(from: first).contains("event: worker_status"))
+    #expect(string(from: second).contains("event: message"))
+    #expect(string(from: third).contains("event: started"))
+
+    var heartbeat: String?
+    for _ in 0..<20 {
+        guard let chunk = await iterator.next() else { break }
+        let text = string(from: chunk)
+        if text == ": keep-alive\n\n" {
+            heartbeat = text
+            break
+        }
+    }
+    #expect(heartbeat == ": keep-alive\n\n")
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func hostPublishesSharedStateForUiAndServerConsumers() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-swiftly-mcp",
+            title: "SpeakSwiftly"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let updates = await host.stateUpdates()
+    let jobID = try await host.submitSpeak(text: "Observe me", profileName: "default")
+    var iterator = updates.makeAsyncIterator()
+    let deadline = ContinuousClock.now + .seconds(1)
+    var publishedState: HostStateSnapshot?
+    while ContinuousClock.now < deadline {
+        guard let snapshot = await iterator.next() else { break }
+        if snapshot.currentGenerationJobs.contains(where: { $0.jobID == jobID }),
+           snapshot.generationQueue.activeCount == 1
+        {
+            publishedState = snapshot
+            break
+        }
+    }
+    let liveState = try #require(publishedState)
+
+    let runtimeRefresh = try #require(liveState.runtimeRefresh)
+    #expect(liveState.playback.state == "playing")
+    #expect(runtimeRefresh.sequenceID > 0)
+    #expect(runtimeRefresh.source == "runtime_overview")
+    #expect(runtimeRefresh.startedAt.isEmpty == false)
+    #expect(runtimeRefresh.completedAt.isEmpty == false)
+    #expect(liveState.transports.contains { $0.name == "http" && $0.advertisedAddress == "http://127.0.0.1:7337" })
+    #expect(liveState.transports.contains { $0.name == "mcp" && $0.advertisedAddress == "http://127.0.0.1:7337/mcp" })
+
+    let uiOverview = await MainActor.run { state.overview }
+    let uiRuntimeRefresh = await MainActor.run { state.runtimeRefresh }
+    let uiCurrentJobs = await MainActor.run { state.currentGenerationJobs }
+    let uiPlayback = await MainActor.run { state.playback }
+    #expect(uiOverview.workerReady == true)
+    #expect(uiRuntimeRefresh == runtimeRefresh)
+    #expect(uiCurrentJobs.contains { $0.jobID == jobID })
+    #expect(uiPlayback.state == "playing")
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func hostUsesRuntimeSnapshotsForQueuedLiveSpeechJobs() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+    try await Task.sleep(for: .milliseconds(50))
+
+    let baselineRefreshCounts = await runtime.runtimeRefreshActionCounts()
+
+    let firstJobID = try await host.submitSpeak(text: "Keep talking", profileName: "default")
+    let secondJobID = try await host.submitSpeak(text: "Wait your turn", profileName: "default")
+
+    let snapshot: HostStateSnapshot = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = await host.hostStateSnapshot()
+        guard
+            snapshot.runtimeRefresh?.source == "runtime_overview",
+            snapshot.playback.activeRequest?.id == firstJobID,
+            snapshot.playbackQueue.activeRequest?.id == firstJobID,
+            snapshot.generationQueue.queuedCount == 1,
+            snapshot.currentGenerationJobs.contains(where: { $0.jobID == firstJobID })
+        else {
+            return nil
+        }
+
+        return snapshot
+    }
+
+    let countsAfterQueuedLiveRequests = await runtime.runtimeRefreshActionCounts()
+    #expect(countsAfterQueuedLiveRequests.generationQueue > baselineRefreshCounts.generationQueue)
+    #expect(countsAfterQueuedLiveRequests.playbackQueue > baselineRefreshCounts.playbackQueue)
+    #expect(countsAfterQueuedLiveRequests.playbackState > baselineRefreshCounts.playbackState)
+    #expect(snapshot.currentGenerationJobs.contains { $0.jobID == firstJobID })
+
+    let secondJobSnapshot = try await host.jobSnapshot(id: secondJobID)
+    #expect(secondJobSnapshot.history.contains {
+        guard case .queued(let event) = $0 else { return false }
+        return event.reason == "waiting_for_active_request"
+    })
+
+    await runtime.finishHeldSpeak(id: firstJobID)
+    await runtime.finishHeldSpeak(id: secondJobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func hostRefreshesRuntimeSnapshotsForHeldLiveProgressEvents() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let jobID = try await host.submitSpeak(text: "Hold steady", profileName: "default")
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = try await host.jobSnapshot(id: jobID)
+        return snapshot.history.count >= 2 ? snapshot : nil
+    }
+
+    try await Task.sleep(for: .milliseconds(50))
+    let baselineRefreshCounts = await runtime.runtimeRefreshActionCounts()
+
+    await runtime.publishHeldSpeakProgress(id: jobID, stage: .bufferingAudio)
+
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let snapshot = try await host.jobSnapshot(id: jobID)
+        return snapshot.history.contains {
+            guard case .progress(let event) = $0 else { return false }
+            return event.stage == "buffering_audio"
+        } ? snapshot : nil
+    }
+
+    try await Task.sleep(for: .milliseconds(50))
+    let countsAfterProgress = await runtime.runtimeRefreshActionCounts()
+    #expect(countsAfterProgress.generationQueue > baselineRefreshCounts.generationQueue)
+    #expect(countsAfterProgress.playbackQueue > baselineRefreshCounts.playbackQueue)
+    #expect(countsAfterProgress.playbackState > baselineRefreshCounts.playbackState)
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}

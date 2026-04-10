@@ -1,0 +1,296 @@
+import Foundation
+import Testing
+@testable import SpeakSwiftlyServer
+
+// MARK: - Host Lifecycle Tests
+
+@available(macOS 14, *)
+@Test func embeddedServerSessionPublishesObservableStateForAppConsumers() async throws {
+    let session = try await EmbeddedServerSession.start(environment: ["APP_ENV": "test"]) { environment, state in
+        #expect(environment["APP_ENV"] == "test")
+
+        await MainActor.run {
+            state.overview = HostOverviewSnapshot(
+                service: "speak-swiftly-server-tests",
+                environment: "test",
+                serverMode: "ready",
+                workerMode: "resident",
+                workerStage: "resident_model_ready",
+                workerReady: true,
+                startupError: nil,
+                profileCacheState: "fresh",
+                profileCacheWarning: nil,
+                profileCount: 1,
+                lastProfileRefreshAt: "2026-04-07T12:00:00Z"
+            )
+            state.playback = PlaybackStatusSnapshot(
+                state: "playing",
+                activeRequest: .init(id: "req-1", op: "speak", profileName: "default"),
+                isStableForConcurrentGeneration: true,
+                isRebuffering: false,
+                stableBufferedAudioMS: 320,
+                stableBufferTargetMS: 400
+            )
+            state.currentGenerationJobs = [
+                CurrentGenerationJobSnapshot(
+                    jobID: "job-1",
+                    op: "speak",
+                    profileName: "default",
+                    submittedAt: "2026-04-07T12:00:00Z",
+                    startedAt: "2026-04-07T12:00:01Z",
+                    latestStage: "speaking",
+                    elapsedGenerationSeconds: 0.25
+                ),
+            ]
+            state.transports = [
+                .init(
+                    name: "http",
+                    enabled: true,
+                    state: "listening",
+                    host: "127.0.0.1",
+                    port: 7337,
+                    path: nil,
+                    advertisedAddress: "http://127.0.0.1:7337"
+                ),
+            ]
+        }
+
+        return .init(
+            requestStop: {},
+            waitUntilStopped: {}
+        )
+    }
+
+    let state = await MainActor.run { session.state }
+    let overview = await MainActor.run { state.overview }
+    let currentGenerationJobs = await MainActor.run { state.currentGenerationJobs }
+    let playback = await MainActor.run { state.playback }
+    let transports = await MainActor.run { state.transports }
+
+    #expect(overview.workerReady == true)
+    #expect(overview.profileCount == 1)
+    #expect(currentGenerationJobs.contains { $0.jobID == "job-1" })
+    #expect(playback.state == "playing")
+    #expect(transports.contains { $0.name == "http" && $0.state == "listening" })
+
+    try await session.stop()
+}
+
+@available(macOS 14, *)
+@Test func embeddedServerSessionRequestsGracefulStopOnlyOnce() async throws {
+    let probe = EmbeddedSessionLifecycleProbe()
+    let session = try await EmbeddedServerSession.start(environment: [:]) { _, _ in
+        .init(
+            requestStop: {
+                await probe.recordRequestStop()
+            },
+            waitUntilStopped: {
+                await probe.recordWaitUntilStopped()
+            }
+        )
+    }
+
+    try await session.stop()
+    try await session.stop()
+
+    let counts = await probe.counts()
+    #expect(counts.requestStop == 1)
+    #expect(counts.waitUntilStopped == 2)
+}
+
+@available(macOS 14, *)
+@Test func hostPublishesTypedEventsForServerConsumers() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-swiftly-mcp",
+            title: "SpeakSwiftly"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    let events = await host.eventUpdates()
+    var iterator = events.makeAsyncIterator()
+
+    await host.start()
+    await host.markTransportStarting(name: "http")
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+    let jobID = try await host.submitSpeak(text: "Observe my events", profileName: "default")
+
+    var sawTransportChange = false
+    var sawProfileCacheChange = false
+    var sawJobChange = false
+    var sawJobEvent = false
+    var sawPlaybackChange = false
+
+    let deadline = ContinuousClock.now + .seconds(1)
+    while ContinuousClock.now < deadline {
+        guard let event = await iterator.next() else { break }
+        switch event {
+        case .transportChanged(let snapshot):
+            if snapshot.name == "http", snapshot.state == "starting" {
+                sawTransportChange = true
+            }
+        case .profileCacheChanged(let snapshot):
+            if snapshot.state == "fresh", snapshot.profileCount == 1 {
+                sawProfileCacheChange = true
+            }
+        case .jobChanged(let snapshot):
+            if snapshot.jobID == jobID {
+                sawJobChange = true
+            }
+        case .jobEvent(let update):
+            if update.jobID == jobID {
+                sawJobEvent = true
+            }
+        case .playbackChanged(let snapshot):
+            if snapshot.state == "playing" {
+                sawPlaybackChange = true
+            }
+        case .textProfilesChanged, .runtimeConfigurationChanged, .recentErrorRecorded:
+            break
+        }
+
+        if sawTransportChange, sawProfileCacheChange, sawJobChange, sawJobEvent, sawPlaybackChange {
+            break
+        }
+    }
+
+    #expect(sawTransportChange)
+    #expect(sawProfileCacheChange)
+    #expect(sawJobChange)
+    #expect(sawJobEvent)
+    #expect(sawPlaybackChange)
+
+    await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func hostTracksTransportLifecycleBeyondStaticConfiguration() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-swiftly-mcp",
+            title: "SpeakSwiftly"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    let initial = await host.hostStateSnapshot()
+    #expect(initial.transports.contains { $0.name == "http" && $0.state == "stopped" })
+    #expect(initial.transports.contains { $0.name == "mcp" && $0.state == "stopped" })
+
+    await host.markTransportStarting(name: "http")
+    await host.markTransportListening(name: "mcp")
+
+    let updated = await host.hostStateSnapshot()
+    #expect(updated.transports.contains { $0.name == "http" && $0.state == "starting" })
+    #expect(updated.transports.contains { $0.name == "mcp" && $0.state == "listening" })
+}
+
+@available(macOS 14, *)
+@Test func hostAppliesSafeLiveConfigurationChangesAndReportsRestartRequiredOnes() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration(completedJobMaxCount: 2)
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        httpConfig: testHTTPConfig(configuration),
+        mcpConfig: .init(
+            enabled: true,
+            path: "/mcp",
+            serverName: "speak-swiftly-mcp",
+            title: "SpeakSwiftly"
+        ),
+        runtime: runtime,
+        state: state
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let first = try await host.submitSpeak(text: "One", profileName: "default")
+    let second = try await host.submitSpeak(text: "Two", profileName: "default")
+    _ = try await waitForJobSnapshot(first, on: host)
+    _ = try await waitForJobSnapshot(second, on: host)
+
+    await host.applyConfigurationUpdate(
+        .init(
+            server: .init(
+                name: "reloaded-service",
+                environment: "qa",
+                host: configuration.host,
+                port: configuration.port,
+                sseHeartbeatSeconds: 0.01,
+                completedJobTTLSeconds: configuration.completedJobTTLSeconds,
+                completedJobMaxCount: 1,
+                jobPruneIntervalSeconds: 0.01
+            ),
+            http: .init(
+                enabled: true,
+                host: "0.0.0.0",
+                port: 7999,
+                sseHeartbeatSeconds: 5
+            ),
+            mcp: .init(
+                enabled: true,
+                path: "/assistant/mcp",
+                serverName: "new-mcp-name",
+                title: "New MCP Title"
+            )
+        )
+    )
+
+    let hostState = await host.hostStateSnapshot()
+    #expect(hostState.overview.service == "reloaded-service")
+    #expect(hostState.overview.environment == "qa")
+    #expect(hostState.recentErrors.contains {
+        $0.source == "config" &&
+            $0.code == "reload_requires_restart" &&
+            $0.message.contains("app.http.port") &&
+            $0.message.contains("app.mcp.path")
+    })
+
+    let snapshots = await host.jobSnapshots()
+    #expect(snapshots.count == 1)
+
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func hostRecordsRejectedConfigurationReloadsClearly() async throws {
+    let runtime = MockRuntime()
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        runtime: runtime,
+        state: state
+    )
+
+    await host.markConfigurationReloadRejected("Configuration value 'APP_PORT' could not be loaded: invalid integer.")
+
+    let hostState = await host.hostStateSnapshot()
+    #expect(hostState.recentErrors.contains {
+        $0.source == "config" &&
+            $0.code == "reload_rejected" &&
+            $0.message.contains("APP_PORT")
+    })
+}
