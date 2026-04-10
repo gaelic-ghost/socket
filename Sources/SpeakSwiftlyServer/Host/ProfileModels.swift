@@ -59,8 +59,8 @@ public struct TextReplacementSnapshot: Codable, Sendable, Equatable {
     init(replacement: TextForSpeech.Replacement) {
         self.id = replacement.id
         self.text = replacement.text
-        self.replacement = replacement.replacement
-        self.match = replacement.match.rawValue
+        self.replacement = replacement.replacement ?? Self.describe(transform: replacement.transform)
+        self.match = Self.describe(match: replacement.match)
         self.phase = replacement.phase.rawValue
         self.isCaseSensitive = replacement.isCaseSensitive
         self.formats = (
@@ -71,12 +71,7 @@ public struct TextReplacementSnapshot: Codable, Sendable, Equatable {
     }
 
     func model() throws -> TextForSpeech.Replacement {
-        guard let match = TextForSpeech.Replacement.Match(rawValue: match) else {
-            throw HTTPError(
-                .badRequest,
-                message: "Text replacement '\(id)' used unsupported match '\(match)'. Expected one of: exact_phrase, whole_token."
-            )
-        }
+        let match = try Self.resolve(match: match, replacementID: id)
         guard let phase = TextForSpeech.Replacement.Phase(rawValue: phase) else {
             throw HTTPError(
                 .badRequest,
@@ -108,6 +103,65 @@ public struct TextReplacementSnapshot: Codable, Sendable, Equatable {
             forSourceFormats: sourceFormats,
             priority: priority
         )
+    }
+
+    private static func describe(match: TextForSpeech.Replacement.Match) -> String {
+        switch match {
+        case .exactPhrase:
+            "exact_phrase"
+        case .wholeToken:
+            "whole_token"
+        case .token(let kind):
+            "token:\(kind.rawValue)"
+        case .line(let kind):
+            "line:\(kind.rawValue)"
+        }
+    }
+
+    private static func describe(transform: TextForSpeech.Replacement.Transform) -> String {
+        switch transform {
+        case .literal(let replacement):
+            replacement
+        case .spokenPath:
+            "spoken_path"
+        case .spokenURL:
+            "spoken_url"
+        case .spokenIdentifier:
+            "spoken_identifier"
+        case .spokenCode:
+            "spoken_code"
+        case .spellOut:
+            "spell_out"
+        }
+    }
+
+    private static func resolve(
+        match rawMatch: String,
+        replacementID: String
+    ) throws -> TextForSpeech.Replacement.Match {
+        switch rawMatch {
+        case "exact_phrase":
+            return .exactPhrase
+        case "whole_token":
+            return .wholeToken
+        default:
+            if rawMatch.hasPrefix("token:") {
+                let tokenKind = String(rawMatch.dropFirst("token:".count))
+                if let kind = TextForSpeech.Replacement.TokenKind(rawValue: tokenKind) {
+                    return .token(kind)
+                }
+            }
+            if rawMatch.hasPrefix("line:") {
+                let lineKind = String(rawMatch.dropFirst("line:".count))
+                if let kind = TextForSpeech.Replacement.LineKind(rawValue: lineKind) {
+                    return .line(kind)
+                }
+            }
+            throw HTTPError(
+                .badRequest,
+                message: "Text replacement '\(replacementID)' used unsupported match '\(rawMatch)'. Expected one of: exact_phrase, whole_token, token:<kind>, line:<kind>."
+            )
+        }
     }
 }
 

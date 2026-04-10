@@ -64,7 +64,8 @@ actor MockRuntime: ServerRuntimeProtocol {
     var createCloneInvocations = [CreateCloneInvocation]()
     var createProfileInvocations = [CreateProfileInvocation]()
     var playbackState: SpeakSwiftly.PlaybackState = .idle
-    var textRuntime = TextForSpeech.Runtime()
+    var textRuntime: TextForSpeech.Runtime
+    let textRuntimePersistenceURL: URL
     var loadTextProfilesCallCount = 0
     var saveTextProfilesCallCount = 0
     var generatedFiles = [SpeakSwiftly.GeneratedFile]()
@@ -84,6 +85,11 @@ actor MockRuntime: ServerRuntimeProtocol {
         self.profiles = profiles
         self.speakBehavior = speakBehavior
         self.mutationRefreshBehavior = mutationRefreshBehavior
+        self.textRuntimePersistenceURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("SpeakSwiftlyServerTests", isDirectory: true)
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("json")
+        self.textRuntime = try! TextForSpeech.Runtime(persistenceURL: textRuntimePersistenceURL)
     }
 
     func start() {}

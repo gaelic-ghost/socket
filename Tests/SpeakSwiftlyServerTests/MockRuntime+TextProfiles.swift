@@ -6,11 +6,11 @@ import TextForSpeech
 @available(macOS 14, *)
 extension MockRuntime {
     func activeTextProfile() async -> TextForSpeech.Profile {
-        textRuntime.profiles.active() ?? .default
+        textRuntime.profiles.active()
     }
 
     func baseTextProfile() async -> TextForSpeech.Profile {
-        .init(id: "base", name: "Base")
+        textRuntime.baseProfile
     }
 
     func textProfile(id profileID: String) async -> TextForSpeech.Profile? {
@@ -22,7 +22,10 @@ extension MockRuntime {
     }
 
     func effectiveTextProfile(id profileID: String?) async -> TextForSpeech.Profile {
-        textRuntime.profiles.effective(id: profileID) ?? .default
+        if let profileID {
+            return textRuntime.profiles.effective(id: profileID) ?? .default
+        }
+        return textRuntime.profiles.effective()
     }
 
     func loadTextProfiles() async throws {
@@ -42,30 +45,31 @@ extension MockRuntime {
     }
 
     func storeTextProfile(_ profile: TextForSpeech.Profile) async throws {
-        textRuntime.profiles.store(profile)
+        try textRuntime.profiles.store(profile)
     }
 
     func useTextProfile(_ profile: TextForSpeech.Profile) async throws {
-        textRuntime.profiles.use(profile)
+        try textRuntime.profiles.store(profile)
+        try textRuntime.profiles.activate(id: profile.id)
     }
 
     func removeTextProfile(id profileID: String) async throws {
-        textRuntime.profiles.delete(id: profileID)
+        try textRuntime.profiles.delete(id: profileID)
     }
 
     func resetTextProfile() async throws {
-        textRuntime.profiles.reset()
+        try textRuntime.profiles.reset()
     }
 
     func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> TextForSpeech.Profile {
-        textRuntime.profiles.add(replacement)
+        try textRuntime.profiles.add(replacement)
     }
 
     func addTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         toStoredTextProfileID profileID: String
     ) async throws -> TextForSpeech.Profile {
-        try textRuntime.profiles.add(replacement, toStoredProfileID: profileID)
+        try textRuntime.profiles.add(replacement, toProfileID: profileID)
     }
 
     func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> TextForSpeech.Profile {
@@ -76,7 +80,7 @@ extension MockRuntime {
         _ replacement: TextForSpeech.Replacement,
         inStoredTextProfileID profileID: String
     ) async throws -> TextForSpeech.Profile {
-        try textRuntime.profiles.replace(replacement, inStoredProfileID: profileID)
+        try textRuntime.profiles.replace(replacement, inProfileID: profileID)
     }
 
     func removeTextReplacement(id replacementID: String) async throws -> TextForSpeech.Profile {
@@ -87,6 +91,6 @@ extension MockRuntime {
         id replacementID: String,
         fromStoredTextProfileID profileID: String
     ) async throws -> TextForSpeech.Profile {
-        try textRuntime.profiles.removeReplacement(id: replacementID, fromStoredProfileID: profileID)
+        try textRuntime.profiles.removeReplacement(id: replacementID, fromProfileID: profileID)
     }
 }

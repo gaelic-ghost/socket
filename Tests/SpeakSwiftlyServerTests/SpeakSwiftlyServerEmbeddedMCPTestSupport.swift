@@ -90,6 +90,10 @@ func mcpEnvelope(from data: Data) throws -> [String: Any] {
 }
 
 func mcpToolPayload(from envelope: [String: Any]) throws -> [String: Any] {
+    if let error = envelope["error"] as? [String: Any] {
+        let message = (error["message"] as? String) ?? "The embedded MCP surface returned a JSON-RPC error without a message."
+        throw JSONError.emptyBody("The embedded MCP surface returned a JSON-RPC error instead of a tool payload. Message: \(message)")
+    }
     let result = try #require(mcpResultPayload(from: envelope))
     if let structuredContent = result["structuredContent"] as? [String: Any] {
         return structuredContent
