@@ -17,28 +17,26 @@ Swift executable package for a shared localhost host process that exposes the pu
 
 ## Overview
 
-This repository is the standalone Swift service for `SpeakSwiftly`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host one localhost macOS process with in-memory job tracking and server-sent events, while delegating speech, voice-profile management, and worker lifecycle to the typed `SpeakSwiftly` runtime. That shared process can mount both the HTTP API and the MCP surface without creating duplicate `SpeakSwiftly.Runtime` owners.
+This repository is the standalone Swift service for `SpeakSwiftly`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host one macOS process with job tracking and server-sent events, while delegating speech, voice-profile management, and worker lifecycle to the typed `SpeakSwiftly` runtime.
 
 ### Deployment Targets
 
-Current intended deployment targets are:
+Current deployment targets are:
 
 - macOS 15 and newer for the standalone server package and initial app-managed installation path
 - iOS 18 and newer for a near-future app-facing reuse path once the host logic is split cleanly enough to be consumed from an iOS app
 
-The current executable package is still macOS-only, but its host and state architecture should be kept friendly to an eventual iOS extraction into a reusable library target.
-
-Linux support is a medium-term consideration rather than a current promise. If making this Swift package Linux-compatible starts forcing awkward compromises into the Apple-first host and app architecture, a separate Linux implementation in Rust is an acceptable direction instead of contorting this package.
+Linux support is a medium-term consideration rather than a current promise. A separate Linux implementation in Rust is more likely.
 
 ### Motivation
 
-The target is a thin Swift service that a forthcoming macOS app can install and manage as a LaunchAgent without needing a separate Python runtime. Early development aimed to stay close to the existing Python server contract, but the current service now follows the newer `SpeakSwiftly` control model directly where the runtime surface has evolved.
+I wanted a solid foundation to build voice-enabled applications on top of. So, this package provides a thin Swift service that macOS apps can easily import and manage as a LaunchAgent, without needing a separate Python runtime. It the `SpeakSwiftly` control model.
 
-That means this package intentionally stays narrow: Hummingbird for transport hosting, `SpeakSwiftly` for speech and profile operations, and a small amount of server state to translate typed runtime events into retained job snapshots, SSE replay, and MCP resources.
+It's intentionally narrow, using Hummingbird for HTTP and MCP, `SpeakSwiftly` for speech and profile operations, `TextForSpeech` for customizeable text normalization, and a small amount of server state to translate and cache runtime events as snapshots, as well as SSE replay, and MCP resources.
 
 ### Current SpeakSwiftly Alignment
 
-This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `2.2.7` package dependency rather than an older private worker boundary.
+This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `2.2.7` package dependency.
 
 Today the server relies on the current typed runtime capabilities that matter for transport hosting:
 
