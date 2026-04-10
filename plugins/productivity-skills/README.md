@@ -1,41 +1,16 @@
 # productivity-skills
 
-Canonical productivity skills for broad standalone installation and repo-local marketplace discovery.
+Some global-scope geenral productivity skills, as well as the template skills for my adjacent language-specific skill packs/plugins.
 
 For maintainer guidance, standards references, and cross-ecosystem packaging policy, see [AGENTS.md](./AGENTS.md).
 
-## Repo Direction
+## Overview
 
-This repository serves two intentional roles in Gale's skills ecosystem:
+See subtitle plsthx. I'm write a real overview eventually.
 
-- it is the public home of broadly installable `productivity-skills` workflows that other people can use directly through skill installs and repo-scoped marketplace discovery
-- it is the canonical general-purpose baseline layer for skill families that later narrow into stack-specific plugins such as `apple-dev-skills` and `python-skills`
+### Direction
 
-- keep `productivity-skills` focused on skills that make sense to install globally
-- keep this repo as the superclass layer for broad workflows before they are specialized into stronger stack-specific variants elsewhere
-- prefer dedicated language-, stack-, or repo-specific plugins for project-level or repository-level install
-- treat agent-stack maintainer workflows as a separate product line instead of mixing them into the long-term core identity of this repo
-
-That split now exists in practice as well:
-
-- this repo remains the home for widely useful global skills
-- this repo is also the home for the broad reusable versions of workflow families that may later gain stronger assumptions in specialized plugins
-- the sibling repo [`../agent-plugin-skills`](../agent-plugin-skills) is now the dedicated home for agent-skills and agent-plugin repository maintainer workflows
-
-Current split:
-
-- `maintain-skills-readme`, `bootstrap-skills-plugin-repo`, and `sync-skills-repo-guidance` were incubated here and now live in [`../agent-plugin-skills`](../agent-plugin-skills)
-- this repository no longer ships agent-stack repo-maintainer skills as part of its active local inventory
-
-## Layering Model
-
-Use this repo when the workflow should stay broad, portable, and reusable across many repositories.
-
-Use a specialized plugin when the best version of the workflow depends on stronger assumptions about one stack, language, toolchain, or operating environment.
-
-In practice, that means:
-
-- `productivity-skills` holds the durable general-purpose baseline
+- `productivity-skills` holds durable general-purpose baselines
 - stack-specific plugins refine or extend these workflows when tighter defaults produce better results
 - specialization is intentional, not a sign that the general version here is unfinished
 - the general version here should stay coherent on its own rather than becoming a thin router to every specialized plugin
