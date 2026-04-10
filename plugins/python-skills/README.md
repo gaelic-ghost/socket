@@ -1,12 +1,11 @@
 # python-skills
 
-Python skills repository for `uv`-first bootstrapping, testing, FastAPI service setup, FastMCP scaffolding, and FastAPI/FastMCP integration workflows, with shared skill content at root and thin plugin packaging layers on top.
+A plugin with some skills I use for Python stuff. Includes skills for `uv`-first bootstrapping, `pytest` unit-testing, FastAPI service setup, FastMCP scaffolding, and FastAPI/FastMCP integration guidance.
 
 For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 
 ## Table of Contents
 
-- [What This Codex Plugin Includes](#what-this-codex-plugin-includes)
 - [Bundled Skill Guide](#bundled-skill-guide)
 - [Platform Direction](#platform-direction)
 - [Install As Skills](#install-as-skills)
@@ -15,14 +14,6 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 - [Notes](#notes)
 - [Keywords](#keywords)
 - [License](#license)
-
-## What This Codex Plugin Includes
-
-This repository ships the maintained skills under `skills/`, and root `skills/` is the canonical workflow-authoring surface.
-
-The active packaged plugin surface lives under `plugins/python-skills/`, while shared marketplace catalogs live at `.agents/plugins/marketplace.json` for Codex and `.claude-plugin/marketplace.json` for Claude sharing.
-
-Current scaffold defaults now include typed configuration via `pydantic-settings`, a committed `.env` for safe defaults, and an ignored `.env.local` for local or secret overrides.
 
 ## Bundled Skill Guide
 
@@ -133,6 +124,12 @@ If this repository is shared as a Claude marketplace, keep `.claude-plugin/marke
     ├── bootstrap-uv-python-workspace/
     └── uv-pytest-unit-testing/
 ```
+
+This repository ships the maintained skills under `skills/`, and root `skills/` is the canonical workflow-authoring surface.
+
+The active packaged plugin surface lives under `plugins/python-skills/`, while shared marketplace catalogs live at `.agents/plugins/marketplace.json` for Codex and `.claude-plugin/marketplace.json` for Claude sharing.
+
+Current scaffold defaults now include typed configuration via `pydantic-settings`, a committed `.env` for safe defaults, and an ignored `.env.local` for local or secret overrides.
 
 ## Maintainer Workflow
 
