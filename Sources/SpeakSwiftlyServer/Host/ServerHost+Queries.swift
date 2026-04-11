@@ -60,12 +60,18 @@ extension ServerHost {
     }
 
     func textProfilesSnapshot() async -> TextProfilesSnapshot {
-        .init(
+        let builtInStyle = await runtime.builtInTextProfileStyle()
+        return .init(
+            builtInStyle: builtInStyle.rawValue,
             baseProfile: .init(profile: await runtime.baseTextProfile()),
             activeProfile: .init(profile: await runtime.activeTextProfile()),
             storedProfiles: (await runtime.textProfiles()).map(TextProfileSnapshot.init(profile:)),
             effectiveProfile: .init(profile: await runtime.effectiveTextProfile(id: nil))
         )
+    }
+
+    func textProfileStyleSnapshot() async -> TextProfileStyleSnapshot {
+        .init(style: await runtime.builtInTextProfileStyle())
     }
 
     func storedTextProfile(_ profileID: String) async -> TextProfileSnapshot? {
@@ -96,6 +102,15 @@ extension ServerHost {
 
     func saveTextProfiles() async throws -> TextProfilesSnapshot {
         try await runtime.saveTextProfiles()
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return await textProfilesSnapshot()
+    }
+
+    func setTextProfileStyle(
+        _ style: TextForSpeech.BuiltInProfileStyle
+    ) async throws -> TextProfilesSnapshot {
+        _ = try await runtime.setBuiltInTextProfileStyle(style)
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return await textProfilesSnapshot()

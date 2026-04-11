@@ -36,7 +36,7 @@ It's intentionally narrow, using Hummingbird for HTTP and MCP, `SpeakSwiftly` fo
 
 ### Current SpeakSwiftly Alignment
 
-This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `2.2.7` package dependency.
+This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `2.2.8` package dependency.
 
 Today the server relies on the current typed runtime capabilities that matter for transport hosting:
 
@@ -320,6 +320,7 @@ The current HTTP surface is:
 - `GET /runtime/configuration`
 - `GET /voices`
 - `GET /text-profiles`
+- `GET /text-profiles/style`
 - `GET /text-profiles/base`
 - `GET /text-profiles/active`
 - `GET /text-profiles/effective`
@@ -354,6 +355,7 @@ The current HTTP surface is:
 - `POST /runtime/models/reload`
 - `POST /runtime/models/unload`
 - `PUT /text-profiles/stored/{profile_id}`
+- `PUT /text-profiles/style`
 - `PUT /text-profiles/active`
 - `PUT /text-profiles/active/replacements/{replacement_id}`
 - `PUT /text-profiles/stored/{profile_id}/replacements/{replacement_id}`
@@ -367,7 +369,7 @@ The current HTTP surface is:
 
 `POST /speech/live`, `POST /voices/from-description`, `POST /voices/from-audio`, and `DELETE /voices/{profile_name}` all return accepted-request metadata immediately. Those responses use `request_id`, `request_url`, and `events_url` so ordinary HTTP clients can follow one tracked request cleanly without having to learn the MCP resource model first. `POST /speech/live` mirrors the current public live-speech queue lane and accepts optional `cwd`, `repo_root`, `text_profile_name`, `text_format`, `nested_source_format`, and `source_format` fields so callers can pass path-aware and normalization-aware context explicitly.
 
-The `/text-profiles` route family is synchronous and state-oriented rather than request-oriented. It exposes the current base, active, stored, and effective `TextForSpeech.Profile` state plus replacement editing and profile persistence paths for downstream apps or agents that need to shape normalization deliberately. `POST /text-profiles/load` and `POST /text-profiles/save` map directly to the public text-profile persistence calls so operators can refresh or flush stored normalization state without reaching into the runtime process manually.
+The `/text-profiles` route family is synchronous and state-oriented rather than request-oriented. It exposes the current built-in style plus base, active, stored, and effective `TextForSpeech.Profile` state, along with replacement editing and profile persistence paths for downstream apps or agents that need to shape normalization deliberately. `GET /text-profiles/style` and `PUT /text-profiles/style` mirror the built-in normalization-style control that now participates in effective normalization alongside custom profiles. `POST /text-profiles/load` and `POST /text-profiles/save` map directly to the public text-profile persistence calls so operators can refresh or flush stored normalization state without reaching into the runtime process manually.
 
 The queue and playback control routes are immediate control operations rather than long-running requests. `GET /generation/queue` and `GET /playback/queue` expose the generation and playback queues separately so the HTTP layer matches the runtime's split control surface. `GET /playback/state`, `POST /playback/pause`, and `POST /playback/resume` expose the current playback state and let clients control it directly. `DELETE /playback/queue` clears queued playback work and returns the number of cancelled queued requests. `DELETE /playback/requests/{request_id}` cancels one active or queued request and returns the cancelled request ID.
 
@@ -390,6 +392,8 @@ The current MCP surface is optional and mounts on the same shared Hummingbird pr
 - `list_voice_profiles`
 - `delete_voice_profile`
 - `get_text_normalizer_snapshot`
+- `get_text_profile_style`
+- `set_text_profile_style`
 - `list_generation_queue`
 - `list_playback_queue`
 - `pause_playback`
@@ -424,6 +428,7 @@ The embedded MCP resources are:
 - `speak://voices`
 - `speak://voices/guide`
 - `speak://text-profiles`
+- `speak://text-profiles/style`
 - `speak://text-profiles/base`
 - `speak://text-profiles/active`
 - `speak://text-profiles/effective`
@@ -455,9 +460,9 @@ The embedded MCP surface also now carries a small prompt catalog migrated from t
 - `draft_text_replacement`
 - `choose_surface_action`
 
-The text-profile prompts and the `speak://text-profiles/guide` resource are there so an app-hosted or MCP-hosted agent can help a user author replacements deliberately instead of treating normalization rules like hidden implementation detail. That parity is intentional because text profiles are meant to be downstream-user-facing, whether the downstream caller is a SwiftUI app, an MCP client, or a local HTTP consumer.
+The text-profile prompts and the `speak://text-profiles/guide` resource are there so an app-hosted or MCP-hosted agent can help a user author replacements deliberately instead of treating normalization rules like hidden implementation detail. That parity is intentional because text profiles are meant to be downstream-user-facing, whether the downstream caller is a SwiftUI app, an MCP client, or a local HTTP consumer, and that now includes the built-in normalization style as part of the operator-facing surface.
 
-The embedded MCP surface also supports resource subscriptions for the live state resources and templates backed by shared host updates. Clients connected to the standalone MCP event stream can subscribe to `speak://runtime/overview`, `speak://runtime/status`, `speak://runtime/configuration`, `speak://voices`, `speak://voices/{profile_name}`, `speak://requests`, `speak://requests/{request_id}`, `speak://generation/jobs`, `speak://generation/jobs/{job_id}`, `speak://generation/files`, `speak://generation/files/{artifact_id}`, `speak://generation/batches`, `speak://generation/batches/{batch_id}`, `speak://text-profiles`, `speak://text-profiles/base`, `speak://text-profiles/active`, `speak://text-profiles/effective`, `speak://text-profiles/effective/{profile_id}`, and `speak://text-profiles/stored/{profile_id}` and receive `notifications/resources/updated` when shared host events change the underlying state.
+The embedded MCP surface also supports resource subscriptions for the live state resources and templates backed by shared host updates. Clients connected to the standalone MCP event stream can subscribe to `speak://runtime/overview`, `speak://runtime/status`, `speak://runtime/configuration`, `speak://voices`, `speak://voices/{profile_name}`, `speak://requests`, `speak://requests/{request_id}`, `speak://generation/jobs`, `speak://generation/jobs/{job_id}`, `speak://generation/files`, `speak://generation/files/{artifact_id}`, `speak://generation/batches`, `speak://generation/batches/{batch_id}`, `speak://text-profiles`, `speak://text-profiles/style`, `speak://text-profiles/base`, `speak://text-profiles/active`, `speak://text-profiles/effective`, `speak://text-profiles/effective/{profile_id}`, and `speak://text-profiles/stored/{profile_id}` and receive `notifications/resources/updated` when shared host events change the underlying state.
 
 Transport lifecycle snapshots are now intentionally tied to the shared Hummingbird process rather than static config alone. `listening` means the shared HTTP host has actually reached Hummingbird's `onServerRunning` boundary, so HTTP and MCP surface status now describe real network availability instead of only configuration intent.
 
@@ -504,8 +509,6 @@ The live audible e2e harness now also pins macOS built-in speakers immediately b
 - `Tests/` contains the package test suite, including the opt-in end-to-end coverage paths and the dedicated CLI tests.
 - `docs/` holds repo-local supporting documentation.
 - `docs/maintainers/source-layout.md` summarizes the current source split so follow-on cleanup work can land in the right file family instead of regrowing monoliths.
-- `plugins/apple-dev-skills/` is the in-development plugin copy that this repository publishes through the local marketplace file.
-- `.agents/plugins/marketplace.json` points local Codex discovery at the in-repo plugin source during development.
 
 ## Verification
 

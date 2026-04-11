@@ -93,8 +93,14 @@ extension SpeakSwiftlyServerTests {
             let textProfilesResponse = try await client.execute(uri: "/text-profiles", method: .get)
             let textProfilesJSON = try jsonObject(from: textProfilesResponse.body)
             let textProfiles = try #require(textProfilesJSON["text_profiles"] as? [String: Any])
+            #expect(textProfiles["built_in_style"] as? String == "balanced")
             let storedTextProfiles = try #require(textProfiles["stored_profiles"] as? [[String: Any]])
             #expect(storedTextProfiles.contains { $0["id"] as? String == "swift-docs" })
+
+            let textProfileStyleResponse = try await client.execute(uri: "/text-profiles/style", method: .get)
+            let textProfileStyleJSON = try jsonObject(from: textProfileStyleResponse.body)
+            let textProfileStyle = try #require(textProfileStyleJSON["text_profile_style"] as? [String: Any])
+            #expect(textProfileStyle["built_in_style"] as? String == "balanced")
 
             let loadTextProfilesResponse = try await client.execute(uri: "/text-profiles/load", method: .post)
             let loadTextProfilesJSON = try jsonObject(from: loadTextProfilesResponse.body)
@@ -107,6 +113,16 @@ extension SpeakSwiftlyServerTests {
             let savedTextProfiles = try #require(saveTextProfilesJSON["text_profiles"] as? [String: Any])
             let savedStoredProfiles = try #require(savedTextProfiles["stored_profiles"] as? [[String: Any]])
             #expect(savedStoredProfiles.contains { $0["id"] as? String == "swift-docs" })
+
+            let compactTextProfileStyleResponse = try await client.execute(
+                uri: "/text-profiles/style",
+                method: .put,
+                headers: [.contentType: "application/json"],
+                body: byteBuffer(#"{"built_in_style":"compact"}"#)
+            )
+            let compactTextProfileStyleJSON = try jsonObject(from: compactTextProfileStyleResponse.body)
+            let compactTextProfiles = try #require(compactTextProfileStyleJSON["text_profiles"] as? [String: Any])
+            #expect(compactTextProfiles["built_in_style"] as? String == "compact")
 
             let useTextProfileResponse = try await client.execute(
                 uri: "/text-profiles/active",

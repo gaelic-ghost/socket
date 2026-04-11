@@ -130,6 +130,14 @@ public struct TextReplacementSnapshot: Codable, Sendable, Equatable {
             "spoken_identifier"
         case .spokenCode:
             "spoken_code"
+        case .spokenFunctionCall(let style):
+            "spoken_function_call:\(style.rawValue)"
+        case .spokenIssueReference(let style):
+            "spoken_issue_reference:\(style.rawValue)"
+        case .spokenFileReference(let style):
+            "spoken_file_reference:\(style.rawValue)"
+        case .spokenCLIFlag(let style):
+            "spoken_cli_flag:\(style.rawValue)"
         case .spellOut:
             "spell_out"
         }
@@ -185,13 +193,27 @@ public struct TextProfileSnapshot: Codable, Sendable, Equatable {
     }
 }
 
+struct TextProfileStyleSnapshot: Codable, Sendable, Equatable {
+    let builtInStyle: String
+
+    enum CodingKeys: String, CodingKey {
+        case builtInStyle = "built_in_style"
+    }
+
+    init(style: TextForSpeech.BuiltInProfileStyle) {
+        builtInStyle = style.rawValue
+    }
+}
+
 struct TextProfilesSnapshot: ResponseEncodable, Sendable, Equatable {
+    let builtInStyle: String
     let baseProfile: TextProfileSnapshot
     let activeProfile: TextProfileSnapshot
     let storedProfiles: [TextProfileSnapshot]
     let effectiveProfile: TextProfileSnapshot
 
     enum CodingKeys: String, CodingKey {
+        case builtInStyle = "built_in_style"
         case baseProfile = "base_profile"
         case activeProfile = "active_profile"
         case storedProfiles = "stored_profiles"
@@ -211,6 +233,14 @@ struct TextProfileResponse: ResponseEncodable, Sendable {
     let profile: TextProfileSnapshot
 }
 
+struct TextProfileStyleResponse: ResponseEncodable, Sendable {
+    let textProfileStyle: TextProfileStyleSnapshot
+
+    enum CodingKeys: String, CodingKey {
+        case textProfileStyle = "text_profile_style"
+    }
+}
+
 struct CreateTextProfileRequestPayload: Decodable {
     let id: String
     let name: String
@@ -227,4 +257,23 @@ struct UseTextProfileRequestPayload: Decodable {
 
 struct TextReplacementRequestPayload: Decodable {
     let replacement: TextReplacementSnapshot
+}
+
+struct SetTextProfileStyleRequestPayload: Decodable {
+    let builtInStyle: String
+
+    enum CodingKeys: String, CodingKey {
+        case builtInStyle = "built_in_style"
+    }
+
+    func styleModel() throws -> TextForSpeech.BuiltInProfileStyle {
+        guard let style = TextForSpeech.BuiltInProfileStyle(rawValue: builtInStyle) else {
+            let acceptedValues = TextForSpeech.BuiltInProfileStyle.allCases.map(\.rawValue).joined(separator: ", ")
+            throw HTTPError(
+                .badRequest,
+                message: "Text-profile built_in_style '\(builtInStyle)' is not supported. Expected one of: \(acceptedValues)."
+            )
+        }
+        return style
+    }
 }

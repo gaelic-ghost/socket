@@ -10,6 +10,10 @@ func registerHTTPTextProfileRoutes(
         .init(textProfiles: await host.textProfilesSnapshot())
     }
 
+    router.get("text-profiles/style") { _, _ -> TextProfileStyleResponse in
+        .init(textProfileStyle: await host.textProfileStyleSnapshot())
+    }
+
     router.get("text-profiles/base") { _, _ -> TextProfileResponse in
         .init(profile: (await host.textProfilesSnapshot()).baseProfile)
     }
@@ -54,6 +58,11 @@ func registerHTTPTextProfileRoutes(
 
     router.post("text-profiles/save") { _, _ -> TextProfileListResponse in
         .init(textProfiles: try await host.saveTextProfiles())
+    }
+
+    router.put("text-profiles/style") { request, context -> TextProfileListResponse in
+        let payload = try await request.decode(as: SetTextProfileStyleRequestPayload.self, context: context)
+        return .init(textProfiles: try await host.setTextProfileStyle(payload.styleModel()))
     }
 
     router.put("text-profiles/stored/:profile_id") { request, context -> TextProfileResponse in

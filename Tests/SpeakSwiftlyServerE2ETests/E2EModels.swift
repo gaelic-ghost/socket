@@ -193,12 +193,14 @@ struct E2ETextProfileResponse: Decodable, Sendable {
 }
 
 struct E2ETextProfilesSnapshot: Decodable, Sendable {
+    let builtInStyle: String
     let baseProfile: E2ETextProfileSnapshot
     let activeProfile: E2ETextProfileSnapshot
     let storedProfiles: [E2ETextProfileSnapshot]
     let effectiveProfile: E2ETextProfileSnapshot
 
     enum CodingKeys: String, CodingKey {
+        case builtInStyle = "built_in_style"
         case baseProfile = "base_profile"
         case activeProfile = "active_profile"
         case storedProfiles = "stored_profiles"
@@ -206,10 +208,26 @@ struct E2ETextProfilesSnapshot: Decodable, Sendable {
     }
 }
 
+struct E2ETextProfileStyleResponse: Decodable, Sendable {
+    let textProfileStyle: E2ETextProfileStyleSnapshot
+
+    enum CodingKeys: String, CodingKey {
+        case textProfileStyle = "text_profile_style"
+    }
+}
+
 struct E2ETextProfileSnapshot: Decodable, Sendable, Equatable {
     let id: String
     let name: String
     let replacements: [E2ETextReplacementSnapshot]
+}
+
+struct E2ETextProfileStyleSnapshot: Decodable, Sendable, Equatable {
+    let builtInStyle: String
+
+    enum CodingKeys: String, CodingKey {
+        case builtInStyle = "built_in_style"
+    }
 }
 
 struct E2ETextReplacementSnapshot: Decodable, Sendable, Equatable {

@@ -140,6 +140,20 @@ func requiredSpeechBackend(
     return speechBackend
 }
 
+func requiredBuiltInTextProfileStyle(
+    _ key: String,
+    in arguments: [String: Value]
+) throws -> TextForSpeech.BuiltInProfileStyle {
+    let rawValue = try requiredString(key, in: arguments)
+    guard let style = TextForSpeech.BuiltInProfileStyle(rawValue: rawValue) else {
+        let acceptedValues = TextForSpeech.BuiltInProfileStyle.allCases.map(\.rawValue).joined(separator: ", ")
+        throw MCPError.invalidParams(
+            "Tool argument '\(key)' used unsupported value '\(rawValue)'. Expected one of: \(acceptedValues)."
+        )
+    }
+    return style
+}
+
 func decodeValue<T: Decodable>(_ value: Value, fieldName: String) throws -> T {
     do {
         let data = try JSONEncoder().encode(value)

@@ -163,8 +163,24 @@ extension SpeakSwiftlyServerTests {
             let textProfilesContents = try #require(textProfilesResourceResult["contents"] as? [[String: Any]])
             let textProfilesText = try #require(textProfilesContents.first?["text"] as? String)
             let textProfilesPayload = try jsonObject(from: Data(textProfilesText.utf8))
+            #expect(textProfilesPayload["built_in_style"] as? String == "balanced")
             let storedProfilesPayload = try #require(textProfilesPayload["stored_profiles"] as? [[String: Any]])
             #expect(storedProfilesPayload.contains { $0["id"] as? String == "mcp-text" })
+
+            let textProfileStyleEnvelope = try await mcpEnvelope(
+                from: await mcpSurface.handle(
+                    mcpPOSTRequest(
+                        body: mcpReadResourceRequestJSON(uri: "speak://text-profiles/style"),
+                        sessionID: sessionID
+                    )
+                )
+            )
+            let textProfileStyleResult = try #require(mcpResultPayload(from: textProfileStyleEnvelope))
+            let textProfileStyleContents = try #require(textProfileStyleResult["contents"] as? [[String: Any]])
+            let textProfileStyleText = try #require(textProfileStyleContents.first?["text"] as? String)
+            let textProfileStylePayload = try jsonObject(from: Data(textProfileStyleText.utf8))
+            let textProfileStyle = try #require(textProfileStylePayload["built_in_style"] as? String)
+            #expect(textProfileStyle == "balanced")
 
             let textProfilesGuideEnvelope = try await mcpEnvelope(
                 from: await mcpSurface.handle(
@@ -178,6 +194,7 @@ extension SpeakSwiftlyServerTests {
             let textProfilesGuideContents = try #require(textProfilesGuideResult["contents"] as? [[String: Any]])
             let textProfilesGuideText = try #require(textProfilesGuideContents.first?["text"] as? String)
             #expect(textProfilesGuideText.contains("text_profile_name"))
+            #expect(textProfilesGuideText.contains("set_text_profile_style"))
 
             let voiceProfilesGuideEnvelope = try await mcpEnvelope(
                 from: await mcpSurface.handle(

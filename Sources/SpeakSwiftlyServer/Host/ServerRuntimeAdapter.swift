@@ -205,12 +205,23 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
 
     // MARK: - Text Profiles
 
+    func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle {
+        await runtime.normalizer.profiles.builtInStyle()
+    }
+
+    func setBuiltInTextProfileStyle(
+        _ style: TextForSpeech.BuiltInProfileStyle
+    ) async throws -> TextForSpeech.BuiltInProfileStyle {
+        try await runtime.normalizer.profiles.setBuiltInStyle(style)
+        return await runtime.normalizer.profiles.builtInStyle()
+    }
+
     func activeTextProfile() async -> TextForSpeech.Profile {
         await runtime.normalizer.profiles.active() ?? .default
     }
 
     func baseTextProfile() async -> TextForSpeech.Profile {
-        .init(id: "base", name: "Base")
+        .builtInBase(style: await runtime.normalizer.profiles.builtInStyle())
     }
 
     func textProfile(id profileID: String) async -> TextForSpeech.Profile? {

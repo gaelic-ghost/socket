@@ -33,6 +33,7 @@ extension SpeakSwiftlyServerE2ETests {
         #expect(resourceURIs.contains("speak://runtime/overview"))
         #expect(resourceURIs.contains("speak://voices"))
         #expect(resourceURIs.contains("speak://text-profiles"))
+        #expect(resourceURIs.contains("speak://text-profiles/style"))
         #expect(resourceURIs.contains("speak://playback/guide"))
 
         let templates = try await client.listResourceTemplates()
@@ -83,6 +84,7 @@ extension SpeakSwiftlyServerE2ETests {
 
         let textGuide = try await client.readResourceText(uri: "speak://text-profiles/guide")
         #expect(textGuide.contains("text_profile_name"))
+        #expect(textGuide.contains("set_text_profile_style"))
         let voiceGuide = try await client.readResourceText(uri: "speak://voices/guide")
         #expect(voiceGuide.contains("create_voice_profile_from_audio"))
         let playbackGuide = try await client.readResourceText(uri: "speak://playback/guide")
@@ -143,8 +145,21 @@ extension SpeakSwiftlyServerE2ETests {
         let storedTextProfilesPayload = try Self.requireObjectPayload(
             from: try await client.readResourceJSON(uri: "speak://text-profiles")
         )
+        #expect(storedTextProfilesPayload["built_in_style"] as? String == "balanced")
         let storedProfiles = try requireArray("stored_profiles", in: storedTextProfilesPayload)
         #expect(storedProfiles.contains { $0["id"] as? String == "mcp-text-profile" })
+
+        let initialTextProfileStylePayload = try Self.requireObjectPayload(
+            from: try await client.readResourceJSON(uri: "speak://text-profiles/style")
+        )
+        #expect(initialTextProfileStylePayload["built_in_style"] as? String == "balanced")
+
+        _ = try await client.callTool(
+            name: "set_text_profile_style",
+            arguments: [
+                "built_in_style": "compact",
+            ]
+        )
 
         _ = try await client.callTool(
             name: "store_text_profile",
@@ -247,6 +262,7 @@ extension SpeakSwiftlyServerE2ETests {
         let loadedTextProfiles = try Self.requireObjectPayload(
             from: try await client.callToolJSON(name: "load_text_profiles", arguments: [:])
         )
+        #expect(loadedTextProfiles["built_in_style"] as? String == "compact")
         let loadedStoredProfiles = try requireArray("stored_profiles", in: loadedTextProfiles)
         #expect(loadedStoredProfiles.contains { $0["id"] as? String == "mcp-text-profile" })
 

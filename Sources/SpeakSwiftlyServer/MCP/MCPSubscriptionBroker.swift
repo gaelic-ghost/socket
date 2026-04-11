@@ -105,6 +105,7 @@ actor MCPSubscriptionBroker {
             candidateURIs = Set(
                 [
                     "speak://text-profiles",
+                    "speak://text-profiles/style",
                     "speak://text-profiles/base",
                     "speak://text-profiles/active",
                     "speak://text-profiles/effective",
@@ -129,6 +130,7 @@ actor MCPSubscriptionBroker {
             candidateURIs = Set(
                 [
                     "speak://text-profiles",
+                    "speak://text-profiles/style",
                     "speak://text-profiles/base",
                     "speak://text-profiles/active",
                     "speak://text-profiles/effective",

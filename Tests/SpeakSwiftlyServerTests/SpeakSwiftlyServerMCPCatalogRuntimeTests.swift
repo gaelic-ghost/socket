@@ -96,8 +96,34 @@ extension SpeakSwiftlyServerTests {
                 )
             )
             let listTextProfilesPayload = try mcpToolPayload(from: listTextProfilesEnvelope)
+            #expect(listTextProfilesPayload["built_in_style"] as? String == "balanced")
             let listTextStoredProfiles = try #require(listTextProfilesPayload["stored_profiles"] as? [[String: Any]])
             #expect(listTextStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
+
+            let getTextProfileStyleEnvelope = try await mcpEnvelope(
+                from: await mcpSurface.handle(
+                    mcpPOSTRequest(
+                        body: mcpCallToolRequestJSON(name: "get_text_profile_style", arguments: [:]),
+                        sessionID: sessionID
+                    )
+                )
+            )
+            let getTextProfileStylePayload = try mcpToolPayload(from: getTextProfileStyleEnvelope)
+            #expect(getTextProfileStylePayload["built_in_style"] as? String == "balanced")
+
+            let setTextProfileStyleEnvelope = try await mcpEnvelope(
+                from: await mcpSurface.handle(
+                    mcpPOSTRequest(
+                        body: mcpCallToolRequestJSON(
+                            name: "set_text_profile_style",
+                            arguments: ["built_in_style": "compact"]
+                        ),
+                        sessionID: sessionID
+                    )
+                )
+            )
+            let setTextProfileStylePayload = try mcpToolPayload(from: setTextProfileStyleEnvelope)
+            #expect(setTextProfileStylePayload["built_in_style"] as? String == "compact")
 
             let loadTextProfilesEnvelope = try await mcpEnvelope(
                 from: await mcpSurface.handle(

@@ -139,6 +139,16 @@ extension MCPSurface {
             case "get_text_normalizer_snapshot":
                 return try toolResult(await host.textProfilesSnapshot())
 
+            case "get_text_profile_style":
+                return try toolResult(await host.textProfileStyleSnapshot())
+
+            case "set_text_profile_style":
+                let result = try await host.setTextProfileStyle(
+                    try requiredBuiltInTextProfileStyle("built_in_style", in: arguments)
+                )
+                await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                return try toolResult(result)
+
             case "create_text_profile":
                 let result = try await host.createTextProfile(
                     id: requiredString("id", in: arguments),

@@ -11,6 +11,7 @@ enum MCPResourceCatalog {
         "speak://voices",
         "speak://voices/guide",
         "speak://text-profiles",
+        "speak://text-profiles/style",
         "speak://text-profiles/guide",
         "speak://text-profiles/base",
         "speak://text-profiles/active",
@@ -28,9 +29,10 @@ enum MCPResourceCatalog {
         .init(name: "Runtime Configuration", uri: "speak://runtime/configuration", description: "Persisted runtime configuration snapshot for the next runtime start.", mimeType: "application/json"),
         .init(name: "Voice Profiles", uri: "speak://voices", description: "Current cached SpeakSwiftly voice profiles.", mimeType: "application/json"),
         .init(name: "Voice Profile Guide", uri: "speak://voices/guide", description: "Operator guidance for creating, cloning, listing, deleting, and using SpeakSwiftly voice profiles.", mimeType: "text/markdown"),
-        .init(name: "Text Profiles", uri: "speak://text-profiles", description: "Current SpeakSwiftly text-profile snapshot, including base, active, stored, and effective profiles.", mimeType: "application/json"),
+        .init(name: "Text Profiles", uri: "speak://text-profiles", description: "Current SpeakSwiftly text-profile snapshot, including built-in style plus base, active, stored, and effective profiles.", mimeType: "application/json"),
+        .init(name: "Text Profile Style", uri: "speak://text-profiles/style", description: "Current built-in SpeakSwiftly text-profile style.", mimeType: "application/json"),
         .init(name: "Text Profile Guide", uri: "speak://text-profiles/guide", description: "Operator guidance for working with SpeakSwiftly text profiles and replacements.", mimeType: "text/markdown"),
-        .init(name: "Base Text Profile", uri: "speak://text-profiles/base", description: "Immutable base SpeakSwiftly text profile.", mimeType: "application/json"),
+        .init(name: "Base Text Profile", uri: "speak://text-profiles/base", description: "Built-in-style-derived base SpeakSwiftly text profile.", mimeType: "application/json"),
         .init(name: "Active Text Profile", uri: "speak://text-profiles/active", description: "Current active custom SpeakSwiftly text profile.", mimeType: "application/json"),
         .init(name: "Effective Text Profile", uri: "speak://text-profiles/effective", description: "Default effective SpeakSwiftly text profile after merging base and active custom state.", mimeType: "application/json"),
         .init(name: "Playback Guide", uri: "speak://playback/guide", description: "Operator guidance for reading queues, controlling playback, and choosing the least destructive action.", mimeType: "text/markdown"),
@@ -106,6 +108,9 @@ extension MCPSurface {
 
             case "speak://text-profiles":
                 return try resourceResult(uri: params.uri, payload: await host.textProfilesSnapshot())
+
+            case "speak://text-profiles/style":
+                return try resourceResult(uri: params.uri, payload: await host.textProfileStyleSnapshot())
 
             case "speak://text-profiles/guide":
                 return .init(
@@ -241,18 +246,20 @@ private func textProfilesGuideMarkdown() -> String {
     Use text profiles when a downstream app or agent needs to normalize phrasing before speech generation without changing the underlying voice profile.
 
     - `base profile`: immutable built-ins that always participate in effective normalization.
+    - `built-in style`: the balanced, compact, or explicit built-in normalization mode that shapes the base profile.
     - `active profile`: the current custom profile used by default when no explicit `text_profile_name` is provided during speech submission.
     - `stored profiles`: named reusable normalization policies that an app or agent can apply on demand.
     - `effective profile`: the merged profile SpeakSwiftly will actually apply after combining the base profile with the selected active or stored profile.
 
     Recommended workflow:
 
-    1. Read `speak://text-profiles` to inspect the current base, active, stored, and effective state.
+    1. Read `speak://text-profiles` to inspect the current built-in style plus base, active, stored, and effective state.
     2. Draft or edit rules with the `draft_text_profile` and `draft_text_replacement` prompts when a user needs help authoring replacements.
-    3. Store reusable policies with `create_text_profile` or `store_text_profile`.
-    4. Use `use_text_profile` when the downstream app wants a temporary active custom profile, or pass `text_profile_name` on one speech request when the caller wants stored-profile selection without mutating the active profile.
-    5. Use `save_text_profiles` when the operator wants an explicit persistence checkpoint, and `load_text_profiles` when another process changed the persistence file and the in-memory state should be refreshed from disk.
-    6. Read `speak://text-profiles/effective/{profile_id}` before queuing speech if the user wants to verify what normalization will really happen.
+    3. Use `get_text_profile_style`, `set_text_profile_style`, or `speak://text-profiles/style` when the operator needs to inspect or change the built-in normalization mode.
+    4. Store reusable policies with `create_text_profile` or `store_text_profile`.
+    5. Use `use_text_profile` when the downstream app wants a temporary active custom profile, or pass `text_profile_name` on one speech request when the caller wants stored-profile selection without mutating the active profile.
+    6. Use `save_text_profiles` when the operator wants an explicit persistence checkpoint, and `load_text_profiles` when another process changed the persistence file and the in-memory state should be refreshed from disk.
+    7. Read `speak://text-profiles/effective/{profile_id}` before queuing speech if the user wants to verify what normalization will really happen.
 
     Replacement guidance:
 

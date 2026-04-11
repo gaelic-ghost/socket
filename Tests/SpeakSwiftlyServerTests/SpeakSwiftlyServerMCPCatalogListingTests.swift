@@ -41,6 +41,7 @@ extension SpeakSwiftlyServerTests {
             #expect(resourceURIs == Set(MCPResourceCatalog.resources.map(\.uri)))
             #expect(resources.contains { $0["uri"] as? String == "speak://runtime/overview" })
             #expect(resources.contains { $0["uri"] as? String == "speak://text-profiles" })
+            #expect(resources.contains { $0["uri"] as? String == "speak://text-profiles/style" })
             #expect(resources.contains { $0["uri"] as? String == "speak://voices/guide" })
             #expect(resources.contains { $0["uri"] as? String == "speak://text-profiles/guide" })
             #expect(resources.contains { $0["uri"] as? String == "speak://playback/guide" })

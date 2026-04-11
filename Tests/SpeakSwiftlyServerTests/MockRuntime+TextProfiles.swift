@@ -5,6 +5,17 @@ import TextForSpeech
 
 @available(macOS 14, *)
 extension MockRuntime {
+    func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle {
+        textRuntime.profiles.builtInStyle
+    }
+
+    func setBuiltInTextProfileStyle(
+        _ style: TextForSpeech.BuiltInProfileStyle
+    ) async throws -> TextForSpeech.BuiltInProfileStyle {
+        try textRuntime.profiles.setBuiltInStyle(style)
+        return textRuntime.profiles.builtInStyle
+    }
+
     func activeTextProfile() async -> TextForSpeech.Profile {
         textRuntime.profiles.active()
     }

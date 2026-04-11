@@ -115,6 +115,8 @@ protocol ServerRuntimeProtocol: Actor {
     func resumePlayback() async -> RuntimeRequestHandle
     func clearQueue() async -> RuntimeRequestHandle
     func cancelRequest(_ requestID: String) async -> RuntimeRequestHandle
+    func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle
+    func setBuiltInTextProfileStyle(_ style: TextForSpeech.BuiltInProfileStyle) async throws -> TextForSpeech.BuiltInProfileStyle
     func activeTextProfile() async -> TextForSpeech.Profile
     func baseTextProfile() async -> TextForSpeech.Profile
     func textProfile(id profileID: String) async -> TextForSpeech.Profile?

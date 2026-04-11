@@ -153,9 +153,26 @@ enum MCPToolCatalog {
         ),
         Tool(
             name: "get_text_normalizer_snapshot",
-            description: "Return the full SpeakSwiftly text-normalizer snapshot, including base, active, stored, and effective profiles.",
+            description: "Return the full SpeakSwiftly text-normalizer snapshot, including built-in style plus base, active, stored, and effective profiles.",
             inputSchema: ["type": "object", "properties": [:]],
             annotations: .init(readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false)
+        ),
+        Tool(
+            name: "get_text_profile_style",
+            description: "Return the current built-in SpeakSwiftly text-profile style that shapes normalization before custom profile merges.",
+            inputSchema: ["type": "object", "properties": [:]],
+            annotations: .init(readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false)
+        ),
+        Tool(
+            name: "set_text_profile_style",
+            description: "Set the built-in SpeakSwiftly text-profile style. This changes the base normalization behavior used alongside custom profiles.",
+            inputSchema: [
+                "type": "object",
+                "required": ["built_in_style"],
+                "properties": [
+                    "built_in_style": ["type": "string", "enum": ["balanced", "compact", "explicit"]],
+                ],
+            ]
         ),
         Tool(
             name: "create_text_profile",

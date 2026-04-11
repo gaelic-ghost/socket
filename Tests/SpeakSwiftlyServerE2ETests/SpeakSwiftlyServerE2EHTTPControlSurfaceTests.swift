@@ -27,8 +27,15 @@ extension SpeakSwiftlyServerE2ETests {
             E2ETextProfileListResponse.self,
             from: try await client.request(path: "/text-profiles", method: "GET").data
         ).textProfiles
+        #expect(initialTextProfiles.builtInStyle == "balanced")
         #expect(initialTextProfiles.baseProfile.id.isEmpty == false)
         #expect(initialTextProfiles.activeProfile.id.isEmpty == false)
+
+        let initialTextProfileStyle = try decode(
+            E2ETextProfileStyleResponse.self,
+            from: try await client.request(path: "/text-profiles/style", method: "GET").data
+        ).textProfileStyle
+        #expect(initialTextProfileStyle.builtInStyle == "balanced")
 
         let createdStored = try decode(
             E2ETextProfileResponse.self,
@@ -213,11 +220,22 @@ extension SpeakSwiftlyServerE2ETests {
         ).textProfiles
         #expect(savedSnapshot.storedProfiles.contains { $0.id == "http-text-profile" })
 
+        let compactSnapshot = try decode(
+            E2ETextProfileListResponse.self,
+            from: try await client.request(
+                path: "/text-profiles/style",
+                method: "PUT",
+                jsonBody: ["built_in_style": "compact"]
+            ).data
+        ).textProfiles
+        #expect(compactSnapshot.builtInStyle == "compact")
+
         let loadedSnapshot = try decode(
             E2ETextProfileListResponse.self,
             from: try await client.request(path: "/text-profiles/load", method: "POST").data
         ).textProfiles
         #expect(loadedSnapshot.storedProfiles.contains { $0.id == "http-text-profile" })
+        #expect(loadedSnapshot.builtInStyle == "compact")
 
         let resetProfile = try decode(
             E2ETextProfileResponse.self,
