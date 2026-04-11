@@ -3,9 +3,9 @@
 ## Markdown Sections
 
 1. Run Context
-2. Profile Assignment
-3. Schema Violations
-4. Command Integrity Issues
+2. Customization State
+3. Schema Contract
+4. Schema Violations
 5. Content Quality Issues
 6. Fixes Applied
 7. Post-Fix Status
@@ -14,9 +14,9 @@
 ## JSON Top-Level Keys
 
 - `run_context`
-- `profile_assignment`
+- `customization_state`
+- `schema_contract`
 - `schema_violations`
-- `command_integrity_issues`
 - `content_quality_issues`
 - `fixes_applied`
 - `post_fix_status`

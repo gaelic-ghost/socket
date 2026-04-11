@@ -13,20 +13,24 @@ Use $maintain-project-readme.
 Scope:
 - Project root: <PROJECT_ROOT_ABS_PATH>
 - README path override: <README_PATH_OR_NONE>
+- README config override: <README_CONFIG_OR_NONE>
 
 Execution policy:
-- Detect the repo profile from project files first.
-- Run `check-only` first and summarize schema issues, command integrity issues, content-quality issues, and profile assignment.
+- Load the canonical README config first.
+- Run `check-only` first and summarize customization state, schema contract, schema violations, and content-quality issues.
 - If <APPLY_FIXES_TRUE_FALSE> is true, run bounded README fixes and re-check.
 - Preserve existing preamble content such as badges, callouts, screenshots, and intro prose before the first H2.
-- Only add a profile-specific section automatically when the repo profile is clear.
+- Treat the configured README structure as hard-enforced.
+- Keep `Status` very short and plain about maturity or availability.
+- Treat `What This Project Is` and `Motivation` as user-authored sections that should not be replaced with invented claims.
+- Keep `Quick Start` and `Usage` human-focused and end-user friendly; prefer fenced code blocks with info strings in `Usage` when examples help.
 - Never invent commands, setup steps, or unsupported product claims.
 - Never edit files other than the target `README.md`.
 - Never commit or push.
 
 Output contract:
 - Return Markdown summary and JSON-ready fields for:
-  run_context, profile_assignment, schema_violations, command_integrity_issues,
+  run_context, customization_state, schema_contract, schema_violations,
   content_quality_issues, fixes_applied, post_fix_status, errors.
 - Write reports to:
   - <REPORT_MD_PATH>
@@ -45,8 +49,9 @@ Use $maintain-project-readme.
 
 Audit the project README under <PROJECT_ROOT_ABS_PATH>.
 If needed, use README override path <README_PATH_OR_NONE>.
-Detect the repo profile first, then run `check-only`.
-Report profile assignment, schema issues, command integrity issues, and content-quality issues.
+If needed, use README config override <README_CONFIG_OR_NONE>.
+Load the canonical README config first, then run `check-only`.
+Report customization state, schema contract, schema violations, and content-quality issues.
 Write outputs to <REPORT_MD_PATH> and <REPORT_JSON_PATH>.
 If there are no issues and no errors, output exactly `No findings.`.
 ```
@@ -58,9 +63,13 @@ Use $maintain-project-readme.
 
 Audit the project README under <PROJECT_ROOT_ABS_PATH>.
 If needed, use README override path <README_PATH_OR_NONE>.
-Detect the repo profile first, then run `check-only`, then bounded README fixes, then re-check.
+If needed, use README config override <README_CONFIG_OR_NONE>.
+Load the canonical README config first, then run `check-only`, then bounded README fixes, then re-check.
 Preserve badges, callouts, screenshots, and extra intro prose before the first H2.
-Only add a profile-specific section when the repo profile is clear.
+Treat the configured structure as hard-enforced.
+Keep `Status` very short and plain about maturity or availability.
+Treat `What This Project Is` and `Motivation` as user-authored sections that should not be replaced with invented claims.
+Keep `Quick Start` and `Usage` human-focused and end-user friendly; prefer fenced code blocks with info strings in `Usage` when examples help.
 Do not invent commands or edit files other than the target `README.md`.
 Write outputs to <REPORT_MD_PATH> and <REPORT_JSON_PATH>.
 ```
@@ -69,6 +78,7 @@ Write outputs to <REPORT_MD_PATH> and <REPORT_JSON_PATH>.
 
 - `<PROJECT_ROOT_ABS_PATH>`
 - `<README_PATH_OR_NONE>`
+- `<README_CONFIG_OR_NONE>`
 - `<APPLY_FIXES_TRUE_FALSE>`
 - `<REPORT_MD_PATH>`
 - `<REPORT_JSON_PATH>`

@@ -1,38 +1,29 @@
 # Section Schema
 
-## Common Required Structure
+## Canonical Base README Structure
 
-1. `# <project-name>`
-2. one-line value proposition
-3. `## Table of Contents` when the README has enough H2 sections to justify it
-4. `## Overview`
-5. `### Motivation` directly under `## Overview`
-6. `## Setup`
-7. `## Usage`
-8. `## Development`
-9. `## Verification`
-10. `## License`
+The canonical base README structure is defined in `config/readme-customization.template.yaml`.
 
-## Core Rules
+## Hard-Enforced Rules
 
-- `### Motivation` belongs under `## Overview`, not as a peer H2.
-- `Setup`, `Usage`, `Development`, and `Verification` should all exist even when brief.
-- `License` may be short, but it should still name or link the actual license.
-- When a README has five or more H2 sections, prefer a compact H2-only table of contents near the top.
+- Top-level canonical sections use exact `##` heading names from the configured schema.
+- Required subsections use exact `###` heading names from the configured schema.
+- Canonical sections appear in canonical order.
+- `Overview` owns the canonical `Status`, `What This Project Is`, and `Motivation` subsections.
+- `Development` owns the canonical `Setup`, `Workflow`, and `Validation` subsections.
+- `Table of Contents` is always required in the base workflow.
+- Additional repo-specific sections may exist, but they follow the canonical block unless a customization override defines a different order.
+- `Table of Contents` is generated from H2 headings only and should use the canonical heading names that appear in the README.
+- The summary line directly beneath the title is part of the schema contract, not optional polish.
 
-## Profile-Specific Additions
+## Alias Policy
 
-- `library-package`
-  - canonical additional section: `## API Notes`
-- `cli-tool`
-  - canonical additional section: `## Command Reference`
-- `app-service`
-  - canonical additional section: `## Configuration`
-- `monorepo-workspace`
-  - canonical additional section: `## Repository Layout`
+- Alias headings may be used as migration hints during apply mode.
+- Alias headings are not canonical output.
+- If a README uses an alias such as `Getting Started` where the canonical schema expects `Quick Start`, the audit should report the non-canonical heading and apply mode should migrate it to the configured canonical heading name.
 
-## Profile Normalization Rules
+## Downstream Customization
 
-- When repo-profile detection is clear, `apply` mode should add the canonical profile-specific section if it is missing.
-- When the profile-specific section already exists, keep its content and normalize its placement into the canonical order.
-- When repo-profile detection is ambiguous, report that ambiguity and do not create a new profile-specific section automatically.
+- Downstream plugins may add, remove, or reorder sections through the customization config.
+- Downstream plugins may add required subsections and alias mappings.
+- Even when customized, the configured schema remains hard-enforced for both `check-only` and `apply`.

@@ -1,99 +1,125 @@
 # productivity-skills
 
-Some global-scope geenral productivity skills, as well as the template skills for my adjacent language-specific skill packs/plugins.
+Broadly useful productivity skills plus durable base template skills that downstream language-, stack-, and repo-specific plugins can adapt.
 
 For maintainer guidance, standards references, and cross-ecosystem packaging policy, see [AGENTS.md](./AGENTS.md).
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [Development](#development)
+- [Repo Structure](#repo-structure)
+- [Release Notes](#release-notes)
+- [License](#license)
+
 ## Overview
 
-See subtitle plsthx. I'm write a real overview eventually.
+### Status
 
-### Direction
+This plugin is active and maintained as the shared productivity-skills base layer.
 
-- `productivity-skills` holds durable general-purpose baselines
-- stack-specific plugins refine or extend these workflows when tighter defaults produce better results
-- specialization is intentional, not a sign that the general version here is unfinished
-- the general version here should stay coherent on its own rather than becoming a thin router to every specialized plugin
+### What This Project Is
 
-## Active Skills
+This repository bundles broadly useful global-install skills and the canonical general-purpose versions of workflow families that later specialize in adjacent plugins. It keeps root [`skills/`](./skills/) as the authored source of truth, with thin Codex and Claude marketplace metadata pointing back at that same skill surface.
 
-- `explain-code-slice`
-  - Use when you want a code path, flow, pipeline, request lifecycle, trace, or part of a system explained step by step.
-- `maintain-project-readme`
-  - Use when an ordinary software project `README.md` needs deterministic auditing or bounded fixes for overview, motivation, setup, usage, development, or verification guidance.
-- `maintain-project-agents`
-  - Use when an ordinary project-local `AGENTS.md` needs deterministic auditing or bounded fixes for workflow guidance, validation commands, architecture boundaries, or agent safety rules.
-- `maintain-project-contributing`
-  - Use when an ordinary software project `CONTRIBUTING.md` needs deterministic auditing or bounded fixes for contributor workflow, local setup, naming conventions, verification, or pull request expectations.
-- `maintain-project-roadmap`
-  - Use when a checklist-style `ROADMAP.md` needs validation, normalization, or bounded updates.
-- `maintain-project-repo`
-  - Use when a repository needs reusable local maintainer scripts for validation, shared sync work, and releases instead of CI-only glue, with explicit `generic`, `swift-package`, or `xcode-app` profile installs.
+It currently ships these active skills:
 
-Maintainer-facing workflow maps, audit procedure, and source-of-truth rules live in [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md) and [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md).
+- [`explain-code-slice`](./skills/explain-code-slice/SKILL.md)
+- [`maintain-project-readme`](./skills/maintain-project-readme/SKILL.md)
+- [`maintain-project-agents`](./skills/maintain-project-agents/SKILL.md)
+- [`maintain-project-contributing`](./skills/maintain-project-contributing/SKILL.md)
+- [`maintain-project-roadmap`](./skills/maintain-project-roadmap/SKILL.md)
+- [`maintain-project-repo`](./skills/maintain-project-repo/SKILL.md)
 
-Agent-stack repo-maintainer skills now live in [`../agent-plugin-skills`](../agent-plugin-skills):
+Agent-skills and plugin-maintainer workflows now live in the sibling [`agent-plugin-skills`](../agent-plugin-skills) repository instead of here.
 
-- [`maintain-skills-readme`](../agent-plugin-skills/skills/maintain-skills-readme/SKILL.md)
-- [`bootstrap-skills-plugin-repo`](../agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md)
-- [`sync-skills-repo-guidance`](../agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md)
+### Motivation
 
-## Discovery and Delegation
+This repository exists to keep the durable superclass layer coherent on its own. The goal is to preserve strong general-purpose defaults for common workflow families while leaving room for downstream plugins to make tighter language-, framework-, or repo-specific assumptions when those assumptions materially improve the workflow.
 
-This repository keeps root [`skills/`](./skills/) as the canonical workflow-authoring surface.
+## Quick Start
 
-Shared guidance across both ecosystems:
+Install one skill:
 
-- keep reusable workflow behavior in root `skills/`
-- keep deterministic helper logic skill-scoped so both Codex and Claude can rely on it
-- treat marketplace wiring as install-surface metadata, not as the workflow source of truth
-- use POSIX symlink mirrors for local Codex and Claude project discovery on macOS and Linux:
-  - `.agents/skills -> ../skills`
-  - `.claude/skills -> ../skills`
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
+```
 
-Layering philosophy going forward:
+Install all active skills from this plugin:
 
-- global plugins should bundle skills that are broadly useful across many repos
-- this global plugin should also hold the canonical general-purpose versions of workflow families that later specialize elsewhere
-- language-, framework-, stack-, or repository-specific skills should increasingly live in dedicated plugins that are installed at the project or repo level
-- this keeps global installs lighter, gives specialized plugins room for stronger assumptions, and preserves this repo as the stable superclass layer instead of turning it into a grab bag
+```bash
+npx skills add gaelic-ghost/productivity-skills --all
+```
 
-Current discovery surfaces live under:
+If you are looking for agent-skills or plugin-repository maintenance workflows instead, start with the sibling plugin:
+
+```bash
+npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-skills-readme
+```
+
+## Usage
+
+Use this plugin when you want globally useful workflow help rather than project-specific specialization.
+
+Common starting points:
+
+- Code walkthroughs:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
+```
+
+- README maintenance for ordinary software projects:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
+```
+
+- Project-local `AGENTS.md` maintenance:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-agents
+```
+
+- `CONTRIBUTING.md` maintenance:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-contributing
+```
+
+- Checklist-style roadmap maintenance:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
+```
+
+- Reusable repo-maintenance toolkit work:
+
+```bash
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-repo
+```
+
+Discovery and install surfaces in this repository are intentionally thin. Root [`skills/`](./skills/) remains the canonical authored surface, while local discovery mirrors and marketplace catalogs expose that same skill tree directly:
 
 - [`.agents/skills`](./.agents/skills)
 - [`.claude/skills`](./.claude/skills)
 - [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
 
-The repo-local marketplace catalogs are intentionally thin:
+Helpful ecosystem docs:
 
-- point directly at root `skills/`
-- avoid nested packaged plugin copies inside this repository
-- keep essential workflow behavior in the skill directories themselves
+- [OpenAI Codex Skills](https://developers.openai.com/codex/skills)
+- [OpenAI Codex customization](https://developers.openai.com/codex/concepts/customization/)
+- [OpenAI Codex plugins overview](https://developers.openai.com/codex/plugins)
+- [OpenAI Codex plugin authoring](https://developers.openai.com/codex/plugins/build)
+- [Claude Code Skills](https://code.claude.com/docs/en/skills)
+- [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
 
-That means this repository should be described as a root-`skills/` repo with thin marketplace metadata, not as a repo that stages a separate packaged plugin tree inside itself.
+## Development
 
-Helpful docs for this discovery model:
-
-- OpenAI Codex Skills: [developers.openai.com/codex/skills](https://developers.openai.com/codex/skills)
-- OpenAI Codex customization: [developers.openai.com/codex/concepts/customization](https://developers.openai.com/codex/concepts/customization/)
-- OpenAI Codex plugins overview: [developers.openai.com/codex/plugins](https://developers.openai.com/codex/plugins)
-- OpenAI Codex plugin authoring: [developers.openai.com/codex/plugins/build](https://developers.openai.com/codex/plugins/build)
-- Claude Code Skills: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills)
-- Claude Code Plugins: [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins)
-
-## Install Surfaces
-
-Repo-local discovery and personal installs are different surfaces and the docs should keep them separate:
-
-- repo-local Codex marketplace: `.agents/plugins/marketplace.json`
-- repo-local Claude marketplace: `.claude-plugin/marketplace.json`
-- canonical authored skills: `skills/`
-- personal Codex marketplace: `~/.agents/plugins/marketplace.json`
-
-Track the repo-scoped marketplace catalogs in git. Keep consumer-side install copies, caches, and machine-local runtime state out of git.
-
-## Maintainer Python Tooling
+### Setup
 
 This repository standardizes maintainer-side Python tooling around `uv`.
 
@@ -104,50 +130,33 @@ uv tool install mypy
 uv run --group dev pytest
 ```
 
-Use the skill entrypoints directly when you need focused validation, for example:
+For maintainer workflow guidance, source-of-truth rules, and cross-ecosystem packaging policy, use:
+
+- [AGENTS.md](./AGENTS.md)
+- [docs/maintainers/workflow-atlas.md](./docs/maintainers/workflow-atlas.md)
+- [docs/maintainers/reality-audit.md](./docs/maintainers/reality-audit.md)
+
+### Workflow
+
+Keep root [`skills/`](./skills/) as the canonical workflow-authoring surface. Treat `.agents/skills` and `.claude/skills` as discovery mirrors, and keep the repo-local marketplace catalogs aligned directly to the same source tree instead of staging nested packaged plugin copies.
+
+When a workflow becomes meaningfully stack-, language-, or repo-specific, prefer moving that stronger specialization into a dedicated adjacent plugin instead of weakening the shared productivity-skills baseline.
+
+### Validation
+
+Run focused maintainer checks before shipping changes:
+
+```bash
+uv run --group dev pytest
+```
+
+When validating a single skill, use its deterministic helper entrypoints directly. For example:
 
 ```bash
 uv run --group dev python /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/explain-code-slice
 ```
 
-## Install
-
-Standalone skill installation is handled through the Vercel `skills` CLI against root [`skills/`](./skills). Repo-local marketplace catalogs also point directly at [`skills/`](./skills) for local discovery without carrying a nested packaged plugin copy. For local project discovery on macOS and Linux, this repo also exposes `.agents/skills` and `.claude/skills` as symlink mirrors into root `skills/`.
-
-Install one skill:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
-```
-
-Install all active skills:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --all
-```
-
-Common starting points:
-
-- code walkthrough work:
-  `npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice`
-- README work:
-  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme`
-- AGENTS work:
-  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-agents`
-- contributing guide work:
-  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-contributing`
-- roadmap work:
-  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap`
-- repo-maintenance toolkit work:
-  `npx skills add gaelic-ghost/productivity-skills --skill maintain-project-repo`
-
-For agent-skills or plugin repository maintenance, use the dedicated sibling repo instead:
-
-- `npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-skills-readme`
-- `npx skills add gaelic-ghost/agent-plugin-skills --skill bootstrap-skills-plugin-repo`
-- `npx skills add gaelic-ghost/agent-plugin-skills --skill sync-skills-repo-guidance`
-
-## Repository Layout
+## Repo Structure
 
 ```text
 .
@@ -159,22 +168,24 @@ For agent-skills or plugin repository maintenance, use the dedicated sibling rep
 │   └── skills -> ../skills
 ├── .claude-plugin/
 │   └── marketplace.json
-├── README.md
 ├── AGENTS.md
+├── README.md
+├── ROADMAP.md
+├── docs/
+│   └── maintainers/
 ├── skills/
 │   ├── explain-code-slice/
-│   ├── maintain-project-contributing/
 │   ├── maintain-project-agents/
+│   ├── maintain-project-contributing/
 │   ├── maintain-project-readme/
 │   ├── maintain-project-roadmap/
 │   └── maintain-project-repo/
-├── docs/
-│   └── maintainers/
-├── ROADMAP.md
 └── pyproject.toml
 ```
 
-The canonical workflow content lives under root `skills/`. The discovery mirrors and marketplace catalogs point at that same source tree directly on macOS and Linux, including WSL 2 when Windows is involved. Agent-stack repo-maintainer workflows now live in [`../agent-plugin-skills`](../agent-plugin-skills) instead of this plugin.
+## Release Notes
+
+Track notable shipped changes through Git history and GitHub releases when cuts are made, and keep in-flight maintainer planning reflected in [ROADMAP.md](./ROADMAP.md) when milestone work changes materially.
 
 ## License
 

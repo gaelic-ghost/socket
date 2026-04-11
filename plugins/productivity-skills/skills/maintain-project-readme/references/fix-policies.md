@@ -2,24 +2,26 @@
 
 ## Allowed Automatic Fixes
 
-- add missing required sections
-- add the canonical profile-specific section when repo-profile detection is clear
-- normalize section ordering
-- add or repair `### Motivation` under `## Overview`
-- add or refresh a compact H2-only table of contents when warranted
-- replace missing title/value-proposition structure with grounded repo-neutral wording
-- fill empty required sections with neutral scaffolding that does not invent commands or product claims
+- add missing canonical top-level sections from the configured schema
+- add missing required subsections inside existing canonical sections
+- normalize top-level section ordering into the configured canonical order
+- migrate configured alias headings into canonical heading names
+- add or refresh the required H2-only table of contents
+- replace a missing title/summary block with grounded repo-neutral wording
+- fill empty required sections or subsections with readable neutral scaffolding
 
 ## Disallowed Automatic Fixes
 
-- invent setup, test, deploy, or release commands
-- invent audience claims, performance claims, or feature guarantees
+- invent quick-start, setup, workflow, validation, deploy, or release commands
+- invent audience claims, performance claims, guarantees, or support promises
+- rewrite healthy prose just to make it sound more generated
 - edit files other than the target `README.md`
 - rewrite specialized skills/plugin repository READMEs
 
 ## Review Bias
 
-- prefer preserving good existing prose over normalization for its own sake
-- prefer small structural edits over large rewrites
-- do not create new profile-specific sections when the repo profile is ambiguous
-- report unsupported command examples instead of guessing replacements
+- prefer hard structural normalization over soft structural hints
+- prefer preserving good existing prose within a section while normalizing the surrounding schema
+- prefer alias migration over deleting useful content
+- preserve preamble material before the first H2 when it remains coherent
+- report placeholder-style content instead of pretending the repo provides facts that are not visible
