@@ -1,6 +1,6 @@
 # productivity-skills
 
-Broadly useful productivity skills plus durable base template skills that downstream language-, stack-, and repo-specific plugins can adapt.
+Useful productivity skills, and durable template skills for downstream lang/stack-specific repos to adapt.
 
 For maintainer guidance, standards references, and cross-ecosystem packaging policy, see [AGENTS.md](./AGENTS.md).
 
@@ -18,11 +18,11 @@ For maintainer guidance, standards references, and cross-ecosystem packaging pol
 
 ### Status
 
-This plugin is active and maintained as the shared productivity-skills base layer.
+This plugin is active and maintained.
 
 ### What This Project Is
 
-This repository bundles broadly useful global-install skills and the canonical general-purpose versions of workflow families that later specialize in adjacent plugins. It keeps root [`skills/`](./skills/) as the authored source of truth, with thin Codex and Claude marketplace metadata pointing back at that same skill surface.
+This repo houses some general productivity skills I've built, as well as the templates for my lang/stack-specific skills in other repos.
 
 It currently ships these active skills:
 
@@ -37,27 +37,20 @@ Agent-skills and plugin-maintainer workflows now live in the sibling [`agent-plu
 
 ### Motivation
 
-This repository exists to keep the durable superclass layer coherent on its own. The goal is to preserve strong general-purpose defaults for common workflow families while leaving room for downstream plugins to make tighter language-, framework-, or repo-specific assumptions when those assumptions materially improve the workflow.
+I like automating busywork, and staying focused on what I'm building, simple as that.
 
 ## Quick Start
 
-Install one skill:
+Install one (or more) skills interactively:
 
 ```bash
-npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
+npx skills add gaelic-ghost/productivity-skills
 ```
 
-Install all active skills from this plugin:
+Install as a Codex Plugin:
 
-```bash
-npx skills add gaelic-ghost/productivity-skills --all
-```
+Install as a Claude Code Plugin:
 
-If you are looking for agent-skills or plugin-repository maintenance workflows instead, start with the sibling plugin:
-
-```bash
-npx skills add gaelic-ghost/agent-plugin-skills --skill maintain-skills-readme
-```
 
 ## Usage
 
@@ -65,40 +58,15 @@ Use this plugin when you want globally useful workflow help rather than project-
 
 Common starting points:
 
-- Code walkthroughs:
-
+- Global productivity skills:
 ```bash
 npx skills add gaelic-ghost/productivity-skills --skill explain-code-slice
 ```
 
-- README maintenance for ordinary software projects:
+- Adaptable template skills:
 
 ```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme
-```
-
-- Project-local `AGENTS.md` maintenance:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-agents
-```
-
-- `CONTRIBUTING.md` maintenance:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-contributing
-```
-
-- Checklist-style roadmap maintenance:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-roadmap
-```
-
-- Reusable repo-maintenance toolkit work:
-
-```bash
-npx skills add gaelic-ghost/productivity-skills --skill maintain-project-repo
+npx skills add gaelic-ghost/productivity-skills --skill maintain-project-readme maintain-project-roadmap
 ```
 
 Discovery and install surfaces in this repository are intentionally thin. Root [`skills/`](./skills/) remains the canonical authored surface, while local discovery mirrors and marketplace catalogs expose that same skill tree directly:
