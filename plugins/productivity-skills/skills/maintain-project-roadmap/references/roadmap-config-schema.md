@@ -5,41 +5,31 @@ Persistent roadmap customization for `maintain-project-roadmap` is defined in:
 - Template defaults: `config/roadmap-customization.template.yaml`
 - User overrides: `config/roadmap-customization.yaml`
 
-Checklist roadmap mode is canonical. Legacy table-era keys remain for backward compatibility.
+Checklist roadmap mode is canonical.
 
 ## Top-level fields
 
-- `schemaVersion`: integer schema version (`1`).
-- `isCustomized`: `true` when user overrides exist in `config/roadmap-customization.yaml`.
-- `profile`: short profile label (`default`, `team-delivery`, `quarterly`, etc).
-- `settings`: roadmap behavior controls.
+- `schemaVersion`: integer schema version (`1`)
+- `isCustomized`: `true` when user overrides exist in `config/roadmap-customization.yaml`
+- `profile`: short profile label such as `base`, `team-delivery`, or `quarterly`
+- `settings`: roadmap behavior and structure controls
 
 ## `settings` fields
 
-### Active in checklist mode
+- `preservePreamble`: whether to preserve preamble content beneath the title before the first H2
+- `allowAdditionalSections`: whether non-canonical top-level sections are preserved after the canonical roadmap block
+- `statusValues`: allowed milestone status values used for milestone `Status` subsections and milestone-progress rollups
+- `requiredSections`: required non-milestone H2 sections
+- `sectionOrder`: canonical roadmap order, including the milestone slot marker `__MILESTONES__`
+- `requiredMilestoneSubsections`: required H3 subsections inside every milestone
+- `sectionAliases`: top-level heading aliases migrated to canonical names during apply
+- `milestoneSubsectionAliases`: milestone subsection aliases migrated to canonical names during apply
+- `sectionTemplates`: default body scaffolding for required top-level sections
+- `milestoneSubsectionTemplates`: default body scaffolding for required milestone subsections
 
-- `statusValues`: ordered list of allowed status values used for normalization and legacy mapping.
-- `planHistoryVerbosity`: one of `concise`, `standard`, `detailed`.
-- `changeLogVerbosity`: one of `concise`, `standard`, `detailed`.
+Base interpretation notes:
 
-### Deprecated (compatibility-only)
-
-These keys are retained for schema compatibility and legacy migrations, but are non-authoritative for checklist-standard output:
-
-- `milestoneIdStyle`: one of `M`, `phase`, `quarter`.
-- `targetStyle`: one of `semver`, `quarter`, `date`.
-- `includeOwnerField`: legacy table-column behavior.
-- `includeDependencyField`: legacy table-column behavior.
-- `enableSubMilestones`: legacy sub-milestone model toggle.
-- `subMilestoneIdStyle`: one of `hierarchical`, `letter`, `ticket`, `external`.
-- `subMilestonePrefix`: legacy ticket-style prefix.
-- `subMilestonePadWidth`: legacy ticket-style zero-padding width.
-- `subMilestoneDelimiter`: one of `.` or `-`.
-- `allowExternalTrackerIds`: legacy external ID behavior.
-- `subMilestoneStatusValues`: legacy child-status vocabulary.
-
-Runtime treatment for deprecated keys:
-
-- `ignored` for normal checklist updates.
-- `legacy-only` as hints during table-style migration.
-- never used to force table/sub-milestone output in checklist-standard mode.
+- `Milestone Progress` should summarize milestone names plus statuses only.
+- `Scope` should stay outcome- and boundary-oriented.
+- `Tickets` should carry actionable checklist work.
+- `History` should stay high-signal and record only notable roadmap changes.

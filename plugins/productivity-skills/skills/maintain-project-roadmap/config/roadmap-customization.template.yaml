@@ -1,30 +1,59 @@
 schemaVersion: 1
 isCustomized: false
-profile: default
+profile: base
 settings:
+  preservePreamble: true
+  allowAdditionalSections: true
   statusValues:
     - Planned
     - In Progress
     - Completed
     - Blocked
     - De-scoped
-  planHistoryVerbosity: standard
-  changeLogVerbosity: standard
-
-  # Deprecated compatibility keys below (legacy migration hints only).
-  milestoneIdStyle: M
-  targetStyle: semver
-  includeOwnerField: false
-  includeDependencyField: false
-  enableSubMilestones: false
-  subMilestoneIdStyle: hierarchical
-  subMilestonePrefix: T
-  subMilestonePadWidth: 2
-  subMilestoneDelimiter: "."
-  allowExternalTrackerIds: false
-  subMilestoneStatusValues:
-    - Planned
-    - In Progress
-    - Completed
-    - Blocked
-    - De-scoped
+  requiredSections:
+    - Vision
+    - Product Principles
+    - Milestone Progress
+    - Backlog Candidates
+    - History
+  sectionOrder:
+    - Vision
+    - Product Principles
+    - Milestone Progress
+    - __MILESTONES__
+    - Backlog Candidates
+    - History
+  requiredMilestoneSubsections:
+    - Status
+    - Scope
+    - Tickets
+    - Exit Criteria
+  sectionAliases:
+    Product Principles:
+      - Product principles
+    Backlog Candidates:
+      - Backlog candidates
+  milestoneSubsectionAliases:
+    Status:
+      - status
+    Exit Criteria:
+      - Exit criteria
+  sectionTemplates:
+    Vision: |
+      - Describe the long-term outcome this roadmap is meant to deliver, not just what the project currently is.
+    Product Principles: |
+      - State the few planning and delivery rules that should shape roadmap decisions and tradeoffs.
+    Backlog Candidates: |
+      - [ ] Record plausible future work that is not yet committed to a milestone.
+    History: |
+      - Initial roadmap scaffold created.
+      - Record only notable roadmap changes here, such as milestone additions, scope cuts, resets, or major replans.
+  milestoneSubsectionTemplates:
+    Status: |
+      Planned
+    Scope: |
+      - [ ] Describe the boundary and intended outcome of this milestone without turning Scope into a task list.
+    Tickets: |
+      - [ ] Add the first concrete implementation task for this milestone.
+    Exit Criteria: |
+      - [ ] Describe what must be true before this milestone counts as complete.

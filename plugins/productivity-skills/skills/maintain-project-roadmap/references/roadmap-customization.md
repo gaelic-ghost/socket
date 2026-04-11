@@ -1,45 +1,64 @@
 # Roadmap Customization Guide
 
-## Checklist Standard
+## Canonical Base Contract
 
-`maintain-project-roadmap` treats checklist-style `ROADMAP.md` as canonical:
+`maintain-project-roadmap` treats checklist-style `ROADMAP.md` as canonical.
 
-- `Vision`
-- `Product principles`
-- `Milestone Progress`
-- Per-milestone sections with `Scope`, `Tickets`, and `Exit criteria`
+The default shared roadmap structure is defined in:
 
-Legacy table-style roadmap formats are auto-migrated in-place when encountered in apply mode.
+- `config/roadmap-customization.template.yaml`
+- `assets/ROADMAP.template.md`
 
-## Active Customization Knobs
+That base contract requires:
 
-- `statusValues`
-  - Used for status vocabulary mapping, especially during legacy migration and textual status normalization.
-- `planHistoryVerbosity`
-  - Controls detail level when preserving or summarizing historical plan context.
-- `changeLogVerbosity`
-  - Controls detail level when preserving or summarizing historical change context.
+- a top-level `# ...` title
+- `## Table of Contents`
+- `## Vision`
+- `## Product Principles`
+- `## Milestone Progress`
+- one or more milestone sections named `## Milestone N: Name`
+- `## Backlog Candidates`
+- `## History`
 
-## Deprecated Knobs (Compatibility-Only)
+Each milestone must include:
 
-The settings below remain available for backward compatibility but are non-authoritative in checklist mode:
+- `### Status`
+- `### Scope`
+- `### Tickets`
+- `### Exit Criteria`
 
-- `milestoneIdStyle`
-- `targetStyle`
-- `includeOwnerField`
-- `includeDependencyField`
-- `enableSubMilestones` and related sub-milestone keys
+Interpretation guidance:
 
-Behavior policy:
+- `Vision` is for the long-term outcome, not a project description.
+- `Product Principles` is for roadmap decision rules, not general product philosophy.
+- `Milestone Progress` is a status rollup, not a second checklist surface.
+- `Status` is one allowed value only.
+- `Scope` defines the milestone boundary and intended outcome, not the implementation task inventory.
+- `Tickets` is the actionable checklist surface.
+- `Exit Criteria` defines what must be true for completion.
+- `Backlog Candidates` is for uncommitted future work.
+- `History` is for notable roadmap changes, not every minor edit.
 
-- Do not fail when deprecated keys exist.
-- Treat deprecated keys as legacy-migration hints only.
-- Prefer checklist section consistency over recreating legacy table/sub-milestone structures.
+## Customization Model
 
-## Validation Checklist
+Downstream plugins may customize roadmap structure through `config/roadmap-customization.yaml`.
 
-- `ROADMAP.md` uses checklist-standard sections.
-- `Milestone Progress` exists and reflects milestone reality.
-- Every milestone has `Tickets` and `Exit criteria` checklists.
-- `[P]` markers are used only for genuinely parallelizable ticket items.
-- Legacy table sections are migrated or preserved only in non-conflicting historical form.
+The intended customization surface is structural and explicit:
+
+- required top-level sections
+- top-level section order
+- required milestone subsections
+- heading aliases for migration
+- section and milestone-subsection scaffolding
+- whether additional non-canonical sections are preserved
+
+## Legacy Migration
+
+Legacy roadmap layouts such as `Current Milestone` sections or milestone tables are not canonical output modes.
+
+Runtime policy:
+
+- in `check-only`, report legacy format as a migration finding
+- in `apply`, migrate legacy layout into checklist-roadmap structure
+- preserve useful milestone identity where possible
+- use canonical template scaffolding when legacy content is incomplete
