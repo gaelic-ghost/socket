@@ -1,4 +1,4 @@
 interface:
   display_name: "Maintain Project Agents"
-  short_description: "Audit and apply bounded fixes to ordinary project-local AGENTS.md files."
-  default_prompt: "Use $maintain-project-agents for an ordinary project-local AGENTS.md. Enforce the shared AGENTS schema with Repository Expectations, Standards and Guidance, Project Workflows, Validation, and Safety and Boundaries, return audit findings in check-only mode, and in apply mode keep edits bounded to grounded workflow and policy guidance only."
+  short_description: "Audit and apply bounded fixes to canonical repo-local AGENTS.md files."
+  default_prompt: "Use $maintain-project-agents for an ordinary project-local AGENTS.md. Load the template-backed AGENTS schema first, enforce the canonical section and subsection structure, return audit findings in check-only mode, and in apply mode keep edits bounded to grounded repo guidance only."

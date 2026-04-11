@@ -3,6 +3,7 @@
 Return Markdown plus JSON with:
 
 - `run_context`
+- `schema_contract`
 - `schema_violations`
 - `workflow_drift_issues`
 - `validation_drift_issues`

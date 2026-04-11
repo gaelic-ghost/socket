@@ -19,6 +19,7 @@ def run(project_root: Path, run_mode: str = "check-only", agents_path: Path | No
         project_root=str(project_root),
         agents_path=str(agents_path) if agents_path else None,
         run_mode=run_mode,
+        config=None,
         json_out=None,
         md_out=None,
         print_json=False,
@@ -35,54 +36,83 @@ def write(path: Path, content: str) -> None:
 
 def test_valid_agents_file_has_no_findings(tmp_path: Path) -> None:
     write(
-        tmp_path / "pyproject.toml",
-        """
-[project]
-name = "demo-lib"
-version = "0.1.0"
-""".strip(),
-    )
-    write(
         tmp_path / "AGENTS.md",
         """
 # AGENTS.md
 
-## Repository Expectations
+Use this file for durable repo-local guidance that Codex should follow before changing code, docs, or project workflow surfaces in this repository.
 
-- Keep edits bounded to the requested repo surface.
-- Treat repo-local files and docs as the source of truth before inventing workflow claims.
-- Surface architectural pivots explicitly instead of silently widening scope.
+## Repository Scope
 
-## Standards and Guidance
+### What This File Covers
 
-- Prefer `uv` for the primary project toolchain.
-- Keep naming, command vocabulary, and file ownership consistent across docs, scripts, and code.
-- Prefer repo-specific guidance over generic agent boilerplate.
+This root-level file governs the repo-wide working rules for Codex in this repository.
 
-## Project Workflows
+### Where To Look First
 
-Explain how agents should keep changes bounded, update nearby docs or tests, and avoid speculative architectural pivots.
+Check the root README, the maintainer docs, and the primary source directories before reading broadly.
 
-## Validation
+## Working Rules
+
+### Change Scope
+
+Keep work bounded to the requested surface and surface any wider architectural pivot before implementing it.
+
+### Source of Truth
+
+Treat repo-local docs, checked-in config, and the nearest relevant source files as the source of truth before guessing.
+
+### Communication and Escalation
+
+Stop and surface tradeoffs whenever the work needs a non-obvious scope change or design decision.
+
+## Commands
+
+### Setup
 
 ```bash
 uv sync
 ```
 
+### Validation
+
 ```bash
 uv run pytest
 ```
 
-## Safety and Boundaries
+### Optional Project Commands
 
-- Never invent commands, secrets, packaging surfaces, or policies that are not grounded in the repository.
-- Never auto-commit, auto-push, or open a PR unless the user explicitly asks.
-- Treat AGENTS guidance as maintainer or operator policy, not as public README content.
+There are no additional project commands worth calling out at the root level right now.
+
+## Review and Delivery
+
+### Review Expectations
+
+Explain what changed, why it changed, and the most important review context.
+
+### Definition of Done
+
+Work is done when the requested change is implemented, nearby docs or tests are updated if needed, and the grounded checks have been run.
+
+## Safety Boundaries
+
+### Never Do
+
+- Never invent commands, policies, or repo structure that are not grounded in the repository.
+- Never auto-commit or auto-push without an explicit request.
+
+### Ask Before
+
+- Ask before widening scope into a larger refactor or architectural change.
+- Ask before changing repo-wide automation or policy surfaces.
+
+## Local Overrides
+
+There are no more specific AGENTS files called out here right now. If a nested AGENTS file appears later, the closer file should refine this root guidance.
 """.strip(),
     )
 
     report, markdown = run(tmp_path)
-
     assert report["schema_violations"] == []
     assert report["workflow_drift_issues"] == []
     assert report["validation_drift_issues"] == []
@@ -91,34 +121,90 @@ uv run pytest
     assert markdown == "No findings."
 
 
-def test_apply_adds_missing_validation_and_safety_sections(tmp_path: Path) -> None:
-    write(
-        tmp_path / "package.json",
-        """
-{
-  "name": "demo-app",
-  "dependencies": {
-    "vite": "^5.0.0"
-  }
-}
-""".strip(),
-    )
+def test_apply_creates_agents_from_template_when_missing(tmp_path: Path) -> None:
+    report, _markdown = run(tmp_path, run_mode="apply")
+    created = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+
+    assert report["fixes_applied"]
+    assert "# AGENTS.md" in created
+    assert "## Repository Scope" in created
+    assert "## Commands" in created
+    assert "## Local Overrides" in created
+
+
+def test_apply_normalizes_structure_and_aliases(tmp_path: Path) -> None:
     write(
         tmp_path / "AGENTS.md",
         """
 # AGENTS.md
 
+Short repo guidance.
+
 ## Repository Expectations
 
-- Keep edits bounded.
+### Purpose
+
+This root-level file governs the repo-wide working rules for Codex in this repository.
+
+### Priority Files
+
+Check the root README first.
 
 ## Standards and Guidance
 
-- Keep names consistent.
+### Scope
 
-## Project Workflows
+Keep work bounded.
 
-Explain which package or app surface the agent should change and how to keep the work scoped.
+### Truth Sources
+
+Use repo-local docs first.
+
+### Escalation
+
+Surface tradeoffs when scope changes.
+
+## Validation
+
+### Setup
+
+```bash
+uv sync
+```
+
+### Validation
+
+```bash
+uv run pytest
+```
+
+### Project Commands
+
+No extra commands.
+
+## Review
+
+### PR Expectations
+
+Share reviewer context.
+
+### Done
+
+Make sure checks ran.
+
+## Safety and Boundaries
+
+### Never
+
+Do not invent repo policy.
+
+### Approval Gates
+
+Ask before wider refactors.
+
+## Local Overrides
+
+No nested overrides are defined here.
 """.strip(),
     )
 
@@ -126,28 +212,141 @@ Explain which package or app surface the agent should change and how to keep the
     updated = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
 
     assert report["fixes_applied"]
-    assert "## Validation" in updated
-    assert "## Safety and Boundaries" in updated
-    assert "pnpm test" in updated
+    assert "## Repository Expectations" not in updated
+    assert "## Repository Scope" in updated
+    assert "## Standards and Guidance" not in updated
+    assert "## Working Rules" in updated
+    assert "\n## Validation\n" not in updated
+    assert "## Commands" in updated
+    assert "### Purpose" not in updated
+    assert "### What This File Covers" in updated
     assert report["schema_violations"] == []
 
 
-def test_apply_creates_agents_when_missing(tmp_path: Path) -> None:
+def test_check_only_flags_missing_required_section(tmp_path: Path) -> None:
     write(
-        tmp_path / "Cargo.toml",
+        tmp_path / "AGENTS.md",
         """
-[package]
-name = "demo-crate"
-version = "0.1.0"
-edition = "2021"
+# AGENTS.md
+
+Short repo guidance.
+
+## Repository Scope
+
+### What This File Covers
+
+This root-level file governs the repo-wide working rules for Codex in this repository.
+
+### Where To Look First
+
+Check the root README first.
+
+## Commands
+
+### Setup
+
+```bash
+uv sync
+```
+
+### Validation
+
+```bash
+uv run pytest
+```
+
+### Optional Project Commands
+
+No extra commands.
+
+## Local Overrides
+
+No nested overrides are defined here.
 """.strip(),
     )
 
-    report, _markdown = run(tmp_path, run_mode="apply")
-    created = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    report, _markdown = run(tmp_path, run_mode="check-only")
+    issue_ids = {issue["issue_id"] for issue in report["schema_violations"]}
+    assert "missing-section-working-rules" in issue_ids
 
-    assert report["fixes_applied"]
-    assert "# AGENTS.md" in created
-    assert "## Project Workflows" in created
-    assert "## Validation" in created
-    assert "```bash\ncargo test\n```" in created
+
+def test_check_only_flags_command_blocks_without_info_string(tmp_path: Path) -> None:
+    write(
+        tmp_path / "AGENTS.md",
+        """
+# AGENTS.md
+
+Short repo guidance.
+
+## Repository Scope
+
+### What This File Covers
+
+This root-level file governs the repo-wide working rules for Codex in this repository.
+
+### Where To Look First
+
+Check the root README first.
+
+## Working Rules
+
+### Change Scope
+
+Keep work bounded.
+
+### Source of Truth
+
+Use repo-local docs first.
+
+### Communication and Escalation
+
+Surface tradeoffs when scope changes.
+
+## Commands
+
+### Setup
+
+```
+uv sync
+```
+
+### Validation
+
+```
+uv run pytest
+```
+
+### Optional Project Commands
+
+No extra commands.
+
+## Review and Delivery
+
+### Review Expectations
+
+Share reviewer context.
+
+### Definition of Done
+
+Make sure checks ran.
+
+## Safety Boundaries
+
+### Never Do
+
+Do not invent repo policy.
+
+### Ask Before
+
+Ask before wider refactors.
+
+## Local Overrides
+
+No nested overrides are defined here.
+""".strip(),
+    )
+
+    report, _markdown = run(tmp_path, run_mode="check-only")
+    issue_ids = {issue["issue_id"] for issue in report["validation_drift_issues"]}
+    assert any(issue_id.startswith("missing-code-fence-info-string-setup-") for issue_id in issue_ids)
+    assert any(issue_id.startswith("missing-code-fence-info-string-validation-") for issue_id in issue_ids)

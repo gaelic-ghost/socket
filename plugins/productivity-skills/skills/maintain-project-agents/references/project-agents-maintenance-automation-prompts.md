@@ -4,14 +4,15 @@ Use these prompts when validating or applying the skill through automation.
 
 ## Check-only
 
-- Audit `AGENTS.md` for the canonical section concepts and heading order.
-- Confirm workflow guidance is repo-specific instead of generic filler.
-- Confirm validation commands match the actual repo toolchain when those commands can be inferred safely.
-- Confirm there is explicit safety or boundary guidance.
+- Audit `AGENTS.md` for the canonical section order.
+- Confirm the required subsection structure exists under the canonical sections.
+- Flag placeholder content, weak routing guidance, malformed command blocks, and thin safety boundaries.
+- Confirm setup and validation guidance uses grounded command examples with code-fence info strings when commands are present.
 
 ## Apply
 
+- Create a missing `AGENTS.md` from the bundled template.
 - Normalize `AGENTS.md` to the canonical section order.
-- Preserve coherent repo-specific sections where possible.
-- Add missing validation and safety guidance with grounded defaults only.
+- Preserve existing AGENTS guidance where it already matches the schema.
+- Add missing sections or subsections from the configured templates only.
 - Keep all edits bounded to `AGENTS.md`.
