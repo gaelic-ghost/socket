@@ -98,7 +98,7 @@ That narrowness also informs platform policy. The package should prefer maintain
 
 ## Setup
 
-This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` is currently pinned to the exact tagged release declared there rather than to a local checkout.
+This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` is currently pinned to the `v2.3.1` commit revision declared there instead of to a local checkout, because the upstream package still depends on `mlx-audio-swift` by revision and SwiftPM will not allow a stable-version root requirement in that graph shape.
 
 Build the package with SwiftPM:
 
@@ -554,7 +554,7 @@ That serialized live suite now mirrors the main `SpeakSwiftly` live workflows ac
 
 If you want the underlying playback trace logs too, add `SPEAKSWIFTLY_PLAYBACK_TRACE=1` to that same command.
 
-That live path now relies on the bundled resources shipped by the resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) dependency instead of expecting a sibling published runtime checkout to provide `default.metallib`. SwiftPM dependency resolution and live runtime resources now come from the same tagged package state declared in `Package.swift` and `Package.resolved`.
+That live path now relies on the bundled resources shipped by the resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) dependency instead of expecting a sibling published runtime checkout to provide `default.metallib`. SwiftPM dependency resolution and live runtime resources now come from the same `v2.3.1` package state declared in `Package.swift` and `Package.resolved`, even though the package itself is pinned by commit revision instead of a semantic-version requirement.
 
 After the live suite passes, use `scripts/repo-maintenance/release.sh` for the tagged release flow so local validation, release artifact staging, tag creation, push, and GitHub release creation stay on the same documented path.
 

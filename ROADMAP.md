@@ -112,9 +112,9 @@ Post-2.0 note: distribution polish for discovery and packaging, not part of the 
 - [ ] Re-check README, package metadata, and release guidance against Swift Package Index expectations after `.spi.yml` lands.
 - [ ] Submit the package to Swift Package Index once license, metadata, and CI state are ready.
 
-## Milestone 11: SpeakSwiftly 2.2 Surface Adoption
+## Milestone 11: SpeakSwiftly 2.2 And 2.3 Surface Adoption
 
-Post-2.0 note: this is the current alignment plan for the newer `SpeakSwiftly` runtime surface after the dependency bump to `2.2.1`.
+Post-2.0 note: this milestone tracks the server-side adoption work for the newer `SpeakSwiftly` runtime surface through the current `2.3.1` alignment pass.
 
 - [x] Bump the resolved `SpeakSwiftly` dependency to `2.2.1` and carry explicit `vibe` through the existing profile and clone creation surfaces instead of preserving the older implicit-profile behavior.
 - [x] Expose the persisted `SpeakSwiftly.Configuration` surface across host state, HTTP, and MCP so operators can inspect and change the active speech backend without reaching into the runtime process manually.
@@ -123,11 +123,21 @@ Post-2.0 note: this is the current alignment plan for the newer `SpeakSwiftly` r
 - [x] Split the oversized host, model, and mixed route-test sources into concern-focused files and refresh the maintainer docs around that layout so future cleanup does not regrow monoliths.
 - [x] Finish the operator-control E2E realignment so it uses the renamed HTTP surface consistently and validates long live playback with varied text instead of repeated-sentence filler.
 - [x] Re-run the full live E2E suite after the `2.2.1` resource-bundling update and verify the renamed MCP surface and operator-control flows end to end.
+- [x] Bump the resolved `SpeakSwiftly` dependency to the current `v2.3.1` package state, including the `TextForSpeech 0.15.x` compatibility updates that follow from that runtime surface.
+- [x] Expose `runtime.voices.rename(_:to:)` and `runtime.voices.reroll(_:)` across host, HTTP, MCP, docs, and controlled-runtime tests.
 - [ ] Add generated-file reads across host, HTTP, MCP, and shared resources so saved artifacts can be listed and fetched through the server instead of only inside the sibling library.
 - [ ] Add generation-job reads and expiry controls across host, HTTP, MCP, and shared resources so persisted file and batch jobs can be inspected and managed directly.
 - [ ] Add batch-generation submission plus batch-read surfaces across host, HTTP, MCP, and shared resources, including artifact-id shaping and the existing text-format / source-format context support for each batch item.
 - [ ] Revisit server-local job and snapshot shaping so the new immediate generation-control operations and persisted generation-job reads map directly to runtime concepts instead of keeping legacy server-only wrappers around them.
 - [x] Expand README, MCP tool docs, shared resources, and opt-in live E2E coverage so `marvis` vs `qwen3`, explicit `vibe`, generated files, generation jobs, and batch generation are all documented and verified end to end.
+
+## Milestone 13: SpeakSwiftly 2.3.x Follow-On Consideration
+
+Post-`v2.1.0` note: these are intentionally deferred adoption candidates from the broader `SpeakSwiftly 2.3.x` runtime surface. They are worth revisiting after the current release ships, but they are not required to make the present server release coherent.
+
+- [ ] Decide whether the runtime's request-update and generation-event stream surfaces should gain first-class HTTP and MCP exposure, or whether the retained request snapshots remain the cleaner operator contract.
+- [ ] Revisit whether text-profile persistence state, repair, and storage diagnostics need a more explicit operator-facing surface than the current snapshot plus load/save controls.
+- [ ] Decide whether any newer voice-profile maintenance operations beyond create, clone, list, rename, reroll, and delete belong in the public server contract or should stay library-only until a downstream operator use case is concrete.
 
 ## Milestone 12: Live Service Reliability And Testing Ergonomics
 
