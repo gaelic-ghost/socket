@@ -80,12 +80,17 @@ extension MockRuntime {
 
     func listVoiceProfiles() async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
+        listVoiceProfilesCallCount += 1
         let profiles = self.profiles
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(.completed(SpeakSwiftly.Success(id: requestID, profiles: profiles, activeRequests: nil)))
             continuation.finish()
         }
         return RuntimeRequestHandle(id: requestID, operation: "list_voice_profiles", profileName: nil, events: events)
+    }
+
+    func voiceProfileRefreshCount() -> Int {
+        listVoiceProfilesCallCount
     }
 
     func renameVoiceProfile(profileName: String, to newProfileName: String) async -> RuntimeRequestHandle {

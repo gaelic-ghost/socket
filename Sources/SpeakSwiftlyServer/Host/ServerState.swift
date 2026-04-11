@@ -6,6 +6,53 @@ import Observation
 @Observable
 @MainActor
 public final class ServerState {
+    struct Actions {
+        let refreshVoiceProfiles: @MainActor @Sendable () async throws -> [ProfileSnapshot]
+        let pausePlayback: @MainActor @Sendable () async throws -> PlaybackStatusSnapshot
+        let resumePlayback: @MainActor @Sendable () async throws -> PlaybackStatusSnapshot
+        let clearPlaybackQueue: @MainActor @Sendable () async throws -> Int
+        let cancelPlaybackRequest: @MainActor @Sendable (String) async throws -> String
+
+        static let unavailable = Actions(
+            refreshVoiceProfiles: {
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not refresh voice profiles because no embedded host action performer is configured yet."
+                )
+            },
+            pausePlayback: {
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not pause playback because no embedded host action performer is configured yet."
+                )
+            },
+            resumePlayback: {
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not resume playback because no embedded host action performer is configured yet."
+                )
+            },
+            clearPlaybackQueue: {
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not clear the playback queue because no embedded host action performer is configured yet."
+                )
+            },
+            cancelPlaybackRequest: { requestID in
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not cancel playback request '\(requestID)' because no embedded host action performer is configured yet."
+                )
+            }
+        )
+    }
+
+    enum ServerStateActionError: LocalizedError {
+        case unavailable(String)
+
+        var errorDescription: String? {
+            switch self {
+            case .unavailable(let message):
+                message
+            }
+        }
+    }
+
     public internal(set) var overview = HostOverviewSnapshot(
         service: "speak-swiftly-server",
         environment: "development",
@@ -63,9 +110,49 @@ public final class ServerState {
         activeRuntimeMatchesNextRuntime: true,
         persistedConfigurationWillAffectNextRuntimeStart: true
     )
+    public internal(set) var voiceProfiles = [ProfileSnapshot]()
     public internal(set) var transports = [TransportStatusSnapshot]()
     public internal(set) var recentErrors = [RecentErrorSnapshot]()
     public internal(set) var jobsByID: [String: JobSnapshot] = [:]
+    @ObservationIgnored private var actions = Actions.unavailable
 
     public init() {}
+
+    public func listVoiceProfiles() -> [ProfileSnapshot] {
+        voiceProfiles
+    }
+
+    public func refreshVoiceProfiles() async throws -> [ProfileSnapshot] {
+        let profiles = try await actions.refreshVoiceProfiles()
+        voiceProfiles = profiles
+        return profiles
+    }
+
+    @discardableResult
+    public func pausePlayback() async throws -> PlaybackStatusSnapshot {
+        let playback = try await actions.pausePlayback()
+        self.playback = playback
+        return playback
+    }
+
+    @discardableResult
+    public func resumePlayback() async throws -> PlaybackStatusSnapshot {
+        let playback = try await actions.resumePlayback()
+        self.playback = playback
+        return playback
+    }
+
+    @discardableResult
+    public func clearPlaybackQueue() async throws -> Int {
+        try await actions.clearPlaybackQueue()
+    }
+
+    @discardableResult
+    public func cancelPlaybackRequest(_ requestID: String) async throws -> String {
+        try await actions.cancelPlaybackRequest(requestID)
+    }
+
+    func configureActions(_ actions: Actions) {
+        self.actions = actions
+    }
 }

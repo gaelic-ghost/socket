@@ -20,6 +20,20 @@ public struct ProfileSnapshot: Codable, Sendable, Equatable {
         case sourceText = "source_text"
     }
 
+    init(
+        profileName: String,
+        vibe: String,
+        createdAt: String,
+        voiceDescription: String,
+        sourceText: String
+    ) {
+        self.profileName = profileName
+        self.vibe = vibe
+        self.createdAt = createdAt
+        self.voiceDescription = voiceDescription
+        self.sourceText = sourceText
+    }
+
     init(profile: SpeakSwiftly.ProfileSummary) {
         self.profileName = profile.profileName
         self.vibe = profile.vibe.rawValue

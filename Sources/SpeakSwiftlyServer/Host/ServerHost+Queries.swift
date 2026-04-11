@@ -59,6 +59,10 @@ extension ServerHost {
         profileCache.first { $0.profileName == profileName }
     }
 
+    func refreshVoiceProfiles() async throws -> [ProfileSnapshot] {
+        try await refreshProfiles(reason: "app_consumer")
+    }
+
     func textProfilesSnapshot() async -> TextProfilesSnapshot {
         let builtInStyle = await runtime.builtInTextProfileStyle()
         return .init(

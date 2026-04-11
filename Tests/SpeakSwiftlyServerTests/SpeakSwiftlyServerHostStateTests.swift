@@ -162,10 +162,12 @@ import Testing
     let uiRuntimeRefresh = await MainActor.run { state.runtimeRefresh }
     let uiCurrentJobs = await MainActor.run { state.currentGenerationJobs }
     let uiPlayback = await MainActor.run { state.playback }
+    let uiVoiceProfiles = await MainActor.run { state.voiceProfiles }
     #expect(uiOverview.workerReady == true)
     #expect(uiRuntimeRefresh == runtimeRefresh)
     #expect(uiCurrentJobs.contains { $0.jobID == jobID })
     #expect(uiPlayback.state == "playing")
+    #expect(uiVoiceProfiles.contains { $0.profileName == "default" })
 
     await runtime.finishHeldSpeak(id: jobID)
     await host.shutdown()
@@ -287,5 +289,96 @@ import Testing
     #expect(countsAfterProgress.playbackState > baselineRefreshCounts.playbackState)
 
     await runtime.finishHeldSpeak(id: jobID)
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func stateProjectsCachedVoiceProfilesAndForwardsPlaybackControls() async throws {
+    let runtime = MockRuntime(speakBehavior: .holdOpen)
+    let configuration = testConfiguration()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: configuration,
+        runtime: runtime,
+        state: state
+    )
+
+    await MainActor.run {
+        state.configureActions(
+            .init(
+                refreshVoiceProfiles: {
+                    try await host.refreshVoiceProfiles()
+                },
+                pausePlayback: {
+                    let response = try await host.pausePlayback()
+                    return .init(
+                        state: response.playback.state,
+                        activeRequest: response.playback.activeRequest,
+                        isStableForConcurrentGeneration: response.playback.isStableForConcurrentGeneration,
+                        isRebuffering: response.playback.isRebuffering,
+                        stableBufferedAudioMS: response.playback.stableBufferedAudioMS,
+                        stableBufferTargetMS: response.playback.stableBufferTargetMS
+                    )
+                },
+                resumePlayback: {
+                    let response = try await host.resumePlayback()
+                    return .init(
+                        state: response.playback.state,
+                        activeRequest: response.playback.activeRequest,
+                        isStableForConcurrentGeneration: response.playback.isStableForConcurrentGeneration,
+                        isRebuffering: response.playback.isRebuffering,
+                        stableBufferedAudioMS: response.playback.stableBufferedAudioMS,
+                        stableBufferTargetMS: response.playback.stableBufferTargetMS
+                    )
+                },
+                clearPlaybackQueue: {
+                    let response = try await host.clearQueue()
+                    return response.clearedCount
+                },
+                cancelPlaybackRequest: { requestID in
+                    let response = try await host.cancelQueuedOrActiveRequest(requestID: requestID)
+                    return response.cancelledRequestID
+                }
+            )
+        )
+    }
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let initialVoiceProfiles = await state.listVoiceProfiles()
+    #expect(initialVoiceProfiles.contains { $0.profileName == "default" })
+
+    let refreshCountBeforeManualRefresh = await runtime.voiceProfileRefreshCount()
+    let refreshedProfiles = try await state.refreshVoiceProfiles()
+    let refreshCountAfterManualRefresh = await runtime.voiceProfileRefreshCount()
+    #expect(refreshedProfiles.contains { $0.profileName == "default" })
+    #expect(refreshCountAfterManualRefresh == refreshCountBeforeManualRefresh + 1)
+
+    let firstJobID = try await host.submitSpeak(text: "Hold this line", profileName: "default")
+    let secondJobID = try await host.submitSpeak(text: "Cancel me next", profileName: "default")
+
+    _ = try await waitUntil(
+        timeout: .seconds(1),
+        pollInterval: .milliseconds(10)
+    ) {
+        let playback = await MainActor.run { state.playback }
+        return playback.state == "playing" ? playback : nil
+    }
+
+    let pausedPlayback = try await state.pausePlayback()
+    #expect(pausedPlayback.state == "paused")
+
+    let resumedPlayback = try await state.resumePlayback()
+    #expect(resumedPlayback.state == "playing")
+
+    let cancelledRequestID = try await state.cancelPlaybackRequest(secondJobID)
+    #expect(cancelledRequestID == secondJobID)
+
+    let clearedCount = try await state.clearPlaybackQueue()
+    #expect(clearedCount == 0)
+
+    await runtime.finishHeldSpeak(id: firstJobID)
     await host.shutdown()
 }

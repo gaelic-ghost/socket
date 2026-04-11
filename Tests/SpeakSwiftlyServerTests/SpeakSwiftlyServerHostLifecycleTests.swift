@@ -23,6 +23,15 @@ import Testing
                 profileCount: 1,
                 lastProfileRefreshAt: "2026-04-07T12:00:00Z"
             )
+            state.voiceProfiles = [
+                .init(
+                    profileName: "default-femme",
+                    vibe: "femme",
+                    createdAt: "2026-04-07T12:00:00Z",
+                    voiceDescription: "Warm and steady.",
+                    sourceText: "Reference text."
+                ),
+            ]
             state.playback = PlaybackStatusSnapshot(
                 state: "playing",
                 activeRequest: .init(id: "req-1", op: "speak", profileName: "default"),
@@ -65,12 +74,14 @@ import Testing
     let overview = await MainActor.run { state.overview }
     let currentGenerationJobs = await MainActor.run { state.currentGenerationJobs }
     let playback = await MainActor.run { state.playback }
+    let voiceProfiles = await MainActor.run { state.voiceProfiles }
     let transports = await MainActor.run { state.transports }
 
     #expect(overview.workerReady == true)
     #expect(overview.profileCount == 1)
     #expect(currentGenerationJobs.contains { $0.jobID == "job-1" })
     #expect(playback.state == "playing")
+    #expect(voiceProfiles.contains { $0.profileName == "default-femme" })
     #expect(transports.contains { $0.name == "http" && $0.state == "listening" })
 
     try await session.stop()

@@ -56,6 +56,45 @@ public final class EmbeddedServerSession {
         let configStore = try await ConfigStore(environment: environment)
         let config = try configStore.loadAppConfig()
         let host = await ServerHost.live(appConfig: config, state: state)
+        await MainActor.run {
+            state.configureActions(
+                .init(
+                    refreshVoiceProfiles: {
+                        try await host.refreshVoiceProfiles()
+                    },
+                    pausePlayback: {
+                        let response = try await host.pausePlayback()
+                        return .init(
+                            state: response.playback.state,
+                            activeRequest: response.playback.activeRequest,
+                            isStableForConcurrentGeneration: response.playback.isStableForConcurrentGeneration,
+                            isRebuffering: response.playback.isRebuffering,
+                            stableBufferedAudioMS: response.playback.stableBufferedAudioMS,
+                            stableBufferTargetMS: response.playback.stableBufferTargetMS
+                        )
+                    },
+                    resumePlayback: {
+                        let response = try await host.resumePlayback()
+                        return .init(
+                            state: response.playback.state,
+                            activeRequest: response.playback.activeRequest,
+                            isStableForConcurrentGeneration: response.playback.isStableForConcurrentGeneration,
+                            isRebuffering: response.playback.isRebuffering,
+                            stableBufferedAudioMS: response.playback.stableBufferedAudioMS,
+                            stableBufferTargetMS: response.playback.stableBufferTargetMS
+                        )
+                    },
+                    clearPlaybackQueue: {
+                        let response = try await host.clearQueue()
+                        return response.clearedCount
+                    },
+                    cancelPlaybackRequest: { requestID in
+                        let response = try await host.cancelQueuedOrActiveRequest(requestID: requestID)
+                        return response.cancelledRequestID
+                    }
+                )
+            )
+        }
         let mcpSurface = await MCPSurface.build(configuration: config.mcp, host: host)
         let app = assembleHBApp(
             configuration: config.http,

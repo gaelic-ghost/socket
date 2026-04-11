@@ -82,6 +82,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     var generatedFiles = [SpeakSwiftly.GeneratedFile]()
     var generatedBatches = [SpeakSwiftly.GeneratedBatch]()
     var generationJobs = [SpeakSwiftly.GenerationJob]()
+    var listVoiceProfilesCallCount = 0
     var generationQueueRequestCount = 0
     var playbackQueueRequestCount = 0
     var playbackStateRequestCount = 0
