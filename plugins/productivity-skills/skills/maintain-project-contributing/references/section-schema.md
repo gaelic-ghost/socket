@@ -1,22 +1,42 @@
 # Section Schema
 
-Canonical top-level section order for `CONTRIBUTING.md`:
+The canonical base `CONTRIBUTING.md` structure is defined by:
 
-1. `Overview`
-2. `Contribution Workflow`
-3. `Local Setup`
-4. `Naming Conventions`
-5. `Verification`
-6. `Pull Request Expectations`
+- `../config/contributing-customization.template.yaml`
+- `../assets/CONTRIBUTING.template.md`
 
-Required `Local Setup` subsections:
+Base top-level shape:
 
-- `Runtime Config`
-- `Runtime Behavior`
+1. top-level title
+2. short contributor-facing summary
+3. `## Table of Contents`
+4. `## Overview`
+5. `## Contribution Workflow`
+6. `## Local Setup`
+7. `## Development Expectations`
+8. `## Pull Request Expectations`
+9. `## Communication`
+10. `## License and Contribution Terms`
+
+Required subsection shape:
+
+- `Overview`
+  - `Who This Guide Is For`
+  - `Before You Start`
+- `Contribution Workflow`
+  - `Choosing Work`
+  - `Making Changes`
+  - `Asking For Review`
+- `Local Setup`
+  - `Runtime Config`
+  - `Runtime Behavior`
+- `Development Expectations`
+  - `Naming Conventions`
+  - `Verification`
 
 Schema expectations:
 
 - Use `##` headings for top-level sections.
-- Use `###` headings for the required `Local Setup` subsections.
-- Preserve additional repo-specific sections when present, but keep the canonical sections in the canonical order.
-- `Naming Conventions` must remain a distinct top-level section, not folded into another heading.
+- Use `###` headings for required subsections.
+- Always include a top-level `Table of Contents`.
+- Preserve additional repo-specific sections when present, but keep canonical sections in canonical order.

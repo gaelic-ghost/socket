@@ -3,7 +3,7 @@
 Return Markdown plus JSON with:
 
 - `run_context`
-- `profile_assignment`
+- `schema_contract`
 - `schema_violations`
 - `command_integrity_issues`
 - `content_quality_issues`

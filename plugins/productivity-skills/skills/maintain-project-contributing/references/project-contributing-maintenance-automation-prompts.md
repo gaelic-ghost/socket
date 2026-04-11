@@ -5,13 +5,14 @@ Use these prompts when validating or applying the skill through automation.
 ## Check-only
 
 - Audit `CONTRIBUTING.md` for the canonical section order.
-- Confirm `Local Setup` contains both `Runtime Config` and `Runtime Behavior`.
-- Confirm there is a dedicated `Naming Conventions` section.
-- Flag placeholder commands or shell blocks that are empty or obviously non-grounded.
+- Confirm the required table of contents is present and matches the canonical top-level headings.
+- Confirm `Overview`, `Contribution Workflow`, `Local Setup`, and `Development Expectations` contain the required subsections.
+- Flag placeholder content and malformed or weak verification command blocks.
 
 ## Apply
 
+- Create a missing `CONTRIBUTING.md` from the bundled template.
 - Normalize `CONTRIBUTING.md` to the canonical section order.
 - Preserve existing contributor guidance where it already matches the schema.
-- Add missing sections with grounded defaults only.
+- Add missing sections or subsections from the configured templates only.
 - Keep all edits bounded to `CONTRIBUTING.md`.

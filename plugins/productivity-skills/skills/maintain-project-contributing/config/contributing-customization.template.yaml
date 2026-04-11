@@ -1,0 +1,87 @@
+schemaVersion: 1
+isCustomized: false
+profile: base
+settings:
+  preservePreamble: true
+  allowAdditionalSections: true
+  requiredSections:
+    - Overview
+    - Contribution Workflow
+    - Local Setup
+    - Development Expectations
+    - Pull Request Expectations
+    - Communication
+    - License and Contribution Terms
+  sectionOrder:
+    - Overview
+    - Contribution Workflow
+    - Local Setup
+    - Development Expectations
+    - Pull Request Expectations
+    - Communication
+    - License and Contribution Terms
+  requiredSubsections:
+    Overview:
+      - Who This Guide Is For
+      - Before You Start
+    Contribution Workflow:
+      - Choosing Work
+      - Making Changes
+      - Asking For Review
+    Local Setup:
+      - Runtime Config
+      - Runtime Behavior
+    Development Expectations:
+      - Naming Conventions
+      - Verification
+  sectionAliases:
+    Development Expectations:
+      - Development
+    License and Contribution Terms:
+      - Contribution Terms
+      - License
+  subsectionAliases:
+    Overview/Who This Guide Is For:
+      - Audience
+    Overview/Before You Start:
+      - Prerequisites
+    Contribution Workflow/Choosing Work:
+      - Picking Work
+    Contribution Workflow/Making Changes:
+      - Implementation Workflow
+    Contribution Workflow/Asking For Review:
+      - Requesting Review
+    Development Expectations/Naming Conventions:
+      - Naming
+    Development Expectations/Verification:
+      - Validation
+  sectionTemplates:
+    Pull Request Expectations: |
+      Summarize what changed, why it changed, and what reviewers should pay attention to first.
+    Communication: |
+      Explain how contributors should raise questions, flag risky scope changes, or ask for clarification before work drifts.
+    License and Contribution Terms: |
+      Refer contributors to the project license and note any practical contribution terms or sign-off requirements when they exist.
+  subsectionTemplates:
+    Overview/Who This Guide Is For: |
+      Explain who should use this guide and what kinds of contributions it is meant to support.
+    Overview/Before You Start: |
+      Call out the most important prerequisites before someone begins work, such as reading nearby docs, checking open work, or understanding repo constraints.
+    Contribution Workflow/Choosing Work: |
+      Explain how contributors should choose or confirm work before they begin.
+    Contribution Workflow/Making Changes: |
+      Explain the normal path for making changes in this repository, including how to keep work bounded and coherent.
+    Contribution Workflow/Asking For Review: |
+      Explain when a change is ready for review and what contributors should double-check first.
+    Local Setup/Runtime Config: |
+      Document the concrete local configuration contributors need, including files, secrets, environment variables, or local services.
+    Local Setup/Runtime Behavior: |
+      Explain what needs to be running locally and how contributors can tell the project is actually working.
+    Development Expectations/Naming Conventions: |
+      Describe the terminology, casing, and naming patterns contributors should match when extending the project.
+    Development Expectations/Verification: |
+      ```bash
+      # Replace this with the grounded validation commands for the project.
+      ```
+
+      Prefer grounded validation commands with fenced code blocks and language info strings when examples help.

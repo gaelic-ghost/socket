@@ -21,6 +21,7 @@ def run(project_root: Path, run_mode: str = "check-only", contributing_path: Pat
         project_root=str(project_root),
         contributing_path=str(contributing_path) if contributing_path else None,
         run_mode=run_mode,
+        config=None,
         json_out=None,
         md_out=None,
         print_json=False,
@@ -37,49 +38,63 @@ def write(path: Path, content: str) -> None:
 
 def test_valid_contributing_file_has_no_findings(tmp_path: Path) -> None:
     write(
-        tmp_path / "pyproject.toml",
-        """
-[project]
-name = "demo-lib"
-version = "0.1.0"
-""".strip(),
-    )
-    write(
         tmp_path / "CONTRIBUTING.md",
         """
-# Contributing to demo-lib
+# Contributing to demo-project
+
+Use this guide when preparing changes so the project stays understandable, runnable, and reviewable for the next contributor.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Contribution Workflow](#contribution-workflow)
+- [Local Setup](#local-setup)
+- [Development Expectations](#development-expectations)
+- [Pull Request Expectations](#pull-request-expectations)
+- [Communication](#communication)
+- [License and Contribution Terms](#license-and-contribution-terms)
 
 ## Overview
 
-Use this guide when preparing changes for review so the repository stays easy to run, verify, and extend.
+### Who This Guide Is For
+
+This guide is for contributors making code, docs, and maintainer-facing workflow changes in this repository.
+
+### Before You Start
+
+Read the nearby project docs first, confirm the intended change, and make sure you understand any repo-level constraints before beginning.
 
 ## Contribution Workflow
 
-- Start from a clean branch or worktree.
-- Keep changes bounded to one coherent purpose.
-- Update nearby docs or tests when behavior changes.
+### Choosing Work
+
+Confirm the intended work before you begin so duplicate or conflicting changes do not drift.
+
+### Making Changes
+
+Keep changes bounded to one coherent purpose and update nearby docs or tests when behavior changes.
+
+### Asking For Review
+
+Ask for review once the change is understandable, validated, and ready for another maintainer to reason about.
 
 ## Local Setup
 
 ### Runtime Config
 
-```bash
-uv sync
-```
-
-Call out required local configuration files, secrets, or environment variables before contributors try to run the project.
+Document the concrete local configuration contributors need, including files, secrets, environment variables, or local services.
 
 ### Runtime Behavior
 
-Explain any local processes, demo entrypoints, or execution steps contributors need before they can validate their changes.
+Explain what needs to be running locally and how contributors can tell the project is actually working.
 
-## Naming Conventions
+## Development Expectations
 
-- Match the repository's existing terminology, casing, and file naming patterns.
-- Keep new public names aligned with the nouns already used in code, docs, and commands.
-- Rename only when the meaning changes or a real collision requires it.
+### Naming Conventions
 
-## Verification
+Match the repository's existing terminology, casing, and naming patterns so new work fits the surrounding code and docs cleanly.
+
+### Verification
 
 ```bash
 uv run pytest
@@ -87,9 +102,15 @@ uv run pytest
 
 ## Pull Request Expectations
 
-- Summarize what changed and why.
-- Note any user-facing or maintainer-facing follow-up work.
-- Include the validation you ran before requesting review.
+Summarize what changed, why it changed, and what reviewers should pay attention to first.
+
+## Communication
+
+Raise questions and scope uncertainty early so work stays aligned before it becomes expensive to unwind.
+
+## License and Contribution Terms
+
+See the project license for the default contribution terms.
 """.strip(),
     )
 
@@ -102,44 +123,82 @@ uv run pytest
     assert markdown == "No findings."
 
 
-def test_apply_adds_missing_naming_conventions_and_local_setup_subsections(tmp_path: Path) -> None:
-    write(
-        tmp_path / "package.json",
-        """
-{
-  "name": "demo-app",
-  "dependencies": {
-    "vite": "^5.0.0"
-  }
-}
-""".strip(),
-    )
+def test_apply_creates_contributing_from_template_when_missing(tmp_path: Path) -> None:
+    report, _markdown = run(tmp_path, run_mode="apply")
+    created = (tmp_path / "CONTRIBUTING.md").read_text(encoding="utf-8")
+
+    assert report["fixes_applied"]
+    assert "# Contributing to" in created
+    assert "## Table of Contents" in created
+    assert "## Development Expectations" in created
+    assert "### Verification" in created
+
+
+def test_apply_normalizes_structure_and_aliases(tmp_path: Path) -> None:
     write(
         tmp_path / "CONTRIBUTING.md",
         """
-# Contributing to demo-app
+# Contributing to demo-project
+
+Short guide.
 
 ## Overview
 
-Short overview.
+### Audience
 
-## Contribution Workflow
+This guide is for contributors.
 
-- Keep changes focused.
+### Prerequisites
 
-## Local Setup
+Read the nearby docs first.
 
-Explain setup briefly.
+## Development
 
-## Verification
+### Naming
+
+Follow existing names.
+
+### Validation
 
 ```bash
 pnpm test
 ```
 
+## Contribution Workflow
+
+### Picking Work
+
+Choose work deliberately.
+
+### Implementation Workflow
+
+Keep changes focused.
+
+### Requesting Review
+
+Ask once the change is ready.
+
+## Local Setup
+
+### Runtime Config
+
+Document local config.
+
+### Runtime Behavior
+
+Explain the running surface.
+
 ## Pull Request Expectations
 
-- Add context for reviewers.
+Share enough reviewer context.
+
+## Communication
+
+Raise questions early.
+
+## Contribution Terms
+
+See the license.
 """.strip(),
     )
 
@@ -147,28 +206,168 @@ pnpm test
     updated = (tmp_path / "CONTRIBUTING.md").read_text(encoding="utf-8")
 
     assert report["fixes_applied"]
-    assert "## Naming Conventions" in updated
-    assert "### Runtime Config" in updated
-    assert "### Runtime Behavior" in updated
+    assert "## Table of Contents" in updated
+    assert "## Development Expectations" in updated
+    assert "## Contribution Terms" not in updated
+    assert "## License and Contribution Terms" in updated
+    assert "### Audience" not in updated
+    assert "### Who This Guide Is For" in updated
     assert report["schema_violations"] == []
 
 
-def test_apply_creates_contributing_when_missing(tmp_path: Path) -> None:
+def test_check_only_flags_missing_table_of_contents(tmp_path: Path) -> None:
     write(
-        tmp_path / "Cargo.toml",
+        tmp_path / "CONTRIBUTING.md",
         """
-[package]
-name = "demo-crate"
-version = "0.1.0"
-edition = "2021"
+# Contributing to demo-project
+
+Short guide.
+
+## Overview
+
+### Who This Guide Is For
+
+This guide is for contributors.
+
+### Before You Start
+
+Read the nearby docs first.
+
+## Contribution Workflow
+
+### Choosing Work
+
+Choose work deliberately.
+
+### Making Changes
+
+Keep changes focused.
+
+### Asking For Review
+
+Ask once the change is ready.
+
+## Local Setup
+
+### Runtime Config
+
+Document local config.
+
+### Runtime Behavior
+
+Explain the running surface.
+
+## Development Expectations
+
+### Naming Conventions
+
+Follow existing names.
+
+### Verification
+
+```bash
+uv run pytest
+```
+
+## Pull Request Expectations
+
+Share enough reviewer context.
+
+## Communication
+
+Raise questions early.
+
+## License and Contribution Terms
+
+See the license.
 """.strip(),
     )
 
-    report, _markdown = run(tmp_path, run_mode="apply")
-    created = (tmp_path / "CONTRIBUTING.md").read_text(encoding="utf-8")
+    report, _markdown = run(tmp_path, run_mode="check-only")
 
-    assert report["fixes_applied"]
-    assert "# Contributing to demo-crate" in created
-    assert "## Naming Conventions" in created
-    assert "```bash\ncargo build\n```" in created
-    assert "```bash\ncargo test\n```" in created
+    issue_ids = {issue["issue_id"] for issue in report["schema_violations"]}
+    assert "missing-table-of-contents" in issue_ids
+
+
+def test_check_only_flags_verification_fence_without_info_string(tmp_path: Path) -> None:
+    write(
+        tmp_path / "CONTRIBUTING.md",
+        """
+# Contributing to demo-project
+
+Short guide.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Contribution Workflow](#contribution-workflow)
+- [Local Setup](#local-setup)
+- [Development Expectations](#development-expectations)
+- [Pull Request Expectations](#pull-request-expectations)
+- [Communication](#communication)
+- [License and Contribution Terms](#license-and-contribution-terms)
+
+## Overview
+
+### Who This Guide Is For
+
+This guide is for contributors.
+
+### Before You Start
+
+Read the nearby docs first.
+
+## Contribution Workflow
+
+### Choosing Work
+
+Choose work deliberately.
+
+### Making Changes
+
+Keep changes focused.
+
+### Asking For Review
+
+Ask once the change is ready.
+
+## Local Setup
+
+### Runtime Config
+
+Document local config.
+
+### Runtime Behavior
+
+Explain the running surface.
+
+## Development Expectations
+
+### Naming Conventions
+
+Follow existing names.
+
+### Verification
+
+```
+uv run pytest
+```
+
+## Pull Request Expectations
+
+Share enough reviewer context.
+
+## Communication
+
+Raise questions early.
+
+## License and Contribution Terms
+
+See the license.
+""".strip(),
+    )
+
+    report, _markdown = run(tmp_path, run_mode="check-only")
+
+    issue_ids = {issue["issue_id"] for issue in report["command_integrity_issues"]}
+    assert any(issue_id.startswith("missing-code-fence-info-string-") for issue_id in issue_ids)
