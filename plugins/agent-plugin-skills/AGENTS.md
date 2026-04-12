@@ -33,7 +33,6 @@ Applicability guidance:
 - This repository tracks first-class source-repo plugin packaging at `.codex-plugin/plugin.json`.
 - This repository intentionally does not track a repo-local Codex marketplace file for itself.
 - Do not recreate nested staged plugin directories, repo marketplaces, or installer workflows in this repository unless Gale explicitly asks for that architectural reversal.
-- Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`.
 
 ## Codex Limitation Policy
 
@@ -42,7 +41,6 @@ Applicability guidance:
 - Do not imply that Codex supports hidden repo-local plugin installs, private scoped plugin packs, or a second repo marketplace file for repo scope.
 - When a skill in this repo discusses Codex plugin export boundaries, it must warn plainly that repo-visible plugins are exposed through the repo marketplace described by OpenAI's docs.
 - Keep responsibility clear in docs and skill wording: this limitation comes from OpenAI's documented Codex plugin model and shipped product behavior, not from this repository.
-- Do not bury this warning in optional notes. Put it in the main workflow whenever Codex plugin scoping claims are discussed.
 
 ## Repo-local Passive Standards
 

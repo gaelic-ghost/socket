@@ -64,7 +64,7 @@ Treat those two files as the source of truth for the canonical base schema and t
 - Never invent commands, setup steps, or product claims that are not grounded in the repo.
 - Never edit files other than the target `README.md`.
 - Keep the README schema hard-enforced against the configured contract instead of inferring structure from repo profile heuristics.
-- Do not relax the configured schema just because the repository is a plugin, skills, or hybrid repo. Use explicit customization when the repo genuinely needs a different shared structure.
+- Do not relax the configured schema just because the repository is a plugin, skills, or hybrid repo. Use explicit extension via preamble or appendices when the repo genuinely needs an additional structure or section.
 
 ## References
 
