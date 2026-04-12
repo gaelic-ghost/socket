@@ -1,6 +1,6 @@
 {
   "name": "things-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Things.app skills and a bundled local MCP server for reminders, planning digests, and structured task workflows.",
   "author": {
     "name": "Gale",
