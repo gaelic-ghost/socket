@@ -100,6 +100,8 @@ flowchart TD
 
 ### Packaging and Delegation Notes
 
+- Treat `productivity-skills` as the baseline maintainer layer for general repo-doc and maintenance work.
+- Use `apple-dev-skills` when Swift, Xcode, Apple docs requirements, or Apple-platform repo shape should materially change the workflow.
 - The repository currently exports only from top-level `skills/`.
 - If this repository later grows top-level `mcps/` or `apps/`, those directories are valid export surfaces too.
 - The repository must not reintroduce a nested packaged plugin tree or any other second export surface under `plugins/`.
@@ -118,7 +120,7 @@ flowchart TD
 - Agent behavior:
   - The agent chooses the best matching top-level skill directly and may recommend another top-level skill if the task shifts.
 - User-visible response:
-  - The user sees direct progress inside one of the nine top-level skills, or a direct recommendation to switch to another skill.
+  - The user sees direct progress inside one of the active top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
 - The repo-level UX is a bundle of thirteen active skills exported from the top-level `skills/` surface.
 

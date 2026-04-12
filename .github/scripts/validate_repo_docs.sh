@@ -39,45 +39,22 @@ echo "Validating local discovery mirrors..."
 [[ "$(readlink .claude/skills)" == "../skills" ]] || fail "Expected .claude/skills -> ../skills"
 [[ ! -e "plugins/apple-dev-skills" ]] || fail "Did not expect a nested plugins/apple-dev-skills tree."
 
-echo "Validating authoritative resource links in root docs..."
-required_resource_strings=(
-  "/Users/galew/.codex/skills/.system/skill-creator/SKILL.md"
-  "https://developers.openai.com/codex/skills"
-  "https://developers.openai.com/codex/mcp/"
-  "openaiDeveloperDocs"
-  "\$openai-docs"
-  "https://code.claude.com/docs/en/features-overview"
-  "https://code.claude.com/docs/en/skills"
-  "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices"
-  "https://code.claude.com/docs/en/plugins"
-  "https://agentskills.io/home"
-  "https://vercel.com/kb/guide/agent-skills-creating-installing-and-sharing-reusable-agent-context"
-)
-for needle in "${required_resource_strings[@]}"; do
-  require_contains "AGENTS.md" "$needle"
-done
-
-echo "Validating README maintainer pointer..."
-require_contains "README.md" 'Maintainers: authoritative skill-authoring resources live in `AGENTS.md`.'
-require_contains "README.md" 'docs/maintainers/workflow-atlas.md'
-require_contains "README.md" 'docs/maintainers/reality-audit.md'
-require_contains "README.md" 'docs/maintainers/customization-consolidation-review.md'
-require_contains "README.md" 'docs/maintainers/execution-split-and-inference-plan.md'
-require_contains "README.md" '.agents/skills -> ../skills'
-require_contains "README.md" '.claude/skills -> ../skills'
-require_contains "README.md" 'top-level `skills/`'
-require_contains "README.md" 'The Apple plugin now ships its repo-maintenance toolkit contract directly.'
+echo "Validating root README contract..."
+require_contains "README.md" 'Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work'
+require_contains "README.md" 'This repository is the canonical source of truth for Gale'"'"'s Apple, Swift, and Xcode workflow skills.'
+require_contains "README.md" 'Treat root [`skills/`](./skills/) as the canonical authored surface.'
+require_contains "README.md" 'Keep shared reusable assets in [`shared/`](./shared/)'
+require_contains "README.md" 'Run the repository test suite for skill and metadata changes:'
 require_not_contains "README.md" 'plugins/apple-dev-skills/'
 require_not_contains "README.md" 'install-plugin-to-socket'
 
-echo "Validating AGENTS maintainer pointers..."
-require_contains "AGENTS.md" 'docs/maintainers/reality-audit.md'
-require_contains "AGENTS.md" 'docs/maintainers/workflow-atlas.md'
-require_contains "AGENTS.md" 'docs/maintainers/customization-consolidation-review.md'
-require_contains "AGENTS.md" 'docs/maintainers/execution-split-and-inference-plan.md'
-require_contains "AGENTS.md" '.agents/skills -> ../skills'
-require_contains "AGENTS.md" '.claude/skills -> ../skills'
-require_contains "AGENTS.md" 'top-level `skills/`'
+echo "Validating AGENTS contract..."
+require_contains "AGENTS.md" 'This repository is the canonical home for Gale'"'"'s Apple, Swift, and Xcode workflow skills.'
+require_contains "AGENTS.md" 'Treat `productivity-skills` as the default baseline maintainer layer'
+require_contains "AGENTS.md" 'Root `skills/` is the canonical authored and exported surface.'
+require_contains "AGENTS.md" 'Keep shared reusable assets in [`shared/`](./shared/) and maintainer tests in [`tests/`](./tests/).'
+require_contains "AGENTS.md" 'require reading the relevant Apple documentation before proposing implementation changes.'
+require_contains "AGENTS.md" 'Keep `explore-apple-swift-docs` as the canonical docs-routing surface'
 require_not_contains "AGENTS.md" 'plugins/apple-dev-skills/'
 
 echo "Validating workflow document structure..."
@@ -123,12 +100,12 @@ require_contains "$execution_split_doc" "## AGENTS Expansion Strategy"
 require_contains "$execution_split_doc" "## Repo-Maintenance Toolkit Direction"
 require_contains "$execution_split_doc" "## Implementation Plan"
 require_contains "$execution_split_doc" 'the shipped plugin self-contained'
-require_contains "ROADMAP.md" "- [x] Milestone 23: Customization Consolidation Review"
-require_contains "ROADMAP.md" "- [x] Milestone 30: Customization Surface Simplification Implementation"
-require_contains "ROADMAP.md" "## Milestone 30: Customization Surface Simplification Implementation"
-require_contains "ROADMAP.md" "- [x] Milestone 34: Execution Skill Split and Inference Refactor"
-require_contains "ROADMAP.md" "- [x] Milestone 35: Swift/Xcode Repo-Maintenance Toolkit Profiles"
-require_contains "ROADMAP.md" "- [x] Milestone 36: Guidance Preservation and AGENTS Expansion"
+require_contains "ROADMAP.md" "Completed Milestones 22 and 23"
+require_contains "ROADMAP.md" 'See `docs/maintainers/customization-consolidation-review.md`.'
+require_contains "ROADMAP.md" "Completed Milestones 30 through 36"
+require_contains "ROADMAP.md" "shrinking the customization surface"
+require_contains "ROADMAP.md" "splitting execution workflows"
+require_contains "ROADMAP.md" "preserving guidance through the refactor"
 
 echo "Validating skill directory layout..."
 active_skill_mds=(
