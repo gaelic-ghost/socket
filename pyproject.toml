@@ -1,0 +1,11 @@
+[project]
+name = "socket-maintenance"
+version = "0.1.0"
+description = "Root uv tooling baseline for the socket superproject."
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "PyYAML>=6.0.0",
+]

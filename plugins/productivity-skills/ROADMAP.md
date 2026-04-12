@@ -269,14 +269,13 @@ Exit criteria:
 Scope:
 
 - Replace the umbrella docs-maintenance skill with separate README and roadmap skills.
-- Keep specialized README maintenance for skills/plugin repositories separate from general project README work.
+- Keep README and roadmap maintenance on separate skill surfaces without weakening the shared canonical doc contracts.
 - Retire `project-docs-maintainer` as a canonical skill without leaving a wrapper behind.
 
 Tickets:
 
 - [x] Split the old roadmap workflow into `maintain-project-roadmap`.
-- [x] Split the old skills/plugin README workflow into `maintain-skills-readme`, then moved it to `agent-plugin-skills`.
-- [x] Add `maintain-project-readme` as the general ordinary-project README skill.
+- [x] Add `maintain-project-readme` as the canonical shared README skill.
 - [x] Update tests, metadata, and repo docs to use the new skills.
 - [x] Retire `project-docs-maintainer` from the active inventory and replace it with compatibility notes in docs.
 
@@ -284,7 +283,7 @@ Exit criteria:
 
 - [x] No active repo docs present `project-docs-maintainer` as canonical.
 - [x] README and roadmap maintenance now route through separate skill names.
-- [x] General project README maintenance is separated from skills/plugin README maintenance.
+- [x] README and roadmap maintenance now route through separate skill names without requiring a repo-type split.
 
 ## Milestone 8: Project README maintainer hardening
 
@@ -460,7 +459,7 @@ Exit criteria:
 - Risk: Users still invoke deprecated names.
   Mitigation: keep canonical usage guidance explicit in repo docs and skill prompts.
 - Risk: Users may choose the wrong README-maintenance skill.
-  Mitigation: keep strong repo-genre routing guidance in `maintain-project-readme` and `maintain-skills-readme`.
+  Mitigation: keep the canonical README schema explicit and rely on config-backed customization instead of repo-type rejection rules.
 
 ## Backlog candidates
 

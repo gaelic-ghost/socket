@@ -16,7 +16,6 @@
 - invent audience claims, performance claims, guarantees, or support promises
 - rewrite healthy prose just to make it sound more generated
 - edit files other than the target `README.md`
-- rewrite specialized skills/plugin repository READMEs
 
 ## Review Bias
 

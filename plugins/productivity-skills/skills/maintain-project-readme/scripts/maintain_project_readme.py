@@ -757,12 +757,6 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
     if not project_root.is_dir():
         report["errors"].append(f"Project root does not exist or is not a directory: {project_root}")
         return report, markdown_report(report)
-    if is_skills_or_plugin_repo(project_root):
-        report["errors"].append(
-            "Detected a skills/plugin repository. Use the dedicated `maintain-skills-readme` skill from `/Users/galew/Workspace/agent-plugin-skills` instead of `maintain-project-readme`."
-        )
-        return report, markdown_report(report)
-
     config = load_config(project_root, args.config)
     report["customization_state"] = {
         "config_path": config.get("configPath", "none"),

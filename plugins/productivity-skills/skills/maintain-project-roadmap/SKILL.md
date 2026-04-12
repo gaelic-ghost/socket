@@ -7,7 +7,7 @@ description: Maintain checklist-style ROADMAP.md files against a hard-enforced c
 
 Maintain checklist-style `ROADMAP.md` files through one deterministic base-template workflow.
 
-This skill is the general template layer for roadmap maintenance. It defines the canonical shared checklist-roadmap contract that downstream language-, framework-, or stack-specific plugins can adapt through explicit customization instead of ad hoc structure drift.
+This skill is the general template layer for roadmap maintenance. It defines the canonical shared checklist-roadmap contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit configuration instead of ad hoc structure drift.
 
 ## Inputs
 

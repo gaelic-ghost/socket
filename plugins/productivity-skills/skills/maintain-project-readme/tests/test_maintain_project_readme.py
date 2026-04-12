@@ -306,13 +306,12 @@ def test_repo_structure_without_tree_outline_is_reported(tmp_path: Path) -> None
     assert "repo-structure-missing-tree-outline" in issue_ids
 
 
-def test_skills_repo_is_rejected(tmp_path: Path) -> None:
+def test_skills_repo_is_allowed(tmp_path: Path) -> None:
     write(tmp_path / ".codex-plugin" / "plugin.json", '{"name":"demo"}')
     write(tmp_path / "skills" / "demo-skill" / "SKILL.md", "---\nname: demo-skill\n---\n")
-    write(tmp_path / "README.md", "# demo\n\ntext\n")
+    write(tmp_path / "README.md", valid_readme().replace("# demo-project", "# demo"))
     report, _md = run(tmp_path)
-    assert report["errors"]
-    assert "maintain-skills-readme" in report["errors"][0]
+    assert report["errors"] == []
 
 
 def test_apply_mode_bootstraps_missing_readme_from_template(tmp_path: Path) -> None:

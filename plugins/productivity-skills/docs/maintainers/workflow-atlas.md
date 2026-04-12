@@ -34,7 +34,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | Skill | Canonical role | Workflows covered |
 | --- | --- | --- |
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
-| `maintain-project-readme` | General README maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run, misroute rejection |
+| `maintain-project-readme` | Canonical shared README maintainer | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-agents` | General AGENTS maintainer for ordinary projects | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-contributing` | General CONTRIBUTING maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
@@ -67,7 +67,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Overview**
 
-- Triggered when the user wants deterministic auditing for an ordinary software-project `README.md`.
+- Triggered when the user wants deterministic auditing for a repository `README.md`, including plugin, skills, and hybrid repos that should follow the shared README contract.
 - Primary workflow.
 - `read-only`
 
@@ -80,7 +80,6 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Branch Conditions**
 
-- Skills/plugin repo detected: reject and redirect to the dedicated `maintain-skills-readme` skill in `/Users/galew/Workspace/agent-plugin-skills`
 - Multiple repo profiles match: report ambiguity while selecting the conservative valid profile
 - README already sound: exact clean-run text
 
@@ -93,7 +92,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Overview**
 
-- Triggered when the user wants bounded README-only normalization or repair for an ordinary software-project `README.md`.
+- Triggered when the user wants bounded README-only normalization or repair for a repository `README.md`, including plugin, skills, and hybrid repos that should follow the shared README contract.
 - Variant workflow.
 - `bounded-write`
 

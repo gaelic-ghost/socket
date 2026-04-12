@@ -1,13 +1,13 @@
 ---
 name: maintain-project-readme
-description: Maintain ordinary software-project README.md files against a hard-enforced canonical base schema with deterministic check-only and bounded apply modes. Use when a project README needs a durable baseline structure that downstream plugins can extend or customize without weakening the shared README contract.
+description: Maintain README.md files against a hard-enforced canonical base schema with deterministic check-only and bounded apply modes. Use when a repository README needs a durable baseline structure that downstream plugins or repo-specific customization can extend without weakening the shared README contract.
 ---
 
 # Maintain Project README
 
-Maintain ordinary software-project `README.md` files through one deterministic base-template workflow.
+Maintain `README.md` files through one deterministic base-template workflow.
 
-This skill is the general template layer for README maintenance. It defines the canonical shared README contract that downstream language-, framework-, or stack-specific plugins can adapt through explicit customization instead of ad hoc structure drift.
+This skill is the general template layer for README maintenance. It defines the canonical shared README contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit configuration instead of ad hoc structure drift.
 
 ## Inputs
 
@@ -25,7 +25,7 @@ This skill is the general template layer for README maintenance. It defines the 
 5. Preserve preamble material such as badges, callouts, screenshots, and extra intro prose before the first H2 while normalizing the structural contract around it.
 6. Use the bundled README template when bootstrapping a missing `README.md` or when a downstream workflow needs a canonical starter document.
 7. Re-run the same audit to confirm post-fix status.
-8. If the repository is a skills or plugin repo with specialized install and discoverability conventions, use the dedicated `maintain-skills-readme` skill from `/Users/galew/Workspace/agent-plugin-skills` instead.
+8. For skills, plugin, or hybrid repositories, keep the same hard-enforced schema while grounding install, discovery, packaging, and maintainer wording in the real repo surface instead of inventing ordinary-app sections that are not actually shipped.
 
 ## Writing Expectations
 
@@ -64,7 +64,7 @@ Treat those two files as the source of truth for the canonical base schema and t
 - Never invent commands, setup steps, or product claims that are not grounded in the repo.
 - Never edit files other than the target `README.md`.
 - Keep the README schema hard-enforced against the configured contract instead of inferring structure from repo profile heuristics.
-- Do not use this skill for agent-skills, Codex plugin, Claude plugin, or similar skills/plugin repositories. Use the dedicated `maintain-skills-readme` skill from `/Users/galew/Workspace/agent-plugin-skills` instead.
+- Do not relax the configured schema just because the repository is a plugin, skills, or hybrid repo. Use explicit customization when the repo genuinely needs a different shared structure.
 
 ## References
 
