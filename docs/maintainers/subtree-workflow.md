@@ -1,23 +1,25 @@
-# Subtree Workflow
+# Monorepo Workflow
 
-This document explains how `socket` is maintained as a subtree-based superproject after the first migration pass.
+This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills` and `python-skills` as the remaining subtree-managed child repositories.
 
 ## What Socket Owns
 
-`socket` owns the superproject layer:
+`socket` owns the monorepo layer:
 
-- the imported child repository layout under `plugins/`
+- the nested directory layout under `plugins/`
 - the root Codex marketplace at `.agents/plugins/marketplace.json`
-- the maintainer docs that explain the monorepo experiment
+- the maintainer docs that explain the mixed monorepo experiment
 - release tags and release notes for the superproject itself
 
-`socket` does not replace the imported child repositories as their own source of truth.
+`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/` and `plugins/python-skills/`.
 
-For ordinary child-repo fixes that should publish back to the source repository, work in the monorepo copy first under `plugins/<name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<name> <remote> <branch>` instead of switching to a separate standalone checkout by default.
+For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
+
+For `apple-dev-skills` and `python-skills`, when a change should publish back to their source repositories, work in `plugins/<repo-name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>`.
 
 ## Child Repository Shape
 
-Each imported child repository remains a real repository with its own internal layout, docs, and packaging choices.
+Each nested directory under `plugins/` keeps its own internal layout, docs, and packaging choices.
 
 That means there are two important patterns to expect:
 
@@ -30,30 +32,44 @@ The socket root marketplace must point at the actual packaged plugin root, not a
 
 ## Current Named Remotes
 
-The superproject keeps one named git remote per imported child repository plus `origin` for the public socket repository.
+The superproject keeps `origin` for `socket` and child-repository remotes for `apple-dev-skills` and `python-skills`.
 
 Current child-repo remotes:
 
-- `agent-plugin-skills`
 - `apple-dev-skills`
-- `dotnet-skills`
-- `productivity-skills`
 - `python-skills`
-- `rust-skills`
-- `speak-to-user-skills`
-- `things-app`
-- `web-dev-skills`
 
-If a new child repository is imported later, add its matching named remote first.
+If a new subtree-managed child repository is introduced later, add its matching named remote first.
 
-The rebuilt minimal subtree source repos now also have public GitHub homes:
+## Subtree Work For Apple Dev Skills And Python Skills
 
-- [`gaelic-ghost/speak-to-user-skills`](https://github.com/gaelic-ghost/speak-to-user-skills)
-- [`gaelic-ghost/web-dev-skills`](https://github.com/gaelic-ghost/web-dev-skills)
+Use dedicated commits for `apple-dev-skills` and `python-skills` subtree work.
 
-## Import A New Child Repository
+Typical pull flow:
 
-Use a dedicated commit for each new subtree import.
+```bash
+git fetch apple-dev-skills
+git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
+
+git fetch python-skills
+git subtree pull --prefix=plugins/python-skills python-skills main
+```
+
+Typical push flow:
+
+```bash
+git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
+git subtree push --prefix=plugins/python-skills python-skills main
+```
+
+After subtree work:
+
+- verify the directory shape under `plugins/apple-dev-skills/` or `plugins/python-skills/`
+- update socket docs and marketplace wiring in a separate focused commit when needed
+
+## Add A New Subtree-Managed Child Repository
+
+Only do this when Gale explicitly wants to preserve an upstream repository as a separate sync target.
 
 Typical flow:
 
@@ -68,26 +84,10 @@ After the import:
 - verify the imported directory shape under `plugins/<name>/`
 - inspect whether the child repo ships `.codex-plugin/plugin.json`
 - if it does, locate the real packaged plugin root before touching the socket marketplace
-- update socket docs and marketplace wiring in a separate focused commit when needed
-
-## Sync An Existing Child Repository
-
-Use a dedicated commit for each subtree sync.
-
-Typical flow:
-
-```bash
-git fetch <name>
-git subtree pull --prefix=plugins/<name> <name> main
-```
-
-After the sync:
-
-- review whether the child repo moved or added plugin packaging
 - re-check `.agents/plugins/marketplace.json`
 - re-check `README.md`
 - re-check `docs/maintainers/subtree-migration-plan.md`
-- remove stale duplicated packaging if the sync introduced a second surviving copy of an already imported child plugin
+- remove stale duplicated packaging if the import introduced a second surviving copy of an already present child plugin
 
 ## Root Marketplace Rules
 
@@ -96,7 +96,7 @@ The root marketplace lives at `.agents/plugins/marketplace.json`.
 Use these rules:
 
 - list every non-private imported child plugin surface by default
-- keep private child repos out of both the public superproject tree and the root marketplace
+- keep private child repos out of the public marketplace, and remove their entries if their directories are retired from the monorepo
 - point `source.path` at the actual child surface the imported repo treats as installable
 - do not invent a second socket-level plugin wrapper when the child repo already has one
 - do not leave stale marketplace entries behind after a packaging move or subtree removal
@@ -117,14 +117,14 @@ Use `vx.x.x` tags for socket releases.
 
 ## Common Failure Modes
 
-- A child repo is imported correctly, but the socket marketplace still points at the subtree root even though the real plugin root is nested.
-- A child repo vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
-- A child subtree exists in `socket`, but its matching named source remote is missing or points nowhere useful, which blocks future subtree pulls.
-- Socket docs describe an earlier migration assumption after the imported child repo has already changed packaging shape.
-- A subtree sync lands without a follow-up pass over root marketplace wiring and docs.
+- The socket marketplace still points at a directory that no longer exists in `plugins/`.
+- A child directory vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
+- `apple-dev-skills` or `python-skills` still expects subtree sync, but its named remote is missing or points nowhere useful.
+- Socket docs still describe the old all-subtree model after the monorepo has already moved on.
+- `apple-dev-skills` or `python-skills` subtree work lands without a follow-up pass over root marketplace wiring and docs.
 
 ## Practical Rule Of Thumb
 
-If the question is “how does this child repository work?”, read the child repo docs.
+If the question is “how does this child directory work?”, read the child docs.
 
-If the question is “how does socket expose, import, sync, or release these child repositories together?”, read and update the socket maintainer docs.
+If the question is “how does socket expose, sync, or release these child directories together?”, read and update the socket maintainer docs.

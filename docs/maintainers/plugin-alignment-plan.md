@@ -1,6 +1,6 @@
 # Plugin Alignment Plan
 
-This document records the current plan for bringing the imported child repositories into closer alignment with the maintainer standards anchored by `agent-plugin-skills`.
+This document records the current plan for bringing the child directories in `socket` into closer alignment with the maintainer standards anchored by `agent-plugin-skills`.
 
 ## Standards Baseline
 
@@ -14,7 +14,7 @@ The near-term standards that matter most across the imported repos are:
 - keep plugin packaging thin and explicit instead of hiding it behind duplicated trees
 - keep Codex marketplace limitations documented plainly
 - keep maintainer docs and packaging surfaces aligned with the real repo shape
-- avoid stale vendored copies of other plugin repos inside imported subtrees
+- avoid stale vendored copies of other plugin repos inside nested directories
 
 ## Current Socket-Level Agent Plugin Skills State
 
@@ -30,10 +30,6 @@ That means the superproject is currently using the top-level imported `agent-plu
   - top-level `.codex-plugin/plugin.json`
   - top-level `skills/`
   - explicit repo-local standards and source-of-truth guidance
-- `speak-to-user-skills`
-  - honest minimal standalone plugin repo
-  - top-level `.codex-plugin/plugin.json`
-  - no fake exported skill inventory yet
 - `web-dev-skills`
   - honest minimal standalone plugin repo
   - top-level `.codex-plugin/plugin.json`
@@ -62,11 +58,14 @@ That means the superproject is currently using the top-level imported `agent-plu
   - intentionally mixed repo with root `skills/`, bundled MCP server, and nested packaged plugin root
   - should align on honesty, source-of-truth wording, and packaging clarity, but should not be forced into a pure skills-export shape if that would erase the MCP-first repo reality
 
-### Excluded From Public Socket
+### Excluded Or Retired From Public Socket
 
 - `private-skills`
   - private repo that should stay outside the public `socket` superproject
   - do not expose it through the root marketplace or public subtree inventory
+- `speak-to-user-skills`
+  - no longer exists as a live directory in this working tree
+  - remove stale root-marketplace or docs references instead of treating it as active inventory
 
 ## First Alignment Pass
 
@@ -106,8 +105,6 @@ The first pass should focus on cross-repo clarity, not forced uniformity.
   - add richer maintainer guidance only when the repo starts shipping real content
 - `rust-skills`
   - same as `dotnet-skills`
-- `speak-to-user-skills`
-  - keep it minimal until the first real speech-facing skill exists
 - `web-dev-skills`
   - keep it minimal until the first real web-focused skill exists
 

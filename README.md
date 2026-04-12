@@ -1,6 +1,6 @@
 # socket
 
-Subtree-managed superproject for Gale's public Codex plugins and skills repositories.
+Mixed-model monorepo for Gale's Codex plugins and skills repositories.
 
 ## Table of Contents
 
@@ -23,33 +23,33 @@ Some skills and plugins I've been building to make Codex better and more useful 
 
 ### Status
 
-`socket` is an active superproject with the current public child repositories imported as subtrees and wired into the root marketplace.
+`socket` is an active monorepo with two remaining subtree-managed child repositories, `apple-dev-skills` and `python-skills`, and the rest of the child directories now treated as ordinary monorepo-owned nested directories wired into the root marketplace.
 
 ### What This Project Is
 
-This repository owns the superproject layer only: subtree coordination, repo-root marketplace wiring, root maintainer docs, and cross-repo release and sync guidance.
+This repository owns the root marketplace, the monorepo-owned nested directories under `plugins/`, the remaining subtree sync paths for `apple-dev-skills` and `python-skills`, and the root maintainer docs.
 
 ### Motivation
 
-It exists to keep the multi-repo plugin and skills experiment workable under one Git root while Codex still lacks better shared-parent scoping.
+It exists to keep the plugin and skills experiment workable under one Git root while Codex still lacks better shared-parent scoping, without carrying subtree sync complexity for repos that no longer need to live as separate public sources of truth.
 
 ## Setup
 
-Read the overview and marketplace sections first, then use the subtree workflow below when you need to sync or publish changes back to the imported child repositories.
+Read the overview and marketplace sections first, then use the mixed monorepo workflow below. Only `apple-dev-skills` and `python-skills` still use subtree sync.
 
 ## Usage
 
-Use the root marketplace and maintainer docs only for the superproject layer. Use the docs inside each imported subtree for repo-specific authoring, validation, and release work.
+Use the root marketplace and maintainer docs for the monorepo layer. Use the docs inside each nested directory for repo-specific authoring, validation, and release work.
 
 ## Development
 
 ### Setup
 
-Clone the repository, use the root `uv` dev environment when running the productivity maintainer scripts, and work in `plugins/<repo>/` for child-repo changes unless the task is explicitly superproject-only.
+Clone the repository, use the root `uv` dev environment when running the productivity maintainer scripts, and work in `plugins/<repo>/` for child-directory changes unless the task is explicitly root-level.
 
 ### Workflow
 
-Edit the monorepo copy first, keep root docs and marketplace wiring in sync with subtree packaging changes, and use `git subtree pull` / `git subtree push` for upstream synchronization.
+Edit the monorepo copy first, keep root docs and marketplace wiring in sync with packaging changes, and reserve `git subtree pull` / `git subtree push` for `plugins/apple-dev-skills/` and `plugins/python-skills/`.
 
 ## Verification
 
@@ -72,11 +72,11 @@ See [LICENSE](./LICENSE).
 
 ## Current Status
 
-Active experiment, with the current public child repositories already imported as subtrees and wired into the root marketplace.
+Active experiment, with `apple-dev-skills` and `python-skills` still subtree-managed and the other child repositories now living as ordinary nested directories inside the monorepo.
 
 ## Imported Repositories
 
-The current subtree-managed child repositories are:
+The current plugin and skills directories under `plugins/` are:
 
 - `agent-plugin-skills`
 - `apple-dev-skills`
@@ -84,11 +84,10 @@ The current subtree-managed child repositories are:
 - `productivity-skills`
 - `python-skills`
 - `rust-skills`
-- `speak-to-user-skills`
 - `web-dev-skills`
 - `things-app`
 
-Each child repository keeps its own docs, release history, and packaging decisions inside its imported subtree. `socket` owns only the superproject layer: subtree layout, root marketplace wiring, and cross-repo maintainer guidance.
+`apple-dev-skills` and `python-skills` are the only directories in that list that still keep live subtree relationships to separate source repositories. The other directories are now monorepo-owned nested directories. `socket` is their canonical source of truth.
 
 ## Marketplace Shape
 
@@ -104,17 +103,17 @@ Current listed plugin roots are:
 - `./plugins/productivity-skills/skills`
 - `./plugins/python-skills/plugins/python-skills`
 - `./plugins/rust-skills`
-- `./plugins/speak-to-user-skills`
 - `./plugins/things-app/plugins/things-app`
 - `./plugins/web-dev-skills`
 
 ## Working In Socket
 
-Treat `socket` as a superproject, not as the canonical authoring home for every child repository concern.
+Treat `socket` as the canonical authoring home for the monorepo-owned nested directories, and as the subtree host for `apple-dev-skills` and `python-skills`.
 
-- Use the root docs to understand how subtree imports, root marketplace wiring, and release flow work.
-- Use the child repository docs inside `plugins/<name>/` when the work is really about that child repo's own skills, plugin packaging, tests, or release process.
-- For ordinary child-repo fixes that should publish back upstream, edit the monorepo copy first under `plugins/<name>/`, commit in `socket`, then push the result back out with `git subtree push --prefix=plugins/<name> <remote> <branch>`.
+- Use the root docs to understand the mixed monorepo model, root marketplace wiring, and release flow.
+- Use the child directory docs inside `plugins/<name>/` when the work is really about that directory's own skills, plugin packaging, tests, or release process.
+- For ordinary fixes in monorepo-owned child directories, edit `plugins/<name>/` directly and commit in `socket`.
+- For `apple-dev-skills` and `python-skills`, keep the subtree workflow explicit when you need to sync with or publish back to their separate source repositories.
 - Keep the root marketplace and maintainer docs in sync whenever a child repo gains, moves, or removes plugin packaging.
 
 ## Repository Layout
@@ -137,7 +136,6 @@ Treat `socket` as a superproject, not as the canonical authoring home for every 
 │   ├── productivity-skills/
 │   ├── python-skills/
 │   ├── rust-skills/
-│   ├── speak-to-user-skills/
 │   ├── web-dev-skills/
 │   └── things-app/
 └── README.md
