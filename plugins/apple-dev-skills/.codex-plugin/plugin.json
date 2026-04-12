@@ -1,0 +1,42 @@
+{
+  "name": "apple-dev-skills",
+  "version": "5.0.0-rc.5",
+  "description": "Apple development workflows for Codex and Claude Code.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/apple-dev-skills",
+  "repository": "https://github.com/gaelic-ghost/apple-dev-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "skills",
+    "apple",
+    "swift",
+    "xcode",
+    "swiftui",
+    "ios",
+    "macos"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Apple Dev Skills",
+    "shortDescription": "Apple, Swift, and Xcode workflows for Codex.",
+    "longDescription": "Bundle Apple-platform development skills for Swift, SwiftUI, Xcode, SwiftPM, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/apple-dev-skills",
+    "defaultPrompt": [
+      "Explore the relevant Apple docs first, then explain the right SwiftUI or Xcode path for this repository.",
+      "Help me build, test, or debug this Swift or Xcode project using the repo's Apple workflows.",
+      "Sync the Apple project guidance in this repo without hand-editing Xcode project files."
+    ],
+    "brandColor": "#0A84FF"
+  }
+}

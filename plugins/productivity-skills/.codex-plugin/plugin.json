@@ -1,0 +1,40 @@
+{
+  "name": "productivity-skills",
+  "version": "4.4.2",
+  "description": "Broadly useful productivity workflows for Codex and Claude Code.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/productivity-skills",
+  "repository": "https://github.com/gaelic-ghost/productivity-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "skills",
+    "productivity",
+    "maintainer",
+    "documentation",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Productivity Skills",
+    "shortDescription": "Broadly useful workflow and maintainer skills for Codex.",
+    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, roadmap work, code explanation, and reusable maintainer-toolkit workflows.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/productivity-skills",
+    "defaultPrompt": [
+      "Install or refresh the repo-maintenance toolkit for this project and explain the local entrypoints.",
+      "Explain this code slice in plain language and compare the relevant alternatives.",
+      "Help me update the README, AGENTS guidance, roadmap, or maintainer docs without flattening the existing structure."
+    ],
+    "brandColor": "#14B8A6"
+  }
+}

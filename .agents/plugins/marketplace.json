@@ -20,7 +20,7 @@
       "name": "apple-dev-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/apple-dev-skills/skills"
+        "path": "./plugins/apple-dev-skills"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -44,7 +44,7 @@
       "name": "productivity-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/productivity-skills/skills"
+        "path": "./plugins/productivity-skills"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -80,7 +80,7 @@
       "name": "things-app",
       "source": {
         "source": "local",
-        "path": "./plugins/things-app/plugins/things-app"
+        "path": "./plugins/things-app"
       },
       "policy": {
         "installation": "AVAILABLE",
