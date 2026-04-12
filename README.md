@@ -17,7 +17,7 @@ Swift executable package for a shared localhost host process that exposes the pu
 
 ## Overview
 
-This repository is the standalone Swift service for `SpeakSwiftly`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host one macOS process with job tracking and server-sent events, while delegating speech, voice-profile management, and worker lifecycle to the typed `SpeakSwiftly` runtime.
+This repository is the standalone Swift service for `SpeakSwiftly`. It uses [Hummingbird](https://github.com/hummingbird-project/hummingbird) to host one macOS process with job tracking, server-sent events, an operator-friendly HTTP API, and an optional MCP surface, while delegating speech, voice-profile management, and worker lifecycle to the typed `SpeakSwiftly` runtime.
 
 ### Deployment Targets
 
@@ -30,9 +30,9 @@ Linux support is a medium-term consideration rather than a current promise. A se
 
 ### Motivation
 
-I wanted a solid foundation to build voice-enabled applications on top of. So, this package provides a thin Swift service that macOS apps can easily import and manage as a LaunchAgent, without needing a separate Python runtime. It the `SpeakSwiftly` control model.
+The goal is to give macOS apps one small, typed, app-managed service layer for local speech work without introducing a separate Python runtime or a second control model beside `SpeakSwiftly`.
 
-It's intentionally narrow, using Hummingbird for HTTP and MCP, `SpeakSwiftly` for speech and profile operations, `TextForSpeech` for customizeable text normalization, and a small amount of server state to translate and cache runtime events as snapshots, as well as SSE replay, and MCP resources.
+The package stays intentionally narrow. Hummingbird owns transport hosting, `SpeakSwiftly` owns speech, profile, and runtime lifecycle behavior, `TextForSpeech` owns customizable text normalization, and the server keeps only the state it needs for retained snapshots, SSE replay, and MCP resources.
 
 ### Current SpeakSwiftly Alignment
 
@@ -131,6 +131,12 @@ swift run SpeakSwiftlyServerTool help
 ```
 
 Running the tool without subcommands defaults to `serve`, and the same binary also exposes `launch-agent` subcommands for install, inspection, and maintenance work.
+
+The most common local operator path is:
+
+1. `swift run SpeakSwiftlyServerTool help`
+2. `swift run SpeakSwiftlyServerTool launch-agent print-plist`
+3. `swift run SpeakSwiftlyServerTool launch-agent install --config-file ./server.yaml`
 
 To render the current per-user LaunchAgent property list without installing it:
 
@@ -507,7 +513,7 @@ The shared runtime entrypoint now lives in [`Sources/SpeakSwiftlyServer/SpeakSwi
 - [`ServerModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ServerModels.swift), [`ProfileModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ProfileModels.swift), [`QueueStatusModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/QueueStatusModels.swift), and [`JobEventModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/JobEventModels.swift) split the transport and host-facing value models by concern instead of keeping one oversized payload file.
 - The opt-in live suite is also now split by transport and support role instead of keeping one broad helper blob. [`E2EHTTPClient.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Tests/SpeakSwiftlyServerE2ETests/E2EHTTPClient.swift), [`E2EMCPClient.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Tests/SpeakSwiftlyServerE2ETests/E2EMCPClient.swift), [`E2EMCPEventStream.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Tests/SpeakSwiftlyServerE2ETests/E2EMCPEventStream.swift), [`E2EPayloadHelpers.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Tests/SpeakSwiftlyServerE2ETests/E2EPayloadHelpers.swift), [`E2ETransportWaiters.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Tests/SpeakSwiftlyServerE2ETests/E2ETransportWaiters.swift), and [`SpeakSwiftlyServerE2EAudioRouteHelpers.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Tests/SpeakSwiftlyServerE2ETests/SpeakSwiftlyServerE2EAudioRouteHelpers.swift) keep MCP handshake logic, SSE observation, payload decoding, polling waiters, and audible-route stabilization separate.
 
-The design is deliberately direct. Adding extra wrappers, managers, or intermediate layers here would be easy, but it would also be the kind of unnecessary complexity that makes a small localhost service harder to reason about, so the server is kept close to the typed runtime API on purpose. That means the service talks to the public `SpeakSwiftly.Runtime` surface, its public text normalizer, and its public event and summary types instead of reaching through the library boundary to construct raw worker requests itself.
+The design is deliberately direct. Adding extra wrappers, managers, or intermediate layers here would be easy, but it would also make a small localhost service harder to reason about, so the server stays close to the typed runtime API on purpose. The service talks to the public `SpeakSwiftly.Runtime` surface, its public text normalizer, and its public event and summary types instead of reaching through the library boundary to construct raw worker requests itself.
 
 The unified tool target is the one intentional widening of that model. It earns its keep because it unlocks LaunchAgent installation, status inspection, and future operator workflows while keeping the reusable `SpeakSwiftlyServer` module focused on embedding and host logic.
 
@@ -515,7 +521,7 @@ For repository maintenance, treat this standalone repository as the source of tr
 
 The repo-maintenance toolkit is now the maintainer-facing wrapper around that release flow. Use `scripts/repo-maintenance/validate-all.sh` for local validation, `scripts/repo-maintenance/sync-shared.sh` for deterministic repo-local sync hooks, and `scripts/repo-maintenance/release.sh` for the tagged release path after verification passes.
 
-That tagged release path now also builds `SpeakSwiftlyServerTool` in `release` mode and stages the resulting binary under `.release-artifacts/<tag>/SpeakSwiftlyServerTool`, copies the required adjacent `Resources/default.metallib` into that same staged artifact directory from the sibling published `SpeakSwiftly` release-runtime metadata, and then refreshes `.release-artifacts/current` to that tagged build. The live LaunchAgent install path is expected to consume that staged release artifact by default.
+That tagged release path also builds `SpeakSwiftlyServerTool` in `release` mode, stages the resulting binary under `.release-artifacts/<tag>/SpeakSwiftlyServerTool`, copies the required adjacent `Resources/default.metallib` into that staged artifact directory from the sibling published `SpeakSwiftly` release-runtime metadata, and then refreshes `.release-artifacts/current` to that tagged build. The live LaunchAgent install path is expected to consume that staged release artifact by default.
 
 The live audible e2e harness now also pins macOS built-in speakers immediately before audible server startup and again immediately before audible request submission. That route stabilization stays test-only, but it matters in practice because connected Bluetooth headphones can otherwise reclaim the default output device mid-run and fail an otherwise healthy live playback request.
 

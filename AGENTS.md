@@ -1,138 +1,60 @@
 # AGENTS.md
 
-## Baseline Provenance
+## Purpose
 
-- This template is the full bootstrap `AGENTS.md` used for new Swift package repositories.
-- It intentionally incorporates the shared Swift/Apple baseline from `shared/agents-snippets/apple-swift-core.md`.
-- Keep baseline guidance aligned with the shared snippet and use this template for deterministic scaffold output.
+- This repository is the standalone Swift Package Manager home for `SpeakSwiftlyServer`.
+- Keep this file focused on repo-owned workflow guidance, not on repeating the full bootstrap template for every Swift package.
+- When the repo workflow or package policy changes materially, refresh this file intentionally instead of letting scaffold language linger.
 
 ## Repository Expectations
 
-- Use Swift Package Manager (SPM) as the source of truth for package structure and dependencies.
-- Prefer `swift package` CLI commands for structural changes whenever the command exists.
-- Use `swift package add-dependency` to add dependencies instead of hand-editing package graphs.
-- Use `swift package add-target` to add library, executable, or test targets.
-- Use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, and `scripts/repo-maintenance/release.sh` for releases.
-- For package configuration not covered by CLI commands, update `Package.swift` intentionally and keep edits minimal.
-- Keep package graph updates together in the same change (`Package.swift`, `Package.resolved`, and target/test layout when applicable).
-- Validate package changes with:
-  - `swift build`
-  - `swift test`
+- Treat `Package.swift` as the source of truth for package structure, products, targets, dependencies, resources, and deployment targets.
+- Prefer `swift package` subcommands for structural edits when SwiftPM already exposes the right operation.
+- Keep package graph changes together in one pass, including `Package.swift`, `Package.resolved`, target layout, and any matching docs or tests.
+- Use `scripts/repo-maintenance/validate-all.sh` for maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, and `scripts/repo-maintenance/release.sh` for releases.
+- Keep package resources under the owning target tree and load them through `Bundle.module`.
+- Treat tagged releases as the distribution surface for this repository, especially when the staged LaunchAgent artifact path changes.
 
-## Repository-Specific Workflow
+## Repo Workflow
 
-- Treat the standalone `SpeakSwiftlyServer` repository as the source of truth for package development, tags, and releases.
-- Treat the `SpeakSwiftly` dependency declared in `Package.swift` and locked in `Package.resolved` as the source of truth for normal `swift build` and `swift test` runs in this repository.
-- Do not retarget this repository to a local `../SpeakSwiftly` checkout unless the manifest is intentionally changed for an explicit local-integration task.
-- If unreleased `SpeakSwiftly` changes need to land here, prefer stabilizing and tagging them in `SpeakSwiftly` first, then update this repository to that tagged release instead of integrating against half-finished local checkout work.
-- Treat `macOS 15` as the current baseline deployment target for the standalone server package.
-- Keep the host and state architecture friendly to a near-future `iOS 18` reuse path even while the executable package remains macOS-only.
-- Prefer maintainable Apple-platform architecture for the current macOS plus near-future iOS use cases over speculative Linux abstraction.
-- If Linux support would require significant architectural compromise, stop and discuss whether a separate Rust implementation is the better path instead of forcing cross-platform concessions into this package.
-- Treat `../../speak-to-user/monorepo/packages/SpeakSwiftlyServer` as the integration submodule copy, not the primary development home.
-- Treat the local `../../speak-to-user/monorepo` checkout as a clean base checkout only. It must stay on `main`, and it must stay clean.
-- Never change the local branch of the base `../../speak-to-user/monorepo` checkout for feature work, experiments, release bumps, or submodule updates.
-- For any monorepo change, create a new branch in a new `git worktree` and do the work there instead of touching the base `../../speak-to-user/monorepo` checkout.
-- After a monorepo branch is merged, pull or fast-forward the base `../../speak-to-user/monorepo` checkout back to `main` and delete the merged worktree and branch.
-- When `speak-to-user` adopts a new `SpeakSwiftlyServer` version, prefer updating the submodule pointer to a tagged `SpeakSwiftlyServer` release rather than an arbitrary branch tip.
-- Land monorepo submodule bumps through a pull request against the monorepo instead of pushing those pointer updates directly to monorepo `main`.
-- Use tagged releases for the monorepo when publishing coordinated umbrella states that depend on specific submodule versions.
+- Treat this standalone `SpeakSwiftlyServer` repository as the source of truth for development, tags, and releases.
+- Treat the resolved `SpeakSwiftly` dependency declared in `Package.swift` and locked in `Package.resolved` as the source of truth for normal `swift build` and `swift test` runs here.
+- Do not retarget this package to a local `../SpeakSwiftly` checkout unless the manifest is being changed intentionally for a specific local-integration task.
+- If unreleased `SpeakSwiftly` changes are needed here, prefer stabilizing and tagging them in `SpeakSwiftly` first, then update this repository to that release instead of integrating against half-finished sibling checkout work.
+- Treat `macOS 15` as the current standalone package baseline and keep the host and state model friendly to a near-future `iOS 18` reuse path.
+- Prefer maintainable Apple-platform architecture over speculative Linux abstraction. If Linux support would require major design compromise, stop and discuss whether a separate Rust implementation is the cleaner path.
 
-## Swift Coding Preferences
+## Monorepo And Submodule Handoff
 
-- Prefer the simplest correct Swift that is easiest to read, reason about, and maintain.
-- Treat idiomatic Swift and Cocoa-style naming conventions as tools in service of readability, not goals by themselves.
-- Prefer explicit, consistent, and unambiguous names.
-- Prefer compact and concise code; use shorthand syntax and trailing-closure syntax when readability improves.
-- Do not add boilerplate, helper types, or extra layers just to make code look more architectural or more "Swifty".
-- Strongly prefer synthesized, implicit, and framework-provided behavior over handwritten setup code.
-- Prefer applicable existing framework or platform error types before inventing custom error wrappers or error hierarchies.
-- Prefer stable, source-of-truth naming across layers when the data and meaning have not changed.
-- Treat naming consistency as a reliability feature: if the same data still serves the same purpose, keep the same name.
-- Do not rename fields just to match local style conventions when the external schema is already clear and stable.
-- Do not use automatic case-conversion strategies such as `.convertFromSnakeCase` or `.convertToSnakeCase` unless the project explicitly wants that behavior and it clearly improves readability overall.
-- This guidance is optimized for an advanced Swift reader and may prefer dense but readable modern Swift over beginner-style explicitness.
-
-## Types and Architecture
-
-- Prefer concrete, straightforward types and data flow that keep the code easy to follow.
-- Use `struct`, `enum`, `class`, `actor`, and protocols only when each one is the clearest fit for the actual problem.
-- Mark classes as `final` by default.
-- Prefer synthesized conformances (`Codable`, `Equatable`, `Hashable`, etc.) whenever they satisfy the actual requirements.
-- Prefer memberwise and otherwise synthesized initializers, default property values, and framework defaults over handwritten setup code.
-- Do not add `CodingKeys`, manual `Codable`, custom initializers, wrappers, helper types, protocols, coordinators, or extra layers unless they are required by a concrete constraint or make the final code clearly easier to understand.
-- When an API, cloud service, or wire format already provides clear names, preserve those names directly in Swift models and nearby code unless the meaning actually changes or a concrete collision must be resolved.
-- Preserve raw wire and persistence shapes by default; do not add DTO, domain, or view-model conversion layers unless meaning actually changes or a concrete boundary requires it.
-- Treat redundant wrappers, rename-and-copy layers, and duplicated logic as anti-patterns by default.
-- Use enums as namespaces only when they genuinely reduce clutter instead of adding indirection.
-- Keep code modular and cohesive without fragmenting simple logic across unnecessary files or types.
-- Prefer pure Swift solutions where practical.
-
-## Concurrency and Language Mode
-
-- Keep code compliant with Swift 6 language mode.
-- Keep strict concurrency checking enabled.
-- Use modern structured concurrency (`async`/`await`, task groups, actors, `AsyncSequence`) instead of legacy async patterns when it keeps the flow clearer and more direct.
-- Prefer compact syntax when it improves local reasoning, including shorthand syntax, ternary expressions, trailing closures, `switch`, `map`, `filter`, `forEach`, and async iteration.
-- Prefer explicit default values at initialization when they reduce optional-handling clutter and keep the code easier to follow.
-- When lines, chains, or expressions get long, prefer chopping them down into a clean vertical, top-down structure with straight visual flow.
-- For app-facing packages, prefer approachable concurrency defaults with main-actor isolation by default.
-- Introduce parallelism where it produces clear performance gains.
-
-## State, Frameworks, and Dependencies
-
-- Prefer `@Observation` over Combine for observation/state propagation.
-- For Apple app projects, prefer Apple-native logging facilities first and allow Swift Logging where it makes the project API clearer.
-- For packages, server-side, or cross-platform Swift, prefer Swift Logging as the primary logging API.
-- Prefer Swift OpenTelemetry for telemetry and instrumentation when telemetry is needed, and prefer existing ecosystem integrations over bespoke wrappers.
-- Prefer frameworks and packages from Swift.org, Swift on Server, Apple, and Apple Open Source ecosystems when they simplify the code and make it easier to reason about.
-- Commonly approved examples include packages such as `swift-configuration`, `swift-async-algorithms`, and `swift-algorithms`.
-
-## Testing and Tooling Baseline
-
-- Use Swift Testing (`import Testing`) as the default test framework.
-- Avoid XCTest unless an external constraint requires it.
-- Prefer Nick Lockwood's SwiftFormat and/or SwiftLint as baseline Swift formatting and linting tools; at least one should be configured and used in any Swift project.
-- Keep formatting consistent with `swift-format` conventions.
-- Keep linting clean against `swiftlint` with clear, maintainable rule intent.
-
-## SwiftUI and State Architecture
-
-- Treat SwiftUI views as component UI: keep them small, composable, reusable, and easy to scan from top to bottom.
-- Prefer straight, top-down data flow with small focused controller classes that own matching state for a view or small view cluster.
-- Do not build monolithic views, monolithic controllers, or broad shared mutable state when a smaller component boundary would be clearer.
-- Keep updates to view-driving state minimal and localized.
-- Prefer durable identity for types that drive SwiftUI state and view updates.
-- Treat `App` as the application entry and scene composition boundary, `Scene` as the container for scene-specific lifecycle and environment, and `View` as the component rendering layer.
-- Use app-level lifecycle concerns at the `App` boundary, scene lifecycle concerns at the `Scene` boundary, and view-local active or presentation behavior inside views.
-- Use `@Binding` to pass a focused writable piece of parent-owned state into a child view.
-- Use `@Bindable` when working with an observable model that should project bindings to its mutable properties in a view.
-- Prefer `@Query` for view-driven SwiftData fetching that should stay in sync with the model context; use explicit fetches only when the view should not be driven by a live query.
-- Prefer environment values for shared context that truly belongs to the surrounding hierarchy, not as a dumping ground for unrelated dependencies.
-- Prefer key-path-based APIs, predicates, and sort descriptors when they keep data access direct and readable.
-- Extract repeated chains of view modifiers into custom view modifiers early when that reduces clutter and clearly matches a view or family of views.
-
-## CLI Tooling Preferences
-
-- Prefer `swift package` for package-focused workflows (dependency graph, targets, manifest intent, and local package validation).
-- Prefer `swift package` subcommands for structural package edits before manually editing `Package.swift`.
-- Use `swift build` and `swift test` as the default first-pass validation commands.
-- Use `xcodebuild` when validating Apple platform integration details that `swift package` does not cover well (schemes, destinations, SDK-specific behavior, and configuration-specific builds/tests).
-- Keep `xcodebuild` invocations explicit and reproducible (always pass scheme, destination or SDK, and configuration when relevant).
-- Prefer deterministic non-interactive CLI usage in automation/CI for both `swift package` and `xcodebuild`.
+- Treat `../../speak-to-user/monorepo/packages/SpeakSwiftlyServer` as the integration submodule copy, not as the primary development home.
+- Treat the local `../../speak-to-user/monorepo` checkout as a clean base checkout that stays on `main` and stays clean.
+- Never use that clean base checkout for feature work, experiments, release bumps, or submodule-pointer edits.
+- For monorepo work, create a dedicated `git worktree`, do the work there, open a pull request, and then delete the merged worktree and branch afterward.
+- When `speak-to-user` adopts a new server version, prefer updating the submodule pointer to a tagged `SpeakSwiftlyServer` release instead of an arbitrary branch tip.
 
 ## Swift Package Workflow
 
-- Use `swift build` and `swift test` as the default first-pass validation commands for this package.
-- When platform requirements are revisited, treat `macOS current minus one` and `iOS current minus one` as the default target policy unless the repository guidance is updated intentionally.
-- Use `bootstrap-swift-package` when a new Swift package repo still needs to be created from scratch.
-- Use `sync-swift-package-guidance` when the repo guidance for this package drifts and needs to be refreshed or merged forward.
-- Read relevant SwiftPM, Swift, and Apple documentation before proposing package-structure, dependency, manifest, concurrency, or architecture changes.
-- Prefer Dash or local Swift docs first, then official Swift or Apple docs when local docs are insufficient.
-- Prefer the simplest correct Swift that is easiest to read and reason about.
-- Prefer synthesized and framework-provided behavior over extra wrappers and boilerplate.
-- Keep data flow straight and dependency direction unidirectional.
-- Treat `Package.swift` as the source of truth for package structure, targets, products, and dependencies.
-- Prefer `swift package` subcommands for structural package edits before manually editing `Package.swift`.
+- Use `swift build` and `swift test` as the default first-pass validation commands.
+- Use `bootstrap-swift-package` only when a brand-new Swift package repository still needs to be created from scratch.
+- Use `sync-swift-package-guidance` when this repo guidance drifts and needs a deliberate refresh against the current Swift package baseline.
+- Use `swift-package-build-run-workflow` for manifest, dependency, build, run, resource, and packaging work when `Package.swift` is the source of truth.
+- Use `swift-package-testing-workflow` for Swift Testing, XCTest holdouts, fixtures, and package test diagnosis.
+- Prefer `xcode-build-run-workflow` or `xcode-testing-workflow` only when package work genuinely needs Xcode-managed SDK, toolchain, Metal, or test behavior that SwiftPM does not cover cleanly.
+- Read relevant SwiftPM, Swift, and Apple documentation before proposing package-structure, dependency, concurrency, or architecture changes, and prefer Dash or local docs first when available.
+
+## Coding And Architecture
+
+- Prefer the simplest correct Swift that is easiest to read, reason about, and maintain.
+- Prefer synthesized and framework-provided behavior over handwritten wrappers, conversion layers, or boilerplate.
+- Keep dependency direction unidirectional and data flow straight.
+- Keep transport-local shaping at the HTTP and MCP edges. If `SpeakSwiftly` or `TextForSpeech` can express a concept directly, prefer deleting server-local inference instead of adding another translation layer.
+- Keep `ServerHost` ownership narrow and explicit. Do not introduce helper coordinators, manager layers, or wrapper objects unless a real ownership boundary changes.
 - Prefer Swift Testing by default unless an external constraint requires XCTest.
-- Prefer `xcode-app-project-workflow` only when package work needs Xcode-managed SDK or toolchain behavior.
+- Validate both Debug and Release behavior when optimization, packaging, or staged release artifacts matter.
+
+## Docs And Maintenance
+
+- Keep `README.md`, maintainer docs, and release guidance aligned with the current public transport and install surfaces.
+- Use repository docs to describe the real current command path and artifact layout; do not leave scaffold wording or guessed maintenance files behind.
+- When the source split changes meaningfully, refresh `docs/maintainers/source-layout.md` in the same pass.
+- When the HTTP, MCP, LaunchAgent, or release workflow changes, update the operator-facing docs in the same change instead of deferring that cleanup.
