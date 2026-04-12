@@ -6,13 +6,6 @@ Maintain a focused set of reusable productivity skills with clear naming, determ
 
 ## Product principles
 
-- Keep skill names clear, stable, and domain-grouped.
-- Keep workflow instructions deterministic and safety-forward.
-- Keep docs and metadata synchronized with the active skill set.
-- Keep this repository focused on broadly useful global-install skills and the canonical general-purpose baseline versions of workflow families that later specialize elsewhere.
-- Prefer dedicated language-, framework-, stack-, or repository-specific plugins for project-level or repo-level install.
-- Treat agent-skills and agent-plugin repository maintenance as a distinct product line now housed in `/Users/galew/Workspace/agent-plugin-skills`.
-
 ## Milestone Progress
 
 - [x] Milestone 0: Naming and structural refactor (completed)

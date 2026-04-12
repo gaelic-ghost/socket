@@ -2,20 +2,42 @@
 
 Local Python MCP server for Things.app on macOS. The server executes Things actions through the official `things:///` URL scheme.
 
-## Requirements
+## Table of Contents
+
+- [Overview](#overview)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Development](#development)
+- [Verification](#verification)
+- [License](#license)
+- [Implemented MCP tools](#implemented-mcp-tools)
+- [Error Codes](#error-codes)
+- [Repository Layout](#repository-layout)
+
+## Overview
+
+`things-mcp` is the local Python MCP server that powers the Things surfaces bundled in the parent `things-app` repository.
+
+### Motivation
+
+It exists to keep Things automation grounded in one local FastMCP server with explicit auth-token handling, readable error codes, and a documented local development workflow.
+
+## Setup
+
+### Requirements
 
 - macOS
 - Things.app installed
 - `uv`
 - Python 3.13+
 
-## Install dependencies
+### Install dependencies
 
 ```bash
 uv sync
 ```
 
-## Configure auth token for update commands
+### Configure auth token for update commands
 
 Updates in the Things URL scheme require an auth token.
 
@@ -37,11 +59,11 @@ Token resolution order for update operations:
 2. `THINGS_AUTH_TOKEN` environment variable
 3. keychain token (`things_auth_set_token`)
 
-## FastMCP local run and test workflow
+## Usage
 
 These commands use the FastMCP CLI patterns from the FastMCP docs (`inspect`, `run`, `list`, `call`) and are wrapped in this repo's helper targets.
 
-## Transport and Codex compatibility
+### Transport and Codex compatibility
 
 - Default server entrypoint (`python app/server.py` or `mcp.run()`) uses FastMCP's standard stdio transport, which is the transport Codex MCP integrations expect.
 - Local development smoke tests in this repo use HTTP transport (`fastmcp run --transport http`) so `fastmcp list/call` can run from a second terminal.
@@ -162,7 +184,11 @@ For safe end-to-end CLI smoke checks without modifying real Things data, use `ma
 
 Sensitive URL params are redacted in tool responses (for example `auth-token`) so returned URLs are safe to log.
 
-## macOS Permissions Caveat
+## Development
+
+Use the local FastMCP helper targets and scripts when you are changing the server, its AppleScript bridge, or the bundled Things skills that depend on it, and keep the root `things-app` docs aligned when this server surface changes.
+
+### macOS Permissions Caveat
 
 Read tools use AppleScript and require macOS Automation permission for the app running Codex/Terminal to control Things. If read calls fail with permission errors:
 
@@ -182,7 +208,7 @@ Common normalized error codes:
 - `THINGS_INVALID_STATUS`: unsupported `status` filter (must be `open`, `completed`, or `canceled`).
 - `THINGS_INVALID_DATE_FILTER`: invalid date filter format (must be ISO-8601 date/datetime).
 
-## Project layout
+## Repository Layout
 
 - `app/server.py`: FastMCP server entrypoint and tool registration.
 - `app/tools.py`: tool payload builders and validation.
@@ -193,7 +219,7 @@ Common normalized error codes:
 - `docs/things-route-matrix.md`: route coverage and next implementation targets.
 - `docs/examples.md`: copy-paste local CLI examples for each major tool.
 
-## Development Quickstart
+## Verification
 
 ```bash
 uv sync
@@ -201,3 +227,7 @@ uv run pytest
 uv run ruff check .
 uv run mypy .
 ```
+
+## License
+
+Covered by the parent [`things-app`](../../README.md) repository license and tracked as part of that repo's combined release surface.

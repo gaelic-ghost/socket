@@ -2,21 +2,7 @@
 
 ## Vision
 
-- Build a focused maintainer toolkit for skills-export repositories.
-- Keep the open Agent Skills standard as the portable core while fully adopting useful OpenAI Codex and Claude Code extensions.
-- Keep this repository honest about the severe scoping limits in OpenAI's current Codex plugin system.
-
-## Product Principles
-
-- Root `skills/` stays canonical.
-- This repository ships root `.codex-plugin` packaging but does not track a repo-local marketplace or nested staged install surface for itself.
-- This repository does not ship an installer skill.
-- This repository does not ship an install-validation skill.
-- Codex limitation wording stays blunt and explicit.
-- POSIX discovery mirrors stay explicit and documented.
-- Narrow file-level maintainers and broader repo-level maintainers should stay distinct.
-- Upstream docs drift is expected and should be audited deliberately.
-- Skill behavior on real agents should be evaluated deliberately instead of inferred from static docs alone.
+## Product principles
 
 ## Milestone Progress
 

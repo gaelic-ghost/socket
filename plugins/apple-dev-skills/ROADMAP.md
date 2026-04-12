@@ -2,14 +2,7 @@
 
 ## Vision
 
-- Keep `apple-dev-skills` as a durable Apple development skill source-of-truth repo with plugin-first packaging for Codex and Claude Code.
-
-## Product Principles
-
-- Keep root `skills/` as the canonical workflow-authoring surface.
-- Prefer deterministic local scripts and validation over implied workflow behavior.
-- Keep cross-ecosystem behavior grounded in the Codex-and-Claude common denominator first, then add Claude-only extras separately.
-- Treat tests, shipped skill assets, plugin manifests, and maintainer validation as the source of truth for roadmap updates.
+## Product principles
 
 ## Milestone Progress
 

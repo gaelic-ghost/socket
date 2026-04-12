@@ -4,7 +4,7 @@
 
 - Keep `things-app` as the canonical home for Gale's Things-oriented skills plus the bundled Things MCP server, with packaging that stays honest about the mixed skills-and-server repository model.
 
-## Product Principles
+## Product principles
 
 - Keep root `skills/` as the canonical skill-authoring surface.
 - Keep the bundled MCP server self-contained under `mcp/things-app-mcp/`.

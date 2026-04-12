@@ -2,13 +2,73 @@
 
 Subtree-managed superproject for Gale's public Codex plugins and skills repositories.
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Development](#development)
+- [Release Notes](#release-notes)
+- [Verification](#verification)
+- [License](#license)
+- [Current Status](#current-status)
+- [Imported Repositories](#imported-repositories)
+- [Marketplace Shape](#marketplace-shape)
+- [Working In Socket](#working-in-socket)
+- [Repository Layout](#repository-layout)
+
 ## Overview
 
 Some skills and plugins I've been building to make Codex better and more useful at stuff that's important to me. Claude Code compat is in-progress.
 
-## Motivation
+### Status
 
-`socket` exists because Codex's current plugin and marketplace scoping is still awkward for multi-repo local work. The superproject keeps one repo-root marketplace, one Git root, and one maintainer surface while preserving each imported child repository as its own real project.
+`socket` is an active superproject with the current public child repositories imported as subtrees and wired into the root marketplace.
+
+### What This Project Is
+
+This repository owns the superproject layer only: subtree coordination, repo-root marketplace wiring, root maintainer docs, and cross-repo release and sync guidance.
+
+### Motivation
+
+It exists to keep the multi-repo plugin and skills experiment workable under one Git root while Codex still lacks better shared-parent scoping.
+
+## Setup
+
+Read the overview and marketplace sections first, then use the subtree workflow below when you need to sync or publish changes back to the imported child repositories.
+
+## Usage
+
+Use the root marketplace and maintainer docs only for the superproject layer. Use the docs inside each imported subtree for repo-specific authoring, validation, and release work.
+
+## Development
+
+### Setup
+
+Clone the repository, use the root `uv` dev environment when running the productivity maintainer scripts, and work in `plugins/<repo>/` for child-repo changes unless the task is explicitly superproject-only.
+
+### Workflow
+
+Edit the monorepo copy first, keep root docs and marketplace wiring in sync with subtree packaging changes, and use `git subtree pull` / `git subtree push` for upstream synchronization.
+
+## Verification
+
+There is no single heavy repo-wide build or test pipeline for `socket` yet.
+
+The current superproject validation surface is lightweight and structural:
+
+- keep `.agents/plugins/marketplace.json` valid JSON
+- verify that every listed `source.path` matches the real child surface the imported repo treats as installable
+- review child repository docs and packaging paths when imports or packaging layouts change
+- run child-repo-specific checks from the relevant imported subtree when the change is really about that child repo
+
+## Release Notes
+
+Use Git history plus GitHub releases for root-level superproject changes, and rely on each imported child repository to track its own shipped release notes inside its subtree.
+
+## License
+
+See [LICENSE](./LICENSE).
 
 ## Current Status
 
@@ -57,18 +117,7 @@ Treat `socket` as a superproject, not as the canonical authoring home for every 
 - For ordinary child-repo fixes that should publish back upstream, edit the monorepo copy first under `plugins/<name>/`, commit in `socket`, then push the result back out with `git subtree push --prefix=plugins/<name> <remote> <branch>`.
 - Keep the root marketplace and maintainer docs in sync whenever a child repo gains, moves, or removes plugin packaging.
 
-## Verification
-
-There is no single heavy repo-wide build or test pipeline for `socket` yet.
-
-The current superproject validation surface is lightweight and structural:
-
-- keep `.agents/plugins/marketplace.json` valid JSON
-- verify that every listed `source.path` matches the real child surface the imported repo treats as installable
-- review child repository docs and packaging paths when imports or packaging layouts change
-- run child-repo-specific checks from the relevant imported subtree when the change is really about that child repo
-
-## Layout
+## Repository Layout
 
 ```text
 .

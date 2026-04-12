@@ -127,6 +127,20 @@ def test_missing_milestone_subsection_is_reported(tmp_path: Path) -> None:
     assert "milestone-0-missing-exit-criteria" in finding_ids
 
 
+def test_apply_mode_regenerates_table_of_contents_for_additional_top_level_sections(tmp_path: Path) -> None:
+    roadmap = tmp_path / "ROADMAP.md"
+    write(
+        roadmap,
+        valid_roadmap()
+        + "\n\n## Notes\n\n- Keep extra roadmap notes in a separate top-level section when needed.\n",
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    post_report, _post_md = run(tmp_path)
+    finding_ids = {finding["finding_id"] for finding in post_report["findings"]}
+    assert report["findings"] == []
+    assert "stale-table-of-contents" not in finding_ids
+
+
 def test_invalid_milestone_status_is_reported(tmp_path: Path) -> None:
     write(
         tmp_path / "ROADMAP.md",

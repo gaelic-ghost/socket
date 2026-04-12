@@ -738,18 +738,7 @@ def validate_schema(
             )
 
     if "Table of Contents" in lookup:
-        expected_toc: List[str] = []
-        for item in order:
-            if item == MILESTONE_SLOT:
-                expected_toc.extend(
-                    f"Milestone {number}: {name}"
-                    for number, name in sorted(
-                        (parse_milestone_heading(heading) for heading, _body in milestones if parse_milestone_heading(heading)),
-                        key=lambda item: item[0],
-                    )
-                )
-            elif item in required or item in lookup:
-                expected_toc.append(item)
+        expected_toc = [heading for heading, _body in sections if heading != "Table of Contents"]
         actual_toc = toc_entries(lookup["Table of Contents"])
         if actual_toc != expected_toc:
             findings.append(

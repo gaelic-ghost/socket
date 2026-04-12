@@ -450,10 +450,9 @@ def validate_schema(
                     )
 
     if "Table of Contents" in lookup:
-        expected_toc = [heading for heading in order if heading in required or heading in lookup]
+        expected_toc = [heading for heading, _body in sections if heading != "Table of Contents"]
         actual_toc = toc_entries(lookup["Table of Contents"])
-        expected_visible = [heading for heading in expected_toc if heading != "Table of Contents"]
-        if actual_toc != expected_visible:
+        if actual_toc != expected_toc:
             schema_issues.append(
                 Issue(
                     issue_id="stale-table-of-contents",

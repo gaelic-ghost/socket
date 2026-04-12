@@ -306,6 +306,20 @@ def test_repo_structure_without_tree_outline_is_reported(tmp_path: Path) -> None
     assert "repo-structure-missing-tree-outline" in issue_ids
 
 
+def test_apply_mode_regenerates_table_of_contents_for_additional_top_level_sections(tmp_path: Path) -> None:
+    readme = tmp_path / "README.md"
+    write(
+        readme,
+        valid_readme()
+        + "\n\n## Install\n\nExplain how to install this repository's shipped surface.\n",
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    post_report, _post_md = run(tmp_path)
+    issue_ids = {issue["issue_id"] for issue in post_report["schema_violations"]}
+    assert report["post_fix_status"] == []
+    assert "stale-table-of-contents" not in issue_ids
+
+
 def test_skills_repo_is_allowed(tmp_path: Path) -> None:
     write(tmp_path / ".codex-plugin" / "plugin.json", '{"name":"demo"}')
     write(tmp_path / "skills" / "demo-skill" / "SKILL.md", "---\nname: demo-skill\n---\n")

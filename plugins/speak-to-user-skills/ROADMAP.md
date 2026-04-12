@@ -4,7 +4,7 @@
 
 - Keep `speak-to-user-skills` as a small, honest placeholder repository until the first real speech-facing skill is ready to ship.
 
-## Product Principles
+## Product principles
 
 - Keep the repository minimal until there is a real exported skill surface.
 - Keep placeholder docs honest about what the repository does and does not ship.
