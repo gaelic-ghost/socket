@@ -37,7 +37,7 @@ The package stays intentionally narrow. Hummingbird owns transport hosting, `Spe
 
 ### Current SpeakSwiftly Alignment
 
-This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `2.3.1` package dependency.
+This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `2.3.3` package dependency.
 
 Today the server relies on the current typed runtime capabilities that matter for transport hosting:
 
@@ -101,7 +101,7 @@ That narrowness also informs platform policy. The package should prefer maintain
 
 ## Setup
 
-This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` is currently pinned to the `v2.3.1` commit revision declared there instead of to a local checkout, because the upstream package still depends on `mlx-audio-swift` by revision and SwiftPM will not allow a stable-version root requirement in that graph shape.
+This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` now uses a normal semantic-version requirement, and this package follows it with an up-to-next-major constraint starting at `2.3.3`.
 
 Build the package with SwiftPM:
 

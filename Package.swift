@@ -26,7 +26,7 @@ let package = Package(
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.21.1"),
         .package(
             url: "https://github.com/gaelic-ghost/SpeakSwiftly.git",
-            revision: "71aebf705604f2d2d1a4805471c0122b254cfafd"
+            from: "2.3.3"
         ),
         .package(url: "https://github.com/ml-explore/mlx-swift-lm.git", exact: "2.30.6"),
         .package(url: "https://github.com/gaelic-ghost/TextForSpeech.git", from: "0.15.0"),

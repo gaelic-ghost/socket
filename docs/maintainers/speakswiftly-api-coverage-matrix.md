@@ -10,7 +10,7 @@ It answers three concrete questions:
 2. Which public capabilities are intentionally adapted instead of mirrored exactly?
 3. Which transport is the right client contract for each capability: HTTP, MCP, both, or neither?
 
-Current baseline checked against the `SpeakSwiftly 2.3.1` package state resolved by this repository on `2026-04-11`. The root package is pinned to the `v2.3.1` commit revision instead of a semantic-version requirement because upstream still depends on `mlx-audio-swift` by revision.
+Current baseline checked against the `SpeakSwiftly 2.3.3` package state resolved by this repository on `2026-04-12`. The root package now follows `SpeakSwiftly` with an up-to-next-major semantic-version requirement starting at `2.3.3`.
 
 ## Summary
 
