@@ -22,11 +22,11 @@ Execution policy:
 - Preserve existing preamble content such as badges, callouts, screenshots, and intro prose before the first H2.
 - Treat the configured README structure as hard-enforced.
 - Keep `Status` very short and plain about maturity or availability.
-- Treat `What This Project Is` and `Motivation` as user-authored sections that should not be replaced with invented claims.
-- Keep `Quick Start` and `Usage` human-focused and end-user friendly; prefer fenced code blocks with info strings in `Usage` when examples help.
+- Treat `What This Project Is` and `Motivation` as user-authored sections that should not be replaced with invented claims. Remind the user to author them, if they've yet to do so.
+- Keep `Quick Start` and `Usage` short, succinct, human-focused and end-user friendly; prefer fenced code blocks with info strings in `Usage` when examples help.
 - Never invent commands, setup steps, or unsupported product claims.
 - Never edit files other than the target `README.md`.
-- Never commit or push.
+- Confirm with the user before a commit or push.
 
 Output contract:
 - Return Markdown summary and JSON-ready fields for:

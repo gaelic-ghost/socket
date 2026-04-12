@@ -2,8 +2,6 @@
 
 ## Repository Expectations
 
-- For work in this repository, edit skills only under `/Users/galew/Workspace/productivity-skills/skills`.
-- Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
 - This file defines maintainer guidance for developing skills in this repository. Keep these links and rules at repo root for contributor workflows.
 - Repository direction: keep this repo focused on broadly useful global-install skills and on the canonical general-purpose baseline versions of workflow families that may later specialize into stack- or language-specific plugins. Prefer dedicated stack- or repo-specific plugins for workflows whose best version depends on stronger project-level assumptions.
 

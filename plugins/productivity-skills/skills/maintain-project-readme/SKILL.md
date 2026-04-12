@@ -7,7 +7,7 @@ description: Maintain README.md files against a hard-enforced canonical base sch
 
 Maintain `README.md` files through one deterministic base-template workflow.
 
-This skill is the general template layer for README maintenance. It defines the canonical shared README contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit configuration instead of ad hoc structure drift.
+This skill is the primary layer for README maintenance. It defines the canonical shared README contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit extension, instead of ad hoc structure drift.
 
 ## Inputs
 
@@ -29,12 +29,12 @@ This skill is the general template layer for README maintenance. It defines the 
 
 ## Writing Expectations
 
-- `Overview > Status` should be very short and plain: one simple statement about whether the project is just starting out, exploratory, in early development, stable enough to try, actively available, or superseded/inactive.
-- `Overview > What This Project Is` should be written by the user in the user's own words.
-- `Overview > Motivation` should be written by the user in the user's own words.
-- `Quick Start` should stay human-focused and end-user friendly, or explicitly say the project is still too early for a real quick start and direct curious readers to `Development`.
+- `Overview > Status` should be very short and plain: one simple, blunt sentence stating about whether the project is just starting out, exploratory, in early development, stable enough to try, actively available, or superseded/inactive.
+- `Overview > What This Project Is` must be written by the user in the user's own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
+- `Overview > Motivation` must be written by the user in the user's own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
+- `Quick Start` should stay human-focused, short, concise, and end-user friendly, or explicitly say the project is still too early for a real quick start and direct curious readers to `Development`.
 - `Usage` should stay human-focused, concise, and informative. Prefer fenced code blocks with info strings when examples help.
-- `Repo Structure` should be a small directory tree or outline diagram, not a long prose section.
+- `Repo Structure` should be a small directory tree or outline diagram, not a prose section.
 
 ## Canonical Base Contract
 
@@ -43,7 +43,7 @@ The authoritative default shared README structure lives in:
 - `config/readme-customization.template.yaml`
 - `assets/README.template.md`
 
-Treat those two files as the source of truth for the canonical base schema and the canonical bootstrap document. Downstream plugins may extend or change that structure through explicit customization, but this base skill treats the required table of contents plus the configured section block as hard-enforced.
+Treat those two files as the source of truth for the canonical base schema and the canonical bootstrap document. Downstream plugins may extend that structure through preamble and appendices, but this base skill treats the required table of contents plus the configured section block as hard-enforced.
 
 ## Output Contract
 

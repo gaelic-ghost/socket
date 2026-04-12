@@ -3,9 +3,7 @@
 ## Repository Policy
 
 - This repository is the source of truth for skill development.
-- Do all skill authoring, refactoring, testing, and maintenance only in this repository.
 - Treat managed production skills at `~/.agents/skills` as read-only deployment artifacts.
-- Never edit files under `~/.agents/skills` directly; make changes here and promote through the normal sync/release flow.
 
 ## Durable Skill Customization
 
@@ -16,7 +14,7 @@
 
 ## Maintainer Defaults
 
-- Keep the active public surface limited to the five bundled skills shipped under `skills/` in this repository's plugin root.
+- Keep the active public surface limited to the bundled skills shipped under `skills/` in this repository's plugin root.
 - Treat the root `README.md` as the canonical install and discovery surface for the repository.
 - Treat root `skills/` as the canonical workflow-authoring surface.
 - Treat `plugins/python-skills/` as the plugin packaging root for this repository.

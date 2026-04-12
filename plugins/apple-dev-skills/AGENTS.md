@@ -2,7 +2,6 @@
 
 ## Repository Expectations
 
-- For work in this repository, edit skills only under `/Users/galew/Workspace/apple-dev-skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
 - This file defines maintainer guidance for developing skills in this repository. Keep these links and rules at repo root for contributor workflows.
 

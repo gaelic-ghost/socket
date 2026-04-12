@@ -2,7 +2,6 @@
 
 ## Repository Expectations
 
-- For work in this repository, edit skills only under `/Users/galew/Workspace/agent-plugin-skills/skills`.
 - Never modify production-installed skills under `~/.agents/skills` while working in this development repository.
 - This repository is for maintainer skills that are exported for global installation.
 
