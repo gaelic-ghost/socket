@@ -10,9 +10,9 @@ Check that:
 
 - `README.md` uses the canonical `*-skills` section schema
 - `README.md` presents root `skills/` as the canonical workflow-authoring surface
-- `README.md` presents the repo as a plugin-first bundle with packaging rooted under `plugins/python-skills/`
+- `README.md` presents the repo as a shared authored skill surface with thin packaging rooted under `plugins/python-skills/`
 - `README.md` names `plugins/python-skills/` as the plugin packaging root
-- `README.md` also states the OpenAI-first, additive-Claude direction accurately
+- `README.md` states plainly that `productivity-skills` is the default baseline layer for general repo-doc and maintenance work, while this repo is the Python-specific specialization layer
 - `README.md` includes accurate direct skill install guidance from the shared `skills/` tree as well as plugin install guidance
 - `README.md` distinguishes repo-local plugin development from personal installs under `~/.codex/plugins/python-skills`
 - `README.md` documents local Claude development through `claude --plugin-dir ./plugins/python-skills`
@@ -50,7 +50,7 @@ For each `agents/openai.yaml`:
 For repo-level packaging policy:
 
 - OpenAI packaging files are present, valid, and described as the active release surface
-- Claude packaging is present, thin, and described as additive rather than as a second authored skill tree
+- Claude packaging is present, thin, and never described as a second authored skill tree
 - shared skill content is still described as the single-source workflow surface
 - Root `skills/` is the canonical workflow-authoring surface.
 - The packaged plugin root is described consistently as `plugins/python-skills/`.

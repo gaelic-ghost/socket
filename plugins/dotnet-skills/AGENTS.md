@@ -1,13 +1,12 @@
 # AGENTS.md
 
-## Repository Purpose
+## Repository Role
 
-- This repository is the standalone plugin source for future .NET-focused Codex skills.
-- Keep the repo minimal until the first real skills land.
-- Prefer adding actual skill content before expanding packaging or automation.
+- This repository is the standalone placeholder source for future .NET-focused Codex skills.
+- Keep the repo intentionally minimal until the first real skill lands.
 
-## Current Boundaries
+## Repo-specific Rules
 
-- `.codex-plugin/plugin.json` is the required Codex plugin root.
-- Do not add extra layers or repo-local install machinery yet.
-- Treat this repo as an independently versioned child repo that can also be imported into the `socket` superproject as a subtree.
+- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) is the required plugin root today.
+- Do not add extra packaging layers, repo-local install machinery, or broad maintainer automation before the repo ships real skill content.
+- Prefer adding actual skill content before expanding docs or workflow complexity.

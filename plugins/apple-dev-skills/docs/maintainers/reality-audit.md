@@ -23,7 +23,7 @@ Root `skills/` is the canonical workflow-authoring surface.
    - `AGENTS.md`
    - `ROADMAP.md`
    - `docs/maintainers/`
-   - especially `execution-split-and-inference-plan.md` and `workflow-guidance-preservation-matrix.md` while the execution split is in progress
+   - especially `execution-split-and-inference-plan.md` and `workflow-guidance-preservation-matrix.md` when validating compatibility surfaces and guidance-preservation rules
 
 Deprecated compatibility skills that remain on disk do not count as part of the active public skill surface unless the validator and root docs explicitly say otherwise.
 
@@ -60,6 +60,7 @@ Use this flow when validating the current top-level export surface and local dis
 
 ## Durable Review Criteria
 
+- Root docs should say plainly that `productivity-skills` remains the default baseline layer for general repo-doc and maintenance work, while this repo is the Apple-specific specialization layer.
 - Root docs must describe the same active skill surface.
 - Root docs must describe the current top-level export shape without treating deleted nested packaging experiments as active.
 - Maintainer-doc links in root docs must resolve on disk.

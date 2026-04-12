@@ -31,8 +31,8 @@ def test_plugin_manifest_and_marketplace_contract() -> None:
     plugin_root = REPO_ROOT / "plugins" / "python-skills"
     manifest = json.loads((plugin_root / ".codex-plugin" / "plugin.json").read_text())
     claude_manifest = json.loads((plugin_root / ".claude-plugin" / "plugin.json").read_text())
-    marketplace = json.loads((REPO_ROOT / ".agents" / "plugins" / "marketplace.json").read_text())
     claude_marketplace = json.loads((REPO_ROOT / ".claude-plugin" / "marketplace.json").read_text())
+    readme_text = (REPO_ROOT / "README.md").read_text()
 
     assert manifest["name"] == "python-skills"
     assert manifest["skills"] == "./skills/"
@@ -41,20 +41,13 @@ def test_plugin_manifest_and_marketplace_contract() -> None:
     assert claude_manifest["name"] == "python-skills"
     assert claude_manifest["version"] == manifest["version"]
 
-    plugin_entry = marketplace["plugins"][0]
-    assert marketplace["interface"]["displayName"] == "Local Python Skills"
-    assert plugin_entry["name"] == "python-skills"
-    assert plugin_entry["source"] == {"source": "local", "path": "./plugins/python-skills"}
-    assert plugin_entry["policy"]["installation"] == "AVAILABLE"
-    assert plugin_entry["policy"]["authentication"] == "ON_INSTALL"
-    assert plugin_entry["category"] == "Productivity"
-
     claude_entry = claude_marketplace["plugins"][0]
     assert claude_entry["name"] == "python-skills"
     assert claude_entry["source"] == "./plugins/python-skills"
-    assert (REPO_ROOT / ".agents" / "skills").is_symlink()
-    assert (REPO_ROOT / ".claude" / "skills").is_symlink()
     assert (plugin_root / "skills").is_symlink()
+    assert (plugin_root / "skills").readlink().as_posix() == "../../skills"
+    assert "plugins/python-skills/" in readme_text
+    assert "root [`skills/`](./skills/) is the canonical authored workflow surface" in readme_text
 
 
 def test_fastapi_scaffold_smoke(tmp_path: Path) -> None:

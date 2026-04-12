@@ -14,6 +14,8 @@ These are the only active bundled skill surfaces that root docs, plugin metadata
 
 OpenAI packaging is the live release surface today. Claude Code compatibility and packaging should stay additive over the same shared skill bodies rather than creating a second authored surface.
 
+Treat `productivity-skills` as the baseline maintainer layer for general repo-doc and maintenance work. Use `python-skills` when Python-, `uv`-, FastAPI-, FastMCP-, or pytest-specific behavior should actively change the workflow.
+
 The repository should still support both user-facing install paths:
 
 - direct skill installation from `skills/` into standard `.agents/skills` locations

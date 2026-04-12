@@ -14,6 +14,8 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 
 ## Hard Boundaries
 
+- Treat `productivity-skills` as the default baseline owner for general repo-doc and maintenance workflows.
+- Treat this repository as the specialist override only for skills-export and plugin-export repo shapes.
 - This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.
 - This repository does not track a repo-local Codex marketplace file for itself.
 - This repository does not ship `install-plugin-to-socket`.
@@ -31,6 +33,5 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 
 ## Specialist Owners
 
-- `maintain-plugin-repo`
 - `bootstrap-skills-plugin-repo`
 - `sync-skills-repo-guidance`

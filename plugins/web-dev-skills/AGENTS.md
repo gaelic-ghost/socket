@@ -1,16 +1,12 @@
 # AGENTS.md
 
-## Repository Purpose
+## Repository Role
 
-- This repository is the standalone source repo for future web-focused Codex skills.
-- Keep it intentionally minimal until real skill content exists.
+- This repository is the standalone placeholder source for future web-focused Codex skills.
+- Keep the repo intentionally minimal until the first real skill lands.
 
-## Boundaries
+## Repo-specific Rules
 
-- `.codex-plugin/plugin.json` is the required Codex plugin root.
+- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) is the required plugin root today.
 - Do not recreate nested repo-local marketplace wiring or bundled copies of other plugin repos here.
-- Do not pretend this repository already ships real skills before those skills exist.
-
-## Source Of Truth
-
-1. root repo files in this repository
+- Do not present this repository as already shipping real skills before those skills exist.

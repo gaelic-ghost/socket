@@ -20,11 +20,11 @@ Write one short, plain sentence stating whether this project is just starting ou
 
 ### What This Project Is
 
-The user must write this section in their own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
+Describe the concrete shipped surface, primary audience, and the main repo boundaries for this project.
 
 ### Motivation
 
-The user must write this section in their own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
+Describe why this project exists, what problem it solves, or why this repo is maintained separately.
 
 ## Quick Start
 

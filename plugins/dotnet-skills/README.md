@@ -1,6 +1,6 @@
 # dotnet-skills
 
-Standalone plugin repository for future .NET-focused Codex skills.
+Placeholder plugin repository for future .NET-focused Codex skills.
 
 ## Table of Contents
 
@@ -8,58 +8,56 @@ Standalone plugin repository for future .NET-focused Codex skills.
 - [Setup](#setup)
 - [Usage](#usage)
 - [Development](#development)
-- [Release Notes](#release-notes)
 - [Verification](#verification)
+- [Release Notes](#release-notes)
 - [License](#license)
 - [Repository Layout](#repository-layout)
 
 ## Overview
 
-This repository is intentionally minimal right now.
-
-- it is a real Git repository
-- it ships baseline Codex plugin packaging
-- skill content has not been authored yet
-
-Track the placeholder plan in [ROADMAP.md](./ROADMAP.md) until the first real exported skill lands.
+This repository is intentionally minimal today.
 
 ### Status
 
-This repository is still a placeholder and is not shipping authored .NET skills yet.
+`dotnet-skills` is a real plugin repository, but it does not ship authored .NET skills yet.
 
 ### What This Project Is
 
-This repository owns the future install surface for .NET-focused Codex skills once real skill content lands.
+This repository reserves the future Codex plugin surface for .NET-focused skills and keeps the placeholder packaging honest until real skills land.
 
 ### Motivation
 
-It exists to reserve a clean standalone home for future .NET skills instead of mixing that work into unrelated repos.
+It exists to keep future .NET workflow work in a dedicated repository instead of mixing that work into unrelated plugin repos too early.
 
 ## Setup
 
-There is no real end-user quick start yet. Use the Development and ROADMAP sections if you are maintaining the placeholder repository shape.
+There is no end-user quick start yet because the repository does not ship actual skill content. Use the maintainer workflow here only if you are preserving the placeholder repository shape or preparing the first real skill surface.
 
 ## Usage
 
-There is no meaningful runtime usage yet because the repository does not ship authored .NET skills today.
+There is no meaningful runtime usage yet. Today this repository is a packaging placeholder plus roadmap.
 
 ## Development
 
 ### Setup
 
-Clone the repository and review the placeholder packaging and roadmap before adding the first real exported skill.
+Review [AGENTS.md](./AGENTS.md), [ROADMAP.md](./ROADMAP.md), and the plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) before expanding the repo.
 
 ### Workflow
 
-Keep the repository minimal until the first real skill exists, then expand docs, validation, and packaging only as the shipped surface earns it.
+Keep the repo minimal until the first real skill exists. Add packaging, docs, and validation only when the shipped surface actually earns them.
 
 ## Verification
 
-Review the placeholder packaging files, keep the docs honest, and add real validation commands only when the repository starts shipping executable skill content.
+Current verification is lightweight:
+
+- keep [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) valid
+- keep placeholder docs honest about the repo not shipping real skills yet
+- add real validation commands only when the repository starts shipping executable or testable skill content
 
 ## Release Notes
 
-Use Git history now for placeholder-repo changes, and add GitHub release tracking once the repository starts shipping real .NET skill content.
+Use Git history for placeholder-stage changes. Add GitHub release tracking once the repository begins shipping real .NET skill content.
 
 ## License
 
@@ -72,6 +70,7 @@ See [LICENSE](./LICENSE).
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
+├── LICENSE
 ├── README.md
 └── ROADMAP.md
 ```

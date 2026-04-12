@@ -35,8 +35,8 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | --- | --- | --- |
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | Canonical shared README maintainer | `check-only`, `apply`, repo-profile detection, clean run |
-| `maintain-project-agents` | General AGENTS maintainer for ordinary projects | `check-only`, `apply`, repo-profile detection, clean run |
-| `maintain-project-contributing` | General CONTRIBUTING maintainer for ordinary software projects | `check-only`, `apply`, repo-profile detection, clean run |
+| `maintain-project-agents` | Default baseline AGENTS maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
+| `maintain-project-contributing` | Default baseline CONTRIBUTING maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-project-repo` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
 
@@ -113,7 +113,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Overview**
 
-- Triggered when the user wants deterministic auditing for an ordinary project-local `AGENTS.md`.
+- Triggered when the user wants deterministic auditing for a project-local `AGENTS.md` and no narrower plugin owns that repo shape.
 - Primary workflow.
 - `read-only`
 
@@ -154,7 +154,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Overview**
 
-- Triggered when the user wants deterministic auditing for an ordinary software-project `CONTRIBUTING.md`.
+- Triggered when the user wants deterministic auditing for a project-local `CONTRIBUTING.md` and no narrower plugin owns that repo shape.
 - Primary workflow.
 - `read-only`
 

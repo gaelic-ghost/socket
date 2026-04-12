@@ -18,14 +18,15 @@ HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 README_REQUIRED_HEADINGS = [
     "# python-skills",
     "## Table of Contents",
-    "## What This Codex Plugin Includes",
-    "## Bundled Skill Guide",
-    "## Platform Direction",
-    "## Install As Skills",
-    "## Plugin Structure",
-    "## Maintainer Workflow",
-    "## Notes",
-    "## Keywords",
+    "## Overview",
+    "## Setup",
+    "## Usage",
+    "## Development",
+    "## Verification",
+    "## Release Notes",
+    "## Active Skills",
+    "## Packaging",
+    "## Repository Layout",
     "## License",
 ]
 
@@ -357,66 +358,6 @@ def validate_plugin_manifest(
     return findings
 
 
-def validate_marketplace(repo_root: Path) -> list[Finding]:
-    findings: list[Finding] = []
-    marketplace_path = repo_root / ".agents" / "plugins" / "marketplace.json"
-    rel_path = str(marketplace_path.relative_to(repo_root))
-
-    if not marketplace_path.exists():
-        return [Finding(rel_path, "missing local plugin marketplace file")]
-
-    try:
-        marketplace = load_json(marketplace_path)
-    except (ValueError, json.JSONDecodeError) as exc:
-        return [Finding(rel_path, str(exc))]
-
-    plugins = marketplace.get("plugins")
-    if not isinstance(plugins, list) or not plugins:
-        return [Finding(rel_path, "plugins must be a non-empty list")]
-
-    matched_plugin = None
-    for plugin in plugins:
-        if isinstance(plugin, dict) and plugin.get("name") == "python-skills":
-            matched_plugin = plugin
-            break
-
-    if matched_plugin is None:
-        return [Finding(rel_path, "marketplace must include a python-skills plugin entry")]
-
-    source = matched_plugin.get("source")
-    if not isinstance(source, dict):
-        findings.append(Finding(rel_path, "plugin source must be a mapping"))
-    else:
-        source_type = source.get("source")
-        if source_type != "local":
-            findings.append(Finding(rel_path, "plugin source.source must be 'local'"))
-        source_path_value = source.get("path")
-        if not isinstance(source_path_value, str) or not source_path_value.startswith("./"):
-            findings.append(Finding(rel_path, "plugin source.path must be a relative local path starting with ./"))
-        else:
-            plugin_root = (repo_root / source_path_value.removeprefix("./")).resolve()
-            expected_plugin_root = (repo_root / "plugins" / PLUGIN_DIR_NAME).resolve()
-            if plugin_root != expected_plugin_root:
-                findings.append(Finding(rel_path, f"plugin source.path must resolve to plugins/{PLUGIN_DIR_NAME}"))
-            if not (plugin_root / ".codex-plugin" / "plugin.json").exists():
-                findings.append(Finding(rel_path, "plugin source.path does not point at a valid plugin root"))
-
-    policy = matched_plugin.get("policy")
-    if not isinstance(policy, dict):
-        findings.append(Finding(rel_path, "plugin policy must be a mapping"))
-    else:
-        for key in ("installation", "authentication"):
-            value = policy.get(key)
-            if not isinstance(value, str) or not value.strip():
-                findings.append(Finding(rel_path, f"plugin policy.{key} must be a non-empty string"))
-
-    category = matched_plugin.get("category")
-    if not isinstance(category, str) or not category.strip():
-        findings.append(Finding(rel_path, "plugin category must be a non-empty string"))
-
-    return findings
-
-
 def validate_claude_marketplace(repo_root: Path) -> list[Finding]:
     findings: list[Finding] = []
     marketplace_path = repo_root / ".claude-plugin" / "marketplace.json"
@@ -457,8 +398,6 @@ def validate_claude_marketplace(repo_root: Path) -> list[Finding]:
 def validate_skill_mirrors(repo_root: Path) -> list[Finding]:
     findings: list[Finding] = []
     expected_symlinks = {
-        repo_root / ".agents" / "skills": "../skills",
-        repo_root / ".claude" / "skills": "../skills",
         repo_root / "plugins" / PLUGIN_DIR_NAME / "skills": "../../skills",
     }
     for path, target in expected_symlinks.items():
@@ -481,8 +420,6 @@ def validate_doc_inventory(repo_root: Path, skill_dirs: list[Path]) -> list[Find
         skill_name = skill_dir.name
         if f"`{skill_name}`" not in readme_text:
             findings.append(Finding("README.md", f"skill missing from root docs: {skill_name}"))
-        if f"{skill_name}/" not in readme_text:
-            findings.append(Finding("README.md", f"plugin structure docs missing skill directory: {skill_name}/"))
     return findings
 
 
@@ -510,7 +447,6 @@ def run(repo_root: Path) -> list[Finding]:
             require_skills_interface=False,
         )
     )
-    findings.extend(validate_marketplace(repo_root))
     findings.extend(validate_claude_marketplace(repo_root))
     findings.extend(validate_skill_mirrors(repo_root))
     findings.extend(validate_doc_inventory(repo_root, skill_dirs))

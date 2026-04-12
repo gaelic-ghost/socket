@@ -188,9 +188,10 @@ Use these conventions when editing repo-maintainer guidance.
 - `maintain-project-agents` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-contributing` reserves exact `No findings.` for clean runs that finish without remaining issues or errors.
 - `maintain-project-roadmap` is the canonical owner of checklist-style `ROADMAP.md` maintenance.
-- `maintain-project-agents` is the canonical owner of ordinary project-local `AGENTS.md` maintenance.
-- `maintain-project-contributing` is the canonical owner of ordinary-project `CONTRIBUTING.md` maintenance.
-- In this repo, `maintain-project-readme`, `maintain-project-agents`, `maintain-project-contributing`, and `maintain-project-roadmap` are the strategic maintainer skills for ordinary project docs.
+- `maintain-project-agents` is the canonical default owner of project-local `AGENTS.md` maintenance for most repos.
+- `maintain-project-contributing` is the canonical default owner of project-local `CONTRIBUTING.md` maintenance for most repos.
+- In this repo, `maintain-project-readme`, `maintain-project-agents`, `maintain-project-contributing`, and `maintain-project-roadmap` are the strategic baseline maintainer skills for most repository docs.
+- When the target repository is itself a skills-export or plugin-export repo, the narrower maintainer guidance belongs in `agent-plugin-skills` instead of being forced into this baseline layer.
 - Agent-stack repo-maintainer skills now live in `/Users/galew/Workspace/agent-plugin-skills`, not in this repository.
 - Root `skills/` is the canonical workflow-authoring surface.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
