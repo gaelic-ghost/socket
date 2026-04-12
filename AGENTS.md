@@ -25,6 +25,8 @@
 
 - Start from the root docs when the task is about subtree imports, root marketplace wiring, or monorepo release flow.
 - Start from the child repo docs when the task is really about one imported repo's own behavior.
+- When a child repository already exists under `plugins/`, do the work in the monorepo copy first unless Gale explicitly asks for a separate checkout, worktree, or direct child-repo workflow.
+- For ordinary child-repo fixes that should publish back to the source repository, prefer this sequence: edit `plugins/<repo-name>/`, commit in `socket`, then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>` instead of cloning a temporary standalone checkout.
 - When importing a new child repository, add or update the matching named git remote first, then use `git subtree add --prefix=plugins/<repo-name> <remote> <branch>` in a dedicated commit.
 - When syncing an existing child repository, use `git subtree pull --prefix=plugins/<repo-name> <remote> <branch>` in a dedicated commit and re-check any affected socket docs or marketplace paths immediately afterward.
 - When a child repo gains, removes, or moves plugin packaging, update `.agents/plugins/marketplace.json`, `README.md`, and the maintainer docs in the same pass.
