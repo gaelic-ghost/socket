@@ -1,2 +1,2 @@
 interface:
-  default_prompt: "Use $maintain-plugin-repo as the repo-level maintainer entrypoint for a skills-export repository. Audit the repo model first, warn plainly about OpenAI's Codex plugin scoping limits whenever relevant, keep nested staged plugin-directory, repo-marketplace, and installer guidance out of the repo, and route any supported narrow docs fixes through $maintain-plugin-docs."
+  default_prompt: "Use $maintain-plugin-repo as the repo-level maintainer entrypoint for a skills-export repository. Audit the repo model first, warn plainly about OpenAI's Codex plugin scoping limits whenever relevant, and keep nested staged plugin-directory, repo-marketplace, and installer guidance out of the repo."

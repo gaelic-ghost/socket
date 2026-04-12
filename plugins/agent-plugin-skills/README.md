@@ -56,9 +56,7 @@ Codex's documented plugin model splits plugin wiring across separate surfaces th
 ## Exported Skills
 
 - `maintain-plugin-repo`
-  - Repo-level maintainer entrypoint for auditing and tightening a skills-export repository.
-- `maintain-plugin-docs`
-  - Docs-maintenance helper for README, ROADMAP, and cross-doc drift in skills-export repositories.
+  - Repo-level maintainer entrypoint for auditing and tightening a skills-export repository without promising a separate docs-only automation surface.
 - `bootstrap-skills-plugin-repo`
   - Bootstrap and structural-alignment helper for creating a clean skills-export repository with root `skills/` and local discovery mirrors.
 - `sync-skills-repo-guidance`
@@ -111,7 +109,6 @@ Claude Code continues to support direct `.claude/skills` discovery for local aut
 ├── AGENTS.md
 ├── skills/
 │   ├── bootstrap-skills-plugin-repo/
-│   ├── maintain-plugin-docs/
 │   ├── maintain-plugin-repo/
 │   └── sync-skills-repo-guidance/
 ├── docs/

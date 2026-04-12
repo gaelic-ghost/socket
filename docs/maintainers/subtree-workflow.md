@@ -13,6 +13,8 @@ This document explains how `socket` is maintained as a subtree-based superprojec
 
 `socket` does not replace the imported child repositories as their own source of truth.
 
+For ordinary child-repo fixes that should publish back to the source repository, work in the monorepo copy first under `plugins/<name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<name> <remote> <branch>` instead of switching to a separate standalone checkout by default.
+
 ## Child Repository Shape
 
 Each imported child repository remains a real repository with its own internal layout, docs, and packaging choices.

@@ -31,7 +31,6 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 
 ## Specialist Owners
 
-- `maintain-plugin-docs`
 - `maintain-plugin-repo`
 - `bootstrap-skills-plugin-repo`
 - `sync-skills-repo-guidance`

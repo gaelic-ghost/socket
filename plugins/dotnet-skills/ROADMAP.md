@@ -2,7 +2,7 @@
 
 ## Vision
 
-- Keep `web-dev-skills` as a small, honest placeholder repository until the first real web-focused skill is ready to ship.
+- Keep `dotnet-skills` as a small, honest placeholder repository until the first real .NET-focused skill is ready to ship.
 
 ## Product Principles
 
@@ -12,15 +12,15 @@
 
 ## Milestone Progress
 
-- [ ] Milestone 1: first exported web skill
+- [ ] Milestone 1: first exported .NET skill
 - [ ] Milestone 2: repository docs and validation expansion
 - [ ] Milestone 3: long-term home decision
 
-## Milestone 1: first exported web skill
+## Milestone 1: first exported .NET skill
 
 Scope:
 
-- Author the first real web-focused skill for Codex.
+- Author the first real .NET-focused skill for Codex.
 
 Tickets:
 
@@ -29,7 +29,7 @@ Tickets:
 
 Exit criteria:
 
-- [ ] The repository ships at least one real web-focused skill.
+- [ ] The repository ships at least one real .NET-focused skill.
 
 ## Milestone 2: repository docs and validation expansion
 

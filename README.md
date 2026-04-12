@@ -1,6 +1,6 @@
 # socket
 
-Superproject for Codex Plugins and Agent Skills.
+Subtree-managed superproject for Gale's public Codex plugins and skills repositories.
 
 ## Overview
 
@@ -8,11 +8,11 @@ Some skills and plugins I've been building to make Codex better and more useful 
 
 ## Motivation
 
-`socket` exists because Codex's current plugin system is kind of a mess, tbh.
+`socket` exists because Codex's current plugin and marketplace scoping is still awkward for multi-repo local work. The superproject keeps one repo-root marketplace, one Git root, and one maintainer surface while preserving each imported child repository as its own real project.
 
 ## Current Status
 
-Very WIP, moving stuff over slowly to become subtrees.
+Active experiment, with the current public child repositories already imported as subtrees and wired into the root marketplace.
 
 ## Imported Repositories
 
@@ -28,7 +28,7 @@ The current subtree-managed child repositories are:
 - `web-dev-skills`
 - `things-app`
 
-Each child repository keeps its own source-of-truth docs and history inside its imported subtree. `socket` is responsible for the superproject concerns around import shape, root marketplace wiring, and cross-repo maintenance workflow.
+Each child repository keeps its own docs, release history, and packaging decisions inside its imported subtree. `socket` owns only the superproject layer: subtree layout, root marketplace wiring, and cross-repo maintainer guidance.
 
 ## Marketplace Shape
 
@@ -54,7 +54,7 @@ Treat `socket` as a superproject, not as the canonical authoring home for every 
 
 - Use the root docs to understand how subtree imports, root marketplace wiring, and release flow work.
 - Use the child repository docs inside `plugins/<name>/` when the work is really about that child repo's own skills, plugin packaging, tests, or release process.
-- Prefer updating child repositories at their source roots and then syncing the subtree into `socket` unless the task is explicitly about the monorepo itself.
+- For ordinary child-repo fixes that should publish back upstream, edit the monorepo copy first under `plugins/<name>/`, commit in `socket`, then push the result back out with `git subtree push --prefix=plugins/<name> <remote> <branch>`.
 - Keep the root marketplace and maintainer docs in sync whenever a child repo gains, moves, or removes plugin packaging.
 
 ## Verification

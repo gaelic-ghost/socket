@@ -61,7 +61,7 @@ Current local discovery scaffolding lives under:
 
 For new installs, prompts, and examples, prefer the narrower execution-skill names over the legacy compatibility entrypoints.
 
-Maintainer guidance for those adjacent surfaces now exists in [AGENTS.md](./AGENTS.md):
+Maintainer guidance for those adjacent surfaces lives in [AGENTS.md](./AGENTS.md).
 
 ## Standards And Docs
 
@@ -205,10 +205,12 @@ Use these snippets for cross-project standards that belong in end-user `AGENTS.m
     ├── format-swift-sources/
     ├── swift-package-build-run-workflow/
     ├── swift-package-testing-workflow/
-    ├── swift-package-workflow/
-    ├── structure-swift-sources/
     ├── sync-swift-package-guidance/
     ├── sync-xcode-project-guidance/
+    ├── xcode-build-run-workflow/
+    ├── xcode-testing-workflow/
+    ├── swift-package-workflow/
+    ├── structure-swift-sources/
     └── xcode-app-project-workflow/
 ```
 

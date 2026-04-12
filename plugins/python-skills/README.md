@@ -148,7 +148,7 @@ Keep the repo packaging and skill metadata consistent:
 - Keep direct skill install guidance accurate too; this repo supports both plugin installs and direct skill installs from the shared `skills/` tree.
 - Keep bundled skills under `skills/` only; do not reintroduce a flat top-level skill layout.
 - Treat each skill's `SKILL.md` plus `agents/openai.yaml` as the canonical per-skill contract pair.
-- Route ongoing install, update, uninstall, verify, enable, disable, and promote workflows through `install-plugin-to-socket` rather than implying the repo-sync workflow owns those lifecycle actions.
+- Use the adjacent `agent-plugin-skills` maintainer workflows when this repository itself needs cross-doc or packaging alignment work, rather than recreating retired installer or install-surface validator flows here.
 - Track canonical plugin source trees and shared marketplace catalogs in git.
 - Do not track consumer-side install copies, caches, or machine-local runtime state.
 - Keep maintainer Python tooling explicit and repo-local:

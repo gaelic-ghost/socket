@@ -2,16 +2,18 @@
 
 Standalone plugin repository for future speech-facing and spoken-reply Codex skills.
 
-## Current Status
+## Overview
 
 This repository is intentionally minimal right now.
 
 - it is a real Git source repository again
 - it ships baseline Codex plugin packaging
 - skill content has not been authored yet
-- `socket` is expected to import this repository as a subtree when Gale wants it present in the monorepo
+- the repository stays compatible with `socket` subtree import and sync workflows
 
-## Layout
+Track the placeholder plan in [ROADMAP.md](./ROADMAP.md) until the first real exported skill lands.
+
+## Repository Layout
 
 ```text
 .

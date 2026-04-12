@@ -95,6 +95,7 @@ That repo-root test run currently targets the Python-backed digest skill test su
 │   └── skills -> ../skills
 ├── AGENTS.md
 ├── README.md
+├── ROADMAP.md
 ├── mcp/
 │   └── things-app-mcp/
 ├── plugins/
@@ -114,3 +115,4 @@ That repo-root test run currently targets the Python-backed digest skill test su
 - Keep active skill runtime assets self-contained inside each skill directory.
 - Prefer `uv run pytest` for the Python-backed digest skill test surface.
 - Treat `things-app` as the canonical repo home for the Things skills and bundled MCP server.
+- Track in-flight repo work in [ROADMAP.md](./ROADMAP.md).

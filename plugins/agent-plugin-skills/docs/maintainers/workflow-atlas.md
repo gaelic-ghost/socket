@@ -8,8 +8,7 @@ For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-inst
 
 | Skill | Role | Output |
 | --- | --- | --- |
-| `maintain-plugin-repo` | repo-level audit and bounded docs-routing entrypoint | grouped findings, owner assignments, routed safe fixes when available |
-| `maintain-plugin-docs` | README, ROADMAP, and cross-doc maintenance | docs findings, narrow deterministic fixes when available |
+| `maintain-plugin-repo` | repo-level audit entrypoint for repo-model drift and forbidden-contract detection | grouped findings, owner assignments |
 | `bootstrap-skills-plugin-repo` | bootstrap or align a clean skills-export repo shape | scaffold actions, findings |
 | `sync-skills-repo-guidance` | audit README, AGENTS, maintainer docs, and discovery mirrors for guidance drift | guidance findings |
 
@@ -24,6 +23,5 @@ For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-inst
 ## Recommended Flow
 
 1. Use `maintain-plugin-repo` when the repo feels drifted overall.
-2. Use `maintain-plugin-docs` for bounded README or ROADMAP work.
-3. Use `bootstrap-skills-plugin-repo` when creating or aligning a new skills-export repo.
-4. Use `sync-skills-repo-guidance` when the repo shape is right but the docs and mirrors have drifted.
+2. Use `bootstrap-skills-plugin-repo` when creating or aligning a new skills-export repo.
+3. Use `sync-skills-repo-guidance` when the repo shape is right but the docs and mirrors have drifted.

@@ -28,6 +28,7 @@
 - [ ] Milestone 5: skills repo migration and split support
 - [ ] Milestone 6: upstream docs watch and change intake
 - [ ] Milestone 7: `skill-evals`
+- [x] Milestone 8: retire `maintain-plugin-docs`
 
 ## Milestone 0: Foundation bootstrap
 
@@ -184,3 +185,21 @@ Exit criteria:
 
 - [ ] Maintainers can run one coherent workflow to evaluate a skill on real agent surfaces instead of relying only on static review.
 - [ ] The repo has a durable place for testing trigger behavior and workflow fidelity across supported agents.
+
+## Milestone 8: retire `maintain-plugin-docs`
+
+Scope:
+
+- Remove the standalone docs-only maintainer skill from the exported surface.
+- Keep repo-level and guidance-sync workflows honest about the narrower surface that remains.
+
+Tickets:
+
+- [x] Remove `maintain-plugin-docs` from the shipped skill inventory.
+- [x] Remove repo-level script routing that depended on `maintain-plugin-docs`.
+- [x] Update README, maintainer docs, tests, and repo metadata to match the smaller exported surface.
+
+Exit criteria:
+
+- [x] The exported skill inventory no longer includes `maintain-plugin-docs`.
+- [x] No shipped workflow promises a docs-only routed maintenance path through a deleted skill.

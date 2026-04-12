@@ -548,7 +548,7 @@ Scope:
 Tickets:
 
 - Confirm the personal-scope maintainer install of `agent-plugin-skills` stays current for work on this repository without reintroducing a nested packaged plugin tree here.
-- Use `maintain-plugin-repo` as the repo-wide audit and coordination entrypoint, with `maintain-plugin-docs` as the routed doc-maintenance owner where relevant.
+- Use `maintain-plugin-repo` and `sync-skills-repo-guidance` as the maintainer entrypoints for repo-wide audit, coordination, and documentation alignment where relevant.
 - Align repo docs, export surfaces, ignores, and maintainer guidance with the current shared standards without flattening repo-specific policy.
 - Remove tracked vendored maintainer-plugin copies and stale nested packaging language from this repo while keeping the adjacent standards source as the maintainer-only setup.
 
