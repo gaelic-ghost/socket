@@ -6,6 +6,7 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 
 ## Table of Contents
 
+- [What This Codex Plugin Includes](#what-this-codex-plugin-includes)
 - [Bundled Skill Guide](#bundled-skill-guide)
 - [Platform Direction](#platform-direction)
 - [Install As Skills](#install-as-skills)
@@ -14,6 +15,10 @@ For standards and maintainer operating guidance, see [AGENTS.md](./AGENTS.md).
 - [Notes](#notes)
 - [Keywords](#keywords)
 - [License](#license)
+
+## What This Codex Plugin Includes
+
+This plugin packages the shared Python skill tree for Codex and keeps the vendor-specific install surface thin. The actual workflow content lives under `skills/`, while `plugins/python-skills/` carries the packaged Codex and Claude plugin manifests that point back to that shared skill set.
 
 ## Bundled Skill Guide
 
