@@ -1,6 +1,6 @@
 [project]
 name = "apple-dev-skills-maintainer"
-version = "5.0.0-rc.6"
+version = "5.0.0-rc.7"
 description = "Maintainer tooling for the apple-dev-skills repository"
 requires-python = ">=3.9"
 dependencies = []
