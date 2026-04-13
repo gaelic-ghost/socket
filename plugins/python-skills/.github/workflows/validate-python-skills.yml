@@ -25,5 +25,8 @@ jobs:
       - name: Validate repo metadata
         run: bash .github/scripts/validate_repo_docs.sh
 
+      - name: Install zsh for scaffold smoke tests
+        run: sudo apt-get update && sudo apt-get install -y zsh
+
       - name: Run test suite
         run: uv run pytest
