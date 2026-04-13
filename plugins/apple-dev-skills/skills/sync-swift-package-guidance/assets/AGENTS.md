@@ -17,6 +17,9 @@
 - Keep data flow straight and dependency direction unidirectional.
 - Treat `Package.swift` as the source of truth for package structure, targets, products, and dependencies.
 - Prefer `swift package` subcommands for structural package edits before manually editing `Package.swift`.
+- Edit `Package.swift` intentionally and keep it readable; agents may modify it when package structure, targets, products, or dependencies need to change, and should try to keep package graph updates consolidated in one change when possible.
+- Avoid adding unnecessary dependency-provenance detail or switching to branch/revision-based requirements unless the user explicitly asks for that level of control.
+- Treat `Package.resolved` and similar package-manager outputs as generated files; do not hand-edit them.
 - Prefer Swift Testing by default unless an external constraint requires XCTest.
 - Keep package resources under the owning target tree, declare them intentionally with `Resource.process(...)`, `Resource.copy(...)`, `Resource.embedInCode(...)`, and load them through `Bundle.module`.
 - Keep test fixtures as test-target resources instead of relying on the working directory.

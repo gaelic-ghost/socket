@@ -72,7 +72,9 @@ Use this snippet in repository `AGENTS.md` files when you want cross-project Swi
 
 - Use Swift Package Manager as the source of truth for package structure and dependencies outside Xcode-managed app workflows.
 - Prefer `swift package` subcommands for dependency, target, and manifest-adjacent changes before hand-editing `Package.swift`.
-- Keep package graph updates cohesive across `Package.swift`, `Package.resolved`, and related source or test targets.
+- Edit `Package.swift` intentionally and keep it readable; agents may modify it when package structure, targets, products, or dependencies need to change, and should try to keep package graph updates consolidated in one change when possible.
+- Avoid adding unnecessary dependency-provenance detail or switching to branch/revision-based requirements unless the user explicitly asks for that level of control.
+- Treat `Package.resolved` and similar package-manager outputs as generated files; do not hand-edit them.
 - Run `swift build` and `swift test` as the default validation checks after package-level changes.
 - Keep toolchain selection explicit and reproducible across local development and CI when supporting multiple Swift versions or platforms.
 - Prefer portable SwiftPM and CLI workflows for server-side or cross-platform Swift code, and avoid assuming Apple-only SDKs or Xcode-only behavior unless the project explicitly requires them.

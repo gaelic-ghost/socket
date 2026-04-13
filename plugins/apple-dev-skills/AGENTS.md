@@ -17,6 +17,8 @@
 - Prefer framework-provided behavior over custom boilerplate. Do not add extra wrappers, coordinators, custom codable glue, or renaming layers unless a concrete constraint requires them or they make the final code clearly easier to understand.
 - Preserve source-of-truth names when the meaning has not changed, and avoid automatic case-conversion strategies unless the project explicitly wants them.
 - Keep `explore-apple-swift-docs` as the canonical docs-routing surface instead of re-embedding broad docs-source selection logic into execution skills.
+- For SwiftPM guidance, edit `Package.swift` intentionally and keep it readable. Agents may modify it when package structure, targets, products, or dependencies need to change, should avoid adding unnecessary dependency-provenance detail or switching to branch/revision-based requirements unless the user explicitly asks for that level of control, and should try to keep package graph updates consolidated in one change when possible.
+- Treat `Package.resolved` and similar package-manager outputs as generated files. Do not tell agents to hand-edit them.
 
 ## Export Boundaries
 

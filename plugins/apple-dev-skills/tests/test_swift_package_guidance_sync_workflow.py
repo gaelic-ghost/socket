@@ -81,6 +81,9 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn(".metallib", agents_text)
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("Debug and Release", agents_text)
+            self.assertIn("branch/revision-based requirements", agents_text)
+            self.assertIn("Package.resolved", agents_text)
+            self.assertIn("one change when possible", agents_text)
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
             self.assertIn(
@@ -102,6 +105,9 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("## Swift Package Workflow", agents_text)
             self.assertIn("Bundle.module", agents_text)
             self.assertIn(".metallib", agents_text)
+            self.assertIn("branch/revision-based requirements", agents_text)
+            self.assertIn("Package.resolved", agents_text)
+            self.assertIn("one change when possible", agents_text)
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="swift-package"',

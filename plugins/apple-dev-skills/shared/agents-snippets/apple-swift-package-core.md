@@ -53,7 +53,9 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 
 - Use Swift Package Manager as the source of truth for package structure and dependencies outside Xcode-managed app workflows.
 - Prefer `swift package` subcommands for dependency, target, and manifest-adjacent changes before hand-editing `Package.swift`.
-- Keep package graph updates cohesive across `Package.swift`, `Package.resolved`, and related source or test targets.
+- Edit `Package.swift` intentionally and keep it readable; agents may modify it when package structure, targets, products, or dependencies need to change, and should try to keep package graph updates consolidated in one change when possible.
+- Avoid adding unnecessary dependency-provenance detail or switching to branch/revision-based requirements unless the user explicitly asks for that level of control.
+- Treat `Package.resolved` and similar package-manager outputs as generated files; do not hand-edit them.
 - Keep package resources under the owning target directory, typically below `Sources/<TargetName>/Resources` or `Tests/<TargetName>Tests/Resources`, so target membership stays obvious.
 - Declare non-automatic resources intentionally with `Resource.process(...)`, `Resource.copy(...)`, or `Resource.embedInCode(...)` according to the distribution need.
 - Prefer `Resource.process(...)` when platform-aware processing or optimization is desired, and prefer `Resource.copy(...)` when the bytes or directory layout must be preserved exactly.

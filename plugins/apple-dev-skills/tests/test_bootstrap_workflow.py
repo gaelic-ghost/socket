@@ -482,6 +482,9 @@ exec "{real_swift}" "$@"
             self.assertIn(".xctestplan", agents_text)
             self.assertIn(".metallib", agents_text)
             self.assertIn("Debug and Release", agents_text)
+            self.assertIn("branch/revision-based requirements", agents_text)
+            self.assertIn("Package.resolved", agents_text)
+            self.assertIn("one change when possible", agents_text)
             self.assertTrue((package_dir / "scripts" / "repo-maintenance" / "sync-shared.sh").is_file())
 
 

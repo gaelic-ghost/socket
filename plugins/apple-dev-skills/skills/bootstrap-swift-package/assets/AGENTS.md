@@ -19,7 +19,9 @@
 - Use `swift package add-dependency` to add dependencies instead of hand-editing package graphs.
 - Use `swift package add-target` to add library, executable, or test targets.
 - For package configuration not covered by CLI commands, update `Package.swift` intentionally and keep edits minimal.
-- Keep package graph updates together in the same change (`Package.swift`, `Package.resolved`, and target/test layout when applicable).
+- Edit `Package.swift` intentionally and keep it readable; agents may modify it when package structure, targets, products, or dependencies need to change, and should try to keep package graph updates consolidated in one change when possible.
+- Avoid adding unnecessary dependency-provenance detail or switching to branch/revision-based requirements unless the user explicitly asks for that level of control.
+- Treat `Package.resolved` and similar package-manager outputs as generated files; do not hand-edit them.
 - Validate package changes with:
   - `swift build`
   - `swift test`
