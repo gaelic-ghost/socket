@@ -201,6 +201,7 @@ extension SpeakSwiftlyServerE2ETests {
             try stabilizeBuiltInAudioRouteForAudiblePlayback()
         }
 
+        let executionLaneLease = try E2ELiveServerExecutionLaneLease.acquire(timeout: e2eTimeout)
         let publishedRuntimeArtifacts = try speakSwiftlyPublishedRuntimeArtifacts(configuration: "Debug")
         let executableURL = try serverToolExecutableURL()
         try stageMetallibForServerBinary(
@@ -209,6 +210,7 @@ extension SpeakSwiftlyServerE2ETests {
         )
 
         return try ServerProcess(
+            executionLaneLease: executionLaneLease,
             executableURL: executableURL,
             profileRootURL: profileRootURL,
             port: port,

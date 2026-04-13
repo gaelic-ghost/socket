@@ -7,6 +7,7 @@ import Darwin
 // MARK: - Live Server Process
 
 final class ServerProcess: @unchecked Sendable {
+    private let executionLaneLease: E2ELiveServerExecutionLaneLease
     private let process = Process()
     private let stdoutPipe = Pipe()
     private let stderrPipe = Pipe()
@@ -16,6 +17,7 @@ final class ServerProcess: @unchecked Sendable {
     let baseURL: URL
 
     init(
+        executionLaneLease: E2ELiveServerExecutionLaneLease,
         executableURL: URL,
         profileRootURL: URL,
         port: Int,
@@ -27,6 +29,7 @@ final class ServerProcess: @unchecked Sendable {
         guard let baseURL = URL(string: "http://127.0.0.1:\(port)") else {
             throw E2ETransportError("The live end-to-end suite could not construct a localhost base URL for port '\(port)'.")
         }
+        self.executionLaneLease = executionLaneLease
         self.baseURL = baseURL
 
         process.executableURL = executableURL
@@ -68,6 +71,7 @@ final class ServerProcess: @unchecked Sendable {
         terminateProcessIfNeeded()
         stdoutTask?.cancel()
         stderrTask?.cancel()
+        executionLaneLease.release()
     }
 
     var isStillRunning: Bool {
@@ -128,6 +132,10 @@ final class ServerProcess: @unchecked Sendable {
 
     private let stdoutRecorder = SynchronizedLogBuffer()
     private let stderrRecorder = SynchronizedLogBuffer()
+
+    deinit {
+        stop()
+    }
 
     private func terminateProcessIfNeeded() {
         guard process.isRunning else { return }
@@ -201,4 +209,83 @@ final class ServerProcess: @unchecked Sendable {
             }
         }
     }
+}
+
+// MARK: - Live Server Lane Lease
+
+final class E2ELiveServerExecutionLaneLease: @unchecked Sendable {
+    private static let lockURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        .appendingPathComponent("speak-swiftly-server-e2e-live-server.lock", isDirectory: false)
+
+    private var fileDescriptor: Int32?
+    private let lockPath: String
+
+    private init(fileDescriptor: Int32, lockPath: String) {
+        self.fileDescriptor = fileDescriptor
+        self.lockPath = lockPath
+    }
+
+    static func acquire(timeout: Duration = .seconds(60)) throws -> E2ELiveServerExecutionLaneLease {
+        let lockPath = lockURL.path
+        let descriptor = open(lockPath, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
+        guard descriptor >= 0 else {
+            throw E2ETransportError(
+                "The live end-to-end suite could not open the exclusive server-lane lock file at '\(lockPath)'."
+            )
+        }
+
+        let timeoutNanoseconds = durationToNanoseconds(timeout)
+        let pollIntervalNanoseconds: UInt64 = 100_000_000
+        let deadline = DispatchTime.now().uptimeNanoseconds &+ timeoutNanoseconds
+
+        while true {
+            if flock(descriptor, LOCK_EX | LOCK_NB) == 0 {
+                return E2ELiveServerExecutionLaneLease(fileDescriptor: descriptor, lockPath: lockPath)
+            }
+
+            let currentErrno = errno
+            guard currentErrno == EWOULDBLOCK else {
+                close(descriptor)
+                throw E2ETransportError(
+                    "The live end-to-end suite could not acquire the exclusive server-lane lock at '\(lockPath)' because `flock` failed with errno \(currentErrno)."
+                )
+            }
+
+            if DispatchTime.now().uptimeNanoseconds >= deadline {
+                close(descriptor)
+                throw E2ETransportError(
+                    "The live end-to-end suite waited more than \(durationDescription(timeout)) for the exclusive server-lane lock at '\(lockPath)'. Another live server test or an orphaned helper is still holding the lane."
+                )
+            }
+
+            usleep(UInt32(pollIntervalNanoseconds / 1_000))
+        }
+    }
+
+    func release() {
+        guard let fileDescriptor else { return }
+        flock(fileDescriptor, LOCK_UN)
+        close(fileDescriptor)
+        self.fileDescriptor = nil
+    }
+
+    deinit {
+        release()
+    }
+}
+
+private func durationToNanoseconds(_ duration: Duration) -> UInt64 {
+    let seconds = UInt64(max(duration.components.seconds, 0))
+    let attoseconds = UInt64(max(duration.components.attoseconds, 0))
+    return seconds * 1_000_000_000 + attoseconds / 1_000_000_000
+}
+
+private func durationDescription(_ duration: Duration) -> String {
+    if duration.components.attoseconds == 0 {
+        return "\(duration.components.seconds) second(s)"
+    }
+
+    let fractionalSeconds = Double(duration.components.seconds)
+        + Double(duration.components.attoseconds) / 1_000_000_000_000_000_000
+    return String(format: "%.2f second(s)", fractionalSeconds)
 }
