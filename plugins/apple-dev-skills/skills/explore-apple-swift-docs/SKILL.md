@@ -103,6 +103,7 @@ Explore Apple and Swift documentation through one top-level entry point. `script
 - `references/dash_mcp_tools.md`
 - `references/apple-framework-docs-guide.md`
 - `references/dash-apple-docset-triage.md`
+- `references/dash-swift-package-shortlist.md`
 - `references/dash_http_api.md`
 - `references/dash_url_and_service.md`
 - `references/official_web_docs.md`

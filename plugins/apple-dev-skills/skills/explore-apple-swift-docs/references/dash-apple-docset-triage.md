@@ -61,3 +61,5 @@ When coverage is unclear, say so and fall back to Xcode MCP docs or official App
 ## Maintenance Note
 
 This guide is intentionally a triage aid, not the final repo-level preferred shortlist. If maintainers later choose a fixed preferred Apple Dash shortlist, add it as a separate explicit reference instead of silently turning this triage guide into policy.
+
+For the current Swift-package-oriented shortlist, use [dash-swift-package-shortlist.md](./dash-swift-package-shortlist.md).
