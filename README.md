@@ -76,14 +76,22 @@ Keep root docs and marketplace wiring in sync with packaging changes in the same
 
 ## Verification
 
-There is no single heavy repo-wide build or test pipeline for `socket` yet.
+`socket` now keeps a lightweight root validation path for the superproject layer.
 
-The current validation surface is structural:
+The current validation surface is still structural:
 
 - keep [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) valid JSON
 - verify that every listed `source.path` matches the real child surface that the child repo treats as installable
+- verify that every packaged plugin path still exposes a matching `.codex-plugin/plugin.json`
 - review child-repo docs when plugin packaging paths move
 - run child-repo-specific validation from the relevant child repo when the change is really about that child repo
+
+Run the root validator locally with:
+
+```bash
+uv sync --dev
+uv run scripts/validate_socket_metadata.py
+```
 
 ## Release Notes
 
