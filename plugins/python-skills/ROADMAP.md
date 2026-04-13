@@ -37,3 +37,4 @@ Exit criteria:
 - Completed Milestones 1 through 6 by establishing the repository, adding the Python bootstrap, FastAPI, FastMCP, and pytest workflows, aligning the maintainer contract, and adding Codex plugin packaging.
 - Completed Milestone 8 by adding Claude plugin and marketplace support without duplicating the shared skill tree.
 - Completed Milestones 9 and 10 by aligning the repo with the shared skills and plugin standards and adding the dedicated FastAPI and FastMCP integration workflow.
+- Added GitHub Actions validation so the documented repo-metadata and pytest checks now run automatically on `main` and pull requests.

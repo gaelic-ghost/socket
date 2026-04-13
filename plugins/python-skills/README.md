@@ -67,6 +67,8 @@ uv sync --dev
 uv run pytest
 ```
 
+GitHub Actions now mirrors the same maintainer checks on `main` and pull requests by running the repo-metadata validator and test suite.
+
 ## Release Notes
 
 Use Git history and GitHub releases to track shipped changes for this repository.
