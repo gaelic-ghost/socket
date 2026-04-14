@@ -21,6 +21,9 @@
 - [ ] Milestone 27: Repo Self-Compliance and Install-Surface Audit
 - [ ] Milestone 28: Use `Agent Dev Skills` plugin to align repo with skills/plugin repo standards
 - [ ] Milestone 29: Swift and Xcode Testing Offload Workflow
+- [ ] Milestone 37: Apple UI Accessibility Workflow
+- [ ] Milestone 38: DocC Workflow
+- [ ] Milestone 39: Swift Package Index Workflow
 
 ## Milestone 18: Claude Code Plugin Extras
 
@@ -164,6 +167,69 @@ Exit criteria:
 
 - [ ] Maintainers have one documented and validated way to offload repetitive Swift and Xcode verification work from the main agent thread.
 - [ ] The offload path returns concise, decision-useful results without obscuring the underlying build or test evidence.
+
+## Milestone 37: Apple UI Accessibility Workflow
+
+Scope:
+
+- [ ] Add a dedicated Apple accessibility workflow skill that covers SwiftUI, UIKit, and AppKit accessibility implementation and review.
+- [ ] Keep the skill grounded in current Apple accessibility APIs, platform semantics, focus behavior, VoiceOver behavior, Dynamic Type or text sizing expectations, and reduced-motion or contrast-related system settings.
+
+Tickets:
+
+- [ ] Define the skill boundary so it owns Apple UI accessibility implementation and review work without duplicating the broader docs-routing or generic repo-accessibility workflows.
+- [ ] Gather the core Apple documentation references for SwiftUI, UIKit, AppKit, accessibility traits, labels, actions, announcements, focus, and testing surfaces.
+- [ ] Ship a workflow surface that can help with both new implementation and review of existing Apple UI code.
+- [ ] Cover the differences and overlap between SwiftUI accessibility modifiers, UIKit accessibility properties, and AppKit accessibility APIs.
+- [ ] Document practical verification expectations, including simulator or device testing, VoiceOver checks, focus-order review, and content-scaling or motion-related checks where relevant.
+- [ ] Add tests and maintainer docs once the workflow shape is stable.
+
+Exit criteria:
+
+- [ ] The repository ships a documented Apple accessibility workflow skill for SwiftUI, UIKit, and AppKit work.
+- [ ] The workflow clearly distinguishes framework-specific guidance from shared Apple accessibility principles and verification expectations.
+
+## Milestone 38: DocC Workflow
+
+Scope:
+
+- [ ] Add a dedicated DocC workflow skill for authoring, organizing, validating, and publishing Apple documentation bundles.
+- [ ] Cover DocC structure, tutorials, symbol documentation, article organization, catalog layout, preview or generation paths, and integration with package or Xcode-hosted docs builds.
+
+Tickets:
+
+- [ ] Define the skill boundary so it owns DocC authoring and publishing workflow guidance without absorbing generic Markdown maintenance work.
+- [ ] Gather the Apple documentation needed for DocC catalogs, articles, tutorials, symbol links, directives, and build or preview tooling.
+- [ ] Ship a workflow surface that helps maintainers create, revise, and validate DocC content in Swift package and Xcode repository shapes.
+- [ ] Cover common failure modes such as broken symbol links, bundle-structure mistakes, navigation drift, and preview or build mismatches.
+- [ ] Document how the workflow should advise on DocC hosting and publishing paths when the repo is using static hosting or generated docs artifacts.
+- [ ] Add tests and maintainer docs once the workflow shape is stable.
+
+Exit criteria:
+
+- [ ] The repository ships a documented DocC workflow skill with clear authoring, validation, and publishing guidance.
+- [ ] The workflow can explain both local DocC maintenance and the main hosting or export paths without blurring them together.
+
+## Milestone 39: Swift Package Index Workflow
+
+Scope:
+
+- [ ] Add a dedicated Swift Package Index workflow skill for package distribution, documentation hosting, build readiness, metadata, and submission or listing expectations.
+- [ ] Cover the parts of SPI work that matter to maintainers shipping public Swift packages, including documentation hosting, build compatibility, supported platform metadata, README and package-surface expectations, and listing hygiene.
+
+Tickets:
+
+- [ ] Define the skill boundary so it owns SPI-specific distribution and hosting guidance without replacing the core Swift package build or testing workflows.
+- [ ] Gather the relevant Swift Package Index documentation for package metadata, documentation hosting, build surfaces, listing or submission expectations, and compatibility signals.
+- [ ] Ship a workflow surface that can help maintainers prepare a package for SPI, diagnose common SPI-facing build or docs issues, and understand what SPI is deriving from the repository.
+- [ ] Cover the relationship between SPI docs hosting, DocC output, README quality, package metadata, and supported platform declarations.
+- [ ] Document common SPI failure modes such as unsupported package structure, incomplete metadata, broken docs generation, or platform mismatch signals.
+- [ ] Add tests and maintainer docs once the workflow shape is stable.
+
+Exit criteria:
+
+- [ ] The repository ships a documented Swift Package Index workflow skill for package distribution and SPI-facing readiness work.
+- [ ] The workflow clearly explains how SPI distribution, documentation hosting, and package metadata fit together for public Swift packages.
 
 ## History
 
