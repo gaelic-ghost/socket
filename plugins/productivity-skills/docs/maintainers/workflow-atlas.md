@@ -68,7 +68,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Overview**
 
-- Triggered when the user wants deterministic auditing for a repository `README.md`, including plugin, skills, and hybrid repos that should follow the shared README contract.
+- Triggered when the user wants deterministic auditing for a repository `README.md`.
 - Primary workflow.
 - `read-only`
 
@@ -79,21 +79,16 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - Optional: `--readme-path <path>`
 - Tool/script input: `scripts/maintain_project_readme.py`
 
-**Branch Conditions**
-
-- Multiple repo profiles match: report ambiguity while selecting the conservative valid profile
-- README already sound: exact clean-run text
-
 **Outputs**
 
-- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Markdown plus JSON with `run_context`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.`
 
 ### Workflow: `apply`
 
 **Overview**
 
-- Triggered when the user wants bounded README-only normalization or repair for a repository `README.md`, including plugin, skills, and hybrid repos that should follow the shared README contract.
+- Triggered when the user wants bounded README-only normalization or repair for a repository `README.md`.
 - Variant workflow.
 - `bounded-write`
 
@@ -105,7 +100,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Outputs**
 
-- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Markdown plus JSON with `run_context`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
 
 ## `maintain-project-agents`
@@ -166,14 +161,9 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - Optional: `--contributing-path <path>`
 - Tool/script input: `scripts/maintain_project_contributing.py`
 
-**Branch Conditions**
-
-- Multiple repo profiles match: report ambiguity while selecting the conservative valid profile
-- Contribution guide already sound: exact clean-run text
-
 **Outputs**
 
-- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Markdown plus JSON with `run_context`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.`
 
 ### Workflow: `apply`
@@ -192,7 +182,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Outputs**
 
-- Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Markdown plus JSON with `run_context`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
 
 ## `maintain-project-accessibility`
