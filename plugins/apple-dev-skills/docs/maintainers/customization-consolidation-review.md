@@ -8,11 +8,11 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 
 ## Current State Summary
 
-- The active skill surface ships `12` separate `references/customization.template.yaml` files.
-- The active skill surface ships `12` separate `scripts/customization_config.py` entrypoints.
+- The active skill surface ships `13` separate `references/customization.template.yaml` files.
+- The active skill surface ships `13` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `15` knobs total:
-  - `14` are documented as `runtime-enforced`
+- The current templates expose `16` knobs total:
+  - `15` are documented as `runtime-enforced`
   - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference
@@ -28,6 +28,7 @@ Milestone 20 audited a larger surface before the implementation pass landed.
   - `30` documented as `runtime-enforced`
   - `5` documented as `policy-only`
 - Milestone 27 applied the approved reduction so the live surface now reflects the smaller counts in the current-state summary above.
+- Milestone 38 later added the narrower `docc-workflow` skill with one runtime-enforced tutorial-handling knob, which is included in the current-state counts above.
 
 ## Decision
 

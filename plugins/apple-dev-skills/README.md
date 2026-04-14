@@ -44,6 +44,7 @@ Use this repository's skills when the work is about:
 
 - Swift or SwiftUI implementation
 - Xcode build, run, or test workflows
+- DocC symbol comments, articles, catalog structure, or DocC-oriented review
 - Swift package bootstrap or validation
 - Apple-project guidance sync
 - Apple-platform documentation routing
@@ -79,6 +80,7 @@ See [LICENSE](./LICENSE).
 
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
+- `docc-workflow`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `structure-swift-sources`
