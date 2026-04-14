@@ -14,6 +14,7 @@
 
 - [ ] Milestone 14: Claude Code optimization pass
 - [ ] Milestone 22: Accessibility maintenance baseline
+- [ ] Milestone 23: Security and support maintenance baseline
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -55,6 +56,30 @@ Exit criteria:
 - [ ] The repository ships a working `maintain-project-accessibility` skill with deterministic `check-only` and bounded `apply` behavior.
 - [ ] The canonical `ACCESSIBILITY.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
 - [ ] `maintain-project-contributing` enforces contributor-facing accessibility expectations that point back to `ACCESSIBILITY.md`.
+
+## Milestone 23: Security and support maintenance baseline
+
+Scope:
+
+- Add a new `maintain-project-security` baseline skill for canonical `SECURITY.md` maintenance.
+- Add a new `maintain-project-support` baseline skill for canonical `SUPPORT.md` maintenance.
+- Keep both skills aligned with the existing docs-maintenance family so security reporting, support boundaries, and escalation paths can be maintained with the same deterministic `check-only` and bounded `apply` workflow model.
+
+Tickets:
+
+- [ ] Draft and ship the `maintain-project-security` skill surface with template, config, script, references, and tests.
+- [ ] Define and validate the canonical `SECURITY.md` schema, including reporting path, intake expectations, disclosure language, scope boundaries, and verification evidence rules.
+- [ ] Add claim-integrity checks so the security workflow does not invent vulnerability-handling guarantees, response timelines, or private-reporting channels that are not grounded in the target repo.
+- [ ] Draft and ship the `maintain-project-support` skill surface with template, config, script, references, and tests.
+- [ ] Define and validate the canonical `SUPPORT.md` schema, including supported surfaces, support boundaries, contact paths, triage expectations, and unsupported-request language.
+- [ ] Add claim-integrity checks so the support workflow does not invent staffing promises, service-level expectations, or support channels that are not grounded in the target repo.
+- [ ] Update repo-level maintainer docs and active-skill inventory once the new skills are implemented.
+
+Exit criteria:
+
+- [ ] The repository ships a working `maintain-project-security` skill with deterministic `check-only` and bounded `apply` behavior.
+- [ ] The repository ships a working `maintain-project-support` skill with deterministic `check-only` and bounded `apply` behavior.
+- [ ] The canonical `SECURITY.md` and `SUPPORT.md` contracts are documented, test-covered, and grounded in the baseline maintainers' workflow family.
 
 ## Backlog Candidates
 
