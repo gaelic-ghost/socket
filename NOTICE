@@ -1,0 +1,15 @@
+socket
+Copyright 2026 Gale Williams
+
+This repository is licensed under the Apache License, Version 2.0.
+See [LICENSE](./LICENSE) for the full license text.
+
+This NOTICE file applies to the `socket` superproject layer itself,
+including the root documentation, root marketplace metadata, and root
+maintainer automation that live in this repository.
+
+Child repositories and packaged plugin surfaces under `plugins/` may
+carry their own license files, notices, packaging metadata, and release
+contracts. Review each child repository's own shipped legal surfaces
+before reusing or redistributing that child surface independently of the
+root superproject.

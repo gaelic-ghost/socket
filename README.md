@@ -9,7 +9,9 @@ Mixed-model monorepo for Gale's Codex plugin and skills repositories.
 - [Usage](#usage)
 - [Development](#development)
 - [Verification](#verification)
+- [Repository Docs](#repository-docs)
 - [Release Notes](#release-notes)
+- [License](#license)
 - [Current Status](#current-status)
 - [Plugin Surfaces](#plugin-surfaces)
 - [Marketplace Shape](#marketplace-shape)
@@ -93,9 +95,24 @@ uv sync --dev
 uv run scripts/validate_socket_metadata.py
 ```
 
+## Repository Docs
+
+The root superproject docs are:
+
+- [README.md](./README.md) for the superproject overview and root workflow
+- [AGENTS.md](./AGENTS.md) for root operating rules and repo-boundary guidance
+- [ROADMAP.md](./ROADMAP.md) for root planning and milestone tracking
+- [CONTRIBUTING.md](./CONTRIBUTING.md) for root contribution workflow expectations
+- [ACCESSIBILITY.md](./ACCESSIBILITY.md) for the root accessibility contract around docs, metadata, and maintainer automation
+- [`docs/maintainers/`](./docs/maintainers/) for the deeper maintainer references behind the mixed-monorepo and subtree model
+
 ## Release Notes
 
 Use Git history and GitHub releases for root-level superproject changes. Child repositories should continue to track their own shipped release notes inside their own surfaces.
+
+## License
+
+The `socket` superproject is licensed under the Apache License 2.0. See [LICENSE](./LICENSE) for the full text and [NOTICE](./NOTICE) for the root superproject notice surface.
 
 ## Current Status
 
@@ -152,12 +169,16 @@ The mixed shape is intentional for now. `socket` does not try to flatten those c
 ├── .agents/
 │   └── plugins/
 │       └── marketplace.json
+├── ACCESSIBILITY.md
+├── CONTRIBUTING.md
 ├── docs/
 │   └── maintainers/
 │       ├── plugin-alignment-plan.md
 │       ├── plugin-packaging-strategy.md
 │       ├── subtree-migration-plan.md
 │       └── subtree-workflow.md
+├── LICENSE
+├── NOTICE
 ├── plugins/
 │   ├── agent-plugin-skills/
 │   ├── apple-dev-skills/
