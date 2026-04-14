@@ -19,7 +19,7 @@
 - [ ] Milestone 25: macOS Menu Bar Extra for Skill Controls
 - [ ] Milestone 26: Dash Direct MCP and Call Library
 - [ ] Milestone 27: Repo Self-Compliance and Install-Surface Audit
-- [ ] Milestone 28: Use `Agent Dev Skills` plugin to align repo with skills/plugin repo standards
+- [ ] Milestone 28: Use `Agent Plugin Skills` plugin to align repo with skills/plugin repo standards
 - [ ] Milestone 29: Swift and Xcode Testing Offload Workflow
 - [ ] Milestone 37: Apple UI Accessibility Workflow
 - [ ] Milestone 38: DocC Workflow
@@ -130,7 +130,7 @@ Exit criteria:
 
 - [ ] Maintainers have a verified, reality-based local discovery and top-level export story for this repo, with docs and tooling updated to match what the repository actually ships.
 
-## Milestone 28: Use `Agent Dev Skills` plugin to align repo with skills/plugin repo standards
+## Milestone 28: Use `Agent Plugin Skills` plugin to align repo with skills/plugin repo standards
 
 Scope:
 
@@ -193,22 +193,29 @@ Exit criteria:
 
 Scope:
 
-- [ ] Add a dedicated DocC workflow skill for authoring, organizing, validating, and publishing Apple documentation bundles.
-- [ ] Cover DocC structure, tutorials, symbol documentation, article organization, catalog layout, preview or generation paths, and integration with package or Xcode-hosted docs builds.
+- [x] Add a dedicated DocC workflow skill for authoring, organizing, and reviewing Apple documentation content in Swift package and Xcode app or framework repositories.
+- [x] Keep the first version centered on symbol documentation, articles, extension files, landing pages, topic groups, and correctness review, with explicit handoffs to the existing execution skills when the work becomes generation, export, or project-integrity heavy.
+- [x] Treat DocC tutorials as a recognized but lighter first-pass surface in phase one, and defer deeper tutorial-authoring mechanics until a later follow-up.
 
 Tickets:
 
-- [ ] Define the skill boundary so it owns DocC authoring and publishing workflow guidance without absorbing generic Markdown maintenance work.
-- [ ] Gather the Apple documentation needed for DocC catalogs, articles, tutorials, symbol links, directives, and build or preview tooling.
-- [ ] Ship a workflow surface that helps maintainers create, revise, and validate DocC content in Swift package and Xcode repository shapes.
-- [ ] Cover common failure modes such as broken symbol links, bundle-structure mistakes, navigation drift, and preview or build mismatches.
-- [ ] Document how the workflow should advise on DocC hosting and publishing paths when the repo is using static hosting or generated docs artifacts.
-- [ ] Add tests and maintainer docs once the workflow shape is stable.
+- [x] Define the skill boundary so it owns DocC authoring and review guidance without absorbing generic Markdown maintenance work or duplicating the existing execution skills.
+- [x] Gather the Apple Xcode documentation plus the fuller Swift.org DocC references needed for catalogs, articles, symbol links, directives, and structure guidance.
+- [x] Ship a workflow surface that helps maintainers create, revise, and review DocC content in Swift package and Xcode repository shapes.
+- [x] Teach the distinction between content correctness, DocC correctness, and project correctness so the skill stays honest about what it can verify directly.
+- [x] Cover common failure modes such as broken symbol links, weak summaries, extension-file targeting mistakes, navigation drift, and catalog-structure mismatches.
+- [x] Keep tutorial coverage phase-one light: classify tutorial-shaped requests, review conceptual flow at a high level, and route deeper directive-specific work to the fuller DocC references until the skill grows a dedicated tutorial-authoring phase.
+- [x] Document the explicit handoffs to `swift-package-build-run-workflow`, `xcode-build-run-workflow`, and `explore-apple-swift-docs`.
+- [x] Keep hosting and publishing guidance as a documented follow-up phase unless the first version proves it needs to absorb more.
+- [x] Add tests and maintainer docs once the workflow shape is stable.
 
 Exit criteria:
 
-- [ ] The repository ships a documented DocC workflow skill with clear authoring, validation, and publishing guidance.
-- [ ] The workflow can explain both local DocC maintenance and the main hosting or export paths without blurring them together.
+- [x] The repository ships a documented DocC workflow skill with clear authoring and review guidance for Swift package and Xcode app or framework repos.
+- [x] The workflow explains its handoff boundary cleanly instead of trying to own both content work and all DocC execution paths at once.
+- [x] Maintainer planning for the first implementation slice is captured in `docs/maintainers/docc-workflow-plan.md`.
+
+Completed Milestone 38 by shipping `docc-workflow`, adding its runtime customization and tests, documenting the first-slice boundary in `docs/maintainers/docc-workflow-plan.md`, and keeping tutorial handling intentionally light in phase one.
 
 ## Milestone 39: Swift Package Index Workflow
 

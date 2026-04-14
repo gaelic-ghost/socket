@@ -66,6 +66,7 @@ require_contains "$workflow_doc" '## `xcode-testing-workflow`'
 require_contains "$workflow_doc" '## `swift-package-build-run-workflow`'
 require_contains "$workflow_doc" '## `swift-package-testing-workflow`'
 require_contains "$workflow_doc" '## `explore-apple-swift-docs`'
+require_contains "$workflow_doc" '## `docc-workflow`'
 require_contains "$workflow_doc" '## `format-swift-sources`'
 require_contains "$workflow_doc" '## `structure-swift-sources`'
 require_contains "$workflow_doc" '## `bootstrap-swift-package`'
@@ -115,6 +116,7 @@ active_skill_mds=(
   "./skills/swift-package-build-run-workflow/SKILL.md"
   "./skills/swift-package-testing-workflow/SKILL.md"
   "./skills/swift-package-workflow/SKILL.md"
+  "./skills/docc-workflow/SKILL.md"
   "./skills/explore-apple-swift-docs/SKILL.md"
   "./skills/format-swift-sources/SKILL.md"
   "./skills/structure-swift-sources/SKILL.md"
@@ -123,7 +125,7 @@ active_skill_mds=(
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 13 ]] || fail "Expected exactly 13 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 14 ]] || fail "Expected exactly 14 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -170,7 +172,7 @@ for skill_md in "${active_skill_mds[@]}"; do
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'
       ;;
-    ./skills/structure-swift-sources)
+    ./skills/structure-swift-sources|./skills/docc-workflow)
       local_snippet=""
       shared_snippet=""
       snippet_ref=""
@@ -199,6 +201,7 @@ for file in \
   "skills/xcode-app-project-workflow/SKILL.md" \
   "skills/xcode-testing-workflow/SKILL.md" \
   "skills/xcode-build-run-workflow/SKILL.md" \
+  "skills/docc-workflow/SKILL.md" \
   "skills/sync-swift-package-guidance/SKILL.md" \
   "skills/sync-xcode-project-guidance/SKILL.md" \
   "docs/maintainers/workflow-atlas.md" \

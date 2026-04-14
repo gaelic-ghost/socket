@@ -25,6 +25,7 @@ flowchart TD
     A --> WPBR["swift-package-build-run-workflow"]
     A --> WPT["swift-package-testing-workflow"]
     A --> WP["swift-package-workflow (legacy compatibility)"]
+    A --> DOCC["docc-workflow"]
     A --> D["explore-apple-swift-docs"]
     A --> ST["format-swift-sources"]
     A --> SS["structure-swift-sources"]
@@ -48,6 +49,8 @@ flowchart TD
     WP --> WPR["Routes broad package work into the narrower package skills"]
     WP --> WPX["May recommend xcode-build-run-workflow or xcode-testing-workflow when Xcode-managed behavior matters"]
     WP --> WPS["May recommend sync-swift-package-guidance for repo guidance alignment"]
+    DOCC --> DOCCD["May recommend explore-apple-swift-docs"]
+    DOCC --> DOCCX["May recommend swift-package-build-run-workflow or xcode-build-run-workflow for generation, export, or hosting follow-through"]
     D --> DX["May recommend xcode-build-run-workflow or xcode-testing-workflow"]
     D --> DT["May recommend format-swift-sources when docs work turns into style-tooling setup"]
     ST --> SXD["May recommend xcode-build-run-workflow or xcode-testing-workflow when setup becomes active Xcode work"]
@@ -71,7 +74,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - The repo has no Apple router or orchestrator layer.
-- The active surface now has thirteen skills, including four primary execution skills and two legacy compatibility-routing execution surfaces.
+- The active surface now has fourteen skills, including four primary execution skills, one DocC authoring-and-review skill, and two legacy compatibility-routing execution surfaces.
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
@@ -122,7 +125,7 @@ flowchart TD
 - User-visible response:
   - The user sees direct progress inside one of the active top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-- The repo-level UX is a bundle of thirteen active skills exported from the top-level `skills/` surface.
+- The repo-level UX is a bundle of fourteen active skills exported from the top-level `skills/` surface.
 
 ## `xcode-build-run-workflow`
 
@@ -391,6 +394,37 @@ flowchart TD
 
 - `handoff`: the work belongs to `swift-package-build-run-workflow`, `swift-package-testing-workflow`, `xcode-build-run-workflow`, or `xcode-testing-workflow`
 - `blocked`: repo root missing, `Package.swift` missing, or no safe SwiftPM-first path exists
+
+## `docc-workflow`
+
+### Purpose
+
+Provide the canonical DocC authoring-and-review workflow for Swift package and Xcode app or framework repositories.
+
+### Branch and Path Notes
+
+- `run_workflow.py` is the local runtime entrypoint.
+- The skill owns symbol comments, articles, extension files, landing pages, topic groups, and the three-part correctness model for DocC work.
+- Tutorial work is recognized, but the first release keeps tutorial handling intentionally light rather than claiming directive-deep expertise.
+- Broad Apple-docs lookup hands off to `explore-apple-swift-docs`.
+- Generation, export, archive, hosting, or project-integrity follow-through hands off to `swift-package-build-run-workflow` or `xcode-build-run-workflow`.
+
+### Agent ↔ User UX
+
+- Entry:
+  - The user asks for DocC writing, DocC review, symbol-comment help, article help, extension-file help, landing-page organization, topic grouping, or DocC correctness review.
+- Agent behavior:
+  - The agent classifies repo shape and DocC task type, runs `run_workflow.py`, then either stays local to DocC authoring-and-review work or hands off when the request is really docs lookup or execution-heavy DocC follow-through.
+- User-visible response:
+  - On success: the user sees the resolved DocC task type, repo shape, correctness model, and next local DocC step.
+  - On handoff: the user sees exactly why the request belongs in `explore-apple-swift-docs`, `swift-package-build-run-workflow`, or `xcode-build-run-workflow`.
+  - On blocked: the user sees that the DocC task type or repo shape still needs to be made explicit.
+
+### Failure / Fallback / Handoff States
+
+- `success`: the request belongs to local DocC authoring-and-review work
+- `handoff`: the request belongs to `explore-apple-swift-docs`, `swift-package-build-run-workflow`, or `xcode-build-run-workflow`
+- `blocked`: the request lacks enough repo-shape or DocC-task detail to proceed honestly
 
 ## `explore-apple-swift-docs`
 

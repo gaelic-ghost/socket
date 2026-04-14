@@ -66,10 +66,10 @@ class CustomizationConsolidationReviewTests(unittest.TestCase):
         knob_count = _count_template_knobs()
         runtime_enforced, policy_only = _count_statuses()
 
-        self.assertEqual(template_count, 12)
-        self.assertEqual(script_count, 12)
-        self.assertEqual(knob_count, 15)
-        self.assertEqual(runtime_enforced, 14)
+        self.assertEqual(template_count, 13)
+        self.assertEqual(script_count, 13)
+        self.assertEqual(knob_count, 16)
+        self.assertEqual(runtime_enforced, 15)
         self.assertEqual(policy_only, 1)
 
         self.assertIn(f"The active skill surface ships `{template_count}` separate `references/customization.template.yaml` files.", text)

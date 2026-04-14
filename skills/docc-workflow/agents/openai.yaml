@@ -1,0 +1,4 @@
+interface:
+  display_name: "DocC Workflow"
+  short_description: "Write and review DocC content for Swift packages and Xcode repos"
+  default_prompt: "Use $docc-workflow to write or review DocC symbol comments, articles, extension files, and landing-page structure, and hand off only when the task becomes docs lookup or DocC execution work."

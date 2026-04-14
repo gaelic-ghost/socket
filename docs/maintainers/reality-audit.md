@@ -76,6 +76,7 @@ Use this flow when validating the current top-level export surface and local dis
 - Audit procedure and source-of-truth order: `docs/maintainers/reality-audit.md`
 - Customization-surface decision and follow-up plan: `docs/maintainers/customization-consolidation-review.md`
 - Execution-skill split, inference plan, and guidance-preservation contract: `docs/maintainers/execution-split-and-inference-plan.md`
+- DocC skill scope and first-slice implementation plan: `docs/maintainers/docc-workflow-plan.md`
 
 ## Reporting Shape
 
