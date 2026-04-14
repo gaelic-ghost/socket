@@ -80,7 +80,7 @@ See [LICENSE](./LICENSE).
 
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
-- `docc-workflow`
+- `author-swift-docc-docs`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `structure-swift-sources`

@@ -15,3 +15,5 @@ These are the best first stop for:
 - how catalogs are added to projects
 - how source comments, articles, and extension files relate to each other
 - how Xcode builds or exports documentation
+
+Treat this Xcode-side material as primarily the guidance for using Xcode to author, build, export, and distribute DocC content. When the user needs deeper DocC syntax, directive behavior, tutorial semantics, or package-side implementation detail, move to the fuller Swift DocC sources instead of treating the Xcode docs as complete coverage.

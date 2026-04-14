@@ -28,7 +28,7 @@ Milestone 20 audited a larger surface before the implementation pass landed.
   - `30` documented as `runtime-enforced`
   - `5` documented as `policy-only`
 - Milestone 27 applied the approved reduction so the live surface now reflects the smaller counts in the current-state summary above.
-- Milestone 38 later added the narrower `docc-workflow` skill with one runtime-enforced tutorial-handling knob, which is included in the current-state counts above.
+- Milestone 38 later added the narrower `author-swift-docc-docs` skill with one runtime-enforced tutorial-handling knob, which is included in the current-state counts above.
 
 ## Decision
 

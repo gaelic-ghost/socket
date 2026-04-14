@@ -25,7 +25,7 @@ flowchart TD
     A --> WPBR["swift-package-build-run-workflow"]
     A --> WPT["swift-package-testing-workflow"]
     A --> WP["swift-package-workflow (legacy compatibility)"]
-    A --> DOCC["docc-workflow"]
+    A --> DOCC["author-swift-docc-docs"]
     A --> D["explore-apple-swift-docs"]
     A --> ST["format-swift-sources"]
     A --> SS["structure-swift-sources"]
@@ -395,7 +395,7 @@ flowchart TD
 - `handoff`: the work belongs to `swift-package-build-run-workflow`, `swift-package-testing-workflow`, `xcode-build-run-workflow`, or `xcode-testing-workflow`
 - `blocked`: repo root missing, `Package.swift` missing, or no safe SwiftPM-first path exists
 
-## `docc-workflow`
+## `author-swift-docc-docs`
 
 ### Purpose
 

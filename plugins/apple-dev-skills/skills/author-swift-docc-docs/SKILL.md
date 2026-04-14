@@ -1,9 +1,9 @@
 ---
-name: docc-workflow
+name: author-swift-docc-docs
 description: Author and review DocC content for Swift package and Xcode app or framework repositories, including symbol comments, articles, extension files, landing pages, topic groups, and light tutorial-aware review. Use when the user wants help writing or reviewing DocC content, checking DocC structure or content correctness, or deciding when DocC work should hand off to Apple docs lookup or build and export workflows.
 ---
 
-# DocC Workflow
+# Author Swift DocC Docs
 
 ## Purpose
 

@@ -135,6 +135,7 @@ Treat `socket` as the canonical home for the monorepo-owned nested directories a
 
 - `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `python-skills` still preserve explicit subtree sync paths.
+- `apple-dev-skills` currently ships Apple-platform authoring and execution workflows that now include the `author-swift-docc-docs` skill for DocC symbol comments, articles, catalog structure, and DocC-oriented review work.
 - Some child repos expose plugin packaging from the repo root, while others keep a nested packaged plugin root inside their own repository tree.
 
 ## Marketplace Shape

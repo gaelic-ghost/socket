@@ -213,9 +213,9 @@ Exit criteria:
 
 - [x] The repository ships a documented DocC workflow skill with clear authoring and review guidance for Swift package and Xcode app or framework repos.
 - [x] The workflow explains its handoff boundary cleanly instead of trying to own both content work and all DocC execution paths at once.
-- [x] Maintainer planning for the first implementation slice is captured in `docs/maintainers/docc-workflow-plan.md`.
+- [x] Maintainer planning for the first implementation slice is captured in `docs/maintainers/author-swift-docc-docs-plan.md`.
 
-Completed Milestone 38 by shipping `docc-workflow`, adding its runtime customization and tests, documenting the first-slice boundary in `docs/maintainers/docc-workflow-plan.md`, and keeping tutorial handling intentionally light in phase one.
+Completed Milestone 38 by shipping `author-swift-docc-docs`, adding its runtime customization and tests, documenting the first-slice boundary in `docs/maintainers/author-swift-docc-docs-plan.md`, and keeping tutorial handling intentionally light in phase one.
 
 ## Milestone 39: Swift Package Index Workflow
 

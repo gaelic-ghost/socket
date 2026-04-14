@@ -5,7 +5,7 @@
 #   "PyYAML>=6.0.2,<7",
 # ]
 # ///
-"""Runtime workflow policy engine for docc-workflow."""
+"""Runtime workflow policy engine for author-swift-docc-docs."""
 
 from __future__ import annotations
 
@@ -252,11 +252,11 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
 
-    next_step = "Stay in docc-workflow and revise or review the DocC content locally."
+    next_step = "Stay in author-swift-docc-docs and revise or review the DocC content locally."
     if task_type == "tutorial-aware-review" and tutorial_support_level == "defer":
         next_step = "Keep the tutorial request recognized, but use the fuller DocC references before making directive-specific claims."
     elif task_type == "tutorial-aware-review":
-        next_step = "Stay in docc-workflow for a light first-pass tutorial review focused on conceptual flow, and use the fuller DocC references before making directive-specific claims."
+        next_step = "Stay in author-swift-docc-docs for a light first-pass tutorial review focused on conceptual flow, and use the fuller DocC references before making directive-specific claims."
 
     payload = {
         "status": "success",

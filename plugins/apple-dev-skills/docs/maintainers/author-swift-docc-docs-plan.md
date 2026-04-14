@@ -1,4 +1,4 @@
-# DocC Workflow Plan
+# Author Swift DocC Docs Plan
 
 Date: 2026-04-14
 
@@ -154,7 +154,7 @@ The skill should avoid rewarding comment volume over clarity.
 
 The first implementation slice should:
 
-- create the new `docc-workflow` skill surface
+- create the new `author-swift-docc-docs` skill surface
 - document the authoring-and-review-first boundary inside the skill
 - add references for the Apple Xcode docs and the Swift.org DocC docs
 - cover Swift package and Xcode app repo-shape detection
