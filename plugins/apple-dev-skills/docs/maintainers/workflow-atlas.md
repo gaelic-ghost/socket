@@ -520,7 +520,7 @@ flowchart TD
 
 ### Purpose
 
-Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, SwiftFormat config export from the Xcode host app or shared defaults, and the pre/post formatting bracket around `structure-swift-sources`.
+Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, SwiftFormat-first ownership of formatting shape, SwiftLint-as-complement guidance for non-formatting signal, SwiftFormat config export from the Xcode host app or shared defaults state, and the pre/post formatting bracket around `structure-swift-sources`.
 
 ### Workflow Diagram
 
@@ -546,7 +546,8 @@ flowchart TD
 - This skill is intentionally about style-tooling setup and maintenance, not general repo bootstrap or Xcode execution.
 - The support matrix is part of the contract and should be checked before proposing a path.
 - The preferred SwiftFormat settings-export path is the host app export flow.
-- The shared-defaults export script is a deterministic fallback for cases where a checked-in `.swiftformat` file is needed from existing host-app settings.
+- When both tools are present, SwiftFormat should own formatting shape and SwiftLint should stay focused on safety, clarity, maintainability, and scoped public-API documentation signal.
+- The shared-defaults export script is a deterministic fallback for cases where a checked-in `.swiftformat` file is needed from existing host-app settings, and it should prefer the real group-container plist when the suite-domain export is incomplete.
 - When a request also includes source cleanup, this skill is the first pass and the final cleanup pass around `structure-swift-sources`.
 
 ### Agent ↔ User UX

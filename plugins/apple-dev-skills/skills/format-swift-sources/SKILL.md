@@ -7,11 +7,12 @@ description: Guide SwiftLint and SwiftFormat integration across CLI, Xcode build
 
 ## Purpose
 
-Use this skill as the top-level workflow for integrating and maintaining SwiftLint and SwiftFormat in Apple or Swift repositories. The skill keeps the support matrix explicit, teaches the shortest correct path for each surface, and includes a deterministic helper script for turning SwiftFormat for Xcode shared settings into a project-root `.swiftformat` file when the host app export path is unavailable or inconvenient. It is also the canonical first pass before and after `structure-swift-sources` when a request will split, move, or reorganize Swift source files.
+Use this skill as the top-level workflow for integrating and maintaining SwiftLint and SwiftFormat in Apple or Swift repositories. The skill keeps the support matrix explicit, teaches the shortest correct path for each surface, and includes a deterministic helper script for turning SwiftFormat for Xcode shared settings into a project-root `.swiftformat` file when the host app export path is unavailable or inconvenient. When both tools are in play, treat SwiftFormat as the primary owner of formatting shape and use SwiftLint as a complementary signal layer for clarity, safety, maintenance, and selectively chosen documentation expectations rather than as a second formatter. When the script path is needed, prefer feeding it the real shared plist from the SwiftFormat group container over assuming the defaults-domain export is complete, and treat the generated file as a curated starting point rather than as a guaranteed final repo config. It is also the canonical first pass before and after `structure-swift-sources` when a request will split, move, or reorganize Swift source files.
 
 ## When To Use
 
 - Use this skill when the user wants to add or maintain `swiftformat`, `swiftlint`, or both in a Swift repository.
+- Use this skill when the user wants guidance on how to divide responsibility between SwiftFormat and SwiftLint in the same repository.
 - Use this skill when the user wants guidance for one of these integration surfaces:
   - CLI
   - Xcode Run Script Build Phase
@@ -50,6 +51,8 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 4. Choose one documented path:
    - for SwiftFormat settings export, prefer the host app export flow in `references/swiftformat-xcode-config-export.md`
    - use `scripts/export_swiftformat_xcode_config.py` only when a deterministic shared-defaults export is needed
+   - when `defaults export` from the suite domain is empty, stale, or incomplete, point the script at the real shared plist inside the SwiftFormat group container with `--input-plist`
+   - after script export, review the generated file before checking it in because extension state may still need light curation
    - for all other surfaces, use the tool-specific references instead of inventing a hybrid path
 5. Return one supported setup path, one set of caveats, and one follow-up verification step.
 6. When the request also includes source-organization work, hand off to `structure-swift-sources` only after this formatting path is clear, then run this skill again afterward as the cleanup pass.
@@ -90,11 +93,11 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Do not imply that the SwiftFormat for Xcode extension reads per-project config automatically. The config must be imported into the host app.
 - Do not imply that SwiftLint build tool plugins accept arbitrary `--config` paths. When config placement is incompatible with the plugin, switch to the documented shim or Run Script path.
 - Stop with `blocked` when the user asks for one tool on a surface that only the other tool supports.
-- Stop with `blocked` when the shared-defaults SwiftFormat export path is requested on a machine that does not expose the SwiftFormat shared defaults domain and no exported plist input is provided.
+- Stop with `blocked` when the shared-defaults SwiftFormat export path is requested on a machine that does not expose a usable SwiftFormat shared defaults export and no group-container plist or other exported plist input is provided.
 
 ## Fallbacks and Handoffs
 
-- SwiftFormat config export falls back from host-app export to `scripts/export_swiftformat_xcode_config.py`.
+- SwiftFormat config export falls back from host-app export to `scripts/export_swiftformat_xcode_config.py`, preferably with `--input-plist` pointed at the real shared plist when the suite-domain export is not trustworthy on the current machine.
 - SwiftLint plugin adoption falls back to an Xcode Run Script Build Phase when plugin constraints conflict with config placement or project layout.
 - SwiftFormat build-phase adoption falls back from package-managed or pinned local binaries to the locally installed CLI path only when shared-version drift is acceptable.
 - For combined cleanup work, use this skill before `structure-swift-sources` to establish the formatting baseline, and run it again after that skill finishes so the post-split or post-move tree is normalized.

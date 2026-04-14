@@ -80,6 +80,15 @@ def normalize_scalar(value: Any) -> str:
     return str(value)
 
 
+def should_skip_option_value(key: str, value: str) -> bool:
+    stripped = value.strip()
+    if stripped == "":
+        return True
+    if key in VERSION_OPTION_KEYS and stripped.lower() in MEANINGLESS_VERSION_VALUES:
+        return True
+    return False
+
+
 def encode_argument(value: str) -> str:
     if SAFE_LITERAL_RE.fullmatch(value):
         return value
@@ -100,12 +109,15 @@ def serialize_lines(payload: dict[str, Any]) -> list[str]:
             if key not in VERSION_OPTION_KEYS:
                 continue
             value = normalize_scalar(options[key]).strip()
-            if value.lower() in MEANINGLESS_VERSION_VALUES:
+            if should_skip_option_value(key, value):
                 continue
             rendered_options.append((key, value))
     else:
         for key in sorted(options):
-            rendered_options.append((key, normalize_scalar(options[key]).strip()))
+            value = normalize_scalar(options[key]).strip()
+            if should_skip_option_value(key, value):
+                continue
+            rendered_options.append((key, value))
 
     lines = [
         "# Generated from SwiftFormat for Xcode shared defaults.",
@@ -145,7 +157,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--input-plist",
         type=Path,
-        help="Read a plist file instead of calling `defaults export`. Useful for testing or offline export.",
+        help="Read a plist file instead of calling `defaults export`. Useful for testing, offline export, or using the real shared plist from the SwiftFormat group container.",
     )
     parser.add_argument(
         "--output",

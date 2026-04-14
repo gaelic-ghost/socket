@@ -16,6 +16,7 @@ Authoritative source: [SwiftFormat README](https://github.com/nicklockwood/Swift
 
 - Prefer a checked-in `.swiftformat` file at the project root for shared repos.
 - Prefer pinned package-managed or project-managed installs over purely developer-local CLI installs when the output is committed.
+- When SwiftLint is also present, keep SwiftFormat as the primary authority for formatting shape instead of splitting line wrapping, indentation, comma, import-order, or declaration-layout responsibility across both tools.
 - The Xcode extension is convenient for interactive formatting but does not give true per-project config auto-discovery. Import the config into the host app and re-import after project config changes.
 
 ## High-Signal Caveats

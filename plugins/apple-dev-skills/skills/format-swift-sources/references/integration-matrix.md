@@ -15,6 +15,7 @@ Use this matrix before proposing or generating setup steps.
 
 ## Caveats That Change The Recommended Path
 
+- When both tools are present, let SwiftFormat own formatting shape such as wrapping, indentation, commas, import order, and declaration layout. Use SwiftLint for non-formatting checks that SwiftFormat is not meant to own.
 - SwiftLint build tool plugins cannot accept arbitrary `--config` paths. When the config location is incompatible, use a local `parent_config` shim or a Run Script path instead.
 - SwiftFormat for Xcode does not auto-follow a project `.swiftformat` file after import. If the file changes, re-import it into the host app.
 - Locally installed CLI paths are convenient but can create version drift across a team. Prefer package-managed, pinned, or otherwise repo-controlled versions where possible.

@@ -53,6 +53,7 @@ class FormatSwiftSourcesExportTests(unittest.TestCase):
             "format-options": {
                 "indent": "2",
                 "allman": False,
+                "header": "",
             },
         }
 
@@ -61,6 +62,7 @@ class FormatSwiftSourcesExportTests(unittest.TestCase):
         self.assertIn("--rules wrap", lines)
         self.assertIn("--allman false", lines)
         self.assertIn("--indent 2", lines)
+        self.assertNotIn("--header ", "\n".join(lines))
         self.assertLess(lines.index("--allman false"), lines.index("--indent 2"))
 
     def test_plist_input_path_loads_dictionary_payload(self) -> None:

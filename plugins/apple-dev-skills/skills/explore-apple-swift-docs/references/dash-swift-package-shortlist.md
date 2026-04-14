@@ -61,6 +61,16 @@ Use this shortlist when the request is about a Swift package, Swift server packa
   - Use for: generated protobuf message APIs, coding surfaces, and runtime behavior in Swift.
   - Upstream: <https://github.com/apple/swift-protobuf>
 
+- `nicklockwood/SwiftFormat main`
+  - Dash location: installed DocC docset shown under that display name.
+  - Use for: formatter rules, CLI flags, package-plugin behavior, Xcode extension workflows, and upstream guidance on what SwiftFormat is intended to own.
+  - Upstream: <https://github.com/nicklockwood/SwiftFormat>
+
+- `realm/SwiftLint main`
+  - Dash location: installed DocC docset shown under that display name.
+  - Use for: rule descriptions, configuration keys, plugin and Run Script integration details, and upstream guidance on choosing lint rules that complement formatter-driven repos.
+  - Upstream: <https://github.com/realm/SwiftLint>
+
 - `swift-otel/swift-otel main`
   - Dash location: installed DocC docset shown under that display name.
   - Use for: OpenTelemetry tracing, metrics, and telemetry-integration questions in Swift packages.
