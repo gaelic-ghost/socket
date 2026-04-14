@@ -36,6 +36,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `explain-code-slice` | Canonical code-slice walkthrough explainer | `explain a slice`, `compare slices`, detail-level variants |
 | `maintain-project-readme` | Canonical shared README maintainer | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-agents` | Default baseline AGENTS maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
+| `maintain-project-accessibility` | Default baseline ACCESSIBILITY maintainer for most repos | `check-only`, `apply`, clean run |
 | `maintain-project-contributing` | Default baseline CONTRIBUTING maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-project-repo` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
@@ -192,6 +193,47 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 **Outputs**
 
 - Markdown plus JSON with `run_context`, `profile_assignment`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
+
+## `maintain-project-accessibility`
+
+### Workflow: `check-only`
+
+**Overview**
+
+- Triggered when the user wants deterministic auditing for a project-local `ACCESSIBILITY.md` and no narrower plugin owns that repo shape.
+- Primary workflow.
+- `read-only`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode check-only`
+- Optional: `--accessibility-path <path>`
+- Tool/script input: `scripts/maintain_project_accessibility.py`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `schema_violations`, `claim_integrity_issues`, `verification_evidence_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `apply`
+
+**Overview**
+
+- Triggered when the user wants bounded `ACCESSIBILITY.md` normalization, repair, or creation.
+- Variant workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode apply`
+- Optional: `--accessibility-path <path>`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `schema_violations`, `claim_integrity_issues`, `verification_evidence_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
 
 ## `maintain-project-roadmap`

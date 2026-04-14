@@ -1,6 +1,6 @@
 {
   "name": "productivity-skills",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "description": "Broadly useful productivity workflows for Codex and Claude Code.",
   "author": {
     "name": "Gale",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Broadly useful workflow and maintainer skills for Codex.",
-    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, roadmap work, code explanation, and reusable maintainer-toolkit workflows.",
+    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, accessibility standards, roadmap work, code explanation, and reusable maintainer-toolkit workflows.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [
@@ -33,7 +33,7 @@
     "defaultPrompt": [
       "Install or refresh the repo-maintenance toolkit for this project and explain the local entrypoints.",
       "Explain this code slice in plain language and compare the relevant alternatives.",
-      "Help me update the README, AGENTS guidance, roadmap, or maintainer docs without flattening the existing structure."
+      "Help me update the README, AGENTS guidance, accessibility standards, roadmap, or maintainer docs without flattening the existing structure."
     ],
     "brandColor": "#14B8A6"
   }

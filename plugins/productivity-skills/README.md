@@ -43,7 +43,7 @@ uv sync --dev
 Use this repository when the work is about:
 
 - explaining code paths in plain language
-- maintaining README, AGENTS, CONTRIBUTING, or ROADMAP docs
+- maintaining README, AGENTS, CONTRIBUTING, ACCESSIBILITY, or ROADMAP docs
 - keeping a general-purpose repository-maintenance baseline aligned
 
 ## Development
@@ -77,6 +77,7 @@ See [LICENSE](./LICENSE).
 
 - `explain-code-slice`
 - `maintain-project-agents`
+- `maintain-project-accessibility`
 - `maintain-project-contributing`
 - `maintain-project-readme`
 - `maintain-project-repo`

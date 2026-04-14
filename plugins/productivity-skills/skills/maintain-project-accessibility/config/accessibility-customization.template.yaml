@@ -1,0 +1,286 @@
+schemaVersion: 1
+isCustomized: false
+profile: base
+settings:
+  preservePreamble: true
+  allowAdditionalSections: true
+  requiredSections:
+    - Overview
+    - Standards Baseline
+    - Accessibility Architecture
+    - Engineering Workflow
+    - Known Gaps
+    - User Support and Reporting
+    - Verification and Evidence
+  sectionOrder:
+    - Overview
+    - Standards Baseline
+    - Accessibility Architecture
+    - Engineering Workflow
+    - Known Gaps
+    - User Support and Reporting
+    - Verification and Evidence
+  requiredSubsections:
+    Overview:
+      - Status
+      - Scope
+      - Accessibility Goals
+    Standards Baseline:
+      - Target Standard
+      - Conformance Language Rules
+      - Supported Platforms and Surfaces
+    Accessibility Architecture:
+      - Semantic Structure
+      - Input and Keyboard Model
+      - Focus Management
+      - Naming and Announcements
+      - Color, Contrast, and Motion
+      - Zoom, Reflow, and Responsive Behavior
+      - Media, Captions, and Alternatives
+    Engineering Workflow:
+      - Design and Implementation Rules
+      - Automated Testing
+      - Manual Testing
+      - Assistive Technology Coverage
+      - Definition of Done
+    Known Gaps:
+      - Current Exceptions
+      - Planned Remediation
+      - Ownership
+    User Support and Reporting:
+      - Feedback Path
+      - Triage Expectations
+    Verification and Evidence:
+      - CI Signals
+      - Audit Cadence
+      - Review History
+  sectionAliases:
+    Standards Baseline:
+      - Standards
+      - Accessibility Standards
+    Accessibility Architecture:
+      - Architecture
+      - A11y Architecture
+    Engineering Workflow:
+      - Workflow
+      - Engineering Expectations
+    User Support and Reporting:
+      - Support and Reporting
+      - Issue Reporting
+    Verification and Evidence:
+      - Verification
+      - Evidence
+  subsectionAliases:
+    Overview/Accessibility Goals:
+      - Goals
+    Standards Baseline/Target Standard:
+      - Standards Target
+      - Accessibility Standard
+    Standards Baseline/Conformance Language Rules:
+      - Conformance Rules
+      - Claim Rules
+    Standards Baseline/Supported Platforms and Surfaces:
+      - Supported Surfaces
+      - Supported Platforms
+    Accessibility Architecture/Input and Keyboard Model:
+      - Keyboard Model
+      - Input Model
+    Accessibility Architecture/Naming and Announcements:
+      - Labels and Announcements
+      - Accessible Names and Announcements
+    Accessibility Architecture/Color, Contrast, and Motion:
+      - Color and Motion
+      - Contrast and Motion
+    Accessibility Architecture/Zoom, Reflow, and Responsive Behavior:
+      - Zoom and Reflow
+      - Responsive Behavior
+    Accessibility Architecture/Media, Captions, and Alternatives:
+      - Media Alternatives
+      - Captions and Alternatives
+    Engineering Workflow/Design and Implementation Rules:
+      - Implementation Rules
+      - Design Rules
+    Engineering Workflow/Assistive Technology Coverage:
+      - Assistive Technology Matrix
+      - AT Coverage
+    Engineering Workflow/Definition of Done:
+      - Done Criteria
+      - Merge Gate
+    Known Gaps/Current Exceptions:
+      - Exceptions
+      - Current Gaps
+    Known Gaps/Planned Remediation:
+      - Remediation
+      - Follow-up Plan
+    User Support and Reporting/Feedback Path:
+      - Reporting Path
+      - Contact Path
+    Verification and Evidence/CI Signals:
+      - Automation Signals
+      - CI Coverage
+    Verification and Evidence/Audit Cadence:
+      - Review Cadence
+    Verification and Evidence/Review History:
+      - Audit History
+  sectionTemplates:
+    Overview: |
+      ### Status
+
+      State the current accessibility posture in one short, plain sentence.
+
+      ### Scope
+
+      Describe which project surfaces this accessibility contract covers.
+
+      ### Accessibility Goals
+
+      Describe the real accessibility outcomes this project is trying to deliver.
+    Standards Baseline: |
+      ### Target Standard
+
+      Name the target standard or internal baseline this project is working toward.
+
+      ### Conformance Language Rules
+
+      Explain what language the project may or may not use when describing accessibility status.
+
+      ### Supported Platforms and Surfaces
+
+      List the concrete environments, platforms, or user-facing surfaces this document applies to.
+    Accessibility Architecture: |
+      ### Semantic Structure
+
+      Describe how the project preserves headings, landmarks, labels, structure, and other semantic meaning.
+
+      ### Input and Keyboard Model
+
+      Describe how the project handles keyboard access, direct input, and interaction behavior.
+
+      ### Focus Management
+
+      Describe how focus order, focus visibility, and focus recovery are handled.
+
+      ### Naming and Announcements
+
+      Describe how controls, state changes, and dynamic updates are named or announced to assistive technology.
+
+      ### Color, Contrast, and Motion
+
+      Describe the rules for contrast, color meaning, animation, and motion reduction.
+
+      ### Zoom, Reflow, and Responsive Behavior
+
+      Describe how the project handles zoom, text scaling, reflow, and narrow layouts.
+
+      ### Media, Captions, and Alternatives
+
+      Describe the project's expectations for media alternatives such as captions, transcripts, and text equivalents.
+    Engineering Workflow: |
+      ### Design and Implementation Rules
+
+      Describe the concrete implementation rules contributors should follow when changing accessibility-relevant surfaces.
+
+      ### Automated Testing
+
+      Document the automated accessibility checks used by this project.
+
+      ### Manual Testing
+
+      Document the manual accessibility checks required for relevant changes.
+
+      ### Assistive Technology Coverage
+
+      Document the assistive technologies, browsers, devices, or operating environments the team actively tests.
+
+      ### Definition of Done
+
+      Describe what must be true before accessibility-relevant work is considered ready for review or merge.
+    Known Gaps: |
+      ### Current Exceptions
+
+      List known accessibility limitations, unsupported surfaces, or temporary exceptions.
+
+      ### Planned Remediation
+
+      Describe how known accessibility gaps are tracked or remediated.
+
+      ### Ownership
+
+      Describe who is responsible for keeping this document and its follow-up work current.
+    User Support and Reporting: |
+      ### Feedback Path
+
+      Describe how users or maintainers should report accessibility issues or request support.
+
+      ### Triage Expectations
+
+      Describe how accessibility reports should be acknowledged, triaged, or escalated.
+    Verification and Evidence: |
+      ### CI Signals
+
+      List the CI or automation signals that support the project's accessibility claims.
+
+      ### Audit Cadence
+
+      Describe how often accessibility review happens and when it is required.
+
+      ### Review History
+
+      Record notable accessibility-review checkpoints, updates, or resets.
+  subsectionTemplates:
+    Overview/Status: |
+      State the current accessibility posture in one short, plain sentence.
+    Overview/Scope: |
+      Describe which project surfaces this accessibility contract covers.
+    Overview/Accessibility Goals: |
+      Describe the real accessibility outcomes this project is trying to deliver.
+    Standards Baseline/Target Standard: |
+      Name the target standard or internal baseline this project is working toward.
+    Standards Baseline/Conformance Language Rules: |
+      Explain what language the project may or may not use when describing accessibility status.
+    Standards Baseline/Supported Platforms and Surfaces: |
+      List the concrete environments, platforms, or user-facing surfaces this document applies to.
+    Accessibility Architecture/Semantic Structure: |
+      Describe how the project preserves headings, landmarks, labels, structure, and other semantic meaning.
+    Accessibility Architecture/Input and Keyboard Model: |
+      Describe how the project handles keyboard access, direct input, and interaction behavior.
+    Accessibility Architecture/Focus Management: |
+      Describe how focus order, focus visibility, and focus recovery are handled.
+    Accessibility Architecture/Naming and Announcements: |
+      Describe how controls, state changes, and dynamic updates are named or announced to assistive technology.
+    Accessibility Architecture/Color, Contrast, and Motion: |
+      Describe the rules for contrast, color meaning, animation, and motion reduction.
+    Accessibility Architecture/Zoom, Reflow, and Responsive Behavior: |
+      Describe how the project handles zoom, text scaling, reflow, and narrow layouts.
+    Accessibility Architecture/Media, Captions, and Alternatives: |
+      Describe the project's expectations for media alternatives such as captions, transcripts, and text equivalents.
+    Engineering Workflow/Design and Implementation Rules: |
+      Describe the concrete implementation rules contributors should follow when changing accessibility-relevant surfaces.
+    Engineering Workflow/Automated Testing: |
+      Document the automated accessibility checks used by this project.
+    Engineering Workflow/Manual Testing: |
+      Document the manual accessibility checks required for relevant changes.
+    Engineering Workflow/Assistive Technology Coverage: |
+      Document the assistive technologies, browsers, devices, or operating environments the team actively tests.
+    Engineering Workflow/Definition of Done: |
+      Describe what must be true before accessibility-relevant work is considered ready for review or merge.
+    Known Gaps/Current Exceptions: |
+      List known accessibility limitations, unsupported surfaces, or temporary exceptions.
+    Known Gaps/Planned Remediation: |
+      Describe how known accessibility gaps are tracked or remediated.
+    Known Gaps/Ownership: |
+      Describe who is responsible for keeping this document and its follow-up work current.
+    User Support and Reporting/Feedback Path: |
+      Describe how users or maintainers should report accessibility issues or request support.
+    User Support and Reporting/Triage Expectations: |
+      Describe how accessibility reports should be acknowledged, triaged, or escalated.
+    Verification and Evidence/CI Signals: |
+      ```bash
+      # Replace this with the grounded CI or automation checks that support the project's accessibility claims.
+      ```
+
+      Prefer fenced code blocks with language info strings when commands help maintainers validate accessibility claims.
+    Verification and Evidence/Audit Cadence: |
+      Describe how often accessibility review happens and when it is required.
+    Verification and Evidence/Review History: |
+      Record notable accessibility-review checkpoints, updates, or resets.

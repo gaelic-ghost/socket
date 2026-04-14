@@ -45,6 +45,7 @@ The base contract requires:
 - `Contribution Workflow` should describe how contributors choose work, make changes, and ask for review without drifting into repo history or product overview prose.
 - `Local Setup > Runtime Config` should be explicit about config files, env vars, secrets, and local services.
 - `Local Setup > Runtime Behavior` should explain what needs to be running locally and how contributors can tell the project is actually working.
+- `Development Expectations > Accessibility Expectations` should keep the contributor contract short, point contributors back to `ACCESSIBILITY.md`, and make accessibility part of normal change quality for relevant work.
 - `Development Expectations > Verification` should prefer fenced code blocks with language info strings when commands help contributors validate changes.
 - `Communication` should stay practical and concise, focused on how contributors surface uncertainty or larger-scope questions.
 

@@ -32,6 +32,7 @@ Required subsection shape:
   - `Runtime Behavior`
 - `Development Expectations`
   - `Naming Conventions`
+  - `Accessibility Expectations`
   - `Verification`
 
 Schema expectations:

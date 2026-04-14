@@ -44,6 +44,14 @@ Explain what needs to be running locally and how contributors can tell the proje
 
 Describe the terminology, casing, and naming patterns contributors should match when extending the project.
 
+### Accessibility Expectations
+
+Contributors must keep changes aligned with the project's accessibility contract in [`ACCESSIBILITY.md`](./ACCESSIBILITY.md).
+
+If a change affects UI semantics, input behavior, focus flow, labels, announcements, motion, contrast, zoom behavior, content structure, or assistive-technology compatibility, verify the affected surface against the documented accessibility standards before asking for review.
+
+If a change introduces a new accessibility limitation, exception, or remediation plan, update `ACCESSIBILITY.md` in the same pass unless maintainers have explicitly agreed on a different tracking path.
+
 ### Verification
 
 Prefer grounded validation commands with fenced code blocks and language info strings when examples help.

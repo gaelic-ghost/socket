@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project Accessibility"
+  short_description: "Audit and apply bounded fixes to canonical ACCESSIBILITY.md files."
+  default_prompt: "Use $maintain-project-accessibility for an ordinary software-project ACCESSIBILITY.md. Load the template-backed accessibility schema first, enforce the required table of contents and canonical section structure, audit unsupported compliance claims and thin verification evidence in check-only mode, and in apply mode keep edits bounded to grounded accessibility standards and workflow guidance only."

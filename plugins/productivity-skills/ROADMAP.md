@@ -13,6 +13,7 @@
 ## Milestone Progress
 
 - [ ] Milestone 14: Claude Code optimization pass
+- [ ] Milestone 22: Accessibility maintenance baseline
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -32,6 +33,28 @@ Exit criteria:
 
 - [ ] Active skills have Claude Code-aware trigger and usage guidance where it materially improves routing.
 - [ ] Claude-facing docs no longer lag behind the current skill layout and plugin-ready repo model.
+
+## Milestone 22: Accessibility maintenance baseline
+
+Scope:
+
+- Add a new `maintain-project-accessibility` baseline skill for canonical `ACCESSIBILITY.md` maintenance.
+- Define `ACCESSIBILITY.md` as the repo-local accessibility control document for standards, architecture, verification, ownership, and known gaps.
+- Extend `maintain-project-contributing` so accessibility expectations become part of the contributor contract instead of optional follow-up guidance.
+
+Tickets:
+
+- [ ] Draft and ship the `maintain-project-accessibility` skill surface with template, config, script, references, and tests.
+- [ ] Define and validate the canonical `ACCESSIBILITY.md` schema, including standards baseline, architecture, workflow, known gaps, and evidence sections.
+- [ ] Add claim-integrity checks so the baseline workflow does not overstate compliance or invent unsupported accessibility evidence.
+- [ ] Extend `maintain-project-contributing` with a required `Accessibility Expectations` subsection under `Development Expectations`.
+- [ ] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
+
+Exit criteria:
+
+- [ ] The repository ships a working `maintain-project-accessibility` skill with deterministic `check-only` and bounded `apply` behavior.
+- [ ] The canonical `ACCESSIBILITY.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
+- [ ] `maintain-project-contributing` enforces contributor-facing accessibility expectations that point back to `ACCESSIBILITY.md`.
 
 ## Backlog Candidates
 

@@ -94,6 +94,10 @@ Explain what needs to be running locally and how contributors can tell the proje
 
 Match the repository's existing terminology, casing, and naming patterns so new work fits the surrounding code and docs cleanly.
 
+### Accessibility Expectations
+
+Contributors must keep changes aligned with the project's accessibility contract in [`ACCESSIBILITY.md`](./ACCESSIBILITY.md).
+
 ### Verification
 
 ```bash
@@ -131,6 +135,7 @@ def test_apply_creates_contributing_from_template_when_missing(tmp_path: Path) -
     assert "# Contributing to" in created
     assert "## Table of Contents" in created
     assert "## Development Expectations" in created
+    assert "### Accessibility Expectations" in created
     assert "### Verification" in created
 
 
@@ -157,6 +162,10 @@ Read the nearby docs first.
 ### Naming
 
 Follow existing names.
+
+### Accessibility
+
+Stay aligned with ACCESSIBILITY.md.
 
 ### Validation
 
@@ -212,6 +221,7 @@ See the license.
     assert "## License and Contribution Terms" in updated
     assert "### Audience" not in updated
     assert "### Who This Guide Is For" in updated
+    assert "### Accessibility Expectations" in updated
     assert report["schema_violations"] == []
 
 
@@ -262,6 +272,10 @@ Explain the running surface.
 ### Naming Conventions
 
 Follow existing names.
+
+### Accessibility Expectations
+
+Stay aligned with ACCESSIBILITY.md.
 
 ### Verification
 
@@ -346,6 +360,10 @@ Explain the running surface.
 ### Naming Conventions
 
 Follow existing names.
+
+### Accessibility Expectations
+
+Stay aligned with ACCESSIBILITY.md.
 
 ### Verification
 
