@@ -1,6 +1,6 @@
 [project]
 name = "socket-maintenance"
-version = "0.4.0"
+version = "0.5.0"
 description = "Root uv tooling baseline for the socket superproject."
 requires-python = ">=3.11"
 dependencies = []
