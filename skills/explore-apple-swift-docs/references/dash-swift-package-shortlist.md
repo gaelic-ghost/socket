@@ -11,6 +11,11 @@ Use this shortlist when the request is about a Swift package, Swift server packa
 
 ## High-Value Package Docsets
 
+- `swiftlang/swift-docc main`
+  - Dash location: installed DocC docset shown under that display name.
+  - Use for: DocC directives, symbol-linking rules, article structure, tutorial syntax, and deeper DocC authoring behavior that goes beyond Xcode's product-side documentation flow.
+  - Upstream: <https://github.com/swiftlang/swift-docc>
+
 - `swiftlang/swift-testing main`
   - Dash location: installed DocC docset shown under that display name.
   - Use for: Swift Testing APIs, traits, issue recording, parameterized tests, and test-organization questions.
@@ -65,6 +70,12 @@ Use this shortlist when the request is about a Swift package, Swift server packa
   - Dash location: installed DocC docset shown under that display name.
   - Use for: Markdown parsing, syntax trees, visitors, and rendering-oriented package behavior.
   - Upstream: <https://github.com/swiftlang/swift-markdown>
+
+- `swiftlang/swift-docc-plugin main`
+  - Dash location: this package does not currently have the same known Dash-docset expectation as `swiftlang/swift-docc`, so check `list_installed_docsets` before assuming local coverage.
+  - Use for: Swift Package Manager integration, plugin-side DocC generation and preview flow, and package-driven documentation build behavior.
+  - Upstream: <https://github.com/swiftlang/swift-docc-plugin>
+  - Swift Package Index docs: <https://swiftpackageindex.com/swiftlang/swift-docc-plugin/documentation>
 
 ## Other Frequently Useful Swift Package Docsets
 

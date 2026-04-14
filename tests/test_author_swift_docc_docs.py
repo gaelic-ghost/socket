@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "skills/docc-workflow/scripts/run_workflow.py"
+SCRIPT = ROOT / "skills/author-swift-docc-docs/scripts/run_workflow.py"
 
 
 def write_config(tmpdir: str, skill: str, settings: dict) -> None:
@@ -75,7 +75,7 @@ class DoccWorkflowTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             env = dict(os.environ)
             env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
-            write_config(tmpdir, "docc-workflow", {"tutorialSupportLevel": "defer"})
+            write_config(tmpdir, "author-swift-docc-docs", {"tutorialSupportLevel": "defer"})
             code, payload = self.run_script(
                 "--request",
                 "Review this DocC tutorial flow for clarity",

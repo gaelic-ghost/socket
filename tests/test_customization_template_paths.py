@@ -13,7 +13,7 @@ SKILL_MODULES = {
     "xcode-app-project-workflow": ROOT / "skills/xcode-app-project-workflow/scripts/customization_config.py",
     "xcode-build-run-workflow": ROOT / "skills/xcode-build-run-workflow/scripts/customization_config.py",
     "xcode-testing-workflow": ROOT / "skills/xcode-testing-workflow/scripts/customization_config.py",
-    "docc-workflow": ROOT / "skills/docc-workflow/scripts/customization_config.py",
+    "author-swift-docc-docs": ROOT / "skills/author-swift-docc-docs/scripts/customization_config.py",
     "explore-apple-swift-docs": ROOT / "skills/explore-apple-swift-docs/scripts/customization_config.py",
     "format-swift-sources": ROOT / "skills/format-swift-sources/scripts/customization_config.py",
     "bootstrap-swift-package": ROOT / "skills/bootstrap-swift-package/scripts/customization_config.py",
