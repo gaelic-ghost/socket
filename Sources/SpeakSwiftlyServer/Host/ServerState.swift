@@ -11,13 +11,13 @@ import Observation
 @MainActor
 public final class ServerState {
     struct Actions {
-        let refreshVoiceProfiles: @MainActor @Sendable () async throws -> [ProfileSnapshot]
-        let setDefaultVoiceProfileName: @MainActor @Sendable (String) async throws -> String
-        let clearDefaultVoiceProfileName: @MainActor @Sendable () async throws -> String?
-        let pausePlayback: @MainActor @Sendable () async throws -> PlaybackStatusSnapshot
-        let resumePlayback: @MainActor @Sendable () async throws -> PlaybackStatusSnapshot
-        let clearPlaybackQueue: @MainActor @Sendable () async throws -> Int
-        let cancelPlaybackRequest: @MainActor @Sendable (String) async throws -> String
+        let refreshVoiceProfiles: @Sendable () async throws -> [ProfileSnapshot]
+        let setDefaultVoiceProfileName: @Sendable (String) async throws -> String
+        let clearDefaultVoiceProfileName: @Sendable () async throws -> String?
+        let pausePlayback: @Sendable () async throws -> PlaybackStatusSnapshot
+        let resumePlayback: @Sendable () async throws -> PlaybackStatusSnapshot
+        let clearPlaybackQueue: @Sendable () async throws -> Int
+        let cancelPlaybackRequest: @Sendable (String) async throws -> String
 
         static let unavailable = Actions(
             refreshVoiceProfiles: {

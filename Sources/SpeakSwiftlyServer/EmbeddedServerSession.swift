@@ -8,8 +8,10 @@ import ServiceLifecycle
 ///
 /// `EmbeddedServerSession` keeps the transport and runtime ownership internal while exposing the
 /// `@Observable` `ServerState` projection that app UI can read directly.
-@MainActor
-public final class EmbeddedServerSession {
+///
+/// The wrapper itself is safe to move between tasks because mutable lifecycle coordination stays
+/// behind actor-isolated members while the observable `ServerState` remains main-actor-owned.
+public final class EmbeddedServerSession: @unchecked Sendable {
     /// Configuration options for the app-owned embedded session bootstrap path.
     public struct Options: Sendable {
         /// Optional localhost port override for the embedded HTTP transport.
@@ -33,15 +35,27 @@ public final class EmbeddedServerSession {
     }
 
     struct LifecycleHooks {
-        let requestStop: @MainActor @Sendable () async -> Void
-        let waitUntilStopped: @MainActor @Sendable () async throws -> Void
+        let requestStop: @Sendable () async -> Void
+        let waitUntilStopped: @Sendable () async throws -> Void
     }
 
     /// The app-facing observable projection of the embedded host state.
     public let state: ServerState
 
     private let lifecycle: LifecycleHooks
-    private var didRequestStop = false
+    private let stopCoordinator = StopCoordinator()
+
+    actor StopCoordinator {
+        private var didRequestStop = false
+
+        func requestStopIfNeeded() -> Bool {
+            guard !didRequestStop else {
+                return false
+            }
+            didRequestStop = true
+            return true
+        }
+    }
 
     // MARK: - Initialization
 
@@ -78,7 +92,7 @@ public final class EmbeddedServerSession {
         defaultProfile: AppRuntimeDefaultProfile = .embeddedSession,
         bootstrap: @escaping @Sendable ([String: String], ServerState) async throws -> LifecycleHooks
     ) async throws -> EmbeddedServerSession {
-        let state = ServerState()
+        let state = await MainActor.run { ServerState() }
         let lifecycle = try await bootstrap(
             effectiveEnvironment(
                 environment: environment,
@@ -230,13 +244,9 @@ public final class EmbeddedServerSession {
 
     /// Gracefully stops the embedded session and waits for transport and host cleanup to finish.
     public func stop() async throws {
-        guard !didRequestStop else {
-            try await waitUntilStopped()
-            return
+        if await stopCoordinator.requestStopIfNeeded() {
+            await lifecycle.requestStop()
         }
-
-        didRequestStop = true
-        await lifecycle.requestStop()
         try await waitUntilStopped()
     }
 
