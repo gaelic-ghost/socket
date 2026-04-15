@@ -4,6 +4,25 @@ import SpeakSwiftly
 // MARK: - Runtime Configuration Store
 
 struct RuntimeConfigurationStore: Sendable {
+    private final class FileSystem: @unchecked Sendable {
+        private let fileManager: FileManager
+
+        init(fileManager: FileManager) {
+            self.fileManager = fileManager
+        }
+
+        func fileExists(atPath path: String) -> Bool {
+            fileManager.fileExists(atPath: path)
+        }
+
+        func createDirectory(at url: URL, withIntermediateDirectories: Bool) throws {
+            try fileManager.createDirectory(
+                at: url,
+                withIntermediateDirectories: withIntermediateDirectories
+            )
+        }
+    }
+
     private struct PersistedRuntimeConfiguration: Codable, Sendable {
         let speechBackend: SpeakSwiftly.SpeechBackend
         let defaultVoiceProfileName: SpeakSwiftly.Name?
@@ -16,7 +35,7 @@ struct RuntimeConfigurationStore: Sendable {
             self.defaultVoiceProfileName = Self.normalized(defaultVoiceProfileName)
         }
 
-        private static func normalized(_ profileName: SpeakSwiftly.Name?) -> SpeakSwiftly.Name? {
+        static func normalized(_ profileName: SpeakSwiftly.Name?) -> SpeakSwiftly.Name? {
             guard let profileName else {
                 return nil
             }
@@ -26,6 +45,7 @@ struct RuntimeConfigurationStore: Sendable {
     }
 
     private let environment: [String: String]
+    private let fileSystem: FileSystem
     private let configurationURL: URL
     private let profileRootURL: URL
     private let defaultActiveRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend?
@@ -37,6 +57,7 @@ struct RuntimeConfigurationStore: Sendable {
     ) {
         let profileRootOverride = environment["SPEAKSWIFTLY_PROFILE_ROOT"]
         self.environment = environment
+        self.fileSystem = FileSystem(fileManager: fileManager)
         if let profileRootOverride,
            profileRootOverride.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
         {
@@ -142,7 +163,8 @@ struct RuntimeConfigurationStore: Sendable {
         }
         return snapshot(
             activeRuntimeSpeechBackend: activeRuntimeSpeechBackend,
-            activeDefaultVoiceProfileName: defaultVoiceProfileName ?? configuredDefaultVoiceProfileName,
+            activeDefaultVoiceProfileName: PersistedRuntimeConfiguration.normalized(defaultVoiceProfileName)
+                ?? configuredDefaultVoiceProfileName,
             configuredDefaultVoiceProfileName: configuredDefaultVoiceProfileName
         )
     }
@@ -150,12 +172,13 @@ struct RuntimeConfigurationStore: Sendable {
     private func resolvedPersistedConfiguration() -> Resolution {
         Self.resolvePersistedConfiguration(
             environment: environment,
-            configurationURL: configurationURL
+            configurationURL: configurationURL,
+            fileSystem: fileSystem
         )
     }
 
     private func loadPersistedRuntimeConfiguration() -> PersistedRuntimeConfiguration? {
-        let configurationExists = FileManager.default.fileExists(atPath: configurationURL.path)
+        let configurationExists = fileSystem.fileExists(atPath: configurationURL.path)
         return Self.loadPersistedConfiguration(
             from: configurationURL,
             configurationExists: configurationExists
@@ -164,7 +187,7 @@ struct RuntimeConfigurationStore: Sendable {
 
     private func savePersistedConfiguration(_ configuration: PersistedRuntimeConfiguration) throws {
         let directoryURL = configurationURL.deletingLastPathComponent()
-        try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        try fileSystem.createDirectory(at: directoryURL, withIntermediateDirectories: true)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         let data = try encoder.encode(configuration)
@@ -189,12 +212,12 @@ private extension RuntimeConfigurationStore {
         let configurationError: String?
     }
 
-    static func resolvePersistedConfiguration(
+    private static func resolvePersistedConfiguration(
         environment: [String: String],
-        configurationURL: URL
+        configurationURL: URL,
+        fileSystem: FileSystem
     ) -> Resolution {
-        let fileManager = FileManager.default
-        let configurationExists = fileManager.fileExists(atPath: configurationURL.path)
+        let configurationExists = fileSystem.fileExists(atPath: configurationURL.path)
         let persistedState = loadPersistedConfiguration(
             from: configurationURL,
             configurationExists: configurationExists

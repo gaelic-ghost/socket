@@ -279,3 +279,77 @@ import Testing
         #expect(runtimeConfiguration.persistedDefaultVoiceProfileName == "persisted-default")
     }
 }
+
+@Test func runtimeConfigurationStoreReportsInvalidPersistedConfiguration() async throws {
+    let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
+    let configurationURL = runtimeProfileRootURL
+        .deletingLastPathComponent()
+        .appendingPathComponent("configuration.json", isDirectory: false)
+    try FileManager.default.createDirectory(
+        at: configurationURL.deletingLastPathComponent(),
+        withIntermediateDirectories: true
+    )
+    try """
+    { this is not valid json }
+    """.write(to: configurationURL, atomically: true, encoding: .utf8)
+
+    let store = RuntimeConfigurationStore(
+        environment: ["SPEAKSWIFTLY_PROFILE_ROOT": runtimeProfileRootURL.path],
+        activeRuntimeSpeechBackend: .qwen3
+    )
+
+    let snapshot = store.snapshot()
+    #expect(snapshot.activeRuntimeSpeechBackend == "qwen3")
+    #expect(snapshot.nextRuntimeSpeechBackend == "qwen3")
+    #expect(snapshot.persistedConfigurationExists == true)
+    #expect(snapshot.persistedConfigurationState == "invalid")
+    #expect(snapshot.persistedSpeechBackend == nil)
+    #expect(snapshot.persistedDefaultVoiceProfileName == nil)
+    #expect(snapshot.persistedConfigurationError?.contains("configuration.json") == true)
+    #expect(snapshot.persistedConfigurationError?.contains("Likely cause") == true)
+}
+
+@Test func runtimeConfigurationStoreEnvironmentOverrideBeatsPersistedBackend() async throws {
+    let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
+    let store = RuntimeConfigurationStore(
+        environment: [
+            "SPEAKSWIFTLY_PROFILE_ROOT": runtimeProfileRootURL.path,
+            "SPEAKSWIFTLY_SPEECH_BACKEND": "marvis",
+        ],
+        activeRuntimeSpeechBackend: .marvis
+    )
+
+    _ = try store.saveDefaultVoiceProfileName("persisted-femme")
+    _ = try store.save(speechBackend: .qwen3)
+
+    let snapshot = store.snapshot()
+    #expect(snapshot.activeRuntimeSpeechBackend == "marvis")
+    #expect(snapshot.nextRuntimeSpeechBackend == "marvis")
+    #expect(snapshot.environmentSpeechBackendOverride == "marvis")
+    #expect(snapshot.persistedSpeechBackend == "qwen3")
+    #expect(snapshot.persistedDefaultVoiceProfileName == "persisted-femme")
+    #expect(snapshot.nextDefaultVoiceProfileName == "persisted-femme")
+    #expect(snapshot.persistedConfigurationState == "loaded")
+    #expect(snapshot.persistedConfigurationWillAffectNextRuntimeStart == false)
+    #expect(snapshot.activeRuntimeMatchesNextRuntime == true)
+}
+
+@Test func runtimeConfigurationStoreNormalizesBlankDefaultVoiceProfileName() throws {
+    let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("profiles", isDirectory: true)
+    let store = RuntimeConfigurationStore(
+        environment: ["SPEAKSWIFTLY_PROFILE_ROOT": runtimeProfileRootURL.path]
+    )
+
+    let snapshot = try store.saveDefaultVoiceProfileName("   \n\t  ")
+    #expect(snapshot.activeDefaultVoiceProfileName == nil)
+    #expect(snapshot.nextDefaultVoiceProfileName == nil)
+    #expect(snapshot.persistedDefaultVoiceProfileName == nil)
+    #expect(snapshot.persistedConfigurationExists == true)
+    #expect(snapshot.persistedConfigurationState == "loaded")
+}
