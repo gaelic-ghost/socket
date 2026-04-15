@@ -16,6 +16,7 @@ SKILL_MODULES = {
     "author-swift-docc-docs": ROOT / "skills/author-swift-docc-docs/scripts/customization_config.py",
     "explore-apple-swift-docs": ROOT / "skills/explore-apple-swift-docs/scripts/customization_config.py",
     "format-swift-sources": ROOT / "skills/format-swift-sources/scripts/customization_config.py",
+    "structure-swift-sources": ROOT / "skills/structure-swift-sources/scripts/customization_config.py",
     "bootstrap-swift-package": ROOT / "skills/bootstrap-swift-package/scripts/customization_config.py",
     "bootstrap-xcode-app-project": ROOT / "skills/bootstrap-xcode-app-project/scripts/customization_config.py",
     "sync-xcode-project-guidance": ROOT / "skills/sync-xcode-project-guidance/scripts/customization_config.py",
