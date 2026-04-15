@@ -23,6 +23,12 @@
 - Place a descriptive secondary line immediately below it as `// MARK: <Comment>`.
 - Group declarations by declaration kind or responsibility rather than by arbitrary source order.
 
+## File Header Rule
+
+- Managed Swift source files should carry the structured block-comment header described in `references/file-headers.md`.
+- The header should explain the file's purpose and concern in plain terms.
+- Keep the header requirement separate from DocC authoring. It is a file-level structure rule, not symbol-level documentation.
+
 ## SwiftUI Rule
 
 - Once any one view has more than `3` chained modifiers, strongly consider extracting a custom `ViewModifier`.

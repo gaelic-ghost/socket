@@ -1,0 +1,115 @@
+from __future__ import annotations
+
+import importlib.util
+import tempfile
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MODULE_PATH = ROOT / "skills/structure-swift-sources/scripts/normalize_swift_file_headers.py"
+
+
+def load_module(module_path: Path):
+    spec = importlib.util.spec_from_file_location(module_path.stem, module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load module from {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.module = load_module(MODULE_PATH)
+
+    def test_report_counts_compliant_missing_and_malformed_headers(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Sources").mkdir()
+            (root / "Sources" / "Compliant.swift").write_text(
+                "/*\nPurpose: Explains the feature entry point.\nConcern: Entry-point state and setup.\n*/\n\nimport Foundation\n",
+                encoding="utf-8",
+            )
+            (root / "Sources" / "Missing.swift").write_text("import Foundation\n", encoding="utf-8")
+            (root / "Sources" / "Malformed.swift").write_text(
+                "/*\nPurpose: Missing the concern field.\n*/\n\nimport Foundation\n",
+                encoding="utf-8",
+            )
+
+            payload = self.module.report_headers(root)
+
+        self.assertEqual(payload["status"], "success")
+        self.assertEqual(payload["files_scanned"], 3)
+        self.assertEqual(payload["counts"]["compliant"], 1)
+        self.assertEqual(payload["counts"]["missing-header"], 1)
+        self.assertEqual(payload["counts"]["malformed-header"], 1)
+
+    def test_apply_inventory_preserves_license_block_and_adds_structured_header(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            source_dir = root / "Sources"
+            source_dir.mkdir()
+            target = source_dir / "Feature.swift"
+            target.write_text(
+                "/*\nCopyright 2026 Example.\n*/\n\nimport Foundation\n",
+                encoding="utf-8",
+            )
+            inventory = root / "headers.yaml"
+            inventory.write_text(
+                "\n".join(
+                    [
+                        "entries:",
+                        "  - path: Sources/Feature.swift",
+                        '    purpose: "Defines the feature entry point in plain terms."',
+                        '    concern: "Feature startup state and setup."',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            payload = self.module.apply_inventory(root, inventory)
+            rewritten = target.read_text(encoding="utf-8")
+
+        self.assertEqual(payload["status"], "success")
+        self.assertEqual(payload["created_headers"], 1)
+        self.assertIn("Copyright 2026 Example.", rewritten)
+        self.assertIn("Purpose: Defines the feature entry point in plain terms.", rewritten)
+        self.assertIn("Concern: Feature startup state and setup.", rewritten)
+
+    def test_apply_inventory_replaces_existing_structured_header(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            source_dir = root / "Sources"
+            source_dir.mkdir()
+            target = source_dir / "Feature.swift"
+            target.write_text(
+                "/*\nPurpose: Old purpose.\nConcern: Old concern.\n*/\n\nimport Foundation\n",
+                encoding="utf-8",
+            )
+            inventory = root / "headers.yaml"
+            inventory.write_text(
+                "\n".join(
+                    [
+                        "entries:",
+                        "  - path: Sources/Feature.swift",
+                        '    purpose: "Defines the new feature entry point."',
+                        '    concern: "Feature state and wiring."',
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            payload = self.module.apply_inventory(root, inventory)
+            rewritten = target.read_text(encoding="utf-8")
+
+        self.assertEqual(payload["status"], "success")
+        self.assertEqual(payload["updated_headers"], 1)
+        self.assertIn("Purpose: Defines the new feature entry point.", rewritten)
+        self.assertNotIn("Old purpose", rewritten)
+
+
+if __name__ == "__main__":
+    unittest.main()

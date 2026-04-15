@@ -1,0 +1,7 @@
+schemaVersion: 1
+isCustomized: false
+settings:
+  fileHeaderMode: "advisory"
+  fileHeaderStyle: "plain-block"
+  splitSoftLimit: 400
+  splitHardLimit: 800

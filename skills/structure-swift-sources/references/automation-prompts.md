@@ -30,11 +30,14 @@ Then use $structure-swift-sources for:
 - target_scope=<TARGET_SCOPE>
 - split_mode=<SPLIT_MODE>
 - todo_fixme_mode=<TODO_FIXME_MODE>
+- file_header_mode=<FILE_HEADER_MODE>
+- file_header_style=<FILE_HEADER_STYLE>
 
 Execution requirements:
 1) Establish or confirm the formatting baseline first.
-2) Apply the structure rules from the skill references.
-3) If the request becomes symbol-doc or DocC-content work, stop and hand off to $author-swift-docc-docs.
-4) If splitting or moving files touches Xcode-managed membership, stop and hand off to $xcode-build-run-workflow.
-5) Finish by returning to $format-swift-sources.
+2) Run `scripts/run_workflow.py` first so the cleanup kind, header policy, split thresholds, and handoff surface resolve into one contract.
+3) Apply the structure rules from the skill references.
+4) If the request becomes symbol-doc or DocC-content work, stop and hand off to $author-swift-docc-docs.
+5) If splitting or moving files touches Xcode-managed membership, stop and hand off to $xcode-build-run-workflow.
+6) Finish by returning to $format-swift-sources.
 ```

@@ -1,18 +1,19 @@
 ---
 name: structure-swift-sources
-description: Organize Swift source trees and oversized Swift files by feature, layer, and declaration group; split large files, normalize `// MARK:` sections, and move TODO and FIXME text into ledger files. Use after `format-swift-sources` has established a clean formatting baseline.
+description: Organize Swift source trees and oversized Swift files by feature, layer, and declaration group; split large files, normalize `// MARK:` sections, enforce plain-language block-comment file headers, and move TODO and FIXME text into ledger files. Use after `format-swift-sources` has established a clean formatting baseline.
 ---
 
 # Structure Swift Sources
 
 ## Purpose
 
-Use this skill as the top-level workflow for structural cleanup inside existing Swift repositories. It governs file splitting, file moves, section grouping, and TODO or FIXME ledger extraction. It is not the formatter or linter integration authority, and it is not the DocC authoring authority. Use `format-swift-sources` before this skill starts mutating source layout, use `author-swift-docc-docs` when the request becomes symbol-doc or DocC-content work, and run `format-swift-sources` again after this skill finishes.
+Use this skill as the top-level workflow for structural cleanup inside existing Swift repositories. It governs file splitting, file moves, section grouping, plain-language file headers, and TODO or FIXME ledger extraction. `scripts/run_workflow.py` is the runtime wrapper for repo-shape detection, cleanup-kind classification, header-policy loading, split-threshold loading, and clean handoffs to DocC or Xcode execution workflows. It is not the formatter or linter integration authority, and it is not the DocC authoring authority. Use `format-swift-sources` before this skill starts mutating source layout, use `author-swift-docc-docs` when the request becomes symbol-doc or DocC-content work, and run `format-swift-sources` again after this skill finishes.
 
 ## When To Use
 
 - Use this skill when the user wants to split oversized Swift files or move files into a clearer repo layout.
 - Use this skill when the user wants consistent `// MARK:` sections, declaration grouping, or view-modifier extraction in SwiftUI code.
+- Use this skill when the user wants consistent block-comment file headers that describe a file's purpose and area of concern in plain terms.
 - Use this skill when the user wants TODO or FIXME text moved out of source files into repo ledger files.
 - Use this skill when a Swift package or Xcode app repo has drifted away from the intended feature-plus-layer directory shape.
 - Recommend `format-swift-sources` first when formatter or linter setup is missing, unclear, or stale.
@@ -28,6 +29,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - repo layout cleanup
    - large-file split
    - section and MARK normalization
+   - file-header normalization
    - TODO or FIXME ledger extraction
    - combined source-hygiene pass
 2. Run or confirm `format-swift-sources` first:
@@ -41,15 +43,20 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - `references/glossary.md`
    - `references/layout-rules.md`
    - `references/source-organization-rules.md`
+   - `references/file-headers.md`
    - `references/todo-fixme-ledgers.md`
    - `references/automation-prompts.md`
+   - `references/customization-flow.md`
 5. Apply the structure rules:
-   - strongly consider splitting a file once it exceeds `400` lines and clearly holds `2` or more separate concerns
-   - always split a file once it exceeds `800` lines
+   - strongly consider splitting a file once it exceeds the configured soft split threshold and clearly holds `2` or more separate concerns
+   - always split a file once it exceeds the configured hard split threshold
    - when the underlying type is still one coherent type, extract grouped concerns into extension files such as `<Original>+Models.swift` or `<Original>+<Concern>.swift`
    - group declarations into explicit `// MARK: - <Heading>` sections, then place a descriptive secondary `// MARK: <Comment>` line directly below each heading
+   - require or recommend the documented block-comment file header according to the effective header policy
+   - keep header text in plain terms that explain what the file is for and what concern it owns, instead of repeating the filename or symbol names as jargon
    - move TODO and FIXME text into `TODO.md` and `FIXME.md`, keeping only ticket IDs in source comments
    - when the task is TODO or FIXME normalization, use `scripts/normalize_todo_fixme_ledgers.py` for the deterministic ledger rewrite pass across supported Swift and Objective-C source forms
+   - when the task is file-header normalization or a full cleanup pass that includes headers, use `scripts/normalize_swift_file_headers.py` to audit or apply the documented header shape
 6. Apply repo-shape rules:
    - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
    - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Controllers/`, and `Models/`
@@ -63,11 +70,14 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - `target_scope`: optional narrowed scope such as one file, one feature directory, or the whole repo
 - `split_mode`: optional; use values such as `advisory`, `required`, or `full-pass`
 - `todo_fixme_mode`: optional; use values such as `report-only`, `rewrite-ledgers`, or `normalize-existing`
+- `file_header_mode`: optional; use values such as `advisory` or `required`
+- `file_header_style`: optional; currently `plain-block`
 - Defaults:
   - run `format-swift-sources` before and after structural mutation
   - prefer feature-plus-layer layout over flat buckets when the repo has meaningful feature boundaries
   - prefer extracted extensions before inventing new wrapper types
   - prefer `TODO.md` and `FIXME.md` as separate ledger files
+  - prefer the plain-language block-comment header described in `references/file-headers.md`
 
 ## Outputs
 
@@ -85,6 +95,8 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
   - `layout_targets`
   - `split_targets`
   - `ledger_files`
+  - `header_policy`
+  - `helper_scripts`
   - `caveats`
   - `verification`
 
@@ -93,6 +105,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - Do not split files purely by line count when the code still represents one small, coherent concern and the real problem is formatting or comments.
 - Do not invent new abstraction layers just to make a file shorter.
 - Do not move files across Xcode-managed boundaries without accounting for project membership and validation.
+- Do not treat file-header automation as permission to invent vague or generic purpose text. Header content must come from the actual code understanding or an explicit inventory.
 - Do not rewrite TODO or FIXME comments into ledger IDs unless the ledger files are updated in the same pass.
 - Do not absorb symbol-doc or DocC-content work; hand that off to `author-swift-docc-docs`.
 - Stop with `blocked` when the repo shape is too ambiguous to choose feature-first versus layer-first layout safely.
@@ -104,12 +117,14 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - If a broad repo-wide cleanup is too risky, fall back to one feature directory or one oversized file at a time.
 - If the request becomes symbol-doc or DocC-content work, hand off to `author-swift-docc-docs`.
 - If Xcode project integrity must be revalidated after file moves, hand off to `xcode-build-run-workflow`.
+- `scripts/run_workflow.py` is the top-level runtime entrypoint and converts repo inspection plus request inference into the documented JSON contract.
 - Recommend `sync-xcode-project-guidance` or `sync-swift-package-guidance` when the request is really about durable repo rules rather than current-file cleanup.
 
 ## Customization
 
-- This skill currently has no durable customization surface.
-- Keep split thresholds, ledger names, and MARK conventions as workflow policy unless a real repeat customization need appears.
+- Use `references/customization-flow.md`.
+- `scripts/customization_config.py` stores and reports customization state.
+- `scripts/run_workflow.py` loads the runtime-enforced header policy and split thresholds before shaping the final workflow contract.
 
 ## References
 
@@ -118,11 +133,13 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - `references/glossary.md`
 - `references/layout-rules.md`
 - `references/source-organization-rules.md`
+- `references/file-headers.md`
 - `references/todo-fixme-ledgers.md`
 
 ### Contract References
 
 - `references/automation-prompts.md`
+- `references/customization-flow.md`
 
 ### Support References
 
@@ -131,4 +148,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 
 ### Script Inventory
 
+- `scripts/customization_config.py`
+- `scripts/run_workflow.py`
 - `scripts/normalize_todo_fixme_ledgers.py`
+- `scripts/normalize_swift_file_headers.py`
