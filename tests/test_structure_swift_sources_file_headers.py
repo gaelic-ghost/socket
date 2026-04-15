@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 import importlib.util
 import tempfile
 import unittest
@@ -28,12 +29,12 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
             root = Path(tmpdir)
             (root / "Sources").mkdir()
             (root / "Sources" / "Compliant.swift").write_text(
-                "/*\nPurpose: Explains the feature entry point.\nConcern: Entry-point state and setup.\n*/\n\nimport Foundation\n",
+                "/*\nSampleProject\nCompliant.swift\n© Gale Williams 2026\n\nConcern: Entry-point state and setup.\nPurpose: Explains the feature entry point.\nKey Types: FeatureView, FeatureState\nSee Also: FeatureView+Model.swift\n*/\n\nimport Foundation\n",
                 encoding="utf-8",
             )
             (root / "Sources" / "Missing.swift").write_text("import Foundation\n", encoding="utf-8")
             (root / "Sources" / "Malformed.swift").write_text(
-                "/*\nPurpose: Missing the concern field.\n*/\n\nimport Foundation\n",
+                "/*\nSampleProject\nMalformed.swift\n© Gale Williams 2026\n\nPurpose: Missing the concern field.\n*/\n\nimport Foundation\n",
                 encoding="utf-8",
             )
 
@@ -75,8 +76,11 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
         self.assertEqual(payload["status"], "success")
         self.assertEqual(payload["created_headers"], 1)
         self.assertIn("Copyright 2026 Example.", rewritten)
-        self.assertIn("Purpose: Defines the feature entry point in plain terms.", rewritten)
+        self.assertIn(root.name, rewritten)
+        self.assertIn("Feature.swift", rewritten)
+        self.assertIn(f"© Gale Williams {date.today().year}", rewritten)
         self.assertIn("Concern: Feature startup state and setup.", rewritten)
+        self.assertIn("Purpose: Defines the feature entry point in plain terms.", rewritten)
 
     def test_apply_inventory_replaces_existing_structured_header(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -85,7 +89,7 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
             source_dir.mkdir()
             target = source_dir / "Feature.swift"
             target.write_text(
-                "/*\nPurpose: Old purpose.\nConcern: Old concern.\n*/\n\nimport Foundation\n",
+                "/*\nOldProject\nFeature.swift\n© Gale Williams 2022\n\nConcern: Old concern.\nPurpose: Old purpose.\n*/\n\nimport Foundation\n",
                 encoding="utf-8",
             )
             inventory = root / "headers.yaml"
@@ -96,6 +100,8 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
                         "  - path: Sources/Feature.swift",
                         '    purpose: "Defines the new feature entry point."',
                         '    concern: "Feature state and wiring."',
+                        '    key_types: "FeatureView, FeatureState"',
+                        '    see_also: "FeatureView+Model.swift, FeatureView+Modifier.swift"',
                     ]
                 )
                 + "\n",
@@ -107,7 +113,12 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
 
         self.assertEqual(payload["status"], "success")
         self.assertEqual(payload["updated_headers"], 1)
+        self.assertIn(root.name, rewritten)
+        self.assertIn("© Gale Williams 2022", rewritten)
+        self.assertIn("Concern: Feature state and wiring.", rewritten)
         self.assertIn("Purpose: Defines the new feature entry point.", rewritten)
+        self.assertIn("Key Types: FeatureView, FeatureState", rewritten)
+        self.assertIn("See Also: FeatureView+Model.swift, FeatureView+Modifier.swift", rewritten)
         self.assertNotIn("Old purpose", rewritten)
 
 

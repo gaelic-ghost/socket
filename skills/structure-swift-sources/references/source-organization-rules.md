@@ -26,7 +26,7 @@
 ## File Header Rule
 
 - Managed Swift source files should carry the structured block-comment header described in `references/file-headers.md`.
-- The header should explain the file's purpose and concern in plain terms.
+- The header should identify the project and file explicitly, then explain the file's concern and purpose in plain terms.
 - Keep the header requirement separate from DocC authoring. It is a file-level structure rule, not symbol-level documentation.
 
 ## SwiftUI Rule

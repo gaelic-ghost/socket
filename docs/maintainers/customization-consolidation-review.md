@@ -11,8 +11,8 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 - The active skill surface ships `14` separate `references/customization.template.yaml` files.
 - The active skill surface ships `14` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `20` knobs total:
-  - `19` are documented as `runtime-enforced`
+- The current templates expose `21` knobs total:
+  - `20` are documented as `runtime-enforced`
   - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference

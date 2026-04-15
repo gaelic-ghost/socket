@@ -28,7 +28,7 @@ VALID_CLEANUP_KINDS = {
 VALID_SPLIT_MODES = {"advisory", "required", "full-pass"}
 VALID_TODO_FIXME_MODES = {"report-only", "rewrite-ledgers", "normalize-existing"}
 VALID_FILE_HEADER_MODES = {"advisory", "required"}
-VALID_FILE_HEADER_STYLES = {"plain-block"}
+VALID_FILE_HEADER_STYLES = {"project-banner"}
 
 
 def normalize_request_text(text: str | None) -> str:
@@ -162,7 +162,8 @@ def load_effective_config() -> dict:
 def validated_runtime_settings() -> dict:
     settings = load_effective_config().get("settings", {})
     file_header_mode = str(settings.get("fileHeaderMode", "advisory"))
-    file_header_style = str(settings.get("fileHeaderStyle", "plain-block"))
+    file_header_style = str(settings.get("fileHeaderStyle", "project-banner"))
+    file_header_copyright_owner = str(settings.get("fileHeaderCopyrightOwner", "Gale Williams")).strip()
     try:
         split_soft_limit = int(settings.get("splitSoftLimit", 400))
         split_hard_limit = int(settings.get("splitHardLimit", 800))
@@ -173,7 +174,9 @@ def validated_runtime_settings() -> dict:
     if file_header_mode not in VALID_FILE_HEADER_MODES:
         file_header_mode = "advisory"
     if file_header_style not in VALID_FILE_HEADER_STYLES:
-        file_header_style = "plain-block"
+        file_header_style = "project-banner"
+    if not file_header_copyright_owner:
+        file_header_copyright_owner = "Gale Williams"
     if split_soft_limit < 1:
         split_soft_limit = 400
     if split_hard_limit <= split_soft_limit:
@@ -182,6 +185,7 @@ def validated_runtime_settings() -> dict:
     return {
         "fileHeaderMode": file_header_mode,
         "fileHeaderStyle": file_header_style,
+        "fileHeaderCopyrightOwner": file_header_copyright_owner,
         "splitSoftLimit": split_soft_limit,
         "splitHardLimit": split_hard_limit,
     }
@@ -231,6 +235,7 @@ def main() -> int:
                 "header_policy": {
                     "mode": settings["fileHeaderMode"],
                     "style": settings["fileHeaderStyle"],
+                    "copyright_owner": settings["fileHeaderCopyrightOwner"],
                 },
                 "split_thresholds": {
                     "soft_limit": settings["splitSoftLimit"],
@@ -257,6 +262,7 @@ def main() -> int:
                 "header_policy": {
                     "mode": settings["fileHeaderMode"],
                     "style": settings["fileHeaderStyle"],
+                    "copyright_owner": settings["fileHeaderCopyrightOwner"],
                 },
                 "split_thresholds": {
                     "soft_limit": settings["splitSoftLimit"],
@@ -283,6 +289,7 @@ def main() -> int:
                 "header_policy": {
                     "mode": settings["fileHeaderMode"],
                     "style": settings["fileHeaderStyle"],
+                    "copyright_owner": settings["fileHeaderCopyrightOwner"],
                 },
                 "split_thresholds": {
                     "soft_limit": settings["splitSoftLimit"],
@@ -309,6 +316,7 @@ def main() -> int:
                 "header_policy": {
                     "mode": settings["fileHeaderMode"],
                     "style": settings["fileHeaderStyle"],
+                    "copyright_owner": settings["fileHeaderCopyrightOwner"],
                 },
                 "split_thresholds": {
                     "soft_limit": settings["splitSoftLimit"],
@@ -356,6 +364,7 @@ def main() -> int:
             "header_policy": {
                 "mode": settings["fileHeaderMode"],
                 "style": settings["fileHeaderStyle"],
+                "copyright_owner": settings["fileHeaderCopyrightOwner"],
             },
             "split_thresholds": {
                 "soft_limit": settings["splitSoftLimit"],
