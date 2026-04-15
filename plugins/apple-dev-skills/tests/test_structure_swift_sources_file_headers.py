@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "skills/structure-swift-sources/scripts/normalize_swift_file_headers.py"
+TEMPLATE_PATH = ROOT / "skills/structure-swift-sources/references/file-header-inventory.template.yaml"
 
 
 def load_module(module_path: Path):
@@ -120,6 +121,19 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
         self.assertIn("Key Types: FeatureView, FeatureState", rewritten)
         self.assertIn("See Also: FeatureView+Model.swift, FeatureView+Modifier.swift", rewritten)
         self.assertNotIn("Old purpose", rewritten)
+
+    def test_checked_in_inventory_template_matches_loader_contract(self) -> None:
+        entries = self.module.load_inventory(TEMPLATE_PATH)
+
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["path"], "Sources/Feature.swift")
+        self.assertTrue(entries[0]["concern"])
+        self.assertTrue(entries[0]["purpose"])
+        self.assertEqual(entries[0]["key_types"], ["FeatureView", "FeatureState"])
+        self.assertEqual(
+            entries[0]["see_also"],
+            ["FeatureView+Model.swift", "FeatureView+Modifier.swift"],
+        )
 
 
 if __name__ == "__main__":

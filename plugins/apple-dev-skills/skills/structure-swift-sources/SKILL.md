@@ -108,6 +108,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - Do not invent new abstraction layers just to make a file shorter.
 - Do not move files across Xcode-managed boundaries without accounting for project membership and validation.
 - Do not treat file-header automation as permission to invent vague or generic purpose text. Header content must come from the actual code understanding or an explicit inventory.
+- Do not make end users reverse-engineer the file-header inventory shape from prose or tests. Point them at `references/file-header-inventory.template.yaml` when `--apply --inventory` is the right path.
 - Do not rewrite TODO or FIXME comments into ledger IDs unless the ledger files are updated in the same pass.
 - Do not absorb symbol-doc or DocC-content work; hand that off to `author-swift-docc-docs`.
 - Stop with `blocked` when the repo shape is too ambiguous to choose feature-first versus layer-first layout safely.
@@ -154,3 +155,4 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - `scripts/run_workflow.py`
 - `scripts/normalize_todo_fixme_ledgers.py`
 - `scripts/normalize_swift_file_headers.py`
+- `references/file-header-inventory.template.yaml`

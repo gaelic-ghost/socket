@@ -18,6 +18,7 @@ This should stay sequential. The formatting passes and the structural pass all m
 - Keep file splitting itself agent-driven because concern detection and access-control-safe extraction still require reasoning.
 - Keep deterministic follow-up work, such as running the formatting skill before and after, inside automation.
 - Use `scripts/normalize_todo_fixme_ledgers.py --apply` as the deterministic helper when the structure pass includes TODO/FIXME ledger normalization.
+- Use `references/file-header-inventory.template.yaml` as the starting point when the structure pass includes deterministic file-header application through `scripts/normalize_swift_file_headers.py --apply --inventory ...`.
 
 ## Codex CLI Prompt Template
 

@@ -1,0 +1,10 @@
+entries:
+  - path: "Sources/Feature.swift"
+    concern: "<Explain the file's main responsibility boundary in plain terms.>"
+    purpose: "<Explain what job this file does for the repository in plain terms.>"
+    key_types:
+      - "FeatureView"
+      - "FeatureState"
+    see_also:
+      - "FeatureView+Model.swift"
+      - "FeatureView+Modifier.swift"

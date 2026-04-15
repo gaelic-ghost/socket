@@ -58,6 +58,7 @@ Tickets:
 - [ ] Document the boundary between deterministic local scripts, `codex exec` enrichment, and Codex GUI background automation.
 - [ ] Audit the handoff boundary between `structure-swift-sources` and the Xcode execution skills, especially for file moves, target membership changes, and other project-integrity-sensitive follow-through.
 - [ ] Explore a SwiftSyntax-backed assist for `structure-swift-sources` file headers so optional fields such as `Key Types` and `See Also` can be suggested or prefilled without inventing `Purpose` or `Concern` text from thin air.
+- [ ] Add a starter inventory helper for `structure-swift-sources` file headers that can emit a user-editable YAML inventory with discovered file paths and blank meaning-bearing fields before any future SwiftSyntax assist is layered in.
 - [ ] Keep file splitting and concern detection agent-driven unless a later design proves a safer deterministic boundary.
 
 Exit criteria:
