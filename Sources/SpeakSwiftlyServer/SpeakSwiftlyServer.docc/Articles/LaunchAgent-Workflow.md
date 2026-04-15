@@ -7,7 +7,7 @@ Use the LaunchAgent workflow when the standalone server should run as a per-user
 In this package, that workflow is intentionally explicit:
 
 1. render the property list you are about to install
-2. install or refresh it for the current user
+2. either install the already-staged artifact or promote the current source checkout into the staged live artifact
 3. inspect status or remove it later through the same executable surface
 
 This article covers the shape of that workflow. It does not replace the repository operator docs, which remain the source of truth for the full command inventory and release-process details.
@@ -40,6 +40,15 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent install \
 ```
 
 This package's LaunchAgent path is designed around the staged release artifact, not around whichever debug binary happened to run the command. That keeps the installed service pointed at the package's maintained release surface instead of at a transient local build product.
+
+If the live service should start running the current repository checkout instead of whichever executable already lives at `.release-artifacts/current`, use the promotion path instead:
+
+```bash
+xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live \
+  --config-file ./server.yaml
+```
+
+That command rebuilds the release executable, stages the executable and sibling `SpeakSwiftly` metallib into `.release-artifacts/current`, refreshes the staged executable's ad-hoc code signature explicitly, and then reruns the LaunchAgent install flow. Use `install` when the staged artifact is already the intended live executable. Use `promote-live` when the intent is "make the current source checkout become the live service now."
 
 ## Inspect Or Remove The Installed Service
 

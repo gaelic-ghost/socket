@@ -23,7 +23,7 @@ xcrun swift run SpeakSwiftlyServerTool help
 That output shows the two top-level roles the executable currently serves:
 
 - `serve` starts the shared host in the foreground
-- `launch-agent` renders, installs, inspects, or removes the per-user LaunchAgent property list
+- `launch-agent` renders, installs, promotes, inspects, or removes the per-user LaunchAgent property list
 
 Running the executable without arguments defaults to `serve`, but the help output is the clearer first stop when you are orienting yourself or checking what a staged release currently exposes.
 
@@ -58,7 +58,7 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist
 
 That subcommand renders the property list the package would install, including the staged executable path, working directory, profile-root environment, and stdout and stderr log paths. The LaunchAgent-owned runtime keeps its own default port, `127.0.0.1:7337`, so the live background service does not have to collide with an ad hoc foreground shell session by default.
 
-For the install, status, and uninstall flow, continue with <doc:LaunchAgent-Workflow>.
+For the install, promotion, status, and uninstall flow, continue with <doc:LaunchAgent-Workflow>.
 
 ## Know When To Leave DocC
 

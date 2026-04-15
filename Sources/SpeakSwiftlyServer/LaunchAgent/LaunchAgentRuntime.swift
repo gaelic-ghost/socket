@@ -157,15 +157,26 @@ struct LaunchctlResult {
     let standardError: String
 }
 
+struct ProcessExecutionResult {
+    let exitCode: Int32
+    let standardOutput: String
+    let standardError: String
+}
+
 @discardableResult
-func runLaunchctl(
+func runProcess(
+    executablePath: String,
     arguments: [String],
     allowNonZeroExit: Bool = false,
-    launchctlPath: String = LaunchAgentDefaults.launchctlPath
-) throws -> LaunchctlResult {
+    currentDirectoryPath: String? = nil,
+    failureSummary: String
+) throws -> ProcessExecutionResult {
     let process = Process()
-    process.executableURL = URL(fileURLWithPath: launchctlPath)
+    process.executableURL = URL(fileURLWithPath: executablePath)
     process.arguments = arguments
+    if let currentDirectoryPath {
+        process.currentDirectoryURL = URL(fileURLWithPath: currentDirectoryPath, isDirectory: true)
+    }
 
     let standardOutput = Pipe()
     let standardError = Pipe()
@@ -177,16 +188,43 @@ func runLaunchctl(
         process.waitUntilExit()
     } catch {
         throw LaunchAgentCommandError(
-            "\(speakSwiftlyServerToolName) could not run launchctl at '\(launchctlPath)'. Likely cause: \(error.localizedDescription)"
+            "\(failureSummary) Likely cause: \(error.localizedDescription)"
         )
     }
 
     let output = String(decoding: standardOutput.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
     let error = String(decoding: standardError.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
-    let result = LaunchctlResult(
+    let result = ProcessExecutionResult(
         exitCode: process.terminationStatus,
         standardOutput: output.trimmingCharacters(in: .whitespacesAndNewlines),
         standardError: error.trimmingCharacters(in: .whitespacesAndNewlines)
+    )
+
+    if !allowNonZeroExit, result.exitCode != 0 {
+        throw LaunchAgentCommandError(
+            "\(failureSummary) The process exited with status \(result.exitCode). stderr: \(result.standardError)"
+        )
+    }
+
+    return result
+}
+
+@discardableResult
+func runLaunchctl(
+    arguments: [String],
+    allowNonZeroExit: Bool = false,
+    launchctlPath: String = LaunchAgentDefaults.launchctlPath
+) throws -> LaunchctlResult {
+    let processResult = try runProcess(
+        executablePath: launchctlPath,
+        arguments: arguments,
+        allowNonZeroExit: allowNonZeroExit,
+        failureSummary: "\(speakSwiftlyServerToolName) could not run launchctl at '\(launchctlPath)'."
+    )
+    let result = LaunchctlResult(
+        exitCode: processResult.exitCode,
+        standardOutput: processResult.standardOutput,
+        standardError: processResult.standardError
     )
 
     if !allowNonZeroExit, result.exitCode != 0 {

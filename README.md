@@ -141,13 +141,13 @@ The package now ships one operator-facing executable product with both the foreg
 xcrun swift run SpeakSwiftlyServerTool help
 ```
 
-Running the tool without subcommands defaults to `serve`, and the same binary also exposes `launch-agent` subcommands for install, inspection, and maintenance work.
+Running the tool without subcommands defaults to `serve`, and the same binary also exposes `launch-agent` subcommands for install, promotion, inspection, and maintenance work.
 
 The most common local operator path is:
 
 1. `xcrun swift run SpeakSwiftlyServerTool help`
 2. `xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist`
-3. `xcrun swift run SpeakSwiftlyServerTool launch-agent install --config-file ./server.yaml`
+3. `xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live --config-file ./server.yaml`
 
 To render the current per-user LaunchAgent property list without installing it:
 
@@ -169,7 +169,16 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent install \
   --config-file ./server.yaml
 ```
 
-That command writes a user-owned property list into `~/Library/LaunchAgents`, points `ProgramArguments` at the staged release artifact under `.release-artifacts/current/SpeakSwiftlyServerTool serve`, and uses `launchctl bootstrap` / `bootout` against the current `gui/<uid>` domain. That default keeps the live service on the repo's staged release build instead of whichever debug or transient executable happened to invoke the command. The repo-maintenance release flow now uses that same install path by default after it stages a tagged artifact, so the live service automatically moves to the newly staged version unless you opt out with `--skip-live-service-refresh`. If your tool binary lives somewhere other than the staged release path, pass `--tool-executable-path /absolute/path/to/SpeakSwiftlyServerTool` explicitly.
+That command writes a user-owned property list into `~/Library/LaunchAgents`, points `ProgramArguments` at the staged release artifact under `.release-artifacts/current/SpeakSwiftlyServerTool serve`, and uses `launchctl bootstrap` / `bootout` against the current `gui/<uid>` domain. That default keeps the live service on the repo's staged release build instead of whichever debug or transient executable happened to invoke the command. The install output now also prints the exact staged executable path and modification time that the LaunchAgent is being asked to activate. If your tool binary lives somewhere other than the staged release path, pass `--tool-executable-path /absolute/path/to/SpeakSwiftlyServerTool` explicitly.
+
+To promote the currently checked-out code into the live LaunchAgent-backed service in one supported step:
+
+```bash
+xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live \
+  --config-file ./server.yaml
+```
+
+That command rebuilds the release executable from the current repository checkout, stages the executable and the sibling `SpeakSwiftly` metallib into `.release-artifacts/current`, refreshes the staged executable's ad-hoc code signature explicitly, and then reruns the LaunchAgent install path. Use `install` when the staged artifact is already the thing you want launchd to boot. Use `promote-live` when the intent is "make the live service run the current source checkout now" without a separate release tag flow.
 
 To inspect or remove the installed LaunchAgent:
 

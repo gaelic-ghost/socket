@@ -5,6 +5,7 @@
 - Date captured: `2026-04-10`
 - Trigger: the live LaunchAgent-backed service exposed healthy HTTP on `127.0.0.1:7337`, but the MCP transport stayed disabled until the service was reinstalled with a real config file.
 - Immediate repair status: fixed in `v2.0.4`.
+- `2026-04-15` follow-on note: promoting the lifecycle fix from commit `7e651f8` into the live LaunchAgent-backed service also exposed a second promotion fragility. Reinstalling the LaunchAgent against a freshly overwritten staged executable failed with `OS_REASON_CODESIGNING` until the staged tool's ad-hoc signature was refreshed explicitly, even though the binary itself still verified on disk.
 
 ## Root Cause Summary
 
@@ -105,6 +106,25 @@ That startup summary should include:
 
 This should make "MCP disabled because config never loaded" visible within the first seconds of startup, without asking the operator to discover it indirectly.
 
+### 6. Make staged-artifact promotion and signature handling explicit
+
+Today's live promotion showed that `launch-agent install` is not the same operation as "promote the currently checked-out code into the live service". `launch-agent install` rewrites or refreshes the property list and bootstraps launchd, but it still runs whichever binary already lives at `.release-artifacts/current/SpeakSwiftlyServerTool`.
+
+That leaves one easy operator trap:
+
+- a source-level fix can be merged and validated locally
+- `launch-agent install` can be rerun successfully
+- the live service can still come back on an older staged executable unless the staged artifact is refreshed first
+
+The package should make that boundary explicit and first-class:
+
+- add a supported operator verb for refreshing or promoting the staged executable instead of relying on manual file copies
+- document whether staged artifacts must be re-signed after in-place refreshes and encode that behavior in the supported path instead of making it a tribal-knowledge repair
+- emit operator-facing output that names the exact staged executable path and modification time that the LaunchAgent install is about to activate
+- add verification that the live running process, the staged artifact, and the intended source build all agree on the same executable revision
+
+If the right long-term answer is "never mutate `.release-artifacts/current` in place", then the package should say that clearly and steer operators toward a safer staged-directory swap model instead.
+
 ## Testing And Tooling Follow-Ups
 
 ### 1. Promote the embedded MCP test harness into a reusable smoke client
@@ -166,7 +186,25 @@ That split should reduce debugging time when live tests fail and make release he
 If these follow-ups are tackled incrementally, the highest-value order is:
 
 1. LaunchAgent smoke test with spaced config path plus HTTP and MCP probes.
-2. First-class live service health-check command.
-3. Better startup and config-open logging.
-4. Reusable repo-owned MCP smoke helper.
-5. Config reload architecture decision for LaunchAgent-owned startup files.
+2. Staged-artifact promotion hardening, including an explicit promote or update path and any required re-sign behavior.
+3. First-class live service health-check command.
+4. Better startup and config-open logging.
+5. Reusable repo-owned MCP smoke helper.
+6. Config reload architecture decision for LaunchAgent-owned startup files.
+
+## Package-Wide Hardening Pass Order
+
+The broader package hardening program should now follow this order:
+
+1. Install and release surface hardening.
+   This includes staged-artifact refresh, LaunchAgent promotion semantics, signature handling, release verification, and operator-facing install diagnostics.
+2. Playback and device-observation hardening.
+   The recurring `freed pointer was not the last allocation` warning still needs a focused ownership audit even though the prune-maintenance crash loop is now fixed in the live service.
+3. Host lifecycle and background-work hardening.
+   Keep moving retained maintenance and watch behavior under explicit service ownership instead of leaving long-lived freestanding task loops around the package.
+4. Configuration and persisted runtime-state hardening.
+   Re-check precedence, reload boundaries, corruption handling, atomic writes, persisted runtime configuration, and test isolation around profile-root-sensitive state.
+5. HTTP and MCP transport hardening.
+   Tighten readiness semantics, validation, reusable smoke coverage, and release-owned transport verification once the lower-level host and install surfaces are stable enough to trust.
+6. Package-wide review, quick fixes, and cleanup.
+   Close the loop with an explicit final review, small fixes surfaced during the passes, and the usual documentation, test, and maintainer-tool cleanup sweep.

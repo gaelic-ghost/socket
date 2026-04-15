@@ -17,10 +17,18 @@ struct LaunchAgentOptions {
 
     // MARK: - Parsing
 
-    static func parse(arguments: [String], currentDirectoryPath: String, currentExecutablePath: String) throws -> LaunchAgentOptions {
+    static func parse(
+        arguments: [String],
+        currentDirectoryPath: String,
+        currentExecutablePath: String,
+        requireToolExecutableExists: Bool = true
+    ) throws -> LaunchAgentOptions {
         var label = LaunchAgentDefaults.label
         let _ = currentExecutablePath
-        var toolExecutablePath = try resolveDefaultToolExecutablePath(currentDirectoryPath: currentDirectoryPath)
+        var toolExecutablePath = try resolveDefaultToolExecutablePath(
+            currentDirectoryPath: currentDirectoryPath,
+            mustExist: requireToolExecutableExists
+        )
         var plistPath = LaunchAgentDefaults.plistPath(for: label)
         var configFilePath: String?
         var reloadIntervalSeconds: String?
@@ -85,7 +93,8 @@ struct LaunchAgentOptions {
             workingDirectory: resolvePath(workingDirectory, relativeTo: currentDirectoryPath),
             profileRootPath: resolvePath(profileRootPath, relativeTo: currentDirectoryPath),
             standardOutPath: resolvePath(standardOutPath, relativeTo: currentDirectoryPath),
-            standardErrorPath: resolvePath(standardErrorPath, relativeTo: currentDirectoryPath)
+            standardErrorPath: resolvePath(standardErrorPath, relativeTo: currentDirectoryPath),
+            requireToolExecutableExists: requireToolExecutableExists
         )
     }
 
@@ -102,22 +111,25 @@ struct LaunchAgentOptions {
         standardOutPath: String = LaunchAgentDefaults.standardOutPath,
         standardErrorPath: String = LaunchAgentDefaults.standardErrorPath,
         launchctlPath: String = LaunchAgentDefaults.launchctlPath,
-        userDomain: String = LaunchAgentDefaults.userDomain
+        userDomain: String = LaunchAgentDefaults.userDomain,
+        requireToolExecutableExists: Bool = true
     ) throws {
         guard !label.isEmpty else {
             throw LaunchAgentCommandError("\(speakSwiftlyServerToolName) launch-agent support requires a non-empty launchd label.")
         }
 
         let resolvedToolExecutablePath = Self.resolvePath(toolExecutablePath)
-        guard FileManager.default.fileExists(atPath: resolvedToolExecutablePath) else {
-            throw LaunchAgentCommandError(
-                "\(speakSwiftlyServerToolName) could not install a LaunchAgent because the tool executable path '\(resolvedToolExecutablePath)' does not exist."
-            )
-        }
-        guard FileManager.default.isExecutableFile(atPath: resolvedToolExecutablePath) else {
-            throw LaunchAgentCommandError(
-                "\(speakSwiftlyServerToolName) could not install a LaunchAgent because '\(resolvedToolExecutablePath)' is not executable."
-            )
+        if requireToolExecutableExists {
+            guard FileManager.default.fileExists(atPath: resolvedToolExecutablePath) else {
+                throw LaunchAgentCommandError(
+                    "\(speakSwiftlyServerToolName) could not install a LaunchAgent because the tool executable path '\(resolvedToolExecutablePath)' does not exist."
+                )
+            }
+            guard FileManager.default.isExecutableFile(atPath: resolvedToolExecutablePath) else {
+                throw LaunchAgentCommandError(
+                    "\(speakSwiftlyServerToolName) could not install a LaunchAgent because '\(resolvedToolExecutablePath)' is not executable."
+                )
+            }
         }
 
         self.label = label
@@ -202,16 +214,24 @@ struct LaunchAgentOptions {
         }
 
         try bootstrapInstalledService()
-        print("Installed LaunchAgent '\(label)' at '\(plistPath)' and bootstrapped it into '\(userDomain)'.")
+        print(
+            """
+            Installed LaunchAgent '\(label)' at '\(plistPath)' and bootstrapped it into '\(userDomain)'.
+            Active tool executable: \(toolExecutableActivationSummary())
+            """
+        )
     }
 
     // MARK: - Helpers
 
-    static func resolveDefaultToolExecutablePath(currentDirectoryPath: String) throws -> String {
+    static func resolveDefaultToolExecutablePath(
+        currentDirectoryPath: String,
+        mustExist: Bool = true
+    ) throws -> String {
         let repositoryRoot = try resolveRepositoryRoot(startingAt: currentDirectoryPath)
         let stagedReleasePath = LaunchAgentDefaults.stagedReleaseToolExecutablePath(for: repositoryRoot)
 
-        guard FileManager.default.fileExists(atPath: stagedReleasePath) else {
+        guard mustExist == false || FileManager.default.fileExists(atPath: stagedReleasePath) else {
             throw LaunchAgentCommandError(
                 """
                 \(speakSwiftlyServerToolName) could not find the staged release artifact at '\(stagedReleasePath)'.
@@ -222,6 +242,19 @@ struct LaunchAgentOptions {
         }
 
         return stagedReleasePath
+    }
+
+    func toolExecutableActivationSummary() -> String {
+        let fileURL = URL(fileURLWithPath: toolExecutablePath)
+        let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path)
+        let modifiedAt = attributes?[.modificationDate] as? Date
+        guard let modifiedAt else {
+            return "'\(toolExecutablePath)' (last modified time unavailable)"
+        }
+
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return "'\(toolExecutablePath)' (last modified \(formatter.string(from: modifiedAt)))"
     }
 
     static func resolveRepositoryRoot(startingAt currentDirectoryPath: String) throws -> String {

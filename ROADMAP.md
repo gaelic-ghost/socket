@@ -174,3 +174,14 @@ Current note: repo-local guidance and automation now prefer `xcrun swift ...` be
 - [ ] Build a minimal reproduction that distinguishes the standalone Swiftly-selected Swift 6.3 toolchain failure from the matching Xcode toolchain success.
 - [ ] Capture the exact module-loading boundary that turns the wider package graph into a `_NumericsShims` failure so the issue report is concrete instead of anecdotal.
 - [ ] Decide whether to file the repro upstream against the standalone Swift 6.3 toolchain, SwiftPM module loading, or a specific dependency once the minimal failing graph is proven.
+
+## Milestone 16: Package Hardening Passes
+
+Current note: this milestone turns the live-service reliability work into a package-wide hardening program. The first confirmed live fixes were promoting commit `7e651f8` into the LaunchAgent-backed service, removing the old prune-maintenance crash loop from the live runtime, and discovering that in-place staged-artifact refreshes can still trip a launchd code-signing failure unless the staged executable's ad-hoc signature is refreshed intentionally.
+
+- [ ] Harden the install and release surface so staged-artifact refreshes are deterministic, the required signature or provenance handling is explicit, the live-service promotion path is first-class, and operator-facing diagnostics make LaunchAgent boot failures obvious.
+- [ ] Audit the playback and device-observation surface that still logs `freed pointer was not the last allocation`, confirm whether the warning comes from runtime-owned audio observation or server-owned integration behavior, and either fix the root cause or narrow the server boundary so the remaining ownership is explicit.
+- [ ] Continue the lifecycle hardening pass by moving any remaining long-lived maintenance loops, watchers, or retained background tasks under explicit service ownership and shutdown accounting instead of freestanding task bodies.
+- [ ] Harden configuration and persisted runtime state handling, including precedence rules, atomic writes, corruption or repair behavior, runtime-configuration persistence, and test isolation for profile-root-sensitive state.
+- [ ] Harden the HTTP and MCP transport surface with clearer readiness policy, stronger request validation and operator-facing errors, reusable smoke coverage, and release verification that proves the staged live service can answer both transport health checks.
+- [ ] Finish the full hardening program with a package-wide review, quick fixes discovered during the passes, and a cleanup sweep across docs, tests, and maintainer tooling.

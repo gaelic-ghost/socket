@@ -113,6 +113,7 @@ public enum SpeakSwiftlyServerToolCommand {
       \(speakSwiftlyServerToolName) serve
       \(speakSwiftlyServerToolName) launch-agent print-plist [options]
       \(speakSwiftlyServerToolName) launch-agent install [options]
+      \(speakSwiftlyServerToolName) launch-agent promote-live [options]
       \(speakSwiftlyServerToolName) launch-agent uninstall [options]
       \(speakSwiftlyServerToolName) launch-agent status [options]
 
@@ -152,6 +153,7 @@ public struct LaunchAgentCommand {
     enum Action {
         case printPlist(LaunchAgentOptions)
         case install(LaunchAgentOptions)
+        case promoteLive(LaunchAgentPromoteOptions)
         case uninstall(LaunchAgentStatusOptions)
         case status(LaunchAgentStatusOptions)
     }
@@ -164,7 +166,7 @@ public struct LaunchAgentCommand {
     static func parse(arguments: [String], currentDirectoryPath: String, currentExecutablePath: String) throws -> LaunchAgentCommand {
         guard let subcommand = arguments.first else {
             throw LaunchAgentCommandError(
-                "The `launch-agent` command requires a subcommand. Supported subcommands are `print-plist`, `install`, `uninstall`, and `status`."
+                "The `launch-agent` command requires a subcommand. Supported subcommands are `print-plist`, `install`, `promote-live`, `uninstall`, and `status`."
             )
         }
 
@@ -174,6 +176,13 @@ public struct LaunchAgentCommand {
 
         case "install":
             return .init(action: .install(try LaunchAgentOptions.parse(arguments: Array(arguments.dropFirst()), currentDirectoryPath: currentDirectoryPath, currentExecutablePath: currentExecutablePath)))
+
+        case "promote-live":
+            return .init(action: .promoteLive(try LaunchAgentPromoteOptions.parse(
+                arguments: Array(arguments.dropFirst()),
+                currentDirectoryPath: currentDirectoryPath,
+                currentExecutablePath: currentExecutablePath
+            )))
 
         case "uninstall":
             return .init(action: .uninstall(try LaunchAgentStatusOptions.parse(arguments: Array(arguments.dropFirst()), currentDirectoryPath: currentDirectoryPath)))
@@ -186,7 +195,7 @@ public struct LaunchAgentCommand {
 
         default:
             throw LaunchAgentCommandError(
-                "\(speakSwiftlyServerToolName) did not recognize launch-agent subcommand '\(subcommand)'. Supported subcommands are `print-plist`, `install`, `uninstall`, and `status`."
+                "\(speakSwiftlyServerToolName) did not recognize launch-agent subcommand '\(subcommand)'. Supported subcommands are `print-plist`, `install`, `promote-live`, `uninstall`, and `status`."
             )
         }
     }
@@ -207,6 +216,9 @@ public struct LaunchAgentCommand {
 
         case .install(let options):
             try options.install()
+
+        case .promoteLive(let options):
+            try options.promoteLive()
 
         case .uninstall(let options):
             try options.uninstall()
