@@ -297,19 +297,19 @@ That keeps DI explicit and unidirectional instead of hiding real dependencies in
 
 ## Concrete Refactor Checklist
 
-- [ ] Split `ServerHost.live(...)` into pure construction plus explicit lifecycle start.
-- [ ] Add `HostLifecycleService`.
-- [ ] Add `ConfigWatchService`.
-- [ ] Add `MCPLifecycleService`.
-- [ ] Add readiness gates for host and MCP startup.
-- [ ] Register a Hummingbird `beforeServerStarts(...)` barrier that waits for host readiness and,
+- [x] Split `ServerHost.live(...)` into pure construction plus explicit lifecycle start.
+- [x] Add `HostLifecycleService`.
+- [x] Add `ConfigWatchService`.
+- [x] Add `MCPLifecycleService`.
+- [x] Add readiness gates for host and MCP startup.
+- [x] Register a Hummingbird `beforeServerStarts(...)` barrier that waits for host readiness and,
       when enabled, MCP readiness.
-- [ ] Change the outer embedded-session `ServiceGroup` so package-owned long-running services are
+- [x] Change the outer embedded-session `ServiceGroup` so package-owned long-running services are
       siblings of the Hummingbird `Application`.
-- [ ] Reduce the retained embedded run task to a single top-level join handle for the outer group.
-- [ ] Remove manual MCP/config-watch/host cleanup from the retained task body once service-owned
+- [x] Reduce the retained embedded run task to a single top-level join handle for the outer group.
+- [x] Remove manual MCP/config-watch/host cleanup from the retained task body once service-owned
       lifecycle replaces it.
-- [ ] Update docs so the ownership model explicitly says the outer service group owns host
+- [x] Update docs so the ownership model explicitly says the outer service group owns host
       lifecycle, config watching, MCP lifecycle, and HTTP serving.
 
 ## Expected Outcome

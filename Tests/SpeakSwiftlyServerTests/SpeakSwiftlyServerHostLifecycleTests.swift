@@ -1,4 +1,6 @@
 import Foundation
+import Logging
+import ServiceLifecycle
 import Testing
 @testable import SpeakSwiftlyServer
 
@@ -119,6 +121,81 @@ import Testing
     let counts = await probe.counts()
     #expect(counts.requestStop == 1)
     #expect(counts.waitUntilStopped == 2)
+}
+
+@available(macOS 14, *)
+@Test func hostLifecycleServiceWaitsForSiblingShutdownBeforeStoppingRuntime() async throws {
+    let runtime = MockRuntime()
+    let state = await MainActor.run { ServerState() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        httpConfig: testHTTPConfig(testConfiguration()),
+        mcpConfig: .init(
+            enabled: false,
+            path: "/mcp",
+            serverName: "speak-swiftly-mcp",
+            title: "SpeakSwiftly"
+        ),
+        runtime: runtime,
+        state: state
+    )
+    let readinessGate = EmbeddedLifecycleReadinessGate()
+    let shutdownBarrier = EmbeddedLifecycleShutdownBarrier(targetCount: 1)
+    let service = HostLifecycleService(
+        host: host,
+        readinessGate: readinessGate,
+        shutdownBarrier: shutdownBarrier
+    )
+    let serviceGroup = ServiceGroup(
+        services: [service],
+        gracefulShutdownSignals: [],
+        cancellationSignals: [],
+        logger: Logger(label: "SpeakSwiftlyServerTests.HostLifecycle")
+    )
+
+    let runTask = Task {
+        try await serviceGroup.run()
+    }
+
+    try await readinessGate.waitUntilReady()
+    let startedCounts = await runtime.lifecycleCounts()
+    #expect(startedCounts.start == 1)
+    #expect(startedCounts.shutdown == 0)
+
+    await serviceGroup.triggerGracefulShutdown()
+    try? await Task.sleep(for: .milliseconds(50))
+
+    let countsBeforeBarrier = await runtime.lifecycleCounts()
+    #expect(countsBeforeBarrier.shutdown == 0)
+
+    await shutdownBarrier.markCompleted()
+    try await runTask.value
+
+    let finalCounts = await runtime.lifecycleCounts()
+    #expect(finalCounts.shutdown == 1)
+}
+
+@available(macOS 14, *)
+@Test func embeddedApplicationServiceMarksShutdownBarrierWhenWrappedServiceFails() async throws {
+    struct FailingService: Service {
+        struct ExpectedFailure: Error {}
+
+        func run() async throws {
+            throw ExpectedFailure()
+        }
+    }
+
+    let shutdownBarrier = EmbeddedLifecycleShutdownBarrier(targetCount: 1)
+    let service = EmbeddedApplicationService(
+        application: FailingService(),
+        shutdownBarrier: shutdownBarrier
+    )
+
+    await #expect(throws: FailingService.ExpectedFailure.self) {
+        try await service.run()
+    }
+
+    await shutdownBarrier.waitUntilCompleted()
 }
 
 @available(macOS 14, *)

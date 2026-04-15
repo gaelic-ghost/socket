@@ -9,7 +9,7 @@ Use ``EmbeddedServerSession`` when an app wants to host the shared SpeakSwiftly 
 - start and stop the shared host lifecycle
 - expose an app-facing ``ServerState`` object that SwiftUI and other main-actor UI code can observe directly
 
-The session keeps transport ownership, config loading, and host shutdown logic internal. App code should usually hold onto the session object, bind UI to `session.state`, and treat the state snapshots as the public read model for the embedded host.
+The session keeps transport ownership, config loading, and host shutdown logic internal. Behind that wrapper, the embedded path now composes the host lifecycle, optional config watching, optional MCP lifecycle, and HTTP serving as service-owned siblings under one outer lifecycle group. App code should still treat that as an internal implementation detail: hold onto the session object, bind UI to `session.state`, and use the state snapshots as the public read model for the embedded host.
 
 ## Core Types
 

@@ -86,6 +86,8 @@ actor MockRuntime: ServerRuntimeProtocol {
     var generationQueueRequestCount = 0
     var playbackQueueRequestCount = 0
     var playbackStateRequestCount = 0
+    var startCallCount = 0
+    var shutdownCallCount = 0
 
     // MARK: - Lifecycle
 
@@ -104,9 +106,12 @@ actor MockRuntime: ServerRuntimeProtocol {
         self.textRuntime = try! TextForSpeech.Runtime(persistence: .file(textRuntimePersistenceURL))
     }
 
-    func start() {}
+    func start() {
+        startCallCount += 1
+    }
 
     func shutdown() async {
+        shutdownCallCount += 1
         statusContinuation?.finish()
         activeContinuation?.finish()
         activeContinuation = nil
@@ -122,6 +127,10 @@ actor MockRuntime: ServerRuntimeProtocol {
         AsyncStream { continuation in
             self.statusContinuation = continuation
         }
+    }
+
+    func lifecycleCounts() -> (start: Int, shutdown: Int) {
+        (startCallCount, shutdownCallCount)
     }
 
 }
