@@ -17,7 +17,7 @@
 - [ ] Milestone 21: Swift Cleanup Automation Exploration
 - [ ] Milestone 24: MCP App UI for Configuration and Customization
 - [ ] Milestone 25: macOS Menu Bar Extra for Skill Controls
-- [ ] Milestone 26: Dash Direct MCP and Call Library
+- [x] Milestone 26: Dash Direct MCP and Call Library
 - [x] Milestone 27: Repo Self-Compliance and Install-Surface Audit
 - [x] Milestone 28: Use `Agent Plugin Skills` plugin to align repo with skills/plugin repo standards
 - [ ] Milestone 29: Swift and Xcode Testing Offload Workflow
@@ -105,19 +105,21 @@ Exit criteria:
 
 Scope:
 
-- [ ] Remove avoidable indirection in the Dash-docsets workflow by teaching direct MCP usage first and documenting the Dash.app localhost HTTP call structure as a direct fallback surface.
+- [x] Remove avoidable indirection in the Dash-docsets workflow by teaching direct MCP usage first and documenting the Dash.app localhost HTTP call structure as a direct fallback surface.
 
 Tickets:
 
-- [ ] Audit `explore-apple-swift-docs` for places where wrapper scripts stand in for MCP usage the agent could perform directly.
-- [ ] Teach the skill to prefer direct Dash MCP calls when the MCP service is available.
-- [ ] Document the Dash.app localhost HTTP call structure clearly enough that the agent can use it directly when MCP is unavailable or incomplete.
-- [ ] Provide a compact library of common Dash example calls and docset targets.
-- [ ] Reconcile references and runtime helpers so the documented primary path and the actual preferred path match again.
+- [x] Audit `explore-apple-swift-docs` for places where wrapper scripts stand in for MCP usage the agent could perform directly.
+- [x] Teach the skill to prefer direct Dash MCP calls when the MCP service is available.
+- [x] Document the Dash.app localhost HTTP call structure clearly enough that the agent can use it directly when MCP is unavailable or incomplete.
+- [x] Provide a compact library of common Dash example calls and docset targets.
+- [x] Reconcile references and runtime helpers so the documented primary path and the actual preferred path match again.
 
 Exit criteria:
 
-- [ ] The Dash workflow teaches direct MCP usage first, documents the localhost HTTP structure as a real fallback, and ships a practical library of common example calls and docset targets.
+- [x] The Dash workflow teaches direct MCP usage first, documents the localhost HTTP structure as a real fallback, and ships a practical library of common example calls and docset targets.
+
+Completed Milestone 26 by rewriting `explore-apple-swift-docs` to teach direct Xcode MCP, Dash MCP, and Dash localhost HTTP usage ahead of the maintainer helper wrapper, by adding a compact Dash call library with common example calls and docset targets, and by updating the repo validator so the public contract and supporting references stay aligned.
 
 ## Milestone 27: Repo Self-Compliance and Install-Surface Audit
 

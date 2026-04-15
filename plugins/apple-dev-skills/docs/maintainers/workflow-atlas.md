@@ -442,10 +442,15 @@ flowchart TD
     M -->|dash-install| DI
     M -->|dash-generate| DG
 
-    E --> RW["run_workflow.py"]
-    RW --> SRC{"Usable docs source?"}
-    SRC -->|Yes| OUT1["Success / primary or fallback"]
-    SRC -->|No| BL["Blocked"]
+    E --> XD{"Xcode MCP docs available?"}
+    XD -->|Yes| OUT1["Success / primary"]
+    XD -->|No| DM{"Dash MCP available?"}
+    DM -->|Yes| OUT2["Success / fallback"]
+    DM -->|No| DH{"Dash localhost HTTP available?"}
+    DH -->|Yes| OUT3["Success / fallback"]
+    DH -->|No| WEB{"Official web docs usable?"}
+    WEB -->|Yes| OUT4["Success / fallback"]
+    WEB -->|No| BL["Blocked"]
     DI --> MATCH{"Installable Dash catalog match?"}
     MATCH -->|Yes| INST["Dash install path"]
     MATCH -->|No| HAND["Handoff to dash-generate"]
@@ -457,7 +462,8 @@ flowchart TD
 
 ### Branch and Path Notes
 
-- `run_workflow.py` is the local runtime entrypoint for all docs modes.
+- Direct docs access is the primary `explore` path: Xcode MCP docs first, then Dash MCP, then Dash localhost HTTP, then official web docs.
+- `run_workflow.py` is the local maintainer helper for structured planning plus the `dash-install` and `dash-generate` follow-up modes.
 - Default progression is `explore -> dash-install -> dash-generate`.
 - Direct entry to `dash-install` or `dash-generate` remains supported.
 - Xcode MCP docs are the default primary source when available.
@@ -475,12 +481,12 @@ flowchart TD
   - `mcp_failure_reason`
   - `approval`
 - Defaults:
-  - repo-maintainer runtime entrypoint `scripts/run_workflow.py`
   - start at `explore` when no mode is explicit
   - source order `xcode-mcp-docs,dash,official-web`
   - Dash install source priority `built-in,user-contributed,cheatsheet`
   - default search result limit `20`
   - default search snippets `true`
+  - repo-maintainer helper entrypoint `scripts/run_workflow.py`
 
 ### Outputs
 
@@ -501,7 +507,7 @@ flowchart TD
 - Entry:
   - The user asks to search Apple or Swift docs, use local docs first, compare docs sources, or follow up on Dash-specific docs access.
 - Agent behavior:
-  - The agent selects a docs mode, calls `run_workflow.py`, and uses the structured result to choose the right docs source instead of stitching Xcode MCP, Dash, and web heuristics together manually.
+  - The agent selects a docs mode, uses direct Xcode MCP or Dash surfaces first for ordinary lookup, and only leans on `run_workflow.py` when a structured helper result is useful or the task is really `dash-install` or `dash-generate`.
 - User-visible response:
   - On success: the user sees what docs source was selected and why.
   - On handoff: the user sees the next mode and why it is needed.

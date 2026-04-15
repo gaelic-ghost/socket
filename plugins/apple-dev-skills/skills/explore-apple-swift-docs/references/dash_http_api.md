@@ -37,6 +37,8 @@ Use `scripts/dash_api_probe.py` to produce:
 - `GET /docsets/enable_fts`
   - In practice called with query param `identifier`.
 
+For compact direct-call examples, use [dash_call_library.md](./dash_call_library.md).
+
 ## Caveats
 
 - `status.json` may contain a stale port while the API server is down.

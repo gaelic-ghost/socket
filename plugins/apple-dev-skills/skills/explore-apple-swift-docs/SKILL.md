@@ -7,7 +7,7 @@ description: Explore Apple and Swift documentation across Xcode MCP docs, Dash, 
 
 ## Purpose
 
-Explore Apple and Swift documentation through one top-level entry point. `scripts/run_workflow.py` is the authoritative runtime path for docs source selection, fallback order, Dash follow-up planning, approval gating for Dash install actions, and structured generation guidance; it does not replace the agent's own Xcode MCP, Dash, or web-doc access methods, and this skill should point users toward the shared simplicity-first Xcode-project snippet when they need reusable Apple or Swift repo guidance.
+Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, and official web docs last. `scripts/run_workflow.py` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
 
 ## When To Use
 
@@ -27,14 +27,16 @@ Explore Apple and Swift documentation through one top-level entry point. `script
    - `dash-install`
    - `dash-generate`
 2. If no mode is explicit, start at `explore`.
-3. Run `scripts/run_workflow.py` with the selected mode:
-   - `explore`: applies configured source order, preference handling, fallback selection, and result shaping
-   - `dash-install`: applies configured Dash install source priority and approval gating
-   - `dash-generate`: returns structured automation-first guidance for missing Dash coverage
-4. If the selected mode cannot complete, hand off forward through one clear next step:
+3. For `explore`, use the documented direct docs path instead of routing ordinary lookups through a wrapper script:
+   - `xcode-mcp-docs`: use Xcode MCP docs tools first when they are available and the user has not asked for another source
+   - `dash`: use Dash MCP tools directly when local Dash coverage is wanted and the MCP service is available
+   - `dash-http`: use the documented Dash localhost HTTP structure directly when Dash MCP is unavailable or incomplete
+   - `official-web`: use official Apple or Swift web docs when the local-docs paths are unavailable or the user explicitly prefers the web source
+4. Use `scripts/run_workflow.py` only when a structured non-interactive planning result is useful, or when the request is specifically about `dash-install` or `dash-generate` follow-up behavior.
+5. If the selected mode cannot complete, hand off forward through one clear next step:
    - `explore -> dash-install`
    - `dash-install -> dash-generate`
-5. Return one `status`, one `path_type`, one `source_used`, and one output contract for the mode that ran.
+6. Return one `status`, one `path_type`, one `source_used`, and one output contract for the mode that ran.
 
 ## Inputs
 
@@ -46,11 +48,11 @@ Explore Apple and Swift documentation through one top-level entry point. `script
 - `docset_request`: required for `dash-install` and `dash-generate`
 - `approval`: required before side-effectful Dash install actions
 - Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
   - `explore` source order is `xcode-mcp-docs,dash,official-web`
   - Dash install source priority is `built-in,user-contributed,cheatsheet`
   - default search result limit is `20`
   - default search snippets setting is `true`
+  - maintainer helper entrypoint: executable `scripts/run_workflow.py`
 
 ## Outputs
 
@@ -73,13 +75,14 @@ Explore Apple and Swift documentation through one top-level entry point. `script
 
 - Do not run Dash install actions without explicit user approval.
 - Do not invent Apple or Swift doc sources, Dash identifiers, or catalog matches.
+- Do not present `scripts/run_workflow.py` as the required first step for ordinary Apple or Swift docs lookup when direct Xcode MCP or Dash MCP/HTTP access is available.
 - Stop with `blocked` when `explore` has no usable docs source after applying the documented fallback order.
 - Stop with `blocked` when `dash-install` or `dash-generate` lacks a concrete docset request.
 - Keep `explore`, `dash-install`, and `dash-generate` in forward order; do not blend them into competing primary workflows.
 
 ## Fallbacks and Handoffs
 
-- `explore` falls back in this order: Xcode MCP docs, then Dash, then official web docs.
+- `explore` falls back in this order: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then official web docs.
 - Explicit user preference overrides the default source order when that preference is usable.
 - `dash-install` hands off to `dash-generate` when no installable catalog match exists.
 - `dash-generate` falls back from stable automation guidance to deterministic manual guidance.
@@ -87,7 +90,7 @@ Explore Apple and Swift documentation through one top-level entry point. `script
 - Recommend `xcode-testing-workflow` directly when the user’s task shifts from docs exploration to Apple or Swift test work.
 - Recommend `bootstrap-xcode-app-project` directly when the user needs new native app scaffolding.
 - Recommend `sync-xcode-project-guidance` directly when an existing Xcode app repo needs guidance sync rather than docs help.
-- `scripts/run_workflow.py` is the only local runtime entrypoint for docs source selection, install gating, and follow-up behavior; helper scripts remain implementation details behind it.
+- `scripts/run_workflow.py` is the shared local helper for structured planning, install gating, and follow-up behavior; helper scripts remain implementation details behind it.
 
 ## Customization
 
@@ -101,6 +104,7 @@ Explore Apple and Swift documentation through one top-level entry point. `script
 
 - `references/xcode_mcp_docs.md`
 - `references/dash_mcp_tools.md`
+- `references/dash_call_library.md`
 - `references/apple-framework-docs-guide.md`
 - `references/dash-apple-docset-triage.md`
 - `references/dash-swift-package-shortlist.md`
@@ -124,6 +128,7 @@ Explore Apple and Swift documentation through one top-level entry point. `script
 
 ### Script Inventory
 
+- These are maintainer helpers behind the public docs workflow, not the primary lookup path for ordinary Apple or Swift docs exploration.
 - `scripts/run_workflow.py`
 - `scripts/dash_api_probe.py`
 - `scripts/dash_catalog_match.py`

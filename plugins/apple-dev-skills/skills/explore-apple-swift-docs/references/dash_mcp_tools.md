@@ -6,6 +6,8 @@ Use this order when working with Dash:
 2. Fallback to local Dash HTTP API if MCP is unavailable.
 3. Fallback to URL scheme / System Service guidance.
 
+For compact ready-to-use examples, use [dash_call_library.md](./dash_call_library.md).
+
 ## Primary tools
 
 - `list_installed_docsets`

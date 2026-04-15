@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provide one consistent automation contract for Apple and Swift docs exploration and subordinate Dash follow-up modes.
+Provide one consistent automation contract for Apple and Swift docs exploration and subordinate Dash follow-up modes without teaching the maintainer helper scripts as the default live lookup path.
 
 ## Inputs
 
@@ -18,6 +18,8 @@ Provide one consistent automation contract for Apple and Swift docs exploration 
 ## Constraints
 
 - Use Xcode MCP docs first when they are available and the user has not asked for another source.
+- Prefer direct Dash MCP calls before Dash localhost HTTP when Xcode MCP docs are unavailable or the user explicitly prefers Dash.
+- Treat Dash localhost HTTP as the direct machine-readable fallback when Dash MCP is unavailable or incomplete.
 - Do not perform Dash install actions inside an `explore` automation run.
 - Do not perform Dash install actions without explicit approval.
 - Keep Dash-specific follow-up subordinate to the main Apple and Swift docs workflow.
@@ -54,12 +56,13 @@ Run docs mode `<MODE>` with:
 Execution order:
 1) Classify the request into one mode: `explore`, `dash-install`, or `dash-generate`.
 2) If no mode is explicit, start with `explore`.
-3) Use the mode's documented primary path.
+3) For `explore`, use the documented direct docs path first: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then official web docs.
 4) Use the documented fallback order only if the primary source is unavailable.
-5) When the next action belongs to the next mode, return a `handoff` output instead of mixing workflows.
+5) Use `scripts/run_workflow.py` only when a structured helper result is useful or when the mode is `dash-install` or `dash-generate`.
+6) When the next action belongs to the next mode, return a `handoff` output instead of mixing workflows.
 
 Behavior:
-- If `<MODE>` is `explore`, prefer `xcode-mcp-docs -> dash -> official-web`.
+- If `<MODE>` is `explore`, prefer `xcode-mcp-docs -> dash-mcp -> dash-http -> official-web`.
 - If `<MODE>` is `dash-install`, follow `built-in -> user-contributed -> cheatsheet`.
 - If `<MODE>` is `dash-generate`, use stable automation guidance first and manual guidance only as fallback.
 - Write a short report to `<REPORT_PATH>` only when that path is provided.

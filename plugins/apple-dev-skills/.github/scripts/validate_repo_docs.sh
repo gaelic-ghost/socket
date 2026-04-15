@@ -74,6 +74,7 @@ require_contains "$workflow_doc" '## `bootstrap-xcode-app-project`'
 require_contains "$workflow_doc" '## `sync-xcode-project-guidance`'
 require_contains "$workflow_doc" '## `sync-swift-package-guidance`'
 require_contains "$workflow_doc" '## `swift-package-workflow`'
+require_contains "$workflow_doc" 'Direct docs access is the primary `explore` path'
 
 echo "Validating reality audit guide..."
 audit_doc="docs/maintainers/reality-audit.md"
@@ -192,6 +193,15 @@ for skill_md in "${active_skill_mds[@]}"; do
     grep -Eiq "recommend.{0,120}$snippet_ref|$snippet_ref.{0,120}recommend" "$skill_md" || fail "Missing snippet recommendation guidance in $skill_md"
   fi
 done
+
+echo "Validating Dash docs exploration references..."
+dash_skill_dir="./skills/explore-apple-swift-docs"
+[[ -f "$dash_skill_dir/references/dash_call_library.md" ]] || fail "Missing $dash_skill_dir/references/dash_call_library.md"
+require_contains "$dash_skill_dir/SKILL.md" 'Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, and official web docs last.'
+require_contains "$dash_skill_dir/SKILL.md" 'Do not present `scripts/run_workflow.py` as the required first step'
+require_contains "$dash_skill_dir/references/dash_call_library.md" '## Dash MCP Examples'
+require_contains "$dash_skill_dir/references/dash_call_library.md" '## Dash Local HTTP Examples'
+require_contains "$dash_skill_dir/references/dash_call_library.md" '## High-Value Docset Targets'
 
 echo "Validating stale installer and nested-packaging guidance is gone..."
 for file in \
