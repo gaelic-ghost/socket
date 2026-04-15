@@ -87,7 +87,8 @@ class StructureWorkflowTests(unittest.TestCase):
                 tmpdir,
                 {
                     "fileHeaderMode": "required",
-                    "fileHeaderStyle": "plain-block",
+                    "fileHeaderStyle": "project-banner",
+                    "fileHeaderCopyrightOwner": "Gale Williams",
                     "splitSoftLimit": 250,
                     "splitHardLimit": 600,
                 },
@@ -103,6 +104,8 @@ class StructureWorkflowTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(payload["status"], "success")
         self.assertEqual(payload["output"]["header_policy"]["mode"], "required")
+        self.assertEqual(payload["output"]["header_policy"]["style"], "project-banner")
+        self.assertEqual(payload["output"]["header_policy"]["copyright_owner"], "Gale Williams")
         self.assertEqual(payload["output"]["split_thresholds"]["soft_limit"], 250)
         self.assertEqual(payload["output"]["split_thresholds"]["hard_limit"], 600)
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Structure Swift Sources"
   short_description: "Split, move, group, and normalize Swift source files"
-  default_prompt: "Use $format-swift-sources first, then use $structure-swift-sources to split oversized Swift files, normalize directory layout, MARK sections, and plain-language file headers, and move TODO and FIXME text into ledger files. Start with `scripts/run_workflow.py` so the cleanup kind, header policy, and handoff surface resolve consistently. If the request becomes DocC authoring or review work, hand off to $author-swift-docc-docs. Finish by returning to $format-swift-sources for cleanup."
+  default_prompt: "Use $format-swift-sources first, then use $structure-swift-sources to split oversized Swift files, normalize directory layout, MARK sections, and structured project-and-file banner headers, and move TODO and FIXME text into ledger files. Start with `scripts/run_workflow.py` so the cleanup kind, header policy, and handoff surface resolve consistently. If the request becomes DocC authoring or review work, hand off to $author-swift-docc-docs. Finish by returning to $format-swift-sources for cleanup."

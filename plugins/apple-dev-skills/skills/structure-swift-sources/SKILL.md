@@ -14,6 +14,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - Use this skill when the user wants to split oversized Swift files or move files into a clearer repo layout.
 - Use this skill when the user wants consistent `// MARK:` sections, declaration grouping, or view-modifier extraction in SwiftUI code.
 - Use this skill when the user wants consistent block-comment file headers that describe a file's purpose and area of concern in plain terms.
+- Use this skill when the user wants structured project-and-file banner headers with deterministic project, filename, copyright, and optional cross-reference fields.
 - Use this skill when the user wants TODO or FIXME text moved out of source files into repo ledger files.
 - Use this skill when a Swift package or Xcode app repo has drifted away from the intended feature-plus-layer directory shape.
 - Recommend `format-swift-sources` first when formatter or linter setup is missing, unclear, or stale.
@@ -52,8 +53,9 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - always split a file once it exceeds the configured hard split threshold
    - when the underlying type is still one coherent type, extract grouped concerns into extension files such as `<Original>+Models.swift` or `<Original>+<Concern>.swift`
    - group declarations into explicit `// MARK: - <Heading>` sections, then place a descriptive secondary `// MARK: <Comment>` line directly below each heading
-   - require or recommend the documented block-comment file header according to the effective header policy
-   - keep header text in plain terms that explain what the file is for and what concern it owns, instead of repeating the filename or symbol names as jargon
+   - require or recommend the documented project-and-file banner header according to the effective header policy
+   - keep `Concern` and `Purpose` text in plain terms that explain what the file owns and what job it does, instead of repeating the filename or symbol names as jargon
+   - treat `Key Types` and `See Also` as optional high-signal fields rather than mandatory filler
    - move TODO and FIXME text into `TODO.md` and `FIXME.md`, keeping only ticket IDs in source comments
    - when the task is TODO or FIXME normalization, use `scripts/normalize_todo_fixme_ledgers.py` for the deterministic ledger rewrite pass across supported Swift and Objective-C source forms
    - when the task is file-header normalization or a full cleanup pass that includes headers, use `scripts/normalize_swift_file_headers.py` to audit or apply the documented header shape
@@ -71,13 +73,13 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - `split_mode`: optional; use values such as `advisory`, `required`, or `full-pass`
 - `todo_fixme_mode`: optional; use values such as `report-only`, `rewrite-ledgers`, or `normalize-existing`
 - `file_header_mode`: optional; use values such as `advisory` or `required`
-- `file_header_style`: optional; currently `plain-block`
+- `file_header_style`: optional; currently `project-banner`
 - Defaults:
   - run `format-swift-sources` before and after structural mutation
   - prefer feature-plus-layer layout over flat buckets when the repo has meaningful feature boundaries
   - prefer extracted extensions before inventing new wrapper types
   - prefer `TODO.md` and `FIXME.md` as separate ledger files
-  - prefer the plain-language block-comment header described in `references/file-headers.md`
+  - prefer the project-and-file banner header described in `references/file-headers.md`
 
 ## Outputs
 

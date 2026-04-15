@@ -9,7 +9,8 @@ Tune the runtime-enforced header policy and split-threshold defaults for the str
 | Knob | Default | Status | Effect |
 | --- | --- | --- | --- |
 | `fileHeaderMode` | `advisory` | `runtime-enforced` | Controls whether file-header work is recommended or required inside the workflow output. |
-| `fileHeaderStyle` | `plain-block` | `runtime-enforced` | Controls the documented header shape. The current runtime supports only the plain block-comment header form. |
+| `fileHeaderStyle` | `project-banner` | `runtime-enforced` | Controls the documented header shape. The current runtime supports only the project-and-file banner block-comment form. |
+| `fileHeaderCopyrightOwner` | `Gale Williams` | `runtime-enforced` | Controls the copyright owner string rendered in normalized headers. |
 | `splitSoftLimit` | `400` | `runtime-enforced` | Controls when the workflow starts strongly recommending a split. |
 | `splitHardLimit` | `800` | `runtime-enforced` | Controls when the workflow treats a split as required. |
 
@@ -19,7 +20,8 @@ Tune the runtime-enforced header policy and split-threshold defaults for the str
 - `scripts/run_workflow.py` loads the effective merged customization state at runtime.
 - `fileHeaderMode=advisory` keeps file headers as a strong recommendation in the output contract.
 - `fileHeaderMode=required` makes missing or malformed file headers part of the required cleanup surface in the output contract.
-- `fileHeaderStyle=plain-block` keeps the skill aligned with `references/file-headers.md`.
+- `fileHeaderStyle=project-banner` keeps the skill aligned with `references/file-headers.md`.
+- `fileHeaderCopyrightOwner` changes the owner string rendered by `scripts/normalize_swift_file_headers.py`.
 - `splitSoftLimit` and `splitHardLimit` change the thresholds reported by `scripts/run_workflow.py`, but do not turn file splitting into a deterministic script.
 
 ## Update Flow
