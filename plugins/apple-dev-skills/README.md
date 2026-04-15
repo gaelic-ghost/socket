@@ -22,6 +22,11 @@ Apple, Swift, and Xcode workflow skills for Codex and Claude Code.
 
 This repository is active and currently ships Apple-platform development skills plus shared maintainer resources and tests.
 
+Recent work strengthened two of the more infrastructure-heavy surfaces:
+
+- `structure-swift-sources` now has a clearer structural-cleanup contract, stronger file-header guidance, and a user-facing header inventory template.
+- `explore-apple-swift-docs` now teaches direct Xcode MCP and Dash lookup paths first, with Dash localhost HTTP documented as the direct machine-readable fallback.
+
 ### What This Project Is
 
 This repository is the canonical source of truth for Gale's Apple, Swift, and Xcode workflow skills. Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work, and use `apple-dev-skills` when Apple-specific assumptions should actively shape the workflow.
@@ -45,6 +50,7 @@ Use this repository's skills when the work is about:
 - Swift or SwiftUI implementation
 - Xcode build, run, or test workflows
 - DocC symbol comments, articles, catalog structure, or DocC-oriented review
+- Swift source cleanup, file-header normalization, or source-organization policy
 - Swift package bootstrap or validation
 - Apple-project guidance sync
 - Apple-platform documentation routing

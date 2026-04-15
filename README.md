@@ -129,13 +129,15 @@ The current plugin and skills directories under [`plugins/`](./plugins/) are:
 
 `apple-dev-skills` and `python-skills` are the only directories in that list that still keep live subtree relationships to separate upstream repositories.
 
+Recent superproject work in `apple-dev-skills` tightened the Swift cleanup workflow around stronger source-organization and file-header guidance, and closed the Dash-direct-docs milestone so Apple docs routing now teaches direct Xcode MCP and Dash usage before maintainer wrappers.
+
 ## Plugin Surfaces
 
 Treat `socket` as the canonical home for the monorepo-owned nested directories and as the subtree host for the remaining imported child repos.
 
 - `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `python-skills` still preserve explicit subtree sync paths.
-- `apple-dev-skills` currently ships Apple-platform authoring and execution workflows that now include the `author-swift-docc-docs` skill for DocC symbol comments, articles, catalog structure, and DocC-oriented review work.
+- `apple-dev-skills` currently ships Apple-platform authoring and execution workflows that now include the `author-swift-docc-docs` skill for DocC symbol comments, articles, catalog structure, and DocC-oriented review work, plus the strengthened `structure-swift-sources` and direct-path `explore-apple-swift-docs` guidance.
 - Some child repos expose plugin packaging from the repo root, while others keep a nested packaged plugin root inside their own repository tree.
 
 ## Marketplace Shape
