@@ -18,11 +18,11 @@
 - [ ] Milestone 24: MCP App UI for Configuration and Customization
 - [ ] Milestone 25: macOS Menu Bar Extra for Skill Controls
 - [ ] Milestone 26: Dash Direct MCP and Call Library
-- [ ] Milestone 27: Repo Self-Compliance and Install-Surface Audit
-- [ ] Milestone 28: Use `Agent Plugin Skills` plugin to align repo with skills/plugin repo standards
+- [x] Milestone 27: Repo Self-Compliance and Install-Surface Audit
+- [x] Milestone 28: Use `Agent Plugin Skills` plugin to align repo with skills/plugin repo standards
 - [ ] Milestone 29: Swift and Xcode Testing Offload Workflow
 - [ ] Milestone 37: Apple UI Accessibility Workflow
-- [ ] Milestone 38: DocC Workflow
+- [x] Milestone 38: DocC Workflow
 - [ ] Milestone 39: Swift Package Index Workflow
 - [ ] Milestone 40: SwiftUI UI Architecture Workflow
 
@@ -123,34 +123,40 @@ Exit criteria:
 
 Scope:
 
-- [ ] Keep this repository checked against its own skill, symlink, export-surface, and local-discovery guidance.
+- [x] Keep this repository checked against its own skill, symlink, export-surface, and local-discovery guidance.
 
 Tickets:
 
-- [ ] Verify that root docs, maintainer docs, and skill docs stay aligned with the top-level export model after future refactors.
-- [ ] Document any mismatch between repo docs and the actual top-level export surface so guidance reflects operational reality instead of stale packaging assumptions.
+- [x] Verify that root docs, maintainer docs, and skill docs stay aligned with the top-level export model after future refactors.
+- [x] Document any mismatch between repo docs and the actual top-level export surface so guidance reflects operational reality instead of stale packaging assumptions.
 
 Exit criteria:
 
-- [ ] Maintainers have a verified, reality-based local discovery and top-level export story for this repo, with docs and tooling updated to match what the repository actually ships.
+- [x] Maintainers have a verified, reality-based local discovery and top-level export story for this repo, with docs and tooling updated to match what the repository actually ships.
 
-## Milestone 28: Use `Agent Plugin Skills` plugin to align repo with skills/plugin repo standards
+Completed Milestone 27 by keeping the top-level `skills/` export story, local discovery symlinks, maintainer docs, and repo validator aligned with the live shipped surface, and by confirming that `bash .github/scripts/validate_repo_docs.sh` plus `uv run pytest` cover the intended self-compliance checks.
+
+## Milestone 28: Use `Agent Plugin Skills` plugin selectively for plugin and export-surface alignment
 
 Scope:
 
-- [ ] Use the adjacent `agent-plugin-skills` maintainer workflows to audit and align this repository with the current shared skills/plugin repo standards while keeping this repo's own contract focused on top-level exports only.
+- [x] Use the adjacent `agent-plugin-skills` maintainer workflows only where they still help with plugin-shape, export-surface, and install-metadata alignment, while keeping this repo's own contract focused on top-level exports only.
+- [x] Keep broader README and maintainer-doc standards anchored in `productivity-skills` rather than reopening a stale shared-docs-standards pass through `agent-plugin-skills`.
 
 Tickets:
 
-- [ ] Keep the personal-scope `agent-plugin-skills` install current for work on this repository without reintroducing a nested packaged plugin tree here.
-- [ ] Use `maintain-plugin-repo` and `sync-skills-repo-guidance` as the maintainer entrypoints for repo-wide audit and docs alignment where relevant.
-- [ ] Align repo docs, export surfaces, ignores, and maintainer guidance with the current shared standards without flattening repo-specific policy.
-- [ ] Remove stale nested packaging language while keeping the adjacent standards repo as the maintainer-only setup.
+- [x] Keep the personal-scope `agent-plugin-skills` install current for work on this repository without reintroducing a nested packaged plugin tree here.
+- [x] Use `maintain-plugin-repo` and `sync-skills-repo-guidance` only for the plugin-shape and export-surface checks that still belong in that repo's standards layer.
+- [x] Confirm that repo docs already align with the current `productivity-skills` documentation standards before treating docs wording drift as a Milestone 28 blocker.
+- [x] Align plugin metadata, export surfaces, ignores, and maintainer guidance with the current shared plugin standards without flattening repo-specific policy.
+- [x] Remove stale nested packaging language while keeping the adjacent standards repo as the maintainer-only setup.
 
 Exit criteria:
 
-- [ ] The repository validates cleanly against the current shared skills/plugin repo standards.
-- [ ] Repo docs, packaging metadata, marketplace wiring, and maintainer guidance describe the same live behavior.
+- [x] The repository validates cleanly against the current shared plugin and export-surface standards that still apply here.
+- [x] Repo docs, packaging metadata, marketplace wiring, and maintainer guidance describe the same live behavior without treating `agent-plugin-skills` as the owner of broader documentation standards.
+
+Completed Milestone 28 by narrowing `agent-plugin-skills` to its still-relevant plugin and export-surface role, keeping broader documentation standards anchored in `productivity-skills`, and confirming through the repo validator plus maintainer-doc audit that the live repo shape already matches that narrower standards model.
 
 ## Milestone 29: Swift and Xcode Testing Offload Workflow
 
@@ -270,4 +276,5 @@ Exit criteria:
 - Completed Milestones 1 through 17 by establishing the repository, shipping the core Apple skill bundle, improving portability and customization guidance, adding bootstrap and repo-sync workflows, extracting Apple docs exploration into its own skill, and cleaning up the install surface around the top-level export model.
 - Completed Milestones 19 and 20 by shipping `format-swift-sources` and `structure-swift-sources` as distinct cleanup workflows with clear boundaries.
 - Completed Milestones 22 and 23 by expanding deterministic TODO/FIXME ledger normalization and finishing the customization consolidation review. See `docs/maintainers/customization-consolidation-review.md`.
+- Completed Milestones 27 and 28 by validating the top-level `skills/` export story against the live repo validator and tests, and by narrowing `agent-plugin-skills` usage to selective plugin and export-surface alignment while leaving broader docs standards with `productivity-skills`.
 - Completed Milestones 30 through 36 by shrinking the customization surface, adding the repo-maintenance toolkit and shared extraction work, splitting execution workflows, and preserving guidance through the refactor.
