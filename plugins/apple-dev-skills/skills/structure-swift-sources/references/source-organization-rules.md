@@ -28,7 +28,7 @@
 - Once any one view has more than `3` chained modifiers, strongly consider extracting a custom `ViewModifier`.
 - Place that modifier in `<Name>+Modifier.swift` when the modifier belongs to one view family.
 
-## DocC Rule
+## Documentation Boundary
 
-- Every symbol declaration should carry DocC-compliant documentation comments during a full structure pass.
-- Prefer concise symbol docs that explain role, inputs, outputs, and important invariants over filler prose.
+- Keep this workflow focused on source layout and declaration organization.
+- When the task becomes symbol documentation, DocC article work, landing-page structure, topic groups, or DocC-oriented review, hand off to `author-swift-docc-docs`.

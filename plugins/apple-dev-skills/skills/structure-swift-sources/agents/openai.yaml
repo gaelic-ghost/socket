@@ -1,4 +1,4 @@
 interface:
   display_name: "Structure Swift Sources"
   short_description: "Split, move, group, and document Swift source files"
-  default_prompt: "Use $format-swift-sources first, then use $structure-swift-sources to split oversized Swift files, normalize directory layout and MARK sections, move TODO and FIXME text into ledger files, and add DocC comments. Finish by returning to $format-swift-sources for cleanup."
+  default_prompt: "Use $format-swift-sources first, then use $structure-swift-sources to split oversized Swift files, normalize directory layout and MARK sections, and move TODO and FIXME text into ledger files. If the request becomes DocC authoring or review work, hand off to $author-swift-docc-docs. Finish by returning to $format-swift-sources for cleanup."

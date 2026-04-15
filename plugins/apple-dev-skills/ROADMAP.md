@@ -56,6 +56,7 @@ Tickets:
 - [ ] Decide whether `codex exec` should remain an on-demand maintainer tool, become a wrapper around deterministic repo helpers, or stay limited to advisory and enrichment work.
 - [ ] Evaluate a Codex GUI App Automation that runs the same choreography on a schedule, preferably in a dedicated worktree.
 - [ ] Document the boundary between deterministic local scripts, `codex exec` enrichment, and Codex GUI background automation.
+- [ ] Audit the handoff boundary between `structure-swift-sources` and the Xcode execution skills, especially for file moves, target membership changes, and other project-integrity-sensitive follow-through.
 - [ ] Keep file splitting and concern detection agent-driven unless a later design proves a safer deterministic boundary.
 
 Exit criteria:

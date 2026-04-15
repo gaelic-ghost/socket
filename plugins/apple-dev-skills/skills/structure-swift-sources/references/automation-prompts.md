@@ -29,12 +29,12 @@ Then use $structure-swift-sources for:
 - repository_kind=<REPOSITORY_KIND>
 - target_scope=<TARGET_SCOPE>
 - split_mode=<SPLIT_MODE>
-- docc_scope=<DOCC_SCOPE>
 - todo_fixme_mode=<TODO_FIXME_MODE>
 
 Execution requirements:
 1) Establish or confirm the formatting baseline first.
 2) Apply the structure rules from the skill references.
-3) If splitting or moving files touches Xcode-managed membership, stop and hand off to $xcode-build-run-workflow.
-4) Finish by returning to $format-swift-sources.
+3) If the request becomes symbol-doc or DocC-content work, stop and hand off to $author-swift-docc-docs.
+4) If splitting or moving files touches Xcode-managed membership, stop and hand off to $xcode-build-run-workflow.
+5) Finish by returning to $format-swift-sources.
 ```

@@ -1,22 +1,22 @@
 ---
 name: structure-swift-sources
-description: Organize Swift source trees and oversized Swift files by feature, layer, and declaration group; split large files, normalize `// MARK:` sections, move TODO and FIXME text into ledger files, and add DocC comments. Use after `format-swift-sources` has established a clean formatting baseline.
+description: Organize Swift source trees and oversized Swift files by feature, layer, and declaration group; split large files, normalize `// MARK:` sections, and move TODO and FIXME text into ledger files. Use after `format-swift-sources` has established a clean formatting baseline.
 ---
 
 # Structure Swift Sources
 
 ## Purpose
 
-Use this skill as the top-level workflow for structural cleanup inside existing Swift repositories. It governs file splitting, file moves, section grouping, DocC coverage, and TODO or FIXME ledger extraction. It is not the formatter or linter integration authority; use `format-swift-sources` before this skill starts mutating source layout, and run `format-swift-sources` again after this skill finishes.
+Use this skill as the top-level workflow for structural cleanup inside existing Swift repositories. It governs file splitting, file moves, section grouping, and TODO or FIXME ledger extraction. It is not the formatter or linter integration authority, and it is not the DocC authoring authority. Use `format-swift-sources` before this skill starts mutating source layout, use `author-swift-docc-docs` when the request becomes symbol-doc or DocC-content work, and run `format-swift-sources` again after this skill finishes.
 
 ## When To Use
 
 - Use this skill when the user wants to split oversized Swift files or move files into a clearer repo layout.
 - Use this skill when the user wants consistent `// MARK:` sections, declaration grouping, or view-modifier extraction in SwiftUI code.
 - Use this skill when the user wants TODO or FIXME text moved out of source files into repo ledger files.
-- Use this skill when the user wants DocC comments added across Swift symbols as part of a structure or hygiene pass.
 - Use this skill when a Swift package or Xcode app repo has drifted away from the intended feature-plus-layer directory shape.
 - Recommend `format-swift-sources` first when formatter or linter setup is missing, unclear, or stale.
+- Recommend `author-swift-docc-docs` when the task becomes symbol documentation, DocC article work, landing-page structure, topic groups, or DocC-oriented review.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when structural cleanup in a plain package repo turns into ordinary package execution or SwiftPM validation.
 - Recommend `xcode-build-run-workflow` when structural cleanup turns into active Xcode execution, scheme validation, file-membership follow-through, or guarded project mutation work.
 - Recommend `xcode-testing-workflow` when structural cleanup turns into active Xcode test validation or test-target diagnosis.
@@ -29,7 +29,6 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - large-file split
    - section and MARK normalization
    - TODO or FIXME ledger extraction
-   - DocC coverage pass
    - combined source-hygiene pass
 2. Run or confirm `format-swift-sources` first:
    - use it to establish a clean baseline before file moves or file splits
@@ -49,9 +48,8 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - always split a file once it exceeds `800` lines
    - when the underlying type is still one coherent type, extract grouped concerns into extension files such as `<Original>+Models.swift` or `<Original>+<Concern>.swift`
    - group declarations into explicit `// MARK: - <Heading>` sections, then place a descriptive secondary `// MARK: <Comment>` line directly below each heading
-   - ensure every symbol declaration has DocC-compliant documentation comments
    - move TODO and FIXME text into `TODO.md` and `FIXME.md`, keeping only ticket IDs in source comments
-  - when the task is TODO or FIXME normalization, use `scripts/normalize_todo_fixme_ledgers.py` for the deterministic ledger rewrite pass across supported Swift and Objective-C source forms
+   - when the task is TODO or FIXME normalization, use `scripts/normalize_todo_fixme_ledgers.py` for the deterministic ledger rewrite pass across supported Swift and Objective-C source forms
 6. Apply repo-shape rules:
    - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
    - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Controllers/`, and `Models/`
@@ -64,14 +62,12 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - `repository_kind`: `swift-package`, `xcode-app-project`, or `mixed`
 - `target_scope`: optional narrowed scope such as one file, one feature directory, or the whole repo
 - `split_mode`: optional; use values such as `advisory`, `required`, or `full-pass`
-- `docc_scope`: optional; use values such as `public-only`, `all-symbols`, or `changed-symbols`
 - `todo_fixme_mode`: optional; use values such as `report-only`, `rewrite-ledgers`, or `normalize-existing`
 - Defaults:
   - run `format-swift-sources` before and after structural mutation
   - prefer feature-plus-layer layout over flat buckets when the repo has meaningful feature boundaries
   - prefer extracted extensions before inventing new wrapper types
   - prefer `TODO.md` and `FIXME.md` as separate ledger files
-  - prefer symbol-level DocC coverage during a full cleanup pass
 
 ## Outputs
 
@@ -98,6 +94,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - Do not invent new abstraction layers just to make a file shorter.
 - Do not move files across Xcode-managed boundaries without accounting for project membership and validation.
 - Do not rewrite TODO or FIXME comments into ledger IDs unless the ledger files are updated in the same pass.
+- Do not absorb symbol-doc or DocC-content work; hand that off to `author-swift-docc-docs`.
 - Stop with `blocked` when the repo shape is too ambiguous to choose feature-first versus layer-first layout safely.
 - Stop with `handoff` when project-file mutation or Xcode membership updates need guarded execution through `xcode-build-run-workflow`.
 
@@ -105,6 +102,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 
 - If the repo lacks a clear formatter or linter baseline, hand off to `format-swift-sources` before any structural mutation.
 - If a broad repo-wide cleanup is too risky, fall back to one feature directory or one oversized file at a time.
+- If the request becomes symbol-doc or DocC-content work, hand off to `author-swift-docc-docs`.
 - If Xcode project integrity must be revalidated after file moves, hand off to `xcode-build-run-workflow`.
 - Recommend `sync-xcode-project-guidance` or `sync-swift-package-guidance` when the request is really about durable repo rules rather than current-file cleanup.
 

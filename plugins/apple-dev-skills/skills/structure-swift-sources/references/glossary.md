@@ -4,7 +4,6 @@
 - `layer`: a technical slice such as `API`, `Features`, `Models`, `Views`, or `Controllers`
 - `concern`: one cohesive responsibility inside a file or directory, such as networking models, persistence adapters, SwiftUI view modifiers, or validation helpers
 - `section group`: a declaration cluster inside one file, separated with `// MARK:` headings
-- `symbol`: a Swift declaration that should carry DocC comments when this skill is doing a documentation pass
 
 Use `feature` language when grouping by product capability.
 Use `layer` language when grouping by technical role.
