@@ -48,6 +48,8 @@
 - Keep the built-in sidebar toggle when it matches the app structure; do not remove it just to replace it with a custom duplicate.
 - If the app needs custom commands around inspector presentation, prefer augmenting `InspectorCommands` rather than shadowing it with unrelated terminology.
 - When the app truly needs programmatic column visibility changes, keep that state near the split-view scene root with `NavigationSplitViewVisibility`.
+- Treat column visibility as a preference, not a guarantee. Apple documents that some platforms do not honor every visibility option, and macOS always displays the content column.
+- Remember that split-view visibility control only applies while the split view is actually showing multiple columns. Apple documents that the control is ignored when the split view collapses into a stack.
 
 ## Worked Examples
 
@@ -114,6 +116,12 @@ Why:
 - column visibility is part of split-view scene structure, not leaf-view rendering detail
 - storing it at the scene root keeps ownership aligned with the view actually using the binding
 
+Caveat:
+
+- Apple documents that macOS always displays the content column
+- Apple also documents that visibility control is ignored when the split view collapses into a stack
+- use this state to express preferred structure, not to promise identical behavior on every platform and size class
+
 ## Common Failure Shapes
 
 - sidebar buttons that directly rewrite deep detail state and inspector state at the same time
@@ -130,6 +138,7 @@ Why:
 - [List](https://developer.apple.com/documentation/swiftui/list)
 - [ToolbarDefaultItemKind.sidebarToggle](https://developer.apple.com/documentation/swiftui/toolbardefaultitemkind/sidebartoggle)
 - [InspectorCommands](https://developer.apple.com/documentation/swiftui/inspectorcommands)
+- [WindowVisibilityToggle](https://developer.apple.com/documentation/swiftui/windowvisibilitytoggle)
 - [View.navigationSplitViewStyle(_:)](https://developer.apple.com/documentation/swiftui/view/navigationsplitviewstyle(_:))
 - [View.navigationSplitViewColumnWidth(_:)](https://developer.apple.com/documentation/swiftui/view/navigationsplitviewcolumnwidth(_:))
 - [View.navigationSplitViewColumnWidth(min:ideal:max:)](https://developer.apple.com/documentation/swiftui/view/navigationsplitviewcolumnwidth(min:ideal:max:))

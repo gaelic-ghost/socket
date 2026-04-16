@@ -12,6 +12,8 @@
   Use when the app should present multiple windows that share one structural template.
 - `Window`
   Use when a distinct singleton-style window surface needs its own identity.
+- `UtilityWindow`
+  Use when a desktop-oriented tool palette or inspector-style window should stay secondary to the app's main scenes.
 - `Settings`
   Use for a managed settings window in macOS-oriented SwiftUI apps.
 - `DocumentGroup`
@@ -21,6 +23,7 @@
 
 - Apple documents `Scene` as the part of the app interface with a lifecycle managed by the system.
 - Apple documents `WindowGroup` as a scene whose windows maintain independent state.
+- Apple documents `UtilityWindow` as a specialized secondary window surface that receives `FocusedValues` from the focused main scene.
 - Apple documents `Settings` as a scene that SwiftUI manages for app settings rather than an arbitrary ordinary view.
 - Apple documents `DocumentGroup` as the document-support scene rather than a stylistic alternative to `WindowGroup`.
 
@@ -30,6 +33,7 @@
 - Put scene-wide responsibilities at the scene boundary when they differ per window, per document, or per managed scene.
 - Keep scene-local state scene-local when multiple windows can exist.
 - Do not use one shared mutable object for every window just because the first draft happened to be single-window.
+- Prefer `UtilityWindow` over an ordinary `Window` when the surface is genuinely an inspector or floating palette that should track the focused main scene like a native utility panel.
 - Treat `NavigationSplitView` as a selection-driven scene root. Apple documents it as a view where selections in leading columns control presentations in subsequent columns.
 - In a three-column split view, the sidebar typically owns the first selection, the content column typically owns the second selection, and the detail or inspector surface reacts to those selections.
 - Prefer `List(selection:)` or similarly selection-honest containers in sidebar and content columns before inventing custom panel-coordination machinery.
@@ -59,6 +63,18 @@ Why:
 
 - settings are a managed scene surface, not just another arbitrary sheet or navigation destination
 - keeping settings in the scene model preserves desktop-oriented app structure
+
+### Example: Inspector-Style Utility Surfaces Use `UtilityWindow`
+
+Good shape:
+
+- the app declares a `UtilityWindow` for a floating inspector or tool palette
+- the utility window reads focused values from the currently focused main scene when it needs active context
+
+Why:
+
+- Apple documents `UtilityWindow` as a specialized secondary window that receives `FocusedValues` from the focused main scene
+- that matches inspector-like desktop behavior more honestly than treating the surface as just another generic singleton window
 
 ### Example: Document Work Uses `DocumentGroup`
 
@@ -121,6 +137,7 @@ Why:
 - [Scenes](https://developer.apple.com/documentation/swiftui/scenes)
 - [WindowGroup](https://developer.apple.com/documentation/swiftui/windowgroup)
 - [Window](https://developer.apple.com/documentation/swiftui/window)
+- [UtilityWindow](https://developer.apple.com/documentation/swiftui/utilitywindow)
 - [Settings](https://developer.apple.com/documentation/swiftui/settings)
 - [DocumentGroup](https://developer.apple.com/documentation/swiftui/documentgroup)
 - [NavigationSplitView](https://developer.apple.com/documentation/swiftui/navigationsplitview)
