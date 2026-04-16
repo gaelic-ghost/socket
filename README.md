@@ -24,7 +24,7 @@ Mixed-model monorepo for Gale's Codex plugin and skills repositories.
 
 ### Status
 
-`socket` is active. `apple-dev-skills` and `python-skills` are still subtree-managed child repositories. The other directories under [`plugins/`](./plugins/) are now treated as ordinary monorepo-owned nested directories.
+`socket` is active. `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` are subtree-managed child repositories. The other directories under [`plugins/`](./plugins/) are treated as ordinary monorepo-owned nested directories.
 
 ### What This Project Is
 
@@ -32,7 +32,7 @@ This repository owns:
 
 - the repo-root Codex marketplace at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
 - the monorepo-owned nested plugin directories under [`plugins/`](./plugins/)
-- the remaining subtree sync paths for `apple-dev-skills` and `python-skills`
+- the remaining subtree sync paths for `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`
 - the root maintainer docs that explain how the mixed model works
 
 ### Motivation
@@ -49,7 +49,7 @@ If you need the root maintainer Python environment, sync it with:
 uv sync --dev
 ```
 
-Only `apple-dev-skills` and `python-skills` still use subtree sync workflows.
+Only `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` still use subtree sync workflows.
 
 ## Usage
 
@@ -57,7 +57,7 @@ Use `socket` when the task is about the superproject layer:
 
 - root marketplace wiring
 - mixed monorepo policy
-- subtree sync flow for `apple-dev-skills` or `python-skills`
+- subtree sync flow for `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer`
 - cross-repo maintainer guidance
 
 When the work is really about one child repository's own behavior, start from that child directory's docs instead.
@@ -73,7 +73,7 @@ Work in the monorepo copy first. Use `plugins/<repo>/` for child-repository chan
 Keep root docs and marketplace wiring in sync with packaging changes in the same pass.
 
 - For monorepo-owned child directories, edit `plugins/<repo>/` directly and commit in `socket`.
-- For `apple-dev-skills` and `python-skills`, keep subtree sync operations explicit and isolated.
+- For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated.
 - Before removing or moving a plugin surface, verify whether the root marketplace or maintainer docs still reference it.
 
 ## Verification
@@ -122,22 +122,24 @@ The current plugin and skills directories under [`plugins/`](./plugins/) are:
 - `apple-dev-skills`
 - `dotnet-skills`
 - `productivity-skills`
+- `SpeakSwiftlyServer`
 - `python-skills`
 - `rust-skills`
 - `things-app`
 - `web-dev-skills`
 
-`apple-dev-skills` and `python-skills` are the only directories in that list that still keep live subtree relationships to separate upstream repositories.
+`apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` are the directories in that list that still keep live subtree relationships to separate upstream repositories.
 
-Recent superproject work in `apple-dev-skills` tightened the Swift cleanup workflow around stronger source-organization and file-header guidance, and closed the Dash-direct-docs milestone so Apple docs routing now teaches direct Xcode MCP and Dash usage before maintainer wrappers.
+Recent superproject work added the `apple-ui-accessibility-workflow` skill and deeper Xcode testing guidance around accessibility verification, `.xctestplan` matrices, and XCUITest automation. The superproject now also carries `SpeakSwiftlyServer` as a live subtree-managed child repo with a repo-root Codex plugin surface for its local speech MCP workflows.
 
 ## Plugin Surfaces
 
 Treat `socket` as the canonical home for the monorepo-owned nested directories and as the subtree host for the remaining imported child repos.
 
 - `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
-- `apple-dev-skills` and `python-skills` still preserve explicit subtree sync paths.
+- `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
 - `apple-dev-skills` currently ships Apple-platform authoring and execution workflows that now include the `author-swift-docc-docs` skill for DocC symbol comments, articles, catalog structure, and DocC-oriented review work, plus the strengthened `structure-swift-sources` and direct-path `explore-apple-swift-docs` guidance.
+- `SpeakSwiftlyServer` ships a repo-root plugin plus focused skills for runtime operation, text-profile authoring, voice workflows, and local speech playback through its shared MCP surface.
 - Some child repos expose plugin packaging from the repo root, while others keep a nested packaged plugin root inside their own repository tree.
 
 ## Marketplace Shape
@@ -150,6 +152,7 @@ That marketplace points at the actual packaged surface each child repository tre
 - `./plugins/apple-dev-skills`
 - `./plugins/dotnet-skills`
 - `./plugins/productivity-skills`
+- `./plugins/SpeakSwiftlyServer`
 - `./plugins/python-skills/plugins/python-skills`
 - `./plugins/rust-skills`
 - `./plugins/things-app`
@@ -162,7 +165,7 @@ The mixed shape is intentional for now. `socket` does not try to flatten those c
 - Use the root docs when you need the mixed monorepo model, marketplace wiring, or subtree workflow.
 - Use child-repo docs when you are changing a child repo's own skills, packaging, tests, or release guidance.
 - For ordinary fixes in monorepo-owned child directories, edit the copy in `plugins/<name>/` directly.
-- For `apple-dev-skills` and `python-skills`, keep subtree pull and push work explicit and separate from unrelated edits.
+- For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree pull and push work explicit and separate from unrelated edits.
 - Update the root marketplace and root docs whenever a child repo gains, moves, or removes plugin packaging.
 
 ## Repository Layout
@@ -187,6 +190,7 @@ The mixed shape is intentional for now. `socket` does not try to flatten those c
 │   ├── apple-dev-skills/
 │   ├── dotnet-skills/
 │   ├── productivity-skills/
+│   ├── SpeakSwiftlyServer/
 │   ├── python-skills/
 │   ├── rust-skills/
 │   ├── things-app/

@@ -2,7 +2,7 @@
 
 This document is the working plan for moving Gale's adjacent plugin and skills repositories under `~/Workspace/gaelic-ghost/socket/` as subtree-managed directories.
 
-Status note: this plan is now mostly historical. `socket` has already completed the simplification step that keeps `apple-dev-skills` and `python-skills` as subtrees while treating the other child directories as ordinary monorepo-owned nested directories.
+Status note: this plan is now mostly historical. `socket` has already completed the simplification step that keeps `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` as subtrees while treating the other child directories as ordinary monorepo-owned nested directories.
 
 ## Why This Change Exists
 
@@ -39,6 +39,7 @@ Rationale:
 │   ├── agent-plugin-skills/
 │   ├── apple-dev-skills/
 │   ├── productivity-skills/
+│   ├── SpeakSwiftlyServer/
 │   ├── python-skills/
 │   ├── things-app/
 │   └── ...
@@ -66,6 +67,7 @@ Immediate subtree candidates:
 - `apple-dev-skills`
 - `productivity-skills`
 - `python-skills`
+- `SpeakSwiftlyServer`
 - `speak-to-user-skills`
 - `things-app`
 - `dotnet-skills` once bootstrapped as a real Git repo
@@ -87,6 +89,7 @@ Status:
   - `dotnet-skills`
   - `productivity-skills`
   - `python-skills`
+  - `SpeakSwiftlyServer`
   - `rust-skills`
   - `speak-to-user-skills`
   - `web-dev-skills`
@@ -97,6 +100,7 @@ Status:
   - `5eabafe` `dotnet-skills`
   - `57698b8` `productivity-skills`
   - `516f256` `python-skills`
+  - `adbc78b` `SpeakSwiftlyServer`
   - `fd77a92` `rust-skills`
   - `6f63d61` `speak-to-user-skills` remake
   - `f8cb4bd` `web-dev-skills`
@@ -110,9 +114,8 @@ Status:
 
 Current state:
 
-- `agent-plugin-skills`, `dotnet-skills`, `rust-skills`, and `web-dev-skills` ship top-level `.codex-plugin/plugin.json` roots, so their socket marketplace entries point directly at the subtree root directories
-- `python-skills` and `things-app` ship packaged plugin roots inside their subtree-managed repositories, so their socket marketplace entries point at `./plugins/python-skills/plugins/python-skills` and `./plugins/things-app/plugins/things-app`
-- `apple-dev-skills` and `productivity-skills` intentionally expose root `skills/` through thin repo-local marketplace metadata, so their socket marketplace entries point at `./plugins/apple-dev-skills/skills` and `./plugins/productivity-skills/skills`
+- `agent-plugin-skills`, `apple-dev-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, `web-dev-skills`, and `SpeakSwiftlyServer` ship top-level `.codex-plugin/plugin.json` roots, so their socket marketplace entries point directly at the child-repo root directories
+- `python-skills` ships its packaged plugin root inside `./plugins/python-skills/plugins/python-skills`, so the socket marketplace points there instead of the subtree root
 - `private-skills` remains intentionally excluded from this public superproject and from the root marketplace
 
 ### Phase 3: validate Codex behavior
@@ -133,6 +136,7 @@ Outcome reached:
 
 - `apple-dev-skills` remains subtree-managed
 - `python-skills` remains subtree-managed
+- `SpeakSwiftlyServer` is now subtree-managed
 - the other child directories under `plugins/` are now monorepo-owned nested directories
 - `speak-to-user-skills` has already been retired from the working tree and from the root marketplace
 - their child remotes are no longer part of the intended steady-state model
@@ -149,7 +153,7 @@ Outcome reached:
 
 - which imported repos actually ship Codex plugin packaging versus only skills or app code
 - whether `things-app` should live beside the skills/plugin repos under `plugins/` or under a second top-level grouping later
-- whether the eventual plain monorepo path should preserve `apple-dev-skills` and `python-skills` subtree history or eventually stop syncing those last child remotes too
+- whether the eventual plain monorepo path should preserve `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` subtree history or eventually stop syncing those last child remotes too
 
 ## First Implementation Pass
 

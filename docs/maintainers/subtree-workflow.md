@@ -1,6 +1,6 @@
 # Monorepo Workflow
 
-This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills` and `python-skills` as the remaining subtree-managed child repositories.
+This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` as the remaining subtree-managed child repositories.
 
 ## What Socket Owns
 
@@ -11,11 +11,11 @@ This document explains how `socket` is maintained after the monorepo simplificat
 - the maintainer docs that explain the mixed monorepo experiment
 - release tags and release notes for the superproject itself
 
-`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/` and `plugins/python-skills/`.
+`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/`, `plugins/python-skills/`, and `plugins/SpeakSwiftlyServer/`.
 
 For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
 
-For `apple-dev-skills` and `python-skills`, when a change should publish back to their source repositories, work in `plugins/<repo-name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>`.
+For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, when a change should publish back to their source repositories, work in `plugins/<repo-name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>`.
 
 ## Child Repository Shape
 
@@ -32,18 +32,19 @@ The socket root marketplace must point at the actual packaged plugin root, not a
 
 ## Current Named Remotes
 
-The superproject keeps `origin` for `socket` and child-repository remotes for `apple-dev-skills` and `python-skills`.
+The superproject keeps `origin` for `socket` and child-repository remotes for `apple-dev-skills`, `python-skills`, and `speak-swiftly-server`.
 
 Current child-repo remotes:
 
 - `apple-dev-skills`
 - `python-skills`
+- `speak-swiftly-server`
 
 If a new subtree-managed child repository is introduced later, add its matching named remote first.
 
-## Subtree Work For Apple Dev Skills And Python Skills
+## Subtree Work For Apple Dev Skills, Python Skills, And SpeakSwiftlyServer
 
-Use dedicated commits for `apple-dev-skills` and `python-skills` subtree work.
+Use dedicated commits for `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` subtree work.
 
 Typical pull flow:
 
@@ -53,6 +54,9 @@ git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
 
 git fetch python-skills
 git subtree pull --prefix=plugins/python-skills python-skills main
+
+git fetch speak-swiftly-server
+git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
 Typical push flow:
@@ -60,11 +64,12 @@ Typical push flow:
 ```bash
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
 git subtree push --prefix=plugins/python-skills python-skills main
+git subtree push --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
 After subtree work:
 
-- verify the directory shape under `plugins/apple-dev-skills/` or `plugins/python-skills/`
+- verify the directory shape under `plugins/apple-dev-skills/`, `plugins/python-skills/`, or `plugins/SpeakSwiftlyServer/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
 
 ## Add A New Subtree-Managed Child Repository
@@ -119,9 +124,9 @@ Use `vx.x.x` tags for socket releases.
 
 - The socket marketplace still points at a directory that no longer exists in `plugins/`.
 - A child directory vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
-- `apple-dev-skills` or `python-skills` still expects subtree sync, but its named remote is missing or points nowhere useful.
+- `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer` still expects subtree sync, but its named remote is missing or points nowhere useful.
 - Socket docs still describe the old all-subtree model after the monorepo has already moved on.
-- `apple-dev-skills` or `python-skills` subtree work lands without a follow-up pass over root marketplace wiring and docs.
+- `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer` subtree work lands without a follow-up pass over root marketplace wiring and docs.
 
 ## Practical Rule Of Thumb
 
