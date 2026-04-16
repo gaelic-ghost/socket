@@ -37,7 +37,7 @@ The package stays intentionally narrow. Hummingbird owns transport hosting, `Spe
 
 ### Current SpeakSwiftly Alignment
 
-This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `3.0.4` package dependency.
+This server is aligned to the current public library surface of its resolved [`SpeakSwiftly`](https://github.com/gaelic-ghost/SpeakSwiftly) `3.0.5` package dependency.
 
 Today the server relies on the current typed runtime capabilities that matter for transport hosting:
 
@@ -101,7 +101,7 @@ That narrowness also informs platform policy. The package should prefer maintain
 
 ## Setup
 
-This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` uses a normal semantic-version requirement here, and this package currently follows it with an up-to-next-major constraint starting at `3.0.4`.
+This package resolves its SwiftPM dependencies from GitHub source control in [`Package.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.swift) and locks the resolved revisions in [`Package.resolved`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Package.resolved). `SpeakSwiftly` uses a normal semantic-version requirement here, and this package currently follows it with an up-to-next-major constraint starting at `3.0.5`. The server's direct `TextForSpeech` dependency now tracks `0.17.0`, matching the current upstream `SpeakSwiftly` graph.
 
 Build the package with SwiftPM through Xcode's selected toolchain:
 
@@ -257,13 +257,16 @@ optional MCP readiness and drain, and the wrapped Hummingbird application as sib
 services. Hummingbird still owns its own internal application `ServiceGroup`, but app code should
 keep treating `EmbeddedServerSession` itself as the lifecycle boundary.
 
-From app code, `ServerState` now also exposes app-facing control points for the cached voice-profile list, the effective default voice profile, and playback actions:
+From app code, `ServerState` now also exposes app-facing control points for the cached voice-profile list, the effective default voice profile, runtime model lifecycle, and playback actions:
 
 - `listVoiceProfiles()` and `refreshVoiceProfiles()`
 - `setDefaultVoiceProfileName(_:)` and `clearDefaultVoiceProfileName()`
+- `switchSpeechBackend(to:)`, `reloadModels()`, and `unloadModels()`
 - `pausePlayback()`, `resumePlayback()`, `clearPlaybackQueue()`, and `cancelPlaybackRequest(_:)`
 
 Those default-profile actions mutate the host-owned effective default that HTTP and MCP speech-generation requests use when `profile_name` is omitted. That app-managed default starts from configuration, can be changed live by the embedded app, and is persisted in the server runtime configuration so it survives process restart. Clearing the app-managed default removes the persisted override and falls back to the configured `app.defaultVoiceProfileName` when one exists.
+
+The runtime control actions apply the refreshed host snapshot back onto `ServerState` before they return, so app code gets one coherent post-action picture of the current backend, worker stage, queues, playback state, and transport health instead of needing to stitch together several follow-up reads.
 
 Start an embedded session from app code like this:
 

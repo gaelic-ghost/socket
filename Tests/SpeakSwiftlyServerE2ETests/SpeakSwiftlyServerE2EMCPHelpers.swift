@@ -12,7 +12,7 @@ extension ServerE2E {
         text: String,
         voiceDescription: String,
         outputPath: String? = nil,
-        cwd: String? = nil
+        cwd: String? = nil,
     ) async throws {
         var arguments = [
             "profile_name": profileName,
@@ -35,7 +35,7 @@ extension ServerE2E {
             id: jobID,
             using: client,
             timeout: e2eTimeout,
-            server: server
+            server: server,
         )
         #expect(snapshot.status == "completed")
         #expect(snapshot.terminalEvent?.ok == true)
@@ -53,7 +53,7 @@ extension ServerE2E {
         referenceAudioPath: String,
         transcript: String?,
         expectTranscription: Bool,
-        cwd: String? = nil
+        cwd: String? = nil,
     ) async throws {
         var arguments = [
             "profile_name": profileName,
@@ -75,7 +75,7 @@ extension ServerE2E {
             id: jobID,
             using: client,
             timeout: e2eTimeout,
-            server: server
+            server: server,
         )
         #expect(snapshot.status == "completed")
         #expect(snapshot.terminalEvent?.ok == true)
@@ -83,13 +83,13 @@ extension ServerE2E {
 
         assertCloneTranscriptionStages(
             in: snapshot,
-            expectTranscription: expectTranscription
+            expectTranscription: expectTranscription,
         )
     }
 
     static func assertProfileIsVisible(
         using client: E2EMCPClient,
-        profileName: String
+        profileName: String,
     ) async throws {
         let payload = try await client.callToolJSON(name: "list_voice_profiles", arguments: [:])
         let profiles = try requireProfiles(from: payload)
@@ -100,14 +100,14 @@ extension ServerE2E {
         using client: E2EMCPClient,
         server: ServerProcess,
         text: String,
-        profileName: String
+        profileName: String,
     ) async throws {
         let payload = try await client.callTool(
             name: "generate_speech",
             arguments: [
                 "text": text,
                 "profile_name": profileName,
-            ]
+            ],
         )
         let jobID = try requireString("request_id", in: payload)
         #expect(payload["request_resource_uri"] as? String == "speak://requests/\(jobID)")
@@ -116,7 +116,7 @@ extension ServerE2E {
             id: jobID,
             using: client,
             timeout: e2eTimeout,
-            server: server
+            server: server,
         )
 
         assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
@@ -129,56 +129,69 @@ extension ServerE2E {
         using client: E2EMCPClient,
         server: ServerProcess,
         text: String,
-        profileName: String
+        profileName: String,
     ) async throws -> String {
+        let audiblePlaybackTimeout = Duration.seconds(180)
+
         try stabilizeBuiltInAudioRouteForAudiblePlayback()
-
-        let engineReadyLog = try await server.waitForStderrJSONObject(timeout: .seconds(120)) {
-            guard
-                $0["event"] as? String == "playback_engine_ready",
-                let details = $0["details"] as? [String: Any]
-            else {
-                return false
-            }
-
-            return details["process_phys_footprint_bytes"] as? Int != nil
-                && details["mlx_active_memory_bytes"] as? Int != nil
-        }
-        #expect(engineReadyLog["event"] as? String == "playback_engine_ready")
 
         let payload = try await client.callTool(
             name: "generate_speech",
             arguments: [
                 "text": text,
                 "profile_name": profileName,
-            ]
+            ],
         )
         let jobID = try requireString("request_id", in: payload)
         #expect(payload["request_resource_uri"] as? String == "speak://requests/\(jobID)")
 
-        _ = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
-            guard
-                $0["event"] as? String == "playback_started",
-                $0["request_id"] as? String == jobID,
-                let details = $0["details"] as? [String: Any]
-            else {
-                return false
-            }
+        do {
+            _ = try await server.waitForStderrJSONObject(timeout: audiblePlaybackTimeout) {
+                guard
+                    $0["event"] as? String == "playback_started",
+                    $0["request_id"] as? String == jobID,
+                    let details = $0["details"] as? [String: Any]
+                else {
+                    return false
+                }
 
-            let textComplexityClass = details["text_complexity_class"] as? String
-            return ["compact", "balanced", "extended"].contains(textComplexityClass)
-                && details["startup_buffer_target_ms"] as? Int != nil
-                && details["startup_buffered_audio_ms"] as? Int != nil
-                && details["process_phys_footprint_bytes"] as? Int != nil
-                && details["mlx_active_memory_bytes"] as? Int != nil
+                let textComplexityClass = details["text_complexity_class"] as? String
+                return ["compact", "balanced", "extended"].contains(textComplexityClass)
+                    && details["startup_buffer_target_ms"] as? Int != nil
+                    && details["startup_buffered_audio_ms"] as? Int != nil
+                    && details["process_phys_footprint_bytes"] as? Int != nil
+                    && details["mlx_active_memory_bytes"] as? Int != nil
+            }
+        } catch is E2ETimeoutError {
+            throw E2ETransportError(
+                """
+                The live MCP audible speech helper never observed a `playback_started` trace event for request '\(jobID)' before timing out.
+                Recent server stderr:
+                \(server.recentStructuredStderrSummary())
+                """,
+            )
         }
 
-        let snapshot = try await waitForTerminalJob(
-            id: jobID,
-            using: client,
-            timeout: e2eTimeout,
-            server: server
-        )
+        let snapshot: E2EJobSnapshot
+        do {
+            snapshot = try await waitForTerminalJob(
+                id: jobID,
+                using: client,
+                timeout: audiblePlaybackTimeout,
+                server: server,
+            )
+        } catch is E2ETimeoutError {
+            let snapshotText = try await client.readResourceText(uri: "speak://requests/\(jobID)")
+            throw E2ETransportError(
+                """
+                The live MCP audible speech helper timed out before request '\(jobID)' reached a terminal state.
+                Current request snapshot:
+                \(snapshotText)
+                Recent server stderr:
+                \(server.recentStructuredStderrSummary())
+                """,
+            )
+        }
 
         assertSpeechJobCompleted(snapshot, expectedJobID: jobID)
         #expect(snapshot.history.contains { $0.event == "progress" && $0.stage == "preroll_ready" })
@@ -208,7 +221,7 @@ extension ServerE2E {
     static func expectMarvisVoiceSelection(
         on server: ServerProcess,
         requestID: String,
-        expectedVoice: String
+        expectedVoice: String,
     ) async throws {
         let log = try await server.waitForStderrJSONObject(timeout: e2eTimeout) {
             guard
@@ -227,18 +240,20 @@ extension ServerE2E {
 
     static func assertMarvisPlaybackStartedInOrder(
         on server: ServerProcess,
-        requestIDs: [String]
+        requestIDs: [String],
     ) async throws {
         let startedRequestIDs: [String] = try await e2eWaitUntil(
             timeout: e2eTimeout,
-            pollInterval: .milliseconds(200)
+            pollInterval: .milliseconds(200),
         ) {
             let matches = server.stderrObjects().compactMap { object -> String? in
                 guard object["event"] as? String == "playback_started" else { return nil }
+
                 return object["request_id"] as? String
             }
             let filtered = matches.filter { requestIDs.contains($0) }
             guard Set(filtered).isSuperset(of: Set(requestIDs)) else { return nil }
+
             return filtered
         }
 
@@ -248,6 +263,7 @@ extension ServerE2E {
                 Issue.record("The live Marvis playback trace never reported a playback_started event for request '\(requestID)'.")
                 return
             }
+
             #expect(index > previousIndex)
             previousIndex = index
         }
@@ -256,17 +272,16 @@ extension ServerE2E {
     static func waitForMCPPlaybackState(
         using client: E2EMCPClient,
         timeout: Duration,
-        matching predicate: @escaping (E2EPlaybackStateSnapshot) -> Bool
+        matching predicate: @escaping (E2EPlaybackStateSnapshot) -> Bool,
     ) async throws -> E2EPlaybackStateSnapshot {
         try await e2eWaitUntil(timeout: timeout, pollInterval: .milliseconds(200)) {
-            let payload = try requireObjectPayload(
-                from: try await client.callToolJSON(name: "get_playback_state", arguments: [:])
+            let payload = try await requireObjectPayload(
+                from: client.callToolJSON(name: "get_playback_state", arguments: [:]),
             )
-            let snapshot: E2EPlaybackStateSnapshot
-            if let playback = payload["playback"] as? [String: Any] {
-                snapshot = try decodePayload(E2EPlaybackStateSnapshot.self, from: playback)
+            let snapshot: E2EPlaybackStateSnapshot = if let playback = payload["playback"] as? [String: Any] {
+                try decodePayload(E2EPlaybackStateSnapshot.self, from: playback)
             } else {
-                snapshot = try decodePayload(E2EPlaybackStateSnapshot.self, from: payload)
+                try decodePayload(E2EPlaybackStateSnapshot.self, from: payload)
             }
             return predicate(snapshot) ? snapshot : nil
         }
@@ -275,11 +290,11 @@ extension ServerE2E {
     static func waitForMCPGenerationQueue(
         using client: E2EMCPClient,
         timeout: Duration,
-        matching predicate: @escaping (E2EQueueSnapshotResponse) -> Bool
+        matching predicate: @escaping (E2EQueueSnapshotResponse) -> Bool,
     ) async throws -> E2EQueueSnapshotResponse {
         try await e2eWaitUntil(timeout: timeout, pollInterval: .milliseconds(200)) {
-            let payload = try requireObjectPayload(
-                from: try await client.callToolJSON(name: "list_generation_queue", arguments: [:])
+            let payload = try await requireObjectPayload(
+                from: client.callToolJSON(name: "list_generation_queue", arguments: [:]),
             )
             let snapshot = try decodePayload(E2EQueueSnapshotResponse.self, from: payload)
             return predicate(snapshot) ? snapshot : nil

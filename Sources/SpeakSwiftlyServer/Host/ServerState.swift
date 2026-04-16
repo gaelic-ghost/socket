@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import SpeakSwiftly
 
 // MARK: - Observable State
 
@@ -11,51 +12,69 @@ import Observation
 @MainActor
 public final class ServerState {
     struct Actions {
-        let refreshVoiceProfiles: @Sendable () async throws -> [ProfileSnapshot]
-        let setDefaultVoiceProfileName: @Sendable (String) async throws -> String
-        let clearDefaultVoiceProfileName: @Sendable () async throws -> String?
-        let pausePlayback: @Sendable () async throws -> PlaybackStatusSnapshot
-        let resumePlayback: @Sendable () async throws -> PlaybackStatusSnapshot
-        let clearPlaybackQueue: @Sendable () async throws -> Int
-        let cancelPlaybackRequest: @Sendable (String) async throws -> String
-
         static let unavailable = Actions(
             refreshVoiceProfiles: {
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not refresh voice profiles because no embedded host action performer is configured yet."
+                    "ServerState could not refresh voice profiles because no embedded host action performer is configured yet.",
                 )
             },
             setDefaultVoiceProfileName: { profileName in
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not set default voice profile '\(profileName)' because no embedded host action performer is configured yet."
+                    "ServerState could not set default voice profile '\(profileName)' because no embedded host action performer is configured yet.",
                 )
             },
             clearDefaultVoiceProfileName: {
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not clear the default voice profile because no embedded host action performer is configured yet."
+                    "ServerState could not clear the default voice profile because no embedded host action performer is configured yet.",
+                )
+            },
+            switchSpeechBackend: { speechBackend in
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not switch the active speech backend to '\(speechBackend.rawValue)' because no embedded host action performer is configured yet.",
+                )
+            },
+            reloadModels: {
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not reload resident runtime models because no embedded host action performer is configured yet.",
+                )
+            },
+            unloadModels: {
+                throw ServerStateActionError.unavailable(
+                    "ServerState could not unload resident runtime models because no embedded host action performer is configured yet.",
                 )
             },
             pausePlayback: {
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not pause playback because no embedded host action performer is configured yet."
+                    "ServerState could not pause playback because no embedded host action performer is configured yet.",
                 )
             },
             resumePlayback: {
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not resume playback because no embedded host action performer is configured yet."
+                    "ServerState could not resume playback because no embedded host action performer is configured yet.",
                 )
             },
             clearPlaybackQueue: {
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not clear the playback queue because no embedded host action performer is configured yet."
+                    "ServerState could not clear the playback queue because no embedded host action performer is configured yet.",
                 )
             },
             cancelPlaybackRequest: { requestID in
                 throw ServerStateActionError.unavailable(
-                    "ServerState could not cancel playback request '\(requestID)' because no embedded host action performer is configured yet."
+                    "ServerState could not cancel playback request '\(requestID)' because no embedded host action performer is configured yet.",
                 )
-            }
+            },
         )
+
+        let refreshVoiceProfiles: @Sendable () async throws -> [ProfileSnapshot]
+        let setDefaultVoiceProfileName: @Sendable (String) async throws -> String
+        let clearDefaultVoiceProfileName: @Sendable () async throws -> String?
+        let switchSpeechBackend: @Sendable (SpeakSwiftly.SpeechBackend) async throws -> HostStateSnapshot
+        let reloadModels: @Sendable () async throws -> HostStateSnapshot
+        let unloadModels: @Sendable () async throws -> HostStateSnapshot
+        let pausePlayback: @Sendable () async throws -> PlaybackStatusSnapshot
+        let resumePlayback: @Sendable () async throws -> PlaybackStatusSnapshot
+        let clearPlaybackQueue: @Sendable () async throws -> Int
+        let cancelPlaybackRequest: @Sendable (String) async throws -> String
     }
 
     enum ServerStateActionError: LocalizedError {
@@ -63,8 +82,8 @@ public final class ServerState {
 
         var errorDescription: String? {
             switch self {
-            case .unavailable(let message):
-                message
+                case let .unavailable(message):
+                    message
             }
         }
     }
@@ -82,7 +101,7 @@ public final class ServerState {
         profileCacheState: "uninitialized",
         profileCacheWarning: nil,
         profileCount: 0,
-        lastProfileRefreshAt: nil
+        lastProfileRefreshAt: nil,
     )
 
     /// Snapshot of the active and queued speech-generation work.
@@ -92,7 +111,7 @@ public final class ServerState {
         queuedCount: 0,
         activeRequest: nil,
         activeRequests: [],
-        queuedRequests: []
+        queuedRequests: [],
     )
 
     /// Snapshot of the active and queued playback work.
@@ -102,7 +121,7 @@ public final class ServerState {
         queuedCount: 0,
         activeRequest: nil,
         activeRequests: [],
-        queuedRequests: []
+        queuedRequests: [],
     )
 
     /// Current playback state reported by the shared runtime.
@@ -112,7 +131,7 @@ public final class ServerState {
         isStableForConcurrentGeneration: false,
         isRebuffering: false,
         stableBufferedAudioMS: nil,
-        stableBufferTargetMS: nil
+        stableBufferTargetMS: nil,
     )
 
     /// Timing details for the most recent host refresh cycle, when one has completed.
@@ -135,7 +154,7 @@ public final class ServerState {
         persistedConfigurationError: nil,
         persistedConfigurationAppliesOnRestart: true,
         activeRuntimeMatchesNextRuntime: true,
-        persistedConfigurationWillAffectNextRuntimeStart: true
+        persistedConfigurationWillAffectNextRuntimeStart: true,
     )
     /// Cached voice-profile summaries currently known to the host.
     public internal(set) var voiceProfiles = [ProfileSnapshot]()
@@ -144,6 +163,7 @@ public final class ServerState {
     /// Recent host and transport errors retained for operator inspection.
     public internal(set) var recentErrors = [RecentErrorSnapshot]()
     public internal(set) var jobsByID: [String: JobSnapshot] = [:]
+
     @ObservationIgnored private var actions = Actions.unavailable
 
     /// Creates an empty observable state model that an embedded session can hydrate.
@@ -175,6 +195,30 @@ public final class ServerState {
         overview = overview.replacing(defaultVoiceProfileName: resolvedProfileName)
     }
 
+    /// Switches the active runtime speech backend and applies the refreshed host state snapshot.
+    @discardableResult
+    public func switchSpeechBackend(to speechBackend: SpeakSwiftly.SpeechBackend) async throws -> HostStateSnapshot {
+        let snapshot = try await actions.switchSpeechBackend(speechBackend)
+        applyHostStateSnapshot(snapshot)
+        return snapshot
+    }
+
+    /// Reloads resident runtime models and applies the refreshed host state snapshot.
+    @discardableResult
+    public func reloadModels() async throws -> HostStateSnapshot {
+        let snapshot = try await actions.reloadModels()
+        applyHostStateSnapshot(snapshot)
+        return snapshot
+    }
+
+    /// Unloads resident runtime models and applies the refreshed host state snapshot.
+    @discardableResult
+    public func unloadModels() async throws -> HostStateSnapshot {
+        let snapshot = try await actions.unloadModels()
+        applyHostStateSnapshot(snapshot)
+        return snapshot
+    }
+
     /// Requests a playback pause through the embedded host and returns the updated playback snapshot.
     @discardableResult
     public func pausePlayback() async throws -> PlaybackStatusSnapshot {
@@ -201,6 +245,18 @@ public final class ServerState {
     @discardableResult
     public func cancelPlaybackRequest(_ requestID: String) async throws -> String {
         try await actions.cancelPlaybackRequest(requestID)
+    }
+
+    func applyHostStateSnapshot(_ snapshot: HostStateSnapshot) {
+        overview = snapshot.overview
+        runtimeRefresh = snapshot.runtimeRefresh
+        generationQueue = snapshot.generationQueue
+        playbackQueue = snapshot.playbackQueue
+        playback = snapshot.playback
+        currentGenerationJobs = snapshot.currentGenerationJobs
+        runtimeConfiguration = snapshot.runtimeConfiguration
+        transports = snapshot.transports
+        recentErrors = snapshot.recentErrors
     }
 
     func configureActions(_ actions: Actions) {
