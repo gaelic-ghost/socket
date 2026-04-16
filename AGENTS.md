@@ -11,7 +11,7 @@
 - Treat `Package.swift` as the source of truth for package structure, products, targets, dependencies, resources, and deployment targets.
 - Prefer `swift package` subcommands for structural edits when SwiftPM already exposes the right operation.
 - Keep package graph changes together in one pass, including `Package.swift`, `Package.resolved`, target layout, and any matching docs or tests.
-- Use `scripts/repo-maintenance/validate-all.sh` for maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, and `scripts/repo-maintenance/release.sh` for releases.
+- Use `scripts/repo-maintenance/validate-all.sh` for maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, `scripts/repo-maintenance/release-prepare.sh` for branch or worktree release prep, and `scripts/repo-maintenance/release-publish.sh` for the final release cut from the release branch. `scripts/repo-maintenance/release.sh` remains the compatibility dispatcher.
 - Keep package resources under the owning target tree and load them through `Bundle.module`.
 - Treat tagged releases as the distribution surface for this repository, especially when the staged LaunchAgent artifact path changes.
 
