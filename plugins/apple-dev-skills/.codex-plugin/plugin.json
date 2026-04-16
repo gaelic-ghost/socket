@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
-  "version": "5.1.5",
-  "description": "Apple development workflows for Codex and Claude Code, including DocC authoring and review guidance.",
+  "version": "5.2.0",
+  "description": "Apple development workflows for Codex and Claude Code, including SwiftUI architecture and DocC authoring guidance.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -23,8 +23,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple, Swift, Xcode, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for Swift, SwiftUI, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling.",
+    "shortDescription": "Apple, Swift, Xcode, SwiftUI, and DocC workflows for Codex.",
+    "longDescription": "Bundle Apple-platform development skills for Swift, SwiftUI architecture, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

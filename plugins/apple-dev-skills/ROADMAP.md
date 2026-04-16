@@ -24,7 +24,7 @@
 - [ ] Milestone 37: Apple UI Accessibility Workflow
 - [x] Milestone 38: DocC Workflow
 - [ ] Milestone 39: Swift Package Index Workflow
-- [ ] Milestone 40: SwiftUI UI Architecture Workflow
+- [x] Milestone 40: SwiftUI UI Architecture Workflow
 
 ## Milestone 18: Claude Code Plugin Extras
 
@@ -256,24 +256,28 @@ Detailed planning notes live in `docs/maintainers/swiftui-app-architecture-workf
 
 Scope:
 
-- [ ] Add a dedicated SwiftUI workflow skill for application UI architecture and implementation across scenes, commands, environment, preferences, focus, and reusable view composition.
-- [ ] Keep the skill grounded in current Apple SwiftUI behavior for app structure and desktop-oriented SwiftUI surfaces instead of generic component-library advice or framework-agnostic UI theory.
-- [ ] Make the workflow explicitly resistant to common agent anti-patterns, especially the sprawling wrapper-heavy, state-scattering, over-abstracted, and environment-abusing shapes that codegen tools constantly try to introduce.
+- [x] Add a dedicated SwiftUI workflow skill for application UI architecture and implementation across scenes, commands, environment, preferences, focus, and reusable view composition.
+- [x] Keep the skill grounded in current Apple SwiftUI behavior for app structure and desktop-oriented SwiftUI surfaces instead of generic component-library advice or framework-agnostic UI theory.
+- [x] Make the workflow explicitly resistant to common agent anti-patterns, especially the sprawling wrapper-heavy, state-scattering, over-abstracted, and environment-abusing shapes that codegen tools constantly try to introduce.
 
 Tickets:
 
-- [ ] Define the skill boundary so it owns SwiftUI application UI architecture and composition guidance without replacing the lower-level Apple docs routing skill or the broader accessibility workflow.
-- [ ] Gather the core Apple documentation references for `App`, scenes, scene types, commands, command groups, focused values, scene-focused values, environment values, preferences, window and document structure, and view composition.
-- [ ] Cover practical SwiftUI app-structure topics including commands, command menus, command groups, scenes, scene identity, scene focus values, focused values, environment propagation, preference keys, and reusable component and view patterns.
-- [ ] Teach when to use `Environment`, when to prefer explicit dependency injection, when preferences are the right upward data-flow tool, and when neither should be used.
-- [ ] Cover anti-patterns directly, including stuffing everything into environment objects, building giant root views, inventing wrapper layers instead of small composable views, overusing preference keys, hiding control flow in modifiers, and pushing app-level command logic into unrelated leaf views.
-- [ ] Include guidance for desktop-centric SwiftUI surfaces such as menu commands, focused command handling, window or scene coordination, and top-level app structure where macOS-style SwiftUI differs from simpler iOS-only examples.
-- [ ] Add tests and maintainer docs once the workflow shape is stable.
+- [x] Define the skill boundary so it owns SwiftUI application UI architecture and composition guidance without replacing the lower-level Apple docs routing skill or the broader accessibility workflow.
+- [x] Gather the core Apple documentation references for `App`, scenes, scene types, commands, command groups, focused values, scene-focused values, environment values, preferences, window and document structure, and view composition.
+- [x] Cover practical SwiftUI app-structure topics including commands, command menus, command groups, scenes, scene identity, scene focus values, focused values, environment propagation, preference keys, and reusable component and view patterns.
+- [x] Teach when to use `Environment`, when to prefer explicit dependency injection, when preferences are the right upward data-flow tool, and when neither should be used.
+- [x] Cover anti-patterns directly, including stuffing everything into environment objects, building giant root views, inventing wrapper layers instead of small composable views, overusing preference keys, hiding control flow in modifiers, and pushing app-level command logic into unrelated leaf views.
+- [x] Include guidance for desktop-centric SwiftUI surfaces such as menu commands, focused command handling, window or scene coordination, and top-level app structure where macOS-style SwiftUI differs from simpler iOS-only examples.
+- [x] Add tests and maintainer docs once the workflow shape is stable.
+- [ ] Future refinement: add explicit `UtilityWindow`, `WindowVisibilityToggle`, and `commandsRemoved()` follow-up guidance for deeper desktop utility-window coverage.
+- [ ] Future refinement: expand desktop-oriented examples around native sidebar, inspector, and auxiliary-window command composition if the first release proves too compressed.
 
 Exit criteria:
 
-- [ ] The repository ships a documented SwiftUI UI architecture workflow skill that covers scenes, commands, environment, preferences, focus, and component composition.
-- [ ] The workflow gives maintainers concrete guardrails against common SwiftUI agent anti-patterns instead of only describing ideal patterns abstractly.
+- [x] The repository ships a documented SwiftUI UI architecture workflow skill that covers scenes, commands, environment, preferences, focus, and component composition.
+- [x] The workflow gives maintainers concrete guardrails against common SwiftUI agent anti-patterns instead of only describing ideal patterns abstractly.
+
+Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, documenting the first-slice boundary in `docs/maintainers/swiftui-app-architecture-workflow-plan.md`, grounding the workflow in current SwiftUI scene, command, focus, and environment behavior, adding desktop-oriented split-view and inspector guidance, and covering the shipped surface with repo-validator and targeted pytest checks.
 
 ## History
 
