@@ -134,6 +134,8 @@ The initial reference set should be small and explicit:
 
 - `references/app-and-scene-structure.md`
   Covers app entry, scene types, scene lifecycle, multiwindow ownership, and scene-local state expectations.
+- `references/navigation-splitview-sidebar-and-inspector.md`
+  Covers native split-view composition, sidebar selection structure, content-detail-inspector flow, built-in sidebar and inspector commands, and when split-view visibility belongs at the scene root.
 - `references/commands-and-focus.md`
   Covers command groups, command menus, command ownership, and the command-facing handoff to focused context.
 - `references/focus-and-focused-context.md`
@@ -152,6 +154,7 @@ The first implementation slice should add:
 - `skills/swiftui-app-architecture-workflow/SKILL.md`
 - `skills/swiftui-app-architecture-workflow/agents/openai.yaml`
 - `skills/swiftui-app-architecture-workflow/references/app-and-scene-structure.md`
+- `skills/swiftui-app-architecture-workflow/references/navigation-splitview-sidebar-and-inspector.md`
 - `skills/swiftui-app-architecture-workflow/references/commands-and-focus.md`
 - `skills/swiftui-app-architecture-workflow/references/focus-and-focused-context.md`
 - `skills/swiftui-app-architecture-workflow/references/environment-and-preferences.md`

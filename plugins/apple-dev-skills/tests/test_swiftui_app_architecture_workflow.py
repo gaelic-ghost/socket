@@ -32,6 +32,18 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         self.assertIn("$xcode-build-run-workflow", prompt_text)
         self.assertIn("$xcode-testing-workflow", prompt_text)
 
+    def test_splitview_and_inspector_reference_is_first_class(self) -> None:
+        skill_text = self.read("skills/swiftui-app-architecture-workflow/SKILL.md")
+        splitview_text = self.read(
+            "skills/swiftui-app-architecture-workflow/references/navigation-splitview-sidebar-and-inspector.md"
+        )
+
+        self.assertIn("navigation-splitview-sidebar-and-inspector.md", skill_text)
+        self.assertIn("NavigationSplitView", splitview_text)
+        self.assertIn("InspectorCommands", splitview_text)
+        self.assertIn("sidebarToggle", splitview_text)
+        self.assertIn("List(selection:)", splitview_text)
+
 
 if __name__ == "__main__":
     unittest.main()

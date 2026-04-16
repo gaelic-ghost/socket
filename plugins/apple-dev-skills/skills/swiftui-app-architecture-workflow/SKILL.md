@@ -139,6 +139,7 @@ Keep the first release focused on the decision model and the documented boundary
 ### Workflow References
 
 - `references/app-and-scene-structure.md`
+- `references/navigation-splitview-sidebar-and-inspector.md`
 - `references/commands-and-focus.md`
 - `references/focus-and-focused-context.md`
 - `references/environment-and-preferences.md`
