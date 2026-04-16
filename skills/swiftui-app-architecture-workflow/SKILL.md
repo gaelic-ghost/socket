@@ -81,7 +81,6 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 ## Inputs
 
 - `request`: optional free-text task description used to classify the SwiftUI architecture question.
-- `scope`: optional explicit scope such as `app-scene-structure`, `commands-and-focus`, `environment`, `preferences`, or `composition`.
 - `scope`: optional explicit scope such as `app-scene-structure`, `commands`, `focus`, `environment`, `preferences`, or `composition`.
 - `platform_context`: optional platform emphasis such as `macos`, `ios`, `ipados`, or `mixed-apple`.
 - `repo_shape`: optional high-level repo context such as `xcode-app`, `document-app`, `multiwindow-app`, or `unknown`.

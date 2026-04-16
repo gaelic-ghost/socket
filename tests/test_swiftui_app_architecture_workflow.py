@@ -44,6 +44,12 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         self.assertIn("sidebarToggle", splitview_text)
         self.assertIn("List(selection:)", splitview_text)
 
+    def test_desktop_scene_coverage_mentions_utility_window(self) -> None:
+        scene_text = self.read("skills/swiftui-app-architecture-workflow/references/app-and-scene-structure.md")
+
+        self.assertIn("UtilityWindow", scene_text)
+        self.assertIn("FocusedValues", scene_text)
+
 
 if __name__ == "__main__":
     unittest.main()
