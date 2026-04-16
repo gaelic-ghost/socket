@@ -175,7 +175,7 @@ Unlike the Xcode execution workflows, this milestone does not currently need det
   Owns build, run, preview, diagnostics, file-membership, and guarded mutation work in existing Xcode-managed projects.
 - `xcode-testing-workflow`
   Owns test-focused execution and diagnosis.
-- planned accessibility workflow
+- `apple-ui-accessibility-workflow`
   Should own accessibility-specific implementation and review rather than having this skill grow sideways into that surface.
 
 ## Quality Expectations

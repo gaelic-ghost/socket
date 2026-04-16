@@ -73,6 +73,16 @@ class SwiftPackageTestingWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
 
+    def test_skill_keeps_accessibility_boundary_as_handoff(self) -> None:
+        skill_text = (ROOT / "skills/swift-package-testing-workflow/SKILL.md").read_text(encoding="utf-8")
+        reference_text = (
+            ROOT / "skills/swift-package-testing-workflow/references/package-resources-testing-and-builds.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("apple-ui-accessibility-workflow", skill_text)
+        self.assertIn("runtime UI accessibility verification", reference_text)
+        self.assertIn("semantic formatting", reference_text)
+
 
 if __name__ == "__main__":
     unittest.main()

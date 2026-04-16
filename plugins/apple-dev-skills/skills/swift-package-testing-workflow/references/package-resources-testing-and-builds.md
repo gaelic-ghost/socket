@@ -22,6 +22,13 @@
 - Prefer direct async tests in Swift Testing, and use `confirmation(...)` for event-driven asynchronous behavior instead of fixed sleeps.
 - Keep XCTest only when a dependency, legacy test surface, or Apple tooling constraint still requires it.
 - When package-facing Xcode integration uses `.xctestplan` files, keep them versioned and exercise them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
+- Keep UI automation, runtime accessibility verification, and deeper Xcode-native `.xctestplan` matrix work in `xcode-testing-workflow`.
+
+## Accessibility-related test boundaries
+
+- Package-side tests can validate semantic formatting, model-derived accessible strings, or other non-UI logic that feeds accessibility behavior.
+- Do not pretend package tests replace runtime UI accessibility verification.
+- Hand off to `apple-ui-accessibility-workflow` when the real question is semantic accessibility design, and hand off to `xcode-testing-workflow` when the real question is runtime UI verification.
 
 ## Debug and Release
 

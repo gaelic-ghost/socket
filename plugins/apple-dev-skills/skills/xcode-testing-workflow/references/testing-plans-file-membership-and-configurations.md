@@ -5,6 +5,7 @@
 - Prefer Swift Testing for modern unit-style test surfaces, including suites, tags, parameterized tests, and direct async coverage.
 - Keep XCTest for Apple tooling or dependency constraints that still require it, and keep XCTest-specific helpers scoped to that surface instead of mixing frameworks casually.
 - Use XCUITest for UI automation and prefer explicit wait APIs such as `waitForExistence(timeout:)`, `waitForNonExistence(timeout:)`, and related state waits instead of fixed sleeps.
+- Keep deeper UI automation mechanics in `references/xcuitest-and-xcuiautomation.md` instead of overloading this summary file.
 
 ## Test plans
 
@@ -12,6 +13,13 @@
 - Inspect available plans with `xcodebuild -scheme <Scheme> -showTestPlans`.
 - Run a specific plan with `xcodebuild -scheme <Scheme> -testPlan <Plan> test`.
 - Use configuration filtering such as `-only-test-configuration` and `-skip-test-configuration` when the plan defines multiple named configurations.
+- Keep the richer `.xctestplan` decision model in `references/xctestplan-configurations-and-matrix.md`.
+
+## Accessibility verification
+
+- Runtime accessibility verification belongs here when the next honest step is XCUITest, simulator or device follow-through, screenshots, attachments, or plan-driven matrix coverage.
+- Accessibility semantics and implementation review belong to `apple-ui-accessibility-workflow`.
+- Keep the runtime verification details in `references/ui-accessibility-verification.md`.
 
 ## File addition and target membership
 

@@ -1,18 +1,18 @@
 ---
 name: xcode-testing-workflow
-description: Guide Swift Testing, XCTest, XCUITest, xctestplan, test filtering, retries, diagnostics, and test-specific fallback work in existing Xcode-managed projects and workspaces. Use when Xcode-aware execution is needed and the task is primarily about testing rather than build or run work.
+description: Guide Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mechanics, xctestplan matrices, accessibility-verification follow-through, test filtering, retries, diagnostics, and test-specific fallback work in existing Xcode-managed projects and workspaces. Use when Xcode-aware execution is needed and the task is primarily about testing rather than build or run work.
 ---
 
 # Xcode Testing Workflow
 
 ## Purpose
 
-Use this skill as the primary execution workflow for test-focused work in or around Xcode-managed projects and workspaces. Keep it focused on Swift Testing, XCTest, XCUITest, `.xctestplan`, destinations, filters, retries, diagnostics, and test-specific Debug/Release validation instead of broad build/run or toolchain work. `scripts/run_workflow.py` is the runtime entrypoint for MCP-first test execution, official CLI fallback planning, and the remaining `.pbxproj` warning boundary when mutation enters project-file territory.
+Use this skill as the primary execution workflow for test-focused work in or around Xcode-managed projects and workspaces. Keep it focused on Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mechanics, `.xctestplan`, destinations, launch arguments, interruption handling, attachments, accessibility-verification follow-through, filters, retries, diagnostics, and test-specific Debug/Release validation instead of broad build/run or toolchain work. `scripts/run_workflow.py` is the runtime entrypoint for MCP-first test execution, official CLI fallback planning, and the remaining `.pbxproj` warning boundary when mutation enters project-file territory.
 
 ## When To Use
 
 - Use this skill for Xcode test execution, test diagnosis, test filtering, retries, destination selection, and test-plan work.
-- Use this skill for Swift Testing, XCTest, XCUITest, `.xctestplan`, flaky-test diagnosis, and test-only configuration validation.
+- Use this skill for Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mechanics, `.xctestplan`, flaky-test diagnosis, accessibility-verification follow-through, and test-only configuration validation.
 - Use this skill for Xcode MCP operations and official Apple CLI fallback when the work is primarily about tests rather than build/run.
 - Use this skill when direct filesystem mutation around tests or test plans may be required.
 - Do not use this skill as the default path for ordinary build, run, preview, archive, or general project-integrity work.
@@ -38,7 +38,11 @@ Use this skill as the primary execution workflow for test-focused work in or aro
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
 4. Run `scripts/run_workflow.py` to apply runtime configuration, `.pbxproj` warning safeguards, and CLI fallback planning.
-5. Use `references/testing-plans-file-membership-and-configurations.md` for Swift Testing, XCTest, XCUITest, `.xctestplan`, file membership, and Debug/Release testing guidance.
+5. Use the focused references for the right testing surface:
+   - `references/xctestplan-configurations-and-matrix.md` for `.xctestplan`, launch-argument matrices, named configurations, and Debug/Release test coverage
+   - `references/xcuitest-and-xcuiautomation.md` for UI automation mechanics, waits, interruption handling, activities, and attachments
+   - `references/ui-accessibility-verification.md` for accessibility-specific runtime verification expectations and coordination with `apple-ui-accessibility-workflow`
+   - `references/testing-plans-file-membership-and-configurations.md` for the condensed cross-cutting summary and file-membership reminder
 6. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
 7. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
 
@@ -88,6 +92,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - Hand off to `xcode-build-run-workflow` when the request becomes primarily about build, run, previews, archives, file membership, or toolchains.
 - Recommend `explore-apple-swift-docs` directly when the task becomes Apple or Swift docs exploration work.
 - Recommend `swift-package-testing-workflow` directly when the task becomes package-first test execution.
+- Recommend `apple-ui-accessibility-workflow` directly when the task is primarily about accessibility semantics or review rather than runtime test execution.
 - Recommend `format-swift-sources` directly when the task becomes SwiftLint or SwiftFormat setup, config export, or style-tooling maintenance work.
 - Recommend `structure-swift-sources` directly when the task becomes structural source cleanup work.
 - Recommend `sync-xcode-project-guidance` directly when the repo needs Xcode-specific guidance sync rather than execution.
@@ -108,6 +113,9 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - `references/workflow-policy.md`
 - `references/mcp-tool-matrix.md`
 - `references/cli-fallback-matrix.md`
+- `references/xctestplan-configurations-and-matrix.md`
+- `references/xcuitest-and-xcuiautomation.md`
+- `references/ui-accessibility-verification.md`
 - `references/testing-plans-file-membership-and-configurations.md`
 - `references/mutation-risk-policy.md`
 - `references/mutation-via-mcp.md`

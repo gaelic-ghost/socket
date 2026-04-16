@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple UI Accessibility Workflow"
+  short_description: "Review and implement Apple UI accessibility"
+  default_prompt: "Use $apple-ui-accessibility-workflow to review or improve Apple UI accessibility with SwiftUI as the primary path, while keeping UIKit and AppKit bridge guidance explicit when wrappers or native platform views are involved. Start by anchoring the recommendation in current Apple accessibility behavior. If the request is really Apple-docs lookup, hand off to $explore-apple-swift-docs. If the request becomes XCUITest execution, simulator verification, or `.xctestplan` work, hand off to $xcode-testing-workflow. If the request is really about broader SwiftUI app structure, hand off to $swiftui-app-architecture-workflow."

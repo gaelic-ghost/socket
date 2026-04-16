@@ -26,8 +26,10 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         prompt_text = self.read("skills/swiftui-app-architecture-workflow/agents/openai.yaml")
 
         self.assertIn("Recommend `explore-apple-swift-docs`", skill_text)
+        self.assertIn("Recommend `apple-ui-accessibility-workflow`", skill_text)
         self.assertIn("Recommend `xcode-build-run-workflow`", skill_text)
         self.assertIn("Recommend `xcode-testing-workflow`", skill_text)
+        self.assertIn("$apple-ui-accessibility-workflow", prompt_text)
         self.assertIn("$explore-apple-swift-docs", prompt_text)
         self.assertIn("$xcode-build-run-workflow", prompt_text)
         self.assertIn("$xcode-testing-workflow", prompt_text)

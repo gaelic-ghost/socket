@@ -88,6 +88,25 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
             self.assertIn("-testPlan Demo", joined)
             self.assertIn("-scheme Demo", joined)
 
+    def test_skill_documents_accessibility_and_ui_automation_references(self) -> None:
+        skill_text = (ROOT / "skills/xcode-testing-workflow/SKILL.md").read_text(encoding="utf-8")
+        plan_text = (
+            ROOT / "skills/xcode-testing-workflow/references/xctestplan-configurations-and-matrix.md"
+        ).read_text(encoding="utf-8")
+        ui_text = (
+            ROOT / "skills/xcode-testing-workflow/references/xcuitest-and-xcuiautomation.md"
+        ).read_text(encoding="utf-8")
+        accessibility_text = (
+            ROOT / "skills/xcode-testing-workflow/references/ui-accessibility-verification.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("xctestplan-configurations-and-matrix.md", skill_text)
+        self.assertIn("xcuitest-and-xcuiautomation.md", skill_text)
+        self.assertIn("ui-accessibility-verification.md", skill_text)
+        self.assertIn("-only-test-configuration", plan_text)
+        self.assertIn("waitForExistence(timeout:)", ui_text)
+        self.assertIn("apple-ui-accessibility-workflow", accessibility_text)
+
 
 if __name__ == "__main__":
     unittest.main()

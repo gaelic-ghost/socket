@@ -75,6 +75,7 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             agents_text = Path(tmpdir, "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("bootstrap-swift-package", agents_text)
             self.assertIn("sync-swift-package-guidance", agents_text)
+            self.assertIn("apple-ui-accessibility-workflow", agents_text)
             self.assertIn("swift build", agents_text)
             self.assertIn("swift test", agents_text)
             self.assertIn("Bundle.module", agents_text)
@@ -84,6 +85,7 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("branch/revision-based requirements", agents_text)
             self.assertIn("Package.resolved", agents_text)
             self.assertIn("one change when possible", agents_text)
+            self.assertIn("runtime UI accessibility verification", agents_text)
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
             self.assertIn(
@@ -103,11 +105,13 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             agents_text = agents_path.read_text(encoding="utf-8")
             self.assertIn("## Existing Section", agents_text)
             self.assertIn("## Swift Package Workflow", agents_text)
+            self.assertIn("apple-ui-accessibility-workflow", agents_text)
             self.assertIn("Bundle.module", agents_text)
             self.assertIn(".metallib", agents_text)
             self.assertIn("branch/revision-based requirements", agents_text)
             self.assertIn("Package.resolved", agents_text)
             self.assertIn("one change when possible", agents_text)
+            self.assertIn("runtime UI accessibility verification", agents_text)
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="swift-package"',

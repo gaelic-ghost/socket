@@ -182,10 +182,19 @@ Exit criteria:
 
 ## Milestone 37: Apple UI Accessibility Workflow
 
+Detailed planning notes live in `docs/maintainers/apple-ui-accessibility-workflow-plan.md`.
+
 Scope:
 
 - [ ] Add a dedicated Apple accessibility workflow skill that covers SwiftUI, UIKit, and AppKit accessibility implementation and review.
 - [ ] Keep the skill grounded in current Apple accessibility APIs, platform semantics, focus behavior, VoiceOver behavior, Dynamic Type or text sizing expectations, and reduced-motion or contrast-related system settings.
+
+Chosen first-slice direction:
+
+- [x] Ship the durable public surface as `apple-ui-accessibility-workflow`.
+- [x] Keep the first implementation SwiftUI-first while still covering UIKit and AppKit bridge guidance.
+- [x] Keep runtime UI accessibility verification and `.xctestplan` execution with `xcode-testing-workflow` instead of collapsing those mechanics into the accessibility skill.
+- [x] Keep `swift-package-testing-workflow` lighter by limiting it to package-side semantic testing guidance plus explicit handoff conditions.
 
 Tickets:
 

@@ -23,7 +23,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 - Recommend `explore-apple-swift-docs` when the user primarily needs Apple or Swift documentation lookup rather than architecture guidance.
 - Recommend `xcode-build-run-workflow` when the work becomes build, run, preview, diagnostics, file-membership, or guarded mutation work in an existing Xcode-managed project.
 - Recommend `xcode-testing-workflow` when the work becomes Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis.
-- Defer accessibility-specific implementation and review to the planned accessibility workflow instead of absorbing that surface here.
+- Recommend `apple-ui-accessibility-workflow` when the work is primarily about accessibility-specific implementation or review instead of absorbing that surface here.
 
 ## When Not To Use
 
@@ -123,7 +123,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 - Recommend `explore-apple-swift-docs` when the real need is broader Apple or Swift docs lookup.
 - Recommend `xcode-build-run-workflow` when the next honest step is build, run, preview, diagnostics, file-membership follow-through, or guarded mutation.
 - Recommend `xcode-testing-workflow` when the next honest step is test execution or test diagnosis.
-- Defer accessibility-specific work to the planned accessibility workflow once that surface exists.
+- Recommend `apple-ui-accessibility-workflow` when the next honest step is accessibility-specific implementation or review.
 
 ## Customization
 

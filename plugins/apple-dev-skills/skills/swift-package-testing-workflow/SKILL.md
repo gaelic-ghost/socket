@@ -1,18 +1,18 @@
 ---
 name: swift-package-testing-workflow
-description: Guide Swift Testing, XCTest, xctestplan, async test, test-fixture, and package test-diagnosis work in existing Swift Package Manager repositories. Use when Package.swift is the source of truth and the task is primarily about testing rather than package build or run work.
+description: Guide Swift Testing, XCTest holdouts, xctestplan handoff conditions, async test design, semantic accessibility-test boundaries, test-fixture organization, and package test-diagnosis work in existing Swift Package Manager repositories. Use when Package.swift is the source of truth and the task is primarily about testing rather than package build or run work.
 ---
 
 # Swift Package Testing Workflow
 
 ## Purpose
 
-Use this skill as the primary execution workflow for test-focused work in existing Swift Package Manager repositories. Keep it focused on Swift Testing, XCTest holdouts, `.xctestplan` usage, async-test guidance, filters, retries, fixtures, and package-level test diagnosis instead of broad manifest and build/run work. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, test-surface command planning, and clean handoff to the build/run or Xcode-oriented surfaces when the request drifts.
+Use this skill as the primary execution workflow for test-focused work in existing Swift Package Manager repositories. Keep it focused on Swift Testing, XCTest holdouts, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, filters, retries, fixtures, and package-level test diagnosis instead of broad manifest and build/run work. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, test-surface command planning, and clean handoff to the build/run or Xcode-oriented surfaces when the request drifts.
 
 ## When To Use
 
 - Use this skill for running, diagnosing, organizing, or evolving tests in an existing Swift package repo.
-- Use this skill for Swift Testing-first package work, XCTest holdouts, async-test design, and test-fixture organization.
+- Use this skill for Swift Testing-first package work, XCTest holdouts, async-test design, semantic accessibility-test boundaries, and test-fixture organization.
 - Use this skill for package-level `.xctestplan` execution when the package surface needs Xcode test-plan follow-through.
 - Use this skill when the request is about test selection, filtering, retries, failures, flaky tests, or test-only Debug/Release validation.
 - Do not use this skill for broad manifest edits, dependency work, package resources, plugin flows, or ordinary build and run work.
@@ -22,7 +22,8 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Recommend `swift-package-build-run-workflow` when the request is primarily about package build/run, manifest, dependency, plugin, resource, or Metal-distribution work.
 - Recommend `bootstrap-swift-package` when the package repo does not exist yet.
 - Recommend `sync-swift-package-guidance` when the repo guidance needs to be added, refreshed, or merged.
-- Recommend `xcode-testing-workflow` when test work depends on active Xcode workspace state, navigator diagnostics, simulator or device flows, or Xcode-native test plans and test execution.
+- Recommend `xcode-testing-workflow` when test work depends on active Xcode workspace state, navigator diagnostics, simulator or device flows, XCUITest, runtime accessibility verification, or Xcode-native test plans and test execution.
+- Recommend `apple-ui-accessibility-workflow` when the request is primarily about accessibility semantics or review rather than package-side testing strategy.
 - Recommend `xcode-build-run-workflow` when package test work crosses into guarded mutation, file membership, or other Xcode-managed project-integrity work.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift docs exploration before implementation or test changes.
 
@@ -44,7 +45,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its package-appropriate logging, telemetry, structured-concurrency, and Swift Testing guidance
 4. Run `scripts/run_workflow.py` to resolve repo shape, confirm the request stays on the testing surface, and plan the package-testing command path.
-5. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, fixtures, async test discipline, or test-related Debug/Release validation.
+5. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, accessibility-related semantic tests, fixtures, async test discipline, or test-related Debug/Release validation.
 6. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-testing-workflow`.
 7. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
 
@@ -98,6 +99,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
   - Xcode MCP mutation tools
   - `.xctestplan` execution or package test behavior that is more authoritative through Xcode-managed Apple SDK integration
   - direct test execution through Xcode-native destinations, UI testing, or `.xctestplan` handling inside an Xcode-managed workspace
+- Recommend `apple-ui-accessibility-workflow` when the user is really asking how the UI should expose semantics to assistive technologies instead of how a package-side test should be organized.
 - Hand off to `xcode-build-run-workflow` when package test work instead crosses into direct changes inside `.xcodeproj`, `.xcworkspace`, or `.pbxproj` managed scope.
 - Recommend `sync-swift-package-guidance` when the request is really about repo guidance instead of execution.
 - Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.

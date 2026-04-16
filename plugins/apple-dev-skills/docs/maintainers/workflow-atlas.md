@@ -27,6 +27,7 @@ flowchart TD
     A --> WP["swift-package-workflow (legacy compatibility)"]
     A --> DOCC["author-swift-docc-docs"]
     A --> SWUI["swiftui-app-architecture-workflow"]
+    A --> A11Y["apple-ui-accessibility-workflow"]
     A --> D["explore-apple-swift-docs"]
     A --> ST["format-swift-sources"]
     A --> SS["structure-swift-sources"]
@@ -53,7 +54,11 @@ flowchart TD
     DOCC --> DOCCD["May recommend explore-apple-swift-docs"]
     DOCC --> DOCCX["May recommend swift-package-build-run-workflow or xcode-build-run-workflow for generation, export, or hosting follow-through"]
     SWUI --> SWUID["May recommend explore-apple-swift-docs"]
+    SWUI --> SWUIA["May recommend apple-ui-accessibility-workflow for accessibility-specific work"]
     SWUI --> SWUIX["May recommend xcode-build-run-workflow or xcode-testing-workflow for execution follow-through"]
+    A11Y --> A11YD["May recommend explore-apple-swift-docs"]
+    A11Y --> A11YX["May recommend xcode-testing-workflow for runtime verification"]
+    A11Y --> A11YS["May recommend swiftui-app-architecture-workflow for non-accessibility SwiftUI structure work"]
     D --> DX["May recommend xcode-build-run-workflow or xcode-testing-workflow"]
     D --> DT["May recommend format-swift-sources when docs work turns into style-tooling setup"]
     ST --> SXD["May recommend xcode-build-run-workflow or xcode-testing-workflow when setup becomes active Xcode work"]
@@ -77,7 +82,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - The repo has no Apple router or orchestrator layer.
-- The active surface now has fifteen skills, including four primary execution skills, one DocC authoring-and-review skill, one SwiftUI app-architecture specialist, and two legacy compatibility-routing execution surfaces.
+- The active surface now has sixteen skills, including four primary execution skills, one DocC authoring-and-review skill, one SwiftUI app-architecture specialist, one Apple UI accessibility specialist, and two legacy compatibility-routing execution surfaces.
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
@@ -441,7 +446,7 @@ Provide the canonical docs-first workflow for SwiftUI app-structure decisions ac
 - It owns ownership-boundary guidance, transport-choice guidance, and anti-pattern correction for SwiftUI app structure.
 - Broad Apple-docs lookup still belongs to `explore-apple-swift-docs`.
 - Build, run, preview, mutation, and test follow-through still belong to the Xcode execution skills.
-- Accessibility-specific implementation and review still belong to the planned accessibility workflow rather than this skill.
+- Accessibility-specific implementation and review still belong to `apple-ui-accessibility-workflow` rather than this skill.
 
 ### Agent ↔ User UX
 
@@ -451,13 +456,44 @@ Provide the canonical docs-first workflow for SwiftUI app-structure decisions ac
   - The agent classifies the request, applies the Apple docs gate, chooses an ownership boundary and transport, and returns one concrete recommendation path or one clean handoff.
 - User-visible response:
   - On success: the user sees the recommended ownership boundary, the chosen mechanism, and the documented SwiftUI behavior being relied on.
-  - On handoff: the user sees exactly why the work belongs in `explore-apple-swift-docs`, `xcode-build-run-workflow`, or `xcode-testing-workflow`.
+  - On handoff: the user sees exactly why the work belongs in `explore-apple-swift-docs`, `apple-ui-accessibility-workflow`, `xcode-build-run-workflow`, or `xcode-testing-workflow`.
   - On blocked: the user sees that the request is still too vague to determine whether the issue is app-level, scene-level, or local-view structure.
 
 ### Failure / Fallback / Handoff States
 
 - `success`: the request belongs to local SwiftUI architecture guidance
-- `handoff`: the request belongs to `explore-apple-swift-docs`, `xcode-build-run-workflow`, or `xcode-testing-workflow`
+- `handoff`: the request belongs to `explore-apple-swift-docs`, `apple-ui-accessibility-workflow`, `xcode-build-run-workflow`, or `xcode-testing-workflow`
+
+## `apple-ui-accessibility-workflow`
+
+### Purpose
+
+Provide the canonical docs-first workflow for Apple UI accessibility implementation and review, with SwiftUI as the primary path and explicit UIKit/AppKit bridge guidance where wrappers or native platform views materially affect the accessibility contract.
+
+### Branch and Path Notes
+
+- The first version is SwiftUI-first, but the public skill name stays broad so the surface can grow cleanly across UIKit and AppKit later.
+- Semantic accessibility reasoning stays here.
+- Runtime UI verification, `.xctestplan` execution, and XCUITest mechanics hand off to `xcode-testing-workflow`.
+- Broader SwiftUI app-structure questions hand off to `swiftui-app-architecture-workflow`.
+
+### Agent ↔ User UX
+
+- Entry:
+  - The user asks how to make Apple UI accessible, how to review accessibility semantics, how to shape the accessibility tree, or how to reason about accessibility verification on Apple platforms.
+- Agent behavior:
+  - The agent classifies the request, anchors the answer in Apple accessibility behavior, chooses the semantic or bridge surface that fits, and hands off if the next honest step is docs lookup, Xcode testing, or broader SwiftUI architecture.
+- User-visible response:
+  - On success: the user sees the chosen accessibility surface, the Apple behavior relied on, and the expected verification step.
+  - On handoff: the user sees exactly why the request belongs in `explore-apple-swift-docs`, `xcode-testing-workflow`, or `swiftui-app-architecture-workflow`.
+  - On blocked: the user sees that the framework or verification shape is too vague to recommend a change honestly.
+
+### Failure / Fallback / Handoff States
+
+- `success` + `primary`: the request stays on the directly supported accessibility path
+- `success` + `fallback`: the request is underspecified, but a limited Apple-accessibility recommendation is still possible
+- `handoff`: the request belongs to `explore-apple-swift-docs`, `xcode-testing-workflow`, or `swiftui-app-architecture-workflow`
+- `blocked`: not enough platform or framework context exists to recommend an accessibility change honestly
 - `blocked`: the request lacks enough boundary detail to proceed honestly
 
 ## `explore-apple-swift-docs`
