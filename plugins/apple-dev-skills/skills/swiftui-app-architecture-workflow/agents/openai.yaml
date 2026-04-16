@@ -1,0 +1,4 @@
+interface:
+  display_name: "SwiftUI App Architecture Workflow"
+  short_description: "Choose SwiftUI app boundaries and data flow"
+  default_prompt: "Use $swiftui-app-architecture-workflow to decide where SwiftUI app responsibilities belong across `App`, scenes, commands, focus, environment, preferences, and reusable view composition. Start by anchoring the recommendation in current Apple SwiftUI behavior. If the request is really Apple-docs lookup, hand off to $explore-apple-swift-docs. If the request becomes build, run, preview, diagnostics, mutation, or test work, hand off to $xcode-build-run-workflow or $xcode-testing-workflow."

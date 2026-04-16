@@ -252,6 +252,8 @@ Exit criteria:
 
 ## Milestone 40: SwiftUI UI Architecture Workflow
 
+Detailed planning notes live in `docs/maintainers/swiftui-app-architecture-workflow-plan.md`.
+
 Scope:
 
 - [ ] Add a dedicated SwiftUI workflow skill for application UI architecture and implementation across scenes, commands, environment, preferences, focus, and reusable view composition.

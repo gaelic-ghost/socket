@@ -48,6 +48,7 @@ uv sync --dev
 Use this repository's skills when the work is about:
 
 - Swift or SwiftUI implementation
+- SwiftUI app structure, focus design, scene ownership, or command architecture
 - Xcode build, run, or test workflows
 - DocC symbol comments, articles, catalog structure, or DocC-oriented review
 - Swift source cleanup, file-header normalization, or source-organization policy
@@ -90,6 +91,7 @@ See [LICENSE](./LICENSE).
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `structure-swift-sources`
+- `swiftui-app-architecture-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`
 - `swift-package-workflow`

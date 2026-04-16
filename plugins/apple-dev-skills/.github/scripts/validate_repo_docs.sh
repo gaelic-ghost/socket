@@ -67,6 +67,7 @@ require_contains "$workflow_doc" '## `swift-package-build-run-workflow`'
 require_contains "$workflow_doc" '## `swift-package-testing-workflow`'
 require_contains "$workflow_doc" '## `explore-apple-swift-docs`'
 require_contains "$workflow_doc" '## `author-swift-docc-docs`'
+require_contains "$workflow_doc" '## `swiftui-app-architecture-workflow`'
 require_contains "$workflow_doc" '## `format-swift-sources`'
 require_contains "$workflow_doc" '## `structure-swift-sources`'
 require_contains "$workflow_doc" '## `bootstrap-swift-package`'
@@ -118,6 +119,7 @@ active_skill_mds=(
   "./skills/swift-package-testing-workflow/SKILL.md"
   "./skills/swift-package-workflow/SKILL.md"
   "./skills/author-swift-docc-docs/SKILL.md"
+  "./skills/swiftui-app-architecture-workflow/SKILL.md"
   "./skills/explore-apple-swift-docs/SKILL.md"
   "./skills/format-swift-sources/SKILL.md"
   "./skills/structure-swift-sources/SKILL.md"
@@ -126,7 +128,7 @@ active_skill_mds=(
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 14 ]] || fail "Expected exactly 14 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 15 ]] || fail "Expected exactly 15 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -212,6 +214,7 @@ for file in \
   "skills/xcode-testing-workflow/SKILL.md" \
   "skills/xcode-build-run-workflow/SKILL.md" \
   "skills/author-swift-docc-docs/SKILL.md" \
+  "skills/swiftui-app-architecture-workflow/SKILL.md" \
   "skills/sync-swift-package-guidance/SKILL.md" \
   "skills/sync-xcode-project-guidance/SKILL.md" \
   "docs/maintainers/workflow-atlas.md" \

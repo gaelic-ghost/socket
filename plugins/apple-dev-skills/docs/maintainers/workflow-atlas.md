@@ -26,6 +26,7 @@ flowchart TD
     A --> WPT["swift-package-testing-workflow"]
     A --> WP["swift-package-workflow (legacy compatibility)"]
     A --> DOCC["author-swift-docc-docs"]
+    A --> SWUI["swiftui-app-architecture-workflow"]
     A --> D["explore-apple-swift-docs"]
     A --> ST["format-swift-sources"]
     A --> SS["structure-swift-sources"]
@@ -51,6 +52,8 @@ flowchart TD
     WP --> WPS["May recommend sync-swift-package-guidance for repo guidance alignment"]
     DOCC --> DOCCD["May recommend explore-apple-swift-docs"]
     DOCC --> DOCCX["May recommend swift-package-build-run-workflow or xcode-build-run-workflow for generation, export, or hosting follow-through"]
+    SWUI --> SWUID["May recommend explore-apple-swift-docs"]
+    SWUI --> SWUIX["May recommend xcode-build-run-workflow or xcode-testing-workflow for execution follow-through"]
     D --> DX["May recommend xcode-build-run-workflow or xcode-testing-workflow"]
     D --> DT["May recommend format-swift-sources when docs work turns into style-tooling setup"]
     ST --> SXD["May recommend xcode-build-run-workflow or xcode-testing-workflow when setup becomes active Xcode work"]
@@ -74,7 +77,7 @@ flowchart TD
 ### Branch and Path Notes
 
 - The repo has no Apple router or orchestrator layer.
-- The active surface now has fourteen skills, including four primary execution skills, one DocC authoring-and-review skill, and two legacy compatibility-routing execution surfaces.
+- The active surface now has fifteen skills, including four primary execution skills, one DocC authoring-and-review skill, one SwiftUI app-architecture specialist, and two legacy compatibility-routing execution surfaces.
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
@@ -125,7 +128,7 @@ flowchart TD
 - User-visible response:
   - The user sees direct progress inside one of the active top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-- The repo-level UX is a bundle of fourteen active skills exported from the top-level `skills/` surface.
+- The repo-level UX is a bundle of fifteen active skills exported from the top-level `skills/` surface.
 
 ## `xcode-build-run-workflow`
 
@@ -425,6 +428,37 @@ Provide the canonical DocC authoring-and-review workflow for Swift package and X
 - `success`: the request belongs to local DocC authoring-and-review work
 - `handoff`: the request belongs to `explore-apple-swift-docs`, `swift-package-build-run-workflow`, or `xcode-build-run-workflow`
 - `blocked`: the request lacks enough repo-shape or DocC-task detail to proceed honestly
+
+## `swiftui-app-architecture-workflow`
+
+### Purpose
+
+Provide the canonical docs-first workflow for SwiftUI app-structure decisions across scenes, commands, focus, environment, preferences, and reusable composition boundaries.
+
+### Branch and Path Notes
+
+- This skill is advisory and boundary-oriented rather than execution-oriented.
+- It owns ownership-boundary guidance, transport-choice guidance, and anti-pattern correction for SwiftUI app structure.
+- Broad Apple-docs lookup still belongs to `explore-apple-swift-docs`.
+- Build, run, preview, mutation, and test follow-through still belong to the Xcode execution skills.
+- Accessibility-specific implementation and review still belong to the planned accessibility workflow rather than this skill.
+
+### Agent ↔ User UX
+
+- Entry:
+  - The user asks how to structure a SwiftUI app, where responsibilities should live, how focus or commands should be modeled, or how to correct a wrapper-heavy or state-scattering SwiftUI shape.
+- Agent behavior:
+  - The agent classifies the request, applies the Apple docs gate, chooses an ownership boundary and transport, and returns one concrete recommendation path or one clean handoff.
+- User-visible response:
+  - On success: the user sees the recommended ownership boundary, the chosen mechanism, and the documented SwiftUI behavior being relied on.
+  - On handoff: the user sees exactly why the work belongs in `explore-apple-swift-docs`, `xcode-build-run-workflow`, or `xcode-testing-workflow`.
+  - On blocked: the user sees that the request is still too vague to determine whether the issue is app-level, scene-level, or local-view structure.
+
+### Failure / Fallback / Handoff States
+
+- `success`: the request belongs to local SwiftUI architecture guidance
+- `handoff`: the request belongs to `explore-apple-swift-docs`, `xcode-build-run-workflow`, or `xcode-testing-workflow`
+- `blocked`: the request lacks enough boundary detail to proceed honestly
 
 ## `explore-apple-swift-docs`
 
