@@ -1,7 +1,7 @@
 # Codex Hooks TTS Prototype
 
-This worktree includes a small repo-local Codex prototype for speaking final
-assistant replies and inspecting Codex notification payloads.
+This worktree includes a small repo-local Codex hooks prototype for speaking
+final assistant replies and inspecting Codex notification payloads.
 
 ## Files
 
@@ -26,6 +26,11 @@ assistant replies and inspecting Codex notification payloads.
 - `.codex/state/stop-tts-seen-turns.json`
   Dedupe state keyed by `session_id + turn_id`.
 
+Both hook scripts now resolve their `.codex` state and log directories from the
+script location itself instead of from `process.cwd()`. That matches the
+official Codex hooks guidance to keep repo-local hook paths stable even when
+Codex is started from a subdirectory.
+
 ## Environment Overrides
 
 The `Stop` hook script accepts a few optional environment overrides:
@@ -42,10 +47,24 @@ The `Stop` hook script accepts a few optional environment overrides:
 
 ## Validation Notes
 
-The current prototype was validated with a synthetic `Stop` payload and queued a
-live speech request successfully against the local server.
+The current prototype was rechecked against the current official Codex hooks
+documentation:
 
-The current `notify` probe was validated with synthetic JSON passed both as the
-documented command-line argument and over `stdin`. The current Codex docs say
-the notify command receives a single JSON argument, so the probe now logs both
-paths in case any Codex surface differs in practice.
+- `Stop` receives one JSON object on `stdin`, including `turn_id`,
+  `stop_hook_active`, and `last_assistant_message`.
+- `Stop` must not emit plain text on `stdout`.
+- repo-local hooks should resolve from the git root or another stable path, not
+  by assuming the session `cwd` is the repository root.
+
+The `Stop` hook script matches that current payload shape and was validated with
+a synthetic `Stop` payload plus real runtime requests queued through the local
+server.
+
+Observed current behavior in this repo's live Codex TUI runs:
+
+- the `Stop` hook payload arrives on `stdin`
+- the `notify` command currently arrives as one JSON command-line argument
+- the current notify runs observed here did not include any `stdin` payload
+
+The `notify` probe still logs both the documented JSON argument and any `stdin`
+payload so future Codex surfaces can be compared without rewriting the hook.
