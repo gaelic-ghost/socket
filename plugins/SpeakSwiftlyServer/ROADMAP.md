@@ -185,3 +185,13 @@ Current note: this milestone turns the live-service reliability work into a pack
 - [x] Harden configuration and persisted runtime state handling, including precedence rules, atomic writes, corruption or repair behavior, runtime-configuration persistence, and test isolation for profile-root-sensitive state.
 - [x] Harden the HTTP and MCP transport surface with clearer readiness policy, stronger request validation and operator-facing errors, reusable smoke coverage, and release verification that proves the staged live service can answer both transport health checks.
 - [x] Finish the full hardening program with a package-wide review, quick fixes discovered during the passes, and a cleanup sweep across docs, tests, and maintainer tooling.
+
+## Milestone 17: Codex Hooks And Operator Workflow
+
+Current note: the repo already has a working local Codex hooks prototype for
+Stop-hook speech and notify payload inspection. This milestone tracks turning
+that into a more intentional operator-facing workflow instead of a one-off
+prototype.
+
+- [x] Re-check the repo-local Codex hook scripts against the current official Codex hooks event shapes and stable-path guidance.
+- [ ] Add a maintained repo-local "use this with Codex hooks" guide or skill so Gale can enable, understand, and validate the speech-hook workflow without reverse-engineering the prototype files.

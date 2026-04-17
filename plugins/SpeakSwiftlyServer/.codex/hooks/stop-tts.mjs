@@ -2,8 +2,10 @@
 
 import { mkdir, readFile, writeFile, appendFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const hookRoot = path.resolve(process.cwd(), ".codex");
+const scriptPath = fileURLToPath(import.meta.url);
+const hookRoot = path.resolve(path.dirname(scriptPath), "..");
 const stateDir = path.join(hookRoot, "state");
 const logDir = path.join(hookRoot, "logs");
 const seenTurnsPath = path.join(stateDir, "stop-tts-seen-turns.json");

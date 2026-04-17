@@ -2,8 +2,10 @@
 
 import { mkdir, appendFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const hookRoot = path.resolve(process.cwd(), ".codex");
+const scriptPath = fileURLToPath(import.meta.url);
+const hookRoot = path.resolve(path.dirname(scriptPath), "..");
 const logDir = path.join(hookRoot, "logs");
 const logPath = path.join(logDir, "notify-events.jsonl");
 
