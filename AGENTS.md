@@ -39,6 +39,11 @@
 - Treat Gale's local `socket` checkout as a real base checkout that should normally stay on `main` and stay clean.
 - For substantive work in `socket`, prefer a feature branch or a dedicated worktree instead of doing the work directly on the base `main` checkout.
 - Use branch-in-place on the base checkout only for very small, low-risk root-maintenance edits when Gale explicitly wants that path.
+- Prefer small, focused commits over broad mixed changes.
+- Use the shared house style for commit messages across terminal Git, Codex-driven commits, and subtree-managed child repo work.
+- Default commit subject format: `<scope>: <imperative summary>` with a short lowercase kebab-case scope and no trailing period.
+- For bigger, wider, riskier, refactor, breaking, or release commits, keep the same scoped subject and add concise body sections when relevant in this order: `Why:`, `Breaking:`, `Verification:`.
+- Prefer concrete scopes such as `runtime`, `normalize`, `forensics`, `models`, `docs`, `tests`, `release`, `build`, `plugin`, or `subtree`, and describe the real changed surface instead of vague intent.
 - Start from the root docs when the task is about the mixed monorepo model, root marketplace wiring, subtree sync for `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer`, or superproject release flow.
 - Start from the child repo docs when the task is really about one child repo's own behavior.
 - When a child repository already exists under `plugins/`, do the work in the monorepo copy first unless Gale explicitly asks for a separate checkout, worktree, or direct child-repo workflow.
