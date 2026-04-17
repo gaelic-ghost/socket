@@ -404,6 +404,7 @@ exec "{real_swift}" "$@"
             manifest_text = (package_dir / "Package.swift").read_text(encoding="utf-8")
             self.assertIn(".executableTarget(", manifest_text)
             self.assertIn(".testTarget(", manifest_text)
+            self.assertIn("swiftLanguageModes: [.v6]", manifest_text)
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for end-to-end bootstrap success")
     def test_wrapper_normalizes_shell_success(self) -> None:
@@ -418,6 +419,8 @@ exec "{real_swift}" "$@"
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
             self.assertTrue(payload["resolved_path"].endswith("DemoPkg"))
+            manifest_text = (Path(payload["resolved_path"]) / "Package.swift").read_text(encoding="utf-8")
+            self.assertIn("swiftLanguageModes: [.v6]", manifest_text)
             self.assertEqual(payload["testing_mode"], "swift-testing")
             self.assertEqual(payload["testing_strategy"], "init-flags")
             self.assertEqual(payload["swift_toolchain"], "6.3")

@@ -155,6 +155,33 @@ EOF
   esac
 }
 
+ensure_swift_language_mode() {
+  if grep -Eq '^[[:space:]]*swiftLanguageModes:[[:space:]]*\[[^]]*\.v6[^]]*\][[:space:]]*,?[[:space:]]*$' Package.swift; then
+    return 0
+  fi
+
+  if grep -Eq '^[[:space:]]*swiftLanguageModes:' Package.swift; then
+    failed "Validation failed: Package.swift contains an unexpected swiftLanguageModes entry, so the bootstrap script cannot guarantee the explicit Swift 6 default."
+  fi
+
+  if (( swift_major_version < 6 )); then
+    return 0
+  fi
+
+  local closing_line_num=""
+  closing_line_num="$(grep -nE '^[[:space:]]*\)[[:space:]]*$' Package.swift | tail -n 1 | cut -d: -f1)"
+  if [[ -z "$closing_line_num" ]]; then
+    failed "Validation failed: unable to locate the Package initializer closing line in Package.swift."
+  fi
+
+  {
+    head -n "$((closing_line_num - 1))" Package.swift
+    printf '%s\n' '    swiftLanguageModes: [.v6]'
+    tail -n +"$closing_line_num" Package.swift
+  } > Package.swift.tmp
+  mv Package.swift.tmp Package.swift
+}
+
 swift_package_init_supports() {
   local flag="$1"
   swift package init --help 2>/dev/null | grep -Fq -- "$flag"
@@ -439,6 +466,8 @@ mkdir -p "$target_dir"
     mv Package.swift.tmp Package.swift
   fi
 
+  ensure_swift_language_mode
+
   if [[ "$initialize_git" == "true" ]]; then
     git init >/dev/null 2>&1
   fi
@@ -457,6 +486,10 @@ mkdir -p "$target_dir"
 
   if [[ ! -f Package.swift ]]; then
     failed "Validation failed: Package.swift missing after initialization."
+  fi
+
+  if (( swift_major_version >= 6 )) && ! grep -Eq '^[[:space:]]*swiftLanguageModes:[[:space:]]*\[[^]]*\.v6[^]]*\][[:space:]]*,?[[:space:]]*$' Package.swift; then
+    failed "Validation failed: Package.swift does not preserve the explicit Swift 6 language-mode declaration swiftLanguageModes: [.v6]."
   fi
 
   if [[ "$initialize_git" == "true" ]] && [[ ! -d .git ]]; then

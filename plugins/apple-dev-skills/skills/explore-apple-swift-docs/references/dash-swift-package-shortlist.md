@@ -11,6 +11,11 @@ Use this shortlist when the request is about a Swift package, Swift server packa
 
 ## High-Value Package Docsets
 
+- `swiftlang/swift-package-manager main` or `SwiftPackageIndex/swift-package-manager main`
+  - Dash location: installed DocC docset shown under either display name; resolve the actual local identifier with `list_installed_docsets` before searching.
+  - Use for: Swift Package Manager package-graph behavior, package manifest structure, `PackageDescription`, package plugins, workspace and dependency resolution behavior, and the `swift package` / broader `swift` CLI command surface.
+  - Upstream: <https://github.com/swiftlang/swift-package-manager>
+
 - `swiftlang/swift-docc main`
   - Dash location: installed DocC docset shown under that display name.
   - Use for: DocC directives, symbol-linking rules, article structure, tutorial syntax, and deeper DocC authoring behavior that goes beyond Xcode's product-side documentation flow.

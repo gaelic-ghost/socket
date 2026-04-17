@@ -47,6 +47,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
    - if no relevant SwiftPM docs can be found, say that explicitly before proceeding
 4. Apply the shared Swift-package policy before making repo-guidance changes:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md`
+   - preserve its explicit `swiftLanguageModes: [.v6]` package-manifest default and prefer that spelling over the legacy `swiftLanguageVersions` alias on current manifest surfaces
    - preserve its simplicity-first Swift, SwiftPM, logging, telemetry, testing, package-resource, Metal handoff, and Debug/Release guidance
 5. Run `scripts/run_workflow.py` to normalize inputs, detect whether the repo is really SwiftPM-managed, and shape the sync plan.
 6. Apply the sync path:

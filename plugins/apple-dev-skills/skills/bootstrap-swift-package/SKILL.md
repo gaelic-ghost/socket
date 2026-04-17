@@ -52,6 +52,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
    ```
 6. Verify the generated repository:
    - `Package.swift`
+   - explicit `swiftLanguageModes: [.v6]` in `Package.swift`
    - `.git`
    - `AGENTS.md`
    - `scripts/repo-maintenance/validate-all.sh`
@@ -61,6 +62,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
 7. Ensure the generated guidance encodes the shared Swift policy:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md`
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
+   - keep the generated manifest aligned with the explicit Swift 6 default language-mode declaration `swiftLanguageModes: [.v6]`
    - preserve the project-appropriate logging and telemetry guidance from that snippet
 8. Hand off package execution guidance cleanly:
    - use `swift build` and `swift test` by default
@@ -88,6 +90,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
   - `testing_mode` defaults to `swift-testing`
   - validation runs unless `--skip-validation` is passed
   - supported and validated Swift toolchain floor is `5.10+`
+  - generated manifests should preserve an explicit Swift 6 language-mode declaration with `swiftLanguageModes: [.v6]` when the active manifest surface supports it
   - the repo-maintenance toolkit is installed into `scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs

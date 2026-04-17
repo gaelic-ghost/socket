@@ -43,6 +43,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 3. Apply the shared Swift-package policy before giving implementation guidance:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md` when package-policy wording is needed
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
+   - preserve its explicit `swiftLanguageModes: [.v6]` package-manifest default and prefer that spelling over the legacy `swiftLanguageVersions` alias on current manifest surfaces
    - preserve its package-appropriate logging, telemetry, structured-concurrency, and Swift Testing guidance
 4. Run `scripts/run_workflow.py` to resolve repo shape, confirm the request stays on the testing surface, and plan the package-testing command path.
 5. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, accessibility-related semantic tests, fixtures, async test discipline, or test-related Debug/Release validation.

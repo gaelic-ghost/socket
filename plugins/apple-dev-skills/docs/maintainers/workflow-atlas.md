@@ -825,6 +825,7 @@ flowchart TD
 
 - This skill is bounded to plain Swift package creation.
 - Within the supported `Swift 5.10+` floor, it prefers current `swift package init` testing-selection flags and only relies on the older default XCTest template when `xctest` is requested and the local CLI exposes no testing-selection flags at all.
+- On current Swift 6-era manifests, the bootstrap path keeps `Package.swift` explicit about package-wide language mode with `swiftLanguageModes: [.v6]` instead of relying on an implicit default.
 - Existing-package guidance sync belongs to `sync-swift-package-guidance`.
 - Ordinary package execution after bootstrap belongs to `swift-package-build-run-workflow` or `swift-package-testing-workflow`.
 - Xcode-specific execution after bootstrap may belong to `xcode-build-run-workflow` or `xcode-testing-workflow`.

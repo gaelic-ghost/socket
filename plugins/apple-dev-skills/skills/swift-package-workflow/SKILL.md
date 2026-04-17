@@ -46,6 +46,7 @@ Use this skill as a compatibility surface for older references to `swift-package
 3. Apply the shared Swift-package policy before giving implementation guidance:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md` when package-policy wording is needed
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
+   - preserve its explicit `swiftLanguageModes: [.v6]` package-manifest default and prefer that spelling over the legacy `swiftLanguageVersions` alias on current manifest surfaces
    - preserve its package-appropriate logging, telemetry, and testing guidance
 4. Run `scripts/run_workflow.py` to resolve repo shape, detect whether the root is a plain package repo, and route the request toward the narrower package build/run or testing skill.
 5. Use `references/cli-command-matrix.md` and `references/package-resources-testing-and-builds.md` only to explain why the narrower skill should take over; do not rebuild a second command-planning surface here.
