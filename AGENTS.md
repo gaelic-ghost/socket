@@ -36,9 +36,9 @@
 
 ## Working Here
 
-- Treat Gale's local `socket` checkout as a real base checkout that should normally stay on `main` and stay clean.
-- For substantive work in `socket`, prefer a feature branch or a dedicated worktree instead of doing the work directly on the base `main` checkout.
-- Use branch-in-place on the base checkout only for very small, low-risk root-maintenance edits when Gale explicitly wants that path.
+- Treat Gale's local `socket` checkout as the normal day-to-day working checkout on `main`.
+- Direct work on local `main` is the default for `socket` unless Gale explicitly asks for a feature branch or a dedicated worktree.
+- Use a feature branch or worktree when the change needs isolation for safety, review, or overlapping parallel work, but do not force that path for ordinary `socket` maintenance.
 - Prefer small, focused commits over broad mixed changes.
 - Use the shared house style for commit messages across terminal Git, Codex-driven commits, and subtree-managed child repo work.
 - Default commit subject format: `<scope>: <imperative summary>` with a short lowercase kebab-case scope and no trailing period.

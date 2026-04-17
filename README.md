@@ -66,7 +66,7 @@ When the work is really about one child repository's own behavior, start from th
 
 ### Setup
 
-Treat Gale's local `socket` checkout as the clean base checkout. Work in the monorepo copy first, but prefer a feature branch or a dedicated worktree for substantive superproject changes instead of editing directly on base `main`. Use `plugins/<repo>/` for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs.
+Treat Gale's local `socket` checkout as the normal day-to-day checkout on `main`. Work in the monorepo copy first, and use `plugins/<repo>/` for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs. Reach for a feature branch or a dedicated worktree only when the change needs extra isolation.
 
 ### Workflow
 
@@ -74,7 +74,7 @@ Keep root docs and marketplace wiring in sync with packaging changes in the same
 
 - For monorepo-owned child directories, edit `plugins/<repo>/` directly and commit in `socket`.
 - For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated.
-- For substantive `socket` work, prefer a feature branch or worktree and treat local `main` as the stable base checkout.
+- For ordinary `socket` work, edit local `main` directly. Use a feature branch or worktree only when the change needs isolation for safety, review, or overlapping parallel work.
 - Before removing or moving a plugin surface, verify whether the root marketplace or maintainer docs still reference it.
 
 ## Verification
@@ -165,7 +165,7 @@ The mixed shape is intentional for now. `socket` does not try to flatten those c
 
 - Use the root docs when you need the mixed monorepo model, marketplace wiring, or subtree workflow.
 - Use child-repo docs when you are changing a child repo's own skills, packaging, tests, or release guidance.
-- Treat this local checkout as the base `main` checkout and prefer a feature branch or worktree for substantive changes.
+- Treat this local checkout as the normal `main` working checkout, and use a feature branch or worktree only when the change needs extra isolation.
 - For ordinary fixes in monorepo-owned child directories, edit the copy in `plugins/<name>/` directly.
 - For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree pull and push work explicit and separate from unrelated edits.
 - Update the root marketplace and root docs whenever a child repo gains, moves, or removes plugin packaging.

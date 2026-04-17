@@ -11,9 +11,9 @@ This document explains how `socket` is maintained after the monorepo simplificat
 - the maintainer docs that explain the mixed monorepo experiment
 - release tags and release notes for the superproject itself
 
-Treat Gale's local `socket` checkout as the clean base checkout on `main`.
+Treat Gale's local `socket` checkout as the normal day-to-day working checkout on `main`.
 
-For substantive superproject work, prefer a feature branch or a dedicated worktree instead of editing directly on that base checkout.
+Direct work on local `main` is the default for `socket`. Use a feature branch or a dedicated worktree only when a change needs extra isolation for safety, review, or overlapping parallel work.
 
 `socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/`, `plugins/python-skills/`, and `plugins/SpeakSwiftlyServer/`.
 
