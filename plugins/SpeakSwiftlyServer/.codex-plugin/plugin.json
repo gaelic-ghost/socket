@@ -33,6 +33,7 @@
     "websiteURL": "https://github.com/gaelic-ghost/SpeakSwiftlyServer",
     "defaultPrompt": [
       "Use SpeakSwiftly to read this reply aloud.",
+      "Set up SpeakSwiftly on this machine as a background service.",
       "Help me install or validate the SpeakSwiftly LaunchAgent service.",
       "Inspect the local SpeakSwiftly runtime and queue state.",
       "Create or edit a SpeakSwiftly text profile."

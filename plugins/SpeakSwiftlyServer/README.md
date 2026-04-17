@@ -225,7 +225,7 @@ print(layout.runtimeProfileRootURL.path)
 
 ## Codex Plugin
 
-This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server and the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally.
+This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server and the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally. When the plugin is installed through a Codex marketplace, Codex installs the plugin into its plugin cache and loads that installed copy from there, so the plugin surface is the normal Codex-side MCP wiring path. Users should not need to add a second handwritten global MCP entry just to reach the local server.
 
 The first plugin pass currently ships five focused skills:
 
