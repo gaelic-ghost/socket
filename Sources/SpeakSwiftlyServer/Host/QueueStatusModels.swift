@@ -79,13 +79,13 @@ struct QueueSnapshotResponse: ResponseEncodable {
 // MARK: - PlaybackStateSnapshot
 
 /// Transport-facing playback state snapshot used by HTTP and MCP control surfaces.
-public struct PlaybackStateSnapshot: Codable, Sendable, Equatable {
-    public let state: String
-    public let activeRequest: ActiveRequestSnapshot?
-    public let isStableForConcurrentGeneration: Bool
-    public let isRebuffering: Bool
-    public let stableBufferedAudioMS: Int?
-    public let stableBufferTargetMS: Int?
+struct PlaybackStateSnapshot: Codable, Equatable {
+    let state: String
+    let activeRequest: ActiveRequestSnapshot?
+    let isStableForConcurrentGeneration: Bool
+    let isRebuffering: Bool
+    let stableBufferedAudioMS: Int?
+    let stableBufferTargetMS: Int?
 
     enum CodingKeys: String, CodingKey {
         case state

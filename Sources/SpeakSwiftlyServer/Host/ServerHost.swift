@@ -48,7 +48,7 @@ actor ServerHost {
     var mcpConfig: MCPConfig
     let runtime: any ServerRuntimeProtocol
     let runtimeConfigurationStore: RuntimeConfigurationStore
-    let state: ServerState
+    let state: EmbeddedServer
     let immediatePublishRequests: AsyncStream<Void>
     let immediatePublishContinuation: AsyncStream<Void>.Continuation
     let coalescedPublishRequests: AsyncStream<Void>
@@ -119,7 +119,7 @@ actor ServerHost {
         runtime: any ServerRuntimeProtocol,
         runtimeConfigurationStore: RuntimeConfigurationStore = .init(),
         activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend? = nil,
-        state: ServerState,
+        state: EmbeddedServer,
     ) {
         let (immediatePublishRequests, immediatePublishContinuation) = AsyncStream.makeStream(
             of: Void.self,
@@ -203,7 +203,7 @@ actor ServerHost {
 
     static func makeLive(
         appConfig: AppConfig,
-        state: ServerState,
+        state: EmbeddedServer,
         environment: [String: String] = ProcessInfo.processInfo.environment,
     ) async -> ServerHost {
         let runtimeConfigurationStore = RuntimeConfigurationStore(environment: environment)

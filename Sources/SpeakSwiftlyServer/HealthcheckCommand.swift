@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - HealthcheckOptions
 
-public struct HealthcheckOptions: Sendable {
+package struct HealthcheckOptions {
     let baseURL: URL
     let mcpPath: String
     let timeoutSeconds: TimeInterval

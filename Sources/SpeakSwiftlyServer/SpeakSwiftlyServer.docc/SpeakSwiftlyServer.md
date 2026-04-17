@@ -21,8 +21,7 @@ When you need transport-level route inventories, request and response payload ex
 
 ### Embedding The Shared Host
 
-- ``EmbeddedServerSession``
-- ``ServerState``
+- ``EmbeddedServer``
 - ``HostStateSnapshot``
 
 ### App-Owned Install Surface
@@ -30,15 +29,6 @@ When you need transport-level route inventories, request and response payload ex
 - ``ServerInstallLayout``
 - ``ServerInstalledLogs``
 - ``ServerInstalledLogsSnapshot``
-
-### Runtime Entry
-
-- ``ServerRuntimeEntrypoint``
-
-### Executable Companion
-
-- ``SpeakSwiftlyServerToolCommand``
-- ``LaunchAgentCommand``
 
 ### Articles
 

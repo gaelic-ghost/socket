@@ -136,7 +136,7 @@ The package now uses distinct default localhost ports by entrypoint:
 - LaunchAgent installs default to `127.0.0.1:7337`
 - embedded app-owned sessions default to `127.0.0.1:7339`
 
-All three entrypaths also support the same explicit runtime-profile-root override through `SPEAKSWIFTLY_PROFILE_ROOT`. Embedded app hosts can set that through `EmbeddedServerSession.Options(runtimeProfileRootURL:)`, foreground `serve` runs can set it through `--profile-root`, and LaunchAgent installs already stage it into the installed property list.
+All three entrypaths also support the same explicit runtime-profile-root override through `SPEAKSWIFTLY_PROFILE_ROOT`. Embedded app hosts can set that through `EmbeddedServer.Options(runtimeProfileRootURL:)`, foreground `serve` runs can set it through `--profile-root`, and LaunchAgent installs already stage it into the installed property list.
 
 The package now ships one operator-facing executable product with both the foreground server entrypoint and the LaunchAgent maintenance surface:
 
@@ -262,19 +262,18 @@ That API is intentionally file-backed. The app can call one package function and
 
 `SpeakSwiftlyServer` now exposes a small app-facing embedding surface for SwiftUI and other Apple-platform app code:
 
-- [`EmbeddedServerSession.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/EmbeddedServerSession.swift) is the supported public lifecycle wrapper for starting and stopping an embedded shared server session.
-- [`ServerState.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ServerState.swift) is the supported public `@Observable` projection that app UI can read directly.
+- [`ServerState.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ServerState.swift) now defines `EmbeddedServer`, the supported public `@Observable` model that app code owns directly.
 - [`HostStateModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/HostStateModels.swift) plus the transport-facing model families in [`ServerModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ServerModels.swift), [`ProfileModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/ProfileModels.swift), [`QueueStatusModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/QueueStatusModels.swift), and [`JobEventModels.swift`](https://github.com/gaelic-ghost/SpeakSwiftlyServer/blob/main/Sources/SpeakSwiftlyServer/Host/JobEventModels.swift) are the public read-only value models that back that observable state.
 
 That public surface is intentionally small. `ServerHost` remains internal so app code does not couple itself to transport orchestration, async stream plumbing, or other backend ownership details.
 
 Behind that small public API, the embedded path now uses one outer `ServiceGroup` owned by the
-session wrapper. That outer group owns the package-level host lifecycle, optional config watching,
+embedded server model. That outer group owns the package-level host lifecycle, optional config watching,
 optional MCP readiness and drain, and the wrapped Hummingbird application as sibling long-running
 services. Hummingbird still owns its own internal application `ServiceGroup`, but app code should
-keep treating `EmbeddedServerSession` itself as the lifecycle boundary.
+keep treating `EmbeddedServer` itself as the lifecycle boundary.
 
-From app code, `ServerState` now also exposes app-facing control points for the cached voice-profile list, the effective default voice profile, runtime model lifecycle, and playback actions:
+From app code, `EmbeddedServer` exposes app-facing control points for the cached voice-profile list, the effective default voice profile, runtime model lifecycle, and playback actions:
 
 - `listVoiceProfiles()` and `refreshVoiceProfiles()`
 - `setDefaultVoiceProfileName(_:)` and `clearDefaultVoiceProfileName()`
@@ -283,9 +282,9 @@ From app code, `ServerState` now also exposes app-facing control points for the 
 
 Those default-profile actions mutate the host-owned effective default that HTTP and MCP speech-generation requests use when `profile_name` is omitted. That app-managed default starts from configuration, can be changed live by the embedded app, and is persisted in the server runtime configuration so it survives process restart. Clearing the app-managed default removes the persisted override and falls back to the configured `app.defaultVoiceProfileName` when one exists.
 
-The runtime control actions apply the refreshed host snapshot back onto `ServerState` before they return, so app code gets one coherent post-action picture of the current backend, worker stage, queues, playback state, and transport health instead of needing to stitch together several follow-up reads.
+The runtime control actions apply the refreshed host snapshot back onto `EmbeddedServer` before they return, so app code gets one coherent post-action picture of the current backend, worker stage, queues, playback state, and transport health instead of needing to stitch together several follow-up reads.
 
-Start an embedded session from app code like this:
+Start an embedded server from app code like this:
 
 ```swift
 import SpeakSwiftlyServer
@@ -293,44 +292,38 @@ import SwiftUI
 
 @main
 struct ExampleApp: App {
-    @State private var session: EmbeddedServerSession?
+    @State private var server = EmbeddedServer(
+        options: .init(
+            port: 7811,
+            runtimeProfileRootURL: FileManager.default
+                .urls(for: .applicationSupportDirectory, in: .userDomainMask)
+                .first?
+                .appendingPathComponent("ExampleApp/SpeakSwiftlyRuntime", isDirectory: true)
+        )
+    )
 
     var body: some Scene {
         WindowGroup {
-            ContentView(session: session)
+            ContentView(server: server)
                 .task {
-                    if session == nil {
-                        session = try? await EmbeddedServerSession.start(
-                            options: .init(
-                                port: 7811,
-                                runtimeProfileRootURL: FileManager.default
-                                    .urls(for: .applicationSupportDirectory, in: .userDomainMask)
-                                    .first?
-                                    .appendingPathComponent("ExampleApp/SpeakSwiftlyRuntime", isDirectory: true)
-                            )
-                        )
-                    }
+                    try? await server.liftoff()
                 }
         }
     }
 }
 
 struct ContentView: View {
-    let session: EmbeddedServerSession?
+    let server: EmbeddedServer
 
     var body: some View {
-        if let session {
-            Text(session.state.overview.workerMode)
-        } else {
-            ProgressView("Starting SpeakSwiftlyServer…")
-        }
+        Text(server.overview.workerMode)
     }
 }
 ```
 
-If you do not pass `EmbeddedServerSession.Options(port:)`, the embedded host defaults to `127.0.0.1:7339`. Passing `options.port` applies that same value to the shared transport default and the concrete HTTP listener, so app code can claim an app-specific localhost port without mutating global environment state first.
+If you do not pass `EmbeddedServer.Options(port:)`, the embedded host defaults to `127.0.0.1:7339`. Passing `options.port` applies that same value to the shared transport default and the concrete HTTP listener, so app code can claim an app-specific localhost port without mutating global environment state first.
 
-If you pass `EmbeddedServerSession.Options(runtimeProfileRootURL:)`, that same root is forwarded into both the server-owned runtime configuration store and the underlying `SpeakSwiftly` startup path. That gives an app one explicit persistence root for runtime configuration, text-profile persistence, generated artifacts, and other runtime-owned profile data. For sandboxed macOS apps, Apple documents that `applicationSupportDirectory` already resolves inside the app container; for shared storage across the app and extensions or helpers, pass an App Group container URL instead.
+If you pass `EmbeddedServer.Options(runtimeProfileRootURL:)`, that same root is forwarded into both the server-owned runtime configuration store and the underlying `SpeakSwiftly` startup path. That gives an app one explicit persistence root for runtime configuration, text-profile persistence, generated artifacts, and other runtime-owned profile data. For sandboxed macOS apps, Apple documents that `applicationSupportDirectory` already resolves inside the app container; for shared storage across the app and extensions or helpers, pass an App Group container URL instead.
 
 If a subview needs bindings into mutable session-backed state, use SwiftUI's `@Bindable` support for `@Observable` models instead of `@ObservedObject`. Apple documents that `@Observable` types are tracked by the properties a view reads directly, and that binding support should come through `@Bindable` when a view needs writable bindings:
 

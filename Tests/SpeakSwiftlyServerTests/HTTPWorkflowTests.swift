@@ -14,7 +14,7 @@ extension ServerTests {
     @Test func `routes expose health profiles and queued speech job lifecycle`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration(defaultVoiceProfileName: "default")
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
             .appendingPathComponent("profiles", isDirectory: true)
@@ -280,7 +280,7 @@ extension ServerTests {
     @Test func `speak route rejects unsupported format arguments clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -319,7 +319,7 @@ extension ServerTests {
     @Test func `speak route rejects missing profile when no server default is configured`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -352,7 +352,7 @@ extension ServerTests {
     @Test func `runtime routes reject unsupported speech backend clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -408,7 +408,7 @@ extension ServerTests {
     @Test func `runtime routes reject missing speech backend field clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,

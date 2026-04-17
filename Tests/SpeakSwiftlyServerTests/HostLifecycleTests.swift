@@ -7,88 +7,91 @@ import Testing
 // MARK: - Host Lifecycle Tests
 
 @available(macOS 14, *)
-@Test func `embedded server session publishes observable state for app consumers`() async throws {
+@Test func `embedded server publishes observable state for app consumers`() async throws {
     let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
         .appendingPathComponent(UUID().uuidString, isDirectory: true)
         .appendingPathComponent("profiles", isDirectory: true)
-    let session = try await EmbeddedServerSession.start(
-        environment: ["APP_ENV": "test"],
-        options: .init(port: 7811, runtimeProfileRootURL: runtimeProfileRootURL),
-    ) { environment, state in
-        #expect(environment["APP_ENV"] == "test")
-        #expect(environment["APP_PORT"] == "7811")
-        #expect(environment["APP_HTTP_PORT"] == "7811")
-        #expect(environment["SPEAKSWIFTLY_PROFILE_ROOT"] == runtimeProfileRootURL.standardizedFileURL.path)
-        #expect(environment[AppRuntimeDefaultProfile.environmentKey] == AppRuntimeDefaultProfile.embeddedSession.rawValue)
-
-        await MainActor.run {
-            state.overview = HostOverviewSnapshot(
-                service: "speak-swiftly-server-tests",
-                environment: "test",
-                defaultVoiceProfileName: "default-femme",
-                serverMode: "ready",
-                workerMode: "resident",
-                workerStage: "resident_model_ready",
-                workerReady: true,
-                startupError: nil,
-                profileCacheState: "fresh",
-                profileCacheWarning: nil,
-                profileCount: 1,
-                lastProfileRefreshAt: "2026-04-07T12:00:00Z",
-            )
-            state.voiceProfiles = [
-                .init(
-                    profileName: "default-femme",
-                    vibe: "femme",
-                    createdAt: "2026-04-07T12:00:00Z",
-                    voiceDescription: "Warm and steady.",
-                    sourceText: "Reference text.",
-                ),
-            ]
-            state.playback = PlaybackStatusSnapshot(
-                state: "playing",
-                activeRequest: .init(id: "req-1", op: "speak", profileName: "default"),
-                isStableForConcurrentGeneration: true,
-                isRebuffering: false,
-                stableBufferedAudioMS: 320,
-                stableBufferTargetMS: 400,
-            )
-            state.currentGenerationJobs = [
-                CurrentGenerationJobSnapshot(
-                    jobID: "job-1",
-                    op: "speak",
-                    profileName: "default",
-                    submittedAt: "2026-04-07T12:00:00Z",
-                    startedAt: "2026-04-07T12:00:01Z",
-                    latestStage: "speaking",
-                    elapsedGenerationSeconds: 0.25,
-                ),
-            ]
-            state.transports = [
-                .init(
-                    name: "http",
-                    enabled: true,
-                    state: "listening",
-                    host: "127.0.0.1",
-                    port: 7811,
-                    path: nil,
-                    advertisedAddress: "http://127.0.0.1:7811",
-                ),
-            ]
-        }
-
-        return .init(
-            requestStop: {},
-            waitUntilStopped: {},
-        )
+    let server = await MainActor.run {
+        EmbeddedServer(options: .init(port: 7811, runtimeProfileRootURL: runtimeProfileRootURL))
     }
+    try await server.liftoff(
+        environment: ["APP_ENV": "test"],
+        defaultProfile: .embeddedSession,
+        bootstrap: { environment, server in
+            #expect(environment["APP_ENV"] == "test")
+            #expect(environment["APP_PORT"] == "7811")
+            #expect(environment["APP_HTTP_PORT"] == "7811")
+            #expect(environment["SPEAKSWIFTLY_PROFILE_ROOT"] == runtimeProfileRootURL.standardizedFileURL.path)
+            #expect(environment[AppRuntimeDefaultProfile.environmentKey] == AppRuntimeDefaultProfile.embeddedSession.rawValue)
 
-    let state = await MainActor.run { session.state }
-    let overview = await MainActor.run { state.overview }
-    let currentGenerationJobs = await MainActor.run { state.currentGenerationJobs }
-    let playback = await MainActor.run { state.playback }
-    let voiceProfiles = await MainActor.run { state.voiceProfiles }
-    let transports = await MainActor.run { state.transports }
+            await MainActor.run {
+                server.overview = HostOverviewSnapshot(
+                    service: "speak-swiftly-server-tests",
+                    environment: "test",
+                    defaultVoiceProfileName: "default-femme",
+                    serverMode: "ready",
+                    workerMode: "resident",
+                    workerStage: "resident_model_ready",
+                    workerReady: true,
+                    startupError: nil,
+                    profileCacheState: "fresh",
+                    profileCacheWarning: nil,
+                    profileCount: 1,
+                    lastProfileRefreshAt: "2026-04-07T12:00:00Z",
+                )
+                server.voiceProfiles = [
+                    .init(
+                        profileName: "default-femme",
+                        vibe: "femme",
+                        createdAt: "2026-04-07T12:00:00Z",
+                        voiceDescription: "Warm and steady.",
+                        sourceText: "Reference text.",
+                    ),
+                ]
+                server.playback = PlaybackStatusSnapshot(
+                    state: "playing",
+                    activeRequest: .init(id: "req-1", op: "speak", profileName: "default"),
+                    isStableForConcurrentGeneration: true,
+                    isRebuffering: false,
+                    stableBufferedAudioMS: 320,
+                    stableBufferTargetMS: 400,
+                )
+                server.currentGenerationJobs = [
+                    CurrentGenerationJobSnapshot(
+                        jobID: "job-1",
+                        op: "speak",
+                        profileName: "default",
+                        submittedAt: "2026-04-07T12:00:00Z",
+                        startedAt: "2026-04-07T12:00:01Z",
+                        latestStage: "speaking",
+                        elapsedGenerationSeconds: 0.25,
+                    ),
+                ]
+                server.transports = [
+                    .init(
+                        name: "http",
+                        enabled: true,
+                        state: "listening",
+                        host: "127.0.0.1",
+                        port: 7811,
+                        path: nil,
+                        advertisedAddress: "http://127.0.0.1:7811",
+                    ),
+                ]
+            }
+
+            return .init(
+                requestStop: {},
+                waitUntilStopped: {},
+            )
+        },
+    )
+
+    let overview = await MainActor.run { server.overview }
+    let currentGenerationJobs = await MainActor.run { server.currentGenerationJobs }
+    let playback = await MainActor.run { server.playback }
+    let voiceProfiles = await MainActor.run { server.voiceProfiles }
+    let transports = await MainActor.run { server.transports }
 
     #expect(overview.workerReady == true)
     #expect(overview.profileCount == 1)
@@ -98,25 +101,30 @@ import Testing
     #expect(voiceProfiles.contains { $0.profileName == "default-femme" })
     #expect(transports.contains { $0.name == "http" && $0.state == "listening" })
 
-    try await session.stop()
+    try await server.land()
 }
 
 @available(macOS 14, *)
-@Test func `embedded server session requests graceful stop only once`() async throws {
+@Test func `embedded server requests graceful stop only once`() async throws {
     let probe = EmbeddedSessionLifecycleProbe()
-    let session = try await EmbeddedServerSession.start(environment: [:]) { _, _ in
-        .init(
-            requestStop: {
-                await probe.recordRequestStop()
-            },
-            waitUntilStopped: {
-                await probe.recordWaitUntilStopped()
-            },
-        )
-    }
+    let server = await MainActor.run { EmbeddedServer() }
+    try await server.liftoff(
+        environment: [:],
+        defaultProfile: .embeddedSession,
+        bootstrap: { _, _ in
+            EmbeddedServerLifecycleHooks(
+                requestStop: {
+                    await probe.recordRequestStop()
+                },
+                waitUntilStopped: {
+                    await probe.recordWaitUntilStopped()
+                },
+            )
+        },
+    )
 
-    try await session.stop()
-    try await session.stop()
+    try await server.land()
+    try await server.land()
 
     let counts = await probe.counts()
     #expect(counts.requestStop == 1)
@@ -126,7 +134,7 @@ import Testing
 @available(macOS 14, *)
 @Test func `host lifecycle service waits for sibling shutdown before stopping runtime`() async throws {
     let runtime = MockRuntime()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: testConfiguration(),
         httpConfig: testHTTPConfig(testConfiguration()),
@@ -187,7 +195,7 @@ import Testing
     }
 
     let runtime = MockRuntime(startBehavior: .waitForRelease)
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: testConfiguration(),
         runtime: runtime,
@@ -217,7 +225,7 @@ import Testing
 @available(macOS 14, *)
 @Test func `host shutdown cancels tracked request monitor tasks`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: testConfiguration(),
         runtime: runtime,
@@ -243,7 +251,7 @@ import Testing
 @Test func `host prune service cancels on graceful shutdown and marks shutdown barrier`() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration(jobPruneIntervalSeconds: 60)
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,
@@ -299,7 +307,7 @@ import Testing
 @Test func `host publishes typed events for server consumers`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         httpConfig: testHTTPConfig(configuration),
@@ -377,7 +385,7 @@ import Testing
 @Test func `host tracks transport lifecycle beyond static configuration`() async {
     let runtime = MockRuntime()
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         httpConfig: testHTTPConfig(configuration),
@@ -408,7 +416,7 @@ import Testing
 @Test func `host applies safe live configuration changes and reports restart required ones`() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration(completedJobMaxCount: 2)
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         httpConfig: testHTTPConfig(configuration),
@@ -481,7 +489,7 @@ import Testing
 @Test func `host records rejected configuration reloads clearly`() async {
     let runtime = MockRuntime()
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,
@@ -503,7 +511,7 @@ import Testing
 @Test func `app managed default voice profile override survives configuration reload`() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration(defaultVoiceProfileName: "configured-default")
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,

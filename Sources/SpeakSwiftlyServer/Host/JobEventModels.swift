@@ -5,10 +5,10 @@ import SpeakSwiftly
 // MARK: - ServerWorkerStatusEvent
 
 /// Worker readiness or mode change emitted on the shared job event stream.
-public struct ServerWorkerStatusEvent: Encodable, Sendable, Equatable {
-    public let event = "worker_status"
-    public let stage: String
-    public let workerMode: String
+struct ServerWorkerStatusEvent: Encodable, Equatable {
+    let event = "worker_status"
+    let stage: String
+    let workerMode: String
 
     enum CodingKeys: String, CodingKey {
         case event
@@ -20,11 +20,11 @@ public struct ServerWorkerStatusEvent: Encodable, Sendable, Equatable {
 // MARK: - ServerQueuedEvent
 
 /// Queue-placement event emitted when a request cannot start immediately.
-public struct ServerQueuedEvent: Encodable, Sendable, Equatable {
-    public let id: String
-    public let event = "queued"
-    public let reason: String
-    public let queuePosition: Int
+struct ServerQueuedEvent: Encodable, Equatable {
+    let id: String
+    let event = "queued"
+    let reason: String
+    let queuePosition: Int
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -37,25 +37,25 @@ public struct ServerQueuedEvent: Encodable, Sendable, Equatable {
 // MARK: - ServerStartedEvent
 
 /// Start event emitted when a queued request begins execution.
-public struct ServerStartedEvent: Encodable, Sendable, Equatable {
-    public let id: String
-    public let event = "started"
-    public let op: String
+struct ServerStartedEvent: Encodable, Equatable {
+    let id: String
+    let event = "started"
+    let op: String
 }
 
 // MARK: - ServerProgressEvent
 
 /// Progress event emitted while a request advances through runtime stages.
-public struct ServerProgressEvent: Encodable, Sendable, Equatable {
-    public let id: String
-    public let event = "progress"
-    public let stage: String
+struct ServerProgressEvent: Encodable, Equatable {
+    let id: String
+    let event = "progress"
+    let stage: String
 }
 
 // MARK: - ServerSuccessEvent
 
 /// Success-shaped event payload used for acknowledgements and completions.
-public struct ServerSuccessEvent: Encodable, Sendable, Equatable {
+struct ServerSuccessEvent: Encodable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id
         case ok
@@ -81,44 +81,44 @@ public struct ServerSuccessEvent: Encodable, Sendable, Equatable {
         case cancelledRequestID = "cancelled_request_id"
     }
 
-    public let id: String
-    public let ok = true
-    public let generatedFile: SpeakSwiftly.GeneratedFile?
-    public let generatedFiles: [SpeakSwiftly.GeneratedFile]?
-    public let generatedBatch: SpeakSwiftly.GeneratedBatch?
-    public let generatedBatches: [SpeakSwiftly.GeneratedBatch]?
-    public let generationJob: SpeakSwiftly.GenerationJob?
-    public let generationJobs: [SpeakSwiftly.GenerationJob]?
-    public let profileName: String?
-    public let profilePath: String?
-    public let profiles: [ProfileSnapshot]?
-    public let textProfile: TextProfileSnapshot?
-    public let textProfiles: [TextProfileSnapshot]?
-    public let textProfilePath: String?
-    public let activeRequest: ActiveRequestSnapshot?
-    public let activeRequests: [ActiveRequestSnapshot]?
-    public let queue: [QueuedRequestSnapshot]?
-    public let playbackState: PlaybackStateSnapshot?
-    public let status: SpeakSwiftly.StatusEvent?
-    public let speechBackend: String?
-    public let clearedCount: Int?
-    public let cancelledRequestID: String?
+    let id: String
+    let ok = true
+    let generatedFile: SpeakSwiftly.GeneratedFile?
+    let generatedFiles: [SpeakSwiftly.GeneratedFile]?
+    let generatedBatch: SpeakSwiftly.GeneratedBatch?
+    let generatedBatches: [SpeakSwiftly.GeneratedBatch]?
+    let generationJob: SpeakSwiftly.GenerationJob?
+    let generationJobs: [SpeakSwiftly.GenerationJob]?
+    let profileName: String?
+    let profilePath: String?
+    let profiles: [ProfileSnapshot]?
+    let textProfile: TextProfileSnapshot?
+    let textProfiles: [TextProfileSnapshot]?
+    let textProfilePath: String?
+    let activeRequest: ActiveRequestSnapshot?
+    let activeRequests: [ActiveRequestSnapshot]?
+    let queue: [QueuedRequestSnapshot]?
+    let playbackState: PlaybackStateSnapshot?
+    let status: SpeakSwiftly.StatusEvent?
+    let speechBackend: String?
+    let clearedCount: Int?
+    let cancelledRequestID: String?
 }
 
 // MARK: - ServerFailureEvent
 
 /// Failure-shaped event payload emitted when a request cannot complete successfully.
-public struct ServerFailureEvent: Encodable, Sendable, Equatable {
-    public let id: String
-    public let ok = false
-    public let code: String
-    public let message: String
+struct ServerFailureEvent: Encodable, Equatable {
+    let id: String
+    let ok = false
+    let code: String
+    let message: String
 }
 
 // MARK: - ServerJobEvent
 
 /// Union event type for one job's lifecycle on the shared event stream.
-public enum ServerJobEvent: Sendable, Equatable, Encodable {
+enum ServerJobEvent: Equatable, Encodable {
     case workerStatus(ServerWorkerStatusEvent)
     case queued(ServerQueuedEvent)
     case acknowledged(ServerSuccessEvent)
@@ -128,7 +128,7 @@ public enum ServerJobEvent: Sendable, Equatable, Encodable {
     case failed(ServerFailureEvent)
 
     /// Indicates whether the event ends the request lifecycle.
-    public var isTerminal: Bool {
+    var isTerminal: Bool {
         switch self {
             case .completed, .failed:
                 true
@@ -138,7 +138,7 @@ public enum ServerJobEvent: Sendable, Equatable, Encodable {
     }
 
     /// Returns the request identifier carried by the event, when the event is request-specific.
-    public var id: String? {
+    var id: String? {
         switch self {
             case .workerStatus:
                 nil
@@ -157,7 +157,7 @@ public enum ServerJobEvent: Sendable, Equatable, Encodable {
         }
     }
 
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         switch self {
             case let .workerStatus(event):
                 try event.encode(to: encoder)
@@ -180,15 +180,15 @@ public enum ServerJobEvent: Sendable, Equatable, Encodable {
 // MARK: - JobSnapshot
 
 /// Snapshot of one retained request lifecycle, including latest and terminal events.
-public struct JobSnapshot: ResponseEncodable, Sendable {
-    public let requestID: String
-    public let op: String
-    public let submittedAt: String
-    public let startedAt: String?
-    public let status: String
-    public let latestEvent: ServerJobEvent?
-    public let terminalEvent: ServerJobEvent?
-    public let history: [ServerJobEvent]
+struct JobSnapshot: ResponseEncodable {
+    let requestID: String
+    let op: String
+    let submittedAt: String
+    let startedAt: String?
+    let status: String
+    let latestEvent: ServerJobEvent?
+    let terminalEvent: ServerJobEvent?
+    let history: [ServerJobEvent]
 
     enum CodingKeys: String, CodingKey {
         case requestID = "request_id"

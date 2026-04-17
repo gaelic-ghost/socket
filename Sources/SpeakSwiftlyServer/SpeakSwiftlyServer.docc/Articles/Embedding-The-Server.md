@@ -2,28 +2,53 @@
 
 ## Overview
 
-Use ``EmbeddedServerSession`` when an app wants to host the shared SpeakSwiftly server runtime inside its own process instead of starting the standalone executable separately.
+Use ``EmbeddedServer`` when an app wants to host the shared SpeakSwiftly server runtime inside its own process instead of starting the standalone executable separately.
 
-`EmbeddedServerSession` gives app code two jobs:
-
-- start and stop the shared host lifecycle
-- expose an app-facing ``ServerState`` object that SwiftUI and other main-actor UI code can observe directly
+`EmbeddedServer` gives app code one durable object to own directly. That object carries the
+observable properties SwiftUI reads, and it owns the embedded host lifecycle through
+``EmbeddedServer/liftoff(environment:)`` and ``EmbeddedServer/land()``.
 
 The session keeps transport ownership, config loading, and host shutdown logic internal. Behind that wrapper, the embedded path now composes the host lifecycle, optional config watching, optional MCP lifecycle, and HTTP serving as service-owned siblings under one outer lifecycle group. App code should still treat that as an internal implementation detail: hold onto the session object, bind UI to `session.state`, and use the state snapshots as the public read model for the embedded host.
 
 ## Core Types
 
-### ``EmbeddedServerSession``
+### ``EmbeddedServer``
 
-Start the shared host through ``EmbeddedServerSession/start(environment:options:)``. The embedded path still uses the same environment-driven config model as the standalone runtime, but it now carries its own embedded-session default port and lets app code provide explicit `Options(port:runtimeProfileRootURL:)` values when another localhost port or another runtime-owned persistence root is a better fit.
+Create the shared host through ``EmbeddedServer/init(options:)`` and start it through
+``EmbeddedServer/liftoff(environment:)``. The embedded path still uses the same environment-driven
+config model as the standalone runtime, but it now carries its own embedded-session default port
+and lets app code provide explicit `Options(port:runtimeProfileRootURL:)` values when another
+localhost port or another runtime-owned persistence root is a better fit.
 
-Call ``EmbeddedServerSession/stop()`` when the app wants a graceful shutdown. If a session has already been asked to stop, a second stop request simply waits for the same shutdown to finish.
+Call ``EmbeddedServer/land()`` when the app wants a graceful shutdown. If the server has already
+been asked to land, a second request simply waits for the same shutdown to finish.
 
-### ``ServerState``
+## Consumer Ownership Model
 
-``ServerState`` is the main-actor observable projection of the embedded host. It carries high-level overview data, queue snapshots, transport status, runtime configuration, recent errors, and the cached voice-profile list.
+For an app consumer, the intended pattern is one long-lived session owner, not ad hoc calls scattered across views.
 
-Treat `ServerState` as the UI-facing model, not as the authority that owns the server process. The real host lifecycle still lives behind the embedded session and server host internals.
+The clean mental model is:
+
+1. one app-owned controller or model creates the `EmbeddedServer`
+2. that owner calls `liftoff()`
+3. UI reads and reacts to properties on that same object
+4. control actions that the app truly owns go through that same object
+5. the same owner calls `land()` during app teardown or when the feature is explicitly turned off
+
+Treat the `EmbeddedServer` instance as both the lifecycle handle and the read-and-control facade.
+Do not try to reconstruct host ownership from the snapshot fields, and do not create a fresh
+server object every time a view appears or a control is tapped.
+
+In practice, the embedded consumer should need exactly one reference to `EmbeddedServer` and one
+observation path rooted directly at that object.
+
+`EmbeddedServer` is meant for three kinds of app work:
+
+- reading current host state for UI and diagnostics
+- issuing a small set of embedded-host control actions such as profile refresh or playback control
+- reacting to readiness and error changes without talking to transport internals directly
+
+It is not meant to be a second runtime owner, a transport client, or a public escape hatch into every HTTP or MCP payload shape.
 
 ### Snapshot Families
 

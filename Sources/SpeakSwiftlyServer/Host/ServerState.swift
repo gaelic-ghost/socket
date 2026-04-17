@@ -2,65 +2,88 @@ import Foundation
 import Observation
 import SpeakSwiftly
 
-// MARK: - Observable State
+// MARK: - Embedded Server
 
-/// Main-actor observable read model for an embedded SpeakSwiftly server session.
+/// Main-actor observable app model for an embedded SpeakSwiftly server session.
 ///
-/// `ServerState` is app-facing. It mirrors the host's latest snapshots for UI and other main-actor consumers,
-/// while the real transport and runtime ownership stays behind ``EmbeddedServerSession`` and the internal host.
+/// `EmbeddedServer` is the consumer-facing type an app should own directly. It exposes the current
+/// host snapshots as bindable properties, exposes the app-owned control actions, and owns the
+/// embedded runtime lifecycle through ``liftoff(environment:)`` and ``land()``.
 @Observable
 @MainActor
-public final class ServerState {
+public final class EmbeddedServer {
+    /// Configuration options for the app-owned embedded server bootstrap path.
+    public struct Options: Sendable {
+        /// Optional localhost port override for the embedded HTTP transport.
+        ///
+        /// When this is set, the embedded server applies the same port to the shared transport
+        /// default and the concrete HTTP listener unless the caller later overrides those values
+        /// more specifically through the environment-driven config surface.
+        public var port: Int?
+
+        /// Optional runtime profile-root override for the embedded server and the underlying
+        /// `SpeakSwiftly` runtime.
+        ///
+        /// Pass this when the host app wants one explicit persistence root, such as an app-owned
+        /// Application Support subdirectory or an App Group container path.
+        public var runtimeProfileRootURL: URL?
+
+        public init(port: Int? = nil, runtimeProfileRootURL: URL? = nil) {
+            self.port = port
+            self.runtimeProfileRootURL = runtimeProfileRootURL
+        }
+    }
+
     struct Actions {
         static let unavailable = Actions(
             refreshVoiceProfiles: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not refresh voice profiles because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not refresh voice profiles because no embedded host action performer is configured yet.",
                 )
             },
             setDefaultVoiceProfileName: { profileName in
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not set default voice profile '\(profileName)' because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not set default voice profile '\(profileName)' because no embedded host action performer is configured yet.",
                 )
             },
             clearDefaultVoiceProfileName: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not clear the default voice profile because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not clear the default voice profile because no embedded host action performer is configured yet.",
                 )
             },
             switchSpeechBackend: { speechBackend in
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not switch the active speech backend to '\(speechBackend.rawValue)' because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not switch the active speech backend to '\(speechBackend.rawValue)' because no embedded host action performer is configured yet.",
                 )
             },
             reloadModels: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not reload resident runtime models because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not reload resident runtime models because no embedded host action performer is configured yet.",
                 )
             },
             unloadModels: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not unload resident runtime models because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not unload resident runtime models because no embedded host action performer is configured yet.",
                 )
             },
             pausePlayback: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not pause playback because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not pause playback because no embedded host action performer is configured yet.",
                 )
             },
             resumePlayback: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not resume playback because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not resume playback because no embedded host action performer is configured yet.",
                 )
             },
             clearPlaybackQueue: {
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not clear the playback queue because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not clear the playback queue because no embedded host action performer is configured yet.",
                 )
             },
             cancelPlaybackRequest: { requestID in
-                throw ServerStateActionError.unavailable(
-                    "ServerState could not cancel playback request '\(requestID)' because no embedded host action performer is configured yet.",
+                throw EmbeddedServerActionError.unavailable(
+                    "EmbeddedServer could not cancel playback request '\(requestID)' because no embedded host action performer is configured yet.",
                 )
             },
         )
@@ -77,7 +100,7 @@ public final class ServerState {
         let cancelPlaybackRequest: @Sendable (String) async throws -> String
     }
 
-    enum ServerStateActionError: LocalizedError {
+    enum EmbeddedServerActionError: LocalizedError {
         case unavailable(String)
 
         var errorDescription: String? {
@@ -162,12 +185,40 @@ public final class ServerState {
     public internal(set) var transports = [TransportStatusSnapshot]()
     /// Recent host and transport errors retained for operator inspection.
     public internal(set) var recentErrors = [RecentErrorSnapshot]()
-    public internal(set) var jobsByID: [String: JobSnapshot] = [:]
 
+    @ObservationIgnored private let options: Options
     @ObservationIgnored private var actions = Actions.unavailable
+    @ObservationIgnored private var lifecycle: EmbeddedServerLifecycleHooks?
+    @ObservationIgnored private var stopCoordinator = EmbeddedServerStopCoordinator()
+    @ObservationIgnored private var isLiftingOff = false
 
-    /// Creates an empty observable state model that an embedded session can hydrate.
-    public init() {}
+    /// Creates an app-owned embedded server model with optional bootstrap overrides.
+    public init(options: Options = .init()) {
+        self.options = options
+    }
+
+    /// Starts the embedded server if it is not already running.
+    public func liftoff(
+        environment: [String: String] = ProcessInfo.processInfo.environment,
+    ) async throws {
+        try await liftoff(
+            environment: environment,
+            defaultProfile: .embeddedSession,
+            bootstrap: embeddedServerLiveBootstrap,
+        )
+    }
+
+    /// Gracefully stops the embedded server and waits for transport and host cleanup to finish.
+    public func land() async throws {
+        guard let lifecycle else {
+            return
+        }
+
+        if await stopCoordinator.requestStopIfNeeded() {
+            await lifecycle.requestStop()
+        }
+        try await lifecycle.waitUntilStopped()
+    }
 
     /// Returns the currently cached voice-profile summaries.
     public func listVoiceProfiles() -> [ProfileSnapshot] {
@@ -247,6 +298,28 @@ public final class ServerState {
         try await actions.cancelPlaybackRequest(requestID)
     }
 
+    func liftoff(
+        environment: [String: String],
+        defaultProfile: AppRuntimeDefaultProfile,
+        bootstrap: @escaping @Sendable ([String: String], EmbeddedServer) async throws -> EmbeddedServerLifecycleHooks = embeddedServerLiveBootstrap,
+    ) async throws {
+        guard lifecycle == nil, !isLiftingOff else {
+            return
+        }
+
+        isLiftingOff = true
+        defer { isLiftingOff = false }
+
+        lifecycle = try await bootstrap(
+            embeddedServerEffectiveEnvironment(
+                environment: environment,
+                options: options,
+                defaultProfile: defaultProfile,
+            ),
+            self,
+        )
+    }
+
     func applyHostStateSnapshot(_ snapshot: HostStateSnapshot) {
         overview = snapshot.overview
         runtimeRefresh = snapshot.runtimeRefresh
@@ -261,5 +334,13 @@ public final class ServerState {
 
     func configureActions(_ actions: Actions) {
         self.actions = actions
+    }
+
+    func waitUntilStopped() async throws {
+        guard let lifecycle else {
+            return
+        }
+
+        try await lifecycle.waitUntilStopped()
     }
 }

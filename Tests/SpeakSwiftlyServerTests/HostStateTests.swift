@@ -8,7 +8,7 @@ import Testing
 @available(macOS 14, *)
 @Test func `state completes queued speech jobs and prunes expired entries`() async throws {
     let runtime = MockRuntime()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: testConfiguration(completedJobTTLSeconds: 0.05, jobPruneIntervalSeconds: 0.02),
         runtime: runtime,
@@ -37,7 +37,7 @@ import Testing
 @available(macOS 14, *)
 @Test func `state prunes oldest completed jobs when max count is exceeded`() async throws {
     let runtime = MockRuntime()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: testConfiguration(completedJobTTLSeconds: 60, completedJobMaxCount: 2),
         runtime: runtime,
@@ -69,7 +69,7 @@ import Testing
 @available(macOS 14, *)
 @Test func `sse replay includes worker status history and heartbeat`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: testConfiguration(sseHeartbeatSeconds: 0.02),
         runtime: runtime,
@@ -120,7 +120,7 @@ import Testing
 @Test func `host publishes shared state for ui and server consumers`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         httpConfig: testHTTPConfig(configuration),
@@ -183,7 +183,7 @@ import Testing
 @Test func `host uses runtime snapshots for queued live speech jobs`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,
@@ -241,7 +241,7 @@ import Testing
 @Test func `host refreshes runtime snapshots for held live progress events`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,
@@ -307,7 +307,7 @@ import Testing
 @Test func `state projects cached voice profiles and forwards playback controls`() async throws {
     let runtime = MockRuntime(speakBehavior: .holdOpen)
     let configuration = testConfiguration()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,
@@ -448,7 +448,7 @@ import Testing
 @Test func `clearing app managed default voice profile falls back to configured default`() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration(defaultVoiceProfileName: "configured-default")
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let host = ServerHost(
         configuration: configuration,
         runtime: runtime,

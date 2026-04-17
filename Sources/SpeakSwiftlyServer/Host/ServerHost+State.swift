@@ -25,7 +25,6 @@ extension ServerHost {
 
         let hostState = hostStateSnapshot()
         let cachedVoiceProfiles = profileCache
-        let jobsByID = Dictionary(uniqueKeysWithValues: jobs.map { ($0.key, $0.value.snapshot) })
         publishedStateContinuation.yield(hostState)
 
         await MainActor.run {
@@ -39,7 +38,6 @@ extension ServerHost {
             state.voiceProfiles = cachedVoiceProfiles
             state.transports = hostState.transports
             state.recentErrors = hostState.recentErrors
-            state.jobsByID = jobsByID
         }
     }
 

@@ -63,7 +63,7 @@ struct RenameVoiceProfileRequestPayload: Decodable {
 // MARK: - TextReplacementSnapshot
 
 /// One text-normalization replacement rule exposed through the server surfaces.
-public struct TextReplacementSnapshot: Codable, Sendable, Equatable {
+struct TextReplacementSnapshot: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id
         case text
@@ -206,7 +206,7 @@ public struct TextReplacementSnapshot: Codable, Sendable, Equatable {
 // MARK: - TextProfileSnapshot
 
 /// One text profile and its replacement rules as exposed by the server.
-public struct TextProfileSnapshot: Codable, Sendable, Equatable {
+struct TextProfileSnapshot: Codable, Equatable {
     let id: String
     let name: String
     let replacements: [TextReplacementSnapshot]

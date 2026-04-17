@@ -13,7 +13,7 @@ extension ServerTests {
     @Test func `routes expose queue inspection and control operations`() async throws {
         let runtime = MockRuntime(speakBehavior: .holdOpen)
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -133,7 +133,7 @@ extension ServerTests {
     @Test func `routes report not ready and missing jobs clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -181,7 +181,7 @@ extension ServerTests {
     @Test func `routes report worker startup failure clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,

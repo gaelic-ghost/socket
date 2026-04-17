@@ -2,10 +2,10 @@ import Foundation
 
 // MARK: - ServerRuntimeEntrypointOptions
 
-public struct ServerRuntimeEntrypointOptions: Sendable {
-    public let runtimeProfileRootPath: String?
+package struct ServerRuntimeEntrypointOptions {
+    package let runtimeProfileRootPath: String?
 
-    public init(runtimeProfileRootPath: String? = nil) {
+    package init(runtimeProfileRootPath: String? = nil) {
         let trimmedPath = runtimeProfileRootPath?.trimmingCharacters(in: .whitespacesAndNewlines)
         if let trimmedPath, !trimmedPath.isEmpty {
             self.runtimeProfileRootPath = trimmedPath
@@ -18,23 +18,26 @@ public struct ServerRuntimeEntrypointOptions: Sendable {
 // MARK: - ServerRuntimeEntrypoint
 
 /// Starts the standalone SpeakSwiftly server runtime using the package's default embedded bootstrap path.
-public enum ServerRuntimeEntrypoint {
+package enum ServerRuntimeEntrypoint {
     /// Builds and runs an embedded session, then waits until that session stops.
-    public static func run(
+    package static func run(
         options: ServerRuntimeEntrypointOptions = .init(),
         environment: [String: String] = ProcessInfo.processInfo.environment,
     ) async throws {
-        let session = try await EmbeddedServerSession.start(
+        let server = await MainActor.run {
+            EmbeddedServer(
+                options: .init(
+                    runtimeProfileRootURL: options.runtimeProfileRootPath.map {
+                        URL(fileURLWithPath: $0, isDirectory: true)
+                    },
+                ),
+            )
+        }
+        try await server.liftoff(
             environment: effectiveEnvironment(environment: environment, options: options),
-            options: .init(
-                runtimeProfileRootURL: options.runtimeProfileRootPath.map {
-                    URL(fileURLWithPath: $0, isDirectory: true)
-                },
-            ),
             defaultProfile: .standaloneExecutable,
-            bootstrap: EmbeddedServerSession.liveBootstrap,
         )
-        try await session.waitUntilStopped()
+        try await server.waitUntilStopped()
     }
 
     private static func effectiveEnvironment(

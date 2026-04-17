@@ -14,23 +14,18 @@ These surfaces share the same underlying host model, but they answer different o
 
 ### Embedded Library
 
-Use ``EmbeddedServerSession`` and ``ServerState`` when an app owns the process and wants direct
-state observation on the main actor.
+Use ``EmbeddedServer`` when an app owns the process and wants direct state observation on the main
+actor.
 
 Internally, the embedded path now keeps package-owned lifecycle concerns explicit: one outer
 service-owned group coordinates host startup and shutdown, optional config watching, optional MCP
-readiness and drain, and the wrapped Hummingbird application. App code should still treat the
-session object as the lifecycle boundary and `ServerState` as the UI-facing projection rather than
-as the owner of the runtime.
+readiness and drain, and the wrapped Hummingbird application. App code should treat the
+`EmbeddedServer` instance itself as the lifecycle boundary and the UI-facing projection rather than
+as a transport owner.
 
 ### Command-Line Tool
 
-`SpeakSwiftlyServerTool` is the operator entrypoint for starting the server directly or managing the LaunchAgent property list workflow. The main command types exposed by the package are:
-
-- ``SpeakSwiftlyServerToolCommand``
-- ``LaunchAgentCommand``
-- ``SpeakSwiftlyServerToolCommandError``
-- ``LaunchAgentCommandError``
+`SpeakSwiftlyServerTool` is the operator entrypoint for starting the server directly or managing the LaunchAgent property list workflow.
 
 The companion executable walkthrough starts at <doc:Using-The-Command-Line-Tool>.
 
