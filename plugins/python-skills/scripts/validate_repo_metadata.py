@@ -32,9 +32,12 @@ README_REQUIRED_HEADINGS = [
 
 ROADMAP_REQUIRED_HEADINGS = [
     "# Project Roadmap",
+    "## Table of Contents",
     "## Vision",
-    "## Product principles",
+    "## Product Principles",
     "## Milestone Progress",
+    "## Backlog Candidates",
+    "## History",
 ]
 
 PATH_REFERENCE_RE = re.compile(
@@ -229,10 +232,14 @@ def validate_roadmap(repo_root: Path) -> list[Finding]:
     for heading in ROADMAP_REQUIRED_HEADINGS:
         if heading not in text:
             findings.append(Finding("ROADMAP.md", f"missing heading: {heading}"))
-    if "Tickets:" not in text:
-        findings.append(Finding("ROADMAP.md", "missing Tickets sections"))
-    if "Exit criteria:" not in text:
-        findings.append(Finding("ROADMAP.md", "missing Exit criteria sections"))
+    if "### Status" not in text:
+        findings.append(Finding("ROADMAP.md", "missing Status subsections"))
+    if "### Scope" not in text:
+        findings.append(Finding("ROADMAP.md", "missing Scope subsections"))
+    if "### Tickets" not in text:
+        findings.append(Finding("ROADMAP.md", "missing Tickets subsections"))
+    if "### Exit Criteria" not in text:
+        findings.append(Finding("ROADMAP.md", "missing Exit Criteria subsections"))
     return findings
 
 

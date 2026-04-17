@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Vision](#vision)
-- [Product principles](#product-principles)
+- [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
 - [Milestone 2: subtree workflow hardening](#milestone-2-subtree-workflow-hardening)
 - [Milestone 3: release and sync discipline](#milestone-3-release-and-sync-discipline)
@@ -14,7 +14,7 @@
 
 - Keep `socket` as the honest superproject layer for Gale's public Codex plugin and skills ecosystem, with subtree imports, root marketplace wiring, and cross-repo maintainer guidance kept consistent.
 
-## Product principles
+## Product Principles
 
 - Keep the superproject focused on subtree coordination, root marketplace wiring, and cross-repo maintainer guidance.
 - Keep child-repository ownership boundaries explicit instead of flattening repo-local behavior into `socket`.
@@ -22,34 +22,42 @@
 
 ## Milestone Progress
 
-- [ ] Milestone 2: subtree workflow hardening
-- [ ] Milestone 3: release and sync discipline
+- Milestone 2: subtree workflow hardening - Planned
+- Milestone 3: release and sync discipline - Planned
 
 ## Milestone 2: subtree workflow hardening
 
-Scope:
+### Status
+
+Planned
+
+### Scope
 
 - [ ] Tighten the documented subtree add, pull, and push workflows without changing the child-repo ownership model.
 
-Tickets:
+### Tickets
 
 - [ ] Review subtree workflow docs against the current import and publish path.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Root maintainer workflow docs describe the actual subtree sync path without stale or duplicate guidance.
 
 ## Milestone 3: release and sync discipline
 
-Scope:
+### Status
+
+Planned
+
+### Scope
 
 - [ ] Keep root release and synchronization guidance explicit when superproject-level changes ship.
 
-Tickets:
+### Tickets
 
 - [ ] Document the expected root release and sync rhythm once the current subtree migration experiment stabilizes.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Superproject release guidance is explicit enough that root changes can be shipped without improvising process each time.
 

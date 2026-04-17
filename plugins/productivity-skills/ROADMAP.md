@@ -1,10 +1,21 @@
 # Project Roadmap
 
+## Table of Contents
+
+- [Vision](#vision)
+- [Product Principles](#product-principles)
+- [Milestone Progress](#milestone-progress)
+- [Milestone 14: Claude Code optimization pass](#milestone-14-claude-code-optimization-pass)
+- [Milestone 22: Accessibility maintenance baseline](#milestone-22-accessibility-maintenance-baseline)
+- [Milestone 23: Security and support maintenance baseline](#milestone-23-security-and-support-maintenance-baseline)
+- [Backlog Candidates](#backlog-candidates)
+- [History](#history)
+
 ## Vision
 
 - Maintain a focused set of reusable productivity skills with clear naming, deterministic workflows, plugin-ready packaging, and direct standalone install surfaces.
 
-## Product principles
+## Product Principles
 
 - Keep this repository focused on broadly reusable baseline workflows.
 - Keep document-maintenance skills separate by document type.
@@ -12,38 +23,46 @@
 
 ## Milestone Progress
 
-- [ ] Milestone 14: Claude Code optimization pass
-- [ ] Milestone 22: Accessibility maintenance baseline
-- [ ] Milestone 23: Security and support maintenance baseline
+- Milestone 14: Claude Code optimization pass - Planned
+- Milestone 22: Accessibility maintenance baseline - Planned
+- Milestone 23: Security and support maintenance baseline - Planned
 
 ## Milestone 14: Claude Code optimization pass
 
-Scope:
+### Status
 
-- Improve this repository's skill surfaces for Claude Code routing and ergonomics.
-- Reconcile wording, references, and metadata where Claude-specific behavior benefits from tighter optimization.
-- Keep Claude-facing improvements additive to the shared standards-based skill core and the existing Codex and OpenAI overlays.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Improve this repository's skill surfaces for Claude Code routing and ergonomics.
+- [ ] Reconcile wording, references, and metadata where Claude-specific behavior benefits from tighter optimization.
+- [ ] Keep Claude-facing improvements additive to the shared standards-based skill core and the existing Codex and OpenAI overlays.
+
+### Tickets
 
 - [ ] Audit skill trigger wording and references for Claude Code activation quality.
 - [ ] Add or refine Claude-facing guidance where Codex-first wording currently leaves avoidable ambiguity.
 - [ ] Review metadata and examples for Claude Code compatibility and discoverability.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Active skills have Claude Code-aware trigger and usage guidance where it materially improves routing.
 - [ ] Claude-facing docs no longer lag behind the current skill layout and plugin-ready repo model.
 
 ## Milestone 22: Accessibility maintenance baseline
 
-Scope:
+### Status
 
-- Add a new `maintain-project-accessibility` baseline skill for canonical `ACCESSIBILITY.md` maintenance.
-- Define `ACCESSIBILITY.md` as the repo-local accessibility control document for standards, architecture, verification, ownership, and known gaps.
-- Extend `maintain-project-contributing` so accessibility expectations become part of the contributor contract instead of optional follow-up guidance.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Add a new `maintain-project-accessibility` baseline skill for canonical `ACCESSIBILITY.md` maintenance.
+- [ ] Define `ACCESSIBILITY.md` as the repo-local accessibility control document for standards, architecture, verification, ownership, and known gaps.
+- [ ] Extend `maintain-project-contributing` so accessibility expectations become part of the contributor contract instead of optional follow-up guidance.
+
+### Tickets
 
 - [ ] Draft and ship the `maintain-project-accessibility` skill surface with template, config, script, references, and tests.
 - [ ] Define and validate the canonical `ACCESSIBILITY.md` schema, including standards baseline, architecture, workflow, known gaps, and evidence sections.
@@ -51,7 +70,7 @@ Tickets:
 - [ ] Extend `maintain-project-contributing` with a required `Accessibility Expectations` subsection under `Development Expectations`.
 - [ ] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] The repository ships a working `maintain-project-accessibility` skill with deterministic `check-only` and bounded `apply` behavior.
 - [ ] The canonical `ACCESSIBILITY.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
@@ -59,13 +78,17 @@ Exit criteria:
 
 ## Milestone 23: Security and support maintenance baseline
 
-Scope:
+### Status
 
-- Add a new `maintain-project-security` baseline skill for canonical `SECURITY.md` maintenance.
-- Add a new `maintain-project-support` baseline skill for canonical `SUPPORT.md` maintenance.
-- Keep both skills aligned with the existing docs-maintenance family so security reporting, support boundaries, and escalation paths can be maintained with the same deterministic `check-only` and bounded `apply` workflow model.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Add a new `maintain-project-security` baseline skill for canonical `SECURITY.md` maintenance.
+- [ ] Add a new `maintain-project-support` baseline skill for canonical `SUPPORT.md` maintenance.
+- [ ] Keep both skills aligned with the existing docs-maintenance family so security reporting, support boundaries, and escalation paths can be maintained with the same deterministic `check-only` and bounded `apply` workflow model.
+
+### Tickets
 
 - [ ] Draft and ship the `maintain-project-security` skill surface with template, config, script, references, and tests.
 - [ ] Define and validate the canonical `SECURITY.md` schema, including reporting path, intake expectations, disclosure language, scope boundaries, and verification evidence rules.
@@ -75,7 +98,7 @@ Tickets:
 - [ ] Add claim-integrity checks so the support workflow does not invent staffing promises, service-level expectations, or support channels that are not grounded in the target repo.
 - [ ] Update repo-level maintainer docs and active-skill inventory once the new skills are implemented.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] The repository ships a working `maintain-project-security` skill with deterministic `check-only` and bounded `apply` behavior.
 - [ ] The repository ships a working `maintain-project-support` skill with deterministic `check-only` and bounded `apply` behavior.

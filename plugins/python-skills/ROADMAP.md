@@ -1,10 +1,19 @@
 # Project Roadmap
 
+## Table of Contents
+
+- [Vision](#vision)
+- [Product Principles](#product-principles)
+- [Milestone Progress](#milestone-progress)
+- [Milestone 7: Claude Code skill optimizations](#milestone-7-claude-code-skill-optimizations)
+- [Backlog Candidates](#backlog-candidates)
+- [History](#history)
+
 ## Vision
 
 - Keep `python-skills` as a focused, durable skills repository with one shared `skills/` surface, deterministic local helpers, and thin packaging layers on top.
 
-## Product principles
+## Product Principles
 
 - Keep the active public surface constrained to one shared `skills/` tree with thin vendor packaging layers.
 - Prefer deterministic local scripts and validation over implied behavior.
@@ -12,25 +21,33 @@
 
 ## Milestone Progress
 
-- [ ] Milestone 7: Claude Code skill optimizations
+- Milestone 7: Claude Code skill optimizations - Planned
 
 ## Milestone 7: Claude Code skill optimizations
 
-Scope:
+### Status
 
-- Audit the shared `skills/` content for Claude Code compatibility and additive Claude-oriented improvements.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Audit the shared `skills/` content for Claude Code compatibility and additive Claude-oriented improvements.
+
+### Tickets
 
 - [ ] Review each shipped `SKILL.md` against Claude Code skill behavior and supported frontmatter.
 - [ ] Make shared skill wording more vendor-neutral where that improves portability.
 - [ ] Define a maintainer policy for Claude-only optimizations so they stay additive rather than invasive.
 - [ ] Update maintainer docs to explain the shared-core versus vendor-layer split.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Shared skills remain single-source and intentionally portable.
 - [ ] Claude-specific skill optimizations are documented or implemented without duplicating the skill tree.
+
+## Backlog Candidates
+
+- [ ] Record plausible future work that is not yet committed to a milestone.
 
 ## History
 
