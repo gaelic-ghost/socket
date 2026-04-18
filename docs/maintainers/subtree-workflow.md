@@ -107,9 +107,12 @@ Use these rules:
 - list every non-private imported child plugin surface by default
 - keep private child repos out of the public marketplace, and remove their entries if their directories are retired from the monorepo
 - point `source.path` at the actual child surface the imported repo treats as installable
+- do not change a marketplace path just because a child repo rearranged files internally; if the packaged plugin root is unchanged, keep the same `source.path`
 - do not invent a second socket-level plugin wrapper when the child repo already has one
 - do not leave stale marketplace entries behind after a packaging move or subtree removal
 - keep one surviving plugin identity for each real child plugin
+
+Recent example: `things-app` moved its bundled MCP server from `mcp/things-app-mcp/` to top-level `mcp/` inside the child repo, but the root marketplace entry stayed `./plugins/things-app` because the installable plugin root did not move.
 
 ## Release Flow
 

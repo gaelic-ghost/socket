@@ -230,4 +230,4 @@ uv run mypy .
 
 ## License
 
-Covered by the parent [`things-app`](../../README.md) repository license and tracked as part of that repo's combined release surface.
+Covered by the parent [`things-app`](../README.md) repository license and tracked as part of that repo's combined release surface.
