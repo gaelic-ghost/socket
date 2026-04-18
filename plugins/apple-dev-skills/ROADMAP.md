@@ -234,8 +234,6 @@ Planned
 
 ## Milestone 37: Apple UI Accessibility Workflow
 
-Detailed planning notes live in `docs/maintainers/apple-ui-accessibility-workflow-plan.md`.
-
 ### Status
 
 Planned
@@ -294,9 +292,8 @@ Completed
 
 - [x] The repository ships a documented DocC workflow skill with clear authoring and review guidance for Swift package and Xcode app or framework repos.
 - [x] The workflow explains its handoff boundary cleanly instead of trying to own both content work and all DocC execution paths at once.
-- [x] Maintainer planning for the first implementation slice is captured in `docs/maintainers/author-swift-docc-docs-plan.md`.
 
-Completed Milestone 38 by shipping `author-swift-docc-docs`, adding its runtime customization and tests, documenting the first-slice boundary in `docs/maintainers/author-swift-docc-docs-plan.md`, and keeping tutorial handling intentionally light in phase one.
+Completed Milestone 38 by shipping `author-swift-docc-docs`, adding its runtime customization and tests, capturing the first-slice authoring and review boundary directly in the shipped docs, and keeping tutorial handling intentionally light in phase one.
 
 ## Milestone 39: Swift Package Index Workflow
 
@@ -325,8 +322,6 @@ Planned
 
 ## Milestone 40: SwiftUI UI Architecture Workflow
 
-Detailed planning notes live in `docs/maintainers/swiftui-app-architecture-workflow-plan.md`.
-
 ### Status
 
 Completed
@@ -354,7 +349,7 @@ Completed
 - [x] The repository ships a documented SwiftUI UI architecture workflow skill that covers scenes, commands, environment, preferences, focus, and component composition.
 - [x] The workflow gives maintainers concrete guardrails against common SwiftUI agent anti-patterns instead of only describing ideal patterns abstractly.
 
-Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, documenting the first-slice boundary in `docs/maintainers/swiftui-app-architecture-workflow-plan.md`, grounding the workflow in current SwiftUI scene, command, focus, and environment behavior, adding desktop-oriented split-view and inspector guidance, and covering the shipped surface with repo-validator and targeted pytest checks.
+Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, grounding the workflow in current SwiftUI scene, command, focus, and environment behavior, adding desktop-oriented split-view and inspector guidance, and covering the shipped surface with repo-validator and targeted pytest checks.
 
 ## Backlog Candidates
 
@@ -367,3 +362,4 @@ Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, document
 - Completed Milestones 22 and 23 by expanding deterministic TODO/FIXME ledger normalization and finishing the customization consolidation review. See `docs/maintainers/customization-consolidation-review.md`.
 - Completed Milestones 27 and 28 by validating the top-level `skills/` export story against the live repo validator and tests, and by narrowing `agent-plugin-skills` usage to selective plugin and export-surface alignment while leaving broader docs standards with `productivity-skills`.
 - Completed Milestones 30 through 36 by shrinking the customization surface, adding the repo-maintenance toolkit and shared extraction work, splitting execution workflows, and preserving guidance through the refactor.
+- Collapsed the older first-slice planning docs for Milestones 37, 38, and 40 plus the standalone execution guidance-preservation matrix into this roadmap history and the still-live maintainer docs once those decisions were absorbed into the shipped skills, validator rules, and synced guidance assets.
