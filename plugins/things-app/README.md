@@ -2,111 +2,181 @@
 
 Canonical home for Gale's Things.app skills, bundled local MCP server, and plugin packaging.
 
-For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.md).
+For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.md). For contributor workflow, setup, and review expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Setup](#setup)
+- [Quick Start](#quick-start)
 - [Usage](#usage)
 - [Development](#development)
-- [Verification](#verification)
+- [Repo Structure](#repo-structure)
 - [Release Notes](#release-notes)
 - [License](#license)
 - [Active Skills](#active-skills)
 - [Bundled MCP Server](#bundled-mcp-server)
 - [Packaging](#packaging)
-- [Maintainer Python Tooling](#maintainer-python-tooling)
-- [Repository Layout](#repository-layout)
 
 ## Overview
 
-This repository ships three closely related surfaces:
+`things-app` ships three related surfaces in one repo:
 
 - reusable Things-oriented skills under [`skills/`](./skills/)
-- the bundled FastMCP server under [`mcp/things-app-mcp/`](./mcp/things-app-mcp/)
-- plugin packaging metadata at the repo root for Codex and Claude Code
+- a bundled FastMCP server under [`mcp/`](./mcp/)
+- thin Codex and Claude plugin packaging metadata at the repo root
 
 ### Status
 
-`things-app` is active and currently ships maintained Things-oriented skills, plugin packaging metadata, and the bundled MCP server described below.
+`things-app` is active and currently maintained as a mixed skills-plus-server repository.
 
 ### What This Project Is
 
-This repository is the canonical home for Gale's Things-focused automation workflows and the local MCP server they depend on.
+This repository is the canonical home for Gale's Things-focused automation workflows and the local MCP server those workflows depend on.
 
 ### Motivation
 
-It exists to keep the Things workflow surface, the server implementation, and the plugin packaging story aligned in one place instead of spreading those pieces across separate repos.
+It keeps the Things workflow surface, the bundled server implementation, and the plugin packaging story aligned in one place instead of splitting those concerns across separate repositories.
 
-## Setup
+## Quick Start
 
-Start with the install and packaging guidance in this README, then use the server-specific docs inside [`mcp/things-app-mcp/`](./mcp/things-app-mcp/) when the work is really about the bundled FastMCP package.
+This repo is primarily a maintainer and power-user surface rather than an end-user app with a single quick-start flow.
+
+If you want to use the workflow guidance, start with the skills under [`skills/`](./skills/). If you want to work on the bundled server, go straight to [`mcp/README.md`](./mcp/README.md). If you are changing the repo itself, use the contributor workflow in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Usage
 
-Use the surface that matches the job you are doing:
+Use the surface that matches the job:
 
-- root [`skills/`](./skills/) for Things workflow guidance
-- root plugin manifests for Codex or Claude plugin installation
-- [`mcp/things-app-mcp/`](./mcp/things-app-mcp/) for the bundled local MCP server package and its server-specific validation
+- root [`skills/`](./skills/) for Things reminder and planning workflows
+- root plugin metadata for Codex or Claude installation and discovery
+- [`mcp/`](./mcp/) for the local FastMCP server, its docs, and its server-specific checks
+
+The current active skills are intentionally narrow:
+
+- `things-reminders-manager` for deterministic create and update flows around Things reminders and scheduled to-dos
+- `things-digest-generator` for week-ahead planning digests built from Things reads or equivalent JSON exports
 
 ## Development
 
 ### Setup
 
-Work from the canonical source surfaces in this repository and keep docs, packaging metadata, and server guidance aligned in the same change.
+The repo has two distinct Python environments:
 
-### Workflow
+- repo root for the digest-skill maintainer tooling and tests
+- `mcp/` for the bundled server package and its lint, typecheck, and smoke flows
 
-Edit root skills first when changing workflow behavior. Edit the bundled MCP server in `mcp/things-app-mcp/` when the server behavior changes. Treat plugin manifests and marketplace wiring as install metadata rather than as the source of truth for workflow logic.
-
-## Verification
-
-Run the validation commands that match the surface you changed.
-
-For the repo-root Python-backed skill surface:
+Root setup:
 
 ```bash
 uv sync --dev
+```
+
+Bundled server setup:
+
+```bash
+cd mcp
+uv sync
+```
+
+### Workflow
+
+Keep the source-of-truth boundaries straight:
+
+- edit root [`skills/`](./skills/) when workflow behavior changes
+- edit [`mcp/`](./mcp/) when server behavior changes
+- treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json), and [`.mcp.json`](./.mcp.json) as install metadata, not as the source of truth for workflow logic
+
+When a change touches more than one surface, update the nearby docs in the same pass so the mixed-repo model stays explicit and accurate.
+
+### Validation
+
+Run the checks that match the surface you changed.
+
+Repo-root skill validation:
+
+```bash
 uv run pytest
 ```
 
-For the bundled MCP server package:
+Bundled server validation:
 
 ```bash
-cd mcp/things-app-mcp
-uv sync
+cd mcp
 uv run pytest
+uv run ruff check .
+uv run mypy .
+```
+
+For local HTTP smoke checks while working on the bundled server:
+
+```bash
+cd mcp
+make smoke-http
+make smoke-json
+```
+
+## Repo Structure
+
+```text
+.
+├── .claude/
+│   └── skills -> ../skills
+├── .claude-plugin/
+│   └── plugin.json
+├── .codex-plugin/
+│   └── plugin.json
+├── .mcp.json
+├── AGENTS.md
+├── CONTRIBUTING.md
+├── README.md
+├── ROADMAP.md
+├── mcp/
+├── pyproject.toml
+└── skills/
+    ├── things-digest-generator/
+    └── things-reminders-manager/
 ```
 
 ## Release Notes
 
-Use Git history and GitHub releases to track shipped changes for this repository, especially when skills, packaging metadata, and the bundled MCP server move together.
+Use Git history and GitHub releases to track shipped changes, especially when skills, packaging metadata, and the bundled MCP server move together.
 
 ## License
 
-See [LICENSE](./LICENSE).
+Keep this README aligned with the repository's checked-in license terms. If `things-app` gains or changes a local `LICENSE` file, update this section and [CONTRIBUTING.md](./CONTRIBUTING.md) in the same pass.
 
 ## Active Skills
 
-- `things-reminders-manager`: deterministic create and update workflows for Things reminders and scheduled todos
-- `things-digest-generator`: week-ahead planning digests built from Things MCP reads or equivalent JSON exports
+- [`skills/things-reminders-manager/`](./skills/things-reminders-manager/): deterministic create and update workflows for Things reminders and scheduled to-dos
+- [`skills/things-digest-generator/`](./skills/things-digest-generator/): week-ahead planning digests built from Things MCP reads or equivalent JSON exports
 
 ## Bundled MCP Server
 
-The former standalone `things-app-mcp` project now lives under [`mcp/things-app-mcp/`](./mcp/things-app-mcp/), with its own package metadata, tests, docs, and README.
+The former standalone `things-app-mcp` project now lives directly under [`mcp/`](./mcp/), with its own package metadata, helper commands, tests, and server-specific docs.
 
-Use its local docs and tests when the work is really about the server package rather than the root skill and plugin surfaces.
+The packaged Codex MCP entrypoint in [`.mcp.json`](./.mcp.json) launches that server with:
+
+```json
+{
+  "things-app": {
+    "command": "uv",
+    "args": ["run", "python", "app/server.py"],
+    "cwd": "../../mcp"
+  }
+}
+```
+
+That relative `cwd` matters because the plugin packaging lives at repo root while the server stays self-contained inside the bundled package directory.
 
 ## Packaging
 
-This repository keeps root workflow content and plugin metadata separate on purpose.
+This repository keeps authored workflow content and packaging metadata separate on purpose.
 
-- root [`skills/`](./skills/) is the canonical workflow-authoring surface
-- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json) describe install metadata
-- [`.agents/skills`](./.agents/skills) and [`.claude/skills`](./.claude/skills) are discovery mirrors into root `skills/`
-- the bundled server stays self-contained under [`mcp/things-app-mcp/`](./mcp/things-app-mcp/)
+- root `skills/` is the canonical workflow-authoring surface
+- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) points Codex at the root skills and bundled MCP config
+- [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json) describes the Claude plugin package
+- [`.claude/skills`](./.claude/skills) is the checked-in discovery mirror currently present in this repo
+- the bundled FastMCP server stays self-contained under [`mcp/`](./mcp/)
 
 Helpful references:
 
@@ -114,36 +184,3 @@ Helpful references:
 - [OpenAI Codex plugins](https://developers.openai.com/codex/plugins)
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 - [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
-
-## Maintainer Python Tooling
-
-Repo-root Python tooling is intentionally narrow and currently supports the Python-backed digest skill test surface:
-
-```bash
-uv sync --dev
-uv run pytest
-```
-
-## Repository Layout
-
-```text
-.
-├── .agents/
-│   └── skills -> ../skills
-├── .claude/
-│   └── skills -> ../skills
-├── .claude-plugin/
-│   └── plugin.json
-├── .codex-plugin/
-│   └── plugin.json
-├── AGENTS.md
-├── LICENSE
-├── README.md
-├── ROADMAP.md
-├── mcp/
-│   └── things-app-mcp/
-├── pyproject.toml
-└── skills/
-    ├── things-digest-generator/
-    └── things-reminders-manager/
-```

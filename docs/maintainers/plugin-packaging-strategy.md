@@ -35,6 +35,8 @@ The current direction is:
 3. keep the `socket` marketplace ready to list each plugin independently
 4. only add marketplace entries for child repos that actually ship `.codex-plugin/plugin.json`
 
+Child-repo internal layout changes do not automatically imply root marketplace changes. If a child repo keeps the same packaged plugin root, keep the `socket` marketplace path stable and only update the root docs to explain the child's new internal layout. Recent example: `things-app` kept its marketplace path at `./plugins/things-app` while moving its bundled MCP server from `mcp/things-app-mcp/` to top-level `mcp/` inside that child repo.
+
 ## Follow-up Decision
 
 Once several child repos have stable plugin packaging, decide whether `socket` needs:

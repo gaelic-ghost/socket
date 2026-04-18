@@ -6,6 +6,6 @@
       "python",
       "app/server.py"
     ],
-    "cwd": "../../mcp/things-app-mcp"
+    "cwd": "../../mcp"
   }
 }
