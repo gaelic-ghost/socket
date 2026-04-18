@@ -1,78 +1,135 @@
 # Contributing
 
+Practical contributor and maintainer guide for working on `SpeakSwiftlyServer`, including local setup, validation, live end-to-end coverage, pull request workflow, and release handoff.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Contribution Workflow](#contribution-workflow)
+- [Local Setup](#local-setup)
+- [Development Expectations](#development-expectations)
+- [Pull Request Expectations](#pull-request-expectations)
+- [Communication](#communication)
+- [Documentation Map](#documentation-map)
+- [Monorepo and Submodule Handoff](#monorepo-and-submodule-handoff)
+- [Release Workflow](#release-workflow)
+- [License and Contribution Terms](#license-and-contribution-terms)
+
 ## Overview
 
-This repository is the standalone Swift Package Manager home for `SpeakSwiftlyServer`. Treat it as the source of truth for package development, tags, and releases, even when a downstream monorepo consumes it as a submodule.
+### Who This Guide Is For
 
-Start with [AGENTS.md](AGENTS.md) for the repo's package, architecture, and monorepo handoff rules. Use this document for the practical contribution path: local validation, source layout, documentation upkeep, and release-adjacent verification.
+This guide is for contributors and maintainers making source, docs, test, release, or operator-surface changes in the standalone `SpeakSwiftlyServer` repository.
 
-## Before You Start
+### Before You Start
 
 - Treat `Package.swift` as the source of truth for package structure, dependencies, resources, and deployment targets.
-- Prefer `swift package` subcommands for structural edits when SwiftPM already exposes the right operation.
-- Keep package graph changes together in one pass, including `Package.swift`, `Package.resolved`, target layout, tests, and matching docs.
+- Start with [AGENTS.md](./AGENTS.md) for the repo's package, architecture, and workflow rules.
+- Keep package graph changes together in one pass, including `Package.swift`, `Package.resolved`, tests, and matching docs.
 - Keep transport-local shaping at the HTTP and MCP edges. If `SpeakSwiftly` or `TextForSpeech` can express a concept directly, prefer deleting server-local inference instead of adding another translation layer.
-- Keep the current standalone package baseline on macOS 15 while preserving a clean near-future iOS reuse path for the host and state model.
+- Preserve the current standalone package baseline on macOS 15 while keeping the host and state model friendly to the near-future iOS reuse path.
 
-## Documentation Map
+## Contribution Workflow
 
-- [README.md](README.md) is the operator-facing entrypoint.
-- [API.md](API.md) is the detailed HTTP and MCP contract reference.
-- [docs/maintainers/source-layout.md](docs/maintainers/source-layout.md) is the maintainer map for the current source split.
-- [docs/maintainers/release-workflow.md](docs/maintainers/release-workflow.md) is the maintainer release contract for feature branches, worktrees, and the final publish step on `main`.
-- [docs/maintainers/docc-spi-hosting-plan.md](docs/maintainers/docc-spi-hosting-plan.md) tracks the first DocC pass and the SPI-hosted documentation plan.
-- [ROADMAP.md](ROADMAP.md) tracks planned work and release-gate follow-through.
+### Choosing Work
 
-When the HTTP, MCP, LaunchAgent, release, or source-layout story changes, update the matching docs in the same pass instead of leaving the repo half-realigned.
+Choose work from the current repo state rather than from stale assumptions. Use [README.md](./README.md) for the product and operator story, [ROADMAP.md](./ROADMAP.md) for planned work, and the maintainer docs under [docs/maintainers](./docs/maintainers/) when the task touches releases, source layout, or transport behavior.
 
-## Local Workflow
+For substantial changes, work on a feature branch instead of local `main`. When a task already has active release or bug-fix context on a branch, keep the follow-on work stacked on that line unless maintainers explicitly want a separate branch.
 
-The default first-pass package validation path is still:
+### Making Changes
+
+Use the `xcrun` SwiftPM path intentionally in this repository:
 
 ```bash
 xcrun swift build
 xcrun swift test
 ```
 
-Use the `xcrun` form intentionally. In this repo, the standalone Swiftly-selected Swift 6.3 toolchain currently reproduces a transitive `_NumericsShims` module-loading failure that does not appear when SwiftPM runs through Xcode's selected toolchain.
+This repo documents the `xcrun` form because the standalone Swiftly-selected Swift 6.3 toolchain currently reproduces a transitive `_NumericsShims` module-loading failure that does not appear when SwiftPM runs through Xcode's selected toolchain.
 
-The maintainer wrapper around that baseline is:
+Keep work bounded and coherent:
+
+- keep transport concerns at the HTTP and MCP edges
+- keep host ownership narrow instead of adding new coordinator layers casually
+- update docs in the same pass when HTTP, MCP, LaunchAgent, release, or source-layout behavior changes
+- prefer the repo-maintenance scripts over one-off release or validation command chains when the repo already owns a workflow
+
+### Asking For Review
+
+Before asking for review, make sure the affected docs are in sync, the local validation path for the change has run, and any release-relevant or operator-facing behavior changes are called out plainly. For release work, use the documented branch-to-`main` split instead of trying to tag directly from a feature branch.
+
+## Local Setup
+
+### Runtime Config
+
+The concrete runtime config surfaces in this repo are:
+
+- [`server.yaml`](./server.yaml) for local config examples
+- `APP_CONFIG_FILE` for YAML-backed configuration
+- `SPEAKSWIFTLY_PROFILE_ROOT` for the runtime-owned profile and persistence root
+- the staged release artifact under `.release-artifacts/current/` for LaunchAgent-owned runs
+
+The shared server supports the same environment variables documented in [README.md](./README.md#configuration), including the `APP_*` transport settings and `SPEAKSWIFTLY_PROFILE_ROOT`.
+
+### Runtime Behavior
+
+The default local package workflow is:
 
 ```bash
-scripts/repo-maintenance/validate-all.sh
+xcrun swift build
+xcrun swift test
 ```
 
-## Formatting
+Use the unified tool surface when you want to inspect the operator path directly:
 
-SpeakSwiftlyServer uses the checked-in [.swiftformat](.swiftformat) file as the repository source of truth for Swift formatting and the checked-in [.swiftlint.yml](.swiftlint.yml) file for a deliberately small set of non-formatting policy checks.
+```bash
+xcrun swift run SpeakSwiftlyServerTool help
+xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist
+xcrun swift run SpeakSwiftlyServerTool healthcheck
+```
 
-Use these commands from the package root:
+Before any live end-to-end run, stop the LaunchAgent-backed live service first:
+
+```bash
+./.release-artifacts/current/SpeakSwiftlyServerTool launch-agent uninstall
+```
+
+That matters because the live E2E harness is intentionally a one-speaking-server surface. The helper now fails fast when the LaunchAgent-backed service is still loaded or when a competing `SpeakSwiftlyServerTool serve` process is already running.
+
+## Development Expectations
+
+### Naming Conventions
+
+Keep user-facing lifecycle vocabulary consistent across docs, scripts, and commands. In this repo that means preferring pairs like `install` and `uninstall`, using `promote-live` for staged-to-live promotion, and avoiding alternate verbs for the same operator action unless a compatibility surface already requires them.
+
+Match the current boundary language in the code:
+
+- `EmbeddedServer` is the public app-owned embedding surface
+- transport-local shaping belongs at the HTTP and MCP edges
+- internal host ownership should stay behind the package boundary instead of leaking new public helpers casually
+
+### Accessibility Expectations
+
+This repository does not currently maintain a separate top-level `ACCESSIBILITY.md`. For relevant work, treat accessibility and operator clarity as part of normal change quality: keep user-facing logs, errors, and documentation explicit, readable, and unambiguous, and call out any new user-visible limitation plainly in docs or review notes when it matters.
+
+### Verification
+
+The maintainer validation entrypoint is:
 
 ```bash
 sh scripts/repo-maintenance/validate-all.sh
+```
+
+Direct formatter and linter commands are:
+
+```bash
 swiftformat --lint --config .swiftformat .
 swiftformat --config .swiftformat .
 swiftlint lint --config .swiftlint.yml
 ```
 
-Use `validate-all.sh` when you want the shared repo-maintenance gate that backs the sample pre-commit hook and the repo-maintenance GitHub Actions workflow. Use the first `swiftformat` command when you want to inspect formatting drift without rewriting files. Use the second `swiftformat` command when you intentionally want to apply formatting changes. Use the SwiftLint command for the smaller safety and maintainability checks that intentionally stay outside SwiftFormat.
-
-Treat SwiftFormat as the primary style tool in this repository. Keep SwiftLint focused on non-formatting policy checks instead of duplicating formatter behavior.
-
-Use the unified tool smoke path when you want to verify the operator surface directly:
-
-```bash
-xcrun swift run SpeakSwiftlyServerTool help
-xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist
-```
-
-The `help` path now also has CI coverage so obvious executable-surface regressions are less likely to escape into release or Swift Package Index builds. The `help` path is expected to exit with the tool's usage-error status while still printing the supported command surface.
-
-If your local clone wants automatic hook enforcement, copy `scripts/repo-maintenance/hooks/pre-commit.sample` into `.git/hooks/pre-commit` and make it executable. That hook intentionally stays optional, but it runs the same validation entry point as the repo-maintenance workflow.
-
-## Live End-To-End Verification
-
-The opt-in live E2E coverage now runs as three serialized suites so maintainers can isolate transport and runtime failures without burning time on one giant rerun:
+The full live end-to-end gate should be run one suite at a time, in separate foreground commands:
 
 ```bash
 SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter HTTPWorkflowE2ETests
@@ -80,56 +137,45 @@ SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter MCPWorkflowE2ETests
 SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ControlE2ETests
 ```
 
-Run those commands one at a time, in separate foreground processes, and never overlap them. Do not background one suite while starting another, and do not run the HTTP, MCP, or control suites in parallel.
+Do not overlap those suites or run the full live target as one giant parallelized process. The repo's live E2E surface is intentionally a serial, one-suite-at-a-time gate.
 
-Before any live E2E run, stop the LaunchAgent-backed live service first:
+## Pull Request Expectations
 
-```bash
-./.release-artifacts/current/SpeakSwiftlyServerTool launch-agent uninstall
-```
+Summarize what changed, why it changed, and what reviewers should pay attention to first. For release work, make sure the branch-side candidate preparation is complete before handing it off to `main` for the final publish step.
 
-That shutdown step matters because the live service and the test-owned helper can both speak audible test strings if they are alive together. The harness now fails fast when the LaunchAgent-backed service is still loaded or when another `SpeakSwiftlyServerTool serve` helper is already running, because live E2E coverage is intentionally a one-speaking-server surface.
+## Communication
 
-Add `SPEAKSWIFTLY_PLAYBACK_TRACE=1` when you want the underlying playback trace logs too.
+Raise uncertainty early when a task starts pushing on architecture, release semantics, or live-service behavior. If the clean path needs wider scope than the original request, say so before the change sprawls. If a behavior changed across docs, HTTP, MCP, LaunchAgent, or embedding surfaces, mention that explicitly instead of assuming reviewers will reconstruct it from the diff.
 
-The suite split is:
+## Documentation Map
 
-- `HTTP Workflow Entry`
-  Covers HTTP voice-design entry, HTTP clone entry with provided or inferred transcripts, HTTP Marvis audible live playback, and HTTP relative-path resolution.
-- `MCP Workflow Entry`
-  Covers the same entry and audible-runtime lanes through the MCP transport.
-- `Control Surfaces`
-  Covers HTTP and MCP text-profile control, playback control, queue mutation, catalog resources, prompts, and subscription behavior.
+- [README.md](./README.md) is the product and operator-facing entrypoint.
+- [API.md](./API.md) is the detailed HTTP and MCP contract reference.
+- [docs/maintainers/source-layout.md](./docs/maintainers/source-layout.md) is the maintainer map for the current source split.
+- [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md) is the branch-versus-`main` release contract.
+- [docs/maintainers](./docs/maintainers/) holds release checklists, release notes, and other maintainer-facing supporting docs.
 
-The checked-in `Tests/SpeakSwiftlyServer-Package-E2E.xctestplan` is the dedicated live E2E plan for the `SpeakSwiftlyServerE2ETests` target, while `Tests/SpeakSwiftlyServer-Package-Main.xctestplan` stays on the non-E2E targets. The suite-level `.serialized` traits in `Tests/SpeakSwiftlyServerE2ETests/E2ESuite.swift` keep each suite ordered within a process, and the helper-side execution-lane lock keeps separate live E2E processes from owning the speaking server at the same time.
-
-The live audible harness pins macOS built-in speakers immediately before audible startup and again immediately before audible request submission so Bluetooth route changes do not create false negatives.
-
-## Source Layout
-
-The shared runtime entrypoint lives in `Sources/SpeakSwiftlyServer/SpeakSwiftlyServer.swift`, and the unified executable wrapper lives in `Sources/SpeakSwiftlyServerTool/SpeakSwiftlyServerToolMain.swift`.
-
-For the current split of host, HTTP, MCP, model, and test files, use [docs/maintainers/source-layout.md](docs/maintainers/source-layout.md) instead of re-deriving ownership from file names ad hoc. If a change starts mixing HTTP, MCP, LaunchAgent, and host-state concerns into one file again, split it before adding more cases.
-
-## Release Workflow
-
-Use the repo-maintenance toolkit's release split intentionally:
-
-```bash
-scripts/repo-maintenance/release-prepare.sh --version vX.Y.Z
-scripts/repo-maintenance/release-publish.sh --version vX.Y.Z --skip-live-service-refresh
-```
-
-Use `release-prepare.sh` from a feature branch or worktree when the job is "push this release candidate, open or update the PR, and queue auto-merge." Use `release-publish.sh` from local `main` after that PR merges when the job is "cut the actual tag and GitHub release." The compatibility wrapper `release.sh` now defaults to the publish path and refuses to run from a non-release branch.
-
-The publish path builds `SpeakSwiftlyServerTool` in `release` mode, stages the binary under `.release-artifacts/<tag>/SpeakSwiftlyServerTool`, copies the adjacent `Resources/default.metallib` into that staged artifact directory, refreshes `.release-artifacts/current` to the tagged build, tags `HEAD`, pushes the tag, creates the GitHub release, and can refresh the live per-user LaunchAgent-backed service by default with `~/Library/Application Support/SpeakSwiftlyServer/server.yaml`. Use `--skip-live-service-refresh` when you need a tag-only or artifact-only release pass, or `--live-service-config-file /absolute/path/to/server.yaml` when the live service should be refreshed against a different config file.
-
-For the current release contract, use [docs/maintainers/release-workflow.md](docs/maintainers/release-workflow.md). For the historical patch release target and the first Swift Package Index submission pass, use [docs/maintainers/v3.1.1-release-and-spi-checklist.md](docs/maintainers/v3.1.1-release-and-spi-checklist.md) instead of reconstructing that older flow from memory.
-
-## Monorepo And Submodule Handoff
+## Monorepo and Submodule Handoff
 
 - Treat `../../speak-to-user/monorepo/packages/SpeakSwiftlyServer` as the integration submodule copy, not the primary development home.
 - Treat the local `../../speak-to-user/monorepo` checkout as a clean base checkout that stays on `main` and stays clean.
 - Never use that clean base checkout for feature work, experiments, release bumps, or submodule-pointer edits.
 - For monorepo work, create a dedicated `git worktree`, do the work there, open a pull request, and then delete the merged worktree and branch afterward.
 - When `speak-to-user` adopts a new server version, prefer updating the submodule pointer to a tagged `SpeakSwiftlyServer` release instead of an arbitrary branch tip.
+
+## Release Workflow
+
+Use the repo-maintenance release split intentionally:
+
+```bash
+scripts/repo-maintenance/release-prepare.sh --version vX.Y.Z
+scripts/repo-maintenance/release-publish.sh --version vX.Y.Z --skip-live-service-refresh
+```
+
+Use `release-prepare.sh` from a feature branch or worktree when the job is "push this release candidate, open or update the PR, and queue auto-merge." Use `release-publish.sh` from local `main` after that PR merges when the job is "cut the actual tag and GitHub release."
+
+For the detailed contract and edge cases, use [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md).
+
+## License and Contribution Terms
+
+This repository is licensed under [Apache License 2.0](./LICENSE). By contributing, you are contributing changes under that same project license.
