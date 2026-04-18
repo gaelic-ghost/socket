@@ -90,4 +90,4 @@ At this point, the remaining surface work should stay focused on clarity rather 
 
 1. keep trimming any server-local wrappers that do not add real transport clarity now that the runtime overview, jobs, artifacts, and text-normalizer APIs are all directly available
 2. keep README and maintainer docs synchronized whenever the resolved `SpeakSwiftly` version or MCP surface changes
-3. keep live E2E coverage pointed at the current HTTP and MCP names so release verification proves the actual shipped operator surface
+3. keep the small live E2E smoke suite pointed at the current HTTP and MCP names so release verification proves the actual shipped transport surface

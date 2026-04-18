@@ -221,12 +221,12 @@ Use that guide for:
 
 - `Sources/SpeakSwiftlyServer/` contains the reusable library target.
 - `Sources/SpeakSwiftlyServerTool/` contains the unified executable wrapper.
-- `Tests/` contains unit, integration, and opt-in live E2E coverage.
+- `Tests/` contains unit, integration, and a small opt-in live E2E smoke suite.
 - `docs/` contains maintainer-facing supporting documentation.
 
 ## Release Notes
 
-Tagged release notes live in [GitHub Releases](https://github.com/gaelic-ghost/SpeakSwiftlyServer/releases) and the repo keeps matching maintainer-facing release notes and checklists under [docs/maintainers](./docs/maintainers/).
+Tagged release notes live in [GitHub Releases](https://github.com/gaelic-ghost/SpeakSwiftlyServer/releases) and the repo keeps matching historical release notes and release checklists under [docs/releases](./docs/releases/). Investigations and incident writeups live under [docs/investigations](./docs/investigations/).
 
 ## License
 

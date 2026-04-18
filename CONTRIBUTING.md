@@ -33,7 +33,7 @@ This guide is for contributors and maintainers making source, docs, test, releas
 
 ### Choosing Work
 
-Choose work from the current repo state rather than from stale assumptions. Use [README.md](./README.md) for the product and operator story, [ROADMAP.md](./ROADMAP.md) for planned work, and the maintainer docs under [docs/maintainers](./docs/maintainers/) when the task touches releases, source layout, or transport behavior.
+Choose work from the current repo state rather than from stale assumptions. Use [README.md](./README.md) for the product and operator story, [ROADMAP.md](./ROADMAP.md) for planned work, the active maintainer docs under [docs/maintainers](./docs/maintainers/) when the task touches current architecture or workflow, the historical release records under [docs/releases](./docs/releases/) when you need prior release context, and [docs/investigations](./docs/investigations/) when you need past incident or debugging context.
 
 For substantial changes, work on a feature branch instead of local `main`. When a task already has active release or bug-fix context on a branch, keep the follow-on work stacked on that line unless maintainers explicitly want a separate branch.
 
@@ -129,15 +129,13 @@ swiftformat --config .swiftformat .
 swiftlint lint --config .swiftlint.yml
 ```
 
-The full live end-to-end gate should be run one suite at a time, in separate foreground commands:
+The live end-to-end gate is intentionally small and should still be run in one foreground process at a time:
 
 ```bash
-SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter HTTPWorkflowE2ETests
-SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter MCPWorkflowE2ETests
-SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ControlE2ETests
+SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ServerTransportE2ETests
 ```
 
-Do not overlap those suites or run the full live target as one giant parallelized process. The repo's live E2E surface is intentionally a serial, one-suite-at-a-time gate.
+This suite is a transport-owned smoke pass, not a second copy of SpeakSwiftly's broader worker end-to-end coverage. Keep this repo's live E2E focused on proving the shipped server can boot the published runtime, answer over HTTP and MCP, deliver MCP resource updates, and retain completed request state.
 
 ## Pull Request Expectations
 
@@ -153,7 +151,9 @@ Raise uncertainty early when a task starts pushing on architecture, release sema
 - [API.md](./API.md) is the detailed HTTP and MCP contract reference.
 - [docs/maintainers/source-layout.md](./docs/maintainers/source-layout.md) is the maintainer map for the current source split.
 - [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md) is the branch-versus-`main` release contract.
-- [docs/maintainers](./docs/maintainers/) holds release checklists, release notes, and other maintainer-facing supporting docs.
+- [docs/maintainers](./docs/maintainers/) holds active maintainer-facing architecture, workflow, and cleanup notes.
+- [docs/releases](./docs/releases/) holds historical release notes and release checklists.
+- [docs/investigations](./docs/investigations/) holds historical investigations and incident writeups.
 
 ## Monorepo and Submodule Handoff
 

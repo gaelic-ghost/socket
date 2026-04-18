@@ -4,6 +4,8 @@
 
 This document is the maintainer map for the current `SpeakSwiftly 3.x`-aligned source split. The goal is to keep future cleanup, review, and feature work landing in the smallest file family that already owns the relevant concern, instead of letting `ServerHost.swift`, one host extension, or one mixed test file grow back into a monolith.
 
+Historical release artifacts belong under [`docs/releases`](../releases/), and historical debugging writeups belong under [`docs/investigations`](../investigations/), not beside the active maintainer maps in this directory.
+
 ## Host Sources
 
 - `Sources/SpeakSwiftlyServer/EmbeddedLifecycleServices.swift`
@@ -67,14 +69,12 @@ This document is the maintainer map for the current `SpeakSwiftly 3.x`-aligned s
   Keep configuration, lifecycle, and shared-state coverage independent instead of mixing them into one broad host suite.
 - `Tests/SpeakSwiftlyServerTests/MockRuntime.swift` plus the `MockRuntime+*.swift` extensions
   Keep the typed-runtime test double split by text profiles, speech generation, runtime controls, retained artifacts, and test-only control hooks.
-- `Tests/SpeakSwiftlyServerE2ETests/E2ESuite.swift` plus the `E2E*Lane.swift`, `SpeakSwiftlyServerE2E*Helpers.swift`, `E2EWorkflowEntryTests.swift`, and `E2E*ControlTests.swift` files
-  Keep the live `HTTP Workflow Entry`, `MCP Workflow Entry`, and `Control Surfaces` suites separate so maintainers can rerun the smallest failing surface instead of one giant serialized pass.
+- `Tests/SpeakSwiftlyServerE2ETests/E2ESuite.swift`, `E2ETransportSmokeTests.swift`, and the `SpeakSwiftlyServerE2E*Helpers.swift` files
+  Keep the live target as one small transport-owned smoke suite that proves server boot, one real HTTP request, one real MCP resource update, and retained request inspection without duplicating SpeakSwiftly's worker-owned E2E matrix here.
 - `Tests/SpeakSwiftlyServerE2ETests/E2EHTTPClient.swift`, `E2EMCPClient.swift`, and `E2EMCPEventStream.swift`
   Keep the live HTTP transport, MCP request transport, and MCP SSE stream handling separate so transport bugs do not regrow one giant helper file.
 - `Tests/SpeakSwiftlyServerE2ETests/E2EPayloadHelpers.swift` and `E2ETransportWaiters.swift`
   Keep JSON or JSON-RPC decoding, polling waiters, and stored-profile manifest loading split by responsibility instead of mixing transport and payload utilities.
-- `Tests/SpeakSwiftlyServerE2ETests/SpeakSwiftlyServerE2EAudioRouteHelpers.swift`
-  Keeps audible-suite-only CoreAudio route stabilization out of the request and lane helpers so the machine-level workaround stays obvious and isolated.
 
 ## Plugin And Skill Sources
 

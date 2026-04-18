@@ -81,9 +81,8 @@ let package = Package(
         .testTarget(
             name: "SpeakSwiftlyServerE2ETests",
             dependencies: [
-                // Keep the live Marvis server suite on the same MLX runtime stack as
-                // SpeakSwiftly's upstream Marvis e2e coverage so model-loading behavior
-                // stays deterministic across the two repositories.
+                // Keep the live server smoke suite on the same MLX runtime stack as
+                // the published SpeakSwiftly runtime this package launches in-process.
                 .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
                 "SpeakSwiftlyServer",
                 .product(name: "MCP", package: "swift-sdk"),

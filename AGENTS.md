@@ -63,5 +63,8 @@
 
 - Keep `README.md`, maintainer docs, and release guidance aligned with the current public transport and install surfaces.
 - Use repository docs to describe the real current command path and artifact layout; do not leave scaffold wording or guessed maintenance files behind.
+- Keep active workflow, architecture, and cleanup guidance under `docs/maintainers/`.
+- Keep historical release notes and release checklists under `docs/releases/`.
+- Keep investigations, incident writeups, and debugging forensics under `docs/investigations/`.
 - When the source split changes meaningfully, refresh `docs/maintainers/source-layout.md` in the same pass.
 - When the HTTP, MCP, LaunchAgent, or release workflow changes, update the operator-facing docs in the same change instead of deferring that cleanup.

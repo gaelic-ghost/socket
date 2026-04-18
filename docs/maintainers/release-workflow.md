@@ -4,6 +4,8 @@
 
 This document is the maintainer-facing release contract for the standalone `SpeakSwiftlyServer` repository.
 
+Historical release notes and release checklists live under [`docs/releases`](../releases/). Keep this file focused on the current release process rather than per-release records.
+
 The release surface is intentionally split by checkout authority:
 
 - use `release-prepare.sh` from a feature branch or worktree when the job is "validate this release candidate, push it, open or update the PR, and queue auto-merge"
@@ -122,7 +124,15 @@ If you accidentally made the release-candidate commits directly on local `main`,
 1. switch to `main`
 2. ensure the checkout is clean
 3. run `release-publish.sh --version vX.Y.Z`
-4. optionally run the staged health verification or live-service refresh path
+4. run the current transport smoke gate or equivalent post-publish health verification
+
+The current opt-in live E2E gate is:
+
+```bash
+SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ServerTransportE2ETests
+```
+
+Use that smoke suite when you want one repo-owned proof that the shipped server can still boot the published runtime and answer over both HTTP and MCP. For the full maintainer verification path, pair it with the staged healthcheck and any live-service refresh steps documented in [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Defaults
 
