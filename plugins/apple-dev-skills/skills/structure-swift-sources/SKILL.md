@@ -12,7 +12,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 ## When To Use
 
 - Use this skill when the user wants to split oversized Swift files or move files into a clearer repo layout.
-- Use this skill when the user wants consistent `// MARK:` sections, declaration grouping, or view-modifier extraction in SwiftUI code.
+- Use this skill when the user wants high-signal `// MARK:` sections, declaration grouping, or view-modifier extraction in SwiftUI code.
 - Use this skill when the user wants consistent block-comment file headers that describe a file's purpose and area of concern in plain terms.
 - Use this skill when the user wants structured project-and-file banner headers with deterministic project, filename, copyright, and optional cross-reference fields.
 - Use this skill when the user wants TODO or FIXME text moved out of source files into repo ledger files.
@@ -52,7 +52,11 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - strongly consider splitting a file once it exceeds the configured soft split threshold and clearly holds `2` or more separate concerns
    - always split a file once it exceeds the configured hard split threshold
    - when the underlying type is still one coherent type, extract grouped concerns into extension files such as `<Original>+Models.swift` or `<Original>+<Concern>.swift`
-   - group declarations into explicit `// MARK: - <Heading>` sections, then place a descriptive secondary `// MARK: <Comment>` line directly below each heading
+   - add `// MARK:` groups only when a file is large enough or varied enough that the grouping materially improves navigation, concern ownership, or declaration discovery
+   - skip `// MARK:` groups entirely when a short file or an already-obvious declaration run does not present meaningful navigation ambiguity
+   - when groups are warranted, use explicit `// MARK: - <Heading>` sections that name a real responsibility boundary instead of restating declaration kinds or symbol names in slightly different words
+   - add a secondary `// MARK: <Comment>` line only when it answers a useful navigation question such as why this section exists, what job it serves, or how it differs from nearby sections
+   - never use headings or secondary comments that just restate an obvious type, symbol, or method name, narrate intuitive code in a small file, or pad the file with redundant structure
    - require or recommend the documented project-and-file banner header according to the effective header policy
    - keep `Concern` and `Purpose` text in plain terms that explain what the file owns and what job it does, instead of repeating the filename or symbol names as jargon
    - treat `Key Types` and `See Also` as optional high-signal fields rather than mandatory filler

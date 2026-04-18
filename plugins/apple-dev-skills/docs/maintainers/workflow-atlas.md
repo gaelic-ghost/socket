@@ -679,6 +679,7 @@ flowchart TD
   - The user asks to split large Swift files, normalize Swift repo layout, add DocC comments, add MARK sections, or move TODO/FIXME text into ledger files.
 - Agent behavior:
   - The agent confirms the formatting baseline, resolves the repo shape, chooses the structural path, and only then performs the cleanup or recommends the narrower safe scope.
+  - For `// MARK:` cleanup, the agent should prefer omission over low-signal structure: only add headings or secondary comments when they answer real navigation questions about responsibility, purpose, or boundaries inside a large or mixed file.
 - User-visible response:
   - On success: the user sees the structural path, affected layout targets, ledger files, and one verification step.
   - On fallback: the user sees why the scope narrowed to one file or one feature area.
