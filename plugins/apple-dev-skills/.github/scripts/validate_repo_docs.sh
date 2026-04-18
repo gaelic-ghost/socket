@@ -26,6 +26,7 @@ echo "Validating roadmap presence..."
 
 echo "Validating root docs presence..."
 [[ -f README.md ]] || fail "Missing README.md at repo root."
+[[ -f CONTRIBUTING.md ]] || fail "Missing CONTRIBUTING.md at repo root."
 [[ -f AGENTS.md ]] || fail "Missing AGENTS.md at repo root."
 [[ -f docs/maintainers/workflow-atlas.md ]] || fail "Missing docs/maintainers/workflow-atlas.md."
 [[ -f docs/maintainers/reality-audit.md ]] || fail "Missing docs/maintainers/reality-audit.md."
@@ -45,8 +46,17 @@ require_contains "README.md" 'This repository is the canonical source of truth f
 require_contains "README.md" 'Treat root [`skills/`](./skills/) as the canonical authored surface.'
 require_contains "README.md" 'Keep shared reusable assets in [`shared/`](./shared/)'
 require_contains "README.md" 'Run the repository test suite for skill and metadata changes:'
+require_contains "README.md" 'Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details'
 require_not_contains "README.md" 'plugins/apple-dev-skills/'
 require_not_contains "README.md" 'install-plugin-to-socket'
+
+echo "Validating CONTRIBUTING contract..."
+require_contains "CONTRIBUTING.md" 'Use this guide when preparing changes so the repository stays understandable, testable, and truthful about the Apple workflow surface it actually ships.'
+require_contains "CONTRIBUTING.md" '## Contribution Workflow'
+require_contains "CONTRIBUTING.md" '## Local Setup'
+require_contains "CONTRIBUTING.md" '## Development Expectations'
+require_contains "CONTRIBUTING.md" 'bash .github/scripts/validate_repo_docs.sh'
+require_contains "CONTRIBUTING.md" 'uv run pytest'
 
 echo "Validating AGENTS contract..."
 require_contains "AGENTS.md" 'This repository is the canonical home for Gale'"'"'s Apple, Swift, and Xcode workflow skills.'
@@ -85,6 +95,7 @@ require_contains "$audit_doc" "## Audit Procedure"
 require_contains "$audit_doc" "## Local Discovery Smoke Test Flow"
 require_contains "$audit_doc" "## Reporting Shape"
 require_contains "$audit_doc" 'this repository'"'"'s shipped Apple plugin owns the end-user toolkit contract'
+require_contains "$audit_doc" 'Historical milestone planning decisions that no longer need standalone docs should live in `ROADMAP.md`'
 require_not_contains "$audit_doc" 'plugins/apple-dev-skills/'
 
 echo "Validating customization consolidation review..."

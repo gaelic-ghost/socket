@@ -95,7 +95,7 @@ After the import:
 - if it does, locate the real packaged plugin root before touching the socket marketplace
 - re-check `.agents/plugins/marketplace.json`
 - re-check `README.md`
-- re-check `docs/maintainers/subtree-migration-plan.md`
+- re-check `ROADMAP.md`
 - remove stale duplicated packaging if the import introduced a second surviving copy of an already present child plugin
 
 ## Root Marketplace Rules

@@ -20,12 +20,7 @@ This guide is for contributors working on the `socket` superproject layer itself
 
 ### Before You Start
 
-Before starting work:
-
-- read the root [README.md](./README.md) and [AGENTS.md](./AGENTS.md)
-- confirm whether the task belongs in the root superproject or in a specific child repository
-- if the work affects subtree-managed children, use the documented subtree workflow instead of improvising a mixed root-and-child change
-- if the change affects root docs, marketplace wiring, or maintainer automation, plan to update the relevant root docs in the same pass
+Read the root [README.md](./README.md) and [AGENTS.md](./AGENTS.md), confirm whether the task belongs in the root superproject or in a specific child repository, and if the work affects subtree-managed children use the documented subtree workflow instead of improvising a mixed root-and-child change. If the change affects root docs, marketplace wiring, or maintainer automation, plan to update the relevant root docs in the same pass.
 
 ## Contribution Workflow
 
@@ -42,14 +37,7 @@ If the change is really about one child repository's own skills, packaging, test
 
 ### Making Changes
 
-Keep changes bounded to one coherent root concern at a time. Common safe shapes are:
-
-- docs-only root alignment
-- marketplace-path or manifest-alignment fixes
-- root validation improvements
-- root subtree-workflow documentation updates
-
-For ordinary work in monorepo-owned child directories, edit the copy in `plugins/<repo>/` directly from this checkout. For `apple-dev-skills` and `python-skills`, keep subtree pull and push operations explicit and separate from unrelated edits.
+Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. For ordinary work in monorepo-owned child directories, edit the copy in the relevant directory under `plugins/` directly from this checkout. For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree pull and push operations explicit and separate from unrelated edits.
 
 ### Asking For Review
 

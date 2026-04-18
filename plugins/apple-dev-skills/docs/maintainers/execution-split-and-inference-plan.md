@@ -50,7 +50,7 @@ Skills that remain separate and keep their current high-level role:
 
 No guidance currently carried by `xcode-app-project-workflow` or `swift-package-workflow` should be dropped during the split.
 
-Use [workflow-guidance-preservation-matrix.md](./workflow-guidance-preservation-matrix.md) as the concrete line-by-line mapping during implementation.
+The line-by-line preservation work from the split is now reflected directly in the shipped narrower skills, the synced and bootstrapped `AGENTS.md` assets, and the repo validator. Keep this document as the durable narrative for that split instead of reviving a separate guidance-preservation matrix file.
 
 The split must preserve every active guidance area in one of these forms:
 

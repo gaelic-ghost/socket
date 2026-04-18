@@ -23,7 +23,7 @@ Root `skills/` is the canonical workflow-authoring surface.
    - `AGENTS.md`
    - `ROADMAP.md`
    - `docs/maintainers/`
-   - especially `execution-split-and-inference-plan.md` and `workflow-guidance-preservation-matrix.md` when validating compatibility surfaces and guidance-preservation rules
+   - especially `execution-split-and-inference-plan.md` when validating compatibility surfaces and guidance-preservation rules
 
 Deprecated compatibility skills that remain on disk do not count as part of the active public skill surface unless the validator and root docs explicitly say otherwise.
 
@@ -76,7 +76,7 @@ Use this flow when validating the current top-level export surface and local dis
 - Audit procedure and source-of-truth order: `docs/maintainers/reality-audit.md`
 - Customization-surface decision and follow-up plan: `docs/maintainers/customization-consolidation-review.md`
 - Execution-skill split, inference plan, and guidance-preservation contract: `docs/maintainers/execution-split-and-inference-plan.md`
-- DocC skill scope and first-slice implementation plan: `docs/maintainers/author-swift-docc-docs-plan.md`
+- Historical milestone planning decisions that no longer need standalone docs should live in `ROADMAP.md` under the milestone body or `History`.
 
 ## Reporting Shape
 
