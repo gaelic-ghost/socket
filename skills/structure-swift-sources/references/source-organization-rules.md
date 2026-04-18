@@ -18,10 +18,13 @@
 
 ## MARK Rules
 
-- Every Swift file should be organized into section groups.
-- Each group should start with `// MARK: - <Heading>`.
-- Place a descriptive secondary line immediately below it as `// MARK: <Comment>`.
-- Group declarations by declaration kind or responsibility rather than by arbitrary source order.
+- Use section groups only when they add real navigation value inside a file that is large enough, mixed enough, or layered enough to justify them.
+- Do not force section groups into small or already-obvious files just to satisfy a formatting pattern.
+- When a group is warranted, start it with `// MARK: - <Heading>`.
+- Use headings that identify a meaningful responsibility, boundary, or decision surface instead of lightly rephrasing symbol names or obvious declaration kinds.
+- Add a secondary line immediately below it as `// MARK: <Comment>` only when that extra line answers a useful question such as why the section exists, what it is for, or how it differs from neighboring sections.
+- Skip the secondary comment line when the heading already says enough and no deeper navigational distinction needs explanation.
+- Group declarations by responsibility or navigational intent rather than by arbitrary source order.
 
 ## File Header Rule
 
