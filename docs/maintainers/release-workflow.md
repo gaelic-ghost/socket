@@ -37,9 +37,9 @@ Run:
 scripts/repo-maintenance/release-prepare.sh --version vX.Y.Z
 ```
 
-That path validates the repo unless told not to, stages the candidate artifact under `.release-artifacts/<tag>`, pushes the current branch, opens or updates the pull request, and enables auto-merge by default.
+That path validates the repo unless told not to, pushes the current branch, opens or updates the pull request, and enables auto-merge by default.
 
-It does **not** create the release tag or GitHub release object.
+It does **not** stage release artifacts, create the release tag, or create the GitHub release object.
 
 ### Local Worktree
 
@@ -114,7 +114,7 @@ Behavior:
 1. finish the release candidate work on a feature branch
 2. keep the worktree clean
 3. run `release-prepare.sh --version vX.Y.Z`
-4. let GitHub checks run
+4. let the authoritative maintainer validation check run
 5. let auto-merge land the PR
 
 If you accidentally made the release-candidate commits directly on local `main`, branch from that tip before continuing so the rest of the workflow still goes through `release-prepare.sh` and a normal PR merge.
@@ -133,6 +133,22 @@ SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ServerTransportE2ETests
 ```
 
 Use that smoke suite when you want one repo-owned proof that the shipped server can still boot the published runtime and answer over both HTTP and MCP. For the full maintainer verification path, pair it with the staged healthcheck and any live-service refresh steps documented in [CONTRIBUTING.md](../../CONTRIBUTING.md).
+
+## CI Shape
+
+The repository now uses one authoritative GitHub validation workflow:
+`.github/workflows/validate-repo-maintenance.yml`.
+
+That workflow installs the local formatting and linting tools and then runs
+`scripts/repo-maintenance/validate-all.sh`, which in turn covers:
+
+- the default package lane (`xcrun swift build` and `xcrun swift test`)
+- the repo-owned CLI smoke checks
+- DocC generation
+- formatting and lint checks
+
+Keep new required validation inside `validate-all.sh` unless there is a clear reason a
+separate GitHub-only workflow must own it.
 
 ## Defaults
 
