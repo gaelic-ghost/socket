@@ -94,6 +94,24 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             )
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
 
+    def test_generated_repo_maintenance_validation_uses_repo_self_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            code, payload = self.run_script("--repo-root", tmpdir)
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+
+            subprocess.run(["git", "init"], cwd=tmpdir, check=True, capture_output=True, text=True)
+            proc = subprocess.run(
+                ["sh", "scripts/repo-maintenance/validate-all.sh"],
+                cwd=tmpdir,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
+            self.assertIn("Repo-maintenance validation completed successfully.", proc.stdout)
+
     def test_sync_appends_section_to_existing_agents(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
