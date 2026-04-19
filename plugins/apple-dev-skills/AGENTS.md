@@ -25,6 +25,14 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - If a task starts needing a new active skill, a new export surface, or a broad repo-structure change, stop and surface that scope change before continuing.
 - Collapse retired historical planning notes into `ROADMAP.md` or still-live maintainer docs instead of preserving stale standalone docs.
 
+### Sync And Branch Accounting Gates
+
+- Treat repo-sync verification and local-branch accounting as hard gates before cleanup, release closeout, or "done" claims.
+- When work in this repository is performed from the `socket` superproject or is expected to ship back through `socket`, verify whether `socket` now needs an explicit subtree sync and either complete it or say plainly why no sync is required.
+- Before saying work is merged, preserved, or safe to delete, verify the exact commit reachability in the repo and remote being discussed.
+- Before deleting local branches, remote branches, worktrees, or rescue refs, enumerate every local branch not contained by `main` and account for each one explicitly as preserved elsewhere, intentionally in progress, newly archived, newly merged, or safe to delete.
+- Do not treat branch cleanup as routine hygiene that can happen before that accounting pass.
+
 ### Source of Truth
 
 - For Swift, Apple framework, Apple platform, SwiftUI, SwiftData, Observation, AppKit, UIKit, Foundation-on-Apple, or Xcode-related guidance, require reading the relevant Apple documentation before proposing implementation changes.
@@ -81,6 +89,8 @@ Use the extra validator when a change touches the skill-creator contract or repo
 - The changed root docs, maintainer docs, validator rules, and tests all describe the same live repository behavior.
 - Grounded validation has been run or any skipped checks are called out plainly.
 - Nearby docs and roadmap history have been updated when the change retires stale planning notes or changes the public workflow contract.
+- Any required superproject or subtree sync has been completed or surfaced explicitly before cleanup.
+- Local branches not contained by `main` have been accounted for explicitly before deleting anything.
 
 ## Safety Boundaries
 

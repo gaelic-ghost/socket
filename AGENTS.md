@@ -29,6 +29,16 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated from unrelated edits.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
+### Subtree Sync And Branch Accounting Gates
+
+- Treat subtree sync completion and branch accounting as hard gates, not follow-up cleanup.
+- Before claiming a subtree-managed task is done, verify whether the corresponding child-repo work also needs an explicit `git subtree pull` or `git subtree push` in `socket`, and either perform that sync or say plainly why no sync is required.
+- Before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch that is still not contained by local `main` and account for each one explicitly as one of: already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete.
+- Do not say work is "on main", "merged", "recovered", "preserved", or "safe to clean up" until commit reachability has been verified in the exact repository and remote that statement refers to.
+- Do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until the branch-accounting pass has been completed and any non-`main` history is either merged or preserved on an explicit archive ref.
+- After a subtree sync lands, re-check `git log origin/main..main` and `git branch --no-merged main` so the superproject does not silently stay ahead with imported child-repo history or stranded local refs.
+- If a child repo release lands outside `socket`, do not consider the overall workflow complete until `socket` has either been synced to that child-repo state or the absence of a `socket` sync has been surfaced explicitly to Gale before cleanup.
+
 ### Source of Truth
 
 - Treat managed production installs such as `~/.agents/skills` as read-only deployment artifacts while working in these development repositories.
@@ -95,6 +105,8 @@ Use these commands only when the work is intentionally publishing or syncing one
 - Root docs and marketplace wiring are updated together when packaging or policy changed.
 - The root validation path ran when marketplace metadata or packaged plugin paths changed.
 - Child-repo-specific validation ran from the relevant child repo when the real change lives there.
+- Any required subtree pull or subtree push has either been completed or called out explicitly as intentionally not done.
+- Every local branch not contained by `main` has been accounted for explicitly before cleanup, and no branch or archive ref was deleted before that accounting pass finished.
 
 ## Safety Boundaries
 

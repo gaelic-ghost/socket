@@ -39,6 +39,14 @@ Use this file for durable repo-local guidance before changing code, docs, metada
 - Run the repo validation path before landing documentation or metadata changes.
 - If docs and validator behavior disagree, update them in the same pass instead of leaving a split-brain repo state.
 
+### Sync And Branch Accounting Gates
+
+- Treat repo-sync verification and local-branch accounting as hard gates before cleanup, release closeout, or "done" claims.
+- When work in this repository is performed from the `socket` superproject or is expected to ship back through `socket`, verify whether `socket` now needs an explicit subtree sync and either complete it or say plainly why no sync is required.
+- Before saying work is merged, preserved, or safe to delete, verify the exact commit reachability in the repo and remote being discussed.
+- Before deleting local branches, remote branches, worktrees, or rescue refs, enumerate every local branch not contained by `main` and account for each one explicitly as preserved elsewhere, intentionally in progress, newly archived, newly merged, or safe to delete.
+- Do not treat branch cleanup as routine hygiene that can happen before that accounting pass.
+
 ## Commands
 
 ### Setup
@@ -68,6 +76,8 @@ uv run pytest
 - Root docs reflect the current active skill inventory and packaging shape.
 - The repo root still reads as the plugin root for Codex without a second packaged subtree.
 - `uv run scripts/validate_repo_metadata.py` and `uv run pytest` pass when the touched work should affect them.
+- Any required superproject or subtree sync has been completed or surfaced explicitly before cleanup.
+- Local branches not contained by `main` have been accounted for explicitly before deleting anything.
 
 ## Safety Boundaries
 

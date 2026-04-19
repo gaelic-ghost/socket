@@ -37,6 +37,14 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Start from the bundled server docs when the task is really about FastMCP behavior, AppleScript routing, auth-token handling, or HTTP smoke flows.
 - Stop and surface the tradeoff before broadening the repo from its current two-skill scope into a larger Things automation bundle or a materially different plugin packaging model.
 
+### Sync And Branch Accounting Gates
+
+- Treat repo-sync verification and local-branch accounting as hard gates before cleanup or "done" claims.
+- When work in this repository is performed from the `socket` superproject or is expected to ship back through `socket`, verify whether `socket` now needs an explicit sync step and either complete it or say plainly why no sync is required.
+- Before saying work is merged, preserved, or safe to delete, verify the exact commit reachability in the repo and remote being discussed.
+- Before deleting local branches, remote branches, worktrees, or rescue refs, enumerate every local branch not contained by `main` and account for each one explicitly as preserved elsewhere, intentionally in progress, newly archived, newly merged, or safe to delete.
+- Do not treat branch cleanup as routine hygiene that can happen before that accounting pass.
+
 ## Commands
 
 ### Setup
@@ -96,6 +104,8 @@ make smoke-read
 - The change is grounded in the correct source-of-truth surface for the behavior you touched.
 - The relevant validation commands ran for the changed surface.
 - Nearby docs and packaging metadata were updated when behavior, install wiring, or contributor workflow changed.
+- Any required superproject or nested-repo sync has been completed or surfaced explicitly before cleanup.
+- Local branches not contained by `main` have been accounted for explicitly before deleting anything.
 
 ## Safety Boundaries
 
