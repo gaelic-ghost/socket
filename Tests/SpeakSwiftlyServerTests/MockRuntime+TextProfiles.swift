@@ -39,8 +39,7 @@ extension MockRuntime {
 
     func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails {
         if let profileID,
-           let details = try? textRuntime.profiles.get(id: profileID)
-        {
+           let details = try? textRuntime.profiles.get(id: profileID) {
             return transportDetails(details)
         }
 
@@ -56,11 +55,11 @@ extension MockRuntime {
     }
 
     func createTextProfile(named name: String) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.create(name: name))
+        try transportDetails(textRuntime.profiles.create(name: name))
     }
 
     func renameTextProfile(id profileID: String, to name: String) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.rename(profile: profileID, to: name))
+        try transportDetails(textRuntime.profiles.rename(profile: profileID, to: name))
     }
 
     func setActiveTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
@@ -78,40 +77,40 @@ extension MockRuntime {
 
     func resetTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
         try textRuntime.profiles.reset(id: profileID)
-        return transportDetails(try textRuntime.profiles.get(id: profileID))
+        return try transportDetails(textRuntime.profiles.get(id: profileID))
     }
 
     func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.addReplacement(replacement))
+        try transportDetails(textRuntime.profiles.addReplacement(replacement))
     }
 
     func addTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         toStoredTextProfileID profileID: String,
     ) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.addReplacement(replacement, toProfile: profileID))
+        try transportDetails(textRuntime.profiles.addReplacement(replacement, toProfile: profileID))
     }
 
     func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.patchReplacement(replacement))
+        try transportDetails(textRuntime.profiles.patchReplacement(replacement))
     }
 
     func replaceTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         inStoredTextProfileID profileID: String,
     ) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.patchReplacement(replacement, inProfile: profileID))
+        try transportDetails(textRuntime.profiles.patchReplacement(replacement, inProfile: profileID))
     }
 
     func removeTextReplacement(id replacementID: String) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.removeReplacement(id: replacementID))
+        try transportDetails(textRuntime.profiles.removeReplacement(id: replacementID))
     }
 
     func removeTextReplacement(
         id replacementID: String,
         fromStoredTextProfileID profileID: String,
     ) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try textRuntime.profiles.removeReplacement(id: replacementID, fromProfile: profileID))
+        try transportDetails(textRuntime.profiles.removeReplacement(id: replacementID, fromProfile: profileID))
     }
 
     private func transportSummary(
@@ -119,12 +118,12 @@ extension MockRuntime {
     ) -> SpeakSwiftly.TextProfileSummary {
         requireFixture("mock text-profile summary bridge") {
             try fixtureDecode(
-            TextProfileSummaryFixture(
-                id: summary.id,
-                name: summary.name,
-                replacementCount: summary.replacementCount,
-            ),
-            as: SpeakSwiftly.TextProfileSummary.self,
+                TextProfileSummaryFixture(
+                    id: summary.id,
+                    name: summary.name,
+                    replacementCount: summary.replacementCount,
+                ),
+                as: SpeakSwiftly.TextProfileSummary.self,
             )
         }
     }
@@ -134,16 +133,16 @@ extension MockRuntime {
     ) -> SpeakSwiftly.TextProfileDetails {
         requireFixture("mock text-profile details bridge") {
             try fixtureDecode(
-            TextProfileDetailsFixture(
-                profileID: details.profileID,
-                summary: TextProfileSummaryFixture(
-                    id: details.summary.id,
-                    name: details.summary.name,
-                    replacementCount: details.summary.replacementCount,
+                TextProfileDetailsFixture(
+                    profileID: details.profileID,
+                    summary: TextProfileSummaryFixture(
+                        id: details.summary.id,
+                        name: details.summary.name,
+                        replacementCount: details.summary.replacementCount,
+                    ),
+                    replacements: details.replacements,
                 ),
-                replacements: details.replacements,
-            ),
-            as: SpeakSwiftly.TextProfileDetails.self,
+                as: SpeakSwiftly.TextProfileDetails.self,
             )
         }
     }

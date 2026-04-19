@@ -221,7 +221,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     }
 
     func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(await runtime.normalizer.profiles.getActive())
+        await transportDetails(runtime.normalizer.profiles.getActive())
     }
 
     func baseTextProfile() async -> TextForSpeech.Profile {
@@ -238,18 +238,19 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     }
 
     func textProfiles() async -> [SpeakSwiftly.TextProfileSummary] {
-        await runtime.normalizer.profiles.list()
+        await runtime.normalizer
+            .profiles
+            .list()
             .map(transportSummary)
     }
 
     func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails {
         if let profileID,
-           let details = try? await runtime.normalizer.profiles.get(id: profileID)
-        {
+           let details = try? await runtime.normalizer.profiles.get(id: profileID) {
             return transportDetails(details)
         }
 
-        return transportDetails(await runtime.normalizer.profiles.getEffective())
+        return await transportDetails(runtime.normalizer.profiles.getEffective())
     }
 
     func loadTextProfiles() async throws {
@@ -261,16 +262,16 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     }
 
     func createTextProfile(named name: String) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.create(name: name))
+        try await transportDetails(runtime.normalizer.profiles.create(name: name))
     }
 
     func renameTextProfile(id profileID: String, to name: String) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.rename(profile: profileID, to: name))
+        try await transportDetails(runtime.normalizer.profiles.rename(profile: profileID, to: name))
     }
 
     func setActiveTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
         try await runtime.normalizer.profiles.setActive(id: profileID)
-        return transportDetails(await runtime.normalizer.profiles.getActive())
+        return await transportDetails(runtime.normalizer.profiles.getActive())
     }
 
     func removeTextProfile(id profileID: String) async throws {
@@ -283,44 +284,44 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
 
     func resetTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
         try await runtime.normalizer.profiles.reset(id: profileID)
-        return transportDetails(try await runtime.normalizer.profiles.get(id: profileID))
+        return try await transportDetails(runtime.normalizer.profiles.get(id: profileID))
     }
 
     func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.addReplacement(replacement))
+        try await transportDetails(runtime.normalizer.profiles.addReplacement(replacement))
     }
 
     func addTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         toStoredTextProfileID profileID: String,
     ) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.addReplacement(replacement, toProfile: profileID))
+        try await transportDetails(runtime.normalizer.profiles.addReplacement(replacement, toProfile: profileID))
     }
 
     func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.patchReplacement(replacement))
+        try await transportDetails(runtime.normalizer.profiles.patchReplacement(replacement))
     }
 
     func replaceTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         inStoredTextProfileID profileID: String,
     ) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.patchReplacement(replacement, inProfile: profileID))
+        try await transportDetails(runtime.normalizer.profiles.patchReplacement(replacement, inProfile: profileID))
     }
 
     func removeTextReplacement(id replacementID: String) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(try await runtime.normalizer.profiles.removeReplacement(id: replacementID))
+        try await transportDetails(runtime.normalizer.profiles.removeReplacement(id: replacementID))
     }
 
     func removeTextReplacement(
         id replacementID: String,
         fromStoredTextProfileID profileID: String,
     ) async throws -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(
-            try await runtime.normalizer.profiles.removeReplacement(
-            id: replacementID,
-            fromProfile: profileID,
-        )
+        try await transportDetails(
+            runtime.normalizer.profiles.removeReplacement(
+                id: replacementID,
+                fromProfile: profileID,
+            ),
         )
     }
 
@@ -382,8 +383,8 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         )
     }
 
-    private func decodeTransportValue<Value: Decodable, Bridge: Encodable>(
-        _ bridge: Bridge,
+    private func decodeTransportValue<Value: Decodable>(
+        _ bridge: some Encodable,
         as type: Value.Type,
     ) -> Value {
         do {

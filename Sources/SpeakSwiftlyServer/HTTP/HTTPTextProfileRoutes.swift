@@ -45,7 +45,7 @@ func registerHTTPTextProfileRoutes(
         let payload = try await request.decode(as: CreateTextProfileRequestPayload.self, context: context)
         let profile = try await host.createTextProfile(
             name: payload.name,
-            replacements: try (payload.replacements ?? []).map { try $0.model() },
+            replacements: (payload.replacements ?? []).map { try $0.model() },
         )
         return .init(profile: profile)
     }
