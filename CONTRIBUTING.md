@@ -126,6 +126,11 @@ That validation path now includes the default package lane (`xcrun swift build` 
 do not need a separate "ordinary SwiftPM lane" command chain just to get the standard package
 signal.
 
+It also owns the repo-specific CLI smoke checks that prove the built tool still renders
+`help` output and LaunchAgent property lists correctly, so GitHub can rely on one
+authoritative maintainer lane instead of duplicating package build, test, and DocC steps in a
+second workflow.
+
 Direct formatter and linter commands are:
 
 ```bash
@@ -178,6 +183,11 @@ scripts/repo-maintenance/release-publish.sh --version vX.Y.Z --skip-live-service
 ```
 
 Use `release-prepare.sh` from a feature branch or worktree when the job is "push this release candidate, open or update the PR, and queue auto-merge." Use `release-publish.sh` from local `main` after that PR merges when the job is "cut the actual tag and GitHub release."
+
+`release-prepare.sh` no longer stages `.release-artifacts/<tag>` before merge. Treat it as the
+branch-side validation and PR handoff step only. The publish path is the single release-owned
+place that stages `.release-artifacts/current`, creates the annotated tag, creates the GitHub
+release, and optionally refreshes the live LaunchAgent-backed service.
 
 For the detailed contract and edge cases, use [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md).
 
