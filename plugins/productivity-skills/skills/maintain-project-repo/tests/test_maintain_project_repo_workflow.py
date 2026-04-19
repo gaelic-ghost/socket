@@ -48,6 +48,37 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertIn('REPO_MAINTENANCE_PROFILE="swift-package"', Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"))
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
 
+    def test_generated_validation_uses_repo_maintenance_self_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+
+            Path(tmpdir, "AGENTS.md").write_text(
+                "\n".join(
+                    [
+                        "# AGENTS.md",
+                        "",
+                        "- scripts/repo-maintenance/validate-all.sh",
+                        "- scripts/repo-maintenance/sync-shared.sh",
+                        "- scripts/repo-maintenance/release.sh",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            subprocess.run(["git", "init"], cwd=tmpdir, check=True, capture_output=True, text=True)
+
+            proc = subprocess.run(
+                ["sh", "scripts/repo-maintenance/validate-all.sh"],
+                cwd=tmpdir,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
+            self.assertIn("Repo-maintenance validation completed successfully.", proc.stdout)
+
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")
