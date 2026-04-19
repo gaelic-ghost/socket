@@ -1,6 +1,6 @@
 {
   "name": "agent-plugin-skills",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "Installable maintainer skills for skills-export repositories.",
   "author": {
     "name": "Gale",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "Agent Plugin Skills",
     "shortDescription": "Maintainer skills for skills-export repositories.",
-    "longDescription": "Installable maintainer skills for skills-export repositories, with blunt guidance about Codex plugin scoping limits and repo-shape maintenance workflows.",
+    "longDescription": "Installable maintainer skills for skills-export repositories, with clear guidance about Codex plugin boundaries and repo-shape maintenance workflows.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

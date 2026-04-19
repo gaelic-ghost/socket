@@ -23,13 +23,13 @@
 ## Milestone Progress
 
 - Milestone 2: subtree workflow hardening - Planned
-- Milestone 3: release and sync discipline - Planned
+- Milestone 3: release and sync discipline - In Progress
 
 ## Milestone 2: subtree workflow hardening
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
@@ -56,10 +56,13 @@ Planned
 ### Tickets
 
 - [ ] Document the expected root release and sync rhythm once the current subtree migration experiment stabilizes.
+- [ ] Keep the root docs aligned with the current child packaging model during coordinated release-prep passes.
+- [ ] Make coordinated minor or patch bumps across `socket` and subtree-managed child repos explicit instead of relying on ad hoc release notes.
 
 ### Exit Criteria
 
 - [ ] Superproject release guidance is explicit enough that root changes can be shipped without improvising process each time.
+- [ ] Root docs still describe the live packaging and versioning model after a coordinated release-prep pass.
 
 ## Backlog Candidates
 

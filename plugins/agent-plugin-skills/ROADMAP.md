@@ -1,91 +1,128 @@
 # Project Roadmap
 
+Use this roadmap to track milestone-level delivery through checklist sections.
+
+## Table of Contents
+
+- [Vision](#vision)
+- [Product Principles](#product-principles)
+- [Milestone Progress](#milestone-progress)
+- [Milestone 4: Docs Visibility And Wording Hardening](#milestone-4-docs-visibility-and-wording-hardening)
+- [Milestone 5: Skills Repo Migration And Split Support](#milestone-5-skills-repo-migration-and-split-support)
+- [Milestone 6: Upstream Docs Watch And Change Intake](#milestone-6-upstream-docs-watch-and-change-intake)
+- [Milestone 7: Skill Evals](#milestone-7-skill-evals)
+- [Backlog Candidates](#backlog-candidates)
+- [History](#history)
+
 ## Vision
 
 - Keep `agent-plugin-skills` as the focused home for maintainer skills that help skills-export and plugin-export repositories stay honest about packaging, discovery, and documentation boundaries.
 
-## Product principles
+## Product Principles
 
-- Keep the repository blunt about Codex's documented plugin-scoping limits.
-- Keep maintainer workflows audit-first and bounded.
-- Keep root `skills/` canonical and avoid reintroducing local installer machinery into this repo.
+- Keep the repository explicit about Codex's currently documented plugin model and install surfaces.
+- Keep maintainer workflows audit-first, bounded, and backed by small deterministic tests.
+- Keep root `skills/` canonical and avoid reviving installer-era machinery inside this repo.
 
 ## Milestone Progress
 
-- [ ] Milestone 4: docs visibility and wording hardening
-- [ ] Milestone 5: skills repo migration and split support
-- [ ] Milestone 6: upstream docs watch and change intake
-- [ ] Milestone 7: `skill-evals`
+- Milestone 4: docs visibility and wording hardening - In Progress
+- Milestone 5: skills repo migration and split support - Planned
+- Milestone 6: upstream docs watch and change intake - Planned
+- Milestone 7: `skill-evals` - Planned
 
-## Milestone 4: docs visibility and wording hardening
+## Milestone 4: Docs Visibility And Wording Hardening
 
-Scope:
+### Status
 
-- Keep top-level docs and shipped skills abundantly clear about what this repo exports and what Codex still cannot scope properly.
+In Progress
 
-Tickets:
+### Scope
 
-- [ ] Audit exported skills for wording that softens OpenAI's Codex scoping limits.
+- [ ] Keep top-level docs and shipped skills abundantly clear about what this repo exports and what Codex's documented plugin model does and does not describe.
+
+### Tickets
+
+- [ ] Audit exported skills for wording that softens or blurs the current OpenAI Codex plugin guidance.
 - [ ] Keep global-install guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
+- [ ] Keep `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, and `ROADMAP.md` aligned on the same repo shape and maintainer split.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] End users can quickly tell that this repo exports installable maintainer skills and does not provide a richer repo-private Codex plugin product.
-- [ ] Limitation messaging is consistent across the shipped skill surface and repo docs.
+- [ ] Plugin-boundary wording is consistent across the shipped skill surface and repo docs.
+- [ ] The core maintainer docs follow the current house templates without blurring their responsibilities.
 
-## Milestone 5: skills repo migration and split support
+## Milestone 5: Skills Repo Migration And Split Support
 
-Scope:
+### Status
 
-- Add a maintainer workflow for moving or re-homing skills between repositories while preserving docs and guidance.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Add a maintainer workflow for moving or re-homing skills between repositories while preserving docs and guidance.
+
+### Tickets
 
 - [ ] Define migration inputs and guardrails for moving one or more skills between repos.
 - [ ] Add guidance for updating install examples, docs, and roadmap references after a move.
 - [ ] Add deterministic validation for orphaned references and stale naming after migration.
 - [ ] Decide whether subtree-managed superprojects such as `socket` should become an explicitly supported repo family here.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Maintainers can move skills between repos without manual cross-surface cleanup.
 
-## Milestone 6: upstream docs watch and change intake
+## Milestone 6: Upstream Docs Watch And Change Intake
 
-Scope:
+### Status
 
-- Add durable process support for noticing changes in the Agent Skills standard, OpenAI docs, and Claude docs and turning those changes into actionable maintainer work.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Add durable process support for noticing changes in the Agent Skills standard, OpenAI docs, and Claude docs and turning those changes into actionable maintainer work.
+
+### Tickets
 
 - [ ] Define the upstream sources and canonical refresh cadence.
 - [ ] Add a dated findings format for upstream changes that affect repo policy or docs.
 - [ ] Decide whether this belongs inside `sync-skills-repo-guidance` or becomes a separate audit skill.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Upstream ecosystem drift can be tracked deliberately instead of ad hoc.
 
-## Milestone 7: `skill-evals`
+## Milestone 7: Skill Evals
 
-Scope:
+### Status
 
-- Add a workflow for evaluating shipped skills against real agent runtimes such as Codex and Claude Code.
+Planned
 
-Tickets:
+### Scope
+
+- [ ] Add a workflow for evaluating shipped skills against real agent runtimes such as Codex and Claude Code.
+
+### Tickets
 
 - [ ] Define the eval targets and supported runtimes.
 - [ ] Define the eval artifact set, including prompts, expected behaviors, failure notes, and dated run summaries.
 - [ ] Add deterministic guidance for comparing trigger activation, tool usage, and final output shape against the intended skill contract.
 - [ ] Decide whether the workflow is audit-only, report-generating, or can also scaffold eval fixtures.
 
-Exit criteria:
+### Exit Criteria
 
 - [ ] Maintainers have one coherent workflow for evaluating a skill on real agent surfaces instead of relying only on static review.
 
+## Backlog Candidates
+
+- [ ] No additional backlog candidates are recorded yet.
+
 ## History
 
-- Completed Milestones 0 through 3 by establishing the repository, shipping the foundational maintainer skills, and removing installer-era nested packaging guidance.
-- Completed Milestone 8 by retiring the old `maintain-plugin-docs` surface and aligning the shipped inventory around the remaining maintainer workflows.
+- Initial roadmap scaffold established the repository and its first maintainer-skill milestones.
+- Completed the foundational milestones that created the repository, shipped the first maintainer skills, and removed installer-era nested packaging guidance.
+- Completed the later cleanup milestone that retired the old `maintain-plugin-docs` surface and aligned the shipped inventory around the remaining maintainer workflows.

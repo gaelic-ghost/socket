@@ -19,11 +19,11 @@ Mixed-model monorepo for Gale's Codex plugin and skills repositories.
 
 ### Status
 
-This repository is active and maintained as the superproject layer.
+This repository is active and maintained as the superproject coordination layer.
 
 ### What This Project Is
 
-`socket` is the superproject Gale uses to keep several Codex plugin and skills repositories under one Git root while OpenAI's documented Codex plugin system still lacks a better shared-parent scoping model. It owns the repo-root Codex marketplace at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), the monorepo-owned nested plugin directories under [`plugins/`](./plugins/), the remaining subtree sync paths for `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, and the root maintainer docs that explain how the mixed model works.
+`socket` is the superproject Gale uses to keep several Codex plugin and skills repositories under one Git root while OpenAI's documented Codex plugin system still lacks a better shared-parent scoping model. It owns the repo-root Codex marketplace at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), the monorepo-owned child directories under [`plugins/`](./plugins/), the remaining subtree sync paths for `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, and the root maintainer docs that explain how the mixed model works.
 
 ### Motivation
 
@@ -55,6 +55,7 @@ Use `socket` when the task is about the superproject layer:
 - mixed monorepo policy
 - subtree sync flow for `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer`
 - cross-repo maintainer guidance
+- coordinated release-prep work that needs the root docs and child version surfaces to stay in sync
 
 When the work is really about one child repository's own behavior, start from that child directory's docs instead.
 
@@ -68,13 +69,13 @@ Sync the root maintainer environment with:
 uv sync --dev
 ```
 
-Only `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` still use subtree sync workflows.
+Only `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` still use subtree sync workflows. `socket` itself does not ship a root plugin; the marketplace is the root packaged surface here.
 
 ### Workflow
 
 Treat Gale's local `socket` checkout as the normal day-to-day checkout on `main`. Work in the monorepo copy first, and use the relevant directory under [`plugins/`](./plugins/) for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs. Reach for a feature branch or a dedicated worktree only when the change needs extra isolation.
 
-Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated.
+Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated. When a release-prep pass bumps subtree-managed child versions, update the child repo metadata in `socket` and keep the corresponding child docs aligned at the same time.
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow boundary and [`ROADMAP.md`](./ROADMAP.md) for root planning and historical notes.
 
@@ -136,7 +137,7 @@ The root superproject docs are:
 
 ## Plugin Surfaces
 
-Treat `socket` as the canonical home for the monorepo-owned nested directories and as the subtree host for the remaining imported child repos.
+Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
 
 - `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
@@ -161,4 +162,4 @@ That marketplace points at the actual packaged surface each child repository tre
 
 For `things-app`, that root marketplace path stays the same after the bundled-server move because the installable plugin root is still `./plugins/things-app`; only the child repo's internal server layout changed, from `mcp/things-app-mcp/` to top-level `mcp/`.
 
-The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout.
+The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.

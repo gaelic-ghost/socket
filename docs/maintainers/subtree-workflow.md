@@ -73,6 +73,7 @@ After subtree work:
 
 - verify the directory shape under `plugins/apple-dev-skills/`, `plugins/python-skills/`, or `plugins/SpeakSwiftlyServer/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
+- if the subtree work is part of a coordinated release-prep pass, keep the child repo version metadata and child docs aligned before pushing the subtree back out
 
 ## Add A New Subtree-Managed Child Repository
 

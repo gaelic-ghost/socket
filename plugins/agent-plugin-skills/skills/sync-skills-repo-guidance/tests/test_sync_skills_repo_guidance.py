@@ -27,12 +27,13 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         "\n".join(
             [
                 "Installable maintainer skills for skills-export repositories.",
-                "OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.",
+                "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
                 "npx skills add gaelic-ghost/agent-plugin-skills --all",
                 "https://skills.sh/",
                 "uv tool install ruff",
                 "uv tool install mypy",
                 "Claude Code continues to support direct `.claude/skills` discovery for local authoring while plugin packaging lives separately.",
+                "Follow the current OpenAI plugin structure literally: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root.",
             ]
         )
         + "\n",
@@ -62,6 +63,21 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             ]
         )
         + "\n",
+        encoding="utf-8",
+    )
+    (repo_root / "docs" / "maintainers" / "codex-plugin-install-surfaces.md").write_text(
+        "\n".join(
+            [
+                "only `plugin.json` belongs in `.codex-plugin/`",
+                "Documented plugin path: `~/.codex/config.toml`",
+                "If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin install-surface map.",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (repo_root / "docs" / "maintainers" / "workflow-atlas.md").write_text(
+        "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.\n",
         encoding="utf-8",
     )
     (repo_root / ".agents").mkdir()

@@ -10,12 +10,13 @@ from pathlib import Path
 EXACT_NO_FINDINGS = "No findings."
 README_SNIPPETS = [
     "Installable maintainer skills for skills-export repositories.",
-    "OpenAI's current documented Codex plugin system is too restricted to provide proper repo-private plugin scoping.",
+    "does not document a richer repo-private scoping model",
     "npx skills add gaelic-ghost/agent-plugin-skills --all",
     "https://skills.sh/",
     "uv tool install ruff",
     "uv tool install mypy",
     "Claude Code continues to support direct `.claude/skills` discovery for local authoring",
+    "only `plugin.json` belongs in `.codex-plugin/`",
 ]
 AGENTS_SNIPPETS = [
     "Root `skills/` is the canonical authored and exported surface",
@@ -27,6 +28,14 @@ AUDIT_SNIPPETS = [
     "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
     "This repository does not ship `install-plugin-to-socket`.",
     "This repository does not ship `validate-plugin-install-surfaces`.",
+]
+INSTALL_SURFACES_SNIPPETS = [
+    "only `plugin.json` belongs in `.codex-plugin/`",
+    "Documented plugin path: `~/.codex/config.toml`",
+    "project-scoped `.codex/config.toml`, label it as a general Codex config capability",
+]
+WORKFLOW_ATLAS_SNIPPETS = [
+    "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
 ]
 GITIGNORE_SNIPPETS = [".claude/settings.local.json"]
 
@@ -71,6 +80,22 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     findings.extend(_check_file_contains(repo_root, repo_root / "AGENTS.md", AGENTS_SNIPPETS, "agents"))
     findings.extend(_check_file_contains(repo_root, repo_root / ".gitignore", GITIGNORE_SNIPPETS, "gitignore"))
     findings.extend(_check_file_contains(repo_root, repo_root / "docs" / "maintainers" / "reality-audit.md", AUDIT_SNIPPETS, "reality-audit"))
+    findings.extend(
+        _check_file_contains(
+            repo_root,
+            repo_root / "docs" / "maintainers" / "codex-plugin-install-surfaces.md",
+            INSTALL_SURFACES_SNIPPETS,
+            "install-surfaces",
+        )
+    )
+    findings.extend(
+        _check_file_contains(
+            repo_root,
+            repo_root / "docs" / "maintainers" / "workflow-atlas.md",
+            WORKFLOW_ATLAS_SNIPPETS,
+            "workflow-atlas",
+        )
+    )
     findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))
     findings.extend(_check_symlink(repo_root, repo_root / ".claude" / "skills", "../skills"))
     if not (repo_root / ".codex-plugin" / "plugin.json").exists():
