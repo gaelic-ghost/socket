@@ -28,6 +28,14 @@
 - Treat `macOS 15` as the current standalone package baseline and keep the host and state model friendly to a near-future `iOS 18` reuse path.
 - Prefer maintainable Apple-platform architecture over speculative Linux abstraction. If Linux support would require major design compromise, stop and discuss whether a separate Rust implementation is the cleaner path.
 
+## Sync And Branch Accounting Gates
+
+- Treat superproject sync verification and local-branch accounting as hard gates before cleanup, release closeout, or "done" claims.
+- When work here is performed from the `socket` superproject copy or is expected to ship back through `socket`, verify whether `socket` now needs an explicit `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` or equivalent sync commit, and either complete it or say plainly why no `socket` sync is required.
+- Do not say a release, merge, or recovery is complete until the exact commit reachability has been verified in this repository and, when relevant, in `socket`.
+- Before deleting local branches, remote branches, worktrees, or rescue refs, enumerate every local branch not contained by `main` and account for each one explicitly as preserved elsewhere, intentionally in progress, newly archived, newly merged, or safe to delete.
+- Do not treat branch cleanup as routine hygiene that can happen before that accounting pass.
+
 ## Monorepo And Submodule Handoff
 
 - Treat `../../speak-to-user/monorepo/packages/SpeakSwiftlyServer` as the integration submodule copy, not as the primary development home.
@@ -62,3 +70,4 @@
 - Use repository docs to describe the real current command path and artifact layout; do not leave scaffold wording or guessed maintenance files behind.
 - When the source split changes meaningfully, refresh `docs/maintainers/source-layout.md` in the same pass.
 - When the HTTP, MCP, LaunchAgent, or release workflow changes, update the operator-facing docs in the same change instead of deferring that cleanup.
+- Do not close out subtree-visible work until any required `socket` sync has been completed or surfaced explicitly.
