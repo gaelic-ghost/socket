@@ -234,6 +234,36 @@ extension ServerTests {
             #expect(setRuntimeConfigPayload["active_runtime_speech_backend"] as? String == "qwen3")
             #expect(setRuntimeConfigPayload["next_runtime_speech_backend"] as? String == "marvis")
             #expect(setRuntimeConfigPayload["persisted_speech_backend"] as? String == "marvis")
+
+            let setChatterboxRuntimeConfigEnvelope = try await mcpEnvelope(
+                from: mcpSurface.handle(
+                    mcpPOSTRequest(
+                        body: mcpCallToolRequestJSON(
+                            name: "set_staged_config",
+                            arguments: ["speech_backend": "chatterbox_turbo"],
+                        ),
+                        sessionID: sessionID,
+                    ),
+                ),
+            )
+            let setChatterboxRuntimeConfigPayload = try mcpToolPayload(from: setChatterboxRuntimeConfigEnvelope)
+            #expect(setChatterboxRuntimeConfigPayload["next_runtime_speech_backend"] as? String == "chatterbox_turbo")
+            #expect(setChatterboxRuntimeConfigPayload["persisted_speech_backend"] as? String == "chatterbox_turbo")
+
+            let setLegacyQwenRuntimeConfigEnvelope = try await mcpEnvelope(
+                from: mcpSurface.handle(
+                    mcpPOSTRequest(
+                        body: mcpCallToolRequestJSON(
+                            name: "set_staged_config",
+                            arguments: ["speech_backend": "qwen3_custom_voice"],
+                        ),
+                        sessionID: sessionID,
+                    ),
+                ),
+            )
+            let setLegacyQwenRuntimeConfigPayload = try mcpToolPayload(from: setLegacyQwenRuntimeConfigEnvelope)
+            #expect(setLegacyQwenRuntimeConfigPayload["next_runtime_speech_backend"] as? String == "qwen3")
+            #expect(setLegacyQwenRuntimeConfigPayload["persisted_speech_backend"] as? String == "qwen3")
         }
     }
 }

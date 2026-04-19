@@ -9,7 +9,7 @@ extension ServerTests {
     @available(macOS 14, *)
     @Test func `runtime degradation while speech jobs are in flight marks jobs degraded and rejects new work`() async throws {
         let runtime = MockRuntime(speakBehavior: .holdOpen)
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: testConfiguration(),
             runtime: runtime,
@@ -84,7 +84,7 @@ extension ServerTests {
     @available(macOS 14, *)
     @Test func `profile mutation failure marks cache stale and fails job`() async throws {
         let runtime = MockRuntime(mutationRefreshBehavior: .leaveProfilesUnchanged)
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: testConfiguration(),
             runtime: runtime,

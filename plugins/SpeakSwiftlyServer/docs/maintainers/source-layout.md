@@ -4,14 +4,20 @@
 
 This document is the maintainer map for the current `SpeakSwiftly 3.x`-aligned source split. The goal is to keep future cleanup, review, and feature work landing in the smallest file family that already owns the relevant concern, instead of letting `ServerHost.swift`, one host extension, or one mixed test file grow back into a monolith.
 
+Historical release artifacts belong under [`docs/releases`](../releases/), and historical debugging writeups belong under [`docs/investigations`](../investigations/), not beside the active maintainer maps in this directory.
+
 ## Host Sources
 
 - `Sources/SpeakSwiftlyServer/EmbeddedLifecycleServices.swift`
   Holds the embedded-session readiness gates, shutdown barrier, and the explicit service-owned wrappers for host lifecycle, config watching, MCP lifecycle, and wrapped application runtime.
 - `Sources/SpeakSwiftlyServer/Host/ServerHost.swift`
-  Holds the actor declaration, stored state, construction, lifecycle, transport watch hooks, and shared snapshot basics.
+  Holds the actor declaration, stored state, and construction-time setup.
+- `Sources/SpeakSwiftlyServer/Host/ServerHost+Lifecycle.swift`
+  Holds runtime start and shutdown, shared update streams, transport lifecycle hooks, configuration-reload handling, and the host health or readiness snapshot surface.
 - `Sources/SpeakSwiftlyServer/Host/ServerHost+Queries.swift`
-  Holds the public query surface, runtime/text-profile reads and writes, generated-artifact reads, and immediate control entrypoints.
+  Holds the public runtime query surface, generated-artifact reads, retained-request reads, and immediate control entrypoints.
+- `Sources/SpeakSwiftlyServer/Host/ServerHost+ProfileQueries.swift`
+  Holds the voice-profile cache reads, default-voice-profile ownership, text-profile queries and mutations, and profile-refresh entrypoints.
 - `Sources/SpeakSwiftlyServer/Host/ServerHost+JobSubmission.swift`
   Holds request submission, accepted-request shaping, and the handoff into retained host tracking.
 - `Sources/SpeakSwiftlyServer/Host/ServerHost+JobTracking.swift`
@@ -40,6 +46,17 @@ This document is the maintainer map for the current `SpeakSwiftly 3.x`-aligned s
 - `Sources/SpeakSwiftlyServer/Host/HostStateModels.swift`
   Shared host-overview snapshots for app state, HTTP, and MCP resources.
 
+## Operator Sources
+
+- `Sources/SpeakSwiftlyServer/HealthcheckCommand.swift` and `HealthcheckCommand+Transport.swift`
+  Keep CLI-facing healthcheck option parsing and high-level probe orchestration separate from the low-level HTTP transport helpers and probe response models.
+- `Sources/SpeakSwiftlyServer/LaunchAgent/LaunchAgentCommands.swift`
+  Holds the top-level command parsing and dispatch for `serve`, `healthcheck`, and `launch-agent`.
+- `Sources/SpeakSwiftlyServer/LaunchAgent/LaunchAgentOptions.swift` and `LaunchAgentOptions+Installation.swift`
+  Keep LaunchAgent option parsing, path resolution, and repository-root discovery separate from property-list rendering, config staging, and install/bootstrap mechanics.
+- `Sources/SpeakSwiftlyServer/LaunchAgent/LaunchAgentRuntime.swift`
+  Holds LaunchAgent status inspection, uninstall flow, launchctl execution, and defaults.
+
 ## Test Sources
 
 - `Tests/SpeakSwiftlyServerTests/HTTPWorkflowTests.swift`, `HTTPControlTests.swift`, and `HTTPFailureTests.swift`
@@ -52,14 +69,12 @@ This document is the maintainer map for the current `SpeakSwiftly 3.x`-aligned s
   Keep configuration, lifecycle, and shared-state coverage independent instead of mixing them into one broad host suite.
 - `Tests/SpeakSwiftlyServerTests/MockRuntime.swift` plus the `MockRuntime+*.swift` extensions
   Keep the typed-runtime test double split by text profiles, speech generation, runtime controls, retained artifacts, and test-only control hooks.
-- `Tests/SpeakSwiftlyServerE2ETests/E2ESuite.swift` plus the `E2E*Lane.swift`, `SpeakSwiftlyServerE2E*Helpers.swift`, `E2EWorkflowEntryTests.swift`, and `E2E*ControlTests.swift` files
-  Keep the live `HTTP Workflow Entry`, `MCP Workflow Entry`, and `Control Surfaces` suites separate so maintainers can rerun the smallest failing surface instead of one giant serialized pass.
+- `Tests/SpeakSwiftlyServerE2ETests/E2ESuite.swift`, `E2ETransportSmokeTests.swift`, and the `SpeakSwiftlyServerE2E*Helpers.swift` files
+  Keep the live target as one small transport-owned smoke suite that proves server boot, one real HTTP request, one real MCP resource update, and retained request inspection without duplicating SpeakSwiftly's worker-owned E2E matrix here.
 - `Tests/SpeakSwiftlyServerE2ETests/E2EHTTPClient.swift`, `E2EMCPClient.swift`, and `E2EMCPEventStream.swift`
   Keep the live HTTP transport, MCP request transport, and MCP SSE stream handling separate so transport bugs do not regrow one giant helper file.
 - `Tests/SpeakSwiftlyServerE2ETests/E2EPayloadHelpers.swift` and `E2ETransportWaiters.swift`
   Keep JSON or JSON-RPC decoding, polling waiters, and stored-profile manifest loading split by responsibility instead of mixing transport and payload utilities.
-- `Tests/SpeakSwiftlyServerE2ETests/SpeakSwiftlyServerE2EAudioRouteHelpers.swift`
-  Keeps audible-suite-only CoreAudio route stabilization out of the request and lane helpers so the machine-level workaround stays obvious and isolated.
 
 ## Plugin And Skill Sources
 

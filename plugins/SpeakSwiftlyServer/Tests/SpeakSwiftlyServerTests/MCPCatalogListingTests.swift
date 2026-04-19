@@ -28,6 +28,12 @@ extension ServerTests {
             #expect(tools.contains { $0["name"] as? String == "get_staged_runtime_config" })
             #expect(tools.contains { $0["name"] as? String == "set_staged_config" })
             #expect(tools.contains { $0["name"] as? String == "get_runtime_overview" })
+            let setStagedConfigTool = try #require(tools.first { $0["name"] as? String == "set_staged_config" })
+            let setStagedConfigSchema = try #require(setStagedConfigTool["inputSchema"] as? [String: Any])
+            let setStagedConfigProperties = try #require(setStagedConfigSchema["properties"] as? [String: Any])
+            let setStagedConfigBackend = try #require(setStagedConfigProperties["speech_backend"] as? [String: Any])
+            let setStagedConfigBackendEnum = try #require(setStagedConfigBackend["enum"] as? [String])
+            #expect(setStagedConfigBackendEnum == ["qwen3", "chatterbox_turbo", "marvis"])
 
             let listResourcesEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(

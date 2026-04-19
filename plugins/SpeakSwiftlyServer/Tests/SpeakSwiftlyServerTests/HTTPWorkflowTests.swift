@@ -14,7 +14,7 @@ extension ServerTests {
     @Test func `routes expose health profiles and queued speech job lifecycle`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration(defaultVoiceProfileName: "default")
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
             .appendingPathComponent("profiles", isDirectory: true)
@@ -71,6 +71,28 @@ extension ServerTests {
             #expect(updateRuntimeConfigJSON["next_runtime_speech_backend"] as? String == "marvis")
             #expect(updateRuntimeConfigJSON["persisted_speech_backend"] as? String == "marvis")
             #expect(updateRuntimeConfigJSON["persisted_configuration_state"] as? String == "loaded")
+
+            let updateChatterboxRuntimeConfigResponse = try await client.execute(
+                uri: "/runtime/configuration",
+                method: .put,
+                headers: [.contentType: "application/json"],
+                body: byteBuffer(#"{"speech_backend":"chatterbox_turbo"}"#),
+            )
+            let updateChatterboxRuntimeConfigJSON = try jsonObject(from: updateChatterboxRuntimeConfigResponse.body)
+            #expect(updateChatterboxRuntimeConfigResponse.status == .ok)
+            #expect(updateChatterboxRuntimeConfigJSON["next_runtime_speech_backend"] as? String == "chatterbox_turbo")
+            #expect(updateChatterboxRuntimeConfigJSON["persisted_speech_backend"] as? String == "chatterbox_turbo")
+
+            let updateLegacyQwenRuntimeConfigResponse = try await client.execute(
+                uri: "/runtime/configuration",
+                method: .put,
+                headers: [.contentType: "application/json"],
+                body: byteBuffer(#"{"speech_backend":"qwen3_custom_voice"}"#),
+            )
+            let updateLegacyQwenRuntimeConfigJSON = try jsonObject(from: updateLegacyQwenRuntimeConfigResponse.body)
+            #expect(updateLegacyQwenRuntimeConfigResponse.status == .ok)
+            #expect(updateLegacyQwenRuntimeConfigJSON["next_runtime_speech_backend"] as? String == "qwen3")
+            #expect(updateLegacyQwenRuntimeConfigJSON["persisted_speech_backend"] as? String == "qwen3")
 
             let profilesResponse = try await client.execute(uri: "/voices", method: .get)
             let profilesJSON = try jsonObject(from: profilesResponse.body)
@@ -258,7 +280,7 @@ extension ServerTests {
     @Test func `speak route rejects unsupported format arguments clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -297,7 +319,7 @@ extension ServerTests {
     @Test func `speak route rejects missing profile when no server default is configured`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -330,7 +352,7 @@ extension ServerTests {
     @Test func `runtime routes reject unsupported speech backend clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,
@@ -357,7 +379,9 @@ extension ServerTests {
             #expect(persistMessage.contains("speech_backend"))
             #expect(persistMessage.contains("totally_invalid"))
             #expect(persistMessage.contains("qwen3"))
+            #expect(persistMessage.contains("chatterbox_turbo"))
             #expect(persistMessage.contains("marvis"))
+            #expect(persistMessage.contains("qwen3_custom_voice"))
 
             let switchResponse = try await client.execute(
                 uri: "/runtime/backend",
@@ -372,7 +396,9 @@ extension ServerTests {
             #expect(switchMessage.contains("speech_backend"))
             #expect(switchMessage.contains("totally_invalid"))
             #expect(switchMessage.contains("qwen3"))
+            #expect(switchMessage.contains("chatterbox_turbo"))
             #expect(switchMessage.contains("marvis"))
+            #expect(switchMessage.contains("qwen3_custom_voice"))
         }
 
         await host.shutdown()
@@ -382,7 +408,7 @@ extension ServerTests {
     @Test func `runtime routes reject missing speech backend field clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             runtime: runtime,

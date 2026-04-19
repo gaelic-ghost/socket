@@ -10,7 +10,7 @@ It answers three concrete questions:
 2. Which public capabilities are intentionally adapted instead of mirrored exactly?
 3. Which transport is the right client contract for each capability: HTTP, MCP, both, or neither?
 
-Current baseline checked against the `SpeakSwiftly 3.0.4` package state resolved by this repository on `2026-04-14`. The root package now follows `SpeakSwiftly` with an up-to-next-major semantic-version requirement starting at `3.0.4`.
+Current baseline checked against the `SpeakSwiftly 3.0.6` package state resolved by this repository on `2026-04-17`. The root package now follows `SpeakSwiftly` with an up-to-next-major semantic-version requirement starting at `3.0.6`.
 
 ## Summary
 
@@ -21,6 +21,12 @@ Current baseline checked against the `SpeakSwiftly 3.0.4` package state resolved
 - runtime overview, runtime status, backend switching, and model reload or unload controls
 - text-normalizer built-in style, state, persistence, and replacement editing
 - generation queue, playback queue, playback state, queue clearing, request cancellation, retained request inspection, and retained generation artifacts
+
+The server's normalized backend contract is now:
+
+- published backend identifiers: `qwen3`, `chatterbox_turbo`, `marvis`
+- compatibility alias accepted on HTTP and MCP runtime-control input: `qwen3_custom_voice`
+- compatibility alias response behavior: always normalized back to `qwen3`
 
 What remains intentionally non-parity:
 
@@ -40,7 +46,7 @@ That means the server is best understood as a transport adapter over the public 
 | `runtime.statusEvents()` | Adapted | `GET /healthz`, `GET /readyz`, `GET /runtime/host`, `GET /runtime/status`, `GET /requests/{request_id}/events` | `get_runtime_overview`, `get_runtime_status`, live resources and subscriptions | Exposed through host snapshots, retained request history, and typed resource updates instead of raw streams. |
 | `runtime.overview()` | Full | `GET /runtime/host` | `get_runtime_overview`, `speak://runtime/overview` | The host now trusts the atomic runtime overview instead of reconstructing queue or playback state locally. |
 | `runtime.status()` | Full | `GET /runtime/status` | `get_runtime_status`, `speak://runtime/status` | Returned directly as runtime status data with transport-local shaping only. |
-| `runtime.switchSpeechBackend(to:)` | Full | `POST /runtime/backend` | `switch_speech_backend` | Hot-switches the active backend. |
+| `runtime.switchSpeechBackend(to:)` | Full | `POST /runtime/backend` | `switch_speech_backend` | Hot-switches the active backend. Transport-facing input accepts `qwen3`, `chatterbox_turbo`, and `marvis`, and still normalizes legacy `qwen3_custom_voice` input onto `qwen3`. |
 | `runtime.reloadModels()` / `runtime.unloadModels()` | Full | `POST /runtime/models/reload`, `POST /runtime/models/unload` | `reload_models`, `unload_models` | Immediate runtime-control operations. |
 | `runtime.generate.speech(...)` | Full | `POST /speech/live` | `generate_speech` | Carries `text_profile_name`, `cwd`, `repo_root`, `text_format`, `nested_source_format`, and `source_format`. |
 | `runtime.generate.audio(...)` | Full | `POST /speech/files` | `generate_audio_file` | Retains generated file artifacts for later reads. |
@@ -84,4 +90,4 @@ At this point, the remaining surface work should stay focused on clarity rather 
 
 1. keep trimming any server-local wrappers that do not add real transport clarity now that the runtime overview, jobs, artifacts, and text-normalizer APIs are all directly available
 2. keep README and maintainer docs synchronized whenever the resolved `SpeakSwiftly` version or MCP surface changes
-3. keep live E2E coverage pointed at the current HTTP and MCP names so release verification proves the actual shipped operator surface
+3. keep the small live E2E smoke suite pointed at the current HTTP and MCP names so release verification proves the actual shipped transport surface

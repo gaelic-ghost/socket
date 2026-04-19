@@ -10,7 +10,7 @@ extension ServerTests {
     @Test func `embedded MCP supports multiple independent sessions`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             httpConfig: testHTTPConfig(configuration),

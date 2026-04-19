@@ -10,7 +10,7 @@ extension ServerTests {
     @Test func `embedded MCP rejects unsupported format arguments clearly`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             httpConfig: testHTTPConfig(configuration),
@@ -84,7 +84,7 @@ extension ServerTests {
     @Test func `embedded MCP uses configured default voice profile when profile name is omitted`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration(defaultVoiceProfileName: "default")
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             httpConfig: testHTTPConfig(configuration),
@@ -158,7 +158,7 @@ extension ServerTests {
     @Test func `embedded MCP rejects missing profile when no server default is configured`() async throws {
         let runtime = MockRuntime()
         let configuration = testConfiguration()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: configuration,
             httpConfig: testHTTPConfig(configuration),

@@ -15,6 +15,7 @@ const runtimeBaseUrl = process.env.CODEX_HOOK_TTS_BASE_URL ?? "http://127.0.0.1:
 const liveSpeechEndpoint = new URL("/speech/live", runtimeBaseUrl).toString();
 const defaultProfileName = process.env.CODEX_HOOK_TTS_PROFILE_NAME ?? "default-femme";
 const skipContinuedTurns = (process.env.CODEX_HOOK_TTS_SKIP_CONTINUATIONS ?? "true") !== "false";
+const logFullPayload = (process.env.CODEX_HOOK_TTS_LOG_FULL_PAYLOAD ?? "true") !== "false";
 const maxSeenTurns = Number.parseInt(process.env.CODEX_HOOK_TTS_MAX_SEEN_TURNS ?? "200", 10);
 
 async function readStdin() {
@@ -58,6 +59,14 @@ function normalizeMessage(input) {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+function payloadLogFields(rawInput, payload) {
+  if (!logFullPayload) return {};
+  return {
+    rawPayload: rawInput,
+    payload,
+  };
+}
+
 async function main() {
   await ensureRuntimePaths();
 
@@ -72,6 +81,7 @@ async function main() {
     cwd = process.cwd(),
     model = null,
   } = payload;
+  const fullPayloadLog = payloadLogFields(rawInput, payload);
 
   const message = normalizeMessage(lastAssistantMessage);
   const dedupeKey = sessionId && turnId ? `${sessionId}:${turnId}` : null;
@@ -86,6 +96,7 @@ async function main() {
       transcriptPath,
       cwd,
       model,
+      ...fullPayloadLog,
     });
     return;
   }
@@ -101,6 +112,7 @@ async function main() {
       cwd,
       model,
       preview: message.slice(0, 160),
+      ...fullPayloadLog,
     });
     return;
   }
@@ -117,6 +129,7 @@ async function main() {
       cwd,
       model,
       preview: message.slice(0, 160),
+      ...fullPayloadLog,
     });
     return;
   }
@@ -149,6 +162,7 @@ async function main() {
       profileName: defaultProfileName,
       endpoint: liveSpeechEndpoint,
       preview: message.slice(0, 160),
+      ...fullPayloadLog,
     });
     return;
   }
@@ -177,15 +191,18 @@ async function main() {
     profileName: defaultProfileName,
     request: parsedResponse,
     preview: message.slice(0, 160),
+    ...fullPayloadLog,
   });
 }
 
 main().catch(async (error) => {
   try {
     await ensureRuntimePaths();
+    const rawInput = await readStdin().catch(() => "");
     await appendLog({
       outcome: "error",
       reason: "unexpected-hook-failure",
+      ...(logFullPayload ? { rawPayload: rawInput } : {}),
       error: error instanceof Error ? { message: error.message, stack: error.stack } : String(error),
     });
   } catch {}

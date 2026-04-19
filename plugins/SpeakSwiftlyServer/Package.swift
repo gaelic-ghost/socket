@@ -31,7 +31,7 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.1.0"),
         .package(
             url: "https://github.com/gaelic-ghost/SpeakSwiftly.git",
-            from: "3.0.5",
+            from: "3.1.0",
         ),
         .package(url: "https://github.com/ml-explore/mlx-swift-lm.git", exact: "2.30.6"),
         .package(url: "https://github.com/gaelic-ghost/TextForSpeech.git", from: "0.17.0"),
@@ -81,9 +81,8 @@ let package = Package(
         .testTarget(
             name: "SpeakSwiftlyServerE2ETests",
             dependencies: [
-                // Keep the live Marvis server suite on the same MLX runtime stack as
-                // SpeakSwiftly's upstream Marvis e2e coverage so model-loading behavior
-                // stays deterministic across the two repositories.
+                // Keep the live server smoke suite on the same MLX runtime stack as
+                // the published SpeakSwiftly runtime this package launches in-process.
                 .product(name: "MLXLMCommon", package: "mlx-swift-lm"),
                 "SpeakSwiftlyServer",
                 .product(name: "MCP", package: "swift-sdk"),

@@ -2,9 +2,7 @@ import Foundation
 
 let speakSwiftlyServerToolName = "SpeakSwiftlyServerTool"
 
-// MARK: - ServeOptions
-
-public struct ServeOptions: Sendable {
+package struct ServeOptions {
     let runtimeProfileRootPath: String?
 
     static func parse(arguments: [String], currentDirectoryPath: String) throws -> ServeOptions {
@@ -36,10 +34,8 @@ public struct ServeOptions: Sendable {
     }
 }
 
-// MARK: - SpeakSwiftlyServerToolCommand
-
 /// Top-level parsed command for the `SpeakSwiftlyServerTool` executable.
-public enum SpeakSwiftlyServerToolCommand {
+package enum SpeakSwiftlyServerToolCommand {
     case serve(ServeOptions)
     case healthcheck(HealthcheckOptions)
     case launchAgent(LaunchAgentCommand)
@@ -78,10 +74,8 @@ public enum SpeakSwiftlyServerToolCommand {
       Without arguments, \(speakSwiftlyServerToolName) defaults to `serve`.
     """
 
-    // MARK: - Parsing
-
     /// Parses command-line arguments into the tool's top-level command model.
-    public static func parse(
+    package static func parse(
         arguments: [String],
         currentDirectoryPath: String = FileManager.default.currentDirectoryPath,
         currentExecutablePath: String = CommandLine.arguments[0],
@@ -126,15 +120,13 @@ public enum SpeakSwiftlyServerToolCommand {
                     )
                 }
                 throw SpeakSwiftlyServerToolCommandError(
-                    "\(speakSwiftlyServerToolName) did not recognize command '\(first)'. Supported commands are `serve` and `launch-agent`.",
+                    "\(speakSwiftlyServerToolName) did not recognize command '\(first)'. Supported commands are `serve`, `healthcheck`, and `launch-agent`.",
                 )
         }
     }
 
-    // MARK: - Running
-
     /// Runs the parsed command against the standalone runtime or LaunchAgent workflow.
-    public func run() async throws {
+    package func run() async throws {
         switch self {
             case let .serve(options):
                 try await ServerRuntimeEntrypoint.run(
@@ -150,23 +142,19 @@ public enum SpeakSwiftlyServerToolCommand {
     }
 }
 
-// MARK: - SpeakSwiftlyServerToolCommandError
-
 /// Human-friendly parse or usage error for the top-level executable command surface.
-public struct SpeakSwiftlyServerToolCommandError: Error, CustomStringConvertible {
-    public let message: String
+package struct SpeakSwiftlyServerToolCommandError: Error, CustomStringConvertible {
+    package let message: String
 
-    public init(_ message: String) {
+    package init(_ message: String) {
         self.message = message
     }
 
-    public var description: String { message }
+    package var description: String { message }
 }
 
-// MARK: - LaunchAgentCommand
-
 /// Parsed subcommand for LaunchAgent install, uninstall, status, and property-list rendering.
-public struct LaunchAgentCommand {
+package struct LaunchAgentCommand {
     enum Action {
         case printPlist(LaunchAgentOptions)
         case install(LaunchAgentOptions)
@@ -176,8 +164,6 @@ public struct LaunchAgentCommand {
     }
 
     let action: Action
-
-    // MARK: - Parsing
 
     /// Parses the `launch-agent` subcommand surface.
     static func parse(arguments: [String], currentDirectoryPath: String, currentExecutablePath: String) throws -> LaunchAgentCommand {
@@ -217,8 +203,6 @@ public struct LaunchAgentCommand {
         }
     }
 
-    // MARK: - Running
-
     /// Executes the requested LaunchAgent management action.
     func run() throws {
         switch action {
@@ -247,15 +231,5 @@ public struct LaunchAgentCommand {
     }
 }
 
-// MARK: - LaunchAgentCommandError
-
 /// Human-friendly parse or execution error for the LaunchAgent command surface.
-public struct LaunchAgentCommandError: Error, CustomStringConvertible {
-    public let message: String
-
-    public init(_ message: String) {
-        self.message = message
-    }
-
-    public var description: String { message }
-}
+package typealias LaunchAgentCommandError = SpeakSwiftlyServerToolCommandError

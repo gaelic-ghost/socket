@@ -21,6 +21,7 @@
 - Treat `main` as the release branch for this repository unless a future repo-local change says otherwise.
 - Use `scripts/repo-maintenance/release-prepare.sh` from feature branches and worktrees when the job is to validate a release candidate, push the branch, open or update the pull request, and queue auto-merge.
 - Use `scripts/repo-maintenance/release-publish.sh` only from local `main` after the release PR has merged when the job is to cut the annotated tag and GitHub release.
+- If local `main` is ahead of `origin/main`, do not try to publish from that unsynced checkout. Move that work onto a feature branch or keep it on the existing branch, run `release-prepare.sh`, merge the PR, fast-forward local `main`, and only then run `release-publish.sh`.
 - Do not publish release tags or GitHub releases directly from a feature branch or feature worktree in this repository.
 - Treat the resolved `SpeakSwiftly` dependency declared in `Package.swift` and locked in `Package.resolved` as the source of truth for normal `xcrun swift build` and `xcrun swift test` runs here.
 - Do not retarget this package to a local `../SpeakSwiftly` checkout unless the manifest is being changed intentionally for a specific local-integration task.
@@ -47,6 +48,8 @@
 ## Swift Package Workflow
 
 - Use `xcrun swift build` and `xcrun swift test` as the default first-pass validation commands so repo-local SwiftPM work stays on the Xcode-selected toolchain.
+- Treat the live `SpeakSwiftlyServerE2ETests` target as a one-process, one-suite-at-a-time surface. Even though the target is split into HTTP, MCP, and control suites, those live end-to-end suites must always be run sequentially in separate foreground commands and must never overlap in parallel.
+- Before running any live end-to-end suite, stop the LaunchAgent-backed live service first so the machine does not end up speaking from both the always-on service and the test-owned helper at the same time. Use `./.release-artifacts/current/SpeakSwiftlyServerTool launch-agent uninstall` for that shutdown step unless a future repo-owned operator command replaces it.
 - Use `bootstrap-swift-package` only when a brand-new Swift package repository still needs to be created from scratch.
 - Use `sync-swift-package-guidance` when this repo guidance drifts and needs a deliberate refresh against the current Swift package baseline.
 - Use `swift-package-build-run-workflow` for manifest, dependency, build, run, resource, and packaging work when `Package.swift` is the source of truth.
@@ -68,6 +71,9 @@
 
 - Keep `README.md`, maintainer docs, and release guidance aligned with the current public transport and install surfaces.
 - Use repository docs to describe the real current command path and artifact layout; do not leave scaffold wording or guessed maintenance files behind.
+- Keep active workflow, architecture, and cleanup guidance under `docs/maintainers/`.
+- Keep historical release notes and release checklists under `docs/releases/`.
+- Keep investigations, incident writeups, and debugging forensics under `docs/investigations/`.
 - When the source split changes meaningfully, refresh `docs/maintainers/source-layout.md` in the same pass.
 - When the HTTP, MCP, LaunchAgent, or release workflow changes, update the operator-facing docs in the same change instead of deferring that cleanup.
 - Do not close out subtree-visible work until any required `socket` sync has been completed or surfaced explicitly.

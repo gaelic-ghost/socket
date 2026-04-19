@@ -159,7 +159,7 @@ import Testing
 
 @Test func `host reports and persists runtime configuration state`() async throws {
     let runtime = MockRuntime()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let profileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
         .appendingPathComponent(UUID().uuidString, isDirectory: true)
         .appendingPathComponent("profiles", isDirectory: true)
@@ -203,7 +203,7 @@ import Testing
 
 @Test func `host reports live backend switch without mutating next startup configuration`() async throws {
     let runtime = MockRuntime()
-    let state = await MainActor.run { ServerState() }
+    let state = await MainActor.run { EmbeddedServer() }
     let profileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
         .appendingPathComponent(UUID().uuidString, isDirectory: true)
         .appendingPathComponent("profiles", isDirectory: true)
@@ -245,7 +245,7 @@ import Testing
 
     do {
         let runtime = MockRuntime()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let host = ServerHost(
             configuration: testConfiguration(defaultVoiceProfileName: "configured-default"),
             runtime: runtime,
@@ -264,7 +264,7 @@ import Testing
 
     do {
         let runtime = MockRuntime()
-        let state = await MainActor.run { ServerState() }
+        let state = await MainActor.run { EmbeddedServer() }
         let restartedHost = ServerHost(
             configuration: testConfiguration(defaultVoiceProfileName: "configured-default"),
             runtime: runtime,

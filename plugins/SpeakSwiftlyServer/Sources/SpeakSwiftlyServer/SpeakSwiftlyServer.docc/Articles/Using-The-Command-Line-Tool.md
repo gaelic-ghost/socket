@@ -10,7 +10,7 @@ This is the right lane when you need to:
 - inspect the command surface before installing anything
 - render or manage the LaunchAgent property list
 
-Stay in the library-first docs when an app owns the process through ``EmbeddedServerSession``. Switch to this article when the executable itself becomes the thing you are operating.
+Stay in the library-first docs when an app owns the process through ``EmbeddedServer``. Switch to this article when the executable itself becomes the thing you are operating.
 
 ## Start With The Help Surface
 

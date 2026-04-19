@@ -173,15 +173,20 @@ This does not have to block every local release immediately, but it should becom
 
 ### 4. Tighten E2E separation between transport coverage and playback-heavy runtime coverage
 
-The existing E2E suite already does valuable live runtime coverage, but some failures mix transport correctness and long-running speech-runtime behavior together. That makes it harder to tell whether a broken run is an MCP bug, an HTTP bug, a playback-drain bug, or a general runtime stall.
+This cleanup is now done in the package-owned live suite. The standalone server target no longer tries to duplicate SpeakSwiftly's broader worker-owned audible, queue-drain, clone, and Marvis workflow coverage.
 
-Future cleanup should split those concerns more deliberately:
+The current repo-owned live E2E contract is intentionally small:
 
-- transport smoke coverage that proves HTTP and MCP surfaces can start, initialize, and serve basic reads
-- operator-control coverage that validates queue and playback mutations
-- heavy audible playback coverage that focuses on runtime behavior without doubling as a transport smoke test
+- one HTTP smoke test that proves the server can boot the published runtime, answer readiness, accept one real request, and retain the completed request snapshot
+- one MCP smoke test that proves the MCP bridge can initialize, emit at least one resource update, accept one real request, and retain the completed request snapshot
 
-That split should reduce debugging time when live tests fail and make release health easier to assess quickly.
+That leaves playback-heavy runtime behavior, queue semantics, clone specifics, and model-routing behavior owned by `SpeakSwiftly` itself, where failures are easier to interpret and cheaper to iterate on.
+
+The remaining follow-through here is mostly discipline:
+
+- keep the server package live suite transport-owned
+- avoid regrowing playback-heavy or model-specific assertions in this repo unless the server itself adds a new transport contract
+- keep the smoke cases pointed at the actual shipped HTTP and MCP names so release verification still proves the operator surface we publish
 
 ## Suggested Tracking Order
 
