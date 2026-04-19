@@ -26,7 +26,7 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 
 - Root `skills/` is canonical.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors to `../skills`.
-- README and AGENTS say plainly that this repo exports installable skills and does not pretend Codex has proper repo-private plugin scope.
+- README and AGENTS say plainly that this repo exports installable skills and that OpenAI documents marketplace-based plugin discovery rather than a richer repo-private plugin scope.
 - ROADMAP matches the live exported skill set.
 - Maintainer tooling guidance includes `uv sync --dev`, `uv tool install ruff`, `uv tool install mypy`, and `uv run --group dev pytest`.
 - No tracked file reintroduces nested staged plugin directories, repo-marketplace guidance for this repo, installer workflows, or install-validation workflows.

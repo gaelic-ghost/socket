@@ -7,9 +7,18 @@ description: Audit guidance across README.md, AGENTS.md, maintainer docs, and di
 
 Audit an existing skills-export repository against the current house guidance and upstream standards.
 
-## Codex Limitation Warning
+## Codex Model Note
 
-When syncing Codex guidance, warn explicitly that OpenAI's documented Codex plugin system does not provide proper repo-private plugin scoping.
+When syncing Codex guidance, state clearly that OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.
+
+## Codex Plugin Root Structure
+
+When this skill touches Codex packaging guidance, keep the plugin-root structure aligned with the current OpenAI docs:
+
+- every plugin has a manifest at `.codex-plugin/plugin.json`
+- only `plugin.json` belongs in `.codex-plugin/`
+- `skills/`, `.app.json`, `.mcp.json`, and `assets/` belong at the plugin root
+- marketplace entries point `source.path` at the plugin root directory, not at `.codex-plugin/`
 
 ## Codex Install-Surface Map
 
@@ -22,13 +31,14 @@ When this skill touches Codex plugin guidance, keep these surfaces distinct inst
 - staged plugin directory
   - common personal pattern: `~/.codex/plugins/<plugin-name>`
   - common repo pattern from the docs: `$REPO_ROOT/plugins/<plugin-name>`
-  - purpose: source payload the marketplace entry points at
+  - purpose: plugin root payload directory that the marketplace entry points at
 - installed plugin cache
   - `~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/`
   - purpose: Codex's installed copy; for local plugins the documented version token is `local`
 - enabled-state config
-  - personal: `~/.codex/config.toml`
-  - optional repo override: `$REPO_ROOT/.codex/config.toml`
+  - documented plugin path: `~/.codex/config.toml`
   - purpose: per-plugin on or off state keyed by plugin name plus marketplace name, for example `[plugins."my-plugin@local-repo"]`
 
 Do not describe `config.toml` as the place plugins install into. Do not describe a marketplace file as the install destination. Keep the wording explicit: marketplaces are catalogs, staged plugin directories are payload roots, the cache is Codex's installed copy, and `config.toml` stores enabled-state.
+
+If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability from the config reference rather than as part of the documented plugin install-surface map.

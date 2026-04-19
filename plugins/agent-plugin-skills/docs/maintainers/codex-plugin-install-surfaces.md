@@ -4,6 +4,15 @@ Use this document when maintainers need a durable map of how Codex's documented 
 
 This is not a replacement for the official docs. It is a maintainer-focused translation layer for the parts that are easiest to blur together during local plugin work.
 
+## Plugin Root Structure
+
+OpenAI's current plugin docs separate the plugin root from the marketplace and config surfaces:
+
+- every plugin has a manifest at `.codex-plugin/plugin.json`
+- only `plugin.json` belongs in `.codex-plugin/`
+- `skills/`, `.app.json`, `.mcp.json`, and `assets/` belong at the plugin root
+- marketplace `source.path` should point at the plugin root directory, not at `.codex-plugin/`
+
 ## Core Model
 
 Codex plugin wiring has four different jobs on four different surfaces:
@@ -13,7 +22,7 @@ Codex plugin wiring has four different jobs on four different surfaces:
    - Personal path: `~/.agents/plugins/marketplace.json`
    - Repo path: `$REPO_ROOT/.agents/plugins/marketplace.json`
 2. Staged plugin directory
-   - Purpose: hold the plugin payload on disk that a marketplace entry points at.
+   - Purpose: hold the plugin root payload on disk that a marketplace entry points at.
    - Common personal pattern: `~/.codex/plugins/<plugin-name>`
    - Common repo pattern from the docs: `$REPO_ROOT/plugins/<plugin-name>`
 3. Installed plugin cache
@@ -22,8 +31,7 @@ Codex plugin wiring has four different jobs on four different surfaces:
    - For local plugins, the documented version token is `local`.
 4. Enabled-state config
    - Purpose: say whether a marketplace-scoped plugin is enabled or disabled.
-   - Personal path: `~/.codex/config.toml`
-   - Optional repo override path: `$REPO_ROOT/.codex/config.toml`
+   - Documented plugin path: `~/.codex/config.toml`
 
 ## Diagram
 
@@ -37,8 +45,7 @@ flowchart LR
     B -->|Codex installs local copy| C["Installed plugin cache
     ~/.codex/plugins/cache/<marketplace>/<plugin>/<version>"]
     D["Enabled-state config
-    ~/.codex/config.toml
-    optional: $REPO_ROOT/.codex/config.toml"] -->|turn plugin identity on or off| C
+    ~/.codex/config.toml"] -->|turn plugin identity on or off| C
 ```
 
 ## What Each Surface Is Not
@@ -68,6 +75,16 @@ That means:
 
 If you later rename the marketplace or switch the plugin to a different marketplace, the config identity changes too.
 
+## General Config Note
+
+The broader Codex config reference also says Codex can load trusted project-scoped overrides from `.codex/config.toml`.
+
+Keep that separate from the plugin install-surface map:
+
+- the current plugin docs explicitly describe plugin on or off state in `~/.codex/config.toml`
+- the plugin docs do not describe repo-local plugin enabled-state as its own install-surface category
+- if you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin wiring model
+
 ## Personal Scope
 
 Personal scope means the catalog and enablement live in your home-directory Codex surfaces.
@@ -85,13 +102,13 @@ Repo scope means the catalog is attached to one repository.
 
 - Catalog: `$REPO_ROOT/.agents/plugins/marketplace.json`
 - Common staged payload path from the docs: `$REPO_ROOT/plugins/<plugin-name>`
-- Optional project-scoped enabled-state override: `$REPO_ROOT/.codex/config.toml`
+- Documented plugin enabled-state path: `~/.codex/config.toml`
 
 Important nuance:
 
 - The repo marketplace is still a catalog, not a private install vault.
 - If the repo tracks that marketplace in git, it is advertising those plugins as part of the repo-visible Codex surface.
-- OpenAI's documented Codex plugin model does not provide true repo-private plugin scoping beyond that visible repo marketplace model.
+- OpenAI's documented Codex plugin model exposes repo-visible plugins through marketplace catalogs and does not describe a richer repo-private scoping model beyond that visible marketplace model.
 
 ## Practical Reading Order
 
@@ -102,7 +119,7 @@ When a plugin looks wrong, inspect in this order:
    - Does `source.path` point at the intended staged payload directory?
 2. staged payload directory
    - Does the target directory exist?
-   - Does it contain `.codex-plugin/plugin.json` and the expected bundled surfaces?
+   - Does it contain `.codex-plugin/plugin.json` and the expected plugin-root surfaces such as `skills/`?
 3. enabled-state
    - Is the plugin identity enabled in `config.toml`?
    - Is there a stale identity from an older marketplace name or scope?
