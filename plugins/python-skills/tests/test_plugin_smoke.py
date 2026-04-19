@@ -28,9 +28,7 @@ def run_command(*args: str, cwd: Path | None = None) -> subprocess.CompletedProc
 
 
 def test_plugin_manifest_and_marketplace_contract() -> None:
-    plugin_root = REPO_ROOT / "plugins" / "python-skills"
-    manifest = json.loads((plugin_root / ".codex-plugin" / "plugin.json").read_text())
-    claude_manifest = json.loads((plugin_root / ".claude-plugin" / "plugin.json").read_text())
+    manifest = json.loads((REPO_ROOT / ".codex-plugin" / "plugin.json").read_text())
     claude_marketplace = json.loads((REPO_ROOT / ".claude-plugin" / "marketplace.json").read_text())
     readme_text = (REPO_ROOT / "README.md").read_text()
 
@@ -38,15 +36,13 @@ def test_plugin_manifest_and_marketplace_contract() -> None:
     assert manifest["skills"] == "./skills/"
     assert manifest["interface"]["displayName"] == "Python Skills"
     assert manifest["interface"]["category"] == "Productivity"
-    assert claude_manifest["name"] == "python-skills"
-    assert claude_manifest["version"] == manifest["version"]
 
     claude_entry = claude_marketplace["plugins"][0]
     assert claude_entry["name"] == "python-skills"
-    assert claude_entry["source"] == "./plugins/python-skills"
-    assert (plugin_root / "skills").is_symlink()
-    assert (plugin_root / "skills").readlink().as_posix() == "../../skills"
-    assert "plugins/python-skills/" in readme_text
+    assert claude_entry["source"] == "./skills"
+    assert (REPO_ROOT / ".claude" / "skills").is_symlink()
+    assert (REPO_ROOT / ".claude" / "skills").readlink().as_posix() == "../skills"
+    assert ".codex-plugin/plugin.json" in readme_text
     assert "root [`skills/`](./skills/) is the canonical authored workflow surface" in readme_text
 
 

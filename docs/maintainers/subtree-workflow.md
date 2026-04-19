@@ -25,12 +25,10 @@ For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, when a change
 
 Each nested directory under `plugins/` keeps its own internal layout, docs, and packaging choices.
 
-That means there are two important patterns to expect:
+That means there is one important packaging rule to expect:
 
-1. A child repo may expose plugin packaging at the subtree root.
-   Example: `plugins/agent-plugin-skills/.codex-plugin/plugin.json`
-2. A child repo may keep plugin packaging inside its own nested `plugins/<plugin-name>/` directory.
-   Example: `plugins/python-skills/plugins/python-skills/.codex-plugin/plugin.json`
+1. A child repo exposes plugin packaging from the actual subtree root it treats as installable.
+   Examples: `plugins/agent-plugin-skills/.codex-plugin/plugin.json` and `plugins/python-skills/.codex-plugin/plugin.json`
 
 The socket root marketplace must point at the actual packaged plugin root, not at an assumed one.
 

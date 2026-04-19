@@ -10,19 +10,17 @@ Check that:
 
 - `README.md` uses the canonical `*-skills` section schema
 - `README.md` presents root `skills/` as the canonical workflow-authoring surface
-- `README.md` presents the repo as a shared authored skill surface with thin packaging rooted under `plugins/python-skills/`
-- `README.md` names `plugins/python-skills/` as the plugin packaging root
+- `README.md` presents the repo as a shared authored skill surface with repo-root plugin metadata
+- `README.md` names the repo root as the Codex plugin root through `.codex-plugin/plugin.json`
 - `README.md` states plainly that `productivity-skills` is the default baseline layer for general repo-doc and maintenance work, while this repo is the Python-specific specialization layer
 - `README.md` includes accurate direct skill install guidance from the shared `skills/` tree as well as plugin install guidance
-- `README.md` distinguishes repo-local plugin development from personal installs under `~/.codex/plugins/python-skills`
-- `README.md` documents local Claude development through `claude --plugin-dir ./plugins/python-skills`
+- `README.md` distinguishes the repo marketplace catalog, staged plugin directory, installed plugin cache, and enabled-state config
+- `README.md` uses the official Codex install-surface map terms instead of collapsing marketplace, staged plugin directory, installed cache, and enabled-state config into one vague install path
 - the active skill inventory matches the actual `skills/*/SKILL.md` directories
 - the repository layout snippet matches the real repo
-- `plugins/python-skills/.codex-plugin/plugin.json` exists and points at `./skills/`
-- `plugins/python-skills/.claude-plugin/plugin.json` exists
-- `.agents/plugins/marketplace.json` exists and points at the packaged plugin root
-- `.claude-plugin/marketplace.json` exists and points at the packaged plugin root
-- `.agents/skills`, `.claude/skills`, and `plugins/python-skills/skills` are the expected POSIX mirrors
+- `.codex-plugin/plugin.json` exists and points at `./skills/`
+- `.claude-plugin/marketplace.json` exists and points at root `skills/`
+- `.claude/skills` is the expected POSIX mirror
 - `ROADMAP.md` uses checklist-style sections and milestone progress
 
 ## Skill Contract Audit
@@ -50,10 +48,10 @@ For each `agents/openai.yaml`:
 For repo-level packaging policy:
 
 - OpenAI packaging files are present, valid, and described as the active release surface
-- Claude packaging is present, thin, and never described as a second authored skill tree
+- Claude packaging is present as a thin repo-root marketplace catalog and never described as a second authored skill tree
 - shared skill content is still described as the single-source workflow surface
 - Root `skills/` is the canonical workflow-authoring surface.
-- The packaged plugin root is described consistently as `plugins/python-skills/`.
+- The Codex plugin root is described consistently as the repo root.
 
 ## Script Audit
 

@@ -5,53 +5,56 @@
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
-- [Milestone 7: Claude Code skill optimizations](#milestone-7-claude-code-skill-optimizations)
+- [Milestone 11: Documentation and maintainer-surface alignment](#milestone-11-documentation-and-maintainer-surface-alignment)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
 ## Vision
 
-- Keep `python-skills` as a focused, durable skills repository with one shared `skills/` surface, deterministic local helpers, and thin packaging layers on top.
+Keep `python-skills` as a focused Python workflow repository with one shared `skills/` surface, repo-root plugin metadata, and docs that make the authored-versus-packaged split obvious.
 
 ## Product Principles
 
-- Keep the active public surface constrained to one shared `skills/` tree with thin vendor packaging layers.
-- Prefer deterministic local scripts and validation over implied behavior.
-- Keep skill docs, metadata, and script behavior synchronized.
+- Keep root `skills/` as the only authored workflow surface.
+- Keep repo-root plugin metadata thin, explicit, and aligned with the real install surfaces.
+- Keep public docs, maintainer docs, and validation behavior synchronized.
+- Keep general-purpose maintainer workflow guidance in `productivity-skills` unless Python-specific behavior truly changes the workflow.
 
 ## Milestone Progress
 
-- Milestone 7: Claude Code skill optimizations - Planned
+- Milestone 11: Documentation and maintainer-surface alignment - Active
 
-## Milestone 7: Claude Code skill optimizations
+## Milestone 11: Documentation and maintainer-surface alignment
 
 ### Status
 
-Planned
+Active
 
 ### Scope
 
-- [ ] Audit the shared `skills/` content for Claude Code compatibility and additive Claude-oriented improvements.
+- [ ] Align the root docs and maintainer guidance around the real source-of-truth split between root `skills/` and the repo-root plugin metadata.
 
 ### Tickets
 
-- [ ] Review each shipped `SKILL.md` against Claude Code skill behavior and supported frontmatter.
-- [ ] Make shared skill wording more vendor-neutral where that improves portability.
-- [ ] Define a maintainer policy for Claude-only optimizations so they stay additive rather than invasive.
-- [ ] Update maintainer docs to explain the shared-core versus vendor-layer split.
+- [ ] Tighten `README.md` so it owns the public overview, install surfaces, active inventory, and packaging shape.
+- [ ] Add a root `CONTRIBUTING.md` that owns maintainer workflow, validation habits, and contributor expectations.
+- [ ] Normalize `AGENTS.md` to the canonical repo-guidance structure without losing the repo-specific packaging rules.
+- [ ] Clean up `ROADMAP.md` so the current planning surface and completed-history notes no longer compete with each other.
+- [ ] Confirm the repo validation path still passes after the docs-alignment pass.
 
 ### Exit Criteria
 
-- [ ] Shared skills remain single-source and intentionally portable.
-- [ ] Claude-specific skill optimizations are documented or implemented without duplicating the skill tree.
+- [ ] `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, and `ROADMAP.md` have clear non-overlapping roles.
+- [ ] The docs describe root `skills/` as the source of truth and the repo root as the Codex plugin root.
+- [ ] The repo validation path passes after the documentation update.
 
 ## Backlog Candidates
 
-- [ ] Record plausible future work that is not yet committed to a milestone.
+- [ ] Revisit the older Claude Code optimization plan as additive portability work once the core maintainer docs are aligned again.
 
 ## History
 
-- Completed Milestones 1 through 6 by establishing the repository, adding the Python bootstrap, FastAPI, FastMCP, and pytest workflows, aligning the maintainer contract, and adding Codex plugin packaging.
-- Completed Milestone 8 by adding Claude plugin and marketplace support without duplicating the shared skill tree.
-- Completed Milestones 9 and 10 by aligning the repo with the shared skills and plugin standards and adding the dedicated FastAPI and FastMCP integration workflow.
+- Completed Milestones 1 through 6 by establishing the repository, adding the Python bootstrap, FastAPI, FastMCP, and pytest workflows, and aligning the initial maintainer contract.
+- Completed Milestones 8 through 10 by adding Claude-compatible packaging, aligning the repo with the shared skills and plugin standards, and adding the dedicated FastAPI and FastMCP integration workflow.
 - Added GitHub Actions validation so the documented repo-metadata and pytest checks now run automatically on `main` and pull requests.
+- Reframed the stale planned Claude optimization milestone into backlog work and made documentation alignment the active planning surface.
