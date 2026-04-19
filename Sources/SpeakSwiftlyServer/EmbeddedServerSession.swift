@@ -55,9 +55,8 @@ func embeddedServerLiveBootstrap(
                 },
                 queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
                     guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
-                        throw ServerConfigurationError(
-                            await host.missingVoiceProfileNameMessage(for: "the live speech request"),
-                        )
+                        let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
+                        throw ServerConfigurationError(errorMessage)
                     }
 
                     return try await host.queueSpeechLive(

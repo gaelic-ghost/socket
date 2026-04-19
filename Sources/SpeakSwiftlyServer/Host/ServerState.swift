@@ -98,7 +98,7 @@ public final class EmbeddedServer {
             String?,
             String?,
             SpeechNormalizationContext?,
-            TextForSpeech.SourceFormat?
+            TextForSpeech.SourceFormat?,
         ) async throws -> String
         let setDefaultVoiceProfileName: @Sendable (String) async throws -> String
         let clearDefaultVoiceProfileName: @Sendable () async throws -> String?

@@ -323,9 +323,8 @@ import Testing
                 },
                 queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
                     guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
-                        throw ServerConfigurationError(
-                            await host.missingVoiceProfileNameMessage(for: "the live speech request"),
-                        )
+                        let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
+                        throw ServerConfigurationError(errorMessage)
                     }
 
                     return try await host.queueSpeechLive(
@@ -418,15 +417,13 @@ import Testing
     #expect(firstQueuedSpeechInvocation.text == "Read this aloud")
     #expect(firstQueuedSpeechInvocation.profileName == "default")
     #expect(firstQueuedSpeechInvocation.textProfileID == "swift-docs")
-    #expect(
-        firstQueuedSpeechInvocation.normalizationContext
-            == SpeechNormalizationContext(
-                cwd: "./Sources",
-                repoRoot: "../SpeakSwiftlyServer",
-                textFormat: .markdown,
-                nestedSourceFormat: .swift,
-            )
+    let expectedNormalizationContext = SpeechNormalizationContext(
+        cwd: "./Sources",
+        repoRoot: "../SpeakSwiftlyServer",
+        textFormat: .markdown,
+        nestedSourceFormat: .swift,
     )
+    #expect(firstQueuedSpeechInvocation.normalizationContext == expectedNormalizationContext)
     #expect(firstQueuedSpeechInvocation.sourceFormat == .python)
     await runtime.finishHeldSpeak(id: firstQueuedRequestID)
 
@@ -521,9 +518,8 @@ import Testing
                 },
                 queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
                     guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
-                        throw ServerConfigurationError(
-                            await host.missingVoiceProfileNameMessage(for: "the live speech request"),
-                        )
+                        let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
+                        throw ServerConfigurationError(errorMessage)
                     }
 
                     return try await host.queueSpeechLive(
