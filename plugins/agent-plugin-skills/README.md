@@ -1,68 +1,101 @@
 # agent-plugin-skills
 
-Maintainer-skill repository for skills-export and plugin-export repos.
+Installable maintainer skills for skills-export and plugin-export repositories.
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Setup](#setup)
+- [Quick Start](#quick-start)
 - [Usage](#usage)
 - [Development](#development)
-- [Verification](#verification)
+- [Repo Structure](#repo-structure)
 - [Release Notes](#release-notes)
 - [License](#license)
 - [Active Skills](#active-skills)
-- [Repository Layout](#repository-layout)
 
 ## Overview
 
-`agent-plugin-skills` packages maintainer-oriented skills for repositories that ship reusable skills or plugins.
-
 ### Status
 
-This repository is active and currently ships maintainer workflows for bootstrapping and syncing skills-export repository guidance.
+This repository is active and currently ships two maintainer workflows.
 
 ### What This Project Is
 
-This repository is the canonical home for maintainer skills that help Gale keep skills-export repositories honest about packaging, discovery, and documentation boundaries.
+This repository is the canonical home for maintainer skills that help Gale keep skills-export and plugin-export repositories aligned on packaging, discovery, and documentation boundaries.
+
+It ships source-first Codex plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), keeps root [`skills/`](./skills/) as the authored surface, and keeps deeper maintainer explanation under [`docs/maintainers/`](./docs/maintainers/).
 
 ### Motivation
 
-It exists so repo-maintenance guidance for skill and plugin repositories can live in one focused place instead of being duplicated across unrelated plugin repos.
+It exists so repo-maintenance guidance for skills and plugin repositories can live in one focused place instead of being repeated across unrelated repos.
 
-## Setup
+## Quick Start
 
-Sync the repo-local maintainer environment when you want to run tests for the Python-backed maintainer tooling:
+Install the published skills if you want them available in your Codex environment:
 
 ```bash
-uv sync --dev
+npx skills add gaelic-ghost/agent-plugin-skills --all
 ```
+
+If you are inspecting or changing the repository itself, go to [Development](#development).
 
 ## Usage
 
-Use these skills when the target repository is itself a skills-export or plugin-export repository and the job is about repo structure, packaging guidance, or cross-surface documentation alignment.
+Use this repository when the target project is itself a skills-export or plugin-export repository and the job is about repo structure, packaging guidance, discovery mirrors, or cross-surface documentation alignment.
 
-For general repository doc and maintenance workflows, treat `productivity-skills` as the default baseline layer first. Reach for `agent-plugin-skills` only when that broader baseline is not specific enough for a repo that exports skills or plugins as its actual shipped surface.
+For general-purpose repository docs and maintainer workflow cleanup, start with `productivity-skills` first and reach for `agent-plugin-skills` only when the repository shape is narrow enough to need plugin-specific maintainer guidance.
 
-This repo is deliberately blunt about a core limitation: OpenAI's documented Codex plugin system still exposes repo-visible plugins through the documented marketplace model rather than through a richer private repo-scoping system.
+When this repo discusses Codex packaging, it stays explicit about the current documented model:
+
+- plugins have a root manifest at `.codex-plugin/plugin.json`
+- only `plugin.json` belongs in `.codex-plugin/`
+- `skills/` stays at the plugin root
+- repo-visible Codex plugins come from marketplace catalogs, and OpenAI does not document a richer repo-private scoping model beyond that
 
 ## Development
 
 ### Setup
 
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep maintainer docs under [`docs/`](./docs/) and plugin metadata under [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
+Sync the local maintainer environment before changing the Python-backed audit tooling or tests:
+
+```bash
+uv sync --dev
+```
 
 ### Workflow
 
-When you update a skill here, keep the surrounding maintainer guidance and tests aligned in the same pass. Do not invent hidden install surfaces or overstate Codex plugin scoping behavior.
+Keep root [`skills/`](./skills/) canonical, keep maintainer docs under [`docs/maintainers/`](./docs/maintainers/), and keep plugin metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
-## Verification
+When you update a skill here, align the nearby docs and tests in the same pass. Keep discovery mirrors, plugin packaging, marketplace catalogs, cache paths, and enabled-state wording separate instead of collapsing them into one vague install story.
 
-Run the repo-local maintainer tests before landing changes that touch skill behavior or metadata:
+Contributor workflow and review expectations live in [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+### Validation
+
+Run the repo-local tests before landing changes that touch skill behavior, docs-backed automation, or plugin metadata:
 
 ```bash
 uv sync --dev
 uv run pytest
+```
+
+## Repo Structure
+
+```text
+.
+├── .codex-plugin/
+│   └── plugin.json
+├── AGENTS.md
+├── CONTRIBUTING.md
+├── README.md
+├── ROADMAP.md
+├── docs/
+│   └── maintainers/
+├── skills/
+│   ├── bootstrap-skills-plugin-repo/
+│   └── sync-skills-repo-guidance/
+├── pyproject.toml
+└── uv.lock
 ```
 
 ## Release Notes
@@ -77,19 +110,3 @@ See [LICENSE](./LICENSE).
 
 - `bootstrap-skills-plugin-repo`: bootstrap or align a skills-export repository around root `skills/`, discovery mirrors, and maintainer guidance
 - `sync-skills-repo-guidance`: audit guidance drift across README, AGENTS, maintainer docs, and discovery mirrors in an existing skills-export repository
-
-## Repository Layout
-
-```text
-.
-├── .codex-plugin/
-│   └── plugin.json
-├── AGENTS.md
-├── LICENSE
-├── README.md
-├── ROADMAP.md
-├── docs/
-├── pyproject.toml
-├── skills/
-└── uv.lock
-```
