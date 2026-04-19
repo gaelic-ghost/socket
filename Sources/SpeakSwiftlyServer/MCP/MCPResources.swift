@@ -247,7 +247,7 @@ private func textProfilesGuideMarkdown() -> String {
 
     - `base profile`: immutable built-ins that always participate in effective normalization.
     - `built-in style`: the balanced, compact, or explicit built-in normalization mode that shapes the base profile.
-    - `active profile`: the current custom profile used by default when no explicit `text_profile_name` is provided during speech submission.
+    - `active profile`: the current custom profile used by default when no explicit `text_profile_id` is provided during speech submission.
     - `stored profiles`: named reusable normalization policies that an app or agent can apply on demand.
     - `effective profile`: the merged profile SpeakSwiftly will actually apply after combining the base profile with the selected active or stored profile.
 
@@ -256,8 +256,8 @@ private func textProfilesGuideMarkdown() -> String {
     1. Read `speak://text-profiles` to inspect the current built-in style plus base, active, stored, and effective state.
     2. Draft or edit rules with the `draft_text_profile` and `draft_text_replacement` prompts when a user needs help authoring replacements.
     3. Use `get_text_profile_style`, `set_text_profile_style`, or `speak://text-profiles/style` when the operator needs to inspect or change the built-in normalization mode.
-    4. Store reusable policies with `create_text_profile` or `store_text_profile`.
-    5. Use `use_text_profile` when the downstream app wants a temporary active custom profile, or pass `text_profile_name` on one speech request when the caller wants stored-profile selection without mutating the active profile.
+    4. Store reusable policies with `create_text_profile`, then use `rename_text_profile` if the operator wants to refine a saved profile name later.
+    5. Use `set_active_text_profile` when the downstream app wants to switch the default custom profile, or pass `text_profile_id` on one speech request when the caller wants stored-profile selection without mutating the active profile.
     6. Use `save_text_profiles` when the operator wants an explicit persistence checkpoint, and `load_text_profiles` when another process changed the persistence file and the in-memory state should be refreshed from disk.
     7. Read `speak://text-profiles/effective/{profile_id}` before queuing speech if the user wants to verify what normalization will really happen.
 

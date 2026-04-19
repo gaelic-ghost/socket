@@ -128,7 +128,7 @@ import Testing
             enabled: true,
             path: "/mcp",
             serverName: "speak-swiftly-mcp",
-            title: "SpeakSwiftly",
+            title: "Speak Swiftly",
         ),
         runtime: runtime,
         runtimeConfigurationStore: testRuntimeConfigurationStore(),

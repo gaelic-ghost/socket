@@ -33,7 +33,7 @@ enum AppRuntimeDefaultProfile: String {
             .init(["app", "mcp", "enabled"]): false,
             .init(["app", "mcp", "path"]): "/mcp",
             .init(["app", "mcp", "serverName"]): "speak-swiftly-mcp",
-            .init(["app", "mcp", "title"]): "SpeakSwiftly",
+            .init(["app", "mcp", "title"]): "Speak Swiftly",
         ]
     }
 

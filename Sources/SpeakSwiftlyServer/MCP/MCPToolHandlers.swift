@@ -27,7 +27,7 @@ extension MCPSurface {
                     let requestID = try await host.queueSpeechLive(
                         text: requiredString("text", in: arguments),
                         profileName: profileName,
-                        textProfileName: optionalString("text_profile_name", in: arguments),
+                        textProfileID: optionalString("text_profile_id", in: arguments),
                         normalizationContext: normalizationContext(in: arguments),
                         sourceFormat: sourceFormat(in: arguments),
                     )
@@ -48,7 +48,7 @@ extension MCPSurface {
                     let requestID = try await host.queueSpeechFile(
                         text: requiredString("text", in: arguments),
                         profileName: profileName,
-                        textProfileName: optionalString("text_profile_name", in: arguments),
+                        textProfileID: optionalString("text_profile_id", in: arguments),
                         normalizationContext: normalizationContext(in: arguments),
                         sourceFormat: sourceFormat(in: arguments),
                     )
@@ -190,7 +190,6 @@ extension MCPSurface {
 
                 case "create_text_profile":
                     let result = try await host.createTextProfile(
-                        id: requiredString("id", in: arguments),
                         name: requiredString("name", in: arguments),
                         replacements: decodeOptionalArgument("replacements", in: arguments, default: [TextReplacementSnapshot]())
                             .map { try $0.model() },
@@ -208,15 +207,11 @@ extension MCPSurface {
                     await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
                     return try toolResult(result)
 
-                case "store_text_profile":
-                    let profile: TextProfileSnapshot = try decodeArgument("profile", in: arguments)
-                    let result = try await host.storeTextProfile(profile.model())
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
-
-                case "use_text_profile":
-                    let profile: TextProfileSnapshot = try decodeArgument("profile", in: arguments)
-                    let result = try await host.useTextProfile(profile.model())
+                case "rename_text_profile":
+                    let result = try await host.renameTextProfile(
+                        id: requiredString("profile_id", in: arguments),
+                        to: requiredString("name", in: arguments),
+                    )
                     await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
                     return try toolResult(result)
 
@@ -225,8 +220,22 @@ extension MCPSurface {
                     await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
                     return try toolResult(result)
 
-                case "reset_active_text_profile":
-                    let result = try await host.resetTextProfile()
+                case "set_active_text_profile":
+                    let result = try await host.setActiveTextProfile(
+                        id: requiredString("profile_id", in: arguments),
+                    )
+                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                    return try toolResult(result)
+
+                case "factory_reset_text_profiles":
+                    let result = try await host.factoryResetTextProfiles()
+                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                    return try toolResult(result)
+
+                case "reset_text_profile":
+                    let result = try await host.resetTextProfile(
+                        id: requiredString("profile_id", in: arguments),
+                    )
                     await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
                     return try toolResult(result)
 

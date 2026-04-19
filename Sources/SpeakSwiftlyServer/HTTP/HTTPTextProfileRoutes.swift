@@ -44,9 +44,8 @@ func registerHTTPTextProfileRoutes(
     router.post("text-profiles/stored") { request, context -> TextProfileResponse in
         let payload = try await request.decode(as: CreateTextProfileRequestPayload.self, context: context)
         let profile = try await host.createTextProfile(
-            id: payload.id,
             name: payload.name,
-            replacements: payload.replacements.map { try $0.model() },
+            replacements: try (payload.replacements ?? []).map { try $0.model() },
         )
         return .init(profile: profile)
     }
@@ -64,26 +63,24 @@ func registerHTTPTextProfileRoutes(
         return try await .init(textProfiles: host.setTextProfileStyle(payload.styleModel()))
     }
 
-    router.put("text-profiles/stored/:profile_id") { request, context -> TextProfileResponse in
+    router.put("text-profiles/stored/:profile_id/name") { request, context -> TextProfileResponse in
         let profileID = try context.parameters.require("profile_id")
-        let payload = try await request.decode(as: StoreTextProfileRequestPayload.self, context: context)
-        guard payload.profile.id == profileID else {
-            throw HTTPError(
-                .badRequest,
-                message: "Stored text profile route id '\(profileID)' did not match body profile id '\(payload.profile.id)'.",
-            )
-        }
-
-        return try await .init(profile: host.storeTextProfile(payload.profile.model()))
+        let payload = try await request.decode(as: RenameTextProfileRequestPayload.self, context: context)
+        return try await .init(profile: host.renameTextProfile(id: profileID, to: payload.name))
     }
 
     router.put("text-profiles/active") { request, context -> TextProfileResponse in
-        let payload = try await request.decode(as: UseTextProfileRequestPayload.self, context: context)
-        return try await .init(profile: host.useTextProfile(payload.profile.model()))
+        let payload = try await request.decode(as: SetActiveTextProfileRequestPayload.self, context: context)
+        return try await .init(profile: host.setActiveTextProfile(id: payload.profileID))
     }
 
-    router.post("text-profiles/active/reset") { _, _ -> TextProfileResponse in
-        try await .init(profile: host.resetTextProfile())
+    router.post("text-profiles/factory-reset") { _, _ -> TextProfileListResponse in
+        try await .init(textProfiles: host.factoryResetTextProfiles())
+    }
+
+    router.post("text-profiles/stored/:profile_id/reset") { _, context -> TextProfileResponse in
+        let profileID = try context.parameters.require("profile_id")
+        return try await .init(profile: host.resetTextProfile(id: profileID))
     }
 
     router.delete("text-profiles/stored/:profile_id") { _, context -> TextProfileListResponse in

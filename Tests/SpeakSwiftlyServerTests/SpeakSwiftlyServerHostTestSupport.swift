@@ -69,14 +69,14 @@ extension ServerHost {
     func submitSpeak(
         text: String,
         profileName: String,
-        textProfileName: String? = nil,
+        textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
     ) async throws -> String {
         try await queueSpeechLive(
             text: text,
             profileName: profileName,
-            textProfileName: textProfileName,
+            textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
         )

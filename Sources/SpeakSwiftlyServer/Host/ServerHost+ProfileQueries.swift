@@ -74,9 +74,9 @@ extension ServerHost {
         return await .init(
             builtInStyle: builtInStyle.rawValue,
             baseProfile: .init(profile: runtime.baseTextProfile()),
-            activeProfile: .init(profile: runtime.activeTextProfile()),
-            storedProfiles: (runtime.textProfiles()).map(TextProfileSnapshot.init(profile:)),
-            effectiveProfile: .init(profile: runtime.effectiveTextProfile(id: nil)),
+            activeProfile: .init(details: runtime.activeTextProfile()),
+            storedProfiles: (runtime.textProfiles()).map(TextProfileSnapshot.init(summary:)),
+            effectiveProfile: .init(details: runtime.effectiveTextProfile(id: nil)),
         )
     }
 
@@ -85,22 +85,28 @@ extension ServerHost {
     }
 
     func storedTextProfile(_ profileID: String) async -> TextProfileSnapshot? {
-        await runtime.textProfile(id: profileID).map(TextProfileSnapshot.init(profile:))
+        await runtime.textProfile(id: profileID).map(TextProfileSnapshot.init(details:))
     }
 
     func effectiveTextProfile(_ profileID: String?) async -> TextProfileSnapshot {
-        await .init(profile: runtime.effectiveTextProfile(id: profileID))
+        await .init(details: runtime.effectiveTextProfile(id: profileID))
     }
 
     func createTextProfile(
-        id: String,
         name: String,
         replacements: [TextForSpeech.Replacement],
     ) async throws -> TextProfileSnapshot {
-        let profile = try await runtime.createTextProfile(id: id, named: name, replacements: replacements)
+        let profile = try await runtime.createTextProfile(named: name)
+        if replacements.isEmpty == false {
+            for replacement in replacements {
+                _ = try await runtime.addTextReplacement(replacement, toStoredTextProfileID: profile.profileID)
+            }
+        }
+
+        let refreshedProfile = await runtime.textProfile(id: profile.profileID) ?? profile
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: profile)
+        return .init(details: refreshedProfile)
     }
 
     func loadTextProfiles() async throws -> TextProfilesSnapshot {
@@ -126,19 +132,18 @@ extension ServerHost {
         return await textProfilesSnapshot()
     }
 
-    func storeTextProfile(_ profile: TextForSpeech.Profile) async throws -> TextProfileSnapshot {
-        try await runtime.storeTextProfile(profile)
+    func renameTextProfile(id profileID: String, to name: String) async throws -> TextProfileSnapshot {
+        let profile = try await runtime.renameTextProfile(id: profileID, to: name)
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: profile)
+        return .init(details: profile)
     }
 
-    func useTextProfile(_ profile: TextForSpeech.Profile) async throws -> TextProfileSnapshot {
-        try await runtime.useTextProfile(profile)
-        let activeProfile = await runtime.activeTextProfile()
+    func setActiveTextProfile(id profileID: String) async throws -> TextProfileSnapshot {
+        let profile = try await runtime.setActiveTextProfile(id: profileID)
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: activeProfile)
+        return .init(details: profile)
     }
 
     func removeTextProfile(id profileID: String) async throws -> TextProfilesSnapshot {
@@ -148,53 +153,59 @@ extension ServerHost {
         return await textProfilesSnapshot()
     }
 
-    func resetTextProfile() async throws -> TextProfileSnapshot {
-        try await runtime.resetTextProfile()
-        let activeProfile = await runtime.activeTextProfile()
+    func factoryResetTextProfiles() async throws -> TextProfilesSnapshot {
+        try await runtime.factoryResetTextProfiles()
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: activeProfile)
+        return await textProfilesSnapshot()
+    }
+
+    func resetTextProfile(id profileID: String) async throws -> TextProfileSnapshot {
+        let profile = try await runtime.resetTextProfile(id: profileID)
+        await emitTextProfilesChanged()
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+        return .init(details: profile)
     }
 
     func addTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         toStoredTextProfileID profileID: String? = nil,
     ) async throws -> TextProfileSnapshot {
-        let profile: TextForSpeech.Profile = if let profileID {
+        let profile: SpeakSwiftly.TextProfileDetails = if let profileID {
             try await runtime.addTextReplacement(replacement, toStoredTextProfileID: profileID)
         } else {
             try await runtime.addTextReplacement(replacement)
         }
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: profile)
+        return .init(details: profile)
     }
 
     func replaceTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         inStoredTextProfileID profileID: String? = nil,
     ) async throws -> TextProfileSnapshot {
-        let profile: TextForSpeech.Profile = if let profileID {
+        let profile: SpeakSwiftly.TextProfileDetails = if let profileID {
             try await runtime.replaceTextReplacement(replacement, inStoredTextProfileID: profileID)
         } else {
             try await runtime.replaceTextReplacement(replacement)
         }
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: profile)
+        return .init(details: profile)
     }
 
     func removeTextReplacement(
         id replacementID: String,
         fromStoredTextProfileID profileID: String? = nil,
     ) async throws -> TextProfileSnapshot {
-        let profile: TextForSpeech.Profile = if let profileID {
+        let profile: SpeakSwiftly.TextProfileDetails = if let profileID {
             try await runtime.removeTextReplacement(id: replacementID, fromStoredTextProfileID: profileID)
         } else {
             try await runtime.removeTextReplacement(id: replacementID)
         }
         await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return .init(profile: profile)
+        return .init(details: profile)
     }
 }

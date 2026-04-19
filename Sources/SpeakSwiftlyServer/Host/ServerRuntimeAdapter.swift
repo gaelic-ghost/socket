@@ -28,14 +28,14 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     func queueSpeechLive(
         text: String,
         with profileName: String,
-        textProfileName: String?,
+        textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
     ) async -> RuntimeRequestHandle {
         let handle = await runtime.generate.speech(
             text: text,
             with: profileName,
-            textProfileName: textProfileName,
+            textProfileID: textProfileID,
             textContext: normalizationContext,
             sourceFormat: sourceFormat,
         )
@@ -45,14 +45,14 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     func queueSpeechFile(
         text: String,
         with profileName: String,
-        textProfileName: String?,
+        textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
     ) async -> RuntimeRequestHandle {
         let handle = await runtime.generate.audio(
             text: text,
             with: profileName,
-            textProfileName: textProfileName,
+            textProfileID: textProfileID,
             textContext: normalizationContext,
             sourceFormat: sourceFormat,
         )
@@ -210,34 +210,46 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     // MARK: - Text Profiles
 
     func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle {
-        await runtime.normalizer.profiles.builtInStyle()
+        await runtime.normalizer.style.getActive()
     }
 
     func setBuiltInTextProfileStyle(
         _ style: TextForSpeech.BuiltInProfileStyle,
     ) async throws -> TextForSpeech.BuiltInProfileStyle {
-        try await runtime.normalizer.profiles.setBuiltInStyle(style)
-        return await runtime.normalizer.profiles.builtInStyle()
+        try await runtime.normalizer.style.setActive(to: style)
+        return await runtime.normalizer.style.getActive()
     }
 
-    func activeTextProfile() async -> TextForSpeech.Profile {
-        await runtime.normalizer.profiles.active() ?? .default
+    func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(await runtime.normalizer.profiles.getActive())
     }
 
     func baseTextProfile() async -> TextForSpeech.Profile {
-        await .builtInBase(style: runtime.normalizer.profiles.builtInStyle())
+        let style = await runtime.normalizer.style.getActive()
+        return .builtInBase(style: style)
     }
 
-    func textProfile(id profileID: String) async -> TextForSpeech.Profile? {
-        await runtime.normalizer.profiles.stored(id: profileID)
+    func textProfile(id profileID: String) async -> SpeakSwiftly.TextProfileDetails? {
+        guard let details = try? await runtime.normalizer.profiles.get(id: profileID) else {
+            return nil
+        }
+
+        return transportDetails(details)
     }
 
-    func textProfiles() async -> [TextForSpeech.Profile] {
+    func textProfiles() async -> [SpeakSwiftly.TextProfileSummary] {
         await runtime.normalizer.profiles.list()
+            .map(transportSummary)
     }
 
-    func effectiveTextProfile(id profileID: String?) async -> TextForSpeech.Profile {
-        await runtime.normalizer.profiles.effective(id: profileID) ?? .default
+    func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails {
+        if let profileID,
+           let details = try? await runtime.normalizer.profiles.get(id: profileID)
+        {
+            return transportDetails(details)
+        }
+
+        return transportDetails(await runtime.normalizer.profiles.getEffective())
     }
 
     func loadTextProfiles() async throws {
@@ -248,63 +260,67 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         try await runtime.normalizer.persistence.save()
     }
 
-    func createTextProfile(
-        id: String,
-        named name: String,
-        replacements: [TextForSpeech.Replacement],
-    ) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.create(id: id, name: name, replacements: replacements)
+    func createTextProfile(named name: String) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.create(name: name))
     }
 
-    func storeTextProfile(_ profile: TextForSpeech.Profile) async throws {
-        try await runtime.normalizer.profiles.store(profile)
+    func renameTextProfile(id profileID: String, to name: String) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.rename(profile: profileID, to: name))
     }
 
-    func useTextProfile(_ profile: TextForSpeech.Profile) async throws {
-        try await runtime.normalizer.profiles.use(profile)
+    func setActiveTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
+        try await runtime.normalizer.profiles.setActive(id: profileID)
+        return transportDetails(await runtime.normalizer.profiles.getActive())
     }
 
     func removeTextProfile(id profileID: String) async throws {
         try await runtime.normalizer.profiles.delete(id: profileID)
     }
 
-    func resetTextProfile() async throws {
-        try await runtime.normalizer.profiles.reset()
+    func factoryResetTextProfiles() async throws {
+        try await runtime.normalizer.profiles.factoryReset()
     }
 
-    func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.add(replacement)
+    func resetTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
+        try await runtime.normalizer.profiles.reset(id: profileID)
+        return transportDetails(try await runtime.normalizer.profiles.get(id: profileID))
+    }
+
+    func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.addReplacement(replacement))
     }
 
     func addTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         toStoredTextProfileID profileID: String,
-    ) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.add(replacement, toStoredProfileID: profileID)
+    ) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.addReplacement(replacement, toProfile: profileID))
     }
 
-    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.replace(replacement)
+    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.patchReplacement(replacement))
     }
 
     func replaceTextReplacement(
         _ replacement: TextForSpeech.Replacement,
         inStoredTextProfileID profileID: String,
-    ) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.replace(replacement, inStoredProfileID: profileID)
+    ) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.patchReplacement(replacement, inProfile: profileID))
     }
 
-    func removeTextReplacement(id replacementID: String) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.removeReplacement(id: replacementID)
+    func removeTextReplacement(id replacementID: String) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(try await runtime.normalizer.profiles.removeReplacement(id: replacementID))
     }
 
     func removeTextReplacement(
         id replacementID: String,
         fromStoredTextProfileID profileID: String,
-    ) async throws -> TextForSpeech.Profile {
-        try await runtime.normalizer.profiles.removeReplacement(
+    ) async throws -> SpeakSwiftly.TextProfileDetails {
+        transportDetails(
+            try await runtime.normalizer.profiles.removeReplacement(
             id: replacementID,
-            fromStoredProfileID: profileID,
+            fromProfile: profileID,
+        )
         )
     }
 
@@ -334,5 +350,71 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         return URL(fileURLWithPath: trimmedPath, relativeTo: URL(fileURLWithPath: resolvedBasePath, isDirectory: true))
             .standardizedFileURL
             .path
+    }
+
+    private func transportSummary(
+        _ summary: TextForSpeech.Runtime.Profiles.Summary,
+    ) -> SpeakSwiftly.TextProfileSummary {
+        decodeTransportValue(
+            SummaryBridge(
+                id: summary.id,
+                name: summary.name,
+                replacementCount: summary.replacementCount,
+            ),
+            as: SpeakSwiftly.TextProfileSummary.self,
+        )
+    }
+
+    private func transportDetails(
+        _ details: TextForSpeech.Runtime.Profiles.Details,
+    ) -> SpeakSwiftly.TextProfileDetails {
+        decodeTransportValue(
+            DetailsBridge(
+                profileID: details.profileID,
+                summary: SummaryBridge(
+                    id: details.summary.id,
+                    name: details.summary.name,
+                    replacementCount: details.summary.replacementCount,
+                ),
+                replacements: details.replacements,
+            ),
+            as: SpeakSwiftly.TextProfileDetails.self,
+        )
+    }
+
+    private func decodeTransportValue<Value: Decodable, Bridge: Encodable>(
+        _ bridge: Bridge,
+        as type: Value.Type,
+    ) -> Value {
+        do {
+            let data = try JSONEncoder().encode(bridge)
+            return try JSONDecoder().decode(Value.self, from: data)
+        } catch {
+            preconditionFailure("SpeakSwiftlyServer could not bridge a released SpeakSwiftly text-profile transport value: \(error)")
+        }
+    }
+}
+
+private struct SummaryBridge: Encodable {
+    let id: String
+    let name: String
+    let replacementCount: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case replacementCount = "replacement_count"
+    }
+}
+
+private struct DetailsBridge: Encodable {
+    let profileID: String
+    let summary: SummaryBridge
+    let replacements: [TextForSpeech.Replacement]
+
+    enum CodingKeys: String, CodingKey {
+        case profileID = "profile_id"
+        case summary
+        case replacements
     }
 }

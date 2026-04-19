@@ -17,7 +17,7 @@ func registerHTTPSpeechRoutes(
         let requestID = try await host.queueSpeechLive(
             text: payload.text,
             profileName: profileName,
-            textProfileName: payload.textProfileName,
+            textProfileID: payload.textProfileID,
             normalizationContext: payload.normalizationContext(),
             sourceFormat: payload.sourceFormatModel(),
         )
@@ -36,7 +36,7 @@ func registerHTTPSpeechRoutes(
         let requestID = try await host.queueSpeechFile(
             text: payload.text,
             profileName: profileName,
-            textProfileName: payload.textProfileName,
+            textProfileID: payload.textProfileID,
             normalizationContext: payload.normalizationContext(),
             sourceFormat: payload.sourceFormatModel(),
         )

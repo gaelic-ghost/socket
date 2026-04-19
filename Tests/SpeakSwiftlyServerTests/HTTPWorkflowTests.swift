@@ -105,20 +105,20 @@ extension ServerTests {
                 method: .post,
                 headers: [.contentType: "application/json"],
                 body: byteBuffer(
-                    #"{"id":"swift-docs","name":"Swift Docs","replacements":[{"id":"replace-1","text":"SPM","replacement":"Swift Package Manager","match":"whole_token","phase":"before_built_ins","is_case_sensitive":false,"formats":["swift_source"],"priority":3}]}"#,
+                    #"{"name":"Swift Docs","replacements":[{"id":"replace-1","text":"SPM","replacement":"Swift Package Manager","match":"whole_token","phase":"before_built_ins","is_case_sensitive":false,"formats":["swift_source"],"priority":3}]}"#,
                 ),
             )
             let createTextProfileJSON = try jsonObject(from: createTextProfileResponse.body)
             let createdTextProfile = try #require(createTextProfileJSON["profile"] as? [String: Any])
             #expect(createTextProfileResponse.status == .ok)
-            #expect(createdTextProfile["id"] as? String == "swift-docs")
+            #expect(createdTextProfile["profile_id"] as? String == "swift-docs")
 
             let textProfilesResponse = try await client.execute(uri: "/text-profiles", method: .get)
             let textProfilesJSON = try jsonObject(from: textProfilesResponse.body)
             let textProfiles = try #require(textProfilesJSON["text_profiles"] as? [String: Any])
             #expect(textProfiles["built_in_style"] as? String == "balanced")
             let storedTextProfiles = try #require(textProfiles["stored_profiles"] as? [[String: Any]])
-            #expect(storedTextProfiles.contains { $0["id"] as? String == "swift-docs" })
+            #expect(storedTextProfiles.contains { $0["profile_id"] as? String == "swift-docs" })
 
             let textProfileStyleResponse = try await client.execute(uri: "/text-profiles/style", method: .get)
             let textProfileStyleJSON = try jsonObject(from: textProfileStyleResponse.body)
@@ -129,13 +129,13 @@ extension ServerTests {
             let loadTextProfilesJSON = try jsonObject(from: loadTextProfilesResponse.body)
             let loadedTextProfiles = try #require(loadTextProfilesJSON["text_profiles"] as? [String: Any])
             let loadedStoredProfiles = try #require(loadedTextProfiles["stored_profiles"] as? [[String: Any]])
-            #expect(loadedStoredProfiles.contains { $0["id"] as? String == "swift-docs" })
+            #expect(loadedStoredProfiles.contains { $0["profile_id"] as? String == "swift-docs" })
 
             let saveTextProfilesResponse = try await client.execute(uri: "/text-profiles/save", method: .post)
             let saveTextProfilesJSON = try jsonObject(from: saveTextProfilesResponse.body)
             let savedTextProfiles = try #require(saveTextProfilesJSON["text_profiles"] as? [String: Any])
             let savedStoredProfiles = try #require(savedTextProfiles["stored_profiles"] as? [[String: Any]])
-            #expect(savedStoredProfiles.contains { $0["id"] as? String == "swift-docs" })
+            #expect(savedStoredProfiles.contains { $0["profile_id"] as? String == "swift-docs" })
 
             let compactTextProfileStyleResponse = try await client.execute(
                 uri: "/text-profiles/style",
@@ -147,17 +147,28 @@ extension ServerTests {
             let compactTextProfiles = try #require(compactTextProfileStyleJSON["text_profiles"] as? [String: Any])
             #expect(compactTextProfiles["built_in_style"] as? String == "compact")
 
+            let renameTextProfileResponse = try await client.execute(
+                uri: "/text-profiles/stored/swift-docs/name",
+                method: .put,
+                headers: [.contentType: "application/json"],
+                body: byteBuffer(#"{"name":"Operator"}"#),
+            )
+            let renameTextProfileJSON = try jsonObject(from: renameTextProfileResponse.body)
+            let renamedTextProfile = try #require(renameTextProfileJSON["profile"] as? [String: Any])
+            #expect(renameTextProfileResponse.status == .ok)
+            #expect(renamedTextProfile["profile_id"] as? String == "swift-docs")
+            #expect(renamedTextProfile["name"] as? String == "Operator")
+
             let useTextProfileResponse = try await client.execute(
                 uri: "/text-profiles/active",
                 method: .put,
                 headers: [.contentType: "application/json"],
-                body: byteBuffer(
-                    #"{"profile":{"id":"operator","name":"Operator","replacements":[{"id":"replace-2","text":"MCP","replacement":"Model Context Protocol","match":"exact_phrase","phase":"after_built_ins","is_case_sensitive":false,"formats":[],"priority":2}]}}"#,
-                ),
+                body: byteBuffer(#"{"profile_id":"swift-docs"}"#),
             )
             let useTextProfileJSON = try jsonObject(from: useTextProfileResponse.body)
             let activeTextProfile = try #require(useTextProfileJSON["profile"] as? [String: Any])
-            #expect(activeTextProfile["id"] as? String == "operator")
+            #expect(activeTextProfile["profile_id"] as? String == "swift-docs")
+            #expect(activeTextProfile["name"] as? String == "Operator")
 
             let effectiveTextProfileResponse = try await client.execute(uri: "/text-profiles/effective/swift-docs", method: .get)
             let effectiveTextProfileJSON = try jsonObject(from: effectiveTextProfileResponse.body)
@@ -233,7 +244,7 @@ extension ServerTests {
                 uri: "/speech/live",
                 method: .post,
                 headers: [.contentType: "application/json"],
-                body: byteBuffer(#"{"text":"Route test","text_profile_name":"swift-docs","cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source"}"#),
+                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source"}"#),
             )
             let speakJSON = try jsonObject(from: speakResponse.body)
             let speakJobID = try #require(speakJSON["request_id"] as? String)
@@ -251,7 +262,7 @@ extension ServerTests {
                         nestedSourceFormat: .swift,
                     ),
             )
-            #expect(queuedSpeechInvocation.textProfileName == "swift-docs")
+            #expect(queuedSpeechInvocation.textProfileID == "swift-docs")
             #expect(queuedSpeechInvocation.sourceFormat == .python)
             #expect(queuedSpeechInvocation.profileName == "default")
 

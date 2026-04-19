@@ -17,10 +17,11 @@ Use this skill for text-normalization work on the local `speak_swiftly` MCP surf
 
 - Use `set_text_profile_style` only when the user is intentionally changing the built-in balanced, compact, or explicit mode.
 - Use `create_text_profile` for a new stored reusable profile with a simple replacement list.
-- Use `store_text_profile` when the full stored profile payload is already known.
-- Use `use_text_profile` when the user wants a temporary active custom profile without changing the stored catalog.
+- Use `rename_text_profile` when the user wants to change the stored display name without recreating the profile.
+- Use `set_active_text_profile` when the user wants one stored profile to become the default active custom profile.
 - Use `delete_text_profile` only after confirming the exact stored `profile_id`.
-- Use `reset_active_text_profile` when the user wants to clear the temporary active custom profile back to defaults.
+- Use `factory_reset_text_profiles` when the user wants to clear the stored catalog back to the default profile set.
+- Use `reset_text_profile` when the user wants one stored profile cleared back to its default replacement set without deleting it.
 
 ## Replacement Editing
 

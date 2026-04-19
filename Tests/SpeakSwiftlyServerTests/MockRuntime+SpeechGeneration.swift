@@ -10,7 +10,7 @@ extension MockRuntime {
     func queueSpeechLive(
         text: String,
         with profileName: String,
-        textProfileName: String?,
+        textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
     ) async -> RuntimeRequestHandle {
@@ -20,7 +20,7 @@ extension MockRuntime {
             .init(
                 text: text,
                 profileName: profileName,
-                textProfileName: textProfileName,
+                textProfileID: textProfileID,
                 normalizationContext: normalizationContext,
                 sourceFormat: sourceFormat,
             ),
@@ -56,7 +56,7 @@ extension MockRuntime {
     func queueSpeechFile(
         text: String,
         with profileName: String,
-        textProfileName: String?,
+        textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
     ) async -> RuntimeRequestHandle {
@@ -68,7 +68,7 @@ extension MockRuntime {
                 artifactID: artifactID,
                 createdAt: createdAt,
                 profileName: profileName,
-                textProfileName: textProfileName,
+                textProfileID: textProfileID,
                 sampleRate: 24000,
                 filePath: "/tmp/\(artifactID).wav",
             )
@@ -78,7 +78,7 @@ extension MockRuntime {
             GenerationJobItemFixture(
                 artifactID: artifactID,
                 text: text,
-                textProfileName: textProfileName,
+                textProfileID: textProfileID,
                 textContext: normalizationContext,
                 sourceFormat: sourceFormat,
             ),
@@ -91,7 +91,7 @@ extension MockRuntime {
                 filePath: generatedFile.filePath,
                 sampleRate: generatedFile.sampleRate,
                 profileName: profileName,
-                textProfileName: textProfileName,
+                textProfileID: textProfileID,
             ),
         ]
         generationJobs.append(
@@ -102,7 +102,7 @@ extension MockRuntime {
                     createdAt: createdAt,
                     updatedAt: createdAt,
                     profileName: profileName,
-                    textProfileName: textProfileName,
+                    textProfileID: textProfileID,
                     speechBackend: "qwen3",
                     state: "completed",
                     items: items,
@@ -134,7 +134,7 @@ extension MockRuntime {
                     artifactID: item.artifactID ?? "\(requestID)-artifact-\(index + 1)",
                     createdAt: createdAt,
                     profileName: profileName,
-                    textProfileName: item.textProfileName,
+                    textProfileID: item.textProfileID,
                     sampleRate: 24000,
                     filePath: "/tmp/\(item.artifactID ?? "\(requestID)-artifact-\(index + 1)").wav",
                 )
@@ -145,7 +145,7 @@ extension MockRuntime {
             GenerationJobItemFixture(
                 artifactID: item.artifactID ?? "\(requestID)-artifact-\(index + 1)",
                 text: item.text,
-                textProfileName: item.textProfileName,
+                textProfileID: item.textProfileID,
                 textContext: item.textContext,
                 sourceFormat: item.sourceFormat,
             )
@@ -154,7 +154,7 @@ extension MockRuntime {
             try makeGeneratedBatch(
                 batchID: requestID,
                 profileName: profileName,
-                textProfileName: items.first?.textProfileName,
+                textProfileID: items.first?.textProfileID,
                 speechBackend: "qwen3",
                 state: "completed",
                 items: batchItems,
@@ -163,7 +163,7 @@ extension MockRuntime {
                         artifactID: $0.artifactID,
                         createdAt: $0.createdAt,
                         profileName: $0.profileName,
-                        textProfileName: $0.textProfileName,
+                        textProfileID: $0.textProfileID,
                         sampleRate: $0.sampleRate,
                         filePath: $0.filePath,
                     )
@@ -186,7 +186,7 @@ extension MockRuntime {
                     createdAt: createdAt,
                     updatedAt: createdAt,
                     profileName: profileName,
-                    textProfileName: items.first?.textProfileName,
+                    textProfileID: items.first?.textProfileID,
                     speechBackend: "qwen3",
                     state: "completed",
                     items: batchItems,
@@ -198,7 +198,7 @@ extension MockRuntime {
                             filePath: $0.filePath,
                             sampleRate: $0.sampleRate,
                             profileName: $0.profileName,
-                            textProfileName: $0.textProfileName,
+                            textProfileID: $0.textProfileID,
                         )
                     },
                     startedAt: generatedBatch.startedAt,

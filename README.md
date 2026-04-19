@@ -175,7 +175,7 @@ app:
     enabled: false
     path: /mcp
     serverName: speak-swiftly-mcp
-    title: SpeakSwiftly
+    title: Speak Swiftly
 ```
 
 The app-managed install layout is centered on one per-user location under `~/Library/Application Support/SpeakSwiftlyServer`, with logs in `~/Library/Logs/SpeakSwiftlyServer`. The package exposes that layout directly through [AppManagedInstallLayout.swift](./Sources/SpeakSwiftlyServer/AppManagedInstallLayout.swift).

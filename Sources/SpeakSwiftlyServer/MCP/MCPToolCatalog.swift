@@ -5,14 +5,14 @@ enum MCPToolCatalog {
     static let definitions: [Tool] = [
         Tool(
             name: "generate_speech",
-            description: "Queue live speech playback with a stored SpeakSwiftly voice profile. Use this when the user wants audible output now, and optionally provide profile_name to override the server's configured default voice profile plus text_profile_name and explicit normalization-format arguments when the input should not rely on automatic format detection.",
+            description: "Queue live speech playback with a stored SpeakSwiftly voice profile. Use this when the user wants audible output now, and optionally provide profile_name to override the server's configured default voice profile plus text_profile_id and explicit normalization-format arguments when the input should not rely on automatic format detection.",
             inputSchema: [
                 "type": "object",
                 "required": ["text"],
                 "properties": [
                     "text": ["type": "string"],
                     "profile_name": ["type": "string"],
-                    "text_profile_name": ["type": "string"],
+                    "text_profile_id": ["type": "string"],
                     "cwd": ["type": "string"],
                     "repo_root": ["type": "string"],
                     "text_format": ["type": "string"],
@@ -30,7 +30,7 @@ enum MCPToolCatalog {
                 "properties": [
                     "text": ["type": "string"],
                     "profile_name": ["type": "string"],
-                    "text_profile_name": ["type": "string"],
+                    "text_profile_id": ["type": "string"],
                     "cwd": ["type": "string"],
                     "repo_root": ["type": "string"],
                     "text_format": ["type": "string"],
@@ -197,12 +197,11 @@ enum MCPToolCatalog {
         ),
         Tool(
             name: "create_text_profile",
-            description: "Create a stored SpeakSwiftly text profile with the provided id, display name, and optional replacement rules.",
+            description: "Create a stored SpeakSwiftly text profile with the provided name and optional replacement rules.",
             inputSchema: [
                 "type": "object",
-                "required": ["id", "name"],
+                "required": ["name"],
                 "properties": [
-                    "id": ["type": "string"],
                     "name": ["type": "string"],
                     "replacements": ["type": "array"],
                 ],
@@ -219,24 +218,25 @@ enum MCPToolCatalog {
             inputSchema: ["type": "object", "properties": [:]],
         ),
         Tool(
-            name: "store_text_profile",
-            description: "Store or replace one persisted SpeakSwiftly text profile by passing the full profile payload.",
+            name: "rename_text_profile",
+            description: "Rename one stored SpeakSwiftly text profile by profile_id.",
             inputSchema: [
                 "type": "object",
-                "required": ["profile"],
+                "required": ["profile_id", "name"],
                 "properties": [
-                    "profile": ["type": "object"],
+                    "profile_id": ["type": "string"],
+                    "name": ["type": "string"],
                 ],
             ],
         ),
         Tool(
-            name: "use_text_profile",
-            description: "Replace the active custom SpeakSwiftly text profile with the provided full profile payload.",
+            name: "set_active_text_profile",
+            description: "Set one stored SpeakSwiftly text profile as the active custom profile by profile_id.",
             inputSchema: [
                 "type": "object",
-                "required": ["profile"],
+                "required": ["profile_id"],
                 "properties": [
-                    "profile": ["type": "object"],
+                    "profile_id": ["type": "string"],
                 ],
             ],
         ),
@@ -252,9 +252,20 @@ enum MCPToolCatalog {
             ],
         ),
         Tool(
-            name: "reset_active_text_profile",
-            description: "Reset the active custom SpeakSwiftly text profile back to the library default.",
+            name: "factory_reset_text_profiles",
+            description: "Delete all stored SpeakSwiftly text profiles and restore the library default active profile state.",
             inputSchema: ["type": "object", "properties": [:]],
+        ),
+        Tool(
+            name: "reset_text_profile",
+            description: "Reset one stored SpeakSwiftly text profile back to its library default contents by profile_id.",
+            inputSchema: [
+                "type": "object",
+                "required": ["profile_id"],
+                "properties": [
+                    "profile_id": ["type": "string"],
+                ],
+            ],
         ),
         Tool(
             name: "add_text_replacement",

@@ -76,10 +76,11 @@ Changes to bind addresses, ports, HTTP enablement, MCP enablement, MCP path, or 
 - `POST /text-profiles/stored`
 - `POST /text-profiles/load`
 - `POST /text-profiles/save`
-- `POST /text-profiles/active/reset`
+- `POST /text-profiles/factory-reset`
+- `POST /text-profiles/stored/{profile_id}/reset`
 - `POST /text-profiles/active/replacements`
 - `POST /text-profiles/stored/{profile_id}/replacements`
-- `PUT /text-profiles/stored/{profile_id}`
+- `PUT /text-profiles/stored/{profile_id}/name`
 - `PUT /text-profiles/style`
 - `PUT /text-profiles/active`
 - `PUT /text-profiles/active/replacements/{replacement_id}`
@@ -119,7 +120,7 @@ Changes to bind addresses, ports, HTTP enablement, MCP enablement, MCP path, or 
 
 Those responses use `request_id`, `request_url`, and `events_url` so ordinary HTTP clients can follow one tracked request cleanly without having to learn the MCP resource model first.
 
-`POST /speech/live` mirrors the current public live-speech queue lane and accepts optional `cwd`, `repo_root`, `text_profile_name`, `text_format`, `nested_source_format`, and `source_format` fields so callers can pass path-aware and normalization-aware context explicitly.
+`POST /speech/live` mirrors the current public live-speech queue lane and accepts optional `cwd`, `repo_root`, `text_profile_id`, `text_format`, `nested_source_format`, and `source_format` fields so callers can pass path-aware and normalization-aware context explicitly.
 
 ### Text Profile Semantics
 
@@ -185,10 +186,11 @@ The MCP surface is optional and mounts on the same shared Hummingbird process at
 - `load_text_profiles`
 - `save_text_profiles`
 - `create_text_profile`
-- `store_text_profile`
-- `use_text_profile`
+- `rename_text_profile`
+- `set_active_text_profile`
 - `delete_text_profile`
-- `reset_active_text_profile`
+- `factory_reset_text_profiles`
+- `reset_text_profile`
 - `add_text_replacement`
 - `replace_text_replacement`
 - `remove_text_replacement`

@@ -60,14 +60,14 @@ protocol ServerRuntimeProtocol: Actor {
     func queueSpeechLive(
         text: String,
         with profileName: String,
-        textProfileName: String?,
+        textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
     ) async -> RuntimeRequestHandle
     func queueSpeechFile(
         text: String,
         with profileName: String,
-        textProfileName: String?,
+        textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
     ) async -> RuntimeRequestHandle
@@ -113,22 +113,23 @@ protocol ServerRuntimeProtocol: Actor {
     func cancelRequest(_ requestID: String) async -> RuntimeRequestHandle
     func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle
     func setBuiltInTextProfileStyle(_ style: TextForSpeech.BuiltInProfileStyle) async throws -> TextForSpeech.BuiltInProfileStyle
-    func activeTextProfile() async -> TextForSpeech.Profile
+    func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails
     func baseTextProfile() async -> TextForSpeech.Profile
-    func textProfile(id profileID: String) async -> TextForSpeech.Profile?
-    func textProfiles() async -> [TextForSpeech.Profile]
-    func effectiveTextProfile(id profileID: String?) async -> TextForSpeech.Profile
+    func textProfile(id profileID: String) async -> SpeakSwiftly.TextProfileDetails?
+    func textProfiles() async -> [SpeakSwiftly.TextProfileSummary]
+    func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails
     func loadTextProfiles() async throws
     func saveTextProfiles() async throws
-    func createTextProfile(id: String, named name: String, replacements: [TextForSpeech.Replacement]) async throws -> TextForSpeech.Profile
-    func storeTextProfile(_ profile: TextForSpeech.Profile) async throws
-    func useTextProfile(_ profile: TextForSpeech.Profile) async throws
+    func createTextProfile(named name: String) async throws -> SpeakSwiftly.TextProfileDetails
+    func renameTextProfile(id profileID: String, to name: String) async throws -> SpeakSwiftly.TextProfileDetails
+    func setActiveTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails
     func removeTextProfile(id profileID: String) async throws
-    func resetTextProfile() async throws
-    func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> TextForSpeech.Profile
-    func addTextReplacement(_ replacement: TextForSpeech.Replacement, toStoredTextProfileID profileID: String) async throws -> TextForSpeech.Profile
-    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> TextForSpeech.Profile
-    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement, inStoredTextProfileID profileID: String) async throws -> TextForSpeech.Profile
-    func removeTextReplacement(id replacementID: String) async throws -> TextForSpeech.Profile
-    func removeTextReplacement(id replacementID: String, fromStoredTextProfileID profileID: String) async throws -> TextForSpeech.Profile
+    func factoryResetTextProfiles() async throws
+    func resetTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails
+    func addTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails
+    func addTextReplacement(_ replacement: TextForSpeech.Replacement, toStoredTextProfileID profileID: String) async throws -> SpeakSwiftly.TextProfileDetails
+    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement) async throws -> SpeakSwiftly.TextProfileDetails
+    func replaceTextReplacement(_ replacement: TextForSpeech.Replacement, inStoredTextProfileID profileID: String) async throws -> SpeakSwiftly.TextProfileDetails
+    func removeTextReplacement(id replacementID: String) async throws -> SpeakSwiftly.TextProfileDetails
+    func removeTextReplacement(id replacementID: String, fromStoredTextProfileID profileID: String) async throws -> SpeakSwiftly.TextProfileDetails
 }

@@ -17,7 +17,7 @@ extension ServerTests {
                             arguments: [
                                 "text": "Inspect MCP resources",
                                 "profile_name": "default",
-                                "text_profile_name": "mcp-text",
+                                "text_profile_id": "mcp-text",
                                 "cwd": "./Tests",
                                 "repo_root": "../SpeakSwiftlyServer",
                                 "text_format": "cli_output",
@@ -43,7 +43,7 @@ extension ServerTests {
                         nestedSourceFormat: .rust,
                     ),
             )
-            #expect(queuedSpeechInvocation.textProfileName == "mcp-text")
+            #expect(queuedSpeechInvocation.textProfileID == "mcp-text")
             #expect(queuedSpeechInvocation.sourceFormat == .generic)
 
             let createCloneToolEnvelope = try await mcpEnvelope(
@@ -116,13 +116,13 @@ extension ServerTests {
             let createTextProfileEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(
                     mcpPOSTRequest(
-                        body: #"{"jsonrpc":"2.0","id":"tool-text-profile-1","method":"tools/call","params":{"name":"create_text_profile","arguments":{"id":"mcp-text","name":"MCP Text","replacements":[{"id":"mcp-replacement","text":"CLI","replacement":"command line interface","match":"whole_token","phase":"before_built_ins","is_case_sensitive":false,"formats":["cli_output"],"priority":1}]}}}"#,
+                        body: #"{"jsonrpc":"2.0","id":"tool-text-profile-1","method":"tools/call","params":{"name":"create_text_profile","arguments":{"name":"MCP Text","replacements":[{"id":"mcp-replacement","text":"CLI","replacement":"command line interface","match":"whole_token","phase":"before_built_ins","is_case_sensitive":false,"formats":["cli_output"],"priority":1}]}}}"#,
                         sessionID: sessionID,
                     ),
                 ),
             )
             let createTextProfilePayload = try mcpToolPayload(from: createTextProfileEnvelope)
-            #expect(createTextProfilePayload["id"] as? String == "mcp-text")
+            #expect(createTextProfilePayload["profile_id"] as? String == "mcp-text")
 
             let listTextProfilesEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(
@@ -138,7 +138,7 @@ extension ServerTests {
             let listTextProfilesPayload = try mcpToolPayload(from: listTextProfilesEnvelope)
             #expect(listTextProfilesPayload["built_in_style"] as? String == "balanced")
             let listTextStoredProfiles = try #require(listTextProfilesPayload["stored_profiles"] as? [[String: Any]])
-            #expect(listTextStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
+            #expect(listTextStoredProfiles.contains { $0["profile_id"] as? String == "mcp-text" })
 
             let getTextProfileStyleEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(
@@ -175,7 +175,7 @@ extension ServerTests {
             )
             let loadTextProfilesPayload = try mcpToolPayload(from: loadTextProfilesEnvelope)
             let loadedStoredProfiles = try #require(loadTextProfilesPayload["stored_profiles"] as? [[String: Any]])
-            #expect(loadedStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
+            #expect(loadedStoredProfiles.contains { $0["profile_id"] as? String == "mcp-text" })
 
             let saveTextProfilesEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(
@@ -187,7 +187,7 @@ extension ServerTests {
             )
             let saveTextProfilesPayload = try mcpToolPayload(from: saveTextProfilesEnvelope)
             let savedStoredProfiles = try #require(saveTextProfilesPayload["stored_profiles"] as? [[String: Any]])
-            #expect(savedStoredProfiles.contains { $0["id"] as? String == "mcp-text" })
+            #expect(savedStoredProfiles.contains { $0["profile_id"] as? String == "mcp-text" })
             let persistenceActionCounts = await runtime.textProfilePersistenceActionCounts()
             #expect(persistenceActionCounts.load == 1)
             #expect(persistenceActionCounts.save == 1)
