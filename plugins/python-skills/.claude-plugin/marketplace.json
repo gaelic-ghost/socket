@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "python-skills",
-      "source": "./plugins/python-skills",
+      "source": "./skills",
       "description": "Bundled Python-focused Claude-compatible plugin packaging for uv bootstrapping, FastAPI and FastMCP scaffolding, and pytest workflows."
     }
   ]

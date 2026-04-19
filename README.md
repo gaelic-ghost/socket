@@ -140,7 +140,7 @@ Treat `socket` as the canonical home for the monorepo-owned nested directories a
 
 - `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
-- Some child repos expose plugin packaging from the repo root, while others keep a nested packaged plugin root inside their own repository tree.
+- Child repos may expose plugin packaging from their own repo roots even when they remain subtree-managed inside `socket`.
 - `things-app` still packages from its child-repo root at `./plugins/things-app`, but its bundled MCP server now lives directly under that child repo's top-level `mcp/` directory rather than under a second nested server folder.
 
 ## Marketplace Shape
@@ -154,7 +154,7 @@ That marketplace points at the actual packaged surface each child repository tre
 - `./plugins/dotnet-skills`
 - `./plugins/productivity-skills`
 - `./plugins/SpeakSwiftlyServer`
-- `./plugins/python-skills/plugins/python-skills`
+- `./plugins/python-skills`
 - `./plugins/rust-skills`
 - `./plugins/things-app`
 - `./plugins/web-dev-skills`

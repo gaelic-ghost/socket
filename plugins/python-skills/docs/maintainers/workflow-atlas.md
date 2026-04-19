@@ -2,7 +2,7 @@
 
 ## Active Surface
 
-`python-skills` now ships with five bundled skills under root `skills/` and thin packaged plugin manifests under `plugins/python-skills/`:
+`python-skills` now ships with five bundled skills under root `skills/` and repo-root plugin metadata for Codex plus a repo-root Claude marketplace catalog:
 
 - `bootstrap-python-mcp-service`
 - `bootstrap-python-service`
@@ -19,7 +19,7 @@ Treat `productivity-skills` as the baseline maintainer layer for general repo-do
 The repository should still support both user-facing install paths:
 
 - direct skill installation from `skills/` into standard `.agents/skills` locations
-- plugin installation through `plugins/python-skills/` plus marketplace metadata
+- plugin installation through the repo root plus marketplace metadata
 
 ## Skill Roles
 
@@ -71,9 +71,7 @@ Each active skill should maintain the full repo contract:
 
 - Root `README.md`: install surface and discovery guidance
 - `skills/`: canonical workflow-authoring surface
-- `plugins/python-skills/.codex-plugin/plugin.json`: Codex plugin distribution contract
-- `plugins/python-skills/.claude-plugin/plugin.json`: Claude plugin distribution contract
-- `.agents/plugins/marketplace.json`: repo-local Codex plugin install and smoke-test contract
+- `.codex-plugin/plugin.json`: Codex plugin distribution contract
 - `.claude-plugin/marketplace.json`: repo-shared Claude marketplace contract
 - `ROADMAP.md`: milestone history and near-term intent
 - `AGENTS.md`: repo-local authoring and validation policy
@@ -83,9 +81,9 @@ Each active skill should maintain the full repo contract:
 Future vendor surfaces should follow the same split:
 
 - shared skill content stays under `skills/`
-- OpenAI-specific packaging stays under `plugins/python-skills/.codex-plugin/` with repo-root marketplace catalogs
-- Claude-specific packaging stays under `plugins/python-skills/.claude-plugin/` and the repo-root `.claude-plugin/marketplace.json`
-- discovery mirrors stay explicit through `.agents/skills`, `.claude/skills`, and `plugins/python-skills/skills`
+- OpenAI-specific packaging stays at the repo root through `.codex-plugin/plugin.json`
+- Claude-specific discovery stays at the repo root through `.claude-plugin/marketplace.json`
+- discovery mirrors stay explicit through `.claude/skills`
 
 ## Validation Ownership
 

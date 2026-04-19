@@ -1,5 +1,0 @@
-{
-  "name": "python-skills",
-  "description": "Bundled Python-focused Claude-compatible plugin packaging for uv bootstrapping, FastAPI and FastMCP scaffolding, FastAPI/FastMCP integration, and pytest workflows.",
-  "version": "1.5.2"
-}

@@ -392,12 +392,12 @@ def validate_claude_marketplace(repo_root: Path) -> list[Finding]:
         return [Finding(rel_path, f"Claude marketplace must include a {PLUGIN_DIR_NAME} plugin entry")]
 
     source = matched_plugin.get("source")
-    if source != f"./plugins/{PLUGIN_DIR_NAME}":
-        findings.append(Finding(rel_path, f"Claude marketplace source must be ./plugins/{PLUGIN_DIR_NAME}"))
+    if source != "./skills":
+        findings.append(Finding(rel_path, "Claude marketplace source must be ./skills"))
 
-    plugin_root = repo_root / "plugins" / PLUGIN_DIR_NAME
-    if not (plugin_root / ".claude-plugin" / "plugin.json").exists():
-        findings.append(Finding(rel_path, "Claude marketplace source does not point at a valid plugin root"))
+    skills_root = repo_root / "skills"
+    if not skills_root.is_dir():
+        findings.append(Finding(rel_path, "Claude marketplace source does not point at an existing skills directory"))
 
     return findings
 
@@ -405,7 +405,7 @@ def validate_claude_marketplace(repo_root: Path) -> list[Finding]:
 def validate_skill_mirrors(repo_root: Path) -> list[Finding]:
     findings: list[Finding] = []
     expected_symlinks = {
-        repo_root / "plugins" / PLUGIN_DIR_NAME / "skills": "../../skills",
+        repo_root / ".claude" / "skills": "../skills",
     }
     for path, target in expected_symlinks.items():
         rel_path = str(path.relative_to(repo_root))
@@ -441,17 +441,9 @@ def run(repo_root: Path) -> list[Finding]:
     findings.extend(
         validate_plugin_manifest(
             repo_root,
-            plugin_root / ".codex-plugin" / "plugin.json",
+            repo_root / ".codex-plugin" / "plugin.json",
             expected_name=PLUGIN_DIR_NAME,
             require_skills_interface=True,
-        )
-    )
-    findings.extend(
-        validate_plugin_manifest(
-            repo_root,
-            plugin_root / ".claude-plugin" / "plugin.json",
-            expected_name=PLUGIN_DIR_NAME,
-            require_skills_interface=False,
         )
     )
     findings.extend(validate_claude_marketplace(repo_root))

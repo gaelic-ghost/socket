@@ -1,6 +1,6 @@
 # python-skills
 
-Python workflow skills for uv bootstrapping, FastAPI and FastMCP scaffolding, integration work, and pytest setup.
+Python workflow skills for `uv` bootstrapping, FastAPI and FastMCP scaffolding, integration work, and pytest setup.
 
 ## Table of Contents
 
@@ -17,57 +17,84 @@ Python workflow skills for uv bootstrapping, FastAPI and FastMCP scaffolding, in
 
 ## Overview
 
-`python-skills` bundles reusable Python-focused workflows centered on `uv`, FastAPI, FastMCP, and pytest-oriented repo setup.
+`python-skills` is the Python-specific workflow plugin in Gale's skills ecosystem.
 
 ### Status
 
-This repository is active and currently ships authored Python skills, repo-local tests, and a nested packaged plugin root for Codex installation.
+This repository is active and currently ships a focused set of Python workflow skills.
 
 ### What This Project Is
 
-This repository is the canonical source of truth for Gale's Python workflow skills. Root [`skills/`](./skills/) is the authored surface, while the nested packaged plugin root under [`plugins/python-skills/`](./plugins/python-skills/) exists for Codex packaging. Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work, and use `python-skills` when Python-, `uv`-, FastAPI-, or FastMCP-specific behavior should shape the workflow.
+This repository is the canonical home for Gale's Python-oriented skill authoring. Root [`skills/`](./skills/) is the authored surface, and the repo root is also the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 ### Motivation
 
-It exists to keep Python-specific workflow guidance in one place while preserving a thin packaging layer instead of duplicating the skill tree per platform.
+It exists to keep Python-specific workflow guidance in one place without mixing it into the broader general-purpose maintainer layer owned by `productivity-skills`.
 
 ## Setup
 
-Sync the repo-local maintainer environment before running tests:
+Use the repo-local maintainer environment when you want to inspect, test, or edit this repository:
 
 ```bash
 uv sync --dev
 ```
 
+If you are trying to contribute changes instead of just consume the shipped skills, use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow.
+
 ## Usage
 
-Use this repository when the work is about:
+Use `python-skills` when the work is specifically about:
 
-- bootstrapping uv-managed Python projects or workspaces
-- scaffolding FastAPI or FastMCP services
+- bootstrapping `uv`-managed Python projects or workspaces
+- scaffolding FastAPI services
+- scaffolding FastMCP services
 - integrating FastAPI and FastMCP in one codebase
-- setting up or troubleshooting pytest in uv-managed repos
+- setting up or troubleshooting pytest in `uv`-managed repositories
+
+### Direct Skill Installation
+
+The canonical authored surface is [`skills/`](./skills/). This repository supports direct skill installation from that shared tree into the standard Codex or Claude skill locations when you want one skill or a small subset instead of the whole packaged plugin.
+
+### Packaged Plugin Installation
+
+The Codex plugin root is this repository root. In parent repositories such as `socket`, marketplace entries should point at the child repo root rather than a second nested packaged copy.
+
+### Install-Surface Map
+
+For Codex, keep these surfaces distinct:
+
+- marketplace catalog: a repo marketplace such as `socket/.agents/plugins/marketplace.json` or a personal marketplace at `~/.agents/plugins/marketplace.json`
+- staged plugin directory: this repo root, which is the local plugin payload directory the marketplace entry should point at
+- installed plugin cache: `~/.codex/plugins/cache/$MARKETPLACE_NAME/python-skills/local/`
+- enabled-state config: `~/.codex/config.toml`
+
+For Claude-side discovery, this repo keeps the marketplace catalog at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json), which points directly at root [`skills/`](./skills/).
+
+### Codex Limitation Warning
+
+OpenAI's documented Codex plugin system supports repo marketplaces, personal marketplaces, staged plugin directories, installed plugin caches, and enabled-state config, but it does not provide proper repo-private plugin scoping beyond that marketplace model.
 
 ## Development
 
 ### Setup
 
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep the nested packaged plugin root under [`plugins/python-skills/`](./plugins/python-skills/) as install metadata only.
+Treat root [`skills/`](./skills/) as the source of truth for shipped workflow content. Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) as install-surface metadata and discovery wiring, not as second authored trees.
 
 ### Workflow
 
-Update the root skill content first, then keep the nested packaged plugin root, marketplace metadata, and tests aligned in the same pass.
+Keep the public docs, maintainer docs, and packaging metadata aligned in the same pass when the shipped skill surface changes. Use this repository for Python-, `uv`-, FastAPI-, FastMCP-, and pytest-specific workflow behavior. Use `productivity-skills` for broader general-purpose maintainer workflows that should stay stack-neutral.
+
+Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the contributor contract, [`AGENTS.md`](./AGENTS.md) for durable repo-local guidance, and [`docs/maintainers/workflow-atlas.md`](./docs/maintainers/workflow-atlas.md) when you need the deeper maintained map of the active repo surface.
 
 ## Verification
 
-Run the repository test suite before landing metadata or documentation changes:
+Run the repo validation path before landing documentation, metadata, or packaging changes:
 
 ```bash
 uv sync --dev
+uv run scripts/validate_repo_metadata.py
 uv run pytest
 ```
-
-GitHub Actions now mirrors the same maintainer checks on `main` and pull requests by running the repo-metadata validator and test suite.
 
 ## Release Notes
 
@@ -87,29 +114,33 @@ See [LICENSE](./LICENSE).
 
 ## Packaging
 
-This repository intentionally separates the authored surface from the packaged plugin root.
+This repository intentionally keeps authored content and plugin metadata separate.
 
 - root [`skills/`](./skills/) is the canonical authored workflow surface
-- [`plugins/python-skills/`](./plugins/python-skills/) is the packaged Codex plugin root used by the `socket` marketplace
-- [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) carries the Claude-side marketplace metadata
+- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) defines the Codex plugin metadata at the repo root
+- [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) carries the repo-root Claude marketplace catalog
+- [`.claude/skills`](./.claude/skills) is a symlink back to the canonical root skill tree
 
 ## Repository Layout
 
 ```text
 .
+├── .claude/
+│   └── skills -> ../skills
 ├── .claude-plugin/
 │   └── marketplace.json
+├── .codex-plugin/
+│   └── plugin.json
 ├── AGENTS.md
+├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md
 ├── ROADMAP.md
 ├── docs/
-├── plugins/
-│   └── python-skills/
-│       ├── .claude-plugin/
-│       ├── .codex-plugin/
-│       └── skills -> ../../skills
+│   └── maintainers/
 ├── pyproject.toml
+├── scripts/
+│   └── validate_repo_metadata.py
 ├── skills/
 ├── tests/
 └── uv.lock

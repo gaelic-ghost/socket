@@ -68,7 +68,7 @@
       "name": "python-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/python-skills/plugins/python-skills"
+        "path": "./plugins/python-skills"
       },
       "policy": {
         "installation": "AVAILABLE",
