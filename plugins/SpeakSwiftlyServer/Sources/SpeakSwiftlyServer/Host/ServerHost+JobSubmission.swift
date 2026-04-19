@@ -7,7 +7,7 @@ extension ServerHost {
     func queueSpeechLive(
         text: String,
         profileName: String,
-        textProfileName: String? = nil,
+        textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
     ) async throws -> String {
@@ -15,7 +15,7 @@ extension ServerHost {
         let handle = await runtime.queueSpeechLive(
             text: text,
             with: profileName,
-            textProfileName: textProfileName,
+            textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
         )
@@ -25,7 +25,7 @@ extension ServerHost {
     func queueSpeechFile(
         text: String,
         profileName: String,
-        textProfileName: String? = nil,
+        textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
     ) async throws -> String {
@@ -33,7 +33,7 @@ extension ServerHost {
         let handle = await runtime.queueSpeechFile(
             text: text,
             with: profileName,
-            textProfileName: textProfileName,
+            textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
         )

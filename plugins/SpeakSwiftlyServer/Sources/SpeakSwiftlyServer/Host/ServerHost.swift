@@ -149,7 +149,7 @@ actor ServerHost {
             enabled: false,
             path: "/mcp",
             serverName: "speak-swiftly-mcp",
-            title: "SpeakSwiftly",
+            title: "Speak Swiftly",
         )
         self.runtime = runtime
         self.runtimeConfigurationStore = runtimeConfigurationStore

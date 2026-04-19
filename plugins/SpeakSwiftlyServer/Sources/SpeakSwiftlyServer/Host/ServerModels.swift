@@ -51,7 +51,7 @@ struct SpeakRequestPayload: Decodable {
     enum CodingKeys: String, CodingKey {
         case text
         case profileName = "profile_name"
-        case textProfileName = "text_profile_name"
+        case textProfileID = "text_profile_id"
         case cwd
         case repoRoot = "repo_root"
         case textFormat = "text_format"
@@ -61,7 +61,7 @@ struct SpeakRequestPayload: Decodable {
 
     let text: String
     let profileName: String?
-    let textProfileName: String?
+    let textProfileID: String?
     let cwd: String?
     let repoRoot: String?
     let textFormat: String?
@@ -138,7 +138,7 @@ struct BatchItemRequestPayload: Decodable {
     enum CodingKeys: String, CodingKey {
         case artifactID = "artifact_id"
         case text
-        case textProfileName = "text_profile_name"
+        case textProfileID = "text_profile_id"
         case cwd
         case repoRoot = "repo_root"
         case textFormat = "text_format"
@@ -148,7 +148,7 @@ struct BatchItemRequestPayload: Decodable {
 
     let artifactID: String?
     let text: String
-    let textProfileName: String?
+    let textProfileID: String?
     let cwd: String?
     let repoRoot: String?
     let textFormat: String?
@@ -159,7 +159,7 @@ struct BatchItemRequestPayload: Decodable {
         try .init(
             artifactID: artifactID,
             text: text,
-            textProfileName: textProfileName,
+            textProfileID: textProfileID,
             textContext: normalizationContext(),
             sourceFormat: sourceFormatModel(),
         )

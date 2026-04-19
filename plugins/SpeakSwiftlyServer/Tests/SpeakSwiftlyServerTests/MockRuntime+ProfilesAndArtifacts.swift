@@ -189,14 +189,14 @@ extension MockRuntime {
                 createdAt: current.createdAt,
                 updatedAt: Date(),
                 profileName: current.profileName,
-                textProfileName: current.textProfileName,
+                textProfileID: current.textProfileID,
                 speechBackend: current.speechBackend.rawValue,
                 state: "expired",
                 items: current.items.map {
                     GenerationJobItemFixture(
                         artifactID: $0.artifactID,
                         text: $0.text,
-                        textProfileName: $0.textProfileName,
+                        textProfileID: $0.textProfileID,
                         textContext: $0.textContext,
                         sourceFormat: $0.sourceFormat,
                     )
@@ -209,7 +209,7 @@ extension MockRuntime {
                         filePath: $0.filePath,
                         sampleRate: $0.sampleRate,
                         profileName: $0.profileName,
-                        textProfileName: $0.textProfileName,
+                        textProfileID: $0.textProfileID,
                     )
                 },
                 failure: current.failure.map { .init(code: $0.code, message: $0.message) },

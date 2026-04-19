@@ -29,7 +29,7 @@ extension ServerTests {
             _ = try await mcpEnvelope(
                 from: mcpSurface.handle(
                     mcpPOSTRequest(
-                        body: #"{"jsonrpc":"2.0","id":"tool-text-profile-1","method":"tools/call","params":{"name":"create_text_profile","arguments":{"id":"mcp-text","name":"MCP Text","replacements":[]}}}"#,
+                        body: #"{"jsonrpc":"2.0","id":"tool-text-profile-1","method":"tools/call","params":{"name":"create_text_profile","arguments":{"name":"MCP Text","replacements":[]}}}"#,
                         sessionID: sessionID,
                     ),
                 ),
@@ -165,7 +165,7 @@ extension ServerTests {
             let textProfilesPayload = try jsonObject(from: Data(textProfilesText.utf8))
             #expect(textProfilesPayload["built_in_style"] as? String == "balanced")
             let storedProfilesPayload = try #require(textProfilesPayload["stored_profiles"] as? [[String: Any]])
-            #expect(storedProfilesPayload.contains { $0["id"] as? String == "mcp-text" })
+            #expect(storedProfilesPayload.contains { $0["profile_id"] as? String == "mcp-text" })
 
             let textProfileStyleEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(
@@ -193,7 +193,7 @@ extension ServerTests {
             let textProfilesGuideResult = try #require(mcpResultPayload(from: textProfilesGuideEnvelope))
             let textProfilesGuideContents = try #require(textProfilesGuideResult["contents"] as? [[String: Any]])
             let textProfilesGuideText = try #require(textProfilesGuideContents.first?["text"] as? String)
-            #expect(textProfilesGuideText.contains("text_profile_name"))
+            #expect(textProfilesGuideText.contains("text_profile_id"))
             #expect(textProfilesGuideText.contains("set_text_profile_style"))
 
             let voiceProfilesGuideEnvelope = try await mcpEnvelope(
@@ -259,7 +259,7 @@ extension ServerTests {
             let storedTextProfileContents = try #require(storedTextProfileResult["contents"] as? [[String: Any]])
             let storedTextProfileText = try #require(storedTextProfileContents.first?["text"] as? String)
             let storedTextProfilePayload = try jsonObject(from: Data(storedTextProfileText.utf8))
-            #expect(storedTextProfilePayload["id"] as? String == "mcp-text")
+            #expect(storedTextProfilePayload["profile_id"] as? String == "mcp-text")
 
             let jobDetailEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(

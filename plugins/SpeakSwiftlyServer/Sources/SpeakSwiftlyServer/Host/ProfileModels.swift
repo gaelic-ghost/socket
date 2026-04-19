@@ -195,24 +195,43 @@ struct TextReplacementSnapshot: Codable, Equatable {
     }
 }
 
-/// One text profile and its replacement rules as exposed by the server.
+/// One text profile summary or detail object as exposed by the server.
 struct TextProfileSnapshot: Codable, Equatable {
-    let id: String
+    let profileID: String
     let name: String
-    let replacements: [TextReplacementSnapshot]
+    let replacementCount: Int?
+    let replacements: [TextReplacementSnapshot]?
+
+    enum CodingKeys: String, CodingKey {
+        case profileID = "profile_id"
+        case name
+        case replacementCount = "replacement_count"
+        case replacements
+    }
 
     init(profile: TextForSpeech.Profile) {
-        id = profile.id
+        profileID = profile.id
         name = profile.name
+        replacementCount = profile.replacements.count
         replacements = profile.replacements.map(TextReplacementSnapshot.init(replacement:))
     }
 
-    func model() throws -> TextForSpeech.Profile {
-        try .init(
-            id: id,
-            name: name,
-            replacements: replacements.map { try $0.model() },
-        )
+    init(summary: SpeakSwiftly.TextProfileSummary) {
+        profileID = summary.id
+        name = summary.name
+        replacementCount = summary.replacementCount
+        replacements = nil
+    }
+
+    init(details: SpeakSwiftly.TextProfileDetails) {
+        profileID = details.profileID
+        name = details.summary.name
+        replacementCount = details.summary.replacementCount
+        replacements = details.replacements.map(TextReplacementSnapshot.init(replacement:))
+    }
+
+    func replacementModels() throws -> [TextForSpeech.Replacement] {
+        try (replacements ?? []).map { try $0.model() }
     }
 }
 
@@ -265,17 +284,28 @@ struct TextProfileStyleResponse: ResponseEncodable {
 }
 
 struct CreateTextProfileRequestPayload: Decodable {
-    let id: String
     let name: String
-    let replacements: [TextReplacementSnapshot]
+    let replacements: [TextReplacementSnapshot]?
 }
 
-struct StoreTextProfileRequestPayload: Decodable {
-    let profile: TextProfileSnapshot
+struct RenameTextProfileRequestPayload: Decodable {
+    let name: String
 }
 
-struct UseTextProfileRequestPayload: Decodable {
-    let profile: TextProfileSnapshot
+struct SetActiveTextProfileRequestPayload: Decodable {
+    let profileID: String
+
+    enum CodingKeys: String, CodingKey {
+        case profileID = "profile_id"
+    }
+}
+
+struct ResetTextProfileRequestPayload: Decodable {
+    let profileID: String
+
+    enum CodingKeys: String, CodingKey {
+        case profileID = "profile_id"
+    }
 }
 
 struct TextReplacementRequestPayload: Decodable {

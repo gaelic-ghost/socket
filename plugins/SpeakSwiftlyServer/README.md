@@ -99,7 +99,7 @@ The full transport contract lives in [API.md](./API.md).
 
 ## Embedding
 
-The supported public embedding surface is `EmbeddedServer`, defined in [Sources/SpeakSwiftlyServer/Host/ServerState.swift](./Sources/SpeakSwiftlyServer/Host/ServerState.swift). App code owns that one observable object directly, calls `liftoff()`, binds UI to its observable properties, and uses the same object for runtime and playback control actions.
+The supported public embedding surface is `EmbeddedServer`, defined in [Sources/SpeakSwiftlyServer/Host/ServerState.swift](./Sources/SpeakSwiftlyServer/Host/ServerState.swift). App code owns that one observable object directly, calls `liftoff()`, binds UI to its observable properties, and uses the same object for runtime controls, playback controls, voice-profile actions, and direct live speech submission through `queueLiveSpeech(...)`.
 
 ```swift
 import SpeakSwiftlyServer
@@ -175,7 +175,7 @@ app:
     enabled: false
     path: /mcp
     serverName: speak-swiftly-mcp
-    title: SpeakSwiftly
+    title: Speak Swiftly
 ```
 
 The app-managed install layout is centered on one per-user location under `~/Library/Application Support/SpeakSwiftlyServer`, with logs in `~/Library/Logs/SpeakSwiftlyServer`. The package exposes that layout directly through [AppManagedInstallLayout.swift](./Sources/SpeakSwiftlyServer/AppManagedInstallLayout.swift).
@@ -203,6 +203,13 @@ Use that guide for:
 - live end-to-end coverage
 - pull request and release workflow
 - monorepo and submodule handoff rules
+
+The short version is:
+
+- use `xcrun swift test` for the normal package-development loop
+- use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
+- use `scripts/repo-maintenance/release-prepare.sh` only for branch-side PR prep
+- use `scripts/repo-maintenance/release-publish.sh` as the single publish-time artifact and tag path
 
 ## Repo Structure
 

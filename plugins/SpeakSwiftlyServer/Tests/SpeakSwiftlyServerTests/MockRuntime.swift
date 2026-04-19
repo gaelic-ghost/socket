@@ -16,7 +16,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     struct QueuedSpeechInvocation: Equatable {
         let text: String
         let profileName: String
-        let textProfileName: String?
+        let textProfileID: String?
         let normalizationContext: SpeechNormalizationContext?
         let sourceFormat: TextForSpeech.SourceFormat?
     }

@@ -66,7 +66,7 @@ while [ "$#" -gt 0 ]; do
 Usage:
   release-prepare.sh --version <vX.Y.Z> [--base-branch <branch>] [--skip-validate] [--no-auto-merge] [--merge-method <merge|rebase|squash>] [--wait-for-merge] [--title <text>] [--body-file <path>] [--draft] [--dry-run]
 
-This workflow is for feature branches and worktrees. It validates the checkout, stages the release candidate artifact locally, pushes the current branch, opens or updates a pull request, and enables auto-merge by default.
+This workflow is for feature branches and worktrees. It validates the checkout, pushes the current branch, opens or updates a pull request, and enables auto-merge by default. Final release artifact staging, tagging, and GitHub release publication remain on release-publish.sh after the branch lands on the release branch.
 USAGE
       exit 0
       ;;
@@ -104,7 +104,6 @@ if [ "$skip_validate" != "true" ]; then
 fi
 
 log "Running release-prepare for $RELEASE_TAG from $branch_name against base branch $base_branch."
-stage_release_artifact
 
 if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
   log "Would push branch $branch_name to $(release_remote)."
@@ -121,8 +120,7 @@ if [ -z "$body_file" ]; then
 ## Release Prepare
 
 - prepares release candidate \`$RELEASE_TAG\`
-- stages the local artifact under \`.release-artifacts/$RELEASE_TAG\`
-- leaves final tag creation and GitHub release publication for \`scripts/repo-maintenance/release-publish.sh\` after this pull request lands on \`$base_branch\`
+- leaves release artifact staging, final tag creation, and GitHub release publication for \`scripts/repo-maintenance/release-publish.sh\` after this pull request lands on \`$base_branch\`
 
 ## Publish Follow-Up
 
@@ -230,4 +228,4 @@ if [ "$wait_for_merge" = "true" ]; then
   fi
 fi
 
-log "Release prepare completed. After this PR merges, switch to $base_branch and run release-publish.sh for $RELEASE_TAG."
+log "Release prepare completed. After this PR merges, switch to $base_branch and run release-publish.sh for $RELEASE_TAG to stage the release artifact, tag it, and publish it."

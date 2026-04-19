@@ -11,7 +11,7 @@ Use this skill for voice selection, voice creation, and speech-generation work o
 
 - Read `list_voice_profiles` or `speak://voices` before creating, renaming, rerolling, deleting, or choosing a profile.
 - Use `speak://voices/{profile_name}` when the user is working on one specific stored voice.
-- If the user wants help designing a voice rather than executing immediately, prefer the prompt and guide flow documented in [MCPResources.swift](../../Sources/SpeakSwiftlyServer/MCP/MCPResources.swift).
+- If the user wants help designing a voice rather than executing immediately, prefer the `draft_profile_voice_description`, `draft_profile_source_text`, and `draft_voice_design_instruction` prompts plus the guide flow documented in [MCPResources.swift](../../Sources/SpeakSwiftlyServer/MCP/MCPResources.swift).
 
 ## Creation And Editing
 
@@ -26,7 +26,7 @@ Use this skill for voice selection, voice creation, and speech-generation work o
 - Use `generate_speech` when the user wants audible playback now.
 - Use `generate_audio_file` when the user wants a saved retained artifact instead of immediate playback.
 - Use `generate_batch` when the user wants multiple generated files under one voice profile.
-- Pass `text_profile_name` only when the user explicitly wants a stored normalization profile on that request.
+- Pass `text_profile_id` only when the user explicitly wants a stored normalization profile on that request.
 - Pass `text_format`, `nested_source_format`, or `source_format` when the input is code, structured output, or other content where automatic detection is likely to misread intent.
 
 ## Tracking

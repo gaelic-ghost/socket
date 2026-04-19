@@ -128,7 +128,7 @@ import Testing
             enabled: true,
             path: "/mcp",
             serverName: "speak-swiftly-mcp",
-            title: "SpeakSwiftly",
+            title: "Speak Swiftly",
         ),
         runtime: runtime,
         runtimeConfigurationStore: testRuntimeConfigurationStore(),
@@ -321,6 +321,20 @@ import Testing
                 refreshVoiceProfiles: {
                     try await host.refreshVoiceProfiles()
                 },
+                queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
+                    guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
+                        let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
+                        throw ServerConfigurationError(errorMessage)
+                    }
+
+                    return try await host.queueSpeechLive(
+                        text: text,
+                        profileName: resolvedProfileName,
+                        textProfileID: textProfileID,
+                        normalizationContext: normalizationContext,
+                        sourceFormat: sourceFormat,
+                    )
+                },
                 setDefaultVoiceProfileName: { profileName in
                     try await host.setDefaultVoiceProfileName(profileName)
                 },
@@ -386,6 +400,33 @@ import Testing
     #expect(refreshedProfiles.contains { $0.profileName == "default" })
     #expect(refreshCountAfterManualRefresh == refreshCountBeforeManualRefresh + 1)
 
+    let firstQueuedRequestID = try await state.queueLiveSpeech(
+        text: "Read this aloud",
+        profileName: "default",
+        textProfileID: "swift-docs",
+        normalizationContext: .init(
+            cwd: "./Sources",
+            repoRoot: "../SpeakSwiftlyServer",
+            textFormat: .markdown,
+            nestedSourceFormat: .swift,
+        ),
+        sourceFormat: .python,
+    )
+    let firstQueuedSpeechInvocation = try #require(await runtime.latestQueuedSpeechInvocation())
+    #expect(firstQueuedRequestID.isEmpty == false)
+    #expect(firstQueuedSpeechInvocation.text == "Read this aloud")
+    #expect(firstQueuedSpeechInvocation.profileName == "default")
+    #expect(firstQueuedSpeechInvocation.textProfileID == "swift-docs")
+    let expectedNormalizationContext = SpeechNormalizationContext(
+        cwd: "./Sources",
+        repoRoot: "../SpeakSwiftlyServer",
+        textFormat: .markdown,
+        nestedSourceFormat: .swift,
+    )
+    #expect(firstQueuedSpeechInvocation.normalizationContext == expectedNormalizationContext)
+    #expect(firstQueuedSpeechInvocation.sourceFormat == .python)
+    await runtime.finishHeldSpeak(id: firstQueuedRequestID)
+
     let defaultVoiceProfileName = try await state.setDefaultVoiceProfileName("default")
     #expect(defaultVoiceProfileName == "default")
     let overviewAfterSet = await MainActor.run { state.overview }
@@ -393,11 +434,24 @@ import Testing
     #expect(await host.defaultVoiceProfileName() == "default")
     #expect(await host.resolvedRequestedVoiceProfileName(nil) == "default")
 
+    let secondQueuedRequestID = try await state.queueLiveSpeech(text: "Use the app default")
+    let secondQueuedSpeechInvocation = try #require(await runtime.latestQueuedSpeechInvocation())
+    #expect(secondQueuedSpeechInvocation.profileName == "default")
+    await runtime.finishHeldSpeak(id: secondQueuedRequestID)
+
     try await state.clearDefaultVoiceProfileName()
     let overviewAfterClear = await MainActor.run { state.overview }
     #expect(overviewAfterClear.defaultVoiceProfileName == nil)
     #expect(await host.defaultVoiceProfileName() == nil)
     #expect(await host.resolvedRequestedVoiceProfileName(nil) == nil)
+
+    do {
+        _ = try await state.queueLiveSpeech(text: "This should fail without a default")
+        Issue.record("Expected live speech submission to fail when neither profileName nor app.defaultVoiceProfileName is available.")
+    } catch {
+        let message = String(describing: error)
+        #expect(message.contains("app.defaultVoiceProfileName"))
+    }
 
     let switchedSnapshot = try await state.switchSpeechBackend(to: .chatterboxTurbo)
     #expect(switchedSnapshot.runtimeConfiguration.activeRuntimeSpeechBackend == "chatterbox_turbo")
@@ -461,6 +515,20 @@ import Testing
             .init(
                 refreshVoiceProfiles: {
                     try await host.refreshVoiceProfiles()
+                },
+                queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
+                    guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
+                        let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
+                        throw ServerConfigurationError(errorMessage)
+                    }
+
+                    return try await host.queueSpeechLive(
+                        text: text,
+                        profileName: resolvedProfileName,
+                        textProfileID: textProfileID,
+                        normalizationContext: normalizationContext,
+                        sourceFormat: sourceFormat,
+                    )
                 },
                 setDefaultVoiceProfileName: { profileName in
                     try await host.setDefaultVoiceProfileName(profileName)
