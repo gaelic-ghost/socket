@@ -89,6 +89,18 @@
       "category": "Developer Tools"
     },
     {
+      "name": "cardhop-app",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cardhop-app"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "things-app",
       "source": {
         "source": "local",

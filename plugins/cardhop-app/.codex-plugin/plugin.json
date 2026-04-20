@@ -1,0 +1,40 @@
+{
+  "name": "cardhop-app",
+  "version": "0.1.0",
+  "description": "Cardhop.app workflow guidance plus a bundled local MCP server for contact capture and updates on macOS.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cardhop-app",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "keywords": [
+    "cardhop",
+    "cardhop.app",
+    "contacts",
+    "mcp",
+    "codex",
+    "macos"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Cardhop.app Socket",
+    "shortDescription": "Cardhop.app workflows plus a bundled local MCP server.",
+    "longDescription": "Bundle Cardhop.app contact-capture guidance with a local MCP server that drives Cardhop through documented macOS integration routes.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cardhop-app",
+    "defaultPrompt": [
+      "Use Cardhop.app Socket to add a new contact to Cardhop.",
+      "Help me update an existing Cardhop contact using a safe natural-language instruction.",
+      "Check whether the local Cardhop.app MCP server is ready on this Mac."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -139,10 +139,11 @@ The root superproject docs are:
 
 Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
 
-- `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
+- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
+- `cardhop-app` packages from its child-repo root at `./plugins/cardhop-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 
 ## Marketplace Shape
 
@@ -152,6 +153,7 @@ That marketplace points at the actual packaged surface each child repository tre
 
 - `./plugins/agent-plugin-skills`
 - `./plugins/apple-dev-skills`
+- `./plugins/cardhop-app`
 - `./plugins/dotnet-skills`
 - `./plugins/productivity-skills`
 - `./plugins/SpeakSwiftlyServer`
@@ -161,5 +163,7 @@ That marketplace points at the actual packaged surface each child repository tre
 - `./plugins/web-dev-skills`
 
 For `things-app`, that marketplace path stays `./plugins/things-app` because the installable plugin root is the child repo root even though the bundled server now lives at top-level `mcp/` inside that child repo.
+
+For `cardhop-app`, that marketplace path stays `./plugins/cardhop-app` because the installable plugin root is the child repo root while the bundled Cardhop MCP server now lives at top-level `mcp/` inside that child repo.
 
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.

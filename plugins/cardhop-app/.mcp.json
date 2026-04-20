@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "cardhop_app_socket": {
+      "command": "uv",
+      "args": [
+        "run",
+        "python",
+        "app/server.py"
+      ],
+      "cwd": "../../mcp"
+    }
+  }
+}
