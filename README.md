@@ -141,8 +141,8 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 - `agent-plugin-skills`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
-- Child repos may expose plugin packaging from their own repo roots even when they remain subtree-managed inside `socket`.
-- `things-app` still packages from its child-repo root at `./plugins/things-app`, but its bundled MCP server now lives directly under that child repo's top-level `mcp/` directory rather than under a second nested server folder.
+- Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
+- `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 
 ## Marketplace Shape
 
@@ -160,6 +160,6 @@ That marketplace points at the actual packaged surface each child repository tre
 - `./plugins/things-app`
 - `./plugins/web-dev-skills`
 
-For `things-app`, that root marketplace path stays the same after the bundled-server move because the installable plugin root is still `./plugins/things-app`; only the child repo's internal server layout changed, from `mcp/things-app-mcp/` to top-level `mcp/`.
+For `things-app`, that marketplace path stays `./plugins/things-app` because the installable plugin root is the child repo root even though the bundled server now lives at top-level `mcp/` inside that child repo.
 
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.
