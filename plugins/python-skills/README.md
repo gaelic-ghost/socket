@@ -39,6 +39,8 @@ Use the repo-local maintainer environment when you want to inspect, test, or edi
 uv sync --dev
 ```
 
+Keep the maintainer toolchain declared in this repository instead of assuming machine-global Python tools. When the repo's validation surface uses them, declare `pytest`, `ruff`, and `mypy` in the repo-local dev dependency group and run them through `uv`.
+
 If you are trying to contribute changes instead of just consume the shipped skills, use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow.
 
 ## Usage
@@ -94,6 +96,8 @@ Run the repo validation path before landing documentation, metadata, or packagin
 uv sync --dev
 uv run scripts/validate_repo_metadata.py
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
 ## Release Notes

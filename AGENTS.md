@@ -49,7 +49,9 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Keep the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, docs, automation prompts, scripts, and marketplace metadata.
 - If docs and scripts disagree, fix the script or narrow the documented contract so they match.
 - When shipped behavior, active skill inventory, packaging roots, or validation commands change, update the relevant docs and `ROADMAP.md` in the same pass unless Gale explicitly says not to.
-- For Python-backed skill repositories, prefer `uv sync --dev`, `uv run pytest`, and uv-managed maintainer tools such as `ruff` and `mypy`.
+- For Python-backed repositories in `socket`, use `uv` as the maintainer baseline and declare repo-local dev dependencies in `pyproject.toml` instead of relying on globally installed tools.
+- Prefer a root or package-local dev group that explicitly includes the Python maintainer tools the repo expects to run, including `pytest`, `ruff`, and `mypy` when those checks are part of the workflow.
+- Prefer `uv sync --dev`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` for repos that actually ship those Python-backed validation surfaces.
 - When OpenAI or Claude product behavior matters, prefer official docs first. When describing Codex plugin boundaries, say plainly that repo-visible plugins come from the documented marketplace model and that OpenAI does not currently document a richer repo-private scoping model.
 - Use these terms consistently:
   - `skill`: reusable workflow-authoring unit

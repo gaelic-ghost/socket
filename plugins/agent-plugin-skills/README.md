@@ -62,6 +62,8 @@ Sync the local maintainer environment before changing the Python-backed audit to
 uv sync --dev
 ```
 
+Keep the Python maintainer baseline repo-local. When this repo or a target repo expects Python checks, declare the required dev dependencies in `pyproject.toml` instead of assuming contributors already installed standalone tools globally. The normal baseline is `pytest`, `ruff`, and `mypy` when those checks are part of the shipped workflow.
+
 ### Workflow
 
 Keep root [`skills/`](./skills/) canonical, keep maintainer docs under [`docs/maintainers/`](./docs/maintainers/), and keep plugin metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
@@ -77,6 +79,8 @@ Run the repo-local tests before landing changes that touch skill behavior, docs-
 ```bash
 uv sync --dev
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
 ## Repo Structure

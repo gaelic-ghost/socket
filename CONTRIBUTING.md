@@ -58,6 +58,8 @@ The root superproject uses a small `uv` environment for maintainer tooling:
 uv sync --dev
 ```
 
+If a root or child-repo workflow depends on Python quality tooling, declare that tooling in the relevant repo's `pyproject.toml` dev dependencies rather than assuming a machine-global install. Treat `pytest`, `ruff`, and `mypy` as the normal Python maintainer baseline when the repo's shipped validation surface uses them.
+
 The root validation path does not require application secrets. If your change involves subtree sync or GitHub operations, make sure your git remotes and GitHub authentication are already configured on your machine before you start those steps.
 
 ### Runtime Behavior
@@ -105,6 +107,8 @@ Root baseline validation:
 uv sync --dev
 uv run scripts/validate_socket_metadata.py
 ```
+
+If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` commands where that repo's contributors will actually look.
 
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
 

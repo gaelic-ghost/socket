@@ -52,6 +52,8 @@ This repository uses `uv` for local Python tooling. Sync the dev environment bef
 uv sync --dev
 ```
 
+Keep the maintainer toolchain declared in the repository itself. If the repo expects linting, type-checking, or tests, add those tools to the repo-local dev dependency group in `pyproject.toml` instead of relying on `uv tool install` or other machine-global setup. Treat `pytest`, `ruff`, and `mypy` as the default Python maintainer trio when the shipped workflow uses them.
+
 This repo does not require dedicated local services or repo-specific secret configuration for normal docs and test work.
 
 ### Runtime Behavior
@@ -62,6 +64,8 @@ Run the normal validation flow with:
 
 ```bash
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
 ## Development Expectations
@@ -89,6 +93,8 @@ Prefer the grounded repo checks:
 ```bash
 uv sync --dev
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
 If you changed only prose, still sanity-check the nearby docs for split clarity and internal consistency before handing the work off.

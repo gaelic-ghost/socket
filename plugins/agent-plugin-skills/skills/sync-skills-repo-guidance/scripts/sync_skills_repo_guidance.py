@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -13,8 +14,8 @@ README_SNIPPETS = [
     "does not document a richer repo-private scoping model",
     "npx skills add gaelic-ghost/agent-plugin-skills --all",
     "https://skills.sh/",
-    "uv tool install ruff",
-    "uv tool install mypy",
+    "declare the required dev dependencies in `pyproject.toml`",
+    "`pytest`, `ruff`, and `mypy`",
     "Claude Code continues to support direct `.claude/skills` discovery for local authoring",
     "only `plugin.json` belongs in `.codex-plugin/`",
 ]
@@ -128,7 +129,7 @@ def main() -> int:
     args = parse_args()
     repo_root = Path(args.repo_root).resolve()
     if not repo_root.exists() or not repo_root.is_dir():
-        print("Repository root does not exist or is not a directory.", file=os.sys.stderr)
+        print("Repository root does not exist or is not a directory.", file=sys.stderr)
         return 1
     plugin_name = infer_plugin_name(repo_root, args.plugin_name)
     findings = audit_repo(repo_root, plugin_name)

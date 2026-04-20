@@ -30,8 +30,8 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
                 "npx skills add gaelic-ghost/agent-plugin-skills --all",
                 "https://skills.sh/",
-                "uv tool install ruff",
-                "uv tool install mypy",
+                "declare the required dev dependencies in `pyproject.toml`",
+                "`pytest`, `ruff`, and `mypy`",
                 "Claude Code continues to support direct `.claude/skills` discovery for local authoring while plugin packaging lives separately.",
                 "Follow the current OpenAI plugin structure literally: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root.",
             ]

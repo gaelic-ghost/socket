@@ -113,6 +113,18 @@
       "category": "Productivity"
     },
     {
+      "name": "spotify",
+      "source": {
+        "source": "local",
+        "path": "./plugins/spotify"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "web-dev-skills",
       "source": {
         "source": "local",

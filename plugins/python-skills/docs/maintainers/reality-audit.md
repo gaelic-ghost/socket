@@ -60,7 +60,7 @@ Check that:
 - developer-facing shell entrypoints use the repo’s current shell policy
 - help text matches actual supported flags
 - docs use `uv run ...` for Python commands
-- maintainer guidance names `uv tool install ruff` and `uv tool install mypy`
+- maintainer guidance names repo-local `pyproject.toml` dev dependencies for `pytest`, `ruff`, and `mypy` instead of leaning on machine-global installs
 - generated next-step commands match what the scaffold really creates
 - generated projects include the committed `.env`, ignored `.env.local`, and `pydantic-settings`-based config surface described in the docs
 
@@ -71,6 +71,8 @@ Run these from repo root:
 ```bash
 uv run scripts/validate_repo_metadata.py
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
 If these commands and the docs disagree, the docs are stale until updated in the same pass.

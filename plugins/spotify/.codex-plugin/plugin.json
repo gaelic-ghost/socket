@@ -1,0 +1,33 @@
+{
+  "name": "spotify",
+  "version": "0.1.0",
+  "description": "Placeholder plugin repository for future Spotify-focused Codex workflows.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/spotify",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "Apache-2.0",
+  "keywords": [
+    "spotify",
+    "music",
+    "audio",
+    "codex",
+    "plugin"
+  ],
+  "interface": {
+    "displayName": "Spotify",
+    "shortDescription": "Future Spotify-focused Codex workflows.",
+    "longDescription": "Reserve a dedicated plugin surface for future Spotify automation, library workflows, and listening-session tools.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/spotify",
+    "brandColor": "#1DB954"
+  }
+}

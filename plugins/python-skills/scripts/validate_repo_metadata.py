@@ -437,7 +437,6 @@ def run(repo_root: Path) -> list[Finding]:
         findings.append(Finding("skills", "no bundled skill directories found under skills/"))
     findings.extend(validate_readme(repo_root))
     findings.extend(validate_roadmap(repo_root))
-    plugin_root = repo_root / "plugins" / PLUGIN_DIR_NAME
     findings.extend(
         validate_plugin_manifest(
             repo_root,

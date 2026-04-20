@@ -32,6 +32,8 @@ Use this file for durable repo-local guidance before changing code, docs, metada
 - Do not reintroduce a nested packaged plugin subtree for Codex.
 - Do not reintroduce maintained per-skill `README.md` files unless Gale explicitly asks for that public-doc surface again.
 - Keep direct skill-install guidance accurate alongside repo-root plugin guidance.
+- For Python-backed maintainer work, require `uv` plus repo-local dev dependencies in `pyproject.toml` for the tools the repo expects to run.
+- Do not rely on machine-global installs as the primary maintainer baseline when the repository can declare `pytest`, `ruff`, and `mypy` directly in its dev dependency group.
 
 ### Validation Discipline
 
@@ -60,6 +62,8 @@ uv sync --dev
 ```bash
 uv run scripts/validate_repo_metadata.py
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
 ## Review and Delivery
@@ -75,7 +79,7 @@ uv run pytest
 - The changed surface still preserves root `skills/` as the source of truth.
 - Root docs reflect the current active skill inventory and packaging shape.
 - The repo root still reads as the plugin root for Codex without a second packaged subtree.
-- `uv run scripts/validate_repo_metadata.py` and `uv run pytest` pass when the touched work should affect them.
+- `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` pass when the touched work should affect them.
 - Any required superproject or subtree sync has been completed or surfaced explicitly before cleanup.
 - Local branches not contained by `main` have been accounted for explicitly before deleting anything.
 

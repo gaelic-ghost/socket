@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -139,7 +140,7 @@ def main() -> int:
     args = parse_args()
     repo_root = Path(args.repo_root).resolve()
     if not repo_root.exists() or not repo_root.is_dir():
-        print("Repository root does not exist or is not a directory.", file=os.sys.stderr)
+        print("Repository root does not exist or is not a directory.", file=sys.stderr)
         return 1
     plugin_name = infer_plugin_name(repo_root, args.plugin_name)
     errors: list[str] = []

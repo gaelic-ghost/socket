@@ -44,7 +44,7 @@ Sync the maintainer environment before editing docs, metadata, or tests:
 uv sync --dev
 ```
 
-The repo uses [`pyproject.toml`](./pyproject.toml) and [`uv.lock`](./uv.lock) as the maintainer tooling baseline. There is no long-lived service config required for ordinary documentation and metadata work.
+The repo uses [`pyproject.toml`](./pyproject.toml) and [`uv.lock`](./uv.lock) as the maintainer tooling baseline. Keep lint, typecheck, and test tools declared in the repo-local dev dependency group instead of assuming machine-global installs. There is no long-lived service config required for ordinary documentation and metadata work.
 
 ### Runtime Behavior
 
@@ -63,9 +63,11 @@ Run the repo checks before landing documentation or metadata work:
 ```bash
 uv run scripts/validate_repo_metadata.py
 uv run pytest
+uv run ruff check .
+uv run mypy .
 ```
 
-When a change touches Python tooling guidance, keep commands expressed with `uv run ...` and make sure the docs still match the real repo surface.
+When a change touches Python tooling guidance, keep commands expressed with `uv run ...`, make sure the docs still match the real repo surface, and keep `pytest`, `ruff`, and `mypy` declared in `pyproject.toml` when the repo expects those checks.
 
 ### Accessibility Expectations
 

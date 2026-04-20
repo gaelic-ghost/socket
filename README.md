@@ -69,6 +69,8 @@ Sync the root maintainer environment with:
 uv sync --dev
 ```
 
+For Python-backed maintainer tooling in this superproject or its child repositories, keep the repo-local baseline explicit in `pyproject.toml` instead of assuming machine-global tools. When a repo expects Python validation, declare the needed dev dependencies there, including `pytest`, `ruff`, and `mypy` when those checks are part of the shipped workflow.
+
 Only `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` still use subtree sync workflows. `socket` itself does not ship a root plugin; the marketplace is the root packaged surface here.
 
 ### Workflow
@@ -94,6 +96,8 @@ Run the root validator locally with:
 ```bash
 uv run scripts/validate_socket_metadata.py
 ```
+
+When a child repository or helper surface grows Python-backed validation beyond this root metadata check, add those checks as repo-local `uv` dev dependencies and document the exact `uv run ...` commands in that child repo instead of assuming a globally provisioned toolchain.
 
 ## Repo Structure
 
@@ -139,7 +143,7 @@ The root superproject docs are:
 
 Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
 
-- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
+- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
@@ -159,6 +163,7 @@ That marketplace points at the actual packaged surface each child repository tre
 - `./plugins/SpeakSwiftlyServer`
 - `./plugins/python-skills`
 - `./plugins/rust-skills`
+- `./plugins/spotify`
 - `./plugins/things-app`
 - `./plugins/web-dev-skills`
 
