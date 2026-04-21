@@ -57,12 +57,12 @@ Planned
 
 - [ ] Document the expected root release and sync rhythm once the current subtree migration experiment stabilizes.
 - [ ] Keep the root docs aligned with the current child packaging model during coordinated release-prep passes.
-- [ ] Make coordinated minor or patch bumps across `socket` and subtree-managed child repos explicit instead of relying on ad hoc release notes.
+- [x] Make coordinated semantic-version bumps across `socket` and the maintained child manifests explicit instead of relying on ad hoc release notes.
 
 ### Exit Criteria
 
-- [ ] Superproject release guidance is explicit enough that root changes can be shipped without improvising process each time.
-- [ ] Root docs still describe the live packaging and versioning model after a coordinated release-prep pass.
+- [x] Superproject release guidance is explicit enough that root changes can be shipped without improvising process each time.
+- [x] Root docs still describe the live packaging and versioning model after a coordinated release-prep pass.
 
 ## Backlog Candidates
 
@@ -75,6 +75,7 @@ Planned
 - Converted the former standalone `cardhop-mcp` checkout into the monorepo-owned `plugins/cardhop-app` child, added first-pass Codex plugin metadata plus a bundled MCP config, and recorded the new child as a normal `socket` marketplace entry.
 - Retired the remaining `things-app` subtree-era wording from the root maintainer docs, removed the now-redundant local `things-app` and `things-app-mcp` sibling checkouts after verification, and prepared the `v0.11.1` plus `things-app v0.1.3` patch bump.
 - Synced the `SpeakSwiftlyServer` subtree through the newer `v4.2.x` plugin and embedded live-speech updates, confirmed the root marketplace path still stayed valid, and kept the superproject release trail explicit with the `v0.11.0` bump.
+- Added a root version-alignment script, switched `python-skills` to the monorepo-owned workflow, and documented the shared-version policy for the maintained manifest surfaces.
 - Completed Milestone 1, `superproject docs and marketplace alignment`, by bringing the root README, AGENTS guidance, roadmap shape, and marketplace-path explanation back into alignment with the live mixed-monorepo model.
 - Added the first root `ROADMAP.md` and established the checklist-style planning format for the superproject.
 - Added a root marketplace-validation script and GitHub Actions workflow so `socket` now checks packaged plugin paths and manifest alignment instead of leaving that audit entirely manual.

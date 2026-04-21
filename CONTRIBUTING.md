@@ -37,7 +37,7 @@ If the change is really about one child repository's own skills, packaging, test
 
 ### Making Changes
 
-Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. For ordinary work in monorepo-owned child directories, edit the copy in the relevant directory under `plugins/` directly from this checkout. For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree pull and push operations explicit and separate from unrelated edits.
+Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. For ordinary work in monorepo-owned child directories, edit the copy in the relevant directory under `plugins/` directly from this checkout. For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree pull and push operations explicit and separate from unrelated edits.
 
 ### Asking For Review
 
@@ -106,6 +106,16 @@ Root baseline validation:
 ```bash
 uv sync --dev
 uv run scripts/validate_socket_metadata.py
+```
+
+When the change intentionally bumps released version numbers across the superproject, inventory or update the maintained manifest surfaces with:
+
+```bash
+scripts/release.sh inventory
+scripts/release.sh patch
+scripts/release.sh minor
+scripts/release.sh major
+scripts/release.sh custom 1.2.3
 ```
 
 If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` commands where that repo's contributors will actually look.

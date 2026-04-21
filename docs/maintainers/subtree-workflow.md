@@ -1,6 +1,6 @@
 # Monorepo Workflow
 
-This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` as the remaining subtree-managed child repositories.
+This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills` and `SpeakSwiftlyServer` as the remaining subtree-managed child repositories.
 
 ## What Socket Owns
 
@@ -15,11 +15,11 @@ Treat Gale's local `socket` checkout as the normal day-to-day working checkout o
 
 Direct work on local `main` is the default for `socket`. Use a feature branch or a dedicated worktree only when a change needs extra isolation for safety, review, or overlapping parallel work.
 
-`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/`, `plugins/python-skills/`, and `plugins/SpeakSwiftlyServer/`.
+`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/` and `plugins/SpeakSwiftlyServer/`.
 
 For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
 
-For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, when a change should publish back to their source repositories, work in `plugins/<repo-name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>`.
+For `apple-dev-skills` and `SpeakSwiftlyServer`, when a change should publish back to their source repositories, work in `plugins/<repo-name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>`.
 
 ## Child Repository Shape
 
@@ -34,28 +34,24 @@ The socket root marketplace must point at the actual packaged plugin root, not a
 
 ## Current Named Remotes
 
-The superproject keeps `origin` for `socket` and child-repository remotes for `apple-dev-skills`, `python-skills`, and `speak-swiftly-server`.
+The superproject keeps `origin` for `socket` and child-repository remotes for `apple-dev-skills` and `speak-swiftly-server`.
 
 Current child-repo remotes:
 
 - `apple-dev-skills`
-- `python-skills`
 - `speak-swiftly-server`
 
 If a new subtree-managed child repository is introduced later, add its matching named remote first.
 
-## Subtree Work For Apple Dev Skills, Python Skills, And SpeakSwiftlyServer
+## Subtree Work For Apple Dev Skills And SpeakSwiftlyServer
 
-Use dedicated commits for `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer` subtree work.
+Use dedicated commits for `apple-dev-skills` and `SpeakSwiftlyServer` subtree work.
 
 Typical pull flow:
 
 ```bash
 git fetch apple-dev-skills
 git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
-
-git fetch python-skills
-git subtree pull --prefix=plugins/python-skills python-skills main
 
 git fetch speak-swiftly-server
 git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
@@ -65,15 +61,28 @@ Typical push flow:
 
 ```bash
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
-git subtree push --prefix=plugins/python-skills python-skills main
 git subtree push --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
 After subtree work:
 
-- verify the directory shape under `plugins/apple-dev-skills/`, `plugins/python-skills/`, or `plugins/SpeakSwiftlyServer/`
+- verify the directory shape under `plugins/apple-dev-skills/` or `plugins/SpeakSwiftlyServer/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
 - if the subtree work is part of a coordinated release-prep pass, keep the child repo version metadata and child docs aligned before pushing the subtree back out
+
+## Shared Version Workflow
+
+The maintained version-bearing manifests across `socket` now stay on one shared semantic version. Use the root workflow to inspect or update those surfaces:
+
+```bash
+scripts/release.sh inventory
+scripts/release.sh patch
+scripts/release.sh minor
+scripts/release.sh major
+scripts/release.sh custom 1.2.3
+```
+
+That workflow updates the maintained `pyproject.toml` and `.codex-plugin/plugin.json` files, plus adjacent `uv.lock` package self-version entries when those lockfiles exist. It intentionally refuses `patch`, `minor`, or `major` bumps while the maintained surfaces are split across multiple versions; use `custom` once to align them first.
 
 ## Add A New Subtree-Managed Child Repository
 
@@ -128,9 +137,9 @@ Use `vx.x.x` tags for socket releases.
 
 - The socket marketplace still points at a directory that no longer exists in `plugins/`.
 - A child directory vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
-- `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer` still expects subtree sync, but its named remote is missing or points nowhere useful.
+- `apple-dev-skills` or `SpeakSwiftlyServer` still expects subtree sync, but its named remote is missing or points nowhere useful.
 - Socket docs still describe the old all-subtree model after the monorepo has already moved on.
-- `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer` subtree work lands without a follow-up pass over root marketplace wiring and docs.
+- `apple-dev-skills` or `SpeakSwiftlyServer` subtree work lands without a follow-up pass over root marketplace wiring and docs.
 
 ## Practical Rule Of Thumb
 

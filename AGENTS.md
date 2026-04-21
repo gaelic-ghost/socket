@@ -26,7 +26,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Use a feature branch or worktree when the change needs isolation for safety, review, or overlapping parallel work, but do not force that path for ordinary `socket` maintenance.
 - Prefer small, focused commits over broad mixed changes.
 - For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
-- For `apple-dev-skills`, `python-skills`, and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated from unrelated edits.
+- For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated from unrelated edits.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
 ### Subtree Sync And Branch Accounting Gates
@@ -60,7 +60,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 ### Communication and Escalation
 
-- Start from the root docs when the task is about the mixed monorepo model, root marketplace wiring, subtree sync for `apple-dev-skills`, `python-skills`, or `SpeakSwiftlyServer`, or superproject release flow.
+- Start from the root docs when the task is about the mixed monorepo model, root marketplace wiring, subtree sync for `apple-dev-skills` or `SpeakSwiftlyServer`, or superproject release flow.
 - Start from the child repo docs when the task is really about one child repo's own behavior.
 - If scope widens from one root concern into a cross-repo or packaging-policy change, stop and surface that widening before continuing.
 - When a historical maintainer doc no longer carries live decision-making value, collapse its durable conclusions into `ROADMAP.md` or a still-live reference doc instead of preserving another stale planning note.
@@ -84,13 +84,25 @@ uv run scripts/validate_socket_metadata.py
 ```bash
 git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
-git subtree pull --prefix=plugins/python-skills python-skills main
-git subtree push --prefix=plugins/python-skills python-skills main
 git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 git subtree push --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
 Use these commands only when the work is intentionally publishing or syncing one of the remaining subtree-managed child repos.
+
+### Shared Version Workflow
+
+Use the root release-version script when the task is to inventory or bump the maintained semantic-version surfaces across the superproject:
+
+```bash
+scripts/release.sh inventory
+scripts/release.sh patch
+scripts/release.sh minor
+scripts/release.sh major
+scripts/release.sh custom 1.2.3
+```
+
+`patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with `custom <x.y.z>`.
 
 ## Review and Delivery
 

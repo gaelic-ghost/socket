@@ -22,7 +22,6 @@ This keeps the near-term model simpler and lowers coupling:
 These are intentionally not phase-one requirements:
 
 - one plugin composed from multiple child repositories
-- shared versioning across child repos
 - a single aggregate plugin manifest that becomes the source of truth for several subtree directories
 - cross-repo bundle ownership rules for hooks, apps, or MCP server packaging
 
@@ -35,6 +34,7 @@ The current direction is:
 3. keep the `socket` marketplace ready to list each plugin independently
 4. only add marketplace entries for child repos that actually ship `.codex-plugin/plugin.json`
 5. keep root `socket` docs aligned with child packaging moves and coordinated release-prep changes instead of treating the marketplace file as the only source of truth
+6. keep the maintained version-bearing manifests aligned on one shared semantic version through the root release-version workflow instead of hand-editing scattered files
 
 Recent monorepo-owned examples follow that rule directly: `things-app` and `cardhop-app` both package from their child-repo roots while keeping bundled MCP server code under each child repo's top-level `mcp/` directory.
 
