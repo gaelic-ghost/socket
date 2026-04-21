@@ -20,7 +20,7 @@
 - Use `swift package add-target` to add library, executable, or test targets.
 - For package configuration not covered by CLI commands, update `Package.swift` intentionally and keep edits minimal.
 - Edit `Package.swift` intentionally and keep it readable; agents may modify it when package structure, targets, products, or dependencies need to change, and should try to keep package graph updates consolidated in one change when possible.
-- Keep `Package.swift` explicit about its package-wide Swift language mode. On current Swift 6-era manifests, prefer `swiftLanguageModes: [.v6]` as the default declaration and treat `swiftLanguageVersions` as a legacy alias used only when an older manifest surface requires it.
+- Keep `Package.swift` explicit about its package-wide Swift language mode. On current Swift 6-era manifests, prefer `swiftLanguageModes: [.v6]` as the default declaration, treat `swiftLanguageVersions` as a legacy alias used only when an older manifest surface requires it, and remember that lowering the manifest's `// swift-tools-version:` from the bootstrap default is often appropriate when the package should support an older Swift 6 toolchain, but never below `6.0`.
 - Avoid adding unnecessary dependency-provenance detail or switching to branch/revision-based requirements unless the user explicitly asks for that level of control.
 - Treat `Package.resolved` and similar package-manager outputs as generated files; do not hand-edit them.
 - Validate package changes with:
@@ -108,7 +108,7 @@
 
 - Prefer `swift package` for package-focused workflows (dependency graph, targets, manifest intent, and local package validation).
 - Prefer `swift package` subcommands for structural package edits before manually editing `Package.swift`.
-- Keep package manifests on the explicit Swift 6 default by preserving `swiftLanguageModes: [.v6]` unless the user asks for a narrower language-mode contract.
+- Keep package manifests on the explicit Swift 6 language-mode default by preserving `swiftLanguageModes: [.v6]` unless the user asks for a narrower language-mode contract, and treat the generated `// swift-tools-version:` as a starting point that may be lowered to match the real package compatibility target as long as it stays at `6.0` or newer.
 - Use `swift build` and `swift test` as the default first-pass validation commands.
 - Keep package resources under the owning target tree, declare them intentionally with `Resource.process(...)`, `Resource.copy(...)`, or `Resource.embedInCode(...)`, and load them through `Bundle.module`.
 - Keep test fixtures as test-target resources instead of relying on the working directory.

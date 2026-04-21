@@ -89,6 +89,7 @@ Constraints:
 Verification:
 - Confirm `Package.swift`, `AGENTS.md`, `Tests/`, and `.git` exist.
 - Confirm `Package.swift` keeps the explicit Swift 6 language-mode declaration `swiftLanguageModes: [.v6]`.
+- Confirm `Package.swift` keeps `// swift-tools-version:` at `6.0` or newer, even if it is lowered from the scaffold default.
 - If validation is enabled, verify `swift build` and `swift test` success.
 
 Return contract:
