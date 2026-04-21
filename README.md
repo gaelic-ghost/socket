@@ -128,7 +128,7 @@ struct ExampleApp: App {
 }
 ```
 
-If you do not pass `EmbeddedServer.Options(port:)`, the embedded host defaults to `127.0.0.1:7339`. If you pass `EmbeddedServer.Options(runtimeProfileRootURL:)`, that root is used for the runtime-owned persistence path as well as the server's runtime configuration store.
+If you do not pass `EmbeddedServer.Options(port:)`, the embedded host defaults to `127.0.0.1:7339`. If you pass `EmbeddedServer.Options(runtimeProfileRootURL:)`, the server treats that as its profile-store root and bridges it at startup into the broader persistence root expected by the current pinned `SpeakSwiftly` runtime, while keeping the server's own runtime-configuration snapshot aligned with the same on-disk state.
 
 ## Configuration
 

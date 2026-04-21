@@ -32,7 +32,7 @@ try await server.liftoff()
 
 `EmbeddedServer` owns the host lifecycle. Internally it now coordinates host startup, optional config watching, optional MCP readiness, and HTTP serving through one service-owned lifecycle group, but app code should still treat the server object itself as the lifecycle boundary. Keep that object alive for as long as you want the shared server running in-process. If you do not pass `Options(port:)`, the embedded host defaults to `127.0.0.1:7339`.
 
-If you pass `runtimeProfileRootURL`, the embedded host uses that same root for both its own persisted runtime configuration and the underlying `SpeakSwiftly` profile and artifact persistence. Use that when the app wants an explicit app-owned or App Group-owned runtime root instead of relying on the default Application Support lookup.
+If you pass `runtimeProfileRootURL`, the embedded host uses that explicit profile-store root for its own persisted runtime configuration bookkeeping and bridges it into the broader persistence root expected by the current pinned `SpeakSwiftly` runtime. Use that when the app wants an explicit app-owned or App Group-owned runtime root instead of relying on the default Application Support lookup.
 
 ## Read The App-Facing State
 

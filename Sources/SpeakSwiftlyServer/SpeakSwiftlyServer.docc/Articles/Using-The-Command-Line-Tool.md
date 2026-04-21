@@ -47,6 +47,7 @@ xcrun swift run SpeakSwiftlyServerTool serve \
 ```
 
 That flag feeds the same `SPEAKSWIFTLY_PROFILE_ROOT` startup override the LaunchAgent and embedded-app paths use, so the foreground server can point its runtime configuration, text-profile persistence, and generated artifacts at one explicit root.
+Inside `SpeakSwiftlyServer`, that value still names the profile-store root. The startup bridge translates it into the broader persistence root expected by the current pinned `SpeakSwiftly` runtime so the launched worker does not accidentally nest `profiles/profiles/`.
 
 ### LaunchAgent Maintenance
 
