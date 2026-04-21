@@ -36,7 +36,7 @@ The current direction is:
 5. keep root `socket` docs aligned with child packaging moves and coordinated release-prep changes instead of treating the marketplace file as the only source of truth
 6. keep the maintained version-bearing manifests aligned on one shared semantic version through the root release-version workflow instead of hand-editing scattered files
 
-Recent monorepo-owned examples follow that rule directly: `things-app` and `cardhop-app` both package from their child-repo roots while keeping bundled MCP server code under each child repo's top-level `mcp/` directory.
+Recent monorepo-owned examples follow that rule directly: `things-app` and `cardhop-app` both package from their child-repo roots while keeping bundled MCP server code under each child repo's top-level `mcp/` directory, and placeholder child repos like `evidence-locker` can still ship a minimal child-root plugin manifest before their first real workflow surface exists.
 
 Child-repo internal layout changes do not automatically imply root marketplace changes. If a child repo keeps the same packaged plugin root, keep the `socket` marketplace path stable and only update the root docs to explain the child's new internal layout. Recent example: `things-app` keeps its marketplace path at `./plugins/things-app` while its bundled MCP server lives at top-level `mcp/` inside that child repo.
 

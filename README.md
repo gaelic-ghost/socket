@@ -158,7 +158,7 @@ The root superproject docs are:
 
 Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
 
-- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
+- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `evidence-locker`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
 - `python-skills` is monorepo-owned here even though its upstream GitHub repository still exists as an archival or private remote source.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
@@ -180,6 +180,7 @@ That marketplace points at the actual packaged surface each child repository tre
 - `./plugins/python-skills`
 - `./plugins/rust-skills`
 - `./plugins/spotify`
+- `./plugins/evidence-locker`
 - `./plugins/things-app`
 - `./plugins/web-dev-skills`
 
