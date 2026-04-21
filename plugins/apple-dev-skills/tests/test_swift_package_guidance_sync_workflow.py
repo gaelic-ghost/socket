@@ -86,6 +86,8 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("Package.resolved", agents_text)
             self.assertIn("one change when possible", agents_text)
             self.assertIn("runtime UI accessibility verification", agents_text)
+            self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
             self.assertIn(
@@ -96,15 +98,16 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
 
     def test_generated_repo_maintenance_validation_uses_repo_self_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
-            code, payload = self.run_script("--repo-root", tmpdir)
+            repo_root = Path(tmpdir).resolve()
+            (repo_root / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            code, payload = self.run_script("--repo-root", str(repo_root))
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
 
-            subprocess.run(["git", "init"], cwd=tmpdir, check=True, capture_output=True, text=True)
+            subprocess.run(["git", "init"], cwd=repo_root, check=True, capture_output=True, text=True)
             proc = subprocess.run(
                 ["sh", "scripts/repo-maintenance/validate-all.sh"],
-                cwd=tmpdir,
+                cwd=repo_root,
                 capture_output=True,
                 text=True,
                 check=False,
@@ -130,6 +133,8 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("Package.resolved", agents_text)
             self.assertIn("one change when possible", agents_text)
             self.assertIn("runtime UI accessibility verification", agents_text)
+            self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="swift-package"',

@@ -196,8 +196,10 @@ exit 1
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
             self.assertTrue((target / "DemoApp.xcodeproj").exists())
+            self.assertTrue((target / ".swiftformat").exists())
             self.assertTrue((target / "scripts" / "repo-maintenance" / "validate-all.sh").exists())
             self.assertTrue((target / "scripts" / "repo-maintenance" / "release.sh").exists())
+            self.assertTrue((target / "scripts" / "repo-maintenance" / "hooks" / "pre-commit.sample").exists())
             self.assertTrue((target / "scripts" / "repo-maintenance" / "config" / "profile.env").exists())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',

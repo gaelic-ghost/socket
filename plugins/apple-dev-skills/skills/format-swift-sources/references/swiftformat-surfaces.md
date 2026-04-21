@@ -15,6 +15,7 @@ Authoritative source: [SwiftFormat README](https://github.com/nicklockwood/Swift
 ## Preferred Path Notes
 
 - Prefer a checked-in `.swiftformat` file at the project root for shared repos.
+- Prefer a Git pre-commit hook as the default shared-repo enforcement surface so Swift sources are formatted before commit and then verified with `swiftformat --lint`.
 - Prefer a checked-in `.swift-version` file when the repository wants version-sensitive SwiftFormat rules to follow the project's actual minimum Swift version without repeating that value across commands.
 - Prefer pinned package-managed or project-managed installs over purely developer-local CLI installs when the output is committed.
 - When SwiftLint is also present, keep SwiftFormat as the primary authority for formatting shape instead of splitting line wrapping, indentation, comma, import-order, or declaration-layout responsibility across both tools.

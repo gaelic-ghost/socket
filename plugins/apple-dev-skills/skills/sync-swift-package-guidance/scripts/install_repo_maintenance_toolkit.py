@@ -18,6 +18,7 @@ PROFILE_CHOICES = {
     "xcode-app": "Xcode app repo-maintenance profile for native Apple app repositories.",
 }
 MANAGED_TOOLKIT_FILES = [
+    ("repo-maintenance/.swiftformat", ".swiftformat"),
     ("repo-maintenance/validate-all.sh", "scripts/repo-maintenance/validate-all.sh"),
     ("repo-maintenance/sync-shared.sh", "scripts/repo-maintenance/sync-shared.sh"),
     ("repo-maintenance/release.sh", "scripts/repo-maintenance/release.sh"),

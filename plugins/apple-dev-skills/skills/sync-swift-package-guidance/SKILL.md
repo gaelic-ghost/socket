@@ -64,6 +64,8 @@ Bring an existing Swift package repository up to the expected guidance baseline 
    - refresh `.github/workflows/validate-repo-maintenance.yml`
    - preserve repo-specific extra scripts that are not part of the managed file set
 9. Verify the synced maintenance guidance still points at the expected maintainer files:
+   - `.swiftformat`
+   - `scripts/repo-maintenance/hooks/pre-commit.sample`
    - `scripts/repo-maintenance/validate-all.sh`
    - `scripts/repo-maintenance/sync-shared.sh`
    - `scripts/repo-maintenance/release.sh`

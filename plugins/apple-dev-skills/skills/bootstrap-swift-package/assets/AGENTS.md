@@ -84,9 +84,9 @@
 - Avoid XCTest unless an external constraint requires it.
 - Prefer Swift Testing suites, tags, and parameterized coverage on current toolchains, and use Swift Testing confirmations for event-driven asynchronous tests instead of fixed sleeps.
 - Keep XCTest only when a legacy dependency, package surface, or Apple tooling constraint still requires it.
-- Prefer Nick Lockwood's SwiftFormat and/or SwiftLint as baseline Swift formatting and linting tools; at least one should be configured and used in any Swift project.
-- Keep formatting consistent with `swift-format` conventions.
-- Keep linting clean against `swiftlint` with clear, maintainable rule intent.
+- Prefer a checked-in repo-root `.swiftformat` file as the Swift formatting source of truth.
+- Prefer a pre-commit hook such as `scripts/repo-maintenance/hooks/pre-commit.sample` that formats staged Swift sources and then verifies them with `swiftformat --lint` before commit.
+- Treat SwiftLint as an optional complementary signal layer for clarity, safety, and maintainability after SwiftFormat owns formatting shape.
 
 ## SwiftUI and State Architecture
 

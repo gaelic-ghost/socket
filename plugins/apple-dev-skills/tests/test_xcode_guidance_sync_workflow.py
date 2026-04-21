@@ -73,6 +73,8 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Debug and Release", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
+            self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
             self.assertIn(
@@ -96,6 +98,8 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("semantic side and `xcode-testing-workflow` for runtime verification", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
+            self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',

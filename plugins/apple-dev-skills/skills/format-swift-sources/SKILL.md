@@ -7,7 +7,7 @@ description: Guide SwiftLint and SwiftFormat integration across CLI, Xcode build
 
 ## Purpose
 
-Use this skill as the top-level workflow for integrating and maintaining SwiftLint and SwiftFormat in Apple or Swift repositories. The skill keeps the support matrix explicit, teaches the shortest correct path for each surface, and includes a deterministic helper script for turning SwiftFormat for Xcode shared settings into a project-root `.swiftformat` file when the host app export path is unavailable or inconvenient. When both tools are in play, treat SwiftFormat as the primary owner of formatting shape and use SwiftLint as a complementary signal layer for clarity, safety, maintenance, and selectively chosen documentation expectations rather than as a second formatter. When the script path is needed, prefer feeding it the real shared plist from the SwiftFormat group container over assuming the defaults-domain export is complete, and treat the generated file as a curated starting point rather than as a guaranteed final repo config. It is also the canonical first pass before and after `structure-swift-sources` when a request will split, move, or reorganize Swift source files.
+Use this skill as the top-level workflow for integrating and maintaining SwiftLint and SwiftFormat in Apple or Swift repositories. The skill keeps the support matrix explicit, teaches the shortest correct path for each surface, and includes a deterministic helper script for turning SwiftFormat for Xcode shared settings into a project-root `.swiftformat` file when the host app export path is unavailable or inconvenient. For shared Swift repositories, the preferred baseline is a checked-in repo-root `.swiftformat` plus a Git pre-commit hook that formats staged Swift sources and then reruns SwiftFormat in lint mode before the commit is allowed through. When both tools are in play, treat SwiftFormat as the primary owner of formatting shape and use SwiftLint as a complementary signal layer for clarity, safety, maintenance, and selectively chosen documentation expectations rather than as a second formatter. When the script path is needed, prefer feeding it the real shared plist from the SwiftFormat group container over assuming the defaults-domain export is complete, and treat the generated file as a curated starting point rather than as a guaranteed final repo config. It is also the canonical first pass before and after `structure-swift-sources` when a request will split, move, or reorganize Swift source files.
 
 ## When To Use
 
@@ -22,6 +22,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
   - Git pre-commit hook
   - GitHub Actions
 - Use this skill when the user wants to promote personal SwiftFormat for Xcode settings into a checked-in `.swiftformat` file.
+- Use this skill when the user wants the recommended shared-repo formatting baseline for a Swift repository.
 - Use this skill when the user needs the supported-path caveats for SwiftLint or SwiftFormat, such as plugin config-path limitations, Xcode script sandboxing, or per-project config gaps in the SwiftFormat extension.
 - Use this skill first when a later `structure-swift-sources` pass will split files, move files, or normalize section layout and the repo needs a clean formatting baseline before structural edits begin.
 - Recommend `bootstrap-swift-package` when the user is creating a brand new Swift package and style tooling is only one part of that scaffold.
@@ -50,6 +51,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
    - `swiftformat-xcode-config-export`
 3. Check the support matrix in `references/integration-matrix.md` before proposing or generating steps.
 4. Choose one documented path:
+   - when the user wants the default baseline for a shared Swift repo, prefer a checked-in root `.swiftformat` and a Git pre-commit hook that formats staged Swift files and then verifies them with `swiftformat --lint`
    - for SwiftFormat settings export, prefer the host app export flow in `references/swiftformat-xcode-config-export.md`
    - use `scripts/export_swiftformat_xcode_config.py` only when a deterministic shared-defaults export is needed
    - when `defaults export` from the suite domain is empty, stale, or incomplete, point the script at the real shared plist inside the SwiftFormat group container with `--input-plist`
@@ -67,6 +69,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - `swiftformat_export_source`: optional; use `host-app-export` or `shared-defaults-script`
 - Defaults:
   - prefer checked-in project-root config files
+  - prefer a checked-in root `.swiftformat` plus a Git pre-commit hook as the default baseline for shared Swift repos
   - prefer package or repo-pinned tooling over developer-local version drift
   - prefer SwiftLint plugins for plugin-based SwiftLint adoption
   - prefer the SwiftFormat host app export path before the shared-defaults script path
@@ -85,6 +88,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
   - `surface`
   - `recommended_path`
   - `config_files`
+  - `recommended_hook`
   - `caveats`
   - `verification`
 
@@ -101,6 +105,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - SwiftFormat config export falls back from host-app export to `scripts/export_swiftformat_xcode_config.py`, preferably with `--input-plist` pointed at the real shared plist when the suite-domain export is not trustworthy on the current machine.
 - SwiftLint plugin adoption falls back to an Xcode Run Script Build Phase when plugin constraints conflict with config placement or project layout.
 - SwiftFormat build-phase adoption falls back from package-managed or pinned local binaries to the locally installed CLI path only when shared-version drift is acceptable.
+- For shared repos, prefer the Git pre-commit path over build-phase-only enforcement when the goal is to keep commits formatted before review and CI.
 - For combined cleanup work, use this skill before `structure-swift-sources` to establish the formatting baseline, and run it again after that skill finishes so the post-split or post-move tree is normalized.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the task becomes ordinary SwiftPM package execution work.
 - Recommend `xcode-build-run-workflow` when the task becomes Xcode execution or diagnostics work.

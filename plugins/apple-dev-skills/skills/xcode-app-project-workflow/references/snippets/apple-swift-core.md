@@ -41,7 +41,8 @@ Use this snippet in repository `AGENTS.md` files when you want cross-project Swi
 - For Apple app projects, prefer Apple-native logging facilities first and allow Swift Logging where it makes the project API clearer.
 - For packages, server-side, or cross-platform Swift, prefer Swift Logging as the primary logging API.
 - Prefer Swift OpenTelemetry for telemetry and instrumentation when telemetry is needed, and prefer existing ecosystem integrations over bespoke wrappers.
-- Prefer Nick Lockwood's SwiftFormat and/or SwiftLint as the default Swift formatting and linting tools; at least one should be configured and used in any Swift project.
+- Prefer a checked-in repo-root `.swiftformat` file as the default Swift formatting source of truth, and prefer a pre-commit hook that formats staged Swift sources and then verifies them with `swiftformat --lint` before commit.
+- Treat SwiftLint as an optional complementary signal layer for clarity, safety, and maintainability after SwiftFormat owns formatting shape.
 - Keep automation and CI commands deterministic, non-interactive, and explicit about toolchain, platform, and configuration assumptions.
 
 ## SwiftUI and State Architecture

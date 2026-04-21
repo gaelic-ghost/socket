@@ -15,6 +15,8 @@ Use this matrix before proposing or generating setup steps.
 
 ## Caveats That Change The Recommended Path
 
+- For shared Swift repositories, prefer a checked-in root `.swiftformat` and a Git pre-commit hook as the default baseline so formatting happens before commits leave a developer machine.
+- When SwiftFormat owns the formatting baseline, prefer a hook flow that formats first and then reruns SwiftFormat in lint mode against the same staged Swift files.
 - When both tools are present, let SwiftFormat own formatting shape such as wrapping, indentation, commas, import order, and declaration layout. Use SwiftLint for non-formatting checks that SwiftFormat is not meant to own.
 - Prefer `.swift-version` when the repository wants SwiftFormat's version-sensitive rules to match the project's declared Swift baseline. Remember that `.swift-version` takes precedence over a command-line `--swift-version`.
 - SwiftLint build tool plugins cannot accept arbitrary `--config` paths. When the config location is incompatible, use a local `parent_config` shim or a Run Script path instead.

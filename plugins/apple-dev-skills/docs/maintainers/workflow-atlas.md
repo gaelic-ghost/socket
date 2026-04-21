@@ -596,7 +596,7 @@ flowchart TD
 
 ### Purpose
 
-Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, SwiftFormat-first ownership of formatting shape, SwiftLint-as-complement guidance for non-formatting signal, `.swift-version` guidance for version-sensitive SwiftFormat behavior, SwiftFormat config export from the Xcode host app or shared defaults state, and the pre/post formatting bracket around `structure-swift-sources`.
+Provide the canonical SwiftLint and SwiftFormat integration workflow for Apple and Swift repositories, including surface selection, support-matrix enforcement, a checked-in `.swiftformat` plus format-then-verify Git pre-commit hook as the preferred shared-repo baseline, SwiftFormat-first ownership of formatting shape, SwiftLint-as-complement guidance for non-formatting signal, `.swift-version` guidance for version-sensitive SwiftFormat behavior, SwiftFormat config export from the Xcode host app or shared defaults state, and the pre/post formatting bracket around `structure-swift-sources`.
 
 ### Workflow Diagram
 
@@ -621,6 +621,7 @@ flowchart TD
 
 - This skill is intentionally about style-tooling setup and maintenance, not general repo bootstrap or Xcode execution.
 - The support matrix is part of the contract and should be checked before proposing a path.
+- For shared Swift repositories, prefer a checked-in `.swiftformat` file and a Git pre-commit hook that formats staged Swift sources and then reruns SwiftFormat in lint mode before commit.
 - The preferred SwiftFormat settings-export path is the host app export flow.
 - When both tools are present, SwiftFormat should own formatting shape and SwiftLint should stay focused on safety, clarity, maintainability, and scoped public-API documentation signal.
 - When SwiftFormat behavior depends on Swift language version, prefer a checked-in `.swift-version` file and remember that it overrides a plain `--swift-version` CLI argument.

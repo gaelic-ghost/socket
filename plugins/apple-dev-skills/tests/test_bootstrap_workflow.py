@@ -425,8 +425,10 @@ exec "{real_swift}" "$@"
             self.assertEqual(payload["testing_strategy"], "init-flags")
             self.assertEqual(payload["swift_toolchain"], "6.3")
             package_dir = Path(payload["resolved_path"])
+            self.assertTrue((package_dir / ".swiftformat").is_file())
             self.assertTrue((package_dir / "scripts" / "repo-maintenance" / "validate-all.sh").is_file())
             self.assertTrue((package_dir / "scripts" / "repo-maintenance" / "release.sh").is_file())
+            self.assertTrue((package_dir / "scripts" / "repo-maintenance" / "hooks" / "pre-commit.sample").is_file())
             self.assertTrue((package_dir / "scripts" / "repo-maintenance" / "config" / "profile.env").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="swift-package"',

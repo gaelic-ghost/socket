@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 set -eu
 
-COMMON_CONTEXT_DIR=${SELF_DIR:-}
-[ -n "$COMMON_CONTEXT_DIR" ] || COMMON_CONTEXT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-if [ -f "$COMMON_CONTEXT_DIR/lib/common.sh" ]; then
-  REPO_MAINTENANCE_ROOT="$COMMON_CONTEXT_DIR"
-else
-  REPO_MAINTENANCE_ROOT=$(CDPATH= cd -- "$COMMON_CONTEXT_DIR/.." && pwd)
+COMMON_DIR="${REPO_MAINTENANCE_COMMON_DIR:-}"
+
+if [ -z "$COMMON_DIR" ]; then
+  COMMON_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 fi
+
+REPO_MAINTENANCE_ROOT=$(CDPATH= cd -- "$COMMON_DIR/.." && pwd)
 REPO_ROOT=$(CDPATH= cd -- "$REPO_MAINTENANCE_ROOT/../.." && pwd)
 REPO_MAINTENANCE_PROFILE="generic"
 REPO_MAINTENANCE_PROFILE_DESCRIPTION="Generic repo-maintenance baseline with no Swift or Xcode specialization."

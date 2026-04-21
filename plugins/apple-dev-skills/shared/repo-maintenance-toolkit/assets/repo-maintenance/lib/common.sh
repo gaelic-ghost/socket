@@ -1,7 +1,12 @@
 #!/usr/bin/env sh
 set -eu
 
-COMMON_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+COMMON_DIR="${REPO_MAINTENANCE_COMMON_DIR:-}"
+
+if [ -z "$COMMON_DIR" ]; then
+  COMMON_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+fi
+
 REPO_MAINTENANCE_ROOT=$(CDPATH= cd -- "$COMMON_DIR/.." && pwd)
 REPO_ROOT=$(CDPATH= cd -- "$REPO_MAINTENANCE_ROOT/../.." && pwd)
 REPO_MAINTENANCE_PROFILE="generic"
