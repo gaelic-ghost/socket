@@ -115,6 +115,30 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
             self.assertIn("Repo-maintenance validation completed successfully.", proc.stdout)
 
+    def test_rerunning_sync_preserves_repo_maintenance_root_resolution(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir).resolve()
+            (repo_root / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+
+            first_code, first_payload = self.run_script("--repo-root", str(repo_root))
+            self.assertEqual(first_code, 0)
+            self.assertEqual(first_payload["status"], "success")
+
+            second_code, second_payload = self.run_script("--repo-root", str(repo_root))
+            self.assertEqual(second_code, 0)
+            self.assertEqual(second_payload["status"], "success")
+
+            subprocess.run(["git", "init"], cwd=repo_root, check=True, capture_output=True, text=True)
+            proc = subprocess.run(
+                ["sh", "scripts/repo-maintenance/validate-all.sh"],
+                cwd=repo_root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
+            self.assertIn("Repo-maintenance validation completed successfully.", proc.stdout)
+
     def test_sync_appends_section_to_existing_agents(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
