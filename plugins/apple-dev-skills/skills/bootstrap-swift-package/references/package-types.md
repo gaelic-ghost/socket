@@ -29,7 +29,7 @@ Choose `multiplatform` unless platform scope is explicitly constrained.
 - `minus-two`: Alias for `current-minus-two`
 
 The bootstrap script applies these by patching `Package.swift` with string platform versions.
-On current Swift 6-era manifests, the bootstrap workflow should also keep the package language mode explicit with `swiftLanguageModes: [.v6]` instead of relying on implicit defaults. Treat `swiftLanguageVersions` as the legacy alias when older manifest surfaces force that spelling.
+On current Swift 6-era manifests, the bootstrap workflow should also keep the package language mode explicit with `swiftLanguageModes: [.v6]` instead of relying on implicit defaults. Treat `swiftLanguageVersions` as the legacy alias when older manifest surfaces force that spelling. The generated `// swift-tools-version:` is a starting point, not a permanent ceiling, so lowering it to match the real package compatibility target is often appropriate as long as it stays at `6.0` or newer.
 
 ## Testing Modes
 

@@ -54,6 +54,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
    - `Package.swift`
    - `.swiftformat`
    - explicit `swiftLanguageModes: [.v6]` in `Package.swift`
+   - `// swift-tools-version:` remains `6.0` or newer, even when it is lowered from the scaffold default
    - `.git`
    - `AGENTS.md`
    - `scripts/repo-maintenance/hooks/pre-commit.sample`
@@ -66,6 +67,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
    - keep the generated repo aligned with the checked-in `.swiftformat` plus format-then-verify pre-commit-hook baseline in that snippet
    - keep the generated manifest aligned with the explicit Swift 6 default language-mode declaration `swiftLanguageModes: [.v6]`
+   - treat the generated `// swift-tools-version:` as a starting point that can be lowered to match the real package compatibility target, but never below `6.0`
    - preserve the project-appropriate logging and telemetry guidance from that snippet
 8. Hand off package execution guidance cleanly:
    - use `swift build` and `swift test` by default
@@ -94,6 +96,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
   - validation runs unless `--skip-validation` is passed
   - supported and validated Swift toolchain floor is `5.10+`
   - generated manifests should preserve an explicit Swift 6 language-mode declaration with `swiftLanguageModes: [.v6]` when the active manifest surface supports it
+  - generated manifests may lower `// swift-tools-version:` from the scaffold default when the package should support an older Swift 6 toolchain, but they should never go below `6.0`
   - the repo-maintenance toolkit is installed into `scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs
