@@ -53,7 +53,7 @@ extension ServerTests {
                             name: "create_voice_profile_from_audio",
                             arguments: [
                                 "profile_name": "clone-from-mcp",
-                                "vibe": "androgenous",
+                                "vibe": "femme",
                                 "reference_audio_path": "./Fixtures/mcp-reference.wav",
                                 "transcript": "Imported from MCP",
                                 "cwd": "/tmp/mcp-clone-cwd",
@@ -68,7 +68,7 @@ extension ServerTests {
             #expect(createCloneToolPayload["request_resource_uri"] as? String == "speak://requests/\(createCloneRequestID)")
             let createCloneInvocation = try #require(await runtime.latestCreateCloneInvocation())
             #expect(createCloneInvocation.profileName == "clone-from-mcp")
-            #expect(createCloneInvocation.vibe == .androgenous)
+            #expect(createCloneInvocation.vibe == .femme)
             #expect(createCloneInvocation.referenceAudioPath == "./Fixtures/mcp-reference.wav")
             #expect(createCloneInvocation.transcript == "Imported from MCP")
             #expect(createCloneInvocation.cwd == "/tmp/mcp-clone-cwd")

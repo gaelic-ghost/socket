@@ -59,7 +59,7 @@ enum MCPToolCatalog {
                 "required": ["profile_name", "vibe", "text", "voice_description"],
                 "properties": [
                     "profile_name": ["type": "string"],
-                    "vibe": ["type": "string", "enum": ["masc", "femme", "androgenous"]],
+                    "vibe": ["type": "string", "enum": ["masc", "femme"]],
                     "text": ["type": "string"],
                     "voice_description": ["type": "string"],
                     "output_path": ["type": "string"],
@@ -75,7 +75,7 @@ enum MCPToolCatalog {
                 "required": ["profile_name", "vibe", "reference_audio_path"],
                 "properties": [
                     "profile_name": ["type": "string"],
-                    "vibe": ["type": "string", "enum": ["masc", "femme", "androgenous"]],
+                    "vibe": ["type": "string", "enum": ["masc", "femme"]],
                     "reference_audio_path": ["type": "string"],
                     "transcript": ["type": "string"],
                     "cwd": ["type": "string"],
