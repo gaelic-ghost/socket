@@ -85,7 +85,7 @@ struct GeneratedFileFixture: Codable {
     let voiceProfile: String
     let textProfile: String?
     let inputTextContext: SpeakSwiftly.InputTextContext?
-    let requestContext: SpeakSwiftly.RequestContext?
+    let requestContext: TextForSpeech.RequestContext?
     let sampleRate: Int
     let filePath: String
 
@@ -112,7 +112,7 @@ struct GenerationArtifactFixture: Codable {
     let voiceProfile: String
     let textProfile: String?
     let inputTextContext: SpeakSwiftly.InputTextContext?
-    let requestContext: SpeakSwiftly.RequestContext?
+    let requestContext: TextForSpeech.RequestContext?
 
     enum CodingKeys: String, CodingKey {
         case artifactID = "artifact_id"
@@ -134,7 +134,7 @@ struct GenerationJobItemFixture: Codable {
     let text: String
     let textProfile: String?
     let inputTextContext: SpeakSwiftly.InputTextContext?
-    let requestContext: SpeakSwiftly.RequestContext?
+    let requestContext: TextForSpeech.RequestContext?
 
     enum CodingKeys: String, CodingKey {
         case artifactID = "artifact_id"
@@ -253,7 +253,7 @@ func makeGeneratedFile(
     voiceProfile: String,
     textProfile: String?,
     inputTextContext: SpeakSwiftly.InputTextContext? = nil,
-    requestContext: SpeakSwiftly.RequestContext? = nil,
+    requestContext: TextForSpeech.RequestContext? = nil,
     sampleRate: Int,
     filePath: String,
 ) throws -> SpeakSwiftly.GeneratedFile {
