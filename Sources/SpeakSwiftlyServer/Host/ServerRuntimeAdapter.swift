@@ -21,24 +21,27 @@ func resolvedAbsoluteFilesystemPath(
     }
 
     let trimmedCWD = cwd?.trimmingCharacters(in: .whitespacesAndNewlines)
-    let resolvedBasePath: String
-    if let trimmedCWD, trimmedCWD.isEmpty == false {
+    let resolvedBasePath: String = if let trimmedCWD, trimmedCWD.isEmpty == false {
         if trimmedCWD.hasPrefix("/") {
-            resolvedBasePath = trimmedCWD
+            trimmedCWD
         } else {
-            resolvedBasePath = URL(
+            URL(
                 fileURLWithPath: trimmedCWD,
                 relativeTo: URL(fileURLWithPath: currentDirectoryPath, isDirectory: true),
-            ).standardizedFileURL.path
+            )
+            .standardizedFileURL
+            .path
         }
     } else {
-        resolvedBasePath = currentDirectoryPath
+        currentDirectoryPath
     }
 
     return URL(
         fileURLWithPath: trimmedPath,
         relativeTo: URL(fileURLWithPath: resolvedBasePath, isDirectory: true),
-    ).standardizedFileURL.path
+    )
+    .standardizedFileURL
+    .path
 }
 
 actor ServerRuntimeAdapter: ServerRuntimeProtocol {
