@@ -121,6 +121,14 @@ extension ServerHost {
         source: String,
     ) {
         if source == "cached_worker_not_ready" {
+            generationQueueStatus = .init(
+                queueType: "generation",
+                activeCount: 0,
+                queuedCount: 0,
+                activeRequest: nil,
+                activeRequests: [],
+                queuedRequests: [],
+            )
             playbackQueueStatus = .init(
                 queueType: "playback",
                 activeCount: 0,

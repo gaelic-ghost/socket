@@ -47,6 +47,11 @@ extension ServerTests {
         let degradedHostState = await host.hostStateSnapshot()
         #expect(degradedHostState.playback.state == "idle")
         #expect(degradedHostState.playbackQueue.activeRequest == nil)
+        #expect(degradedHostState.generationQueue.activeRequest == nil)
+        #expect(degradedHostState.generationQueue.activeRequests.isEmpty)
+        #expect(degradedHostState.generationQueue.queuedRequests.isEmpty)
+        #expect(degradedHostState.generationQueue.activeCount == 0)
+        #expect(degradedHostState.generationQueue.queuedCount == 0)
         #expect(degradedHostState.runtimeRefresh?.source == "cached_worker_not_ready")
 
         let activeSnapshot = try await waitUntil(timeout: .seconds(1), pollInterval: .milliseconds(10)) {
@@ -117,6 +122,40 @@ extension ServerTests {
         let status = await host.statusSnapshot()
         #expect(status.profileCacheState == "stale")
         #expect(status.profileCacheWarning?.contains("could not confirm the refreshed profile list") == true)
+
+        await host.shutdown()
+    }
+
+    @available(macOS 14, *)
+    @Test func `text profile routes surface bridge failures as typed server errors`() async throws {
+        let runtime = MockRuntime(
+            textProfileTransportError: SpeakSwiftly.Error(
+                code: .internalError,
+                message: "Configured text-profile bridge failure for tests.",
+            ),
+        )
+        let state = await MainActor.run { EmbeddedServer() }
+        let host = ServerHost(
+            configuration: testConfiguration(),
+            runtime: runtime,
+            runtimeConfigurationStore: testRuntimeConfigurationStore(),
+            state: state,
+        )
+
+        await host.start()
+        await runtime.publishStatus(.residentModelReady)
+        try await waitUntilReady(host)
+
+        let app = assembleHBApp(configuration: testHTTPConfig(testConfiguration()), host: host)
+        try await app.test(.router) { client in
+            let response = try await client.execute(uri: "/text-profiles", method: .get)
+            let responseJSON = try jsonObject(from: response.body)
+            let error = try #require(responseJSON["error"] as? [String: Any])
+            let message = try #require(error["message"] as? String)
+
+            #expect(response.status == .internalServerError)
+            #expect(message.contains("Configured text-profile bridge failure for tests"))
+        }
 
         await host.shutdown()
     }

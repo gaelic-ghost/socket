@@ -10,6 +10,7 @@ extension ServerHost {
         textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
+        requestContext: SpeakSwiftly.RequestContext? = nil,
     ) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.queueSpeechLive(
@@ -18,6 +19,7 @@ extension ServerHost {
             textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
+            requestContext: requestContext,
         )
         return await enqueuePublicJob(handle)
     }
@@ -28,6 +30,7 @@ extension ServerHost {
         textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
+        requestContext: SpeakSwiftly.RequestContext? = nil,
     ) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.queueSpeechFile(
@@ -36,6 +39,7 @@ extension ServerHost {
             textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
+            requestContext: requestContext,
         )
         return await enqueuePublicJob(handle)
     }

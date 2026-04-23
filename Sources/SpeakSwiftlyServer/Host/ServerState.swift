@@ -40,7 +40,7 @@ public final class EmbeddedServer {
                     "EmbeddedServer could not refresh voice profiles because no embedded host action performer is configured yet.",
                 )
             },
-            queueLiveSpeech: { _, _, _, _, _ in
+            queueLiveSpeech: { _, _, _, _, _, _ in
                 throw EmbeddedServerActionError.unavailable(
                     "EmbeddedServer could not queue the live speech request because no embedded host action performer is configured yet.",
                 )
@@ -99,6 +99,7 @@ public final class EmbeddedServer {
             String?,
             SpeechNormalizationContext?,
             TextForSpeech.SourceFormat?,
+            SpeakSwiftly.RequestContext?,
         ) async throws -> String
         let setDefaultVoiceProfileName: @Sendable (String) async throws -> String
         let clearDefaultVoiceProfileName: @Sendable () async throws -> String?
@@ -251,6 +252,7 @@ public final class EmbeddedServer {
         textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
+        requestContext: SpeakSwiftly.RequestContext? = nil,
     ) async throws -> String {
         try await actions.queueLiveSpeech(
             text,
@@ -258,6 +260,7 @@ public final class EmbeddedServer {
             textProfileID,
             normalizationContext,
             sourceFormat,
+            requestContext,
         )
     }
 

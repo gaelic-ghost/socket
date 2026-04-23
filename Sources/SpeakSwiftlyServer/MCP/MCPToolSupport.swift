@@ -108,6 +108,14 @@ func sourceFormat(in arguments: [String: Value]) throws -> TextForSpeech.SourceF
     try requestSourceFormat("source_format", in: arguments)
 }
 
+func requestContext(in arguments: [String: Value]) throws -> SpeakSwiftly.RequestContext? {
+    guard let value = arguments["request_context"] else {
+        return nil
+    }
+
+    return try decodeValue(value, fieldName: "request_context")
+}
+
 func requestTextFormat(in arguments: [String: Value]) throws -> TextForSpeech.TextFormat? {
     guard let rawValue = optionalString("text_format", in: arguments) else {
         return nil

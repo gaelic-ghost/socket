@@ -128,6 +128,22 @@ extension MockRuntime {
     func rerollVoiceProfile(profileName: String) async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         rerollProfileInvocations.append(.init(profileName: profileName))
+        if mutationRefreshBehavior == .applyMutations {
+            profiles = profiles.map { profile in
+                guard profile.profileName == profileName else { return profile }
+
+                return SpeakSwiftly.ProfileSummary(
+                    profileName: profile.profileName,
+                    vibe: profile.vibe,
+                    createdAt: profile.createdAt.addingTimeInterval(60),
+                    voiceDescription: "\(profile.voiceDescription) (rerolled)",
+                    sourceText: "\(profile.sourceText) (rerolled)",
+                    transcriptSource: profile.transcriptSource,
+                    transcriptResolvedAt: profile.transcriptResolvedAt,
+                    transcriptionModelRepo: profile.transcriptionModelRepo,
+                )
+            }
+        }
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(.completed(SpeakSwiftly.Success(id: requestID, profileName: profileName, activeRequests: nil)))
             continuation.finish()

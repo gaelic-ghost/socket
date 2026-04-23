@@ -106,6 +106,7 @@ extension ServerHost {
                         if handle.operation == "create_voice_profile_from_description"
                             || handle.operation == "create_voice_profile_from_audio"
                             || handle.operation == "update_voice_profile_name"
+                            || handle.operation == "reroll_voice_profile"
                             || handle.operation == "delete_voice_profile" {
                             await finalizeMutationSuccess(
                                 success: success,
@@ -272,6 +273,15 @@ extension ServerHost {
                 return refreshedNames.contains(profileName)
                     && !previousNames.contains(profileName)
                     && refreshedNames.count == previousNames.count
+            case "reroll_voice_profile":
+                guard
+                    let previousProfile = previousProfiles.first(where: { $0.profileName == profileName }),
+                    let refreshedProfile = refreshedProfiles.first(where: { $0.profileName == profileName })
+                else {
+                    return false
+                }
+
+                return refreshedProfile != previousProfile
             case "delete_voice_profile":
                 return !refreshedNames.contains(profileName) && refreshedNames != previousNames
             default:

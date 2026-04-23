@@ -244,7 +244,7 @@ extension ServerTests {
                 uri: "/speech/live",
                 method: .post,
                 headers: [.contentType: "application/json"],
-                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source"}"#),
+                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","request_context":{"source":"http","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"route-coverage","attributes":{"surface":"http"}},"cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source"}"#),
             )
             let speakJSON = try jsonObject(from: speakResponse.body)
             let speakJobID = try #require(speakJSON["request_id"] as? String)
@@ -264,6 +264,16 @@ extension ServerTests {
             )
             #expect(queuedSpeechInvocation.textProfileID == "swift-docs")
             #expect(queuedSpeechInvocation.sourceFormat == .python)
+            #expect(
+                queuedSpeechInvocation.requestContext
+                    == SpeakSwiftly.RequestContext(
+                        source: "http",
+                        app: "SpeakSwiftlyServerTests",
+                        project: "SpeakSwiftlyServer",
+                        topic: "route-coverage",
+                        attributes: ["surface": "http"],
+                    ),
+            )
             #expect(queuedSpeechInvocation.profileName == "default")
 
             _ = try await waitForJobSnapshot(speakJobID, on: host)

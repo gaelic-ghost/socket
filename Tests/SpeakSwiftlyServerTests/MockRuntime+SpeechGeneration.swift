@@ -13,6 +13,7 @@ extension MockRuntime {
         textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
+        requestContext: SpeakSwiftly.RequestContext?,
     ) async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         let request = MockRequest(id: requestID, operation: "generate_speech", profileName: profileName)
@@ -23,6 +24,7 @@ extension MockRuntime {
                 textProfileID: textProfileID,
                 normalizationContext: normalizationContext,
                 sourceFormat: sourceFormat,
+                requestContext: requestContext,
             ),
         )
         var requestContinuation: AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error>.Continuation?
@@ -59,6 +61,7 @@ extension MockRuntime {
         textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
+        requestContext: SpeakSwiftly.RequestContext?,
     ) async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         let artifactID = "\(requestID)-artifact-1"
@@ -73,6 +76,7 @@ extension MockRuntime {
                     normalizationContext: normalizationContext,
                     sourceFormat: sourceFormat,
                 ),
+                requestContext: requestContext,
                 sampleRate: 24000,
                 filePath: "/tmp/\(artifactID).wav",
             )
@@ -87,7 +91,7 @@ extension MockRuntime {
                     normalizationContext: normalizationContext,
                     sourceFormat: sourceFormat,
                 ),
-                requestContext: nil,
+                requestContext: requestContext,
             ),
         ]
         let artifacts = [
@@ -103,7 +107,7 @@ extension MockRuntime {
                     normalizationContext: normalizationContext,
                     sourceFormat: sourceFormat,
                 ),
-                requestContext: nil,
+                requestContext: requestContext,
             ),
         ]
         generationJobs.append(

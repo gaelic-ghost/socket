@@ -48,7 +48,7 @@ That means the server is best understood as a transport adapter over the public 
 | `runtime.status()` | Full | `GET /runtime/status` | `get_runtime_status`, `speak://runtime/status` | Returned directly as runtime status data with transport-local shaping only. |
 | `runtime.switchSpeechBackend(to:)` | Full | `POST /runtime/backend` | `switch_speech_backend` | Hot-switches the active backend. Transport-facing input accepts `qwen3`, `chatterbox_turbo`, and `marvis`, and still normalizes legacy `qwen3_custom_voice` input onto `qwen3`. |
 | `runtime.reloadModels()` / `runtime.unloadModels()` | Full | `POST /runtime/models/reload`, `POST /runtime/models/unload` | `reload_models`, `unload_models` | Immediate runtime-control operations. |
-| `runtime.generate.speech(...)` | Full | `POST /speech/live` | `generate_speech` | Carries `text_profile_id`, `cwd`, `repo_root`, `text_format`, `nested_source_format`, and `source_format`. |
+| `runtime.generate.speech(...)` | Full | `POST /speech/live` | `generate_speech` | Carries `text_profile_id`, `request_context`, `cwd`, `repo_root`, `text_format`, `nested_source_format`, and `source_format`. |
 | `runtime.generate.audio(...)` | Full | `POST /speech/files` | `generate_audio_file` | Retains generated file artifacts for later reads. |
 | `runtime.generate.batch(_:with:)` | Full | `POST /speech/batches` | `generate_batch` | Uses the same retained-request and generated-batch shaping as the other submission lanes. |
 | `runtime.voices.create(design:from:vibe:voice:outputPath:)` | Full | `POST /voices/from-description` | `create_voice_profile_from_description` | Accepted-request flow with retained request inspection. |

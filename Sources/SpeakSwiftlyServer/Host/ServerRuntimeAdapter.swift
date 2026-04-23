@@ -2,6 +2,45 @@ import Foundation
 import SpeakSwiftly
 import TextForSpeech
 
+func resolvedAbsoluteFilesystemPath(
+    _ path: String?,
+    cwd: String?,
+    currentDirectoryPath: String = FileManager.default.currentDirectoryPath,
+) -> String? {
+    guard let path else {
+        return nil
+    }
+
+    let trimmedPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard trimmedPath.isEmpty == false else {
+        return nil
+    }
+
+    if trimmedPath.hasPrefix("/") {
+        return URL(fileURLWithPath: trimmedPath).standardizedFileURL.path
+    }
+
+    let trimmedCWD = cwd?.trimmingCharacters(in: .whitespacesAndNewlines)
+    let resolvedBasePath: String
+    if let trimmedCWD, trimmedCWD.isEmpty == false {
+        if trimmedCWD.hasPrefix("/") {
+            resolvedBasePath = trimmedCWD
+        } else {
+            resolvedBasePath = URL(
+                fileURLWithPath: trimmedCWD,
+                relativeTo: URL(fileURLWithPath: currentDirectoryPath, isDirectory: true),
+            ).standardizedFileURL.path
+        }
+    } else {
+        resolvedBasePath = currentDirectoryPath
+    }
+
+    return URL(
+        fileURLWithPath: trimmedPath,
+        relativeTo: URL(fileURLWithPath: resolvedBasePath, isDirectory: true),
+    ).standardizedFileURL.path
+}
+
 actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     private let runtime: SpeakSwiftly.Runtime
 
@@ -31,6 +70,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
+        requestContext: SpeakSwiftly.RequestContext?,
     ) async -> RuntimeRequestHandle {
         let handle = await runtime.generate.speech(
             text: text,
@@ -40,6 +80,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
                 normalizationContext: normalizationContext,
                 sourceFormat: sourceFormat,
             ),
+            requestContext: requestContext,
         )
         return .init(id: handle.id, operation: "generate_speech", profileName: profileName, events: handle.events)
     }
@@ -50,6 +91,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
+        requestContext: SpeakSwiftly.RequestContext?,
     ) async -> RuntimeRequestHandle {
         let handle = await runtime.generate.audio(
             text: text,
@@ -59,6 +101,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
                 normalizationContext: normalizationContext,
                 sourceFormat: sourceFormat,
             ),
+            requestContext: requestContext,
         )
         return .init(id: handle.id, operation: "generate_audio_file", profileName: profileName, events: handle.events)
     }
@@ -224,8 +267,8 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         return await runtime.normalizer.style.getActive()
     }
 
-    func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails {
-        await transportDetails(runtime.normalizer.profiles.getActive())
+    func activeTextProfile() async throws -> SpeakSwiftly.TextProfileDetails {
+        try await transportDetails(runtime.normalizer.profiles.getActive())
     }
 
     func baseTextProfile() async -> TextForSpeech.Profile {
@@ -233,28 +276,28 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         return .builtInBase(style: style)
     }
 
-    func textProfile(id profileID: String) async -> SpeakSwiftly.TextProfileDetails? {
+    func textProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails? {
         guard let details = try? await runtime.normalizer.profiles.get(id: profileID) else {
             return nil
         }
 
-        return transportDetails(details)
+        return try transportDetails(details)
     }
 
-    func textProfiles() async -> [SpeakSwiftly.TextProfileSummary] {
-        await runtime.normalizer
+    func textProfiles() async throws -> [SpeakSwiftly.TextProfileSummary] {
+        try await runtime.normalizer
             .profiles
             .list()
-            .map(transportSummary)
+            .map { try transportSummary($0) }
     }
 
-    func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails {
+    func effectiveTextProfile(id profileID: String?) async throws -> SpeakSwiftly.TextProfileDetails {
         if let profileID,
            let details = try? await runtime.normalizer.profiles.get(id: profileID) {
-            return transportDetails(details)
+            return try transportDetails(details)
         }
 
-        return await transportDetails(runtime.normalizer.profiles.getEffective())
+        return try await transportDetails(runtime.normalizer.profiles.getEffective())
     }
 
     func loadTextProfiles() async throws {
@@ -275,7 +318,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
 
     func setActiveTextProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails {
         try await runtime.normalizer.profiles.setActive(id: profileID)
-        return await transportDetails(runtime.normalizer.profiles.getActive())
+        return try await transportDetails(runtime.normalizer.profiles.getActive())
     }
 
     func removeTextProfile(id profileID: String) async throws {
@@ -331,36 +374,10 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
 
     // MARK: - Path Resolution
 
-    private func resolvedAbsoluteFilesystemPath(
-        _ path: String?,
-        cwd: String?,
-    ) -> String? {
-        guard let path else {
-            return nil
-        }
-
-        let trimmedPath = path.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmedPath.isEmpty == false else {
-            return nil
-        }
-
-        if trimmedPath.hasPrefix("/") {
-            return URL(fileURLWithPath: trimmedPath).standardizedFileURL.path
-        }
-
-        let trimmedCWD = cwd?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let resolvedBasePath =
-            (trimmedCWD?.isEmpty == false ? trimmedCWD : nil)
-                ?? FileManager.default.currentDirectoryPath
-        return URL(fileURLWithPath: trimmedPath, relativeTo: URL(fileURLWithPath: resolvedBasePath, isDirectory: true))
-            .standardizedFileURL
-            .path
-    }
-
     private func transportSummary(
         _ summary: TextForSpeech.Runtime.Profiles.Summary,
-    ) -> SpeakSwiftly.TextProfileSummary {
-        decodeTransportValue(
+    ) throws -> SpeakSwiftly.TextProfileSummary {
+        try decodeTransportValue(
             SummaryBridge(
                 id: summary.id,
                 name: summary.name,
@@ -372,8 +389,8 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
 
     private func transportDetails(
         _ details: TextForSpeech.Runtime.Profiles.Details,
-    ) -> SpeakSwiftly.TextProfileDetails {
-        decodeTransportValue(
+    ) throws -> SpeakSwiftly.TextProfileDetails {
+        try decodeTransportValue(
             DetailsBridge(
                 profileID: details.profileID,
                 summary: SummaryBridge(
@@ -390,12 +407,15 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     private func decodeTransportValue<Value: Decodable>(
         _ bridge: some Encodable,
         as type: Value.Type,
-    ) -> Value {
+    ) throws -> Value {
         do {
             let data = try JSONEncoder().encode(bridge)
             return try JSONDecoder().decode(Value.self, from: data)
         } catch {
-            preconditionFailure("SpeakSwiftlyServer could not bridge a released SpeakSwiftly text-profile transport value: \(error)")
+            throw SpeakSwiftly.Error(
+                code: .internalError,
+                message: "SpeakSwiftlyServer could not bridge a released SpeakSwiftly text-profile transport value into its stable server payload. Likely cause: \(error.localizedDescription)",
+            )
         }
     }
 }

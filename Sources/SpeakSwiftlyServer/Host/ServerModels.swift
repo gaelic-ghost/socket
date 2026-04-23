@@ -57,6 +57,7 @@ struct SpeakRequestPayload: Decodable {
         case textFormat = "text_format"
         case nestedSourceFormat = "nested_source_format"
         case sourceFormat = "source_format"
+        case requestContext = "request_context"
     }
 
     let text: String
@@ -67,6 +68,7 @@ struct SpeakRequestPayload: Decodable {
     let textFormat: String?
     let nestedSourceFormat: String?
     let sourceFormat: String?
+    let requestContext: SpeakSwiftly.RequestContext?
 
     func normalizationContext() throws -> SpeechNormalizationContext? {
         try makeSpeechNormalizationContext(
@@ -144,6 +146,7 @@ struct BatchItemRequestPayload: Decodable {
         case textFormat = "text_format"
         case nestedSourceFormat = "nested_source_format"
         case sourceFormat = "source_format"
+        case requestContext = "request_context"
     }
 
     let artifactID: String?
@@ -154,6 +157,7 @@ struct BatchItemRequestPayload: Decodable {
     let textFormat: String?
     let nestedSourceFormat: String?
     let sourceFormat: String?
+    let requestContext: SpeakSwiftly.RequestContext?
 
     func model() throws -> SpeakSwiftly.BatchItem {
         try .init(
@@ -164,6 +168,7 @@ struct BatchItemRequestPayload: Decodable {
                 normalizationContext: normalizationContext(),
                 sourceFormat: sourceFormatModel(),
             ),
+            requestContext: requestContext,
         )
     }
 

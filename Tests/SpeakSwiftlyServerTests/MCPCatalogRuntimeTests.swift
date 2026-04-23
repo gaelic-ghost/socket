@@ -1,5 +1,6 @@
 import Foundation
 import MCP
+import SpeakSwiftly
 @testable import SpeakSwiftlyServer
 import Testing
 
@@ -14,16 +15,7 @@ extension ServerTests {
                     mcpPOSTRequest(
                         body: mcpCallToolRequestJSON(
                             name: "generate_speech",
-                            arguments: [
-                                "text": "Inspect MCP resources",
-                                "profile_name": "default",
-                                "text_profile_id": "mcp-text",
-                                "cwd": "./Tests",
-                                "repo_root": "../SpeakSwiftlyServer",
-                                "text_format": "cli_output",
-                                "nested_source_format": "rust_source",
-                                "source_format": "source_code",
-                            ],
+                            argumentsJSON: #"{"text":"Inspect MCP resources","profile_name":"default","text_profile_id":"mcp-text","request_context":{"source":"mcp","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"catalog-runtime","attributes":{"surface":"mcp"}},"cwd":"./Tests","repo_root":"../SpeakSwiftlyServer","text_format":"cli_output","nested_source_format":"rust_source","source_format":"source_code"}"#,
                         ),
                         sessionID: sessionID,
                     ),
@@ -45,6 +37,16 @@ extension ServerTests {
             )
             #expect(queuedSpeechInvocation.textProfileID == "mcp-text")
             #expect(queuedSpeechInvocation.sourceFormat == .generic)
+            #expect(
+                queuedSpeechInvocation.requestContext
+                    == SpeakSwiftly.RequestContext(
+                        source: "mcp",
+                        app: "SpeakSwiftlyServerTests",
+                        project: "SpeakSwiftlyServer",
+                        topic: "catalog-runtime",
+                        attributes: ["surface": "mcp"],
+                    ),
+            )
 
             let createCloneToolEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(

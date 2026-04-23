@@ -19,6 +19,7 @@ actor MockRuntime: ServerRuntimeProtocol {
         let textProfileID: String?
         let normalizationContext: SpeechNormalizationContext?
         let sourceFormat: TextForSpeech.SourceFormat?
+        let requestContext: SpeakSwiftly.RequestContext?
     }
 
     struct CreateCloneInvocation: Equatable {
@@ -84,6 +85,7 @@ actor MockRuntime: ServerRuntimeProtocol {
     let textRuntimePersistenceURL: URL
     var loadTextProfilesCallCount = 0
     var saveTextProfilesCallCount = 0
+    var textProfileTransportError: SpeakSwiftly.Error?
     var generatedFiles = [SpeakSwiftly.GeneratedFile]()
     var generatedBatches = [SpeakSwiftly.GeneratedBatch]()
     var generationJobs = [SpeakSwiftly.GenerationJob]()
@@ -102,11 +104,13 @@ actor MockRuntime: ServerRuntimeProtocol {
         profiles: [SpeakSwiftly.ProfileSummary] = [sampleProfile()],
         speakBehavior: SpeakBehavior = .completeImmediately,
         mutationRefreshBehavior: MutationRefreshBehavior = .applyMutations,
+        textProfileTransportError: SpeakSwiftly.Error? = nil,
         startBehavior: StartBehavior = .immediate,
     ) {
         self.profiles = profiles
         self.speakBehavior = speakBehavior
         self.mutationRefreshBehavior = mutationRefreshBehavior
+        self.textProfileTransportError = textProfileTransportError
         self.startBehavior = startBehavior
         let persistenceURL = FileManager.default
             .temporaryDirectory
