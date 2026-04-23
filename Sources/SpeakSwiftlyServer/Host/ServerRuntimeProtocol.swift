@@ -127,11 +127,11 @@ protocol ServerRuntimeProtocol: Actor {
     func cancelRequest(_ requestID: String) async -> RuntimeRequestHandle
     func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle
     func setBuiltInTextProfileStyle(_ style: TextForSpeech.BuiltInProfileStyle) async throws -> TextForSpeech.BuiltInProfileStyle
-    func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails
+    func activeTextProfile() async throws -> SpeakSwiftly.TextProfileDetails
     func baseTextProfile() async -> TextForSpeech.Profile
-    func textProfile(id profileID: String) async -> SpeakSwiftly.TextProfileDetails?
-    func textProfiles() async -> [SpeakSwiftly.TextProfileSummary]
-    func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails
+    func textProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails?
+    func textProfiles() async throws -> [SpeakSwiftly.TextProfileSummary]
+    func effectiveTextProfile(id profileID: String?) async throws -> SpeakSwiftly.TextProfileDetails
     func loadTextProfiles() async throws
     func saveTextProfiles() async throws
     func createTextProfile(named name: String) async throws -> SpeakSwiftly.TextProfileDetails

@@ -499,6 +499,93 @@ import Testing
 }
 
 @available(macOS 14, *)
+@Test func `rerolling a voice profile refreshes cached profile metadata`() async throws {
+    let originalCreatedAt = Date(timeIntervalSince1970: 1_700_000_000)
+    let runtime = MockRuntime(
+        profiles: [
+            SpeakSwiftly.ProfileSummary(
+                profileName: "default",
+                vibe: .femme,
+                createdAt: originalCreatedAt,
+                voiceDescription: "Warm guide voice",
+                sourceText: "Original training text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+        ],
+    )
+    let state = await MainActor.run { EmbeddedServer() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: testRuntimeConfigurationStore(),
+        state: state,
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let baselineRefreshCount = await runtime.voiceProfileRefreshCount()
+    let baselineStatus = await host.statusSnapshot()
+    let baselineProfile = try #require(baselineStatus.cachedProfiles.first(where: { $0.profileName == "default" }))
+    #expect(baselineProfile.createdAt == TimestampFormatter.string(from: originalCreatedAt))
+    #expect(baselineProfile.voiceDescription == "Warm guide voice")
+    #expect(baselineProfile.sourceText == "Original training text")
+
+    let rerollJobID = try await host.submitRerollProfile(profileName: "default")
+    let rerollSnapshot = try await waitForJobSnapshot(rerollJobID, on: host)
+    #expect(rerollSnapshot.status == "completed")
+
+    let refreshedStatus = await host.statusSnapshot()
+    let refreshedProfile = try #require(refreshedStatus.cachedProfiles.first(where: { $0.profileName == "default" }))
+    let refreshedCount = await runtime.voiceProfileRefreshCount()
+    #expect(refreshedCount == baselineRefreshCount + 1)
+    #expect(refreshedProfile.createdAt == TimestampFormatter.string(from: originalCreatedAt.addingTimeInterval(60)))
+    #expect(refreshedProfile.voiceDescription == "Warm guide voice (rerolled)")
+    #expect(refreshedProfile.sourceText == "Original training text (rerolled)")
+
+    await host.shutdown()
+}
+
+@Test func `runtime adapter path resolution normalizes relative and whitespace padded cwd values`() {
+    let currentDirectoryPath = "/tmp/speakswiftly-tests/workspace"
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "./Artifacts/output.wav",
+            cwd: "  /tmp/speakswiftly-tests/project  ",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == "/tmp/speakswiftly-tests/project/Artifacts/output.wav",
+    )
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "../Fixtures/reference.wav",
+            cwd: "  ./Runs/Session  ",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == "/tmp/speakswiftly-tests/workspace/Runs/Fixtures/reference.wav",
+    )
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "/tmp/speakswiftly-tests/../speakswiftly-tests/final.wav",
+            cwd: "./ignored",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == "/tmp/speakswiftly-tests/final.wav",
+    )
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "   ",
+            cwd: "/tmp/speakswiftly-tests/project",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == nil,
+    )
+}
+
+@available(macOS 14, *)
 @Test func `clearing app managed default voice profile falls back to configured default`() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration(defaultVoiceProfileName: "configured-default")

@@ -88,9 +88,9 @@ extension ServerHost {
         )
     }
 
-    func emitTextProfilesChanged() async {
-        let activeProfile = await runtime.activeTextProfile()
-        let storedProfiles = await runtime.textProfiles()
+    func emitTextProfilesChanged() async throws {
+        let activeProfile = try await runtime.activeTextProfile()
+        let storedProfiles = try await runtime.textProfiles()
         hostEventContinuation.yield(
             .textProfilesChanged(
                 .init(

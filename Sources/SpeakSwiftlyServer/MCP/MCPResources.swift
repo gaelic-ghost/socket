@@ -1,5 +1,20 @@
 import Foundation
 import MCP
+import SpeakSwiftly
+
+private func mapTextProfileResourceError(_ error: any Error) -> MCPError {
+    if let error = error as? MCPError {
+        return error
+    }
+
+    if let error = error as? SpeakSwiftly.Error {
+        return .internalError(error.message)
+    }
+
+    return .internalError(
+        "SpeakSwiftlyServer could not complete the text-profile MCP resource request. Likely cause: \(error.localizedDescription)",
+    )
+}
 
 enum MCPResourceCatalog {
     static let resourceURIs = Set([
@@ -105,7 +120,12 @@ extension MCPSurface {
                     )
 
                 case "speak://text-profiles":
-                    return try await resourceResult(uri: params.uri, payload: host.textProfilesSnapshot())
+                    do {
+                        let snapshot = try await host.textProfilesSnapshot()
+                        return try resourceResult(uri: params.uri, payload: snapshot)
+                    } catch {
+                        throw mapTextProfileResourceError(error)
+                    }
 
                 case "speak://text-profiles/style":
                     return try await resourceResult(uri: params.uri, payload: host.textProfileStyleSnapshot())
@@ -133,13 +153,28 @@ extension MCPSurface {
                     )
 
                 case "speak://text-profiles/base":
-                    return try await resourceResult(uri: params.uri, payload: (host.textProfilesSnapshot()).baseProfile)
+                    do {
+                        let snapshot = try await host.textProfilesSnapshot()
+                        return try resourceResult(uri: params.uri, payload: snapshot.baseProfile)
+                    } catch {
+                        throw mapTextProfileResourceError(error)
+                    }
 
                 case "speak://text-profiles/active":
-                    return try await resourceResult(uri: params.uri, payload: (host.textProfilesSnapshot()).activeProfile)
+                    do {
+                        let snapshot = try await host.textProfilesSnapshot()
+                        return try resourceResult(uri: params.uri, payload: snapshot.activeProfile)
+                    } catch {
+                        throw mapTextProfileResourceError(error)
+                    }
 
                 case "speak://text-profiles/effective":
-                    return try await resourceResult(uri: params.uri, payload: host.effectiveTextProfile(nil))
+                    do {
+                        let profile = try await host.effectiveTextProfile(nil)
+                        return try resourceResult(uri: params.uri, payload: profile)
+                    } catch {
+                        throw mapTextProfileResourceError(error)
+                    }
 
                 case "speak://requests":
                     return try await resourceResult(uri: params.uri, payload: host.jobSnapshots())
@@ -165,17 +200,26 @@ extension MCPSurface {
                     }
 
                     if let profileID = storedTextProfileID(from: params.uri) {
-                        guard let profile = await host.storedTextProfile(profileID) else {
-                            throw MCPError.invalidRequest(
-                                "No stored SpeakSwiftly text profile matched that profile id. Read speak://text-profiles first to inspect the current stored profile set.",
-                            )
-                        }
+                        do {
+                            guard let profile = try await host.storedTextProfile(profileID) else {
+                                throw MCPError.invalidRequest(
+                                    "No stored SpeakSwiftly text profile matched that profile id. Read speak://text-profiles first to inspect the current stored profile set.",
+                                )
+                            }
 
-                        return try resourceResult(uri: params.uri, payload: profile)
+                            return try resourceResult(uri: params.uri, payload: profile)
+                        } catch {
+                            throw mapTextProfileResourceError(error)
+                        }
                     }
 
                     if let profileID = effectiveTextProfileID(from: params.uri) {
-                        return try await resourceResult(uri: params.uri, payload: host.effectiveTextProfile(profileID))
+                        do {
+                            let profile = try await host.effectiveTextProfile(profileID)
+                            return try resourceResult(uri: params.uri, payload: profile)
+                        } catch {
+                            throw mapTextProfileResourceError(error)
+                        }
                     }
 
                     if let requestID = requestID(from: params.uri) {

@@ -3,6 +3,20 @@ import MCP
 import SpeakSwiftly
 import TextForSpeech
 
+private func mapTextProfileToolError(_ error: any Error) -> MCPError {
+    if let error = error as? MCPError {
+        return error
+    }
+
+    if let error = error as? SpeakSwiftly.Error {
+        return .internalError(error.message)
+    }
+
+    return .internalError(
+        "SpeakSwiftlyServer could not complete the text-profile MCP tool request. Likely cause: \(error.localizedDescription)",
+    )
+}
+
 extension MCPSurface {
     static func registerToolHandlers(
         on server: Server,
@@ -176,94 +190,146 @@ extension MCPSurface {
                     return try await toolResult(host.unloadModels())
 
                 case "get_text_normalizer_snapshot":
-                    return try await toolResult(host.textProfilesSnapshot())
+                    do {
+                        return try await toolResult(host.textProfilesSnapshot())
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "get_text_profile_style":
                     return try await toolResult(host.textProfileStyleSnapshot())
 
                 case "set_text_profile_style":
-                    let result = try await host.setTextProfileStyle(
-                        requiredBuiltInTextProfileStyle("built_in_style", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.setTextProfileStyle(
+                            requiredBuiltInTextProfileStyle("built_in_style", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "create_text_profile":
-                    let result = try await host.createTextProfile(
-                        name: requiredString("name", in: arguments),
-                        replacements: decodeOptionalArgument("replacements", in: arguments, default: [TextReplacementSnapshot]())
-                            .map { try $0.model() },
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.createTextProfile(
+                            name: requiredString("name", in: arguments),
+                            replacements: decodeOptionalArgument("replacements", in: arguments, default: [TextReplacementSnapshot]())
+                                .map { try $0.model() },
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "load_text_profiles":
-                    let result = try await host.loadTextProfiles()
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.loadTextProfiles()
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "save_text_profiles":
-                    let result = try await host.saveTextProfiles()
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.saveTextProfiles()
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "rename_text_profile":
-                    let result = try await host.renameTextProfile(
-                        id: requiredString("profile_id", in: arguments),
-                        to: requiredString("name", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.renameTextProfile(
+                            id: requiredString("profile_id", in: arguments),
+                            to: requiredString("name", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "delete_text_profile":
-                    let result = try await host.removeTextProfile(id: requiredString("profile_id", in: arguments))
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.removeTextProfile(id: requiredString("profile_id", in: arguments))
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "set_active_text_profile":
-                    let result = try await host.setActiveTextProfile(
-                        id: requiredString("profile_id", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.setActiveTextProfile(
+                            id: requiredString("profile_id", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "factory_reset_text_profiles":
-                    let result = try await host.factoryResetTextProfiles()
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.factoryResetTextProfiles()
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "reset_text_profile":
-                    let result = try await host.resetTextProfile(
-                        id: requiredString("profile_id", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.resetTextProfile(
+                            id: requiredString("profile_id", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "add_text_replacement":
-                    let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
-                    let result = try await host.addTextReplacement(
-                        replacement.model(),
-                        toStoredTextProfileID: optionalString("profile_id", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
+                        let result = try await host.addTextReplacement(
+                            replacement.model(),
+                            toStoredTextProfileID: optionalString("profile_id", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "replace_text_replacement":
-                    let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
-                    let result = try await host.replaceTextReplacement(
-                        replacement.model(),
-                        inStoredTextProfileID: optionalString("profile_id", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
+                        let result = try await host.replaceTextReplacement(
+                            replacement.model(),
+                            inStoredTextProfileID: optionalString("profile_id", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "remove_text_replacement":
-                    let result = try await host.removeTextReplacement(
-                        id: requiredString("replacement_id", in: arguments),
-                        fromStoredTextProfileID: optionalString("profile_id", in: arguments),
-                    )
-                    await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                    return try toolResult(result)
+                    do {
+                        let result = try await host.removeTextReplacement(
+                            id: requiredString("replacement_id", in: arguments),
+                            fromStoredTextProfileID: optionalString("profile_id", in: arguments),
+                        )
+                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+                        return try toolResult(result)
+                    } catch {
+                        throw mapTextProfileToolError(error)
+                    }
 
                 case "list_generation_queue":
                     return try await toolResult(host.generationQueueSnapshot())
