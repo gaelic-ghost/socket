@@ -18,7 +18,7 @@
   Files: `Sources/SpeakSwiftlyServer/EmbeddedServerSession.swift`, `Sources/SpeakSwiftlyServer/EmbeddedLifecycleServices.swift`
   Focus: readiness gates, sibling-service coordination, shutdown barriers, and transport-state transitions.
 
-- [ ] Slice 5: LaunchAgent operator flow
+- [~] Slice 5: LaunchAgent operator flow
   Files: `Sources/SpeakSwiftlyServer/LaunchAgent/LaunchAgentRuntime.swift`
   Focus: launchctl polling, uninstall timing, partial teardown states, and operator-facing diagnostics.
 
@@ -52,3 +52,7 @@
 - [x] Split MCP startup failure handling from the post-start shutdown path so readiness failures only describe real startup failures instead of conflating later lifecycle errors with startup.
 - [x] Collapse repeated sibling-service shutdown-barrier completion into one helper so prune, config-watch, MCP, and embedded-application services all use the same completion bookkeeping on success, graceful shutdown, and thrown failure paths.
 - [x] Make embedded host startup both cancellable and time-bounded so `land()` can preempt an in-flight startup attempt and a stuck runtime start now fails with a clear operator-facing timeout instead of wedging the lifecycle service indefinitely.
+
+## Slice 5 Findings
+
+- [x] Make plain LaunchAgent uninstall wait for launchd to finish unloading the job, not just issue `bootout`, so immediate status checks and follow-up install flows do not race a partially torn-down service.

@@ -60,6 +60,10 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent status
 xcrun swift run SpeakSwiftlyServerTool launch-agent uninstall
 ```
 
+`uninstall` now waits for `launchctl` to stop reporting the job as loaded before it returns. That
+keeps a plain remove flow aligned with the install and promote-live refresh flows, which already
+wait for launchd teardown before they try to bootstrap the next job incarnation.
+
 For one explicit live-service verification pass, run:
 
 ```bash

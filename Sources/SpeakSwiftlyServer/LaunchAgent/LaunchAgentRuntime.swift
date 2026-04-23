@@ -70,7 +70,7 @@ struct LaunchAgentStatusOptions {
 
     func uninstall() throws {
         if try isLoaded() {
-            try bootoutLoadedService()
+            try unloadLoadedService()
         }
 
         if FileManager.default.fileExists(atPath: plistPath) {
@@ -98,6 +98,11 @@ struct LaunchAgentStatusOptions {
                 "\(speakSwiftlyServerToolName) asked launchctl to unload '\(userDomain)/\(label)', but launchctl exited with status \(result.exitCode). stderr: \(result.standardError)",
             )
         }
+    }
+
+    func unloadLoadedService() throws {
+        try bootoutLoadedService()
+        try waitUntilNotLoaded()
     }
 
     func waitUntilNotLoaded(
