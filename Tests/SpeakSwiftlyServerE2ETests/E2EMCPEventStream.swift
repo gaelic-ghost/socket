@@ -134,6 +134,7 @@ private actor E2EMCPEventStreamConnectionState {
 
     func finish(with error: Error) {
         guard terminalError == nil else { return }
+
         terminalError = error
         let pendingWaiters = waiters
         waiters.removeAll()
@@ -163,11 +164,12 @@ private actor E2ENotificationBuffer {
         let continuation: CheckedContinuation<Data, Error>
     }
 
+    private static let payloadHistoryLimit = 48
+
     private var notifications = [Data]()
     private var terminalError: Error?
     private var payloadHistory = [String]()
     private var waiters = [Waiter]()
-    private static let payloadHistoryLimit = 48
 
     func append(_ notification: Data) {
         payloadHistory.append(String(decoding: notification, as: UTF8.self))
@@ -176,8 +178,7 @@ private actor E2ENotificationBuffer {
         }
 
         if let object = try? decodeJSONObject(from: notification),
-           let waiterIndex = waiters.firstIndex(where: { $0.predicate(object) })
-        {
+           let waiterIndex = waiters.firstIndex(where: { $0.predicate(object) }) {
             let waiter = waiters.remove(at: waiterIndex)
             waiter.continuation.resume(returning: notification)
             return
@@ -188,6 +189,7 @@ private actor E2ENotificationBuffer {
 
     func finish(with error: Error) {
         guard terminalError == nil else { return }
+
         terminalError = error
         let pendingWaiters = waiters
         waiters.removeAll()
@@ -248,6 +250,7 @@ private actor E2ENotificationBuffer {
                 "The live MCP event stream produced a notification payload that was not a JSON object.",
             )
         }
+
         return object
     }
 }
@@ -270,6 +273,7 @@ private func e2eWithTimeout<T: Sendable>(
         guard let value = try await group.next() else {
             throw E2ETimeoutError()
         }
+
         group.cancelAll()
         return value
     }

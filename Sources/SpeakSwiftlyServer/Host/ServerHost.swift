@@ -5,7 +5,7 @@ import SpeakSwiftly
 import TextForSpeech
 
 actor ServerHost {
-    enum ProfileMutationExpectation: Sendable, Equatable {
+    enum ProfileMutationExpectation: Equatable {
         case create(profileName: String)
         case rename(from: String, to: String)
         case reroll(profileName: String)
@@ -27,8 +27,8 @@ actor ServerHost {
         var expectedSuccessProfileName: String {
             switch self {
                 case let .create(profileName),
-                    let .reroll(profileName),
-                    let .delete(profileName):
+                     let .reroll(profileName),
+                     let .delete(profileName):
                     profileName
                 case let .rename(_, newProfileName):
                     newProfileName

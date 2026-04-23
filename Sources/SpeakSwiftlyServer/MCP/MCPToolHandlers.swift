@@ -29,20 +29,20 @@ private func acceptedRequestToolResult(
     )
 }
 
-private func mappedTextProfileToolResult<T: Encodable>(
-    _ operation: () async throws -> T,
+private func mappedTextProfileToolResult(
+    _ operation: () async throws -> some Encodable,
 ) async throws -> CallTool.Result {
     do {
-        return try toolResult(try await operation())
+        return try await toolResult(operation())
     } catch {
         throw mapTextProfileToolError(error)
     }
 }
 
-private func notifyingTextProfileToolResult<T: Encodable>(
+private func notifyingTextProfileToolResult(
     on server: Server,
     subscriptionBroker: MCPSubscriptionBroker,
-    _ operation: () async throws -> T,
+    _ operation: () async throws -> some Encodable,
 ) async throws -> CallTool.Result {
     do {
         let result = try await operation()

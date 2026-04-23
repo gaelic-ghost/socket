@@ -266,7 +266,6 @@ extension ServerHost {
                 guard let refreshedProfile = refreshedProfiles.first(where: { $0.profileName == profileName }) else {
                     return false
                 }
-
                 guard let previousProfile = previousProfiles.first(where: { $0.profileName == profileName }) else {
                     return true
                 }
