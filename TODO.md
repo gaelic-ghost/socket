@@ -10,7 +10,7 @@
   Files: `Sources/SpeakSwiftlyServer/Host/ServerRuntimeAdapter.swift`
   Focus: text-profile transport shaping, crash-vs-error behavior, path resolution, and runtime API drift handling.
 
-- [ ] Slice 3: MCP tool dispatch and notification policy
+- [x] Slice 3: MCP tool dispatch and notification policy
   Files: `Sources/SpeakSwiftlyServer/MCP/MCPToolHandlers.swift`
   Focus: repeated argument parsing, accepted-request result shaping, resource-change notifications, and tool-handler drift.
 
@@ -38,3 +38,9 @@
 - [x] Translate MCP text-profile resource and tool bridge failures into explicit `MCPError.internalError(...)` payloads instead of relying on the default thrown-error path.
 - [x] Recheck runtime-adapter path-resolution behavior for edge cases like non-normalized relative `cwd` values and whitespace-padded `cwd` inputs, and cover it with direct helper tests.
 - [ ] Keep watching for future upstream transport-shape drift beyond the current text-profile bridge; if another released payload starts needing ad hoc JSON bridging, treat that as a new review slice rather than letting the adapter accumulate more silent translation seams.
+
+## Slice 3 Findings
+
+- [x] Collapse repeated accepted-request MCP tool result shaping behind one helper so speech-generation and voice-profile job tools keep a single request-resource response shape.
+- [x] Collapse repeated text-profile MCP mutation branches behind one helper that preserves explicit `MCPError` mapping and always emits the `textProfiles` resource-change notification after successful mutation work.
+- [x] Keep the text-profile snapshot read path on the same explicit error-mapping helper so read-only and mutation tool cases now fail through one predictable MCP error surface.

@@ -17,6 +17,42 @@ private func mapTextProfileToolError(_ error: any Error) -> MCPError {
     )
 }
 
+private func acceptedRequestToolResult(
+    requestID: String,
+    message: String,
+) throws -> CallTool.Result {
+    try toolResult(
+        acceptedRequestResult(
+            requestID: requestID,
+            message: message,
+        ),
+    )
+}
+
+private func mappedTextProfileToolResult<T: Encodable>(
+    _ operation: () async throws -> T,
+) async throws -> CallTool.Result {
+    do {
+        return try toolResult(try await operation())
+    } catch {
+        throw mapTextProfileToolError(error)
+    }
+}
+
+private func notifyingTextProfileToolResult<T: Encodable>(
+    on server: Server,
+    subscriptionBroker: MCPSubscriptionBroker,
+    _ operation: () async throws -> T,
+) async throws -> CallTool.Result {
+    do {
+        let result = try await operation()
+        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
+        return try toolResult(result)
+    } catch {
+        throw mapTextProfileToolError(error)
+    }
+}
+
 extension MCPSurface {
     static func registerToolHandlers(
         on server: Server,
@@ -45,11 +81,9 @@ extension MCPSurface {
                         normalizationContext: normalizationContext(in: arguments),
                         sourceFormat: sourceFormat(in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the live speech request. Read the returned request resource for progress or read speak://runtime/overview to monitor generation, playback, and transport state.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the live speech request. Read the returned request resource for progress or read speak://runtime/overview to monitor generation, playback, and transport state.",
                     )
 
                 case "generate_audio_file":
@@ -66,11 +100,9 @@ extension MCPSurface {
                         normalizationContext: normalizationContext(in: arguments),
                         sourceFormat: sourceFormat(in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the retained audio-file generation request. Read the returned request resource for progress, then inspect speak://generation/files or speak://generation/jobs.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the retained audio-file generation request. Read the returned request resource for progress, then inspect speak://generation/files or speak://generation/jobs.",
                     )
 
                 case "generate_batch":
@@ -85,11 +117,9 @@ extension MCPSurface {
                         items: items.map { try $0.model() },
                         profileName: profileName,
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the retained audio-batch generation request. Read the returned request resource for progress, then inspect speak://generation/batches or speak://generation/jobs.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the retained audio-batch generation request. Read the returned request resource for progress, then inspect speak://generation/batches or speak://generation/jobs.",
                     )
 
                 case "create_voice_profile_from_description":
@@ -101,11 +131,9 @@ extension MCPSurface {
                         outputPath: optionalString("output_path", in: arguments),
                         cwd: optionalString("cwd", in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the voice-profile creation request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the voice-profile creation request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
                     )
 
                 case "create_voice_profile_from_audio":
@@ -116,11 +144,9 @@ extension MCPSurface {
                         transcript: optionalString("transcript", in: arguments),
                         cwd: optionalString("cwd", in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the voice-clone creation request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the voice-clone creation request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
                     )
 
                 case "list_voice_profiles":
@@ -131,33 +157,27 @@ extension MCPSurface {
                         profileName: requiredString("profile_name", in: arguments),
                         to: requiredString("new_profile_name", in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the voice-profile rename request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the voice-profile rename request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
                     )
 
                 case "reroll_voice_profile":
                     let requestID = try await host.submitRerollVoiceProfile(
                         profileName: requiredString("profile_name", in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the voice-profile reroll request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the voice-profile reroll request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
                     )
 
                 case "delete_voice_profile":
                     let requestID = try await host.submitDeleteVoiceProfile(
                         profileName: requiredString("profile_name", in: arguments),
                     )
-                    return try toolResult(
-                        acceptedRequestResult(
-                            requestID: requestID,
-                            message: "SpeakSwiftlyServer accepted the voice-profile deletion request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
-                        ),
+                    return try acceptedRequestToolResult(
+                        requestID: requestID,
+                        message: "SpeakSwiftlyServer accepted the voice-profile deletion request. Read the returned request resource for progress or read speak://voices to monitor the refreshed cache.",
                     )
 
                 case "get_runtime_overview":
@@ -190,145 +210,131 @@ extension MCPSurface {
                     return try await toolResult(host.unloadModels())
 
                 case "get_text_normalizer_snapshot":
-                    do {
-                        return try await toolResult(host.textProfilesSnapshot())
-                    } catch {
-                        throw mapTextProfileToolError(error)
+                    return try await mappedTextProfileToolResult {
+                        try await host.textProfilesSnapshot()
                     }
 
                 case "get_text_profile_style":
                     return try await toolResult(host.textProfileStyleSnapshot())
 
                 case "set_text_profile_style":
-                    do {
-                        let result = try await host.setTextProfileStyle(
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.setTextProfileStyle(
                             requiredBuiltInTextProfileStyle("built_in_style", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "create_text_profile":
-                    do {
-                        let result = try await host.createTextProfile(
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.createTextProfile(
                             name: requiredString("name", in: arguments),
                             replacements: decodeOptionalArgument("replacements", in: arguments, default: [TextReplacementSnapshot]())
                                 .map { try $0.model() },
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "load_text_profiles":
-                    do {
-                        let result = try await host.loadTextProfiles()
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.loadTextProfiles()
                     }
 
                 case "save_text_profiles":
-                    do {
-                        let result = try await host.saveTextProfiles()
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.saveTextProfiles()
                     }
 
                 case "rename_text_profile":
-                    do {
-                        let result = try await host.renameTextProfile(
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.renameTextProfile(
                             id: requiredString("profile_id", in: arguments),
                             to: requiredString("name", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "delete_text_profile":
-                    do {
-                        let result = try await host.removeTextProfile(id: requiredString("profile_id", in: arguments))
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.removeTextProfile(id: requiredString("profile_id", in: arguments))
                     }
 
                 case "set_active_text_profile":
-                    do {
-                        let result = try await host.setActiveTextProfile(
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.setActiveTextProfile(
                             id: requiredString("profile_id", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "factory_reset_text_profiles":
-                    do {
-                        let result = try await host.factoryResetTextProfiles()
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.factoryResetTextProfiles()
                     }
 
                 case "reset_text_profile":
-                    do {
-                        let result = try await host.resetTextProfile(
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.resetTextProfile(
                             id: requiredString("profile_id", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "add_text_replacement":
-                    do {
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
                         let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
-                        let result = try await host.addTextReplacement(
+                        return try await host.addTextReplacement(
                             replacement.model(),
                             toStoredTextProfileID: optionalString("profile_id", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "replace_text_replacement":
-                    do {
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
                         let replacement: TextReplacementSnapshot = try decodeArgument("replacement", in: arguments)
-                        let result = try await host.replaceTextReplacement(
+                        return try await host.replaceTextReplacement(
                             replacement.model(),
                             inStoredTextProfileID: optionalString("profile_id", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "remove_text_replacement":
-                    do {
-                        let result = try await host.removeTextReplacement(
+                    return try await notifyingTextProfileToolResult(
+                        on: server,
+                        subscriptionBroker: subscriptionBroker,
+                    ) {
+                        try await host.removeTextReplacement(
                             id: requiredString("replacement_id", in: arguments),
                             fromStoredTextProfileID: optionalString("profile_id", in: arguments),
                         )
-                        await subscriptionBroker.notifyResourceChanges(for: .textProfiles, using: server)
-                        return try toolResult(result)
-                    } catch {
-                        throw mapTextProfileToolError(error)
                     }
 
                 case "list_generation_queue":
