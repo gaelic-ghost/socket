@@ -70,7 +70,7 @@ extension ServerHost {
             outputPath: outputPath,
             cwd: cwd,
         )
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .create(profileName: profileName))
     }
 
     func createVoiceProfileFromAudio(
@@ -88,7 +88,7 @@ extension ServerHost {
             transcript: transcript,
             cwd: cwd,
         )
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .create(profileName: profileName))
     }
 
     func submitRenameVoiceProfile(
@@ -97,19 +97,19 @@ extension ServerHost {
     ) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.renameVoiceProfile(profileName: profileName, to: newProfileName)
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .rename(from: profileName, to: newProfileName))
     }
 
     func submitRerollVoiceProfile(profileName: String) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.rerollVoiceProfile(profileName: profileName)
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .reroll(profileName: profileName))
     }
 
     func submitDeleteVoiceProfile(profileName: String) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.deleteVoiceProfile(profileName: profileName)
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .delete(profileName: profileName))
     }
 
     func ensureWorkerReady() throws {
@@ -121,11 +121,15 @@ extension ServerHost {
         }
     }
 
-    func enqueuePublicJob(_ handle: RuntimeRequestHandle) async -> String {
+    func enqueuePublicJob(
+        _ handle: RuntimeRequestHandle,
+        profileMutation: ProfileMutationExpectation? = nil,
+    ) async -> String {
         jobs[handle.id] = JobRecord(
             jobID: handle.id,
             op: handle.operation,
             profileName: handle.profileName,
+            profileMutation: profileMutation,
             submittedAt: Date(),
         )
 

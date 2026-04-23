@@ -21,7 +21,12 @@ and lets app code provide explicit `Options(port:runtimeProfileRootURL:)` values
 localhost port or another runtime-owned persistence root is a better fit.
 
 Call ``EmbeddedServer/land()`` when the app wants a graceful shutdown. If the server has already
-been asked to land, a second request simply waits for the same shutdown to finish.
+been asked to land, a second request simply waits for the same shutdown to finish. If shutdown is
+requested while the embedded runtime is still starting, that same `land()` call now cancels the
+in-flight startup attempt instead of waiting forever for startup to finish first. Embedded startup
+is also time-bounded: if the underlying runtime does not finish startup within the package-owned
+startup timeout, the session reports a clear startup failure and tears itself down instead of
+remaining stuck in a permanent starting state.
 
 ## Consumer Ownership Model
 

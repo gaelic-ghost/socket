@@ -9,7 +9,7 @@ Historical release notes and release checklists live under [`docs/releases`](../
 The release surface is intentionally split by checkout authority:
 
 - use `release-prepare.sh` from a feature branch or worktree when the job is "validate this release candidate, push it, open or update the PR, and queue auto-merge"
-- use `release-publish.sh` from the release branch when the job is "cut the actual tag and GitHub release from the merged branch tip"
+- use `release-publish.sh` from the release branch when the job is "cut the actual tag and GitHub release from the merged branch tip without pushing the protected release branch"
 
 That split keeps branch and worktree automation convenient without letting an unmerged feature branch publish a release tag accidentally.
 
@@ -25,9 +25,11 @@ Run:
 scripts/repo-maintenance/release-publish.sh --version vX.Y.Z --skip-live-service-refresh
 ```
 
-That path is the only supported tagged-release publisher. It syncs local `main` with `origin/main`, validates the repo unless told not to, stages the release artifact, creates the annotated tag, pushes the branch and tag, creates the GitHub release, and optionally refreshes the local LaunchAgent-backed live service.
+That path is the only supported tagged-release publisher. It syncs local `main` with `origin/main`, validates the repo unless told not to, stages the release artifact, creates the annotated tag, pushes the tag, creates the GitHub release, and optionally refreshes the local LaunchAgent-backed live service.
 
 If local `main` is ahead of `origin/main`, stop there. Do not try to force the publish path through that unsynced checkout. Put those commits on a feature branch if needed, run `release-prepare.sh`, merge the PR, fast-forward local `main`, and only then return to `release-publish.sh`.
+
+Protected `main` updates belong entirely on the prepare side of the workflow. `release-publish.sh` assumes the exact commit you want to tag is already reachable on `origin/main` and on your fast-forwarded local `main`, so publish never needs to push the branch itself.
 
 ### Local Feature Branch
 
@@ -167,5 +169,6 @@ Current defaults:
 - `release-publish.sh` refuses to run from any branch other than the configured release branch
 - `release-publish.sh` syncs the local release branch with the remote before tagging
 - `release-publish.sh` refuses to publish if local release-branch commits are ahead of the remote
+- `release-publish.sh` pushes the release tag only; it does not push the release branch
 - protected `main` policies are expected to force release-candidate commits through a PR before publish
 - both flows require a clean worktree

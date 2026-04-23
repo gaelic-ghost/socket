@@ -4,6 +4,18 @@ import Foundation
 extension ServerHost {
     // MARK: - Runtime Lifecycle
 
+    func markEmbeddedStartupFailure(_ message: String) async {
+        workerMode = "failed"
+        workerStage = "startup_failed"
+        startupError = message
+        recordRecentError(
+            source: "runtime:start",
+            code: "embedded_startup_failed",
+            message: message,
+        )
+        await requestPublish(mode: .immediate, refreshRuntimeState: false)
+    }
+
     func start() async {
         publishTask = Task {
             let immediateRequests = self.immediatePublishRequests

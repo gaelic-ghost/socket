@@ -64,8 +64,7 @@ extension LaunchAgentOptions {
             userDomain: userDomain,
         )
         if try status.isLoaded() {
-            try status.bootoutLoadedService()
-            try status.waitUntilNotLoaded()
+            try status.unloadLoadedService()
         }
 
         try bootstrapInstalledService()

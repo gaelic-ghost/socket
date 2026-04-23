@@ -60,6 +60,17 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent status
 xcrun swift run SpeakSwiftlyServerTool launch-agent uninstall
 ```
 
+`uninstall` now waits for `launchctl` to stop reporting the job as loaded before it returns. That
+keeps a plain remove flow aligned with the install and promote-live refresh flows, which already
+wait for launchd teardown before they try to bootstrap the next job incarnation.
+It also removes the staged LaunchAgent config alias copy from the managed install layout, so the
+remove flow now clears the launch-agent-owned config shim instead of leaving stale alias state
+behind after the job is gone.
+
+`status` now reports an explicit `load_state` field. A normal absent job shows `load_state: not_loaded`.
+If `launchctl print` fails for some other reason, the command now surfaces that failure directly
+instead of flattening it into `loaded: no`.
+
 For one explicit live-service verification pass, run:
 
 ```bash

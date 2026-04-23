@@ -127,6 +127,84 @@ extension ServerTests {
     }
 
     @available(macOS 14, *)
+    @Test func `profile creation reconciliation rejects unrelated refresh-only changes`() async throws {
+        let originalCreatedAt = Date(timeIntervalSince1970: 1_700_000_000)
+        let runtime = MockRuntime(
+            profiles: [
+                SpeakSwiftly.ProfileSummary(
+                    profileName: "bright-guide",
+                    vibe: .femme,
+                    createdAt: originalCreatedAt,
+                    voiceDescription: "Existing voice",
+                    sourceText: "Existing text",
+                    transcriptSource: nil,
+                    transcriptResolvedAt: nil,
+                    transcriptionModelRepo: nil,
+                ),
+            ],
+            mutationRefreshBehavior: .leaveProfilesUnchanged,
+        )
+        let state = await MainActor.run { EmbeddedServer() }
+        let host = ServerHost(
+            configuration: testConfiguration(),
+            runtime: runtime,
+            runtimeConfigurationStore: testRuntimeConfigurationStore(),
+            state: state,
+        )
+
+        await host.start()
+        await runtime.publishStatus(.residentModelReady)
+        try await waitUntilReady(host)
+
+        await runtime.setScriptedProfileRefreshSnapshots(
+            [[
+                SpeakSwiftly.ProfileSummary(
+                    profileName: "bright-guide",
+                    vibe: .femme,
+                    createdAt: originalCreatedAt,
+                    voiceDescription: "Existing voice",
+                    sourceText: "Existing text",
+                    transcriptSource: nil,
+                    transcriptResolvedAt: nil,
+                    transcriptionModelRepo: nil,
+                ),
+                SpeakSwiftly.ProfileSummary(
+                    profileName: "external-addition",
+                    vibe: .femme,
+                    createdAt: originalCreatedAt.addingTimeInterval(30),
+                    voiceDescription: "Unrelated external voice",
+                    sourceText: "External text",
+                    transcriptSource: nil,
+                    transcriptResolvedAt: nil,
+                    transcriptionModelRepo: nil,
+                ),
+            ]],
+        )
+
+        let jobID = try await host.submitCreateProfile(
+            profileName: "bright-guide",
+            vibe: .femme,
+            text: "Hello there",
+            voiceDescription: "Warm and bright",
+            outputPath: nil,
+            cwd: nil,
+        )
+        let snapshot = try await waitForJobSnapshot(jobID, on: host)
+
+        switch snapshot.terminalEvent {
+            case let .failed(failure):
+                #expect(failure.code == "profile_refresh_mismatch")
+            default:
+                Issue.record("Expected create_voice_profile_from_description reconciliation to reject unrelated refresh-only changes when the target profile snapshot stayed unchanged.")
+        }
+
+        let status = await host.statusSnapshot()
+        #expect(status.profileCacheState == "stale")
+
+        await host.shutdown()
+    }
+
+    @available(macOS 14, *)
     @Test func `text profile routes surface bridge failures as typed server errors`() async throws {
         let runtime = MockRuntime(
             textProfileTransportError: SpeakSwiftly.Error(

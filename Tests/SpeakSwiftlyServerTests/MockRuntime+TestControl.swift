@@ -129,7 +129,7 @@ extension MockRuntime {
     func playbackStateSummary() -> SpeakSwiftly.PlaybackStateSnapshot {
         .init(
             state: playbackState,
-            activeRequest: playbackState == .idle ? nil : activeRequest.map(activeSummary(for:)),
+            activeRequest: playbackState == .idle ? nil : activeRequest.map { activeSummary(for: $0) },
             isStableForConcurrentGeneration: playbackState == .playing,
             isRebuffering: false,
             stableBufferedAudioMS: playbackState == .playing ? 320 : nil,
@@ -138,14 +138,14 @@ extension MockRuntime {
     }
 
     func runtimeOverviewSummary() -> SpeakSwiftly.RuntimeOverview {
-        let generationActiveRequest = activeRequest.map(activeSummary(for:))
+        let generationActiveRequest = activeRequest.map { activeSummary(for: $0) }
         let generationQueue = SpeakSwiftly.QueueSnapshot(
             queueType: "generation",
             activeRequest: generationActiveRequest,
             activeRequests: generationActiveRequest.map { [$0] },
             queue: queuedSummaries(),
         )
-        let playbackActiveRequest = playbackState == .idle ? nil : activeRequest.map(activeSummary(for:))
+        let playbackActiveRequest = playbackState == .idle ? nil : activeRequest.map { activeSummary(for: $0) }
         let playbackQueue = SpeakSwiftly.QueueSnapshot(
             queueType: "playback",
             activeRequest: playbackActiveRequest,

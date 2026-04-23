@@ -5,6 +5,37 @@ import SpeakSwiftly
 import TextForSpeech
 
 actor ServerHost {
+    enum ProfileMutationExpectation: Equatable {
+        case create(profileName: String)
+        case rename(from: String, to: String)
+        case reroll(profileName: String)
+        case delete(profileName: String)
+
+        var operationName: String {
+            switch self {
+                case .create:
+                    "create_voice_profile"
+                case .rename:
+                    "update_voice_profile_name"
+                case .reroll:
+                    "reroll_voice_profile"
+                case .delete:
+                    "delete_voice_profile"
+            }
+        }
+
+        var expectedSuccessProfileName: String {
+            switch self {
+                case let .create(profileName),
+                     let .reroll(profileName),
+                     let .delete(profileName):
+                    profileName
+                case let .rename(_, newProfileName):
+                    newProfileName
+            }
+        }
+    }
+
     enum PublishMode {
         case immediate
         case coalesced
@@ -14,6 +45,7 @@ actor ServerHost {
         let jobID: String
         let op: String
         let profileName: String?
+        let profileMutation: ProfileMutationExpectation?
         let submittedAt: Date
         var startedAt: Date?
         var terminalAt: Date?

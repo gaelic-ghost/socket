@@ -128,7 +128,64 @@ import Testing
 
     let counts = await probe.counts()
     #expect(counts.requestStop == 1)
-    #expect(counts.waitUntilStopped == 2)
+    #expect(counts.waitUntilStopped == 1)
+}
+
+@available(macOS 14, *)
+@Test func `embedded server can liftoff again after landing`() async throws {
+    actor RestartProbe {
+        private var bootstrapCallCount = 0
+        private var requestStopCallCount = 0
+
+        func recordBootstrap() {
+            bootstrapCallCount += 1
+        }
+
+        func recordRequestStop() {
+            requestStopCallCount += 1
+        }
+
+        func counts() -> (bootstrap: Int, requestStop: Int) {
+            (bootstrapCallCount, requestStopCallCount)
+        }
+    }
+
+    let probe = RestartProbe()
+    let server = await MainActor.run { EmbeddedServer() }
+
+    try await server.liftoff(
+        environment: [:],
+        defaultProfile: .embeddedSession,
+        bootstrap: { _, _ in
+            await probe.recordBootstrap()
+            return EmbeddedServerLifecycleHooks(
+                requestStop: {
+                    await probe.recordRequestStop()
+                },
+                waitUntilStopped: {},
+            )
+        },
+    )
+    try await server.land()
+
+    try await server.liftoff(
+        environment: [:],
+        defaultProfile: .embeddedSession,
+        bootstrap: { _, _ in
+            await probe.recordBootstrap()
+            return EmbeddedServerLifecycleHooks(
+                requestStop: {
+                    await probe.recordRequestStop()
+                },
+                waitUntilStopped: {},
+            )
+        },
+    )
+    try await server.land()
+
+    let counts = await probe.counts()
+    #expect(counts.bootstrap == 2)
+    #expect(counts.requestStop == 2)
 }
 
 @available(macOS 14, *)
@@ -154,6 +211,7 @@ import Testing
         host: host,
         readinessGate: readinessGate,
         shutdownBarrier: shutdownBarrier,
+        startupTimeout: .seconds(15),
     )
     let serviceGroup = ServiceGroup(
         services: [service],
@@ -182,6 +240,80 @@ import Testing
 
     let finalCounts = await runtime.lifecycleCounts()
     #expect(finalCounts.shutdown == 1)
+}
+
+@available(macOS 14, *)
+@Test func `host lifecycle service can shut down while startup is still in flight`() async throws {
+    let runtime = MockRuntime(startBehavior: .waitForRelease)
+    let state = await MainActor.run { EmbeddedServer() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: testRuntimeConfigurationStore(),
+        state: state,
+    )
+    let readinessGate = EmbeddedLifecycleReadinessGate()
+    let shutdownBarrier = EmbeddedLifecycleShutdownBarrier(targetCount: 0)
+    let service = HostLifecycleService(
+        host: host,
+        readinessGate: readinessGate,
+        shutdownBarrier: shutdownBarrier,
+        startupTimeout: .seconds(15),
+    )
+    let serviceGroup = ServiceGroup(
+        services: [service],
+        gracefulShutdownSignals: [],
+        cancellationSignals: [],
+        logger: Logger(label: "ServerTests.HostLifecycleStartupCancellation"),
+    )
+
+    let runTask = Task {
+        try await serviceGroup.run()
+    }
+
+    await runtime.waitUntilStartReachesBarrier()
+    await serviceGroup.triggerGracefulShutdown()
+    try await runTask.value
+
+    let lifecycleCounts = await runtime.lifecycleCounts()
+    #expect(lifecycleCounts.start == 1)
+    #expect(lifecycleCounts.shutdown == 1)
+}
+
+@available(macOS 14, *)
+@Test func `host lifecycle service times out stuck startup clearly`() async throws {
+    let runtime = MockRuntime(startBehavior: .waitForRelease)
+    let state = await MainActor.run { EmbeddedServer() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: testRuntimeConfigurationStore(),
+        state: state,
+    )
+    let readinessGate = EmbeddedLifecycleReadinessGate()
+    let shutdownBarrier = EmbeddedLifecycleShutdownBarrier(targetCount: 0)
+    let service = HostLifecycleService(
+        host: host,
+        readinessGate: readinessGate,
+        shutdownBarrier: shutdownBarrier,
+        startupTimeout: .milliseconds(20),
+    )
+
+    await #expect(throws: Error.self) {
+        try await service.run()
+    }
+
+    let lifecycleCounts = await runtime.lifecycleCounts()
+    #expect(lifecycleCounts.start == 1)
+    #expect(lifecycleCounts.shutdown == 1)
+
+    let readiness = await #expect(throws: Error.self) {
+        try await readinessGate.waitUntilReady()
+    }
+    _ = readiness
+
+    let snapshot = await host.hostStateSnapshot()
+    #expect(snapshot.overview.startupError?.contains("timed out while waiting for the embedded runtime to finish startup") == true)
 }
 
 @available(macOS 14, *)

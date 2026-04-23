@@ -567,6 +567,73 @@ import Testing
     await host.shutdown()
 }
 
+@available(macOS 14, *)
+@Test func `renaming a voice profile tolerates unrelated profile refresh changes`() async throws {
+    let runtime = MockRuntime(
+        profiles: [
+            SpeakSwiftly.ProfileSummary(
+                profileName: "default",
+                vibe: .femme,
+                createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+                voiceDescription: "Default voice",
+                sourceText: "Default text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+        ],
+    )
+    let state = await MainActor.run { EmbeddedServer() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: testRuntimeConfigurationStore(),
+        state: state,
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    await runtime.setScriptedProfileRefreshSnapshots(
+        [[
+            SpeakSwiftly.ProfileSummary(
+                profileName: "renamed-default",
+                vibe: .femme,
+                createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+                voiceDescription: "Default voice",
+                sourceText: "Default text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+            SpeakSwiftly.ProfileSummary(
+                profileName: "external-addition",
+                vibe: .femme,
+                createdAt: Date(timeIntervalSince1970: 1_700_000_120),
+                voiceDescription: "Added outside the host cache",
+                sourceText: "External text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+        ]],
+    )
+
+    let jobID = try await host.submitRenameProfile(profileName: "default", newProfileName: "renamed-default")
+    let snapshot = try await waitForJobSnapshot(jobID, on: host)
+    #expect(snapshot.status == "completed")
+    #expect(snapshot.terminalEvent != nil)
+
+    let status = await host.statusSnapshot()
+    #expect(status.profileCacheState == "fresh")
+    #expect(status.cachedProfiles.contains { $0.profileName == "renamed-default" })
+    #expect(status.cachedProfiles.contains { $0.profileName == "external-addition" })
+    #expect(status.cachedProfiles.contains { $0.profileName == "default" } == false)
+
+    await host.shutdown()
+}
+
 @Test func `runtime adapter path resolution normalizes relative and whitespace padded cwd values`() {
     let currentDirectoryPath = "/tmp/speakswiftly-tests/workspace"
 

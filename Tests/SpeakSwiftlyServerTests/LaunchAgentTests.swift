@@ -68,6 +68,150 @@ import Testing
     }
 }
 
+@Test func `launch agent uninstall waits for delayed launchctl teardown`() throws {
+    let temporaryRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+    try FileManager.default.createDirectory(at: temporaryRootURL, withIntermediateDirectories: true)
+
+    let plistURL = temporaryRootURL.appendingPathComponent("SpeakSwiftlyServer.plist", isDirectory: false)
+    try "plist".write(to: plistURL, atomically: true, encoding: .utf8)
+
+    let serviceStateURL = temporaryRootURL.appendingPathComponent("service-loaded", isDirectory: false)
+    try "loaded".write(to: serviceStateURL, atomically: true, encoding: .utf8)
+
+    let launchctlScriptURL = temporaryRootURL.appendingPathComponent("launchctl", isDirectory: false)
+    let launchctlScript = """
+    #!/bin/sh
+    STATE_FILE="\(serviceStateURL.path)"
+
+    case "$1" in
+      print)
+        if [ -f "$STATE_FILE" ]; then
+          exit 0
+        fi
+        exit 113
+        ;;
+      bootout)
+        (
+          sleep 0.2
+          rm -f "$STATE_FILE"
+        ) &
+        exit 0
+        ;;
+      *)
+        exit 64
+        ;;
+    esac
+    """
+    try launchctlScript.write(to: launchctlScriptURL, atomically: true, encoding: .utf8)
+    try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: launchctlScriptURL.path)
+
+    let options = LaunchAgentStatusOptions(
+        label: "com.gaelic-ghost.test-launch-agent",
+        plistPath: plistURL.path,
+        launchctlPath: launchctlScriptURL.path,
+        userDomain: "gui/501",
+    )
+
+    try options.uninstall()
+
+    #expect(FileManager.default.fileExists(atPath: plistURL.path) == false)
+    #expect(FileManager.default.fileExists(atPath: serviceStateURL.path) == false)
+}
+
+@Test func `launch agent uninstall removes staged config alias`() throws {
+    let homeDirectoryURL = try makeLaunchAgentCommandTestRepository()
+    let layout = ServerInstallLayout.defaultForCurrentUser(
+        homeDirectoryURL: homeDirectoryURL,
+        launchAgentLabel: "com.gaelic-ghost.test-launch-agent",
+    )
+
+    try FileManager.default.createDirectory(
+        at: layout.launchAgentConfigAliasURL.deletingLastPathComponent(),
+        withIntermediateDirectories: true,
+    )
+    try FileManager.default.createDirectory(
+        at: layout.launchAgentPlistURL.deletingLastPathComponent(),
+        withIntermediateDirectories: true,
+    )
+    try "aliased config".write(to: layout.launchAgentConfigAliasURL, atomically: true, encoding: .utf8)
+    try "plist".write(to: layout.launchAgentPlistURL, atomically: true, encoding: .utf8)
+
+    let options = LaunchAgentStatusOptions(
+        label: layout.launchAgentLabel,
+        plistPath: layout.launchAgentPlistURL.path,
+        launchctlPath: "/usr/bin/true",
+        userDomain: "gui/501",
+    )
+
+    try options.removeStagedConfigAliasIfPresent()
+    #expect(FileManager.default.fileExists(atPath: layout.launchAgentConfigAliasURL.path) == false)
+}
+
+@Test func `launch agent status reports explicit not loaded state`() throws {
+    let temporaryRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+    try FileManager.default.createDirectory(at: temporaryRootURL, withIntermediateDirectories: true)
+
+    let plistURL = temporaryRootURL.appendingPathComponent("SpeakSwiftlyServer.plist", isDirectory: false)
+    let launchctlScriptURL = temporaryRootURL.appendingPathComponent("launchctl", isDirectory: false)
+    let launchctlScript = """
+    #!/bin/sh
+    if [ "$1" = "print" ]; then
+      echo "Could not find service" >&2
+      exit 113
+    fi
+    exit 64
+    """
+    try launchctlScript.write(to: launchctlScriptURL, atomically: true, encoding: .utf8)
+    try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: launchctlScriptURL.path)
+
+    let options = LaunchAgentStatusOptions(
+        label: "com.gaelic-ghost.test-launch-agent",
+        plistPath: plistURL.path,
+        launchctlPath: launchctlScriptURL.path,
+        userDomain: "gui/501",
+    )
+
+    let status = try options.statusSummary()
+    #expect(status.contains("loaded: no"))
+    #expect(status.contains("load_state: not_loaded"))
+}
+
+@Test func `launch agent status surfaces unexpected launchctl print failures`() throws {
+    let temporaryRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+    try FileManager.default.createDirectory(at: temporaryRootURL, withIntermediateDirectories: true)
+
+    let plistURL = temporaryRootURL.appendingPathComponent("SpeakSwiftlyServer.plist", isDirectory: false)
+    let launchctlScriptURL = temporaryRootURL.appendingPathComponent("launchctl", isDirectory: false)
+    let launchctlScript = """
+    #!/bin/sh
+    if [ "$1" = "print" ]; then
+      echo "Permission denied while reading launchd state" >&2
+      exit 5
+    fi
+    exit 64
+    """
+    try launchctlScript.write(to: launchctlScriptURL, atomically: true, encoding: .utf8)
+    try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: launchctlScriptURL.path)
+
+    let options = LaunchAgentStatusOptions(
+        label: "com.gaelic-ghost.test-launch-agent",
+        plistPath: plistURL.path,
+        launchctlPath: launchctlScriptURL.path,
+        userDomain: "gui/501",
+    )
+
+    do {
+        _ = try options.statusSummary()
+        Issue.record("Expected launch-agent status to surface an unexpected launchctl print failure.")
+    } catch let error as LaunchAgentCommandError {
+        #expect(error.message.contains("unexpected failure"))
+        #expect(error.message.contains("Permission denied while reading launchd state"))
+    }
+}
+
 @Test func `healthcheck command parses custom probe options`() throws {
     let command = try SpeakSwiftlyServerToolCommand.parse(
         arguments: [

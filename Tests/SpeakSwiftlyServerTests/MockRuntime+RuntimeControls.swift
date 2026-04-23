@@ -69,7 +69,7 @@ extension MockRuntime {
     func generationQueue() async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         generationQueueRequestCount += 1
-        let activeRequest = activeRequest.map(activeSummary(for:))
+        let activeRequest = activeRequest.map { activeSummary(for: $0) }
         let queue = queuedSummaries()
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(
@@ -90,7 +90,7 @@ extension MockRuntime {
     func playbackQueue() async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         playbackQueueRequestCount += 1
-        let activeRequest = playbackState == .idle ? nil : activeRequest.map(activeSummary(for:))
+        let activeRequest = playbackState == .idle ? nil : activeRequest.map { activeSummary(for: $0) }
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(
                 .completed(

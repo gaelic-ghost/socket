@@ -209,7 +209,7 @@ The short version is:
 - use `xcrun swift test` for the normal package-development loop
 - use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
 - use `scripts/repo-maintenance/release-prepare.sh` only for branch-side PR prep
-- use `scripts/repo-maintenance/release-publish.sh` as the single publish-time artifact and tag path
+- use `scripts/repo-maintenance/release-publish.sh` as the single publish-time artifact and tag path; it tags from fast-forwarded local `main` and pushes the tag, not the protected branch
 
 ## Repo Structure
 

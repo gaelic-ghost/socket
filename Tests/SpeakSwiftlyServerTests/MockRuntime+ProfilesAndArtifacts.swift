@@ -87,6 +87,9 @@ extension MockRuntime {
     func listVoiceProfiles() async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         listVoiceProfilesCallCount += 1
+        if !scriptedProfileRefreshSnapshots.isEmpty {
+            profiles = scriptedProfileRefreshSnapshots.removeFirst()
+        }
         let profiles = profiles
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(.completed(SpeakSwiftly.Success(id: requestID, profiles: profiles, activeRequests: nil)))
