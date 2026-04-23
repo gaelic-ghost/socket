@@ -159,9 +159,11 @@ struct BatchItemRequestPayload: Decodable {
         try .init(
             artifactID: artifactID,
             text: text,
-            textProfileID: textProfileID,
-            textContext: normalizationContext(),
-            sourceFormat: sourceFormatModel(),
+            textProfile: textProfileID,
+            inputTextContext: makeInputTextContext(
+                normalizationContext: normalizationContext(),
+                sourceFormat: sourceFormatModel(),
+            ),
         )
     }
 

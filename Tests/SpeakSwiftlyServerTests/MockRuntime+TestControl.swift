@@ -111,7 +111,7 @@ extension MockRuntime {
     }
 
     func activeSummary(for request: MockRequest) -> SpeakSwiftly.ActiveRequest {
-        .init(id: request.id, op: request.operation, profileName: request.profileName)
+        .init(id: request.id, op: request.operation, voiceProfile: request.profileName, requestContext: nil)
     }
 
     func queuedSummaries() -> [SpeakSwiftly.QueuedRequest] {
@@ -119,7 +119,8 @@ extension MockRuntime {
             .init(
                 id: queued.request.id,
                 op: queued.request.operation,
-                profileName: queued.request.profileName,
+                voiceProfile: queued.request.profileName,
+                requestContext: nil,
                 queuePosition: offset + 1,
             )
         }

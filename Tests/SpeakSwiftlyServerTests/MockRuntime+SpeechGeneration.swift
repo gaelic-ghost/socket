@@ -67,8 +67,12 @@ extension MockRuntime {
             try makeGeneratedFile(
                 artifactID: artifactID,
                 createdAt: createdAt,
-                profileName: profileName,
-                textProfileID: textProfileID,
+                voiceProfile: profileName,
+                textProfile: textProfileID,
+                inputTextContext: makeInputTextContext(
+                    normalizationContext: normalizationContext,
+                    sourceFormat: sourceFormat,
+                ),
                 sampleRate: 24000,
                 filePath: "/tmp/\(artifactID).wav",
             )
@@ -78,9 +82,12 @@ extension MockRuntime {
             GenerationJobItemFixture(
                 artifactID: artifactID,
                 text: text,
-                textProfileID: textProfileID,
-                textContext: normalizationContext,
-                sourceFormat: sourceFormat,
+                textProfile: textProfileID,
+                inputTextContext: makeInputTextContext(
+                    normalizationContext: normalizationContext,
+                    sourceFormat: sourceFormat,
+                ),
+                requestContext: nil,
             ),
         ]
         let artifacts = [
@@ -90,8 +97,13 @@ extension MockRuntime {
                 createdAt: createdAt,
                 filePath: generatedFile.filePath,
                 sampleRate: generatedFile.sampleRate,
-                profileName: profileName,
-                textProfileID: textProfileID,
+                voiceProfile: profileName,
+                textProfile: textProfileID,
+                inputTextContext: makeInputTextContext(
+                    normalizationContext: normalizationContext,
+                    sourceFormat: sourceFormat,
+                ),
+                requestContext: nil,
             ),
         ]
         generationJobs.append(
@@ -101,8 +113,8 @@ extension MockRuntime {
                     jobKind: "file",
                     createdAt: createdAt,
                     updatedAt: createdAt,
-                    profileName: profileName,
-                    textProfileID: textProfileID,
+                    voiceProfile: profileName,
+                    textProfile: textProfileID,
                     speechBackend: "qwen3",
                     state: "completed",
                     items: items,
@@ -133,8 +145,9 @@ extension MockRuntime {
                 try makeGeneratedFile(
                     artifactID: item.artifactID ?? "\(requestID)-artifact-\(index + 1)",
                     createdAt: createdAt,
-                    profileName: profileName,
-                    textProfileID: item.textProfileID,
+                    voiceProfile: profileName,
+                    textProfile: item.textProfile,
+                    inputTextContext: item.inputTextContext,
                     sampleRate: 24000,
                     filePath: "/tmp/\(item.artifactID ?? "\(requestID)-artifact-\(index + 1)").wav",
                 )
@@ -145,16 +158,16 @@ extension MockRuntime {
             GenerationJobItemFixture(
                 artifactID: item.artifactID ?? "\(requestID)-artifact-\(index + 1)",
                 text: item.text,
-                textProfileID: item.textProfileID,
-                textContext: item.textContext,
-                sourceFormat: item.sourceFormat,
+                textProfile: item.textProfile,
+                inputTextContext: item.inputTextContext,
+                requestContext: item.requestContext,
             )
         }
         let generatedBatch = requireFixture("generated batch '\(requestID)'") {
             try makeGeneratedBatch(
                 batchID: requestID,
-                profileName: profileName,
-                textProfileID: items.first?.textProfileID,
+                voiceProfile: profileName,
+                textProfile: items.first?.textProfile,
                 speechBackend: "qwen3",
                 state: "completed",
                 items: batchItems,
@@ -162,8 +175,10 @@ extension MockRuntime {
                     GeneratedFileFixture(
                         artifactID: $0.artifactID,
                         createdAt: $0.createdAt,
-                        profileName: $0.profileName,
-                        textProfileID: $0.textProfileID,
+                        voiceProfile: $0.voiceProfile,
+                        textProfile: $0.textProfile,
+                        inputTextContext: $0.inputTextContext,
+                        requestContext: $0.requestContext,
                         sampleRate: $0.sampleRate,
                         filePath: $0.filePath,
                     )
@@ -185,8 +200,8 @@ extension MockRuntime {
                     jobKind: "batch",
                     createdAt: createdAt,
                     updatedAt: createdAt,
-                    profileName: profileName,
-                    textProfileID: items.first?.textProfileID,
+                    voiceProfile: profileName,
+                    textProfile: items.first?.textProfile,
                     speechBackend: "qwen3",
                     state: "completed",
                     items: batchItems,
@@ -197,8 +212,10 @@ extension MockRuntime {
                             createdAt: $0.createdAt,
                             filePath: $0.filePath,
                             sampleRate: $0.sampleRate,
-                            profileName: $0.profileName,
-                            textProfileID: $0.textProfileID,
+                            voiceProfile: $0.voiceProfile,
+                            textProfile: $0.textProfile,
+                            inputTextContext: $0.inputTextContext,
+                            requestContext: $0.requestContext,
                         )
                     },
                     startedAt: generatedBatch.startedAt,

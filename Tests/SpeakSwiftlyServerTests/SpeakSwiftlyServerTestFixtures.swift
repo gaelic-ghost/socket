@@ -82,16 +82,20 @@ func sampleProfile() -> SpeakSwiftly.ProfileSummary {
 struct GeneratedFileFixture: Codable {
     let artifactID: String
     let createdAt: Date
-    let profileName: String
-    let textProfileID: String?
+    let voiceProfile: String
+    let textProfile: String?
+    let inputTextContext: SpeakSwiftly.InputTextContext?
+    let requestContext: SpeakSwiftly.RequestContext?
     let sampleRate: Int
     let filePath: String
 
     enum CodingKeys: String, CodingKey {
         case artifactID = "artifact_id"
         case createdAt = "created_at"
-        case profileName = "profile_name"
-        case textProfileID = "text_profile_id"
+        case voiceProfile = "voice_profile"
+        case textProfile = "text_profile"
+        case inputTextContext = "input_text_context"
+        case requestContext = "request_context"
         case sampleRate = "sample_rate"
         case filePath = "file_path"
     }
@@ -105,8 +109,10 @@ struct GenerationArtifactFixture: Codable {
     let createdAt: Date
     let filePath: String
     let sampleRate: Int
-    let profileName: String
-    let textProfileID: String?
+    let voiceProfile: String
+    let textProfile: String?
+    let inputTextContext: SpeakSwiftly.InputTextContext?
+    let requestContext: SpeakSwiftly.RequestContext?
 
     enum CodingKeys: String, CodingKey {
         case artifactID = "artifact_id"
@@ -114,8 +120,10 @@ struct GenerationArtifactFixture: Codable {
         case createdAt = "created_at"
         case filePath = "file_path"
         case sampleRate = "sample_rate"
-        case profileName = "profile_name"
-        case textProfileID = "text_profile_id"
+        case voiceProfile = "voice_profile"
+        case textProfile = "text_profile"
+        case inputTextContext = "input_text_context"
+        case requestContext = "request_context"
     }
 }
 
@@ -124,16 +132,16 @@ struct GenerationArtifactFixture: Codable {
 struct GenerationJobItemFixture: Codable {
     let artifactID: String
     let text: String
-    let textProfileID: String?
-    let textContext: TextForSpeech.Context?
-    let sourceFormat: TextForSpeech.SourceFormat?
+    let textProfile: String?
+    let inputTextContext: SpeakSwiftly.InputTextContext?
+    let requestContext: SpeakSwiftly.RequestContext?
 
     enum CodingKeys: String, CodingKey {
         case artifactID = "artifact_id"
         case text
-        case textProfileID = "text_profile_id"
-        case textContext = "text_context"
-        case sourceFormat = "source_format"
+        case textProfile = "text_profile"
+        case inputTextContext = "input_text_context"
+        case requestContext = "request_context"
     }
 }
 
@@ -151,8 +159,8 @@ struct GenerationJobFixture: Codable {
     let jobKind: String
     let createdAt: Date
     let updatedAt: Date
-    let profileName: String
-    let textProfileID: String?
+    let voiceProfile: String
+    let textProfile: String?
     let speechBackend: String
     let state: String
     let items: [GenerationJobItemFixture]
@@ -169,8 +177,8 @@ struct GenerationJobFixture: Codable {
         case jobKind = "job_kind"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
-        case profileName = "profile_name"
-        case textProfileID = "text_profile_id"
+        case voiceProfile = "voice_profile"
+        case textProfile = "text_profile"
         case speechBackend = "speech_backend"
         case state
         case items
@@ -188,8 +196,8 @@ struct GenerationJobFixture: Codable {
 
 struct GeneratedBatchFixture: Codable {
     let batchID: String
-    let profileName: String
-    let textProfileID: String?
+    let voiceProfile: String
+    let textProfile: String?
     let speechBackend: String
     let state: String
     let items: [GenerationJobItemFixture]
@@ -205,8 +213,8 @@ struct GeneratedBatchFixture: Codable {
 
     enum CodingKeys: String, CodingKey {
         case batchID = "batch_id"
-        case profileName = "profile_name"
-        case textProfileID = "text_profile_id"
+        case voiceProfile = "voice_profile"
+        case textProfile = "text_profile"
         case speechBackend = "speech_backend"
         case state
         case items
@@ -242,8 +250,10 @@ func requireFixture<T>(
 func makeGeneratedFile(
     artifactID: String,
     createdAt: Date,
-    profileName: String,
-    textProfileID: String?,
+    voiceProfile: String,
+    textProfile: String?,
+    inputTextContext: SpeakSwiftly.InputTextContext? = nil,
+    requestContext: SpeakSwiftly.RequestContext? = nil,
     sampleRate: Int,
     filePath: String,
 ) throws -> SpeakSwiftly.GeneratedFile {
@@ -251,8 +261,10 @@ func makeGeneratedFile(
         GeneratedFileFixture(
             artifactID: artifactID,
             createdAt: createdAt,
-            profileName: profileName,
-            textProfileID: textProfileID,
+            voiceProfile: voiceProfile,
+            textProfile: textProfile,
+            inputTextContext: inputTextContext,
+            requestContext: requestContext,
             sampleRate: sampleRate,
             filePath: filePath,
         ),
@@ -265,8 +277,8 @@ func makeGenerationJob(
     jobKind: String,
     createdAt: Date,
     updatedAt: Date,
-    profileName: String,
-    textProfileID: String?,
+    voiceProfile: String,
+    textProfile: String?,
     speechBackend: String,
     state: String,
     items: [GenerationJobItemFixture],
@@ -284,8 +296,8 @@ func makeGenerationJob(
             jobKind: jobKind,
             createdAt: createdAt,
             updatedAt: updatedAt,
-            profileName: profileName,
-            textProfileID: textProfileID,
+            voiceProfile: voiceProfile,
+            textProfile: textProfile,
             speechBackend: speechBackend,
             state: state,
             items: items,
@@ -303,8 +315,8 @@ func makeGenerationJob(
 
 func makeGeneratedBatch(
     batchID: String,
-    profileName: String,
-    textProfileID: String?,
+    voiceProfile: String,
+    textProfile: String?,
     speechBackend: String,
     state: String,
     items: [GenerationJobItemFixture],
@@ -321,8 +333,8 @@ func makeGeneratedBatch(
     try fixtureDecode(
         GeneratedBatchFixture(
             batchID: batchID,
-            profileName: profileName,
-            textProfileID: textProfileID,
+            voiceProfile: voiceProfile,
+            textProfile: textProfile,
             speechBackend: speechBackend,
             state: state,
             items: items,

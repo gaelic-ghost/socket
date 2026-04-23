@@ -4,6 +4,20 @@ import TextForSpeech
 
 public typealias SpeechNormalizationContext = TextForSpeech.Context
 
+func makeInputTextContext(
+    normalizationContext: SpeechNormalizationContext?,
+    sourceFormat: TextForSpeech.SourceFormat?,
+) -> SpeakSwiftly.InputTextContext? {
+    guard normalizationContext != nil || sourceFormat != nil else {
+        return nil
+    }
+
+    return SpeakSwiftly.InputTextContext(
+        context: normalizationContext,
+        sourceFormat: sourceFormat,
+    )
+}
+
 struct RuntimeRequestHandle {
     let id: String
     let operation: String
@@ -27,7 +41,7 @@ struct RuntimeRequestHandle {
     init(_ handle: SpeakSwiftly.RequestHandle) {
         id = handle.id
         operation = canonicalOperationName(handle.operation)
-        profileName = handle.profileName
+        profileName = handle.voiceProfile
         events = handle.events
     }
 }

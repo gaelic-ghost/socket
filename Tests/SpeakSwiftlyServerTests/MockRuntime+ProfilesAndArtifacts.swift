@@ -188,17 +188,17 @@ extension MockRuntime {
                 jobKind: current.jobKind.rawValue,
                 createdAt: current.createdAt,
                 updatedAt: Date(),
-                profileName: current.profileName,
-                textProfileID: current.textProfileID,
+                voiceProfile: current.voiceProfile,
+                textProfile: current.textProfile,
                 speechBackend: current.speechBackend.rawValue,
                 state: "expired",
                 items: current.items.map {
                     GenerationJobItemFixture(
                         artifactID: $0.artifactID,
                         text: $0.text,
-                        textProfileID: $0.textProfileID,
-                        textContext: $0.textContext,
-                        sourceFormat: $0.sourceFormat,
+                        textProfile: $0.textProfile,
+                        inputTextContext: $0.inputTextContext,
+                        requestContext: $0.requestContext,
                     )
                 },
                 artifacts: current.artifacts.map {
@@ -208,8 +208,10 @@ extension MockRuntime {
                         createdAt: $0.createdAt,
                         filePath: $0.filePath,
                         sampleRate: $0.sampleRate,
-                        profileName: $0.profileName,
-                        textProfileID: $0.textProfileID,
+                        voiceProfile: $0.voiceProfile,
+                        textProfile: $0.textProfile,
+                        inputTextContext: $0.inputTextContext,
+                        requestContext: $0.requestContext,
                     )
                 },
                 failure: current.failure.map { .init(code: $0.code, message: $0.message) },

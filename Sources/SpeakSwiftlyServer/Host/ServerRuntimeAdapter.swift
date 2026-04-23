@@ -34,10 +34,12 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     ) async -> RuntimeRequestHandle {
         let handle = await runtime.generate.speech(
             text: text,
-            with: profileName,
-            textProfileID: textProfileID,
-            textContext: normalizationContext,
-            sourceFormat: sourceFormat,
+            voiceProfile: profileName,
+            textProfile: textProfileID,
+            inputTextContext: makeInputTextContext(
+                normalizationContext: normalizationContext,
+                sourceFormat: sourceFormat,
+            ),
         )
         return .init(id: handle.id, operation: "generate_speech", profileName: profileName, events: handle.events)
     }
@@ -51,10 +53,12 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
     ) async -> RuntimeRequestHandle {
         let handle = await runtime.generate.audio(
             text: text,
-            with: profileName,
-            textProfileID: textProfileID,
-            textContext: normalizationContext,
-            sourceFormat: sourceFormat,
+            voiceProfile: profileName,
+            textProfile: textProfileID,
+            inputTextContext: makeInputTextContext(
+                normalizationContext: normalizationContext,
+                sourceFormat: sourceFormat,
+            ),
         )
         return .init(id: handle.id, operation: "generate_audio_file", profileName: profileName, events: handle.events)
     }
@@ -63,7 +67,7 @@ actor ServerRuntimeAdapter: ServerRuntimeProtocol {
         _ items: [SpeakSwiftly.BatchItem],
         with profileName: String,
     ) async -> RuntimeRequestHandle {
-        let handle = await runtime.generate.batch(items, with: profileName)
+        let handle = await runtime.generate.batch(items, voiceProfile: profileName)
         return .init(id: handle.id, operation: "generate_batch", profileName: profileName, events: handle.events)
     }
 
