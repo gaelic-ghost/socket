@@ -206,7 +206,7 @@ struct HostLifecycleService: Service {
 
         let timeoutWatcher = Task {
             do {
-                try await Task.sleep(for: startupTimeout)
+                try await hostLifecycleDelay(for: startupTimeout)
                 continuation.yield(.timedOut)
                 continuation.finish()
             } catch is CancellationError {
