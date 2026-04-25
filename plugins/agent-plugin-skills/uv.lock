@@ -4,7 +4,7 @@ requires-python = ">=3.11"
 
 [[package]]
 name = "agent-plugin-skills-maintenance"
-version = "6.0.6"
+version = "6.0.7"
 source = { virtual = "." }
 
 [package.dev-dependencies]
