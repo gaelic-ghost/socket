@@ -163,6 +163,21 @@ extension NSLock {
     }
 }
 
+final class E2ERecordedError: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storedError: Error?
+
+    var value: Error? {
+        lock.withLock { storedError }
+    }
+
+    func record(_ error: Error) {
+        lock.withLock {
+            storedError = error
+        }
+    }
+}
+
 // MARK: - Error Helpers
 
 struct E2ETimeoutError: Error {}

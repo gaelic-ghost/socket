@@ -59,6 +59,14 @@ func mcpCallToolRequestJSON(
     return #"{"jsonrpc":"2.0","id":"\#(id)","method":"tools/call","params":{"name":"\#(name)","arguments":{\#(sortedArguments)}}}"#
 }
 
+func mcpCallToolRequestJSON(
+    name: String,
+    argumentsJSON: String,
+    id: String = "tool-1",
+) -> String {
+    #"{"jsonrpc":"2.0","id":"\#(id)","method":"tools/call","params":{"name":"\#(name)","arguments":\#(argumentsJSON)}}"#
+}
+
 func mcpReadResourceRequestJSON(uri: String) -> String {
     #"{"jsonrpc":"2.0","id":"read-resource-1","method":"resources/read","params":{"uri":"\#(uri)"}}"#
 }

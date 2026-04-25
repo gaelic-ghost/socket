@@ -1,4 +1,5 @@
 import Foundation
+import Testing
 
 // MARK: - E2EMCPEventStream
 
@@ -71,43 +72,47 @@ final class E2EMCPEventStream: @unchecked Sendable {
             }
         }
 
-        let _: Bool = try await e2eWaitUntil(timeout: .seconds(10), pollInterval: .milliseconds(100)) {
-            try await self.connectionState.streamReady()
+        try await e2eWithTimeout(.seconds(10)) {
+            try await self.connectionState.waitUntilReady()
         }
-        try await Task.sleep(for: .milliseconds(100))
     }
 
     func stop() {
         task?.cancel()
         task = nil
         urlSession.invalidateAndCancel()
+        let cancellationError = CancellationError()
+        Task {
+            await connectionState.finish(with: cancellationError)
+            await buffer.finish(with: cancellationError)
+        }
     }
 
     func waitForNotification(
         timeout: Duration,
         matching predicate: @escaping @Sendable ([String: Any]) -> Bool,
     ) async throws -> [String: Any] {
-        let deadline = ContinuousClock.now + timeout
-        while ContinuousClock.now < deadline {
-            if let data = try await buffer.takeMatching(predicate) {
-                let json = try JSONSerialization.jsonObject(with: data)
-                guard let object = json as? [String: Any] else {
-                    throw E2ETransportError(
-                        "The live MCP event stream produced a notification payload that was not a JSON object.",
-                    )
-                }
-
-                return object
+        do {
+            let data = try await e2eWithTimeout(timeout) {
+                try await self.buffer.waitForMatching(predicate)
             }
-            try await Task.sleep(for: .milliseconds(100))
+            let json = try JSONSerialization.jsonObject(with: data)
+            guard let object = json as? [String: Any] else {
+                throw E2ETransportError(
+                    "The live MCP event stream produced a notification payload that was not a JSON object.",
+                )
+            }
+
+            return object
+        } catch is E2ETimeoutError {
+            let observedPayloads = await buffer.recentPayloads(limit: 12)
+            let preview = observedPayloads.isEmpty
+                ? "none"
+                : observedPayloads.joined(separator: "\n")
+            throw E2ETransportError(
+                "The live MCP event stream timed out after waiting \(timeout) for a matching notification. The GET SSE stream stayed connected, but no matching notification arrived. Recent raw notification payloads seen before timeout:\n\(preview)",
+            )
         }
-        let observedPayloads = await buffer.recentPayloads(limit: 12)
-        let preview = observedPayloads.isEmpty
-            ? "none"
-            : observedPayloads.joined(separator: "\n")
-        throw E2ETransportError(
-            "The live MCP event stream timed out after waiting \(timeout) for a matching notification. The GET SSE stream stayed connected, but no matching notification arrived. Recent raw notification payloads seen before timeout:\n\(preview)",
-        )
     }
 }
 
@@ -116,51 +121,90 @@ final class E2EMCPEventStream: @unchecked Sendable {
 private actor E2EMCPEventStreamConnectionState {
     private var isConnected = false
     private var terminalError: Error?
+    private var waiters = [CheckedContinuation<Void, Error>]()
 
     func markConnected() {
         isConnected = true
+        let pendingWaiters = waiters
+        waiters.removeAll()
+        for waiter in pendingWaiters {
+            waiter.resume()
+        }
     }
 
     func finish(with error: Error) {
+        guard terminalError == nil else { return }
+
         terminalError = error
+        let pendingWaiters = waiters
+        waiters.removeAll()
+        for waiter in pendingWaiters {
+            waiter.resume(throwing: error)
+        }
     }
 
-    func streamReady() throws -> Bool? {
+    func waitUntilReady() async throws {
         if let terminalError {
             throw terminalError
         }
-        return isConnected ? true : nil
+        guard isConnected == false else { return }
+
+        try await withCheckedThrowingContinuation { continuation in
+            waiters.append(continuation)
+        }
     }
 }
 
 // MARK: - E2ENotificationBuffer
 
 private actor E2ENotificationBuffer {
+    private struct Waiter {
+        let id: UUID
+        let predicate: @Sendable ([String: Any]) -> Bool
+        let continuation: CheckedContinuation<Data, Error>
+    }
+
+    private static let payloadHistoryLimit = 48
+
     private var notifications = [Data]()
     private var terminalError: Error?
     private var payloadHistory = [String]()
-    private static let payloadHistoryLimit = 48
+    private var waiters = [Waiter]()
 
     func append(_ notification: Data) {
-        notifications.append(notification)
         payloadHistory.append(String(decoding: notification, as: UTF8.self))
         if payloadHistory.count > Self.payloadHistoryLimit {
             payloadHistory.removeFirst(payloadHistory.count - Self.payloadHistoryLimit)
         }
+
+        if let object = try? decodeJSONObject(from: notification),
+           let waiterIndex = waiters.firstIndex(where: { $0.predicate(object) }) {
+            let waiter = waiters.remove(at: waiterIndex)
+            waiter.continuation.resume(returning: notification)
+            return
+        }
+
+        notifications.append(notification)
     }
 
     func finish(with error: Error) {
+        guard terminalError == nil else { return }
+
         terminalError = error
+        let pendingWaiters = waiters
+        waiters.removeAll()
+        for waiter in pendingWaiters {
+            waiter.continuation.resume(throwing: error)
+        }
     }
 
-    func takeMatching(_ predicate: @escaping @Sendable ([String: Any]) -> Bool) throws -> Data? {
+    func waitForMatching(_ predicate: @escaping @Sendable ([String: Any]) -> Bool) async throws -> Data {
         if let terminalError {
             throw terminalError
         }
 
         for (index, notification) in notifications.enumerated() {
-            let json = try JSONSerialization.jsonObject(with: notification)
-            guard let object = json as? [String: Any] else {
+            guard let object = try? decodeJSONObject(from: notification) else {
                 continue
             }
 
@@ -168,10 +212,103 @@ private actor E2ENotificationBuffer {
                 return notifications.remove(at: index)
             }
         }
-        return nil
+
+        let waiterID = UUID()
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                if let terminalError {
+                    continuation.resume(throwing: terminalError)
+                    return
+                }
+
+                waiters.append(.init(id: waiterID, predicate: predicate, continuation: continuation))
+            }
+        } onCancel: {
+            Task {
+                await self.cancelWaiter(id: waiterID)
+            }
+        }
     }
 
     func recentPayloads(limit: Int) -> [String] {
         Array(payloadHistory.suffix(limit))
+    }
+
+    private func cancelWaiter(id: UUID) {
+        guard let waiterIndex = waiters.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+
+        let waiter = waiters.remove(at: waiterIndex)
+        waiter.continuation.resume(throwing: CancellationError())
+    }
+
+    private func decodeJSONObject(from notification: Data) throws -> [String: Any] {
+        let json = try JSONSerialization.jsonObject(with: notification)
+        guard let object = json as? [String: Any] else {
+            throw E2ETransportError(
+                "The live MCP event stream produced a notification payload that was not a JSON object.",
+            )
+        }
+
+        return object
+    }
+}
+
+// MARK: - Timeout Support
+
+private func e2eWithTimeout<T: Sendable>(
+    _ timeout: Duration,
+    operation: @escaping @Sendable () async throws -> T,
+) async throws -> T {
+    try await withThrowingTaskGroup(of: T.self) { group in
+        group.addTask {
+            try await operation()
+        }
+        group.addTask {
+            try await Task.sleep(for: timeout)
+            throw E2ETimeoutError()
+        }
+
+        guard let value = try await group.next() else {
+            throw E2ETimeoutError()
+        }
+
+        group.cancelAll()
+        return value
+    }
+}
+
+// MARK: - E2E MCP Event Stream Tests
+
+@Test func `notification buffer wakes a matching waiter when payload arrives`() async throws {
+    let buffer = E2ENotificationBuffer()
+    let waiter = Task {
+        try await buffer.waitForMatching {
+            $0["method"] as? String == "notifications/resources/updated"
+        }
+    }
+
+    await Task.yield()
+    await buffer.append(
+        Data(#"{"method":"notifications/resources/updated","params":{"uri":"speak://voices"}}"#.utf8),
+    )
+
+    let data = try await waiter.value
+    let object = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+    #expect(object["method"] as? String == "notifications/resources/updated")
+}
+
+@Test func `notification buffer finishes pending waiters on terminal error`() async throws {
+    let buffer = E2ENotificationBuffer()
+    let waiter = Task {
+        try await buffer.waitForMatching { _ in true }
+    }
+
+    await Task.yield()
+    await buffer.finish(with: E2ETransportError("The event stream closed before a notification arrived."))
+
+    await #expect(throws: E2ETransportError.self) {
+        _ = try await waiter.value
     }
 }

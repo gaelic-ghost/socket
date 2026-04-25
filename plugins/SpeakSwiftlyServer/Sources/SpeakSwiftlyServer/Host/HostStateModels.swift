@@ -113,6 +113,29 @@ public struct PlaybackStatusSnapshot: Codable, Sendable, Equatable {
     }
 }
 
+/// Live backend-switch progress for the running runtime.
+public struct RuntimeBackendTransitionSnapshot: Codable, Sendable, Equatable {
+    enum CodingKeys: String, CodingKey {
+        case state
+        case activeSpeechBackend = "active_speech_backend"
+        case requestedSpeechBackend = "requested_speech_backend"
+        case requestID = "request_id"
+        case operation
+        case waitingReason = "waiting_reason"
+        case submittedAt = "submitted_at"
+        case startedAt = "started_at"
+    }
+
+    public let state: String
+    public let activeSpeechBackend: String
+    public let requestedSpeechBackend: String?
+    public let requestID: String?
+    public let operation: String?
+    public let waitingReason: String?
+    public let submittedAt: String?
+    public let startedAt: String?
+}
+
 /// Timing markers for one completed refresh cycle of the host state snapshots.
 public struct RuntimeRefreshSnapshot: Codable, Sendable, Equatable {
     public let sequenceID: Int
@@ -193,29 +216,20 @@ public struct RecentErrorSnapshot: Codable, Sendable, Equatable {
 
 /// The active and next-start runtime configuration state exposed by the host.
 public struct RuntimeConfigurationSnapshot: Codable, ResponseEncodable, Sendable, Equatable {
-    public let activeRuntimeSpeechBackend: String
-    public let nextRuntimeSpeechBackend: String
-    public let activeDefaultVoiceProfileName: String?
-    public let nextDefaultVoiceProfileName: String?
-    public let environmentSpeechBackendOverride: String?
-    public let persistedSpeechBackend: String?
-    public let persistedDefaultVoiceProfileName: String?
-    public let profileRootPath: String
-    public let persistedConfigurationPath: String
-    public let persistedConfigurationExists: Bool
-    public let persistedConfigurationState: String
-    public let persistedConfigurationError: String?
-    public let persistedConfigurationAppliesOnRestart: Bool
-    public let activeRuntimeMatchesNextRuntime: Bool
-    public let persistedConfigurationWillAffectNextRuntimeStart: Bool
-
     enum CodingKeys: String, CodingKey {
         case activeRuntimeSpeechBackend = "active_runtime_speech_backend"
         case nextRuntimeSpeechBackend = "next_runtime_speech_backend"
+        case activeQwenResidentModel = "active_qwen_resident_model"
+        case nextQwenResidentModel = "next_qwen_resident_model"
+        case activeMarvisResidentPolicy = "active_marvis_resident_policy"
+        case nextMarvisResidentPolicy = "next_marvis_resident_policy"
         case activeDefaultVoiceProfileName = "active_default_voice_profile_name"
         case nextDefaultVoiceProfileName = "next_default_voice_profile_name"
         case environmentSpeechBackendOverride = "environment_speech_backend_override"
+        case environmentQwenResidentModelOverride = "environment_qwen_resident_model_override"
         case persistedSpeechBackend = "persisted_speech_backend"
+        case persistedQwenResidentModel = "persisted_qwen_resident_model"
+        case persistedMarvisResidentPolicy = "persisted_marvis_resident_policy"
         case persistedDefaultVoiceProfileName = "persisted_default_voice_profile_name"
         case profileRootPath = "profile_root_path"
         case persistedConfigurationPath = "persisted_configuration_path"
@@ -226,6 +240,29 @@ public struct RuntimeConfigurationSnapshot: Codable, ResponseEncodable, Sendable
         case activeRuntimeMatchesNextRuntime = "active_runtime_matches_next_runtime"
         case persistedConfigurationWillAffectNextRuntimeStart = "persisted_configuration_will_affect_next_runtime_start"
     }
+
+    public let activeRuntimeSpeechBackend: String
+    public let nextRuntimeSpeechBackend: String
+    public let activeQwenResidentModel: String
+    public let nextQwenResidentModel: String
+    public let activeMarvisResidentPolicy: String
+    public let nextMarvisResidentPolicy: String
+    public let activeDefaultVoiceProfileName: String?
+    public let nextDefaultVoiceProfileName: String?
+    public let environmentSpeechBackendOverride: String?
+    public let environmentQwenResidentModelOverride: String?
+    public let persistedSpeechBackend: String?
+    public let persistedQwenResidentModel: String?
+    public let persistedMarvisResidentPolicy: String?
+    public let persistedDefaultVoiceProfileName: String?
+    public let profileRootPath: String
+    public let persistedConfigurationPath: String
+    public let persistedConfigurationExists: Bool
+    public let persistedConfigurationState: String
+    public let persistedConfigurationError: String?
+    public let persistedConfigurationAppliesOnRestart: Bool
+    public let activeRuntimeMatchesNextRuntime: Bool
+    public let persistedConfigurationWillAffectNextRuntimeStart: Bool
 }
 
 /// Aggregate snapshot of the host state that bundles overview, queues, runtime, transport, and error data.
@@ -235,6 +272,7 @@ public struct HostStateSnapshot: Codable, Sendable, Equatable {
     public let generationQueue: QueueStatusSnapshot
     public let playbackQueue: QueueStatusSnapshot
     public let playback: PlaybackStatusSnapshot
+    public let runtimeBackendTransition: RuntimeBackendTransitionSnapshot
     public let currentGenerationJobs: [CurrentGenerationJobSnapshot]
     public let runtimeConfiguration: RuntimeConfigurationSnapshot
     public let transports: [TransportStatusSnapshot]
@@ -246,6 +284,7 @@ public struct HostStateSnapshot: Codable, Sendable, Equatable {
         case generationQueue = "generation_queue"
         case playbackQueue = "playback_queue"
         case playback
+        case runtimeBackendTransition = "runtime_backend_transition"
         case currentGenerationJobs = "current_generation_jobs"
         case runtimeConfiguration = "runtime_configuration"
         case transports

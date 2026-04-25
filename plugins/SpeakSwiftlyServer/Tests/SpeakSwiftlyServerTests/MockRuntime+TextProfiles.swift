@@ -6,6 +6,12 @@ import TextForSpeech
 
 @available(macOS 14, *)
 extension MockRuntime {
+    private func throwConfiguredTextProfileTransportErrorIfNeeded() throws {
+        if let textProfileTransportError {
+            throw textProfileTransportError
+        }
+    }
+
     func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle {
         textRuntime.style.getActive()
     }
@@ -17,15 +23,17 @@ extension MockRuntime {
         return textRuntime.style.getActive()
     }
 
-    func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails {
-        transportDetails(textRuntime.profiles.getActive())
+    func activeTextProfile() async throws -> SpeakSwiftly.TextProfileDetails {
+        try throwConfiguredTextProfileTransportErrorIfNeeded()
+        return transportDetails(textRuntime.profiles.getActive())
     }
 
     func baseTextProfile() async -> TextForSpeech.Profile {
         .builtInBase(style: textRuntime.style.getActive())
     }
 
-    func textProfile(id profileID: String) async -> SpeakSwiftly.TextProfileDetails? {
+    func textProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails? {
+        try throwConfiguredTextProfileTransportErrorIfNeeded()
         guard let details = try? textRuntime.profiles.get(id: profileID) else {
             return nil
         }
@@ -33,11 +41,13 @@ extension MockRuntime {
         return transportDetails(details)
     }
 
-    func textProfiles() async -> [SpeakSwiftly.TextProfileSummary] {
-        textRuntime.profiles.list().map(transportSummary)
+    func textProfiles() async throws -> [SpeakSwiftly.TextProfileSummary] {
+        try throwConfiguredTextProfileTransportErrorIfNeeded()
+        return textRuntime.profiles.list().map(transportSummary)
     }
 
-    func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails {
+    func effectiveTextProfile(id profileID: String?) async throws -> SpeakSwiftly.TextProfileDetails {
+        try throwConfiguredTextProfileTransportErrorIfNeeded()
         if let profileID,
            let details = try? textRuntime.profiles.get(id: profileID) {
             return transportDetails(details)

@@ -5,7 +5,7 @@ enum MCPToolCatalog {
     static let definitions: [Tool] = [
         Tool(
             name: "generate_speech",
-            description: "Queue live speech playback with a stored SpeakSwiftly voice profile. Use this when the user wants audible output now, and optionally provide profile_name to override the server's configured default voice profile plus text_profile_id and explicit normalization-format arguments when the input should not rely on automatic format detection.",
+            description: "Queue live speech playback with a stored SpeakSwiftly voice profile. Use this when the user wants audible output now, and optionally provide profile_name to override the server's configured default voice profile plus text_profile_id, request_context, and explicit normalization-format arguments when the input should not rely on automatic format detection.",
             inputSchema: [
                 "type": "object",
                 "required": ["text"],
@@ -13,17 +13,19 @@ enum MCPToolCatalog {
                     "text": ["type": "string"],
                     "profile_name": ["type": "string"],
                     "text_profile_id": ["type": "string"],
+                    "request_context": ["type": "object"],
                     "cwd": ["type": "string"],
                     "repo_root": ["type": "string"],
                     "text_format": ["type": "string"],
                     "nested_source_format": ["type": "string"],
                     "source_format": ["type": "string"],
+                    "qwen_pre_model_text_chunking": ["type": "boolean"],
                 ],
             ],
         ),
         Tool(
             name: "generate_audio_file",
-            description: "Queue one retained generated-audio file instead of live playback. Use this when the user wants a saved artifact they can inspect or reuse later, and optionally provide profile_name to override the server's configured default voice profile.",
+            description: "Queue one retained generated-audio file instead of live playback. Use this when the user wants a saved artifact they can inspect or reuse later, and optionally provide profile_name to override the server's configured default voice profile plus request_context when the downstream artifact should retain caller metadata.",
             inputSchema: [
                 "type": "object",
                 "required": ["text"],
@@ -31,6 +33,7 @@ enum MCPToolCatalog {
                     "text": ["type": "string"],
                     "profile_name": ["type": "string"],
                     "text_profile_id": ["type": "string"],
+                    "request_context": ["type": "object"],
                     "cwd": ["type": "string"],
                     "repo_root": ["type": "string"],
                     "text_format": ["type": "string"],
@@ -41,7 +44,7 @@ enum MCPToolCatalog {
         ),
         Tool(
             name: "generate_batch",
-            description: "Queue a retained generated-audio batch from multiple items under one voice profile. Use this when the user wants several output files produced together, and optionally provide profile_name to override the server's configured default voice profile.",
+            description: "Queue a retained generated-audio batch from multiple items under one voice profile. Use this when the user wants several output files produced together, and optionally provide profile_name to override the server's configured default voice profile. Each item may carry its own request_context payload.",
             inputSchema: [
                 "type": "object",
                 "required": ["items"],
@@ -59,7 +62,7 @@ enum MCPToolCatalog {
                 "required": ["profile_name", "vibe", "text", "voice_description"],
                 "properties": [
                     "profile_name": ["type": "string"],
-                    "vibe": ["type": "string", "enum": ["masc", "femme", "androgenous"]],
+                    "vibe": ["type": "string", "enum": ["masc", "femme"]],
                     "text": ["type": "string"],
                     "voice_description": ["type": "string"],
                     "output_path": ["type": "string"],
@@ -75,7 +78,7 @@ enum MCPToolCatalog {
                 "required": ["profile_name", "vibe", "reference_audio_path"],
                 "properties": [
                     "profile_name": ["type": "string"],
-                    "vibe": ["type": "string", "enum": ["masc", "femme", "androgenous"]],
+                    "vibe": ["type": "string", "enum": ["masc", "femme"]],
                     "reference_audio_path": ["type": "string"],
                     "transcript": ["type": "string"],
                     "cwd": ["type": "string"],
@@ -136,29 +139,31 @@ enum MCPToolCatalog {
         ),
         Tool(
             name: "get_staged_runtime_config",
-            description: "Return the staged persisted runtime-configuration snapshot that will apply on the next runtime start, including the active backend, the next-start backend, and any environment override.",
+            description: "Return the staged persisted runtime-configuration snapshot that will apply on the next runtime start, including active and next-start backend, Qwen resident model, Marvis resident policy, and environment overrides.",
             inputSchema: ["type": "object", "properties": [:]],
             annotations: .init(readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false),
         ),
         Tool(
             name: "set_staged_config",
-            description: "Persist one speech_backend value for the next runtime start without hot-swapping the current worker.",
+            description: "Persist runtime startup choices for the next runtime start without hot-swapping the current worker. speech_backend stays required for compatibility; qwen_resident_model and marvis_resident_policy are optional startup-only refinements.",
             inputSchema: [
                 "type": "object",
                 "required": ["speech_backend"],
                 "properties": [
-                    "speech_backend": ["type": "string", "enum": ["qwen3", "chatterbox_turbo", "marvis"]],
+                    "speech_backend": ["type": "string", "enum": stringEnum(exposedSpeechBackendIdentifiers())],
+                    "qwen_resident_model": ["type": "string", "enum": stringEnum(exposedQwenResidentModelIdentifiers())],
+                    "marvis_resident_policy": ["type": "string", "enum": stringEnum(exposedMarvisResidentPolicyIdentifiers())],
                 ],
             ],
         ),
         Tool(
             name: "switch_speech_backend",
-            description: "Ask the already-running SpeakSwiftly runtime to switch to a different active speech backend immediately.",
+            description: "Queue an ordered switch for the already-running SpeakSwiftly runtime to move to a different active speech backend. The returned request can be observed while the runtime waits for active work to settle.",
             inputSchema: [
                 "type": "object",
                 "required": ["speech_backend"],
                 "properties": [
-                    "speech_backend": ["type": "string", "enum": ["qwen3", "chatterbox_turbo", "marvis"]],
+                    "speech_backend": ["type": "string", "enum": stringEnum(exposedSpeechBackendIdentifiers())],
                 ],
             ],
         ),
@@ -421,4 +426,8 @@ enum MCPToolCatalog {
             annotations: .init(readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false),
         ),
     ]
+
+    private static func stringEnum(_ values: [String]) -> Value {
+        .array(values.map { .string($0) })
+    }
 }

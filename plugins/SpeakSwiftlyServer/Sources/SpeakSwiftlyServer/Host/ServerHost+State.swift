@@ -31,6 +31,7 @@ extension ServerHost {
             state.generationQueue = hostState.generationQueue
             state.playbackQueue = hostState.playbackQueue
             state.playback = hostState.playback
+            state.runtimeBackendTransition = hostState.runtimeBackendTransition
             state.currentGenerationJobs = hostState.currentGenerationJobs
             state.runtimeConfiguration = hostState.runtimeConfiguration
             state.voiceProfiles = cachedVoiceProfiles
@@ -121,6 +122,14 @@ extension ServerHost {
         source: String,
     ) {
         if source == "cached_worker_not_ready" {
+            generationQueueStatus = .init(
+                queueType: "generation",
+                activeCount: 0,
+                queuedCount: 0,
+                activeRequest: nil,
+                activeRequests: [],
+                queuedRequests: [],
+            )
             playbackQueueStatus = .init(
                 queueType: "playback",
                 activeCount: 0,
@@ -172,6 +181,7 @@ extension ServerHost {
         generationQueueStatus = queueStatusSnapshot(from: overview.generationQueue)
         playbackQueueStatus = queueStatusSnapshot(from: overview.playbackQueue)
         playbackStatus = PlaybackStatusSnapshot(summary: overview.playbackState)
+        activeRuntimeSpeechBackend = overview.speechBackend
     }
 
     // MARK: - Derived Snapshot Helpers
@@ -188,6 +198,71 @@ extension ServerHost {
                 elapsedGenerationSeconds: job.startedAt.map { max(0, Date().timeIntervalSince($0)) },
             )
         }
+    }
+
+    func runtimeBackendTransitionSnapshot() -> RuntimeBackendTransitionSnapshot {
+        guard let job = pendingRuntimeBackendSwitchJob() else {
+            return .init(
+                state: "idle",
+                activeSpeechBackend: activeRuntimeSpeechBackend.rawValue,
+                requestedSpeechBackend: nil,
+                requestID: nil,
+                operation: nil,
+                waitingReason: nil,
+                submittedAt: nil,
+                startedAt: nil,
+            )
+        }
+
+        let latestEvent = latestOperationalEvent(for: job)
+        let state = runtimeBackendTransitionState(for: job, latestEvent: latestEvent)
+        let waitingReason = runtimeBackendTransitionWaitingReason(from: latestEvent)
+        return .init(
+            state: state,
+            activeSpeechBackend: activeRuntimeSpeechBackend.rawValue,
+            requestedSpeechBackend: job.runtimeBackendSwitch?.requestedSpeechBackend.rawValue,
+            requestID: job.jobID,
+            operation: job.op,
+            waitingReason: waitingReason,
+            submittedAt: TimestampFormatter.string(from: job.submittedAt),
+            startedAt: job.startedAt.map(TimestampFormatter.string(from:)),
+        )
+    }
+
+    func pendingRuntimeBackendSwitchJob() -> JobRecord? {
+        jobs.values
+            .filter { $0.runtimeBackendSwitch != nil && $0.terminalEvent == nil }
+            .sorted { lhs, rhs in
+                if lhs.submittedAt == rhs.submittedAt {
+                    return lhs.jobID < rhs.jobID
+                }
+                return lhs.submittedAt < rhs.submittedAt
+            }
+            .first
+    }
+
+    func runtimeBackendTransitionState(
+        for job: JobRecord,
+        latestEvent: ServerJobEvent?,
+    ) -> String {
+        if case .queued = latestEvent {
+            return "queued"
+        }
+        if job.startedAt != nil {
+            return "switching"
+        }
+        if case .acknowledged = latestEvent {
+            return "accepted"
+        }
+        return "pending"
+    }
+
+    func runtimeBackendTransitionWaitingReason(from event: ServerJobEvent?) -> String? {
+        guard case let .queued(queued) = event else {
+            return nil
+        }
+
+        return queued.reason
     }
 
     func activeGenerationJobRecords() -> [JobRecord] {

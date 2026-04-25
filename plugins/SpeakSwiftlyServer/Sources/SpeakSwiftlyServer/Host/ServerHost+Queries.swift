@@ -27,6 +27,7 @@ extension ServerHost {
             generationQueue: hostState.generationQueue,
             playbackQueue: hostState.playbackQueue,
             playback: hostState.playback,
+            runtimeBackendTransition: hostState.runtimeBackendTransition,
             currentGenerationJobs: hostState.currentGenerationJobs,
             runtimeConfiguration: hostState.runtimeConfiguration,
             transports: hostState.transports,
@@ -37,6 +38,8 @@ extension ServerHost {
     func runtimeConfigurationSnapshot() -> RuntimeConfigurationSnapshot {
         runtimeConfigurationStore.snapshot(
             activeRuntimeSpeechBackend: activeRuntimeSpeechBackend,
+            activeQwenResidentModel: activeQwenResidentModel,
+            activeMarvisResidentPolicy: activeMarvisResidentPolicy,
             activeDefaultVoiceProfileName: activeDefaultVoiceProfileName,
             configuredDefaultVoiceProfileName: configuration.defaultVoiceProfileName,
         )
@@ -44,10 +47,16 @@ extension ServerHost {
 
     func saveRuntimeConfiguration(
         speechBackend: SpeakSwiftly.SpeechBackend,
+        qwenResidentModel: SpeakSwiftly.QwenResidentModel? = nil,
+        marvisResidentPolicy: SpeakSwiftly.MarvisResidentPolicy? = nil,
     ) async throws -> RuntimeConfigurationSnapshot {
         let snapshot = try runtimeConfigurationStore.save(
             speechBackend: speechBackend,
+            qwenResidentModel: qwenResidentModel,
+            marvisResidentPolicy: marvisResidentPolicy,
             activeRuntimeSpeechBackend: activeRuntimeSpeechBackend,
+            activeQwenResidentModel: activeQwenResidentModel,
+            activeMarvisResidentPolicy: activeMarvisResidentPolicy,
             activeDefaultVoiceProfileName: activeDefaultVoiceProfileName,
             configuredDefaultVoiceProfileName: configuration.defaultVoiceProfileName,
         )
@@ -180,7 +189,7 @@ extension ServerHost {
             )
         }
 
-        return .init(status: status)
+        return .init(status: status, runtimeBackendTransition: runtimeBackendTransitionSnapshot())
     }
 
     func switchSpeechBackend(to speechBackend: SpeakSwiftly.SpeechBackend) async throws -> RuntimeBackendResponse {
@@ -200,6 +209,8 @@ extension ServerHost {
         activeRuntimeSpeechBackend = resolvedSpeechBackend
         let runtimeConfigurationSnapshot = runtimeConfigurationStore.snapshot(
             activeRuntimeSpeechBackend: resolvedSpeechBackend,
+            activeQwenResidentModel: activeQwenResidentModel,
+            activeMarvisResidentPolicy: activeMarvisResidentPolicy,
         )
         emitRuntimeConfigurationChanged(runtimeConfigurationSnapshot)
         await requestPublish(mode: .immediate, refreshRuntimeState: false)

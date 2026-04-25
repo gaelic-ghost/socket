@@ -4,6 +4,20 @@ import TextForSpeech
 
 public typealias SpeechNormalizationContext = TextForSpeech.Context
 
+func makeInputTextContext(
+    normalizationContext: SpeechNormalizationContext?,
+    sourceFormat: TextForSpeech.SourceFormat?,
+) -> SpeakSwiftly.InputTextContext? {
+    guard normalizationContext != nil || sourceFormat != nil else {
+        return nil
+    }
+
+    return SpeakSwiftly.InputTextContext(
+        context: normalizationContext,
+        sourceFormat: sourceFormat,
+    )
+}
+
 struct RuntimeRequestHandle {
     let id: String
     let operation: String
@@ -27,7 +41,7 @@ struct RuntimeRequestHandle {
     init(_ handle: SpeakSwiftly.RequestHandle) {
         id = handle.id
         operation = canonicalOperationName(handle.operation)
-        profileName = handle.profileName
+        profileName = handle.voiceProfile
         events = handle.events
     }
 }
@@ -63,6 +77,8 @@ protocol ServerRuntimeProtocol: Actor {
         textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
+        requestContext: SpeakSwiftly.RequestContext?,
+        qwenPreModelTextChunking: Bool,
     ) async -> RuntimeRequestHandle
     func queueSpeechFile(
         text: String,
@@ -70,6 +86,7 @@ protocol ServerRuntimeProtocol: Actor {
         textProfileID: String?,
         normalizationContext: SpeechNormalizationContext?,
         sourceFormat: TextForSpeech.SourceFormat?,
+        requestContext: SpeakSwiftly.RequestContext?,
     ) async -> RuntimeRequestHandle
     func queueSpeechBatch(
         _ items: [SpeakSwiftly.BatchItem],
@@ -113,11 +130,11 @@ protocol ServerRuntimeProtocol: Actor {
     func cancelRequest(_ requestID: String) async -> RuntimeRequestHandle
     func builtInTextProfileStyle() async -> TextForSpeech.BuiltInProfileStyle
     func setBuiltInTextProfileStyle(_ style: TextForSpeech.BuiltInProfileStyle) async throws -> TextForSpeech.BuiltInProfileStyle
-    func activeTextProfile() async -> SpeakSwiftly.TextProfileDetails
+    func activeTextProfile() async throws -> SpeakSwiftly.TextProfileDetails
     func baseTextProfile() async -> TextForSpeech.Profile
-    func textProfile(id profileID: String) async -> SpeakSwiftly.TextProfileDetails?
-    func textProfiles() async -> [SpeakSwiftly.TextProfileSummary]
-    func effectiveTextProfile(id profileID: String?) async -> SpeakSwiftly.TextProfileDetails
+    func textProfile(id profileID: String) async throws -> SpeakSwiftly.TextProfileDetails?
+    func textProfiles() async throws -> [SpeakSwiftly.TextProfileSummary]
+    func effectiveTextProfile(id profileID: String?) async throws -> SpeakSwiftly.TextProfileDetails
     func loadTextProfiles() async throws
     func saveTextProfiles() async throws
     func createTextProfile(named name: String) async throws -> SpeakSwiftly.TextProfileDetails

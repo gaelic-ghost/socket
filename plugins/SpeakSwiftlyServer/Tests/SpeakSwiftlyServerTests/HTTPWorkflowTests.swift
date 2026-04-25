@@ -57,19 +57,29 @@ extension ServerTests {
             #expect(runtimeConfigResponse.status == .ok)
             #expect(runtimeConfigJSON["active_runtime_speech_backend"] as? String == "qwen3")
             #expect(runtimeConfigJSON["next_runtime_speech_backend"] as? String == "qwen3")
+            #expect(runtimeConfigJSON["active_qwen_resident_model"] as? String == "base_0_6b_8bit")
+            #expect(runtimeConfigJSON["next_qwen_resident_model"] as? String == "base_0_6b_8bit")
+            #expect(runtimeConfigJSON["active_marvis_resident_policy"] as? String == "dual_resident_serialized")
+            #expect(runtimeConfigJSON["next_marvis_resident_policy"] as? String == "dual_resident_serialized")
             #expect(runtimeConfigJSON["persisted_configuration_state"] as? String == "missing")
 
             let updateRuntimeConfigResponse = try await client.execute(
                 uri: "/runtime/configuration",
                 method: .put,
                 headers: [.contentType: "application/json"],
-                body: byteBuffer(#"{"speech_backend":"marvis"}"#),
+                body: byteBuffer(#"{"speech_backend":"marvis","qwen_resident_model":"base_1_7b_8bit","marvis_resident_policy":"single_resident_dynamic"}"#),
             )
             let updateRuntimeConfigJSON = try jsonObject(from: updateRuntimeConfigResponse.body)
             #expect(updateRuntimeConfigResponse.status == .ok)
             #expect(updateRuntimeConfigJSON["active_runtime_speech_backend"] as? String == "qwen3")
             #expect(updateRuntimeConfigJSON["next_runtime_speech_backend"] as? String == "marvis")
+            #expect(updateRuntimeConfigJSON["active_qwen_resident_model"] as? String == "base_0_6b_8bit")
+            #expect(updateRuntimeConfigJSON["next_qwen_resident_model"] as? String == "base_1_7b_8bit")
+            #expect(updateRuntimeConfigJSON["active_marvis_resident_policy"] as? String == "dual_resident_serialized")
+            #expect(updateRuntimeConfigJSON["next_marvis_resident_policy"] as? String == "single_resident_dynamic")
             #expect(updateRuntimeConfigJSON["persisted_speech_backend"] as? String == "marvis")
+            #expect(updateRuntimeConfigJSON["persisted_qwen_resident_model"] as? String == "base_1_7b_8bit")
+            #expect(updateRuntimeConfigJSON["persisted_marvis_resident_policy"] as? String == "single_resident_dynamic")
             #expect(updateRuntimeConfigJSON["persisted_configuration_state"] as? String == "loaded")
 
             let updateChatterboxRuntimeConfigResponse = try await client.execute(
@@ -244,7 +254,7 @@ extension ServerTests {
                 uri: "/speech/live",
                 method: .post,
                 headers: [.contentType: "application/json"],
-                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source"}"#),
+                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","request_context":{"source":"http","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"route-coverage","attributes":{"surface":"http"}},"cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source","qwen_pre_model_text_chunking":true}"#),
             )
             let speakJSON = try jsonObject(from: speakResponse.body)
             let speakJobID = try #require(speakJSON["request_id"] as? String)
@@ -264,6 +274,17 @@ extension ServerTests {
             )
             #expect(queuedSpeechInvocation.textProfileID == "swift-docs")
             #expect(queuedSpeechInvocation.sourceFormat == .python)
+            #expect(queuedSpeechInvocation.qwenPreModelTextChunking == true)
+            #expect(
+                queuedSpeechInvocation.requestContext
+                    == SpeakSwiftly.RequestContext(
+                        source: "http",
+                        app: "SpeakSwiftlyServerTests",
+                        project: "SpeakSwiftlyServer",
+                        topic: "route-coverage",
+                        attributes: ["surface": "http"],
+                    ),
+            )
             #expect(queuedSpeechInvocation.profileName == "default")
 
             _ = try await waitForJobSnapshot(speakJobID, on: host)
@@ -282,6 +303,74 @@ extension ServerTests {
             let foregroundHistory = try #require(foregroundJobJSON["history"] as? [[String: Any]])
             #expect(foregroundHistory.contains { $0["event"] as? String == "started" })
             #expect(foregroundHistory.filter { $0["ok"] as? Bool == true }.count == 2)
+        }
+
+        await host.shutdown()
+    }
+
+    @available(macOS 14, *)
+    @Test func `runtime backend switch is accepted and visible while waiting for active work`() async throws {
+        let runtime = MockRuntime(speakBehavior: .holdOpen)
+        let configuration = testConfiguration(defaultVoiceProfileName: "default")
+        let state = await MainActor.run { EmbeddedServer() }
+        let host = ServerHost(
+            configuration: configuration,
+            runtime: runtime,
+            runtimeConfigurationStore: testRuntimeConfigurationStore(),
+            state: state,
+        )
+
+        await host.start()
+        await runtime.publishStatus(.residentModelReady)
+        try await waitUntilReady(host)
+
+        let app = assembleHBApp(configuration: testHTTPConfig(configuration), host: host)
+        try await app.test(.router) { client in
+            let speakResponse = try await client.execute(
+                uri: "/speech/live",
+                method: .post,
+                headers: [.contentType: "application/json"],
+                body: byteBuffer(#"{"text":"Keep the active lane busy"}"#),
+            )
+            let speakJSON = try jsonObject(from: speakResponse.body)
+            let speakJobID = try #require(speakJSON["request_id"] as? String)
+            #expect(speakResponse.status == .accepted)
+
+            let switchResponse = try await client.execute(
+                uri: "/runtime/backend",
+                method: .post,
+                headers: [.contentType: "application/json"],
+                body: byteBuffer(#"{"speech_backend":"marvis"}"#),
+            )
+            let switchJSON = try jsonObject(from: switchResponse.body)
+            let switchJobID = try #require(switchJSON["request_id"] as? String)
+            #expect(switchResponse.status == .accepted)
+            #expect((switchJSON["request_url"] as? String)?.contains(switchJobID) == true)
+
+            let queuedTransition: RuntimeBackendTransitionSnapshot = try await waitUntil(timeout: .seconds(1), pollInterval: .milliseconds(10)) {
+                let transition = await host.statusSnapshot().runtimeBackendTransition
+                guard transition.requestID == switchJobID, transition.state == "queued" else {
+                    return nil
+                }
+
+                return transition
+            }
+            #expect(queuedTransition.activeSpeechBackend == "qwen3")
+            #expect(queuedTransition.requestedSpeechBackend == "marvis")
+            #expect(queuedTransition.operation == "switch_speech_backend")
+            #expect(queuedTransition.waitingReason == "waiting_for_active_request")
+
+            await runtime.finishHeldSpeak(id: speakJobID)
+            _ = try await waitForJobSnapshot(switchJobID, on: host)
+
+            let finalHostResponse = try await client.execute(uri: "/runtime/host", method: .get)
+            let finalHostJSON = try jsonObject(from: finalHostResponse.body)
+            let finalTransition = try #require(finalHostJSON["runtime_backend_transition"] as? [String: Any])
+            #expect(finalTransition["state"] as? String == "idle")
+            #expect(finalTransition["active_speech_backend"] as? String == "marvis")
+            let finalConfig = try #require(finalHostJSON["runtime_configuration"] as? [String: Any])
+            #expect(finalConfig["active_runtime_speech_backend"] as? String == "marvis")
+            #expect(finalConfig["next_runtime_speech_backend"] as? String == "qwen3")
         }
 
         await host.shutdown()

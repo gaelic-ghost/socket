@@ -14,21 +14,38 @@ struct E2EMCPClient {
         timeout: Duration,
         server: ServerProcess,
     ) async throws -> E2EMCPClient {
-        try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
-            guard server.isStillRunning else {
+        let startupErrorRecorder = E2ERecordedError()
+        do {
+            return try await e2eWaitUntil(timeout: timeout, pollInterval: .seconds(1)) {
+                guard server.isStillRunning else {
+                    throw E2ETransportError(
+                        "The live SpeakSwiftlyServer process exited before the MCP transport became available.\n\(server.combinedOutput)",
+                    )
+                }
+
+                do {
+                    return try await connectNow(baseURL: baseURL, path: path)
+                } catch {
+                    if isRetryableConnectionDuringStartup(error) {
+                        startupErrorRecorder.record(error)
+                        return nil
+                    }
+
+                    throw E2ETransportError(
+                        "The live MCP transport became reachable, but the initial session handshake failed before a session was established. Underlying error: \(error)",
+                    )
+                }
+            }
+        } catch is E2ETimeoutError {
+            if let startupError = startupErrorRecorder.value {
                 throw E2ETransportError(
-                    "The live SpeakSwiftlyServer process exited before the MCP transport became available.\n\(server.combinedOutput)",
+                    "The live MCP transport did not become ready within \(timeout). The most recent retryable startup error was: \(startupError)",
                 )
             }
 
-            do {
-                return try await connectNow(baseURL: baseURL, path: path)
-            } catch {
-                if isRetryableConnectionDuringStartup(error) {
-                    return nil
-                }
-                return nil
-            }
+            throw E2ETransportError(
+                "The live MCP transport did not become ready within \(timeout), and the server never completed the initial MCP session handshake.",
+            )
         }
     }
 

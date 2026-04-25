@@ -43,6 +43,8 @@ extension ServerHost {
         let runtimeConfigurationSnapshot = try runtimeConfigurationStore.saveDefaultVoiceProfileName(
             normalizedProfileName,
             activeRuntimeSpeechBackend: activeRuntimeSpeechBackend,
+            activeQwenResidentModel: activeQwenResidentModel,
+            activeMarvisResidentPolicy: activeMarvisResidentPolicy,
             configuredDefaultVoiceProfileName: configuration.defaultVoiceProfileName,
         )
         emitRuntimeConfigurationChanged(runtimeConfigurationSnapshot)
@@ -56,6 +58,8 @@ extension ServerHost {
         let runtimeConfigurationSnapshot = try runtimeConfigurationStore.saveDefaultVoiceProfileName(
             nil,
             activeRuntimeSpeechBackend: activeRuntimeSpeechBackend,
+            activeQwenResidentModel: activeQwenResidentModel,
+            activeMarvisResidentPolicy: activeMarvisResidentPolicy,
             configuredDefaultVoiceProfileName: configuration.defaultVoiceProfileName,
         )
         emitRuntimeConfigurationChanged(runtimeConfigurationSnapshot)
@@ -69,14 +73,18 @@ extension ServerHost {
 
     // MARK: - Text Profile Queries
 
-    func textProfilesSnapshot() async -> TextProfilesSnapshot {
+    func textProfilesSnapshot() async throws -> TextProfilesSnapshot {
         let builtInStyle = await runtime.builtInTextProfileStyle()
-        return await .init(
+        let baseProfile = await runtime.baseTextProfile()
+        let activeProfile = try await runtime.activeTextProfile()
+        let storedProfiles = try await runtime.textProfiles()
+        let effectiveProfile = try await runtime.effectiveTextProfile(id: nil)
+        return .init(
             builtInStyle: builtInStyle.rawValue,
-            baseProfile: .init(profile: runtime.baseTextProfile()),
-            activeProfile: .init(details: runtime.activeTextProfile()),
-            storedProfiles: (runtime.textProfiles()).map(TextProfileSnapshot.init(summary:)),
-            effectiveProfile: .init(details: runtime.effectiveTextProfile(id: nil)),
+            baseProfile: .init(profile: baseProfile),
+            activeProfile: .init(details: activeProfile),
+            storedProfiles: storedProfiles.map(TextProfileSnapshot.init(summary:)),
+            effectiveProfile: .init(details: effectiveProfile),
         )
     }
 
@@ -84,12 +92,14 @@ extension ServerHost {
         await .init(style: runtime.builtInTextProfileStyle())
     }
 
-    func storedTextProfile(_ profileID: String) async -> TextProfileSnapshot? {
-        await runtime.textProfile(id: profileID).map(TextProfileSnapshot.init(details:))
+    func storedTextProfile(_ profileID: String) async throws -> TextProfileSnapshot? {
+        let profile = try await runtime.textProfile(id: profileID)
+        return profile.map(TextProfileSnapshot.init(details:))
     }
 
-    func effectiveTextProfile(_ profileID: String?) async -> TextProfileSnapshot {
-        await .init(details: runtime.effectiveTextProfile(id: profileID))
+    func effectiveTextProfile(_ profileID: String?) async throws -> TextProfileSnapshot {
+        let profile = try await runtime.effectiveTextProfile(id: profileID)
+        return .init(details: profile)
     }
 
     func createTextProfile(
@@ -103,66 +113,66 @@ extension ServerHost {
             }
         }
 
-        let refreshedProfile = await runtime.textProfile(id: profile.profileID) ?? profile
-        await emitTextProfilesChanged()
+        let refreshedProfile = try await runtime.textProfile(id: profile.profileID) ?? profile
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: refreshedProfile)
     }
 
     func loadTextProfiles() async throws -> TextProfilesSnapshot {
         try await runtime.loadTextProfiles()
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return await textProfilesSnapshot()
+        return try await textProfilesSnapshot()
     }
 
     func saveTextProfiles() async throws -> TextProfilesSnapshot {
         try await runtime.saveTextProfiles()
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return await textProfilesSnapshot()
+        return try await textProfilesSnapshot()
     }
 
     func setTextProfileStyle(
         _ style: TextForSpeech.BuiltInProfileStyle,
     ) async throws -> TextProfilesSnapshot {
         _ = try await runtime.setBuiltInTextProfileStyle(style)
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return await textProfilesSnapshot()
+        return try await textProfilesSnapshot()
     }
 
     func renameTextProfile(id profileID: String, to name: String) async throws -> TextProfileSnapshot {
         let profile = try await runtime.renameTextProfile(id: profileID, to: name)
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: profile)
     }
 
     func setActiveTextProfile(id profileID: String) async throws -> TextProfileSnapshot {
         let profile = try await runtime.setActiveTextProfile(id: profileID)
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: profile)
     }
 
     func removeTextProfile(id profileID: String) async throws -> TextProfilesSnapshot {
         try await runtime.removeTextProfile(id: profileID)
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return await textProfilesSnapshot()
+        return try await textProfilesSnapshot()
     }
 
     func factoryResetTextProfiles() async throws -> TextProfilesSnapshot {
         try await runtime.factoryResetTextProfiles()
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
-        return await textProfilesSnapshot()
+        return try await textProfilesSnapshot()
     }
 
     func resetTextProfile(id profileID: String) async throws -> TextProfileSnapshot {
         let profile = try await runtime.resetTextProfile(id: profileID)
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: profile)
     }
@@ -176,7 +186,7 @@ extension ServerHost {
         } else {
             try await runtime.addTextReplacement(replacement)
         }
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: profile)
     }
@@ -190,7 +200,7 @@ extension ServerHost {
         } else {
             try await runtime.replaceTextReplacement(replacement)
         }
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: profile)
     }
@@ -204,7 +214,7 @@ extension ServerHost {
         } else {
             try await runtime.removeTextReplacement(id: replacementID)
         }
-        await emitTextProfilesChanged()
+        try await emitTextProfilesChanged()
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
         return .init(details: profile)
     }

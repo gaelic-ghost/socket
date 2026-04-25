@@ -21,7 +21,12 @@ and lets app code provide explicit `Options(port:runtimeProfileRootURL:)` values
 localhost port or another runtime-owned persistence root is a better fit.
 
 Call ``EmbeddedServer/land()`` when the app wants a graceful shutdown. If the server has already
-been asked to land, a second request simply waits for the same shutdown to finish.
+been asked to land, a second request simply waits for the same shutdown to finish. If shutdown is
+requested while the embedded runtime is still starting, that same `land()` call now cancels the
+in-flight startup attempt instead of waiting forever for startup to finish first. Embedded startup
+is also time-bounded: if the underlying runtime does not finish startup within the package-owned
+startup timeout, the session reports a clear startup failure and tears itself down instead of
+remaining stuck in a permanent starting state.
 
 ## Consumer Ownership Model
 
@@ -65,6 +70,6 @@ When you need the whole current picture at once, use ``HostStateSnapshot`` as th
 
 Use the embedded session when an app owns the process and wants direct observable state. Use the standalone executable and the HTTP or MCP surfaces when another process, a LaunchAgent, or an external operator should own runtime startup and shutdown.
 
-If the app needs explicit ownership of where the runtime persists profiles, generated artifacts, and staged runtime configuration, pass `runtimeProfileRootURL` on the embedded session options. That same root is forwarded into both the server's own runtime-configuration store and the underlying `SpeakSwiftly` startup path so the embedded app does not have to manage those two persistence layers separately.
+If the app needs explicit ownership of where the runtime persists profiles, generated artifacts, and staged runtime configuration, pass `runtimeProfileRootURL` on the embedded session options. `SpeakSwiftlyServer` keeps that value as the profile-store root on its side and bridges it into the broader persistence root expected by the current pinned `SpeakSwiftly` startup path so the embedded app does not have to manage those two persistence layers separately.
 
 For the transport inventory and command-line surface, see <doc:Operator-Surfaces>.

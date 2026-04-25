@@ -15,6 +15,22 @@ func legacySpeechBackendNormalizationNote() -> String {
     "The legacy value '\(SpeakSwiftly.SpeechBackend.legacyQwenCustomVoiceRawValue)' is still accepted and normalized to 'qwen3'."
 }
 
+func exposedQwenResidentModelIdentifiers() -> [String] {
+    SpeakSwiftly.QwenResidentModel.allCases.map(\.rawValue)
+}
+
+func supportedQwenResidentModelDescription() -> String {
+    exposedQwenResidentModelIdentifiers().joined(separator: ", ")
+}
+
+func exposedMarvisResidentPolicyIdentifiers() -> [String] {
+    SpeakSwiftly.MarvisResidentPolicy.allCases.map(\.rawValue)
+}
+
+func supportedMarvisResidentPolicyDescription() -> String {
+    exposedMarvisResidentPolicyIdentifiers().joined(separator: ", ")
+}
+
 func makeSpeechNormalizationContext(
     cwd: String?,
     repoRoot: String?,
@@ -57,6 +73,8 @@ struct SpeakRequestPayload: Decodable {
         case textFormat = "text_format"
         case nestedSourceFormat = "nested_source_format"
         case sourceFormat = "source_format"
+        case requestContext = "request_context"
+        case qwenPreModelTextChunking = "qwen_pre_model_text_chunking"
     }
 
     let text: String
@@ -67,6 +85,8 @@ struct SpeakRequestPayload: Decodable {
     let textFormat: String?
     let nestedSourceFormat: String?
     let sourceFormat: String?
+    let requestContext: SpeakSwiftly.RequestContext?
+    let qwenPreModelTextChunking: Bool?
 
     func normalizationContext() throws -> SpeechNormalizationContext? {
         try makeSpeechNormalizationContext(
@@ -144,6 +164,7 @@ struct BatchItemRequestPayload: Decodable {
         case textFormat = "text_format"
         case nestedSourceFormat = "nested_source_format"
         case sourceFormat = "source_format"
+        case requestContext = "request_context"
     }
 
     let artifactID: String?
@@ -154,14 +175,18 @@ struct BatchItemRequestPayload: Decodable {
     let textFormat: String?
     let nestedSourceFormat: String?
     let sourceFormat: String?
+    let requestContext: SpeakSwiftly.RequestContext?
 
     func model() throws -> SpeakSwiftly.BatchItem {
         try .init(
             artifactID: artifactID,
             text: text,
-            textProfileID: textProfileID,
-            textContext: normalizationContext(),
-            sourceFormat: sourceFormatModel(),
+            textProfile: textProfileID,
+            inputTextContext: makeInputTextContext(
+                normalizationContext: normalizationContext(),
+                sourceFormat: sourceFormatModel(),
+            ),
+            requestContext: requestContext,
         )
     }
 
@@ -181,13 +206,29 @@ struct BatchItemRequestPayload: Decodable {
 
 struct RuntimeConfigurationUpdatePayload: Decodable {
     let speechBackend: String
+    let qwenResidentModel: String?
+    let marvisResidentPolicy: String?
 
     enum CodingKeys: String, CodingKey {
         case speechBackend = "speech_backend"
+        case qwenResidentModel = "qwen_resident_model"
+        case marvisResidentPolicy = "marvis_resident_policy"
     }
 
     func speechBackendModel() throws -> SpeakSwiftly.SpeechBackend {
         try resolveSpeechBackend(speechBackend, fieldName: "speech_backend")
+    }
+
+    func qwenResidentModelModel() throws -> SpeakSwiftly.QwenResidentModel? {
+        try qwenResidentModel.map {
+            try resolveQwenResidentModel($0, fieldName: "qwen_resident_model")
+        }
+    }
+
+    func marvisResidentPolicyModel() throws -> SpeakSwiftly.MarvisResidentPolicy? {
+        try marvisResidentPolicy.map {
+            try resolveMarvisResidentPolicy($0, fieldName: "marvis_resident_policy")
+        }
     }
 }
 
@@ -209,6 +250,12 @@ struct RequestListResponse: ResponseEncodable {
 
 struct RuntimeStatusResponse: ResponseEncodable {
     let status: SpeakSwiftly.StatusEvent
+    let runtimeBackendTransition: RuntimeBackendTransitionSnapshot
+
+    enum CodingKeys: String, CodingKey {
+        case status
+        case runtimeBackendTransition = "runtime_backend_transition"
+    }
 }
 
 struct RuntimeBackendResponse: ResponseEncodable {
@@ -303,4 +350,32 @@ private func resolveSpeechBackend(
     }
 
     return speechBackend
+}
+
+private func resolveQwenResidentModel(
+    _ rawValue: String,
+    fieldName: String,
+) throws -> SpeakSwiftly.QwenResidentModel {
+    guard let qwenResidentModel = SpeakSwiftly.QwenResidentModel(rawValue: rawValue) else {
+        throw HTTPError(
+            .badRequest,
+            message: "Runtime configuration field '\(fieldName)' used unsupported value '\(rawValue)'. Expected one of: \(supportedQwenResidentModelDescription()).",
+        )
+    }
+
+    return qwenResidentModel
+}
+
+private func resolveMarvisResidentPolicy(
+    _ rawValue: String,
+    fieldName: String,
+) throws -> SpeakSwiftly.MarvisResidentPolicy {
+    guard let marvisResidentPolicy = SpeakSwiftly.MarvisResidentPolicy(rawValue: rawValue) else {
+        throw HTTPError(
+            .badRequest,
+            message: "Runtime configuration field '\(fieldName)' used unsupported value '\(rawValue)'. Expected one of: \(supportedMarvisResidentPolicyDescription()).",
+        )
+    }
+
+    return marvisResidentPolicy
 }

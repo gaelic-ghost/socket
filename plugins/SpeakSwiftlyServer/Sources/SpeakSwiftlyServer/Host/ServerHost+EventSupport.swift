@@ -88,9 +88,9 @@ extension ServerHost {
         )
     }
 
-    func emitTextProfilesChanged() async {
-        let activeProfile = await runtime.activeTextProfile()
-        let storedProfiles = await runtime.textProfiles()
+    func emitTextProfilesChanged() async throws {
+        let activeProfile = try await runtime.activeTextProfile()
+        let storedProfiles = try await runtime.textProfiles()
         hostEventContinuation.yield(
             .textProfilesChanged(
                 .init(
@@ -107,11 +107,18 @@ extension ServerHost {
                 .init(
                     activeRuntimeSpeechBackend: snapshot.activeRuntimeSpeechBackend,
                     nextRuntimeSpeechBackend: snapshot.nextRuntimeSpeechBackend,
+                    activeQwenResidentModel: snapshot.activeQwenResidentModel,
+                    nextQwenResidentModel: snapshot.nextQwenResidentModel,
+                    activeMarvisResidentPolicy: snapshot.activeMarvisResidentPolicy,
+                    nextMarvisResidentPolicy: snapshot.nextMarvisResidentPolicy,
                     activeDefaultVoiceProfileName: snapshot.activeDefaultVoiceProfileName,
                     nextDefaultVoiceProfileName: snapshot.nextDefaultVoiceProfileName,
                     persistedSpeechBackend: snapshot.persistedSpeechBackend,
+                    persistedQwenResidentModel: snapshot.persistedQwenResidentModel,
+                    persistedMarvisResidentPolicy: snapshot.persistedMarvisResidentPolicy,
                     persistedDefaultVoiceProfileName: snapshot.persistedDefaultVoiceProfileName,
                     environmentSpeechBackendOverride: snapshot.environmentSpeechBackendOverride,
+                    environmentQwenResidentModelOverride: snapshot.environmentQwenResidentModelOverride,
                     persistedConfigurationPath: snapshot.persistedConfigurationPath,
                     persistedConfigurationState: snapshot.persistedConfigurationState,
                 ),

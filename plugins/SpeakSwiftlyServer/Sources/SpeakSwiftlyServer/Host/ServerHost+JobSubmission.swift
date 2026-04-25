@@ -10,6 +10,8 @@ extension ServerHost {
         textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
+        requestContext: SpeakSwiftly.RequestContext? = nil,
+        qwenPreModelTextChunking: Bool = false,
     ) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.queueSpeechLive(
@@ -18,6 +20,8 @@ extension ServerHost {
             textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
+            requestContext: requestContext,
+            qwenPreModelTextChunking: qwenPreModelTextChunking,
         )
         return await enqueuePublicJob(handle)
     }
@@ -28,6 +32,7 @@ extension ServerHost {
         textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
+        requestContext: SpeakSwiftly.RequestContext? = nil,
     ) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.queueSpeechFile(
@@ -36,6 +41,7 @@ extension ServerHost {
             textProfileID: textProfileID,
             normalizationContext: normalizationContext,
             sourceFormat: sourceFormat,
+            requestContext: requestContext,
         )
         return await enqueuePublicJob(handle)
     }
@@ -66,7 +72,7 @@ extension ServerHost {
             outputPath: outputPath,
             cwd: cwd,
         )
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .create(profileName: profileName))
     }
 
     func createVoiceProfileFromAudio(
@@ -84,7 +90,7 @@ extension ServerHost {
             transcript: transcript,
             cwd: cwd,
         )
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .create(profileName: profileName))
     }
 
     func submitRenameVoiceProfile(
@@ -93,19 +99,28 @@ extension ServerHost {
     ) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.renameVoiceProfile(profileName: profileName, to: newProfileName)
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .rename(from: profileName, to: newProfileName))
     }
 
     func submitRerollVoiceProfile(profileName: String) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.rerollVoiceProfile(profileName: profileName)
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .reroll(profileName: profileName))
     }
 
     func submitDeleteVoiceProfile(profileName: String) async throws -> String {
         try ensureWorkerReady()
         let handle = await runtime.deleteVoiceProfile(profileName: profileName)
-        return await enqueuePublicJob(handle)
+        return await enqueuePublicJob(handle, profileMutation: .delete(profileName: profileName))
+    }
+
+    func submitSpeechBackendSwitch(to speechBackend: SpeakSwiftly.SpeechBackend) async throws -> String {
+        try ensureWorkerReady()
+        let handle = await runtime.switchSpeechBackend(to: speechBackend)
+        return await enqueuePublicJob(
+            handle,
+            runtimeBackendSwitch: .init(requestedSpeechBackend: speechBackend),
+        )
     }
 
     func ensureWorkerReady() throws {
@@ -117,11 +132,17 @@ extension ServerHost {
         }
     }
 
-    func enqueuePublicJob(_ handle: RuntimeRequestHandle) async -> String {
+    func enqueuePublicJob(
+        _ handle: RuntimeRequestHandle,
+        profileMutation: ProfileMutationExpectation? = nil,
+        runtimeBackendSwitch: RuntimeBackendSwitchExpectation? = nil,
+    ) async -> String {
         jobs[handle.id] = JobRecord(
             jobID: handle.id,
             op: handle.operation,
             profileName: handle.profileName,
+            profileMutation: profileMutation,
+            runtimeBackendSwitch: runtimeBackendSwitch,
             submittedAt: Date(),
         )
 

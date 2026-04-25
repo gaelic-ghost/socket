@@ -34,6 +34,18 @@ extension ServerTests {
             let setStagedConfigBackend = try #require(setStagedConfigProperties["speech_backend"] as? [String: Any])
             let setStagedConfigBackendEnum = try #require(setStagedConfigBackend["enum"] as? [String])
             #expect(setStagedConfigBackendEnum == ["qwen3", "chatterbox_turbo", "marvis"])
+            let setStagedConfigQwenModel = try #require(setStagedConfigProperties["qwen_resident_model"] as? [String: Any])
+            let setStagedConfigQwenModelEnum = try #require(setStagedConfigQwenModel["enum"] as? [String])
+            #expect(setStagedConfigQwenModelEnum == ["base_0_6b_8bit", "base_1_7b_8bit"])
+            let setStagedConfigMarvisPolicy = try #require(setStagedConfigProperties["marvis_resident_policy"] as? [String: Any])
+            let setStagedConfigMarvisPolicyEnum = try #require(setStagedConfigMarvisPolicy["enum"] as? [String])
+            #expect(setStagedConfigMarvisPolicyEnum == ["dual_resident_serialized", "single_resident_dynamic"])
+
+            let generateSpeechTool = try #require(tools.first { $0["name"] as? String == "generate_speech" })
+            let generateSpeechSchema = try #require(generateSpeechTool["inputSchema"] as? [String: Any])
+            let generateSpeechProperties = try #require(generateSpeechSchema["properties"] as? [String: Any])
+            let qwenPreModelTextChunking = try #require(generateSpeechProperties["qwen_pre_model_text_chunking"] as? [String: Any])
+            #expect(qwenPreModelTextChunking["type"] as? String == "boolean")
 
             let listResourcesEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(

@@ -321,7 +321,7 @@ import Testing
                 refreshVoiceProfiles: {
                     try await host.refreshVoiceProfiles()
                 },
-                queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
+                queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat, requestContext, qwenPreModelTextChunking in
                     guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
                         let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
                         throw ServerConfigurationError(errorMessage)
@@ -333,6 +333,8 @@ import Testing
                         textProfileID: textProfileID,
                         normalizationContext: normalizationContext,
                         sourceFormat: sourceFormat,
+                        requestContext: requestContext,
+                        qwenPreModelTextChunking: qwenPreModelTextChunking,
                     )
                 },
                 setDefaultVoiceProfileName: { profileName in
@@ -411,6 +413,13 @@ import Testing
             nestedSourceFormat: .swift,
         ),
         sourceFormat: .python,
+        requestContext: .init(
+            source: "embedded-session",
+            app: "SpeakSwiftlyServerTests",
+            project: "SpeakSwiftlyServer",
+            topic: "state-actions",
+            attributes: ["surface": "embedded"],
+        ),
     )
     let firstQueuedSpeechInvocation = try #require(await runtime.latestQueuedSpeechInvocation())
     #expect(firstQueuedRequestID.isEmpty == false)
@@ -425,6 +434,16 @@ import Testing
     )
     #expect(firstQueuedSpeechInvocation.normalizationContext == expectedNormalizationContext)
     #expect(firstQueuedSpeechInvocation.sourceFormat == .python)
+    #expect(
+        firstQueuedSpeechInvocation.requestContext
+            == SpeakSwiftly.RequestContext(
+                source: "embedded-session",
+                app: "SpeakSwiftlyServerTests",
+                project: "SpeakSwiftlyServer",
+                topic: "state-actions",
+                attributes: ["surface": "embedded"],
+            ),
+    )
     await runtime.finishHeldSpeak(id: firstQueuedRequestID)
 
     let defaultVoiceProfileName = try await state.setDefaultVoiceProfileName("default")
@@ -499,6 +518,160 @@ import Testing
 }
 
 @available(macOS 14, *)
+@Test func `rerolling a voice profile refreshes cached profile metadata`() async throws {
+    let originalCreatedAt = Date(timeIntervalSince1970: 1_700_000_000)
+    let runtime = MockRuntime(
+        profiles: [
+            SpeakSwiftly.ProfileSummary(
+                profileName: "default",
+                vibe: .femme,
+                createdAt: originalCreatedAt,
+                voiceDescription: "Warm guide voice",
+                sourceText: "Original training text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+        ],
+    )
+    let state = await MainActor.run { EmbeddedServer() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: testRuntimeConfigurationStore(),
+        state: state,
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    let baselineRefreshCount = await runtime.voiceProfileRefreshCount()
+    let baselineStatus = await host.statusSnapshot()
+    let baselineProfile = try #require(baselineStatus.cachedProfiles.first(where: { $0.profileName == "default" }))
+    #expect(baselineProfile.createdAt == TimestampFormatter.string(from: originalCreatedAt))
+    #expect(baselineProfile.voiceDescription == "Warm guide voice")
+    #expect(baselineProfile.sourceText == "Original training text")
+
+    let rerollJobID = try await host.submitRerollProfile(profileName: "default")
+    let rerollSnapshot = try await waitForJobSnapshot(rerollJobID, on: host)
+    #expect(rerollSnapshot.status == "completed")
+
+    let refreshedStatus = await host.statusSnapshot()
+    let refreshedProfile = try #require(refreshedStatus.cachedProfiles.first(where: { $0.profileName == "default" }))
+    let refreshedCount = await runtime.voiceProfileRefreshCount()
+    #expect(refreshedCount == baselineRefreshCount + 1)
+    #expect(refreshedProfile.createdAt == TimestampFormatter.string(from: originalCreatedAt.addingTimeInterval(60)))
+    #expect(refreshedProfile.voiceDescription == "Warm guide voice (rerolled)")
+    #expect(refreshedProfile.sourceText == "Original training text (rerolled)")
+
+    await host.shutdown()
+}
+
+@available(macOS 14, *)
+@Test func `renaming a voice profile tolerates unrelated profile refresh changes`() async throws {
+    let runtime = MockRuntime(
+        profiles: [
+            SpeakSwiftly.ProfileSummary(
+                profileName: "default",
+                vibe: .femme,
+                createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+                voiceDescription: "Default voice",
+                sourceText: "Default text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+        ],
+    )
+    let state = await MainActor.run { EmbeddedServer() }
+    let host = ServerHost(
+        configuration: testConfiguration(),
+        runtime: runtime,
+        runtimeConfigurationStore: testRuntimeConfigurationStore(),
+        state: state,
+    )
+
+    await host.start()
+    await runtime.publishStatus(.residentModelReady)
+    try await waitUntilReady(host)
+
+    await runtime.setScriptedProfileRefreshSnapshots(
+        [[
+            SpeakSwiftly.ProfileSummary(
+                profileName: "renamed-default",
+                vibe: .femme,
+                createdAt: Date(timeIntervalSince1970: 1_700_000_000),
+                voiceDescription: "Default voice",
+                sourceText: "Default text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+            SpeakSwiftly.ProfileSummary(
+                profileName: "external-addition",
+                vibe: .femme,
+                createdAt: Date(timeIntervalSince1970: 1_700_000_120),
+                voiceDescription: "Added outside the host cache",
+                sourceText: "External text",
+                transcriptSource: nil,
+                transcriptResolvedAt: nil,
+                transcriptionModelRepo: nil,
+            ),
+        ]],
+    )
+
+    let jobID = try await host.submitRenameProfile(profileName: "default", newProfileName: "renamed-default")
+    let snapshot = try await waitForJobSnapshot(jobID, on: host)
+    #expect(snapshot.status == "completed")
+    #expect(snapshot.terminalEvent != nil)
+
+    let status = await host.statusSnapshot()
+    #expect(status.profileCacheState == "fresh")
+    #expect(status.cachedProfiles.contains { $0.profileName == "renamed-default" })
+    #expect(status.cachedProfiles.contains { $0.profileName == "external-addition" })
+    #expect(status.cachedProfiles.contains { $0.profileName == "default" } == false)
+
+    await host.shutdown()
+}
+
+@Test func `runtime adapter path resolution normalizes relative and whitespace padded cwd values`() {
+    let currentDirectoryPath = "/tmp/speakswiftly-tests/workspace"
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "./Artifacts/output.wav",
+            cwd: "  /tmp/speakswiftly-tests/project  ",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == "/tmp/speakswiftly-tests/project/Artifacts/output.wav",
+    )
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "../Fixtures/reference.wav",
+            cwd: "  ./Runs/Session  ",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == "/tmp/speakswiftly-tests/workspace/Runs/Fixtures/reference.wav",
+    )
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "/tmp/speakswiftly-tests/../speakswiftly-tests/final.wav",
+            cwd: "./ignored",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == "/tmp/speakswiftly-tests/final.wav",
+    )
+
+    #expect(
+        resolvedAbsoluteFilesystemPath(
+            "   ",
+            cwd: "/tmp/speakswiftly-tests/project",
+            currentDirectoryPath: currentDirectoryPath,
+        ) == nil,
+    )
+}
+
+@available(macOS 14, *)
 @Test func `clearing app managed default voice profile falls back to configured default`() async throws {
     let runtime = MockRuntime()
     let configuration = testConfiguration(defaultVoiceProfileName: "configured-default")
@@ -516,7 +689,7 @@ import Testing
                 refreshVoiceProfiles: {
                     try await host.refreshVoiceProfiles()
                 },
-                queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat in
+                queueLiveSpeech: { text, profileName, textProfileID, normalizationContext, sourceFormat, requestContext, qwenPreModelTextChunking in
                     guard let resolvedProfileName = await host.resolvedRequestedVoiceProfileName(profileName) else {
                         let errorMessage = await host.missingVoiceProfileNameMessage(for: "the live speech request")
                         throw ServerConfigurationError(errorMessage)
@@ -528,6 +701,8 @@ import Testing
                         textProfileID: textProfileID,
                         normalizationContext: normalizationContext,
                         sourceFormat: sourceFormat,
+                        requestContext: requestContext,
+                        qwenPreModelTextChunking: qwenPreModelTextChunking,
                     )
                 },
                 setDefaultVoiceProfileName: { profileName in

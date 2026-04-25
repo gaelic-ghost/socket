@@ -17,7 +17,7 @@ public struct ActiveRequestSnapshot: Codable, Sendable, Equatable {
     init(summary: SpeakSwiftly.ActiveRequest) {
         id = summary.id
         op = canonicalOperationName(summary.op)
-        profileName = summary.profileName
+        profileName = summary.voiceProfile
     }
 
     init(id: String, op: String, profileName: String?) {
@@ -44,7 +44,7 @@ public struct QueuedRequestSnapshot: Codable, Sendable, Equatable {
     init(summary: SpeakSwiftly.QueuedRequest) {
         id = summary.id
         op = canonicalOperationName(summary.op)
-        profileName = summary.profileName
+        profileName = summary.voiceProfile
         queuePosition = summary.queuePosition
     }
 
@@ -196,6 +196,7 @@ struct StatusSnapshot: ResponseEncodable {
         case generationQueue = "generation_queue"
         case playbackQueue = "playback_queue"
         case playback
+        case runtimeBackendTransition = "runtime_backend_transition"
         case currentGenerationJobs = "current_generation_jobs"
         case runtimeConfiguration = "runtime_configuration"
         case transports
@@ -219,6 +220,7 @@ struct StatusSnapshot: ResponseEncodable {
     let generationQueue: QueueStatusSnapshot
     let playbackQueue: QueueStatusSnapshot
     let playback: PlaybackStatusSnapshot
+    let runtimeBackendTransition: RuntimeBackendTransitionSnapshot
     let currentGenerationJobs: [CurrentGenerationJobSnapshot]
     let runtimeConfiguration: RuntimeConfigurationSnapshot
     let transports: [TransportStatusSnapshot]

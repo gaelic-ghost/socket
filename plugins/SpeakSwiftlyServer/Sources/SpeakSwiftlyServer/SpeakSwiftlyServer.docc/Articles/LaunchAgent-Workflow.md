@@ -29,7 +29,7 @@ That gives you the exact LaunchAgent payload the package currently wants to stag
 - the stdout and stderr log files
 - the `SPEAKSWIFTLY_PROFILE_ROOT` environment override for the standalone server
 
-That profile-root override is the LaunchAgent-owned runtime persistence root. It is the directory the installed background service uses for its persisted runtime configuration and the underlying `SpeakSwiftly` profile and artifact persistence, so operators do not have to manage those two filesystem surfaces independently.
+That profile-root override is the LaunchAgent-owned profile-store root on the `SpeakSwiftlyServer` side. The startup bridge converts it into the broader persistence root expected by the current pinned `SpeakSwiftly` runtime so the installed background service can keep one on-disk state tree without nesting `profiles/profiles/`.
 
 ## Install Or Refresh The Background Service
 
@@ -59,6 +59,17 @@ Use the same executable to check the installed state or remove it:
 xcrun swift run SpeakSwiftlyServerTool launch-agent status
 xcrun swift run SpeakSwiftlyServerTool launch-agent uninstall
 ```
+
+`uninstall` now waits for `launchctl` to stop reporting the job as loaded before it returns. That
+keeps a plain remove flow aligned with the install and promote-live refresh flows, which already
+wait for launchd teardown before they try to bootstrap the next job incarnation.
+It also removes the staged LaunchAgent config alias copy from the managed install layout, so the
+remove flow now clears the launch-agent-owned config shim instead of leaving stale alias state
+behind after the job is gone.
+
+`status` now reports an explicit `load_state` field. A normal absent job shows `load_state: not_loaded`.
+If `launchctl print` fails for some other reason, the command now surfaces that failure directly
+instead of flattening it into `loaded: no`.
 
 For one explicit live-service verification pass, run:
 

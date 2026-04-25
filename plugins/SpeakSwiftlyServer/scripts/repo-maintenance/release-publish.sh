@@ -53,7 +53,7 @@ while [ "$#" -gt 0 ]; do
 Usage:
   release-publish.sh --mode <standard|submodule> --version <vX.Y.Z> [--skip-validate] [--skip-gh-release] [--refresh-live-service|--skip-live-service-refresh] [--live-service-config-file <path>] [--dry-run]
 
-This workflow is for the release branch only. It syncs local main with origin, validates the checkout, stages the tagged release artifact, creates the annotated tag, pushes the tag, creates the GitHub release object, and optionally refreshes the live service.
+This workflow is for the release branch only. It syncs local main with origin, validates the checkout, stages the tagged release artifact, creates the annotated tag, pushes the tag, creates the GitHub release object, and optionally refreshes the live service. It does not push the release branch itself; protected-branch updates stay on the release-prepare side of the workflow.
 USAGE
       exit 0
       ;;
@@ -115,13 +115,11 @@ else
   log "Created annotated tag $RELEASE_TAG."
 fi
 
-branch_name="$(ensure_named_branch)"
 if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-  log "Would push branch $branch_name and tag $RELEASE_TAG to $(release_remote)."
+  log "Would push tag $RELEASE_TAG to $(release_remote)."
 else
-  git -C "$REPO_ROOT" push -u "$(release_remote)" "$branch_name"
   git -C "$REPO_ROOT" push "$(release_remote)" "$RELEASE_TAG"
-  log "Pushed branch $branch_name and tag $RELEASE_TAG."
+  log "Pushed tag $RELEASE_TAG."
 fi
 
 if [ "$REPO_MAINTENANCE_SKIP_GH_RELEASE" = "true" ]; then

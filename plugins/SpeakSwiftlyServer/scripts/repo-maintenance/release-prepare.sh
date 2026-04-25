@@ -120,7 +120,7 @@ if [ -z "$body_file" ]; then
 ## Release Prepare
 
 - prepares release candidate \`$RELEASE_TAG\`
-- leaves release artifact staging, final tag creation, and GitHub release publication for \`scripts/repo-maintenance/release-publish.sh\` after this pull request lands on \`$base_branch\`
+- leaves release artifact staging, final tag creation, tag push, and GitHub release publication for \`scripts/repo-maintenance/release-publish.sh\` after this pull request lands on \`$base_branch\`
 
 ## Publish Follow-Up
 
@@ -228,4 +228,4 @@ if [ "$wait_for_merge" = "true" ]; then
   fi
 fi
 
-log "Release prepare completed. After this PR merges, switch to $base_branch and run release-publish.sh for $RELEASE_TAG to stage the release artifact, tag it, and publish it."
+log "Release prepare completed. After this PR merges, switch to $base_branch and run release-publish.sh for $RELEASE_TAG to stage the release artifact, create the tag, push the tag, and publish the release."

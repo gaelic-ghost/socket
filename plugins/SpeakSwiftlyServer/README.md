@@ -99,7 +99,7 @@ The full transport contract lives in [API.md](./API.md).
 
 ## Embedding
 
-The supported public embedding surface is `EmbeddedServer`, defined in [Sources/SpeakSwiftlyServer/Host/ServerState.swift](./Sources/SpeakSwiftlyServer/Host/ServerState.swift). App code owns that one observable object directly, calls `liftoff()`, binds UI to its observable properties, and uses the same object for runtime controls, playback controls, voice-profile actions, and direct live speech submission through `queueLiveSpeech(...)`.
+The supported public embedding surface is `EmbeddedServer`, defined in [Sources/SpeakSwiftlyServer/Host/ServerState.swift](./Sources/SpeakSwiftlyServer/Host/ServerState.swift). App code owns that one observable object directly, calls `liftoff()`, binds UI to its observable properties, and uses the same object for runtime controls, playback controls, voice-profile actions, and direct live speech submission through `queueLiveSpeech(...)`, including the shared `SpeakSwiftly.RequestContext` metadata model when one request needs caller-origin details.
 
 ```swift
 import SpeakSwiftlyServer
@@ -128,7 +128,7 @@ struct ExampleApp: App {
 }
 ```
 
-If you do not pass `EmbeddedServer.Options(port:)`, the embedded host defaults to `127.0.0.1:7339`. If you pass `EmbeddedServer.Options(runtimeProfileRootURL:)`, that root is used for the runtime-owned persistence path as well as the server's runtime configuration store.
+If you do not pass `EmbeddedServer.Options(port:)`, the embedded host defaults to `127.0.0.1:7339`. If you pass `EmbeddedServer.Options(runtimeProfileRootURL:)`, the server treats that as its profile-store root and bridges it at startup into the broader persistence root expected by the current pinned `SpeakSwiftly` runtime, while keeping the server's own runtime-configuration snapshot aligned with the same on-disk state.
 
 ## Configuration
 
@@ -209,7 +209,7 @@ The short version is:
 - use `xcrun swift test` for the normal package-development loop
 - use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
 - use `scripts/repo-maintenance/release-prepare.sh` only for branch-side PR prep
-- use `scripts/repo-maintenance/release-publish.sh` as the single publish-time artifact and tag path
+- use `scripts/repo-maintenance/release-publish.sh` as the single publish-time artifact and tag path; it tags from fast-forwarded local `main` and pushes the tag, not the protected branch
 
 ## Repo Structure
 

@@ -123,6 +123,10 @@ struct TextReplacementSnapshot: Codable, Equatable {
                 "spoken_file_reference:\(style.rawValue)"
             case let .spokenCLIFlag(style):
                 "spoken_cli_flag:\(style.rawValue)"
+            case .spokenCurrencyAmount:
+                "spoken_currency_amount"
+            case .spokenMeasuredValue:
+                "spoken_measured_value"
             case .spellOut:
                 "spell_out"
         }

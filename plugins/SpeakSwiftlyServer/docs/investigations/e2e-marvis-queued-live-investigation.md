@@ -67,7 +67,7 @@ The later queued requests had both advanced past queueing:
   - later observed at `progress.starting_playback`
 - third request:
   - `333B6133-888F-4A48-A2FA-D3471A06F555`
-  - profile: `http-marvis-queued-androgenous-profile`
+  - profile: `http-marvis-queued-femme-profile`
   - queued at position `2`
   - later observed at `progress.starting_playback`
 

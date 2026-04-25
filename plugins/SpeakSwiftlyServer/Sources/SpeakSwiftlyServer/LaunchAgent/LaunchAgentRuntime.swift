@@ -49,29 +49,36 @@ struct LaunchAgentStatusOptions {
 
     func statusSummary() throws -> String {
         let plistExists = FileManager.default.fileExists(atPath: plistPath)
-        let loaded = try isLoaded()
+        let loadState = try loadState()
         return """
         label: \(label)
         plist_path: \(plistPath)
         plist_exists: \(plistExists ? "yes" : "no")
-        loaded: \(loaded ? "yes" : "no")
+        loaded: \(loadState.isLoaded ? "yes" : "no")
         user_domain: \(userDomain)
+        load_state: \(loadState.summary)
         """
     }
 
     func isLoaded() throws -> Bool {
+        try loadState().isLoaded
+    }
+
+    func loadState() throws -> LaunchAgentLoadState {
         let result = try runLaunchctl(
             arguments: ["print", "\(userDomain)/\(label)"],
             allowNonZeroExit: true,
             launchctlPath: launchctlPath,
         )
-        return result.exitCode == 0
+        return try LaunchAgentLoadState(result: result)
     }
 
     func uninstall() throws {
         if try isLoaded() {
-            try bootoutLoadedService()
+            try unloadLoadedService()
         }
+
+        try removeStagedConfigAliasIfPresent()
 
         if FileManager.default.fileExists(atPath: plistPath) {
             do {
@@ -87,6 +94,22 @@ struct LaunchAgentStatusOptions {
         }
     }
 
+    func removeStagedConfigAliasIfPresent() throws {
+        let layout = ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
+        let aliasPath = layout.launchAgentConfigAliasURL.path
+        guard FileManager.default.fileExists(atPath: aliasPath) else {
+            return
+        }
+
+        do {
+            try FileManager.default.removeItem(atPath: aliasPath)
+        } catch {
+            throw LaunchAgentCommandError(
+                "\(speakSwiftlyServerToolName) could not remove the staged LaunchAgent config copy '\(aliasPath)' during uninstall. Likely cause: \(error.localizedDescription)",
+            )
+        }
+    }
+
     func bootoutLoadedService() throws {
         let result = try runLaunchctl(
             arguments: ["bootout", "\(userDomain)/\(label)"],
@@ -98,6 +121,11 @@ struct LaunchAgentStatusOptions {
                 "\(speakSwiftlyServerToolName) asked launchctl to unload '\(userDomain)/\(label)', but launchctl exited with status \(result.exitCode). stderr: \(result.standardError)",
             )
         }
+    }
+
+    func unloadLoadedService() throws {
+        try bootoutLoadedService()
+        try waitUntilNotLoaded()
     }
 
     func waitUntilNotLoaded(
@@ -118,6 +146,46 @@ struct LaunchAgentStatusOptions {
             Likely cause: launchd has not finished tearing the old job down yet.
             """,
         )
+    }
+}
+
+struct LaunchAgentLoadState {
+    let isLoaded: Bool
+    let summary: String
+
+    init(result: LaunchctlResult) throws {
+        if result.exitCode == 0 {
+            isLoaded = true
+            summary = "loaded"
+            return
+        }
+
+        if LaunchAgentLoadState.isKnownNotLoadedExit(result) {
+            isLoaded = false
+            summary = "not_loaded"
+            return
+        }
+
+        throw LaunchAgentCommandError(
+            """
+            \(speakSwiftlyServerToolName) asked launchctl to inspect the loaded state for the LaunchAgent job, but launchctl returned an unexpected failure instead of a normal loaded or not-loaded result.
+            Exit status: \(result.exitCode)
+            stdout: \(result.standardOutput)
+            stderr: \(result.standardError)
+            """,
+        )
+    }
+
+    private static func isKnownNotLoadedExit(_ result: LaunchctlResult) -> Bool {
+        if result.exitCode == 113 {
+            return true
+        }
+
+        let diagnostic = "\(result.standardOutput)\n\(result.standardError)".lowercased()
+        return diagnostic.contains("could not find service")
+            || diagnostic.contains("service not found")
+            || diagnostic.contains("unknown service")
+            || diagnostic.contains("not found")
     }
 }
 

@@ -103,14 +103,17 @@ extension ServerHost {
                     case let .progress(progress):
                         await record(mapProgressEvent(progress), for: handle.id, terminal: false)
                     case let .completed(success):
-                        if handle.operation == "create_voice_profile_from_description"
-                            || handle.operation == "create_voice_profile_from_audio"
-                            || handle.operation == "update_voice_profile_name"
-                            || handle.operation == "delete_voice_profile" {
+                        if let mutationExpectation = jobs[handle.id]?.profileMutation {
                             await finalizeMutationSuccess(
                                 success: success,
                                 requestID: handle.id,
-                                operationName: handle.operation,
+                                expectation: mutationExpectation,
+                            )
+                        } else if let backendSwitchExpectation = jobs[handle.id]?.runtimeBackendSwitch {
+                            await finalizeRuntimeBackendSwitchSuccess(
+                                success: success,
+                                requestID: handle.id,
+                                expectation: backendSwitchExpectation,
                             )
                         } else if handle.operation == "list_voice_profiles" {
                             await applyProfileRefresh(from: success)
@@ -133,15 +136,49 @@ extension ServerHost {
         }
     }
 
+    func finalizeRuntimeBackendSwitchSuccess(
+        success: SpeakSwiftly.Success,
+        requestID: String,
+        expectation: RuntimeBackendSwitchExpectation,
+    ) async {
+        guard let resolvedSpeechBackend = success.speechBackend else {
+            let failure = ServerFailureEvent(
+                id: requestID,
+                code: SpeakSwiftly.ErrorCode.internalError.rawValue,
+                message: "SpeakSwiftly reported a successful speech-backend switch request '\(requestID)', but it did not include the active speech_backend payload.",
+            )
+            await record(.failed(failure), for: requestID, terminal: true)
+            return
+        }
+        guard resolvedSpeechBackend == expectation.requestedSpeechBackend else {
+            let failure = ServerFailureEvent(
+                id: requestID,
+                code: SpeakSwiftly.ErrorCode.internalError.rawValue,
+                message: "SpeakSwiftly reported speech-backend switch request '\(requestID)' as '\(resolvedSpeechBackend.rawValue)' instead of the requested '\(expectation.requestedSpeechBackend.rawValue)'.",
+            )
+            await record(.failed(failure), for: requestID, terminal: true)
+            return
+        }
+
+        activeRuntimeSpeechBackend = resolvedSpeechBackend
+        let runtimeConfigurationSnapshot = runtimeConfigurationStore.snapshot(
+            activeRuntimeSpeechBackend: resolvedSpeechBackend,
+            activeQwenResidentModel: activeQwenResidentModel,
+            activeMarvisResidentPolicy: activeMarvisResidentPolicy,
+        )
+        emitRuntimeConfigurationChanged(runtimeConfigurationSnapshot)
+        await record(mapSuccessEvent(success, acknowledged: false), for: requestID, terminal: true)
+    }
+
     func finalizeMutationSuccess(
         success: SpeakSwiftly.Success,
         requestID: String,
-        operationName: String,
+        expectation: ProfileMutationExpectation,
     ) async {
         do {
             let previousProfiles = profileCache
             let profiles = try await reconcileProfilesAfterMutation(
-                op: operationName,
+                expectation: expectation,
                 requestID: requestID,
                 success: success,
                 previousProfiles: previousProfiles,
@@ -175,7 +212,7 @@ extension ServerHost {
             await record(.completed(finalSuccess), for: requestID, terminal: true)
         } catch {
             profileCacheState = "stale"
-            profileCacheWarning = "SpeakSwiftly reported a successful profile mutation, but the server could not confirm the refreshed profile list afterward. The cached profile list may be stale. Likely cause: \(error.localizedDescription)"
+            profileCacheWarning = "SpeakSwiftly reported a successful \(expectation.operationName) mutation, but the server could not confirm the refreshed profile list afterward. The cached profile list may be stale. Likely cause: \(error.localizedDescription)"
             emitProfileCacheChanged()
             recordRecentError(
                 source: "profile_cache",
@@ -192,24 +229,29 @@ extension ServerHost {
     }
 
     func reconcileProfilesAfterMutation(
-        op: String,
+        expectation: ProfileMutationExpectation,
         requestID: String,
         success: SpeakSwiftly.Success,
         previousProfiles: [ProfileSnapshot],
     ) async throws -> [ProfileSnapshot] {
-        guard let profileName = success.profileName, !profileName.isEmpty else {
+        guard let reportedProfileName = success.profileName, !reportedProfileName.isEmpty else {
             throw SpeakSwiftly.Error(
                 code: .internalError,
-                message: "SpeakSwiftly returned a successful \(op) payload for request '\(requestID)', but it did not include a usable profile name for cache reconciliation.",
+                message: "SpeakSwiftly returned a successful \(expectation.operationName) payload for request '\(requestID)', but it did not include a usable profile name for cache reconciliation.",
+            )
+        }
+        guard reportedProfileName == expectation.expectedSuccessProfileName else {
+            throw SpeakSwiftly.Error(
+                code: .internalError,
+                message: "SpeakSwiftly returned a successful \(expectation.operationName) payload for request '\(requestID)', but it reported profile '\(reportedProfileName)' instead of the expected profile '\(expectation.expectedSuccessProfileName)'.",
             )
         }
 
         let retryDelays = Self.mutationRefreshRetryDelays
         for attempt in 0...retryDelays.count {
-            let refreshedProfiles = try await refreshProfiles(reason: "\(op):\(requestID):\(attempt)")
-            if profilesMatchExpectedMutation(
-                op: op,
-                profileName: profileName,
+            let refreshedProfiles = try await refreshProfiles(reason: "\(expectation.operationName):\(requestID):\(attempt)")
+            if refreshedProfilesMatchExpectedMutation(
+                expectation: expectation,
                 previousProfiles: previousProfiles,
                 refreshedProfiles: refreshedProfiles,
             ) {
@@ -223,7 +265,7 @@ extension ServerHost {
 
         throw SpeakSwiftly.Error(
             code: .internalError,
-            message: "SpeakSwiftly refreshed the profile cache after \(op) for profile '\(profileName)', but the list still did not reflect the expected mutation.",
+            message: "SpeakSwiftly refreshed the profile cache after \(expectation.operationName) for profile '\(expectation.expectedSuccessProfileName)', but the list still did not reflect the expected mutation.",
         )
     }
 
@@ -254,28 +296,49 @@ extension ServerHost {
         await requestPublish(mode: .immediate, refreshRuntimeState: false)
     }
 
-    func profilesMatchExpectedMutation(
-        op: String,
-        profileName: String,
+    func refreshedProfilesMatchExpectedMutation(
+        expectation: ProfileMutationExpectation,
         previousProfiles: [ProfileSnapshot],
         refreshedProfiles: [ProfileSnapshot],
     ) -> Bool {
-        let previousNames = Set(previousProfiles.map(\.profileName))
-        let refreshedNames = Set(refreshedProfiles.map(\.profileName))
+        switch expectation {
+            case let .create(profileName):
+                guard let refreshedProfile = refreshedProfiles.first(where: { $0.profileName == profileName }) else {
+                    return false
+                }
+                guard let previousProfile = previousProfiles.first(where: { $0.profileName == profileName }) else {
+                    return true
+                }
 
-        switch op {
-            case "create_voice_profile_from_description":
-                return refreshedNames.contains(profileName) && refreshedNames != previousNames
-            case "create_voice_profile_from_audio":
-                return refreshedNames.contains(profileName) && refreshedNames != previousNames
-            case "update_voice_profile_name":
-                return refreshedNames.contains(profileName)
-                    && !previousNames.contains(profileName)
-                    && refreshedNames.count == previousNames.count
-            case "delete_voice_profile":
-                return !refreshedNames.contains(profileName) && refreshedNames != previousNames
-            default:
-                return false
+                return refreshedProfile != previousProfile
+            case let .rename(previousProfileName, newProfileName):
+                guard refreshedProfiles.contains(where: { $0.profileName == previousProfileName }) == false else {
+                    return false
+                }
+                guard let refreshedProfile = refreshedProfiles.first(where: { $0.profileName == newProfileName }) else {
+                    return false
+                }
+
+                if previousProfiles.contains(where: { $0.profileName == previousProfileName }) {
+                    return true
+                }
+
+                guard let previousRenamedProfile = previousProfiles.first(where: { $0.profileName == newProfileName }) else {
+                    return true
+                }
+
+                return refreshedProfile != previousRenamedProfile
+            case let .reroll(profileName):
+                guard
+                    let previousProfile = previousProfiles.first(where: { $0.profileName == profileName }),
+                    let refreshedProfile = refreshedProfiles.first(where: { $0.profileName == profileName })
+                else {
+                    return false
+                }
+
+                return refreshedProfile != previousProfile
+            case let .delete(profileName):
+                return refreshedProfiles.contains(where: { $0.profileName == profileName }) == false
         }
     }
 

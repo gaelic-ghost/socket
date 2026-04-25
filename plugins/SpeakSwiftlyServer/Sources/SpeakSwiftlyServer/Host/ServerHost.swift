@@ -5,15 +5,52 @@ import SpeakSwiftly
 import TextForSpeech
 
 actor ServerHost {
+    enum ProfileMutationExpectation: Equatable {
+        case create(profileName: String)
+        case rename(from: String, to: String)
+        case reroll(profileName: String)
+        case delete(profileName: String)
+
+        var operationName: String {
+            switch self {
+                case .create:
+                    "create_voice_profile"
+                case .rename:
+                    "update_voice_profile_name"
+                case .reroll:
+                    "reroll_voice_profile"
+                case .delete:
+                    "delete_voice_profile"
+            }
+        }
+
+        var expectedSuccessProfileName: String {
+            switch self {
+                case let .create(profileName),
+                     let .reroll(profileName),
+                     let .delete(profileName):
+                    profileName
+                case let .rename(_, newProfileName):
+                    newProfileName
+            }
+        }
+    }
+
     enum PublishMode {
         case immediate
         case coalesced
+    }
+
+    struct RuntimeBackendSwitchExpectation: Equatable {
+        let requestedSpeechBackend: SpeakSwiftly.SpeechBackend
     }
 
     struct JobRecord {
         let jobID: String
         let op: String
         let profileName: String?
+        let profileMutation: ProfileMutationExpectation?
+        let runtimeBackendSwitch: RuntimeBackendSwitchExpectation?
         let submittedAt: Date
         var startedAt: Date?
         var terminalAt: Date?
@@ -58,6 +95,8 @@ actor ServerHost {
     let encoder = JSONEncoder()
     let byteBufferAllocator = ByteBufferAllocator()
     var activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend
+    var activeQwenResidentModel: SpeakSwiftly.QwenResidentModel
+    var activeMarvisResidentPolicy: SpeakSwiftly.MarvisResidentPolicy
 
     var statusTask: Task<Void, Never>?
     var publishTask: Task<Void, Never>?
@@ -117,6 +156,8 @@ actor ServerHost {
         runtime: any ServerRuntimeProtocol,
         runtimeConfigurationStore: RuntimeConfigurationStore = .init(),
         activeRuntimeSpeechBackend: SpeakSwiftly.SpeechBackend? = nil,
+        activeQwenResidentModel: SpeakSwiftly.QwenResidentModel? = nil,
+        activeMarvisResidentPolicy: SpeakSwiftly.MarvisResidentPolicy? = nil,
         state: EmbeddedServer,
     ) {
         let (immediatePublishRequests, immediatePublishContinuation) = AsyncStream.makeStream(
@@ -155,6 +196,10 @@ actor ServerHost {
         self.runtimeConfigurationStore = runtimeConfigurationStore
         self.activeRuntimeSpeechBackend = activeRuntimeSpeechBackend
             ?? runtimeConfigurationStore.initialActiveRuntimeSpeechBackend()
+        self.activeQwenResidentModel = activeQwenResidentModel
+            ?? runtimeConfigurationStore.initialActiveQwenResidentModel()
+        self.activeMarvisResidentPolicy = activeMarvisResidentPolicy
+            ?? runtimeConfigurationStore.initialActiveMarvisResidentPolicy()
         activeDefaultVoiceProfileName = runtimeConfigurationStore.initialActiveDefaultVoiceProfileName(
             configuredDefaultVoiceProfileName: configuration.defaultVoiceProfileName,
         )
@@ -222,6 +267,8 @@ actor ServerHost {
             runtime: runtime,
             runtimeConfigurationStore: runtimeConfigurationStore,
             activeRuntimeSpeechBackend: startupConfiguration.speechBackend,
+            activeQwenResidentModel: startupConfiguration.qwenResidentModel,
+            activeMarvisResidentPolicy: startupConfiguration.marvisResidentPolicy,
             state: state,
         )
     }

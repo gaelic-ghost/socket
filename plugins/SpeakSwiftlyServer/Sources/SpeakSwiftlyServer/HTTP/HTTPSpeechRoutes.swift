@@ -20,6 +20,8 @@ func registerHTTPSpeechRoutes(
             textProfileID: payload.textProfileID,
             normalizationContext: payload.normalizationContext(),
             sourceFormat: payload.sourceFormatModel(),
+            requestContext: payload.requestContext,
+            qwenPreModelTextChunking: payload.qwenPreModelTextChunking ?? false,
         )
         return try buildAcceptedRequestResponse(request: request, configuration: configuration, requestID: requestID)
     }
@@ -39,6 +41,7 @@ func registerHTTPSpeechRoutes(
             textProfileID: payload.textProfileID,
             normalizationContext: payload.normalizationContext(),
             sourceFormat: payload.sourceFormatModel(),
+            requestContext: payload.requestContext,
         )
         return try buildAcceptedRequestResponse(request: request, configuration: configuration, requestID: requestID)
     }

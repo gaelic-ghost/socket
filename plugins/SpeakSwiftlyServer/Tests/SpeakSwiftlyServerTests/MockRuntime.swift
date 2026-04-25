@@ -11,6 +11,19 @@ actor MockRuntime: ServerRuntimeProtocol {
         let id: String
         let operation: String
         let profileName: String?
+        let requestedSpeechBackend: SpeakSwiftly.SpeechBackend?
+
+        init(
+            id: String,
+            operation: String,
+            profileName: String?,
+            requestedSpeechBackend: SpeakSwiftly.SpeechBackend? = nil,
+        ) {
+            self.id = id
+            self.operation = operation
+            self.profileName = profileName
+            self.requestedSpeechBackend = requestedSpeechBackend
+        }
     }
 
     struct QueuedSpeechInvocation: Equatable {
@@ -19,6 +32,8 @@ actor MockRuntime: ServerRuntimeProtocol {
         let textProfileID: String?
         let normalizationContext: SpeechNormalizationContext?
         let sourceFormat: TextForSpeech.SourceFormat?
+        let requestContext: SpeakSwiftly.RequestContext?
+        let qwenPreModelTextChunking: Bool
     }
 
     struct CreateCloneInvocation: Equatable {
@@ -80,14 +95,17 @@ actor MockRuntime: ServerRuntimeProtocol {
     var renameProfileInvocations = [RenameProfileInvocation]()
     var rerollProfileInvocations = [RerollProfileInvocation]()
     var playbackState: SpeakSwiftly.PlaybackState = .idle
+    var activeSpeechBackend: SpeakSwiftly.SpeechBackend = .qwen3
     var textRuntime: TextForSpeech.Runtime
     let textRuntimePersistenceURL: URL
     var loadTextProfilesCallCount = 0
     var saveTextProfilesCallCount = 0
+    var textProfileTransportError: SpeakSwiftly.Error?
     var generatedFiles = [SpeakSwiftly.GeneratedFile]()
     var generatedBatches = [SpeakSwiftly.GeneratedBatch]()
     var generationJobs = [SpeakSwiftly.GenerationJob]()
     var listVoiceProfilesCallCount = 0
+    var scriptedProfileRefreshSnapshots = [[SpeakSwiftly.ProfileSummary]]()
     var generationQueueRequestCount = 0
     var playbackQueueRequestCount = 0
     var playbackStateRequestCount = 0
@@ -102,12 +120,16 @@ actor MockRuntime: ServerRuntimeProtocol {
         profiles: [SpeakSwiftly.ProfileSummary] = [sampleProfile()],
         speakBehavior: SpeakBehavior = .completeImmediately,
         mutationRefreshBehavior: MutationRefreshBehavior = .applyMutations,
+        textProfileTransportError: SpeakSwiftly.Error? = nil,
         startBehavior: StartBehavior = .immediate,
+        scriptedProfileRefreshSnapshots: [[SpeakSwiftly.ProfileSummary]] = [],
     ) {
         self.profiles = profiles
         self.speakBehavior = speakBehavior
         self.mutationRefreshBehavior = mutationRefreshBehavior
+        self.textProfileTransportError = textProfileTransportError
         self.startBehavior = startBehavior
+        self.scriptedProfileRefreshSnapshots = scriptedProfileRefreshSnapshots
         let persistenceURL = FileManager.default
             .temporaryDirectory
             .appendingPathComponent("ServerTests", isDirectory: true)
@@ -132,8 +154,14 @@ actor MockRuntime: ServerRuntimeProtocol {
             waiter.resume()
         }
 
-        await withCheckedContinuation { continuation in
-            startReleaseContinuation = continuation
+        await withTaskCancellationHandler {
+            await withCheckedContinuation { continuation in
+                startReleaseContinuation = continuation
+            }
+        } onCancel: {
+            Task {
+                await self.cancelStartWait()
+            }
         }
     }
 
@@ -160,6 +188,10 @@ actor MockRuntime: ServerRuntimeProtocol {
         (startCallCount, shutdownCallCount)
     }
 
+    func setScriptedProfileRefreshSnapshots(_ snapshots: [[SpeakSwiftly.ProfileSummary]]) {
+        scriptedProfileRefreshSnapshots = snapshots
+    }
+
     func waitUntilStartReachesBarrier() async {
         guard startBehavior == .waitForRelease else { return }
         guard !startHasReachedBarrier else { return }
@@ -177,5 +209,10 @@ actor MockRuntime: ServerRuntimeProtocol {
         startReleaseContinuation?.resume()
         startReleaseContinuation = nil
         startBehavior = .immediate
+    }
+
+    func cancelStartWait() {
+        startReleaseContinuation?.resume()
+        startReleaseContinuation = nil
     }
 }

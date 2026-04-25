@@ -87,6 +87,9 @@ extension MockRuntime {
     func listVoiceProfiles() async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         listVoiceProfilesCallCount += 1
+        if !scriptedProfileRefreshSnapshots.isEmpty {
+            profiles = scriptedProfileRefreshSnapshots.removeFirst()
+        }
         let profiles = profiles
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(.completed(SpeakSwiftly.Success(id: requestID, profiles: profiles, activeRequests: nil)))
@@ -128,6 +131,22 @@ extension MockRuntime {
     func rerollVoiceProfile(profileName: String) async -> RuntimeRequestHandle {
         let requestID = UUID().uuidString
         rerollProfileInvocations.append(.init(profileName: profileName))
+        if mutationRefreshBehavior == .applyMutations {
+            profiles = profiles.map { profile in
+                guard profile.profileName == profileName else { return profile }
+
+                return SpeakSwiftly.ProfileSummary(
+                    profileName: profile.profileName,
+                    vibe: profile.vibe,
+                    createdAt: profile.createdAt.addingTimeInterval(60),
+                    voiceDescription: "\(profile.voiceDescription) (rerolled)",
+                    sourceText: "\(profile.sourceText) (rerolled)",
+                    transcriptSource: profile.transcriptSource,
+                    transcriptResolvedAt: profile.transcriptResolvedAt,
+                    transcriptionModelRepo: profile.transcriptionModelRepo,
+                )
+            }
+        }
         let events = AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error> { continuation in
             continuation.yield(.completed(SpeakSwiftly.Success(id: requestID, profileName: profileName, activeRequests: nil)))
             continuation.finish()
@@ -188,17 +207,17 @@ extension MockRuntime {
                 jobKind: current.jobKind.rawValue,
                 createdAt: current.createdAt,
                 updatedAt: Date(),
-                profileName: current.profileName,
-                textProfileID: current.textProfileID,
+                voiceProfile: current.voiceProfile,
+                textProfile: current.textProfile,
                 speechBackend: current.speechBackend.rawValue,
                 state: "expired",
                 items: current.items.map {
                     GenerationJobItemFixture(
                         artifactID: $0.artifactID,
                         text: $0.text,
-                        textProfileID: $0.textProfileID,
-                        textContext: $0.textContext,
-                        sourceFormat: $0.sourceFormat,
+                        textProfile: $0.textProfile,
+                        inputTextContext: $0.inputTextContext,
+                        requestContext: $0.requestContext,
                     )
                 },
                 artifacts: current.artifacts.map {
@@ -208,8 +227,10 @@ extension MockRuntime {
                         createdAt: $0.createdAt,
                         filePath: $0.filePath,
                         sampleRate: $0.sampleRate,
-                        profileName: $0.profileName,
-                        textProfileID: $0.textProfileID,
+                        voiceProfile: $0.voiceProfile,
+                        textProfile: $0.textProfile,
+                        inputTextContext: $0.inputTextContext,
+                        requestContext: $0.requestContext,
                     )
                 },
                 failure: current.failure.map { .init(code: $0.code, message: $0.message) },

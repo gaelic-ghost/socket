@@ -16,7 +16,7 @@ extension MockRuntime {
             case .residentModelFailed:
                 .failed
         }
-        statusContinuation?.yield(.init(stage: stage, residentState: residentState, speechBackend: .qwen3))
+        statusContinuation?.yield(.init(stage: stage, residentState: residentState, speechBackend: activeSpeechBackend))
     }
 
     func finishHeldSpeak(id: String) {
@@ -87,6 +87,23 @@ extension MockRuntime {
         continuation: AsyncThrowingStream<SpeakSwiftly.RequestEvent, Error>.Continuation,
     ) {
         activeRequest = request
+        if request.operation == "switch_speech_backend", let requestedSpeechBackend = request.requestedSpeechBackend {
+            continuation.yield(.started(.init(id: request.id, op: request.operation)))
+            activeSpeechBackend = requestedSpeechBackend
+            continuation.yield(
+                .completed(
+                    .init(
+                        id: request.id,
+                        speechBackend: requestedSpeechBackend,
+                    ),
+                ),
+            )
+            continuation.finish()
+            activeRequest = nil
+            startNextQueuedRequestIfNeeded()
+            return
+        }
+
         playbackState = .playing
         continuation.yield(.started(.init(id: request.id, op: request.operation)))
 
@@ -111,7 +128,7 @@ extension MockRuntime {
     }
 
     func activeSummary(for request: MockRequest) -> SpeakSwiftly.ActiveRequest {
-        .init(id: request.id, op: request.operation, profileName: request.profileName)
+        .init(id: request.id, op: request.operation, voiceProfile: request.profileName, requestContext: nil)
     }
 
     func queuedSummaries() -> [SpeakSwiftly.QueuedRequest] {
@@ -119,7 +136,8 @@ extension MockRuntime {
             .init(
                 id: queued.request.id,
                 op: queued.request.operation,
-                profileName: queued.request.profileName,
+                voiceProfile: queued.request.profileName,
+                requestContext: nil,
                 queuePosition: offset + 1,
             )
         }
@@ -128,7 +146,7 @@ extension MockRuntime {
     func playbackStateSummary() -> SpeakSwiftly.PlaybackStateSnapshot {
         .init(
             state: playbackState,
-            activeRequest: playbackState == .idle ? nil : activeRequest.map(activeSummary(for:)),
+            activeRequest: playbackState == .idle ? nil : activeRequest.map { activeSummary(for: $0) },
             isStableForConcurrentGeneration: playbackState == .playing,
             isRebuffering: false,
             stableBufferedAudioMS: playbackState == .playing ? 320 : nil,
@@ -137,14 +155,14 @@ extension MockRuntime {
     }
 
     func runtimeOverviewSummary() -> SpeakSwiftly.RuntimeOverview {
-        let generationActiveRequest = activeRequest.map(activeSummary(for:))
+        let generationActiveRequest = activeRequest.map { activeSummary(for: $0) }
         let generationQueue = SpeakSwiftly.QueueSnapshot(
             queueType: "generation",
             activeRequest: generationActiveRequest,
             activeRequests: generationActiveRequest.map { [$0] },
             queue: queuedSummaries(),
         )
-        let playbackActiveRequest = playbackState == .idle ? nil : activeRequest.map(activeSummary(for:))
+        let playbackActiveRequest = playbackState == .idle ? nil : activeRequest.map { activeSummary(for: $0) }
         let playbackQueue = SpeakSwiftly.QueueSnapshot(
             queueType: "playback",
             activeRequest: playbackActiveRequest,
@@ -154,11 +172,11 @@ extension MockRuntime {
         let status = SpeakSwiftly.StatusEvent(
             stage: .residentModelReady,
             residentState: .ready,
-            speechBackend: .qwen3,
+            speechBackend: activeSpeechBackend,
         )
         return .init(
             status: status,
-            speechBackend: .qwen3,
+            speechBackend: activeSpeechBackend,
             generationQueue: generationQueue,
             playbackQueue: playbackQueue,
             playbackState: playbackStateSummary(),

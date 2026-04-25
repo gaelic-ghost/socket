@@ -1,5 +1,6 @@
 import Foundation
 import MCP
+import SpeakSwiftly
 @testable import SpeakSwiftlyServer
 import Testing
 
@@ -275,5 +276,76 @@ extension ServerTests {
             let jobDetailPayload = try jsonObject(from: Data(jobDetailText.utf8))
             #expect(jobDetailPayload["request_id"] as? String == requestID)
         }
+    }
+
+    @available(macOS 14, *)
+    @Test func `embedded MCP text profile resources surface bridge failures as explicit jsonrpc errors`() async throws {
+        let runtime = MockRuntime(
+            speakBehavior: .holdOpen,
+            textProfileTransportError: SpeakSwiftly.Error(
+                code: .internalError,
+                message: "Configured MCP text-profile bridge failure for tests.",
+            ),
+        )
+        let configuration = testConfiguration()
+        let state = await MainActor.run { EmbeddedServer() }
+        let runtimeProfileRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathComponent("profiles", isDirectory: true)
+        let host = ServerHost(
+            configuration: configuration,
+            httpConfig: testHTTPConfig(configuration),
+            mcpConfig: .init(
+                enabled: true,
+                path: "/mcp",
+                serverName: "speak-swiftly-test-mcp",
+                title: "SpeakSwiftly Test MCP",
+            ),
+            runtime: runtime,
+            runtimeConfigurationStore: .init(
+                environment: ["SPEAKSWIFTLY_PROFILE_ROOT": runtimeProfileRootURL.path],
+                activeRuntimeSpeechBackend: .qwen3,
+            ),
+            state: state,
+        )
+
+        await host.start()
+        await runtime.publishStatus(.residentModelReady)
+        try await waitUntilReady(host)
+        let mcpSurface = try #require(
+            await MCPSurface.build(
+                configuration: .init(
+                    enabled: true,
+                    path: "/mcp",
+                    serverName: "speak-swiftly-test-mcp",
+                    title: "SpeakSwiftly Test MCP",
+                ),
+                host: host,
+            ),
+        )
+
+        try await mcpSurface.start()
+        let initializeResponse = await mcpSurface.handle(mcpPOSTRequest(body: mcpInitializeRequestJSON()))
+        let sessionID = try #require(mcpSessionID(from: initializeResponse))
+        try await drainMCPResponse(initializeResponse)
+        _ = await mcpSurface.handle(
+            mcpPOSTRequest(
+                body: mcpInitializedNotificationJSON(),
+                sessionID: sessionID,
+            ),
+        )
+
+        let envelope = try await mcpEnvelope(
+            from: mcpSurface.handle(
+                mcpPOSTRequest(
+                    body: mcpReadResourceRequestJSON(uri: "speak://text-profiles"),
+                    sessionID: sessionID,
+                ),
+            ),
+        )
+        let error = try #require(envelope["error"] as? [String: Any])
+        let message = try #require(error["message"] as? String)
+        #expect((error["code"] as? Int) == -32603)
+        #expect(message.contains("Configured MCP text-profile bridge failure for tests."))
     }
 }

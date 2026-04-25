@@ -40,7 +40,7 @@ public final class EmbeddedServer {
                     "EmbeddedServer could not refresh voice profiles because no embedded host action performer is configured yet.",
                 )
             },
-            queueLiveSpeech: { _, _, _, _, _ in
+            queueLiveSpeech: { _, _, _, _, _, _, _ in
                 throw EmbeddedServerActionError.unavailable(
                     "EmbeddedServer could not queue the live speech request because no embedded host action performer is configured yet.",
                 )
@@ -99,6 +99,8 @@ public final class EmbeddedServer {
             String?,
             SpeechNormalizationContext?,
             TextForSpeech.SourceFormat?,
+            SpeakSwiftly.RequestContext?,
+            Bool,
         ) async throws -> String
         let setDefaultVoiceProfileName: @Sendable (String) async throws -> String
         let clearDefaultVoiceProfileName: @Sendable () async throws -> String?
@@ -170,16 +172,34 @@ public final class EmbeddedServer {
 
     /// Timing details for the most recent host refresh cycle, when one has completed.
     public internal(set) var runtimeRefresh: RuntimeRefreshSnapshot?
+    /// Live backend-switch progress for the running runtime.
+    public internal(set) var runtimeBackendTransition = RuntimeBackendTransitionSnapshot(
+        state: "idle",
+        activeSpeechBackend: "qwen3",
+        requestedSpeechBackend: nil,
+        requestID: nil,
+        operation: nil,
+        waitingReason: nil,
+        submittedAt: nil,
+        startedAt: nil,
+    )
     /// Generation jobs that are currently active in the runtime.
     public internal(set) var currentGenerationJobs = [CurrentGenerationJobSnapshot]()
     /// The active and next-start runtime configuration state.
     public internal(set) var runtimeConfiguration = RuntimeConfigurationSnapshot(
         activeRuntimeSpeechBackend: "qwen3",
         nextRuntimeSpeechBackend: "qwen3",
+        activeQwenResidentModel: "base_0_6b_8bit",
+        nextQwenResidentModel: "base_0_6b_8bit",
+        activeMarvisResidentPolicy: "dual_resident_serialized",
+        nextMarvisResidentPolicy: "dual_resident_serialized",
         activeDefaultVoiceProfileName: nil,
         nextDefaultVoiceProfileName: nil,
         environmentSpeechBackendOverride: nil,
+        environmentQwenResidentModelOverride: nil,
         persistedSpeechBackend: nil,
+        persistedQwenResidentModel: nil,
+        persistedMarvisResidentPolicy: nil,
         persistedDefaultVoiceProfileName: nil,
         profileRootPath: "",
         persistedConfigurationPath: "",
@@ -229,6 +249,7 @@ public final class EmbeddedServer {
             await lifecycle.requestStop()
         }
         try await lifecycle.waitUntilStopped()
+        resetEmbeddedLifecycleState()
     }
 
     /// Returns the currently cached voice-profile summaries.
@@ -251,6 +272,8 @@ public final class EmbeddedServer {
         textProfileID: String? = nil,
         normalizationContext: SpeechNormalizationContext? = nil,
         sourceFormat: TextForSpeech.SourceFormat? = nil,
+        requestContext: SpeakSwiftly.RequestContext? = nil,
+        qwenPreModelTextChunking: Bool = false,
     ) async throws -> String {
         try await actions.queueLiveSpeech(
             text,
@@ -258,6 +281,8 @@ public final class EmbeddedServer {
             textProfileID,
             normalizationContext,
             sourceFormat,
+            requestContext,
+            qwenPreModelTextChunking,
         )
     }
 
@@ -355,6 +380,7 @@ public final class EmbeddedServer {
         generationQueue = snapshot.generationQueue
         playbackQueue = snapshot.playbackQueue
         playback = snapshot.playback
+        runtimeBackendTransition = snapshot.runtimeBackendTransition
         currentGenerationJobs = snapshot.currentGenerationJobs
         runtimeConfiguration = snapshot.runtimeConfiguration
         transports = snapshot.transports
@@ -371,5 +397,11 @@ public final class EmbeddedServer {
         }
 
         try await lifecycle.waitUntilStopped()
+        resetEmbeddedLifecycleState()
+    }
+
+    private func resetEmbeddedLifecycleState() {
+        lifecycle = nil
+        stopCoordinator = EmbeddedServerStopCoordinator()
     }
 }
