@@ -145,19 +145,20 @@ release_artifact_resources_dir() {
 }
 
 find_speak_swiftly_metallib() {
-  deterministic_metallib_path="$REPO_ROOT/../SpeakSwiftly/.local/derived-data/runtime-release/Build/Products/Release/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib"
-  metadata_path="$(speak_swiftly_runtime_root)/SpeakSwiftly.release.json"
-  if [ ! -f "$metadata_path" ]; then
-    [ -f "$deterministic_metallib_path" ] || die "Could not find SpeakSwiftly's published Release runtime metadata at $metadata_path or deterministic Release metallib at $deterministic_metallib_path. Publish and verify the sibling runtime first."
-    printf '%s\n' "$deterministic_metallib_path"
-    return
-  fi
+  bin_path="$1"
 
-  runtime_metallib_path="$(speak_swiftly_runtime_metadata_value "$metadata_path" metallib_path)"
-  [ -n "$runtime_metallib_path" ] || die "SpeakSwiftly runtime metadata at $metadata_path did not include a metallib_path value."
-  runtime_metallib_path="$(rebase_speak_swiftly_runtime_path "$metadata_path" "$runtime_metallib_path")"
-  [ -f "$runtime_metallib_path" ] || die "SpeakSwiftly runtime metadata at $metadata_path pointed at a missing metallib path: $runtime_metallib_path"
-  printf '%s\n' "$runtime_metallib_path"
+  for candidate in \
+    "$bin_path/SpeakSwiftly_SpeakSwiftly.bundle/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib" \
+    "$bin_path/SpeakSwiftly_SpeakSwiftlyCore.bundle/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib" \
+    "$bin_path/Resources/default.metallib"
+  do
+    if [ -f "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return
+    fi
+  done
+
+  die "Release build completed, but no SpeakSwiftly MLX metallib was found in SwiftPM product directory $bin_path. Expected the SpeakSwiftly package dependency to bundle mlx-swift_Cmlx.bundle in the release build products."
 }
 
 stage_release_artifact() {
@@ -178,7 +179,7 @@ stage_release_artifact() {
   source_tool="$bin_path/SpeakSwiftlyServerTool"
   [ -f "$source_tool" ] || die "Release build completed, but the expected tool executable was not found at $source_tool."
   [ -x "$source_tool" ] || die "Release build completed, but $source_tool is not executable."
-  source_metallib="$(find_speak_swiftly_metallib)"
+  source_metallib="$(find_speak_swiftly_metallib "$bin_path")"
 
   mkdir -p "$tag_dir"
   cp "$source_tool" "$tag_dir/SpeakSwiftlyServerTool"
@@ -194,51 +195,6 @@ stage_release_artifact() {
   log "Staged release artifact at $tag_dir/SpeakSwiftlyServerTool."
   log "Staged metallib resource at $resources_dir/default.metallib."
   log "Updated current release artifact link at $current_link."
-}
-
-speak_swiftly_runtime_root() {
-  printf '%s\n' "$REPO_ROOT/../SpeakSwiftly/.local/xcode"
-}
-
-speak_swiftly_runtime_metadata_path() {
-  configuration="$1"
-  lower_configuration=$(printf '%s' "$configuration" | tr '[:upper:]' '[:lower:]')
-  metadata_path="$(speak_swiftly_runtime_root)/SpeakSwiftly.$lower_configuration.json"
-  [ -f "$metadata_path" ] || die "Could not find SpeakSwiftly's published $configuration runtime metadata at $metadata_path. Publish and verify the sibling runtime first."
-  printf '%s\n' "$metadata_path"
-}
-
-speak_swiftly_runtime_metadata_value() {
-  metadata_path="$1"
-  key="$2"
-  value=$(sed -n "s/^[[:space:]]*\"$key\"[[:space:]]*:[[:space:]]*\"\\(.*\\)\"[[:space:]]*,\{0,1\}[[:space:]]*$/\\1/p" "$metadata_path" | head -n 1)
-  printf '%s\n' "$value"
-}
-
-rebase_speak_swiftly_runtime_path() {
-  metadata_path="$1"
-  runtime_path="$2"
-
-  if [ -f "$runtime_path" ]; then
-    printf '%s\n' "$runtime_path"
-    return 0
-  fi
-
-  metadata_source_root="$(speak_swiftly_runtime_metadata_value "$metadata_path" source_root)"
-  actual_source_root="$(CDPATH= cd -- "$REPO_ROOT/../SpeakSwiftly" && pwd)"
-
-  case "$runtime_path" in
-    "$metadata_source_root"/*)
-      suffix=${runtime_path#"$metadata_source_root"/}
-      rebased_path="$actual_source_root/$suffix"
-      if [ -f "$rebased_path" ]; then
-        printf '%s\n' "$rebased_path"
-        return 0
-      fi
-      ;;
-  esac
-
-  printf '%s\n' "$runtime_path"
 }
 
 run_dispatch_dir() {

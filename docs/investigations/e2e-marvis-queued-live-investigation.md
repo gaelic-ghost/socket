@@ -205,7 +205,7 @@ That focused rerun shifts the problem statement:
 ### Sample evidence from the stalled MCP operator-control lane
 
 - Sample file:
-  - `/tmp/SpeakSwiftlyServerTool_mcp_operator_trace.sample.txt`
+  - `artifacts/SpeakSwiftlyServerTool_mcp_operator_trace.sample.txt`
 - The hot stack was inside `Qwen3TTSModel.generateStream(...)` and MLX eval work, not parked in the MCP transport or server event loop.
 - That means the process was still burning real generation work while the retained request snapshot remained stuck at `preroll_ready`.
 

@@ -203,7 +203,7 @@ extension ServerTests {
                 method: .post,
                 headers: [.contentType: "application/json"],
                 body: byteBuffer(
-                    #"{"profile_name":"clone-default","vibe":"femme","reference_audio_path":"./Fixtures/reference.wav","transcript":"Cloned route test transcript.","cwd":"/tmp/http-clone-cwd"}"#,
+                    #"{"profile_name":"clone-default","vibe":"femme","reference_audio_path":"./Fixtures/reference.wav","transcript":"Cloned route test transcript.","cwd":"./http-clone-cwd"}"#,
                 ),
             )
             let cloneJSON = try jsonObject(from: cloneResponse.body)
@@ -215,7 +215,7 @@ extension ServerTests {
             #expect(cloneInvocation.profileName == "clone-default")
             #expect(cloneInvocation.referenceAudioPath == "./Fixtures/reference.wav")
             #expect(cloneInvocation.transcript == "Cloned route test transcript.")
-            #expect(cloneInvocation.cwd == "/tmp/http-clone-cwd")
+            #expect(cloneInvocation.cwd == "./http-clone-cwd")
 
             let renameResponse = try await client.execute(
                 uri: "/voices/clone-default/name",
@@ -254,7 +254,7 @@ extension ServerTests {
                 uri: "/speech/live",
                 method: .post,
                 headers: [.contentType: "application/json"],
-                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","request_context":{"source":"http","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"route-coverage","attributes":{"surface":"http"}},"cwd":"./Sources","repo_root":"../SpeakSwiftlyServer","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source","qwen_pre_model_text_chunking":true}"#),
+                body: byteBuffer(#"{"text":"Route test","text_profile_id":"swift-docs","request_context":{"source":"http","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"route-coverage","attributes":{"surface":"http"}},"cwd":"./Sources","repo_root":".","text_format":"markdown","nested_source_format":"swift_source","source_format":"python_source","qwen_pre_model_text_chunking":true}"#),
             )
             let speakJSON = try jsonObject(from: speakResponse.body)
             let speakJobID = try #require(speakJSON["request_id"] as? String)
@@ -267,7 +267,7 @@ extension ServerTests {
                 queuedSpeechInvocation.normalizationContext
                     == SpeechNormalizationContext(
                         cwd: "./Sources",
-                        repoRoot: "../SpeakSwiftlyServer",
+                        repoRoot: ".",
                         textFormat: .markdown,
                         nestedSourceFormat: .swift,
                     ),

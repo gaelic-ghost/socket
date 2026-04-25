@@ -415,7 +415,8 @@ import Testing
 }
 
 @Test func `runtime launcher bridges a profiles directory override onto the broader SpeakSwiftly runtime root`() {
-    let profileRootURL = URL(fileURLWithPath: "/tmp/speakswiftly-runtime/profiles", isDirectory: true)
+    let profileRootURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        .appendingPathComponent("speakswiftly-runtime/profiles", isDirectory: true)
 
     #expect(
         SpeakSwiftlyRuntimeLauncher.bridgedSpeakSwiftlyProfileRoot(profileRootURL.path)
@@ -424,7 +425,8 @@ import Testing
 }
 
 @Test func `runtime launcher leaves non-profiles override paths unchanged`() {
-    let runtimeRootURL = URL(fileURLWithPath: "/tmp/SpeakSwiftlyRuntime", isDirectory: true)
+    let runtimeRootURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        .appendingPathComponent("SpeakSwiftlyRuntime", isDirectory: true)
 
     #expect(
         SpeakSwiftlyRuntimeLauncher.bridgedSpeakSwiftlyProfileRoot(runtimeRootURL.path)

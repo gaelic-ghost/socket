@@ -10,7 +10,7 @@ import Testing
     let command = try LaunchAgentCommand.parse(
         arguments: ["promote-live"],
         currentDirectoryPath: repositoryRootURL.path,
-        currentExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+        currentExecutablePath: testToolExecutablePath(in: repositoryRootURL),
     )
 
     switch command.action {
@@ -35,7 +35,7 @@ import Testing
         _ = try LaunchAgentCommand.parse(
             arguments: ["install"],
             currentDirectoryPath: repositoryRootURL.path,
-            currentExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+            currentExecutablePath: testToolExecutablePath(in: repositoryRootURL),
         )
         Issue.record("Expected `launch-agent install` to reject a missing staged executable.")
     } catch let error as LaunchAgentCommandError {
@@ -56,7 +56,7 @@ import Testing
     let command = try LaunchAgentCommand.parse(
         arguments: ["print-plist", "--tool-executable-path", explicitToolURL.path],
         currentDirectoryPath: repositoryRootURL.path,
-        currentExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+        currentExecutablePath: testToolExecutablePath(in: repositoryRootURL),
     )
 
     switch command.action {
@@ -182,7 +182,7 @@ import Testing
     )
     let options = try LaunchAgentOptions(
         label: layout.launchAgentLabel,
-        toolExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+        toolExecutablePath: testToolExecutablePath(in: homeDirectoryURL),
         plistPath: layout.launchAgentPlistURL.path,
         configFilePath: layout.serverConfigFileURL.path,
         requireToolExecutableExists: false,
@@ -268,7 +268,7 @@ import Testing
             "--mcp-path", "rpc",
             "--timeout-seconds", "5",
         ],
-        currentExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+        currentExecutablePath: testToolExecutablePath(),
     )
 
     switch command {
@@ -286,7 +286,7 @@ import Testing
     do {
         _ = try SpeakSwiftlyServerToolCommand.parse(
             arguments: ["wat"],
-            currentExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+            currentExecutablePath: testToolExecutablePath(),
         )
         Issue.record("Expected an unknown top-level command to fail parsing.")
     } catch let error as SpeakSwiftlyServerToolCommandError {
@@ -309,4 +309,10 @@ private func makeLaunchAgentCommandTestRepository() throws -> URL {
             encoding: .utf8,
         )
     return repositoryRootURL
+}
+
+private func testToolExecutablePath(in rootURL: URL? = nil) -> String {
+    (rootURL ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true))
+        .appendingPathComponent("tmp/SpeakSwiftlyServerTool", isDirectory: false)
+        .path
 }

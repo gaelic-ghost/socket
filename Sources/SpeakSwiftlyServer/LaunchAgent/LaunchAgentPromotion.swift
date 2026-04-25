@@ -60,27 +60,17 @@ private struct ReleaseArtifactPromotionResult {
 }
 
 private enum ReleaseArtifactPromoter {
-    private struct SpeakSwiftlyPublishedRuntimeMetadata: Decodable {
-        let buildConfiguration: String
-        let metallibPath: String
-        let sourceRoot: String?
-
-        enum CodingKeys: String, CodingKey {
-            case buildConfiguration = "build_configuration"
-            case metallibPath = "metallib_path"
-            case sourceRoot = "source_root"
-        }
-    }
-
     static func promoteLive(
         repositoryRootPath: String,
         stagedExecutablePath: String,
     ) throws -> ReleaseArtifactPromotionResult {
-        let repositoryRootURL = URL(fileURLWithPath: repositoryRootPath, isDirectory: true)
         try buildReleaseTool(repositoryRootPath: repositoryRootPath)
 
         let builtExecutablePath = try builtReleaseExecutablePath(repositoryRootPath: repositoryRootPath)
-        let builtMetallibURL = try publishedRuntimeMetallibURL(repositoryRootURL: repositoryRootURL)
+        let builtMetallibURL = try builtReleaseMetallibURL(
+            productsURL: URL(fileURLWithPath: builtExecutablePath, isDirectory: false)
+                .deletingLastPathComponent(),
+        )
         let stagedExecutableURL = URL(fileURLWithPath: stagedExecutablePath, isDirectory: false)
         let stagedDirectoryURL = stagedExecutableURL.deletingLastPathComponent()
         let stagedMetallibURL = stagedDirectoryURL
@@ -145,54 +135,25 @@ private enum ReleaseArtifactPromoter {
         return executablePath
     }
 
-    private static func publishedRuntimeMetallibURL(repositoryRootURL: URL) throws -> URL {
-        let siblingSourceRootURL = repositoryRootURL
-            .deletingLastPathComponent()
-            .appendingPathComponent("SpeakSwiftly", isDirectory: true)
-        let metadataURL = siblingSourceRootURL
-            .appendingPathComponent(".local/xcode/SpeakSwiftly.release.json", isDirectory: false)
-        let deterministicMetallibURL = siblingSourceRootURL
-            .appendingPathComponent(".local/derived-data/runtime-release/Build/Products/Release/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib", isDirectory: false)
+    private static func builtReleaseMetallibURL(productsURL: URL) throws -> URL {
+        let candidates = [
+            productsURL.appendingPathComponent(
+                "SpeakSwiftly_SpeakSwiftly.bundle/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib",
+                isDirectory: false,
+            ),
+            productsURL.appendingPathComponent(
+                "SpeakSwiftly_SpeakSwiftlyCore.bundle/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib",
+                isDirectory: false,
+            ),
+            productsURL.appendingPathComponent("Resources/default.metallib", isDirectory: false),
+        ]
 
-        if !FileManager.default.fileExists(atPath: metadataURL.path) {
-            guard FileManager.default.fileExists(atPath: deterministicMetallibURL.path) else {
-                throw LaunchAgentCommandError(
-                    "The live-service promotion path requires either sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)' or the deterministic release runtime metallib at '\(deterministicMetallibURL.path)'. Publish and verify the sibling release runtime first.",
-                )
-            }
-
-            return deterministicMetallibURL
-        }
-
-        let metadata = try JSONDecoder().decode(
-            SpeakSwiftlyPublishedRuntimeMetadata.self,
-            from: Data(contentsOf: metadataURL),
-        )
-        guard metadata.buildConfiguration == "Release" else {
-            throw LaunchAgentCommandError(
-                "The sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)' reported build configuration '\(metadata.buildConfiguration)' instead of the expected 'Release'.",
-            )
-        }
-
-        let recordedURL = URL(fileURLWithPath: metadata.metallibPath, isDirectory: false)
-        if FileManager.default.fileExists(atPath: recordedURL.path) {
-            return recordedURL
-        }
-
-        if let sourceRoot = metadata.sourceRoot, metadata.metallibPath.hasPrefix(sourceRoot) {
-            let relativeSuffix = String(metadata.metallibPath.dropFirst(sourceRoot.count))
-                .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-            if relativeSuffix.isEmpty == false {
-                let rebasedURL = siblingSourceRootURL
-                    .appendingPathComponent(relativeSuffix, isDirectory: false)
-                if FileManager.default.fileExists(atPath: rebasedURL.path) {
-                    return rebasedURL
-                }
-            }
+        if let metallibURL = candidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }) {
+            return metallibURL
         }
 
         throw LaunchAgentCommandError(
-            "The sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)' pointed at a missing metallib path '\(metadata.metallibPath)'. Publish and verify the sibling release runtime first.",
+            "\(speakSwiftlyServerToolName) completed a release build, but no SpeakSwiftly MLX metallib was found in SwiftPM product directory '\(productsURL.path)'. Expected the SpeakSwiftly package dependency to bundle mlx-swift_Cmlx.bundle in the release build products.",
         )
     }
 

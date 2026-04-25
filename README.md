@@ -68,7 +68,7 @@ xcrun swift run SpeakSwiftlyServerTool serve
 
 Install or refresh the per-user LaunchAgent with a config file:
 
-This command expects the staged tool artifact to already exist at `.release-artifacts/current/SpeakSwiftlyServerTool`. On a clean checkout, build and stage the release artifact first, or pass `--tool-executable-path /absolute/path/to/SpeakSwiftlyServerTool` explicitly.
+This command expects the staged tool artifact to already exist at `.release-artifacts/current/SpeakSwiftlyServerTool`. On a clean checkout, build and stage the release artifact first, or pass `--tool-executable-path <SpeakSwiftlyServerTool>` explicitly.
 
 ```bash
 xcrun swift run SpeakSwiftlyServerTool launch-agent install \
