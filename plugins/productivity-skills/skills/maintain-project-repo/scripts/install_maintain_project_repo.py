@@ -20,6 +20,7 @@ PROFILE_CHOICES = {
 PROFILE_OVERLAY_FILES = {
     "swift-package": [
         ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
+        ("profiles/apple/repo-maintenance/.swiftlint.yml", ".swiftlint.yml"),
         (
             "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
             "scripts/repo-maintenance/hooks/pre-commit.sample",
@@ -27,6 +28,7 @@ PROFILE_OVERLAY_FILES = {
     ],
     "xcode-app": [
         ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
+        ("profiles/apple/repo-maintenance/.swiftlint.yml", ".swiftlint.yml"),
         (
             "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
             "scripts/repo-maintenance/hooks/pre-commit.sample",

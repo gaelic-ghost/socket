@@ -29,6 +29,8 @@ scripts/
 .github/
   workflows/
     validate-repo-maintenance.yml
+.swiftformat (Apple profiles)
+.swiftlint.yml (Apple profiles)
 ```
 
 ## Design Rules
@@ -37,5 +39,6 @@ scripts/
 - Ordered `validations/*.sh`, `syncing/*.sh`, and `release/*.sh` are discovered automatically.
 - Managed files are safe to refresh in place.
 - Repo-specific extra scripts are allowed as long as they do not reuse the managed filenames.
+- Apple profiles install `.swiftformat` and `.swiftlint.yml` samples together; SwiftFormat remains the formatting authority and SwiftLint stays scoped to complementary non-formatting checks.
 - Standard release mode uses the optional repo-specific `version-bump.sh` hook when it exists and requires either that hook or an explicit `--skip-version-bump` decision.
 - The managed GitHub workflow exposes `validate` as the required branch-protection check context. Do not configure protected branches to require the display-style string `Validate Repo Maintenance / validate`.
