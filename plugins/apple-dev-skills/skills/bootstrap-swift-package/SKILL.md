@@ -138,7 +138,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
 - After a successful scaffold, hand off ordinary package execution tasks to `swift-package-build-run-workflow` or `swift-package-testing-workflow`.
 - After a successful scaffold, hand off Xcode-managed package build or run tasks to `xcode-build-run-workflow`.
 - After a successful scaffold, hand off Xcode-managed package test tasks to `xcode-testing-workflow`.
-- After a successful scaffold, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh` for releases.
+- After a successful scaffold, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful scaffold, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - After a successful scaffold, hand off later repo-guidance alignment work to `sync-swift-package-guidance`.
 - For ordinary package work, prefer `swift build` and `swift test`.

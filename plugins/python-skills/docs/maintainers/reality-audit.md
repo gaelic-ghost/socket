@@ -61,6 +61,7 @@ Check that:
 - help text matches actual supported flags
 - docs use `uv run ...` for Python commands
 - maintainer guidance names repo-local `pyproject.toml` dev dependencies for `pytest`, `ruff`, and `mypy` instead of leaning on machine-global installs
+- dependency declarations, generated project files, docs, scripts, and CI examples avoid machine-local dependency paths and resolve shared dependencies from package managers, package registries, GitHub URLs, or other real remote repositories
 - generated next-step commands match what the scaffold really creates
 - generated projects include the committed `.env`, ignored `.env.local`, and `pydantic-settings`-based config surface described in the docs
 

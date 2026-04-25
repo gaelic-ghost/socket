@@ -75,7 +75,7 @@ Use this flow when validating the current top-level export surface and local dis
 - Historical notes may mention retired or deprecated skills only in migration context.
 - Maintainer docs must not imply that repo-root files are required when the canonical files live under `docs/maintainers/`.
 - Docs and skill guidance must not mention removed installer or install-validator skills as if they still exist.
-- Maintainer Python tooling guidance should stay explicit about `uv tool install` for optional tools such as `ruff` and `mypy`.
+- Maintainer Python tooling guidance should stay explicit about repo-local `pyproject.toml` dev dependencies and `uv run` commands for tools such as `pytest`, `ruff`, and `mypy`, rather than relying on machine-global installs.
 
 ## Current Canonical Maintainer Docs
 

@@ -115,7 +115,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
 - The only current fallback is a non-mutating dry-run or guided result that explains what the sync would do.
 - After a successful sync, hand off ongoing build, run, diagnostics, preview, and mutation work to `xcode-build-run-workflow`.
 - After a successful sync, hand off ongoing test execution and test diagnosis work to `xcode-testing-workflow`.
-- After a successful sync, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh` for releases.
+- After a successful sync, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful sync, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - Recommend `bootstrap-xcode-app-project` when the repository still needs to be created from scratch.
 - Recommend `sync-swift-package-guidance` when the repo is a plain Swift package rather than an Xcode app project.
