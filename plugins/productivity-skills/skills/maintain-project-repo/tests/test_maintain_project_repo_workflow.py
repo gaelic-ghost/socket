@@ -95,6 +95,17 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
             self.assertIn("Repo-maintenance validation completed successfully.", proc.stdout)
 
+    def test_release_script_encodes_protected_main_standard_flow(self) -> None:
+        release_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Standard release mode must run from a release branch or worktree", release_script)
+        self.assertIn("version-bump.sh", release_script)
+        self.assertIn('gh pr checks "$pr_number" --watch', release_script)
+        self.assertIn("valid concerns in code, or add out-of-scope concerns to ROADMAP.md", release_script)
+        self.assertIn('gh pr merge "$pr_number" --merge --delete-branch', release_script)
+        self.assertIn('pull --ff-only origin "$base_branch"', release_script)
+
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")

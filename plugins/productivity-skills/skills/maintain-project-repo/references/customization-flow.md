@@ -8,7 +8,7 @@ Record lightweight default preferences for `maintain-project-repo` without turni
 
 | Knob | Default | Status | Effect |
 | --- | --- | --- | --- |
-| `defaultReleaseMode` | `standard` | `policy-only` | Sets the default planning posture when the user asks for a release flow without saying whether the repo is standalone or a submodule. |
+| `defaultReleaseMode` | `standard` | `policy-only` | Sets the default planning posture when the user asks for a release flow without saying whether the repo is standalone or a submodule. Standard mode assumes releases run from a branch or worktree into protected `main`. |
 
 ## Runtime Behavior
 

@@ -16,7 +16,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 
 - Use this skill when a Swift or Xcode repo needs one local entrypoint for validation, shared sync work, and releases.
 - Use this skill when a repo has GitHub Actions or local shell helpers that should become thin wrappers around repo-owned scripts.
-- Use this skill when a repo needs a standard and a submodule-aware release flow.
+- Use this skill when a repo needs a protected-main standard release flow and a submodule-aware release flow.
 - Use this skill when the user wants a local-first alternative to putting maintainer logic under `.github/scripts/`.
 - Do not use this skill for app bootstrap, Swift package bootstrap, or AGENTS-only guidance sync by themselves.
 - Recommend `bootstrap-swift-package` when the repo does not exist yet and package scaffold creation is still the primary task.
@@ -55,7 +55,8 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 7. Hand off follow-on work cleanly:
    - use `scripts/repo-maintenance/validate-all.sh` for local validation
    - use `scripts/repo-maintenance/sync-shared.sh` for repo-local shared sync tasks
-   - use `scripts/repo-maintenance/release.sh --mode standard` or `--mode submodule` for releases
+   - use `scripts/repo-maintenance/release.sh --mode standard` from a feature branch or worktree when protected `main` owns the final release line
+   - use `scripts/repo-maintenance/release.sh --mode submodule` only when the repo is checked out as a submodule and the parent pointer update remains a separate follow-up
 
 ## Inputs
 
@@ -108,7 +109,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 
 - Use `references/customization-flow.md`.
 - `scripts/customization_config.py` stores and reports customization state.
-- The current customization surface is one policy-only default for release mode preference. Installation shape, profile selection, and managed file selection are explicit workflow behavior, not durable runtime customization.
+- The current customization surface is one policy-only default for release mode preference. Installation shape, profile selection, standard-mode branch release behavior, and managed file selection are explicit workflow behavior, not durable runtime customization.
 
 ## References
 
