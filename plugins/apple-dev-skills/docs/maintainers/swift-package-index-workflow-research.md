@@ -12,11 +12,24 @@ Use this practical sequence for a first listing:
 
 1. Confirm the package satisfies the public SPI requirements from [Add a Package](https://swiftpackageindex.com/add-a-package) and the [`PackageList` README](https://github.com/SwiftPackageIndex/PackageList).
 2. Use a public GitHub repository URL with the protocol and `.git` suffix, for example `https://github.com/owner/package.git`.
-3. Submit one URL per line through the Add Package issue form.
+3. Click the Add Package(s) button, choose the Add Package(s) issue template, and submit one URL per line through the `New Packages` field.
 4. Wait for the PackageList automation to validate the issue body and open the generated pull request.
 5. After the package appears on SPI, use the package page's maintainer flow to claim the package and copy SPI's generated compatibility badges if the repository wants them.
 
-The Add Package issue template currently accepts a free-form textarea named `New Packages` and asks for one repository URL per line. The issue workflow then runs `add_package.swift`, validates the updated package list, and creates a pull request that changes `packages.json` when there is real work to do.
+The live click path is:
+
+1. Start at <https://swiftpackageindex.com/add-a-package>.
+2. Click Add Package(s), which opens <https://github.com/SwiftPackageIndex/PackageList/issues/new/choose>.
+3. Choose the Add Package(s) template, which opens <https://github.com/SwiftPackageIndex/PackageList/issues/new?template=add_package.yml>.
+
+The Add Package issue template currently asks for a title shaped as `Add <Package>` and a free-form textarea named `New Packages`. Put each package repository URL on its own line in that textarea:
+
+```text
+https://github.com/owner/package.git
+https://github.com/owner/another-package.git
+```
+
+The issue workflow then runs `add_package.swift`, validates the updated package list, and creates a pull request that changes `packages.json` when there is real work to do.
 
 ## Requirements To Check Before Submission
 
