@@ -233,7 +233,7 @@ check_pr_comments() {
   fi
 
   review_decision="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""')"
-  comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, .reviews[]?] | length)')"
+  comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, .reviews[]? | select(.state == "COMMENTED")] | length)')"
 
   if [ "$review_decision" = "CHANGES_REQUESTED" ]; then
     gh pr view "$pr_number" --comments
