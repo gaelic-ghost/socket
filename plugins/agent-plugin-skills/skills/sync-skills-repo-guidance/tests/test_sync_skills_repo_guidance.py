@@ -28,11 +28,11 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             [
                 "Installable maintainer skills for skills-export repositories.",
                 "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
-                "npx skills add gaelic-ghost/agent-plugin-skills --all",
-                "https://skills.sh/",
+                "codex plugin marketplace add ./path/to/marketplace-root",
+                "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
                 "declare the required dev dependencies in `pyproject.toml`",
                 "`pytest`, `ruff`, and `mypy`",
-                "Claude Code continues to support direct `.claude/skills` discovery for local authoring while plugin packaging lives separately.",
+                "the plugin manifest points to bundled skills with `\"skills\": \"./skills/\"`",
                 "Follow the current OpenAI plugin structure literally: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root.",
             ]
         )
@@ -43,9 +43,9 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         "\n".join(
             [
                 "Root `skills/` is the canonical authored and exported surface",
+                'the manifest points to it with `"skills": "./skills/"`',
                 "Do not recreate nested staged plugin directories",
                 "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
-                "Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo.",
             ]
         )
         + "\n",
@@ -53,11 +53,12 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
     )
     (repo_root / ".gitignore").write_text(".claude/settings.local.json\n", encoding="utf-8")
     (repo_root / ".codex-plugin").mkdir()
-    (repo_root / ".codex-plugin" / "plugin.json").write_text("{}\n", encoding="utf-8")
+    (repo_root / ".codex-plugin" / "plugin.json").write_text('{"skills": "./skills/"}\n', encoding="utf-8")
     (repo_root / "docs" / "maintainers" / "reality-audit.md").write_text(
         "\n".join(
             [
                 "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
+                'Its plugin manifest must declare `"skills": "./skills/"`',
                 "This repository does not ship `install-plugin-to-socket`.",
                 "This repository does not ship `validate-plugin-install-surfaces`.",
             ]
@@ -69,6 +70,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         "\n".join(
             [
                 "only `plugin.json` belongs in `.codex-plugin/`",
+                'plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field',
                 "Documented plugin path: `~/.codex/config.toml`",
                 "If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin install-surface map.",
             ]
@@ -77,7 +79,13 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         encoding="utf-8",
     )
     (repo_root / "docs" / "maintainers" / "workflow-atlas.md").write_text(
-        "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.\n",
+        "\n".join(
+            [
+                "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
+                'Root `.codex-plugin/plugin.json` points at that surface with `"skills": "./skills/"`.',
+            ]
+        )
+        + "\n",
         encoding="utf-8",
     )
     (repo_root / ".agents").mkdir()
@@ -108,3 +116,13 @@ def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) ->
     assert "agents-missing-snippet" in issue_ids
     assert "missing-symlink" in issue_ids
     assert "forbidden-path" in issue_ids
+    assert "missing-plugin-manifest" in issue_ids
+
+
+def test_audit_repo_flags_manifest_without_skills_component(tmp_path: Path) -> None:
+    _write_repo(tmp_path, "example-skills")
+    (tmp_path / ".codex-plugin" / "plugin.json").write_text("{}\n", encoding="utf-8")
+
+    findings = m.audit_repo(tmp_path, "example-skills")
+
+    assert any(finding.issue_id == "missing-skills-component" for finding in findings)

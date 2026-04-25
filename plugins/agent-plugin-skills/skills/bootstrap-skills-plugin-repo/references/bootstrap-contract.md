@@ -12,4 +12,4 @@ A bootstrapped skills-export repository should include:
 - `docs/maintainers/workflow-atlas.md`
 - maintainer Python tooling guidance
 
-It may include root `.codex-plugin` packaging, but it should not include a nested staged plugin directory, repo marketplace, installer skill, or install-validation skill for itself.
+It may include root `.codex-plugin` packaging. When it does, `.codex-plugin/plugin.json` should point at bundled skills with `"skills": "./skills/"`. It should not include a nested staged plugin directory, repo marketplace, installer skill, or install-validation skill for itself.

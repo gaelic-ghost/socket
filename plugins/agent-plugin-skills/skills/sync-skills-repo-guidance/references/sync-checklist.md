@@ -1,6 +1,7 @@
 # Sync Checklist
 
 - root `skills/` is canonical
+- `.codex-plugin/plugin.json` points at root `skills/` with `"skills": "./skills/"`
 - `.agents/skills -> ../skills`
 - `.claude/skills -> ../skills`
 - README and AGENTS describe the repo as a source-first skills-export repository

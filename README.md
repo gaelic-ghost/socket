@@ -72,7 +72,7 @@ uv sync --dev
 
 For Python-backed maintainer tooling in this superproject or its child repositories, keep the repo-local baseline explicit in `pyproject.toml` instead of assuming machine-global tools. When a repo expects Python validation, declare the needed dev dependencies there, including `pytest`, `ruff`, and `mypy` when those checks are part of the shipped workflow.
 
-Only `apple-dev-skills` and `SpeakSwiftlyServer` still use subtree sync workflows. `python-skills` is now maintained as a normal monorepo-owned child directory. `socket` itself does not ship a root plugin; the marketplace is the root packaged surface here.
+Only `apple-dev-skills` and `SpeakSwiftlyServer` still use subtree sync workflows. `python-skills` is now maintained as a normal monorepo-owned child directory. `socket` itself does not ship a root plugin; the repo marketplace is the root Codex-facing catalog here.
 
 ### Workflow
 
@@ -170,7 +170,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
 
-That marketplace points at the actual packaged surface each child repository treats as installable today:
+That marketplace points at the actual plugin root each child repository treats as installable today:
 
 - `./plugins/agent-plugin-skills`
 - `./plugins/apple-dev-skills`

@@ -75,7 +75,7 @@ uv run mypy .
 Keep the repo's core terms stable:
 
 - `skill` means the reusable workflow-authoring unit under `skills/`
-- `plugin` means the installable Codex distribution bundle rooted at `.codex-plugin/plugin.json`
+- `plugin` means the installable Codex distribution bundle rooted at the plugin directory, with its manifest at `.codex-plugin/plugin.json`
 - `subagent` means a delegated runtime worker, not a packaged repo surface
 
 Match existing file, skill, and maintainer-doc names unless the change is explicitly about renaming.

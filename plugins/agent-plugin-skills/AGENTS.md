@@ -27,7 +27,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 - Root [`skills/`](./skills/) is the canonical authored and exported surface.
 - Treat maintainer docs under [`docs/maintainers/`](./docs/maintainers/) as the durable explanation layer for repo policy and packaging boundaries.
-- Keep Codex plugin guidance aligned with the current OpenAI docs: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root.
+- Keep Codex plugin guidance aligned with the current OpenAI docs: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root and the manifest points to it with `"skills": "./skills/"`.
 - Keep Codex plugin-boundary wording factual and explicit: repo-visible plugins come from the documented marketplace model, and OpenAI does not document a richer repo-private scoping model beyond that.
 - For Python-backed maintainer repositories, require `uv` plus repo-local dev dependencies in `pyproject.toml` for the tools the repo expects to run.
 - Do not teach or rely on machine-global `uv tool install` as the primary baseline for repo validation when the repo can declare `pytest`, `ruff`, and `mypy` directly in its dev dependency group.

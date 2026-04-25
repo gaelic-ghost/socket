@@ -17,6 +17,7 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 - Treat `productivity-skills` as the default baseline owner for general repo-doc and maintenance workflows.
 - Treat this repository as the specialist override only for skills-export and plugin-export repo shapes.
 - This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.
+- Its plugin manifest must declare `"skills": "./skills/"` because this plugin bundles the root authored skill surface.
 - This repository does not track a repo-local Codex marketplace file for itself.
 - This repository does not ship `install-plugin-to-socket`.
 - This repository does not ship `validate-plugin-install-surfaces`.
@@ -25,6 +26,7 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 ## Audit Checklist
 
 - Root `skills/` is canonical.
+- `.codex-plugin/plugin.json` includes `"skills": "./skills/"`.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors to `../skills`.
 - README and AGENTS say plainly that this repo exports installable skills and that OpenAI documents marketplace-based plugin discovery rather than a richer repo-private plugin scope.
 - ROADMAP matches the live exported skill set.

@@ -18,6 +18,7 @@ When this skill touches Codex packaging guidance, keep the plugin-root structure
 - every plugin has a manifest at `.codex-plugin/plugin.json`
 - only `plugin.json` belongs in `.codex-plugin/`
 - `skills/`, `.app.json`, `.mcp.json`, and `assets/` belong at the plugin root
+- plugin manifests should point to bundled skill folders with `"skills": "./skills/"`
 - marketplace entries point `source.path` at the plugin root directory, not at `.codex-plugin/`
 
 ## Codex Install-Surface Map

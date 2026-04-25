@@ -18,6 +18,7 @@ When bootstrapping or aligning a plugin repo, follow the current OpenAI plugin s
 - every plugin has a manifest at `.codex-plugin/plugin.json`
 - only `plugin.json` belongs in `.codex-plugin/`
 - `skills/`, `.app.json`, `.mcp.json`, and `assets/` belong at the plugin root
+- plugin manifests should point to bundled skill folders with `"skills": "./skills/"`
 - marketplace `source.path` should point at the plugin root directory
 
 ## Codex Install-Surface Map

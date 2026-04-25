@@ -31,11 +31,13 @@ It exists so repo-maintenance guidance for skills and plugin repositories can li
 
 ## Quick Start
 
-Install the published skills if you want them available in your Codex environment:
+Install the plugin through a Codex marketplace when you want these skills available in your Codex environment. For a local checkout, add the marketplace that exposes this plugin, restart Codex, then enable `agent-plugin-skills` from the plugin directory:
 
 ```bash
-npx skills add gaelic-ghost/agent-plugin-skills --all
+codex plugin marketplace add ./path/to/marketplace-root
 ```
+
+In the `socket` superproject, the repo marketplace is [`.agents/plugins/marketplace.json`](../../.agents/plugins/marketplace.json), and its `agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`.
 
 If you are inspecting or changing the repository itself, go to [Development](#development).
 
@@ -50,6 +52,7 @@ When this repo discusses Codex packaging, it stays explicit about the current do
 - plugins have a root manifest at `.codex-plugin/plugin.json`
 - only `plugin.json` belongs in `.codex-plugin/`
 - `skills/` stays at the plugin root
+- the plugin manifest points to bundled skills with `"skills": "./skills/"`
 - repo-visible Codex plugins come from marketplace catalogs, and OpenAI does not document a richer repo-private scoping model beyond that
 
 ## Development

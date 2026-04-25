@@ -11,6 +11,7 @@ OpenAI's current plugin docs separate the plugin root from the marketplace and c
 - every plugin has a manifest at `.codex-plugin/plugin.json`
 - only `plugin.json` belongs in `.codex-plugin/`
 - `skills/`, `.app.json`, `.mcp.json`, and `assets/` belong at the plugin root
+- plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field
 - marketplace `source.path` should point at the plugin root directory, not at `.codex-plugin/`
 
 ## Core Model
@@ -143,6 +144,7 @@ This repository is intentionally source-first.
 
 - Root `skills/` is canonical.
 - Root `.codex-plugin/plugin.json` is the packaged plugin manifest for this source repo.
+- The manifest declares `"skills": "./skills/"` so Codex knows this plugin bundles the authored skill surface.
 - `.agents/skills` and `.claude/skills` are local authoring mirrors.
 - This repository does not track a nested repo-local Codex plugin install surface for itself.
 - This repository does not track a repo-local marketplace file for itself.

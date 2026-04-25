@@ -12,31 +12,34 @@ EXACT_NO_FINDINGS = "No findings."
 README_SNIPPETS = [
     "Installable maintainer skills for skills-export repositories.",
     "does not document a richer repo-private scoping model",
-    "npx skills add gaelic-ghost/agent-plugin-skills --all",
-    "https://skills.sh/",
+    "codex plugin marketplace add",
+    "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
     "declare the required dev dependencies in `pyproject.toml`",
     "`pytest`, `ruff`, and `mypy`",
-    "Claude Code continues to support direct `.claude/skills` discovery for local authoring",
+    "the plugin manifest points to bundled skills with `\"skills\": \"./skills/\"`",
     "only `plugin.json` belongs in `.codex-plugin/`",
 ]
 AGENTS_SNIPPETS = [
     "Root `skills/` is the canonical authored and exported surface",
+    'the manifest points to it with `"skills": "./skills/"`',
     "Do not recreate nested staged plugin directories",
     "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
-    "Claude Code's documented plugin workflow is separate from the local `.claude/skills` authoring mirror used in this repo",
 ]
 AUDIT_SNIPPETS = [
     "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
+    'Its plugin manifest must declare `"skills": "./skills/"`',
     "This repository does not ship `install-plugin-to-socket`.",
     "This repository does not ship `validate-plugin-install-surfaces`.",
 ]
 INSTALL_SURFACES_SNIPPETS = [
     "only `plugin.json` belongs in `.codex-plugin/`",
+    'plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field',
     "Documented plugin path: `~/.codex/config.toml`",
     "project-scoped `.codex/config.toml`, label it as a general Codex config capability",
 ]
 WORKFLOW_ATLAS_SNIPPETS = [
     "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
+    'Root `.codex-plugin/plugin.json` points at that surface with `"skills": "./skills/"`.',
 ]
 GITIGNORE_SNIPPETS = [".claude/settings.local.json"]
 
@@ -99,7 +102,8 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     )
     findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))
     findings.extend(_check_symlink(repo_root, repo_root / ".claude" / "skills", "../skills"))
-    if not (repo_root / ".codex-plugin" / "plugin.json").exists():
+    manifest_path = repo_root / ".codex-plugin" / "plugin.json"
+    if not manifest_path.exists():
         findings.append(
             Finding(
                 ".codex-plugin/plugin.json",
@@ -107,6 +111,26 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
                 "Expected source-repo plugin packaging at `.codex-plugin/plugin.json`.",
             )
         )
+    else:
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            findings.append(
+                Finding(
+                    ".codex-plugin/plugin.json",
+                    "invalid-plugin-manifest",
+                    f"Expected valid JSON plugin manifest: {exc.msg}.",
+                )
+            )
+        else:
+            if manifest.get("skills") != "./skills/":
+                findings.append(
+                    Finding(
+                        ".codex-plugin/plugin.json",
+                        "missing-skills-component",
+                        'Expected plugin manifest to declare bundled skills with `"skills": "./skills/"`.',
+                    )
+                )
     if (repo_root / "plugins").exists():
         findings.append(Finding("plugins", "forbidden-path", "Nested staged plugin directories are forbidden for this repo model."))
     return findings

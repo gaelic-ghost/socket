@@ -16,6 +16,7 @@ For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-inst
 - Treat `productivity-skills` as the default baseline maintainer layer for ordinary repo-doc and maintenance work.
 - Use this repo only when the target repository is itself a skills-export or plugin-export surface and needs narrower packaging or discovery guidance.
 - Root `skills/` is canonical.
+- Root `.codex-plugin/plugin.json` points at that surface with `"skills": "./skills/"`.
 - `.agents/skills` and `.claude/skills` are local discovery mirrors.
 - No skill in this repo should teach a nested staged plugin directory for this repo.
 - No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.

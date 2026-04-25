@@ -17,6 +17,7 @@
     "maintainer",
     "agent-skills"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Agent Plugin Skills",
     "shortDescription": "Maintainer skills for skills-export repositories.",

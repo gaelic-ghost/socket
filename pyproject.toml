@@ -12,3 +12,11 @@ dev = [
   "PyYAML>=6.0.0",
   "ruff>=0.14.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "tests",
+  "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/tests",
+  "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/tests",
+  "plugins/productivity-skills/skills/maintain-project-repo/tests",
+]

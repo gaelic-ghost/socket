@@ -40,7 +40,7 @@ Recent monorepo-owned examples follow that rule directly: `things-app` and `card
 
 Child-repo internal layout changes do not automatically imply root marketplace changes. If a child repo keeps the same packaged plugin root, keep the `socket` marketplace path stable and only update the root docs to explain the child's new internal layout. Recent example: `things-app` keeps its marketplace path at `./plugins/things-app` while its bundled MCP server lives at top-level `mcp/` inside that child repo.
 
-`socket` itself still does not define an aggregate root plugin above the child repos. The root packaged surface here is the marketplace catalog, not a second shared plugin bundle.
+`socket` itself still does not define an aggregate root plugin above the child repos. The root Codex-facing surface here is the marketplace catalog, not a packaged plugin payload or a second shared plugin bundle.
 
 ## Follow-up Decision
 
