@@ -33,7 +33,16 @@ __pycache__/
 .claude/.local/
 """,
         repo_root / "README.md": f"# {repo_root.name}\n\nInstallable maintainer skills for skills-export repositories.\n",
-        repo_root / "AGENTS.md": "# AGENTS.md\n\nRoot `skills/` is canonical.\n",
+        repo_root / "AGENTS.md": """# AGENTS.md
+
+Root `skills/` is canonical.
+
+Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+
+Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+
+Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
+""",
         repo_root / "ROADMAP.md": "# Project Roadmap\n\n## Vision\n\n- Define the long-term outcome for this skills-export repository.\n",
         repo_root / "docs" / "maintainers" / "reality-audit.md": "# Repo Reality Audit\n\nRoot `skills/` is canonical.\n",
         repo_root / "docs" / "maintainers" / "workflow-atlas.md": "# Workflow Atlas\n\nBootstrap repos first, then author individual skills.\n",

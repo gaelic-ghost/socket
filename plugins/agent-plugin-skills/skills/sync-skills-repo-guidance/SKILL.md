@@ -43,3 +43,11 @@ When this skill touches Codex plugin guidance, keep these surfaces distinct inst
 Do not describe `config.toml` as the place plugins install into. Do not describe a marketplace file as the install destination. Keep the wording explicit: marketplaces are catalogs, staged plugin directories are payload roots, the cache is Codex's installed copy, and `config.toml` stores enabled-state.
 
 If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability from the config reference rather than as part of the documented plugin install-surface map.
+
+## Dependency Provenance
+
+When syncing `AGENTS.md`, include strict dependency guidance:
+
+- shared project dependencies must resolve from GitHub repository URLs, package managers, package registries, or other real remote repositories
+- committed dependency declarations, lockfiles, scripts, docs, examples, generated project files, and CI config must not point at machine-local paths
+- machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly

@@ -10,6 +10,9 @@
 - [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) is the required plugin root today.
 - Do not add extra packaging layers, repo-local install machinery, or broad maintainer automation before the repo ships real workflow content.
 - Prefer adding actual Spotify workflow content before expanding docs or workflow complexity.
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
 - Treat repo-sync verification and local-branch accounting as hard gates before cleanup or "done" claims.
 - When work in this repository changes the root `socket` marketplace or root docs, update those root surfaces in the same pass.
 - Before saying work is merged, preserved, or safe to delete, verify the exact commit reachability in the repo and remote being discussed.

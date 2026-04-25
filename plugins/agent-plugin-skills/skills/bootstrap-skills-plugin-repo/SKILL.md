@@ -21,6 +21,14 @@ When bootstrapping or aligning a plugin repo, follow the current OpenAI plugin s
 - plugin manifests should point to bundled skill folders with `"skills": "./skills/"`
 - marketplace `source.path` should point at the plugin root directory
 
+## Dependency Provenance
+
+When creating or aligning `AGENTS.md`, include strict dependency guidance:
+
+- shared project dependencies must resolve from GitHub repository URLs, package managers, package registries, or other real remote repositories
+- committed dependency declarations, lockfiles, scripts, docs, examples, generated project files, and CI config must not point at machine-local paths
+- machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly
+
 ## Codex Install-Surface Map
 
 When bootstrapping or aligning repo guidance, teach Codex plugin wiring with four separate surfaces:

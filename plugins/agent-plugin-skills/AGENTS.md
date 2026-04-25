@@ -32,6 +32,12 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - For Python-backed maintainer repositories, require `uv` plus repo-local dev dependencies in `pyproject.toml` for the tools the repo expects to run.
 - Do not teach or rely on machine-global `uv tool install` as the primary baseline for repo validation when the repo can declare `pytest`, `ruff`, and `mypy` directly in its dev dependency group.
 
+### Dependency Provenance
+
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
+
 ### Communication and Escalation
 
 - Surface scope expansion before adding new maintainer workflows, new packaging layers, or new repo families.

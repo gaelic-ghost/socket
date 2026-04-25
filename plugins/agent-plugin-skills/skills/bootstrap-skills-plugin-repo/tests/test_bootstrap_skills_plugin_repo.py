@@ -37,6 +37,9 @@ def test_apply_repo_creates_expected_discovery_mirrors(tmp_path: Path) -> None:
     assert (tmp_path / ".claude" / "skills").is_symlink()
     assert "README.md" in created_paths
     assert "AGENTS.md" in created_paths
+    agents_text = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert "Resolve shared project dependencies only from GitHub repository URLs" in agents_text
+    assert "Machine-local dependency paths are expressly prohibited" in agents_text
 
 
 def test_audit_repo_flags_forbidden_nested_plugin_dir(tmp_path: Path) -> None:

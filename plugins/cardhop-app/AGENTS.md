@@ -31,6 +31,12 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.mcp.json`](./.mcp.json) as packaging and launch metadata only.
 - Keep the repo honest about the install surfaces that actually exist. Do not claim a discovery mirror or packaged surface is present unless it is checked in here.
 
+### Dependency Provenance
+
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
+
 ### Communication and Escalation
 
 - Start from the root docs when the task is about the mixed repo model, contributor workflow, packaging boundaries, or root guidance alignment.

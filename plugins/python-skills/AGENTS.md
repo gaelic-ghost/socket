@@ -35,6 +35,12 @@ Use this file for durable repo-local guidance before changing code, docs, metada
 - For Python-backed maintainer work, require `uv` plus repo-local dev dependencies in `pyproject.toml` for the tools the repo expects to run.
 - Do not rely on machine-global installs as the primary maintainer baseline when the repository can declare `pytest`, `ruff`, and `mypy` directly in its dev dependency group.
 
+### Dependency Provenance
+
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
+
 ### Validation Discipline
 
 - Keep user-facing and maintainer-facing Python command examples expressed with `uv`.

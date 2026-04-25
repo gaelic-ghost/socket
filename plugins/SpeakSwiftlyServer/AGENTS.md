@@ -25,9 +25,16 @@
 - Feature branches and feature worktrees may publish release tags when Gale explicitly requests that branch-tagged release flow.
 - Treat the resolved `SpeakSwiftly` dependency declared in `Package.swift` and locked in `Package.resolved` as the source of truth for normal `xcrun swift build` and `xcrun swift test` runs here.
 - Do not retarget this package to a local `../SpeakSwiftly` checkout unless the manifest is being changed intentionally for a specific local-integration task.
+- Do not commit or publish that local-integration retargeting. Public and shared package state must resolve `SpeakSwiftly` from a tagged release, branch, or other real remote repository.
 - If unreleased `SpeakSwiftly` changes are needed here, prefer stabilizing and tagging them in `SpeakSwiftly` first, then update this repository to that release instead of integrating against half-finished sibling checkout work.
 - Treat `macOS 15` as the current standalone package baseline and keep the host and state model friendly to a near-future `iOS 18` reuse path.
 - Prefer maintainable Apple-platform architecture over speculative Linux abstraction. If Linux support would require major design compromise, stop and discuss whether a separate Rust implementation is the cleaner path.
+
+## Dependency Provenance
+
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
 
 ## Sync And Branch Accounting Gates
 

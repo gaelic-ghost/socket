@@ -44,6 +44,8 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             [
                 "Root `skills/` is the canonical authored and exported surface",
                 'the manifest points to it with `"skills": "./skills/"`',
+                "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
+                "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
                 "Do not recreate nested staged plugin directories",
                 "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
             ]

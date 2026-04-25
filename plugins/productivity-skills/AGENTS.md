@@ -12,6 +12,9 @@
 - Treat standalone skill installation as the primary distribution story, with plugin packaging and marketplace metadata as thin additive discovery layers.
 - Keep documentation-maintenance skills split by document type instead of collapsing README, AGENTS, CONTRIBUTING, and ROADMAP maintenance into one oversized workflow.
 - Keep stack-specific or repo-family-specific maintainer skills in the dedicated repos that own them. Historical note: `bootstrap-skills-plugin-repo` and `sync-skills-repo-guidance` moved out to `agent-plugin-skills` and should stay there.
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
 - Treat repo-sync verification and local-branch accounting as hard gates before cleanup or "done" claims.
 - When work in this repository is performed from the `socket` superproject or is expected to ship back through `socket`, verify whether `socket` now needs an explicit sync step and either complete it or say plainly why no sync is required.
 - Before saying work is merged, preserved, or safe to delete, verify the exact commit reachability in the repo and remote being discussed.
