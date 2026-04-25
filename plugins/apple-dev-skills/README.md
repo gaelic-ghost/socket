@@ -45,6 +45,8 @@ Use this repository's skills when the work is about:
 - Apple-project guidance sync
 - Apple-platform documentation routing
 
+When installed as a Codex plugin, this repository also registers Xcode's built-in MCP bridge through `xcrun mcpbridge`. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools.
+
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [`ROADMAP.md`](./ROADMAP.md) for planned and completed milestone-level work.
 
 ## Development
@@ -59,7 +61,7 @@ uv sync --dev
 
 ### Workflow
 
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/), maintainer docs in [`docs/`](./docs/), and install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
+Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/), maintainer docs in [`docs/`](./docs/), and install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), [`.mcp.json`](./.mcp.json), and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
 
 Keep the repo honest about its Apple docs-first policy. When a skill changes, update the relevant tests and maintainer guidance in the same pass rather than letting the packaging or guidance drift. Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the normal contributor workflow and review expectations.
 
@@ -78,6 +80,7 @@ uv run pytest
 .
 ├── .codex-plugin/
 ├── .claude-plugin/
+├── .mcp.json
 ├── AGENTS.md
 ├── CONTRIBUTING.md
 ├── README.md

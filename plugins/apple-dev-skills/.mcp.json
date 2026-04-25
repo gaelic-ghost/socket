@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "xcode": {
+      "command": "xcrun",
+      "args": [
+        "mcpbridge"
+      ],
+      "note": "Registers Xcode's built-in MCP bridge for external Codex sessions. Users still need Xcode installed, Xcode > Settings > Intelligence > Model Context Protocol enabled, and an open project in Xcode for the bridge to provide project-specific tools."
+    }
+  }
+}

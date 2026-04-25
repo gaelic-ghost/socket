@@ -8,7 +8,7 @@ resolution-markers = [
 
 [[package]]
 name = "apple-dev-skills-maintainer"
-version = "6.0.4"
+version = "6.0.5"
 source = { virtual = "." }
 
 [package.dev-dependencies]

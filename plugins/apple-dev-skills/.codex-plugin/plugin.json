@@ -1,6 +1,6 @@
 {
   "name": "apple-dev-skills",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "description": "Apple development workflows for Codex and Claude Code, including SwiftUI architecture and DocC authoring guidance.",
   "author": {
     "name": "Gale",
@@ -16,11 +16,13 @@
     "apple",
     "swift",
     "xcode",
+    "mcp",
     "swiftui",
     "ios",
     "macos"
   ],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
     "shortDescription": "Apple, Swift, Xcode, SwiftUI, and DocC workflows for Codex.",

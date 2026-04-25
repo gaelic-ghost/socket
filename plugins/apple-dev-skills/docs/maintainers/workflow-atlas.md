@@ -134,7 +134,7 @@ flowchart TD
 - User-visible response:
   - The user sees direct progress inside one of the active top-level skills, or a direct recommendation to switch to another skill.
 - Interaction style:
-- The repo-level UX is a bundle of fifteen active skills exported from the top-level `skills/` surface.
+- The repo-level UX is a bundle of sixteen active skills exported from the top-level `skills/` surface.
 
 ## `xcode-build-run-workflow`
 
