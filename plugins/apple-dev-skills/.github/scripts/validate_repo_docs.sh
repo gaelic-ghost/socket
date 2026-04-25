@@ -94,7 +94,8 @@ require_contains "$audit_doc" "## Source-of-Truth Order"
 require_contains "$audit_doc" "## Audit Procedure"
 require_contains "$audit_doc" "## Local Discovery Smoke Test Flow"
 require_contains "$audit_doc" "## Reporting Shape"
-require_contains "$audit_doc" 'this repository'"'"'s shipped Apple plugin owns the end-user toolkit contract'
+require_contains "$audit_doc" '`productivity-skills` owns the reusable `maintain-project-repo` toolkit contract'
+require_contains "$audit_doc" 'this repository owns only the Apple-specific profile selection and Xcode MCP registration contract'
 require_contains "$audit_doc" 'Historical milestone planning decisions that no longer need standalone docs should live in `ROADMAP.md`'
 require_not_contains "$audit_doc" 'plugins/apple-dev-skills/'
 
@@ -112,9 +113,9 @@ execution_split_doc="docs/maintainers/execution-split-and-inference-plan.md"
 require_contains "$execution_split_doc" "## Target Skill Matrix"
 require_contains "$execution_split_doc" "## Guidance Preservation Contract"
 require_contains "$execution_split_doc" "## AGENTS Expansion Strategy"
-require_contains "$execution_split_doc" "## Repo-Maintenance Toolkit Direction"
+require_contains "$execution_split_doc" "## Repo-Maintenance Direction"
 require_contains "$execution_split_doc" "## Implementation Plan"
-require_contains "$execution_split_doc" 'the shipped plugin self-contained'
+require_contains "$execution_split_doc" '`productivity-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface'
 require_contains "ROADMAP.md" "Completed Milestones 22 and 23"
 require_contains "ROADMAP.md" 'See `docs/maintainers/customization-consolidation-review.md`.'
 require_contains "ROADMAP.md" "Completed Milestones 30 through 36"
@@ -237,20 +238,23 @@ do
   require_not_contains "$file" 'plugins/apple-dev-skills/'
 done
 
-echo "Validating repo-maintenance toolkit asset copies..."
-toolkit_source_dir="./shared/repo-maintenance-toolkit/assets/repo-maintenance"
-toolkit_workflow_source="./shared/repo-maintenance-toolkit/assets/github/repo-maintenance-workflows/validate-repo-maintenance.yml"
-toolkit_installer_source="./shared/repo-maintenance-toolkit/scripts/install_repo_maintenance_toolkit.py"
+echo "Validating maintain-project-repo delegation..."
+[[ ! -e "./shared/repo-maintenance-toolkit" ]] || fail "Did not expect apple-dev-skills to retain shared/repo-maintenance-toolkit."
 for skill_dir in \
   "./skills/bootstrap-swift-package" \
   "./skills/bootstrap-xcode-app-project" \
   "./skills/sync-swift-package-guidance" \
   "./skills/sync-xcode-project-guidance"
 do
-  cmp -s "$skill_dir/scripts/install_repo_maintenance_toolkit.py" "$toolkit_installer_source" || fail "Repo-maintenance toolkit installer drift detected in $skill_dir"
-  diff -qr "$toolkit_source_dir" "$skill_dir/assets/repo-maintenance" >/dev/null || fail "Repo-maintenance toolkit asset drift detected in $skill_dir/assets/repo-maintenance"
-  cmp -s "$toolkit_workflow_source" "$skill_dir/assets/github/repo-maintenance-workflows/validate-repo-maintenance.yml" || fail "Repo-maintenance workflow asset drift detected in $skill_dir"
+  [[ ! -e "$skill_dir/scripts/install_repo_maintenance_toolkit.py" ]] || fail "Did not expect legacy toolkit installer in $skill_dir"
+  [[ ! -e "$skill_dir/assets/repo-maintenance" ]] || fail "Did not expect vendored repo-maintenance assets in $skill_dir"
+  [[ ! -e "$skill_dir/assets/github/repo-maintenance-workflows" ]] || fail "Did not expect vendored repo-maintenance workflow assets in $skill_dir"
+  require_contains "$skill_dir/SKILL.md" 'maintain-project-repo'
 done
+require_contains "./skills/bootstrap-swift-package/scripts/bootstrap_swift_package.sh" 'productivity-skills/skills/maintain-project-repo/scripts/run_workflow.py'
+require_contains "./skills/bootstrap-xcode-app-project/scripts/bootstrap_xcode_app_project.py" 'productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
+require_contains "./skills/sync-swift-package-guidance/scripts/sync_swift_package_guidance.py" 'productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
+require_contains "./skills/sync-xcode-project-guidance/scripts/sync_xcode_project_guidance.py" 'productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
 
 echo "Validating preserved guidance in AGENTS assets..."
 package_agents_assets=(

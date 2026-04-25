@@ -88,6 +88,33 @@ def validate_plugin_entry(entry: object, seen_names: set[str]) -> None:
             f"`{manifest_name}` instead."
         )
 
+    mcp_servers_path = plugin_manifest.get("mcpServers")
+    if mcp_servers_path is not None:
+        if not isinstance(mcp_servers_path, str) or not mcp_servers_path.startswith("./"):
+            fail(
+                f"Packaged plugin manifest for `{name}` must use a repo-relative `./...` "
+                f"`mcpServers` path, but found `{mcp_servers_path}`."
+            )
+        mcp_config_path = (plugin_root / mcp_servers_path).resolve()
+        try:
+            mcp_config_path.relative_to(plugin_root)
+        except ValueError:
+            fail(
+                f"Packaged plugin manifest for `{name}` points `mcpServers` outside its "
+                f"plugin root: {mcp_servers_path}"
+            )
+        if not mcp_config_path.is_file():
+            fail(
+                f"Packaged plugin manifest for `{name}` points at missing MCP server "
+                f"configuration: {mcp_config_path.relative_to(REPO_ROOT)}."
+            )
+        mcp_config = load_json(mcp_config_path)
+        if not isinstance(mcp_config, dict):
+            fail(
+                f"MCP server configuration for `{name}` must decode to a JSON object: "
+                f"{mcp_config_path.relative_to(REPO_ROOT)}"
+            )
+
 
 def main() -> None:
     print("Validating root marketplace presence...")

@@ -1,5 +1,7 @@
 # MCP Tool Matrix
 
+These are Xcode-owned MCP tools exposed through `xcrun mcpbridge` after external-agent access is enabled in Xcode. Do not substitute a bundled or third-party Xcode MCP server when following this matrix.
+
 ## Workspace and session
 
 - `XcodeListWindows`
