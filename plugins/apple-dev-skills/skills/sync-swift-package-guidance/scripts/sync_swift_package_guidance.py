@@ -24,10 +24,28 @@ REQUIRED_STRINGS = [
     "scripts/repo-maintenance/release.sh",
 ]
 
+IGNORED_XCODE_MARKER_PARTS = {".build", ".swiftpm"}
+
+
+def is_generated_xcode_marker(repo_root: Path, path: Path) -> bool:
+    try:
+        relative = path.relative_to(repo_root)
+    except ValueError:
+        return False
+    return any(part in IGNORED_XCODE_MARKER_PARTS for part in relative.parts)
+
 
 def discover_repo_state(repo_root: Path) -> dict:
-    workspaces = sorted(str(path) for path in repo_root.rglob("*.xcworkspace"))
-    projects = sorted(str(path) for path in repo_root.rglob("*.xcodeproj"))
+    workspaces = sorted(
+        str(path)
+        for path in repo_root.rglob("*.xcworkspace")
+        if not is_generated_xcode_marker(repo_root, path)
+    )
+    projects = sorted(
+        str(path)
+        for path in repo_root.rglob("*.xcodeproj")
+        if not is_generated_xcode_marker(repo_root, path)
+    )
     return {
         "package_manifest": str(repo_root / "Package.swift") if (repo_root / "Package.swift").exists() else None,
         "workspace": workspaces[0] if workspaces else None,
