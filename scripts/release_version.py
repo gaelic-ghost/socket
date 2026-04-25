@@ -16,6 +16,9 @@ SEMVER_RE = re.compile(
     r"(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$"
 )
 IGNORED_PARTS = {".build", ".git", ".venv", "__pycache__", "node_modules"}
+EXCLUDED_VERSION_PATHS = {
+    Path("plugins/SpeakSwiftlyServer/.codex-plugin/plugin.json"),
+}
 
 
 class VersionToolError(RuntimeError):
@@ -68,7 +71,7 @@ def bump_version(version: str, mode: str) -> str:
 
 
 def should_ignore(path: Path) -> bool:
-    return any(part in IGNORED_PARTS for part in path.parts)
+    return path in EXCLUDED_VERSION_PATHS or any(part in IGNORED_PARTS for part in path.parts)
 
 
 def discover_pyproject_targets(root: Path) -> list[VersionTarget]:

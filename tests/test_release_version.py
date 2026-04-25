@@ -78,6 +78,10 @@ name = "things-mcp"
 version = "1.2.3"
 """,
     )
+    write(
+        tmp_path / "plugins" / "SpeakSwiftlyServer" / ".codex-plugin" / "plugin.json",
+        json.dumps({"name": "speak-swiftly-server", "version": "9.8.7"}, indent=2) + "\n",
+    )
     return tmp_path
 
 
@@ -95,6 +99,7 @@ version = "9.9.9"
 
     paths = [target.display_path for target in targets]
     assert "plugins/SpeakSwiftlyServer/.build/checkouts/ignored/pyproject.toml" not in paths
+    assert "plugins/SpeakSwiftlyServer/.codex-plugin/plugin.json" not in paths
     assert "pyproject.toml" in paths
     assert "plugins/python-skills/.codex-plugin/plugin.json" in paths
 
@@ -125,6 +130,10 @@ def test_custom_updates_manifests_and_lockfiles(tmp_path: Path) -> None:
     assert unchanged_files == []
     assert 'version = "4.5.6"' in (root / "pyproject.toml").read_text(encoding="utf-8")
     assert 'version = "4.5.6"' in (root / "uv.lock").read_text(encoding="utf-8")
+    speak_swiftly_data = json.loads(
+        (root / "plugins" / "SpeakSwiftlyServer" / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
+    )
+    assert speak_swiftly_data["version"] == "9.8.7"
     plugin_data = json.loads(
         (root / "plugins" / "python-skills" / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
     )
