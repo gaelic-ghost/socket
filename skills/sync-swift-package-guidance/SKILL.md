@@ -69,6 +69,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
    - `scripts/repo-maintenance/validate-all.sh`
    - `scripts/repo-maintenance/sync-shared.sh`
    - `scripts/repo-maintenance/release.sh`
+   - protected branches, when configured, require the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
 10. Hand off ongoing package work cleanly:
    - prefer `swift-package-build-run-workflow` or `swift-package-testing-workflow` for ordinary package work after guidance sync
    - recommend `xcode-build-run-workflow` or `xcode-testing-workflow` only when package work needs Xcode-managed SDK, toolchain, or test behavior
@@ -117,6 +118,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
 - The only current fallback is a non-mutating dry-run or guided result that explains what the sync would do.
 - After a successful sync, use `swift-package-build-run-workflow` or `swift-package-testing-workflow` for ordinary package work by default.
 - After a successful sync, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh` for releases.
+- After a successful sync, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - Recommend `xcode-build-run-workflow` when package work needs Xcode-managed SDK or toolchain behavior.
 - Recommend `xcode-testing-workflow` when package work needs Xcode-managed test execution behavior.
 - Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.

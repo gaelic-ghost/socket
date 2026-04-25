@@ -62,6 +62,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
    - `scripts/repo-maintenance/release.sh`
    - `Tests/`
    - `swift build` and `swift test` unless `--skip-validation` was requested
+   - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
 7. Ensure the generated guidance encodes the shared Swift policy:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md`
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
@@ -138,6 +139,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
 - After a successful scaffold, hand off Xcode-managed package build or run tasks to `xcode-build-run-workflow`.
 - After a successful scaffold, hand off Xcode-managed package test tasks to `xcode-testing-workflow`.
 - After a successful scaffold, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh` for releases.
+- After a successful scaffold, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - After a successful scaffold, hand off later repo-guidance alignment work to `sync-swift-package-guidance`.
 - For ordinary package work, prefer `swift build` and `swift test`.
 - For package builds that need Xcode-managed SDK or toolchain behavior, use `xcode-build-run-workflow` and `xcodebuild` guidance instead of stretching the bootstrap skill into an execution skill.

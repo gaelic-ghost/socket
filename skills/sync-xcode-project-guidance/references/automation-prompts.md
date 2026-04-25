@@ -28,6 +28,7 @@ Goals:
 - keep the result bounded and idempotent
 - hand off active Xcode build or run work to xcode-build-run-workflow afterward
 - hand off active Xcode testing work to xcode-testing-workflow afterward
+- when branch protection is configured, require the GitHub Actions check context `validate`, not `Validate Repo Maintenance / validate`
 
 Execution:
 - run `uv run scripts/run_workflow.py --repo-root <REPO_ROOT>` and add `--workspace-path <WORKSPACE_PATH_OR_BLANK>` only when the workspace path is provided

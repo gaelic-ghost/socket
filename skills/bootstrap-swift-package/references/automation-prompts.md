@@ -91,6 +91,7 @@ Verification:
 - Confirm `Package.swift` keeps the explicit Swift 6 language-mode declaration `swiftLanguageModes: [.v6]`.
 - Confirm `Package.swift` keeps `// swift-tools-version:` at `6.0` or newer, even if it is lowered from the scaffold default.
 - If validation is enabled, verify `swift build` and `swift test` success.
+- If branch protection is configured, require the GitHub Actions check context `validate`, not `Validate Repo Maintenance / validate`.
 
 Return contract:
 - `status: success|blocked|failed`
@@ -116,3 +117,4 @@ Return contract:
 - Stop if target exists and is non-empty.
 - Stop if script invocation fails at any step.
 - Never continue after failed validation unless `<SKIP_VALIDATION>` is explicitly `true`.
+- Do not configure protected branches to require the workflow-title display string `Validate Repo Maintenance / validate`.

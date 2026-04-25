@@ -101,6 +101,7 @@ Constraints:
 Verification:
 - Confirm the expected scaffold files exist.
 - If validation is enabled, verify the supported project-generation path completed successfully.
+- If branch protection is configured, require the GitHub Actions check context `validate`, not `Validate Repo Maintenance / validate`.
 
 Return contract:
 - `status: success|blocked|failed`
