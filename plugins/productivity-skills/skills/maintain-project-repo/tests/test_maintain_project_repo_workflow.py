@@ -53,6 +53,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
             self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
             self.assertIn("  validate:\n    name: validate\n", workflow_text)
+            self.assertIn("brew install swiftformat swiftlint", workflow_text)
 
     def test_generic_profile_keeps_generic_pre_commit_hook(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

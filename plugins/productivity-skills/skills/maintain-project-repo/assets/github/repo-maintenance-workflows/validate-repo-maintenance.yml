@@ -15,5 +15,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install Swift repo-maintenance tools
+        run: brew install swiftformat swiftlint
       - name: Run repo-maintenance validation
         run: bash scripts/repo-maintenance/validate-all.sh
