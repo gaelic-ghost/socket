@@ -47,6 +47,12 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Keep `Package.swift` explicit about its package-wide Swift language mode. On current Swift 6-era manifests, prefer `swiftLanguageModes: [.v6]` as the default declaration, treat `swiftLanguageVersions` as a legacy alias used only when an older manifest surface requires it, and remember that lowering the manifest's `// swift-tools-version:` from the bootstrap default is often appropriate when the package should support an older Swift 6 toolchain, but never below `6.0`.
 - Treat `Package.resolved` and similar package-manager outputs as generated files. Do not tell agents to hand-edit them.
 
+### Dependency Provenance
+
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
+- Do not commit dependency declarations, lockfiles, scripts, docs, examples, generated project files, or CI config that point at machine-local paths such as `/Users/...`, `~/...`, `../...`, local worktrees, or private checkout paths.
+- Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly. If local integration is needed, keep it uncommitted or convert it to a tagged release, branch, or registry dependency before sharing.
+
 ### Communication and Escalation
 
 - Surface non-obvious tradeoffs before widening a change from one skill or one doc into repo-wide wording or policy.
