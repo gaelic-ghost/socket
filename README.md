@@ -7,13 +7,13 @@ Standalone Swift package for hosting the local `SpeakSwiftly` runtime behind an 
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Usage](#usage)
-- [Embedding](#embedding)
-- [Configuration](#configuration)
-- [Codex Plugin](#codex-plugin)
 - [Development](#development)
 - [Repo Structure](#repo-structure)
 - [Release Notes](#release-notes)
 - [License](#license)
+- [Embedding](#embedding)
+- [Configuration](#configuration)
+- [Codex Plugin](#codex-plugin)
 
 ## Overview
 
@@ -68,7 +68,7 @@ xcrun swift run SpeakSwiftlyServerTool serve
 
 Install or refresh the per-user LaunchAgent with a config file:
 
-This command expects the staged tool artifact to already exist at `.release-artifacts/current/SpeakSwiftlyServerTool`. On a clean checkout, build and stage the release artifact first, or pass `--tool-executable-path <SpeakSwiftlyServerTool>` explicitly.
+This command expects the staged tool artifact to already exist at `.release-artifacts/current/SpeakSwiftlyServerTool`. On a clean checkout, build and stage the release artifact first, or pass `--tool-executable-path /path/to/SpeakSwiftlyServerTool` explicitly.
 
 ```bash
 xcrun swift run SpeakSwiftlyServerTool launch-agent install \
@@ -96,6 +96,86 @@ The package uses distinct default localhost ports by entrypoint:
 - embedded app-owned sessions default to `127.0.0.1:7339`
 
 The full transport contract lives in [API.md](./API.md).
+
+## Development
+
+The contributor and maintainer workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+Use that guide for:
+
+- local setup and runtime expectations
+- validation commands
+- live end-to-end coverage
+- pull request and release workflow
+- monorepo and submodule handoff rules
+
+The short version is:
+
+- use `xcrun swift test` for the normal package-development loop
+- use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
+- use `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump` for the aligned release flow
+- use `scripts/repo-maintenance/config/profile.env` to confirm the active `swift-package` maintainer profile
+
+### Setup
+
+Resolve package dependencies with the Xcode-selected Swift toolchain:
+
+```bash
+xcrun swift package resolve
+```
+
+Install the local tools used by the full maintainer gate when you are running it outside CI:
+
+```bash
+brew install swiftformat swiftlint
+```
+
+### Workflow
+
+Use a feature branch for normal repo work. Keep Swift package changes grounded in `Package.swift`, keep source and docs updates together when public behavior changes, and use [CONTRIBUTING.md](./CONTRIBUTING.md) for pull request, live-service, and monorepo handoff rules.
+
+### Validation
+
+Run the full local maintainer gate before handing off a complete change:
+
+```bash
+sh scripts/repo-maintenance/validate-all.sh
+```
+
+For a narrower package-development loop, run:
+
+```bash
+xcrun swift build
+xcrun swift test
+```
+
+## Repo Structure
+
+```text
+.
+├── Sources/
+│   ├── SpeakSwiftlyServer/
+│   └── SpeakSwiftlyServerTool/
+├── Tests/
+├── docs/
+├── API.md
+├── CONTRIBUTING.md
+├── Package.swift
+└── README.md
+```
+
+- `Sources/SpeakSwiftlyServer/` contains the reusable library target.
+- `Sources/SpeakSwiftlyServerTool/` contains the unified executable wrapper.
+- `Tests/` contains unit, integration, and a small opt-in live E2E smoke suite.
+- `docs/` contains maintainer-facing supporting documentation.
+
+## Release Notes
+
+Tagged release notes live in [GitHub Releases](https://github.com/gaelic-ghost/SpeakSwiftlyServer/releases) and the repo keeps matching historical release notes and release checklists under [docs/releases](./docs/releases/). Investigations and incident writeups live under [docs/investigations](./docs/investigations/).
+
+## License
+
+See [LICENSE](./LICENSE).
 
 ## Embedding
 
@@ -191,50 +271,3 @@ The first plugin pass ships focused skills for:
 - runtime, playback, and queue control
 - voice workflows
 - text-profile workflows
-
-## Development
-
-The contributor and maintainer workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-Use that guide for:
-
-- local setup and runtime expectations
-- validation commands
-- live end-to-end coverage
-- pull request and release workflow
-- monorepo and submodule handoff rules
-
-The short version is:
-
-- use `xcrun swift test` for the normal package-development loop
-- use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
-- use `scripts/repo-maintenance/release-prepare.sh` only for branch-side PR prep
-- use `scripts/repo-maintenance/release-publish.sh` as the single publish-time artifact and tag path; it tags from fast-forwarded local `main` and pushes the tag, not the protected branch
-
-## Repo Structure
-
-```text
-.
-├── Sources/
-│   ├── SpeakSwiftlyServer/
-│   └── SpeakSwiftlyServerTool/
-├── Tests/
-├── docs/
-├── API.md
-├── CONTRIBUTING.md
-├── Package.swift
-└── README.md
-```
-
-- `Sources/SpeakSwiftlyServer/` contains the reusable library target.
-- `Sources/SpeakSwiftlyServerTool/` contains the unified executable wrapper.
-- `Tests/` contains unit, integration, and a small opt-in live E2E smoke suite.
-- `docs/` contains maintainer-facing supporting documentation.
-
-## Release Notes
-
-Tagged release notes live in [GitHub Releases](https://github.com/gaelic-ghost/SpeakSwiftlyServer/releases) and the repo keeps matching historical release notes and release checklists under [docs/releases](./docs/releases/). Investigations and incident writeups live under [docs/investigations](./docs/investigations/).
-
-## License
-
-See [LICENSE](./LICENSE).

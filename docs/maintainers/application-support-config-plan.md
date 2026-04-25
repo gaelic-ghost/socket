@@ -159,8 +159,8 @@ Run the normal package and maintainer checks:
 
 Then run the live-service proof serially:
 
-1. publish the patch release through `scripts/repo-maintenance/release-prepare.sh`
-2. after merge, publish through `scripts/repo-maintenance/release-publish.sh --refresh-live-service`
+1. publish the patch release through `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump`
+2. run any live-service refresh or staged-artifact promotion that remains part of the patch release task
 3. verify the LaunchAgent environment shows `APP_CONFIG_FILE` pointing directly at
    `~/Library/Application Support/SpeakSwiftlyServer/server.yaml`
 4. run `.release-artifacts/current/SpeakSwiftlyServerTool healthcheck --base-url http://127.0.0.1:7337`

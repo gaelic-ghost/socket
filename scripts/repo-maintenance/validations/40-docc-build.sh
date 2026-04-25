@@ -6,7 +6,7 @@ SELF_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 
 docc_output_dir="$REPO_ROOT/.build/docc"
 
-swiftpm package \
+xcrun swift package \
   --allow-writing-to-directory "$docc_output_dir" \
   generate-documentation \
   --target SpeakSwiftlyServer \
