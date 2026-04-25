@@ -1,4 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.9"
+# dependencies = [
+#   "PyYAML>=6.0.2,<7",
+# ]
+# ///
 """Audit and apply bounded ACCESSIBILITY.md maintenance from a hard-enforced schema."""
 
 from __future__ import annotations

@@ -1,4 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.9"
+# ///
 """Launch Dash docset install URL after confirmation."""
 
 from __future__ import annotations

@@ -1,4 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.9"
+# ///
 """Refresh Dash catalog snapshots from Kapeli sources."""
 
 from __future__ import annotations
