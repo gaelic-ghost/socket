@@ -309,11 +309,13 @@ Planned
 ### Tickets
 
 - [ ] Define the skill boundary so it owns SPI-specific distribution and hosting guidance without replacing the core Swift package build or testing workflows.
-- [ ] Gather the relevant Swift Package Index documentation for package metadata, documentation hosting, build surfaces, listing or submission expectations, and compatibility signals.
+- [x] Gather the relevant Swift Package Index documentation for package metadata, documentation hosting, build surfaces, listing or submission expectations, and compatibility signals.
 - [ ] Ship a workflow surface that can help maintainers prepare a package for SPI, diagnose common SPI-facing build or docs issues, and understand what SPI is deriving from the repository.
 - [ ] Cover the relationship between SPI docs hosting, DocC output, README quality, package metadata, and supported platform declarations.
 - [ ] Document common SPI failure modes such as unsupported package structure, incomplete metadata, broken docs generation, or platform mismatch signals.
 - [ ] Add tests and maintainer docs once the workflow shape is stable.
+
+Research note: the current supported listing path is the Swift Package Index Add Package issue workflow in `SwiftPackageIndex/PackageList`, not a manual-first `packages.json` edit. See [`docs/maintainers/swift-package-index-workflow-research.md`](./docs/maintainers/swift-package-index-workflow-research.md) for the source-backed listing, package-collection, and future skill-boundary notes.
 
 ### Exit Criteria
 
