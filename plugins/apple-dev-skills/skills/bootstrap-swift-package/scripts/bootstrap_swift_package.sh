@@ -74,7 +74,7 @@ swift_major_version=""
 swift_minor_version=""
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 agents_template="$script_dir/../assets/AGENTS.md"
-repo_maintenance_installer="$script_dir/install_repo_maintenance_toolkit.py"
+maintain_project_repo_runner="$script_dir/../../../../productivity-skills/skills/maintain-project-repo/scripts/run_workflow.py"
 
 is_ignorable_directory_entry() {
   local entry_name="$1"
@@ -476,10 +476,10 @@ mkdir -p "$target_dir"
     cp "$agents_template" AGENTS.md
   fi
 
-  if [[ -x "$repo_maintenance_installer" ]]; then
-    "$repo_maintenance_installer" --repo-root "$target_dir" --operation install --profile swift-package >/dev/null
+  if [[ -x "$maintain_project_repo_runner" ]]; then
+    "$maintain_project_repo_runner" --repo-root "$target_dir" --operation install --profile swift-package >/dev/null
   else
-    failed "Validation failed: repo-maintenance toolkit installer missing at $repo_maintenance_installer."
+    failed "Validation failed: maintain-project-repo runner missing at $maintain_project_repo_runner. Ensure productivity-skills ships alongside apple-dev-skills before rerunning."
   fi
 
   ensure_test_target "$testing_mode" "$name"

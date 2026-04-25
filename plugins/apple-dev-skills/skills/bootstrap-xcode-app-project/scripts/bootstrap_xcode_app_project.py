@@ -117,6 +117,16 @@ targets:
 """
 
 
+def maintain_project_repo_runner() -> Path:
+    plugins_root = Path(__file__).resolve().parents[4]
+    runner = plugins_root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
+    if not runner.is_file():
+        raise RuntimeError(
+            f"Expected maintain-project-repo runner at {runner}, but it was missing."
+        )
+    return runner
+
+
 def main() -> int:
     args = build_parser().parse_args()
     target_dir = (Path(args.destination).expanduser() / args.name).resolve()
@@ -187,10 +197,24 @@ def main() -> int:
             shutil.copyfile(agents_template, target_dir / "AGENTS.md")
             agents_copied = True
 
-    installer = Path(__file__).with_name("install_repo_maintenance_toolkit.py")
+    try:
+        runner = maintain_project_repo_runner()
+    except RuntimeError as exc:
+        payload = {
+            "status": "failed",
+            "path_type": "primary",
+            "resolved_path": str(target_dir),
+            "normalized_inputs": normalized_inputs,
+            "validation_result": "failed (maintain-project-repo install)",
+            "stderr": str(exc),
+            "next_step": "Ensure productivity-skills ships alongside apple-dev-skills, then rerun the workflow.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
+
     proc_install_toolkit = subprocess.run(
         [
-            str(installer),
+            str(runner),
             "--repo-root",
             str(target_dir),
             "--operation",
@@ -208,10 +232,10 @@ def main() -> int:
             "path_type": "primary",
             "resolved_path": str(target_dir),
             "normalized_inputs": normalized_inputs,
-            "validation_result": "failed (repo-maintenance toolkit install)",
+            "validation_result": "failed (maintain-project-repo install)",
             "stdout": proc_install_toolkit.stdout,
             "stderr": proc_install_toolkit.stderr,
-            "next_step": "Fix the repo-maintenance toolkit install failure and rerun the workflow.",
+            "next_step": "Fix the maintain-project-repo install failure and rerun the workflow.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1

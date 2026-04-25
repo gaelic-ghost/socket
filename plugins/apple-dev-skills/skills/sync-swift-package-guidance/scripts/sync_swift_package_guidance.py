@@ -50,6 +50,16 @@ def read_asset(name: str) -> str:
     return (Path(__file__).resolve().parents[1] / "assets" / name).read_text(encoding="utf-8").rstrip() + "\n"
 
 
+def maintain_project_repo_runner() -> Path:
+    plugins_root = Path(__file__).resolve().parents[4]
+    runner = plugins_root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
+    if not runner.is_file():
+        raise RuntimeError(
+            f"Expected maintain-project-repo runner at {runner}, but it was missing."
+        )
+    return runner
+
+
 def validate_agents(text: str) -> tuple[bool, list[str]]:
     missing = [needle for needle in REQUIRED_STRINGS if needle not in text]
     return not missing, missing
@@ -167,10 +177,26 @@ def main() -> int:
             return 1
         validation_result = "validated"
 
-    installer = Path(__file__).with_name("install_repo_maintenance_toolkit.py")
+    try:
+        runner = maintain_project_repo_runner()
+    except RuntimeError as exc:
+        payload = {
+            "status": "failed",
+            "path_type": "primary",
+            "repo_root": str(repo_root),
+            "agents_path": str(agents_path),
+            "detected_state": detected_state,
+            "validation_result": validation_result,
+            "actions": actions,
+            "stderr": str(exc),
+            "next_step": "Ensure productivity-skills ships alongside apple-dev-skills, then rerun the workflow.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
+
     proc_install_toolkit = subprocess.run(
         [
-            str(installer),
+            str(runner),
             "--repo-root",
             str(repo_root),
             "--operation",
@@ -193,11 +219,11 @@ def main() -> int:
             "actions": actions,
             "stdout": proc_install_toolkit.stdout,
             "stderr": proc_install_toolkit.stderr,
-            "next_step": "Fix the repo-maintenance toolkit refresh failure and rerun the workflow.",
+            "next_step": "Fix the maintain-project-repo refresh failure and rerun the workflow.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
-    actions.append("refreshed the swift-package repo-maintenance toolkit profile")
+    actions.append("refreshed maintain-project-repo with the swift-package profile")
 
     payload = {
         "status": "success",

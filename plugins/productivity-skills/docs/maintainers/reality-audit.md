@@ -66,7 +66,7 @@ All active repo-authored skills live under `skills/`.
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
 - `maintain-project-repo`
-  - Scripts: `scripts/run_workflow.py`, `scripts/install_repo_maintenance_toolkit.py`, `scripts/customization_config.py`
+  - Scripts: `scripts/run_workflow.py`, `scripts/install_maintain_project_repo.py`, `scripts/customization_config.py`
   - Metadata: `agents/openai.yaml`
   - Runtime docs: `SKILL.md`, `references/*`
   - Assets: `assets/repo-maintenance/*`, `assets/github/repo-maintenance-workflows/validate-repo-maintenance.yml`

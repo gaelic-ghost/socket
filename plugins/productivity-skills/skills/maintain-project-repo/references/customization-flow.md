@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Record lightweight default preferences for the maintainer toolkit without turning its managed file set into a wide runtime customization surface.
+Record lightweight default preferences for `maintain-project-repo` without turning its managed file set into a wide runtime customization surface.
 
 ## Knobs
 
@@ -13,7 +13,7 @@ Record lightweight default preferences for the maintainer toolkit without turnin
 ## Runtime Behavior
 
 - `scripts/customization_config.py` reads, writes, resets, and reports customization state.
-- `scripts/install_repo_maintenance_toolkit.py` and `scripts/run_workflow.py` do not currently read these customization knobs.
+- `scripts/install_maintain_project_repo.py` and `scripts/run_workflow.py` do not currently read these customization knobs.
 - The managed file set, GitHub workflow wrapper, and release script surfaces are fixed workflow behavior rather than durable runtime customization.
 
 ## Update Flow

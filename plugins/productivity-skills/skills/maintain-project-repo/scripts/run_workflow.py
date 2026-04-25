@@ -38,7 +38,7 @@ def main() -> int:
         "dry_run": args.dry_run,
     }
 
-    helper_path = Path(__file__).with_name("install_repo_maintenance_toolkit.py")
+    helper_path = Path(__file__).with_name("install_maintain_project_repo.py")
     command = [
         str(helper_path),
         "--repo-root",
@@ -64,7 +64,7 @@ def main() -> int:
         "validation_result": None,
         "stdout": proc.stdout,
         "stderr": proc.stderr,
-        "next_step": "Fix the repo-maintenance toolkit workflow error and rerun the workflow.",
+        "next_step": "Fix the maintain-project-repo workflow error and rerun the workflow.",
     }
     payload.setdefault("normalized_inputs", normalized_inputs)
     print(json.dumps(payload, indent=2, sort_keys=True))

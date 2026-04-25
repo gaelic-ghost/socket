@@ -12,7 +12,7 @@ if ! command -v swiftformat >/dev/null 2>&1; then
 fi
 
 if [ ! -f "$config_file" ]; then
-  echo "SwiftFormat pre-commit hook expected a checked-in config at $config_file, but it was missing. Restore the managed .swiftformat file or refresh the repo-maintenance toolkit before committing." >&2
+  echo "SwiftFormat pre-commit hook expected a checked-in config at $config_file, but it was missing. Restore the managed .swiftformat file or refresh maintain-project-repo before committing." >&2
   exit 1
 fi
 

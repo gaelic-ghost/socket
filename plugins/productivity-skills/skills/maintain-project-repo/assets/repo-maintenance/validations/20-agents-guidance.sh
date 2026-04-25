@@ -2,6 +2,7 @@
 set -eu
 
 SELF_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+export REPO_MAINTENANCE_COMMON_DIR="$SELF_DIR/../lib"
 . "$SELF_DIR/../lib/common.sh"
 
 if [ "${REPO_MAINTENANCE_REQUIRE_AGENTS:-true}" != "true" ]; then
@@ -10,7 +11,7 @@ if [ "${REPO_MAINTENANCE_REQUIRE_AGENTS:-true}" != "true" ]; then
 fi
 
 agents_path="$REPO_ROOT/AGENTS.md"
-[ -f "$agents_path" ] || die "Expected $agents_path to exist so the repo-maintenance toolkit has repo guidance to complement."
+[ -f "$agents_path" ] || die "Expected $agents_path to exist so maintain-project-repo has repo guidance to complement."
 [ -s "$agents_path" ] || die "Expected $agents_path to be non-empty."
 
 for needle in \

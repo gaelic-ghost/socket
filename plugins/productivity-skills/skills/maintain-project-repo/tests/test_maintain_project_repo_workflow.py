@@ -45,11 +45,24 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
             self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
+            self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
             self.assertIn('REPO_MAINTENANCE_PROFILE="swift-package"', Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"))
+            hook_text = Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").read_text(encoding="utf-8")
+            self.assertIn("swiftformat --lint", hook_text)
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
             workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
             self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
             self.assertIn("  validate:\n    name: validate\n", workflow_text)
+
+    def test_generic_profile_keeps_generic_pre_commit_hook(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertFalse(Path(tmpdir, ".swiftformat").exists())
+            hook_text = Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").read_text(encoding="utf-8")
+            self.assertNotIn("swiftformat --lint", hook_text)
+            self.assertIn('exec "$repo_root/scripts/repo-maintenance/validate-all.sh"', hook_text)
 
     def test_generated_validation_uses_repo_maintenance_self_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

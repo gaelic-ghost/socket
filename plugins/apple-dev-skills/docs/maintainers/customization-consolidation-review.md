@@ -162,10 +162,11 @@ If the repo still wants less duplication after the surface shrinks, the approved
 
 ## Post-Extraction Note
 
-The Apple plugin now treats its bundled `repo-maintenance-toolkit` source as part of the shipped local contract.
+The Apple plugin now treats `productivity-skills/maintain-project-repo` as the shipped local contract for reusable repo-maintenance behavior.
 
-- `apple-dev-skills` no longer treats an external toolkit repo as part of the end-user install story
-- this repo keeps the managed toolkit source under `shared/repo-maintenance-toolkit/` so the Apple bootstrap and guidance-sync skills stay independently usable and fully bundled
+- `apple-dev-skills` no longer owns a second bundled toolkit source
+- Apple bootstrap and guidance-sync skills stay responsible for Apple repo classification, `AGENTS.md` guidance, and choosing the `swift-package` or `xcode-app` `maintain-project-repo` profile
+- SwiftFormat profile assets live in `maintain-project-repo`, while the Apple formatting policy remains in the Apple skill guidance
 
 ## Follow-Up Plan
 
