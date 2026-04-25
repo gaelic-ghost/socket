@@ -57,6 +57,26 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "blocked")
             self.assertIn("ambiguous", payload["stderr"])
 
+    def test_ignores_generated_xcode_markers_in_swiftpm_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            (repo_root / ".build/checkouts/swift-collections/Xcode/Collections.xcodeproj").mkdir(parents=True)
+            (
+                repo_root
+                / ".build/checkouts/swift-collections/Utils/swift-collections.xcworkspace"
+            ).mkdir(parents=True)
+
+            code, payload = self.run_script("--repo-root", tmpdir, "--dry-run")
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertFalse(payload["detected_state"]["is_ambiguous_repo"])
+            self.assertTrue(payload["detected_state"]["is_package_repo"])
+            self.assertFalse(payload["detected_state"]["is_xcode_repo"])
+            self.assertIsNone(payload["detected_state"]["project"])
+            self.assertIsNone(payload["detected_state"]["workspace"])
+
     def test_dry_run_plans_agents_creation(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
