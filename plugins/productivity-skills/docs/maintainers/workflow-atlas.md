@@ -39,7 +39,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `maintain-project-accessibility` | Default baseline ACCESSIBILITY maintainer for most repos | `check-only`, `apply`, clean run |
 | `maintain-project-contributing` | Default baseline CONTRIBUTING maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
-| `maintain-project-repo` | Local-first repo maintainer toolkit installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
+| `maintain-project-repo` | Local-first repo maintainer installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
 
 ## `explain-code-slice`
 
@@ -289,7 +289,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 **Branch Conditions**
 
 - Managed path conflict: block when a required managed path cannot be updated safely
-- GitHub workflow skip: keep toolkit install but omit the thin workflow wrapper
+- GitHub workflow skip: keep `maintain-project-repo` install but omit the thin workflow wrapper
 
 **Outputs**
 
@@ -299,7 +299,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 
 **Overview**
 
-- Triggered when the user wants the planned toolkit file set without mutating the repo.
+- Triggered when the user wants the planned `maintain-project-repo` file set without mutating the repo.
 - Variant workflow.
 - `read-only`
 

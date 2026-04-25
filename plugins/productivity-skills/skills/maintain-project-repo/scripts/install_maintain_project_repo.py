@@ -2,7 +2,7 @@
 # /// script
 # requires-python = ">=3.9"
 # ///
-"""Install or refresh the managed repo-maintenance toolkit files."""
+"""Install or refresh the managed maintain-project-repo files."""
 
 from __future__ import annotations
 
@@ -16,6 +16,22 @@ PROFILE_CHOICES = {
     "generic": "Generic repo-maintenance baseline with no Swift or Xcode specialization.",
     "swift-package": "Swift Package Manager repo-maintenance profile for library, tool, and package repos.",
     "xcode-app": "Xcode app repo-maintenance profile for native Apple app repositories.",
+}
+PROFILE_OVERLAY_FILES = {
+    "swift-package": [
+        ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
+        (
+            "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
+            "scripts/repo-maintenance/hooks/pre-commit.sample",
+        ),
+    ],
+    "xcode-app": [
+        ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
+        (
+            "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
+            "scripts/repo-maintenance/hooks/pre-commit.sample",
+        ),
+    ],
 }
 MANAGED_TOOLKIT_FILES = [
     ("repo-maintenance/validate-all.sh", "scripts/repo-maintenance/validate-all.sh"),
@@ -53,11 +69,22 @@ def assets_root() -> Path:
     return Path(__file__).resolve().parents[1] / "assets"
 
 
-def target_pairs(skip_github_workflow: bool) -> list[tuple[Path, Path]]:
+def target_pairs(profile: str, skip_github_workflow: bool) -> list[tuple[Path, Path]]:
     root = assets_root()
     pairs = []
+
+    def add_pair(source_relative: str, target_relative: str) -> None:
+        target = Path(target_relative)
+        for index, (_, existing_target) in enumerate(pairs):
+            if existing_target == target:
+                pairs[index] = (root / source_relative, target)
+                return
+        pairs.append((root / source_relative, target))
+
     for source_relative, target_relative in MANAGED_TOOLKIT_FILES:
-        pairs.append((root / source_relative, Path(target_relative)))
+        add_pair(source_relative, target_relative)
+    for source_relative, target_relative in PROFILE_OVERLAY_FILES.get(profile, []):
+        add_pair(source_relative, target_relative)
     if not skip_github_workflow:
         pairs.append(
             (
@@ -102,7 +129,7 @@ def main() -> int:
     args = build_parser().parse_args()
     repo_root = Path(args.repo_root).expanduser().resolve()
     actions: list[str] = []
-    managed_files = [relative.as_posix() for _, relative in target_pairs(args.skip_github_workflow)]
+    managed_files = [relative.as_posix() for _, relative in target_pairs(args.profile, args.skip_github_workflow)]
     managed_files.append(MANAGED_PROFILE_FILE.as_posix())
 
     if not repo_root.exists():
@@ -142,7 +169,7 @@ def main() -> int:
         return 1
 
     try:
-        for _, relative_target in target_pairs(args.skip_github_workflow):
+        for _, relative_target in target_pairs(args.profile, args.skip_github_workflow):
             ensure_safe_target(repo_root, relative_target)
         ensure_safe_target(repo_root, MANAGED_PROFILE_FILE)
     except RuntimeError as exc:
@@ -164,7 +191,7 @@ def main() -> int:
         return 1
 
     if args.operation == "report-only" or args.dry_run:
-        for source, relative_target in target_pairs(args.skip_github_workflow):
+        for source, relative_target in target_pairs(args.profile, args.skip_github_workflow):
             target = repo_root / relative_target
             if target.exists():
                 actions.append(f"refresh {relative_target.as_posix()} from {source.relative_to(assets_root()).as_posix()}")
@@ -185,7 +212,7 @@ def main() -> int:
                     "managed_files": managed_files,
                     "actions": actions,
                     "validation_result": "skipped (--dry-run)" if args.dry_run else "skipped (report-only)",
-                    "next_step": "Run without --dry-run or report-only to install or refresh the repo-maintenance toolkit.",
+                    "next_step": "Run without --dry-run or report-only to install or refresh maintain-project-repo.",
                 },
                 indent=2,
                 sort_keys=True,
@@ -193,7 +220,7 @@ def main() -> int:
         )
         return 0
 
-    for source, relative_target in target_pairs(args.skip_github_workflow):
+    for source, relative_target in target_pairs(args.profile, args.skip_github_workflow):
         target = repo_root / relative_target
         action = "refreshed" if target.exists() else "installed"
         copy_file(source, target)

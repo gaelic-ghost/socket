@@ -4,7 +4,7 @@ Date: 2026-04-08
 
 ## Purpose
 
-Record the planned split of the current execution skills into narrower build-run and testing skills, define the guidance-preservation contract for that split, and establish the companion plan for a first-class Swift and Xcode-oriented `repo-maintenance-toolkit` profile owned by this shipped Apple plugin.
+Record the planned split of the current execution skills into narrower build-run and testing skills, define the guidance-preservation contract for that split, and establish the companion plan for Swift and Xcode-oriented `maintain-project-repo` profiles selected by this shipped Apple plugin.
 
 ## Current Problem
 
@@ -87,9 +87,9 @@ Good candidates for stronger `AGENTS.md` presence:
 
 Keep execution-only mechanics out of `AGENTS.md` when they are too tied to tool behavior or a transient runtime path.
 
-## Repo-Maintenance Toolkit Direction
+## Repo-Maintenance Direction
 
-The repo should treat the bundled Apple-facing `repo-maintenance-toolkit` contract in this repository as the canonical shipped surface, with Swift- and Xcode-aware profiles, instead of treating an external repo as part of the end-user install story.
+The repo should treat `productivity-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface, with Apple workflows selecting the Swift- and Xcode-aware profiles. `apple-dev-skills` owns Apple repo classification and guidance; it does not own a second toolkit implementation.
 
 Planned profile shape:
 
@@ -98,14 +98,14 @@ Planned profile shape:
 - `xcode-app`
 - optional later `swift-mixed-root`
 
-The Apple repo should ship that toolkit contract directly and keep any external sharing or upstreaming as maintainer-only coordination.
+The socket plugin ships `productivity-skills` and `apple-dev-skills` together, so Apple workflows can call the sibling `maintain-project-repo` skill instead of vendoring another toolkit source.
 
 Current Apple-side integration status:
 
-- the vendored installer in this repo is now profile-aware
-- Apple bootstrap and guidance-sync skills explicitly install the `swift-package` or `xcode-app` profile
+- `maintain-project-repo` is profile-aware
+- Apple bootstrap and guidance-sync skills explicitly run `maintain-project-repo` with the `swift-package` or `xcode-app` profile
 - installed repos now get `scripts/repo-maintenance/config/profile.env` as a concrete profile marker
-- the remaining local work is keeping the Apple-local shared source authoritative and the shipped plugin self-contained
+- Apple-specific formatting assets are promoted into the `maintain-project-repo` Apple profile overlay
 
 ## Implementation Plan
 
@@ -134,10 +134,10 @@ Current status:
 - Keep volatile runtime behavior in skill-local references and wrappers.
 - Re-audit the guidance-preservation contract after the split lands.
 
-### Phase 4: Toolkit promotion
+### Phase 4: Toolkit consolidation
 
-- Keep the Swift and Xcode-oriented `repo-maintenance-toolkit` profile support canonical in this repository's shared toolkit source.
-- Keep any future upstream sharing strictly maintainer-side so the Apple plugin remains one-and-done for end users.
+- Keep Swift and Xcode-oriented repo-maintenance profile support canonical in `productivity-skills/maintain-project-repo`.
+- Keep Apple-specific plugin work focused on stack guidance, repo classification, and profile selection.
 
 ## First Implementation Slice
 

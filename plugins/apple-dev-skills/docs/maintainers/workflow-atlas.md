@@ -70,13 +70,13 @@ flowchart TD
     B --> BW["May recommend swift-package-build-run-workflow or swift-package-testing-workflow"]
     B --> BX["May recommend xcode-build-run-workflow or xcode-testing-workflow"]
     B --> BS["May recommend sync-swift-package-guidance after bootstrap or later repo-guidance drift"]
-    B --> BR["Installs repo-maintenance toolkit into the new repo"]
+    B --> BR["Runs maintain-project-repo with the swift-package profile"]
     AX --> AS["May recommend sync-xcode-project-guidance after bootstrap"]
-    AX --> AR["Installs repo-maintenance toolkit into the new repo"]
+    AX --> AR["Runs maintain-project-repo with the xcode-app profile"]
     SX --> SXW["Hands off to xcode-build-run-workflow or xcode-testing-workflow after sync"]
-    SX --> SR["Refreshes repo-maintenance toolkit while syncing guidance"]
+    SX --> SR["Refreshes maintain-project-repo while syncing guidance"]
     SP --> SPB["Uses the narrower package build-run or testing skills after sync, and may recommend the narrower Xcode skills for Xcode-managed package work"]
-    SP --> SPR["Refreshes repo-maintenance toolkit while syncing guidance"]
+    SP --> SPR["Refreshes maintain-project-repo while syncing guidance"]
 ```
 
 ### Branch and Path Notes
@@ -86,8 +86,8 @@ flowchart TD
 - Cross-skill recommendation is decentralized inside each active skill.
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
-- The shared repo-maintenance toolkit now lives inside the active Apple skill surface under `shared/repo-maintenance-toolkit/` so bootstrap and sync skills can keep installing the same managed file set without a second plugin or repo.
-- The canonical shipped toolkit contract now lives in this repository, stays profile-aware, and gives downstream repos `scripts/repo-maintenance/config/profile.env` while Apple workflows choose either the `swift-package` or `xcode-app` profile explicitly.
+- The reusable repo-maintenance implementation now lives in `productivity-skills/maintain-project-repo`; Apple bootstrap and sync skills call that sibling skill with the `swift-package` or `xcode-app` profile.
+- The canonical shipped repo-maintenance contract stays profile-aware and gives downstream repos `scripts/repo-maintenance/config/profile.env` while Apple workflows choose either the `swift-package` or `xcode-app` profile explicitly.
 - The managed workflow's protected-branch check context is `validate`; GitHub exposes the job check run by that context, not by the display-style workflow title plus job string `Validate Repo Maintenance / validate`.
 - The Swift package side of the execution split is now in place, with build-run and testing split into separate primary skills while `swift-package-workflow` remains only as a legacy compatibility-routing surface.
 - The Xcode side of the execution split is now in place too, with `xcode-build-run-workflow` and `xcode-testing-workflow` as the real owners while `xcode-app-project-workflow` remains only as a legacy compatibility-routing surface.

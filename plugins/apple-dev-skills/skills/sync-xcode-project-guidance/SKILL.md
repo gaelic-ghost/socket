@@ -7,7 +7,7 @@ description: Sync repo guidance for an existing native Apple app repository mana
 
 ## Purpose
 
-Bring an existing Xcode app repository up to the expected guidance baseline without overloading the main Xcode execution skill. This skill owns repo-guidance alignment for existing Apple app repos, including deterministic `AGENTS.md` creation or bounded section append behavior, and refreshes the managed `xcode-app` repo-maintenance toolkit profile alongside that guidance. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/sync_xcode_project_guidance.py` applies the current sync behavior.
+Bring an existing Xcode app repository up to the expected guidance baseline without overloading the main Xcode execution skill. This skill owns repo-guidance alignment for existing Apple app repos, including deterministic `AGENTS.md` creation or bounded section append behavior, and runs `maintain-project-repo` with the `xcode-app` profile alongside that guidance. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/sync_xcode_project_guidance.py` applies the current sync behavior.
 
 ## When To Use
 
@@ -21,7 +21,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
 - Recommend `xcode-build-run-workflow` when the task is active Xcode execution, diagnostics, docs lookup, previews, file-membership follow-through, or mutation work inside an existing Xcode project.
 - Recommend `xcode-testing-workflow` when the task is primarily about Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis inside an existing Xcode project.
 - Recommend `sync-swift-package-guidance` when the repo is a plain Swift package instead of an Xcode app project.
-- After updating this plugin's Xcode-policy surfaces, recommend rerunning `sync-xcode-project-guidance` in downstream repos so their `AGENTS.md` and repo-maintenance toolkit stay aligned.
+- After updating this plugin's Xcode-policy surfaces, recommend rerunning `sync-xcode-project-guidance` in downstream repos so their `AGENTS.md` and `maintain-project-repo` output stay aligned.
 - For maintainer notes about this repository itself, say plainly that the repo exports from top-level `skills/` today and does not ship repo-local installer workflows.
 
 ## Single-Path Workflow
@@ -56,7 +56,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
    - verify `AGENTS.md` exists
    - verify the synced file mentions `xcode-build-run-workflow` and `xcode-testing-workflow`
    - verify the synced file preserves the no-direct-`.pbxproj` rule
-8. Refresh the repo-maintenance toolkit:
+8. Refresh `maintain-project-repo`:
    - refresh `scripts/repo-maintenance/`
    - refresh `.github/workflows/validate-repo-maintenance.yml`
    - preserve repo-specific extra scripts that are not part of the managed file set
@@ -82,7 +82,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
   - `repo_root=.` when omitted
   - `writeMode=sync-if-needed`
   - validation runs unless `--skip-validation` is passed
-  - successful mutating runs refresh the repo-maintenance toolkit in place
+  - successful mutating runs refresh `maintain-project-repo` output in place
 
 ## Outputs
 
@@ -98,7 +98,7 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
   - detected workspace or project markers
   - `AGENTS.md` path
   - actions applied or planned
-  - refreshed repo-maintenance toolkit paths
+  - refreshed `maintain-project-repo` paths
   - validation result
   - one concise next step or handoff
 
@@ -151,5 +151,4 @@ Bring an existing Xcode app repository up to the expected guidance baseline with
 
 - `scripts/run_workflow.py`
 - `scripts/sync_xcode_project_guidance.py`
-- `scripts/install_repo_maintenance_toolkit.py`
 - `scripts/customization_config.py`

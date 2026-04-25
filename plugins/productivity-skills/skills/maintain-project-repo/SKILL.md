@@ -1,16 +1,16 @@
 ---
 name: maintain-project-repo
-description: Install or refresh a profile-aware local-first repo-maintenance toolkit for Swift, Xcode, and general repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
+description: Install or refresh the profile-aware local-first maintain-project-repo toolkit for Swift, Xcode, and general repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
 license: MIT
 metadata:
-  semver: 0.1.2
+  semver: 0.2.0
 ---
 
 # Maintain Project Repo
 
 ## Purpose
 
-Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a general, SwiftPM, or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_repo_maintenance_toolkit.py` applies the managed file set, writes `scripts/repo-maintenance/config/profile.env`, and keeps the installed toolkit profile explicit.
+Install or refresh the reusable `maintain-project-repo` toolkit inside a general, SwiftPM, or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_maintain_project_repo.py` applies the managed file set, writes `scripts/repo-maintenance/config/profile.env`, and keeps the installed profile explicit.
 
 ## When To Use
 
@@ -21,7 +21,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
 - Do not use this skill for app bootstrap, Swift package bootstrap, or AGENTS-only guidance sync by themselves.
 - Recommend `bootstrap-swift-package` when the repo does not exist yet and package scaffold creation is still the primary task.
 - Recommend `bootstrap-xcode-app-project` when the repo does not exist yet and native Apple app bootstrap is still the primary task.
-- Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when the immediate task is AGENTS alignment rather than maintainer-toolkit installation.
+- Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when the immediate task is AGENTS alignment rather than `maintain-project-repo` installation.
 
 ## Single-Path Workflow
 
@@ -31,7 +31,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
    - optional `skip_github_workflow`
    - optional `dry_run`
 2. Classify the repo and profile:
-   - prefer this toolkit for SwiftPM repos, Xcode app repos, mixed Apple repos, and general software repos that need local maintainer automation
+   - prefer `maintain-project-repo` for SwiftPM repos, Xcode app repos, mixed Apple repos, and general software repos that need local maintainer automation
    - choose `swift-package` for plain Swift package repos
    - choose `xcode-app` for native Apple app repos
    - choose `generic` when no stronger Swift or Xcode profile applies
@@ -41,12 +41,12 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
    - it removes the pain of CI-only helper scripts and scattered release glue
    - the simpler extension path considered first was leaving helper scripts under `.github/scripts/` and adding more workflow-specific wrappers, but that would keep local and CI behavior drifting apart
 4. Run `scripts/run_workflow.py` to normalize the inputs and choose the installer path.
-5. Apply the managed toolkit files:
-   - install or refresh `scripts/repo-maintenance/`
+5. Apply the managed `maintain-project-repo` files:
+   - install or refresh the managed `scripts/repo-maintenance/` files
    - install or refresh `scripts/repo-maintenance/config/profile.env` for the selected profile
    - install or refresh the thin workflow wrapper at `.github/workflows/validate-repo-maintenance.yml` unless disabled
    - preserve repo-specific scripts or files that are not part of the managed file set
-6. Verify the installed toolkit:
+6. Verify the installed `maintain-project-repo` files:
    - `scripts/repo-maintenance/validate-all.sh`
    - `scripts/repo-maintenance/sync-shared.sh`
    - `scripts/repo-maintenance/release.sh`
@@ -74,7 +74,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
 ## Outputs
 
 - `status`
-  - `success`: the toolkit is installed, refreshed, or reported successfully
+  - `success`: `maintain-project-repo` is installed, refreshed, or reported successfully
   - `blocked`: the requested repo root or installer preconditions are invalid
   - `failed`: the installer started but did not complete successfully
 - `path_type`
@@ -99,10 +99,10 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
 
 - `report-only` is the non-mutating fallback path.
 - The installer preserves repo-specific extra files under `scripts/repo-maintenance/`, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
-- The installer keeps the selected toolkit profile explicit via `scripts/repo-maintenance/config/profile.env`.
+- The installer keeps the selected `maintain-project-repo` profile explicit via `scripts/repo-maintenance/config/profile.env`.
 - The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the repo still needs to be created.
-- Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after the toolkit is present.
+- Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after `maintain-project-repo` is present.
 
 ## Customization
 
@@ -131,5 +131,5 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
 ### Script Inventory
 
 - `scripts/run_workflow.py`
-- `scripts/install_repo_maintenance_toolkit.py`
+- `scripts/install_maintain_project_repo.py`
 - `scripts/customization_config.py`

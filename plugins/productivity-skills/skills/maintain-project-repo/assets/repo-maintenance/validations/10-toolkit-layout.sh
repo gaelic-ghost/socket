@@ -2,6 +2,7 @@
 set -eu
 
 SELF_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+export REPO_MAINTENANCE_COMMON_DIR="$SELF_DIR/../lib"
 . "$SELF_DIR/../lib/common.sh"
 
 for required in \
@@ -11,5 +12,5 @@ for required in \
   "$REPO_MAINTENANCE_ROOT/lib/common.sh" \
   "$REPO_MAINTENANCE_ROOT/config/profile.env"
 do
-  [ -f "$required" ] || die "The repo-maintenance toolkit is missing the required file $required."
+  [ -f "$required" ] || die "maintain-project-repo is missing the required file $required."
 done

@@ -359,11 +359,11 @@ Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, groundin
 
 ## History
 
-- Clarified the Apple repo-maintenance toolkit's branch-protection contract so generated and synced repos require the `validate` Actions check context instead of the workflow-title display string.
+- Clarified the Apple `maintain-project-repo` branch-protection contract so generated and synced repos require the `validate` Actions check context instead of the workflow-title display string.
 - Completed Milestones 1 through 17 by establishing the repository, shipping the core Apple skill bundle, improving portability and customization guidance, adding bootstrap and repo-sync workflows, extracting Apple docs exploration into its own skill, and cleaning up the install surface around the top-level export model.
 - Completed Milestones 19 and 20 by shipping `format-swift-sources` and `structure-swift-sources` as distinct cleanup workflows with clear boundaries.
 - Completed Milestones 22 and 23 by expanding deterministic TODO/FIXME ledger normalization and finishing the customization consolidation review. See `docs/maintainers/customization-consolidation-review.md`.
 - Completed Milestones 27 and 28 by validating the top-level `skills/` export story against the live repo validator and tests, and by narrowing `agent-plugin-skills` usage to selective plugin and export-surface alignment while leaving broader docs standards with `productivity-skills`.
-- Completed Milestones 30 through 36 by shrinking the customization surface, adding the repo-maintenance toolkit and shared extraction work, splitting execution workflows, and preserving guidance through the refactor.
+- Completed Milestones 30 through 36 by shrinking the customization surface, adding the `maintain-project-repo` integration and shared extraction work, splitting execution workflows, and preserving guidance through the refactor.
 - Collapsed the older first-slice planning docs for Milestones 37, 38, and 40 plus the standalone execution guidance-preservation matrix into this roadmap history and the still-live maintainer docs once those decisions were absorbed into the shipped skills, validator rules, and synced guidance assets.
 - Tightened the Swift package guidance so the explicit Swift 6 language-mode default stays in place while making it clear that `// swift-tools-version:` may be lowered from the scaffold default when real package compatibility needs it, but never below `6.0`.

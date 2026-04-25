@@ -7,7 +7,7 @@ description: Bootstrap new Swift Package Manager repositories with consistent de
 
 ## Purpose
 
-Create a new Swift package repository with one top-level entry point, a simplicity-first Swift baseline, and a local-first maintainer toolkit. `scripts/run_workflow.py` is the runtime wrapper, and `scripts/bootstrap_swift_package.sh` is the deterministic implementation core for scaffold creation, testing-mode selection, validation, and `swift-package` repo-maintenance toolkit installation.
+Create a new Swift package repository with one top-level entry point, a simplicity-first Swift baseline, and a local-first maintainer surface. `scripts/run_workflow.py` is the runtime wrapper, and `scripts/bootstrap_swift_package.sh` is the deterministic implementation core for scaffold creation, testing-mode selection, validation, and `maintain-project-repo` installation with the `swift-package` profile.
 
 ## When To Use
 
@@ -98,7 +98,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
   - supported and validated Swift toolchain floor is `5.10+`
   - generated manifests should preserve an explicit Swift 6 language-mode declaration with `swiftLanguageModes: [.v6]` when the active manifest surface supports it
   - generated manifests may lower `// swift-tools-version:` from the scaffold default when the package should support an older Swift 6 toolchain, but they should never go below `6.0`
-  - the repo-maintenance toolkit is installed into `scripts/repo-maintenance/` on successful mutating runs
+  - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs
 
@@ -114,7 +114,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
   - normalized inputs
   - resolved `testing_strategy`
   - detected `swift_toolchain` on real runs
-  - installed repo-maintenance toolkit paths
+  - installed `maintain-project-repo` paths
   - validation result
   - one concise next step
 
@@ -176,5 +176,4 @@ Create a new Swift package repository with one top-level entry point, a simplici
 
 - `scripts/run_workflow.py`
 - `scripts/bootstrap_swift_package.sh`
-- `scripts/install_repo_maintenance_toolkit.py`
 - `scripts/customization_config.py`

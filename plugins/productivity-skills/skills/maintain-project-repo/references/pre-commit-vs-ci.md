@@ -1,6 +1,6 @@
 # Pre-Commit vs CI
 
-Use the maintainer toolkit with a local-first split:
+Use `maintain-project-repo` with a local-first split:
 
 - `scripts/repo-maintenance/validate-all.sh`
   - the full local validation command
