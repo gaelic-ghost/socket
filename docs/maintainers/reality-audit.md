@@ -14,9 +14,9 @@ Root `skills/` is the canonical workflow-authoring surface.
    - `agents/openai.yaml`
    - `references/`
    - `scripts/`
-2.5. Shared repo-maintenance toolkit source under `shared/repo-maintenance-toolkit/` for Apple bootstrap and guidance-sync integrations
-   - this repository's shipped Apple plugin owns the end-user toolkit contract
-   - the shared source exists so Apple bootstrap and sync flows can stay standalone at install time
+2.5. Shared repo-maintenance behavior from `productivity-skills/skills/maintain-project-repo/`
+   - `productivity-skills` owns the reusable `maintain-project-repo` toolkit contract
+   - this repository's Apple bootstrap and guidance-sync flows call that sibling skill with the `swift-package` or `xcode-app` profile
 3. Repository validation rules in `.github/scripts/validate_repo_docs.sh`
 4. Root maintainer and discoverability docs
    - `README.md`
@@ -42,8 +42,8 @@ Deprecated compatibility skills that remain on disk do not count as part of the 
    - docs do not tell maintainers to use removed installer or install-validator skills
    - docs describe top-level `skills/` as the active export surface today, with top-level `mcps/` or `apps/` only if those directories are added later
 4. Run `bash .github/scripts/validate_repo_docs.sh` and treat failures as documentation-contract drift unless code assets prove otherwise.
-   - for repo-maintenance toolkit drift inside this repo, compare the Apple skill copies against `shared/repo-maintenance-toolkit/`, not against an active top-level skill directory in this repo
-   - when intentionally syncing ideas from another repo, reconcile them into the local shared source first, then re-mirror the Apple skill copies from there
+   - for repo-maintenance drift inside this repo, compare Apple behavior against `productivity-skills/skills/maintain-project-repo/`
+   - when intentionally syncing ideas from another repo, reconcile them into `maintain-project-repo` first, then keep this repo limited to Apple guidance and profile selection
 5. Run `uv run --group dev pytest` and treat failures as runtime drift.
 6. Reconcile root docs to the tested, shipped state instead of preserving stale historical wording.
 7. Update `ROADMAP.md` in the same change when milestone or status text is no longer truthful.

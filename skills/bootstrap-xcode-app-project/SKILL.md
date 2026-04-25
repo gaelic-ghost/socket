@@ -7,7 +7,7 @@ description: Bootstrap a new native Apple app project for macOS, iOS, or iPadOS 
 
 ## Purpose
 
-Create a new native Apple app repository from nothing to a usable baseline on disk. The first implementation prioritizes a deterministic `XcodeGen` path for SwiftUI app projects and a guarded planning path for the standard Xcode-created-project flow. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/bootstrap_xcode_app_project.py` is the current implementation core for XcodeGen-backed scaffold creation plus `xcode-app` repo-maintenance toolkit installation.
+Create a new native Apple app repository from nothing to a usable baseline on disk. The first implementation prioritizes a deterministic `XcodeGen` path for SwiftUI app projects and a guarded planning path for the standard Xcode-created-project flow. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/bootstrap_xcode_app_project.py` is the current implementation core for XcodeGen-backed scaffold creation plus `maintain-project-repo` installation with the `xcode-app` profile.
 
 ## When To Use
 
@@ -91,7 +91,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
   - `project_generator` defaults to `ask`
   - `copy_agents_md` defaults to `true`
   - validation runs unless `--skip-validation` is passed
-  - the repo-maintenance toolkit is installed into `scripts/repo-maintenance/` on successful mutating runs
+  - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs
 
@@ -107,7 +107,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
   - normalized inputs
   - resolved bundle identifier
   - generator path
-  - installed repo-maintenance toolkit paths
+  - installed `maintain-project-repo` paths
   - validation result
   - one concise next step or handoff
 
@@ -164,5 +164,4 @@ Create a new native Apple app repository from nothing to a usable baseline on di
 
 - `scripts/run_workflow.py`
 - `scripts/bootstrap_xcode_app_project.py`
-- `scripts/install_repo_maintenance_toolkit.py`
 - `scripts/customization_config.py`
