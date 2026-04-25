@@ -4,13 +4,13 @@ set -eu
 SELF_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 . "$SELF_DIR/../lib/common.sh"
 
-bin_path="$(swiftpm build --show-bin-path)"
+bin_path="$(xcrun swift build --show-bin-path)"
 tool_path="$bin_path/SpeakSwiftlyServerTool"
 [ -x "$tool_path" ] || die "Expected the debug SpeakSwiftlyServerTool executable at $tool_path after the package build step."
 
 log "Smoke-testing the executable help surface."
 set +e
-help_output="$(swiftpm run SpeakSwiftlyServerTool help 2>&1)"
+help_output="$(xcrun swift run SpeakSwiftlyServerTool help 2>&1)"
 help_status=$?
 set -e
 printf '%s\n' "$help_output"
@@ -19,7 +19,7 @@ printf '%s\n' "$help_output" | grep -F "Usage:" >/dev/null || die "Expected the 
 
 log "Smoke-testing LaunchAgent plist rendering against the built debug tool."
 set +e
-plist_output="$(swiftpm run SpeakSwiftlyServerTool launch-agent print-plist --tool-executable-path "$tool_path" 2>&1)"
+plist_output="$(xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist --tool-executable-path "$tool_path" 2>&1)"
 plist_status=$?
 set -e
 printf '%s\n' "$plist_output"

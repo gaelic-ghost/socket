@@ -160,7 +160,7 @@ Raise uncertainty early when a task starts pushing on architecture, release sema
 - [README.md](./README.md) is the product and operator-facing entrypoint.
 - [API.md](./API.md) is the detailed HTTP and MCP contract reference.
 - [docs/maintainers/source-layout.md](./docs/maintainers/source-layout.md) is the maintainer map for the current source split.
-- [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md) is the branch-versus-`main` release contract.
+- [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md) is the current `maintain-project-repo` release contract.
 - [docs/maintainers](./docs/maintainers/) holds active maintainer-facing architecture, workflow, and cleanup notes.
 - [docs/releases](./docs/releases/) holds historical release notes and release checklists.
 - [docs/investigations](./docs/investigations/) holds historical investigations and incident writeups.
@@ -175,19 +175,15 @@ Raise uncertainty early when a task starts pushing on architecture, release sema
 
 ## Release Workflow
 
-Use the repo-maintenance release split intentionally:
+Use the repo-maintenance release entrypoint intentionally:
 
 ```bash
-scripts/repo-maintenance/release-prepare.sh --version vX.Y.Z
-scripts/repo-maintenance/release-publish.sh --version vX.Y.Z --skip-live-service-refresh
+scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump
 ```
 
-Use `release-prepare.sh` from a feature branch or worktree when the job is "push this release candidate, open or update the PR, and queue auto-merge." Use `release-publish.sh` from local `main` after that PR merges when the job is "cut the actual tag and GitHub release."
+Run standard mode from a feature branch or worktree. It validates the checkout, creates the annotated tag, pushes the branch and tag, opens or updates the release PR, watches CI, checks review state, merges the PR, fast-forwards local `main`, creates the GitHub release, and cleans up merged branches when safe.
 
-`release-prepare.sh` no longer stages `.release-artifacts/<tag>` before merge. Treat it as the
-branch-side validation and PR handoff step only. The publish path is the single release-owned
-place that stages `.release-artifacts/current`, creates the annotated tag, creates the GitHub
-release, and optionally refreshes the live LaunchAgent-backed service.
+Use `--skip-version-bump` unless this repo later adds an executable `scripts/repo-maintenance/version-bump.sh` hook for version-bearing files. Run live-service refresh or staged-artifact promotion only when that operation is explicitly part of the release task.
 
 For the detailed contract and edge cases, use [docs/maintainers/release-workflow.md](./docs/maintainers/release-workflow.md).
 

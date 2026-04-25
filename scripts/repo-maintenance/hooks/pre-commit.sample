@@ -2,4 +2,34 @@
 set -eu
 
 repo_root="$(git rev-parse --show-toplevel)"
-exec "$repo_root/scripts/repo-maintenance/validate-all.sh"
+config_file="$repo_root/.swiftformat"
+staged_file_list="$(mktemp "${TMPDIR:-/tmp}/swiftformat-staged.XXXXXX")"
+trap 'rm -f "$staged_file_list"' EXIT HUP INT TERM
+
+if ! command -v swiftformat >/dev/null 2>&1; then
+  echo "SwiftFormat pre-commit hook could not find the \`swiftformat\` CLI on PATH. Install SwiftFormat before committing, or bypass once with --no-verify if you are unblocking an emergency." >&2
+  exit 1
+fi
+
+if [ ! -f "$config_file" ]; then
+  echo "SwiftFormat pre-commit hook expected a checked-in config at $config_file, but it was missing. Restore the managed .swiftformat file or refresh maintain-project-repo before committing." >&2
+  exit 1
+fi
+
+cd "$repo_root"
+git diff --cached --name-only --diff-filter=ACMR -- '*.swift' > "$staged_file_list"
+
+if [ ! -s "$staged_file_list" ]; then
+  exit 0
+fi
+
+echo "Running SwiftFormat on staged Swift sources..."
+swiftformat --config "$config_file" --filelist "$staged_file_list"
+
+while IFS= read -r relative_path; do
+  [ -n "$relative_path" ] || continue
+  git add -- "$relative_path"
+done < "$staged_file_list"
+
+echo "Verifying staged Swift sources with SwiftFormat lint..."
+swiftformat --lint --config "$config_file" --filelist "$staged_file_list"
