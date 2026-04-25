@@ -12,6 +12,12 @@ Run `uv run scripts/run_workflow.py --repo-root <path> --dry-run` and return the
 Run `uv run scripts/run_workflow.py --repo-root <path>` and sync the bounded Swift package guidance into `AGENTS.md` for the existing SwiftPM repo at that path.
 ```
 
+## Branch Protection
+
+```text
+When the managed repo-maintenance workflow is installed and branch protection is configured, require the GitHub Actions check context `validate`. Do not require `Validate Repo Maintenance / validate`.
+```
+
 ## Apply Sync Without Validation
 
 ```text

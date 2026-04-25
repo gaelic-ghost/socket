@@ -63,6 +63,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
    - verify `AGENTS.md` exists when enabled
    - verify `scripts/repo-maintenance/hooks/pre-commit.sample` exists
    - verify `scripts/repo-maintenance/validate-all.sh` and `scripts/repo-maintenance/release.sh` exist
+   - verify branch protection, when enabled, requires the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
    - if validation is enabled, verify project generation and basic project introspection succeeded
 9. Hand off existing-project work cleanly:
    - recommend `sync-xcode-project-guidance` when the repo guidance should be refreshed or merged after creation
@@ -128,6 +129,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
 - After a successful bootstrap, hand off to `sync-xcode-project-guidance` for repo-guidance alignment when needed, then to `xcode-build-run-workflow` for build, run, diagnostics, mutation, preview, and docs work.
 - After a successful bootstrap, hand off to `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, `.xctestplan`, and test diagnosis work.
 - After a successful bootstrap, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh` for releases.
+- After a successful bootstrap, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - Recommend `bootstrap-swift-package` directly when the task is really package bootstrap.
 - Recommend `sync-xcode-project-guidance` when the repo already exists and only needs repo-guidance or documentation alignment.
 

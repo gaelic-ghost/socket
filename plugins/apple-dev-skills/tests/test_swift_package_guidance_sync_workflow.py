@@ -95,6 +95,9 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
                 Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
             )
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
+            workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
+            self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
+            self.assertIn("  validate:\n    name: validate\n", workflow_text)
 
     def test_generated_repo_maintenance_validation_uses_repo_self_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

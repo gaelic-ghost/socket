@@ -111,6 +111,7 @@ Planned
 
 ## History
 
+- Clarified that the managed repo-maintenance workflow exposes `validate` as the branch-protection check context, avoiding blocked PRs caused by requiring the workflow-title display string instead.
 - Completed Milestones 0 through 11 by refactoring the naming and structure, splitting README and roadmap maintenance into dedicated skills, restoring `explain-code-slice`, and aligning the repository around the current plugin-ready packaging model.
 - Completed Milestones 12 and 13 by moving the agent-stack maintainer bootstrap and guidance-sync workflows into `agent-plugin-skills`.
 - Completed Milestones 15 through 21 by adding Claude plugin support, shipping `maintain-project-repo`, `maintain-project-contributing`, and `maintain-project-agents`, and clarifying the repository's role as the general-purpose productivity baseline layer.

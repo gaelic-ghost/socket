@@ -1,5 +1,8 @@
 name: Validate Repo Maintenance
 
+# Branch protection should require the Actions check context `validate`.
+# GitHub exposes the job check run by this job name, not by the workflow title.
+
 on:
   pull_request:
   push:
@@ -8,6 +11,7 @@ on:
 
 jobs:
   validate:
+    name: validate
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4

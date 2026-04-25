@@ -36,3 +36,4 @@ scripts/
 - Ordered `validations/*.sh`, `syncing/*.sh`, and `release/*.sh` are discovered automatically.
 - Managed files are safe to refresh in place.
 - Repo-specific extra scripts are allowed as long as they do not reuse the managed filenames.
+- The managed GitHub workflow exposes `validate` as the required branch-protection check context. Do not configure protected branches to require the display-style string `Validate Repo Maintenance / validate`.

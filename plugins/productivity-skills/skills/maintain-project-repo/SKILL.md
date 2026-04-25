@@ -51,6 +51,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
    - `scripts/repo-maintenance/sync-shared.sh`
    - `scripts/repo-maintenance/release.sh`
    - `.github/workflows/validate-repo-maintenance.yml` when workflow installation is enabled
+   - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
 7. Hand off follow-on work cleanly:
    - use `scripts/repo-maintenance/validate-all.sh` for local validation
    - use `scripts/repo-maintenance/sync-shared.sh` for repo-local shared sync tasks
@@ -99,6 +100,7 @@ Install or refresh a reusable `scripts/repo-maintenance/` toolkit inside a gener
 - `report-only` is the non-mutating fallback path.
 - The installer preserves repo-specific extra files under `scripts/repo-maintenance/`, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
 - The installer keeps the selected toolkit profile explicit via `scripts/repo-maintenance/config/profile.env`.
+- The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the repo still needs to be created.
 - Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after the toolkit is present.
 

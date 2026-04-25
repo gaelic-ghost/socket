@@ -88,6 +88,7 @@ flowchart TD
 - The active skill surface now uses the intended install-facing names directly.
 - The shared repo-maintenance toolkit now lives inside the active Apple skill surface under `shared/repo-maintenance-toolkit/` so bootstrap and sync skills can keep installing the same managed file set without a second plugin or repo.
 - The canonical shipped toolkit contract now lives in this repository, stays profile-aware, and gives downstream repos `scripts/repo-maintenance/config/profile.env` while Apple workflows choose either the `swift-package` or `xcode-app` profile explicitly.
+- The managed workflow's protected-branch check context is `validate`; GitHub exposes the job check run by that context, not by the display-style workflow title plus job string `Validate Repo Maintenance / validate`.
 - The Swift package side of the execution split is now in place, with build-run and testing split into separate primary skills while `swift-package-workflow` remains only as a legacy compatibility-routing surface.
 - The Xcode side of the execution split is now in place too, with `xcode-build-run-workflow` and `xcode-testing-workflow` as the real owners while `xcode-app-project-workflow` remains only as a legacy compatibility-routing surface.
 
