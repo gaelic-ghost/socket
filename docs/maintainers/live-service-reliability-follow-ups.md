@@ -14,7 +14,9 @@ The live service had two separate issues that combined into one confusing operat
 1. The LaunchAgent had been installed without `APP_CONFIG_FILE`, so the service fell back to built-in defaults and kept the MCP transport disabled.
 2. Once a real config file was supplied, the current config-loading path failed when `APP_CONFIG_FILE` pointed at `~/Library/Application Support/SpeakSwiftlyServer/server.yaml`, because that path contains spaces.
 
-The `v2.0.4` fix keeps the canonical config file in Application Support, but stages a copied LaunchAgent-owned alias config under `~/Library/Caches/SpeakSwiftlyServer/launch-agent-server.yaml` whenever the canonical path contains spaces. The LaunchAgent environment now points at that cache copy instead of the spaced canonical path.
+The `v2.0.4` fix kept the canonical config file in Application Support, but staged a copied LaunchAgent-owned alias config under `~/Library/Caches/SpeakSwiftlyServer/launch-agent-server.yaml` whenever the canonical path contained spaces. The LaunchAgent environment pointed at that cache copy instead of the spaced canonical path.
+
+The `v4.3.4` follow-up moves that alias to `~/Library/SpeakSwiftlyServer/launch-agent-server.yaml`. The alias still avoids the `Application Support` space that exposed the original config-provider bug, but it no longer depends on a cache directory that macOS or maintenance tooling can remove independently of the installed LaunchAgent plist.
 
 ## Reliability Follow-Ups
 
@@ -27,6 +29,7 @@ The intended flow is:
 - create a temporary per-user style install layout whose canonical config file lives under an `Application Support` path with spaces
 - run the LaunchAgent install path against the staged release artifact
 - confirm that the installed property list uses the alias config path instead of the canonical path
+- confirm that the default alias path is durable install support under `~/Library/SpeakSwiftlyServer`, not disposable cache state
 - boot the service
 - probe `GET /runtime/host`
 - probe MCP `initialize` over `POST /mcp`

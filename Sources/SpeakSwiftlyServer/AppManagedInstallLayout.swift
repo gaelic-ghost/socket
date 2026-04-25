@@ -79,6 +79,9 @@ public struct ServerInstallLayout: Codable, Sendable, Equatable {
         let cacheDirectoryURL = fileManager
             .urls(for: .cachesDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("SpeakSwiftlyServer", isDirectory: true)
+        let launchAgentSupportDirectoryURL = homeDirectoryURL
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("SpeakSwiftlyServer", isDirectory: true)
         let logsDirectoryURL = fileManager
             .urls(for: .libraryDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Logs", isDirectory: true)
@@ -104,7 +107,8 @@ public struct ServerInstallLayout: Codable, Sendable, Equatable {
             launchAgentsDirectoryURL: launchAgentsDirectoryURL,
             launchAgentPlistURL: launchAgentPlistURL,
             serverConfigFileURL: applicationSupportDirectoryURL.appendingPathComponent("server.yaml", isDirectory: false),
-            launchAgentConfigAliasURL: cacheDirectoryURL.appendingPathComponent("launch-agent-server.yaml", isDirectory: false),
+            launchAgentConfigAliasURL: launchAgentSupportDirectoryURL
+                .appendingPathComponent("launch-agent-server.yaml", isDirectory: false),
             runtimeBaseDirectoryURL: runtimeBaseDirectoryURL,
             runtimeProfileRootURL: runtimeProfileRootURL,
             runtimeConfigurationFileURL: runtimeConfigurationFileURL,

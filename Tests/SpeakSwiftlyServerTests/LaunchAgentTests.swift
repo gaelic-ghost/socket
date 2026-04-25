@@ -144,7 +144,7 @@ import Testing
         userDomain: "gui/501",
     )
 
-    try options.removeStagedConfigAliasIfPresent()
+    try options.removeStagedConfigAliasIfPresent(layout: layout)
     #expect(FileManager.default.fileExists(atPath: layout.launchAgentConfigAliasURL.path) == false)
 }
 

@@ -94,8 +94,10 @@ struct LaunchAgentStatusOptions {
         }
     }
 
-    func removeStagedConfigAliasIfPresent() throws {
-        let layout = ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
+    func removeStagedConfigAliasIfPresent(
+        layout: ServerInstallLayout? = nil,
+    ) throws {
+        let layout = layout ?? ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
         let aliasPath = layout.launchAgentConfigAliasURL.path
         guard FileManager.default.fileExists(atPath: aliasPath) else {
             return
