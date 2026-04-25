@@ -18,13 +18,17 @@ Use this guide when you are changing the root docs, packaged plugin metadata, va
 
 ### Before You Start
 
-This repository has a deliberate split between authored workflow content and packaging metadata. Root [`skills/`](./skills/) is the source of truth. The repo root is also the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). Keep that split intact whenever you edit the repo.
+This directory is normal monorepo-owned content inside `socket` and has a deliberate split between authored workflow content and packaging metadata. Root [`skills/`](./skills/) is the source of truth. The directory root is also the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). Keep that split intact whenever you edit it.
 
 ## Contribution Workflow
 
 ### Choose the Right Surface
 
 Use `python-skills` when Python-, `uv`-, FastAPI-, FastMCP-, or pytest-specific behavior should shape the workflow. If the change is really a general-purpose maintainer pattern, move it to `productivity-skills` instead of broadening this repo.
+
+Commit `python-skills` changes through the `socket` superproject. Do not plan a separate `python-skills` remote push, tag, or GitHub release.
+
+Version changes also belong to `socket`: keep `python-skills` matched to the shared `socket` semantic version and use the root `scripts/release.sh` workflow for inventory and bumps.
 
 ### Keep Changes Coherent
 

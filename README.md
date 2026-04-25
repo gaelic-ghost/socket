@@ -160,7 +160,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 - `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
-- `python-skills` is monorepo-owned here even though its upstream GitHub repository still exists as an archival or private remote source.
+- `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.

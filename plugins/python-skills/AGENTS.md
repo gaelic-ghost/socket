@@ -6,7 +6,7 @@ Use this file for durable repo-local guidance before changing code, docs, metada
 
 ### What This File Covers
 
-- `python-skills` is the canonical source of truth for the shipped Python workflow skills.
+- `python-skills` is a normal monorepo-owned child directory inside `socket` and is the canonical source of truth for the shipped Python workflow skills.
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 - Treat `productivity-skills` as the default baseline maintainer layer for general repo-doc and maintenance work. Use this repo when Python-specific behavior should materially change the workflow.
@@ -23,8 +23,15 @@ Use this file for durable repo-local guidance before changing code, docs, metada
 ### Change Scope
 
 - Keep changes focused on one coherent repo outcome.
+- Commit changes to this directory through the `socket` superproject. Do not expect or recreate a separate `python-skills` remote release path.
 - When the shipped skill surface changes, update the affected skill docs, root docs, and packaging metadata in the same pass.
 - Do not broaden this repo into the general-purpose maintainer baseline when the work belongs in `productivity-skills`.
+
+### Version Ownership
+
+- Match the `socket` shared semantic version exactly.
+- Use the `socket` root `scripts/release.sh` workflow for version inventory and version bumps.
+- Do not hand-bump `python-skills` versions independently from the maintained `socket` version surfaces.
 
 ### Source Of Truth
 
@@ -47,10 +54,10 @@ Use this file for durable repo-local guidance before changing code, docs, metada
 - Run the repo validation path before landing documentation or metadata changes.
 - If docs and validator behavior disagree, update them in the same pass instead of leaving a split-brain repo state.
 
-### Sync And Branch Accounting Gates
+### Superproject And Branch Accounting Gates
 
-- Treat repo-sync verification and local-branch accounting as hard gates before cleanup, release closeout, or "done" claims.
-- When work in this repository is performed from the `socket` superproject or is expected to ship back through `socket`, verify whether `socket` now needs an explicit subtree sync and either complete it or say plainly why no sync is required.
+- Treat superproject status verification and local-branch accounting as hard gates before cleanup, release closeout, or "done" claims.
+- This directory is normal nested `socket` content. There is no `python-skills` subtree push, subtree pull, or independent remote release step to perform for ordinary work here.
 - Before saying work is merged, preserved, or safe to delete, verify the exact commit reachability in the repo and remote being discussed.
 - Before deleting local branches, remote branches, worktrees, or rescue refs, enumerate every local branch not contained by `main` and account for each one explicitly as preserved elsewhere, intentionally in progress, newly archived, newly merged, or safe to delete.
 - Do not treat branch cleanup as routine hygiene that can happen before that accounting pass.
@@ -86,7 +93,7 @@ uv run mypy .
 - Root docs reflect the current active skill inventory and packaging shape.
 - The repo root still reads as the plugin root for Codex without a second packaged subtree.
 - `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` pass when the touched work should affect them.
-- Any required superproject or subtree sync has been completed or surfaced explicitly before cleanup.
+- The `socket` superproject status is clean or explicitly accounted for before cleanup.
 - Local branches not contained by `main` have been accounted for explicitly before deleting anything.
 
 ## Safety Boundaries

@@ -21,11 +21,11 @@ Python workflow skills for `uv` bootstrapping, FastAPI and FastMCP scaffolding, 
 
 ### Status
 
-This repository is active and currently ships a focused set of Python workflow skills.
+This directory is active as normal monorepo-owned content inside `socket` and currently ships a focused set of Python workflow skills.
 
 ### What This Project Is
 
-This repository is the canonical home for Gale's Python-oriented skill authoring. Root [`skills/`](./skills/) is the authored surface, and the repo root is also the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
+This directory is the canonical home for Gale's Python-oriented skill authoring inside `socket`. Root [`skills/`](./skills/) is the authored surface, and the directory root is also the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 ### Motivation
 
@@ -102,7 +102,9 @@ uv run mypy .
 
 ## Release Notes
 
-Use Git history and GitHub releases to track shipped changes for this repository.
+Use `socket` Git history and GitHub releases to track shipped changes for this directory.
+
+`python-skills` follows the shared `socket` semantic version. Version inventory and version bumps must run through the root [`scripts/release.sh`](../../scripts/release.sh) workflow, not through an independent `python-skills` release path.
 
 ## License
 
