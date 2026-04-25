@@ -1,6 +1,6 @@
 {
   "name": "speak-swiftly-server",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "Repo-local Codex plugin for the SpeakSwiftlyServer MCP surface, focused operator skills, and shared local MCP configuration.",
   "author": {
     "name": "Gale",
