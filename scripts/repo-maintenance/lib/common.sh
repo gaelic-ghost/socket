@@ -145,7 +145,14 @@ release_artifact_resources_dir() {
 }
 
 find_speak_swiftly_metallib() {
-  metadata_path="$(speak_swiftly_runtime_metadata_path Release)"
+  deterministic_metallib_path="$REPO_ROOT/../SpeakSwiftly/.local/derived-data/runtime-release/Build/Products/Release/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib"
+  metadata_path="$(speak_swiftly_runtime_root)/SpeakSwiftly.release.json"
+  if [ ! -f "$metadata_path" ]; then
+    [ -f "$deterministic_metallib_path" ] || die "Could not find SpeakSwiftly's published Release runtime metadata at $metadata_path or deterministic Release metallib at $deterministic_metallib_path. Publish and verify the sibling runtime first."
+    printf '%s\n' "$deterministic_metallib_path"
+    return
+  fi
+
   runtime_metallib_path="$(speak_swiftly_runtime_metadata_value "$metadata_path" metallib_path)"
   [ -n "$runtime_metallib_path" ] || die "SpeakSwiftly runtime metadata at $metadata_path did not include a metallib_path value."
   runtime_metallib_path="$(rebase_speak_swiftly_runtime_path "$metadata_path" "$runtime_metallib_path")"

@@ -41,12 +41,56 @@ extension ServerE2E {
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .deletingLastPathComponent()
-        let metadataURL = serverRootURL
+        let siblingSourceRootURL = serverRootURL
             .deletingLastPathComponent()
-            .appendingPathComponent("SpeakSwiftly/.local/xcode/SpeakSwiftly.\(configuration.lowercased()).json", isDirectory: false)
-        guard FileManager.default.fileExists(atPath: metadataURL.path) else {
-            throw SpeakSwiftlyBuildError(
-                "The live SpeakSwiftlyServer end-to-end suite requires the sibling SpeakSwiftly published runtime metadata at '\(metadataURL.path)'. Publish and verify the sibling \(configuration) runtime first.",
+            .appendingPathComponent("SpeakSwiftly", isDirectory: true)
+        let metadataURL = siblingSourceRootURL
+            .appendingPathComponent(".local/xcode/SpeakSwiftly.\(configuration.lowercased()).json", isDirectory: false)
+        let localXcodeRootURL = siblingSourceRootURL
+            .appendingPathComponent(".local/xcode", isDirectory: true)
+        let deterministicRuntimeURL = siblingSourceRootURL
+            .appendingPathComponent(".local/derived-data/runtime-\(configuration.lowercased())", isDirectory: true)
+        let deterministicProductsURL = deterministicRuntimeURL
+            .appendingPathComponent("Build/Products/\(configuration)", isDirectory: true)
+        let deterministicLauncherURL = deterministicRuntimeURL
+            .appendingPathComponent("run-speakswiftly", isDirectory: false)
+        let deterministicExecutableURL = deterministicProductsURL
+            .appendingPathComponent("SpeakSwiftlyTool", isDirectory: false)
+        let deterministicMetallibURL = deterministicProductsURL
+            .appendingPathComponent("mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib", isDirectory: false)
+
+        if !FileManager.default.fileExists(atPath: metadataURL.path) {
+            guard FileManager.default.fileExists(atPath: deterministicMetallibURL.path) else {
+                throw SpeakSwiftlyBuildError(
+                    "The live SpeakSwiftlyServer end-to-end suite requires either sibling SpeakSwiftly published runtime metadata at '\(metadataURL.path)' or the deterministic \(configuration) runtime metallib at '\(deterministicMetallibURL.path)'. Publish and verify the sibling \(configuration) runtime first.",
+                )
+            }
+            guard FileManager.default.isExecutableFile(atPath: deterministicLauncherURL.path) else {
+                throw SpeakSwiftlyBuildError(
+                    "The deterministic sibling SpeakSwiftly \(configuration) runtime launcher was expected at '\(deterministicLauncherURL.path)', but it was missing or not executable. Publish and verify the sibling \(configuration) runtime first.",
+                )
+            }
+            guard FileManager.default.isExecutableFile(atPath: deterministicExecutableURL.path) else {
+                throw SpeakSwiftlyBuildError(
+                    "The deterministic sibling SpeakSwiftly \(configuration) runtime executable was expected at '\(deterministicExecutableURL.path)', but it was missing or not executable. Publish and verify the sibling \(configuration) runtime first.",
+                )
+            }
+
+            return .init(
+                metadataURL: metadataURL,
+                metadata: .init(
+                    buildConfiguration: configuration,
+                    productsPath: deterministicProductsURL.path,
+                    executablePath: deterministicExecutableURL.path,
+                    launcherPath: deterministicLauncherURL.path,
+                    metallibPath: deterministicMetallibURL.path,
+                    aliasPath: deterministicRuntimeURL.path,
+                    sourceRoot: siblingSourceRootURL.path,
+                ),
+                productsURL: deterministicProductsURL,
+                executableURL: deterministicExecutableURL,
+                launcherURL: deterministicLauncherURL,
+                metallibURL: deterministicMetallibURL,
             )
         }
 
@@ -60,12 +104,6 @@ extension ServerE2E {
             )
         }
 
-        let siblingSourceRootURL = metadataURL
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-        let localXcodeRootURL = siblingSourceRootURL
-            .appendingPathComponent(".local/xcode", isDirectory: true)
         let productsURL = resolvedPublishedRuntimeURL(
             recordedPath: metadata.productsPath,
             recordedSourceRoot: metadata.sourceRoot,
