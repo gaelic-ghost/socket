@@ -146,13 +146,22 @@ private enum ReleaseArtifactPromoter {
     }
 
     private static func publishedRuntimeMetallibURL(repositoryRootURL: URL) throws -> URL {
-        let metadataURL = repositoryRootURL
+        let siblingSourceRootURL = repositoryRootURL
             .deletingLastPathComponent()
-            .appendingPathComponent("SpeakSwiftly/.local/xcode/SpeakSwiftly.release.json", isDirectory: false)
-        guard FileManager.default.fileExists(atPath: metadataURL.path) else {
-            throw LaunchAgentCommandError(
-                "The live-service promotion path requires sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)'. Publish and verify the sibling release runtime first.",
-            )
+            .appendingPathComponent("SpeakSwiftly", isDirectory: true)
+        let metadataURL = siblingSourceRootURL
+            .appendingPathComponent(".local/xcode/SpeakSwiftly.release.json", isDirectory: false)
+        let deterministicMetallibURL = siblingSourceRootURL
+            .appendingPathComponent(".local/derived-data/runtime-release/Build/Products/Release/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib", isDirectory: false)
+
+        if !FileManager.default.fileExists(atPath: metadataURL.path) {
+            guard FileManager.default.fileExists(atPath: deterministicMetallibURL.path) else {
+                throw LaunchAgentCommandError(
+                    "The live-service promotion path requires either sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)' or the deterministic release runtime metallib at '\(deterministicMetallibURL.path)'. Publish and verify the sibling release runtime first.",
+                )
+            }
+
+            return deterministicMetallibURL
         }
 
         let metadata = try JSONDecoder().decode(
@@ -174,9 +183,7 @@ private enum ReleaseArtifactPromoter {
             let relativeSuffix = String(metadata.metallibPath.dropFirst(sourceRoot.count))
                 .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
             if relativeSuffix.isEmpty == false {
-                let rebasedURL = repositoryRootURL
-                    .deletingLastPathComponent()
-                    .appendingPathComponent("SpeakSwiftly", isDirectory: true)
+                let rebasedURL = siblingSourceRootURL
                     .appendingPathComponent(relativeSuffix, isDirectory: false)
                 if FileManager.default.fileExists(atPath: rebasedURL.path) {
                     return rebasedURL
