@@ -217,11 +217,60 @@ watch_ci() {
     return 0
   fi
 
+  wait_for_initial_pr_checks "$pr_number"
+
   log "Watching CI for PR #$pr_number."
   if ! gh pr checks "$pr_number" --watch; then
     die "CI is not green for PR #$pr_number. Fix the failing checks, push the branch, and rerun release.sh so it can watch CI again."
   fi
   log "CI is green for PR #$pr_number."
+}
+
+positive_integer_or_default() {
+  value="$1"
+  default_value="$2"
+
+  case "$value" in
+    ''|*[!0-9]*)
+      printf '%s\n' "$default_value"
+      ;;
+    0)
+      printf '%s\n' "$default_value"
+      ;;
+    *)
+      printf '%s\n' "$value"
+      ;;
+  esac
+}
+
+wait_for_initial_pr_checks() {
+  pr_number="$1"
+  timeout_seconds="$(positive_integer_or_default "${REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS:-120}" 120)"
+  poll_seconds="$(positive_integer_or_default "${REPO_MAINTENANCE_INITIAL_CHECK_POLL_SECONDS:-5}" 5)"
+  elapsed_seconds="0"
+
+  log "Waiting up to ${timeout_seconds}s for GitHub to report initial checks on PR #$pr_number."
+
+  while :; do
+    check_count="$(gh pr checks "$pr_number" --json name,state,workflow --jq 'length' 2>/dev/null || printf '0')"
+    case "$check_count" in
+      ''|*[!0-9]*)
+        check_count="0"
+        ;;
+    esac
+
+    if [ "$check_count" -gt 0 ]; then
+      log "Found $check_count initial check(s) for PR #$pr_number."
+      return 0
+    fi
+
+    if [ "$elapsed_seconds" -ge "$timeout_seconds" ]; then
+      die "No checks were reported for PR #$pr_number after ${timeout_seconds}s. Confirm the GitHub Actions workflow triggers for the release branch, then rerun release.sh so it can watch CI."
+    fi
+
+    sleep "$poll_seconds"
+    elapsed_seconds=$((elapsed_seconds + poll_seconds))
+  done
 }
 
 check_pr_comments() {
@@ -233,7 +282,7 @@ check_pr_comments() {
   fi
 
   review_decision="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""')"
-  comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, .reviews[]?] | length)')"
+  comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)')"
 
   if [ "$review_decision" = "CHANGES_REQUESTED" ]; then
     gh pr view "$pr_number" --comments
