@@ -78,7 +78,7 @@ Only `apple-dev-skills` and `SpeakSwiftlyServer` still use subtree sync workflow
 
 Treat Gale's local `socket` checkout as the normal day-to-day checkout on `main`. Work in the monorepo copy first, and use the relevant directory under [`plugins/`](./plugins/) for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs. Reach for a feature branch or a dedicated worktree only when the change needs extra isolation.
 
-Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated. When a coordinated versioning pass bumps maintained child versions, update the child repo metadata in `socket` and keep the corresponding child docs aligned at the same time.
+Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated. `SpeakSwiftlyServer` is pull-only from `socket` by default: release and validate it in its standalone checkout, then pull the released state down here.
 
 ### Shared Versioning
 
@@ -95,6 +95,8 @@ scripts/release.sh custom 1.2.3
 `patch`, `minor`, and `major` are intentionally blocked until every maintained version surface already agrees on one shared version. Use `custom <x.y.z>` once to align them, then use the normal bump modes afterward.
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow boundary and [`ROADMAP.md`](./ROADMAP.md) for root planning and historical notes.
+
+Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the full release flow. `standard` is the normal `socket` release mode; `subtrees` is the standard mode plus explicit pull/push accounting for subtree-managed children.
 
 ### Validation
 
@@ -126,6 +128,7 @@ When a child repository or helper surface grows Python-backed validation beyond 
 ├── docs/
 │   └── maintainers/
 │       ├── plugin-packaging-strategy.md
+│       ├── release-modes.md
 │       └── subtree-workflow.md
 ├── plugins/
 ├── scripts/
@@ -153,6 +156,7 @@ The root superproject docs are:
 - [ROADMAP.md](./ROADMAP.md) for root planning and milestone tracking
 - [ACCESSIBILITY.md](./ACCESSIBILITY.md) for the root accessibility contract around docs, metadata, and maintainer automation
 - [`docs/maintainers/`](./docs/maintainers/) for the deeper maintainer references behind the mixed-monorepo and subtree model
+- [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the `standard` and `subtrees` release modes
 
 ## Plugin Surfaces
 
@@ -160,6 +164,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 - `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
+- `SpeakSwiftlyServer` is synchronized into `socket` by subtree pull after the standalone child release lands; do not subtree-push it from `socket` unless Gale explicitly asks for that exception.
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.

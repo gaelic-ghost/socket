@@ -109,11 +109,18 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("version-bump.sh", release_script)
         self.assertIn("wait_for_initial_pr_checks", release_script)
         self.assertIn("REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS", release_script)
+        self.assertIn("push_release_branch", release_script)
+        self.assertIn("push_release_tag", release_script)
         self.assertIn('gh pr checks "$pr_number" --watch', release_script)
         self.assertIn('select(.state == "COMMENTED")', release_script)
         self.assertIn("valid concerns in code, or add out-of-scope concerns to ROADMAP.md", release_script)
         self.assertIn('gh pr merge "$pr_number" --merge --delete-branch', release_script)
         self.assertIn('pull --ff-only origin "$base_branch"', release_script)
+        self.assertNotIn("release tag `$RELEASE_TAG` was created locally before this PR", release_script)
+        standard_flow = release_script[release_script.index("run_standard_release()") :]
+        self.assertLess(standard_flow.index("watch_ci \"$pr_number\""), standard_flow.index("create_release_tag"))
+        self.assertLess(standard_flow.index("check_pr_comments \"$pr_number\""), standard_flow.index("create_release_tag"))
+        self.assertLess(standard_flow.index("fast_forward_base_branch"), standard_flow.index("create_release_tag"))
 
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

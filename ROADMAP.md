@@ -22,7 +22,7 @@
 
 ## Milestone Progress
 
-- Milestone 2: subtree workflow hardening - Planned
+- Milestone 2: subtree workflow hardening - In Progress
 - Milestone 3: release and sync discipline - In Progress
 
 ## Milestone 2: subtree workflow hardening
@@ -34,20 +34,21 @@ In Progress
 ### Scope
 
 - [ ] Tighten the documented subtree add, pull, and push workflows without changing the child-repo ownership model.
+- [x] Define `standard` and `subtrees` release modes so umbrella releases follow the `maintain-project-repo` protected-main shape with subtree-specific accounting.
 
 ### Tickets
 
-- [ ] Review subtree workflow docs against the current import and publish path.
+- [x] Review subtree workflow docs against the current import and publish path.
 
 ### Exit Criteria
 
-- [ ] Root maintainer workflow docs describe the actual subtree sync path without stale or duplicate guidance.
+- [x] Root maintainer workflow docs describe the actual subtree sync path without stale or duplicate guidance.
 
 ## Milestone 3: release and sync discipline
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
@@ -55,7 +56,7 @@ Planned
 
 ### Tickets
 
-- [ ] Document the expected root release and sync rhythm once the current subtree migration experiment stabilizes.
+- [x] Document the expected root release and sync rhythm once the current subtree migration experiment stabilizes.
 - [ ] Keep the root docs aligned with the current child packaging model during coordinated release-prep passes.
 - [x] Make coordinated semantic-version bumps across `socket` and the maintained child manifests explicit instead of relying on ad hoc release notes.
 
@@ -71,6 +72,7 @@ Planned
 
 ## History
 
+- Added explicit `standard` and `subtrees` release-mode guidance, including the pull-only `SpeakSwiftlyServer` rule for `socket` subtree sync.
 - Prepared the shared `v6.0.11` patch release after fixing `productivity-skills:maintain-project-repo` release-helper regressions for initial PR check discovery and approval-only review handling.
 - Added the placeholder `plugins/spotify` child repository, wired it into the root marketplace, and kept the superproject docs honest about that new monorepo-owned plugin surface.
 - Converted the former standalone `cardhop-mcp` checkout into the monorepo-owned `plugins/cardhop-app` child, added first-pass Codex plugin metadata plus a bundled MCP config, and recorded the new child as a normal `socket` marketplace entry.

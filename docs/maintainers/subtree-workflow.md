@@ -19,7 +19,9 @@ Direct work on local `main` is the default for `socket`. Use a feature branch or
 
 For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
 
-For `apple-dev-skills` and `SpeakSwiftlyServer`, when a change should publish back to their source repositories, work in `plugins/<repo-name>/`, commit in `socket`, and then use `git subtree push --prefix=plugins/<repo-name> <remote> <branch>`.
+For `apple-dev-skills`, when a change should publish back to its source repository, work in `plugins/apple-dev-skills/`, commit in `socket`, and then use `git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main`.
+
+For `SpeakSwiftlyServer`, treat `plugins/SpeakSwiftlyServer/` as a downstream mirror. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer in its standalone checkout, then use `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` to bring that released child state down into `socket`.
 
 ## Child Repository Shape
 
@@ -47,6 +49,13 @@ If a new subtree-managed child repository is introduced later, add its matching 
 
 Use dedicated commits for `apple-dev-skills` and `SpeakSwiftlyServer` subtree work.
 
+Current subtree direction:
+
+| Child | Prefix | Remote | Default direction |
+| --- | --- | --- | --- |
+| `apple-dev-skills` | `plugins/apple-dev-skills` | `apple-dev-skills` | pull and push |
+| `SpeakSwiftlyServer` | `plugins/SpeakSwiftlyServer` | `speak-swiftly-server` | pull-only |
+
 Typical pull flow:
 
 ```bash
@@ -61,14 +70,15 @@ Typical push flow:
 
 ```bash
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
-git subtree push --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
+
+Do not subtree-push `SpeakSwiftlyServer` from `socket` unless Gale explicitly overrides the pull-only rule for that specific task.
 
 After subtree work:
 
 - verify the directory shape under `plugins/apple-dev-skills/` or `plugins/SpeakSwiftlyServer/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
-- if the subtree work is part of a coordinated release-prep pass, keep the child repo version metadata and child docs aligned before pushing the subtree back out
+- if the subtree work is part of a coordinated release-prep pass, use [`release-modes.md`](./release-modes.md) and account for whether each child needs pull-only sync, push-out sync, or no subtree action
 
 ## Shared Version Workflow
 
@@ -83,6 +93,14 @@ scripts/release.sh custom 1.2.3
 ```
 
 That workflow updates the maintained `pyproject.toml` and `.codex-plugin/plugin.json` files, plus adjacent `uv.lock` package self-version entries when those lockfiles exist. It intentionally refuses `patch`, `minor`, or `major` bumps while the maintained surfaces are split across multiple versions; use `custom` once to align them first.
+
+## Release Mode For Subtrees
+
+Use `subtrees` mode from [`release-modes.md`](./release-modes.md) when a `socket` release also needs subtree accounting. That mode treats the umbrella repository like a standard protected-main release and adds the subtree gate before tagging:
+
+- `apple-dev-skills`: pull or push as needed for the child state that the release owns
+- `SpeakSwiftlyServer`: pull the already validated standalone child state down into `socket`; do not push it back out from `socket` by default
+- all subtree sync decisions: record whether the child was pulled, pushed, intentionally deferred, or not touched
 
 ## Add A New Subtree-Managed Child Repository
 
@@ -122,16 +140,20 @@ Use these rules:
 
 ## Release Flow
 
+For full release sequencing, use [`release-modes.md`](./release-modes.md). In short, `standard` is the normal `socket` release mode and `subtrees` is the normal mode plus explicit subtree accounting.
+
 For socket releases:
 
 1. make the intended superproject commits first
 2. keep the working tree clean
-3. push `main` to `origin`
-4. create the release tag locally
-5. push the tag
-6. create the GitHub release from the existing tag
+3. check CI and comments for any release PR before tagging
+4. merge the reviewed release state to `main`
+5. fast-forward local `main` from `origin/main`
+6. create the release tag locally from `main`
+7. push the tag
+8. create the GitHub release from the existing tag
 
-Use `vx.x.x` tags for socket releases.
+Use `vx.x.x` tags for socket releases. When a release used `subtrees` mode, do not create the tag until every touched subtree-managed child has been pulled, pushed, deferred with a stated reason, or confirmed untouched.
 
 ## Common Failure Modes
 
@@ -140,6 +162,7 @@ Use `vx.x.x` tags for socket releases.
 - `apple-dev-skills` or `SpeakSwiftlyServer` still expects subtree sync, but its named remote is missing or points nowhere useful.
 - Socket docs still describe the old all-subtree model after the monorepo has already moved on.
 - `apple-dev-skills` or `SpeakSwiftlyServer` subtree work lands without a follow-up pass over root marketplace wiring and docs.
+- `SpeakSwiftlyServer` is subtree-pushed from `socket` even though its build, validation, release, and live-service refresh belong in the standalone checkout.
 
 ## Practical Rule Of Thumb
 

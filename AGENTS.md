@@ -13,7 +13,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 ### Where To Look First
 
-- Start with [README.md](./README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [ROADMAP.md](./ROADMAP.md), and [`docs/maintainers/subtree-workflow.md`](./docs/maintainers/subtree-workflow.md).
+- Start with [README.md](./README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [ROADMAP.md](./ROADMAP.md), [`docs/maintainers/subtree-workflow.md`](./docs/maintainers/subtree-workflow.md), and [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md).
 - Use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md) when the question is about the root marketplace or the independent-plugin packaging stance.
 - When a task is really about one child repo's own behavior, read that child repo's docs before reading broadly across the superproject.
 
@@ -27,12 +27,14 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Prefer small, focused commits over broad mixed changes.
 - For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
 - For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated from unrelated edits.
+- Treat `plugins/SpeakSwiftlyServer` as a downstream mirror of the standalone SpeakSwiftlyServer checkout. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer from its own checkout, then subtree-pull the merged child state into `socket`; do not subtree-push SpeakSwiftlyServer changes from `socket` unless Gale explicitly overrides that one-off rule.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
 ### Subtree Sync And Branch Accounting Gates
 
 - Treat subtree sync completion and branch accounting as hard gates, not follow-up cleanup.
 - Before claiming a subtree-managed task is done, verify whether the corresponding child-repo work also needs an explicit `git subtree pull` or `git subtree push` in `socket`, and either perform that sync or say plainly why no sync is required.
+- In `subtrees` release mode, treat `socket` like a standard protected-main release: validate, branch or PR when needed, clear CI and PR comments before tagging, merge to `main`, fast-forward local `main`, tag the superproject from reviewed `main`, push the tag, create the GitHub release, and only add the subtree accounting gates that determine whether each child repo needs pull-only sync, push-out sync, or no subtree action.
 - Before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch that is still not contained by local `main` and account for each one explicitly as one of: already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete.
 - Do not say work is "on main", "merged", "recovered", "preserved", or "safe to clean up" until commit reachability has been verified in the exact repository and remote that statement refers to.
 - Do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until the branch-accounting pass has been completed and any non-`main` history is either merged or preserved on an explicit archive ref.
@@ -85,10 +87,9 @@ uv run scripts/validate_socket_metadata.py
 git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
 git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
-git subtree push --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
-Use these commands only when the work is intentionally publishing or syncing one of the remaining subtree-managed child repos.
+Use these commands only when the work is intentionally publishing or syncing one of the remaining subtree-managed child repos. `SpeakSwiftlyServer` is intentionally pull-only from `socket` by default.
 
 ### Shared Version Workflow
 
@@ -103,6 +104,8 @@ scripts/release.sh custom 1.2.3
 ```
 
 `patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with `custom <x.y.z>`.
+
+For full release sequencing, use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md). Use `standard` when only the `socket` superproject changes. Use `subtrees` when the release also needs subtree pull/push accounting.
 
 ## Review and Delivery
 

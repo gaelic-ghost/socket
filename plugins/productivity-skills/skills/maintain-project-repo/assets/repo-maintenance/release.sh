@@ -153,17 +153,26 @@ create_release_tag() {
   log "Created annotated tag $RELEASE_TAG."
 }
 
-push_branch_and_tag() {
+push_release_branch() {
   branch_name="$1"
 
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would push branch $branch_name and tag $RELEASE_TAG to origin."
+    log "Would push branch $branch_name to origin."
     return 0
   fi
 
   git -C "$REPO_ROOT" push -u origin "$branch_name"
+  log "Pushed branch $branch_name."
+}
+
+push_release_tag() {
+  if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
+    log "Would push tag $RELEASE_TAG to origin."
+    return 0
+  fi
+
   git -C "$REPO_ROOT" push origin "$RELEASE_TAG"
-  log "Pushed branch $branch_name and tag $RELEASE_TAG."
+  log "Pushed tag $RELEASE_TAG."
 }
 
 create_or_update_pr() {
@@ -184,11 +193,11 @@ create_or_update_pr() {
 
 - prepares $RELEASE_TAG from branch \`$branch_name\`
 - keeps protected \`$base_branch\` updates behind pull request review and CI
-- release tag \`$RELEASE_TAG\` was created locally before this PR so the reviewed release candidate is preserved exactly
+- release tag \`$RELEASE_TAG\` will be created after CI and the review-comment gate pass, so failed or still-discussed release candidates do not get tagged
 
 ## Review Loop
 
-Before merge, \`scripts/repo-maintenance/release.sh\` watches CI and stops on review comments unless the maintainer has already addressed or resolved them and reruns with \`--review-comments-addressed\`.
+Before merge and tagging, \`scripts/repo-maintenance/release.sh\` watches CI and stops on review comments unless the maintainer has already addressed or resolved them and reruns with \`--review-comments-addressed\`.
 EOF
 
   pr_number="$(gh pr list --head "$branch_name" --base "$base_branch" --json number --jq '.[0].number // empty' --limit 1)"
@@ -320,7 +329,7 @@ fast_forward_base_branch() {
     git -C "$REPO_ROOT" pull --ff-only origin "$base_branch"
     log "Fast-forwarded local $base_branch."
   else
-    warn "Could not check out local $base_branch, likely because another worktree owns it. Fast-forward $base_branch from origin/$base_branch in that checkout before cleanup."
+    die "Could not check out local $base_branch, likely because another worktree owns it. Fast-forward $base_branch from origin/$base_branch in that checkout, then rerun release.sh so the release tag is created from the reviewed base branch."
   fi
 }
 
@@ -383,14 +392,15 @@ run_standard_release() {
 
   run_version_bump
   ensure_clean_worktree
-  create_release_tag
-  push_branch_and_tag "$branch_name"
+  push_release_branch "$branch_name"
   create_or_update_pr "$branch_name"
   pr_number="$PR_NUMBER"
   watch_ci "$pr_number"
   check_pr_comments "$pr_number"
   merge_pr "$pr_number"
   fast_forward_base_branch
+  create_release_tag
+  push_release_tag
   create_github_release
   cleanup_merged_branches "$branch_name"
   log "Standard release flow completed successfully for $RELEASE_TAG."
