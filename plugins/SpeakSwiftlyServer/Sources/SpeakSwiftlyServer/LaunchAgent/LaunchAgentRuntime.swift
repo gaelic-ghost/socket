@@ -94,19 +94,23 @@ struct LaunchAgentStatusOptions {
         }
     }
 
-    func removeStagedConfigAliasIfPresent() throws {
-        let layout = ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
-        let aliasPath = layout.launchAgentConfigAliasURL.path
-        guard FileManager.default.fileExists(atPath: aliasPath) else {
-            return
-        }
+    func removeStagedConfigAliasIfPresent(
+        layout: ServerInstallLayout? = nil,
+    ) throws {
+        let layout = layout ?? ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
+        let legacyAliasURLs = [
+            layout.launchAgentConfigAliasURL,
+            layout.cacheDirectoryURL.appendingPathComponent("launch-agent-server.yaml", isDirectory: false),
+        ]
 
-        do {
-            try FileManager.default.removeItem(atPath: aliasPath)
-        } catch {
-            throw LaunchAgentCommandError(
-                "\(speakSwiftlyServerToolName) could not remove the staged LaunchAgent config copy '\(aliasPath)' during uninstall. Likely cause: \(error.localizedDescription)",
-            )
+        for aliasURL in legacyAliasURLs where FileManager.default.fileExists(atPath: aliasURL.path) {
+            do {
+                try FileManager.default.removeItem(at: aliasURL)
+            } catch {
+                throw LaunchAgentCommandError(
+                    "\(speakSwiftlyServerToolName) could not remove the legacy staged LaunchAgent config copy '\(aliasURL.path)' during uninstall. Likely cause: \(error.localizedDescription)",
+                )
+            }
         }
     }
 

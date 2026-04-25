@@ -157,6 +157,43 @@ import Testing
     #expect(initialConfig.server.completedJobMaxCount == 25)
 }
 
+@Test func `config store loads application support yaml path with spaces directly`() async throws {
+    let applicationSupportDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        .appendingPathComponent("Application Support/SpeakSwiftlyServer", isDirectory: true)
+    try FileManager.default.createDirectory(at: applicationSupportDirectory, withIntermediateDirectories: true)
+    let yamlURL = applicationSupportDirectory.appendingPathComponent("server.yaml", isDirectory: false)
+    try """
+    app:
+      name: application-support-server
+      environment: development
+      host: 127.0.0.1
+      port: 7337
+      sseHeartbeatSeconds: 10
+      completedJobTTLSeconds: 900
+      completedJobMaxCount: 200
+      jobPruneIntervalSeconds: 60
+      http:
+        enabled: true
+        host: 127.0.0.1
+        port: 7337
+        sseHeartbeatSeconds: 10
+      mcp:
+        enabled: true
+        path: /mcp
+        serverName: speak-swiftly-mcp
+        title: SpeakSwiftly
+    """.write(to: yamlURL, atomically: true, encoding: .utf8)
+
+    let config = try await AppConfig.load(environment: ["APP_CONFIG_FILE": yamlURL.path])
+
+    #expect(yamlURL.path.contains("Application Support"))
+    #expect(config.server.name == "application-support-server")
+    #expect(config.server.port == 7337)
+    #expect(config.http.enabled)
+    #expect(config.mcp.enabled)
+}
+
 @Test func `host reports and persists runtime configuration state`() async throws {
     let runtime = MockRuntime()
     let state = await MainActor.run { EmbeddedServer() }

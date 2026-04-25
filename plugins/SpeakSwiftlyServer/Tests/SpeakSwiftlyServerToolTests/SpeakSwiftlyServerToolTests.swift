@@ -155,6 +155,9 @@ import Testing
 
     try "#!/bin/sh\nexit 0\n".write(to: executableURL, atomically: true, encoding: .utf8)
     try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: executableURL.path)
+    let configURL = tempDirectory.appendingPathComponent("config/server.yaml", isDirectory: false)
+    try FileManager.default.createDirectory(at: configURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try "app:\n  port: 7337\n".write(to: configURL, atomically: true, encoding: .utf8)
 
     let fakeLaunchctlScript = """
     #!/bin/sh
@@ -188,6 +191,7 @@ import Testing
         label: "com.example.test",
         toolExecutablePath: executableURL.path,
         plistPath: plistURL.path,
+        configFilePath: configURL.path,
         workingDirectory: tempDirectory.path,
         profileRootPath: tempDirectory.appendingPathComponent("runtime/profiles").path,
         standardOutPath: tempDirectory.appendingPathComponent("logs/stdout.log").path,
@@ -217,6 +221,9 @@ import Testing
     try "#!/bin/sh\nexit 0\n".write(to: executableURL, atomically: true, encoding: .utf8)
     try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: executableURL.path)
     try Data().write(to: stateURL)
+    let configURL = tempDirectory.appendingPathComponent("config/server.yaml", isDirectory: false)
+    try FileManager.default.createDirectory(at: configURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try "app:\n  port: 7337\n".write(to: configURL, atomically: true, encoding: .utf8)
 
     let fakeLaunchctlScript = """
     #!/bin/sh
@@ -263,6 +270,7 @@ import Testing
         label: "com.example.test",
         toolExecutablePath: executableURL.path,
         plistPath: plistURL.path,
+        configFilePath: configURL.path,
         workingDirectory: tempDirectory.path,
         profileRootPath: tempDirectory.appendingPathComponent("runtime/profiles").path,
         standardOutPath: tempDirectory.appendingPathComponent("logs/stdout.log").path,

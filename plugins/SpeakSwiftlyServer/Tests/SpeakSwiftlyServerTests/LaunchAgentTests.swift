@@ -119,15 +119,20 @@ import Testing
     #expect(FileManager.default.fileExists(atPath: serviceStateURL.path) == false)
 }
 
-@Test func `launch agent uninstall removes staged config alias`() throws {
+@Test func `launch agent uninstall removes legacy staged config aliases`() throws {
     let homeDirectoryURL = try makeLaunchAgentCommandTestRepository()
     let layout = ServerInstallLayout.defaultForCurrentUser(
         homeDirectoryURL: homeDirectoryURL,
         launchAgentLabel: "com.gaelic-ghost.test-launch-agent",
     )
+    let cacheAliasURL = layout.cacheDirectoryURL.appendingPathComponent("launch-agent-server.yaml", isDirectory: false)
 
     try FileManager.default.createDirectory(
         at: layout.launchAgentConfigAliasURL.deletingLastPathComponent(),
+        withIntermediateDirectories: true,
+    )
+    try FileManager.default.createDirectory(
+        at: cacheAliasURL.deletingLastPathComponent(),
         withIntermediateDirectories: true,
     )
     try FileManager.default.createDirectory(
@@ -135,6 +140,7 @@ import Testing
         withIntermediateDirectories: true,
     )
     try "aliased config".write(to: layout.launchAgentConfigAliasURL, atomically: true, encoding: .utf8)
+    try "cache aliased config".write(to: cacheAliasURL, atomically: true, encoding: .utf8)
     try "plist".write(to: layout.launchAgentPlistURL, atomically: true, encoding: .utf8)
 
     let options = LaunchAgentStatusOptions(
@@ -144,8 +150,50 @@ import Testing
         userDomain: "gui/501",
     )
 
-    try options.removeStagedConfigAliasIfPresent()
+    try options.removeStagedConfigAliasIfPresent(layout: layout)
     #expect(FileManager.default.fileExists(atPath: layout.launchAgentConfigAliasURL.path) == false)
+    #expect(FileManager.default.fileExists(atPath: cacheAliasURL.path) == false)
+}
+
+@Test func `launch agent config preparation seeds missing canonical application support config`() throws {
+    let homeDirectoryURL = try makeLaunchAgentCommandTestRepository()
+    let layout = ServerInstallLayout(
+        launchAgentLabel: "com.gaelic-ghost.test-launch-agent",
+        workingDirectoryURL: homeDirectoryURL,
+        applicationSupportDirectoryURL: homeDirectoryURL
+            .appendingPathComponent("Library/Application Support/SpeakSwiftlyServer", isDirectory: true),
+        cacheDirectoryURL: homeDirectoryURL.appendingPathComponent("Library/Caches/SpeakSwiftlyServer", isDirectory: true),
+        logsDirectoryURL: homeDirectoryURL.appendingPathComponent("Library/Logs/SpeakSwiftlyServer", isDirectory: true),
+        launchAgentsDirectoryURL: homeDirectoryURL.appendingPathComponent("Library/LaunchAgents", isDirectory: true),
+        launchAgentPlistURL: homeDirectoryURL
+            .appendingPathComponent("Library/LaunchAgents/com.gaelic-ghost.test-launch-agent.plist", isDirectory: false),
+        serverConfigFileURL: homeDirectoryURL
+            .appendingPathComponent("Library/Application Support/SpeakSwiftlyServer/server.yaml", isDirectory: false),
+        launchAgentConfigAliasURL: homeDirectoryURL
+            .appendingPathComponent("Library/SpeakSwiftlyServer/launch-agent-server.yaml", isDirectory: false),
+        runtimeBaseDirectoryURL: homeDirectoryURL
+            .appendingPathComponent("Library/Application Support/SpeakSwiftlyServer/runtime", isDirectory: true),
+        runtimeProfileRootURL: homeDirectoryURL
+            .appendingPathComponent("Library/Application Support/SpeakSwiftlyServer/runtime/profiles", isDirectory: true),
+        runtimeConfigurationFileURL: homeDirectoryURL
+            .appendingPathComponent("Library/Application Support/SpeakSwiftlyServer/runtime/configuration.json", isDirectory: false),
+        standardOutLogURL: homeDirectoryURL.appendingPathComponent("Library/Logs/SpeakSwiftlyServer/stdout.log"),
+        standardErrorLogURL: homeDirectoryURL.appendingPathComponent("Library/Logs/SpeakSwiftlyServer/stderr.log"),
+    )
+    let options = try LaunchAgentOptions(
+        label: layout.launchAgentLabel,
+        toolExecutablePath: "/tmp/SpeakSwiftlyServerTool",
+        plistPath: layout.launchAgentPlistURL.path,
+        configFilePath: layout.serverConfigFileURL.path,
+        requireToolExecutableExists: false,
+    )
+
+    try options.prepareLaunchAgentConfig(layout: layout)
+
+    let seededConfig = try String(contentsOf: layout.serverConfigFileURL, encoding: .utf8)
+    #expect(seededConfig.contains("port: 7337"))
+    #expect(seededConfig.contains("enabled: true"))
+    #expect(options.effectiveConfigFilePath(layout: layout) == layout.serverConfigFileURL.standardizedFileURL.path)
 }
 
 @Test func `launch agent status reports explicit not loaded state`() throws {

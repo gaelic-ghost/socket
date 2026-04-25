@@ -83,7 +83,16 @@ import Testing
     #expect(snapshot.stderr.lines.isEmpty)
 }
 
-@Test func `launch agent environment uses cache alias when config path contains spaces`() throws {
+@Test func `default install layout uses application support for canonical config`() throws {
+    let homeDirectory = try makeTemporaryDirectory()
+    let layout = ServerInstallLayout.defaultForCurrentUser(homeDirectoryURL: homeDirectory)
+
+    #expect(
+        layout.serverConfigFileURL.path.contains("/Library/Application Support/SpeakSwiftlyServer/server.yaml"),
+    )
+}
+
+@Test func `launch agent environment uses canonical config path when it contains spaces`() throws {
     let tempDirectory = try makeTemporaryDirectory()
     let layout = ServerInstallLayout(
         launchAgentLabel: "com.example.test",
@@ -107,7 +116,7 @@ import Testing
         reloadIntervalSeconds: nil,
     )
 
-    #expect(environmentVariables["APP_CONFIG_FILE"] == layout.launchAgentConfigAliasURL.path)
+    #expect(environmentVariables["APP_CONFIG_FILE"] == layout.serverConfigFileURL.standardizedFileURL.path)
     #expect(environmentVariables["SPEAKSWIFTLY_PROFILE_ROOT"] == layout.runtimeProfileRootURL.path)
 }
 

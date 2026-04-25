@@ -14,19 +14,24 @@ The live service had two separate issues that combined into one confusing operat
 1. The LaunchAgent had been installed without `APP_CONFIG_FILE`, so the service fell back to built-in defaults and kept the MCP transport disabled.
 2. Once a real config file was supplied, the current config-loading path failed when `APP_CONFIG_FILE` pointed at `~/Library/Application Support/SpeakSwiftlyServer/server.yaml`, because that path contains spaces.
 
-The `v2.0.4` fix keeps the canonical config file in Application Support, but stages a copied LaunchAgent-owned alias config under `~/Library/Caches/SpeakSwiftlyServer/launch-agent-server.yaml` whenever the canonical path contains spaces. The LaunchAgent environment now points at that cache copy instead of the spaced canonical path.
+The `v2.0.4` fix kept the canonical config file in Application Support, but staged a copied LaunchAgent-owned alias config under `~/Library/Caches/SpeakSwiftlyServer/launch-agent-server.yaml` whenever the canonical path contained spaces. The LaunchAgent environment pointed at that cache copy instead of the spaced canonical path.
+
+The `v4.3.4` follow-up moves that alias to `~/Library/SpeakSwiftlyServer/launch-agent-server.yaml`. The alias still avoids the `Application Support` space that exposed the original config-provider bug, but it no longer depends on a cache directory that macOS or maintenance tooling can remove independently of the installed LaunchAgent plist.
+
+The Application Support cleanup is implemented on the `runtime/application-support-config` branch. It treats the alias as a temporary compatibility shim and moves the target design back to direct `~/Library/Application Support/SpeakSwiftlyServer/server.yaml` loading, with install/refresh seeding the canonical file from a bundled default when needed.
 
 ## Reliability Follow-Ups
 
 ### 1. Add a full LaunchAgent smoke test for the real per-user install layout
 
-The existing unit coverage now proves that LaunchAgent installs rewrite `APP_CONFIG_FILE` to the cache alias when the canonical config path contains spaces. That should be extended into an end-to-end smoke test that verifies the whole app-managed install contract, not only the environment shaping.
+The current unit coverage now proves that LaunchAgent installs point `APP_CONFIG_FILE` directly at the canonical Application Support config path, even when the path contains spaces. That should be extended into an end-to-end smoke test that verifies the whole app-managed install contract, not only the environment shaping.
 
 The intended flow is:
 
 - create a temporary per-user style install layout whose canonical config file lives under an `Application Support` path with spaces
 - run the LaunchAgent install path against the staged release artifact
-- confirm that the installed property list uses the alias config path instead of the canonical path
+- confirm that the installed property list uses the canonical Application Support config path
+- confirm that install/refresh seeds the canonical config when it is missing
 - boot the service
 - probe `GET /runtime/host`
 - probe MCP `initialize` over `POST /mcp`
@@ -34,28 +39,28 @@ The intended flow is:
 
 That test should fail for any future regression where:
 
-- the alias copy is not staged
-- the property list keeps pointing at the spaced canonical path
+- the canonical config is not seeded during install/refresh
+- the property list stops pointing at the spaced canonical path
 - the service starts but the MCP transport silently falls back to disabled
 
 ### 2. Make config-path staging and config-open behavior visible in operator logs
 
-The current fix is operationally correct, but it still asks a maintainer to infer too much from side effects. Startup logs should say exactly which config path the service intended to use and whether an alias copy was staged.
+The current fix is operationally correct, but it still asks a maintainer to infer too much from side effects. Startup logs should say exactly which config path the service intended to use and whether a default config was seeded.
 
 Add explicit log lines for:
 
 - canonical config path requested for LaunchAgent install
-- alias config path selected for LaunchAgent use
-- whether the alias path was copied or left untouched
+- canonical config path selected for LaunchAgent use
+- whether the canonical config was seeded or already present
 - the exact config path the runtime config loader is opening at startup
 - whether config reload watching is enabled for that path
 
 If the config file cannot be opened, the error should name:
 
 - the path that failed
-- whether it was the canonical path or the LaunchAgent alias path
+- whether it was the canonical path or an explicit custom path
 - whether the file existed
-- one likely cause, such as a missing file, a stale alias copy, or a provider/path handling bug
+- one likely cause, such as a missing file, permissions problem, or provider/path handling bug
 
 ### 3. Add a first-class health-check command for the live service
 
@@ -85,14 +90,7 @@ Status update on `2026-04-15`: this is now shipped as `xcrun swift run SpeakSwif
 
 ### 4. Revisit whether LaunchAgent-owned config needs a reloading provider
 
-The current server config path uses `swift-configuration` reloading providers for YAML-backed config, which is the right long-term default for operator-edited config files. It is less clear that the LaunchAgent-owned startup config path needs the same behavior when the practical requirement is "start reliably from a known file under the app-managed layout".
-
-The project should make an explicit decision here instead of inheriting that behavior accidentally:
-
-- keep the reloading provider for LaunchAgent config and harden the file-path behavior further
-- or split startup config loading from live reload watching so LaunchAgent startup uses a simpler file-open path and optional later reload support is layered on top
-
-Before changing architecture, verify the documented `swift-configuration` behavior being relied on and confirm whether the path-with-spaces failure came from the provider stack itself or from the way this package integrates with it.
+Status update: the package now keeps reload behavior, but uses a small Foundation URL-backed YAML provider for the filesystem read and polling. `swift-configuration` still owns the reader, precedence behavior, YAML snapshot parsing, and value lookup shape; only the path-sensitive file access moved out of `ReloadingFileProvider<YAMLSnapshot>`.
 
 ### 5. Add explicit self-reporting for transport policy at startup
 

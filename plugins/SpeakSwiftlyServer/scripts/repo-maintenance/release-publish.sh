@@ -11,7 +11,8 @@ release_tag=""
 skip_validate="false"
 skip_gh_release="false"
 refresh_live_service="${REPO_MAINTENANCE_DEFAULT_REFRESH_LIVE_SERVICE:-true}"
-live_service_config_file="${REPO_MAINTENANCE_DEFAULT_LIVE_SERVICE_CONFIG_FILE:-$HOME/Library/Application Support/SpeakSwiftlyServer/server.yaml}"
+default_live_service_config_file="${REPO_MAINTENANCE_DEFAULT_LIVE_SERVICE_CONFIG_FILE:-$HOME/Library/Application Support/SpeakSwiftlyServer/server.yaml}"
+live_service_config_file="$default_live_service_config_file"
 dry_run="false"
 
 while [ "$#" -gt 0 ]; do
@@ -141,7 +142,13 @@ if [ "$REPO_MAINTENANCE_REFRESH_LIVE_SERVICE" = "true" ]; then
     log "Would refresh the live LaunchAgent-backed service with $staged_tool using config $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE."
   else
     [ -n "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" ] || die "Live service refresh requires a non-empty config file path. Pass --live-service-config-file /absolute/path/to/server.yaml or use --skip-live-service-refresh."
-    [ -f "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" ] || die "Live service refresh expected a server config file at $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE, but that file does not exist. Pass --live-service-config-file /absolute/path/to/server.yaml or use --skip-live-service-refresh."
+    if [ ! -f "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" ]; then
+      if [ "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" = "$default_live_service_config_file" ]; then
+        log "Live service config is missing at $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE; launch-agent install will seed the default Application Support config."
+      else
+        die "Live service refresh expected a server config file at $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE, but that file does not exist. Use the default Application Support config path to allow seeding, pass an existing --live-service-config-file /absolute/path/to/server.yaml, or use --skip-live-service-refresh."
+      fi
+    fi
     [ -x "$staged_tool" ] || die "Live service refresh expected the staged release tool at $staged_tool, but it was missing or not executable."
     log "Refreshing the live LaunchAgent-backed service from $staged_tool."
     "$staged_tool" launch-agent install --config-file "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE"

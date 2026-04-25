@@ -1,7 +1,6 @@
 import Configuration
 import Foundation
 import ServiceLifecycle
-import SystemPackage
 
 struct ConfigStore {
     enum Update {
@@ -12,7 +11,7 @@ struct ConfigStore {
     let reader: ConfigReader
     let services: [any Service]
 
-    private let reloadingProvider: ReloadingFileProvider<YAMLSnapshot>?
+    private let reloadingProvider: URLReloadingYAMLConfigProvider?
 
     // MARK: - Initialization
 
@@ -29,12 +28,11 @@ struct ConfigStore {
             environment: environment,
         )
 
-        var reloadingProvider: ReloadingFileProvider<YAMLSnapshot>?
+        var reloadingProvider: URLReloadingYAMLConfigProvider?
 
         if let configFilePath = environment["APP_CONFIG_FILE"], !configFilePath.isEmpty {
-            let provider = try await ReloadingFileProvider<YAMLSnapshot>(
-                filePath: FilePath(configFilePath),
-                allowMissing: false,
+            let provider = try await URLReloadingYAMLConfigProvider(
+                fileURL: URL(fileURLWithPath: configFilePath),
                 pollInterval: Self.reloadPollInterval(from: environment),
             )
             providers.append(provider)

@@ -21,7 +21,7 @@ public struct ServerInstallLayout: Codable, Sendable, Equatable {
     public let launchAgentPlistURL: URL
     /// The durable server config file an app should manage for the standalone server.
     public let serverConfigFileURL: URL
-    /// The alias config file path used when the real config path is not LaunchAgent-friendly.
+    /// The legacy alias config file path used by older LaunchAgent installs.
     public let launchAgentConfigAliasURL: URL
     /// The runtime state root used by the installed server process.
     public let runtimeBaseDirectoryURL: URL
@@ -79,6 +79,9 @@ public struct ServerInstallLayout: Codable, Sendable, Equatable {
         let cacheDirectoryURL = fileManager
             .urls(for: .cachesDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("SpeakSwiftlyServer", isDirectory: true)
+        let launchAgentSupportDirectoryURL = homeDirectoryURL
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("SpeakSwiftlyServer", isDirectory: true)
         let logsDirectoryURL = fileManager
             .urls(for: .libraryDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("Logs", isDirectory: true)
@@ -104,7 +107,8 @@ public struct ServerInstallLayout: Codable, Sendable, Equatable {
             launchAgentsDirectoryURL: launchAgentsDirectoryURL,
             launchAgentPlistURL: launchAgentPlistURL,
             serverConfigFileURL: applicationSupportDirectoryURL.appendingPathComponent("server.yaml", isDirectory: false),
-            launchAgentConfigAliasURL: cacheDirectoryURL.appendingPathComponent("launch-agent-server.yaml", isDirectory: false),
+            launchAgentConfigAliasURL: launchAgentSupportDirectoryURL
+                .appendingPathComponent("launch-agent-server.yaml", isDirectory: false),
             runtimeBaseDirectoryURL: runtimeBaseDirectoryURL,
             runtimeProfileRootURL: runtimeProfileRootURL,
             runtimeConfigurationFileURL: runtimeConfigurationFileURL,
@@ -129,11 +133,7 @@ public struct ServerInstallLayout: Codable, Sendable, Equatable {
     }
 
     func launchAgentConfigPath(for configFilePath: String) -> String {
-        let standardizedPath = URL(fileURLWithPath: configFilePath).standardizedFileURL.path
-        if standardizedPath.contains(" ") {
-            return launchAgentConfigAliasURL.path
-        }
-        return standardizedPath
+        URL(fileURLWithPath: configFilePath).standardizedFileURL.path
     }
 }
 

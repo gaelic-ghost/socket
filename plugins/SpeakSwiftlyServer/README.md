@@ -154,7 +154,7 @@ The shared server supports these environment variables:
 - `APP_MCP_TITLE`
 - `SPEAKSWIFTLY_PROFILE_ROOT`
 
-If `APP_CONFIG_FILE` points at a YAML file, the server loads it through [swift-configuration](https://github.com/apple/swift-configuration), with environment variables taking precedence over YAML and YAML taking precedence over built-in defaults.
+If `APP_CONFIG_FILE` points at a YAML file, the server loads it through the package's Foundation URL-backed YAML provider and [swift-configuration](https://github.com/apple/swift-configuration), with environment variables taking precedence over YAML and YAML taking precedence over built-in defaults. Missing config files fail startup loudly. LaunchAgent install and refresh paths seed the default `~/Library/Application Support/SpeakSwiftlyServer/server.yaml` from the bundled template when that canonical file is missing.
 
 ```yaml
 app:

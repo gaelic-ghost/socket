@@ -10,11 +10,11 @@ It answers three concrete questions:
 2. Which public capabilities are intentionally adapted instead of mirrored exactly?
 3. Which transport is the right client contract for each capability: HTTP, MCP, both, or neither?
 
-Current baseline checked against the `SpeakSwiftly 4.0.5` package state resolved by this repository on `2026-04-24`. The root package now follows `SpeakSwiftly` with an up-to-next-major semantic-version requirement starting at `4.0.5`.
+Current baseline checked against the `SpeakSwiftly 4.0.7` package state resolved by this repository on `2026-04-25`. The root package now follows `SpeakSwiftly` with an up-to-next-major semantic-version requirement starting at `4.0.7`.
 
 ## Summary
 
-`SpeakSwiftlyServer` exposes most of the public runtime control plane that makes sense outside Swift code, with the current `SpeakSwiftly 4.0.5` Qwen additions called out below as deliberate follow-up decisions:
+`SpeakSwiftlyServer` exposes most of the public runtime control plane that makes sense outside Swift code, with the current `SpeakSwiftly 4.0.7` Qwen additions called out below as deliberate follow-up decisions:
 
 - speech generation for live playback, retained file output, and batches
 - voice design and voice cloning with explicit `vibe`

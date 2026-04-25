@@ -16,7 +16,7 @@ extension LaunchAgentOptions {
 
         let layout = ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
         let environmentVariables = layout.launchAgentEnvironmentVariables(
-            configFilePath: configFilePath,
+            configFilePath: effectiveConfigFilePath(layout: layout),
             reloadIntervalSeconds: reloadIntervalSeconds,
         )
         .merging(
@@ -52,7 +52,7 @@ extension LaunchAgentOptions {
         try FileManager.default.createDirectory(atPath: profileRootPath, withIntermediateDirectories: true)
         try ensureParentDirectory(for: standardOutPath)
         try ensureParentDirectory(for: standardErrorPath)
-        try stageLaunchAgentConfigAliasIfNeeded(layout: layout)
+        try prepareLaunchAgentConfig(layout: layout)
 
         try propertyListData().write(to: URL(fileURLWithPath: plistPath), options: .atomic)
         try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: plistPath)
@@ -121,32 +121,28 @@ extension LaunchAgentOptions {
         }
     }
 
-    private func stageLaunchAgentConfigAliasIfNeeded(layout: ServerInstallLayout) throws {
-        guard let configFilePath, !configFilePath.isEmpty else { return }
-
-        let canonicalConfigURL = URL(fileURLWithPath: configFilePath).standardizedFileURL
-        guard FileManager.default.fileExists(atPath: canonicalConfigURL.path) else {
-            throw LaunchAgentCommandError(
-                "\(speakSwiftlyServerToolName) could not install the LaunchAgent because the config file '\(canonicalConfigURL.path)' does not exist.",
-            )
+    func effectiveConfigFilePath(layout: ServerInstallLayout) -> String {
+        if let configFilePath, !configFilePath.isEmpty {
+            return URL(fileURLWithPath: configFilePath).standardizedFileURL.path
         }
 
-        let aliasedConfigPath = layout.launchAgentConfigPath(for: canonicalConfigURL.path)
-        guard aliasedConfigPath != canonicalConfigURL.path else { return }
+        return layout.serverConfigFileURL.standardizedFileURL.path
+    }
 
-        let aliasURL = URL(fileURLWithPath: aliasedConfigPath)
-        try ensureParentDirectory(for: aliasURL.path)
+    func prepareLaunchAgentConfig(layout: ServerInstallLayout) throws {
+        let effectiveConfigURL = URL(fileURLWithPath: effectiveConfigFilePath(layout: layout)).standardizedFileURL
+        let canonicalConfigURL = layout.serverConfigFileURL.standardizedFileURL
 
-        do {
-            if FileManager.default.fileExists(atPath: aliasURL.path) {
-                try FileManager.default.removeItem(at: aliasURL)
-            }
-            try FileManager.default.copyItem(at: canonicalConfigURL, to: aliasURL)
-        } catch {
+        if effectiveConfigURL.path == canonicalConfigURL.path {
+            _ = try DefaultServerConfig.seedIfMissing(at: canonicalConfigURL)
+            return
+        }
+
+        guard FileManager.default.fileExists(atPath: effectiveConfigURL.path) else {
             throw LaunchAgentCommandError(
                 """
-                \(speakSwiftlyServerToolName) could not stage the LaunchAgent config copy at '\(aliasURL.path)' from canonical config '\(canonicalConfigURL.path)'.
-                Likely cause: \(error.localizedDescription)
+                \(speakSwiftlyServerToolName) could not install the LaunchAgent because the explicit config file '\(effectiveConfigURL.path)' does not exist.
+                Use the default Application Support config at '\(canonicalConfigURL.path)' to allow automatic seeding, or create the explicit config file before installing.
                 """,
             )
         }

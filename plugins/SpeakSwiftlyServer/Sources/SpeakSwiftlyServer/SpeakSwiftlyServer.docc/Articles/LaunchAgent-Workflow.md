@@ -26,6 +26,7 @@ That gives you the exact LaunchAgent payload the package currently wants to stag
 - the label
 - the `ProgramArguments` path and `serve` invocation
 - the working directory
+- the `APP_CONFIG_FILE` path for the canonical Application Support config
 - the stdout and stderr log files
 - the `SPEAKSWIFTLY_PROFILE_ROOT` environment override for the standalone server
 
@@ -33,12 +34,16 @@ That profile-root override is the LaunchAgent-owned profile-store root on the `S
 
 ## Install Or Refresh The Background Service
 
-Once the property list looks right, install it with the config file you want the background service to use:
+Once the property list looks right, install it. If no config file is supplied, the install path uses
+`~/Library/Application Support/SpeakSwiftlyServer/server.yaml` and seeds that file from the bundled
+default config when it is missing:
 
 ```bash
-xcrun swift run SpeakSwiftlyServerTool launch-agent install \
-  --config-file ./server.yaml
+xcrun swift run SpeakSwiftlyServerTool launch-agent install
 ```
+
+If you pass `--config-file`, custom paths must already exist. The default Application Support path is
+the only path that install and refresh flows seed automatically.
 
 This package's LaunchAgent path is designed around the staged release artifact, not around whichever debug binary happened to run the command. That keeps the installed service pointed at the package's maintained release surface instead of at a transient local build product.
 
@@ -64,7 +69,7 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent uninstall
 keeps a plain remove flow aligned with the install and promote-live refresh flows, which already
 wait for launchd teardown before they try to bootstrap the next job incarnation.
 It also removes the staged LaunchAgent config alias copy from the managed install layout, so the
-remove flow now clears the launch-agent-owned config shim instead of leaving stale alias state
+remove flow now clears legacy launch-agent-owned config shims instead of leaving stale alias state
 behind after the job is gone.
 
 `status` now reports an explicit `load_state` field. A normal absent job shows `load_state: not_loaded`.

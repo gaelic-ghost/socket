@@ -1,0 +1,19 @@
+app:
+  name: speak-swiftly-server
+  environment: development
+  host: 127.0.0.1
+  port: 7337
+  sseHeartbeatSeconds: 10
+  completedJobTTLSeconds: 900
+  completedJobMaxCount: 200
+  jobPruneIntervalSeconds: 60
+  http:
+    enabled: true
+    host: 127.0.0.1
+    port: 7337
+    sseHeartbeatSeconds: 10
+  mcp:
+    enabled: true
+    path: /mcp
+    serverName: speak-swiftly-mcp
+    title: SpeakSwiftly
