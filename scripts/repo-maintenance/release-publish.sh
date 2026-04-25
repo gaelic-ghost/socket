@@ -141,12 +141,12 @@ if [ "$REPO_MAINTENANCE_REFRESH_LIVE_SERVICE" = "true" ]; then
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
     log "Would refresh the live LaunchAgent-backed service with $staged_tool using config $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE."
   else
-    [ -n "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" ] || die "Live service refresh requires a non-empty config file path. Pass --live-service-config-file /absolute/path/to/server.yaml or use --skip-live-service-refresh."
+    [ -n "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" ] || die "Live service refresh requires a non-empty config file path. Pass --live-service-config-file <server-config-yaml> or use --skip-live-service-refresh."
     if [ ! -f "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" ]; then
       if [ "$REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE" = "$default_live_service_config_file" ]; then
         log "Live service config is missing at $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE; launch-agent install will seed the default Application Support config."
       else
-        die "Live service refresh expected a server config file at $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE, but that file does not exist. Use the default Application Support config path to allow seeding, pass an existing --live-service-config-file /absolute/path/to/server.yaml, or use --skip-live-service-refresh."
+        die "Live service refresh expected a server config file at $REPO_MAINTENANCE_LIVE_SERVICE_CONFIG_FILE, but that file does not exist. Use the default Application Support config path to allow seeding, pass an existing --live-service-config-file <server-config-yaml>, or use --skip-live-service-refresh."
       fi
     fi
     [ -x "$staged_tool" ] || die "Live service refresh expected the staged release tool at $staged_tool, but it was missing or not executable."

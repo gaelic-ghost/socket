@@ -24,7 +24,7 @@
 - If local `main` is ahead of `origin/main`, do not try to publish from that unsynced checkout. Move that work onto a feature branch or keep it on the existing branch, run `release-prepare.sh`, merge the PR, fast-forward local `main`, and only then run `release-publish.sh`. Protected-branch updates belong on the prepare side of the workflow, not inside publish.
 - Feature branches and feature worktrees may publish release tags when Gale explicitly requests that branch-tagged release flow.
 - Treat the resolved `SpeakSwiftly` dependency declared in `Package.swift` and locked in `Package.resolved` as the source of truth for normal `xcrun swift build` and `xcrun swift test` runs here.
-- Do not retarget this package to a local `../SpeakSwiftly` checkout unless the manifest is being changed intentionally for a specific local-integration task.
+- Do not retarget this package to a local SpeakSwiftly checkout unless the manifest is being changed intentionally for a specific local-integration task.
 - If unreleased `SpeakSwiftly` changes are needed here, prefer stabilizing and tagging them in `SpeakSwiftly` first, then update this repository to that release instead of integrating against half-finished sibling checkout work.
 - Treat `macOS 15` as the current standalone package baseline and keep the host and state model friendly to a near-future `iOS 18` reuse path.
 - Prefer maintainable Apple-platform architecture over speculative Linux abstraction. If Linux support would require major design compromise, stop and discuss whether a separate Rust implementation is the cleaner path.

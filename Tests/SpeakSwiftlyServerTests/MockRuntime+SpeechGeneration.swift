@@ -80,7 +80,7 @@ extension MockRuntime {
                 ),
                 requestContext: requestContext,
                 sampleRate: 24000,
-                filePath: "/tmp/\(artifactID).wav",
+                filePath: mockArtifactPath("\(artifactID).wav"),
             )
         }
         generatedFiles.append(generatedFile)
@@ -155,7 +155,7 @@ extension MockRuntime {
                     textProfile: item.textProfile,
                     inputTextContext: item.inputTextContext,
                     sampleRate: 24000,
-                    filePath: "/tmp/\(item.artifactID ?? "\(requestID)-artifact-\(index + 1)").wav",
+                    filePath: mockArtifactPath("\(item.artifactID ?? "\(requestID)-artifact-\(index + 1)").wav"),
                 )
             }
         }
@@ -238,4 +238,10 @@ extension MockRuntime {
         }
         return RuntimeRequestHandle(id: requestID, operation: "generate_batch", profileName: profileName, events: events)
     }
+}
+
+private func mockArtifactPath(_ fileName: String) -> String {
+    URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        .appendingPathComponent(fileName, isDirectory: false)
+        .path
 }

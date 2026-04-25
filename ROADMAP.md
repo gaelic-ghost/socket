@@ -58,7 +58,7 @@
 
 ## Milestone 5: Library Integration Follow-Through
 
-- [x] Split `../SpeakSwiftly` so it vends a reusable library product alongside its executable product.
+- [x] Split the SpeakSwiftly package so it vends a reusable library product alongside its executable product.
 - [x] Switch this package from subprocess-style integration to direct `SpeakSwiftly` package import when that library product exists.
 - [x] Collapse temporary integration-only scaffolding that became unnecessary after direct import.
 - [x] Align the runtime bridge with the public `SpeakSwiftly` library surface instead of constructing raw worker requests across the library boundary.
