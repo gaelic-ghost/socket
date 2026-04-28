@@ -62,7 +62,7 @@
 - [x] Switch this package from subprocess-style integration to direct `SpeakSwiftly` package import when that library product exists.
 - [x] Collapse temporary integration-only scaffolding that became unnecessary after direct import.
 - [x] Align the runtime bridge with the public `SpeakSwiftly` library surface instead of constructing raw worker requests across the library boundary.
-- [x] Re-align this package with the repackaged `SpeakSwiftly` plus direct `TextForSpeech` dependency surface so `swift build` and `swift test` work against the current sibling checkout again.
+- [x] Re-align this package with the repackaged `SpeakSwiftly` plus direct `TextForSpeech` dependency surface so `xcrun swift build` and `xcrun swift test` work against the current package graph again.
 - [x] Adopt the updated `SpeakSwiftly.Runtime.speak(..., textProfileName:textContext:id:)` signature and remove assumptions about older normalization-only entrypoints.
 - [x] Add the new voice-clone creation flow across host, HTTP, MCP, and tests.
 - [x] Expose the new text-profile inspection and editing helpers across HTTP and MCP with a transport model that stays distinct from stored voice-profile jobs.
@@ -115,11 +115,11 @@ Current note: distribution polish for discovery and packaging, not a current rel
 - [x] Add a deliberately small executable-oriented companion article set for `SpeakSwiftlyServerTool` without duplicating the full repository operator docs.
 - [x] Add the short tutorial-style walkthrough described in `docs/maintainers/docc-spi-hosting-plan.md` so the hosted docs have a concrete embedded-session first-use path.
 - [x] Add a DocC build check both locally through `scripts/repo-maintenance/validate-all.sh` and in GitHub Actions before the package is submitted to Swift Package Index.
-- [ ] Submit the package to Swift Package Index once the current patch release candidate (`v3.1.1`) is tagged, pushed, and checked against the maintainer SPI submission checklist.
+- [ ] Submit the package to Swift Package Index once the package metadata and hosted DocC surface are ready for public indexing.
 
 ## Milestone 11: SpeakSwiftly 3.x Surface Adoption
 
-Current note: this milestone tracks the server-side adoption work for the newer `SpeakSwiftly` runtime surface through the current `3.0.3` alignment pass.
+Current note: this milestone tracks the server-side adoption work for the newer `SpeakSwiftly` runtime surface. The older 3.x migration is complete; remaining items are follow-on parity and shaping work on top of the current 4.x package line.
 
 - [x] Carry explicit `vibe` through the existing profile and clone creation surfaces instead of preserving the older implicit-profile behavior as the server moved onto the newer `SpeakSwiftly` runtime surface.
 - [x] Expose the persisted `SpeakSwiftly.Configuration` surface across host state, HTTP, and MCP so operators can inspect and change the active speech backend without reaching into the runtime process manually.
@@ -128,11 +128,11 @@ Current note: this milestone tracks the server-side adoption work for the newer 
 - [x] Split the oversized host, model, and mixed route-test sources into concern-focused files and refresh the maintainer docs around that layout so future cleanup does not regrow monoliths.
 - [x] Finish the operator-control E2E realignment so it uses the renamed HTTP surface consistently and validates long live playback with varied text instead of repeated-sentence filler.
 - [x] Re-run the full live E2E suite after the resource-bundling and transport-surface realignment updates and verify the renamed MCP surface and operator-control flows end to end.
-- [x] Bump the resolved `SpeakSwiftly` dependency to the current `v3.0.3` package state, including the `TextForSpeech 0.16.x` compatibility updates that follow from that runtime surface.
+- [x] Bump the resolved `SpeakSwiftly` dependency through the newer 4.x package state, including the matching `TextForSpeech` compatibility updates that follow from that runtime surface.
 - [x] Expose `runtime.voices.rename(_:to:)` and `runtime.voices.reroll(_:)` across host, HTTP, MCP, docs, and controlled-runtime tests.
-- [ ] Add generated-file reads across host, HTTP, MCP, and shared resources so saved artifacts can be listed and fetched through the server instead of only inside the sibling library.
-- [ ] Add generation-job reads and expiry controls across host, HTTP, MCP, and shared resources so persisted file and batch jobs can be inspected and managed directly.
-- [ ] Add batch-generation submission plus batch-read surfaces across host, HTTP, MCP, and shared resources, including artifact-id shaping and the existing text-format / source-format context support for each batch item.
+- [x] Add generated-file reads across host, HTTP, MCP, and shared resources so saved artifacts can be listed and fetched through the server instead of only inside the sibling library.
+- [x] Add generation-job reads and expiry controls across host, HTTP, MCP, and shared resources so persisted file and batch jobs can be inspected and managed directly.
+- [x] Add batch-generation submission plus batch-read surfaces across host, HTTP, MCP, and shared resources, including artifact-id shaping and the existing text-format / source-format context support for each batch item.
 - [ ] Revisit server-local job and snapshot shaping so the new immediate generation-control operations and persisted generation-job reads map directly to runtime concepts instead of keeping legacy server-only wrappers around them.
 - [x] Expand README, MCP tool docs, shared resources, and opt-in live E2E coverage so `marvis` vs `qwen3`, explicit `vibe`, generated files, generation jobs, and batch generation are all documented and verified end to end.
 
@@ -165,7 +165,7 @@ Post-`v2.0.4` note: these items capture the next hardening pass after the Launch
 - [ ] Decide whether LaunchAgent-owned startup config should keep using a reloading provider or move to a simpler startup-open path with reload support layered on intentionally later.
 - [ ] Promote the existing MCP E2E client utilities into a reusable repo-owned smoke helper for local checks, CI, and release verification.
 - [ ] Add a maintainer-facing release verification path that confirms the staged release artifact, LaunchAgent install, runtime host overview, and MCP initialize flow all agree.
-- [ ] Split transport smoke coverage more clearly from long audible-playback E2E coverage so failures localize faster.
+- [x] Split transport smoke coverage more clearly from long audible-playback E2E coverage so failures localize faster.
 
 ## Milestone 15: Toolchain Repro And Upstream Follow-Through
 

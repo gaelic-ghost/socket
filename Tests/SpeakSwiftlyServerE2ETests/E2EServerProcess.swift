@@ -247,7 +247,6 @@ final class E2ELiveServerExecutionLaneLease: @unchecked Sendable {
     }
 
     static func acquire(timeout: Duration = .seconds(5)) throws -> E2ELiveServerExecutionLaneLease {
-        try ensureLaunchAgentBackedLiveServiceIsNotLoaded()
         try ensureNoCompetingServeProcessIsRunning()
 
         let lockPath = lockURL.path
@@ -290,27 +289,8 @@ final class E2ELiveServerExecutionLaneLease: @unchecked Sendable {
         }
     }
 
-    private static func ensureLaunchAgentBackedLiveServiceIsNotLoaded() throws {
-        let userDomain = "gui/\(getuid())"
-        let result = try runProcess(
-            executableURL: URL(fileURLWithPath: launchctlPath),
-            arguments: ["print", "\(userDomain)/\(launchAgentLabel)"],
-            allowNonZeroExit: true,
-            failureSummary: "The live end-to-end suite could not inspect the LaunchAgent-backed SpeakSwiftlyServer service state.",
-        )
-
-        guard result.exitCode != 0 else {
-            throw E2ETransportError(
-                """
-                The LaunchAgent-backed live SpeakSwiftlyServer service '\(launchAgentLabel)' is still loaded in '\(userDomain)'.
-                Live end-to-end coverage must run without the always-on service active, or the machine can end up speaking from two different server processes at once.
-                Stop it first with `./.release-artifacts/current/SpeakSwiftlyServerTool launch-agent uninstall` and then rerun the end-to-end command.
-                """,
-            )
-        }
-    }
-
     private static func ensureNoCompetingServeProcessIsRunning() throws {
+        let allowedProcessIdentifiers = try launchAgentBackedLiveServiceProcessIdentifiers()
         let result = try runProcess(
             executableURL: URL(fileURLWithPath: pgrepPath),
             arguments: ["-fl", "SpeakSwiftlyServerTool serve"],
@@ -326,6 +306,7 @@ final class E2ELiveServerExecutionLaneLease: @unchecked Sendable {
                 guard line.contains("SpeakSwiftlyServerTool serve") else { return false }
                 guard !line.hasPrefix(currentProcessIdentifier + " ") else { return false }
                 guard !line.contains("\(pgrepPath) -fl SpeakSwiftlyServerTool serve") else { return false }
+                guard allowedProcessIdentifiers.contains(processIdentifier(from: line)) == false else { return false }
 
                 return true
             }
@@ -334,13 +315,46 @@ final class E2ELiveServerExecutionLaneLease: @unchecked Sendable {
             let processSummary = competingProcesses.joined(separator: "\n")
             throw E2ETransportError(
                 """
-                The live end-to-end suite found an existing `SpeakSwiftlyServerTool serve` process before it could start its own helper.
-                Live end-to-end coverage must own the only speaking server process on the machine while it runs.
+                The live end-to-end suite found an existing non-LaunchAgent `SpeakSwiftlyServerTool serve` process before it could start its own helper.
+                Live end-to-end coverage can run alongside the LaunchAgent-backed service after its resident models are unloaded, but separate ad hoc server helpers must not overlap.
                 Existing processes:
                 \(processSummary)
                 """,
             )
         }
+    }
+
+    private static func launchAgentBackedLiveServiceProcessIdentifiers() throws -> Set<String> {
+        let userDomain = "gui/\(getuid())"
+        let result = try runProcess(
+            executableURL: URL(fileURLWithPath: launchctlPath),
+            arguments: ["print", "\(userDomain)/\(launchAgentLabel)"],
+            allowNonZeroExit: true,
+            failureSummary: "The live end-to-end suite could not inspect the LaunchAgent-backed SpeakSwiftlyServer service state.",
+        )
+
+        guard result.exitCode == 0 else {
+            return []
+        }
+
+        return Set(
+            result.standardOutput
+                .split(separator: "\n")
+                .compactMap { processIdentifier(fromLaunchctlLine: String($0)) },
+        )
+    }
+
+    private static func processIdentifier(from processLine: String) -> String {
+        processLine.split(separator: " ", maxSplits: 1).first.map(String.init) ?? ""
+    }
+
+    private static func processIdentifier(fromLaunchctlLine line: String) -> String? {
+        let trimmedLine = line.trimmingCharacters(in: .whitespaces)
+        guard let match = trimmedLine.firstMatch(of: /pid\s*=\s*(\d+)/) else {
+            return nil
+        }
+
+        return String(match.1)
     }
 
     func release() {

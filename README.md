@@ -75,7 +75,7 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent install \
   --config-file ./server.yaml
 ```
 
-Promote the current checkout into the live LaunchAgent-backed service explicitly:
+Use the explicit promotion command when you want the lower-level "build, stage, then reinstall" spelling. This is mostly useful for release or operator scripts that want to name the promotion step directly; ordinary default-path refreshes can use `install`.
 
 ```bash
 xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live \

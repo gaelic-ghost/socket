@@ -63,4 +63,4 @@
 
 - [x] Replace the SSE helper's fixed post-connect sleep and buffer polling loop with explicit async wakeups for stream readiness, notification arrival, and terminal stream failure so MCP resource-update tests stop depending on arbitrary 100ms delays inside the harness.
 - [x] Recheck the broader MCP E2E helper path for places where startup or session-handshake failures are still flattened into retry polling instead of surfacing the real transport error once the server is reachable.
-- [x] Run one live MCP smoke path against the refactored stream helper once it is worth temporarily stopping any LaunchAgent-backed local service, so the async-wakeup harness changes have one real end-to-end proof point beyond helper-only tests.
+- [x] Run one live MCP smoke path against the refactored stream helper after the live-service model-unload preflight creates enough memory headroom, so the async-wakeup harness changes have one real end-to-end proof point beyond helper-only tests.
