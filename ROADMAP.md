@@ -78,6 +78,7 @@ No active backlog candidates are currently tracked here. Add new candidates only
 ## History
 
 - Completed the subtree workflow and release-discipline milestones by adding the root marketplace audit pass, the public child plugin removal checklist, and a tighter roadmap state that no longer carries stale backlog items as active work.
+- Prepared the `v6.1.0` minor release by adding the `maintain-project-api` productivity skill and keeping the monorepo-owned child docs, tests, and shared version surfaces aligned.
 - Added explicit `standard` and `subtrees` release-mode guidance, including the pull-only `SpeakSwiftlyServer` rule for `socket` subtree sync.
 - Published `apple-dev-skills` `v6.0.11` after adding direct regression coverage for SwiftPM-generated `.swiftpm/xcode/package.xcworkspace` classification and synced the released child state back into `socket`.
 - Prepared the shared `v6.0.11` patch release after fixing `productivity-skills:maintain-project-repo` release-helper regressions for initial PR check discovery and approval-only review handling.

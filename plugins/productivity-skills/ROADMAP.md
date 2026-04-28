@@ -27,7 +27,7 @@
 - Milestone 14: Claude Code optimization pass - Planned
 - Milestone 22: Accessibility maintenance baseline - Planned
 - Milestone 23: Security and support maintenance baseline - Planned
-- Milestone 24: API maintenance baseline - In Progress
+- Milestone 24: API maintenance baseline - Completed
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -110,25 +110,27 @@ Planned
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
-- [ ] Add a new `maintain-project-api` baseline skill for canonical `API.md` maintenance.
-- [ ] Define `API.md` as the repo-local API contract document for surface area, access, request and response shapes, errors, compatibility, local verification, and ownership.
-- [ ] Keep the skill aligned with the existing docs-maintenance family so API references can be audited and normalized with deterministic `check-only` and bounded `apply` workflow modes.
+- [x] Add a new `maintain-project-api` baseline skill for canonical `API.md` maintenance.
+- [x] Define `API.md` as the repo-local API contract document for surface area, access, request and response shapes, errors, compatibility, local verification, and ownership.
+- [x] Keep the skill aligned with the existing docs-maintenance family so API references can be audited and normalized with deterministic `check-only` and bounded `apply` workflow modes.
 
 ### Tickets
 
-- [ ] Draft and ship the `maintain-project-api` skill surface with template, config, script, references, and tests.
-- [ ] Define and validate the canonical `API.md` schema, including surface, auth, schemas, errors, versioning, verification, and support ownership sections.
-- [ ] Add claim-integrity guardrails so the workflow does not invent endpoints, schemas, credentials, permissions, version guarantees, or support paths.
-- [ ] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
+- [x] Draft and ship the `maintain-project-api` skill surface with template, config, script, references, and tests.
+- [x] Define and validate the canonical `API.md` schema, including surface, auth, schemas, errors, versioning, verification, and support ownership sections.
+- [x] Add claim-integrity guardrails so the workflow does not invent endpoints, schemas, credentials, permissions, version guarantees, or support paths.
+- [x] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
 
 ### Exit Criteria
 
-- [ ] The repository ships a working `maintain-project-api` skill with deterministic `check-only` and bounded `apply` behavior.
-- [ ] The canonical `API.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
+- [x] The repository ships a working `maintain-project-api` skill with deterministic `check-only` and bounded `apply` behavior.
+- [x] The canonical `API.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
+
+Completed Milestone 24 by adding `maintain-project-api` as a template-backed `API.md` maintenance workflow with check/apply modes, schema references, OpenAI metadata, and regression coverage for clean missing-file creation.
 
 ## Backlog Candidates
 
@@ -138,6 +140,7 @@ In Progress
 ## History
 
 - Fixed `maintain-project-repo` standard release handling so new release PRs wait for initial GitHub checks before watching CI, approval-only reviews no longer count as unresolved review comments, and release tags are created only after CI and the review-comment gate pass.
+- Added `maintain-project-api` as the baseline `API.md` maintenance skill for API surface, access, schema, error, compatibility, verification, and support ownership docs.
 - Clarified that the managed repo-maintenance workflow exposes `validate` as the branch-protection check context, avoiding blocked PRs caused by requiring the workflow-title display string instead.
 - Completed Milestones 0 through 11 by refactoring the naming and structure, splitting README and roadmap maintenance into dedicated skills, restoring `explain-code-slice`, and aligning the repository around the current plugin-ready packaging model.
 - Completed Milestones 12 and 13 by moving the agent-stack maintainer bootstrap and guidance-sync workflows into `agent-plugin-skills`.
