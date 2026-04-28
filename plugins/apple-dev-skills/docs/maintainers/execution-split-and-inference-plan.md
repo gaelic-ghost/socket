@@ -98,7 +98,7 @@ Planned profile shape:
 - `xcode-app`
 - optional later `swift-mixed-root`
 
-The socket plugin ships `productivity-skills` and `apple-dev-skills` together, so Apple workflows can call the sibling `maintain-project-repo` skill instead of vendoring another toolkit source.
+The `socket` marketplace lists `productivity-skills` and `apple-dev-skills` together, so users who install that catalog get the sibling `maintain-project-repo` skill without wiring each plugin one by one. Users who install only `apple-dev-skills` still get the Apple-only workflows, but mutating bootstrap and guidance-sync workflows must explain that repo-maintenance install or refresh requires the `productivity-skills` companion plugin.
 
 Current Apple-side integration status:
 

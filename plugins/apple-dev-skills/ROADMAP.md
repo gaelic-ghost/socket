@@ -29,6 +29,7 @@
 - Keep root `skills/` as the canonical authored and exported surface.
 - Keep Apple documentation requirements explicit and enforceable in the skill guidance.
 - Keep plugin packaging thin and secondary to the workflow-authoring surface.
+- Keep standalone install behavior honest: Apple-only workflows should remain usable from `apple-dev-skills` alone, while repo-maintenance bootstrap and sync workflows should name their `productivity-skills` companion requirement and the optional `socket` marketplace path.
 - Expand the repo deliberately instead of adding loosely related helper features ad hoc.
 
 ## Milestone Progress

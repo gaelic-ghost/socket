@@ -47,6 +47,14 @@ Use this repository's skills when the work is about:
 
 When installed as a Codex plugin, this repository also registers Xcode's built-in MCP bridge through `xcrun mcpbridge`. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools.
 
+### Companion Plugin Requirements
+
+Most Apple Dev Skills workflows are useful as a standalone plugin. The bootstrap and repo-guidance sync workflows that install or refresh `scripts/repo-maintenance/` also need the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin installed alongside this plugin, because `productivity-skills` owns the reusable `maintain-project-repo` implementation while Apple Dev Skills chooses the Apple-specific `swift-package` or `xcode-app` profile.
+
+If an agent has only `apple-dev-skills` installed, it can still use the documentation lookup, SwiftUI architecture, Xcode build/run/test, DocC, formatting, source-structure, and accessibility workflows. It should install `productivity-skills` before running `bootstrap-swift-package`, `bootstrap-xcode-app-project`, `sync-swift-package-guidance`, or `sync-xcode-project-guidance` in mutating mode.
+
+The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the socket marketplace is useful when you want Apple Dev Skills and its companion plugins available together without wiring each plugin one by one; standalone installs remain supported for Apple-only workflows that do not call `maintain-project-repo`.
+
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [`ROADMAP.md`](./ROADMAP.md) for planned and completed milestone-level work.
 
 ## Development

@@ -9,6 +9,10 @@ description: Sync repo guidance for an existing Swift Package Manager repository
 
 Bring an existing Swift package repository up to the expected guidance baseline without stretching the package bootstrap skill into an ongoing repo-guidance surface. This skill owns deterministic `AGENTS.md` creation or bounded section append behavior for existing SwiftPM repos and runs `maintain-project-repo` with the `swift-package` profile alongside that guidance. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/sync_swift_package_guidance.py` applies the current sync behavior.
 
+## Companion Plugin Requirement
+
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating guidance-sync path refreshes repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills` or install the [`socket`](https://github.com/gaelic-ghost/socket) marketplace, which is useful when they want Gale's Apple and general maintainer plugins available together.
+
 ## When To Use
 
 - Use this skill when an existing Swift package repo needs `AGENTS.md` added, refreshed, or merged with the current SwiftPM workflow baseline.

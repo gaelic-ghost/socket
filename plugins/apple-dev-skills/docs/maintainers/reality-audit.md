@@ -67,6 +67,7 @@ Use this flow when validating the current top-level export surface and local dis
 ## Durable Review Criteria
 
 - Root docs should say plainly that `productivity-skills` remains the default baseline layer for general repo-doc and maintenance work, while this repo is the Apple-specific specialization layer.
+- Root docs should distinguish standalone `apple-dev-skills` installs from installs that also include the `productivity-skills` companion plugin or the `socket` marketplace catalog.
 - Root docs must describe the same active skill surface.
 - Root docs must describe the current top-level export shape without treating deleted nested packaging experiments as active.
 - Codex plugin docs must describe Xcode MCP registration as Xcode-owned `xcrun mcpbridge` wiring, not as a bundled third-party server package.

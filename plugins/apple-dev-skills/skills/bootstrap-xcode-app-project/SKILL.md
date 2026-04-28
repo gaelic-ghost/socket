@@ -9,6 +9,10 @@ description: Bootstrap a new native Apple app project for macOS, iOS, or iPadOS 
 
 Create a new native Apple app repository from nothing to a usable baseline on disk. The first implementation prioritizes a deterministic `XcodeGen` path for SwiftUI app projects and a guarded planning path for the standard Xcode-created-project flow. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/bootstrap_xcode_app_project.py` is the current implementation core for XcodeGen-backed scaffold creation plus `maintain-project-repo` installation with the `xcode-app` profile.
 
+## Companion Plugin Requirement
+
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills` or install the [`socket`](https://github.com/gaelic-ghost/socket) marketplace, which is useful when they want Gale's Apple and general maintainer plugins available together.
+
 ## When To Use
 
 - Use this skill when the user wants to start, begin, create, or bootstrap a new macOS, iOS, or iPadOS app project on macOS.
