@@ -89,13 +89,7 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist
 xcrun swift run SpeakSwiftlyServerTool healthcheck
 ```
 
-Before any live end-to-end run, make sure the LaunchAgent-backed live service is not holding resident model memory. The current suite still fails fast when that service is loaded, so the historical manual stop command is:
-
-```bash
-./.release-artifacts/current/SpeakSwiftlyServerTool launch-agent uninstall
-```
-
-That command removes the installed plist, so reinstall afterward with `xcrun swift run SpeakSwiftlyServerTool launch-agent install` if you use it. The intended next simplification is to replace this destructive preflight with a live-service model unload/reload helper so the service definition stays installed while the test-owned helper has enough memory headroom.
+Before any live end-to-end run, make sure the LaunchAgent-backed live service has released resident model memory through the live-service model unload preflight. Leave the installed service in place; the E2E helper runs on its own random ports and only needs comfortable memory headroom.
 
 ## Development Expectations
 

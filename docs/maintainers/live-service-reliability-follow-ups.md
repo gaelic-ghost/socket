@@ -187,14 +187,14 @@ The remaining follow-through here is mostly discipline:
 - keep the server package live suite transport-owned
 - avoid regrowing playback-heavy or model-specific assertions in this repo unless the server itself adds a new transport contract
 - keep the smoke cases pointed at the actual shipped HTTP and MCP names so release verification still proves the operator surface we publish
-- replace the current destructive LaunchAgent uninstall preflight with a live-service memory-headroom preflight that unloads resident models before tests and reloads them afterward, but only when the live service is reachable and idle enough for that mutation to be safe
+- keep E2E preflight focused on live-service memory headroom by unloading resident models before tests and reloading them afterward; do not remove the installed LaunchAgent service for test setup
 
 ## Suggested Tracking Order
 
 If these follow-ups are tackled incrementally, the highest-value order is:
 
 1. LaunchAgent smoke test with spaced config path plus HTTP and MCP probes.
-2. Replace destructive E2E uninstall guidance with an idle-aware resident-model unload/reload preflight.
+2. Keep the resident-model unload/reload E2E preflight aligned with the current live-service helper.
 3. Staged-artifact promotion hardening, including the all-in-one install path and any required re-sign behavior.
 4. First-class live service health-check command.
 5. Better startup and config-open logging.
