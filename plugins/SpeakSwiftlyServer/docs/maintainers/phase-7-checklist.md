@@ -64,8 +64,8 @@ The simpler path considered first was to stop after documenting that playback-jo
 
 ## Validation
 
-- `swift build`
-- `swift test`
+- `xcrun swift build`
+- `xcrun swift test`
 
 Add coverage for both the typed reload-update surface and the host-side live-apply versus restart-required boundary.
 

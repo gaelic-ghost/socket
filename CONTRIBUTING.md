@@ -32,12 +32,15 @@ Use the root repository for work about:
 - root maintainer docs under [`docs/`](./docs/)
 - root policies in [README.md](./README.md), [AGENTS.md](./AGENTS.md), and [ROADMAP.md](./ROADMAP.md)
 - root validation and CI such as [`scripts/validate_socket_metadata.py`](./scripts/validate_socket_metadata.py) and [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml)
+- coordinated child-skill guidance that needs one consistent policy across multiple monorepo-owned plugin or skills repositories
 
 If the change is really about one child repository's own skills, packaging, tests, or release flow, start in that child repository's docs and workflow instead of treating `socket` as a generic catch-all.
 
 ### Making Changes
 
 Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. For ordinary work in monorepo-owned child directories, edit the copy in the relevant directory under `plugins/` directly from this checkout. For `apple-dev-skills`, keep subtree pull and push operations explicit and separate from unrelated edits. For `SpeakSwiftlyServer`, treat `socket` as a pull-only mirror of the standalone release checkout unless maintainers explicitly approve a one-off push from `socket`.
+
+For coordinated child-skill guidance, keep the root explanation small and put detailed behavior in the child repo that owns the skill surface. The root docs should explain why the pass is coordinated; the child docs should explain the actual skill contract.
 
 ### Asking For Review
 

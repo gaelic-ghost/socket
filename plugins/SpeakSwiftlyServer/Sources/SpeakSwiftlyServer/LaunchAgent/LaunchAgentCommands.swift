@@ -178,7 +178,12 @@ package struct LaunchAgentCommand {
                 return try .init(action: .printPlist(LaunchAgentOptions.parse(arguments: Array(arguments.dropFirst()), currentDirectoryPath: currentDirectoryPath, currentExecutablePath: currentExecutablePath)))
 
             case "install":
-                return try .init(action: .install(LaunchAgentOptions.parse(arguments: Array(arguments.dropFirst()), currentDirectoryPath: currentDirectoryPath, currentExecutablePath: currentExecutablePath)))
+                return try .init(action: .install(LaunchAgentOptions.parse(
+                    arguments: Array(arguments.dropFirst()),
+                    currentDirectoryPath: currentDirectoryPath,
+                    currentExecutablePath: currentExecutablePath,
+                    stageDefaultReleaseArtifact: true,
+                )))
 
             case "promote-live":
                 return try .init(action: .promoteLive(LaunchAgentPromoteOptions.parse(

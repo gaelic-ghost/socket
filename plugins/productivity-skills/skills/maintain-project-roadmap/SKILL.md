@@ -38,6 +38,12 @@ This skill is the general template layer for roadmap maintenance. It defines the
 - `Backlog Candidates` should hold plausible future work that is not yet committed to a milestone.
 - `History` should record only notable roadmap changes such as milestone additions, scope cuts, resets, or major replans.
 
+## Codex Subagent Fit
+
+When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy roadmap discovery before the main workflow edits or reports. Good jobs include checking one milestone family per worker, comparing roadmap claims against release notes, or gathering evidence from docs and issues for backlog triage.
+
+Keep `apply` edits in the main thread because this skill owns one target roadmap and must preserve one coherent planning structure. Ask workers for concise findings, candidate changes, and references instead of direct roadmap rewrites.
+
 ## Canonical Base Contract
 
 The authoritative default shared roadmap structure lives in:

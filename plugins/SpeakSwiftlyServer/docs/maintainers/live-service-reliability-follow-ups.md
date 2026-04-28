@@ -108,17 +108,19 @@ This should make "MCP disabled because config never loaded" visible within the f
 
 ### 6. Make staged-artifact promotion and signature handling explicit
 
-Today's live promotion showed that `launch-agent install` is not the same operation as "promote the currently checked-out code into the live service". `launch-agent install` rewrites or refreshes the property list and bootstraps launchd, but it still runs whichever binary already lives at `.release-artifacts/current/SpeakSwiftlyServerTool`.
+Today's live promotion showed that `launch-agent install` is not the same operation as "promote the currently checked-out code into the live service". Older `launch-agent install` rewrote or refreshed the property list and bootstrapped launchd, but still ran whichever binary already lived at `.release-artifacts/current/SpeakSwiftlyServerTool`.
+
+Status update: the default `launch-agent install` path now builds and stages the current checkout before writing and bootstrapping the LaunchAgent. Explicit `--tool-executable-path` installs still use the caller-provided executable without overwriting it.
 
 That leaves one easy operator trap:
 
 - a source-level fix can be merged and validated locally
-- `launch-agent install` can be rerun successfully
-- the live service can still come back on an older staged executable unless the staged artifact is refreshed first
+- an explicit `--tool-executable-path` install can be rerun successfully
+- the live service can still come back on an older custom executable unless that explicit executable is refreshed first
 
 The package should make that boundary explicit and first-class:
 
-- add a supported operator verb for refreshing or promoting the staged executable instead of relying on manual file copies
+- keep the default `install` path as the supported all-in-one refresh path instead of relying on manual file copies
 - document whether staged artifacts must be re-signed after in-place refreshes and encode that behavior in the supported path instead of making it a tribal-knowledge repair
 - emit operator-facing output that names the exact staged executable path and modification time that the LaunchAgent install is about to activate
 - add verification that the live running process, the staged artifact, and the intended source build all agree on the same executable revision
@@ -158,7 +160,7 @@ But Inspector should stay in the "operator investigation" lane, not become the o
 
 ### 3. Extend the release-owned live-service refresh into transport health verification
 
-The release script now validates the repo, fails fast if the requested tag does not already match `HEAD`, builds the release artifact, stages `.release-artifacts/current`, tags, pushes, creates the GitHub release object, and refreshes the live LaunchAgent-backed service from that staged artifact by default. It still does not verify that the refreshed live service can actually boot from the staged artifact with both transports healthy.
+The release script now validates the repo, creates or verifies the requested tag at `HEAD`, pushes the branch and tag, opens the release PR, watches CI, checks review state, merges, fast-forwards `main`, and creates the GitHub release object. It still does not verify that a refreshed live service can actually boot from the staged artifact with both transports healthy.
 
 Add a maintainer-facing release checklist or release helper step that covers:
 
@@ -185,17 +187,19 @@ The remaining follow-through here is mostly discipline:
 - keep the server package live suite transport-owned
 - avoid regrowing playback-heavy or model-specific assertions in this repo unless the server itself adds a new transport contract
 - keep the smoke cases pointed at the actual shipped HTTP and MCP names so release verification still proves the operator surface we publish
+- keep E2E preflight focused on live-service memory headroom by unloading resident models before tests and reloading them afterward; do not remove the installed LaunchAgent service for test setup
 
 ## Suggested Tracking Order
 
 If these follow-ups are tackled incrementally, the highest-value order is:
 
 1. LaunchAgent smoke test with spaced config path plus HTTP and MCP probes.
-2. Staged-artifact promotion hardening, including an explicit promote or update path and any required re-sign behavior.
-3. First-class live service health-check command.
-4. Better startup and config-open logging.
-5. Reusable repo-owned MCP smoke helper.
-6. Config reload architecture decision for LaunchAgent-owned startup files.
+2. Keep the resident-model unload/reload E2E preflight aligned with the current live-service helper.
+3. Staged-artifact promotion hardening, including the all-in-one install path and any required re-sign behavior.
+4. First-class live service health-check command.
+5. Better startup and config-open logging.
+6. Reusable repo-owned MCP smoke helper.
+7. Config reload architecture decision for LaunchAgent-owned startup files.
 
 ## Package-Wide Hardening Pass Order
 

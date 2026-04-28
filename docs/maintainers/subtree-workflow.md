@@ -9,6 +9,7 @@ This document explains how `socket` is maintained after the monorepo simplificat
 - the nested directory layout under `plugins/`
 - the root Codex marketplace at `.agents/plugins/marketplace.json`
 - the maintainer docs that explain the mixed monorepo experiment
+- coordinated guidance passes that intentionally keep multiple child skill repositories aligned
 - release tags and release notes for the superproject itself
 
 Treat Gale's local `socket` checkout as the normal day-to-day working checkout on `main`.
@@ -18,6 +19,8 @@ Direct work on local `main` is the default for `socket`. Use a feature branch or
 `socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/` and `plugins/SpeakSwiftlyServer/`.
 
 For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
+
+For coordinated guidance that spans multiple monorepo-owned child repositories, edit the relevant child directories directly and update the root docs only enough to explain the cross-child policy or discovery reason.
 
 For `apple-dev-skills`, when a change should publish back to its source repository, work in `plugins/apple-dev-skills/`, commit in `socket`, and then use `git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main`.
 

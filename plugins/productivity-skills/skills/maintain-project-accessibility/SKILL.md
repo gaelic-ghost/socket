@@ -51,6 +51,12 @@ The base contract requires:
 - `Known Gaps` should always exist, even when it only records that there are no currently documented exceptions.
 - `Verification and Evidence` should prefer grounded tools, commands, audit dates, and review history over general promises.
 
+## Codex Subagent Fit
+
+When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy accessibility evidence gathering before the main workflow edits or reports. Good jobs include checking documented verification commands, inventorying UI surfaces, reading known-gap notes, or comparing accessibility claims against repo evidence.
+
+Keep `apply` edits in the main thread because this skill owns one target `ACCESSIBILITY.md` file and must avoid unsupported compliance claims. Ask workers for concise evidence, risks, and file references rather than drafted conformance language.
+
 ## Output Contract
 
 - Return Markdown plus JSON with:

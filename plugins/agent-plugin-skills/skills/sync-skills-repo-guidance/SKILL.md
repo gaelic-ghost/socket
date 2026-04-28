@@ -51,3 +51,21 @@ When syncing `AGENTS.md`, include strict dependency guidance:
 - shared project dependencies must resolve from GitHub repository URLs, package managers, package registries, or other real remote repositories
 - committed dependency declarations, lockfiles, scripts, docs, examples, generated project files, and CI config must not point at machine-local paths
 - machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly
+
+## Codex Subagent Guidance
+
+When auditing target skills, treat subagent guidance as useful only when it is explicit, bounded, and tied to real parallel support work. Match OpenAI's current Codex wording:
+
+- use `subagent` and `subagent workflow` rather than vague older `multi-agent` language
+- say Codex only spawns subagents when the user explicitly asks for subagents or parallel agent work
+- prefer subagents for read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization
+- ask workers for concise findings, evidence, links, or file references instead of raw intermediate output
+- keep write-heavy apply work in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes
+
+Flag skill guidance that implies automatic delegation, recommends parallel writes without ownership boundaries, or adds subagent advice to narrow single-file or sequential workflows.
+
+## Codex Hooks Guidance
+
+When auditing target skills or plugin-repo docs that mention OpenAI Codex Hooks, keep hooks separate from plugin packaging and discovery mirrors. Hooks are Codex runtime lifecycle scripts, not a plugin install surface.
+
+Flag hooks guidance that omits `features.codex_hooks = true`, implies project-local hooks load without a trusted `.codex/` layer, treats `PreToolUse` or `PostToolUse` as complete enforcement for every tool path, or confuses Codex Hooks with git pre-commit hooks or repo-maintenance hook scripts.

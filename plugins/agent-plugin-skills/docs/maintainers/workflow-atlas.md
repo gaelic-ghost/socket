@@ -21,6 +21,8 @@ For the maintainers' plugin-surface diagram and glossary, see [codex-plugin-inst
 - No skill in this repo should teach a nested staged plugin directory for this repo.
 - No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.
 - No skill in this repo should resurrect installer or install-validation workflows.
+- Use [codex-subagent-skill-guidance.md](./codex-subagent-skill-guidance.md) when bootstrap or sync work needs to add or audit optional Codex subagent guidance in a skills repository.
+- When auditing OpenAI Codex Hooks wording, keep hooks framed as Codex runtime lifecycle scripts rather than plugin packaging, discovery mirrors, or install surfaces.
 
 ## Recommended Flow
 

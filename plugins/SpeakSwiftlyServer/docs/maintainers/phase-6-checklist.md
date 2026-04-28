@@ -58,8 +58,8 @@ The simpler path considered first was keeping the current job-scoped subscriber 
 
 ## Validation
 
-- `swift build`
-- `swift test`
+- `xcrun swift build`
+- `xcrun swift test`
 
 Existing SSE replay and heartbeat coverage should continue to pass, and the host event tests should still confirm that MCP and non-UI consumers receive the shared host event stream.
 

@@ -15,7 +15,7 @@ extension ServerTests {
                     mcpPOSTRequest(
                         body: mcpCallToolRequestJSON(
                             name: "generate_speech",
-                            argumentsJSON: #"{"text":"Inspect MCP resources","profile_name":"default","text_profile_id":"mcp-text","request_context":{"source":"mcp","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"catalog-runtime","attributes":{"surface":"mcp"}},"cwd":"./Tests","repo_root":"../SpeakSwiftlyServer","text_format":"cli_output","nested_source_format":"rust_source","source_format":"source_code","qwen_pre_model_text_chunking":true}"#,
+                            argumentsJSON: #"{"text":"Inspect MCP resources","profile_name":"default","text_profile_id":"mcp-text","request_context":{"source":"mcp","app":"SpeakSwiftlyServerTests","project":"SpeakSwiftlyServer","topic":"catalog-runtime","attributes":{"surface":"mcp"}},"cwd":"./Tests","repo_root":".","text_format":"cli_output","nested_source_format":"rust_source","source_format":"source_code","qwen_pre_model_text_chunking":true}"#,
                         ),
                         sessionID: sessionID,
                     ),
@@ -30,7 +30,7 @@ extension ServerTests {
                 queuedSpeechInvocation.normalizationContext
                     == SpeechNormalizationContext(
                         cwd: "./Tests",
-                        repoRoot: "../SpeakSwiftlyServer",
+                        repoRoot: ".",
                         textFormat: .cli,
                         nestedSourceFormat: .rust,
                     ),
@@ -59,7 +59,7 @@ extension ServerTests {
                                 "vibe": "femme",
                                 "reference_audio_path": "./Fixtures/mcp-reference.wav",
                                 "transcript": "Imported from MCP",
-                                "cwd": "/tmp/mcp-clone-cwd",
+                                "cwd": "./mcp-clone-cwd",
                             ],
                         ),
                         sessionID: sessionID,
@@ -74,7 +74,7 @@ extension ServerTests {
             #expect(createCloneInvocation.vibe == .femme)
             #expect(createCloneInvocation.referenceAudioPath == "./Fixtures/mcp-reference.wav")
             #expect(createCloneInvocation.transcript == "Imported from MCP")
-            #expect(createCloneInvocation.cwd == "/tmp/mcp-clone-cwd")
+            #expect(createCloneInvocation.cwd == "./mcp-clone-cwd")
 
             let renameVoiceToolEnvelope = try await mcpEnvelope(
                 from: mcpSurface.handle(

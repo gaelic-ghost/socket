@@ -7,7 +7,7 @@ Use the LaunchAgent workflow when the standalone server should run as a per-user
 In this package, that workflow is intentionally explicit:
 
 1. render the property list you are about to install
-2. either install the already-staged artifact or promote the current source checkout into the staged live artifact
+2. install the default staged artifact from the current checkout, or intentionally pin the install to a caller-provided executable
 3. inspect status or remove it later through the same executable surface
 4. verify the live HTTP and MCP transports through one repo-owned health-check command
 
@@ -47,14 +47,16 @@ the only path that install and refresh flows seed automatically.
 
 This package's LaunchAgent path is designed around the staged release artifact, not around whichever debug binary happened to run the command. That keeps the installed service pointed at the package's maintained release surface instead of at a transient local build product.
 
-If the live service should start running the current repository checkout instead of whichever executable already lives at `.release-artifacts/current`, use the promotion path instead:
+On the default staged executable path, `install` builds and stages the current checkout before it writes and bootstraps the LaunchAgent. Explicit `--tool-executable-path` installs are different: they stay pinned to the executable path the caller provided and do not overwrite it.
+
+Use the explicit promotion command when an operator or release script wants to name the build-and-stage operation directly:
 
 ```bash
 xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live \
   --config-file ./server.yaml
 ```
 
-That command rebuilds the release executable, stages the executable and sibling `SpeakSwiftly` metallib into `.release-artifacts/current`, refreshes the staged executable's ad-hoc code signature explicitly, and then reruns the LaunchAgent install flow. Use `install` when the staged artifact is already the intended live executable. Use `promote-live` when the intent is "make the current source checkout become the live service now."
+That command rebuilds the release executable, stages the executable and sibling `SpeakSwiftly` metallib into `.release-artifacts/current`, refreshes the staged executable's ad-hoc code signature explicitly, and then reruns the LaunchAgent install flow without staging a second time.
 
 ## Inspect Or Remove The Installed Service
 
