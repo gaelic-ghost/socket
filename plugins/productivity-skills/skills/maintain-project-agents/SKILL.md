@@ -62,6 +62,12 @@ When the user explicitly asks for subagents or parallel agent work, use subagent
 
 Keep `apply` edits in the main thread because this skill owns one target `AGENTS.md` file and needs one coherent policy voice. If a target `AGENTS.md` mentions subagents, make the wording match OpenAI's current Codex rule: subagents are explicit user-triggered workflows, best for bounded parallel discovery, tests, triage, and summarization.
 
+## Codex Hooks Fit
+
+When a target `AGENTS.md` mentions OpenAI Codex Hooks, keep the wording narrow and operational. Hooks are optional lifecycle scripts loaded from `hooks.json` or inline `[hooks]` config when `features.codex_hooks = true`; project-local hooks load only from trusted `.codex/` layers.
+
+Use hooks guidance in `AGENTS.md` only when the repo actually owns hook behavior or wants to warn contributors about repo-local Codex runtime checks. Name the event, matcher, script location, and user-visible effect. Do not present hooks as a replacement for `AGENTS.md`, approval policy, tests, or ordinary validation commands.
+
 ## Output Contract
 
 - Return Markdown plus JSON with:

@@ -35,6 +35,12 @@ Use [codex-subagent-guidance.md](./codex-subagent-guidance.md) when a skill need
 
 The short version is: Codex subagents help when the user explicitly asks for parallel agent work and the job can be split into bounded read-heavy discovery, triage, testing, or summarization. They are not the default execution path for these skills, and apply-mode document edits should stay in the main thread unless the user explicitly asks for parallel implementation with disjoint write scopes.
 
+## Codex Hooks Fit
+
+Use [codex-hooks-guidance.md](./codex-hooks-guidance.md) when a skill needs to describe OpenAI Codex Hooks.
+
+The short version is: Codex Hooks are optional lifecycle scripts loaded from `hooks.json` or inline `[hooks]` config when `features.codex_hooks = true`. They are useful for repo-local Codex runtime context, checks, approval-request policy, or turn-end validation, but they are not a replacement for `AGENTS.md`, tests, approval policy, or git hooks.
+
 ## Skill Index
 
 | Skill | Canonical role | Workflows covered |

@@ -63,3 +63,9 @@ When auditing target skills, treat subagent guidance as useful only when it is e
 - keep write-heavy apply work in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes
 
 Flag skill guidance that implies automatic delegation, recommends parallel writes without ownership boundaries, or adds subagent advice to narrow single-file or sequential workflows.
+
+## Codex Hooks Guidance
+
+When auditing target skills or plugin-repo docs that mention OpenAI Codex Hooks, keep hooks separate from plugin packaging and discovery mirrors. Hooks are Codex runtime lifecycle scripts, not a plugin install surface.
+
+Flag hooks guidance that omits `features.codex_hooks = true`, implies project-local hooks load without a trusted `.codex/` layer, treats `PreToolUse` or `PostToolUse` as complete enforcement for every tool path, or confuses Codex Hooks with git pre-commit hooks or repo-maintenance hook scripts.

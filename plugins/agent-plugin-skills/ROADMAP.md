@@ -123,6 +123,7 @@ Planned
 
 ## History
 
+- Added Codex Hooks audit guidance to keep skills-export and plugin-export repos from confusing runtime hooks with plugin packaging or discovery surfaces.
 - Added maintainer guidance for auditing optional Codex subagent wording in skills-export and plugin-export repositories, using OpenAI's current `subagents` terminology and explicit-trigger rule.
 - Initial roadmap scaffold established the repository and its first maintainer-skill milestones.
 - Completed the foundational milestones that created the repository, shipped the first maintainer skills, and removed installer-era nested packaging guidance.

@@ -112,6 +112,12 @@ When the user explicitly asks for subagents or parallel agent work, use subagent
 
 Keep managed file installation, refresh, and release guidance in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes. Subagents should return concise findings and file references so the main thread can make one coherent decision about the managed toolkit.
 
+## Codex Hooks Fit
+
+This skill may document Codex Hooks as an adjacent Codex runtime surface, but it should not install or manage Codex Hooks as part of the current `maintain-project-repo` file set. Keep Codex Hooks distinct from git pre-commit hooks, `scripts/repo-maintenance/hooks/`, validation scripts, and GitHub Actions wrappers.
+
+When a repo needs Codex Hooks guidance, record that hooks require `features.codex_hooks = true`, may live in `hooks.json` or inline `[hooks]` config, and should name the lifecycle event, matcher, stable script path, and expected effect. Recommend a future dedicated `maintain-project-hooks` workflow when the user wants deterministic hook auditing or scaffolding.
+
 ## Customization
 
 - Use `references/customization-flow.md`.

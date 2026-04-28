@@ -9,6 +9,7 @@
 - [Milestone 22: Accessibility maintenance baseline](#milestone-22-accessibility-maintenance-baseline)
 - [Milestone 23: Security and support maintenance baseline](#milestone-23-security-and-support-maintenance-baseline)
 - [Milestone 24: API maintenance baseline](#milestone-24-api-maintenance-baseline)
+- [Milestone 25: Codex Hooks maintenance baseline](#milestone-25-codex-hooks-maintenance-baseline)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -28,6 +29,7 @@
 - Milestone 22: Accessibility maintenance baseline - Planned
 - Milestone 23: Security and support maintenance baseline - Planned
 - Milestone 24: API maintenance baseline - Completed
+- Milestone 25: Codex Hooks maintenance baseline - Planned
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -132,6 +134,30 @@ Completed
 
 Completed Milestone 24 by adding `maintain-project-api` as a template-backed `API.md` maintenance workflow with check/apply modes, schema references, OpenAI metadata, and regression coverage for clean missing-file creation.
 
+## Milestone 25: Codex Hooks maintenance baseline
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a future `maintain-project-hooks` baseline skill for auditing and documenting OpenAI Codex Hooks in repositories that intentionally use `.codex/hooks.json` or inline `[hooks]` config.
+- [ ] Keep hooks guidance distinct from `AGENTS.md`, approval policy, tests, git hooks, and repo-maintenance hook scripts.
+- [ ] Ground hook wording in the official OpenAI Codex Hooks guide, including the `features.codex_hooks` flag, trusted project-local `.codex/` loading, supported events, matcher behavior, and known guardrail limits.
+
+### Tickets
+
+- [ ] Define the canonical hook audit inputs, including project root, `.codex/hooks.json`, `.codex/config.toml`, user-level references, and managed-environment notes.
+- [ ] Define a hooks documentation schema that records event, matcher, script path, timeout, status message, expected effect, and safety boundary for each hook.
+- [ ] Add checks that flag missing feature flags, relative repo-local script paths, untrusted-project assumptions, unsupported event claims, and confusion between Codex Hooks and git hooks.
+- [ ] Decide whether the first version is audit-only or can also scaffold a minimal hooks reference document.
+
+### Exit Criteria
+
+- [ ] Maintainers have one coherent workflow for checking Codex Hooks guidance without folding runtime hooks into ordinary AGENTS, validation, or repo-maintenance scripts.
+- [ ] Repositories that use Codex Hooks can document what each hook does, when it fires, and what it can and cannot enforce.
+
 ## Backlog Candidates
 
 - [ ] Add lightweight validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
@@ -139,6 +165,7 @@ Completed Milestone 24 by adding `maintain-project-api` as a template-backed `AP
 
 ## History
 
+- Added first-pass OpenAI Codex Hooks guidance for AGENTS and repo-maintenance workflows, plus a planned `maintain-project-hooks` baseline skill for future deterministic hook audits.
 - Added maintainer guidance for optional Codex subagent use in documentation, maintenance, and explanation skills, keeping delegation explicitly user-triggered and read-heavy by default.
 - Fixed `maintain-project-repo` standard release handling so new release PRs wait for initial GitHub checks before watching CI, approval-only reviews no longer count as unresolved review comments, and release tags are created only after CI and the review-comment gate pass.
 - Added `maintain-project-api` as the baseline `API.md` maintenance skill for API surface, access, schema, error, compatibility, verification, and support ownership docs.
