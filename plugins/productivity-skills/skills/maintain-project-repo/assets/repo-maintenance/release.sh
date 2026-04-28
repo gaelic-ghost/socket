@@ -139,7 +139,8 @@ create_release_tag() {
   tag_sha="$(git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/$RELEASE_TAG" 2>/dev/null || true)"
 
   if [ -n "$tag_sha" ]; then
-    [ "$tag_sha" = "$head_sha" ] || die "Tag $RELEASE_TAG already exists and does not point at HEAD."
+    tag_commit_sha="$(git -C "$REPO_ROOT" rev-list -n 1 "$RELEASE_TAG")"
+    [ "$tag_commit_sha" = "$head_sha" ] || die "Tag $RELEASE_TAG already exists and does not point at HEAD."
     log "Tag $RELEASE_TAG already points at HEAD."
     return 0
   fi

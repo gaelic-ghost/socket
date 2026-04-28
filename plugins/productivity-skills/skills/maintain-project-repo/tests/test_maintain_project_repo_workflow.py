@@ -111,6 +111,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS", release_script)
         self.assertIn("push_release_branch", release_script)
         self.assertIn("push_release_tag", release_script)
+        self.assertIn('rev-list -n 1 "$RELEASE_TAG"', release_script)
         self.assertIn('gh pr checks "$pr_number" --watch', release_script)
         self.assertIn('select(.state == "COMMENTED")', release_script)
         self.assertIn("valid concerns in code, or add out-of-scope concerns to ROADMAP.md", release_script)
