@@ -15,6 +15,9 @@
 - Prefer Dash or local Swift docs first, then official Swift or Apple docs when local docs are insufficient.
 - Prefer the simplest correct Swift that is easiest to read and reason about.
 - Prefer synthesized and framework-provided behavior over extra wrappers and boilerplate.
+- For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; prefer optional parameters with explicit default values over additional methods or overloads when the difference is optional behavior on the same operation.
+- When a public function, initializer, or method reaches four or more arguments or parameters, strongly prefer a named typed `struct` request, options, or configuration value so call sites stay readable and future additions do not multiply overloads.
+- Prefer enums, enum cases with associated values, and narrow typed values over strings, booleans, sentinel values, or parallel parameters whenever the domain has a closed or meaningful set of choices.
 - Keep data flow straight and dependency direction unidirectional.
 - Treat `Package.swift` as the source of truth for package structure, targets, products, and dependencies.
 - Prefer `swift package` subcommands for structural package edits before manually editing `Package.swift`.

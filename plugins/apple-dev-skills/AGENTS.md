@@ -41,6 +41,9 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - If no relevant Apple documentation can be found, say that explicitly before proceeding.
 - Prefer the simplest correct Swift that is easiest to read and reason about.
 - Prefer framework-provided behavior over custom boilerplate. Do not add extra wrappers, coordinators, custom codable glue, or renaming layers unless a concrete constraint requires them or they make the final code clearly easier to understand.
+- For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default. Prefer optional parameters with explicit default values over additional methods or overloads when the difference is optional behavior on the same operation.
+- When a public function, initializer, or method reaches four or more arguments or parameters, strongly prefer a named typed `struct` request, options, or configuration value so call sites stay readable and future additions do not multiply overloads.
+- Prefer enums, enum cases with associated values, and narrow typed values over strings, booleans, sentinel values, or parallel parameters whenever the domain has a closed or meaningful set of choices.
 - Preserve source-of-truth names when the meaning has not changed, and avoid automatic case-conversion strategies unless the project explicitly wants them.
 - Keep `explore-apple-swift-docs` as the canonical docs-routing surface instead of re-embedding broad docs-source selection logic into execution skills.
 - For SwiftPM guidance, edit `Package.swift` intentionally and keep it readable. Agents may modify it when package structure, targets, products, or dependencies need to change, should keep dependency provenance concise but fetchable from real remote repositories or package registries, should not commit machine-local dependency paths, and should try to keep package graph updates consolidated in one change when possible.
