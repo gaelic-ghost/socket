@@ -138,6 +138,33 @@ Use these rules:
 - do not leave stale marketplace entries behind after a packaging move or subtree removal
 - keep one surviving plugin identity for each real child plugin
 
+### Marketplace Audit Pass
+
+Run this audit whenever a child plugin is added, removed, moved, renamed, converted from subtree-managed to monorepo-owned, or changes its packaged plugin root:
+
+1. List every marketplace entry in `.agents/plugins/marketplace.json`.
+2. For each `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
+3. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed.
+4. Open each changed child repo's README or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
+5. Run `uv run scripts/validate_socket_metadata.py`.
+6. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
+
+The audit is about the installable plugin roots that Codex can actually see. Do not rewrite marketplace paths to follow an invented uniform layout when the child repo still packages from a different root.
+
+### Removing A Public Child Plugin
+
+Use this checklist before removing a public child repository from `socket` or from the root marketplace:
+
+1. Identify whether the child is monorepo-owned, subtree-managed with push-back, or pull-only.
+2. Confirm the child history is preserved where it belongs before deleting the directory, marketplace entry, branch, worktree, remote branch, or archive ref.
+3. Remove the child directory only when the source repo is no longer meant to be imported here, or when the child has been explicitly moved elsewhere.
+4. Remove the marketplace entry in the same commit as the directory removal when the plugin is no longer installable from `socket`.
+5. Update `README.md`, `ROADMAP.md`, and any maintainer docs that listed the child as active.
+6. Run `uv run scripts/validate_socket_metadata.py`.
+7. Account for local branches not contained by `main` before cleanup.
+
+If the child is `SpeakSwiftlyServer`, do not use this checklist as permission to delete or rewrite the standalone live-service repository. That repo's standalone release, validation, and live-refresh path stays outside ordinary `socket` cleanup.
+
 ## Release Flow
 
 For full release sequencing, use [`release-modes.md`](./release-modes.md). In short, `standard` is the normal `socket` release mode and `subtrees` is the normal mode plus explicit subtree accounting.
