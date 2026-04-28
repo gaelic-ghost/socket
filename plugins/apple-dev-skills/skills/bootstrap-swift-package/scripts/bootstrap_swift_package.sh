@@ -75,6 +75,7 @@ swift_minor_version=""
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 agents_template="$script_dir/../assets/AGENTS.md"
 maintain_project_repo_runner="$script_dir/../../../../productivity-skills/skills/maintain-project-repo/scripts/run_workflow.py"
+maintain_project_repo_missing_message="Validation failed: bootstrap-swift-package needs productivity-skills/maintain-project-repo to install repo-maintenance files, but the runner was missing at $maintain_project_repo_runner. Install the productivity-skills plugin alongside apple-dev-skills, or install the socket marketplace from https://github.com/gaelic-ghost/socket so both companion plugins are available, then rerun this workflow."
 
 is_ignorable_directory_entry() {
   local entry_name="$1"
@@ -479,7 +480,7 @@ mkdir -p "$target_dir"
   if [[ -x "$maintain_project_repo_runner" ]]; then
     "$maintain_project_repo_runner" --repo-root "$target_dir" --operation install --profile swift-package >/dev/null
   else
-    failed "Validation failed: maintain-project-repo runner missing at $maintain_project_repo_runner. Ensure productivity-skills ships alongside apple-dev-skills before rerunning."
+    failed "$maintain_project_repo_missing_message"
   fi
 
   ensure_test_target "$testing_mode" "$name"

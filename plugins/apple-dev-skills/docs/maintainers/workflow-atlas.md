@@ -87,6 +87,7 @@ flowchart TD
 - End-user `AGENTS.md` guidance is recommended from each skill's local snippet copy, not from a router.
 - The active skill surface now uses the intended install-facing names directly.
 - The reusable repo-maintenance implementation now lives in `productivity-skills/maintain-project-repo`; Apple bootstrap and sync skills call that sibling skill with the `swift-package` or `xcode-app` profile.
+- Standalone `apple-dev-skills` installs remain useful for Apple-only workflows, but mutating bootstrap and guidance-sync workflows must tell users when they need the `productivity-skills` companion plugin or the `socket` marketplace catalog.
 - The canonical shipped repo-maintenance contract stays profile-aware and gives downstream repos `scripts/repo-maintenance/config/profile.env` while Apple workflows choose either the `swift-package` or `xcode-app` profile explicitly.
 - The managed workflow's protected-branch check context is `validate`; GitHub exposes the job check run by that context, not by the display-style workflow title plus job string `Validate Repo Maintenance / validate`.
 - The Swift package side of the execution split is now in place, with build-run and testing split into separate primary skills while `swift-package-workflow` remains only as a legacy compatibility-routing surface.
@@ -114,6 +115,7 @@ flowchart TD
 
 - Treat `productivity-skills` as the baseline maintainer layer for general repo-doc and maintenance work.
 - Use `apple-dev-skills` when Swift, Xcode, Apple docs requirements, or Apple-platform repo shape should materially change the workflow.
+- Keep public install guidance explicit about the two valid shapes: standalone `apple-dev-skills` for Apple-only workflows, or `apple-dev-skills` plus `productivity-skills` for repo-maintenance bootstrap and sync workflows. The `socket` marketplace is the convenient catalog when users want those companion plugins together.
 - The repository currently exports only from top-level `skills/`.
 - If this repository later grows top-level `mcps/` or `apps/`, those directories are valid export surfaces too.
 - The repository must not reintroduce a nested packaged plugin tree or any other second export surface under `plugins/`.

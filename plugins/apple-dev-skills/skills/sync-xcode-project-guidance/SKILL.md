@@ -9,6 +9,10 @@ description: Sync repo guidance for an existing native Apple app repository mana
 
 Bring an existing Xcode app repository up to the expected guidance baseline without overloading the main Xcode execution skill. This skill owns repo-guidance alignment for existing Apple app repos, including deterministic `AGENTS.md` creation or bounded section append behavior, and runs `maintain-project-repo` with the `xcode-app` profile alongside that guidance. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/sync_xcode_project_guidance.py` applies the current sync behavior.
 
+## Companion Plugin Requirement
+
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating guidance-sync path refreshes repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills` or install the [`socket`](https://github.com/gaelic-ghost/socket) marketplace, which is useful when they want Gale's Apple and general maintainer plugins available together.
+
 ## When To Use
 
 - Use this skill when an existing macOS, iOS, or iPadOS app repo needs `AGENTS.md` added, refreshed, or merged with the current Xcode workflow baseline.

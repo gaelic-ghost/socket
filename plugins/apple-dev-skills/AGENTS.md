@@ -8,6 +8,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 - This repository is the canonical home for Gale's Apple, Swift, and Xcode workflow skills.
 - Treat `productivity-skills` as the default baseline maintainer layer for general repo docs and maintenance work; this repo is the narrower specialist layer when Apple-specific behavior should change the workflow.
+- Preserve standalone-install guidance for public users who install only `apple-dev-skills`, and make the `productivity-skills` companion requirement explicit only for workflows that install or refresh `maintain-project-repo`.
 - Root `skills/` is the canonical authored and exported surface.
 - Keep shared reusable assets in [`shared/`](./shared/) and maintainer tests in [`tests/`](./tests/).
 

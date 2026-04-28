@@ -52,7 +52,11 @@ def maintain_project_repo_runner() -> Path:
     runner = plugins_root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
     if not runner.is_file():
         raise RuntimeError(
-            f"Expected maintain-project-repo runner at {runner}, but it was missing."
+            "sync-xcode-project-guidance needs productivity-skills/maintain-project-repo "
+            f"to refresh repo-maintenance files, but the runner was missing at {runner}. "
+            "Install the productivity-skills plugin alongside apple-dev-skills, or install "
+            "the socket marketplace from https://github.com/gaelic-ghost/socket so both "
+            "companion plugins are available, then rerun this workflow."
         )
     return runner
 
@@ -171,7 +175,7 @@ def main() -> int:
             "validation_result": validation_result,
             "actions": actions,
             "stderr": str(exc),
-            "next_step": "Ensure productivity-skills ships alongside apple-dev-skills, then rerun the workflow.",
+            "next_step": "Install the productivity-skills companion plugin or the socket marketplace, then rerun sync-xcode-project-guidance.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1

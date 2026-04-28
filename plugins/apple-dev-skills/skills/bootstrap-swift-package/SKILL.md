@@ -9,6 +9,10 @@ description: Bootstrap new Swift Package Manager repositories with consistent de
 
 Create a new Swift package repository with one top-level entry point, a simplicity-first Swift baseline, and a local-first maintainer surface. `scripts/run_workflow.py` is the runtime wrapper, and `scripts/bootstrap_swift_package.sh` is the deterministic implementation core for scaffold creation, testing-mode selection, validation, and `maintain-project-repo` installation with the `swift-package` profile.
 
+## Companion Plugin Requirement
+
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills` or install the [`socket`](https://github.com/gaelic-ghost/socket) marketplace, which is useful when they want Gale's Apple and general maintainer plugins available together.
+
 ## When To Use
 
 - Use this skill for new Swift package scaffolding.
