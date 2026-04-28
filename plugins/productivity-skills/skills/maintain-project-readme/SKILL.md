@@ -36,6 +36,12 @@ This skill is the primary layer for README maintenance. It defines the canonical
 - `Usage` should stay human-focused, concise, and informative. Prefer fenced code blocks with info strings when examples help.
 - `Repo Structure` should be a small directory tree or outline diagram, not a prose section.
 
+## Codex Subagent Fit
+
+When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy README discovery before the main workflow edits or reports. Good jobs include checking source docs, inventorying commands, inspecting sibling package metadata, or comparing README claims against one upstream source per worker.
+
+Keep `apply` edits in the main thread because this skill has one target file and a hard-enforced schema. Ask subagents to return concise evidence and file references, not replacement README prose.
+
 ## Canonical Base Contract
 
 The authoritative default shared README structure lives in:

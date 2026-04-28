@@ -29,6 +29,17 @@ When creating or aligning `AGENTS.md`, include strict dependency guidance:
 - committed dependency declarations, lockfiles, scripts, docs, examples, generated project files, and CI config must not point at machine-local paths
 - machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly
 
+## Codex Subagent Guidance
+
+When creating or aligning skills that can benefit from parallel support work, add optional `Codex Subagent Fit` guidance that matches OpenAI's current Codex subagent docs:
+
+- Codex only spawns subagents when the user explicitly asks for subagents or parallel agent work.
+- Good fits are bounded read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization.
+- Subagents should return concise findings, evidence, links, or file references instead of raw intermediate output.
+- Apply-mode or implementation edits should stay in the main thread unless the user explicitly asks for parallel implementation and each worker has a disjoint write scope.
+
+Do not add subagent guidance to every skill by default. Use `docs/maintainers/codex-subagent-skill-guidance.md` to decide whether the target skill has real parallelizable support work.
+
 ## Codex Install-Surface Map
 
 When bootstrapping or aligning repo guidance, teach Codex plugin wiring with four separate surfaces:

@@ -29,6 +29,12 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 - `Internal branch`: a decision point driven by mode, auth, config, missing input, or compatibility handling.
 - `No findings.`, `blocked`, `created`, `updated`, `check-only`, `apply`, `duplicatePolicy`, `onUpdateWithoutToken`, `requireAbsoluteDateInConfirmation`, `outputStyle`, and `Executive Summary` use their current canonical repo meanings.
 
+## Codex Subagent Fit
+
+Use [codex-subagent-guidance.md](./codex-subagent-guidance.md) when a skill needs to describe optional Codex subagent use.
+
+The short version is: Codex subagents help when the user explicitly asks for parallel agent work and the job can be split into bounded read-heavy discovery, triage, testing, or summarization. They are not the default execution path for these skills, and apply-mode document edits should stay in the main thread unless the user explicitly asks for parallel implementation with disjoint write scopes.
+
 ## Skill Index
 
 | Skill | Canonical role | Workflows covered |
@@ -38,6 +44,7 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 | `maintain-project-agents` | Default baseline AGENTS maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
 | `maintain-project-accessibility` | Default baseline ACCESSIBILITY maintainer for most repos | `check-only`, `apply`, clean run |
 | `maintain-project-contributing` | Default baseline CONTRIBUTING maintainer for most repos | `check-only`, `apply`, repo-profile detection, clean run |
+| `maintain-project-api` | Default baseline API reference maintainer for most repos | `check-only`, `apply`, clean run |
 | `maintain-project-roadmap` | Checklist roadmap maintainer | `check-only`, `apply`, clean run, legacy migration |
 | `maintain-project-repo` | Local-first repo maintainer installer | `install`, `refresh`, `report-only`, thin CI wrapper setup |
 
@@ -224,6 +231,47 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 **Outputs**
 
 - Markdown plus JSON with `run_context`, `schema_violations`, `claim_integrity_issues`, `verification_evidence_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
+
+## `maintain-project-api`
+
+### Workflow: `check-only`
+
+**Overview**
+
+- Triggered when the user wants deterministic auditing for a project-local `API.md` and no narrower plugin owns that repo shape.
+- Primary workflow.
+- `read-only`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode check-only`
+- Optional: `--api-path <path>`
+- Tool/script input: `scripts/maintain_project_api.py`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
+- Exact clean-run text: `No findings.`
+
+### Workflow: `apply`
+
+**Overview**
+
+- Triggered when the user wants bounded `API.md` normalization, repair, or creation.
+- Variant workflow.
+- `bounded-write`
+
+**Inputs**
+
+- Required: `--project-root <path>`
+- Required: `--run-mode apply`
+- Optional: `--api-path <path>`
+
+**Outputs**
+
+- Markdown plus JSON with `run_context`, `schema_violations`, `command_integrity_issues`, `content_quality_issues`, `fixes_applied`, `post_fix_status`, `errors`
 - Exact clean-run text: `No findings.` when no issues and no errors remain after the post-fix audit
 
 ## `maintain-project-roadmap`

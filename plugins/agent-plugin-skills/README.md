@@ -55,6 +55,8 @@ When this repo discusses Codex packaging, it stays explicit about the current do
 - the plugin manifest points to bundled skills with `"skills": "./skills/"`
 - repo-visible Codex plugins come from marketplace catalogs, and OpenAI does not document a richer repo-private scoping model beyond that
 
+When this repo discusses Codex subagents, it follows OpenAI's current `subagents` terminology: subagent use is explicit user-triggered delegation for bounded parallel work, not automatic behavior that every skill should perform.
+
 ## Development
 
 ### Setup
@@ -72,6 +74,8 @@ Keep the Python maintainer baseline repo-local. When this repo or a target repo 
 Keep root [`skills/`](./skills/) canonical, keep maintainer docs under [`docs/maintainers/`](./docs/maintainers/), and keep plugin metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 When you update a skill here, align the nearby docs and tests in the same pass. Keep discovery mirrors, plugin packaging, marketplace catalogs, cache paths, and enabled-state wording separate instead of collapsing them into one vague install story.
+
+For optional Codex subagent wording in target skills repos, use [`docs/maintainers/codex-subagent-skill-guidance.md`](./docs/maintainers/codex-subagent-skill-guidance.md).
 
 Contributor workflow and review expectations live in [CONTRIBUTING.md](./CONTRIBUTING.md).
 

@@ -139,6 +139,7 @@ Completed Milestone 24 by adding `maintain-project-api` as a template-backed `AP
 
 ## History
 
+- Added maintainer guidance for optional Codex subagent use in documentation, maintenance, and explanation skills, keeping delegation explicitly user-triggered and read-heavy by default.
 - Fixed `maintain-project-repo` standard release handling so new release PRs wait for initial GitHub checks before watching CI, approval-only reviews no longer count as unresolved review comments, and release tags are created only after CI and the review-comment gate pass.
 - Added `maintain-project-api` as the baseline `API.md` maintenance skill for API surface, access, schema, error, compatibility, verification, and support ownership docs.
 - Clarified that the managed repo-maintenance workflow exposes `validate` as the branch-protection check context, avoiding blocked PRs caused by requiring the workflow-title display string instead.

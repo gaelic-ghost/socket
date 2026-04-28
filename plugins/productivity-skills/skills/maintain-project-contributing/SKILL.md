@@ -49,6 +49,12 @@ The base contract requires:
 - `Development Expectations > Verification` should prefer fenced code blocks with language info strings when commands help contributors validate changes.
 - `Communication` should stay practical and concise, focused on how contributors surface uncertainty or larger-scope questions.
 
+## Codex Subagent Fit
+
+When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy contribution-guide discovery before the main workflow edits or reports. Good jobs include checking setup commands, comparing PR expectations against repo policy, reading workflow docs, or verifying contributor-facing tool requirements.
+
+Keep `apply` edits in the main thread because this skill owns one target `CONTRIBUTING.md` file and needs one coherent contributor contract. Ask workers for concise evidence and file references, not replacement guide prose.
+
 ## Output Contract
 
 - Return Markdown plus JSON with:

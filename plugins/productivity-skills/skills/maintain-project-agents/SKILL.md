@@ -56,6 +56,12 @@ The base contract is shaped to match the official Codex `AGENTS.md` guidance:
 - update `AGENTS.md` when repeated mistakes or recurring review feedback reveal missing guidance
 - acknowledge that more specific nested instruction files can refine the root guidance
 
+## Codex Subagent Fit
+
+When the user explicitly asks for subagents or parallel agent work, use subagents only for bounded read-heavy checks before the main workflow edits or reports. Good jobs include auditing command accuracy, comparing repo instructions against nearby docs, checking safety boundaries, or reading nested guidance files in separate directories.
+
+Keep `apply` edits in the main thread because this skill owns one target `AGENTS.md` file and needs one coherent policy voice. If a target `AGENTS.md` mentions subagents, make the wording match OpenAI's current Codex rule: subagents are explicit user-triggered workflows, best for bounded parallel discovery, tests, triage, and summarization.
+
 ## Output Contract
 
 - Return Markdown plus JSON with:

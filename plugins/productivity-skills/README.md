@@ -45,6 +45,7 @@ Use this repository when the work is about:
 - explaining code paths in plain language
 - maintaining README, AGENTS, CONTRIBUTING, ACCESSIBILITY, or ROADMAP docs
 - keeping a general-purpose repository-maintenance baseline aligned
+- describing when Codex subagents are useful for bounded docs pulling, repo scans, triage, or summarization before the main workflow edits or reports
 
 ## Development
 
@@ -55,6 +56,8 @@ Treat root [`skills/`](./skills/) as the canonical authored surface. Keep instal
 ### Workflow
 
 When a skill changes, update its tests and any repo-level maintainer guidance in the same pass. Keep the repo focused on general-purpose workflows instead of quietly growing stack-specific assumptions.
+
+For optional Codex subagent guidance, use [`docs/maintainers/codex-subagent-guidance.md`](./docs/maintainers/codex-subagent-guidance.md) so skills stay aligned with OpenAI's current subagent terminology and do not imply automatic delegation.
 
 ## Verification
 

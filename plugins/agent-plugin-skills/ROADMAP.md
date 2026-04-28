@@ -123,6 +123,7 @@ Planned
 
 ## History
 
+- Added maintainer guidance for auditing optional Codex subagent wording in skills-export and plugin-export repositories, using OpenAI's current `subagents` terminology and explicit-trigger rule.
 - Initial roadmap scaffold established the repository and its first maintainer-skill milestones.
 - Completed the foundational milestones that created the repository, shipped the first maintainer skills, and removed installer-era nested packaging guidance.
 - Completed the later cleanup milestone that retired the old `maintain-plugin-docs` surface and aligned the shipped inventory around the remaining maintainer workflows.
