@@ -68,14 +68,14 @@ xcrun swift run SpeakSwiftlyServerTool serve
 
 Install or refresh the per-user LaunchAgent with a config file:
 
-This command expects the staged tool artifact to already exist at `.release-artifacts/current/SpeakSwiftlyServerTool`. On a clean checkout, build and stage the release artifact first, or pass `--tool-executable-path /path/to/SpeakSwiftlyServerTool` explicitly.
+When the default staged tool path is used, this command first builds and stages the current checkout at `.release-artifacts/current/SpeakSwiftlyServerTool`, refreshes its bundled Metal resource, refreshes the staged ad-hoc signature, and then writes and bootstraps the LaunchAgent. Pass `--tool-executable-path /path/to/SpeakSwiftlyServerTool` only when you intentionally want to install a specific prebuilt executable instead.
 
 ```bash
 xcrun swift run SpeakSwiftlyServerTool launch-agent install \
   --config-file ./server.yaml
 ```
 
-Promote the current checkout into the live LaunchAgent-backed service:
+Promote the current checkout into the live LaunchAgent-backed service explicitly:
 
 ```bash
 xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live \

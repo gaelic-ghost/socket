@@ -95,7 +95,7 @@ extension ServerE2E {
     }
 
     static func randomPort(in range: Range<Int>) -> Int {
-        let shuffledCandidates = Array(range).shuffled()
+        let shuffledCandidates = Array(range).filter { !reservedLiveServicePorts.contains($0) }.shuffled()
         if let availablePort = shuffledCandidates.first(where: isPortAvailable(_:)) {
             return availablePort
         }
@@ -114,6 +114,8 @@ extension ServerE2E {
     }
 
     // MARK: - Port Selection
+
+    private static let reservedLiveServicePorts: Set<Int> = [7337, 7338, 7339]
 
     private static func isPortAvailable(_ port: Int) -> Bool {
 #if canImport(Darwin)

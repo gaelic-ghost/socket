@@ -1,6 +1,12 @@
 import Foundation
 
 struct LaunchAgentOptions {
+    enum StagedArtifactPolicy {
+        case useExistingExecutable
+        case promoteCurrentCheckout(repositoryRootPath: String)
+        case custom(@Sendable () throws -> ReleaseArtifactPromotionResult)
+    }
+
     let label: String
     let toolExecutablePath: String
     let plistPath: String
@@ -12,6 +18,7 @@ struct LaunchAgentOptions {
     let standardErrorPath: String
     let launchctlPath: String
     let userDomain: String
+    let stagedArtifactPolicy: StagedArtifactPolicy
 
     // MARK: - Initialization
 
@@ -28,6 +35,7 @@ struct LaunchAgentOptions {
         launchctlPath: String = LaunchAgentDefaults.launchctlPath,
         userDomain: String = LaunchAgentDefaults.userDomain,
         requireToolExecutableExists: Bool = true,
+        stagedArtifactPolicy: StagedArtifactPolicy = .useExistingExecutable,
     ) throws {
         guard !label.isEmpty else {
             throw LaunchAgentCommandError("\(speakSwiftlyServerToolName) launch-agent support requires a non-empty launchd label.")
@@ -58,6 +66,7 @@ struct LaunchAgentOptions {
         self.standardErrorPath = Self.resolvePath(standardErrorPath)
         self.launchctlPath = launchctlPath
         self.userDomain = userDomain
+        self.stagedArtifactPolicy = stagedArtifactPolicy
     }
 
     static func parse(
@@ -65,6 +74,7 @@ struct LaunchAgentOptions {
         currentDirectoryPath: String,
         currentExecutablePath: String,
         requireToolExecutableExists: Bool = true,
+        stageDefaultReleaseArtifact: Bool = false,
     ) throws -> LaunchAgentOptions {
         var label = LaunchAgentDefaults.label
         let _ = currentExecutablePath
@@ -124,10 +134,26 @@ struct LaunchAgentOptions {
             }
         }
 
+        let usingDefaultStagedArtifact = toolExecutablePathOverride == nil
+        let repositoryRootPath: String? = if usingDefaultStagedArtifact {
+            try resolveRepositoryRoot(startingAt: currentDirectoryPath)
+        } else {
+            nil
+        }
         let toolExecutablePath = try toolExecutablePathOverride ?? resolveDefaultToolExecutablePath(
-            currentDirectoryPath: currentDirectoryPath,
-            mustExist: requireToolExecutableExists,
+            repositoryRootPath: repositoryRootPath ?? currentDirectoryPath,
+            mustExist: requireToolExecutableExists && !stageDefaultReleaseArtifact,
         )
+        let shouldRequireExecutable = if usingDefaultStagedArtifact, stageDefaultReleaseArtifact {
+            false
+        } else {
+            requireToolExecutableExists
+        }
+        let stagedArtifactPolicy: StagedArtifactPolicy = if usingDefaultStagedArtifact, stageDefaultReleaseArtifact {
+            .promoteCurrentCheckout(repositoryRootPath: repositoryRootPath ?? currentDirectoryPath)
+        } else {
+            .useExistingExecutable
+        }
 
         return try .init(
             label: label,
@@ -139,7 +165,8 @@ struct LaunchAgentOptions {
             profileRootPath: resolvePath(profileRootPath, relativeTo: currentDirectoryPath),
             standardOutPath: resolvePath(standardOutPath, relativeTo: currentDirectoryPath),
             standardErrorPath: resolvePath(standardErrorPath, relativeTo: currentDirectoryPath),
-            requireToolExecutableExists: requireToolExecutableExists,
+            requireToolExecutableExists: shouldRequireExecutable,
+            stagedArtifactPolicy: stagedArtifactPolicy,
         )
     }
 
@@ -150,7 +177,14 @@ struct LaunchAgentOptions {
         mustExist: Bool = true,
     ) throws -> String {
         let repositoryRoot = try resolveRepositoryRoot(startingAt: currentDirectoryPath)
-        let stagedReleasePath = LaunchAgentDefaults.stagedReleaseToolExecutablePath(for: repositoryRoot)
+        return try resolveDefaultToolExecutablePath(repositoryRootPath: repositoryRoot, mustExist: mustExist)
+    }
+
+    static func resolveDefaultToolExecutablePath(
+        repositoryRootPath: String,
+        mustExist: Bool = true,
+    ) throws -> String {
+        let stagedReleasePath = LaunchAgentDefaults.stagedReleaseToolExecutablePath(for: repositoryRootPath)
 
         guard mustExist == false || FileManager.default.fileExists(atPath: stagedReleasePath) else {
             throw LaunchAgentCommandError(
