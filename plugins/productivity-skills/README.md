@@ -78,6 +78,7 @@ See [LICENSE](./LICENSE).
 - `explain-code-slice`
 - `maintain-project-agents`
 - `maintain-project-accessibility`
+- `maintain-project-api`
 - `maintain-project-contributing`
 - `maintain-project-readme`
 - `maintain-project-repo`

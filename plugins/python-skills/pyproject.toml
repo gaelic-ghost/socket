@@ -1,6 +1,6 @@
 [project]
 name = "python-skills-maintainer"
-version = "6.0.15"
+version = "6.1.0"
 description = "Maintainer tooling for the python-skills repository"
 requires-python = ">=3.11"
 dependencies = []

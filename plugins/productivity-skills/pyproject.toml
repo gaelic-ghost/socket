@@ -1,6 +1,6 @@
 [project]
 name = "productivity-skills-maintenance"
-version = "6.0.15"
+version = "6.1.0"
 description = "Maintainer-only Python tooling baseline for productivity-skills."
 requires-python = ">=3.11"
 dependencies = []
@@ -15,6 +15,7 @@ dev = [
 testpaths = [
   "skills/maintain-project-agents/tests",
   "skills/maintain-project-accessibility/tests",
+  "skills/maintain-project-api/tests",
   "skills/maintain-project-readme/tests",
   "skills/maintain-project-contributing/tests",
   "skills/maintain-project-roadmap/tests",
