@@ -8,6 +8,7 @@
 - [Milestone 14: Claude Code optimization pass](#milestone-14-claude-code-optimization-pass)
 - [Milestone 22: Accessibility maintenance baseline](#milestone-22-accessibility-maintenance-baseline)
 - [Milestone 23: Security and support maintenance baseline](#milestone-23-security-and-support-maintenance-baseline)
+- [Milestone 24: API maintenance baseline](#milestone-24-api-maintenance-baseline)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -26,6 +27,7 @@
 - Milestone 14: Claude Code optimization pass - Planned
 - Milestone 22: Accessibility maintenance baseline - Planned
 - Milestone 23: Security and support maintenance baseline - Planned
+- Milestone 24: API maintenance baseline - In Progress
 
 ## Milestone 14: Claude Code optimization pass
 
@@ -103,6 +105,30 @@ Planned
 - [ ] The repository ships a working `maintain-project-security` skill with deterministic `check-only` and bounded `apply` behavior.
 - [ ] The repository ships a working `maintain-project-support` skill with deterministic `check-only` and bounded `apply` behavior.
 - [ ] The canonical `SECURITY.md` and `SUPPORT.md` contracts are documented, test-covered, and grounded in the baseline maintainers' workflow family.
+
+## Milestone 24: API maintenance baseline
+
+### Status
+
+In Progress
+
+### Scope
+
+- [ ] Add a new `maintain-project-api` baseline skill for canonical `API.md` maintenance.
+- [ ] Define `API.md` as the repo-local API contract document for surface area, access, request and response shapes, errors, compatibility, local verification, and ownership.
+- [ ] Keep the skill aligned with the existing docs-maintenance family so API references can be audited and normalized with deterministic `check-only` and bounded `apply` workflow modes.
+
+### Tickets
+
+- [ ] Draft and ship the `maintain-project-api` skill surface with template, config, script, references, and tests.
+- [ ] Define and validate the canonical `API.md` schema, including surface, auth, schemas, errors, versioning, verification, and support ownership sections.
+- [ ] Add claim-integrity guardrails so the workflow does not invent endpoints, schemas, credentials, permissions, version guarantees, or support paths.
+- [ ] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
+
+### Exit Criteria
+
+- [ ] The repository ships a working `maintain-project-api` skill with deterministic `check-only` and bounded `apply` behavior.
+- [ ] The canonical `API.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
 
 ## Backlog Candidates
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project API"
+  short_description: "Audit and apply bounded fixes to canonical API.md files."
+  default_prompt: "Use $maintain-project-api for an ordinary software-project API.md. Load the template-backed API-reference schema first, enforce the required table of contents and canonical section structure, return audit findings in check-only mode, and in apply mode keep edits bounded to grounded API surface, request, response, error, versioning, verification, and support guidance only."
