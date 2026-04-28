@@ -4,6 +4,7 @@ struct LaunchAgentOptions {
     enum StagedArtifactPolicy {
         case useExistingExecutable
         case promoteCurrentCheckout(repositoryRootPath: String)
+        case custom(@Sendable () throws -> ReleaseArtifactPromotionResult)
     }
 
     let label: String

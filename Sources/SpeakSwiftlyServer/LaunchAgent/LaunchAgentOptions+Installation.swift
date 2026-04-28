@@ -47,16 +47,17 @@ extension LaunchAgentOptions {
     }
 
     func install() throws {
-        try prepareStagedArtifactIfNeeded()
-
         let layout = ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
         try ensureParentDirectory(for: plistPath)
         try FileManager.default.createDirectory(atPath: profileRootPath, withIntermediateDirectories: true)
         try ensureParentDirectory(for: standardOutPath)
         try ensureParentDirectory(for: standardErrorPath)
         try prepareLaunchAgentConfig(layout: layout)
+        let propertyListData = try propertyListData()
 
-        try propertyListData().write(to: URL(fileURLWithPath: plistPath), options: .atomic)
+        try prepareStagedArtifactIfNeeded()
+
+        try propertyListData.write(to: URL(fileURLWithPath: plistPath), options: .atomic)
         try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: plistPath)
 
         let status = LaunchAgentStatusOptions(
@@ -79,14 +80,21 @@ extension LaunchAgentOptions {
     }
 
     private func prepareStagedArtifactIfNeeded() throws {
-        guard case let .promoteCurrentCheckout(repositoryRootPath) = stagedArtifactPolicy else {
-            return
+        let stagingResult: ReleaseArtifactPromotionResult
+        switch stagedArtifactPolicy {
+            case .useExistingExecutable:
+                return
+
+            case let .promoteCurrentCheckout(repositoryRootPath):
+                stagingResult = try ReleaseArtifactPromoter.promoteLive(
+                    repositoryRootPath: repositoryRootPath,
+                    stagedExecutablePath: toolExecutablePath,
+                )
+
+            case let .custom(promote):
+                stagingResult = try promote()
         }
 
-        let stagingResult = try ReleaseArtifactPromoter.promoteLive(
-            repositoryRootPath: repositoryRootPath,
-            stagedExecutablePath: toolExecutablePath,
-        )
         print(
             """
             Staged current release artifact from '\(stagingResult.builtExecutablePath)' to '\(stagingResult.stagedExecutablePath)'.
