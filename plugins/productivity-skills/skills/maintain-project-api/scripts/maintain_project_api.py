@@ -625,18 +625,15 @@ def apply_fixes(
     api_text: str,
     config: Dict[str, object],
 ) -> Tuple[str, List[Dict[str, str]]]:
+    fixes: List[Dict[str, str]] = []
     if not api_text.strip():
-        bootstrap = render_template_bootstrap(project_root)
-        write_text(api_path, bootstrap)
-        return (
-            bootstrap,
-            [
-                {
-                    "action": "create-api-from-template",
-                    "file": str(api_path),
-                    "reason": "Created a missing API.md from the bundled canonical template.",
-                }
-            ],
+        api_text = render_template_bootstrap(project_root)
+        fixes.append(
+            {
+                "action": "create-api-from-template",
+                "file": str(api_path),
+                "reason": "Created a missing API.md from the bundled canonical template.",
+            }
         )
 
     settings = config_settings(config)
@@ -676,13 +673,14 @@ def apply_fixes(
     for heading, body in rendered_sections:
         parts.extend(["", f"## {heading}", "", body.strip()])
     document = "\n".join(parts).strip() + "\n"
-    return normalize_whitespace(document), [
+    fixes.append(
         {
             "action": "normalize-api-structure",
             "file": str(api_path),
             "reason": "Normalized API.md to the canonical template-backed section schema.",
         }
-    ]
+    )
+    return normalize_whitespace(document), fixes
 
 
 def format_report(report: Dict[str, object]) -> str:

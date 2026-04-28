@@ -151,10 +151,13 @@ def test_apply_creates_api_from_template_when_missing(tmp_path: Path) -> None:
     assert report["fixes_applied"]
     assert "# API Reference for" in created
     assert "## Table of Contents" in created
+    assert "- [Overview](#overview)" in created
     assert "## API Surface" in created
     assert "## Local Development and Verification" in created
     assert "### Runtime Configuration" in created
     assert "### Verification" in created
+    assert report["schema_violations"] == []
+    assert report["post_fix_status"]["is_clean"] is True
 
 
 def test_apply_normalizes_structure_and_aliases(tmp_path: Path) -> None:
