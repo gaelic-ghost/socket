@@ -55,6 +55,7 @@ Use `socket` when the task is about the superproject layer:
 - mixed monorepo policy
 - subtree sync flow for `apple-dev-skills` or `SpeakSwiftlyServer`
 - cross-repo maintainer guidance
+- coordinated child-skill guidance, such as Codex subagent wording that must stay consistent across exported skills
 - coordinated release-prep work that needs the root docs and child version surfaces to stay in sync
 - coordinated semantic-version bumps that keep the maintained manifests aligned across the superproject
 
@@ -79,6 +80,8 @@ Only `apple-dev-skills` and `SpeakSwiftlyServer` still use subtree sync workflow
 Treat Gale's local `socket` checkout as the normal day-to-day checkout on `main`. Work in the monorepo copy first, and use the relevant directory under [`plugins/`](./plugins/) for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs. Reach for a feature branch or a dedicated worktree only when the change needs extra isolation.
 
 Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated. `SpeakSwiftlyServer` is pull-only from `socket` by default: release and validate it in its standalone checkout, then pull the released state down here.
+
+When a guidance change intentionally spans multiple child skill repositories, update the affected child docs and the root `socket` docs in the same pass so the superproject still explains why the coordinated edit belongs here.
 
 ### Shared Versioning
 
