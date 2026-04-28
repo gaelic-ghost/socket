@@ -160,7 +160,7 @@ But Inspector should stay in the "operator investigation" lane, not become the o
 
 ### 3. Extend the release-owned live-service refresh into transport health verification
 
-The release script now validates the repo, fails fast if the requested tag does not already match `HEAD`, builds the release artifact, stages `.release-artifacts/current`, tags, pushes, creates the GitHub release object, and refreshes the live LaunchAgent-backed service from that staged artifact by default. It still does not verify that the refreshed live service can actually boot from the staged artifact with both transports healthy.
+The release script now validates the repo, creates or verifies the requested tag at `HEAD`, pushes the branch and tag, opens the release PR, watches CI, checks review state, merges, fast-forwards `main`, and creates the GitHub release object. It still does not verify that a refreshed live service can actually boot from the staged artifact with both transports healthy.
 
 Add a maintainer-facing release checklist or release helper step that covers:
 

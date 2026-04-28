@@ -91,7 +91,7 @@ These events should complement the existing `HostStateSnapshot`, not replace it.
 - Transport snapshots only report `listening` once the shared Hummingbird process is actually serving traffic.
 - `ServerHost` exposes a typed host event surface alongside the existing stable snapshot surface.
 - `ServerState` remains out of the server-side event backbone.
-- `swift build` and `swift test` remain green after the transport lifecycle cleanup and event-surface additions.
+- `xcrun swift build` and `xcrun swift test` remain green after the transport lifecycle cleanup and event-surface additions.
 
 ## Status
 
