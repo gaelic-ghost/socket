@@ -12,6 +12,9 @@
 - Prefer Dash or local Apple docs first, then official Apple docs when local docs are insufficient.
 - Prefer the simplest correct Swift that is easiest to read and reason about.
 - Prefer synthesized and framework-provided behavior over extra wrappers and boilerplate.
+- For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; prefer optional parameters with explicit default values over additional methods or overloads when the difference is optional behavior on the same operation.
+- When a public function, initializer, or method reaches four or more arguments or parameters, strongly prefer a named typed `struct` request, options, or configuration value so call sites stay readable and future additions do not multiply overloads.
+- Prefer enums, enum cases with associated values, and narrow typed values over strings, booleans, sentinel values, or parallel parameters whenever the domain has a closed or meaningful set of choices.
 - Keep data flow straight and dependency direction unidirectional.
 - Treat the `.xcworkspace` or `.xcodeproj` as the source of truth for app integration, schemes, and build settings.
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.

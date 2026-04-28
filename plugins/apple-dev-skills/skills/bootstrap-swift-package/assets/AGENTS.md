@@ -33,6 +33,10 @@
 - Prefer the simplest correct Swift that is easiest to read, reason about, and maintain.
 - Treat idiomatic Swift and Cocoa-style naming conventions as tools in service of readability, not goals by themselves.
 - Prefer explicit, consistent, and unambiguous names.
+- For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; do not grow method families, overload sets, or loosely typed entry points when one clear typed API can express the operation.
+- Prefer optional parameters with explicit default values over additional methods or overloads whenever the difference is optional behavior on the same operation.
+- When a public function, initializer, or method reaches four or more arguments or parameters, strongly prefer a named typed `struct` request, options, or configuration value so call sites stay readable and future additions do not multiply overloads.
+- Prefer enums, enum cases with associated values, and narrow typed values over strings, booleans, sentinel values, or parallel parameters whenever the domain has a closed or meaningful set of choices.
 - Prefer compact and concise code; use shorthand syntax and trailing-closure syntax when readability improves.
 - Do not add boilerplate, helper types, or extra layers just to make code look more architectural or more "Swifty".
 - Strongly prefer synthesized, implicit, and framework-provided behavior over handwritten setup code.

@@ -28,6 +28,10 @@ Use this snippet in repository `AGENTS.md` files when you want cross-project Swi
 - Treat redundant wrappers, rename-and-copy layers, and duplicated logic as anti-patterns by default.
 - This guidance is optimized for an advanced Swift reader and may prefer dense but readable modern Swift over beginner-style explicitness.
 - Prefer explicit names that are consistent, unambiguous, and easy to scan at the call site.
+- For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; do not grow method families, overload sets, or loosely typed entry points when one clear typed API can express the operation.
+- Prefer optional parameters with explicit default values over additional methods or overloads whenever the difference is optional behavior on the same operation.
+- When a public function, initializer, or method reaches four or more arguments or parameters, strongly prefer a named typed `struct` request, options, or configuration value so call sites stay readable and future additions do not multiply overloads.
+- Prefer enums, enum cases with associated values, and narrow typed values over strings, booleans, sentinel values, or parallel parameters whenever the domain has a closed or meaningful set of choices.
 - Prefer compact syntax when it improves local reasoning, including shorthand syntax, ternary expressions, trailing closures, enums, `switch`, `map`, `filter`, `forEach`, async iteration, `AsyncSequence`, `AsyncStream`, and `AsyncAlgorithms`.
 - Prefer explicit default values at initialization when they reduce optional-handling clutter and keep the code easier to follow.
 - When lines, chains, or expressions get long, prefer chopping them down into a clean vertical, top-down structure with straight visual flow.

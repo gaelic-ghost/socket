@@ -359,6 +359,7 @@ Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, groundin
 
 ## History
 
+- Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.
 - Registered Xcode's built-in MCP bridge through the Codex plugin manifest so installed `apple-dev-skills` plugins expose the Xcode-owned MCP path without bundling a separate server package.
 - Clarified the Apple `maintain-project-repo` branch-protection contract so generated and synced repos require the `validate` Actions check context instead of the workflow-title display string.
 - Completed Milestones 1 through 17 by establishing the repository, shipping the core Apple skill bundle, improving portability and customization guidance, adding bootstrap and repo-sync workflows, extracting Apple docs exploration into its own skill, and cleaning up the install surface around the top-level export model.
