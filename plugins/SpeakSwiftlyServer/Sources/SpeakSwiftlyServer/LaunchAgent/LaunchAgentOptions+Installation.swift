@@ -53,8 +53,11 @@ extension LaunchAgentOptions {
         try ensureParentDirectory(for: standardOutPath)
         try ensureParentDirectory(for: standardErrorPath)
         try prepareLaunchAgentConfig(layout: layout)
+        let propertyListData = try propertyListData()
 
-        try propertyListData().write(to: URL(fileURLWithPath: plistPath), options: .atomic)
+        try prepareStagedArtifactIfNeeded()
+
+        try propertyListData.write(to: URL(fileURLWithPath: plistPath), options: .atomic)
         try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: plistPath)
 
         let status = LaunchAgentStatusOptions(
@@ -72,6 +75,31 @@ extension LaunchAgentOptions {
             """
             Installed LaunchAgent '\(label)' at '\(plistPath)' and bootstrapped it into '\(userDomain)'.
             Active tool executable: \(toolExecutableActivationSummary())
+            """,
+        )
+    }
+
+    private func prepareStagedArtifactIfNeeded() throws {
+        let stagingResult: ReleaseArtifactPromotionResult
+        switch stagedArtifactPolicy {
+            case .useExistingExecutable:
+                return
+
+            case let .promoteCurrentCheckout(repositoryRootPath):
+                stagingResult = try ReleaseArtifactPromoter.promoteLive(
+                    repositoryRootPath: repositoryRootPath,
+                    stagedExecutablePath: toolExecutablePath,
+                )
+
+            case let .custom(promote):
+                stagingResult = try promote()
+        }
+
+        print(
+            """
+            Staged current release artifact from '\(stagingResult.builtExecutablePath)' to '\(stagingResult.stagedExecutablePath)'.
+            Refreshed staged metallib at '\(stagingResult.stagedMetallibPath)'.
+            Refreshed staged code signature for '\(stagingResult.stagedExecutablePath)'.
             """,
         )
     }

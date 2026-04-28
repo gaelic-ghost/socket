@@ -408,7 +408,7 @@ import Testing
         textProfileID: "swift-docs",
         normalizationContext: .init(
             cwd: "./Sources",
-            repoRoot: "../SpeakSwiftlyServer",
+            repoRoot: ".",
             textFormat: .markdown,
             nestedSourceFormat: .swift,
         ),
@@ -428,7 +428,7 @@ import Testing
     #expect(firstQueuedSpeechInvocation.textProfileID == "swift-docs")
     let expectedNormalizationContext = SpeechNormalizationContext(
         cwd: "./Sources",
-        repoRoot: "../SpeakSwiftlyServer",
+        repoRoot: ".",
         textFormat: .markdown,
         nestedSourceFormat: .swift,
     )
@@ -636,14 +636,23 @@ import Testing
 }
 
 @Test func `runtime adapter path resolution normalizes relative and whitespace padded cwd values`() {
-    let currentDirectoryPath = "/tmp/speakswiftly-tests/workspace"
+    let temporaryRootURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        .appendingPathComponent("speakswiftly-tests", isDirectory: true)
+    let currentDirectoryPath = temporaryRootURL
+        .appendingPathComponent("workspace", isDirectory: true)
+        .path
+    let projectPath = temporaryRootURL
+        .appendingPathComponent("project", isDirectory: true)
+        .path
 
     #expect(
         resolvedAbsoluteFilesystemPath(
             "./Artifacts/output.wav",
-            cwd: "  /tmp/speakswiftly-tests/project  ",
+            cwd: "  \(projectPath)  ",
             currentDirectoryPath: currentDirectoryPath,
-        ) == "/tmp/speakswiftly-tests/project/Artifacts/output.wav",
+        ) == URL(fileURLWithPath: projectPath, isDirectory: true)
+            .appendingPathComponent("Artifacts/output.wav", isDirectory: false)
+            .path,
     )
 
     #expect(
@@ -651,21 +660,26 @@ import Testing
             "../Fixtures/reference.wav",
             cwd: "  ./Runs/Session  ",
             currentDirectoryPath: currentDirectoryPath,
-        ) == "/tmp/speakswiftly-tests/workspace/Runs/Fixtures/reference.wav",
+        ) == URL(fileURLWithPath: currentDirectoryPath, isDirectory: true)
+            .appendingPathComponent("Runs/Fixtures/reference.wav", isDirectory: false)
+            .path,
     )
 
+    let finalPath = temporaryRootURL
+        .appendingPathComponent("nested/../final.wav", isDirectory: false)
+        .path
     #expect(
         resolvedAbsoluteFilesystemPath(
-            "/tmp/speakswiftly-tests/../speakswiftly-tests/final.wav",
+            finalPath,
             cwd: "./ignored",
             currentDirectoryPath: currentDirectoryPath,
-        ) == "/tmp/speakswiftly-tests/final.wav",
+        ) == temporaryRootURL.appendingPathComponent("final.wav", isDirectory: false).path,
     )
 
     #expect(
         resolvedAbsoluteFilesystemPath(
             "   ",
-            cwd: "/tmp/speakswiftly-tests/project",
+            cwd: projectPath,
             currentDirectoryPath: currentDirectoryPath,
         ) == nil,
     )

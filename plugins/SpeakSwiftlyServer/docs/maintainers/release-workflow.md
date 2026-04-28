@@ -6,169 +6,125 @@ This document is the maintainer-facing release contract for the standalone `Spea
 
 Historical release notes and release checklists live under [`docs/releases`](../releases/). Keep this file focused on the current release process rather than per-release records.
 
-The release surface is intentionally split by checkout authority:
+The current release surface is aligned with the checked-in `maintain-project-repo` toolkit. That means `scripts/repo-maintenance/release.sh` is the standing entrypoint for release automation, and the selected profile lives in `scripts/repo-maintenance/config/profile.env`.
 
-- use `release-prepare.sh` from a feature branch or worktree when the job is "validate this release candidate, push it, open or update the PR, and queue auto-merge"
-- use `release-publish.sh` from the release branch when the job is "cut the actual tag and GitHub release from the merged branch tip without pushing the protected release branch"
+## Standard Release Command
 
-That split keeps branch and worktree automation convenient without letting an unmerged feature branch publish a release tag accidentally.
+Run the standard release flow from a feature branch or worktree:
 
-One practical rule follows from that split: if the commits you want to release are not already on `origin/main`, you are still on the prepare side of the workflow even if those commits currently live in a local `main` checkout. Protected-branch policy and `release-publish.sh` both assume the release tip has already been merged and synced back down to local `main`.
+```bash
+scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump
+```
+
+Use `--skip-version-bump` because this repository does not currently have repo-owned version-bearing files that need a scripted bump before tagging. If the repo later adds an executable `scripts/repo-maintenance/version-bump.sh`, remove that flag and let the hook update the version surfaces before the release tag is created.
+
+The standard flow is a durable repo-maintenance path. It validates the checkout, creates the annotated tag locally, pushes the branch and tag, opens or updates the release PR, watches CI, checks for review comments, merges the PR, fast-forwards local `main`, creates the GitHub release with `gh release create --verify-tag`, and cleans up merged local branches when safe.
 
 ## Context Rules
 
+### Feature Branch Or Worktree
+
+Use the standard flow from a named feature branch or worktree:
+
+```bash
+scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump
+```
+
+The flow refuses to run standard mode from the protected base branch. If release-candidate commits were accidentally made directly on local `main`, branch from that tip before continuing so the release still goes through a pull request.
+
 ### Local `main`
 
-Run:
+Local `main` is the protected release branch and should normally be a sync surface, not the release automation workspace. After the standard release flow merges its PR, it attempts to fast-forward local `main` from `origin/main`.
+
+If another worktree owns `main`, fast-forward that checkout manually after the release flow completes.
+
+### Submodule Mode
+
+Use submodule mode only when this repository is checked out as a submodule and the parent pointer update remains a separate follow-up:
 
 ```bash
-scripts/repo-maintenance/release-publish.sh --version vX.Y.Z --skip-live-service-refresh
+scripts/repo-maintenance/release.sh --mode submodule --version vX.Y.Z --skip-version-bump
 ```
 
-That path is the only supported tagged-release publisher. It syncs local `main` with `origin/main`, validates the repo unless told not to, stages the release artifact, creates the annotated tag, pushes the tag, creates the GitHub release, and optionally refreshes the local LaunchAgent-backed live service.
-
-If local `main` is ahead of `origin/main`, stop there. Do not try to force the publish path through that unsynced checkout. Put those commits on a feature branch if needed, run `release-prepare.sh`, merge the PR, fast-forward local `main`, and only then return to `release-publish.sh`.
-
-Protected `main` updates belong entirely on the prepare side of the workflow. `release-publish.sh` assumes the exact commit you want to tag is already reachable on `origin/main` and on your fast-forwarded local `main`, so publish never needs to push the branch itself.
-
-### Local Feature Branch
-
-Run:
-
-```bash
-scripts/repo-maintenance/release-prepare.sh --version vX.Y.Z
-```
-
-That path validates the repo unless told not to, pushes the current branch, opens or updates the pull request, and enables auto-merge by default.
-
-It does **not** stage release artifacts, create the release tag, or create the GitHub release object.
-
-### Local Worktree
-
-Treat a regular `git worktree` checkout and a Worktrunk-created worktree the same way.
-
-If the worktree is checked out on a feature branch, use `release-prepare.sh`.
-
-If the worktree is checked out on the configured release branch, use `release-publish.sh`.
-
-The worktree manager does not materially change the release semantics. The deciding factor is the checked-out branch and whether that branch is the configured release branch.
+Submodule mode runs the dispatch scripts under `scripts/repo-maintenance/release/` and then leaves the parent repository pointer update to a separate commit.
 
 ## Script Inventory
-
-### `scripts/repo-maintenance/release-prepare.sh`
-
-Purpose:
-
-- branch and worktree release preparation
-- branch push
-- pull request creation or refresh
-- auto-merge enablement
-
-Key flags:
-
-- `--version vX.Y.Z`
-- `--base-branch <branch>`
-- `--skip-validate`
-- `--no-auto-merge`
-- `--merge-method <merge|rebase|squash>`
-- `--wait-for-merge`
-- `--title <text>`
-- `--body-file <path>`
-- `--draft`
-- `--dry-run`
-
-### `scripts/repo-maintenance/release-publish.sh`
-
-Purpose:
-
-- final tagged release cut from the release branch
-- tag push
-- GitHub release creation
-- optional live-service refresh
-
-Key flags:
-
-- `--version vX.Y.Z`
-- `--mode <standard|submodule>`
-- `--skip-validate`
-- `--skip-gh-release`
-- `--refresh-live-service`
-- `--skip-live-service-refresh`
-- `--live-service-config-file <path>`
-- `--dry-run`
 
 ### `scripts/repo-maintenance/release.sh`
 
 Purpose:
 
-- compatibility dispatcher
+- standard feature-branch release automation
+- submodule release dispatch
+- local validation before release work
+- branch, tag, PR, CI, merge, GitHub release, and cleanup behavior for standard mode
 
-Behavior:
+Key flags:
 
-- `release.sh prepare ...` dispatches to `release-prepare.sh`
-- `release.sh publish ...` dispatches to `release-publish.sh`
-- `release.sh ...` without a subcommand defaults to the publish path and refuses to run from a non-release branch
+- `--mode <standard|submodule>`
+- `--version vX.Y.Z`
+- `--base-branch <branch>`
+- `--skip-validate`
+- `--skip-version-bump`
+- `--skip-gh-release`
+- `--review-comments-addressed`
+- `--skip-branch-cleanup`
+- `--dry-run`
+
+### `scripts/repo-maintenance/validate-all.sh`
+
+Purpose:
+
+- one local maintainer validation entrypoint
+- the command CI calls through `.github/workflows/validate-repo-maintenance.yml`
+- dispatch of repo-maintenance validation scripts under `scripts/repo-maintenance/validations/`
 
 ## Expected Flow
 
-### Branch Or Worktree Prepare
-
-1. finish the release candidate work on a feature branch
-2. keep the worktree clean
-3. run `release-prepare.sh --version vX.Y.Z`
-4. let the authoritative maintainer validation check run
-5. let auto-merge land the PR
-
-If you accidentally made the release-candidate commits directly on local `main`, branch from that tip before continuing so the rest of the workflow still goes through `release-prepare.sh` and a normal PR merge.
-
-### Main Publish
-
-1. switch to `main`
-2. ensure the checkout is clean
-3. run `release-publish.sh --version vX.Y.Z`
-4. run the current transport smoke gate or equivalent post-publish health verification
-
-The current opt-in live E2E gate is:
+1. Finish release-candidate work on a feature branch or worktree.
+2. Keep the worktree clean.
+3. Run the standard release command:
 
 ```bash
-SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ServerTransportE2ETests
+scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump
 ```
 
-Use that smoke suite when you want one repo-owned proof that the shipped server can still boot the published runtime and answer over both HTTP and MCP. For the full maintainer verification path, pair it with the staged healthcheck and any live-service refresh steps documented in [CONTRIBUTING.md](../../CONTRIBUTING.md).
+4. Let the repo-maintenance validation check run.
+5. Let the script push the branch and tag, open or update the PR, watch CI, check review state, merge, fast-forward `main`, create the GitHub release, and clean up merged branches.
+6. Run any post-release live-service refresh or staged-artifact promotion only when that operation is explicitly part of the release task.
 
-## CI Shape
+## Validation Shape
 
-The repository now uses one authoritative GitHub validation workflow:
-`.github/workflows/validate-repo-maintenance.yml`.
+The repository uses one authoritative GitHub validation workflow: `.github/workflows/validate-repo-maintenance.yml`.
 
-That workflow installs the local formatting and linting tools and then runs
-`scripts/repo-maintenance/validate-all.sh`, which in turn covers:
+That workflow installs the local formatting and linting tools and then runs:
 
-- the default package lane (`xcrun swift build` and `xcrun swift test`)
-- the repo-owned CLI smoke checks
-- DocC generation
-- formatting and lint checks
+```bash
+bash scripts/repo-maintenance/validate-all.sh
+```
 
-Keep new required validation inside `validate-all.sh` unless there is a clear reason a
-separate GitHub-only workflow must own it.
+The local validation dispatcher covers the managed toolkit checks and the repo-specific Swift package checks that remain under `scripts/repo-maintenance/validations/`, including build, test, DocC, CLI smoke, SwiftFormat, and SwiftLint.
+
+Keep new required validation inside `validate-all.sh` unless there is a clear reason a separate GitHub-only workflow must own it.
 
 ## Defaults
 
-The release defaults live in `scripts/repo-maintenance/config/release.env`.
+Release defaults live in `scripts/repo-maintenance/config/release.env`.
 
 Current defaults:
 
-- release remote: `origin`
+- default release mode: `standard`
 - release branch: `main`
-- prepare auto-merge method: `merge`
-- live-service refresh: enabled by default for publish
+
+The explicit repo-maintenance profile lives in `scripts/repo-maintenance/config/profile.env` and is currently `swift-package`.
 
 ## Safety Properties
 
-- `release-prepare.sh` refuses to run from the configured release branch
-- `release-publish.sh` refuses to run from any branch other than the configured release branch
-- `release-publish.sh` syncs the local release branch with the remote before tagging
-- `release-publish.sh` refuses to publish if local release-branch commits are ahead of the remote
-- `release-publish.sh` pushes the release tag only; it does not push the release branch
-- protected `main` policies are expected to force release-candidate commits through a PR before publish
-- both flows require a clean worktree
+- Standard mode requires a named feature branch or worktree.
+- Standard mode refuses to run from the configured base branch.
+- Standard mode requires a clean worktree before release work starts.
+- Standard mode creates the annotated tag before pushing the branch and tag.
+- Standard mode uses a pull request and watches CI before merge.
+- Standard mode stops on requested changes or unresolved review/discussion comments unless rerun with `--review-comments-addressed` after the comment pass is intentionally complete.
+- Standard mode creates the GitHub release from the pushed tag with `--verify-tag`.
+- Submodule mode leaves parent repository pointer updates to a separate follow-up commit.

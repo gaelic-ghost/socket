@@ -1,3 +1,4 @@
+import Darwin
 import Foundation
 
 struct LaunchAgentPromoteOptions {
@@ -53,61 +54,148 @@ struct LaunchAgentPromoteOptions {
     }
 }
 
-private struct ReleaseArtifactPromotionResult {
+struct ReleaseArtifactPromotionResult {
     let builtExecutablePath: String
     let stagedExecutablePath: String
     let stagedMetallibPath: String
 }
 
-private enum ReleaseArtifactPromoter {
-    private struct SpeakSwiftlyPublishedRuntimeMetadata: Decodable {
-        let buildConfiguration: String
-        let metallibPath: String
-        let sourceRoot: String?
-
-        enum CodingKeys: String, CodingKey {
-            case buildConfiguration = "build_configuration"
-            case metallibPath = "metallib_path"
-            case sourceRoot = "source_root"
-        }
-    }
-
+enum ReleaseArtifactPromoter {
     static func promoteLive(
         repositoryRootPath: String,
         stagedExecutablePath: String,
     ) throws -> ReleaseArtifactPromotionResult {
-        let repositoryRootURL = URL(fileURLWithPath: repositoryRootPath, isDirectory: true)
         try buildReleaseTool(repositoryRootPath: repositoryRootPath)
 
         let builtExecutablePath = try builtReleaseExecutablePath(repositoryRootPath: repositoryRootPath)
-        let builtMetallibURL = try publishedRuntimeMetallibURL(repositoryRootURL: repositoryRootURL)
+        let builtMetallibURL = try builtReleaseMetallibURL(
+            productsURL: URL(fileURLWithPath: builtExecutablePath, isDirectory: false)
+                .deletingLastPathComponent(),
+        )
         let stagedExecutableURL = URL(fileURLWithPath: stagedExecutablePath, isDirectory: false)
         let stagedDirectoryURL = stagedExecutableURL.deletingLastPathComponent()
         let stagedMetallibURL = stagedDirectoryURL
             .appendingPathComponent("Resources", isDirectory: true)
             .appendingPathComponent("default.metallib", isDirectory: false)
 
-        try FileManager.default.createDirectory(at: stagedDirectoryURL, withIntermediateDirectories: true)
-        try replaceItem(
-            at: stagedExecutableURL,
-            with: URL(fileURLWithPath: builtExecutablePath, isDirectory: false),
-            permissions: 0o755,
-        )
         try FileManager.default.createDirectory(
             at: stagedMetallibURL.deletingLastPathComponent(),
             withIntermediateDirectories: true,
         )
-        try replaceItem(
+
+        let preparedExecutableURL = try prepareReplacementItem(
+            at: stagedExecutableURL,
+            with: URL(fileURLWithPath: builtExecutablePath, isDirectory: false),
+            permissions: 0o755,
+            prepareTemporaryItem: refreshAdHocSignature,
+        )
+        defer {
+            try? FileManager.default.removeItem(at: preparedExecutableURL)
+        }
+
+        let preparedMetallibURL = try prepareReplacementItem(
             at: stagedMetallibURL,
             with: builtMetallibURL,
         )
-        try refreshAdHocSignature(for: stagedExecutableURL)
+        defer {
+            try? FileManager.default.removeItem(at: preparedMetallibURL)
+        }
+
+        let metallibBackupURL = try backupItemIfPresent(at: stagedMetallibURL)
+        defer {
+            if let metallibBackupURL {
+                try? FileManager.default.removeItem(at: metallibBackupURL)
+            }
+        }
+
+        try commitPreparedReplacement(preparedMetallibURL, to: stagedMetallibURL)
+        do {
+            try commitPreparedReplacement(preparedExecutableURL, to: stagedExecutableURL)
+        } catch {
+            try rollbackItem(at: stagedMetallibURL, from: metallibBackupURL, after: error)
+            throw error
+        }
 
         return .init(
             builtExecutablePath: builtExecutablePath,
             stagedExecutablePath: stagedExecutableURL.path,
             stagedMetallibPath: stagedMetallibURL.path,
         )
+    }
+
+    static func replaceItem(
+        at destinationURL: URL,
+        with sourceURL: URL,
+        permissions: NSNumber? = nil,
+    ) throws {
+        let temporaryURL = try prepareReplacementItem(
+            at: destinationURL,
+            with: sourceURL,
+            permissions: permissions,
+        )
+        defer {
+            try? FileManager.default.removeItem(at: temporaryURL)
+        }
+
+        try commitPreparedReplacement(temporaryURL, to: destinationURL)
+    }
+
+    private static func prepareReplacementItem(
+        at destinationURL: URL,
+        with sourceURL: URL,
+        permissions: NSNumber? = nil,
+        prepareTemporaryItem: ((URL) throws -> Void)? = nil,
+    ) throws -> URL {
+        let temporaryURL = destinationURL
+            .deletingLastPathComponent()
+            .appendingPathComponent(".\(destinationURL.lastPathComponent).\(UUID().uuidString).tmp", isDirectory: false)
+
+        try FileManager.default.copyItem(at: sourceURL, to: temporaryURL)
+        if let permissions {
+            try FileManager.default.setAttributes([.posixPermissions: permissions], ofItemAtPath: temporaryURL.path)
+        }
+        try prepareTemporaryItem?(temporaryURL)
+
+        return temporaryURL
+    }
+
+    private static func commitPreparedReplacement(_ temporaryURL: URL, to destinationURL: URL) throws {
+        guard rename(temporaryURL.path, destinationURL.path) == 0 else {
+            let failureDescription = String(cString: strerror(errno))
+            throw LaunchAgentCommandError(
+                "\(speakSwiftlyServerToolName) could not atomically replace staged artifact '\(destinationURL.path)' with temporary artifact '\(temporaryURL.path)'. Likely cause: \(failureDescription)",
+            )
+        }
+    }
+
+    private static func backupItemIfPresent(at destinationURL: URL) throws -> URL? {
+        guard FileManager.default.fileExists(atPath: destinationURL.path) else {
+            return nil
+        }
+
+        let backupURL = destinationURL
+            .deletingLastPathComponent()
+            .appendingPathComponent(".\(destinationURL.lastPathComponent).\(UUID().uuidString).backup", isDirectory: false)
+        try FileManager.default.copyItem(at: destinationURL, to: backupURL)
+        return backupURL
+    }
+
+    private static func rollbackItem(
+        at destinationURL: URL,
+        from backupURL: URL?,
+        after replacementError: Error,
+    ) throws {
+        do {
+            if let backupURL {
+                try commitPreparedReplacement(backupURL, to: destinationURL)
+            } else if FileManager.default.fileExists(atPath: destinationURL.path) {
+                try FileManager.default.removeItem(at: destinationURL)
+            }
+        } catch {
+            throw LaunchAgentCommandError(
+                "\(speakSwiftlyServerToolName) could not roll back staged artifact '\(destinationURL.path)' after promotion failed. Promotion error: \(replacementError). Rollback error: \(error).",
+            )
+        }
     }
 
     private static func buildReleaseTool(repositoryRootPath: String) throws {
@@ -145,62 +233,26 @@ private enum ReleaseArtifactPromoter {
         return executablePath
     }
 
-    private static func publishedRuntimeMetallibURL(repositoryRootURL: URL) throws -> URL {
-        let metadataURL = repositoryRootURL
-            .deletingLastPathComponent()
-            .appendingPathComponent("SpeakSwiftly/.local/xcode/SpeakSwiftly.release.json", isDirectory: false)
-        guard FileManager.default.fileExists(atPath: metadataURL.path) else {
-            throw LaunchAgentCommandError(
-                "The live-service promotion path requires sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)'. Publish and verify the sibling release runtime first.",
-            )
-        }
+    private static func builtReleaseMetallibURL(productsURL: URL) throws -> URL {
+        let candidates = [
+            productsURL.appendingPathComponent(
+                "SpeakSwiftly_SpeakSwiftly.bundle/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib",
+                isDirectory: false,
+            ),
+            productsURL.appendingPathComponent(
+                "SpeakSwiftly_SpeakSwiftlyCore.bundle/mlx-swift_Cmlx.bundle/Contents/Resources/default.metallib",
+                isDirectory: false,
+            ),
+            productsURL.appendingPathComponent("Resources/default.metallib", isDirectory: false),
+        ]
 
-        let metadata = try JSONDecoder().decode(
-            SpeakSwiftlyPublishedRuntimeMetadata.self,
-            from: Data(contentsOf: metadataURL),
-        )
-        guard metadata.buildConfiguration == "Release" else {
-            throw LaunchAgentCommandError(
-                "The sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)' reported build configuration '\(metadata.buildConfiguration)' instead of the expected 'Release'.",
-            )
-        }
-
-        let recordedURL = URL(fileURLWithPath: metadata.metallibPath, isDirectory: false)
-        if FileManager.default.fileExists(atPath: recordedURL.path) {
-            return recordedURL
-        }
-
-        if let sourceRoot = metadata.sourceRoot, metadata.metallibPath.hasPrefix(sourceRoot) {
-            let relativeSuffix = String(metadata.metallibPath.dropFirst(sourceRoot.count))
-                .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-            if relativeSuffix.isEmpty == false {
-                let rebasedURL = repositoryRootURL
-                    .deletingLastPathComponent()
-                    .appendingPathComponent("SpeakSwiftly", isDirectory: true)
-                    .appendingPathComponent(relativeSuffix, isDirectory: false)
-                if FileManager.default.fileExists(atPath: rebasedURL.path) {
-                    return rebasedURL
-                }
-            }
+        if let metallibURL = candidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }) {
+            return metallibURL
         }
 
         throw LaunchAgentCommandError(
-            "The sibling SpeakSwiftly release runtime metadata at '\(metadataURL.path)' pointed at a missing metallib path '\(metadata.metallibPath)'. Publish and verify the sibling release runtime first.",
+            "\(speakSwiftlyServerToolName) completed a release build, but no SpeakSwiftly MLX metallib was found in SwiftPM product directory '\(productsURL.path)'. Expected the SpeakSwiftly package dependency to bundle mlx-swift_Cmlx.bundle in the release build products.",
         )
-    }
-
-    private static func replaceItem(
-        at destinationURL: URL,
-        with sourceURL: URL,
-        permissions: NSNumber? = nil,
-    ) throws {
-        if FileManager.default.fileExists(atPath: destinationURL.path) {
-            try FileManager.default.removeItem(at: destinationURL)
-        }
-        try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
-        if let permissions {
-            try FileManager.default.setAttributes([.posixPermissions: permissions], ofItemAtPath: destinationURL.path)
-        }
     }
 
     private static func refreshAdHocSignature(for executableURL: URL) throws {

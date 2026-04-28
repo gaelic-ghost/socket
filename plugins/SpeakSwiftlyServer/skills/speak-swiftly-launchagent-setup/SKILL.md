@@ -18,8 +18,8 @@ Use this skill when the user wants the standalone `SpeakSwiftlyServer` to run as
 
 1. Print the property list first with `xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist`.
 2. Confirm the config file the service should use. The standard live-service path is `~/Library/Application Support/SpeakSwiftlyServer/server.yaml` unless the user explicitly wants another file.
-3. If the staged live artifact is already the intended executable, run `xcrun swift run SpeakSwiftlyServerTool launch-agent install --config-file /absolute/path/to/server.yaml`.
-4. If the user wants the current checkout to become the live service now, run `xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live --config-file /absolute/path/to/server.yaml`.
+3. If the staged live artifact is already the intended executable, run `xcrun swift run SpeakSwiftlyServerTool launch-agent install --config-file <server-config-yaml>`.
+4. If the user wants the current checkout to become the live service now, run `xcrun swift run SpeakSwiftlyServerTool launch-agent promote-live --config-file <server-config-yaml>`.
 5. Verify the result with `xcrun swift run SpeakSwiftlyServerTool healthcheck`.
 
 ## When To Use Each Command
