@@ -89,19 +89,19 @@ xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist
 xcrun swift run SpeakSwiftlyServerTool healthcheck
 ```
 
-Before any live end-to-end run, stop the LaunchAgent-backed live service first:
+Before any live end-to-end run, make sure the LaunchAgent-backed live service is not holding resident model memory. The current suite still fails fast when that service is loaded, so the historical manual stop command is:
 
 ```bash
 ./.release-artifacts/current/SpeakSwiftlyServerTool launch-agent uninstall
 ```
 
-That matters because the live E2E harness is intentionally a one-speaking-server surface. The helper now fails fast when the LaunchAgent-backed service is still loaded or when a competing `SpeakSwiftlyServerTool serve` process is already running.
+That command removes the installed plist, so reinstall afterward with `xcrun swift run SpeakSwiftlyServerTool launch-agent install` if you use it. The intended next simplification is to replace this destructive preflight with a live-service model unload/reload helper so the service definition stays installed while the test-owned helper has enough memory headroom.
 
 ## Development Expectations
 
 ### Naming Conventions
 
-Keep user-facing lifecycle vocabulary consistent across docs, scripts, and commands. In this repo that means preferring pairs like `install` and `uninstall`, using `promote-live` for staged-to-live promotion, and avoiding alternate verbs for the same operator action unless a compatibility surface already requires them.
+Keep user-facing lifecycle vocabulary consistent across docs, scripts, and commands. In this repo that means preferring pairs like `install` and `uninstall`, treating `install` as the normal all-in-one staged-artifact plus LaunchAgent refresh path, keeping `promote-live` as the explicit staged-to-live promotion spelling, and avoiding alternate verbs for the same operator action unless a compatibility surface already requires them.
 
 Match the current boundary language in the code:
 

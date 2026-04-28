@@ -28,18 +28,32 @@ import Testing
     }
 }
 
-@Test func `launch agent install still rejects missing staged executable by default`() throws {
+@Test func `launch agent install stages default artifact when it is missing`() throws {
     let repositoryRootURL = try makeLaunchAgentCommandTestRepository()
 
-    do {
-        _ = try LaunchAgentCommand.parse(
-            arguments: ["install"],
-            currentDirectoryPath: repositoryRootURL.path,
-            currentExecutablePath: testToolExecutablePath(in: repositoryRootURL),
-        )
-        Issue.record("Expected `launch-agent install` to reject a missing staged executable.")
-    } catch let error as LaunchAgentCommandError {
-        #expect(error.message.contains("could not find the staged release artifact"))
+    let command = try LaunchAgentCommand.parse(
+        arguments: ["install"],
+        currentDirectoryPath: repositoryRootURL.path,
+        currentExecutablePath: testToolExecutablePath(in: repositoryRootURL),
+    )
+
+    switch command.action {
+        case let .install(options):
+            guard case let .promoteCurrentCheckout(repositoryRootPath) = options.stagedArtifactPolicy else {
+                Issue.record("Expected `launch-agent install` to stage the current checkout for the default artifact path.")
+                return
+            }
+
+            #expect(repositoryRootPath == repositoryRootURL.path)
+            #expect(
+                options.toolExecutablePath
+                    == repositoryRootURL
+                    .appendingPathComponent(".release-artifacts/current/SpeakSwiftlyServerTool", isDirectory: false)
+                    .path,
+            )
+
+        default:
+            Issue.record("Expected `launch-agent install` to parse into the install action.")
     }
 }
 

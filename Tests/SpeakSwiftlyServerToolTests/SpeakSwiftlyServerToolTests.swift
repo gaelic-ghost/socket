@@ -49,6 +49,12 @@ import Testing
     #expect(options.toolExecutablePath == stagedToolURL.path)
     #expect(options.configFilePath == tempDirectory.appendingPathComponent("server.yaml").path)
     #expect(options.reloadIntervalSeconds == "2")
+    guard case let .promoteCurrentCheckout(repositoryRootPath) = options.stagedArtifactPolicy else {
+        Issue.record("Expected launch-agent install to stage the current checkout when using the default release artifact.")
+        return
+    }
+
+    #expect(repositoryRootPath == tempDirectory.path)
 }
 
 @Test func `tool parses serve profile root option`() throws {
@@ -89,7 +95,7 @@ import Testing
     )
 }
 
-@Test func `tool rejects install when staged release artifact is missing`() throws {
+@Test func `tool parses install when staged release artifact is missing`() throws {
     let tempDirectory = try makeTemporaryDirectory()
     try FileManager.default.createDirectory(
         at: tempDirectory.appendingPathComponent("Sources/SpeakSwiftlyServerTool", isDirectory: true),
@@ -106,13 +112,26 @@ import Testing
     try "#!/bin/sh\nexit 0\n".write(to: currentToolURL, atomically: true, encoding: .utf8)
     try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: currentToolURL.path)
 
-    #expect(throws: LaunchAgentCommandError.self) {
-        try SpeakSwiftlyServerToolCommand.parse(
-            arguments: ["launch-agent", "install"],
-            currentDirectoryPath: tempDirectory.path,
-            currentExecutablePath: currentToolURL.path,
-        )
+    let command = try SpeakSwiftlyServerToolCommand.parse(
+        arguments: ["launch-agent", "install"],
+        currentDirectoryPath: tempDirectory.path,
+        currentExecutablePath: currentToolURL.path,
+    )
+
+    guard case let .launchAgent(launchAgentCommand) = command,
+          case let .install(options) = launchAgentCommand.action,
+          case let .promoteCurrentCheckout(repositoryRootPath) = options.stagedArtifactPolicy else {
+        Issue.record("Expected launch-agent install to stage the current checkout instead of requiring a preexisting staged executable.")
+        return
     }
+
+    #expect(repositoryRootPath == tempDirectory.path)
+    #expect(
+        options.toolExecutablePath
+            == tempDirectory
+            .appendingPathComponent(".release-artifacts/current/SpeakSwiftlyServerTool", isDirectory: false)
+            .path,
+    )
 }
 
 @Test func `launch agent property list includes serve command and environment overrides`() throws {

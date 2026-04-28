@@ -47,6 +47,8 @@ extension LaunchAgentOptions {
     }
 
     func install() throws {
+        try prepareStagedArtifactIfNeeded()
+
         let layout = ServerInstallLayout.defaultForCurrentUser(launchAgentLabel: label)
         try ensureParentDirectory(for: plistPath)
         try FileManager.default.createDirectory(atPath: profileRootPath, withIntermediateDirectories: true)
@@ -72,6 +74,24 @@ extension LaunchAgentOptions {
             """
             Installed LaunchAgent '\(label)' at '\(plistPath)' and bootstrapped it into '\(userDomain)'.
             Active tool executable: \(toolExecutableActivationSummary())
+            """,
+        )
+    }
+
+    private func prepareStagedArtifactIfNeeded() throws {
+        guard case let .promoteCurrentCheckout(repositoryRootPath) = stagedArtifactPolicy else {
+            return
+        }
+
+        let stagingResult = try ReleaseArtifactPromoter.promoteLive(
+            repositoryRootPath: repositoryRootPath,
+            stagedExecutablePath: toolExecutablePath,
+        )
+        print(
+            """
+            Staged current release artifact from '\(stagingResult.builtExecutablePath)' to '\(stagingResult.stagedExecutablePath)'.
+            Refreshed staged metallib at '\(stagingResult.stagedMetallibPath)'.
+            Refreshed staged code signature for '\(stagingResult.stagedExecutablePath)'.
             """,
         )
     }

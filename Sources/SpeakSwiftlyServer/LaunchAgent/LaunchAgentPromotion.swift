@@ -53,13 +53,13 @@ struct LaunchAgentPromoteOptions {
     }
 }
 
-private struct ReleaseArtifactPromotionResult {
+struct ReleaseArtifactPromotionResult {
     let builtExecutablePath: String
     let stagedExecutablePath: String
     let stagedMetallibPath: String
 }
 
-private enum ReleaseArtifactPromoter {
+enum ReleaseArtifactPromoter {
     static func promoteLive(
         repositoryRootPath: String,
         stagedExecutablePath: String,
