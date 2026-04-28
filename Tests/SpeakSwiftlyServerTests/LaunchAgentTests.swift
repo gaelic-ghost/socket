@@ -28,6 +28,24 @@ import Testing
     }
 }
 
+@Test func `release artifact replacement keeps existing destination when source copy fails`() throws {
+    let temporaryRootURL = URL(fileURLWithPath: NSTemporaryDirectory())
+        .appendingPathComponent(UUID().uuidString, isDirectory: true)
+    try FileManager.default.createDirectory(at: temporaryRootURL, withIntermediateDirectories: true)
+
+    let destinationURL = temporaryRootURL.appendingPathComponent("SpeakSwiftlyServerTool", isDirectory: false)
+    let missingSourceURL = temporaryRootURL.appendingPathComponent("missing-tool", isDirectory: false)
+    try "existing staged tool".write(to: destinationURL, atomically: true, encoding: .utf8)
+
+    do {
+        try ReleaseArtifactPromoter.replaceItem(at: destinationURL, with: missingSourceURL, permissions: 0o755)
+        Issue.record("Expected replacement to fail when the source artifact is missing.")
+    } catch {
+        let stagedContent = try String(contentsOf: destinationURL, encoding: .utf8)
+        #expect(stagedContent == "existing staged tool")
+    }
+}
+
 @Test func `launch agent install stages default artifact when it is missing`() throws {
     let repositoryRootURL = try makeLaunchAgentCommandTestRepository()
 
