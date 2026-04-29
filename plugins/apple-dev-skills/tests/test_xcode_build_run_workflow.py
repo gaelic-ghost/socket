@@ -117,6 +117,17 @@ class XcodeBuildRunWorkflowTests(unittest.TestCase):
             joined = "\n".join(payload["output"]["fallback_commands"])
             self.assertIn("-scheme Demo", joined)
 
+    def test_skill_documents_xcodegen_project_maintenance(self) -> None:
+        skill_text = (ROOT / "skills/xcode-build-run-workflow/SKILL.md").read_text(encoding="utf-8")
+        reference_text = (
+            ROOT / "skills/xcode-build-run-workflow/references/xcodegen-project-maintenance.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("xcodegen-project-maintenance.md", skill_text)
+        self.assertIn("project.yml", reference_text)
+        self.assertIn("xcodegen generate", reference_text)
+        self.assertIn("generated `.xcodeproj` and `.pbxproj` files as output", reference_text)
+
 
 if __name__ == "__main__":
     unittest.main()

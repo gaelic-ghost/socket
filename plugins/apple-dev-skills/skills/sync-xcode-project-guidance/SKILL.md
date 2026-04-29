@@ -50,7 +50,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - if no relevant Apple docs can be found, say that explicitly before proceeding
 4. Apply the shared Xcode-project policy before making repo-guidance changes:
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
-   - preserve its simplicity-first Swift, SwiftUI, Xcode-managed project, test-plan, file-membership, and Debug/Release guidance
+   - preserve its simplicity-first Swift, SwiftUI, Xcode-managed project, XcodeGen-backed project, test-plan, file-membership, and Debug/Release guidance
 5. Run `scripts/run_workflow.py` to normalize inputs, detect whether the repo is really Xcode-managed, and shape the sync plan.
 6. Apply the sync path:
    - if `AGENTS.md` is missing, copy `assets/AGENTS.md`
@@ -60,6 +60,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify `AGENTS.md` exists
    - verify the synced file mentions `xcode-build-run-workflow` and `xcode-testing-workflow`
    - verify the synced file preserves the no-direct-`.pbxproj` rule
+   - verify the synced file preserves the XcodeGen source-of-truth rule for repos that use generated projects
 8. Refresh `maintain-project-repo`:
    - refresh `scripts/repo-maintenance/`
    - refresh `.github/workflows/validate-repo-maintenance.yml`

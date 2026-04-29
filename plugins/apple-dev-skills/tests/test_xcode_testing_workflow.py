@@ -107,6 +107,17 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
         self.assertIn("waitForExistence(timeout:)", ui_text)
         self.assertIn("apple-ui-accessibility-workflow", accessibility_text)
 
+    def test_skill_documents_xcodegen_test_project_maintenance(self) -> None:
+        skill_text = (ROOT / "skills/xcode-testing-workflow/SKILL.md").read_text(encoding="utf-8")
+        reference_text = (
+            ROOT / "skills/xcode-testing-workflow/references/xcodegen-project-maintenance.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("xcodegen-project-maintenance.md", skill_text)
+        self.assertIn("scheme test actions", reference_text)
+        self.assertIn(".xctestplan", reference_text)
+        self.assertIn("xcodegen generate", reference_text)
+
 
 if __name__ == "__main__":
     unittest.main()

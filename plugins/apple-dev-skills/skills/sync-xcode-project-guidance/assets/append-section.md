@@ -18,6 +18,9 @@
 - Keep data flow straight and dependency direction unidirectional.
 - Treat the `.xcworkspace` or `.xcodeproj` as the source of truth for app integration, schemes, and build settings.
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
+- If this repo is XcodeGen-backed, treat `project.yml`, `project.yaml`, and any included XcodeGen specs as the source of truth for generated targets, schemes, build settings, packages, and file membership.
+- For XcodeGen-backed projects, edit the spec set and rerun `xcodegen generate` instead of hand-editing generated `.pbxproj` files.
+- After regenerating an XcodeGen project, review both the spec diff and generated `.xcodeproj` diff, then validate the affected scheme with explicit `xcodebuild` commands.
 - Prefer Swift Testing for modern unit-style tests, keep XCTest where Apple tooling or dependencies still require it, and use XCUITest with explicit element wait APIs instead of fixed sleeps.
 - Keep `.xctestplan` files versioned when the project depends on repeatable test-plan configurations, and inspect or run them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
 - Treat accessibility semantics and Apple UI accessibility review as a separate concern from UI automation; use `apple-ui-accessibility-workflow` for the semantic side and `xcode-testing-workflow` for runtime verification and XCUITest follow-through.
