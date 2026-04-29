@@ -94,6 +94,17 @@ class XcodeWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "blocked")
             self.assertEqual(payload["output"]["operation_type_source"], "missing")
 
+    def test_skill_documents_xcodegen_routing_boundary(self) -> None:
+        skill_text = (ROOT / "skills/xcode-app-project-workflow/SKILL.md").read_text(encoding="utf-8")
+        reference_text = (
+            ROOT / "skills/xcode-app-project-workflow/references/xcodegen-project-maintenance.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("xcodegen-project-maintenance.md", skill_text)
+        self.assertIn("route to `xcode-build-run-workflow`", reference_text)
+        self.assertIn("route to `xcode-testing-workflow`", reference_text)
+        self.assertIn("generated `.pbxproj` diffs as reviewed output", reference_text)
+
 
 if __name__ == "__main__":
     unittest.main()

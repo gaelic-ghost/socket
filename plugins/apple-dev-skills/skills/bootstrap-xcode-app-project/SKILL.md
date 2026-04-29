@@ -60,6 +60,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - if the generator setting is `ask`, stop with a clear next step rather than guessing
 7. Create the project:
    - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold, `project.yml`, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
+   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, targets, sources, schemes, packages, test plans, and `minimumXcodeGenVersion`
    - for `xcode`, use a guarded guidance path for now instead of pretending the repo supports full GUI automation already
 8. Validate the scaffold:
    - verify the expected app files exist
@@ -130,6 +131,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 
 - Preferred implementation path in the first iteration is `XcodeGen` plus generated scaffold files.
 - Use the standard Xcode-created-project path only as a guided fallback for now.
+- After a successful XcodeGen bootstrap, treat `project.yml` as the editable source for generated project structure and regenerate with `xcodegen generate` after project-spec changes.
 - After a successful bootstrap, hand off to `sync-xcode-project-guidance` for repo-guidance alignment when needed, then to `xcode-build-run-workflow` for build, run, diagnostics, mutation, preview, and docs work.
 - After a successful bootstrap, hand off to `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, `.xctestplan`, and test diagnosis work.
 - After a successful bootstrap, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.

@@ -43,8 +43,9 @@ Use this skill as the primary execution workflow for test-focused work in or aro
    - `references/xcuitest-and-xcuiautomation.md` for UI automation mechanics, waits, interruption handling, activities, and attachments
    - `references/ui-accessibility-verification.md` for accessibility-specific runtime verification expectations and coordination with `apple-ui-accessibility-workflow`
    - `references/testing-plans-file-membership-and-configurations.md` for the condensed cross-cutting summary and file-membership reminder
-6. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
-7. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
+6. Use `references/xcodegen-project-maintenance.md` when the repo is XcodeGen-backed and the task touches generated test targets, scheme test actions, test-plan references, launch arguments, environment variables, or test bundle membership.
+7. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
+8. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
 
 ## Inputs
 
@@ -80,6 +81,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 
 - Apply the mutation safeguard from `references/mutation-risk-policy.md` only when the operation type is `mutation`.
 - Do not skip the explicit warning path for direct `.pbxproj` edits.
+- In XcodeGen-backed repos, edit the XcodeGen spec set and regenerate the project instead of hand-editing generated `.pbxproj` files.
 - Stop with `handoff` when the request is really build/run or toolchain work.
 - Stop with `blocked` when the required workspace context cannot be resolved and the operation cannot safely continue.
 - Stop with `blocked` when allowlist or sandbox rules prevent the official CLI fallback and no safe alternative exists.
@@ -117,6 +119,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - `references/xcuitest-and-xcuiautomation.md`
 - `references/ui-accessibility-verification.md`
 - `references/testing-plans-file-membership-and-configurations.md`
+- `references/xcodegen-project-maintenance.md`
 - `references/mutation-risk-policy.md`
 - `references/mutation-via-mcp.md`
 

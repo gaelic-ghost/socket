@@ -82,3 +82,14 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Treat tagged releases as a signal to validate both the normal Debug path and a Release artifact path, and when shipping apps or deliverables test the Release behavior without relying on an attached debugger.
 - Prefer direct filesystem edits in Xcode-managed scope only when the workflow already accounts for project-file and scheme integrity.
 - Never edit `.pbxproj` files directly. If a project-file change is needed and no safe project-aware tool is available, stop and ask for an Xcode-mediated project change instead.
+
+## XcodeGen-Backed Project Guidance
+
+- If the repo contains `project.yml`, `project.yaml`, or clearly named included XcodeGen spec files, treat the XcodeGen spec set as the source of truth for generated project structure.
+- For XcodeGen-backed repos, make target membership, resource membership, build settings, schemes, Swift package declarations, test plans, project references, and generation options in the XcodeGen specs instead of editing the generated `.pbxproj`.
+- Before changing generated project structure, inspect the root spec plus any `include` entries so the edit lands in the owning spec rather than duplicating settings in the wrong file.
+- After changing XcodeGen specs, run `xcodegen generate` from the spec root, or `xcodegen generate --spec <path>` when the project uses a non-default spec path.
+- If the spec uses environment variables or generation hooks, preserve and document the required environment before regenerating so CI and other contributors can reproduce the project.
+- Review both the spec diff and the generated `.xcodeproj` diff after regeneration. Generated `.pbxproj` changes are acceptable output when they come from XcodeGen, but they should still be reviewed for unintended target, scheme, or setting churn.
+- Validate regenerated projects with explicit `xcodebuild` commands for the affected scheme, destination or SDK, and configuration.
+- Do not introduce XcodeGen into an existing hand-managed Xcode project unless the user explicitly asks for that migration and accepts the extra generator dependency.

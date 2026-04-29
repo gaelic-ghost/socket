@@ -42,9 +42,10 @@ Use this skill as the primary execution workflow for non-testing work in or arou
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
 4. Run `scripts/run_workflow.py` to apply runtime configuration, `.pbxproj` warning safeguards, and CLI fallback planning.
 5. Use the guidance in `references/mcp-tool-matrix.md` for agent-executed MCP operations.
-6. Use `references/testing-plans-file-membership-and-configurations.md` when the task touches file membership after filesystem edits or Debug/Release validation.
-7. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
-8. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
+6. Use `references/xcodegen-project-maintenance.md` when the repo is XcodeGen-backed and the task touches generated targets, schemes, build settings, packages, file membership, resource membership, or generation options.
+7. Use `references/testing-plans-file-membership-and-configurations.md` when the task touches file membership after filesystem edits or Debug/Release validation.
+8. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
+9. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
 
 ## Inputs
 
@@ -80,6 +81,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 
 - Apply the mutation safeguard from `references/mutation-risk-policy.md` only when the operation type is `mutation`.
 - Do not skip the explicit warning path for direct `.pbxproj` edits.
+- In XcodeGen-backed repos, edit the XcodeGen spec set and regenerate the project instead of hand-editing generated `.pbxproj` files.
 - Stop with `handoff` when the request is really test-focused work.
 - Stop with `blocked` when the required workspace context cannot be resolved and the operation cannot safely continue.
 - Stop with `blocked` when allowlist or sandbox rules prevent the official CLI fallback and no safe alternative exists.
@@ -115,6 +117,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - `references/cli-fallback-matrix.md`
 - `references/toolchain-management.md`
 - `references/testing-plans-file-membership-and-configurations.md`
+- `references/xcodegen-project-maintenance.md`
 - `references/mutation-risk-policy.md`
 - `references/mutation-via-mcp.md`
 

@@ -45,8 +45,9 @@ Use this skill as a compatibility surface for older references to `xcode-app-pro
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
 4. Run `scripts/run_workflow.py` to preserve the direct `.pbxproj` warning safeguard and route the request toward the narrower Xcode build/run or testing skill.
-5. Use `references/mcp-tool-matrix.md`, `references/cli-fallback-matrix.md`, and `references/testing-plans-file-membership-and-configurations.md` only to explain why the narrower skill should take over; do not rebuild a second Xcode execution-planning surface here.
-6. Report the Apple docs relied on, the direct `.pbxproj` warning result when relevant, and the recommended narrower skill.
+5. Use `references/xcodegen-project-maintenance.md` only to identify whether an XcodeGen-backed project mutation should route to `xcode-build-run-workflow` or `xcode-testing-workflow`; do not rebuild a second XcodeGen execution-planning surface here.
+6. Use `references/mcp-tool-matrix.md`, `references/cli-fallback-matrix.md`, and `references/testing-plans-file-membership-and-configurations.md` only to explain why the narrower skill should take over; do not rebuild a second Xcode execution-planning surface here.
+7. Report the Apple docs relied on, the direct `.pbxproj` warning result when relevant, and the recommended narrower skill.
 
 ## Inputs
 
@@ -79,6 +80,7 @@ Use this skill as a compatibility surface for older references to `xcode-app-pro
 
 - Apply the mutation safeguard from `references/mutation-risk-policy.md` only when the operation type is `mutation`.
 - Do not skip the explicit warning path for direct `.pbxproj` edits.
+- Route XcodeGen-backed project-structure edits to the narrower owner and keep generated `.pbxproj` changes as reviewed output from `xcodegen generate`, not as hand-edited input.
 - Stop with `handoff` when the request should move into `xcode-build-run-workflow` or `xcode-testing-workflow`.
 - Stop with `blocked` when the required workspace context cannot be resolved and the operation cannot safely continue.
 
@@ -113,6 +115,7 @@ Use this skill as a compatibility surface for older references to `xcode-app-pro
 - `references/cli-fallback-matrix.md`
 - `references/toolchain-management.md`
 - `references/testing-plans-file-membership-and-configurations.md`
+- `references/xcodegen-project-maintenance.md`
 - `references/mutation-risk-policy.md`
 - `references/mutation-via-mcp.md`
 

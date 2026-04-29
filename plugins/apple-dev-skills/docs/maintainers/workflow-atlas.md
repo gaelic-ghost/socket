@@ -149,6 +149,7 @@ Provide the canonical execution workflow for existing Xcode-managed or Xcode-adj
 - `run_workflow.py` is the local runtime entrypoint.
 - Test-focused requests hand off immediately to `xcode-testing-workflow`.
 - Direct filesystem edits are allowed by default, but direct `.pbxproj` edits still trigger the explicit warning path.
+- In XcodeGen-backed repos, generated project-structure edits go through the XcodeGen spec set and `xcodegen generate`; generated `.pbxproj` changes are reviewed output, not hand-edited input.
 - Official CLI execution remains the only documented fallback plan when the primary agent-side MCP path cannot complete.
 
 ### Agent ↔ User UX
@@ -181,6 +182,7 @@ Provide the canonical execution workflow for Xcode-native Swift Testing, XCTest,
 - Build or run requests hand off immediately to `xcode-build-run-workflow`.
 - Xcode-native test plans, destinations, and UI-test follow-through stay here.
 - Direct `.pbxproj` edits still trigger the explicit warning path.
+- In XcodeGen-backed repos, generated test targets, scheme test actions, launch arguments, environment variables, and test-plan references are maintained through the XcodeGen spec set before running test validation.
 
 ### Agent ↔ User UX
 
@@ -223,6 +225,7 @@ flowchart TD
 - `run_workflow.py` is the local runtime entrypoint.
 - The primary job is compatibility routing, not long-term ownership of Xcode execution guidance.
 - It preserves the direct `.pbxproj` warning boundary while routing to the narrower Xcode skills.
+- XcodeGen-backed project-structure requests route to the narrower build/run or testing skill based on whether the requested generated surface is general project structure or test-specific configuration.
 - Apple or Swift docs exploration now lives outside this skill in `explore-apple-swift-docs`.
 - Ordinary Swift package execution now lives outside this skill in `swift-package-build-run-workflow` and `swift-package-testing-workflow`, with `swift-package-workflow` kept only as a compatibility surface.
 
@@ -725,6 +728,7 @@ flowchart TD
 - `run_workflow.py` is the local runtime entrypoint.
 - The first supported mutating implementation path is `xcodegen`.
 - The standard Xcode-created-project path is documented and guided, but not yet safely automated.
+- The generated `project.yml` should stay aligned with current XcodeGen project-spec concepts such as options, targets, sources, schemes, packages, and test-plan references.
 - Successful bootstrap hands off existing-project build or run work to `sync-xcode-project-guidance`, then to `xcode-build-run-workflow`, and test work to `xcode-testing-workflow`.
 
 ### Inputs
@@ -792,6 +796,7 @@ flowchart TD
 
 - The skill is intentionally bounded to repo-guidance alignment for existing Xcode app repos.
 - New-project creation belongs to `bootstrap-xcode-app-project`.
+- Synced guidance names XcodeGen-backed project specs as the source of truth only for repos that actually use generated projects.
 - Active engineering work after sync belongs to `xcode-build-run-workflow` or `xcode-testing-workflow`.
 
 ### Agent ↔ User UX
