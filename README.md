@@ -205,6 +205,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
 - `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
+- `SpeakSwiftlyServer` owns the canonical `speak-swiftly` plugin payload. The Socket marketplace should expose that payload by Git-backed reference so users can enable `Speak Swiftly` from the Socket catalog without `socket` carrying a second copied plugin directory.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 - `cardhop-app` packages from its child-repo root at `./plugins/cardhop-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 
@@ -230,6 +231,8 @@ For `things-app`, that marketplace path stays `./plugins/things-app` because the
 
 For `cardhop-app`, that marketplace path stays `./plugins/cardhop-app` because the installable plugin root is the child repo root while the bundled Cardhop MCP server now lives at top-level `mcp/` inside that child repo.
 
+For Speak Swiftly, the planned catalog split changes that one entry. The marketplace should stop pointing at the local `./plugins/SpeakSwiftlyServer` subtree mirror and instead list the canonical `SpeakSwiftlyServer` repository as a Git-backed plugin source named `speak-swiftly`, with the UI display name `Speak Swiftly`. That keeps the standalone `SpeakSwiftlyServer` marketplace fully functional while avoiding two plugin payload copies that can drift.
+
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.
 
 Current [OpenAI Codex plugin docs](https://developers.openai.com/codex/plugins/build) support Git-backed marketplace sources and the [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) command. That makes the Git-backed marketplace the preferred install and update path for `socket`:
@@ -240,6 +243,8 @@ codex plugin marketplace upgrade socket
 ```
 
 Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `things-app`, and the other listed child plugins. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
+
+When both the Socket marketplace and the standalone SpeakSwiftlyServer marketplace are configured, prefer enabling `speak-swiftly` from the Socket catalog and disabling duplicate standalone enablement. The Speak Swiftly doctor should detect duplicate installs or enablement and offer a repair path that keeps the Socket entry active.
 
 Standalone child repositories that carry their own repo marketplace should use the same pattern against their own Git repository:
 
