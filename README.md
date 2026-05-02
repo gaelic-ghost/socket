@@ -37,7 +37,8 @@ The goal is to give macOS and near-future Apple-platform apps one small, typed l
 
 ## Quick Start
 
-Build the package with Xcode's selected Swift toolchain:
+`SpeakSwiftlyServer` currently targets macOS 15.0 and Swift 6.3. Build the
+package with Xcode's selected Swift toolchain:
 
 ```bash
 xcrun swift build
@@ -99,7 +100,7 @@ The full transport contract lives in [API.md](./API.md).
 
 ## Development
 
-The contributor and maintainer workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md).
+The contributor and maintainer workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md). This section is only the product README's short handoff for people who want to build or validate the package locally before making changes.
 
 Use that guide for:
 
@@ -109,10 +110,11 @@ Use that guide for:
 - pull request and release workflow
 - monorepo and submodule handoff rules
 
-The short version is:
+The short version for a fresh checkout is:
 
 - use `xcrun swift test` for the normal package-development loop
 - use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
+- use `node scripts/codex-hooks-doctor.mjs` when changing the Codex plugin or hook surface
 - use `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump` for the aligned release flow
 - use `scripts/repo-maintenance/config/profile.env` to confirm the active `swift-package` maintainer profile
 
@@ -158,6 +160,9 @@ xcrun swift test
 │   └── SpeakSwiftlyServerTool/
 ├── Tests/
 ├── docs/
+├── hooks/
+├── skills/
+├── .codex-plugin/
 ├── API.md
 ├── CONTRIBUTING.md
 ├── Package.swift
@@ -168,6 +173,8 @@ xcrun swift test
 - `Sources/SpeakSwiftlyServerTool/` contains the unified executable wrapper.
 - `Tests/` contains unit, integration, and a small opt-in live E2E smoke suite.
 - `docs/` contains maintainer-facing supporting documentation.
+- `hooks/` and `skills/` contain the plugin-managed Codex hook and skill surfaces.
+- `.codex-plugin/` contains the Codex plugin manifest for this repository.
 
 ## Release Notes
 

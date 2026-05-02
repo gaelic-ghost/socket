@@ -10,9 +10,6 @@ Practical contributor and maintainer guide for working on `SpeakSwiftlyServer`, 
 - [Development Expectations](#development-expectations)
 - [Pull Request Expectations](#pull-request-expectations)
 - [Communication](#communication)
-- [Documentation Map](#documentation-map)
-- [Monorepo and Submodule Handoff](#monorepo-and-submodule-handoff)
-- [Release Workflow](#release-workflow)
 - [License and Contribution Terms](#license-and-contribution-terms)
 
 ## Overview
@@ -28,6 +25,8 @@ This guide is for contributors and maintainers making source, docs, test, releas
 - Keep package graph changes together in one pass, including `Package.swift`, `Package.resolved`, tests, and matching docs.
 - Keep transport-local shaping at the HTTP and MCP edges. If `SpeakSwiftly` or `TextForSpeech` can express a concept directly, prefer deleting server-local inference instead of adding another translation layer.
 - Preserve the current standalone package baseline on macOS 15 while keeping the host and state model friendly to the near-future iOS reuse path.
+- Use Xcode's selected Swift toolchain through `xcrun`; this package declares Swift tools version 6.3 and macOS 15.0 in `Package.swift`.
+- Expect the ordinary package lane to work without secrets, without changing the installed LaunchAgent, and without a live service. Live end-to-end coverage is opt-in and documented separately below.
 
 ## Contribution Workflow
 
@@ -72,11 +71,14 @@ The concrete runtime config surfaces in this repo are:
 
 The shared server supports the same environment variables documented in [README.md](./README.md#configuration), including the `APP_*` transport settings and `SPEAKSWIFTLY_PROFILE_ROOT`.
 
+The default build and unit-test loop does not require secrets or a running LaunchAgent. Use `server.yaml` only when you want to run the executable or inspect LaunchAgent-owned behavior locally.
+
 ### Runtime Behavior
 
-The default local package workflow is:
+For a fresh checkout, resolve dependencies once and then use the normal package loop:
 
 ```bash
+xcrun swift package resolve
 xcrun swift build
 xcrun swift test
 ```
@@ -87,6 +89,14 @@ Use the unified tool surface when you want to inspect the operator path directly
 xcrun swift run SpeakSwiftlyServerTool help
 xcrun swift run SpeakSwiftlyServerTool launch-agent print-plist
 xcrun swift run SpeakSwiftlyServerTool healthcheck
+```
+
+Direct executable runs default to `127.0.0.1:7338`. LaunchAgent installs default to `127.0.0.1:7337`. Embedded app-owned sessions default to `127.0.0.1:7339`.
+
+For Codex plugin or hook changes, keep end-user behavior plugin-managed and use the repo-local `.codex/` files only as a development harness. The hook doctor summarizes the active install and voice-profile state:
+
+```bash
+node scripts/codex-hooks-doctor.mjs
 ```
 
 Before any live end-to-end run, make sure the LaunchAgent-backed live service has released resident model memory through the live-service model unload preflight. Leave the installed service in place; the E2E helper runs on its own random ports and only needs comfortable memory headroom.
@@ -136,7 +146,9 @@ swiftlint lint --config .swiftlint.yml
 The live end-to-end gate is intentionally small and should still be run in one foreground process at a time:
 
 ```bash
+curl -X POST http://127.0.0.1:7337/runtime/models/unload
 SPEAKSWIFTLYSERVER_E2E=1 xcrun swift test --filter ServerTransportE2ETests
+curl -X POST http://127.0.0.1:7337/runtime/models/reload
 ```
 
 This suite is a transport-owned smoke pass, not a second copy of SpeakSwiftly's broader worker end-to-end coverage. Keep this repo's live E2E focused on proving the shipped server can boot the published runtime, answer over HTTP and MCP, deliver MCP resource updates, and retain completed request state.
