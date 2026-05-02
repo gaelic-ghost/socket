@@ -50,11 +50,11 @@ uv run scripts/validate_socket_metadata.py
 For ordinary user installation, prefer the official Git-backed marketplace path. Add the `socket` marketplace from Git, then update it through Codex when the marketplace or child plugin entries change:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
-After the marketplace is added or upgraded, install or enable the desired child plugin from Codex's plugin directory. Manual local marketplace roots are useful for development, unpublished testing, and fallback work, but they are not the default user install or update path.
+After the marketplace is added or upgraded, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable the desired child plugins there. Manual local marketplace roots are useful for development, unpublished testing, and fallback work, but they are not the default user install or update path.
 
 ## Usage
 
@@ -211,15 +211,15 @@ The mixed shape is intentional for now. `socket` does not try to flatten those c
 Current [OpenAI Codex plugin docs](https://developers.openai.com/codex/plugins/build) support Git-backed marketplace sources and the [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) command. That makes the Git-backed marketplace the preferred install and update path for `socket`:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
 Standalone child repositories that carry their own repo marketplace should use the same pattern against their own Git repository:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
-codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+codex plugin marketplace add gaelic-ghost/apple-dev-skills
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 ```
 
-Manual clone-and-local-marketplace instructions remain valid for development, unpublished testing, and fallback cases. They should not be the first user-facing install or update story when the Git-backed marketplace path is available.
+Use an explicit ref, such as `gaelic-ghost/socket@vX.Y.Z`, only when you want a pinned, reproducible install instead of the release-aligned default branch. Manual clone-and-local-marketplace instructions remain valid for development, unpublished testing, and fallback cases. They should not be the first user-facing install or update story when the Git-backed marketplace path is available.

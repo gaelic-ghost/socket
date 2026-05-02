@@ -38,7 +38,7 @@ Keep root [`skills/`](./skills/) canonical, keep repo-level maintainer explanati
 
 Do not reintroduce nested staged plugin directories, installer-era workflows, manual-first local install stories, or vague install-surface language while making an unrelated fix.
 
-When changing user-facing plugin install or update examples, default to the Git-backed marketplace path: `codex plugin marketplace add <owner>/<repo> --ref main` for install setup and `codex plugin marketplace upgrade <marketplace-name>` for updates. Keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
+When changing user-facing plugin install or update examples, default to the Git-backed marketplace path: `codex plugin marketplace add <owner>/<repo>` for install setup and `codex plugin marketplace upgrade <marketplace-name>` for updates. Keep explicit refs such as `<owner>/<repo>@vX.Y.Z` scoped to pinned reproducible installs, and keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
 
 ### Asking For Review
 

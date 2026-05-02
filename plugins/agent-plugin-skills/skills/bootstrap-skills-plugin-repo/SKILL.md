@@ -45,7 +45,7 @@ Do not add subagent guidance to every skill by default. Use `docs/maintainers/co
 When bootstrapping or aligning repo guidance, teach Codex plugin wiring with five separate surfaces:
 
 - tracked marketplace source
-  - preferred user path: `codex plugin marketplace add <owner>/<repo> --ref main`
+  - preferred user path: `codex plugin marketplace add <owner>/<repo>`
   - update path: `codex plugin marketplace upgrade <marketplace-name>`
   - role: Codex-managed Git checkout for a marketplace source
 - marketplace catalog
@@ -64,7 +64,7 @@ When bootstrapping or aligning repo guidance, teach Codex plugin wiring with fiv
   - documented plugin path: `~/.codex/config.toml`
   - role: on or off state keyed by plugin plus marketplace identity, such as `[plugins."my-plugin@socket"]`
 
-Bootstrap docs should make the Git-backed marketplace path the default user install/update story. Use manual local marketplace or copied-payload instructions only for local development, unpublished testing, or fallback cases.
+Bootstrap docs should make the Git-backed marketplace path the default user install/update story. Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs. Use manual local marketplace or copied-payload instructions only for local development, unpublished testing, or fallback cases.
 
 Bootstrap docs should keep discovery mirrors, plugin packaging, marketplace sources, marketplace catalogs, plugin root payload directories, cache paths, and config-state separate. Do not blur "where Codex can see a plugin", "where the plugin payload lives", "how Codex updates the marketplace", and "whether the plugin is enabled" into one sentence.
 

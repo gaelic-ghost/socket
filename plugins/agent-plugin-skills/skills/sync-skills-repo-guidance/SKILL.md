@@ -26,7 +26,7 @@ When this skill touches Codex packaging guidance, keep the plugin-root structure
 When this skill touches Codex plugin guidance, keep these surfaces distinct instead of collapsing them into one vague "plugin install" concept:
 
 - tracked marketplace source
-  - preferred user path: `codex plugin marketplace add <owner>/<repo> --ref main`
+  - preferred user path: `codex plugin marketplace add <owner>/<repo>`
   - update path: `codex plugin marketplace upgrade <marketplace-name>`
   - purpose: let Codex clone, track, and refresh a marketplace from Git instead of asking users to copy plugin payload directories by hand
 - marketplace catalog
@@ -45,20 +45,20 @@ When this skill touches Codex plugin guidance, keep these surfaces distinct inst
   - documented plugin path: `~/.codex/config.toml`
   - purpose: per-plugin on or off state keyed by plugin name plus marketplace name, for example `[plugins."my-plugin@local-repo"]`
 
-Default user-facing install and update guidance to the official Git-backed marketplace commands. Use manual local marketplace or copied-payload instructions only for local development, testing unpublished changes, or fallback cases where the Git-backed path is not available.
+Default user-facing install and update guidance to the official Git-backed marketplace commands. Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs. Use manual local marketplace or copied-payload instructions only for local development, testing unpublished changes, or fallback cases where the Git-backed path is not available.
 
 For `socket`, prefer:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
 For standalone plugin repositories that carry their own repo marketplace, prefer the same pattern with that repository, for example:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
-codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+codex plugin marketplace add gaelic-ghost/apple-dev-skills
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 ```
 
 Do not describe `config.toml` as the place plugins install into. Do not describe a marketplace file as the install destination. Keep the wording explicit: marketplace sources are tracked by Codex, marketplaces are catalogs, plugin roots are payload directories, the cache is Codex's installed copy, and `config.toml` stores enabled-state.

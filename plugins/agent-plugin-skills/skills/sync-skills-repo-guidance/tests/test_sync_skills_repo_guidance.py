@@ -28,7 +28,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             [
                 "Installable maintainer skills for skills-export repositories.",
                 "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
-                "codex plugin marketplace add gaelic-ghost/socket --ref main",
+                "codex plugin marketplace add gaelic-ghost/socket",
                 "codex plugin marketplace upgrade socket",
                 "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
                 "ordinary user installs should use Git-backed marketplace sources",
@@ -79,7 +79,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 'plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field',
                 "Tracked marketplace source",
                 "Preferred User Install And Update Path",
-                "codex plugin marketplace add gaelic-ghost/socket --ref main",
+                "codex plugin marketplace add gaelic-ghost/socket",
                 "codex plugin marketplace upgrade socket",
                 "Documented plugin path: `~/.codex/config.toml`",
                 "If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin install-surface map.",

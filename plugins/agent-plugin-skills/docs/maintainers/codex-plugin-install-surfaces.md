@@ -20,9 +20,9 @@ Codex plugin wiring has five different jobs on five different surfaces:
 
 1. Tracked marketplace source
    - Purpose: tell Codex where to fetch and refresh the marketplace from.
-   - Preferred user command: `codex plugin marketplace add <owner>/<repo> --ref main`
+   - Preferred user command: `codex plugin marketplace add <owner>/<repo>`
    - Update command: `codex plugin marketplace upgrade <marketplace-name>`
-   - Common `socket` command: `codex plugin marketplace add gaelic-ghost/socket --ref main`
+   - Common `socket` command: `codex plugin marketplace add gaelic-ghost/socket`
 2. Marketplace catalog
    - Purpose: tell Codex which plugins are discoverable from a given marketplace.
    - Personal path: `~/.agents/plugins/marketplace.json`
@@ -75,18 +75,18 @@ Use the official Git-backed marketplace commands for ordinary user installation 
 For `socket`, use the superproject marketplace:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
 For a standalone plugin repository that carries its own `.agents/plugins/marketplace.json`, use that repository directly:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
-codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+codex plugin marketplace add gaelic-ghost/apple-dev-skills
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 ```
 
-After the marketplace is added or upgraded, install or enable the desired plugin from Codex's plugin directory. Manual local marketplace files and copied payload directories are development and fallback tools, not the preferred user path.
+After the marketplace is added or upgraded, restart Codex, open the plugin directory in the Codex GUI, choose the marketplace, and install or enable the desired plugin there. Use explicit refs such as `gaelic-ghost/socket@vX.Y.Z` only for pinned reproducible installs. Manual local marketplace files and copied payload directories are development and fallback tools, not the preferred user path.
 
 ## Marketplace Identity
 
@@ -183,7 +183,7 @@ This repository is intentionally source-first.
 - `.agents/skills` and `.claude/skills` are local authoring mirrors.
 - This repository does not track a nested repo-local Codex plugin install surface for itself.
 - This repository does not track a repo-local marketplace file for itself.
-- User installs should normally come through the Git-backed `socket` marketplace with `codex plugin marketplace add gaelic-ghost/socket --ref main`.
+- User installs should normally come through the Git-backed `socket` marketplace with `codex plugin marketplace add gaelic-ghost/socket`.
 
 That means repo-local discovery mirrors in this repository should not be described as packaged plugin install roots.
 

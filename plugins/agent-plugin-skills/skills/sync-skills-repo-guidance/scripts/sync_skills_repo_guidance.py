@@ -16,7 +16,7 @@ EXACT_NO_FINDINGS = "No findings."
 README_SNIPPETS = [
     "Installable maintainer skills for skills-export repositories.",
     "does not document a richer repo-private scoping model",
-    "codex plugin marketplace add gaelic-ghost/socket --ref main",
+    "codex plugin marketplace add gaelic-ghost/socket",
     "codex plugin marketplace upgrade socket",
     "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
     "ordinary user installs should use Git-backed marketplace sources",
@@ -46,7 +46,7 @@ INSTALL_SURFACES_SNIPPETS = [
     'plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field',
     "Tracked marketplace source",
     "Preferred User Install And Update Path",
-    "codex plugin marketplace add gaelic-ghost/socket --ref main",
+    "codex plugin marketplace add gaelic-ghost/socket",
     "codex plugin marketplace upgrade socket",
     "Documented plugin path: `~/.codex/config.toml`",
     "project-scoped `.codex/config.toml`, label it as a general Codex config capability",

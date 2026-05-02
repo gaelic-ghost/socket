@@ -54,11 +54,11 @@ This repository can be installed on its own through Codex's Git-backed marketpla
 Prefer the official Git-backed install and update path:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
+codex plugin marketplace add gaelic-ghost/apple-dev-skills
 codex plugin marketplace upgrade apple-dev-skills
 ```
 
-After Codex adds or upgrades the marketplace, install or enable `apple-dev-skills` from the plugin directory. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
+After Codex adds or upgrades the marketplace, restart Codex, open the plugin directory in the Codex GUI, choose the `Apple Dev Skills` marketplace, and install or enable `apple-dev-skills` there. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
 
 ### Companion Plugin Requirements
 
@@ -66,14 +66,14 @@ Most Apple Dev Skills workflows are useful as a standalone plugin. The bootstrap
 
 If an agent has only `apple-dev-skills` installed, it can still use the documentation lookup, SwiftUI architecture, Xcode build/run/test, DocC, formatting, source-structure, and accessibility workflows. It should install `productivity-skills` before running `bootstrap-swift-package`, `bootstrap-xcode-app-project`, `sync-swift-package-guidance`, or `sync-xcode-project-guidance` in mutating mode.
 
-The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the Git-backed socket marketplace is useful when you want Apple Dev Skills and its companion plugins available together without wiring each plugin one by one:
+The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the Git-backed socket marketplace is useful when you want Apple Dev Skills plus Gale's other Codex plugins available from one marketplace instead of wiring each plugin one by one:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
-Standalone Git-backed installs from this repository remain supported for Apple-only workflows that do not call `maintain-project-repo`.
+After adding `socket`, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable `apple-dev-skills` plus any companion plugins you want. Standalone Git-backed installs from this repository remain supported for Apple-only workflows that do not call `maintain-project-repo`. Use an explicit ref such as `gaelic-ghost/apple-dev-skills@vX.Y.Z` only when you want a pinned reproducible install rather than the release-aligned default branch.
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [`ROADMAP.md`](./ROADMAP.md) for planned and completed milestone-level work.
 

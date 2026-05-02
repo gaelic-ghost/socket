@@ -41,7 +41,7 @@ __pycache__/
 
 Root `skills/` is canonical.
 
-Default user-facing Codex plugin install and update guidance to Git-backed marketplace sources with `codex plugin marketplace add <owner>/<repo> --ref main` and `codex plugin marketplace upgrade <marketplace-name>`. Manual local marketplace roots and copied plugin payloads are development, unpublished-testing, or fallback paths.
+Default user-facing Codex plugin install and update guidance to Git-backed marketplace sources with `codex plugin marketplace add <owner>/<repo>` and `codex plugin marketplace upgrade <marketplace-name>`. Explicit refs such as `<owner>/<repo>@vX.Y.Z` are for pinned reproducible installs. Manual local marketplace roots and copied plugin payloads are development, unpublished-testing, or fallback paths.
 
 Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch.
 

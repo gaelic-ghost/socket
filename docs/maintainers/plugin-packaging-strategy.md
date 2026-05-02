@@ -48,18 +48,18 @@ Child-repo internal layout changes do not automatically imply root marketplace c
 OpenAI's current [Codex plugin docs](https://developers.openai.com/codex/plugins/build) allow local repo marketplaces, personal marketplaces, and Git-backed marketplace sources through [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli). The preferred user install and update path is therefore Git-backed:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
 For child repositories such as `apple-dev-skills` and `SpeakSwiftlyServer`, the clean standalone path is a child-owned repo marketplace that points at `./` when the repository root is the plugin root:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
-codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+codex plugin marketplace add gaelic-ghost/apple-dev-skills
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 ```
 
-`socket` can still list the same child as `./plugins/<child>` from the superproject marketplace. Manual local marketplace roots and copied payload directories are development, unpublished-testing, and fallback tools rather than the default user-facing path.
+`socket` can still list the same child as `./plugins/<child>` from the superproject marketplace. Use explicit refs such as `gaelic-ghost/socket@vX.Y.Z` only for pinned reproducible installs. Manual local marketplace roots and copied payload directories are development, unpublished-testing, and fallback tools rather than the default user-facing path.
 
 ## Follow-up Decision
 

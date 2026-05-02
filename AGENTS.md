@@ -51,7 +51,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Keep the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, docs, automation prompts, scripts, and marketplace metadata.
 - If docs and scripts disagree, fix the script or narrow the documented contract so they match.
 - When shipped behavior, active skill inventory, packaging roots, or validation commands change, update the relevant docs and `ROADMAP.md` in the same pass unless Gale explicitly says not to.
-- Default user-facing plugin install and update guidance to Git-backed marketplace sources with `codex plugin marketplace add <owner>/<repo> --ref main` and `codex plugin marketplace upgrade <marketplace-name>`. Use manual local marketplace roots only for development, unpublished testing, or fallback cases.
+- Default user-facing plugin install and update guidance to Git-backed marketplace sources with `codex plugin marketplace add <owner>/<repo>` and `codex plugin marketplace upgrade <marketplace-name>`. Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs, and use manual local marketplace roots only for development, unpublished testing, or fallback cases.
 - For Python-backed repositories in `socket`, use `uv` as the maintainer baseline and declare repo-local dev dependencies in `pyproject.toml` instead of relying on globally installed tools.
 - Prefer a root or package-local dev group that explicitly includes the Python maintainer tools the repo expects to run, including `pytest`, `ruff`, and `mypy` when those checks are part of the workflow.
 - Prefer `uv sync --dev`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` for repos that actually ship those Python-backed validation surfaces.

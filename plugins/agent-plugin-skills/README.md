@@ -34,13 +34,13 @@ It exists so repo-maintenance guidance for skills and plugin repositories can li
 Install the plugin through a Git-backed Codex marketplace when you want these skills available in your Codex environment. The preferred user path is to add Gale's `socket` marketplace, let Codex track that Git source, and then install or enable `agent-plugin-skills` from the plugin directory:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
 In the `socket` superproject, the repo marketplace is [`.agents/plugins/marketplace.json`](../../.agents/plugins/marketplace.json), and its `agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`.
 
-Manual local marketplace roots are for local development, unpublished testing, or fallback cases. User-facing install and update examples should prefer `codex plugin marketplace add` and `codex plugin marketplace upgrade` against the Git-backed marketplace source.
+After adding or upgrading the marketplace, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable `agent-plugin-skills` there. Manual local marketplace roots are for local development, unpublished testing, or fallback cases. User-facing install and update examples should prefer `codex plugin marketplace add` and `codex plugin marketplace upgrade` against the Git-backed marketplace source.
 
 If you are inspecting or changing the repository itself, go to [Development](#development).
 
