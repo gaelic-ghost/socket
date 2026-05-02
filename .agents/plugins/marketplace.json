@@ -53,10 +53,11 @@
       "category": "Productivity"
     },
     {
-      "name": "speak-swiftly-server",
+      "name": "speak-swiftly",
       "source": {
-        "source": "local",
-        "path": "./plugins/SpeakSwiftlyServer"
+        "source": "url",
+        "url": "https://github.com/gaelic-ghost/SpeakSwiftlyServer.git",
+        "ref": "main"
       },
       "policy": {
         "installation": "AVAILABLE",

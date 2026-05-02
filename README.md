@@ -101,7 +101,7 @@ Only `apple-dev-skills` and `SpeakSwiftlyServer` still use subtree sync workflow
 
 Treat Gale's local `socket` checkout as the normal day-to-day checkout on `main`. Work in the monorepo copy first, and use the relevant directory under [`plugins/`](./plugins/) for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs. Reach for a feature branch or a dedicated worktree only when the change needs extra isolation.
 
-Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated. `SpeakSwiftlyServer` is pull-only from `socket` by default: release and validate it in its standalone checkout, then pull the released state down here.
+Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills`, keep subtree sync operations explicit and isolated. For Speak Swiftly plugin payload changes, work in the standalone `SpeakSwiftlyServer` checkout; the Socket marketplace points at that Git-backed plugin source and does not need a copied payload update here. Use the `SpeakSwiftlyServer` subtree pull only when `socket` intentionally needs the standalone source mirror refreshed for release or accounting work.
 
 When a guidance change intentionally spans multiple child skill repositories, update the affected child docs and the root `socket` docs in the same pass so the superproject still explains why the coordinated edit belongs here.
 
@@ -128,8 +128,9 @@ Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) f
 The current root validation surface is structural:
 
 - keep [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) valid JSON
-- verify that every listed `source.path` matches the real child surface that the child repo treats as installable
-- verify that every packaged plugin path still exposes a matching `.codex-plugin/plugin.json`
+- verify that every local entry's `source.path` matches the real child surface that the child repo treats as installable
+- verify that every local packaged plugin path still exposes a matching `.codex-plugin/plugin.json`
+- verify that every Git-backed entry uses the documented root-plugin or subdirectory source shape
 - review child-repo docs when plugin packaging paths move
 - run child-repo-specific validation from the relevant child repo when the change is really about that child repo
 
@@ -162,6 +163,7 @@ When a child repository or helper surface grows Python-backed validation beyond 
 │   ├── media/
 │   │   └── codex-plugin-directory-socket-productivity-skills.png
 │   └── maintainers/
+│       ├── plugin-install-testing.md
 │       ├── plugin-packaging-strategy.md
 │       ├── release-modes.md
 │       └── subtree-workflow.md
@@ -191,6 +193,7 @@ The root superproject docs are:
 - [ROADMAP.md](./ROADMAP.md) for root planning and milestone tracking
 - [ACCESSIBILITY.md](./ACCESSIBILITY.md) for the root accessibility contract around docs, metadata, and maintainer automation
 - [`docs/maintainers/`](./docs/maintainers/) for the deeper maintainer references behind the mixed-monorepo and subtree model
+- [`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md) for isolated local and Git-backed marketplace install tests that leave personal production installs untouched
 - [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the `standard` and `subtrees` release modes
 - [`docs/media/`](./docs/media/) for README screenshots and other root documentation media assets
 
@@ -200,11 +203,12 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 - `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
-- `SpeakSwiftlyServer` is synchronized into `socket` by subtree pull after the standalone child release lands; do not subtree-push it from `socket` unless Gale explicitly asks for that exception.
+- `SpeakSwiftlyServer` may be synchronized into `socket` by subtree pull after standalone source or release work lands, but routine Speak Swiftly plugin payload edits do not need a subtree pull because the Socket catalog installs from the Git-backed standalone repository.
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
 - `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
+- `SpeakSwiftlyServer` owns the canonical `speak-swiftly` plugin payload. The Socket marketplace exposes that payload by Git-backed reference so users can enable `Speak Swiftly` from the Socket catalog without `socket` carrying a second copied plugin directory.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 - `cardhop-app` packages from its child-repo root at `./plugins/cardhop-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 
@@ -219,7 +223,7 @@ That marketplace points at the actual plugin root each child repository treats a
 - `./plugins/cardhop-app`
 - `./plugins/dotnet-skills`
 - `./plugins/productivity-skills`
-- `./plugins/SpeakSwiftlyServer`
+- `gaelic-ghost/SpeakSwiftlyServer` for `speak-swiftly`, displayed as `Speak Swiftly`
 - `./plugins/python-skills`
 - `./plugins/rust-skills`
 - `./plugins/spotify`
@@ -229,6 +233,8 @@ That marketplace points at the actual plugin root each child repository treats a
 For `things-app`, that marketplace path stays `./plugins/things-app` because the installable plugin root is the child repo root even though the bundled server now lives at top-level `mcp/` inside that child repo.
 
 For `cardhop-app`, that marketplace path stays `./plugins/cardhop-app` because the installable plugin root is the child repo root while the bundled Cardhop MCP server now lives at top-level `mcp/` inside that child repo.
+
+For Speak Swiftly, the marketplace points at the canonical `SpeakSwiftlyServer` repository as a Git-backed plugin source named `speak-swiftly`, with the UI display name `Speak Swiftly`. That keeps the standalone `SpeakSwiftlyServer` marketplace fully functional while avoiding two plugin payload copies that can drift.
 
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.
 
@@ -240,6 +246,8 @@ codex plugin marketplace upgrade socket
 ```
 
 Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `things-app`, and the other listed child plugins. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
+
+When both the Socket marketplace and the standalone SpeakSwiftlyServer marketplace are configured, prefer enabling `speak-swiftly` from the Socket catalog and disabling duplicate standalone enablement. The Speak Swiftly doctor should detect duplicate installs or enablement and offer a repair path that keeps the Socket entry active.
 
 Standalone child repositories that carry their own repo marketplace should use the same pattern against their own Git repository:
 

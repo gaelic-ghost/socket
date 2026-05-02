@@ -43,26 +43,22 @@ Recent monorepo-owned examples follow that rule directly: `things-app` and `card
 
 Child-repo internal layout changes do not automatically imply root marketplace changes. If a child repo keeps the same packaged plugin root, keep the `socket` marketplace path stable and only update the root docs to explain the child's new internal layout. Recent example: `things-app` keeps its marketplace path at `./plugins/things-app` while its bundled MCP server lives at top-level `mcp/` inside that child repo.
 
-## Planned Speak Swiftly Split
+## Speak Swiftly Catalog Split
 
-`SpeakSwiftlyServer` is the exception that now needs to move away from child-root packaging in `socket`.
+`SpeakSwiftlyServer` is the exception that moved away from local child-root packaging in `socket`.
 
-The current marketplace entry points at `./plugins/SpeakSwiftlyServer`, which is the full pull-only subtree mirror of the standalone Swift package. That keeps the plugin install technically valid because the subtree root contains `.codex-plugin/plugin.json`, `.mcp.json`, `skills/`, and `hooks/`, but it also couples the public Codex plugin payload to the entire Swift package source tree, tests, maintainer docs, and release workflow. That is the wrong long-term shape for users who only want Codex to talk to an already-running local Speak Swiftly service.
+The older `socket` marketplace entry pointed at `./plugins/SpeakSwiftlyServer`, which is the full pull-only subtree mirror of the standalone Swift package. That kept the plugin install technically valid because the subtree root contains `.codex-plugin/plugin.json`, `.mcp.json`, `skills/`, and `hooks/`, but it also coupled the Socket catalog entry to the entire Swift package source tree, tests, maintainer docs, and release workflow.
 
-The planned direction is a small monorepo-owned plugin root:
+The current direction is one canonical plugin payload exposed through two marketplace catalogs:
 
-```text
-plugins/speak-swiftly/
-├── .codex-plugin/
-│   └── plugin.json
-├── .mcp.json
-├── hooks/
-├── skills/
-├── README.md
-└── scripts/
-```
+- `gaelic-ghost/SpeakSwiftlyServer` remains the canonical repository for the `speak-swiftly` plugin payload.
+- `gaelic-ghost/SpeakSwiftlyServer` keeps its own repo-local marketplace so users can run `codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer`.
+- `gaelic-ghost/socket` lists the same canonical plugin payload as a Git-backed root-plugin marketplace entry so users can run `codex plugin marketplace add gaelic-ghost/socket`, choose the Socket catalog, and enable `Speak Swiftly` there.
+- `plugins/SpeakSwiftlyServer/` remains a pull-only subtree mirror only while it is useful for source, release, and superproject accounting. It is not the plugin payload path for Socket users.
 
-That plugin should own only the Codex-facing distribution surface:
+The plugin identity should be `speak-swiftly`, and the display name should be `Speak Swiftly`. The old `speak-swiftly-server` plugin id needs explicit migration handling because existing Codex config and plugin cache entries may still be keyed to that name.
+
+The canonical plugin payload in `SpeakSwiftlyServer` should own the Codex-facing distribution surface:
 
 - plugin identity, install metadata, and user-facing prompts
 - MCP registration for the local service endpoint
@@ -71,9 +67,17 @@ That plugin should own only the Codex-facing distribution surface:
 - doctor or install-check scripts for plugin, hook, runtime, and voice-profile health
 - migration guidance from the old `speak-swiftly-server` plugin entry
 
-The standalone `SpeakSwiftlyServer` repository should remain the source of truth for the Swift package, executable, LaunchAgent behavior, embedded API, HTTP/MCP implementation, API docs, release notes, and live-service validation. `socket/plugins/SpeakSwiftlyServer` may remain a pull-only source mirror while that is still useful for release coordination, but it should stop being the preferred public Codex plugin payload once `plugins/speak-swiftly/` exists.
+The standalone `SpeakSwiftlyServer` repository should also remain the source of truth for the Swift package, executable, LaunchAgent behavior, embedded API, HTTP/MCP implementation, API docs, release notes, and live-service validation.
 
-When the split lands, update `.agents/plugins/marketplace.json` so the public Speak Swiftly plugin entry points at `./plugins/speak-swiftly`, then run the marketplace audit and `uv run scripts/validate_socket_metadata.py`. Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass so users see one coherent story: Codex users install `speak-swiftly` from the Git-backed `socket` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
+The Socket catalog entry named `speak-swiftly` points at the Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source instead of `./plugins/SpeakSwiftlyServer`. Because the plugin root is the repository root, it uses the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry. Run the marketplace audit and `uv run scripts/validate_socket_metadata.py` after changes to this entry.
+
+Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass when this catalog model changes so users see one coherent story: Codex users can install `Speak Swiftly` from either the Git-backed `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
+
+For ordinary Speak Swiftly plugin changes, edit the standalone `SpeakSwiftlyServer` checkout. `socket` only needs a follow-up change when the marketplace entry itself, root docs, root validation behavior, or a coordinated `socket` release changes. Because the Socket entry tracks the standalone repository's `main` branch, a plugin payload edit in `SpeakSwiftlyServer` does not require copying files, subtree-pulling the source mirror, or bumping a Socket version by itself.
+
+The doctor should be able to detect and repair duplicate installs or enablement caused by users adding both marketplaces. Its repair preference is the Socket marketplace entry: keep `speak-swiftly@socket` enabled, then disable or remove the duplicate standalone-marketplace plugin enablement after reporting the intended change. The standalone marketplace remains fully functional for users who only want Speak Swiftly, but Socket is the preferred catalog when both are configured.
+
+For install-surface verification, use [plugin-install-testing.md](./plugin-install-testing.md). Keep Gale's personal Codex scope reserved for stable production installs; test local checkouts and Git-backed marketplaces with a temporary `CODEX_HOME`, remove the test marketplace before cleanup, and run the Socket-side tests from this repository while leaving detailed standalone SpeakSwiftlyServer payload checks to that repository.
 
 `socket` itself still does not define an aggregate root plugin above the child repos. The root Codex-facing surface here is the marketplace catalog, not a packaged plugin payload or a second shared plugin bundle.
 
@@ -93,7 +97,7 @@ codex plugin marketplace add gaelic-ghost/apple-dev-skills
 codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 ```
 
-`socket` can still list the same child as `./plugins/<child>` from the superproject marketplace. Use explicit refs such as `gaelic-ghost/socket@vX.Y.Z` only for pinned reproducible installs. Manual local marketplace roots and copied payload directories are development, unpublished-testing, and fallback tools rather than the default user-facing path.
+`socket` can list ordinary local child plugins as `./plugins/<child>` from the superproject marketplace. For Speak Swiftly, prefer a Git-backed entry pointing at `gaelic-ghost/SpeakSwiftlyServer` so the Socket catalog and standalone catalog install the same canonical payload instead of carrying two copies. Use explicit refs such as `gaelic-ghost/socket@vX.Y.Z` only for pinned reproducible installs. Manual local marketplace roots and copied payload directories are development, unpublished-testing, and fallback tools rather than the default user-facing path.
 
 When a user has already migrated from an older copied-plugin or personal-local-marketplace install to the Git-backed marketplace, use the repo-owned cleanup helper instead of hand-editing home-directory files:
 

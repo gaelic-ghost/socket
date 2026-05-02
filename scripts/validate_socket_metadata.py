@@ -13,6 +13,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MARKETPLACE_PATH = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
+GIT_SOURCE_KINDS = {"url", "git-subdir"}
 
 
 def fail(message: str) -> None:
@@ -27,6 +28,49 @@ def load_json(path: Path) -> object:
         fail(f"Required JSON file is missing: {path}")
     except json.JSONDecodeError as exc:
         fail(f"JSON file is invalid at {path}:{exc.lineno}:{exc.colno}: {exc.msg}")
+
+
+def validate_optional_git_selector(
+    *,
+    plugin_name: str,
+    source: dict[str, object],
+) -> None:
+    ref = source.get("ref")
+    sha = source.get("sha")
+    if ref is not None and (not isinstance(ref, str) or not ref):
+        fail(f"Marketplace plugin `{plugin_name}` has an invalid Git source ref: {ref}")
+    if sha is not None and (not isinstance(sha, str) or not sha):
+        fail(f"Marketplace plugin `{plugin_name}` has an invalid Git source sha: {sha}")
+    if ref is not None and sha is not None:
+        fail(f"Marketplace plugin `{plugin_name}` must not set both Git source ref and sha.")
+
+
+def validate_git_source(
+    *,
+    plugin_name: str,
+    source: dict[str, object],
+    source_kind: str,
+) -> None:
+    url = source.get("url")
+    if not isinstance(url, str) or not url:
+        fail(f"Marketplace plugin `{plugin_name}` must define a non-empty Git source url.")
+
+    validate_optional_git_selector(plugin_name=plugin_name, source=source)
+
+    if source_kind == "url":
+        if "path" in source:
+            fail(
+                f"Marketplace plugin `{plugin_name}` uses a root Git source and must not "
+                "also define source.path. Use `git-subdir` for repository subdirectories."
+            )
+        return
+
+    path = source.get("path")
+    if not isinstance(path, str) or not path.startswith("./"):
+        fail(
+            f"Marketplace plugin `{plugin_name}` uses `git-subdir` and must define a "
+            f"`./...` source.path, but found `{path}`."
+        )
 
 
 def validate_manifest_path(
@@ -66,26 +110,7 @@ def validate_manifest_path(
     return component_path
 
 
-def validate_plugin_entry(entry: object, seen_names: set[str]) -> None:
-    if not isinstance(entry, dict):
-        fail("Each marketplace plugin entry must be a JSON object.")
-
-    name = entry.get("name")
-    if not isinstance(name, str) or not name:
-        fail("Each marketplace plugin entry must define a non-empty string `name`.")
-    if name in seen_names:
-        fail(f"Marketplace plugin name `{name}` is duplicated.")
-    seen_names.add(name)
-
-    source = entry.get("source")
-    if not isinstance(source, dict):
-        fail(f"Marketplace plugin `{name}` is missing its `source` object.")
-    source_kind = source.get("source")
-    if source_kind != "local":
-        fail(
-            f"Marketplace plugin `{name}` must use a local source in this superproject, "
-            f"but found `{source_kind}`."
-        )
+def validate_local_plugin_entry(*, name: str, source: dict[str, object]) -> None:
     relative_path = source.get("path")
     if not isinstance(relative_path, str) or not relative_path.startswith("./"):
         fail(
@@ -174,6 +199,34 @@ def validate_plugin_entry(entry: object, seen_names: set[str]) -> None:
             )
 
 
+def validate_plugin_entry(entry: object, seen_names: set[str]) -> None:
+    if not isinstance(entry, dict):
+        fail("Each marketplace plugin entry must be a JSON object.")
+
+    name = entry.get("name")
+    if not isinstance(name, str) or not name:
+        fail("Each marketplace plugin entry must define a non-empty string `name`.")
+    if name in seen_names:
+        fail(f"Marketplace plugin name `{name}` is duplicated.")
+    seen_names.add(name)
+
+    source = entry.get("source")
+    if not isinstance(source, dict):
+        fail(f"Marketplace plugin `{name}` is missing its `source` object.")
+    source_kind = source.get("source")
+    if source_kind == "local":
+        validate_local_plugin_entry(name=name, source=source)
+        return
+    if source_kind in GIT_SOURCE_KINDS:
+        validate_git_source(plugin_name=name, source=source, source_kind=source_kind)
+        return
+
+    fail(
+        f"Marketplace plugin `{name}` must use a supported source kind "
+        f"(`local`, `url`, or `git-subdir`), but found `{source_kind}`."
+    )
+
+
 def main() -> None:
     print("Validating root marketplace presence...")
     marketplace = load_json(MARKETPLACE_PATH)
@@ -184,7 +237,7 @@ def main() -> None:
     if not isinstance(plugins, list) or not plugins:
         fail("Root marketplace must contain a non-empty `plugins` array.")
 
-    print("Validating packaged plugin paths...")
+    print("Validating marketplace entries...")
     seen_names: set[str] = set()
     for entry in plugins:
         validate_plugin_entry(entry, seen_names)

@@ -24,7 +24,7 @@ For coordinated guidance that spans multiple monorepo-owned child repositories, 
 
 For `apple-dev-skills`, when a change should publish back to its source repository, work in `plugins/apple-dev-skills/`, commit in `socket`, and then use `git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main`.
 
-For `SpeakSwiftlyServer`, treat `plugins/SpeakSwiftlyServer/` as a downstream mirror. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer in its standalone checkout, then use `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` to bring that released child state down into `socket`.
+For `SpeakSwiftlyServer`, treat `plugins/SpeakSwiftlyServer/` as a downstream source mirror, not as the Socket plugin payload. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer in its standalone checkout. Use `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` only when `socket` intentionally needs the standalone source state refreshed for release or accounting work. Routine Speak Swiftly plugin payload changes land in the standalone repository and flow to Socket users through the Git-backed marketplace entry.
 
 ## Child Repository Shape
 
@@ -36,6 +36,20 @@ That means there is one important packaging rule to expect:
    Examples: `plugins/agent-plugin-skills/.codex-plugin/plugin.json` and `plugins/python-skills/.codex-plugin/plugin.json`
 
 The socket root marketplace must point at the actual packaged plugin root, not at an assumed one.
+
+### Remote Catalog Entries
+
+Most Socket marketplace entries point at local child directories under `./plugins/`, but a marketplace entry may intentionally point at a Git-backed plugin source when the canonical payload lives outside `socket`.
+
+The Speak Swiftly catalog split uses this model. `SpeakSwiftlyServer` remains the canonical owner of the `speak-swiftly` plugin payload and keeps its standalone marketplace functional. The Socket marketplace exposes the same canonical plugin payload by Git-backed reference instead of installing from the local `plugins/SpeakSwiftlyServer` subtree mirror.
+
+Use this shape when all of these are true:
+
+1. The external repository is the real source of truth for the plugin manifest, skills, hooks, MCP config, and doctor scripts.
+2. `socket` should list the plugin for catalog convenience, but should not own a second copied payload.
+3. The local subtree mirror exists for source, release, or branch-accounting visibility rather than as the plugin install root.
+
+When a remote catalog entry is added, update the root marketplace validator so it understands that entry type. Local entries should still verify their checked-in packaged plugin roots. Remote entries should verify the marketplace metadata shape and document which external repository owns plugin validation.
 
 ## Current Named Remotes
 
@@ -135,7 +149,8 @@ Use these rules:
 
 - list every non-private imported child plugin surface by default
 - keep private child repos out of the public marketplace, and remove their entries if their directories are retired from the monorepo
-- point `source.path` at the actual child surface the imported repo treats as installable
+- point local entries' `source.path` at the actual child surface the imported repo treats as installable
+- use a Git-backed source when the actual plugin payload is canonical in another repository and `socket` is only exposing it through the Socket catalog
 - do not change a marketplace path just because a child repo rearranged files internally; if the packaged plugin root is unchanged, keep the same `source.path`
 - do not invent a second socket-level plugin wrapper when the child repo already has one
 - do not leave stale marketplace entries behind after a packaging move or subtree removal
@@ -146,13 +161,16 @@ Use these rules:
 Run this audit whenever a child plugin is added, removed, moved, renamed, converted from subtree-managed to monorepo-owned, or changes its packaged plugin root:
 
 1. List every marketplace entry in `.agents/plugins/marketplace.json`.
-2. For each `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
-3. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed.
-4. Open each changed child repo's README or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
-5. Run `uv run scripts/validate_socket_metadata.py`.
-6. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
+2. For each local `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
+3. For each Git-backed entry, verify the source kind matches the plugin location: `url` for a repository-root plugin and `git-subdir` for a plugin in a repository subdirectory.
+4. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed or intentionally exposed by Git-backed reference.
+5. Open each changed child repo's README or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
+6. Run `uv run scripts/validate_socket_metadata.py`.
+7. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
 
 The audit is about the installable plugin roots that Codex can actually see. Do not rewrite marketplace paths to follow an invented uniform layout when the child repo still packages from a different root.
+
+For the Speak Swiftly catalog split, the expected surviving plugin identity is `speak-swiftly`, displayed as `Speak Swiftly`. The doctor should treat duplicate enablement from both the Socket marketplace and the standalone SpeakSwiftlyServer marketplace as repairable configuration drift. Its repair path should prefer `speak-swiftly@socket`, then disable or remove the duplicate standalone enablement after explaining the intended change.
 
 ### Removing A Public Child Plugin
 

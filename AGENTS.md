@@ -26,8 +26,8 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Use a feature branch or worktree when the change needs isolation for safety, review, or overlapping parallel work, but do not force that path for ordinary `socket` maintenance.
 - Prefer small, focused commits over broad mixed changes.
 - For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
-- For `apple-dev-skills` and `SpeakSwiftlyServer`, keep subtree sync operations explicit and isolated from unrelated edits.
-- Treat `plugins/SpeakSwiftlyServer` as a downstream mirror of the standalone SpeakSwiftlyServer checkout. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer from its own checkout, then subtree-pull the merged child state into `socket`; do not subtree-push SpeakSwiftlyServer changes from `socket` unless Gale explicitly overrides that one-off rule.
+- For `apple-dev-skills`, keep subtree sync operations explicit and isolated from unrelated edits.
+- Treat `plugins/SpeakSwiftlyServer` as a downstream source mirror of the standalone SpeakSwiftlyServer checkout, not as the Socket plugin payload. Speak Swiftly plugin payload edits belong in the standalone checkout and reach Socket users through the Git-backed marketplace entry. Subtree-pull `SpeakSwiftlyServer` into `socket` only when the superproject intentionally needs the standalone source state for release or accounting work; do not subtree-push SpeakSwiftlyServer changes from `socket` unless Gale explicitly overrides that one-off rule.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
 ### Subtree Sync And Branch Accounting Gates

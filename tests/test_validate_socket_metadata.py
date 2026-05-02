@@ -47,6 +47,30 @@ def make_marketplace_repo(tmp_path: Path, manifest: dict[str, object]) -> Path:
     return repo_root
 
 
+def make_remote_marketplace_repo(
+    tmp_path: Path,
+    *,
+    source: dict[str, object],
+) -> Path:
+    repo_root = tmp_path
+    write(
+        repo_root / ".agents" / "plugins" / "marketplace.json",
+        json.dumps(
+            {
+                "plugins": [
+                    {
+                        "name": "speak-swiftly",
+                        "source": source,
+                    }
+                ]
+            },
+            indent=2,
+        )
+        + "\n",
+    )
+    return repo_root
+
+
 def run_validator(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(validate_socket_metadata, "REPO_ROOT", repo_root)
     monkeypatch.setattr(
@@ -80,6 +104,72 @@ def test_main_rejects_plugin_manifest_missing_root_skills_component(
         tmp_path,
         {
             "name": "example-skills",
+        },
+    )
+
+    with pytest.raises(SystemExit):
+        run_validator(repo_root, monkeypatch)
+
+
+def test_main_accepts_root_git_plugin_source(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_remote_marketplace_repo(
+        tmp_path,
+        source={
+            "source": "url",
+            "url": "https://github.com/gaelic-ghost/SpeakSwiftlyServer.git",
+            "ref": "main",
+        },
+    )
+
+    run_validator(repo_root, monkeypatch)
+
+
+def test_main_accepts_git_subdir_plugin_source(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_remote_marketplace_repo(
+        tmp_path,
+        source={
+            "source": "git-subdir",
+            "url": "https://github.com/example/codex-plugins.git",
+            "path": "./plugins/speak-swiftly",
+            "sha": "abc123",
+        },
+    )
+
+    run_validator(repo_root, monkeypatch)
+
+
+def test_main_rejects_root_git_source_with_path(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_remote_marketplace_repo(
+        tmp_path,
+        source={
+            "source": "url",
+            "url": "https://github.com/gaelic-ghost/SpeakSwiftlyServer.git",
+            "path": "./plugins/speak-swiftly",
+        },
+    )
+
+    with pytest.raises(SystemExit):
+        run_validator(repo_root, monkeypatch)
+
+
+def test_main_rejects_git_subdir_source_without_relative_path(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_remote_marketplace_repo(
+        tmp_path,
+        source={
+            "source": "git-subdir",
+            "url": "https://github.com/example/codex-plugins.git",
         },
     )
 
