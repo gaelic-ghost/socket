@@ -130,7 +130,8 @@ In Progress
 
 - [x] Create `plugins/swiftasb-skills/` with its own `.codex-plugin/plugin.json` and authored `skills/` source.
 - [x] Add first-slice skills for explaining SwiftASB, choosing an integration shape, and building a SwiftUI app on top of SwiftASB.
-- [ ] Add later-slice skills for AppKit apps and Swift package authors after the first slice proves useful.
+- [ ] Add `swiftasb:build-appkit-app` for AppKit apps after the first slice proves useful.
+- [ ] Add `swiftasb:build-swift-package` for Swift package authors after the first slice proves useful.
 - [x] Add an integration diagnostics skill for runtime discovery, app-server startup, threads, turns, approvals, diagnostics, MCP status, history reads, and live-test isolation.
 - [x] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
@@ -145,7 +146,8 @@ In Progress
 
 ## Backlog Candidates
 
-No active backlog candidates are currently tracked here. Add new candidates only when they represent real future work that is not already covered by the maintainer docs or milestone history.
+- [ ] [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37): Harden release and PR scripts around delayed GitHub state. Fold the duplicate timing reports into one implementation pass that reviews CI check registration, PR comment/review reads, remote branch/tag visibility, GitHub release visibility, timeout configuration, logs, and tests across `socket` and the reusable `maintain-project-repo` release assets.
+- [ ] [#31](https://github.com/gaelic-ghost/socket/issues/31): Review the remaining subtree plugin strategy after the Git-backed marketplace shift. Decide whether `apple-dev-skills` and `SpeakSwiftlyServer` still need subtree mirrors, what `socket` should own long term, how versioning should work if more children become standalone-only, and what validation proves the chosen install model.
 
 ## History
 

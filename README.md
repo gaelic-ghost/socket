@@ -207,7 +207,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
-- `swiftasb-skills` packages from its child-repo root at `./plugins/swiftasb-skills`, and ships companion guidance for explaining SwiftASB plus building SwiftUI-facing integrations on top of the SwiftASB package.
+- `swiftasb-skills` packages from its child-repo root at `./plugins/swiftasb-skills`, and ships companion guidance for explaining SwiftASB, choosing integration shapes, diagnosing integration failures, and building SwiftUI, AppKit, and Swift package integrations on top of the SwiftASB package.
 - `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
 - `SpeakSwiftlyServer` owns the canonical `speak-swiftly` plugin payload. The Socket marketplace exposes that payload by Git-backed reference so users can enable `Speak Swiftly` from the Socket catalog without `socket` carrying a second copied plugin directory.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.

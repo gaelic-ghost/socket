@@ -24,7 +24,7 @@ This directory is active as normal monorepo-owned content inside `socket` and sh
 
 ### What This Project Is
 
-This plugin helps Codex agents explain SwiftASB, choose an integration shape, implement SwiftUI-facing SwiftASB work, and diagnose integration failures. SwiftASB itself remains the source of truth for the Swift package, public API, DocC, release notes, generated wire maintenance, and licensing.
+This plugin helps Codex agents explain SwiftASB, choose an integration shape, implement SwiftUI-facing SwiftASB work, diagnose integration failures, and prepare later AppKit and package-author integrations. SwiftASB itself remains the source of truth for the Swift package, public API, DocC, release notes, generated wire maintenance, and licensing.
 
 ### Motivation
 
