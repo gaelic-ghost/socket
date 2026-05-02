@@ -147,12 +147,12 @@ This skill should cover:
 
 The first slice should be intentionally small:
 
-- [ ] Create `plugins/swiftasb-skills/` with a plugin manifest.
-- [ ] Add `swiftasb:explain-swiftasb`.
-- [ ] Add `swiftasb:choose-integration-shape`.
-- [ ] Add `swiftasb:build-swiftui-app`.
-- [ ] Wire `swiftasb-skills` into `.agents/plugins/marketplace.json`.
-- [ ] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
+- [x] Create `plugins/swiftasb-skills/` with a plugin manifest.
+- [x] Add `swiftasb:explain-swiftasb`.
+- [x] Add `swiftasb:choose-integration-shape`.
+- [x] Add `swiftasb:build-swiftui-app`.
+- [x] Wire `swiftasb-skills` into `.agents/plugins/marketplace.json`.
+- [x] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
 - [ ] Run `uv run scripts/validate_socket_metadata.py`.
 - [ ] Run any child-plugin validation added by the new plugin.
 
@@ -171,8 +171,8 @@ After the first slice proves useful, add:
 
 The plugin is ready for first release when:
 
-- [ ] Socket exposes `swiftasb-skills` as an installable child plugin.
-- [ ] The skills consistently describe SwiftASB as a Swift-native app-server client rather than a general AI SDK or a raw protocol dump.
-- [ ] The guidance sends Apple framework questions through Apple Dev Skills instead of duplicating broad SwiftUI or AppKit rules.
-- [ ] The guidance points agents back to the SwiftASB package docs for source-of-truth API, licensing, release, and compatibility details.
+- [x] Socket exposes `swiftasb-skills` as an installable child plugin.
+- [x] The skills consistently describe SwiftASB as a Swift-native app-server client rather than a general AI SDK or a raw protocol dump.
+- [x] The guidance sends Apple framework questions through Apple Dev Skills instead of duplicating broad SwiftUI or AppKit rules.
+- [x] The guidance points agents back to the SwiftASB package docs for source-of-truth API, licensing, release, and compatibility details.
 - [ ] Root Socket docs, marketplace wiring, and validation all agree on the plugin's install surface.

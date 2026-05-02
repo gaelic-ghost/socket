@@ -201,12 +201,13 @@ The root superproject docs are:
 
 Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
 
-- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
+- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `swiftasb-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
 - `SpeakSwiftlyServer` may be synchronized into `socket` by subtree pull after standalone source or release work lands, but routine Speak Swiftly plugin payload edits do not need a subtree pull because the Socket catalog installs from the Git-backed standalone repository.
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
+- `swiftasb-skills` packages from its child-repo root at `./plugins/swiftasb-skills`, and ships companion guidance for explaining SwiftASB plus building SwiftUI-facing integrations on top of the SwiftASB package.
 - `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
 - `SpeakSwiftlyServer` owns the canonical `speak-swiftly` plugin payload. The Socket marketplace exposes that payload by Git-backed reference so users can enable `Speak Swiftly` from the Socket catalog without `socket` carrying a second copied plugin directory.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
@@ -227,6 +228,7 @@ That marketplace points at the actual plugin root each child repository treats a
 - `./plugins/python-skills`
 - `./plugins/rust-skills`
 - `./plugins/spotify`
+- `./plugins/swiftasb-skills`
 - `./plugins/things-app`
 - `./plugins/web-dev-skills`
 
