@@ -43,17 +43,17 @@ Recent monorepo-owned examples follow that rule directly: `things-app` and `card
 
 Child-repo internal layout changes do not automatically imply root marketplace changes. If a child repo keeps the same packaged plugin root, keep the `socket` marketplace path stable and only update the root docs to explain the child's new internal layout. Recent example: `things-app` keeps its marketplace path at `./plugins/things-app` while its bundled MCP server lives at top-level `mcp/` inside that child repo.
 
-## Planned Speak Swiftly Catalog Split
+## Speak Swiftly Catalog Split
 
-`SpeakSwiftlyServer` is the exception that now needs to move away from local child-root packaging in `socket`.
+`SpeakSwiftlyServer` is the exception that moved away from local child-root packaging in `socket`.
 
-The current `socket` marketplace entry points at `./plugins/SpeakSwiftlyServer`, which is the full pull-only subtree mirror of the standalone Swift package. That keeps the plugin install technically valid because the subtree root contains `.codex-plugin/plugin.json`, `.mcp.json`, `skills/`, and `hooks/`, but it also couples the Socket catalog entry to the entire Swift package source tree, tests, maintainer docs, and release workflow.
+The older `socket` marketplace entry pointed at `./plugins/SpeakSwiftlyServer`, which is the full pull-only subtree mirror of the standalone Swift package. That kept the plugin install technically valid because the subtree root contains `.codex-plugin/plugin.json`, `.mcp.json`, `skills/`, and `hooks/`, but it also coupled the Socket catalog entry to the entire Swift package source tree, tests, maintainer docs, and release workflow.
 
-The planned direction is one canonical plugin payload exposed through two marketplace catalogs:
+The current direction is one canonical plugin payload exposed through two marketplace catalogs:
 
 - `gaelic-ghost/SpeakSwiftlyServer` remains the canonical repository for the `speak-swiftly` plugin payload.
 - `gaelic-ghost/SpeakSwiftlyServer` keeps its own repo-local marketplace so users can run `codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer`.
-- `gaelic-ghost/socket` lists the same canonical plugin payload as a Git-backed marketplace entry so users can run `codex plugin marketplace add gaelic-ghost/socket`, choose the Socket catalog, and enable `Speak Swiftly` there.
+- `gaelic-ghost/socket` lists the same canonical plugin payload as a Git-backed root-plugin marketplace entry so users can run `codex plugin marketplace add gaelic-ghost/socket`, choose the Socket catalog, and enable `Speak Swiftly` there.
 - `plugins/SpeakSwiftlyServer/` remains a pull-only subtree mirror only while it is useful for source, release, and superproject accounting. It is not the preferred plugin payload path for Socket users after the catalog split lands.
 
 The plugin identity should be `speak-swiftly`, and the display name should be `Speak Swiftly`. The old `speak-swiftly-server` plugin id needs explicit migration handling because existing Codex config and plugin cache entries may still be keyed to that name.
@@ -69,7 +69,7 @@ The canonical plugin payload in `SpeakSwiftlyServer` should own the Codex-facing
 
 The standalone `SpeakSwiftlyServer` repository should also remain the source of truth for the Swift package, executable, LaunchAgent behavior, embedded API, HTTP/MCP implementation, API docs, release notes, and live-service validation.
 
-When the catalog split lands, update `.agents/plugins/marketplace.json` so the Socket catalog entry named `speak-swiftly` points at the Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source instead of `./plugins/SpeakSwiftlyServer`. Because the plugin root is the repository root, use the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry. Then run the marketplace audit and `uv run scripts/validate_socket_metadata.py`. The validator must be updated first because it currently assumes every Socket marketplace entry is a local `./plugins/...` directory.
+The Socket catalog entry named `speak-swiftly` points at the Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source instead of `./plugins/SpeakSwiftlyServer`. Because the plugin root is the repository root, it uses the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry. Run the marketplace audit and `uv run scripts/validate_socket_metadata.py` after changes to this entry.
 
 Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass so users see one coherent story: Codex users can install `Speak Swiftly` from either the Git-backed `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
 

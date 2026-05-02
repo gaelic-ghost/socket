@@ -128,8 +128,9 @@ Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) f
 The current root validation surface is structural:
 
 - keep [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json) valid JSON
-- verify that every listed `source.path` matches the real child surface that the child repo treats as installable
-- verify that every packaged plugin path still exposes a matching `.codex-plugin/plugin.json`
+- verify that every local entry's `source.path` matches the real child surface that the child repo treats as installable
+- verify that every local packaged plugin path still exposes a matching `.codex-plugin/plugin.json`
+- verify that every Git-backed entry uses the documented root-plugin or subdirectory source shape
 - review child-repo docs when plugin packaging paths move
 - run child-repo-specific validation from the relevant child repo when the change is really about that child repo
 
@@ -220,7 +221,7 @@ That marketplace points at the actual plugin root each child repository treats a
 - `./plugins/cardhop-app`
 - `./plugins/dotnet-skills`
 - `./plugins/productivity-skills`
-- `./plugins/SpeakSwiftlyServer`
+- `gaelic-ghost/SpeakSwiftlyServer` for `speak-swiftly`, displayed as `Speak Swiftly`
 - `./plugins/python-skills`
 - `./plugins/rust-skills`
 - `./plugins/spotify`
@@ -231,7 +232,7 @@ For `things-app`, that marketplace path stays `./plugins/things-app` because the
 
 For `cardhop-app`, that marketplace path stays `./plugins/cardhop-app` because the installable plugin root is the child repo root while the bundled Cardhop MCP server now lives at top-level `mcp/` inside that child repo.
 
-For Speak Swiftly, the planned catalog split changes that one entry. The marketplace should stop pointing at the local `./plugins/SpeakSwiftlyServer` subtree mirror and instead list the canonical `SpeakSwiftlyServer` repository as a Git-backed plugin source named `speak-swiftly`, with the UI display name `Speak Swiftly`. That keeps the standalone `SpeakSwiftlyServer` marketplace fully functional while avoiding two plugin payload copies that can drift.
+For Speak Swiftly, the marketplace points at the canonical `SpeakSwiftlyServer` repository as a Git-backed plugin source named `speak-swiftly`, with the UI display name `Speak Swiftly`. That keeps the standalone `SpeakSwiftlyServer` marketplace fully functional while avoiding two plugin payload copies that can drift.
 
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.
 

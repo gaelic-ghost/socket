@@ -41,7 +41,7 @@ The socket root marketplace must point at the actual packaged plugin root, not a
 
 Most Socket marketplace entries point at local child directories under `./plugins/`, but a marketplace entry may intentionally point at a Git-backed plugin source when the canonical payload lives outside `socket`.
 
-The planned Speak Swiftly catalog split uses this model. `SpeakSwiftlyServer` remains the canonical owner of the `speak-swiftly` plugin payload and keeps its standalone marketplace functional. The Socket marketplace should expose the same canonical plugin payload by Git-backed reference instead of installing from the local `plugins/SpeakSwiftlyServer` subtree mirror.
+The Speak Swiftly catalog split uses this model. `SpeakSwiftlyServer` remains the canonical owner of the `speak-swiftly` plugin payload and keeps its standalone marketplace functional. The Socket marketplace exposes the same canonical plugin payload by Git-backed reference instead of installing from the local `plugins/SpeakSwiftlyServer` subtree mirror.
 
 Use this shape when all of these are true:
 
@@ -161,11 +161,12 @@ Use these rules:
 Run this audit whenever a child plugin is added, removed, moved, renamed, converted from subtree-managed to monorepo-owned, or changes its packaged plugin root:
 
 1. List every marketplace entry in `.agents/plugins/marketplace.json`.
-2. For each `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
-3. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed.
-4. Open each changed child repo's README or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
-5. Run `uv run scripts/validate_socket_metadata.py`.
-6. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
+2. For each local `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
+3. For each Git-backed entry, verify the source kind matches the plugin location: `url` for a repository-root plugin and `git-subdir` for a plugin in a repository subdirectory.
+4. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed or intentionally exposed by Git-backed reference.
+5. Open each changed child repo's README or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
+6. Run `uv run scripts/validate_socket_metadata.py`.
+7. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
 
 The audit is about the installable plugin roots that Codex can actually see. Do not rewrite marketplace paths to follow an invented uniform layout when the child repo still packages from a different root.
 
