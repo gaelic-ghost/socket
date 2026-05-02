@@ -47,14 +47,14 @@ uv sync --dev
 uv run scripts/validate_socket_metadata.py
 ```
 
-For ordinary user installation, prefer the official Git-backed marketplace path. Add the `socket` marketplace from Git, then update it through Codex when the marketplace or child plugin entries change:
+For ordinary user installation, prefer the official Git-backed marketplace path. Add the `socket` marketplace from Git when you want one Codex marketplace that exposes Gale's plugin and skill collection, including companion plugins such as `productivity-skills`, `apple-dev-skills`, `agent-plugin-skills`, `python-skills`, and the other child plugins listed below. Update that marketplace through Codex when the marketplace or child plugin entries change:
 
 ```bash
 codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
-After the marketplace is added or upgraded, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable the desired child plugins there. Manual local marketplace roots are useful for development, unpublished testing, and fallback work, but they are not the default user install or update path.
+After the marketplace is added or upgraded, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable the child plugins you want. This is the preferred way to get sibling or companion skills from one catalog instead of adding each child repository as a separate marketplace. Manual local marketplace roots are useful for development, unpublished testing, and fallback work, but they are not the default user install or update path.
 
 If you previously used the older copied-plugin or personal-local-marketplace install path, run the legacy cleanup helper after the Git-backed marketplace works:
 
@@ -231,6 +231,8 @@ Current [OpenAI Codex plugin docs](https://developers.openai.com/codex/plugins/b
 codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
+
+Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `things-app`, and the other listed child plugins. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
 
 Standalone child repositories that carry their own repo marketplace should use the same pattern against their own Git repository:
 

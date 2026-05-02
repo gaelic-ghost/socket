@@ -52,6 +52,8 @@ codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
+Use the `socket` marketplace as the all-in-one catalog when users want Gale's plugin collection or need companion skills from sibling child plugins. After adding `socket`, users still choose which plugin entries to install or enable from the Codex plugin directory; adding the marketplace exposes the catalog, it does not imply that every child plugin is installed automatically.
+
 For child repositories such as `apple-dev-skills` and `SpeakSwiftlyServer`, the clean standalone path is a child-owned repo marketplace that points at `./` when the repository root is the plugin root:
 
 ```bash
