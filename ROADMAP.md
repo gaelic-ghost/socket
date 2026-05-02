@@ -78,35 +78,37 @@ Completed Milestone 3 by aligning the release-mode docs, subtree sync rules, sha
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
-- [ ] Keep the canonical Codex plugin payload in the standalone `SpeakSwiftlyServer` repository so `.codex-plugin/plugin.json`, `.mcp.json`, `hooks/`, `skills/`, user guidance, and doctor scripts have one source of truth.
-- [ ] Rename the canonical plugin identity to `speak-swiftly` while keeping the display name `Speak Swiftly`.
+- [x] Keep the canonical Codex plugin payload in the standalone `SpeakSwiftlyServer` repository so `.codex-plugin/plugin.json`, `.mcp.json`, `hooks/`, `skills/`, user guidance, and doctor scripts have one source of truth.
+- [x] Rename the canonical plugin identity to `speak-swiftly` while keeping the display name `Speak Swiftly`.
 - [x] Update the root marketplace so the public Speak Swiftly entry is listed as `speak-swiftly` from the `gaelic-ghost/SpeakSwiftlyServer` Git-backed plugin source instead of the local `./plugins/SpeakSwiftlyServer` subtree mirror.
 - [ ] Keep `plugins/SpeakSwiftlyServer/` as a pull-only subtree mirror of the standalone Swift package only for source, release, and superproject accounting while that mirror remains useful.
 - [x] Update root README, plugin-packaging strategy, subtree workflow guidance, and child-facing docs so users understand the split: Codex users can install `Speak Swiftly` from either the `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace, while app embedders use the Swift package directly.
 
 ### Tickets
 
-- [ ] Update `SpeakSwiftlyServer`'s plugin manifest and repo-local marketplace from `speak-swiftly-server` to `speak-swiftly`, with `interface.displayName` remaining `Speak Swiftly`.
+- [x] Update `SpeakSwiftlyServer`'s plugin manifest and repo-local marketplace from `speak-swiftly-server` to `speak-swiftly`, with `interface.displayName` remaining `Speak Swiftly`.
 - [x] Update `socket` marketplace validation so Git-backed remote plugin entries are allowed and checked for required metadata without requiring a local packaged plugin directory.
 - [x] Change the `socket` marketplace entry from local `./plugins/SpeakSwiftlyServer` to the canonical `gaelic-ghost/SpeakSwiftlyServer` plugin source. Because the plugin root is the repository root, use the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry.
-- [ ] Adapt MCP registration and hooks in `SpeakSwiftlyServer` so paths stay `./`-relative to the plugin root and still target the installed local service at `127.0.0.1:7337`.
-- [ ] Update the hook doctor so it detects legacy `speak-swiftly-server` installs, duplicate installs from both marketplaces, plugin-managed hook state, live service reachability, and expected voice profile.
+- [x] Adapt MCP registration and hooks in `SpeakSwiftlyServer` so paths stay `./`-relative to the plugin root and still target the installed local service at `127.0.0.1:7337`.
+- [x] Update the hook doctor so it detects legacy `speak-swiftly-server` installs, duplicate installs from both marketplaces, plugin-managed hook state, live service reachability, and expected voice profile.
 - [ ] Add doctor repair mode that prefers the `speak-swiftly@socket` install when both the `socket` marketplace and standalone `SpeakSwiftlyServer` marketplace are present, and disables or removes the duplicate standalone enablement only after reporting the intended change.
-- [ ] Add migration notes for users who installed `speak-swiftly-server` from either marketplace, including how to enable `speak-swiftly` from `socket` and when the old entry is safe to disable or remove.
+- [x] Add migration notes for users who installed `speak-swiftly-server` from either marketplace, including how to enable `speak-swiftly` from `socket` and when the old entry is safe to disable or remove.
 - [ ] Run `uv run scripts/validate_socket_metadata.py` after marketplace changes, then install or inspect the plugin through Codex to confirm the plugin directory shows `Speak Swiftly` from the Socket catalog.
 
 ### Exit Criteria
 
 - [x] The `socket` marketplace exposes `speak-swiftly` as a Git-backed reference to the canonical `SpeakSwiftlyServer` plugin payload instead of a second copied plugin directory.
-- [ ] `SpeakSwiftlyServer` remains the source of truth for the plugin payload, Swift package, executable, LaunchAgent, embedded API, HTTP/MCP implementation, and release notes.
+- [x] `SpeakSwiftlyServer` remains the source of truth for the plugin payload, Swift package, executable, LaunchAgent, embedded API, HTTP/MCP implementation, and release notes.
 - [x] User-facing docs no longer recommend installing the full `SpeakSwiftlyServer` subtree mirror from `socket` as the default Codex plugin path.
 - [ ] `Speak Swiftly` can be installed or enabled from either the Git-backed `gaelic-ghost/socket` marketplace or the standalone `gaelic-ghost/SpeakSwiftlyServer` marketplace.
 - [ ] The doctor confirms hook, MCP, runtime, and voice-profile health, detects duplicate marketplace enablement, and can repair duplicates with preference for `speak-swiftly@socket`.
-- [ ] The old `speak-swiftly-server` plugin id is either migrated away, marked transitional with a documented sunset path, or intentionally retained with a clear reason.
+- [x] The old `speak-swiftly-server` plugin id is either migrated away, marked transitional with a documented sunset path, or intentionally retained with a clear reason.
+
+Verified against `gaelic-ghost/SpeakSwiftlyServer` `v4.5.0`: the released repository root plugin manifest declares `name: speak-swiftly`, version `2.2.0`, `interface.displayName: Speak Swiftly`, `mcpServers: ./.mcp.json`, `hooks: ./hooks/hooks.json`, and `skills: ./skills/`; its standalone marketplace entry also exposes `speak-swiftly` from `./`.
 
 ## Backlog Candidates
 
