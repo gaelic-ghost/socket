@@ -130,7 +130,8 @@ In Progress
 
 - [x] Create `plugins/swiftasb-skills/` with its own `.codex-plugin/plugin.json` and authored `skills/` source.
 - [x] Add first-slice skills for explaining SwiftASB, choosing an integration shape, and building a SwiftUI app on top of SwiftASB.
-- [ ] Add later-slice skills for AppKit apps, Swift package authors, and integration diagnostics after the first slice proves useful.
+- [ ] Add later-slice skills for AppKit apps and Swift package authors after the first slice proves useful.
+- [x] Add an integration diagnostics skill for runtime discovery, app-server startup, threads, turns, approvals, diagnostics, MCP status, history reads, and live-test isolation.
 - [x] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.

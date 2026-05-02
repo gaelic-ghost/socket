@@ -24,7 +24,7 @@ This directory is active as normal monorepo-owned content inside `socket` and sh
 
 ### What This Project Is
 
-This plugin helps Codex agents explain SwiftASB, choose an integration shape, and implement SwiftUI-facing SwiftASB work. SwiftASB itself remains the source of truth for the Swift package, public API, DocC, release notes, generated wire maintenance, and licensing.
+This plugin helps Codex agents explain SwiftASB, choose an integration shape, implement SwiftUI-facing SwiftASB work, and diagnose integration failures. SwiftASB itself remains the source of truth for the Swift package, public API, DocC, release notes, generated wire maintenance, and licensing.
 
 ### Motivation
 
@@ -37,6 +37,7 @@ Use `swiftasb-skills` when the work is specifically about:
 - explaining what SwiftASB does and whether it fits a user's Swift project
 - choosing between SwiftUI, AppKit, command-line, helper-service, or package-author integration shapes
 - building SwiftUI state around SwiftASB's `CodexAppServer`, `CodexThread`, `CodexTurnHandle`, and observable companions
+- diagnosing SwiftASB integration failures across runtime discovery, app-server startup, threads, turns, approvals, diagnostics, MCP status, history reads, and live-test isolation
 
 Use `apple-dev-skills` for Apple framework rules, Xcode workflow selection, SwiftUI/AppKit lifecycle behavior, DocC, build, and test execution.
 
@@ -71,6 +72,7 @@ See [LICENSE](../../LICENSE) for the Socket superproject license. SwiftASB packa
 - `explain-swiftasb`
 - `choose-integration-shape`
 - `build-swiftui-app`
+- `diagnose-integration`
 
 ## Packaging
 

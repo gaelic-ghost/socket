@@ -34,7 +34,8 @@
     "defaultPrompt": [
       "Explain whether SwiftASB is the right fit for this Swift app before we start building.",
       "Choose a SwiftASB integration shape for this SwiftUI or AppKit project.",
-      "Add a SwiftUI-facing SwiftASB client model using observable companions."
+      "Add a SwiftUI-facing SwiftASB client model using observable companions.",
+      "Diagnose why this SwiftASB-backed app or test is failing."
     ],
     "brandColor": "#F05138"
   }

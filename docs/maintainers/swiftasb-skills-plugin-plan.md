@@ -162,10 +162,10 @@ After the first slice proves useful, add:
 
 - [ ] `swiftasb:build-appkit-app`.
 - [ ] `swiftasb:build-swift-package`.
-- [ ] `swiftasb:diagnose-integration`.
+- [x] `swiftasb:diagnose-integration`.
 - [ ] Examples that show how agents should explain SwiftASB to users before implementation.
 - [ ] Install testing with a temporary `CODEX_HOME`.
-- [ ] A decision on whether SwiftASB itself should also carry a lightweight repo-local marketplace for standalone plugin installation.
+- [x] Decide against a SwiftASB repo-local marketplace because SwiftASB is expected to be consumed as a Swift package dependency inside other apps, command-line tools, and packages; Codex-visible guidance belongs in the Socket-hosted companion plugin.
 
 ## Definition Of Done
 
