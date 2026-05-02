@@ -77,6 +77,8 @@ For ordinary Speak Swiftly plugin changes, edit the standalone `SpeakSwiftlyServ
 
 The doctor should be able to detect and repair duplicate installs or enablement caused by users adding both marketplaces. Its repair preference is the Socket marketplace entry: keep `speak-swiftly@socket` enabled, then disable or remove the duplicate standalone-marketplace plugin enablement after reporting the intended change. The standalone marketplace remains fully functional for users who only want Speak Swiftly, but Socket is the preferred catalog when both are configured.
 
+For install-surface verification, use [plugin-install-testing.md](./plugin-install-testing.md). Keep Gale's personal Codex scope reserved for stable production installs; test local checkouts and Git-backed marketplaces with a temporary `CODEX_HOME`, remove the test marketplace before cleanup, and run the Socket-side tests from this repository while leaving detailed standalone SpeakSwiftlyServer payload checks to that repository.
+
 `socket` itself still does not define an aggregate root plugin above the child repos. The root Codex-facing surface here is the marketplace catalog, not a packaged plugin payload or a second shared plugin bundle.
 
 OpenAI's current [Codex plugin docs](https://developers.openai.com/codex/plugins/build) allow local repo marketplaces, personal marketplaces, and Git-backed marketplace sources through [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli). The preferred user install and update path is therefore Git-backed:

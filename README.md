@@ -163,6 +163,7 @@ When a child repository or helper surface grows Python-backed validation beyond 
 │   ├── media/
 │   │   └── codex-plugin-directory-socket-productivity-skills.png
 │   └── maintainers/
+│       ├── plugin-install-testing.md
 │       ├── plugin-packaging-strategy.md
 │       ├── release-modes.md
 │       └── subtree-workflow.md
@@ -192,6 +193,7 @@ The root superproject docs are:
 - [ROADMAP.md](./ROADMAP.md) for root planning and milestone tracking
 - [ACCESSIBILITY.md](./ACCESSIBILITY.md) for the root accessibility contract around docs, metadata, and maintainer automation
 - [`docs/maintainers/`](./docs/maintainers/) for the deeper maintainer references behind the mixed-monorepo and subtree model
+- [`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md) for isolated local and Git-backed marketplace install tests that leave personal production installs untouched
 - [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the `standard` and `subtrees` release modes
 - [`docs/media/`](./docs/media/) for README screenshots and other root documentation media assets
 
