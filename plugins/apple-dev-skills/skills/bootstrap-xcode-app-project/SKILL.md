@@ -11,7 +11,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
 
 ## Companion Plugin Requirement
 
-This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills` or install the [`socket`](https://github.com/gaelic-ghost/socket) marketplace, which is useful when they want Gale's Apple and general maintainer plugins available together.
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills`, or add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket` and then install or enable both `apple-dev-skills` and `productivity-skills` from the Socket catalog.
 
 ## When To Use
 

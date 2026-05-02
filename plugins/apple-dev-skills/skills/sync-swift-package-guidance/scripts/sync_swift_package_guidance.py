@@ -75,9 +75,10 @@ def maintain_project_repo_runner() -> Path:
         raise RuntimeError(
             "sync-swift-package-guidance needs productivity-skills/maintain-project-repo "
             f"to refresh repo-maintenance files, but the runner was missing at {runner}. "
-            "Install the productivity-skills plugin alongside apple-dev-skills, or install "
-            "the socket marketplace from https://github.com/gaelic-ghost/socket so both "
-            "companion plugins are available, then rerun this workflow."
+            "Install productivity-skills alongside apple-dev-skills, or add the socket "
+            "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
+            "enable both apple-dev-skills and productivity-skills from the Socket catalog, "
+            "then rerun this workflow."
         )
     return runner
 
@@ -211,7 +212,7 @@ def main() -> int:
             "validation_result": validation_result,
             "actions": actions,
             "stderr": str(exc),
-            "next_step": "Install the productivity-skills companion plugin or the socket marketplace, then rerun sync-swift-package-guidance.",
+            "next_step": "Install productivity-skills alongside apple-dev-skills, or add the socket marketplace and enable both plugin entries from the Socket catalog, then rerun sync-swift-package-guidance.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
