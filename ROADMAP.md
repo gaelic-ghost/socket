@@ -122,9 +122,9 @@ In Progress
 ### Scope
 
 - [x] Add a Socket-hosted `swiftasb-skills` child plugin that helps agents explain SwiftASB, choose an integration shape, and build SwiftUI, AppKit, and Swift package surfaces on top of SwiftASB.
-- [ ] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, duplicate SwiftASB source, or copy generated schema files into `socket`.
-- [ ] Keep Apple framework workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftASB-specific explanation, decision support, integration, and troubleshooting.
-- [ ] Keep the detailed implementation plan in [`docs/maintainers/swiftasb-skills-plugin-plan.md`](./docs/maintainers/swiftasb-skills-plugin-plan.md).
+- [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, duplicate SwiftASB source, or copy generated schema files into `socket`.
+- [x] Keep Apple framework workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftASB-specific explanation, decision support, integration, and troubleshooting.
+- [x] Keep the detailed implementation plan in [`docs/maintainers/swiftasb-skills-plugin-plan.md`](./docs/maintainers/swiftasb-skills-plugin-plan.md).
 
 ### Tickets
 
@@ -133,14 +133,14 @@ In Progress
 - [ ] Add later-slice skills for AppKit apps, Swift package authors, and integration diagnostics after the first slice proves useful.
 - [x] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
 
 ### Exit Criteria
 
 - [x] The Socket marketplace exposes `swiftasb-skills` as an installable child plugin.
 - [x] The new skills can help an agent explain SwiftASB to a user before implementation, including when SwiftASB is not the right fit.
 - [ ] The new skills guide SwiftUI, AppKit, and Swift package integrations without duplicating broad Apple framework guidance that belongs to `apple-dev-skills`.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Backlog Candidates
 
