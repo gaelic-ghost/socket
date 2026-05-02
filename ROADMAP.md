@@ -7,6 +7,7 @@
 - [Milestone Progress](#milestone-progress)
 - [Milestone 2: subtree workflow hardening](#milestone-2-subtree-workflow-hardening)
 - [Milestone 3: release and sync discipline](#milestone-3-release-and-sync-discipline)
+- [Milestone 4: Speak Swiftly plugin split](#milestone-4-speak-swiftly-plugin-split)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -25,6 +26,7 @@
 
 - Milestone 2: subtree workflow hardening - Completed
 - Milestone 3: release and sync discipline - Completed
+- Milestone 4: Speak Swiftly plugin split - Planned
 
 ## Milestone 2: subtree workflow hardening
 
@@ -72,6 +74,37 @@ Completed
 
 Completed Milestone 3 by aligning the release-mode docs, subtree sync rules, shared-version workflow, and roadmap backlog cleanup around the current mixed monorepo model.
 
+## Milestone 4: Speak Swiftly plugin split
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Create `plugins/speak-swiftly/` as a normal monorepo-owned Codex plugin whose payload is limited to the Codex-facing surfaces: `.codex-plugin/plugin.json`, `.mcp.json`, `hooks/`, `skills/`, user guidance, and any doctor or install-check helper scripts.
+- [ ] Keep `plugins/SpeakSwiftlyServer/` as a pull-only subtree mirror of the standalone Swift package while the split is underway, but stop treating that full source mirror as the preferred public Codex plugin payload.
+- [ ] Update the root marketplace so the public Speak Swiftly Codex plugin entry points at `./plugins/speak-swiftly` instead of `./plugins/SpeakSwiftlyServer` once the new plugin root is validated.
+- [ ] Update root README, plugin-packaging strategy, subtree workflow guidance, and child-facing docs so users understand the split: Codex users install the `speak-swiftly` plugin from `socket`; app embedders use the `SpeakSwiftlyServer` Swift package directly.
+- [ ] Decide whether the `SpeakSwiftlyServer` subtree remains useful as a source mirror after the split, or whether future `socket` releases can rely on the standalone repository plus the smaller monorepo-owned plugin directory.
+
+### Tickets
+
+- [ ] Inventory the current `SpeakSwiftlyServer` plugin-only payload and copy or move the minimal files into `plugins/speak-swiftly/` without importing Swift package sources, tests, build products, or release machinery.
+- [ ] Rename the plugin identity and display surface intentionally. Prefer plugin name `speak-swiftly` and display name `Speak Swiftly` unless install compatibility requires a transitional alias or migration note.
+- [ ] Adapt the MCP registration and hooks so paths stay `./`-relative to the new plugin root and still target the installed local service at `127.0.0.1:7337`.
+- [ ] Port or rewrite the hook doctor so it can validate the new socket-managed plugin root, the installed plugin cache, legacy global hooks, live service reachability, and expected voice profile.
+- [ ] Add a migration note for users who installed `speak-swiftly-server` from `socket`, including how to install or enable `speak-swiftly` and when it is safe to remove the old plugin entry.
+- [ ] Run `uv run scripts/validate_socket_metadata.py` after marketplace changes, then install or inspect the plugin through Codex to confirm the plugin directory shows the new entry.
+
+### Exit Criteria
+
+- [ ] The `socket` marketplace exposes a small `speak-swiftly` plugin whose installable root contains only Codex plugin surfaces and intentional support docs/scripts.
+- [ ] `SpeakSwiftlyServer` remains the source of truth for the Swift package, executable, LaunchAgent, embedded API, HTTP/MCP implementation, and release notes.
+- [ ] User-facing docs no longer recommend installing the full `SpeakSwiftlyServer` subtree mirror from `socket` as the default Codex plugin path.
+- [ ] The new plugin can be installed or enabled from the Git-backed `gaelic-ghost/socket` marketplace, and the doctor confirms hook, MCP, runtime, and voice-profile health.
+- [ ] The old `speak-swiftly-server` marketplace entry is either removed, marked transitional with a documented sunset path, or intentionally retained with a clear reason.
+
 ## Backlog Candidates
 
 No active backlog candidates are currently tracked here. Add new candidates only when they represent real future work that is not already covered by the maintainer docs or milestone history.
@@ -79,6 +112,7 @@ No active backlog candidates are currently tracked here. Add new candidates only
 ## History
 
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
+- Planned the `Speak Swiftly` plugin split so the public Codex plugin payload can move into a small monorepo-owned `plugins/speak-swiftly/` directory instead of requiring the full `SpeakSwiftlyServer` Swift package subtree mirror.
 - Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.
 - Updated `socket` and plugin guidance so ordinary user installs and updates default to Git-backed Codex marketplace sources and official marketplace add/upgrade commands.
 - Added coordinated Codex subagent guidance across `agent-plugin-skills` and `productivity-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
