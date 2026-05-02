@@ -137,6 +137,8 @@ def test_stale_config_plugin_tables_reports_non_socket_marketplaces(tmp_path: Pa
             [
                 '[plugins."apple-dev-skills@socket"]',
                 "enabled = true",
+                '[plugins."apple-dev-skills@apple-dev-skills"]',
+                "enabled = true",
                 '[plugins."apple-dev-skills@local-repo"]',
                 "enabled = true",
                 '[plugins."unrelated@local-repo"]',

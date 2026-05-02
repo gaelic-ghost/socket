@@ -30,6 +30,8 @@ KNOWN_SOCKET_PLUGINS = {
     "web-dev-skills",
 }
 
+CANONICAL_MARKETPLACE_NAMES = KNOWN_SOCKET_PLUGINS | {"socket"}
+
 
 @dataclass(frozen=True)
 class PlannedAction:
@@ -159,7 +161,10 @@ def stale_config_plugin_tables(config_path: Path) -> list[str]:
         if "@" not in table_name:
             continue
         plugin_name, marketplace_name = table_name.rsplit("@", 1)
-        if plugin_name in KNOWN_SOCKET_PLUGINS and marketplace_name != "socket":
+        if (
+            plugin_name in KNOWN_SOCKET_PLUGINS
+            and marketplace_name not in CANONICAL_MARKETPLACE_NAMES
+        ):
             stale_tables.append(table_name)
     return stale_tables
 
