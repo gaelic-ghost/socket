@@ -1,49 +1,66 @@
-# Codex Hooks TTS Prototype
+# Codex Hooks TTS
 
-This worktree includes a small repo-local Codex hooks prototype for speaking
-final assistant replies and inspecting Codex notification payloads.
+SpeakSwiftlyServer ships a Codex lifecycle hook that can speak final assistant
+replies through the local `SpeakSwiftlyServer` HTTP surface.
 
-## Files
+The user-facing install path is plugin-managed. The repository-local `.codex/`
+files are only a development and testing harness for this checkout.
+
+## User Install Surface
+
+- `.codex-plugin/plugin.json`
+  Declares `hooks: "./hooks/hooks.json"` so installed plugin users get the
+  lifecycle config from the plugin.
+- `hooks/hooks.json`
+  Registers one `Stop` hook handler.
+- `hooks/stop-tts.mjs`
+  Reads the Codex `Stop` payload from `stdin`, skips empty or duplicate turns,
+  ignores continuation passes by default, and queues speech through the local
+  `SpeakSwiftlyServer` HTTP route at `POST /speech/live`.
+
+The plugin-managed hook stores state and logs under
+`~/.codex/speak-swiftly-server/hooks/` by default, or under `CODEX_HOME` when
+that environment variable points Codex at a different home directory.
+
+## Development Harness
 
 - `.codex/config.toml`
   Enables `features.codex_hooks = true` for this trusted project and wires a
   `notify` probe command.
 - `.codex/hooks.json`
-  Registers one `Stop` hook handler.
+  Registers the same `Stop` hook script for local testing, with
+  `CODEX_HOOK_TTS_DATA_DIR` pointed at this checkout's `.codex/` directory.
 - `.codex/hooks/stop-tts.mjs`
-  Reads the Codex `Stop` payload from `stdin`, skips empty or duplicate turns,
-  ignores continuation passes by default, and queues speech through the local
-  `SpeakSwiftlyServer` HTTP route at `POST /speech/live`.
-  The hook now reserves a turn before posting to the speech route, under a
-  small local state lock, so concurrent duplicate `Stop` invocations for the
-  same `session_id + turn_id` do not queue duplicate audio jobs.
+  Dev-only forwarding entrypoint for older local configs that still point at
+  the pre-plugin hook path. It keeps existing developer sessions from failing
+  while the doctor reports that the global hook should be migrated away.
 - `.codex/hooks/notify-dump.mjs`
-  Records whatever Codex passes to the `notify` command so we can inspect the
-  real payload shape. The probe captures both the documented JSON argument and
-  any unexpected stdin payload so we can compare real behavior across Codex
-  surfaces.
+  Records whatever Codex passes to the `notify` command so maintainers can
+  inspect the real payload shape.
 - `.codex/logs/stop-tts.jsonl`
-  Runtime log for queued, skipped, and failed TTS attempts.
+  Runtime log for queued, skipped, and failed development-harness TTS attempts.
 - `.codex/logs/notify-events.jsonl`
   Runtime log for `notify` payload inspection.
 - `.codex/state/stop-tts-seen-turns.json`
-  Dedupe state keyed by `session_id + turn_id`.
+  Development-harness dedupe state keyed by `session_id + turn_id`.
 
-Both hook scripts now resolve their `.codex` state and log directories from the
-script location itself instead of from `process.cwd()`. That matches the
-official Codex hooks guidance to keep repo-local hook paths stable even when
-Codex is started from a subdirectory.
+Do not tell end users to copy `.codex/hooks.json` or `.codex/config.toml` into
+their own Codex home. That creates a second hook source and can make Codex
+launch duplicate `Stop` hook processes. Use the plugin install flow instead.
 
 ## Environment Overrides
 
-The `Stop` hook script accepts a few optional environment overrides:
+The `Stop` hook script accepts these optional environment overrides:
 
 - `CODEX_HOOK_TTS_BASE_URL`
   Override the default `http://127.0.0.1:7337`.
 - `CODEX_HOOK_TTS_PROFILE_NAME`
   Override the default voice profile name `default-femme`.
+- `CODEX_HOOK_TTS_DATA_DIR`
+  Override the state and log root. The hook creates `state/` and `logs/` under
+  this directory.
 - `CODEX_HOOK_TTS_SKIP_CONTINUATIONS`
-  Defaults to `true`. Set to `false` if you want continued `Stop` turns read
+  Defaults to `true`. Set to `false` if continued `Stop` turns should be read
   aloud too.
 - `CODEX_HOOK_TTS_SKIP_STRUCTURED_MESSAGES`
   Defaults to `true`. Skips compact structured assistant payloads such as
@@ -61,65 +78,68 @@ The `Stop` hook script accepts a few optional environment overrides:
   Defaults to `50`. Controls how frequently a waiting hook process retries the
   local dedupe-state lock.
 
-## Runtime Insights
+## Doctor
 
-The ignored logs under `.codex/logs/` have turned out to be useful as a small
-operator observability surface:
+Run this from the repository root when hook behavior or voice selection looks
+off:
+
+```bash
+node scripts/codex-hooks-doctor.mjs
+```
+
+The doctor reports:
+
+- repo plugin hook metadata
+- repo development-harness hook metadata
+- legacy global `~/.codex/hooks.json` entries that still point at SpeakSwiftly
+- installed plugin-cache manifests and whether they declare hooks
+- `codex_hooks = true` and the enabled `speak-swiftly-server@socket` plugin
+- live runtime reachability through `GET /runtime/host`
+- runtime default voice profile versus the hook's configured profile
+- cached voice profiles
+- recent plugin-managed and repo-local hook log outcomes
+
+Warnings are expected during migration if a legacy global hook is still active
+or the installed plugin cache has not yet been upgraded to a version that
+declares plugin-managed hooks.
+
+## Runtime Insights
 
 - `Stop` is the right TTS trigger because it carries the final assistant text
   in `last_assistant_message`.
-- `notify` is a good payload probe, but the observed Desktop process often runs
-  the notify command with process `cwd` as `/`; use the event's own `cwd` field
-  when interpreting where the turn happened.
-- Duplicate `Stop` invocations can happen for the same `session_id + turn_id`,
-  so state reservation must happen before the hook posts speech.
+- `notify` is a useful payload probe, but observed Desktop notify commands can
+  run with process `cwd` as `/`; use the event's own `cwd` field when
+  interpreting where the turn happened.
+- Duplicate `Stop` invocations can happen for the same `session_id + turn_id`
+  when multiple hook sources match. The hook reserves a turn before posting to
+  the speech route so duplicate processes do not queue duplicate audio jobs.
 - Some assistant messages are compact JSON metadata used by Codex UI or
   automation flows. Those should be logged and skipped, not spoken aloud.
-- The speech route can distinguish a reachable-but-not-ready runtime from an
+- The speech route distinguishes a reachable-but-not-ready runtime from an
   unreachable runtime:
   - HTTP `503` with `SpeakSwiftly is not ready yet...` means the server is up
     but not accepting speech work.
   - `speech-route-unreachable` means the hook could not reach the local
     `SpeakSwiftlyServer` route at all.
 
-The hook also sends `request_context` with each queued speech request. That
-keeps Codex-originated speech inspectable through the existing
-`SpeakSwiftlyServer` request model without adding a hook-specific server API.
-The context includes the Codex model, permission mode, transcript path, session
-id, turn id, and event name when those fields are available.
-
-## Product Ideas From The Logs
-
-The current hook logs suggest a few reusable surfaces for this repo and sibling
-products:
-
-- A small queue inspector could group speech requests by `request_context`
-  source, project, model, and turn id so Codex-, app-, browser-, and editor-
-  originated speech are easy to tell apart.
-- A readiness widget could expose the difference between “server reachable but
-  not ready” and “route unreachable,” which is more actionable than a single
-  failed/success state.
-- A future Codex or editor integration should treat structured assistant
-  metadata as UI state, not spoken text.
-- `notify` payloads are a promising source for client identity and input-turn
-  summaries, while `Stop` remains the safer source for speakable final replies.
+The hook sends `request_context` with each queued speech request. That keeps
+Codex-originated speech inspectable through the existing `SpeakSwiftlyServer`
+request model without adding a hook-specific server API. The context includes
+the Codex model, permission mode, transcript path, session id, turn id, and
+event name when those fields are available.
 
 ## Validation Notes
 
-The current prototype was rechecked against the current official Codex hooks
-documentation:
+The hook matches the current official Codex hooks payload shape:
 
 - `Stop` receives one JSON object on `stdin`, including `turn_id`,
   `stop_hook_active`, and `last_assistant_message`.
 - `Stop` must not emit plain text on `stdout`.
-- repo-local hooks should resolve from the git root or another stable path, not
-  by assuming the session `cwd` is the repository root.
+- Commands run with the session `cwd`, so repo-local development hooks resolve
+  through `git rev-parse --show-toplevel` and plugin hooks keep their command
+  path relative to the plugin lifecycle config.
 - `notify` is a top-level Codex configuration command that receives a JSON
   payload from Codex; it is not nested under `[features]`.
-
-The `Stop` hook script matches that current payload shape and was validated with
-a synthetic `Stop` payload plus real runtime requests queued through the local
-server.
 
 Observed current behavior in this repo's live Codex TUI runs:
 

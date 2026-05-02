@@ -37,7 +37,8 @@ The goal is to give macOS and near-future Apple-platform apps one small, typed l
 
 ## Quick Start
 
-Build the package with Xcode's selected Swift toolchain:
+`SpeakSwiftlyServer` currently targets macOS 15.0 and Swift 6.3. Build the
+package with Xcode's selected Swift toolchain:
 
 ```bash
 xcrun swift build
@@ -99,7 +100,7 @@ The full transport contract lives in [API.md](./API.md).
 
 ## Development
 
-The contributor and maintainer workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md).
+The contributor and maintainer workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md). This section is only the product README's short handoff for people who want to build or validate the package locally before making changes.
 
 Use that guide for:
 
@@ -109,10 +110,11 @@ Use that guide for:
 - pull request and release workflow
 - monorepo and submodule handoff rules
 
-The short version is:
+The short version for a fresh checkout is:
 
 - use `xcrun swift test` for the normal package-development loop
 - use `sh scripts/repo-maintenance/validate-all.sh` for the full maintainer and CI gate
+- use `node scripts/codex-hooks-doctor.mjs` when changing the Codex plugin or hook surface
 - use `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --skip-version-bump` for the aligned release flow
 - use `scripts/repo-maintenance/config/profile.env` to confirm the active `swift-package` maintainer profile
 
@@ -158,6 +160,9 @@ xcrun swift test
 │   └── SpeakSwiftlyServerTool/
 ├── Tests/
 ├── docs/
+├── hooks/
+├── skills/
+├── .codex-plugin/
 ├── API.md
 ├── CONTRIBUTING.md
 ├── Package.swift
@@ -168,6 +173,8 @@ xcrun swift test
 - `Sources/SpeakSwiftlyServerTool/` contains the unified executable wrapper.
 - `Tests/` contains unit, integration, and a small opt-in live E2E smoke suite.
 - `docs/` contains maintainer-facing supporting documentation.
+- `hooks/` and `skills/` contain the plugin-managed Codex hook and skill surfaces.
+- `.codex-plugin/` contains the Codex plugin manifest for this repository.
 
 ## Release Notes
 
@@ -262,7 +269,7 @@ The app-managed install layout is centered on one per-user location under `~/Lib
 
 ## Codex Plugin
 
-This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server and the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally.
+This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server, the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally, and the plugin-managed [hooks](./hooks/hooks.json) that can speak final Codex replies through the local service.
 
 The plugin can be installed without using `socket` through Codex's Git-backed marketplace flow. The repo-local marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
 
@@ -283,6 +290,16 @@ codex plugin marketplace upgrade socket
 ```
 
 After adding `socket`, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable `speak-swiftly-server` plus any companion plugins you want. Use an explicit ref such as `gaelic-ghost/SpeakSwiftlyServer@vX.Y.Z` only when you want a pinned reproducible install rather than the release-aligned default branch.
+
+End users should rely on the plugin-managed hook setup rather than copying repo-local `.codex` files into their own Codex home. The repo-local `.codex/` files are a development harness for testing hook payloads and notification behavior from this checkout.
+
+To inspect the installed hook and voice surfaces, run:
+
+```bash
+node scripts/codex-hooks-doctor.mjs
+```
+
+The doctor checks whether the plugin manifest declares hooks, whether a legacy global `~/.codex/hooks.json` entry is still pointing at this checkout, whether the live service is reachable, and whether the hook voice profile matches the runtime voice-profile inventory.
 
 The first plugin pass ships focused skills for:
 
