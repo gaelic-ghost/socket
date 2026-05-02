@@ -100,8 +100,11 @@ Runtime model selection is startup-only as well. Persisted runtime configuration
 - `GET /requests/{request_id}`
 - `GET /requests/{request_id}/events`
 - `GET /generation/queue`
+- `DELETE /generation/queue`
+- `DELETE /generation/requests/{request_id}`
 - `GET /generation/jobs`
 - `GET /generation/jobs/{job_id}`
+- `DELETE /generation/jobs/{job_id}`
 - `GET /generation/files`
 - `GET /generation/files/{artifact_id}`
 - `GET /generation/batches`
@@ -137,6 +140,8 @@ The `/text-profiles` route family is synchronous and state-oriented rather than 
 The queue and playback control routes are immediate control operations rather than long-running requests.
 
 - `GET /generation/queue` and `GET /playback/queue` expose the generation and playback queues separately so the HTTP layer matches the runtime's split control surface.
+- `DELETE /generation/queue` clears queued generation work and returns the number of cancelled queued requests.
+- `DELETE /generation/requests/{request_id}` cancels one active or queued generation request and returns the cancelled request ID.
 - `GET /playback/state`, `POST /playback/pause`, and `POST /playback/resume` expose the current playback state and let clients control it directly.
 - `DELETE /playback/queue` clears queued playback work and returns the number of cancelled queued requests.
 - `DELETE /playback/requests/{request_id}` cancels one active or queued request and returns the cancelled request ID.
@@ -211,7 +216,10 @@ The MCP surface is optional and mounts on the same shared Hummingbird process at
 - `pause_playback`
 - `resume_playback`
 - `get_playback_state`
+- `clear_generation_queue`
 - `clear_playback_queue`
+- `cancel_generation`
+- `cancel_playback`
 - `cancel_request`
 
 `generate_speech` accepts `qwen_pre_model_text_chunking` as an opt-in boolean for Qwen live playback. `set_staged_config` changes persisted next-start runtime choices with `speech_backend`, optional `qwen_resident_model`, and optional `marvis_resident_policy`. `switch_speech_backend` queues live runtime work and returns an accepted request payload; read `speak://runtime/overview`, `speak://runtime/status`, or `speak://requests/{request_id}` to observe the pending and active backend state.
