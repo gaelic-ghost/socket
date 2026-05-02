@@ -61,6 +61,15 @@ codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 
 `socket` can still list the same child as `./plugins/<child>` from the superproject marketplace. Use explicit refs such as `gaelic-ghost/socket@vX.Y.Z` only for pinned reproducible installs. Manual local marketplace roots and copied payload directories are development, unpublished-testing, and fallback tools rather than the default user-facing path.
 
+When a user has already migrated from an older copied-plugin or personal-local-marketplace install to the Git-backed marketplace, use the repo-owned cleanup helper instead of hand-editing home-directory files:
+
+```bash
+uv run scripts/cleanup_legacy_socket_installs.py
+uv run scripts/cleanup_legacy_socket_installs.py --apply
+```
+
+The helper's job is intentionally narrow. It removes known legacy `socket` entries from `~/.agents/plugins/marketplace.json` and copied personal payload directories such as `~/.codex/plugins/apple-dev-skills` after backing them up. It leaves Codex's installed cache under `~/.codex/plugins/cache/` alone, because that cache is Codex-owned install state for current marketplace entries.
+
 ## Follow-up Decision
 
 Once several child repos have stable plugin packaging, decide whether `socket` needs:
