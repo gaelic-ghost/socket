@@ -79,9 +79,15 @@ Historical release artifacts belong under [`docs/releases`](../releases/), and h
 ## Plugin And Skill Sources
 
 - `.codex-plugin/plugin.json`
-  Holds the repo-root Codex plugin manifest for this checkout, including the tracked skill and MCP config paths.
+  Holds the repo-root Codex plugin manifest for this checkout, including the tracked skill, MCP config, and plugin-managed hook paths.
 - `.agents/plugins/marketplace.json`
   Holds the repo-local marketplace advertisement that lets this repository surface as an installable local Codex plugin.
+- `hooks/`
+  Holds the plugin-managed Codex lifecycle hook config and final-reply TTS script used by installed plugin users.
+- `.codex/`
+  Holds repo-local development and testing config for hook payload inspection. Do not document `.codex/` as the end-user install path.
+- `scripts/codex-hooks-doctor.mjs`
+  Reports hook ownership, legacy global hook entries, installed plugin hook metadata, live runtime readiness, and voice-profile alignment.
 - `skills/speak-swiftly-mcp/`
   Holds the general MCP orientation skill for broad SpeakSwiftly surface requests.
 - `skills/speak-swiftly-runtime-operator/`

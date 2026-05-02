@@ -20,10 +20,11 @@
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
+  "hooks": "./hooks/hooks.json",
   "interface": {
     "displayName": "Speak Swiftly",
     "shortDescription": "Local speech and playback workflows for Codex.",
-    "longDescription": "Repo-local Codex plugin for the SpeakSwiftlyServer MCP surface, including focused skills for LaunchAgent setup, runtime operation, voice workflows, and text-profile authoring.",
+    "longDescription": "Repo-local Codex plugin for the SpeakSwiftlyServer MCP surface, including focused skills for LaunchAgent setup, runtime operation, voice workflows, text-profile authoring, and plugin-managed Codex final-reply speech hooks.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [
