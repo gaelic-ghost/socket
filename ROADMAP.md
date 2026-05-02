@@ -197,3 +197,19 @@ prototype.
 
 - [x] Re-check the repo-local Codex hook scripts against the current official Codex hooks event shapes and stable-path guidance.
 - [ ] Add a maintained repo-local "use this with Codex hooks" guide or skill so Gale can enable, understand, and validate the speech-hook workflow without reverse-engineering the prototype files.
+
+## Milestone 18: Codex Plugin Packaging Split
+
+Current note: this repository now ships a working plugin-managed Codex hook
+surface, but long-term plugin distribution should not require installing the
+entire Swift package mirror as the Codex plugin payload. Most consumers will
+either use `SpeakSwiftlyServer` as a Swift package or embedded app dependency,
+or install a Codex plugin that talks to the already-running local service.
+Those are related surfaces, but they should not force one install shape.
+
+- [ ] Create a normal monorepo-owned `socket/plugins/speak-swiftly/` Codex plugin that owns the Codex-facing manifest, MCP registration, hooks, skills, user guidance, and doctor or install-check scripts.
+- [ ] Keep this repository as the Swift package, executable, LaunchAgent, embedded API, HTTP/MCP implementation, and authoritative API documentation source.
+- [ ] Add or update guidance here so Codex users install `gaelic-ghost/socket` and enable the `speak-swiftly` plugin, while app embedders use the Swift package directly.
+- [ ] Keep repo-local `.codex/` files and any standalone plugin fallback clearly scoped to development, testing, or transitional validation rather than the default end-user path.
+- [ ] Decide whether the current `socket/plugins/SpeakSwiftlyServer` subtree should remain as a pull-only source mirror after the `speak-swiftly` plugin exists, or whether `socket` can stop exposing the full server subtree as a public plugin marketplace entry.
+- [ ] Update `socket` marketplace docs and validation so the public plugin path points at `./plugins/speak-swiftly` instead of the full `./plugins/SpeakSwiftlyServer` package mirror.
