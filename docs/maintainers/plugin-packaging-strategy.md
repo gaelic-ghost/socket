@@ -54,7 +54,7 @@ The current direction is one canonical plugin payload exposed through two market
 - `gaelic-ghost/SpeakSwiftlyServer` remains the canonical repository for the `speak-swiftly` plugin payload.
 - `gaelic-ghost/SpeakSwiftlyServer` keeps its own repo-local marketplace so users can run `codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer`.
 - `gaelic-ghost/socket` lists the same canonical plugin payload as a Git-backed root-plugin marketplace entry so users can run `codex plugin marketplace add gaelic-ghost/socket`, choose the Socket catalog, and enable `Speak Swiftly` there.
-- `plugins/SpeakSwiftlyServer/` remains a pull-only subtree mirror only while it is useful for source, release, and superproject accounting. It is not the preferred plugin payload path for Socket users after the catalog split lands.
+- `plugins/SpeakSwiftlyServer/` remains a pull-only subtree mirror only while it is useful for source, release, and superproject accounting. It is not the plugin payload path for Socket users.
 
 The plugin identity should be `speak-swiftly`, and the display name should be `Speak Swiftly`. The old `speak-swiftly-server` plugin id needs explicit migration handling because existing Codex config and plugin cache entries may still be keyed to that name.
 
@@ -71,7 +71,9 @@ The standalone `SpeakSwiftlyServer` repository should also remain the source of 
 
 The Socket catalog entry named `speak-swiftly` points at the Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source instead of `./plugins/SpeakSwiftlyServer`. Because the plugin root is the repository root, it uses the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry. Run the marketplace audit and `uv run scripts/validate_socket_metadata.py` after changes to this entry.
 
-Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass so users see one coherent story: Codex users can install `Speak Swiftly` from either the Git-backed `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
+Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass when this catalog model changes so users see one coherent story: Codex users can install `Speak Swiftly` from either the Git-backed `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
+
+For ordinary Speak Swiftly plugin changes, edit the standalone `SpeakSwiftlyServer` checkout. `socket` only needs a follow-up change when the marketplace entry itself, root docs, root validation behavior, or a coordinated `socket` release changes. Because the Socket entry tracks the standalone repository's `main` branch, a plugin payload edit in `SpeakSwiftlyServer` does not require copying files, subtree-pulling the source mirror, or bumping a Socket version by itself.
 
 The doctor should be able to detect and repair duplicate installs or enablement caused by users adding both marketplaces. Its repair preference is the Socket marketplace entry: keep `speak-swiftly@socket` enabled, then disable or remove the duplicate standalone-marketplace plugin enablement after reporting the intended change. The standalone marketplace remains fully functional for users who only want Speak Swiftly, but Socket is the preferred catalog when both are configured.
 

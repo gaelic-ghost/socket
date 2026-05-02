@@ -24,7 +24,7 @@ For coordinated guidance that spans multiple monorepo-owned child repositories, 
 
 For `apple-dev-skills`, when a change should publish back to its source repository, work in `plugins/apple-dev-skills/`, commit in `socket`, and then use `git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main`.
 
-For `SpeakSwiftlyServer`, treat `plugins/SpeakSwiftlyServer/` as a downstream mirror. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer in its standalone checkout, then use `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` to bring that released child state down into `socket`.
+For `SpeakSwiftlyServer`, treat `plugins/SpeakSwiftlyServer/` as a downstream source mirror, not as the Socket plugin payload. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer in its standalone checkout. Use `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` only when `socket` intentionally needs the standalone source state refreshed for release or accounting work. Routine Speak Swiftly plugin payload changes land in the standalone repository and flow to Socket users through the Git-backed marketplace entry.
 
 ## Child Repository Shape
 
@@ -47,7 +47,7 @@ Use this shape when all of these are true:
 
 1. The external repository is the real source of truth for the plugin manifest, skills, hooks, MCP config, and doctor scripts.
 2. `socket` should list the plugin for catalog convenience, but should not own a second copied payload.
-3. The local subtree mirror exists for source, release, or branch-accounting visibility rather than as the preferred plugin install root.
+3. The local subtree mirror exists for source, release, or branch-accounting visibility rather than as the plugin install root.
 
 When a remote catalog entry is added, update the root marketplace validator so it understands that entry type. Local entries should still verify their checked-in packaged plugin roots. Remote entries should verify the marketplace metadata shape and document which external repository owns plugin validation.
 

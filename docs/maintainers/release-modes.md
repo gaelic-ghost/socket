@@ -60,14 +60,14 @@ This mode is not the same as `maintain-project-repo`'s `submodule` mode. `socket
 | Child | Prefix | Remote | Direction | Rule |
 | --- | --- | --- | --- | --- |
 | `apple-dev-skills` | `plugins/apple-dev-skills` | `apple-dev-skills` | pull and push | Work may start in `socket`; push back with `git subtree push` when the child repo should receive the socket-authored change. |
-| `SpeakSwiftlyServer` | `plugins/SpeakSwiftlyServer` | `speak-swiftly-server` | pull-only | Build, validate, tag, release, and live-refresh in the standalone SpeakSwiftlyServer checkout, then pull the merged child state into `socket`. Do not subtree-push SpeakSwiftlyServer from `socket` unless Gale explicitly overrides this rule. |
+| `SpeakSwiftlyServer` | `plugins/SpeakSwiftlyServer` | `speak-swiftly-server` | pull-only | Build, validate, tag, release, and live-refresh in the standalone SpeakSwiftlyServer checkout. Pull the merged child state into `socket` only when the superproject intentionally needs the source mirror refreshed for release or accounting work. Routine Speak Swiftly plugin payload updates flow through the Git-backed marketplace entry and do not require a subtree pull. Do not subtree-push SpeakSwiftlyServer from `socket` unless Gale explicitly overrides this rule. |
 
 ## Subtrees Mode Checklist
 
 Before opening or merging the `socket` release PR:
 
 - verify which subtree-managed children are touched
-- for `SpeakSwiftlyServer`, verify the standalone checkout already owns the child release or say plainly that the socket sync is intentionally deferred
+- for `SpeakSwiftlyServer`, verify whether the socket release actually needs the source mirror refreshed; if not, say plainly that plugin payload changes are served from the Git-backed standalone repository and no subtree sync is required
 - for `apple-dev-skills`, decide whether the socket commit must be pushed back to the child remote before the umbrella release
 - keep subtree sync commits isolated from unrelated docs, marketplace, or version-bump commits
 
