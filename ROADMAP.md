@@ -8,6 +8,7 @@
 - [Milestone 2: subtree workflow hardening](#milestone-2-subtree-workflow-hardening)
 - [Milestone 3: release and sync discipline](#milestone-3-release-and-sync-discipline)
 - [Milestone 4: Speak Swiftly plugin catalog split](#milestone-4-speak-swiftly-plugin-catalog-split)
+- [Milestone 5: SwiftASB skills plugin](#milestone-5-swiftasb-skills-plugin)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -26,7 +27,8 @@
 
 - Milestone 2: subtree workflow hardening - Completed
 - Milestone 3: release and sync discipline - Completed
-- Milestone 4: Speak Swiftly plugin catalog split - Planned
+- Milestone 4: Speak Swiftly plugin catalog split - In Progress
+- Milestone 5: SwiftASB skills plugin - Planned
 
 ## Milestone 2: subtree workflow hardening
 
@@ -111,12 +113,42 @@ In Progress
 
 Verified against `gaelic-ghost/SpeakSwiftlyServer` `v4.5.0`: the released repository root plugin manifest declares `name: speak-swiftly`, version `2.2.0`, `interface.displayName: Speak Swiftly`, `mcpServers: ./.mcp.json`, `hooks: ./hooks/hooks.json`, and `skills: ./skills/`; its standalone marketplace entry also exposes `speak-swiftly` from `./`. Local checkout install/remove tests for both repositories passed with temporary `CODEX_HOME` directories, leaving the test marketplaces removed. The Git-backed standalone SpeakSwiftlyServer marketplace add/upgrade test passed from isolated state. After PR #36 merged, the Git-backed Socket marketplace add/upgrade test passed from isolated state at Socket revision `5bc1e94`, and the cached Socket catalog exposed `speak-swiftly` from `https://github.com/gaelic-ghost/SpeakSwiftlyServer.git` with `ref: main`.
 
+## Milestone 5: SwiftASB skills plugin
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a Socket-hosted `swiftasb-skills` child plugin that helps agents explain SwiftASB, choose an integration shape, and build SwiftUI, AppKit, and Swift package surfaces on top of SwiftASB.
+- [ ] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, duplicate SwiftASB source, or copy generated schema files into `socket`.
+- [ ] Keep Apple framework workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftASB-specific explanation, decision support, integration, and troubleshooting.
+- [ ] Keep the detailed implementation plan in [`docs/maintainers/swiftasb-skills-plugin-plan.md`](./docs/maintainers/swiftasb-skills-plugin-plan.md).
+
+### Tickets
+
+- [ ] Create `plugins/swiftasb-skills/` with its own `.codex-plugin/plugin.json` and authored `skills/` source.
+- [ ] Add first-slice skills for explaining SwiftASB, choosing an integration shape, and building a SwiftUI app on top of SwiftASB.
+- [ ] Add later-slice skills for AppKit apps, Swift package authors, and integration diagnostics after the first slice proves useful.
+- [ ] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
+- [ ] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
+
+### Exit Criteria
+
+- [ ] The Socket marketplace exposes `swiftasb-skills` as an installable child plugin.
+- [ ] The new skills can help an agent explain SwiftASB to a user before implementation, including when SwiftASB is not the right fit.
+- [ ] The new skills guide SwiftUI, AppKit, and Swift package integrations without duplicating broad Apple framework guidance that belongs to `apple-dev-skills`.
+- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
 ## Backlog Candidates
 
 No active backlog candidates are currently tracked here. Add new candidates only when they represent real future work that is not already covered by the maintainer docs or milestone history.
 
 ## History
 
+- Planned a `swiftasb-skills` child plugin to help agents explain SwiftASB and build SwiftUI, AppKit, and Swift package integrations from a Socket-visible guidance surface.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
 - Planned the `Speak Swiftly` plugin catalog split so the Socket marketplace can expose the canonical `SpeakSwiftlyServer` plugin payload by Git-backed reference instead of carrying a second copied plugin directory.
 - Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.
