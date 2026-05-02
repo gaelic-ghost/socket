@@ -1,7 +1,7 @@
 {
-  "name": "apple-dev-skills-local",
+  "name": "apple-dev-skills",
   "interface": {
-    "displayName": "Apple Dev Skills Local Plugins"
+    "displayName": "Apple Dev Skills"
   },
   "plugins": [
     {

@@ -56,6 +56,15 @@ codex plugin marketplace upgrade socket
 
 After the marketplace is added or upgraded, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable the desired child plugins there. Manual local marketplace roots are useful for development, unpublished testing, and fallback work, but they are not the default user install or update path.
 
+If you previously used the older copied-plugin or personal-local-marketplace install path, run the legacy cleanup helper after the Git-backed marketplace works:
+
+```bash
+uv run scripts/cleanup_legacy_socket_installs.py
+uv run scripts/cleanup_legacy_socket_installs.py --apply
+```
+
+The first command is a dry run. The `--apply` mode backs up affected files and copied plugin directories before removing only known legacy `socket` install artifacts. It does not delete Codex's installed plugin cache under `~/.codex/plugins/cache/`.
+
 ## Usage
 
 Use `socket` when the task is about the superproject layer:
@@ -125,6 +134,14 @@ Run the root validator locally with:
 ```bash
 uv run scripts/validate_socket_metadata.py
 ```
+
+To audit or remove old copied personal plugin payloads after moving to the Git-backed marketplace path, run:
+
+```bash
+uv run scripts/cleanup_legacy_socket_installs.py
+```
+
+Add `--apply` only after reviewing the dry-run output. The helper backs up the personal marketplace file and copied plugin directories under `~/.codex/backups/socket-legacy-install-cleanup/<timestamp>/` before changing anything. It reports stale non-`socket` plugin enablement entries in `~/.codex/config.toml`, but it does not rewrite that config file.
 
 When a child repository or helper surface grows Python-backed validation beyond this root metadata check, add those checks as repo-local `uv` dev dependencies and document the exact `uv run ...` commands in that child repo instead of assuming a globally provisioned toolchain.
 
