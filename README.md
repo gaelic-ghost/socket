@@ -171,6 +171,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
+- `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so a user can clone either child repository and install that plugin without cloning `socket`.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 - `cardhop-app` packages from its child-repo root at `./plugins/cardhop-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 
@@ -197,3 +198,5 @@ For `things-app`, that marketplace path stays `./plugins/things-app` because the
 For `cardhop-app`, that marketplace path stays `./plugins/cardhop-app` because the installable plugin root is the child repo root while the bundled Cardhop MCP server now lives at top-level `mcp/` inside that child repo.
 
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.
+
+Current [OpenAI Codex plugin docs](https://developers.openai.com/codex/plugins/build) also support Git-backed marketplace entries and the [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) command. That means a standalone child repository can be cloned or tracked as its own marketplace source when it carries a repo-local marketplace file; `socket` remains a curated catalog, not the only installation path.

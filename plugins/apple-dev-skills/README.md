@@ -47,13 +47,19 @@ Use this repository's skills when the work is about:
 
 When installed as a Codex plugin, this repository also registers Xcode's built-in MCP bridge through `xcrun mcpbridge`. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools.
 
+### Codex Plugin Install
+
+This repository can be installed on its own after cloning it. The repo-local Codex marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
+
+From a local clone, restart Codex and install `apple-dev-skills` from the repo marketplace. For a personal install, copy or clone this repository wherever you keep personal plugin payloads and add an entry for it to `~/.agents/plugins/marketplace.json`. For a Git-tracked marketplace install, use Codex's documented [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) flow against this repository; the marketplace entry can stay in this repo because the plugin root and repository root are the same.
+
 ### Companion Plugin Requirements
 
 Most Apple Dev Skills workflows are useful as a standalone plugin. The bootstrap and repo-guidance sync workflows that install or refresh `scripts/repo-maintenance/` also need the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin installed alongside this plugin, because `productivity-skills` owns the reusable `maintain-project-repo` implementation while Apple Dev Skills chooses the Apple-specific `swift-package` or `xcode-app` profile.
 
 If an agent has only `apple-dev-skills` installed, it can still use the documentation lookup, SwiftUI architecture, Xcode build/run/test, DocC, formatting, source-structure, and accessibility workflows. It should install `productivity-skills` before running `bootstrap-swift-package`, `bootstrap-xcode-app-project`, `sync-swift-package-guidance`, or `sync-xcode-project-guidance` in mutating mode.
 
-The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the socket marketplace is useful when you want Apple Dev Skills and its companion plugins available together without wiring each plugin one by one; standalone installs remain supported for Apple-only workflows that do not call `maintain-project-repo`.
+The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the socket marketplace is useful when you want Apple Dev Skills and its companion plugins available together without wiring each plugin one by one; standalone installs from this repository remain supported for Apple-only workflows that do not call `maintain-project-repo`.
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [`ROADMAP.md`](./ROADMAP.md) for planned and completed milestone-level work.
 
@@ -69,7 +75,7 @@ uv sync --dev
 
 ### Workflow
 
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/), maintainer docs in [`docs/`](./docs/), and install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), [`.mcp.json`](./.mcp.json), and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
+Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/), maintainer docs in [`docs/`](./docs/), and install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), [`.mcp.json`](./.mcp.json), [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
 
 Keep the repo honest about its Apple docs-first policy. When a skill changes, update the relevant tests and maintainer guidance in the same pass rather than letting the packaging or guidance drift. Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the normal contributor workflow and review expectations.
 
