@@ -269,11 +269,20 @@ The plugin can be installed without using `socket` through Codex's Git-backed ma
 Prefer the official Git-backed install and update path:
 
 ```bash
-codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 codex plugin marketplace upgrade SpeakSwiftlyServer
 ```
 
-After Codex adds or upgrades the marketplace, install or enable `speak-swiftly-server` from the plugin directory. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
+After Codex adds or upgrades the marketplace, restart Codex, open the plugin directory in the Codex GUI, choose the `SpeakSwiftlyServer` marketplace, and install or enable `speak-swiftly-server` there. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
+
+The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the Git-backed socket marketplace is useful when you want SpeakSwiftlyServer plus Gale's other Codex plugins available from one marketplace:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket
+codex plugin marketplace upgrade socket
+```
+
+After adding `socket`, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable `speak-swiftly-server` plus any companion plugins you want. Use an explicit ref such as `gaelic-ghost/SpeakSwiftlyServer@vX.Y.Z` only when you want a pinned reproducible install rather than the release-aligned default branch.
 
 The first plugin pass ships focused skills for:
 
