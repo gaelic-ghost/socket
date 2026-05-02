@@ -98,7 +98,7 @@ In Progress
 - [ ] Add doctor repair mode that prefers the `speak-swiftly@socket` install when both the `socket` marketplace and standalone `SpeakSwiftlyServer` marketplace are present, and disables or removes the duplicate standalone enablement only after reporting the intended change.
 - [x] Add migration notes for users who installed `speak-swiftly-server` from either marketplace, including how to enable `speak-swiftly` from `socket` and when the old entry is safe to disable or remove.
 - [x] Document isolated repo-scope install testing in `docs/maintainers/plugin-install-testing.md` so local checkout tests do not mutate Gale's personal production Codex installs.
-- [ ] After this branch lands, run the Git-backed Socket marketplace install/upgrade test with a temporary `CODEX_HOME` and confirm the cached Socket catalog shows `Speak Swiftly` from the canonical `SpeakSwiftlyServer` source.
+- [x] After this branch lands, run the Git-backed Socket marketplace install/upgrade test with a temporary `CODEX_HOME` and confirm the cached Socket catalog shows `Speak Swiftly` from the canonical `SpeakSwiftlyServer` source.
 
 ### Exit Criteria
 
@@ -109,7 +109,7 @@ In Progress
 - [ ] The doctor confirms hook, MCP, runtime, and voice-profile health, detects duplicate marketplace enablement, and can repair duplicates with preference for `speak-swiftly@socket`.
 - [x] The old `speak-swiftly-server` plugin id is either migrated away, marked transitional with a documented sunset path, or intentionally retained with a clear reason.
 
-Verified against `gaelic-ghost/SpeakSwiftlyServer` `v4.5.0`: the released repository root plugin manifest declares `name: speak-swiftly`, version `2.2.0`, `interface.displayName: Speak Swiftly`, `mcpServers: ./.mcp.json`, `hooks: ./hooks/hooks.json`, and `skills: ./skills/`; its standalone marketplace entry also exposes `speak-swiftly` from `./`. Local checkout install/remove tests for both repositories passed with temporary `CODEX_HOME` directories, leaving the test marketplaces removed. The Git-backed standalone SpeakSwiftlyServer marketplace add/upgrade test passed from isolated state; the Git-backed Socket test still needs to run after this branch lands because the current `gaelic-ghost/socket` default branch predates the new `speak-swiftly` entry.
+Verified against `gaelic-ghost/SpeakSwiftlyServer` `v4.5.0`: the released repository root plugin manifest declares `name: speak-swiftly`, version `2.2.0`, `interface.displayName: Speak Swiftly`, `mcpServers: ./.mcp.json`, `hooks: ./hooks/hooks.json`, and `skills: ./skills/`; its standalone marketplace entry also exposes `speak-swiftly` from `./`. Local checkout install/remove tests for both repositories passed with temporary `CODEX_HOME` directories, leaving the test marketplaces removed. The Git-backed standalone SpeakSwiftlyServer marketplace add/upgrade test passed from isolated state. After PR #36 merged, the Git-backed Socket marketplace add/upgrade test passed from isolated state at Socket revision `5bc1e94`, and the cached Socket catalog exposed `speak-swiftly` from `https://github.com/gaelic-ghost/SpeakSwiftlyServer.git` with `ref: main`.
 
 ## Backlog Candidates
 
