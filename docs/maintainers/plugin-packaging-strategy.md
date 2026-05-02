@@ -14,7 +14,7 @@ This keeps the near-term model simpler and lowers coupling:
 
 - each child repository can be developed and versioned independently
 - the repo-root marketplace can list plugins one by one without inventing a bundle model too early
-- child repositories that carry their own repo-local marketplace can be cloned and installed directly without cloning `socket`
+- child repositories that carry their own repo-local marketplace can be tracked as standalone Git-backed marketplace sources without cloning `socket`
 - aggregate plugins can be added later as a deliberate packaging feature
 - reverting back toward fully independent repos stays easier if the superproject experiment fails
 
@@ -37,6 +37,7 @@ The current direction is:
 5. keep root `socket` docs aligned with child packaging moves and coordinated release-prep changes instead of treating the marketplace file as the only source of truth
 6. keep the maintained version-bearing manifests aligned on one shared semantic version through the root release-version workflow instead of hand-editing scattered files
 7. for child repositories that should remain independently cloneable, keep a repo-local `.agents/plugins/marketplace.json` whose local entry points at that child's plugin root
+8. make Git-backed marketplace commands the default user install and update path for both `socket` and standalone plugin repositories
 
 Recent monorepo-owned examples follow that rule directly: `things-app` and `cardhop-app` both package from their child-repo roots while keeping bundled MCP server code under each child repo's top-level `mcp/` directory. `apple-dev-skills` follows the same child-root packaging rule while using a root `.mcp.json` to register Xcode's built-in `xcrun mcpbridge` server instead of bundling separate server code.
 
@@ -44,7 +45,21 @@ Child-repo internal layout changes do not automatically imply root marketplace c
 
 `socket` itself still does not define an aggregate root plugin above the child repos. The root Codex-facing surface here is the marketplace catalog, not a packaged plugin payload or a second shared plugin bundle.
 
-OpenAI's current [Codex plugin docs](https://developers.openai.com/codex/plugins/build) allow local repo marketplaces, personal marketplaces, and Git-backed marketplace entries. For child repositories such as `apple-dev-skills` and `SpeakSwiftlyServer`, the clean independent-install path is therefore a child-owned repo marketplace that points at `./` when the repository root is the plugin root. `socket` can still list the same child as `./plugins/<child>` from the superproject marketplace.
+OpenAI's current [Codex plugin docs](https://developers.openai.com/codex/plugins/build) allow local repo marketplaces, personal marketplaces, and Git-backed marketplace sources through [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli). The preferred user install and update path is therefore Git-backed:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace upgrade socket
+```
+
+For child repositories such as `apple-dev-skills` and `SpeakSwiftlyServer`, the clean standalone path is a child-owned repo marketplace that points at `./` when the repository root is the plugin root:
+
+```bash
+codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+```
+
+`socket` can still list the same child as `./plugins/<child>` from the superproject marketplace. Manual local marketplace roots and copied payload directories are development, unpublished-testing, and fallback tools rather than the default user-facing path.
 
 ## Follow-up Decision
 

@@ -9,7 +9,7 @@ Bootstrap or align a skills-export repository.
 
 ## Codex Model Note
 
-State plainly that OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that. This repository pattern allows root `.codex-plugin` packaging, but it does not normalize nested staged plugin directories or repo marketplaces for itself.
+State plainly that OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that. This repository pattern allows root `.codex-plugin` packaging, and standalone plugin repositories should carry a repo-local marketplace when they are meant to be installed directly. Do not normalize nested staged plugin directories or installer-era helper workflows for this repo family.
 
 ## Codex Plugin Root Structure
 
@@ -42,15 +42,20 @@ Do not add subagent guidance to every skill by default. Use `docs/maintainers/co
 
 ## Codex Install-Surface Map
 
-When bootstrapping or aligning repo guidance, teach Codex plugin wiring with four separate surfaces:
+When bootstrapping or aligning repo guidance, teach Codex plugin wiring with five separate surfaces:
 
+- tracked marketplace source
+  - preferred user path: `codex plugin marketplace add <owner>/<repo> --ref main`
+  - update path: `codex plugin marketplace upgrade <marketplace-name>`
+  - role: Codex-managed Git checkout for a marketplace source
 - marketplace catalog
   - personal: `~/.agents/plugins/marketplace.json`
   - repo: `$REPO_ROOT/.agents/plugins/marketplace.json`
-  - role: the catalog Codex reads from; each plugin entry points `source.path` at a staged plugin directory
-- staged plugin directory
+  - role: the catalog Codex reads from; each plugin entry points at a plugin root
+- plugin root payload
   - common personal pattern: `~/.codex/plugins/<plugin-name>`
   - common repo pattern from the docs: `$REPO_ROOT/plugins/<plugin-name>`
+  - Git-backed marketplace pattern: a plugin root inside the tracked marketplace checkout
   - role: the plugin root payload on disk
 - installed plugin cache
   - `~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/`
@@ -59,6 +64,8 @@ When bootstrapping or aligning repo guidance, teach Codex plugin wiring with fou
   - documented plugin path: `~/.codex/config.toml`
   - role: on or off state keyed by plugin plus marketplace identity, such as `[plugins."my-plugin@socket"]`
 
-Bootstrap docs should keep discovery mirrors, plugin packaging, marketplace catalogs, staged payload directories, cache paths, and config-state separate. Do not blur "where Codex can see a plugin", "where the plugin payload lives", and "whether the plugin is enabled" into one sentence.
+Bootstrap docs should make the Git-backed marketplace path the default user install/update story. Use manual local marketplace or copied-payload instructions only for local development, unpublished testing, or fallback cases.
+
+Bootstrap docs should keep discovery mirrors, plugin packaging, marketplace sources, marketplace catalogs, plugin root payload directories, cache paths, and config-state separate. Do not blur "where Codex can see a plugin", "where the plugin payload lives", "how Codex updates the marketplace", and "whether the plugin is enabled" into one sentence.
 
 If you mention project-scoped `.codex/config.toml`, describe it as a general Codex config surface from the config reference, not as a separate documented plugin install surface.

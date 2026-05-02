@@ -8,7 +8,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 - This repository is the canonical home for Gale's Apple, Swift, and Xcode workflow skills.
 - Treat `productivity-skills` as the default baseline maintainer layer for general repo docs and maintenance work; this repo is the narrower specialist layer when Apple-specific behavior should change the workflow.
-- Preserve standalone-install guidance for public users who install only `apple-dev-skills`, and make the `productivity-skills` companion requirement explicit only for workflows that install or refresh `maintain-project-repo`.
+- Preserve standalone-install guidance for public users who install only `apple-dev-skills`, default that guidance to the Git-backed Codex marketplace path, and make the `productivity-skills` companion requirement explicit only for workflows that install or refresh `maintain-project-repo`.
 - Root `skills/` is the canonical authored and exported surface.
 - Keep shared reusable assets in [`shared/`](./shared/) and maintainer tests in [`tests/`](./tests/).
 
@@ -50,6 +50,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - For SwiftPM guidance, edit `Package.swift` intentionally and keep it readable. Agents may modify it when package structure, targets, products, or dependencies need to change, should keep dependency provenance concise but fetchable from real remote repositories or package registries, should not commit machine-local dependency paths, and should try to keep package graph updates consolidated in one change when possible.
 - Keep `Package.swift` explicit about its package-wide Swift language mode. On current Swift 6-era manifests, prefer `swiftLanguageModes: [.v6]` as the default declaration, treat `swiftLanguageVersions` as a legacy alias used only when an older manifest surface requires it, and remember that lowering the manifest's `// swift-tools-version:` from the bootstrap default is often appropriate when the package should support an older Swift 6 toolchain, but never below `6.0`.
 - Treat `Package.resolved` and similar package-manager outputs as generated files. Do not tell agents to hand-edit them.
+- Default user-facing plugin install and update examples to `codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main` and `codex plugin marketplace upgrade apple-dev-skills`. Keep manual local clone marketplace instructions scoped to development, unpublished testing, or fallback cases.
 
 ### Dependency Provenance
 

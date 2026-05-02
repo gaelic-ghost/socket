@@ -28,8 +28,10 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             [
                 "Installable maintainer skills for skills-export repositories.",
                 "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
-                "codex plugin marketplace add ./path/to/marketplace-root",
+                "codex plugin marketplace add gaelic-ghost/socket --ref main",
+                "codex plugin marketplace upgrade socket",
                 "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
+                "ordinary user installs should use Git-backed marketplace sources",
                 "declare the required dev dependencies in `pyproject.toml`",
                 "`pytest`, `ruff`, and `mypy`",
                 "the plugin manifest points to bundled skills with `\"skills\": \"./skills/\"`",
@@ -47,6 +49,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
                 "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
                 "Do not recreate nested staged plugin directories",
+                "Default user-facing install and update guidance to Git-backed marketplace sources",
                 "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
             ]
         )
@@ -61,6 +64,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             [
                 "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
                 'Its plugin manifest must declare `"skills": "./skills/"`',
+                "user installs normally come through the Git-backed `socket` marketplace",
                 "This repository does not ship `install-plugin-to-socket`.",
                 "This repository does not ship `validate-plugin-install-surfaces`.",
             ]
@@ -73,6 +77,10 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
             [
                 "only `plugin.json` belongs in `.codex-plugin/`",
                 'plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field',
+                "Tracked marketplace source",
+                "Preferred User Install And Update Path",
+                "codex plugin marketplace add gaelic-ghost/socket --ref main",
+                "codex plugin marketplace upgrade socket",
                 "Documented plugin path: `~/.codex/config.toml`",
                 "If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin install-surface map.",
             ]
@@ -84,6 +92,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         "\n".join(
             [
                 "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
+                "User-facing plugin install and update guidance should default to Git-backed marketplace sources",
                 'Root `.codex-plugin/plugin.json` points at that surface with `"skills": "./skills/"`.',
             ]
         )

@@ -47,6 +47,15 @@ uv sync --dev
 uv run scripts/validate_socket_metadata.py
 ```
 
+For ordinary user installation, prefer the official Git-backed marketplace path. Add the `socket` marketplace from Git, then update it through Codex when the marketplace or child plugin entries change:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace upgrade socket
+```
+
+After the marketplace is added or upgraded, install or enable the desired child plugin from Codex's plugin directory. Manual local marketplace roots are useful for development, unpublished testing, and fallback work, but they are not the default user install or update path.
+
 ## Usage
 
 Use `socket` when the task is about the superproject layer:
@@ -171,7 +180,7 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
-- `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so a user can clone either child repository and install that plugin without cloning `socket`.
+- `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 - `cardhop-app` packages from its child-repo root at `./plugins/cardhop-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 
@@ -199,4 +208,18 @@ For `cardhop-app`, that marketplace path stays `./plugins/cardhop-app` because t
 
 The mixed shape is intentional for now. `socket` does not try to flatten those child repo packaging models into one fake uniform layout, and it does not define a second aggregate Codex plugin root above the child repos.
 
-Current [OpenAI Codex plugin docs](https://developers.openai.com/codex/plugins/build) also support Git-backed marketplace entries and the [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) command. That means a standalone child repository can be cloned or tracked as its own marketplace source when it carries a repo-local marketplace file; `socket` remains a curated catalog, not the only installation path.
+Current [OpenAI Codex plugin docs](https://developers.openai.com/codex/plugins/build) support Git-backed marketplace sources and the [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) command. That makes the Git-backed marketplace the preferred install and update path for `socket`:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace upgrade socket
+```
+
+Standalone child repositories that carry their own repo marketplace should use the same pattern against their own Git repository:
+
+```bash
+codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+```
+
+Manual clone-and-local-marketplace instructions remain valid for development, unpublished testing, and fallback cases. They should not be the first user-facing install or update story when the Git-backed marketplace path is available.

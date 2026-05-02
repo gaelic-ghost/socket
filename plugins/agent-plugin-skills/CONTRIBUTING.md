@@ -36,7 +36,9 @@ When the work is about Codex plugin behavior, confirm the current OpenAI docs fi
 
 Keep root [`skills/`](./skills/) canonical, keep repo-level maintainer explanations under [`docs/maintainers/`](./docs/maintainers/), and keep source-repo plugin metadata under [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
-Do not reintroduce nested staged plugin directories, installer-era workflows, or vague install-surface language while making an unrelated fix.
+Do not reintroduce nested staged plugin directories, installer-era workflows, manual-first local install stories, or vague install-surface language while making an unrelated fix.
+
+When changing user-facing plugin install or update examples, default to the Git-backed marketplace path: `codex plugin marketplace add <owner>/<repo> --ref main` for install setup and `codex plugin marketplace upgrade <marketplace-name>` for updates. Keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
 
 ### Asking For Review
 

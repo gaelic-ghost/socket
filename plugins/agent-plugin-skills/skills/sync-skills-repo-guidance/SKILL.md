@@ -25,13 +25,18 @@ When this skill touches Codex packaging guidance, keep the plugin-root structure
 
 When this skill touches Codex plugin guidance, keep these surfaces distinct instead of collapsing them into one vague "plugin install" concept:
 
+- tracked marketplace source
+  - preferred user path: `codex plugin marketplace add <owner>/<repo> --ref main`
+  - update path: `codex plugin marketplace upgrade <marketplace-name>`
+  - purpose: let Codex clone, track, and refresh a marketplace from Git instead of asking users to copy plugin payload directories by hand
 - marketplace catalog
   - personal: `~/.agents/plugins/marketplace.json`
   - repo: `$REPO_ROOT/.agents/plugins/marketplace.json`
-  - purpose: catalog that Codex can read from; plugin entries point `source.path` at a staged plugin directory
-- staged plugin directory
+  - purpose: catalog that Codex can read from; plugin entries point at plugin roots inside the marketplace source
+- plugin root payload
   - common personal pattern: `~/.codex/plugins/<plugin-name>`
   - common repo pattern from the docs: `$REPO_ROOT/plugins/<plugin-name>`
+  - Git-backed marketplace pattern: a plugin root inside the tracked marketplace checkout, often the repo root for standalone plugins or `plugins/<plugin-name>` for `socket`
   - purpose: plugin root payload directory that the marketplace entry points at
 - installed plugin cache
   - `~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/`
@@ -40,7 +45,23 @@ When this skill touches Codex plugin guidance, keep these surfaces distinct inst
   - documented plugin path: `~/.codex/config.toml`
   - purpose: per-plugin on or off state keyed by plugin name plus marketplace name, for example `[plugins."my-plugin@local-repo"]`
 
-Do not describe `config.toml` as the place plugins install into. Do not describe a marketplace file as the install destination. Keep the wording explicit: marketplaces are catalogs, staged plugin directories are payload roots, the cache is Codex's installed copy, and `config.toml` stores enabled-state.
+Default user-facing install and update guidance to the official Git-backed marketplace commands. Use manual local marketplace or copied-payload instructions only for local development, testing unpublished changes, or fallback cases where the Git-backed path is not available.
+
+For `socket`, prefer:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace upgrade socket
+```
+
+For standalone plugin repositories that carry their own repo marketplace, prefer the same pattern with that repository, for example:
+
+```bash
+codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+```
+
+Do not describe `config.toml` as the place plugins install into. Do not describe a marketplace file as the install destination. Keep the wording explicit: marketplace sources are tracked by Codex, marketplaces are catalogs, plugin roots are payload directories, the cache is Codex's installed copy, and `config.toml` stores enabled-state.
 
 If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability from the config reference rather than as part of the documented plugin install-surface map.
 

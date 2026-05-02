@@ -19,6 +19,7 @@
 - Keep the superproject focused on subtree coordination, root marketplace wiring, and cross-repo maintainer guidance.
 - Keep child-repository ownership boundaries explicit instead of flattening repo-local behavior into `socket`.
 - Keep public imported plugin surfaces and root marketplace wiring aligned in the same pass.
+- Keep user-facing plugin install and update docs on the official Git-backed marketplace path.
 
 ## Milestone Progress
 
@@ -78,6 +79,7 @@ No active backlog candidates are currently tracked here. Add new candidates only
 ## History
 
 - Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.
+- Updated `socket` and plugin guidance so ordinary user installs and updates default to Git-backed Codex marketplace sources and official marketplace add/upgrade commands.
 - Added coordinated Codex subagent guidance across `agent-plugin-skills` and `productivity-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
 - Completed the subtree workflow and release-discipline milestones by adding the root marketplace audit pass, the public child plugin removal checklist, and a tighter roadmap state that no longer carries stale backlog items as active work.
 - Prepared the `v6.1.0` minor release by adding the `maintain-project-api` productivity skill and keeping the monorepo-owned child docs, tests, and shared version surfaces aligned.

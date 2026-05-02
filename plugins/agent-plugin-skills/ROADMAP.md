@@ -20,7 +20,7 @@ Use this roadmap to track milestone-level delivery through checklist sections.
 
 ## Product Principles
 
-- Keep the repository explicit about Codex's currently documented plugin model and install surfaces.
+- Keep the repository explicit about Codex's currently documented plugin model, install surfaces, and Git-backed marketplace update path.
 - Keep maintainer workflows audit-first, bounded, and backed by small deterministic tests.
 - Keep root `skills/` canonical and avoid reviving installer-era machinery inside this repo.
 
@@ -44,7 +44,7 @@ In Progress
 ### Tickets
 
 - [ ] Audit exported skills for wording that softens or blurs the current OpenAI Codex plugin guidance.
-- [ ] Keep global-install guidance ahead of local authoring notes.
+- [ ] Keep Git-backed user install and update guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
 - [ ] Keep `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, and `ROADMAP.md` aligned on the same repo shape and maintainer split.
@@ -52,7 +52,7 @@ In Progress
 ### Exit Criteria
 
 - [ ] End users can quickly tell that this repo exports installable maintainer skills and does not provide a richer repo-private Codex plugin product.
-- [ ] Plugin-boundary wording is consistent across the shipped skill surface and repo docs.
+- [ ] Plugin-boundary wording is consistent across the shipped skill surface and repo docs, including the preference for official marketplace add/upgrade commands.
 - [ ] The core maintainer docs follow the current house templates without blurring their responsibilities.
 
 ## Milestone 5: Skills Repo Migration And Split Support
@@ -124,6 +124,7 @@ Planned
 ## History
 
 - Added Codex Hooks audit guidance to keep skills-export and plugin-export repos from confusing runtime hooks with plugin packaging or discovery surfaces.
+- Updated Codex plugin install-surface guidance so user-facing install and update examples default to Git-backed marketplace sources and official marketplace add/upgrade commands.
 - Added maintainer guidance for auditing optional Codex subagent wording in skills-export and plugin-export repositories, using OpenAI's current `subagents` terminology and explicit-trigger rule.
 - Initial roadmap scaffold established the repository and its first maintainer-skill milestones.
 - Completed the foundational milestones that created the repository, shipped the first maintainer skills, and removed installer-era nested packaging guidance.

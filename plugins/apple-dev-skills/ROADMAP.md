@@ -29,7 +29,7 @@
 - Keep root `skills/` as the canonical authored and exported surface.
 - Keep Apple documentation requirements explicit and enforceable in the skill guidance.
 - Keep plugin packaging thin and secondary to the workflow-authoring surface.
-- Keep standalone install behavior honest: Apple-only workflows should remain usable from `apple-dev-skills` alone, while repo-maintenance bootstrap and sync workflows should name their `productivity-skills` companion requirement and the optional `socket` marketplace path.
+- Keep standalone install behavior honest: Apple-only workflows should remain usable from `apple-dev-skills` alone through the Git-backed marketplace path, while repo-maintenance bootstrap and sync workflows should name their `productivity-skills` companion requirement and the optional `socket` marketplace path.
 - Expand the repo deliberately instead of adding loosely related helper features ad hoc.
 
 ## Milestone Progress
@@ -360,6 +360,7 @@ Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, groundin
 
 ## History
 
+- Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow while keeping manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.
 - Registered Xcode's built-in MCP bridge through the Codex plugin manifest so installed `apple-dev-skills` plugins expose the Xcode-owned MCP path without bundling a separate server package.
 - Clarified the Apple `maintain-project-repo` branch-protection contract so generated and synced repos require the `validate` Actions check context instead of the workflow-title display string.

@@ -2,7 +2,7 @@
 
 Use this document as the source-of-truth checklist when auditing `agent-plugin-skills`.
 
-For the durable map of Codex plugin catalogs, staged payloads, installed cache paths, and config enabled-state, see [codex-plugin-install-surfaces.md](./codex-plugin-install-surfaces.md).
+For the durable map of Codex marketplace sources, catalogs, plugin root payloads, installed cache paths, and config enabled-state, see [codex-plugin-install-surfaces.md](./codex-plugin-install-surfaces.md).
 
 ## Source Of Truth Order
 
@@ -18,7 +18,7 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 - Treat this repository as the specialist override only for skills-export and plugin-export repo shapes.
 - This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.
 - Its plugin manifest must declare `"skills": "./skills/"` because this plugin bundles the root authored skill surface.
-- This repository does not track a repo-local Codex marketplace file for itself.
+- This repository does not track a repo-local Codex marketplace file for itself; user installs normally come through the Git-backed `socket` marketplace.
 - This repository does not ship `install-plugin-to-socket`.
 - This repository does not ship `validate-plugin-install-surfaces`.
 - If docs or skills imply otherwise, treat that as a real defect.
@@ -28,10 +28,10 @@ For the durable map of Codex plugin catalogs, staged payloads, installed cache p
 - Root `skills/` is canonical.
 - `.codex-plugin/plugin.json` includes `"skills": "./skills/"`.
 - `.agents/skills` and `.claude/skills` are POSIX symlink mirrors to `../skills`.
-- README and AGENTS say plainly that this repo exports installable skills and that OpenAI documents marketplace-based plugin discovery rather than a richer repo-private plugin scope.
+- README and AGENTS say plainly that this repo exports installable skills, that user installs normally come through the Git-backed `socket` marketplace, and that OpenAI documents marketplace-based plugin discovery rather than a richer repo-private plugin scope.
 - ROADMAP matches the live exported skill set.
 - Maintainer tooling guidance includes `uv sync --dev`, repo-local `pyproject.toml` dev dependencies for `pytest`, `ruff`, and `mypy`, plus the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` commands when those checks are part of the shipped workflow.
-- No tracked file reintroduces nested staged plugin directories, repo-marketplace guidance for this repo, installer workflows, or install-validation workflows.
+- No tracked file reintroduces nested staged plugin directories, repo-local marketplace guidance for this repo itself, manual-first local install stories, installer workflows, or install-validation workflows.
 
 ## Specialist Owners
 

@@ -38,6 +38,7 @@ def test_apply_repo_creates_expected_discovery_mirrors(tmp_path: Path) -> None:
     assert "README.md" in created_paths
     assert "AGENTS.md" in created_paths
     agents_text = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert "Default user-facing Codex plugin install and update guidance to Git-backed marketplace sources" in agents_text
     assert "Resolve shared project dependencies only from GitHub repository URLs" in agents_text
     assert "Machine-local dependency paths are expressly prohibited" in agents_text
 

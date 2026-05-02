@@ -49,9 +49,16 @@ When installed as a Codex plugin, this repository also registers Xcode's built-i
 
 ### Codex Plugin Install
 
-This repository can be installed on its own after cloning it. The repo-local Codex marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
+This repository can be installed on its own through Codex's Git-backed marketplace flow. The repo-local Codex marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
 
-From a local clone, restart Codex and install `apple-dev-skills` from the repo marketplace. For a personal install, copy or clone this repository wherever you keep personal plugin payloads and add an entry for it to `~/.agents/plugins/marketplace.json`. For a Git-tracked marketplace install, use Codex's documented [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) flow against this repository; the marketplace entry can stay in this repo because the plugin root and repository root are the same.
+Prefer the official Git-backed install and update path:
+
+```bash
+codex plugin marketplace add gaelic-ghost/apple-dev-skills --ref main
+codex plugin marketplace upgrade apple-dev-skills
+```
+
+After Codex adds or upgrades the marketplace, install or enable `apple-dev-skills` from the plugin directory. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
 
 ### Companion Plugin Requirements
 
@@ -59,7 +66,14 @@ Most Apple Dev Skills workflows are useful as a standalone plugin. The bootstrap
 
 If an agent has only `apple-dev-skills` installed, it can still use the documentation lookup, SwiftUI architecture, Xcode build/run/test, DocC, formatting, source-structure, and accessibility workflows. It should install `productivity-skills` before running `bootstrap-swift-package`, `bootstrap-xcode-app-project`, `sync-swift-package-guidance`, or `sync-xcode-project-guidance` in mutating mode.
 
-The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the socket marketplace is useful when you want Apple Dev Skills and its companion plugins available together without wiring each plugin one by one; standalone installs from this repository remain supported for Apple-only workflows that do not call `maintain-project-repo`.
+The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the Git-backed socket marketplace is useful when you want Apple Dev Skills and its companion plugins available together without wiring each plugin one by one:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket --ref main
+codex plugin marketplace upgrade socket
+```
+
+Standalone Git-backed installs from this repository remain supported for Apple-only workflows that do not call `maintain-project-repo`.
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [`ROADMAP.md`](./ROADMAP.md) for planned and completed milestone-level work.
 

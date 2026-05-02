@@ -40,6 +40,8 @@ If the change is really about one child repository's own skills, packaging, test
 
 Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. For ordinary work in monorepo-owned child directories, edit the copy in the relevant directory under `plugins/` directly from this checkout. For `apple-dev-skills`, keep subtree pull and push operations explicit and separate from unrelated edits. For `SpeakSwiftlyServer`, treat `socket` as a pull-only mirror of the standalone release checkout unless maintainers explicitly approve a one-off push from `socket`.
 
+When changing user-facing plugin install or update docs, make the Git-backed marketplace path the default. Use `codex plugin marketplace add <owner>/<repo> --ref main` for install setup and `codex plugin marketplace upgrade <marketplace-name>` for updates; keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
+
 For coordinated child-skill guidance, keep the root explanation small and put detailed behavior in the child repo that owns the skill surface. The root docs should explain why the pass is coordinated; the child docs should explain the actual skill contract.
 
 ### Asking For Review
