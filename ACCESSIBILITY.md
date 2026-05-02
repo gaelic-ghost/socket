@@ -73,7 +73,7 @@ Root scripts, workflow steps, validation failures, and documentation headings sh
 
 ### Color, Contrast, and Motion
 
-The root superproject should not rely on color alone to communicate meaning in documentation or generated summaries. When screenshots, diagrams, or visual artifacts are added later, they should include text labels or surrounding context that does not depend on color perception. Root docs should avoid animation-dependent explanations.
+The root superproject should not rely on color alone to communicate meaning in documentation or generated summaries. Screenshots, diagrams, and other visual artifacts should include text labels or surrounding context that does not depend on color perception. Root docs should avoid animation-dependent explanations.
 
 ### Zoom, Reflow, and Responsive Behavior
 
@@ -81,7 +81,7 @@ Root documentation should remain readable under normal browser zoom and narrow l
 
 ### Media, Captions, and Alternatives
 
-If the root repository later adds media such as screenshots, diagrams, or recorded demos, contributors should provide adjacent text that explains the point of the artifact. If audio or video is ever added at the root level, include captions or a transcript where practical.
+Root media assets live under [`docs/media/`](./docs/media/). Contributors should provide meaningful alt text plus adjacent text that explains the point of each screenshot, diagram, or recorded demo. If audio or video is ever added at the root level, include captions or a transcript where practical.
 
 ## Engineering Workflow
 
@@ -109,6 +109,7 @@ For accessibility-relevant root changes, contributors should manually review:
 - heading hierarchy and section ordering in edited Markdown
 - link text and table-of-contents accuracy
 - code-block readability and command accuracy
+- image alt text, adjacent media explanations, and relative media paths
 - terminal output from root scripts for clarity and ambiguity
 - GitHub-rendered formatting when a change significantly reshapes a root document
 
@@ -175,4 +176,5 @@ Root accessibility review should happen whenever:
 
 ### Review History
 
+- 2026-05-02: Added root screenshot guidance after introducing README media under `docs/media/`.
 - 2026-04-14: Added the first root `ACCESSIBILITY.md` for the `socket` superproject and documented the root-only accessibility boundary around docs, metadata, and maintainer automation.

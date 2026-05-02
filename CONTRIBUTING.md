@@ -44,6 +44,8 @@ When changing user-facing plugin install or update docs, make the Git-backed mar
 
 For coordinated child-skill guidance, keep the root explanation small and put detailed behavior in the child repo that owns the skill surface. The root docs should explain why the pass is coordinated; the child docs should explain the actual skill contract.
 
+When adding root screenshots or other documentation media, place them under [`docs/media/`](./docs/media/), use portable descriptive filenames, and add nearby text that explains what the artifact proves or demonstrates. Do not rely on image content alone to explain a workflow.
+
 ### Asking For Review
 
 A root change is ready for review when:
@@ -128,6 +130,8 @@ Use the release modes in [`docs/maintainers/release-modes.md`](./docs/maintainer
 If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` commands where that repo's contributors will actually look.
 
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
+
+When editing docs that include media, also review the image path, alt text, and adjacent explanatory prose.
 
 ## Pull Request Expectations
 

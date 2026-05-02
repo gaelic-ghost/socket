@@ -2,6 +2,10 @@
 
 Mixed-model monorepo for Gale's Codex plugin and skills repositories.
 
+![Codex plugin directory filtered to the Socket marketplace, showing Productivity Skills featured above installable Socket child plugins.](./docs/media/codex-plugin-directory-socket-productivity-skills.png)
+
+The screenshot shows the Codex plugin directory filtered to the `Socket` marketplace. This is the user-facing catalog surface that `socket` provides: adding the marketplace exposes the child plugins, and users still choose which entries to install or enable.
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -155,6 +159,8 @@ When a child repository or helper surface grows Python-backed validation beyond 
 ├── ACCESSIBILITY.md
 ├── CONTRIBUTING.md
 ├── docs/
+│   ├── media/
+│   │   └── codex-plugin-directory-socket-productivity-skills.png
 │   └── maintainers/
 │       ├── plugin-packaging-strategy.md
 │       ├── release-modes.md
@@ -186,6 +192,7 @@ The root superproject docs are:
 - [ACCESSIBILITY.md](./ACCESSIBILITY.md) for the root accessibility contract around docs, metadata, and maintainer automation
 - [`docs/maintainers/`](./docs/maintainers/) for the deeper maintainer references behind the mixed-monorepo and subtree model
 - [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the `standard` and `subtrees` release modes
+- [`docs/media/`](./docs/media/) for README screenshots and other root documentation media assets
 
 ## Plugin Surfaces
 

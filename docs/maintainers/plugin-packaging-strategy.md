@@ -43,6 +43,38 @@ Recent monorepo-owned examples follow that rule directly: `things-app` and `card
 
 Child-repo internal layout changes do not automatically imply root marketplace changes. If a child repo keeps the same packaged plugin root, keep the `socket` marketplace path stable and only update the root docs to explain the child's new internal layout. Recent example: `things-app` keeps its marketplace path at `./plugins/things-app` while its bundled MCP server lives at top-level `mcp/` inside that child repo.
 
+## Planned Speak Swiftly Split
+
+`SpeakSwiftlyServer` is the exception that now needs to move away from child-root packaging in `socket`.
+
+The current marketplace entry points at `./plugins/SpeakSwiftlyServer`, which is the full pull-only subtree mirror of the standalone Swift package. That keeps the plugin install technically valid because the subtree root contains `.codex-plugin/plugin.json`, `.mcp.json`, `skills/`, and `hooks/`, but it also couples the public Codex plugin payload to the entire Swift package source tree, tests, maintainer docs, and release workflow. That is the wrong long-term shape for users who only want Codex to talk to an already-running local Speak Swiftly service.
+
+The planned direction is a small monorepo-owned plugin root:
+
+```text
+plugins/speak-swiftly/
+├── .codex-plugin/
+│   └── plugin.json
+├── .mcp.json
+├── hooks/
+├── skills/
+├── README.md
+└── scripts/
+```
+
+That plugin should own only the Codex-facing distribution surface:
+
+- plugin identity, install metadata, and user-facing prompts
+- MCP registration for the local service endpoint
+- final-reply speech hooks
+- focused operator skills
+- doctor or install-check scripts for plugin, hook, runtime, and voice-profile health
+- migration guidance from the old `speak-swiftly-server` plugin entry
+
+The standalone `SpeakSwiftlyServer` repository should remain the source of truth for the Swift package, executable, LaunchAgent behavior, embedded API, HTTP/MCP implementation, API docs, release notes, and live-service validation. `socket/plugins/SpeakSwiftlyServer` may remain a pull-only source mirror while that is still useful for release coordination, but it should stop being the preferred public Codex plugin payload once `plugins/speak-swiftly/` exists.
+
+When the split lands, update `.agents/plugins/marketplace.json` so the public Speak Swiftly plugin entry points at `./plugins/speak-swiftly`, then run the marketplace audit and `uv run scripts/validate_socket_metadata.py`. Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass so users see one coherent story: Codex users install `speak-swiftly` from the Git-backed `socket` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
+
 `socket` itself still does not define an aggregate root plugin above the child repos. The root Codex-facing surface here is the marketplace catalog, not a packaged plugin payload or a second shared plugin bundle.
 
 OpenAI's current [Codex plugin docs](https://developers.openai.com/codex/plugins/build) allow local repo marketplaces, personal marketplaces, and Git-backed marketplace sources through [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli). The preferred user install and update path is therefore Git-backed:
