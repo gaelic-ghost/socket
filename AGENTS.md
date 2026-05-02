@@ -13,6 +13,7 @@ This root file governs the standalone Swift Package Manager repository for `Spea
 - Keep `Package.resolved` aligned with dependency changes from normal SwiftPM resolution.
 - Treat tagged GitHub releases as the distribution surface for consumers and downstream submodule adoption.
 - Keep the checked-in `maintain-project-repo` toolkit as the local-first maintainer surface for validation, sync, release, and CI wiring.
+- Default user-facing Codex plugin install and update examples to `codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main` and `codex plugin marketplace upgrade SpeakSwiftlyServer`. Keep manual local clone marketplace instructions scoped to development, unpublished testing, or fallback cases.
 
 ### Where To Look First
 
