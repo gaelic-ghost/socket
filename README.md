@@ -264,7 +264,16 @@ The app-managed install layout is centered on one per-user location under `~/Lib
 
 This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server and the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally.
 
-The plugin can be installed from a standalone clone without using `socket`. The repo-local marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root. From a local clone, restart Codex and install `speak-swiftly-server` from the repo marketplace. For a personal install, copy or clone this repository wherever you keep personal plugin payloads and add an entry for it to `~/.agents/plugins/marketplace.json`. For a Git-tracked marketplace install, use Codex's documented [`codex plugin marketplace add`](https://developers.openai.com/codex/plugins/build#add-a-marketplace-from-the-cli) flow against this repository.
+The plugin can be installed without using `socket` through Codex's Git-backed marketplace flow. The repo-local marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
+
+Prefer the official Git-backed install and update path:
+
+```bash
+codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer --ref main
+codex plugin marketplace upgrade SpeakSwiftlyServer
+```
+
+After Codex adds or upgrades the marketplace, install or enable `speak-swiftly-server` from the plugin directory. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
 
 The first plugin pass ships focused skills for:
 

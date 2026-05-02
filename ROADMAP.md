@@ -5,6 +5,7 @@
 - [x] Document the app-managed install and configuration contract the macOS app will rely on.
 - [x] Decide and document how app-managed installs own logs, profile roots, and cache paths.
 - [x] Trim the roadmap so the remaining unchecked items are clearly split between shipped work and active follow-up work.
+- [x] Default Codex plugin install and update docs to the Git-backed marketplace add/upgrade path, with manual local clone marketplaces kept as development and fallback guidance.
 
 ## Milestone 1: Bootstrap And Repo Hygiene
 
