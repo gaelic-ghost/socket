@@ -262,7 +262,7 @@ The app-managed install layout is centered on one per-user location under `~/Lib
 
 ## Codex Plugin
 
-This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server and the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally.
+This repository is also packaged as a repo-local Codex plugin through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). The plugin points at the checked-in [`.mcp.json`](./.mcp.json) connection for the local `speak_swiftly` MCP server, the tracked [skills](./skills/) bundle that teaches Codex how to use the surface intentionally, and the plugin-managed [hooks](./hooks/hooks.json) that can speak final Codex replies through the local service.
 
 The plugin can be installed without using `socket` through Codex's Git-backed marketplace flow. The repo-local marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
 
@@ -283,6 +283,16 @@ codex plugin marketplace upgrade socket
 ```
 
 After adding `socket`, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable `speak-swiftly-server` plus any companion plugins you want. Use an explicit ref such as `gaelic-ghost/SpeakSwiftlyServer@vX.Y.Z` only when you want a pinned reproducible install rather than the release-aligned default branch.
+
+End users should rely on the plugin-managed hook setup rather than copying repo-local `.codex` files into their own Codex home. The repo-local `.codex/` files are a development harness for testing hook payloads and notification behavior from this checkout.
+
+To inspect the installed hook and voice surfaces, run:
+
+```bash
+node scripts/codex-hooks-doctor.mjs
+```
+
+The doctor checks whether the plugin manifest declares hooks, whether a legacy global `~/.codex/hooks.json` entry is still pointing at this checkout, whether the live service is reachable, and whether the hook voice profile matches the runtime voice-profile inventory.
 
 The first plugin pass ships focused skills for:
 
