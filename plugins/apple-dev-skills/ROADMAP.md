@@ -305,14 +305,17 @@ Planned
 ### Scope
 
 - [ ] Add a dedicated Swift Package Index workflow skill for package distribution, documentation hosting, build readiness, metadata, and submission or listing expectations.
-- [ ] Cover the parts of SPI work that matter to maintainers shipping public Swift packages, including documentation hosting, build compatibility, supported platform metadata, README and package-surface expectations, and listing hygiene.
+- [ ] Cover the parts of SPI work that matter to maintainers shipping public Swift packages, including documentation hosting, build compatibility, supported platform metadata, README compatibility badges, package-surface expectations, and listing hygiene.
 
 ### Tickets
 
 - [ ] Define the skill boundary so it owns SPI-specific distribution and hosting guidance without replacing the core Swift package build or testing workflows.
 - [x] Gather the relevant Swift Package Index documentation for package metadata, documentation hosting, build surfaces, listing or submission expectations, and compatibility signals.
 - [ ] Ship a workflow surface that can help maintainers prepare a package for SPI, diagnose common SPI-facing build or docs issues, and understand what SPI is deriving from the repository.
+- [ ] Integrate the Socket `scripts/spi_add_package.py` one-shot readiness, issue-form, Zen, and Codex Computer Use handoff contract into the workflow.
+- [ ] Explicitly forbid non-form PackageList actions, including `gh issue create`, manual label edits, PackageList forks, `packages.json` edits, PackageList branches, PackageList PRs, and CLA-triggering contribution paths.
 - [ ] Cover the relationship between SPI docs hosting, DocC output, README quality, package metadata, and supported platform declarations.
+- [ ] Document the post-indexing badge workflow for copying SPI-generated shields.io Swift-version and platform compatibility badges into README preambles.
 - [ ] Document common SPI failure modes such as unsupported package structure, incomplete metadata, broken docs generation, or platform mismatch signals.
 - [ ] Add tests and maintainer docs once the workflow shape is stable.
 

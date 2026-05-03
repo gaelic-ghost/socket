@@ -104,5 +104,5 @@ Immediate CI expectations:
 2. Land the first `.docc` catalog and symbol-doc pass.
 3. Add any CI or local build check needed to keep docs generation honest.
 4. Add the short tutorial-style walkthrough if the hosted docs still need a clearer first-use path.
-5. Submit the package to Swift Package Index.
+5. Submit the package to Swift Package Index only through Socket's `scripts/spi_add_package.py` flow or the equivalent official `SwiftPackageIndex/PackageList` Add Package issue form.
 6. Review the resulting hosted docs and compatibility pages, then tighten wording or navigation based on what SPI actually renders.
