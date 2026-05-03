@@ -164,6 +164,7 @@ push_release_branch() {
 
   git -C "$REPO_ROOT" push -u origin "$branch_name"
   log "Pushed branch $branch_name."
+  wait_for_remote_branch "$branch_name"
 }
 
 push_release_tag() {
@@ -174,6 +175,7 @@ push_release_tag() {
 
   git -C "$REPO_ROOT" push origin "$RELEASE_TAG"
   log "Pushed tag $RELEASE_TAG."
+  wait_for_remote_tag "$RELEASE_TAG"
 }
 
 create_or_update_pr() {
@@ -236,32 +238,17 @@ watch_ci() {
   log "CI is green for PR #$pr_number."
 }
 
-positive_integer_or_default() {
-  value="$1"
-  default_value="$2"
-
-  case "$value" in
-    ''|*[!0-9]*)
-      printf '%s\n' "$default_value"
-      ;;
-    0)
-      printf '%s\n' "$default_value"
-      ;;
-    *)
-      printf '%s\n' "$value"
-      ;;
-  esac
-}
-
 wait_for_initial_pr_checks() {
   pr_number="$1"
-  timeout_seconds="$(positive_integer_or_default "${REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS:-120}" 120)"
-  poll_seconds="$(positive_integer_or_default "${REPO_MAINTENANCE_INITIAL_CHECK_POLL_SECONDS:-5}" 5)"
+  timeout_seconds="$(github_wait_timeout "${REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS:-}")"
+  poll_seconds="$(github_wait_poll_seconds "${REPO_MAINTENANCE_INITIAL_CHECK_POLL_SECONDS:-}")"
   elapsed_seconds="0"
+  last_state="no check data returned yet"
 
   log "Waiting up to ${timeout_seconds}s for GitHub to report initial checks on PR #$pr_number."
 
   while :; do
+    last_state="$(gh pr checks "$pr_number" --json name,state,workflow --jq 'map(.name + ":" + .state) | join(", ")' 2>/dev/null || printf 'no checks reported')"
     check_count="$(gh pr checks "$pr_number" --json name,state,workflow --jq 'length' 2>/dev/null || printf '0')"
     case "$check_count" in
       ''|*[!0-9]*)
@@ -275,7 +262,36 @@ wait_for_initial_pr_checks() {
     fi
 
     if [ "$elapsed_seconds" -ge "$timeout_seconds" ]; then
-      die "No checks were reported for PR #$pr_number after ${timeout_seconds}s. Confirm the GitHub Actions workflow triggers for the release branch, then rerun release.sh so it can watch CI."
+      die "No checks were reported for PR #$pr_number after ${timeout_seconds}s. Last observed state: $last_state. Confirm the GitHub Actions workflow triggers for the release branch, Actions is enabled, and the branch push succeeded before rerunning release.sh."
+    fi
+
+    sleep "$poll_seconds"
+    elapsed_seconds=$((elapsed_seconds + poll_seconds))
+  done
+}
+
+wait_for_pr_review_state() {
+  pr_number="$1"
+  timeout_seconds="$(github_wait_timeout "${REPO_MAINTENANCE_PR_REVIEW_TIMEOUT_SECONDS:-}")"
+  poll_seconds="$(github_wait_poll_seconds "${REPO_MAINTENANCE_PR_REVIEW_POLL_SECONDS:-}")"
+  elapsed_seconds="0"
+  last_state="PR review/comment state has not been read yet"
+
+  log "Waiting up to ${timeout_seconds}s for GitHub review/comment state on PR #$pr_number."
+
+  while :; do
+    last_state="$(gh pr view "$pr_number" --json reviewDecision,comments,reviews --jq '"reviewDecision=" + (.reviewDecision // "") + ", comments=" + ((.comments | length) | tostring) + ", reviews=" + ((.reviews | length) | tostring)' 2>/dev/null || printf 'GitHub did not return PR review/comment state')"
+    case "$last_state" in
+      "GitHub did not return PR review/comment state")
+        ;;
+      *)
+        log "GitHub review/comment state is readable for PR #$pr_number: $last_state."
+        return 0
+        ;;
+    esac
+
+    if [ "$elapsed_seconds" -ge "$timeout_seconds" ]; then
+      die "GitHub review/comment state for PR #$pr_number was not readable after ${timeout_seconds}s. Last observed state: $last_state. Confirm the PR exists and GitHub is returning review data before rerunning release.sh."
     fi
 
     sleep "$poll_seconds"
@@ -290,6 +306,8 @@ check_pr_comments() {
     log "Would check PR #$pr_number for comments and requested changes."
     return 0
   fi
+
+  wait_for_pr_review_state "$pr_number"
 
   review_decision="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""')"
   comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)')"
@@ -352,6 +370,7 @@ create_github_release() {
 
   gh release create "$RELEASE_TAG" --verify-tag --generate-notes
   log "Created GitHub release $RELEASE_TAG."
+  wait_for_github_release "$RELEASE_TAG"
 }
 
 cleanup_merged_branches() {

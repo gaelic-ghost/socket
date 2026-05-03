@@ -146,7 +146,7 @@ In Progress
 
 ## Backlog Candidates
 
-- [ ] [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37): Harden release and PR scripts around delayed GitHub state. Fold the duplicate timing reports into one implementation pass that reviews CI check registration, PR comment/review reads, remote branch/tag visibility, GitHub release visibility, timeout configuration, logs, and tests across `socket` and the reusable `maintain-project-repo` release assets.
+- [x] [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37): Harden release and PR scripts around delayed GitHub state. Fold the duplicate timing reports into one implementation pass that reviews CI check registration, PR comment/review reads, remote branch/tag visibility, GitHub release visibility, timeout configuration, logs, and tests across `socket` and the reusable `maintain-project-repo` release assets.
 
 ## History
 

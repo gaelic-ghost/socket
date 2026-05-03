@@ -108,6 +108,10 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("Standard release mode must run from a release branch or worktree", release_script)
         self.assertIn("version-bump.sh", release_script)
         self.assertIn("wait_for_initial_pr_checks", release_script)
+        self.assertIn("wait_for_remote_branch", release_script)
+        self.assertIn("wait_for_remote_tag", release_script)
+        self.assertIn("wait_for_pr_review_state", release_script)
+        self.assertIn("wait_for_github_release", release_script)
         self.assertIn("REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS", release_script)
         self.assertIn("push_release_branch", release_script)
         self.assertIn("push_release_tag", release_script)
@@ -117,11 +121,45 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("valid concerns in code, or add out-of-scope concerns to ROADMAP.md", release_script)
         self.assertIn('gh pr merge "$pr_number" --merge --delete-branch', release_script)
         self.assertIn('pull --ff-only origin "$base_branch"', release_script)
+        self.assertIn("Last observed state:", release_script)
         self.assertNotIn("release tag `$RELEASE_TAG` was created locally before this PR", release_script)
         standard_flow = release_script[release_script.index("run_standard_release()") :]
         self.assertLess(standard_flow.index("watch_ci \"$pr_number\""), standard_flow.index("create_release_tag"))
         self.assertLess(standard_flow.index("check_pr_comments \"$pr_number\""), standard_flow.index("create_release_tag"))
         self.assertLess(standard_flow.index("fast_forward_base_branch"), standard_flow.index("create_release_tag"))
+
+    def test_common_release_helpers_cover_delayed_github_state(self) -> None:
+        common_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/common.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("wait_for_remote_branch", common_script)
+        self.assertIn("wait_for_remote_tag", common_script)
+        self.assertIn("wait_for_github_release", common_script)
+        self.assertIn("REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS", common_script)
+        self.assertIn("REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS", common_script)
+        self.assertIn("REPO_MAINTENANCE_REMOTE_BRANCH_TIMEOUT_SECONDS", common_script)
+        self.assertIn("REPO_MAINTENANCE_REMOTE_TAG_TIMEOUT_SECONDS", common_script)
+        self.assertIn("REPO_MAINTENANCE_GH_RELEASE_TIMEOUT_SECONDS", common_script)
+        self.assertIn("positive_integer_or_default", common_script)
+
+        push_step = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release/30-push-release.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('wait_for_remote_branch "$branch_name"', push_step)
+        self.assertIn('wait_for_remote_tag "$RELEASE_TAG"', push_step)
+
+        release_step = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release/40-github-release.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('wait_for_github_release "$RELEASE_TAG"', release_step)
+
+    def test_release_env_documents_github_wait_defaults(self) -> None:
+        release_env = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/config/release.env").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS=120", release_env)
+        self.assertIn("REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS=5", release_env)
+        self.assertIn("transient indexing gaps", release_env)
 
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
