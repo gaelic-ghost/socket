@@ -79,17 +79,7 @@ Use the project according to the documented local workflow.
 
 ## Development
 
-### Setup
-
-Document the concrete setup steps needed before someone can develop this project.
-
-### Workflow
-
-Explain the normal local development workflow for maintainers and contributors.
-
-### Validation
-
-List the grounded checks used to verify local changes for this project.
+For setup, local workflow, validation, and contribution expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Repo Structure
 
@@ -118,16 +108,17 @@ def test_valid_base_readme_has_no_findings(tmp_path: Path) -> None:
     assert report["errors"] == []
 
 
-def test_missing_development_subsection_is_reported(tmp_path: Path) -> None:
+def test_old_style_development_procedure_is_reported(tmp_path: Path) -> None:
     write(
         tmp_path / "README.md",
         valid_readme().replace(
-            "\n### Validation\n\nList the grounded checks used to verify local changes for this project.\n", "\n"
+            "For setup, local workflow, validation, and contribution expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).",
+            "### Setup\n\nInstall dependencies.\n\n### Workflow\n\nMake a branch and edit files.\n\n### Validation\n\nRun tests.",
         ),
     )
     report, _md = run(tmp_path)
-    issue_ids = {issue["issue_id"] for issue in report["schema_violations"]}
-    assert "missing-subsection-development-validation" in issue_ids
+    issue_ids = {issue["issue_id"] for issue in report["content_quality_issues"]}
+    assert "readme-development-contains-contributor-procedure" in issue_ids
 
 
 def test_overlong_status_is_reported(tmp_path: Path) -> None:
@@ -192,9 +183,7 @@ demo-project keeps the structure tight.
     assert "## Table of Contents" in updated
     assert "## Quick Start" in updated
     assert "### Status" in updated
-    assert "### Setup" in updated
-    assert "### Workflow" in updated
-    assert "### Validation" in updated
+    assert "For setup, local workflow, validation, and contribution expectations" in updated
     assert "## Repo Structure" in updated
     assert "## Release Notes" in updated
     assert report["post_fix_status"] == []
@@ -339,8 +328,7 @@ def test_apply_mode_bootstraps_missing_readme_from_template(tmp_path: Path) -> N
     assert "## Table of Contents" in content
     assert "## Quick Start" in content
     assert "### Status" in content
-    assert "### Setup" in content
-    assert "### Validation" in content
+    assert "For setup, local workflow, validation, and contribution expectations" in content
     assert "## Repo Structure" in content
     assert "```text" in content
     assert "## Release Notes" in content

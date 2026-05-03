@@ -12,7 +12,7 @@ The built-in template config in `config/readme-customization.template.yaml` defi
 - always-required H2-only table of contents
 - canonical top-level sections
 - required `Overview` subsections
-- required `Development` subsections
+- a short `Development` handoff to contributor documentation, usually `CONTRIBUTING.md`
 
 ## Supported Customization Knobs
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Maintain Project README"
   short_description: "Audit and apply bounded fixes to README.md files against a hard-enforced base schema."
-  default_prompt: "Use $maintain-project-readme for any repository README that should be normalized against the bundled canonical schema. Load the canonical README config first, enforce the configured section names, ordering, required subsections, and the required table of contents, return audit findings in check-only mode, and in apply mode keep edits bounded to README structure and grounded wording only."
+  default_prompt: "Use $maintain-project-readme for any repository README that should be normalized against the bundled canonical schema. Treat README.md as product-focused for end users, evaluators, integrators, and their agents; contributor and maintainer procedure belongs in CONTRIBUTING.md or linked maintainer docs. Load the canonical README config first, enforce the configured section names, ordering, required subsections, and the required table of contents, return audit findings in check-only mode, and in apply mode keep edits bounded to README structure and grounded wording only."
