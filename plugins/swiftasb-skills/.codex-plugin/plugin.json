@@ -1,6 +1,6 @@
 {
   "name": "swiftasb-skills",
-  "version": "6.4.1",
+  "version": "6.5.0",
   "description": "Codex skills for explaining SwiftASB and building SwiftUI, AppKit, and Swift package integrations on top of it.",
   "author": {
     "name": "Gale",
@@ -33,8 +33,10 @@
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swiftasb-skills",
     "defaultPrompt": [
       "Explain whether SwiftASB is the right fit for this Swift app before we start building.",
-      "Choose a SwiftASB integration shape for this SwiftUI or AppKit project.",
+      "Choose a SwiftASB integration shape for this SwiftUI, AppKit, package, or helper project.",
       "Add a SwiftUI-facing SwiftASB client model using observable companions.",
+      "Add an AppKit-facing SwiftASB owner for a window, document, or controller.",
+      "Design a Swift package API that uses SwiftASB internally without leaking raw wire models.",
       "Diagnose why this SwiftASB-backed app or test is failing."
     ],
     "brandColor": "#F05138"

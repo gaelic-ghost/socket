@@ -2,7 +2,7 @@
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -96,6 +96,8 @@ Plan:
 - how menu or toolbar actions start, steer, interrupt, or inspect turns
 - how streamed events reach AppKit views safely
 
+Handoff: `swiftasb:build-appkit-app`.
+
 ### Command-Line Tool
 
 Use `CodexAppServer` in a short-lived async main flow. Start, initialize, create or resume a thread, start a turn, stream terminal output or summary, and stop the app-server predictably.
@@ -113,6 +115,8 @@ Treat service interruption, process cleanup, and logs as part of the product beh
 Expose the package's own narrow API instead of re-exporting all SwiftASB types by default. Use SwiftASB internally unless the consumer genuinely needs direct `CodexAppServer`, `CodexThread`, or `CodexTurnHandle` access.
 
 Keep live Codex tests opt-in and timeout-bounded.
+
+Handoff: `swiftasb:build-swift-package`.
 
 ### Test Harness
 

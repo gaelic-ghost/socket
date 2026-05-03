@@ -12,7 +12,7 @@ Use this file for durable guidance that applies inside the `swiftasb-skills` chi
 ## Source Of Truth
 
 - Use the current SwiftASB repository, README, DocC docs, release notes, and public Swift API as the source of truth for package behavior.
-- SwiftASB `v1.0.0` is the first supported public API baseline, but active development may move ahead of that release. Verify the local or GitHub package state before writing exact API guidance.
+- SwiftASB `v1.0.0` is the first supported public API baseline, and `v1.0.1` is the current released baseline. Active development may move ahead of that release, so verify the local or GitHub package state before writing exact API guidance.
 - Do not copy SwiftASB source, generated wire models, or schema files into this plugin.
 - Do not describe generated `CodexWire...` models as the intended public integration surface. SwiftASB's public surface is the hand-owned Swift API.
 

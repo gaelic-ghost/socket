@@ -88,6 +88,8 @@ codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 
 After the marketplace is added or upgraded, restart Codex, open the plugin directory in the Codex GUI, choose the marketplace, and install or enable the desired plugin there. Use explicit refs such as `gaelic-ghost/socket@vX.Y.Z` only for pinned reproducible installs. Manual local marketplace files and copied payload directories are development and fallback tools, not the preferred user path.
 
+When an active Codex workflow needs a companion skill or plugin, first route through the Codex harness surfaces that are already available in the current session. Name the current-session skill to use before giving installation advice. If the companion skill is not exposed, add or update the marketplace and install the plugin through Codex's plugin directory for future sessions instead of presenting `config.toml` edits, copied payload folders, or arbitrary checkout searches as the standard path.
+
 ## Marketplace Identity
 
 Codex tracks plugin enabled-state by plugin name plus marketplace name.

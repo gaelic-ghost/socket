@@ -47,6 +47,8 @@ When this skill touches Codex plugin guidance, keep these surfaces distinct inst
 
 Default user-facing install and update guidance to the official Git-backed marketplace commands. Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs. Use manual local marketplace or copied-payload instructions only for local development, testing unpublished changes, or fallback cases where the Git-backed path is not available.
 
+When a workflow depends on a companion skill or plugin, first route through the Codex harness surfaces that are already available in the current session. Name the current-session skill to use, such as `productivity-skills:maintain-project-repo`, before giving install advice. If the companion skill is missing from the session, tell the user to add or update the marketplace and install the plugin through Codex's plugin directory for future sessions; do not imply that editing `config.toml`, copying payload folders, or searching an arbitrary checkout is the standard way to make a skill callable from Codex.
+
 For `socket`, prefer:
 
 ```bash

@@ -11,6 +11,7 @@ Codex skills for explaining [SwiftASB](https://github.com/gaelic-ghost/SwiftASB)
 - [Release Notes](#release-notes)
 - [License](#license)
 - [Active Skills](#active-skills)
+- [Examples](#examples)
 - [Packaging](#packaging)
 - [Repository Layout](#repository-layout)
 
@@ -20,11 +21,11 @@ Codex skills for explaining [SwiftASB](https://github.com/gaelic-ghost/SwiftASB)
 
 ### Status
 
-This directory is active as normal monorepo-owned content inside `socket` and ships the first SwiftASB workflow skills.
+This directory is active as normal monorepo-owned content inside `socket` and ships the SwiftASB companion workflow set.
 
 ### What This Project Is
 
-This plugin helps Codex agents explain SwiftASB, choose an integration shape, implement SwiftUI-facing SwiftASB work, diagnose integration failures, and prepare later AppKit and package-author integrations. SwiftASB itself remains the source of truth for the Swift package, public API, DocC, release notes, generated wire maintenance, and licensing.
+This plugin helps Codex agents explain SwiftASB, choose an integration shape, implement SwiftUI-facing, AppKit-facing, and package-author SwiftASB work, and diagnose integration failures. SwiftASB itself remains the source of truth for the Swift package, public API, DocC, release notes, generated wire maintenance, and licensing.
 
 ### Motivation
 
@@ -45,7 +46,7 @@ Use `apple-dev-skills` for Apple framework rules, Xcode workflow selection, Swif
 
 Treat root [`skills/`](./skills/) as the source of truth for shipped workflow content. Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) as install-surface metadata.
 
-Before changing exact SwiftASB API guidance, verify the current SwiftASB package state through the local checkout or [GitHub repository](https://github.com/gaelic-ghost/SwiftASB). The first supported public API baseline is `v1.0.0`, but the local package may be under active development.
+Before changing exact SwiftASB API guidance, verify the current SwiftASB package state through the local checkout or [GitHub repository](https://github.com/gaelic-ghost/SwiftASB). The first supported public API baseline is `v1.0.0`; the current released baseline is `v1.0.1`, and the local package may be under active development.
 
 ## Verification
 
@@ -72,7 +73,13 @@ See [LICENSE](../../LICENSE) for the Socket superproject license. SwiftASB packa
 - `explain-swiftasb`
 - `choose-integration-shape`
 - `build-swiftui-app`
+- `build-appkit-app`
+- `build-swift-package`
 - `diagnose-integration`
+
+## Examples
+
+Use [examples/explain-before-implementation.md](./examples/explain-before-implementation.md) when an agent needs a short, user-facing SwiftASB fit explanation before implementation starts.
 
 ## Packaging
 

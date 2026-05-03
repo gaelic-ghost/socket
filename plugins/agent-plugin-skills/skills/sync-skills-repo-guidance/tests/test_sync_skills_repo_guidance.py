@@ -26,7 +26,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
     (repo_root / "README.md").write_text(
         "\n".join(
             [
-                "Installable maintainer skills for skills-export repositories.",
+                "Installable maintainer skills for skills-export and plugin-export repositories.",
                 "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
                 "codex plugin marketplace add gaelic-ghost/socket",
                 "codex plugin marketplace upgrade socket",
@@ -44,7 +44,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
     (repo_root / "AGENTS.md").write_text(
         "\n".join(
             [
-                "Root `skills/` is the canonical authored and exported surface",
+                "canonical authored and exported surface",
                 'the manifest points to it with `"skills": "./skills/"`',
                 "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
                 "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
@@ -83,6 +83,8 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "codex plugin marketplace upgrade socket",
                 "Documented plugin path: `~/.codex/config.toml`",
                 "If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin install-surface map.",
+                "first route through the Codex harness surfaces that are already available in the current session",
+                "install the plugin through Codex's plugin directory for future sessions",
             ]
         )
         + "\n",

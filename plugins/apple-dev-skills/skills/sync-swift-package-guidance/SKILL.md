@@ -11,7 +11,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
 
 ## Companion Plugin Requirement
 
-This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating guidance-sync path refreshes repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills`, or add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket` and then install or enable both `apple-dev-skills` and `productivity-skills` from the Socket catalog.
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating guidance-sync path refreshes repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. Before giving filesystem-level fallback instructions, first check the skills exposed in the current Codex session and use the harness-discovered `productivity-skills:maintain-project-repo` workflow when it is available. If the companion skill is not exposed, tell the user to add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket`, then install the relevant plugins from Codex's plugin directory so future sessions expose both `apple-dev-skills` and `productivity-skills`.
 
 ## When To Use
 

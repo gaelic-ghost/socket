@@ -153,18 +153,18 @@ The first slice should be intentionally small:
 - [x] Add `swiftasb:build-swiftui-app`.
 - [x] Wire `swiftasb-skills` into `.agents/plugins/marketplace.json`.
 - [x] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
-- [ ] Run `uv run scripts/validate_socket_metadata.py`.
-- [ ] Run any child-plugin validation added by the new plugin.
+- [x] Run `uv run scripts/validate_socket_metadata.py`.
+- [x] Run any child-plugin validation added by the new plugin.
 
 ## Later Slices
 
 After the first slice proves useful, add:
 
-- [ ] `swiftasb:build-appkit-app`.
-- [ ] `swiftasb:build-swift-package`.
+- [x] `swiftasb:build-appkit-app`.
+- [x] `swiftasb:build-swift-package`.
 - [x] `swiftasb:diagnose-integration`.
-- [ ] Examples that show how agents should explain SwiftASB to users before implementation.
-- [ ] Install testing with a temporary `CODEX_HOME`.
+- [x] Examples that show how agents should explain SwiftASB to users before implementation.
+- [x] Install testing with a temporary `CODEX_HOME`.
 - [x] Decide against a SwiftASB repo-local marketplace because SwiftASB is expected to be consumed as a Swift package dependency inside other apps, command-line tools, and packages; Codex-visible guidance belongs in the Socket-hosted companion plugin.
 
 ## Definition Of Done
@@ -175,4 +175,4 @@ The plugin is ready for first release when:
 - [x] The skills consistently describe SwiftASB as a Swift-native app-server client rather than a general AI SDK or a raw protocol dump.
 - [x] The guidance sends Apple framework questions through Apple Dev Skills instead of duplicating broad SwiftUI or AppKit rules.
 - [x] The guidance points agents back to the SwiftASB package docs for source-of-truth API, licensing, release, and compatibility details.
-- [ ] Root Socket docs, marketplace wiring, and validation all agree on the plugin's install surface.
+- [x] Root Socket docs, marketplace wiring, and validation all agree on the plugin's install surface.
