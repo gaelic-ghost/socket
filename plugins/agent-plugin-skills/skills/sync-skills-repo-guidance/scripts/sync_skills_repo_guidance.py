@@ -14,7 +14,7 @@ from pathlib import Path
 
 EXACT_NO_FINDINGS = "No findings."
 README_SNIPPETS = [
-    "Installable maintainer skills for skills-export repositories.",
+    "Installable maintainer skills for skills-export and plugin-export repositories.",
     "does not document a richer repo-private scoping model",
     "codex plugin marketplace add gaelic-ghost/socket",
     "codex plugin marketplace upgrade socket",
@@ -26,7 +26,7 @@ README_SNIPPETS = [
     "only `plugin.json` belongs in `.codex-plugin/`",
 ]
 AGENTS_SNIPPETS = [
-    "Root `skills/` is the canonical authored and exported surface",
+    "canonical authored and exported surface",
     'the manifest points to it with `"skills": "./skills/"`',
     "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
     "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
