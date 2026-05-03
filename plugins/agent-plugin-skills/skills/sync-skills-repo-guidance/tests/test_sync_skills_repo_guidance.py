@@ -83,6 +83,8 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "codex plugin marketplace upgrade socket",
                 "Documented plugin path: `~/.codex/config.toml`",
                 "If you mention project-scoped `.codex/config.toml`, label it as a general Codex config capability rather than part of the documented plugin install-surface map.",
+                "first route through the Codex harness surfaces that are already available in the current session",
+                "install the plugin through Codex's plugin directory for future sessions",
             ]
         )
         + "\n",

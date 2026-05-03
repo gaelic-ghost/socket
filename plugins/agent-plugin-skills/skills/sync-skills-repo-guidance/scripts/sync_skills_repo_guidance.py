@@ -50,6 +50,8 @@ INSTALL_SURFACES_SNIPPETS = [
     "codex plugin marketplace upgrade socket",
     "Documented plugin path: `~/.codex/config.toml`",
     "project-scoped `.codex/config.toml`, label it as a general Codex config capability",
+    "first route through the Codex harness surfaces that are already available in the current session",
+    "install the plugin through Codex's plugin directory for future sessions",
 ]
 WORKFLOW_ATLAS_SNIPPETS = [
     "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
