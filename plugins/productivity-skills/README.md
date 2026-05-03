@@ -43,7 +43,7 @@ uv sync --dev
 Use this repository when the work is about:
 
 - explaining code paths in plain language
-- maintaining README, AGENTS, CONTRIBUTING, ACCESSIBILITY, or ROADMAP docs
+- maintaining README, AGENTS, CONTRIBUTING, ACCESSIBILITY, ARCHITECTURE, SLICES, or ROADMAP docs
 - keeping a general-purpose repository-maintenance baseline aligned
 - describing when Codex subagents are useful for bounded docs pulling, repo scans, triage, or summarization before the main workflow edits or reports
 - describing when OpenAI Codex Hooks belong in repo-local agent guidance or maintainer-tooling docs
@@ -85,6 +85,7 @@ See [LICENSE](./LICENSE).
 - `maintain-project-agents`
 - `maintain-project-accessibility`
 - `maintain-project-api`
+- `maintain-project-architecture`
 - `maintain-project-contributing`
 - `maintain-project-readme`
 - `maintain-project-repo`

@@ -10,6 +10,7 @@ Use this skill when the user wants one bounded walkthrough of how part of a syst
 ## Purpose
 
 - Explain one slice end to end without dropping meaningful steps.
+- When the user wants the slice recorded durably, update `docs/architecture/SLICES.md` after the explanation.
 - Start with the incoming data shape, what it represents, who sends it, and why it enters the flow.
 - Walk the execution path in order, including boundaries, branch points, shared versus specialized steps, and data transformations.
 - End with the final output shape, who receives it, and what purpose it serves.
@@ -115,12 +116,31 @@ Return a structured narrative in this order:
 
 The writing should stay conversational and narrative-first. Avoid sterile dumps, but do not skip steps for brevity.
 
+## Persistent Slice Records
+
+Use this when the user asks to save, record, maintain, update, or add a slice to repository architecture docs.
+
+1. Explain the slice normally first.
+2. Ensure `docs/architecture/SLICES.md` exists. If it is missing, use the `maintain-project-architecture` structure: title, summary, slice index, and slices sections.
+3. Add or refresh one `## Slice: <Name>` section.
+4. Include:
+   - `### Trigger`
+   - `### Data Shapes`
+   - `### Step Trace`
+   - `### Boundaries`
+   - `### Outputs`
+   - `### Evidence`
+5. Every recorded step must include a file path and symbol when known. Include line numbers when available.
+6. Do not record a slice that cannot be proven from code. Say what evidence is missing instead.
+7. Do not use Mermaid or generic graph diagrams as the persistent slice format.
+
 ## Guardrails
 
 - Never silently collapse or omit meaningful steps in the requested slice.
 - Do not replace the end-to-end walkthrough with only a component map or only a high-level summary.
 - If the path is ambiguous, say where the ambiguity starts and explain the most likely path plus the alternate branch.
 - If a step cannot be proven from the code, say that plainly instead of guessing.
+- Do not persist unproven slice claims into `SLICES.md`.
 - Prefer concrete file/function references when available.
 - Keep branch and data-shape notes short and move clutter out of the main narrative when a marker note will do.
 

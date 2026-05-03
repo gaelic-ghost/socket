@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Project Architecture"
+  short_description: "Maintain architecture docs and slice inventory from repo evidence."
+  default_prompt: "Use $maintain-project-architecture to create or refresh docs/architecture/ARCHITECTURE.md, SLICES.md, and architecture.json. Detect Swift products and targets from repo evidence, keep architecture descriptive rather than prescriptive, reject stale claims, avoid generic diagrams, and only record products, modules, symbols, data flows, or slices that are provable from code."

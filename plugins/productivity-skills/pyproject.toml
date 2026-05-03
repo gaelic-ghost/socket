@@ -16,6 +16,7 @@ testpaths = [
   "skills/maintain-project-agents/tests",
   "skills/maintain-project-accessibility/tests",
   "skills/maintain-project-api/tests",
+  "skills/maintain-project-architecture/tests",
   "skills/maintain-project-readme/tests",
   "skills/maintain-project-contributing/tests",
   "skills/maintain-project-roadmap/tests",
