@@ -25,10 +25,6 @@ settings:
       - Status
       - What This Project Is
       - Motivation
-    Development:
-      - Setup
-      - Workflow
-      - Validation
   sectionAliases:
     Quick Start:
       - Getting Started
@@ -49,21 +45,11 @@ settings:
 
       Describe why this project exists, what problem it solves, or why this repo is maintained separately.
     Quick Start: |
-      Give a human-friendly quick start for trying or using the project. If the project is still too early for a real quick start, say that plainly and direct curious readers to the Development section instead.
+      Give a human-friendly quick start for trying or using the project. If the project is still too early for a real quick start, say that plainly and direct curious readers to the Development section for contributor documentation.
     Usage: |
       Keep this section concise and human-focused. Prefer fenced code blocks with language info strings when examples help explain normal usage.
     Development: |
-      ### Setup
-
-      Document the concrete setup steps needed before someone can develop this project.
-
-      ### Workflow
-
-      Explain the normal local development workflow for maintainers and contributors.
-
-      ### Validation
-
-      List the grounded checks used to verify local changes for this project.
+      For setup, local workflow, validation, and contribution expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
     Repo Structure: |
       ```text
       .
@@ -83,9 +69,3 @@ settings:
       Describe the concrete shipped surface, primary audience, and the main repo boundaries for this project.
     Overview/Motivation: |
       Describe why this project exists, what problem it solves, or why this repo is maintained separately.
-    Development/Setup: |
-      Document the concrete setup steps needed before someone can develop this project.
-    Development/Workflow: |
-      Explain the normal local development workflow for maintainers and contributors.
-    Development/Validation: |
-      List the grounded checks used to verify local changes for this project.

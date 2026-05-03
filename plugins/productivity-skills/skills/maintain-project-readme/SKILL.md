@@ -29,11 +29,14 @@ This skill is the primary layer for README maintenance. It defines the canonical
 
 ## Writing Expectations
 
+- `README.md` is product-focused: write it for end users, evaluators, integrators, and their agents who need to understand what the project is, whether it fits, how to try it, and where the shipped surface lives.
+- Contributor, maintainer, release, validation, branch, review, and local development procedures belong in `CONTRIBUTING.md` or a linked maintainer document. In `README.md`, keep only the shortest useful pointer to that contributor path.
 - `Overview > Status` should be very short and plain: one simple, blunt sentence stating about whether the project is just starting out, exploratory, in early development, stable enough to try, actively available, or superseded/inactive.
 - `Overview > What This Project Is` must be written by the user in the user's own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
 - `Overview > Motivation` must be written by the user in the user's own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
 - `Quick Start` should stay human-focused, short, concise, and end-user friendly, or explicitly say the project is still too early for a real quick start and direct curious readers to `Development`.
 - `Usage` should stay human-focused, concise, and informative. Prefer fenced code blocks with info strings when examples help.
+- `Development` should stay short and reader-oriented. Prefer a direct link to `CONTRIBUTING.md` for setup, workflow, validation, review, and maintainer commands instead of duplicating those procedures in the README.
 - `Repo Structure` should be a small directory tree or outline diagram, not a prose section.
 
 ## Codex Subagent Fit
@@ -69,6 +72,7 @@ Treat those two files as the source of truth for the canonical base schema and t
 - Never auto-commit, auto-push, or open a PR.
 - Never invent commands, setup steps, or product claims that are not grounded in the repo.
 - Never edit files other than the target `README.md`.
+- Never move contributor or maintainer procedures into `README.md` when `CONTRIBUTING.md` or a maintainer doc is the correct owner.
 - Keep the README schema hard-enforced against the configured contract instead of inferring structure from repo profile heuristics.
 - Do not relax the configured schema just because the repository is a plugin, skills, or hybrid repo. Use explicit extension via preamble or appendices when the repo genuinely needs an additional structure or section.
 

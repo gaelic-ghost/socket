@@ -27,6 +27,16 @@ PLACEHOLDER_PATTERNS = [
     re.compile(r"\bTBD\b", re.IGNORECASE),
     re.compile(r"<[^>]+>"),
 ]
+CONTRIBUTOR_PROCEDURE_HEADINGS = {
+    "Setup",
+    "Workflow",
+    "Validation",
+    "Local Setup",
+    "Development Workflow",
+    "Release Workflow",
+    "Review Workflow",
+    "Maintainer Workflow",
+}
 
 
 @dataclass
@@ -512,6 +522,29 @@ def validate_schema(
                     auto_fixable=False,
                 )
             )
+        if heading == "Development" and not required_subsections(settings).get("Development"):
+            procedure_headings = [
+                subsection for subsection in collect_subsection_headings(body) if subsection in CONTRIBUTOR_PROCEDURE_HEADINGS
+            ]
+            if procedure_headings:
+                content_issues.append(
+                    Issue(
+                        issue_id="readme-development-contains-contributor-procedure",
+                        category="content-quality",
+                        severity="medium",
+                        file=str(readme_path),
+                        evidence=(
+                            "Section '## Development' contains contributor-procedure subsections: "
+                            + ", ".join(f"'### {heading}'" for heading in procedure_headings)
+                            + "."
+                        ),
+                        recommended_fix=(
+                            "Move setup, workflow, validation, release, branch, and review procedures to "
+                            "`CONTRIBUTING.md` or a maintainer document, and keep README.md to a short pointer."
+                        ),
+                        auto_fixable=False,
+                    )
+                )
 
     return schema_issues, content_issues, sections
 

@@ -10,7 +10,7 @@ The canonical base README structure is defined in `config/readme-customization.t
 - Required subsections use exact `###` heading names from the configured schema.
 - Canonical sections appear in canonical order.
 - `Overview` owns the canonical `Status`, `What This Project Is`, and `Motivation` subsections.
-- `Development` owns the canonical `Setup`, `Workflow`, and `Validation` subsections.
+- `Development` is a short handoff to contributor documentation, usually `CONTRIBUTING.md`; setup, workflow, validation, release, branch, and review procedures do not belong in the base README contract.
 - `Table of Contents` is always required in the base workflow.
 - Additional repo-specific sections may exist, but they follow the canonical block unless a customization override defines a different order.
 - `Table of Contents` is generated from H2 headings only and should use the canonical heading names that appear in the README.

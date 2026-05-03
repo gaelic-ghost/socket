@@ -28,7 +28,7 @@ Describe why this project exists, what problem it solves, or why this repo is ma
 
 ## Quick Start
 
-Give a short, succinct, human-friendly quick start for trying or using the project. If the project is still too early for a real quick start, say that plainly and direct curious readers to the Development section instead.
+Give a short, succinct, human-friendly quick start for trying or using the project. If the project is still too early for a real quick start, say that plainly and direct curious readers to the Development section for contributor documentation.
 
 ## Usage
 
@@ -36,17 +36,7 @@ Keep this section concise, consolidated, and human-focused. Prefer fenced code b
 
 ## Development
 
-### Setup
-
-Document the concrete setup steps needed before someone can develop this project.
-
-### Workflow
-
-Explain the normal local development workflow for maintainers and contributors.
-
-### Validation
-
-List the grounded checks used to verify local changes for this project.
+For setup, local workflow, validation, and contribution expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Repo Structure
 
