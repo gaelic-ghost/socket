@@ -53,9 +53,10 @@ uv run /Users/galew/Workspace/gaelic-ghost/socket/scripts/spi_add_package.py han
 The script performs these repo-local checks before any browser action:
 
 - `Package.swift` exists at the package root.
+- `Package.swift` declares Swift tools version 5.0 or later.
 - The package remote resolves to a public GitHub HTTPS `.git` URL.
-- At least one semantic-version tag exists.
-- `swift package dump-package` succeeds.
+- At least one semantic-version tag exists locally and is visible on the public GitHub remote.
+- `swift package dump-package` succeeds, emits parseable JSON, and includes at least one product.
 - `swift build` succeeds unless explicitly skipped.
 - `swift test` succeeds unless explicitly skipped.
 - The package is not already indexed on SPI when the indexed-state check is available.
@@ -68,6 +69,8 @@ The script then fetches the live `SwiftPackageIndex/PackageList` issue form and 
 - required `New Packages` field with id `list`
 
 If the form shape changes, the script stops. It must not invent a replacement submission path.
+
+Browser-opening modes require complete readiness and the live form-shape check. Skip flags are allowed only for `readiness` and `url` diagnostic runs. They are rejected for `open` and `hands-free`.
 
 ## Modes
 

@@ -43,7 +43,7 @@ Socket ships a one-shot guardrail script for agents and maintainers:
 uv run /Users/galew/Workspace/gaelic-ghost/socket/scripts/spi_add_package.py hands-free /path/to/package
 ```
 
-The script performs repo-local readiness, validates the live PackageList issue-form shape, opens the prefilled official Add Package issue form, and prints a Codex Computer Use handoff. The default browser target is Zen by bundle id `app.zen-browser.zen`.
+The script performs repo-local readiness, validates the live PackageList issue-form shape, opens the prefilled official Add Package issue form, and prints a Codex Computer Use handoff. Browser-opening modes require complete readiness and reject skip flags. The default browser target is Zen by bundle id `app.zen-browser.zen`.
 
 The hands-free path is intentionally narrow:
 
@@ -62,8 +62,8 @@ Before recommending submission, verify the package against the live SPI requirem
 - The repository is publicly accessible.
 - `Package.swift` exists at the repository root.
 - The package is written in Swift 5.0 or later.
-- The package has at least one semantically versioned release tag.
-- `swift package dump-package` emits valid JSON with the latest Swift toolchain available to the maintainer.
+- The package has at least one semantically versioned release tag visible on the public remote.
+- `swift package dump-package` emits valid JSON with the latest Swift toolchain available to the maintainer and reports at least one product.
 - The package URL includes a protocol, usually `https`, and the `.git` suffix.
 - The package compiles.
 - The package content complies with SPI's code of conduct.

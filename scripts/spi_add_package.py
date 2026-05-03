@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import subprocess
 import sys
@@ -28,6 +27,7 @@ SPI_PACKAGE_BASE_URL = "https://swiftpackageindex.com"
 ZEN_BROWSER_BUNDLE_ID = "app.zen-browser.zen"
 ZEN_BROWSER_APP_NAME = "Zen"
 SEMVER_TAG_RE = re.compile(r"^v?\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
+SWIFT_TOOLS_VERSION_RE = re.compile(r"//\s*swift-tools-version\s*:\s*(\d+)(?:\.(\d+))?")
 
 
 class SPIAddPackageError(RuntimeError):
@@ -128,8 +128,60 @@ def discover_semver_tags(package_root: Path) -> tuple[str, ...]:
     return tags
 
 
+def confirm_remote_semver_tag(identity: PackageIdentity, package_root: Path, local_tags: tuple[str, ...]) -> None:
+    result = run_command(["git", "ls-remote", "--tags", identity.git_url], cwd=package_root)
+    remote_tags = {
+        line.rsplit("/", maxsplit=1)[-1].removesuffix("^{}")
+        for line in result.stdout.splitlines()
+        if "refs/tags/" in line
+    }
+    matching_tags = sorted(tag for tag in local_tags if tag in remote_tags)
+    if not matching_tags:
+        raise SPIAddPackageError(
+            "SPI requires an accessible semantic-version release tag. "
+            f"Local SemVer tags exist, but none were visible on {identity.git_url}. "
+            "Push the release tag before opening the Add Package form."
+        )
+
+
 def confirm_public_repository(identity: PackageIdentity, package_root: Path) -> None:
     run_command(["git", "ls-remote", "--exit-code", identity.git_url, "HEAD"], cwd=package_root)
+
+
+def confirm_swift_tools_version(package_root: Path) -> None:
+    manifest_prefix = (package_root / "Package.swift").read_text(encoding="utf-8", errors="replace")[:300]
+    match = SWIFT_TOOLS_VERSION_RE.search(manifest_prefix)
+    if not match:
+        raise SPIAddPackageError(
+            "Package.swift must declare a Swift tools version before SPI submission, "
+            "for example `// swift-tools-version: 5.10`."
+        )
+    major = int(match.group(1))
+    minor = int(match.group(2) or "0")
+    if (major, minor) < (5, 0):
+        raise SPIAddPackageError(
+            "SPI requires packages to be written in Swift 5.0 or later. "
+            f"Package.swift declares swift-tools-version {major}.{minor}."
+        )
+
+
+def dump_package_json(package_root: Path) -> dict[str, object]:
+    result = run_command(["swift", "package", "dump-package"], cwd=package_root)
+    try:
+        package_data = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise SPIAddPackageError(
+            "SPI requires `swift package dump-package` to emit valid JSON. "
+            f"JSON parsing failed at line {exc.lineno}, column {exc.colno}: {exc.msg}"
+        ) from exc
+    if not isinstance(package_data, dict):
+        raise SPIAddPackageError("`swift package dump-package` did not emit a JSON object.")
+    products = package_data.get("products")
+    if not isinstance(products, list) or not products:
+        raise SPIAddPackageError(
+            "SPI requires the package to contain at least one library or executable product."
+        )
+    return package_data
 
 
 def check_spi_index_state(identity: PackageIdentity, timeout: float = 10.0) -> str:
@@ -209,9 +261,11 @@ def run_readiness(
 
     semver_tags = discover_semver_tags(package_root)
     checked_steps.append("semantic version tags")
+    confirm_swift_tools_version(package_root)
+    checked_steps.append("Swift tools version")
 
-    run_command(["swift", "package", "dump-package"], cwd=package_root)
-    checked_steps.append("swift package dump-package")
+    dump_package_json(package_root)
+    checked_steps.append("swift package dump-package JSON and products")
 
     if skip_build:
         skipped_steps.append("swift build")
@@ -236,6 +290,12 @@ def run_readiness(
     else:
         indexed_state = check_spi_index_state(identity)
         checked_steps.append(f"SPI indexed-state: {indexed_state}")
+
+    if skip_remote_check:
+        skipped_steps.append("remote semantic-version tag visibility")
+    else:
+        confirm_remote_semver_tag(identity, package_root, semver_tags)
+        checked_steps.append("remote semantic-version tag")
 
     if indexed_state == "indexed":
         raise SPIAddPackageError(
@@ -325,17 +385,50 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("package_root", nargs="?", default=".", help="Swift package repository root.")
     parser.add_argument("--repo-url", help="Override the GitHub package URL.")
     parser.add_argument("--browser", default=ZEN_BROWSER_BUNDLE_ID, help="Browser bundle id for open/hands-free.")
-    parser.add_argument("--skip-build", action="store_true", help="Skip `swift build`.")
-    parser.add_argument("--skip-tests", action="store_true", help="Skip `swift test`.")
-    parser.add_argument("--skip-remote-check", action="store_true", help="Skip public GitHub remote check.")
-    parser.add_argument("--skip-index-check", action="store_true", help="Skip SPI already-indexed check.")
-    parser.add_argument("--skip-live-form-check", action="store_true", help="Skip live PackageList form-shape check.")
+    parser.add_argument("--skip-build", action="store_true", help="Diagnostic-only for readiness/url: skip `swift build`.")
+    parser.add_argument("--skip-tests", action="store_true", help="Diagnostic-only for readiness/url: skip `swift test`.")
+    parser.add_argument(
+        "--skip-remote-check",
+        action="store_true",
+        help="Diagnostic-only for readiness/url: skip public GitHub remote and tag checks.",
+    )
+    parser.add_argument(
+        "--skip-index-check",
+        action="store_true",
+        help="Diagnostic-only for readiness/url: skip SPI already-indexed check.",
+    )
+    parser.add_argument(
+        "--skip-live-form-check",
+        action="store_true",
+        help="Diagnostic-only for readiness/url: skip live PackageList form-shape check.",
+    )
     return parser.parse_args(argv)
+
+
+def validate_mode_and_skip_flags(args: argparse.Namespace) -> None:
+    skipped = [
+        flag
+        for flag in (
+            "skip_build",
+            "skip_tests",
+            "skip_remote_check",
+            "skip_index_check",
+            "skip_live_form_check",
+        )
+        if getattr(args, flag)
+    ]
+    if args.mode in {"open", "hands-free"} and skipped:
+        flags = ", ".join("--" + flag.replace("_", "-") for flag in skipped)
+        raise SPIAddPackageError(
+            "Browser-opening SPI submission modes require complete readiness and live form checks. "
+            f"Remove these skip flags before using `{args.mode}`: {flags}"
+        )
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     try:
+        validate_mode_and_skip_flags(args)
         result = run_readiness(
             Path(args.package_root),
             override_url=args.repo_url,

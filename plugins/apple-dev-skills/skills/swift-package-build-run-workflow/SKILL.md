@@ -16,6 +16,7 @@ Use this skill as the primary execution workflow for non-testing work in existin
 - Use this skill for package resources, `Bundle.module`, `.process(...)`, `.copy(...)`, `.embedInCode(...)`, and package-local fixture layout decisions.
 - Use this skill for Metal library packaging, distribution, and the SwiftPM side of Metal-related package work before Xcode-managed Apple toolchain behavior becomes the real concern.
 - Use this skill for Debug-versus-Release validation, build artifacts, and tagged-release package expectations.
+- Use this skill for Swift Package Index readiness checks in package repositories, but hand external add-package submission to Socket's guarded `scripts/spi_add_package.py` issue-form flow when that script is available.
 - Do not use this skill for package-testing-first work, test-plan execution, XCTest or Swift Testing diagnosis, or test-specific filtering and retries.
 - Do not use this skill for brand-new package bootstrap from nothing.
 - Do not use this skill for repo-guidance alignment in an existing package repo.
@@ -52,7 +53,12 @@ Use this skill as the primary execution workflow for non-testing work in existin
 5. Use `references/cli-command-matrix.md` for agent-executed SwiftPM commands and terminal-first editor workflows.
 6. Use `references/package-resources-testing-and-builds.md` when the request touches package resources, Metal artifacts, `Bundle.module`, or Debug/Release and tagged-release validation.
 7. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-build-run-workflow`.
-8. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
+8. For Swift Package Index add-package work, distinguish local readiness from external submission:
+   - local readiness may include `Package.swift`, semantic-version tag, `swift package dump-package`, `swift build`, `swift test`, `.spi.yml`, and DocC checks
+   - external submission must use the official `SwiftPackageIndex/PackageList` Add Package issue form
+   - when working from Socket, run `uv run /Users/galew/Workspace/gaelic-ghost/socket/scripts/spi_add_package.py hands-free <package-root>` and follow its Codex Computer Use handoff
+   - never create PackageList issues with `gh issue create`, apply labels manually, fork PackageList, edit `packages.json`, or open PackageList PRs
+9. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
 
 ## Inputs
 
@@ -91,6 +97,7 @@ Use this skill as the primary execution workflow for non-testing work in existin
 - Stop with `handoff` when the repo root is mixed and Xcode-managed behavior is the safer default.
 - Stop with `handoff` when the requested work crosses into Xcode project membership, scheme, preview, simulator, or other Xcode-managed concerns.
 - Stop with `blocked` when no safe SwiftPM-first command path exists for the requested operation.
+- Stop with `blocked` when Swift Package Index submission is requested but the package is only locally ready, the official Add Package issue form is unavailable, the Socket guarded script reports incomplete readiness, or the created issue cannot be verified with the `Add Package` label.
 
 ## Fallbacks and Handoffs
 
@@ -133,6 +140,7 @@ Use this skill as the primary execution workflow for non-testing work in existin
 
 - Recommend `references/snippets/apple-swift-package-core.md` when the user needs reusable SwiftPM baseline policy wording in an end-user repo.
 - `references/snippets/apple-swift-package-core.md`
+- For Swift Package Index add-package automation in Socket, use `/Users/galew/Workspace/gaelic-ghost/socket/scripts/spi_add_package.py` and `/Users/galew/Workspace/gaelic-ghost/socket/docs/maintainers/spi-add-package-automation-plan.md`.
 
 ### Script Inventory
 

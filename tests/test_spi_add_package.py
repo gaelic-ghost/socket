@@ -69,6 +69,54 @@ def test_validate_live_add_package_form_rejects_missing_list_field() -> None:
         spi_add_package.validate_live_add_package_form(form)
 
 
+def test_validate_mode_rejects_skip_flags_for_hands_free() -> None:
+    args = spi_add_package.parse_args(["hands-free", ".", "--skip-tests"])
+
+    with pytest.raises(spi_add_package.SPIAddPackageError, match="complete readiness"):
+        spi_add_package.validate_mode_and_skip_flags(args)
+
+
+def test_dump_package_json_requires_products(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    completed = spi_add_package.subprocess.CompletedProcess(
+        args=["swift", "package", "dump-package"],
+        returncode=0,
+        stdout='{"name":"Empty","products":[]}',
+        stderr="",
+    )
+    monkeypatch.setattr(spi_add_package, "run_command", lambda *_args, **_kwargs: completed)
+
+    with pytest.raises(spi_add_package.SPIAddPackageError, match="at least one"):
+        spi_add_package.dump_package_json(tmp_path)
+
+
+def test_confirm_swift_tools_version_rejects_legacy_manifest(tmp_path: Path) -> None:
+    (tmp_path / "Package.swift").write_text("// swift-tools-version: 4.2\n", encoding="utf-8")
+
+    with pytest.raises(spi_add_package.SPIAddPackageError, match="Swift 5.0 or later"):
+        spi_add_package.confirm_swift_tools_version(tmp_path)
+
+
+def test_confirm_remote_semver_tag_requires_pushed_release_tag(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    identity = spi_add_package.PackageIdentity(
+        owner="gaelic-ghost",
+        repository="SwiftASB",
+        git_url="https://github.com/gaelic-ghost/SwiftASB.git",
+    )
+    completed = spi_add_package.subprocess.CompletedProcess(
+        args=["git", "ls-remote", "--tags", identity.git_url],
+        returncode=0,
+        stdout="abc123\trefs/tags/v0.0.1\n",
+        stderr="",
+    )
+    monkeypatch.setattr(spi_add_package, "run_command", lambda *_args, **_kwargs: completed)
+
+    with pytest.raises(spi_add_package.SPIAddPackageError, match="none were visible"):
+        spi_add_package.confirm_remote_semver_tag(identity, tmp_path, ("v1.0.0",))
+
+
 def test_computer_use_handoff_forbids_failed_external_paths() -> None:
     result = spi_add_package.ReadinessResult(
         package_root=Path("/tmp/SwiftASB"),
