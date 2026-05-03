@@ -11,6 +11,7 @@ Codex skills for explaining [SwiftASB](https://github.com/gaelic-ghost/SwiftASB)
 - [Release Notes](#release-notes)
 - [License](#license)
 - [Active Skills](#active-skills)
+- [Examples](#examples)
 - [Packaging](#packaging)
 - [Repository Layout](#repository-layout)
 
@@ -75,6 +76,10 @@ See [LICENSE](../../LICENSE) for the Socket superproject license. SwiftASB packa
 - `build-appkit-app`
 - `build-swift-package`
 - `diagnose-integration`
+
+## Examples
+
+Use [examples/explain-before-implementation.md](./examples/explain-before-implementation.md) when an agent needs a short, user-facing SwiftASB fit explanation before implementation starts.
 
 ## Packaging
 
