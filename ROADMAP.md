@@ -147,7 +147,6 @@ In Progress
 ## Backlog Candidates
 
 - [ ] [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37): Harden release and PR scripts around delayed GitHub state. Fold the duplicate timing reports into one implementation pass that reviews CI check registration, PR comment/review reads, remote branch/tag visibility, GitHub release visibility, timeout configuration, logs, and tests across `socket` and the reusable `maintain-project-repo` release assets.
-- [ ] [#31](https://github.com/gaelic-ghost/socket/issues/31): Review the remaining subtree plugin strategy after the Git-backed marketplace shift. Decide whether `apple-dev-skills` and `SpeakSwiftlyServer` still need subtree mirrors, what `socket` should own long term, how versioning should work if more children become standalone-only, and what validation proves the chosen install model.
 
 ## History
 
