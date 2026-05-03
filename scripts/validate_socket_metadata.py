@@ -14,6 +14,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MARKETPLACE_PATH = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
 GIT_SOURCE_KINDS = {"url", "git-subdir"}
+INSTALLATION_POLICIES = {"AVAILABLE", "INSTALLED_BY_DEFAULT", "NOT_AVAILABLE"}
+AUTHENTICATION_POLICIES = {"ON_INSTALL", "ON_FIRST_USE"}
 
 
 def fail(message: str) -> None:
@@ -110,7 +112,58 @@ def validate_manifest_path(
     return component_path
 
 
-def validate_local_plugin_entry(*, name: str, source: dict[str, object]) -> None:
+def validate_policy(*, plugin_name: str, entry: dict[str, object]) -> str:
+    policy = entry.get("policy")
+    if not isinstance(policy, dict):
+        fail(f"Marketplace plugin `{plugin_name}` is missing its `policy` object.")
+
+    installation = policy.get("installation")
+    if installation not in INSTALLATION_POLICIES:
+        allowed = ", ".join(sorted(INSTALLATION_POLICIES))
+        fail(
+            f"Marketplace plugin `{plugin_name}` has invalid policy.installation "
+            f"`{installation}`. Expected one of: {allowed}."
+        )
+
+    authentication = policy.get("authentication")
+    if authentication not in AUTHENTICATION_POLICIES:
+        allowed = ", ".join(sorted(AUTHENTICATION_POLICIES))
+        fail(
+            f"Marketplace plugin `{plugin_name}` has invalid policy.authentication "
+            f"`{authentication}`. Expected one of: {allowed}."
+        )
+
+    category = entry.get("category")
+    if not isinstance(category, str) or not category:
+        fail(f"Marketplace plugin `{plugin_name}` must define a non-empty category.")
+
+    return installation
+
+
+def manifest_exports_content(*, plugin_root: Path, plugin_manifest: dict[str, object]) -> bool:
+    skills_path = plugin_manifest.get("skills")
+    if isinstance(skills_path, str):
+        skills_root = (plugin_root / skills_path).resolve()
+        try:
+            skills_root.relative_to(plugin_root)
+        except ValueError:
+            return False
+        if skills_root.is_dir() and any(skills_root.glob("*/SKILL.md")):
+            return True
+
+    for field_name in ("mcpServers", "hooks", "apps"):
+        if plugin_manifest.get(field_name) is not None:
+            return True
+
+    return False
+
+
+def validate_local_plugin_entry(
+    *,
+    name: str,
+    source: dict[str, object],
+    installation_policy: str,
+) -> None:
     relative_path = source.get("path")
     if not isinstance(relative_path, str) or not relative_path.startswith("./"):
         fail(
@@ -151,6 +204,16 @@ def validate_local_plugin_entry(*, name: str, source: dict[str, object]) -> None
         fail(
             f"Marketplace plugin `{name}` points at a packaged manifest that declares "
             f"`{manifest_name}` instead."
+        )
+
+    if (
+        installation_policy != "NOT_AVAILABLE"
+        and not manifest_exports_content(plugin_root=plugin_root, plugin_manifest=plugin_manifest)
+    ):
+        fail(
+            f"Marketplace plugin `{name}` is installable but does not export skills, "
+            "MCP servers, hooks, or apps. Empty placeholder plugins must use "
+            "policy.installation `NOT_AVAILABLE` until they ship content."
         )
 
     skills_dir = plugin_root / "skills"
@@ -210,12 +273,18 @@ def validate_plugin_entry(entry: object, seen_names: set[str]) -> None:
         fail(f"Marketplace plugin name `{name}` is duplicated.")
     seen_names.add(name)
 
+    installation_policy = validate_policy(plugin_name=name, entry=entry)
+
     source = entry.get("source")
     if not isinstance(source, dict):
         fail(f"Marketplace plugin `{name}` is missing its `source` object.")
     source_kind = source.get("source")
     if source_kind == "local":
-        validate_local_plugin_entry(name=name, source=source)
+        validate_local_plugin_entry(
+            name=name,
+            source=source,
+            installation_policy=installation_policy,
+        )
         return
     if source_kind in GIT_SOURCE_KINDS:
         validate_git_source(plugin_name=name, source=source, source_kind=source_kind)

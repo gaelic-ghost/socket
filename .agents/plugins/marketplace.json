@@ -47,7 +47,7 @@
         "path": "./plugins/dotnet-skills"
       },
       "policy": {
-        "installation": "AVAILABLE",
+        "installation": "NOT_AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"
@@ -96,7 +96,7 @@
         "path": "./plugins/rust-skills"
       },
       "policy": {
-        "installation": "AVAILABLE",
+        "installation": "NOT_AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"
@@ -132,7 +132,7 @@
         "path": "./plugins/spotify"
       },
       "policy": {
-        "installation": "AVAILABLE",
+        "installation": "NOT_AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
@@ -144,7 +144,7 @@
         "path": "./plugins/web-dev-skills"
       },
       "policy": {
-        "installation": "AVAILABLE",
+        "installation": "NOT_AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"

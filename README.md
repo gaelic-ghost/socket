@@ -217,20 +217,20 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
 
-That marketplace points at the actual plugin root each child repository treats as installable today:
+That marketplace points at the plugin root for each cataloged child repository. Entries with real shipped skills, MCP servers, hooks, or apps are installable. Placeholder entries stay visible as planned surfaces but use `policy.installation: NOT_AVAILABLE` until they ship actual content:
 
-- `./plugins/agent-plugin-skills`
-- `./plugins/apple-dev-skills`
-- `./plugins/cardhop-app`
-- `./plugins/dotnet-skills`
-- `./plugins/productivity-skills`
-- `gaelic-ghost/SpeakSwiftlyServer` for `speak-swiftly`, displayed as `Speak Swiftly`
-- `./plugins/python-skills`
-- `./plugins/rust-skills`
-- `./plugins/spotify`
-- `./plugins/swiftasb-skills`
-- `./plugins/things-app`
-- `./plugins/web-dev-skills`
+- Installable: `./plugins/agent-plugin-skills`
+- Installable: `./plugins/apple-dev-skills`
+- Installable: `./plugins/cardhop-app`
+- Installable: `./plugins/productivity-skills`
+- Installable: `gaelic-ghost/SpeakSwiftlyServer` for `speak-swiftly`, displayed as `Speak Swiftly`
+- Installable: `./plugins/python-skills`
+- Installable: `./plugins/swiftasb-skills`
+- Installable: `./plugins/things-app`
+- Not available yet: `./plugins/dotnet-skills`
+- Not available yet: `./plugins/rust-skills`
+- Not available yet: `./plugins/spotify`
+- Not available yet: `./plugins/web-dev-skills`
 
 For `things-app`, that marketplace path stays `./plugins/things-app` because the installable plugin root is the child repo root even though the bundled server now lives at top-level `mcp/` inside that child repo.
 
@@ -247,7 +247,7 @@ codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
-Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `things-app`, and the other listed child plugins. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
+Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual available entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `swiftasb-skills`, `things-app`, and `cardhop-app`. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
 
 When both the Socket marketplace and the standalone SpeakSwiftlyServer marketplace are configured, prefer enabling `speak-swiftly` from the Socket catalog and disabling duplicate standalone enablement. The Speak Swiftly doctor should detect duplicate installs or enablement and offer a repair path that keeps the Socket entry active.
 
