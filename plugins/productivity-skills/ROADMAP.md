@@ -165,6 +165,7 @@ Planned
 
 ## History
 
+- Added `maintain-project-architecture` as the baseline `docs/architecture/ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` maintenance skill, with first-pass SwiftPM product/target detection and stale model checks.
 - Added first-pass OpenAI Codex Hooks guidance for AGENTS and repo-maintenance workflows, plus a planned `maintain-project-hooks` baseline skill for future deterministic hook audits.
 - Added maintainer guidance for optional Codex subagent use in documentation, maintenance, and explanation skills, keeping delegation explicitly user-triggered and read-heavy by default.
 - Fixed `maintain-project-repo` standard release handling so new release PRs wait for initial GitHub checks before watching CI, approval-only reviews no longer count as unresolved review comments, and release tags are created only after CI and the review-comment gate pass.
