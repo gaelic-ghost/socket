@@ -1,6 +1,6 @@
 {
   "name": "agent-plugin-skills",
-  "version": "6.4.0",
+  "version": "6.4.1",
   "description": "Installable maintainer skills for skills-export repositories.",
   "author": {
     "name": "Gale",

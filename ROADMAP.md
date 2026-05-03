@@ -147,6 +147,7 @@ In Progress
 ## Backlog Candidates
 
 - [x] [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37): Harden release and PR scripts around delayed GitHub state. Fold the duplicate timing reports into one implementation pass that reviews CI check registration, PR comment/review reads, remote branch/tag visibility, GitHub release visibility, timeout configuration, logs, and tests across `socket` and the reusable `maintain-project-repo` release assets.
+- [x] [#39](https://github.com/gaelic-ghost/socket/issues/39): Add a Swift Package Index add-package gate and one-shot script so agents use only the documented `SwiftPackageIndex/PackageList` Add Package issue form, with Zen plus Codex Computer Use as the hands-free browser path.
 
 ## History
 
