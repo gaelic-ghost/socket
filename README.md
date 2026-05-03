@@ -201,12 +201,13 @@ The root superproject docs are:
 
 Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
 
-- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `things-app`, and `web-dev-skills` are monorepo-owned here.
+- `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `swiftasb-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
 - `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
 - `SpeakSwiftlyServer` may be synchronized into `socket` by subtree pull after standalone source or release work lands, but routine Speak Swiftly plugin payload edits do not need a subtree pull because the Socket catalog installs from the Git-backed standalone repository.
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
 - Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
+- `swiftasb-skills` packages from its child-repo root at `./plugins/swiftasb-skills`, and ships companion guidance for explaining SwiftASB, choosing integration shapes, diagnosing integration failures, and building SwiftUI, AppKit, and Swift package integrations on top of the SwiftASB package.
 - `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
 - `SpeakSwiftlyServer` owns the canonical `speak-swiftly` plugin payload. The Socket marketplace exposes that payload by Git-backed reference so users can enable `Speak Swiftly` from the Socket catalog without `socket` carrying a second copied plugin directory.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
@@ -216,19 +217,20 @@ Treat `socket` as the canonical home for the monorepo-owned child directories an
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json).
 
-That marketplace points at the actual plugin root each child repository treats as installable today:
+That marketplace points at the plugin root for each cataloged child repository. Entries with real shipped skills, MCP servers, hooks, or apps are installable. Placeholder entries stay visible as planned surfaces but use `policy.installation: NOT_AVAILABLE` until they ship actual content:
 
-- `./plugins/agent-plugin-skills`
-- `./plugins/apple-dev-skills`
-- `./plugins/cardhop-app`
-- `./plugins/dotnet-skills`
-- `./plugins/productivity-skills`
-- `gaelic-ghost/SpeakSwiftlyServer` for `speak-swiftly`, displayed as `Speak Swiftly`
-- `./plugins/python-skills`
-- `./plugins/rust-skills`
-- `./plugins/spotify`
-- `./plugins/things-app`
-- `./plugins/web-dev-skills`
+- Installable: `./plugins/agent-plugin-skills`
+- Installable: `./plugins/apple-dev-skills`
+- Installable: `./plugins/cardhop-app`
+- Installable: `./plugins/productivity-skills`
+- Installable: `gaelic-ghost/SpeakSwiftlyServer` for `speak-swiftly`, displayed as `Speak Swiftly`
+- Installable: `./plugins/python-skills`
+- Installable: `./plugins/swiftasb-skills`
+- Installable: `./plugins/things-app`
+- Not available yet: `./plugins/dotnet-skills`
+- Not available yet: `./plugins/rust-skills`
+- Not available yet: `./plugins/spotify`
+- Not available yet: `./plugins/web-dev-skills`
 
 For `things-app`, that marketplace path stays `./plugins/things-app` because the installable plugin root is the child repo root even though the bundled server now lives at top-level `mcp/` inside that child repo.
 
@@ -245,7 +247,7 @@ codex plugin marketplace add gaelic-ghost/socket
 codex plugin marketplace upgrade socket
 ```
 
-Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `things-app`, and the other listed child plugins. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
+Use the `socket` marketplace when you want one catalog for Gale's plugin set. From that marketplace, users can install or enable individual available entries such as `apple-dev-skills`, `productivity-skills`, `agent-plugin-skills`, `python-skills`, `swiftasb-skills`, `things-app`, and `cardhop-app`. This is especially useful for workflows that need companion skills, such as Apple bootstrap or guidance-sync workflows that rely on both `apple-dev-skills` and `productivity-skills`.
 
 When both the Socket marketplace and the standalone SpeakSwiftlyServer marketplace are configured, prefer enabling `speak-swiftly` from the Socket catalog and disabling duplicate standalone enablement. The Speak Swiftly doctor should detect duplicate installs or enablement and offer a repair path that keeps the Socket entry active.
 

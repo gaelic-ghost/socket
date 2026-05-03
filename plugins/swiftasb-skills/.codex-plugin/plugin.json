@@ -1,0 +1,42 @@
+{
+  "name": "swiftasb-skills",
+  "version": "6.4.0",
+  "description": "Codex skills for explaining SwiftASB and building SwiftUI, AppKit, and Swift package integrations on top of it.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swiftasb-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "skills",
+    "swift",
+    "swiftui",
+    "appkit",
+    "swiftasb",
+    "app-server"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "SwiftASB Skills",
+    "shortDescription": "SwiftASB explanation and integration workflows for Swift apps and packages.",
+    "longDescription": "Guide Codex agents through explaining SwiftASB, choosing the right integration shape, and building SwiftUI, AppKit, and Swift package surfaces on top of SwiftASB's Swift-native Codex app-server API.",
+    "developerName": "gaelic-ghost",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swiftasb-skills",
+    "defaultPrompt": [
+      "Explain whether SwiftASB is the right fit for this Swift app before we start building.",
+      "Choose a SwiftASB integration shape for this SwiftUI or AppKit project.",
+      "Add a SwiftUI-facing SwiftASB client model using observable companions.",
+      "Diagnose why this SwiftASB-backed app or test is failing."
+    ],
+    "brandColor": "#F05138"
+  }
+}

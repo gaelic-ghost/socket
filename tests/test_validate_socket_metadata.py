@@ -35,6 +35,11 @@ def make_marketplace_repo(tmp_path: Path, manifest: dict[str, object]) -> Path:
                             "source": "local",
                             "path": "./plugins/example-skills",
                         },
+                        "policy": {
+                            "installation": "AVAILABLE",
+                            "authentication": "ON_INSTALL",
+                        },
+                        "category": "Developer Tools",
                     }
                 ]
             },
@@ -43,7 +48,7 @@ def make_marketplace_repo(tmp_path: Path, manifest: dict[str, object]) -> Path:
         + "\n",
     )
     write(plugin_root / ".codex-plugin" / "plugin.json", json.dumps(manifest, indent=2) + "\n")
-    (plugin_root / "skills" / "example").mkdir(parents=True)
+    write(plugin_root / "skills" / "example" / "SKILL.md", "---\nname: example\n---\n")
     return repo_root
 
 
@@ -61,6 +66,11 @@ def make_remote_marketplace_repo(
                     {
                         "name": "speak-swiftly",
                         "source": source,
+                        "policy": {
+                            "installation": "AVAILABLE",
+                            "authentication": "ON_INSTALL",
+                        },
+                        "category": "Productivity",
                     }
                 ]
             },
@@ -109,6 +119,43 @@ def test_main_rejects_plugin_manifest_missing_root_skills_component(
 
     with pytest.raises(SystemExit):
         run_validator(repo_root, monkeypatch)
+
+
+def test_main_accepts_unavailable_empty_placeholder_plugin(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = tmp_path
+    plugin_root = repo_root / "plugins" / "placeholder-skills"
+    write(
+        repo_root / ".agents" / "plugins" / "marketplace.json",
+        json.dumps(
+            {
+                "plugins": [
+                    {
+                        "name": "placeholder-skills",
+                        "source": {
+                            "source": "local",
+                            "path": "./plugins/placeholder-skills",
+                        },
+                        "policy": {
+                            "installation": "NOT_AVAILABLE",
+                            "authentication": "ON_INSTALL",
+                        },
+                        "category": "Developer Tools",
+                    }
+                ]
+            },
+            indent=2,
+        )
+        + "\n",
+    )
+    write(
+        plugin_root / ".codex-plugin" / "plugin.json",
+        json.dumps({"name": "placeholder-skills"}, indent=2) + "\n",
+    )
+
+    run_validator(repo_root, monkeypatch)
 
 
 def test_main_accepts_root_git_plugin_source(
