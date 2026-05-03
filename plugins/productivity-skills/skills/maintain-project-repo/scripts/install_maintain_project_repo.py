@@ -35,6 +35,10 @@ PROFILE_OVERLAY_FILES = {
         ),
     ],
 }
+PROFILE_WORKFLOW_FILES = {
+    "swift-package": "profiles/apple/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
+    "xcode-app": "profiles/apple/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
+}
 MANAGED_TOOLKIT_FILES = [
     ("repo-maintenance/validate-all.sh", "scripts/repo-maintenance/validate-all.sh"),
     ("repo-maintenance/sync-shared.sh", "scripts/repo-maintenance/sync-shared.sh"),
@@ -88,9 +92,13 @@ def target_pairs(profile: str, skip_github_workflow: bool) -> list[tuple[Path, P
     for source_relative, target_relative in PROFILE_OVERLAY_FILES.get(profile, []):
         add_pair(source_relative, target_relative)
     if not skip_github_workflow:
+        workflow_source = PROFILE_WORKFLOW_FILES.get(
+            profile,
+            "github/repo-maintenance-workflows/validate-repo-maintenance.yml",
+        )
         pairs.append(
             (
-                root / "github" / "repo-maintenance-workflows" / "validate-repo-maintenance.yml",
+                root / workflow_source,
                 Path(MANAGED_WORKFLOW_FILE),
             )
         )

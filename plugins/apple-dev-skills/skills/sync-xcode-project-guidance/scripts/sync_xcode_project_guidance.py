@@ -23,6 +23,16 @@ REQUIRED_STRINGS = [
 ]
 
 
+def version_sort_key(path: Path) -> tuple[int, ...]:
+    parts = []
+    for component in path.name.split("."):
+        try:
+            parts.append(int(component))
+        except ValueError:
+            parts.append(-1)
+    return tuple(parts)
+
+
 def discover_xcode_state(repo_root: Path) -> dict:
     workspaces = sorted(str(path) for path in repo_root.rglob("*.xcworkspace"))
     projects = sorted(str(path) for path in repo_root.rglob("*.xcodeproj"))
@@ -48,18 +58,43 @@ def read_asset(name: str) -> str:
 
 
 def maintain_project_repo_runner() -> Path:
-    plugins_root = Path(__file__).resolve().parents[4]
-    runner = plugins_root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
-    if not runner.is_file():
-        raise RuntimeError(
-            "sync-xcode-project-guidance needs productivity-skills/maintain-project-repo "
-            f"to refresh repo-maintenance files, but the runner was missing at {runner}. "
-            "Install productivity-skills alongside apple-dev-skills, or add the socket "
-            "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
-            "enable both apple-dev-skills and productivity-skills from the Socket catalog, "
-            "then rerun this workflow."
-        )
-    return runner
+    script_path = Path(__file__).resolve()
+    candidate_paths: list[Path] = []
+    seen: set[Path] = set()
+
+    def add_candidate(path: Path) -> None:
+        resolved = path.resolve()
+        if resolved not in seen:
+            seen.add(resolved)
+            candidate_paths.append(resolved)
+
+    for root in script_path.parents:
+        add_candidate(root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py")
+        versioned_plugin_root = root / "productivity-skills"
+        if versioned_plugin_root.is_dir():
+            for version_dir in sorted(versioned_plugin_root.iterdir(), key=version_sort_key, reverse=True):
+                add_candidate(
+                    version_dir / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
+                )
+
+    for runner in candidate_paths:
+        if runner.is_file():
+            return runner
+
+    expected = candidate_paths[0] if candidate_paths else script_path
+    searched = "\n".join(f"- {path}" for path in candidate_paths)
+    if not searched:
+        searched = "- no candidate paths were generated"
+    raise RuntimeError(
+        "sync-xcode-project-guidance needs productivity-skills/maintain-project-repo "
+        f"to refresh repo-maintenance files, but no runner was found. First expected path: {expected}. "
+        "Searched candidate paths:\n"
+        f"{searched}\n"
+        "Install productivity-skills alongside apple-dev-skills, or add the socket "
+        "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
+        "enable both apple-dev-skills and productivity-skills from the Socket catalog, "
+        "then rerun this workflow."
+    )
 
 
 def validate_agents(text: str) -> tuple[bool, list[str]]:

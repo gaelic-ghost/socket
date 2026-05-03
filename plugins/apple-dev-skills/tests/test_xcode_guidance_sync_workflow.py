@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -152,6 +153,38 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertEqual(payload["path_type"], "fallback")
             self.assertIn("report that AGENTS.md is missing", payload["actions"][0])
+
+    def test_sync_discovers_socket_cache_sibling_productivity_runner(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            cache_root = Path(tmpdir) / "socket"
+            apple_skill = cache_root / "apple-dev-skills" / "6.5.1" / "skills" / "sync-xcode-project-guidance"
+            productivity_skill = (
+                cache_root
+                / "productivity-skills"
+                / "6.5.1"
+                / "skills"
+                / "maintain-project-repo"
+            )
+            shutil.copytree(ROOT / "skills/sync-xcode-project-guidance", apple_skill)
+            shutil.copytree(ROOT.parent / "productivity-skills/skills/maintain-project-repo", productivity_skill)
+
+            repo_root = Path(tmpdir) / "Repo"
+            repo_root.mkdir()
+            (repo_root / "Demo.xcodeproj").mkdir()
+
+            script = apple_skill / "scripts" / "run_workflow.py"
+            proc = subprocess.run(
+                [str(script), "--repo-root", str(repo_root)],
+                cwd="/tmp",
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
+            payload = json.loads(proc.stdout)
+            self.assertEqual(payload["status"], "success")
+            self.assertTrue((repo_root / "scripts/repo-maintenance/validate-all.sh").is_file())
 
 
 if __name__ == "__main__":
