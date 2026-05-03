@@ -130,8 +130,8 @@ In Progress
 
 - [x] Create `plugins/swiftasb-skills/` with its own `.codex-plugin/plugin.json` and authored `skills/` source.
 - [x] Add first-slice skills for explaining SwiftASB, choosing an integration shape, and building a SwiftUI app on top of SwiftASB.
-- [ ] Add `swiftasb:build-appkit-app` for AppKit apps after the first slice proves useful.
-- [ ] Add `swiftasb:build-swift-package` for Swift package authors after the first slice proves useful.
+- [x] Add `swiftasb:build-appkit-app` for AppKit apps after the first slice proves useful.
+- [x] Add `swiftasb:build-swift-package` for Swift package authors after the first slice proves useful.
 - [x] Add an integration diagnostics skill for runtime discovery, app-server startup, threads, turns, approvals, diagnostics, MCP status, history reads, and live-test isolation.
 - [x] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
@@ -141,7 +141,7 @@ In Progress
 
 - [x] The Socket marketplace exposes `swiftasb-skills` as an installable child plugin.
 - [x] The new skills can help an agent explain SwiftASB to a user before implementation, including when SwiftASB is not the right fit.
-- [ ] The new skills guide SwiftUI, AppKit, and Swift package integrations without duplicating broad Apple framework guidance that belongs to `apple-dev-skills`.
+- [x] The new skills guide SwiftUI, AppKit, and Swift package integrations without duplicating broad Apple framework guidance that belongs to `apple-dev-skills`.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Backlog Candidates

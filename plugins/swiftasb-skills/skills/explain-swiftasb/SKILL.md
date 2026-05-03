@@ -2,7 +2,7 @@
 name: explain-swiftasb
 description: Explain SwiftASB in user-facing terms, including what it does, what it does not do, adoption tradeoffs, licensing, and when it is or is not the right foundation for a Swift app or package.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -36,7 +36,7 @@ Before giving exact API claims, inspect the current SwiftASB source of truth:
 - the public files under `Sources/SwiftASB/Public/`
 - the latest release notes or tags
 
-As of SwiftASB `v1.0.0`, the supported public surface centers on:
+As of SwiftASB `v1.0.1`, the supported public surface centers on:
 
 - `CodexAppServer`, the owner of the local Codex subprocess and app-wide capability reads
 - `CodexThread`, the handle for one Codex conversation thread
@@ -98,6 +98,8 @@ Answer in this order:
 
 - Use `swiftasb:choose-integration-shape` when the user wants to proceed but the app shape is not settled.
 - Use `swiftasb:build-swiftui-app` when the chosen target is a SwiftUI app.
+- Use `swiftasb:build-appkit-app` when the chosen target is an AppKit app.
+- Use `swiftasb:build-swift-package` when the chosen target is a package library, command-line package, helper package, or test harness.
 - Use `apple-dev-skills:explore-apple-swift-docs` before making Apple framework claims.
 - Use Apple build or Xcode workflow skills when the task shifts from explanation to project execution.
 

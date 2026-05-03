@@ -153,15 +153,15 @@ The first slice should be intentionally small:
 - [x] Add `swiftasb:build-swiftui-app`.
 - [x] Wire `swiftasb-skills` into `.agents/plugins/marketplace.json`.
 - [x] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
-- [ ] Run `uv run scripts/validate_socket_metadata.py`.
+- [x] Run `uv run scripts/validate_socket_metadata.py`.
 - [ ] Run any child-plugin validation added by the new plugin.
 
 ## Later Slices
 
 After the first slice proves useful, add:
 
-- [ ] `swiftasb:build-appkit-app`.
-- [ ] `swiftasb:build-swift-package`.
+- [x] `swiftasb:build-appkit-app`.
+- [x] `swiftasb:build-swift-package`.
 - [x] `swiftasb:diagnose-integration`.
 - [ ] Examples that show how agents should explain SwiftASB to users before implementation.
 - [ ] Install testing with a temporary `CODEX_HOME`.
