@@ -43,12 +43,12 @@ After a version bump lands on `main`, create the matching `vX.Y.Z` tag from `mai
 
 ## Subtrees Mode
 
-Use `subtrees` when a `socket` release also changes, imports, refreshes, or depends on one of the remaining subtree-managed child repositories.
+Use `subtrees` when a `socket` release also changes, imports, refreshes, or depends on a subtree-managed child repository.
 
 Subtrees mode is standard mode plus this extra gate:
 
 1. identify each subtree-managed child touched by the release
-2. classify each touched child as `pull-only`, `push-out`, or `no subtree action`
+2. classify each touched child as `pull`, `push`, or `no subtree action`
 3. run the required subtree pull or push before tagging `socket`, or record why no subtree action is correct
 4. rerun root validation after any subtree operation
 5. re-check `git log origin/main..main` and `git branch --no-merged main` before cleanup or final status
@@ -60,14 +60,12 @@ This mode is not the same as `maintain-project-repo`'s `submodule` mode. `socket
 | Child | Prefix | Remote | Direction | Rule |
 | --- | --- | --- | --- | --- |
 | `apple-dev-skills` | `plugins/apple-dev-skills` | `apple-dev-skills` | pull and push | Work may start in `socket`; push back with `git subtree push` when the child repo should receive the socket-authored change. |
-| `SpeakSwiftlyServer` | `plugins/SpeakSwiftlyServer` | `speak-swiftly-server` | pull-only | Build, validate, tag, release, and live-refresh in the standalone SpeakSwiftlyServer checkout. Pull the merged child state into `socket` only when the superproject intentionally needs the source mirror refreshed for release or accounting work. Routine Speak Swiftly plugin payload updates flow through the Git-backed marketplace entry and do not require a subtree pull. Do not subtree-push SpeakSwiftlyServer from `socket` unless Gale explicitly overrides this rule. |
 
 ## Subtrees Mode Checklist
 
 Before opening or merging the `socket` release PR:
 
 - verify which subtree-managed children are touched
-- for `SpeakSwiftlyServer`, verify whether the socket release actually needs the source mirror refreshed; if not, say plainly that plugin payload changes are served from the Git-backed standalone repository and no subtree sync is required
 - for `apple-dev-skills`, decide whether the socket commit must be pushed back to the child remote before the umbrella release
 - keep subtree sync commits isolated from unrelated docs, marketplace, or version-bump commits
 
@@ -84,4 +82,4 @@ After tagging:
 - push the `socket` tag
 - create the GitHub release from the existing tag
 - verify the release object exists on GitHub
-- if a child release landed outside `socket`, verify `socket` either contains that child state or explicitly records why the sync is deferred
+- if a child release landed outside `socket`, verify `socket` either contains that child state or explicitly records why the sync is deferred. For Speak Swiftly, the Socket catalog follows `gaelic-ghost/SpeakSwiftlyServer` directly, so standalone SpeakSwiftlyServer releases normally require no local subtree sync.

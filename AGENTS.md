@@ -28,19 +28,19 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Prefer small, focused commits over broad mixed changes.
 - For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
 - For `apple-dev-skills`, keep subtree sync operations explicit and isolated from unrelated edits.
-- Treat `plugins/SpeakSwiftlyServer` as a downstream source mirror of the standalone SpeakSwiftlyServer checkout, not as the Socket plugin payload. Speak Swiftly plugin payload edits belong in the standalone checkout and reach Socket users through the Git-backed marketplace entry. Subtree-pull `SpeakSwiftlyServer` into `socket` only when the superproject intentionally needs the standalone source state for release or accounting work; do not subtree-push SpeakSwiftlyServer changes from `socket` unless Gale explicitly overrides that one-off rule.
+- Treat `SpeakSwiftlyServer` as a standalone Git-backed plugin source, not as a local `plugins/` mirror. Speak Swiftly plugin payload edits belong in the standalone checkout and reach Socket users through the Git-backed marketplace entry.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
 ### Subtree Sync And Branch Accounting Gates
 
 - Treat subtree sync completion and branch accounting as hard gates, not follow-up cleanup.
 - Before claiming a subtree-managed task is done, verify whether the corresponding child-repo work also needs an explicit `git subtree pull` or `git subtree push` in `socket`, and either perform that sync or say plainly why no sync is required.
-- In `subtrees` release mode, treat `socket` like a standard protected-main release: validate, branch or PR when needed, clear CI and PR comments before tagging, merge to `main`, fast-forward local `main`, tag the superproject from reviewed `main`, push the tag, create the GitHub release, and only add the subtree accounting gates that determine whether each child repo needs pull-only sync, push-out sync, or no subtree action.
+- In `subtrees` release mode, treat `socket` like a standard protected-main release: validate, branch or PR when needed, clear CI and PR comments before tagging, merge to `main`, fast-forward local `main`, tag the superproject from reviewed `main`, push the tag, create the GitHub release, and only add the subtree accounting gates that determine whether each child repo needs pull or push.
 - Before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch that is still not contained by local `main` and account for each one explicitly as one of: already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete.
 - Do not say work is "on main", "merged", "recovered", "preserved", or "safe to clean up" until commit reachability has been verified in the exact repository and remote that statement refers to.
 - Do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until the branch-accounting pass has been completed and any non-`main` history is either merged or preserved on an explicit archive ref.
 - After a subtree sync lands, re-check `git log origin/main..main` and `git branch --no-merged main` so the superproject does not silently stay ahead with imported child-repo history or stranded local refs.
-- If a child repo release lands outside `socket`, do not consider the overall workflow complete until `socket` has either been synced to that child-repo state or the absence of a `socket` sync has been surfaced explicitly to Gale before cleanup.
+- If a child repo release lands outside `socket`, do not consider the overall workflow complete until `socket` has either been synced to that child-repo state or the absence of a `socket` sync has been surfaced explicitly to Gale before cleanup. For `SpeakSwiftlyServer`, the expected state is usually no local sync because the Socket marketplace follows the standalone Git-backed plugin source.
 
 ### Source of Truth
 
@@ -67,7 +67,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 ### Communication and Escalation
 
-- Start from the root docs when the task is about the mixed monorepo model, root marketplace wiring, subtree sync for `apple-dev-skills` or `SpeakSwiftlyServer`, or superproject release flow.
+- Start from the root docs when the task is about the mixed monorepo model, root marketplace wiring, subtree sync for `apple-dev-skills`, the Git-backed Speak Swiftly catalog entry, or superproject release flow.
 - Start from the child repo docs when the task is really about one child repo's own behavior.
 - If scope widens from one root concern into a cross-repo or packaging-policy change, stop and surface that widening before continuing.
 - When a historical maintainer doc no longer carries live decision-making value, collapse its durable conclusions into `ROADMAP.md` or a still-live reference doc instead of preserving another stale planning note.
@@ -91,10 +91,9 @@ uv run scripts/validate_socket_metadata.py
 ```bash
 git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
-git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
-Use these commands only when the work is intentionally publishing or syncing one of the remaining subtree-managed child repos. `SpeakSwiftlyServer` is intentionally pull-only from `socket` by default.
+Use these commands only when the work is intentionally publishing or syncing the remaining subtree-managed child repo.
 
 ### Shared Version Workflow
 

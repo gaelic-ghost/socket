@@ -27,7 +27,7 @@ This repository is active and maintained as the superproject coordination layer.
 
 ### What This Project Is
 
-`socket` is the superproject Gale uses to keep several Codex plugin and skills repositories under one Git root while OpenAI's documented Codex plugin system still lacks a better shared-parent scoping model. It owns the repo-root Codex marketplace at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), the monorepo-owned child directories under [`plugins/`](./plugins/), the remaining subtree sync paths for `apple-dev-skills` and `SpeakSwiftlyServer`, and the root maintainer docs that explain how the mixed model works.
+`socket` is the superproject Gale uses to keep several Codex plugin and skills repositories under one Git root while OpenAI's documented Codex plugin system still lacks a better shared-parent scoping model. It owns the repo-root Codex marketplace at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), the monorepo-owned child directories under [`plugins/`](./plugins/), the remaining subtree sync path for `apple-dev-skills`, and the root maintainer docs that explain how the mixed model works.
 
 ### Motivation
 
@@ -75,7 +75,7 @@ Use `socket` when the task is about the superproject layer:
 
 - root marketplace wiring
 - mixed monorepo policy
-- subtree sync flow for `apple-dev-skills` or `SpeakSwiftlyServer`
+- subtree sync flow for `apple-dev-skills`
 - cross-repo maintainer guidance
 - coordinated child-skill guidance, such as Codex subagent wording that must stay consistent across exported skills
 - coordinated release-prep work that needs the root docs and child version surfaces to stay in sync
@@ -95,13 +95,13 @@ uv sync --dev
 
 For Python-backed maintainer tooling in this superproject or its child repositories, keep the repo-local baseline explicit in `pyproject.toml` instead of assuming machine-global tools. When a repo expects Python validation, declare the needed dev dependencies there, including `pytest`, `ruff`, and `mypy` when those checks are part of the shipped workflow.
 
-Only `apple-dev-skills` and `SpeakSwiftlyServer` still use subtree sync workflows. `python-skills` is now maintained as a normal monorepo-owned child directory. `socket` itself does not ship a root plugin; the repo marketplace is the root Codex-facing catalog here.
+Only `apple-dev-skills` still uses a subtree sync workflow. `SpeakSwiftlyServer` is exposed through a Git-backed marketplace entry, and `python-skills` is maintained as a normal monorepo-owned child directory. `socket` itself does not ship a root plugin; the repo marketplace is the root Codex-facing catalog here.
 
 ### Workflow
 
 Treat Gale's local `socket` checkout as the normal day-to-day checkout on `main`. Work in the monorepo copy first, and use the relevant directory under [`plugins/`](./plugins/) for child-repository changes unless the task is explicitly about the root marketplace or root maintainer docs. Reach for a feature branch or a dedicated worktree only when the change needs extra isolation.
 
-Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills`, keep subtree sync operations explicit and isolated. For Speak Swiftly plugin payload changes, work in the standalone `SpeakSwiftlyServer` checkout; the Socket marketplace points at that Git-backed plugin source and does not need a copied payload update here. Use the `SpeakSwiftlyServer` subtree pull only when `socket` intentionally needs the standalone source mirror refreshed for release or accounting work.
+Keep root docs and marketplace wiring in sync with packaging changes in the same pass. For monorepo-owned child directories, edit the relevant directory under [`plugins/`](./plugins/) directly and commit in `socket`. For `apple-dev-skills`, keep subtree sync operations explicit and isolated. For Speak Swiftly plugin payload changes, work in the standalone `SpeakSwiftlyServer` checkout; the Socket marketplace points at that Git-backed plugin source and does not carry a copied payload or source mirror here.
 
 When a guidance change intentionally spans multiple child skill repositories, update the affected child docs and the root `socket` docs in the same pass so the superproject still explains why the coordinated edit belongs here.
 
@@ -121,7 +121,7 @@ scripts/release.sh custom 1.2.3
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow boundary and [`ROADMAP.md`](./ROADMAP.md) for root planning and historical notes.
 
-Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the full release flow. `standard` is the normal `socket` release mode; `subtrees` is the standard mode plus explicit pull/push accounting for subtree-managed children.
+Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for the full release flow. `standard` is the normal `socket` release mode; `subtrees` is the standard mode plus explicit pull/push accounting for subtree-managed children such as `apple-dev-skills`.
 
 ### Validation
 
@@ -200,16 +200,16 @@ The root superproject docs are:
 
 ## Plugin Surfaces
 
-Treat `socket` as the canonical home for the monorepo-owned child directories and as the subtree host for the remaining imported child repos.
+Treat `socket` as the canonical home for the monorepo-owned child directories, the subtree host for `apple-dev-skills`, and the Git-backed catalog host for Speak Swiftly.
 
 - `agent-plugin-skills`, `cardhop-app`, `dotnet-skills`, `productivity-skills`, `rust-skills`, `spotify`, `swiftasb-skills`, `things-app`, and `web-dev-skills` are monorepo-owned here.
-- `apple-dev-skills` and `SpeakSwiftlyServer` preserve explicit subtree sync paths.
-- `SpeakSwiftlyServer` may be synchronized into `socket` by subtree pull after standalone source or release work lands, but routine Speak Swiftly plugin payload edits do not need a subtree pull because the Socket catalog installs from the Git-backed standalone repository.
+- `apple-dev-skills` preserves an explicit subtree sync path.
+- `SpeakSwiftlyServer` is no longer imported under `plugins/`; the Socket catalog installs it from the Git-backed standalone repository.
 - `python-skills` is monorepo-owned here with no separate upstream GitHub release target.
-- Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here or still preserve subtree sync.
+- Child repos may expose plugin packaging from their own repo roots whether they are monorepo-owned here, subtree-managed, or exposed through a Git-backed marketplace entry.
 - `apple-dev-skills` packages from its child-repo root at `./plugins/apple-dev-skills`, and its Codex plugin manifest registers Xcode's built-in MCP bridge through a root `.mcp.json`.
 - `swiftasb-skills` packages from its child-repo root at `./plugins/swiftasb-skills`, and ships companion guidance for explaining SwiftASB, choosing integration shapes, diagnosing integration failures, and building SwiftUI, AppKit, and Swift package integrations on top of the SwiftASB package.
-- `apple-dev-skills` and `SpeakSwiftlyServer` also carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either child repository as a Git-backed standalone marketplace without cloning `socket`.
+- `apple-dev-skills` and `SpeakSwiftlyServer` carry their own repo-local `.agents/plugins/marketplace.json` files so Codex can track either repository as a Git-backed standalone marketplace without cloning `socket`.
 - `SpeakSwiftlyServer` owns the canonical `speak-swiftly` plugin payload. The Socket marketplace exposes that payload by Git-backed reference so users can enable `Speak Swiftly` from the Socket catalog without `socket` carrying a second copied plugin directory.
 - `things-app` packages from its child-repo root at `./plugins/things-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.
 - `cardhop-app` packages from its child-repo root at `./plugins/cardhop-app`, and its bundled MCP server lives directly under that child repo's top-level `mcp/` directory.

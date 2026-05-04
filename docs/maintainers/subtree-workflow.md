@@ -1,6 +1,6 @@
 # Monorepo Workflow
 
-This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills` and `SpeakSwiftlyServer` as the remaining subtree-managed child repositories.
+This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills` as the remaining subtree-managed child repository.
 
 ## What Socket Owns
 
@@ -16,7 +16,7 @@ Treat Gale's local `socket` checkout as the normal day-to-day working checkout o
 
 Direct work on local `main` is the default for `socket`. Use a feature branch or a dedicated worktree only when a change needs extra isolation for safety, review, or overlapping parallel work.
 
-`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/` and `plugins/SpeakSwiftlyServer/`.
+`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/`.
 
 For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
 
@@ -24,7 +24,7 @@ For coordinated guidance that spans multiple monorepo-owned child repositories, 
 
 For `apple-dev-skills`, when a change should publish back to its source repository, work in `plugins/apple-dev-skills/`, commit in `socket`, and then use `git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main`.
 
-For `SpeakSwiftlyServer`, treat `plugins/SpeakSwiftlyServer/` as a downstream source mirror, not as the Socket plugin payload. Build, validate, tag, release, and live-refresh SpeakSwiftlyServer in its standalone checkout. Use `git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main` only when `socket` intentionally needs the standalone source state refreshed for release or accounting work. Routine Speak Swiftly plugin payload changes land in the standalone repository and flow to Socket users through the Git-backed marketplace entry.
+For Speak Swiftly plugin payload work, use the standalone `SpeakSwiftlyServer` checkout. Socket users receive that payload through the Git-backed marketplace entry, so `socket` no longer imports the standalone source tree under `plugins/`.
 
 ## Child Repository Shape
 
@@ -47,40 +47,35 @@ Use this shape when all of these are true:
 
 1. The external repository is the real source of truth for the plugin manifest, skills, hooks, MCP config, and doctor scripts.
 2. `socket` should list the plugin for catalog convenience, but should not own a second copied payload.
-3. The local subtree mirror exists for source, release, or branch-accounting visibility rather than as the plugin install root.
+3. `socket` does not need to carry a local source mirror for the plugin to stay available from the Socket catalog.
 
 When a remote catalog entry is added, update the root marketplace validator so it understands that entry type. Local entries should still verify their checked-in packaged plugin roots. Remote entries should verify the marketplace metadata shape and document which external repository owns plugin validation.
 
 ## Current Named Remotes
 
-The superproject keeps `origin` for `socket` and child-repository remotes for `apple-dev-skills` and `speak-swiftly-server`.
+The superproject keeps `origin` for `socket` and a child-repository remote for `apple-dev-skills`.
 
 Current child-repo remotes:
 
 - `apple-dev-skills`
-- `speak-swiftly-server`
 
 If a new subtree-managed child repository is introduced later, add its matching named remote first.
 
-## Subtree Work For Apple Dev Skills And SpeakSwiftlyServer
+## Subtree Work For Apple Dev Skills
 
-Use dedicated commits for `apple-dev-skills` and `SpeakSwiftlyServer` subtree work.
+Use dedicated commits for `apple-dev-skills` subtree work.
 
 Current subtree direction:
 
 | Child | Prefix | Remote | Default direction |
 | --- | --- | --- | --- |
 | `apple-dev-skills` | `plugins/apple-dev-skills` | `apple-dev-skills` | pull and push |
-| `SpeakSwiftlyServer` | `plugins/SpeakSwiftlyServer` | `speak-swiftly-server` | pull-only |
 
 Typical pull flow:
 
 ```bash
 git fetch apple-dev-skills
 git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
-
-git fetch speak-swiftly-server
-git subtree pull --prefix=plugins/SpeakSwiftlyServer speak-swiftly-server main
 ```
 
 Typical push flow:
@@ -89,13 +84,11 @@ Typical push flow:
 git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
 ```
 
-Do not subtree-push `SpeakSwiftlyServer` from `socket` unless Gale explicitly overrides the pull-only rule for that specific task.
-
 After subtree work:
 
-- verify the directory shape under `plugins/apple-dev-skills/` or `plugins/SpeakSwiftlyServer/`
+- verify the directory shape under `plugins/apple-dev-skills/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
-- if the subtree work is part of a coordinated release-prep pass, use [`release-modes.md`](./release-modes.md) and account for whether each child needs pull-only sync, push-out sync, or no subtree action
+- if the subtree work is part of a coordinated release-prep pass, use [`release-modes.md`](./release-modes.md) and account for whether the child needs pull, push, or no subtree action
 
 ## Shared Version Workflow
 
@@ -116,7 +109,6 @@ That workflow updates the maintained `pyproject.toml` and `.codex-plugin/plugin.
 Use `subtrees` mode from [`release-modes.md`](./release-modes.md) when a `socket` release also needs subtree accounting. That mode treats the umbrella repository like a standard protected-main release and adds the subtree gate before tagging:
 
 - `apple-dev-skills`: pull or push as needed for the child state that the release owns
-- `SpeakSwiftlyServer`: pull the already validated standalone child state down into `socket`; do not push it back out from `socket` by default
 - all subtree sync decisions: record whether the child was pulled, pushed, intentionally deferred, or not touched
 
 ## Add A New Subtree-Managed Child Repository
@@ -184,7 +176,7 @@ Use this checklist before removing a public child repository from `socket` or fr
 6. Run `uv run scripts/validate_socket_metadata.py`.
 7. Account for local branches not contained by `main` before cleanup.
 
-If the child is `SpeakSwiftlyServer`, do not use this checklist as permission to delete or rewrite the standalone live-service repository. That repo's standalone release, validation, and live-refresh path stays outside ordinary `socket` cleanup.
+If the removed Socket entry points at `SpeakSwiftlyServer`, do not use this checklist as permission to delete or rewrite the standalone live-service repository. That repo's standalone release, validation, and live-refresh path stays outside ordinary `socket` cleanup.
 
 ## Release Flow
 
@@ -207,10 +199,10 @@ Use `vx.x.x` tags for socket releases. When a release used `subtrees` mode, do n
 
 - The socket marketplace still points at a directory that no longer exists in `plugins/`.
 - A child directory vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
-- `apple-dev-skills` or `SpeakSwiftlyServer` still expects subtree sync, but its named remote is missing or points nowhere useful.
+- `apple-dev-skills` still expects subtree sync, but its named remote is missing or points nowhere useful.
 - Socket docs still describe the old all-subtree model after the monorepo has already moved on.
-- `apple-dev-skills` or `SpeakSwiftlyServer` subtree work lands without a follow-up pass over root marketplace wiring and docs.
-- `SpeakSwiftlyServer` is subtree-pushed from `socket` even though its build, validation, release, and live-service refresh belong in the standalone checkout.
+- `apple-dev-skills` subtree work lands without a follow-up pass over root marketplace wiring and docs.
+- Socket docs or marketplace entries reintroduce a local SpeakSwiftlyServer mirror even though Speak Swiftly is served from the standalone Git-backed repository.
 
 ## Practical Rule Of Thumb
 

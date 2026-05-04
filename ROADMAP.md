@@ -34,7 +34,7 @@
 
 ### Status
 
-Completed
+In Progress
 
 ### Scope
 
@@ -51,7 +51,7 @@ Completed
 
 - [x] Root maintainer workflow docs describe the actual subtree sync path without stale or duplicate guidance.
 
-Completed Milestone 2 by documenting the current subtree add, pull, and push paths, preserving the child-specific `apple-dev-skills` push-capable and `SpeakSwiftlyServer` pull-only rules, and adding explicit marketplace-audit and public-child-removal checklists to the maintainer workflow.
+Completed Milestone 2 by documenting the subtree add, pull, and push paths, preserving the child-specific `apple-dev-skills` push-capable and historical `SpeakSwiftlyServer` pull-only rules, and adding explicit marketplace-audit and public-child-removal checklists to the maintainer workflow.
 
 ## Milestone 3: release and sync discipline
 
@@ -80,14 +80,14 @@ Completed Milestone 3 by aligning the release-mode docs, subtree sync rules, sha
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
 - [x] Keep the canonical Codex plugin payload in the standalone `SpeakSwiftlyServer` repository so `.codex-plugin/plugin.json`, `.mcp.json`, `hooks/`, `skills/`, user guidance, and doctor scripts have one source of truth.
 - [x] Rename the canonical plugin identity to `speak-swiftly` while keeping the display name `Speak Swiftly`.
 - [x] Update the root marketplace so the public Speak Swiftly entry is listed as `speak-swiftly` from the `gaelic-ghost/SpeakSwiftlyServer` Git-backed plugin source instead of the local `./plugins/SpeakSwiftlyServer` subtree mirror.
-- [ ] Keep `plugins/SpeakSwiftlyServer/` as a pull-only subtree mirror of the standalone Swift package only for source, release, and superproject accounting while that mirror remains useful.
+- [x] Retire the legacy `plugins/SpeakSwiftlyServer/` pull-only subtree mirror once the Git-backed catalog path made the local source mirror unnecessary.
 - [x] Update root README, plugin-packaging strategy, subtree workflow guidance, and child-facing docs so users understand the split: Codex users can install `Speak Swiftly` from either the `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace, while app embedders use the Swift package directly.
 
 ### Tickets
@@ -107,11 +107,11 @@ In Progress
 - [x] The `socket` marketplace exposes `speak-swiftly` as a Git-backed reference to the canonical `SpeakSwiftlyServer` plugin payload instead of a second copied plugin directory.
 - [x] `SpeakSwiftlyServer` remains the source of truth for the plugin payload, Swift package, executable, LaunchAgent, embedded API, HTTP/MCP implementation, and release notes.
 - [x] User-facing docs no longer recommend installing the full `SpeakSwiftlyServer` subtree mirror from `socket` as the default Codex plugin path.
-- [ ] `Speak Swiftly` can be installed or enabled from either the Git-backed `gaelic-ghost/socket` marketplace or the standalone `gaelic-ghost/SpeakSwiftlyServer` marketplace.
+- [x] `Speak Swiftly` can be installed or enabled from either the Git-backed `gaelic-ghost/socket` marketplace or the standalone `gaelic-ghost/SpeakSwiftlyServer` marketplace.
 - [ ] The doctor confirms hook, MCP, runtime, and voice-profile health, detects duplicate marketplace enablement, and can repair duplicates with preference for `speak-swiftly@socket`.
 - [x] The old `speak-swiftly-server` plugin id is either migrated away, marked transitional with a documented sunset path, or intentionally retained with a clear reason.
 
-Verified against `gaelic-ghost/SpeakSwiftlyServer` `v4.5.0`: the released repository root plugin manifest declares `name: speak-swiftly`, version `2.2.0`, `interface.displayName: Speak Swiftly`, `mcpServers: ./.mcp.json`, `hooks: ./hooks/hooks.json`, and `skills: ./skills/`; its standalone marketplace entry also exposes `speak-swiftly` from `./`. Local checkout install/remove tests for both repositories passed with temporary `CODEX_HOME` directories, leaving the test marketplaces removed. The Git-backed standalone SpeakSwiftlyServer marketplace add/upgrade test passed from isolated state. After PR #36 merged, the Git-backed Socket marketplace add/upgrade test passed from isolated state at Socket revision `5bc1e94`, and the cached Socket catalog exposed `speak-swiftly` from `https://github.com/gaelic-ghost/SpeakSwiftlyServer.git` with `ref: main`.
+Verified against `gaelic-ghost/SpeakSwiftlyServer` `v4.5.0`: the released repository root plugin manifest declares `name: speak-swiftly`, version `2.2.0`, `interface.displayName: Speak Swiftly`, `mcpServers: ./.mcp.json`, `hooks: ./hooks/hooks.json`, and `skills: ./skills/`; its standalone marketplace entry also exposes `speak-swiftly` from `./`. Local checkout install/remove tests for both repositories passed with temporary `CODEX_HOME` directories, leaving the test marketplaces removed. The Git-backed standalone SpeakSwiftlyServer marketplace add/upgrade test passed from isolated state. After PR #36 merged, the Git-backed Socket marketplace add/upgrade test passed from isolated state at Socket revision `5bc1e94`, and the cached Socket catalog exposed `speak-swiftly` from `https://github.com/gaelic-ghost/SpeakSwiftlyServer.git` with `ref: main`. After the standalone `SpeakSwiftlyServer` `v5.0.0` update landed on `main`, `socket` removed the legacy local subtree mirror instead of pulling another source copy that the marketplace no longer installs from.
 
 ## Milestone 5: SwiftASB skills plugin
 
