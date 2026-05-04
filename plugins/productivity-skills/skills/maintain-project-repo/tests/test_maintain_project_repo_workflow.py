@@ -138,11 +138,17 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("Standard release mode must run from a release branch or worktree", release_script)
         self.assertIn("version-bump.sh", release_script)
         self.assertIn("wait_for_initial_pr_checks", release_script)
+        self.assertIn("ensure_remote_ci_mode", release_script)
+        self.assertIn("defer_remote_ci_if_requested", release_script)
+        self.assertIn("--remote-ci-mode full|defer", release_script)
+        self.assertIn("Version bump commit for $RELEASE_TAG is already at HEAD", release_script)
+        self.assertIn("Codex should use a native thread Timer/Wakeup or heartbeat automation", release_script)
         self.assertIn("wait_for_remote_branch", release_script)
         self.assertIn("wait_for_remote_tag", release_script)
         self.assertIn("wait_for_pr_review_state", release_script)
         self.assertIn("wait_for_github_release", release_script)
         self.assertIn("REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS", release_script)
+        self.assertIn("REPO_MAINTENANCE_REMOTE_CI_MODE", release_script)
         self.assertIn("push_release_branch", release_script)
         self.assertIn("push_release_tag", release_script)
         self.assertIn('rev-list -n 1 "$RELEASE_TAG"', release_script)
@@ -154,6 +160,10 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("Last observed state:", release_script)
         self.assertNotIn("release tag `$RELEASE_TAG` was created locally before this PR", release_script)
         standard_flow = release_script[release_script.index("run_standard_release()") :]
+        self.assertLess(
+            standard_flow.index("wait_for_initial_pr_checks \"$pr_number\""),
+            standard_flow.index("defer_remote_ci_if_requested \"$pr_number\""),
+        )
         self.assertLess(standard_flow.index("watch_ci \"$pr_number\""), standard_flow.index("create_release_tag"))
         self.assertLess(standard_flow.index("check_pr_comments \"$pr_number\""), standard_flow.index("create_release_tag"))
         self.assertLess(standard_flow.index("fast_forward_base_branch"), standard_flow.index("create_release_tag"))
@@ -189,7 +199,9 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         )
         self.assertIn("REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS=120", release_env)
         self.assertIn("REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS=5", release_env)
+        self.assertIn("REPO_MAINTENANCE_REMOTE_CI_MODE=full", release_env)
         self.assertIn("transient indexing gaps", release_env)
+        self.assertIn("native thread Timer/Wakeup or heartbeat automation", release_env)
 
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

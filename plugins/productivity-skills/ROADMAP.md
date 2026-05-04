@@ -166,6 +166,7 @@ Planned
 ## History
 
 - Added Codex plugin repository detection to `maintain-project-architecture`, covering plugin manifests, marketplace catalogs, skill manifests, MCP configs, and evidence-backed plugin-to-skill and marketplace-to-plugin relationships.
+- Added a deferred remote-CI release lane to `maintain-project-repo`, keeping full local validation while letting Codex pause after initial GitHub check discovery and resume through a native thread Timer/Wakeup or heartbeat automation instead of holding an idle polling shell open.
 - Updated `maintain-project-repo` GitHub workflow assets to avoid Node 20 deprecation warnings by moving generated checkout steps to `actions/checkout@v6.0.2` and replacing the Apple profile's `setup-xcode@v1` action with a shell Xcode selection step.
 - Added `maintain-project-architecture` as the baseline `docs/architecture/ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` maintenance skill, with first-pass SwiftPM product/target detection and stale model checks.
 - Added first-pass OpenAI Codex Hooks guidance for AGENTS and repo-maintenance workflows, plus a planned `maintain-project-hooks` baseline skill for future deterministic hook audits.

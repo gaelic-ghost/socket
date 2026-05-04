@@ -153,6 +153,7 @@ In Progress
 ## History
 
 - Planned a `swiftasb-skills` child plugin to help agents explain SwiftASB and build SwiftUI, AppKit, and Swift package integrations from a Socket-visible guidance surface.
+- Updated `productivity-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
 - Planned the `Speak Swiftly` plugin catalog split so the Socket marketplace can expose the canonical `SpeakSwiftlyServer` plugin payload by Git-backed reference instead of carrying a second copied plugin directory.
 - Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.

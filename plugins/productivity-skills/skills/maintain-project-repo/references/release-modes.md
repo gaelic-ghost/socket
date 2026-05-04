@@ -14,7 +14,7 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 - wait for the pushed branch to become visible on the remote before creating or updating the PR
 - open or update a pull request against `main`
 - wait for GitHub to report initial PR checks before treating missing checks as a failure
-- watch CI
+- watch CI by default, or pause after initial check discovery when `--remote-ci-mode defer` is selected for a repository with intentionally heavy remote CI
 - stop with a clear message if CI is not green so the maintainer can fix the branch, push, and rerun the same script
 - wait for PR review/comment state to be readable before making the review-comment gate decision
 - check PR review state and comments after CI is green
@@ -35,6 +35,8 @@ bash scripts/repo-maintenance/release.sh --mode standard --version v1.2.0
 ```
 
 When a release intentionally has no repo version surfaces, pass `--skip-version-bump`. When the PR comment pass has already been handled and only historical comments remain visible through GitHub, rerun with `--review-comments-addressed`.
+
+By default, standard release mode uses `--remote-ci-mode full`, which blocks in the script while `gh pr checks --watch` waits for GitHub CI. For repositories where full local validation has already run and GitHub CI normally takes more than a couple minutes, use `--remote-ci-mode defer` during the first release pass. The script still runs local validation, pushes the release branch, opens or updates the PR, and waits until GitHub reports initial checks; then it pauses with a continuation command instead of polling the whole CI run. Codex should use the native thread Timer/Wakeup or heartbeat automation when the current Codex surface exposes it, then wake in the same thread, inspect the PR/check state, and rerun the same release command without `--remote-ci-mode defer` to finish the CI gate, review-comment gate, merge, tag, GitHub release, and cleanup.
 
 GitHub visibility waits default to `REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS=120` and `REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS=5`. More specific overrides such as `REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_PR_REVIEW_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_REMOTE_BRANCH_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_REMOTE_TAG_TIMEOUT_SECONDS`, and `REPO_MAINTENANCE_GH_RELEASE_TIMEOUT_SECONDS` can narrow individual gates without editing the script. Timeout failures should name the delayed surface and the last observed state so maintainers can tell indexing lag apart from real CI, review, branch, tag, or release failures.
 

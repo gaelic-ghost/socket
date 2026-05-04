@@ -349,6 +349,33 @@ The short version is: Codex Hooks are optional lifecycle scripts loaded from `ho
 
 - JSON with `status`, `path_type`, `output`, `profile`, `managed_files`, `applied_actions`, `next_step`
 
+### Workflow: `standard release remote CI`
+
+**Overview**
+
+- Triggered when a maintained repository uses the installed `release.sh --mode standard` flow and GitHub CI is intentionally heavy.
+- Variant workflow.
+- `local-validated-then-deferred`
+
+**Inputs**
+
+- Required: `--mode standard`
+- Required: `--version vX.Y.Z`
+- Optional: `--remote-ci-mode full|defer`
+- Optional: `REPO_MAINTENANCE_REMOTE_CI_MODE=full|defer`
+- Tool/script input: `assets/repo-maintenance/release.sh`
+
+**Branch Conditions**
+
+- Full mode: after full local validation, keep the script open while `gh pr checks --watch` waits for the remote checks.
+- Deferred mode: after full local validation, branch push, PR creation, and initial check discovery, pause with a continuation command so Codex can use a native thread Timer/Wakeup or heartbeat automation when available.
+- Resume: rerun the same standard release command without deferred mode from the release branch; an existing `release: bump versions for vX.Y.Z` commit at `HEAD` is treated as the intended resume point.
+
+**Outputs**
+
+- Full mode continues through CI, review-comment gate, merge, fast-forward, tag, GitHub release, and cleanup.
+- Deferred mode exits after printing the PR, release branch, and continuation command; the release is explicitly not complete until the resumed pass finishes.
+
 ### Workflow: `report-only`
 
 **Overview**

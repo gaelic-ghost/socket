@@ -56,6 +56,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - use `scripts/repo-maintenance/validate-all.sh` for local validation
    - use `scripts/repo-maintenance/sync-shared.sh` for repo-local shared sync tasks
    - use `scripts/repo-maintenance/release.sh --mode standard` from a feature branch or worktree when protected `main` owns the final release line
+   - use `scripts/repo-maintenance/release.sh --mode standard --remote-ci-mode defer` when full local validation has run and the repository's GitHub CI is intentionally heavy; Codex should schedule a native thread Timer/Wakeup or heartbeat automation when available, then resume the release in the same thread instead of leaving a shell process open just to poll remote checks
    - use `scripts/repo-maintenance/release.sh --mode submodule` only when the repo is checked out as a submodule and the parent pointer update remains a separate follow-up
 
 ## Inputs
@@ -104,6 +105,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - Apple profiles install checked-in `.swiftformat` and `.swiftlint.yml` samples so SwiftFormat owns formatting shape while SwiftLint stays focused on complementary safety and clarity checks.
 - The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
 - The generated GitHub Actions wrapper uses Node 24-compatible Actions versions, including `actions/checkout@v6.0.2`. Apple profiles report the runner-selected Xcode with shell commands instead of using the Node 20-based `maxim-lobanov/setup-xcode@v1` action.
+- Standard release mode defaults to full remote CI watching, but supports `--remote-ci-mode defer` for repositories whose GitHub CI is too heavy to justify keeping a Codex thread and shell process awake. Deferred mode still requires full local validation, branch push, PR creation, and initial check discovery before pausing.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the repo still needs to be created.
 - Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after `maintain-project-repo` is present.
 
