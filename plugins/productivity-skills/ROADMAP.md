@@ -165,6 +165,7 @@ Planned
 
 ## History
 
+- Updated `maintain-project-repo` GitHub workflow assets to avoid Node 20 deprecation warnings by moving generated checkout steps to `actions/checkout@v6.0.2` and replacing the Apple profile's `setup-xcode@v1` action with a shell Xcode selection step.
 - Added `maintain-project-architecture` as the baseline `docs/architecture/ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` maintenance skill, with first-pass SwiftPM product/target detection and stale model checks.
 - Added first-pass OpenAI Codex Hooks guidance for AGENTS and repo-maintenance workflows, plus a planned `maintain-project-hooks` baseline skill for future deterministic hook audits.
 - Added maintainer guidance for optional Codex subagent use in documentation, maintenance, and explanation skills, keeping delegation explicitly user-triggered and read-heavy by default.

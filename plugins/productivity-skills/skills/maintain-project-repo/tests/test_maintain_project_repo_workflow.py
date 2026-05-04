@@ -58,8 +58,10 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
             self.assertIn("  validate:\n    name: validate\n", workflow_text)
             self.assertIn("runs-on: macos-26", workflow_text)
-            self.assertIn("maxim-lobanov/setup-xcode@v1", workflow_text)
-            self.assertIn("xcode-version: latest-stable", workflow_text)
+            self.assertIn("actions/checkout@v6.0.2", workflow_text)
+            self.assertIn("xcode-select --print-path", workflow_text)
+            self.assertNotIn("actions/checkout@v4", workflow_text)
+            self.assertNotIn("maxim-lobanov/setup-xcode@v1", workflow_text)
             self.assertIn("xcrun swift --version", workflow_text)
             self.assertIn("brew install swiftformat swiftlint", workflow_text)
 
@@ -70,7 +72,22 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
             self.assertIn("runs-on: macos-latest", workflow_text)
+            self.assertIn("actions/checkout@v6.0.2", workflow_text)
+            self.assertNotIn("actions/checkout@v4", workflow_text)
             self.assertNotIn("maxim-lobanov/setup-xcode@v1", workflow_text)
+
+    def test_managed_workflows_avoid_node20_action_versions(self) -> None:
+        workflow_assets = [
+            ROOT / "skills/maintain-project-repo/assets/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
+            ROOT
+            / "skills/maintain-project-repo/assets/profiles/apple/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
+        ]
+        for workflow_asset in workflow_assets:
+            with self.subTest(workflow=workflow_asset.name):
+                workflow_text = workflow_asset.read_text(encoding="utf-8")
+                self.assertIn("actions/checkout@v6.0.2", workflow_text)
+                self.assertNotIn("actions/checkout@v4", workflow_text)
+                self.assertNotIn("maxim-lobanov/setup-xcode@v1", workflow_text)
 
     def test_generic_profile_keeps_generic_pre_commit_hook(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

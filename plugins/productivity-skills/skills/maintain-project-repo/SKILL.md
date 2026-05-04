@@ -3,7 +3,7 @@ name: maintain-project-repo
 description: Install or refresh the profile-aware local-first maintain-project-repo toolkit for Swift, Xcode, and general repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
 license: MIT
 metadata:
-  semver: 0.2.0
+  semver: 0.2.1
 ---
 
 # Maintain Project Repo
@@ -103,6 +103,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - The installer keeps the selected `maintain-project-repo` profile explicit via `scripts/repo-maintenance/config/profile.env`.
 - Apple profiles install checked-in `.swiftformat` and `.swiftlint.yml` samples so SwiftFormat owns formatting shape while SwiftLint stays focused on complementary safety and clarity checks.
 - The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
+- The generated GitHub Actions wrapper uses Node 24-compatible Actions versions, including `actions/checkout@v6.0.2`. Apple profiles report the runner-selected Xcode with shell commands instead of using the Node 20-based `maxim-lobanov/setup-xcode@v1` action.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the repo still needs to be created.
 - Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after `maintain-project-repo` is present.
 
