@@ -31,5 +31,5 @@
 - Treat accessibility semantics and Apple UI accessibility review as a separate concern from UI automation; use `apple-ui-accessibility-workflow` for the semantic side and `xcode-testing-workflow` for runtime verification and XCUITest follow-through.
 - When scripts add files on disk, verify project membership, target membership, build phases, and resource inclusion afterward; files existing in the directory tree alone are not enough.
 - Validate both Debug and Release paths when behavior can diverge, and treat tagged releases as a cue to build and verify Release artifacts in addition to the everyday Debug flow.
-- Never edit `.pbxproj` files directly. If a project-file change is needed and no safe project-aware tool is available, stop and make that change through Xcode instead.
+- Never edit `.pbxproj` files directly. If a project-file change is needed and no safe project-aware tool is available, stop and make that change through Xcode instead. When `.pbxproj` is tracked and Xcode, XcodeGen, or another project-aware workflow legitimately changes it, treat that diff as critical project state: review it, stage it, and commit it with the branch before any push, merge, release, or cleanup.
 - Validate Xcode-project changes with explicit `xcodebuild` commands when build or test integrity matters.

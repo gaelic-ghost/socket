@@ -17,6 +17,7 @@ REQUIRED_STRINGS = [
     "xcode-testing-workflow",
     "sync-xcode-project-guidance",
     "Never edit `.pbxproj` files directly.",
+    "treat that diff as critical project state",
     "scripts/repo-maintenance/validate-all.sh",
     "scripts/repo-maintenance/sync-shared.sh",
     "scripts/repo-maintenance/release.sh",

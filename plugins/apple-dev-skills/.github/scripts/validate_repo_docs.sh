@@ -300,6 +300,7 @@ for agents_asset in "${xcode_agents_assets[@]}"; do
   require_contains "$agents_asset" 'project membership, target membership, build phases, and resource inclusion'
   require_contains "$agents_asset" 'Debug and Release'
   require_contains "$agents_asset" 'Never edit `.pbxproj` files directly.'
+  require_contains "$agents_asset" 'treat that diff as critical project state'
   require_contains "$agents_asset" 'sync-xcode-project-guidance'
 done
 

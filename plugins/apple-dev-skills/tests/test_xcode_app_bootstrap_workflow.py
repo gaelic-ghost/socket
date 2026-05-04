@@ -195,6 +195,7 @@ exit 1
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
+            self.assertIn("treat that diff as critical project state", agents_text)
             self.assertTrue((target / "DemoApp.xcodeproj").exists())
             self.assertTrue((target / ".swiftformat").exists())
             self.assertTrue((target / "scripts" / "repo-maintenance" / "validate-all.sh").exists())

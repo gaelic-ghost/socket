@@ -18,3 +18,7 @@ Before directly editing `.pbxproj`:
 - require explicit user approval before continuing with the direct `.pbxproj` edit
 
 Do not apply this warning path to ordinary source edits, asset edits, package work, or other direct filesystem changes that do not touch `.pbxproj`.
+
+## Tracked `.pbxproj` output
+
+When `.pbxproj` is tracked and Xcode, XcodeGen, or another project-aware workflow legitimately changes it, treat that diff as critical project state. Review it, stage it, and commit it with the branch before any push, merge, release, branch deletion, or worktree cleanup so dependency bumps, target membership, build settings, and scheme-facing changes are not stranded outside history.

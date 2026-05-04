@@ -45,7 +45,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 6. Use `references/xcodegen-project-maintenance.md` when the repo is XcodeGen-backed and the task touches generated targets, schemes, build settings, packages, file membership, resource membership, or generation options.
 7. Use `references/testing-plans-file-membership-and-configurations.md` when the task touches file membership after filesystem edits or Debug/Release validation.
 8. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
-9. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, and any required next step.
+9. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, any tracked `.pbxproj` diff that must be staged and committed with the branch, and any required next step.
 
 ## Inputs
 

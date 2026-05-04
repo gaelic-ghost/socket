@@ -65,6 +65,14 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "blocked")
             self.assertTrue(payload["output"]["guard_result"]["direct_pbxproj_edit_warning_required"])
 
+    def test_mutation_policy_requires_committing_tracked_pbxproj_output(self) -> None:
+        reference_text = (
+            ROOT / "skills/xcode-testing-workflow/references/mutation-risk-policy.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("treat that diff as critical project state", reference_text)
+        self.assertIn("commit it with the branch before any push, merge, release", reference_text)
+
     def test_infers_test_plan_and_ui_test_context_from_workspace(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_root = Path(tmpdir)

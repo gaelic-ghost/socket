@@ -128,6 +128,14 @@ class XcodeBuildRunWorkflowTests(unittest.TestCase):
         self.assertIn("xcodegen generate", reference_text)
         self.assertIn("generated `.xcodeproj` and `.pbxproj` files as output", reference_text)
 
+    def test_mutation_policy_requires_committing_tracked_pbxproj_output(self) -> None:
+        reference_text = (
+            ROOT / "skills/xcode-build-run-workflow/references/mutation-risk-policy.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("treat that diff as critical project state", reference_text)
+        self.assertIn("commit it with the branch before any push, merge, release", reference_text)
+
 
 if __name__ == "__main__":
     unittest.main()

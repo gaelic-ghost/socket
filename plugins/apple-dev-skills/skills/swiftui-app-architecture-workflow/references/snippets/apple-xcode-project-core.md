@@ -81,7 +81,7 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Prefer Debug builds for everyday edit-build-test loops, but validate Release builds explicitly when optimization, packaging, launch behavior, watchdog timing, or deployment realism matters.
 - Treat tagged releases as a signal to validate both the normal Debug path and a Release artifact path, and when shipping apps or deliverables test the Release behavior without relying on an attached debugger.
 - Prefer direct filesystem edits in Xcode-managed scope only when the workflow already accounts for project-file and scheme integrity.
-- Never edit `.pbxproj` files directly. If a project-file change is needed and no safe project-aware tool is available, stop and ask for an Xcode-mediated project change instead.
+- Never edit `.pbxproj` files directly. If a project-file change is needed and no safe project-aware tool is available, stop and ask for an Xcode-mediated project change instead. When `.pbxproj` is tracked and Xcode, XcodeGen, or another project-aware workflow legitimately changes it, treat that diff as critical project state: review it, stage it, and commit it with the branch before any push, merge, release, or cleanup.
 
 ## XcodeGen-Backed Project Guidance
 

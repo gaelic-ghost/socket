@@ -66,6 +66,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify the expected app files exist
    - verify `.swiftformat` exists
    - verify `AGENTS.md` exists when enabled
+   - verify generated guidance says tracked `.pbxproj` changes must be reviewed, staged, and committed before push, merge, release, or cleanup
    - verify `scripts/repo-maintenance/hooks/pre-commit.sample` exists
    - verify `scripts/repo-maintenance/validate-all.sh` and `scripts/repo-maintenance/release.sh` exist
    - verify branch protection, when enabled, requires the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
