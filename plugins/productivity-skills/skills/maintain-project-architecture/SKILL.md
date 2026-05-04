@@ -1,6 +1,6 @@
 ---
 name: maintain-project-architecture
-description: Maintain docs/architecture/ARCHITECTURE.md, SLICES.md, and architecture.json for a repository's product/module architecture and provable code slices. Use when a repo needs architecture docs that explain Swift products, modules, construction, ownership, evidence, stale claims, and slice inventory without generic diagrams or ungrounded architecture claims.
+description: Maintain docs/architecture/ARCHITECTURE.md, SLICES.md, and architecture.json for a repository's product/module architecture and provable code slices. Use when a repo needs architecture docs that explain Swift products, Codex plugins, skills, MCP configs, modules, construction, ownership, evidence, stale claims, and slice inventory without generic diagrams or ungrounded architecture claims.
 ---
 
 # Maintain Project Architecture
@@ -21,11 +21,16 @@ This skill is related to `explain-code-slice`, but it owns the durable architect
 2. Detect Swift package products and targets when `Package.swift` exists:
    - prefer `swift package dump-package` when it succeeds
    - fall back to conservative `Package.swift` text scanning
-3. Build or refresh `docs/architecture/architecture.json` with product, target, evidence, and slice placeholders.
-4. In `check-only`, audit required files, required sections, and stale product or target facts in `architecture.json`.
-5. In `apply`, create missing architecture files and refresh generated model facts without inventing symbols, data flows, or ownership claims.
-6. Leave `SLICES.md` present even when no provable slices have been recorded yet.
-7. Re-run the same audit and report remaining findings.
+3. Detect Codex plugin repository surfaces when plugin metadata exists:
+   - treat `.codex-plugin/plugin.json` manifests as plugin products
+   - treat `.agents/plugins/marketplace.json` catalogs as marketplace products that expose plugin entries
+   - treat `skills/*/SKILL.md` files and declared `.mcp.json` files as module targets
+   - record only manifest-backed or marketplace-backed relationships
+4. Build or refresh `docs/architecture/architecture.json` with product, target, relationship, evidence, and slice placeholders.
+5. In `check-only`, audit required files, required sections, and stale product or target facts in `architecture.json`.
+6. In `apply`, create missing architecture files and refresh generated model facts without inventing symbols, data flows, or ownership claims.
+7. Leave `SLICES.md` present even when no provable slices have been recorded yet.
+8. Re-run the same audit and report remaining findings.
 
 ## Required Files
 
@@ -38,6 +43,7 @@ This skill is related to `explain-code-slice`, but it owns the durable architect
 - `ARCHITECTURE.md` is descriptive. Put preferences, constraints, and "do not" rules in `AGENTS.md`, not here.
 - Use fixed section names so Gale can ask for a specific section without ambiguity.
 - Treat Swift Package Manager products and targets as first-class architecture facts when available.
+- Treat Codex plugin manifests, plugin marketplaces, skills, and declared MCP configs as first-class architecture facts when available.
 - Explain products/modules in terms of what they do, who creates or consumes them, what they own, and what code evidence proves that claim.
 - Do not use Mermaid, generic graph diagrams, unlabeled arrows, curved-line diagrams, centered text, or diagram labels that interrupt connector lines.
 - Keep visual claims in structured `architecture.json` until a purpose-built viewer can render them with Gale-readable layout.

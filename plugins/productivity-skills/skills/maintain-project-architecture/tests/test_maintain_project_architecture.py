@@ -43,6 +43,43 @@ let package = Package(
 """.strip()
 
 
+def plugin_manifest(name: str = "demo-plugin") -> str:
+    return f"""
+{{
+  "name": "{name}",
+  "version": "1.0.0",
+  "description": "Demo plugin.",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}}
+""".strip()
+
+
+def marketplace() -> str:
+    return """
+{
+  "name": "demo-marketplace",
+  "plugins": [
+    {
+      "name": "demo-plugin",
+      "source": {
+        "source": "local",
+        "path": "./plugins/demo-plugin"
+      }
+    },
+    {
+      "name": "remote-plugin",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/example/remote-plugin.git",
+        "ref": "main"
+      }
+    }
+  ]
+}
+""".strip()
+
+
 def test_check_only_reports_missing_architecture_files(tmp_path: Path) -> None:
     write(tmp_path / "Package.swift", package_manifest())
     report = run(tmp_path)
@@ -86,3 +123,60 @@ def test_apply_preserves_existing_slices_in_architecture_json(tmp_path: Path) ->
     run(tmp_path, run_mode="apply")
     model = (tmp_path / "docs" / "architecture" / "architecture.json").read_text(encoding="utf-8")
     assert '"name": "Launch"' in model
+
+
+def test_apply_detects_plugin_manifest_skills_and_mcp_config(tmp_path: Path) -> None:
+    plugin_root = tmp_path / "plugins" / "demo-plugin"
+    write(plugin_root / ".codex-plugin" / "plugin.json", plugin_manifest())
+    write(plugin_root / ".mcp.json", '{"mcpServers": {}}')
+    write(plugin_root / "skills" / "demo-skill" / "SKILL.md", "---\nname: demo-skill\n---\n# Demo Skill\n")
+
+    report = run(tmp_path, run_mode="apply")
+
+    assert report["errors"] == []
+    assert report["detected_model"]["detectionSource"] == "plugin-repo"
+    product_names = {product["name"] for product in report["detected_model"]["products"]}
+    target_names = {target["name"] for target in report["detected_model"]["targets"]}
+    relationship_labels = {relationship["label"] for relationship in report["detected_model"]["relationships"]}
+    assert "demo-plugin" in product_names
+    assert "skill:demo-plugin/demo-skill" in target_names
+    assert "mcp:plugins/demo-plugin/.mcp.json" in target_names
+    assert "plugin exposes skill" in relationship_labels
+    assert "plugin declares MCP servers" in relationship_labels
+
+    architecture = (tmp_path / "docs" / "architecture" / "ARCHITECTURE.md").read_text(encoding="utf-8")
+    assert "`demo-plugin`" in architecture
+    assert "`skill:demo-plugin/demo-skill`" in architecture
+    assert "`mcp-config` evidence from `plugins/demo-plugin/.mcp.json`" in architecture
+
+
+def test_apply_detects_plugin_marketplace_entries(tmp_path: Path) -> None:
+    plugin_root = tmp_path / "plugins" / "demo-plugin"
+    write(plugin_root / ".codex-plugin" / "plugin.json", plugin_manifest())
+    write(plugin_root / "skills" / "demo-skill" / "SKILL.md", "---\nname: demo-skill\n---\n# Demo Skill\n")
+    write(tmp_path / ".agents" / "plugins" / "marketplace.json", marketplace())
+
+    report = run(tmp_path, run_mode="apply")
+
+    product_names = {product["name"] for product in report["detected_model"]["products"]}
+    relationship_labels = {relationship["label"] for relationship in report["detected_model"]["relationships"]}
+    assert {"demo-marketplace", "demo-plugin", "remote-plugin"}.issubset(product_names)
+    assert "marketplace exposes plugin entry" in relationship_labels
+    assert "marketplace entry points at local plugin root" in relationship_labels
+
+    model = (tmp_path / "docs" / "architecture" / "architecture.json").read_text(encoding="utf-8")
+    assert '"kind": "codex-plugin-marketplace"' in model
+    assert '"kind": "remote-plugin-entry"' in model
+
+
+def test_apply_detects_swift_and_plugin_repos_together(tmp_path: Path) -> None:
+    write(tmp_path / "Package.swift", package_manifest())
+    write(tmp_path / ".codex-plugin" / "plugin.json", plugin_manifest("demo-swift-plugin"))
+    write(tmp_path / "skills" / "demo-skill" / "SKILL.md", "---\nname: demo-skill\n---\n# Demo Skill\n")
+
+    report = run(tmp_path, run_mode="apply")
+
+    product_names = {product["name"] for product in report["detected_model"]["products"]}
+    assert "DemoCore" in product_names
+    assert "demo-swift-plugin" in product_names
+    assert report["detected_model"]["detectionSource"].endswith("+plugin-repo")

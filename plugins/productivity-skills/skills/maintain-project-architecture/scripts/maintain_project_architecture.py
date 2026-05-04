@@ -26,6 +26,7 @@ REQUIRED_ARCHITECTURE_SECTIONS = [
     "Staleness Checks",
 ]
 REQUIRED_SLICES_SECTIONS = ["Summary", "Slice Index", "Slices"]
+IGNORED_PARTS = {".build", ".git", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".venv", "__pycache__", "node_modules"}
 
 
 @dataclass
@@ -77,6 +78,25 @@ def write_text(path: Path, text: str) -> None:
 
 def render_template(name: str) -> str:
     return read_text(skill_root() / "assets" / name)
+
+
+def load_json_file(path: Path) -> dict[str, Any] | None:
+    try:
+        data = json.loads(read_text(path))
+    except (OSError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def relative_path(project_root: Path, path: Path) -> str:
+    try:
+        return path.relative_to(project_root).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def is_ignored(path: Path) -> bool:
+    return any(part in IGNORED_PARTS for part in path.parts)
 
 
 def slugify(text: str) -> str:
@@ -179,6 +199,206 @@ def normalize_dump_package(project_root: Path, data: dict[str, Any]) -> tuple[li
     return products, targets
 
 
+def plugin_root_from_manifest(manifest_path: Path) -> Path:
+    return manifest_path.parent.parent
+
+
+def plugin_manifest_paths(project_root: Path) -> list[Path]:
+    return sorted(path for path in project_root.rglob(".codex-plugin/plugin.json") if not is_ignored(path))
+
+
+def skill_manifest_paths(plugin_root: Path) -> list[Path]:
+    skills_root = plugin_root / "skills"
+    if not skills_root.is_dir():
+        return []
+    return sorted(path for path in skills_root.glob("*/SKILL.md") if path.is_file())
+
+
+def plugin_product_target_names(project_root: Path, plugin_root: Path, manifest: dict[str, Any]) -> list[str]:
+    targets: list[str] = []
+    skills_value = manifest.get("skills")
+    if isinstance(skills_value, str) and (plugin_root / skills_value).exists():
+        targets.append(f"skills:{relative_path(project_root, plugin_root / skills_value)}")
+    mcp_value = manifest.get("mcpServers")
+    if isinstance(mcp_value, str) and (plugin_root / mcp_value).exists():
+        targets.append(f"mcp:{relative_path(project_root, plugin_root / mcp_value)}")
+    return targets
+
+
+def marketplace_paths(project_root: Path) -> list[Path]:
+    marketplace_path = project_root / ".agents" / "plugins" / "marketplace.json"
+    return [marketplace_path] if marketplace_path.is_file() else []
+
+
+def marketplace_entry_name(entry: dict[str, Any]) -> str | None:
+    name = entry.get("name")
+    return name if isinstance(name, str) and name else None
+
+
+def marketplace_source_path(entry: dict[str, Any]) -> str | None:
+    source = entry.get("source")
+    if not isinstance(source, dict):
+        return None
+    path = source.get("path")
+    return path if isinstance(path, str) and path else None
+
+
+def resolve_marketplace_source(marketplace_path: Path, source_path: str) -> Path:
+    marketplace_root = marketplace_path.parent.parent.parent
+    return (marketplace_root / source_path).resolve()
+
+
+def detect_plugin_model(project_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, str]]]:
+    products: list[dict[str, Any]] = []
+    targets: list[dict[str, Any]] = []
+    relationships: list[dict[str, Any]] = []
+    evidence: list[dict[str, str]] = []
+    product_names: set[str] = set()
+    target_names: set[str] = set()
+
+    manifest_by_root: dict[Path, dict[str, Any]] = {}
+    for manifest_path in plugin_manifest_paths(project_root):
+        manifest = load_json_file(manifest_path)
+        if not manifest:
+            continue
+        plugin_name = manifest.get("name")
+        if not isinstance(plugin_name, str) or not plugin_name:
+            continue
+        plugin_root = plugin_root_from_manifest(manifest_path)
+        manifest_by_root[plugin_root.resolve()] = manifest
+        manifest_evidence = [{"kind": "codex-plugin-manifest", "path": relative_path(project_root, manifest_path)}]
+        target_refs = plugin_product_target_names(project_root, plugin_root, manifest)
+        if plugin_name not in product_names:
+            products.append(
+                {
+                    "name": plugin_name,
+                    "kind": "codex-plugin",
+                    "targets": target_refs,
+                    "path": relative_path(project_root, plugin_root),
+                    "evidence": manifest_evidence,
+                }
+            )
+            product_names.add(plugin_name)
+        for skill_path in skill_manifest_paths(plugin_root):
+            skill_name = skill_path.parent.name
+            target_name = f"skill:{plugin_name}/{skill_name}"
+            skill_evidence = [{"kind": "skill-manifest", "path": relative_path(project_root, skill_path)}]
+            if target_name not in target_names:
+                targets.append(
+                    {
+                        "name": target_name,
+                        "kind": "codex-skill",
+                        "dependencies": [],
+                        "path": relative_path(project_root, skill_path),
+                        "evidence": skill_evidence,
+                    }
+                )
+                target_names.add(target_name)
+                evidence.extend(skill_evidence)
+            relationships.append(
+                {
+                    "kind": "exposes",
+                    "from": f"product:{plugin_name}",
+                    "to": f"target:{target_name}",
+                    "label": "plugin exposes skill",
+                    "evidence": [{"kind": "skill-directory", "path": relative_path(project_root, skill_path)}],
+                }
+            )
+        mcp_value = manifest.get("mcpServers")
+        if isinstance(mcp_value, str):
+            mcp_path = plugin_root / mcp_value
+            if mcp_path.is_file():
+                target_name = f"mcp:{relative_path(project_root, mcp_path)}"
+                mcp_evidence = [{"kind": "mcp-config", "path": relative_path(project_root, mcp_path)}]
+                if target_name not in target_names:
+                    targets.append(
+                        {
+                            "name": target_name,
+                            "kind": "mcp-config",
+                            "dependencies": [],
+                            "path": relative_path(project_root, mcp_path),
+                            "evidence": mcp_evidence,
+                        }
+                    )
+                    target_names.add(target_name)
+                    evidence.extend(mcp_evidence)
+                relationships.append(
+                    {
+                        "kind": "exposes",
+                        "from": f"product:{plugin_name}",
+                        "to": f"target:{target_name}",
+                        "label": "plugin declares MCP servers",
+                        "evidence": manifest_evidence,
+                    }
+                )
+        evidence.extend(manifest_evidence)
+
+    for marketplace_path in marketplace_paths(project_root):
+        marketplace = load_json_file(marketplace_path)
+        if not marketplace:
+            continue
+        marketplace_name = marketplace.get("name")
+        entries = marketplace.get("plugins")
+        if not isinstance(marketplace_name, str) or not isinstance(entries, list):
+            continue
+        entry_names = [name for entry in entries if isinstance(entry, dict) for name in [marketplace_entry_name(entry)] if name]
+        marketplace_evidence = [{"kind": "plugin-marketplace", "path": relative_path(project_root, marketplace_path)}]
+        if marketplace_name not in product_names:
+            products.append(
+                {
+                    "name": marketplace_name,
+                    "kind": "codex-plugin-marketplace",
+                    "targets": entry_names,
+                    "path": relative_path(project_root, marketplace_path),
+                    "evidence": marketplace_evidence,
+                }
+            )
+            product_names.add(marketplace_name)
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            entry_name = marketplace_entry_name(entry)
+            if not entry_name:
+                continue
+            source_path = marketplace_source_path(entry)
+            source_root = resolve_marketplace_source(marketplace_path, source_path) if source_path else None
+            if entry_name not in product_names:
+                source = entry.get("source") if isinstance(entry.get("source"), dict) else {}
+                source_kind = source.get("source") if isinstance(source, dict) else None
+                products.append(
+                    {
+                        "name": entry_name,
+                        "kind": "codex-plugin-entry" if source_kind == "local" else "remote-plugin-entry",
+                        "targets": [],
+                        "path": source_path,
+                        "evidence": marketplace_evidence,
+                    }
+                )
+                product_names.add(entry_name)
+            relationships.append(
+                {
+                    "kind": "exposes",
+                    "from": f"product:{marketplace_name}",
+                    "to": f"product:{entry_name}",
+                    "label": "marketplace exposes plugin entry",
+                    "evidence": marketplace_evidence,
+                }
+            )
+            if source_root and source_root in manifest_by_root:
+                relationships.append(
+                    {
+                        "kind": "owns",
+                        "from": f"product:{entry_name}",
+                        "to": f"path:{source_path}",
+                        "label": "marketplace entry points at local plugin root",
+                        "evidence": marketplace_evidence,
+                    }
+                )
+        evidence.extend(marketplace_evidence)
+
+    return products, targets, relationships, evidence
+
+
 def detect_model(project_root: Path) -> dict[str, Any]:
     package_data = run_dump_package(project_root)
     if package_data:
@@ -200,6 +420,15 @@ def detect_model(project_root: Path) -> dict[str, Any]:
                     "evidence": target.get("evidence", []),
                 }
             )
+    plugin_products, plugin_targets, plugin_relationships, plugin_evidence = detect_plugin_model(project_root)
+    products.extend(plugin_products)
+    targets.extend(plugin_targets)
+    relationships.extend(plugin_relationships)
+    if plugin_products or plugin_targets:
+        source = f"{source}+plugin-repo" if source != "filesystem" else "plugin-repo"
+
+    evidence = [{"kind": source, "path": "Package.swift"}] if (project_root / "Package.swift").is_file() else []
+    evidence.extend(plugin_evidence)
 
     return {
         "schemaVersion": 1,
@@ -211,7 +440,7 @@ def detect_model(project_root: Path) -> dict[str, Any]:
         "targets": [item for item in targets if item.get("name")],
         "relationships": relationships,
         "slices": [],
-        "evidence": [{"kind": source, "path": "Package.swift"}] if (project_root / "Package.swift").is_file() else [],
+        "evidence": evidence,
     }
 
 
@@ -235,15 +464,25 @@ def target_inventory(model: dict[str, Any]) -> str:
     for target in targets:
         dependencies = ", ".join(target.get("dependencies", [])) or "no declared dependencies"
         path = target.get("path") or "path not recorded"
-        lines.append(f"- `{target['name']}` at `{path}` depends on: {dependencies}.")
+        kind = target.get("kind") or "target"
+        lines.append(f"- `{target['name']}` ({kind}) at `{path}` depends on: {dependencies}.")
     return "\n".join(lines)
 
 
 def evidence_inventory(model: dict[str, Any]) -> str:
-    source = model.get("detectionSource", "unknown")
     if not model.get("evidence"):
         return "- No architecture evidence has been recorded yet."
-    return f"- Product and target inventory detected with `{source}` from `Package.swift`."
+    lines = []
+    seen: set[tuple[str, str]] = set()
+    for item in model.get("evidence", []):
+        kind = str(item.get("kind", "evidence"))
+        path = str(item.get("path", "path not recorded"))
+        key = (kind, path)
+        if key in seen:
+            continue
+        lines.append(f"- `{kind}` evidence from `{path}`.")
+        seen.add(key)
+    return "\n".join(lines)
 
 
 def replace_generated_block(text: str, start: str, end: str, body: str) -> str:

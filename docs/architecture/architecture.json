@@ -1,0 +1,1758 @@
+{
+  "detectedAt": "2026-05-04T21:12:55.254281+00:00",
+  "detectionSource": "plugin-repo",
+  "evidence": [
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/agent-plugin-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-build-run-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-testing-workflow/SKILL.md"
+    },
+    {
+      "kind": "mcp-config",
+      "path": "plugins/apple-dev-skills/.mcp.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/apple-dev-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cardhop-app/skills/cardhop-contact-workflow/SKILL.md"
+    },
+    {
+      "kind": "mcp-config",
+      "path": "plugins/cardhop-app/.mcp.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/cardhop-app/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/dotnet-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/productivity-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/bootstrap-python-mcp-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/bootstrap-python-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/bootstrap-uv-python-workspace/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/python-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/rust-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/spotify/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swiftasb-skills/skills/build-swift-package/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swiftasb-skills/skills/choose-integration-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swiftasb-skills/skills/diagnose-integration/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swiftasb-skills/skills/explain-swiftasb/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/swiftasb-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/things-app/skills/things-digest-generator/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/things-app/skills/things-reminders-manager/SKILL.md"
+    },
+    {
+      "kind": "mcp-config",
+      "path": "plugins/things-app/.mcp.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/things-app/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/web-dev-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "plugin-marketplace",
+      "path": ".agents/plugins/marketplace.json"
+    }
+  ],
+  "generatedBy": "maintain-project-architecture",
+  "products": [
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/agent-plugin-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "agent-plugin-skills",
+      "path": "plugins/agent-plugin-skills",
+      "targets": [
+        "skills:plugins/agent-plugin-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/apple-dev-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "apple-dev-skills",
+      "path": "plugins/apple-dev-skills",
+      "targets": [
+        "skills:plugins/apple-dev-skills/skills",
+        "mcp:plugins/apple-dev-skills/.mcp.json"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/cardhop-app/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "cardhop-app",
+      "path": "plugins/cardhop-app",
+      "targets": [
+        "skills:plugins/cardhop-app/skills",
+        "mcp:plugins/cardhop-app/.mcp.json"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/dotnet-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "dotnet-skills",
+      "path": "plugins/dotnet-skills",
+      "targets": []
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/productivity-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "productivity-skills",
+      "path": "plugins/productivity-skills",
+      "targets": [
+        "skills:plugins/productivity-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/python-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "python-skills",
+      "path": "plugins/python-skills",
+      "targets": [
+        "skills:plugins/python-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/rust-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "rust-skills",
+      "path": "plugins/rust-skills",
+      "targets": []
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/spotify/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "spotify",
+      "path": "plugins/spotify",
+      "targets": []
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/swiftasb-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "swiftasb-skills",
+      "path": "plugins/swiftasb-skills",
+      "targets": [
+        "skills:plugins/swiftasb-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/things-app/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "things-app",
+      "path": "plugins/things-app",
+      "targets": [
+        "skills:plugins/things-app/skills",
+        "mcp:plugins/things-app/.mcp.json"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/web-dev-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "web-dev-skills",
+      "path": "plugins/web-dev-skills",
+      "targets": []
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "kind": "codex-plugin-marketplace",
+      "name": "socket",
+      "path": ".agents/plugins/marketplace.json",
+      "targets": [
+        "agent-plugin-skills",
+        "apple-dev-skills",
+        "swiftasb-skills",
+        "dotnet-skills",
+        "productivity-skills",
+        "speak-swiftly",
+        "python-skills",
+        "rust-skills",
+        "cardhop-app",
+        "things-app",
+        "spotify",
+        "web-dev-skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "kind": "remote-plugin-entry",
+      "name": "speak-swiftly",
+      "path": null,
+      "targets": []
+    }
+  ],
+  "projectRoot": "/Users/galew/Workspace/gaelic-ghost/socket",
+  "relationships": [
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+        }
+      ],
+      "from": "product:agent-plugin-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-plugin-skills/bootstrap-skills-plugin-repo"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+        }
+      ],
+      "from": "product:agent-plugin-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-plugin-skills/sync-skills-repo-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/apple-ui-accessibility-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/author-swift-docc-docs"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/bootstrap-swift-package"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/bootstrap-xcode-app-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/explore-apple-swift-docs"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/format-swift-sources"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/structure-swift-sources"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swift-package-build-run-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swift-package-testing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swift-package-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swiftui-app-architecture-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/sync-swift-package-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/sync-xcode-project-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-app-project-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-build-run-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-build-run-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-testing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-testing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/apple-dev-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin declares MCP servers",
+      "to": "target:mcp:plugins/apple-dev-skills/.mcp.json"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cardhop-app/skills/cardhop-contact-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:cardhop-app",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cardhop-app/cardhop-contact-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/cardhop-app/.codex-plugin/plugin.json"
+        }
+      ],
+      "from": "product:cardhop-app",
+      "kind": "exposes",
+      "label": "plugin declares MCP servers",
+      "to": "target:mcp:plugins/cardhop-app/.mcp.json"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/explain-code-slice"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-accessibility"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-agents"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-api"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-architecture"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-contributing"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-readme"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-repo"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-roadmap"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/bootstrap-python-mcp-service/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/bootstrap-python-mcp-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/bootstrap-python-service/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/bootstrap-python-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/bootstrap-uv-python-workspace/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/bootstrap-uv-python-workspace"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/integrate-fastapi-fastmcp"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/uv-pytest-unit-testing"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swiftasb-skills/build-appkit-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swiftasb-skills/skills/build-swift-package/SKILL.md"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swiftasb-skills/build-swift-package"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swiftasb-skills/build-swiftui-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swiftasb-skills/skills/choose-integration-shape/SKILL.md"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swiftasb-skills/choose-integration-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swiftasb-skills/skills/diagnose-integration/SKILL.md"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swiftasb-skills/diagnose-integration"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swiftasb-skills/skills/explain-swiftasb/SKILL.md"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swiftasb-skills/explain-swiftasb"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/things-app/skills/things-digest-generator/SKILL.md"
+        }
+      ],
+      "from": "product:things-app",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:things-app/things-digest-generator"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/things-app/skills/things-reminders-manager/SKILL.md"
+        }
+      ],
+      "from": "product:things-app",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:things-app/things-reminders-manager"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/things-app/.codex-plugin/plugin.json"
+        }
+      ],
+      "from": "product:things-app",
+      "kind": "exposes",
+      "label": "plugin declares MCP servers",
+      "to": "target:mcp:plugins/things-app/.mcp.json"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:agent-plugin-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:agent-plugin-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/agent-plugin-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:apple-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/apple-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:swiftasb-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:swiftasb-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/swiftasb-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:dotnet-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/dotnet-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:productivity-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/productivity-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:speak-swiftly"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:python-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/python-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:rust-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/rust-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:cardhop-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:cardhop-app",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/cardhop-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:things-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:things-app",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/things-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:spotify"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:spotify",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/spotify"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:web-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:web-dev-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/web-dev-skills"
+    }
+  ],
+  "schemaVersion": 1,
+  "slices": [],
+  "targets": [
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-plugin-skills/bootstrap-skills-plugin-repo",
+      "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-plugin-skills/sync-skills-repo-guidance",
+      "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/apple-ui-accessibility-workflow",
+      "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/author-swift-docc-docs",
+      "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/bootstrap-swift-package",
+      "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/bootstrap-xcode-app-project",
+      "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/explore-apple-swift-docs",
+      "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/format-swift-sources",
+      "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/structure-swift-sources",
+      "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swift-package-build-run-workflow",
+      "path": "plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swift-package-testing-workflow",
+      "path": "plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swift-package-workflow",
+      "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swiftui-app-architecture-workflow",
+      "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/sync-swift-package-guidance",
+      "path": "plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/sync-xcode-project-guidance",
+      "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-app-project-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-build-run-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-build-run-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-build-run-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-testing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-testing-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-testing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "mcp-config",
+          "path": "plugins/apple-dev-skills/.mcp.json"
+        }
+      ],
+      "kind": "mcp-config",
+      "name": "mcp:plugins/apple-dev-skills/.mcp.json",
+      "path": "plugins/apple-dev-skills/.mcp.json"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cardhop-app/skills/cardhop-contact-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cardhop-app/cardhop-contact-workflow",
+      "path": "plugins/cardhop-app/skills/cardhop-contact-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "mcp-config",
+          "path": "plugins/cardhop-app/.mcp.json"
+        }
+      ],
+      "kind": "mcp-config",
+      "name": "mcp:plugins/cardhop-app/.mcp.json",
+      "path": "plugins/cardhop-app/.mcp.json"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/explain-code-slice",
+      "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-accessibility",
+      "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-agents",
+      "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-api",
+      "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-architecture",
+      "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-contributing",
+      "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-readme",
+      "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-repo",
+      "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-roadmap",
+      "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/bootstrap-python-mcp-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/bootstrap-python-mcp-service",
+      "path": "plugins/python-skills/skills/bootstrap-python-mcp-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/bootstrap-python-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/bootstrap-python-service",
+      "path": "plugins/python-skills/skills/bootstrap-python-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/bootstrap-uv-python-workspace/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/bootstrap-uv-python-workspace",
+      "path": "plugins/python-skills/skills/bootstrap-uv-python-workspace/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/integrate-fastapi-fastmcp",
+      "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/uv-pytest-unit-testing",
+      "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swiftasb-skills/build-appkit-app",
+      "path": "plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swiftasb-skills/skills/build-swift-package/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swiftasb-skills/build-swift-package",
+      "path": "plugins/swiftasb-skills/skills/build-swift-package/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swiftasb-skills/build-swiftui-app",
+      "path": "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swiftasb-skills/skills/choose-integration-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swiftasb-skills/choose-integration-shape",
+      "path": "plugins/swiftasb-skills/skills/choose-integration-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swiftasb-skills/skills/diagnose-integration/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swiftasb-skills/diagnose-integration",
+      "path": "plugins/swiftasb-skills/skills/diagnose-integration/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swiftasb-skills/skills/explain-swiftasb/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swiftasb-skills/explain-swiftasb",
+      "path": "plugins/swiftasb-skills/skills/explain-swiftasb/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/things-app/skills/things-digest-generator/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:things-app/things-digest-generator",
+      "path": "plugins/things-app/skills/things-digest-generator/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/things-app/skills/things-reminders-manager/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:things-app/things-reminders-manager",
+      "path": "plugins/things-app/skills/things-reminders-manager/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "mcp-config",
+          "path": "plugins/things-app/.mcp.json"
+        }
+      ],
+      "kind": "mcp-config",
+      "name": "mcp:plugins/things-app/.mcp.json",
+      "path": "plugins/things-app/.mcp.json"
+    }
+  ]
+}
