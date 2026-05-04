@@ -23,6 +23,9 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 ### Change Scope
 
 - Keep work bounded to the smallest coherent docs, skill, validator, and test surface that resolves the real drift.
+- Keep workflow scale tied to the user's actual request. Do not turn ordinary questions, Apple-docs lookups, investigations, local implementation changes, or small guidance edits into branch, PR, CI, release, tag, or cleanup workflows unless the user explicitly asks for that lifecycle step or a closer repo-local rule requires it for the exact task.
+- Treat protected-main release guidance as release-only guidance. Apple docs-first work, package or project edits, and targeted validation do not imply a full release pass by themselves.
+- When a commit is made on a branch with a reachable remote, push that branch as the normal checkpoint unless the user asked for local-only work or the branch is intentionally incomplete. Do not treat that push as permission to open a PR, watch CI, merge, tag, or release.
 - If a task starts needing a new active skill, a new export surface, or a broad repo-structure change, stop and surface that scope change before continuing.
 - Collapse retired historical planning notes into `ROADMAP.md` or still-live maintainer docs instead of preserving stale standalone docs.
 

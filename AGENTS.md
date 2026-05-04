@@ -25,6 +25,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Treat Gale's local `socket` checkout as the normal day-to-day working checkout on `main`.
 - Direct work on local `main` is the default for `socket` unless Gale explicitly asks for a feature branch or a dedicated worktree.
 - Use a feature branch or worktree when the change needs isolation for safety, review, or overlapping parallel work, but do not force that path for ordinary `socket` maintenance.
+- When a commit is made in `socket`, push the current branch as the normal checkpoint unless Gale asks for local-only work or the branch is intentionally incomplete. Pushing the branch does not imply opening a PR, waiting on CI, tagging, or releasing.
 - Prefer small, focused commits over broad mixed changes.
 - For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
 - For `apple-dev-skills`, keep subtree sync operations explicit and isolated from unrelated edits.

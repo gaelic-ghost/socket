@@ -13,8 +13,9 @@
 - Use `swift-package-testing-workflow` for Swift Testing, XCTest holdouts, `.xctestplan`, fixtures, and package test diagnosis.
 - Use `sync-swift-package-guidance` if this repo's package-specific `AGENTS.md` guidance later drifts and needs to be refreshed or merged forward.
 - Re-run `sync-swift-package-guidance` after substantial package-workflow or plugin updates so local guidance stays aligned.
-- Use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation, `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps, and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
-- Do not run the standard release workflow from `main`; let it validate, bump versions, tag, push the branch and tag, open the release PR, watch CI, address valid PR comments or record out-of-scope concerns in `ROADMAP.md`, merge to protected `main`, fast-forward local `main`, and clean up stale branches.
+- Use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps.
+- Use `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree only when the task is actually a protected-main release, publish, merge, tag, or release-PR preparation.
+- Do not run the standard release workflow from `main`; when a protected-main release is explicitly requested, let it validate, bump versions, tag, push the branch and tag, open the release PR, watch CI, address valid PR comments or record out-of-scope concerns in `ROADMAP.md`, merge to protected `main`, fast-forward local `main`, and clean up stale branches.
 - Treat `scripts/repo-maintenance/config/profile.env` as the installed `maintain-project-repo` profile marker, and keep it on the `swift-package` profile for plain package repos.
 - Prefer `swift package` CLI commands for structural changes whenever the command exists.
 - Use `swift package add-dependency` to add dependencies instead of hand-editing package graphs.

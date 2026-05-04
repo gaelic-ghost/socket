@@ -1,5 +1,7 @@
 # Release Modes
 
+Use these modes only when the current task is actually a release, publish, merge, tag, or protected-main release preparation task. They are not the default completion path for ordinary questions, investigations, local edits, documentation maintenance, or targeted validation.
+
 ## `standard`
 
 Use this mode for an ordinary standalone repository whose release line is a protected `main` branch.

@@ -18,6 +18,8 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - Use this skill when a repo has GitHub Actions or local shell helpers that should become thin wrappers around repo-owned scripts.
 - Use this skill when a repo needs a protected-main standard release flow and a submodule-aware release flow.
 - Use this skill when the user wants a local-first alternative to putting maintainer logic under `.github/scripts/`.
+- Do not use this skill to make ordinary questions, investigations, local edits, or documentation maintenance take a full PR, CI, release, tag, and cleanup path.
+- Do not run or recommend the release choreography unless the user is actually asking to release, publish, merge, tag, open a release PR, or prepare the repo for that protected-main release workflow.
 - Do not use this skill for app bootstrap, Swift package bootstrap, or AGENTS-only guidance sync by themselves.
 - Recommend `bootstrap-swift-package` when the repo does not exist yet and package scaffold creation is still the primary task.
 - Recommend `bootstrap-xcode-app-project` when the repo does not exist yet and native Apple app bootstrap is still the primary task.
