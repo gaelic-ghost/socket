@@ -26,7 +26,7 @@ The child plugin should own its Codex-facing guidance surface:
 
 - `.codex-plugin/plugin.json`
 - `skills/`
-- README or maintainer notes that explain the plugin's role
+- plugin metadata, skill metadata, AGENTS guidance, or maintainer notes that explain the plugin's role
 - any validation scripts needed for the plugin's own authored guidance
 
 The root Socket marketplace should list the plugin as a normal local child entry when the plugin is ready to install:

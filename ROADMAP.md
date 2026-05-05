@@ -57,14 +57,15 @@ In Progress
 
 ## Backlog Candidates
 
-- [ ] Overhaul `agent-plugin-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
+- [x] Overhaul `agent-plugin-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
 - [ ] Add a `productivity-skills:maintain-project-docs` umbrella workflow after a dedicated `maintain-project-todo` skill exists. It should run the individual docs skills together, enforce the splits between `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ACCESSIBILITY.md`, `ROADMAP.md`, and `TODO.md`, and prevent repeated content from drifting across files.
-- [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child README/AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
+- [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
 - [ ] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open.
 
 ## History
 
 - Released `v6.7.0` after aggressively simplifying Socket documentation: root README and CONTRIBUTING split, child roadmap consolidation into root planning docs, child README collapse with user-owned `TBD` overview sections, nested maintainer doc cleanup, workflow atlas removal, and unsupported non-Codex surface removal.
+- Removed redundant monorepo-owned child root READMEs after making `AGENTS.md`, plugin manifests, skill metadata, MCP server READMEs, and root Socket docs the maintained documentation surfaces. `apple-dev-skills` keeps its public README because it remains subtree-managed and standalone-installable.
 - Completed the Speak Swiftly plugin catalog split by exposing `speak-swiftly` from the canonical `gaelic-ghost/SpeakSwiftlyServer` Git-backed source, retiring the local `plugins/SpeakSwiftlyServer/` mirror, validating isolated marketplace install paths, and keeping standalone SpeakSwiftlyServer as the plugin payload source of truth.
 - Completed the release and sync discipline milestone by aligning release-mode docs, subtree sync rules, shared-version workflow, release-ready gates, and marketplace refresh ordering around the current mixed monorepo model.
 - Completed the subtree workflow hardening milestone by documenting subtree add, pull, and push paths, adding the root marketplace audit pass, and adding a public child plugin removal checklist.

@@ -107,7 +107,6 @@ def test_audit_repo_accepts_expected_repo_shape(tmp_path: Path) -> None:
 
 def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) -> None:
     (tmp_path / "plugins").mkdir(parents=True)
-    (tmp_path / "README.md").write_text("", encoding="utf-8")
     (tmp_path / "AGENTS.md").write_text("", encoding="utf-8")
     (tmp_path / "docs" / "maintainers").mkdir(parents=True)
     (tmp_path / "docs" / "maintainers" / "reality-audit.md").write_text("", encoding="utf-8")
@@ -115,11 +114,19 @@ def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) ->
     findings = m.audit_repo(tmp_path, "example-skills")
 
     issue_ids = {finding.issue_id for finding in findings}
-    assert "readme-missing-snippet" in issue_ids
     assert "agents-missing-snippet" in issue_ids
     assert "missing-symlink" in issue_ids
     assert "forbidden-path" in issue_ids
     assert "missing-plugin-manifest" in issue_ids
+
+
+def test_audit_repo_accepts_missing_readme(tmp_path: Path) -> None:
+    _write_repo(tmp_path, "example-skills")
+    (tmp_path / "README.md").unlink()
+
+    findings = m.audit_repo(tmp_path, "example-skills")
+
+    assert findings == []
 
 
 def test_audit_repo_does_not_require_optional_maintainer_docs(tmp_path: Path) -> None:

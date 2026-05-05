@@ -95,7 +95,9 @@ def _check_symlink(repo_root: Path, path: Path, target: str) -> list[Finding]:
 
 def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     findings: list[Finding] = []
-    findings.extend(_check_file_contains(repo_root, repo_root / "README.md", README_SNIPPETS, "readme"))
+    readme = repo_root / "README.md"
+    if readme.exists():
+        findings.extend(_check_file_contains(repo_root, readme, README_SNIPPETS, "readme"))
     findings.extend(_check_file_contains(repo_root, repo_root / "AGENTS.md", AGENTS_SNIPPETS, "agents"))
     findings.extend(_check_file_contains(repo_root, repo_root / ".gitignore", GITIGNORE_SNIPPETS, "gitignore"))
     reality_audit = repo_root / "docs" / "maintainers" / "reality-audit.md"

@@ -50,6 +50,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - When a repository ships reusable skills, treat the top-level authored surface such as `skills/`, `mcps/`, or `apps/` as the source of truth. Treat plugin manifests, marketplace files, and nested packaged plugin roots as packaging metadata unless a nearer `AGENTS.md` explicitly says otherwise.
 - Keep the root README short, nontechnical, and focused on end users or agents installing and using the Socket marketplace. Put contributor workflow and maintainer procedures in `CONTRIBUTING.md` or `docs/maintainers/`, and put durable agent-facing operating rules in this file.
 - Keep installed skills independent from repo-level docs under `docs/`.
+- Do not add root-level `README.md` files to monorepo-owned child plugin directories by default. Keep child root guidance in `AGENTS.md`, plugin metadata, skill metadata, root Socket docs, and root planning docs unless a child has a real standalone public install surface or server-specific docs. `apple-dev-skills` keeps its public README because it is still subtree-managed and standalone-installable; bundled MCP servers may keep their own `mcp/README.md` files.
 - Prefer POSIX symlink discovery mirrors over duplicate or hardlinked skill trees when a repo exposes `.agents/skills`.
 - Do not track consumer-side install copies, cache directories, or machine-local runtime state in git.
 - Keep the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, docs, automation prompts, scripts, and marketplace metadata.

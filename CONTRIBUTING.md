@@ -48,6 +48,8 @@ When adding root screenshots or other documentation media, place them under [`do
 
 When updating root docs, keep [README.md](./README.md) short, nontechnical, and focused on people or agents installing and using the Socket marketplace. Put contributor workflow, maintainer commands, release process, subtree accounting, marketplace source-shape details, and root validation expectations in this file or the maintainer docs under [`docs/maintainers/`](./docs/maintainers/). Put durable agent-facing operating rules in [AGENTS.md](./AGENTS.md).
 
+Do not add `README.md` files to monorepo-owned child plugin roots by default. The root Socket docs, plugin manifests, skill metadata, child `AGENTS.md`, and root planning docs are the normal documentation surfaces for those children. Keep child root READMEs only for standalone public surfaces such as `apple-dev-skills`; keep server-specific README files under bundled server directories such as `mcp/`.
+
 ### Asking For Review
 
 A root change is ready for review when:

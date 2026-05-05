@@ -129,7 +129,7 @@ After the import:
 - inspect whether the child repo ships `.codex-plugin/plugin.json`
 - if it does, locate the real packaged plugin root before touching the socket marketplace
 - re-check `.agents/plugins/marketplace.json`
-- re-check `README.md`
+- re-check the root `README.md`
 - re-check `ROADMAP.md`
 - remove stale duplicated packaging if the import introduced a second surviving copy of an already present child plugin
 
@@ -156,7 +156,7 @@ Run this audit whenever a child plugin is added, removed, moved, renamed, conver
 2. For each local `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
 3. For each Git-backed entry, verify the source kind matches the plugin location: `url` for a repository-root plugin and `git-subdir` for a plugin in a repository subdirectory.
 4. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed or intentionally exposed by Git-backed reference.
-5. Open each changed child repo's README or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
+5. Open each changed child repo's `AGENTS.md`, plugin manifest, optional public README, or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
 6. Run `uv run scripts/validate_socket_metadata.py`.
 7. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
 

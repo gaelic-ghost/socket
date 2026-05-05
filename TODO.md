@@ -6,9 +6,9 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### agent-plugin-skills
 
-- [ ] Overhaul the exported skills around Codex/OpenAI plus the open `.agents/skills` discovery mirror only.
-- [ ] Remove stale sync-audit expectations for retired child maintainer docs such as reality-audit and install-surface docs.
-- [ ] Refresh tests and bootstrap output so generated guidance matches the current collapsed Socket docs model.
+- [x] Overhaul the exported skills around Codex/OpenAI plus the open `.agents/skills` discovery mirror only.
+- [x] Remove stale sync-audit expectations for retired child maintainer docs such as reality-audit and install-surface docs.
+- [x] Refresh tests and bootstrap output so generated guidance matches the current collapsed Socket docs model.
 - [ ] Keep Git-backed Codex marketplace install and update guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
@@ -34,7 +34,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### python-skills
 
-- [ ] Tighten child-specific `AGENTS.md` and validator expectations after the README collapse.
+- [x] Tighten child-specific `AGENTS.md` and validator expectations after the README collapse.
 - [ ] Keep `skills/`, `.codex-plugin/plugin.json`, and Socket-root contribution workflow boundaries clearly separated.
 - [ ] Confirm `uv run scripts/validate_repo_metadata.py` and `uv run pytest` still pass after docs or metadata changes.
 - [ ] Add lightweight validation for future Codex metadata changes.
@@ -55,7 +55,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ## Cross-Child Validation
 
-- [ ] Evaluate one root validation command for marketplace metadata, plugin manifests, child README/AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment.
+- [ ] Evaluate one root validation command for marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Decide which checks belong centrally in Socket and which should remain child-local behavior tests.
 - [ ] Retire or update stale child validators when their expected docs have been collapsed into root docs.
 
