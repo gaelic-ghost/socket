@@ -34,7 +34,7 @@ Deprecated compatibility skills that remain on disk do not count as part of the 
 
 ## Audit Procedure
 
-1. Confirm the active public skill surface from `.github/scripts/validate_repo_docs.sh` and the matching sections in `README.md` and `docs/maintainers/workflow-atlas.md`.
+1. Confirm the active public skill surface from `.github/scripts/validate_repo_docs.sh` and the matching sections in `README.md`.
 2. Check each active skill for the documented contract:
    - required headings in `SKILL.md`
    - `agents/openai.yaml`
@@ -80,7 +80,6 @@ Use this flow when validating the current top-level export surface and local dis
 
 ## Current Canonical Maintainer Docs
 
-- Workflow diagrams and UX maps: `docs/maintainers/workflow-atlas.md`
 - Audit procedure and source-of-truth order: `docs/maintainers/reality-audit.md`
 - Customization-surface decision and follow-up plan: `docs/maintainers/customization-consolidation-review.md`
 - Execution-skill split, inference plan, and guidance-preservation contract: `docs/maintainers/execution-split-and-inference-plan.md`

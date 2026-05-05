@@ -8,7 +8,6 @@ A bootstrapped skills-export repository should include:
 - `AGENTS.md`
 - `ROADMAP.md`
 - `docs/maintainers/reality-audit.md`
-- `docs/maintainers/workflow-atlas.md`
 - maintainer Python tooling guidance
 - strict dependency-provenance guidance in `AGENTS.md` requiring shared dependencies to resolve from GitHub, package managers, package registries, or other real remote repositories
 - an explicit `AGENTS.md` prohibition on machine-local dependency paths in public or publicly shared projects

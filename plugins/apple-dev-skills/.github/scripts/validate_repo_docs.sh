@@ -28,7 +28,6 @@ echo "Validating root docs presence..."
 [[ -f README.md ]] || fail "Missing README.md at repo root."
 [[ -f CONTRIBUTING.md ]] || fail "Missing CONTRIBUTING.md at repo root."
 [[ -f AGENTS.md ]] || fail "Missing AGENTS.md at repo root."
-[[ -f docs/maintainers/workflow-atlas.md ]] || fail "Missing docs/maintainers/workflow-atlas.md."
 [[ -f docs/maintainers/reality-audit.md ]] || fail "Missing docs/maintainers/reality-audit.md."
 [[ -f docs/maintainers/customization-consolidation-review.md ]] || fail "Missing docs/maintainers/customization-consolidation-review.md."
 [[ -f docs/maintainers/execution-split-and-inference-plan.md ]] || fail "Missing docs/maintainers/execution-split-and-inference-plan.md."
@@ -67,27 +66,6 @@ require_contains "AGENTS.md" 'Keep shared reusable assets in [`shared/`](./share
 require_contains "AGENTS.md" 'require reading the relevant Apple documentation before proposing implementation changes.'
 require_contains "AGENTS.md" 'Keep `explore-apple-swift-docs` as the canonical docs-routing surface'
 require_not_contains "AGENTS.md" 'plugins/apple-dev-skills/'
-
-echo "Validating workflow document structure..."
-workflow_doc="docs/maintainers/workflow-atlas.md"
-require_contains "$workflow_doc" "## Repo Workflow Map"
-require_contains "$workflow_doc" '## `xcode-app-project-workflow`'
-require_contains "$workflow_doc" '## `xcode-build-run-workflow`'
-require_contains "$workflow_doc" '## `xcode-testing-workflow`'
-require_contains "$workflow_doc" '## `swift-package-build-run-workflow`'
-require_contains "$workflow_doc" '## `swift-package-testing-workflow`'
-require_contains "$workflow_doc" '## `explore-apple-swift-docs`'
-require_contains "$workflow_doc" '## `author-swift-docc-docs`'
-require_contains "$workflow_doc" '## `swiftui-app-architecture-workflow`'
-require_contains "$workflow_doc" '## `apple-ui-accessibility-workflow`'
-require_contains "$workflow_doc" '## `format-swift-sources`'
-require_contains "$workflow_doc" '## `structure-swift-sources`'
-require_contains "$workflow_doc" '## `bootstrap-swift-package`'
-require_contains "$workflow_doc" '## `bootstrap-xcode-app-project`'
-require_contains "$workflow_doc" '## `sync-xcode-project-guidance`'
-require_contains "$workflow_doc" '## `sync-swift-package-guidance`'
-require_contains "$workflow_doc" '## `swift-package-workflow`'
-require_contains "$workflow_doc" 'Direct docs access is the primary `explore` path'
 
 echo "Validating reality audit guide..."
 audit_doc="docs/maintainers/reality-audit.md"
@@ -234,7 +212,6 @@ for file in \
   "skills/swiftui-app-architecture-workflow/SKILL.md" \
   "skills/sync-swift-package-guidance/SKILL.md" \
   "skills/sync-xcode-project-guidance/SKILL.md" \
-  "docs/maintainers/workflow-atlas.md" \
   "ROADMAP.md"
 do
   require_not_contains "$file" 'install-plugin-to-socket'
@@ -304,11 +281,5 @@ done
 
 echo "Validating skill-creator contract..."
 uv run python .github/scripts/validate_skill_creator_contract.py >/dev/null
-
-echo "Validating workflow document content..."
-grep -q '```mermaid' "$workflow_doc" || fail "$workflow_doc must contain Mermaid diagrams."
-grep -q 'Agent ↔ User UX' "$workflow_doc" || fail "$workflow_doc must describe Agent ↔ User UX."
-grep -q 'Failure / Fallback / Handoff States' "$workflow_doc" || fail "$workflow_doc must describe failure, fallback, and handoff states."
-! grep -q 'apple-skills-router' "$workflow_doc" || fail "$workflow_doc must not mention apple-skills-router."
 
 echo "All validation checks passed."

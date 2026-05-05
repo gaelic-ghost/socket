@@ -80,7 +80,6 @@ All active repo-authored skills live under `skills/`.
 
 - `AGENTS.md`
 - `docs/maintainers/reality-audit.md`
-- `docs/maintainers/workflow-atlas.md`
 
 ## Audit Procedure
 

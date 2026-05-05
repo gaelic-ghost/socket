@@ -90,17 +90,6 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         + "\n",
         encoding="utf-8",
     )
-    (repo_root / "docs" / "maintainers" / "workflow-atlas.md").write_text(
-        "\n".join(
-            [
-                "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
-                "User-facing plugin install and update guidance should default to Git-backed marketplace sources",
-                'Root `.codex-plugin/plugin.json` points at that surface with `"skills": "./skills/"`.',
-            ]
-        )
-        + "\n",
-        encoding="utf-8",
-    )
     (repo_root / ".agents").mkdir()
     os.symlink("../skills", repo_root / ".agents" / "skills")
 

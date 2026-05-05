@@ -48,7 +48,6 @@ Machine-local dependency paths are expressly prohibited in any project that is p
 """,
         repo_root / "ROADMAP.md": "# Project Roadmap\n\n## Vision\n\n- Define the long-term outcome for this skills-export repository.\n",
         repo_root / "docs" / "maintainers" / "reality-audit.md": "# Repo Reality Audit\n\nRoot `skills/` is canonical.\n",
-        repo_root / "docs" / "maintainers" / "workflow-atlas.md": "# Workflow Atlas\n\nBootstrap repos first, then author individual skills.\n",
     }
 
 

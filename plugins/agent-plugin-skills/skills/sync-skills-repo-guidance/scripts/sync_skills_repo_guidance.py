@@ -53,11 +53,6 @@ INSTALL_SURFACES_SNIPPETS = [
     "first route through the Codex harness surfaces that are already available in the current session",
     "install the plugin through Codex's plugin directory for future sessions",
 ]
-WORKFLOW_ATLAS_SNIPPETS = [
-    "No skill in this repo should treat repo-local Codex plugin installs as a richer private scoping model than the marketplace-based behavior OpenAI documents.",
-    "User-facing plugin install and update guidance should default to Git-backed marketplace sources",
-    'Root `.codex-plugin/plugin.json` points at that surface with `"skills": "./skills/"`.',
-]
 GITIGNORE_SNIPPETS: list[str] = []
 
 @dataclass
@@ -107,14 +102,6 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
             repo_root / "docs" / "maintainers" / "codex-plugin-install-surfaces.md",
             INSTALL_SURFACES_SNIPPETS,
             "install-surfaces",
-        )
-    )
-    findings.extend(
-        _check_file_contains(
-            repo_root,
-            repo_root / "docs" / "maintainers" / "workflow-atlas.md",
-            WORKFLOW_ATLAS_SNIPPETS,
-            "workflow-atlas",
         )
     )
     findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))

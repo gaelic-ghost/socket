@@ -20,7 +20,7 @@ Use this guide when you are changing the shipped skills, the maintainer docs, th
 
 ### Before You Start
 
-Read [`README.md`](./README.md), [`ROADMAP.md`](./ROADMAP.md), [`AGENTS.md`](./AGENTS.md), [`docs/maintainers/workflow-atlas.md`](./docs/maintainers/workflow-atlas.md), and [`docs/maintainers/reality-audit.md`](./docs/maintainers/reality-audit.md) before broadening a docs or workflow change. If the work touches one specific skill, read that skill directory first instead of generalizing from sibling skills.
+Read [`README.md`](./README.md), [`ROADMAP.md`](./ROADMAP.md), [`AGENTS.md`](./AGENTS.md), and [`docs/maintainers/reality-audit.md`](./docs/maintainers/reality-audit.md) before broadening a docs or workflow change. If the work touches one specific skill, read that skill directory first instead of generalizing from sibling skills.
 
 ## Contribution Workflow
 
