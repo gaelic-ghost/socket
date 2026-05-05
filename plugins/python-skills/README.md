@@ -41,7 +41,7 @@ uv sync --dev
 
 Keep the maintainer toolchain declared in this repository instead of assuming machine-global Python tools. When the repo's validation surface uses them, declare `pytest`, `ruff`, and `mypy` in the repo-local dev dependency group and run them through `uv`.
 
-If you are trying to contribute changes instead of just consume the shipped skills, use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow.
+If you are trying to contribute changes instead of just consume the shipped skills, use the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md) for the maintainer workflow.
 
 ## Usage
 
@@ -82,9 +82,9 @@ Treat root [`skills/`](./skills/) as the source of truth for shipped workflow co
 
 ### Workflow
 
-Keep the public docs, maintainer docs, and packaging metadata aligned in the same pass when the shipped skill surface changes. Use this repository for Python-, `uv`-, FastAPI-, FastMCP-, and pytest-specific workflow behavior. Use `productivity-skills` for broader general-purpose maintainer workflows that should stay stack-neutral.
+Keep the public docs, maintainer guidance, and packaging metadata aligned in the same pass when the shipped skill surface changes. Use this repository for Python-, `uv`-, FastAPI-, FastMCP-, and pytest-specific workflow behavior. Use `productivity-skills` for broader general-purpose maintainer workflows that should stay stack-neutral.
 
-Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the contributor contract, [`AGENTS.md`](./AGENTS.md) for durable repo-local guidance, and [`docs/maintainers/workflow-atlas.md`](./docs/maintainers/workflow-atlas.md) when you need the deeper maintained map of the active repo surface.
+Use the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md) for the contributor contract and [`AGENTS.md`](./AGENTS.md) for durable child-specific guidance.
 
 ## Verification
 
@@ -130,11 +130,8 @@ This repository intentionally keeps authored content and plugin metadata separat
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
-├── CONTRIBUTING.md
 ├── README.md
 ├── ROADMAP.md
-├── docs/
-│   └── maintainers/
 ├── pyproject.toml
 ├── scripts/
 │   └── validate_repo_metadata.py

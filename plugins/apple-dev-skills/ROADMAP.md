@@ -296,7 +296,7 @@ Planned
 - [ ] Document common SPI failure modes such as unsupported package structure, incomplete metadata, broken docs generation, or platform mismatch signals.
 - [ ] Add tests and maintainer docs once the workflow shape is stable.
 
-Research note: the current supported listing path is the Swift Package Index Add Package issue workflow in `SwiftPackageIndex/PackageList`, not a manual-first `packages.json` edit. See [`docs/maintainers/swift-package-index-workflow-research.md`](./docs/maintainers/swift-package-index-workflow-research.md) for the source-backed listing, package-collection, and future skill-boundary notes.
+Research note: the current supported listing path is the Swift Package Index Add Package issue workflow in `SwiftPackageIndex/PackageList`, not a manual-first `packages.json` edit. Socket owns the durable add-package automation contract in [`../../docs/maintainers/spi-add-package-automation-plan.md`](../../docs/maintainers/spi-add-package-automation-plan.md).
 
 ### Exit Criteria
 

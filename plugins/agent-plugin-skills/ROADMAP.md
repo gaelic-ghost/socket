@@ -47,7 +47,7 @@ In Progress
 - [ ] Keep Git-backed user install and update guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
-- [ ] Keep `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, and `ROADMAP.md` aligned on the same repo shape and maintainer split.
+- [ ] Keep `README.md`, `AGENTS.md`, and `ROADMAP.md` aligned on the same repo shape and maintainer split, with shared contribution workflow owned by Socket root docs.
 
 ### Exit Criteria
 

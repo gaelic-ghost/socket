@@ -7,7 +7,7 @@ This file is the Agent Plugin Skills child-repo override for work done from `soc
 - `agent-plugin-skills` is the canonical home for maintainer skills that target skills-export and plugin-export repositories.
 - Root [`skills/`](./skills/) is the canonical authored and exported surface.
 - Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) as plugin packaging metadata only.
-- Use [`docs/maintainers/reality-audit.md`](./docs/maintainers/reality-audit.md) and [`docs/maintainers/workflow-atlas.md`](./docs/maintainers/workflow-atlas.md) when checking repo-shape or active-skill drift.
+- Use the Socket root maintainer docs for shared marketplace, release, and contribution workflow. Keep child maintainer notes only when they describe `agent-plugin-skills`-specific behavior.
 
 ## Local Rules
 

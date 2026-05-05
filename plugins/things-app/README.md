@@ -2,7 +2,7 @@
 
 Canonical home for Gale's Things.app skills, bundled local MCP server, and plugin packaging.
 
-For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.md). For contributor workflow, setup, and review expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.md). For contributor workflow, setup, and review expectations, see the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Table of Contents
 
@@ -41,7 +41,7 @@ It keeps the Things workflow surface, the bundled server implementation, and the
 
 This repo is primarily a maintainer and power-user surface rather than an end-user app with a single quick-start flow.
 
-If you want to use the workflow guidance, start with the skills under [`skills/`](./skills/). If you want to work on the bundled server, go straight to [`mcp/README.md`](./mcp/README.md). If you are changing the repo itself, use the contributor workflow in [CONTRIBUTING.md](./CONTRIBUTING.md).
+If you want to use the workflow guidance, start with the skills under [`skills/`](./skills/). If you want to work on the bundled server, go straight to [`mcp/README.md`](./mcp/README.md). If you are changing the repo itself, use the contributor workflow in the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Usage
 
@@ -123,7 +123,6 @@ make smoke-json
 │   └── plugin.json
 ├── .mcp.json
 ├── AGENTS.md
-├── CONTRIBUTING.md
 ├── README.md
 ├── ROADMAP.md
 ├── mcp/
@@ -139,7 +138,7 @@ Use Git history and GitHub releases to track shipped changes, especially when sk
 
 ## License
 
-Keep this README aligned with the repository's checked-in license terms. If `things-app` gains or changes a local `LICENSE` file, update this section and [CONTRIBUTING.md](./CONTRIBUTING.md) in the same pass.
+See the Socket root [LICENSE](../../LICENSE).
 
 ## Active Skills
 

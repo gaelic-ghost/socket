@@ -32,13 +32,13 @@ In Progress
 
 ### Scope
 
-- [ ] Refresh the root maintainer docs so `README.md`, `CONTRIBUTING.md`, `ROADMAP.md`, and `AGENTS.md` describe the same mixed repo model and the same source-of-truth boundaries.
+- [ ] Refresh the root maintainer docs so `README.md`, `ROADMAP.md`, and `AGENTS.md` describe the same mixed repo model and the same source-of-truth boundaries, with shared contribution workflow owned by Socket root docs.
 - [ ] Tighten the split between root-skill maintenance guidance and bundled-server guidance so contributors can tell which validation path applies to which surface.
 
 ### Tickets
 
 - [ ] Keep the root README focused on project shape, usage, packaging, and high-level validation entrypoints.
-- [ ] Maintain a separate CONTRIBUTING guide with grounded setup, workflow, and review expectations for root skills, plugin packaging, and the bundled MCP server.
+- [ ] Keep root README and AGENTS guidance grounded about setup, workflow, and review expectations for root skills, plugin packaging, and the bundled MCP server.
 - [ ] Keep AGENTS guidance explicit about source-of-truth boundaries, validation commands, and scope-escalation triggers.
 - [ ] Re-run the maintainer guidance audits after doc updates so the subtree stays on the canonical schemas.
 
@@ -57,4 +57,4 @@ In Progress
 
 - Completed Milestones 1 through 3 by establishing this repo as the canonical Things skill home, importing the bundled MCP server, and aligning the plugin packaging story around the shared authored surface.
 - Completed Milestone 4 by tightening the repo docs, clarifying which validation runs from repo root versus `mcp/`, and keeping the mixed-repo packaging story consistent across the root docs.
-- Opened Milestone 5 to modernize the root guidance contract around a cleaner README and CONTRIBUTING split plus explicit maintainer-schema alignment.
+- Opened Milestone 5 to modernize the root guidance contract around a cleaner README, AGENTS, and Socket-root contribution split plus explicit maintainer-schema alignment.

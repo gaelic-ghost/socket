@@ -15,6 +15,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 - Start with [README.md](./README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [ROADMAP.md](./ROADMAP.md), [`docs/maintainers/subtree-workflow.md`](./docs/maintainers/subtree-workflow.md), and [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md).
 - Use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md) when the question is about the root marketplace or the independent-plugin packaging stance.
+- Use [`docs/maintainers/codex-plugin-install-surfaces.md`](./docs/maintainers/codex-plugin-install-surfaces.md) when the question is about Codex marketplace sources, plugin roots, installed caches, or enabled-state config.
 - Use [`docs/maintainers/spi-add-package-automation-plan.md`](./docs/maintainers/spi-add-package-automation-plan.md) for Swift Package Index readiness, submission, and add-package automation.
 - When a task is really about one child repo's own behavior, read that child repo's docs before reading broadly across the superproject.
 

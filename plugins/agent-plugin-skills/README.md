@@ -23,7 +23,7 @@ This repository is active and currently ships two maintainer workflows.
 
 This repository is the canonical home for maintainer skills that help Gale keep skills-export and plugin-export repositories aligned on packaging, discovery, and documentation boundaries.
 
-It ships source-first Codex plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), keeps root [`skills/`](./skills/) as the authored surface, and keeps deeper maintainer explanation under [`docs/maintainers/`](./docs/maintainers/).
+It ships source-first Codex plugin packaging at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), keeps root [`skills/`](./skills/) as the authored surface, and keeps optional skill-specific maintainer notes under [`docs/maintainers/`](./docs/maintainers/).
 
 ### Motivation
 
@@ -75,13 +75,13 @@ Keep the Python maintainer baseline repo-local. When this repo or a target repo 
 
 ### Workflow
 
-Keep root [`skills/`](./skills/) canonical, keep maintainer docs under [`docs/maintainers/`](./docs/maintainers/), and keep plugin metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
+Keep root [`skills/`](./skills/) canonical and keep plugin metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json). Use the Socket root maintainer docs for shared marketplace, release, and contribution workflow.
 
 When you update a skill here, align the nearby docs and tests in the same pass. Keep discovery mirrors, plugin packaging, marketplace sources, marketplace catalogs, plugin root payloads, cache paths, and enabled-state wording separate instead of collapsing them into one vague install story.
 
 For optional Codex subagent wording in target skills repos, use [`docs/maintainers/codex-subagent-skill-guidance.md`](./docs/maintainers/codex-subagent-skill-guidance.md).
 
-Contributor workflow and review expectations live in [CONTRIBUTING.md](./CONTRIBUTING.md).
+Contributor workflow and review expectations live in the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ### Validation
 
@@ -101,7 +101,6 @@ uv run mypy .
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
-├── CONTRIBUTING.md
 ├── README.md
 ├── ROADMAP.md
 ├── docs/

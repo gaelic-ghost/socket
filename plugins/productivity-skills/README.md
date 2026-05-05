@@ -98,7 +98,6 @@ See the Socket root [LICENSE](../../LICENSE).
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
-├── CONTRIBUTING.md
 ├── README.md
 ├── ROADMAP.md
 ├── docs/

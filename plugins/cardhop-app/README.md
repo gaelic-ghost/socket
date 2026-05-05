@@ -2,7 +2,7 @@
 
 Canonical home for Gale's Cardhop.app Codex skill, bundled local MCP server, and thin plugin packaging.
 
-For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.md). For contributor workflow, setup, and review expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.md). For contributor workflow, setup, and review expectations, see the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Table of Contents
 
@@ -38,7 +38,7 @@ It keeps the Cardhop workflow surface, the bundled server implementation, and th
 
 ## Quick Start
 
-If you want to use the workflow guidance, start with the skills under [`skills/`](./skills/). If you want to work on the bundled server, go straight to [`mcp/README.md`](./mcp/README.md). If you are changing the repo itself, use the contributor workflow in [CONTRIBUTING.md](./CONTRIBUTING.md).
+If you want to use the workflow guidance, start with the skills under [`skills/`](./skills/). If you want to work on the bundled server, go straight to [`mcp/README.md`](./mcp/README.md). If you are changing the repo itself, use the contributor workflow in the Socket root [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Usage
 
@@ -94,7 +94,6 @@ When the skill wording or packaging metadata changes, also review the root docs 
 │   └── plugin.json
 ├── .mcp.json
 ├── AGENTS.md
-├── CONTRIBUTING.md
 ├── README.md
 ├── ROADMAP.md
 ├── mcp/

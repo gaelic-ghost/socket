@@ -37,14 +37,14 @@ Active
 ### Tickets
 
 - [ ] Tighten `README.md` so it owns the public overview, install surfaces, active inventory, and packaging shape.
-- [ ] Add a root `CONTRIBUTING.md` that owns maintainer workflow, validation habits, and contributor expectations.
+- [ ] Keep this child README aligned with the Socket root `CONTRIBUTING.md` that owns maintainer workflow, validation habits, and contributor expectations.
 - [ ] Normalize `AGENTS.md` to the canonical repo-guidance structure without losing the repo-specific packaging rules.
 - [ ] Clean up `ROADMAP.md` so the current planning surface and completed-history notes no longer compete with each other.
 - [ ] Confirm the repo validation path still passes after the docs-alignment pass.
 
 ### Exit Criteria
 
-- [ ] `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, and `ROADMAP.md` have clear non-overlapping roles.
+- [ ] `README.md`, `AGENTS.md`, and `ROADMAP.md` have clear non-overlapping roles, with shared contribution workflow owned by the Socket root guide.
 - [ ] The docs describe root `skills/` as the source of truth and the repo root as the Codex plugin root.
 - [ ] The repo validation path passes after the documentation update.
 

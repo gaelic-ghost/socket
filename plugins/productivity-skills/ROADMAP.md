@@ -24,7 +24,7 @@
 
 ## Milestone Progress
 
-- Milestone 22: Accessibility maintenance baseline - Planned
+- Milestone 22: Accessibility maintenance baseline - Completed
 - Milestone 23: Security and support maintenance baseline - Planned
 - Milestone 24: API maintenance baseline - Completed
 - Milestone 25: Codex Hooks maintenance baseline - Planned
@@ -33,27 +33,29 @@
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Add a new `maintain-project-accessibility` baseline skill for canonical `ACCESSIBILITY.md` maintenance.
-- [ ] Define `ACCESSIBILITY.md` as the repo-local accessibility control document for standards, architecture, verification, ownership, and known gaps.
-- [ ] Extend `maintain-project-contributing` so accessibility expectations become part of the contributor contract instead of optional follow-up guidance.
+- [x] Add a new `maintain-project-accessibility` baseline skill for canonical `ACCESSIBILITY.md` maintenance.
+- [x] Define `ACCESSIBILITY.md` as the repo-local accessibility control document for standards, architecture, verification, ownership, and known gaps.
+- [x] Extend `maintain-project-contributing` so accessibility expectations become part of the contributor contract instead of optional follow-up guidance.
 
 ### Tickets
 
-- [ ] Draft and ship the `maintain-project-accessibility` skill surface with template, config, script, references, and tests.
-- [ ] Define and validate the canonical `ACCESSIBILITY.md` schema, including standards baseline, architecture, workflow, known gaps, and evidence sections.
-- [ ] Add claim-integrity checks so the baseline workflow does not overstate compliance or invent unsupported accessibility evidence.
-- [ ] Extend `maintain-project-contributing` with a required `Accessibility Expectations` subsection under `Development Expectations`.
-- [ ] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
+- [x] Draft and ship the `maintain-project-accessibility` skill surface with template, config, script, references, and tests.
+- [x] Define and validate the canonical `ACCESSIBILITY.md` schema, including standards baseline, architecture, workflow, known gaps, and evidence sections.
+- [x] Add claim-integrity checks so the baseline workflow does not overstate compliance or invent unsupported accessibility evidence.
+- [x] Extend `maintain-project-contributing` with a required `Accessibility Expectations` subsection under `Development Expectations`.
+- [x] Update repo-level maintainer docs and active-skill inventory once the new skill is implemented.
 
 ### Exit Criteria
 
-- [ ] The repository ships a working `maintain-project-accessibility` skill with deterministic `check-only` and bounded `apply` behavior.
-- [ ] The canonical `ACCESSIBILITY.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
-- [ ] `maintain-project-contributing` enforces contributor-facing accessibility expectations that point back to `ACCESSIBILITY.md`.
+- [x] The repository ships a working `maintain-project-accessibility` skill with deterministic `check-only` and bounded `apply` behavior.
+- [x] The canonical `ACCESSIBILITY.md` contract is documented, test-covered, and grounded in the baseline maintainers' workflow family.
+- [x] `maintain-project-contributing` enforces contributor-facing accessibility expectations that point back to `ACCESSIBILITY.md`.
+
+Completed Milestone 22 by adding `maintain-project-accessibility` and folding the accessibility contributor contract into `maintain-project-contributing`. The earlier standalone implementation plan has been removed because the shipped skill assets, tests, and this roadmap now carry the durable state.
 
 ## Milestone 23: Security and support maintenance baseline
 
