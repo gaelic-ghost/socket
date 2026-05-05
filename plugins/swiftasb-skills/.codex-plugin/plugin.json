@@ -1,6 +1,6 @@
 {
   "name": "swiftasb-skills",
-  "version": "6.6.12",
+  "version": "6.6.13",
   "description": "Codex skills for explaining SwiftASB and building SwiftUI, AppKit, and Swift package integrations on top of it.",
   "author": {
     "name": "Gale",
