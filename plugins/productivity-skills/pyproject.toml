@@ -1,6 +1,6 @@
 [project]
 name = "productivity-skills-maintenance"
-version = "6.6.15"
+version = "6.6.16"
 description = "Maintainer-only Python tooling baseline for productivity-skills."
 requires-python = ">=3.11"
 dependencies = []

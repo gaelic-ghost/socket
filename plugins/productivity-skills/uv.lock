@@ -40,7 +40,7 @@ wheels = [
 
 [[package]]
 name = "productivity-skills-maintenance"
-version = "6.6.15"
+version = "6.6.16"
 source = { virtual = "." }
 
 [package.dev-dependencies]
