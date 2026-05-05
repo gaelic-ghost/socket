@@ -47,6 +47,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 - Treat managed production installs such as `~/.agents/skills` as read-only deployment artifacts while working in these development repositories.
 - When a repository ships reusable skills, treat the top-level authored surface such as `skills/`, `mcps/`, or `apps/` as the source of truth. Treat plugin manifests, marketplace files, and nested packaged plugin roots as packaging metadata unless a nearer `AGENTS.md` explicitly says otherwise.
+- Keep the root README short, nontechnical, and focused on end users or agents installing and using the Socket marketplace. Put contributor workflow and maintainer procedures in `CONTRIBUTING.md` or `docs/maintainers/`, and put durable agent-facing operating rules in this file.
 - Keep installed skills independent from repo-level docs under `docs/`.
 - Prefer POSIX symlink discovery mirrors over duplicate or hardlinked skill trees when a repo exposes `.agents/skills` or `.claude/skills`.
 - Do not track consumer-side install copies, cache directories, or machine-local runtime state in git.
@@ -56,7 +57,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - For Swift Package Index work, treat repo-local readiness and external submission as different states. Use [`scripts/spi_add_package.py`](./scripts/spi_add_package.py) for readiness, official issue-form URL generation, browser opening, and hands-free Computer Use handoff. Do not create `SwiftPackageIndex/PackageList` issues with `gh issue create`, do not apply labels manually, do not fork or clone `SwiftPackageIndex/PackageList`, do not edit `packages.json`, do not open PackageList pull requests, and do not trigger PackageList validation or CLA automation through a manual contribution path. The only supported external add-package path is the documented `Add Package(s)` issue form.
 - For hands-free SPI submission, use Codex Computer Use against Zen (`app.zen-browser.zen`) only after `scripts/spi_add_package.py hands-free <package-root>` opens the prefilled official issue form and prints its handoff. Computer Use may confirm the form, confirm the package URL, click GitHub's `Submit new issue` button, and verify the created issue has the `Add Package` label. If any check fails, stop and report the failure instead of improvising another GitHub action.
 - Say `SPI-ready locally`, `SPI Add Package issue submitted`, or `indexed on SPI` only when that exact state has been verified. A blocked issue, missing label, open PackageList PR, or failed external artifact is not successful SPI setup or successful SPI submission.
-- Default user-facing plugin install and update guidance to Git-backed marketplace sources with `codex plugin marketplace add <owner>/<repo>` and `codex plugin marketplace upgrade <marketplace-name>`. Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs, and use manual local marketplace roots only for development, unpublished testing, or fallback cases.
+- Default user-facing plugin install and update guidance to Git-backed marketplace sources with commands shaped like `codex plugin marketplace add owner/repo` and `codex plugin marketplace upgrade marketplace-name`. Use explicit refs such as `owner/repo@vX.Y.Z` only for pinned reproducible installs, and use manual local marketplace roots only for development, unpublished testing, or fallback cases.
 - For Python-backed repositories in `socket`, use `uv` as the maintainer baseline and declare repo-local dev dependencies in `pyproject.toml` instead of relying on globally installed tools.
 - Prefer a root or package-local dev group that explicitly includes the Python maintainer tools the repo expects to run, including `pytest`, `ruff`, and `mypy` when those checks are part of the workflow.
 - Prefer `uv sync --dev`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` for repos that actually ship those Python-backed validation surfaces.
@@ -108,7 +109,7 @@ scripts/release.sh major
 scripts/release.sh custom 1.2.3
 ```
 
-`patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with `custom <x.y.z>`.
+`patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
 
 For full release sequencing, use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md). Use `standard` when only the `socket` superproject changes. Use `subtrees` when the release also needs subtree pull/push accounting.
 

@@ -40,11 +40,13 @@ If the change is really about one child repository's own skills, packaging, test
 
 Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. For ordinary work in monorepo-owned child directories, edit the copy in the relevant directory under `plugins/` directly from this checkout. For `apple-dev-skills`, keep subtree pull and push operations explicit and separate from unrelated edits. For Speak Swiftly plugin payload changes, work in the standalone `SpeakSwiftlyServer` checkout; `socket` lists that payload by Git-backed marketplace reference. Treat `plugins/SpeakSwiftlyServer` as a pull-only source mirror, and refresh it only when the superproject intentionally needs the standalone source state.
 
-When changing user-facing plugin install or update docs, make the Git-backed marketplace path the default. Use `codex plugin marketplace add <owner>/<repo>` for install setup and `codex plugin marketplace upgrade <marketplace-name>` for updates; keep explicit refs such as `<owner>/<repo>@vX.Y.Z` scoped to pinned reproducible installs, and keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
+When changing user-facing plugin install or update docs, make the Git-backed marketplace path the default. Use commands shaped like `codex plugin marketplace add owner/repo` for install setup and `codex plugin marketplace upgrade marketplace-name` for updates; keep explicit refs such as `owner/repo@vX.Y.Z` scoped to pinned reproducible installs, and keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
 
 For coordinated child-skill guidance, keep the root explanation small and put detailed behavior in the child repo that owns the skill surface. The root docs should explain why the pass is coordinated; the child docs should explain the actual skill contract.
 
 When adding root screenshots or other documentation media, place them under [`docs/media/`](./docs/media/), use portable descriptive filenames, and add nearby text that explains what the artifact proves or demonstrates. Do not rely on image content alone to explain a workflow.
+
+When updating root docs, keep [README.md](./README.md) short, nontechnical, and focused on people or agents installing and using the Socket marketplace. Put contributor workflow, maintainer commands, release process, subtree accounting, marketplace source-shape details, and root validation expectations in this file or the maintainer docs under [`docs/maintainers/`](./docs/maintainers/). Put durable agent-facing operating rules in [AGENTS.md](./AGENTS.md).
 
 ### Asking For Review
 
@@ -83,6 +85,37 @@ You can verify that baseline with:
 ```bash
 uv run scripts/validate_socket_metadata.py
 ```
+
+### Marketplace Shape
+
+The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json). It is a catalog, not a root aggregate plugin.
+
+The installable local child entries currently point at:
+
+- `./plugins/agent-plugin-skills`
+- `./plugins/apple-dev-skills`
+- `./plugins/cardhop-app`
+- `./plugins/productivity-skills`
+- `./plugins/python-skills`
+- `./plugins/swiftasb-skills`
+- `./plugins/things-app`
+
+The Speak Swiftly entry points at the canonical Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source as `speak-swiftly`, with the display name `Speak Swiftly`.
+
+Placeholder entries may stay visible with `policy.installation: NOT_AVAILABLE` until they ship real plugin content. Current placeholder entries are `dotnet-skills`, `rust-skills`, `spotify`, and `web-dev-skills`.
+
+For the detailed packaging stance, use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md). For isolated install testing that leaves personal production installs alone, use [`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md).
+
+### Legacy Install Cleanup
+
+If a contributor is cleaning up an older copied-plugin or local-personal-marketplace setup after confirming the Git-backed Socket marketplace works, use the repo-owned cleanup helper:
+
+```bash
+uv run scripts/cleanup_legacy_socket_installs.py
+uv run scripts/cleanup_legacy_socket_installs.py --apply
+```
+
+The first command is a dry run. The `--apply` command backs up known legacy Socket install artifacts before removing them.
 
 ## Development Expectations
 
@@ -132,6 +165,22 @@ If the changed surface also introduces or expands Python-backed repo checks, add
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
 
 When editing docs that include media, also review the image path, alt text, and adjacent explanatory prose.
+
+### Release and Subtree Accounting
+
+Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for release sequencing. Use `standard` for root-only releases and `subtrees` when a release also needs explicit subtree pull or push accounting.
+
+Use the root release-version script when the task is to inventory or bump the maintained semantic-version surfaces across the superproject:
+
+```bash
+scripts/release.sh inventory
+scripts/release.sh patch
+scripts/release.sh minor
+scripts/release.sh major
+scripts/release.sh custom 1.2.3
+```
+
+`patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
 
 ## Pull Request Expectations
 
