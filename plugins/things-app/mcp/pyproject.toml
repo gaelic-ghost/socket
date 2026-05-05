@@ -7,7 +7,7 @@ packages = ["app"]
 
 [project]
 name = "things-mcp"
-version = "6.6.11"
+version = "6.6.12"
 requires-python = ">=3.13"
 dependencies = [
     "fastmcp>=3.0.2",
