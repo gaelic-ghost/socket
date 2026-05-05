@@ -1,74 +1,28 @@
 # web-dev-skills
 
-Placeholder plugin repository for future web-focused Codex skills.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Setup](#setup)
-- [Usage](#usage)
-- [Development](#development)
-- [Verification](#verification)
-- [Release Notes](#release-notes)
-- [License](#license)
-- [Repository Layout](#repository-layout)
+Placeholder plugin repository for future web-development Codex skills.
 
 ## Overview
 
-This repository is intentionally minimal today.
-
 ### Status
 
-`web-dev-skills` is a real plugin repository, but it does not ship authored web-focused skills yet.
+TBD
 
 ### What This Project Is
 
-This repository reserves the future Codex plugin surface for web-development-focused skills and keeps the placeholder packaging honest until real skills land.
+TBD
 
 ### Motivation
 
-It exists to keep future web workflow work in a dedicated repository instead of mixing that work into unrelated plugin repos too early.
+TBD
 
-## Setup
+## What It Provides
 
-There is no end-user quick start yet because the repository does not ship actual skill content. Use the maintainer workflow here only if you are preserving the placeholder repository shape or preparing the first real skill surface.
+Nothing runtime-facing yet. The directory reserves the future Socket home for web-development workflow skills.
 
-## Usage
+## Socket Docs
 
-There is no meaningful runtime usage yet. Today this repository is a packaging placeholder plus roadmap.
-
-## Development
-
-### Setup
-
-Review [AGENTS.md](./AGENTS.md), the Socket root [TODO.md](../../TODO.md), and the plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) before expanding the repo.
-
-### Workflow
-
-Keep the repo minimal until the first real skill exists. Add packaging, docs, and validation only when the shipped surface actually earns them.
-
-## Verification
-
-Current verification is lightweight:
-
-- keep [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) valid
-- keep placeholder docs honest about the repo not shipping real skills yet
-- add real validation commands only when the repository starts shipping executable or testable skill content
-
-## Release Notes
-
-Use Git history for placeholder-stage changes. Add GitHub release tracking once the repository begins shipping real web-focused skill content.
-
-## License
-
-See the Socket root [LICENSE](../../LICENSE).
-
-## Repository Layout
-
-```text
-.
-├── .codex-plugin/
-│   └── plugin.json
-├── AGENTS.md
-└── README.md
-```
+- Installable plugin catalog: [Socket README](../../README.md)
+- Shared contributor workflow: [Socket CONTRIBUTING](../../CONTRIBUTING.md)
+- Consolidated backlog: [Socket TODO](../../TODO.md)
+- Agent-facing local guidance: [AGENTS](./AGENTS.md)

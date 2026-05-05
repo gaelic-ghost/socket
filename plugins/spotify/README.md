@@ -2,73 +2,27 @@
 
 Placeholder plugin repository for future Spotify-focused Codex workflows.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Setup](#setup)
-- [Usage](#usage)
-- [Development](#development)
-- [Verification](#verification)
-- [Release Notes](#release-notes)
-- [License](#license)
-- [Repository Layout](#repository-layout)
-
 ## Overview
-
-This repository is intentionally minimal today.
 
 ### Status
 
-`spotify` is a real plugin repository, but it does not ship authored Spotify workflows yet.
+TBD
 
 ### What This Project Is
 
-This repository reserves a dedicated Codex plugin surface for future Spotify automation, playback, library-management, or discovery workflows.
+TBD
 
 ### Motivation
 
-It exists to keep Spotify-specific workflow work in its own child repository instead of mixing that work into unrelated plugins before the real surface is ready.
+TBD
 
-## Setup
+## What It Provides
 
-There is no end-user quick start yet because the repository does not ship actual skills, apps, or MCP server wiring. Use the maintainer workflow here only when preserving the placeholder shape or preparing the first real Spotify surface.
+Nothing runtime-facing yet. The directory reserves the future Socket home for Spotify workflow support.
 
-## Usage
+## Socket Docs
 
-There is no meaningful runtime usage yet. Today this repository is a packaging placeholder plus roadmap.
-
-## Development
-
-### Setup
-
-Review [AGENTS.md](./AGENTS.md), the Socket root [TODO.md](../../TODO.md), and [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) before expanding the repo.
-
-### Workflow
-
-Keep the repository minimal until the first real Spotify workflow exists. Add skills, MCP wiring, apps, docs, and validation only when the shipped surface actually earns them.
-
-## Verification
-
-Current verification is lightweight:
-
-- keep [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) valid
-- keep placeholder docs honest about the repo not shipping real workflow content yet
-- add real validation commands only when the repository starts shipping executable or testable Spotify surfaces
-
-## Release Notes
-
-Use Git history for placeholder-stage changes. Add GitHub release tracking once the repository begins shipping real Spotify workflow content.
-
-## License
-
-See the root [LICENSE](../../LICENSE).
-
-## Repository Layout
-
-```text
-.
-├── .codex-plugin/
-│   └── plugin.json
-├── AGENTS.md
-└── README.md
-```
+- Installable plugin catalog: [Socket README](../../README.md)
+- Shared contributor workflow: [Socket CONTRIBUTING](../../CONTRIBUTING.md)
+- Consolidated backlog: [Socket TODO](../../TODO.md)
+- Agent-facing local guidance: [AGENTS](./AGENTS.md)
