@@ -1,6 +1,6 @@
 [project]
 name = "agent-plugin-skills-maintenance"
-version = "6.6.6"
+version = "6.6.7"
 description = "Maintainer-only Python tooling baseline for agent-plugin-skills."
 requires-python = ">=3.11"
 dependencies = []
