@@ -1,6 +1,6 @@
 # productivity-skills
 
-Broadly useful workflow and maintainer skills for Codex and Claude Code.
+Broadly useful workflow and maintainer skills for Codex.
 
 ## Table of Contents
 
@@ -52,7 +52,7 @@ Use this repository when the work is about:
 
 ### Setup
 
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json), and keep maintainer docs under [`docs/`](./docs/).
+Treat root [`skills/`](./skills/) as the canonical authored surface. Keep install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), and keep maintainer docs under [`docs/`](./docs/).
 
 ### Workflow
 
@@ -77,7 +77,7 @@ Use Git history and GitHub releases to track shipped changes for this repository
 
 ## License
 
-See [LICENSE](./LICENSE).
+See the Socket root [LICENSE](../../LICENSE).
 
 ## Active Skills
 
@@ -95,13 +95,10 @@ See [LICENSE](./LICENSE).
 
 ```text
 .
-├── .claude-plugin/
-│   └── marketplace.json
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
 ├── CONTRIBUTING.md
-├── LICENSE
 ├── README.md
 ├── ROADMAP.md
 ├── docs/

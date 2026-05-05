@@ -1,9 +1,0 @@
-{
-  "name": "things-app",
-  "description": "Things.app skills and bundled MCP server packaged for Claude Code.",
-  "version": "0.1.2",
-  "author": {
-    "name": "Gale"
-  },
-  "repository": "https://github.com/gaelic-ghost/things-app"
-}

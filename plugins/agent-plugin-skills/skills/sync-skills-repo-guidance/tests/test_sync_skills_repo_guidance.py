@@ -56,7 +56,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         + "\n",
         encoding="utf-8",
     )
-    (repo_root / ".gitignore").write_text(".claude/settings.local.json\n", encoding="utf-8")
+    (repo_root / ".gitignore").write_text(".venv/\n", encoding="utf-8")
     (repo_root / ".codex-plugin").mkdir()
     (repo_root / ".codex-plugin" / "plugin.json").write_text('{"skills": "./skills/"}\n', encoding="utf-8")
     (repo_root / "docs" / "maintainers" / "reality-audit.md").write_text(
@@ -102,9 +102,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         encoding="utf-8",
     )
     (repo_root / ".agents").mkdir()
-    (repo_root / ".claude").mkdir()
     os.symlink("../skills", repo_root / ".agents" / "skills")
-    os.symlink("../skills", repo_root / ".claude" / "skills")
 
 
 def test_audit_repo_accepts_expected_repo_shape(tmp_path: Path) -> None:

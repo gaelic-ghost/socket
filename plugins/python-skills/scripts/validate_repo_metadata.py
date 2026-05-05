@@ -371,61 +371,6 @@ def validate_plugin_manifest(
     return findings
 
 
-def validate_claude_marketplace(repo_root: Path) -> list[Finding]:
-    findings: list[Finding] = []
-    marketplace_path = repo_root / ".claude-plugin" / "marketplace.json"
-    rel_path = str(marketplace_path.relative_to(repo_root))
-
-    if not marketplace_path.exists():
-        return [Finding(rel_path, "missing Claude marketplace file")]
-
-    try:
-        marketplace = load_json(marketplace_path)
-    except (ValueError, json.JSONDecodeError) as exc:
-        return [Finding(rel_path, str(exc))]
-
-    plugins = marketplace.get("plugins")
-    if not isinstance(plugins, list) or not plugins:
-        return [Finding(rel_path, "plugins must be a non-empty list")]
-
-    matched_plugin = None
-    for plugin in plugins:
-        if isinstance(plugin, dict) and plugin.get("name") == PLUGIN_DIR_NAME:
-            matched_plugin = plugin
-            break
-
-    if matched_plugin is None:
-        return [Finding(rel_path, f"Claude marketplace must include a {PLUGIN_DIR_NAME} plugin entry")]
-
-    source = matched_plugin.get("source")
-    if source != "./skills":
-        findings.append(Finding(rel_path, "Claude marketplace source must be ./skills"))
-
-    skills_root = repo_root / "skills"
-    if not skills_root.is_dir():
-        findings.append(Finding(rel_path, "Claude marketplace source does not point at an existing skills directory"))
-
-    return findings
-
-
-def validate_skill_mirrors(repo_root: Path) -> list[Finding]:
-    findings: list[Finding] = []
-    expected_symlinks = {
-        repo_root / ".claude" / "skills": "../skills",
-    }
-    for path, target in expected_symlinks.items():
-        rel_path = str(path.relative_to(repo_root))
-        if not path.exists() and not path.is_symlink():
-            findings.append(Finding(rel_path, f"missing symlink to {target}"))
-            continue
-        if not path.is_symlink():
-            findings.append(Finding(rel_path, f"expected POSIX symlink to {target}"))
-            continue
-        if path.readlink().as_posix() != target:
-            findings.append(Finding(rel_path, f"symlink target must be {target}"))
-    return findings
-
-
 def validate_doc_inventory(repo_root: Path, skill_dirs: list[Path]) -> list[Finding]:
     findings: list[Finding] = []
     readme_text = (repo_root / "README.md").read_text()
@@ -451,8 +396,6 @@ def run(repo_root: Path) -> list[Finding]:
             require_skills_interface=True,
         )
     )
-    findings.extend(validate_claude_marketplace(repo_root))
-    findings.extend(validate_skill_mirrors(repo_root))
     findings.extend(validate_doc_inventory(repo_root, skill_dirs))
     for skill_dir in skill_dirs:
         findings.extend(validate_skill_dir(repo_root, skill_dir))

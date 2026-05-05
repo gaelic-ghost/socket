@@ -60,7 +60,7 @@ Use this flow when validating the current top-level export surface and local dis
 
 1. Run `bash .github/scripts/validate_repo_docs.sh`.
 2. Run `uv run --group dev pytest`.
-3. Confirm `.agents/skills` and `.claude/skills` still point at `../skills`.
+3. Confirm `.agents/skills` still points at `../skills`.
 4. Confirm root docs, skill docs, and the roadmap all describe top-level `skills/` as the active export surface and do not mention a nested packaged plugin tree or removed installer workflows.
 5. If discovery or docs drift remains, update the docs to match the tested top-level export surface instead of preserving stale packaging language.
 

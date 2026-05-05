@@ -52,7 +52,7 @@ The repo uses [`pyproject.toml`](./pyproject.toml) and [`uv.lock`](./uv.lock) as
 
 ### Runtime Behavior
 
-This repository is file-backed rather than service-backed. The normal contributor loop is: edit root `skills/`, keep the repo-root plugin metadata aligned, update the root docs if the shipped surface changed, then run the validation path. For Claude-side local discovery, the repo-root marketplace catalog is `.claude-plugin/marketplace.json`.
+This repository is file-backed rather than service-backed. The normal contributor loop is: edit root `skills/`, keep the repo-root plugin metadata aligned, update the root docs if the shipped surface changed, then run the validation path.
 
 ## Development Expectations
 
@@ -87,4 +87,4 @@ Surface scope widening early. If the work starts as a repo-docs pass but actuall
 
 ## Contribution Terms
 
-By contributing to this repository, you agree that your contributions will be licensed under the Apache License 2.0 project license.
+By contributing to this repository, you agree that your contributions will be licensed under the Socket root Apache License 2.0 project license.

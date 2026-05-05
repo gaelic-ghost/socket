@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "6.6.16",
-  "description": "Apple development workflows for Codex and Claude Code, including SwiftUI architecture and DocC authoring guidance.",
+  "description": "Apple development workflows for Codex, including SwiftUI architecture and DocC authoring guidance.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",

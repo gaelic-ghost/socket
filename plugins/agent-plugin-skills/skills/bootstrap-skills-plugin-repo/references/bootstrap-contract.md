@@ -4,7 +4,6 @@ A bootstrapped skills-export repository should include:
 
 - root `skills/`
 - `.agents/skills -> ../skills`
-- `.claude/skills -> ../skills`
 - `README.md`
 - `AGENTS.md`
 - `ROADMAP.md`

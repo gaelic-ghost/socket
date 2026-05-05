@@ -5,7 +5,6 @@
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
-- [Milestone 14: Claude Code optimization pass](#milestone-14-claude-code-optimization-pass)
 - [Milestone 22: Accessibility maintenance baseline](#milestone-22-accessibility-maintenance-baseline)
 - [Milestone 23: Security and support maintenance baseline](#milestone-23-security-and-support-maintenance-baseline)
 - [Milestone 24: API maintenance baseline](#milestone-24-api-maintenance-baseline)
@@ -25,34 +24,10 @@
 
 ## Milestone Progress
 
-- Milestone 14: Claude Code optimization pass - Planned
 - Milestone 22: Accessibility maintenance baseline - Planned
 - Milestone 23: Security and support maintenance baseline - Planned
 - Milestone 24: API maintenance baseline - Completed
 - Milestone 25: Codex Hooks maintenance baseline - Planned
-
-## Milestone 14: Claude Code optimization pass
-
-### Status
-
-Planned
-
-### Scope
-
-- [ ] Improve this repository's skill surfaces for Claude Code routing and ergonomics.
-- [ ] Reconcile wording, references, and metadata where Claude-specific behavior benefits from tighter optimization.
-- [ ] Keep Claude-facing improvements additive to the shared standards-based skill core and the existing Codex and OpenAI overlays.
-
-### Tickets
-
-- [ ] Audit skill trigger wording and references for Claude Code activation quality.
-- [ ] Add or refine Claude-facing guidance where Codex-first wording currently leaves avoidable ambiguity.
-- [ ] Review metadata and examples for Claude Code compatibility and discoverability.
-
-### Exit Criteria
-
-- [ ] Active skills have Claude Code-aware trigger and usage guidance where it materially improves routing.
-- [ ] Claude-facing docs no longer lag behind the current skill layout and plugin-ready repo model.
 
 ## Milestone 22: Accessibility maintenance baseline
 
@@ -176,4 +151,4 @@ Planned
 - Clarified that the managed repo-maintenance workflow exposes `validate` as the branch-protection check context, avoiding blocked PRs caused by requiring the workflow-title display string instead.
 - Completed Milestones 0 through 11 by refactoring the naming and structure, splitting README and roadmap maintenance into dedicated skills, restoring `explain-code-slice`, and aligning the repository around the current plugin-ready packaging model.
 - Completed Milestones 12 and 13 by moving the agent-stack maintainer bootstrap and guidance-sync workflows into `agent-plugin-skills`.
-- Completed Milestones 15 through 21 by adding Claude plugin support, shipping `maintain-project-repo`, `maintain-project-contributing`, and `maintain-project-agents`, and clarifying the repository's role as the general-purpose productivity baseline layer.
+- Completed Milestones 15 through 21 by shipping `maintain-project-repo`, `maintain-project-contributing`, and `maintain-project-agents`, and clarifying the repository's role as the general-purpose productivity baseline layer.

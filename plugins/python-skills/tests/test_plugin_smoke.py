@@ -29,7 +29,6 @@ def run_command(*args: str, cwd: Path | None = None) -> subprocess.CompletedProc
 
 def test_plugin_manifest_and_marketplace_contract() -> None:
     manifest = json.loads((REPO_ROOT / ".codex-plugin" / "plugin.json").read_text())
-    claude_marketplace = json.loads((REPO_ROOT / ".claude-plugin" / "marketplace.json").read_text())
     readme_text = (REPO_ROOT / "README.md").read_text()
 
     assert manifest["name"] == "python-skills"
@@ -37,11 +36,6 @@ def test_plugin_manifest_and_marketplace_contract() -> None:
     assert manifest["interface"]["displayName"] == "Python Skills"
     assert manifest["interface"]["category"] == "Productivity"
 
-    claude_entry = claude_marketplace["plugins"][0]
-    assert claude_entry["name"] == "python-skills"
-    assert claude_entry["source"] == "./skills"
-    assert (REPO_ROOT / ".claude" / "skills").is_symlink()
-    assert (REPO_ROOT / ".claude" / "skills").readlink().as_posix() == "../skills"
     assert ".codex-plugin/plugin.json" in readme_text
     assert "root [`skills/`](./skills/) is the canonical authored workflow surface" in readme_text
 

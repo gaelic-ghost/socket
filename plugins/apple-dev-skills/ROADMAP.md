@@ -5,7 +5,6 @@
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
-- [Milestone 18: Claude Code Plugin Extras](#milestone-18-claude-code-plugin-extras)
 - [Milestone 21: Swift Cleanup Automation Exploration](#milestone-21-swift-cleanup-automation-exploration)
 - [Milestone 24: MCP App UI for Configuration and Customization](#milestone-24-mcp-app-ui-for-configuration-and-customization)
 - [Milestone 25: macOS Menu Bar Extra for Skill Controls](#milestone-25-macos-menu-bar-extra-for-skill-controls)
@@ -34,7 +33,6 @@
 
 ## Milestone Progress
 
-- Milestone 18: Claude Code Plugin Extras - Planned
 - Milestone 21: Swift Cleanup Automation Exploration - Planned
 - Milestone 24: MCP App UI for Configuration and Customization - Planned
 - Milestone 25: macOS Menu Bar Extra for Skill Controls - Planned
@@ -46,27 +44,6 @@
 - Milestone 38: DocC Workflow - Completed
 - Milestone 39: Swift Package Index Workflow - Planned
 - Milestone 40: SwiftUI UI Architecture Workflow - Completed
-
-## Milestone 18: Claude Code Plugin Extras
-
-### Status
-
-Planned
-
-### Scope
-
-- [ ] Add Claude-only plugin enhancements on top of the shared Codex and Claude common denominator without making cross-ecosystem workflows depend on them.
-
-### Tickets
-
-- [ ] Flesh out `hooks/` for Claude-only automation where it clearly helps maintainers or end users.
-- [ ] Add `bin/` helpers only for Claude-only convenience wrappers that do not become required for the shared workflow contract.
-- [ ] Document which Claude-only extras are optional sugar versus canonical workflow behavior.
-- [ ] Validate that Claude-only extras degrade gracefully when absent from Codex.
-
-### Exit Criteria
-
-- [ ] Claude-only plugin extras exist as clearly separated enhancements, and the core workflow remains usable through the shared skill surface in both ecosystems.
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 

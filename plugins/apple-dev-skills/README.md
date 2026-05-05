@@ -1,6 +1,10 @@
 # apple-dev-skills
 
-Apple, Swift, and Xcode workflow skills for Codex and Claude Code.
+Apple, Swift, SwiftUI, Xcode, and DocC workflow skills for Codex.
+
+![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
+
+The Socket marketplace is the easiest way to install Apple Dev Skills alongside the companion Productivity Skills workflows that Apple bootstrap and guidance-sync skills can use.
 
 ## Table of Contents
 
@@ -17,83 +21,65 @@ Apple, Swift, and Xcode workflow skills for Codex and Claude Code.
 
 ### Status
 
-This repository is active and available for maintainer use.
+`apple-dev-skills` is active and usable as a Codex plugin.
 
 ### What This Project Is
 
-This repository is the canonical source of truth for Gale's Apple, Swift, and Xcode workflow skills. Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work, and use `apple-dev-skills` when Apple-specific assumptions should actively shape the workflow.
+This repository is the canonical source of truth for Gale's Apple, Swift, and Xcode workflow skills. It gives agents focused workflows for reading Apple docs first, working with Swift and SwiftUI, using Xcode safely, building and testing Swift packages or Xcode projects, writing DocC, and keeping Apple repo guidance aligned.
 
 ### Motivation
 
-It exists to keep Apple-platform workflow guidance in one dedicated repository with explicit requirements around Apple documentation, Xcode-safe workflows, and clear source-of-truth boundaries.
+Apple development work has sharp edges around framework behavior, Xcode project state, documentation, accessibility, and build tooling. This plugin keeps those rules in one place so agents can move carefully without turning every Swift or Xcode task into guesswork.
 
 ## Quick Start
 
-This repository is primarily the authored source tree for the shipped Apple workflow skills rather than an end-user app with a separate getting-started path. If you want to understand what the repo currently ships, start with [Active Skills](#active-skills) and [`docs/maintainers/workflow-atlas.md`](./docs/maintainers/workflow-atlas.md). If you want to modify the repository, go to [Development](#development) and use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the maintainer workflow.
+The easiest way to install Apple Dev Skills with its companion workflows is through Gale's Socket marketplace:
+
+```bash
+codex plugin marketplace add gaelic-ghost/socket
+```
+
+When the Socket marketplace changes, refresh it:
+
+```bash
+codex plugin marketplace upgrade socket
+```
+
+Restart Codex, open the plugin directory, choose `Socket`, and install or enable `apple-dev-skills`. Install `productivity-skills` from the same marketplace too if you want the Apple bootstrap and guidance-sync workflows.
 
 ## Usage
 
-Use this repository's skills when the work is about:
+Use Apple Dev Skills when an agent is helping with:
 
-- Swift or SwiftUI implementation
-- Apple UI accessibility implementation or review
-- SwiftUI app structure, focus design, scene ownership, or command architecture
-- Xcode build, run, or test workflows
-- DocC symbol comments, articles, catalog structure, or DocC-oriented review
-- Swift source cleanup, file-header normalization, or source-organization policy
-- Swift package bootstrap or validation
-- Apple-project guidance sync
-- Apple-platform documentation routing
+- Swift and SwiftUI implementation
+- Xcode build, run, test, and project workflows
+- Swift package bootstrap, build, and testing
+- Apple UI accessibility work
+- DocC comments, articles, and documentation catalogs
+- Swift source formatting and file organization
+- Apple docs lookup before design or code changes
+- Apple-specific repo guidance setup or refresh
 
-When installed as a Codex plugin, this repository also registers Xcode's built-in MCP bridge through `xcrun mcpbridge`. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools.
+Most Apple Dev Skills workflows are useful as a standalone plugin. Bootstrap and guidance-sync workflows also need `productivity-skills`, because that companion plugin owns the reusable repo-maintenance workflow that Apple Dev Skills applies to Swift packages and Xcode apps.
 
-### Codex Plugin Install
+Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work, and use Apple Dev Skills when Apple-specific behavior should shape the workflow.
 
-This repository can be installed on its own through Codex's Git-backed marketplace flow. The repo-local Codex marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and its single plugin entry points at this repository root with `source.path` set to `./` because the root directory is also the plugin root.
+The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog.
 
-Prefer the official Git-backed install and update path:
+If you only want the Apple plugin without the rest of Socket, the standalone marketplace remains supported:
 
 ```bash
 codex plugin marketplace add gaelic-ghost/apple-dev-skills
 codex plugin marketplace upgrade apple-dev-skills
 ```
 
-After Codex adds or upgrades the marketplace, restart Codex, open the plugin directory in the Codex GUI, choose the `Apple Dev Skills` marketplace, and install or enable `apple-dev-skills` there. Manual local clone marketplaces and personal copied-payload entries are development, unpublished-testing, and fallback paths rather than the default user install story.
-
-### Companion Plugin Requirements
-
-Most Apple Dev Skills workflows are useful as a standalone plugin. The bootstrap and repo-guidance sync workflows that install or refresh `scripts/repo-maintenance/` also need the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin installed alongside this plugin, because `productivity-skills` owns the reusable `maintain-project-repo` implementation while Apple Dev Skills chooses the Apple-specific `swift-package` or `xcode-app` profile.
-
-If an agent has only `apple-dev-skills` installed, it can still use the documentation lookup, SwiftUI architecture, Xcode build/run/test, DocC, formatting, source-structure, and accessibility workflows. It should install `productivity-skills` before running `bootstrap-swift-package`, `bootstrap-xcode-app-project`, `sync-swift-package-guidance`, or `sync-xcode-project-guidance` in mutating mode.
-
-The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog. Installing from the Git-backed socket marketplace is useful when you want Apple Dev Skills plus Gale's other Codex plugins available from one marketplace instead of wiring each plugin one by one:
-
-```bash
-codex plugin marketplace add gaelic-ghost/socket
-codex plugin marketplace upgrade socket
-```
-
-After adding `socket`, restart Codex, open the plugin directory in the Codex GUI, choose the `Socket` marketplace, and install or enable `apple-dev-skills` plus any companion plugins you want. Standalone Git-backed installs from this repository remain supported for Apple-only workflows that do not call `maintain-project-repo`. Use an explicit ref such as `gaelic-ghost/apple-dev-skills@vX.Y.Z` only when you want a pinned reproducible install rather than the release-aligned default branch.
-
-Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [`ROADMAP.md`](./ROADMAP.md) for planned and completed milestone-level work.
+When installed as a Codex plugin, Apple Dev Skills also registers Xcode's built-in MCP bridge through `xcrun mcpbridge`. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools.
 
 ## Development
 
-### Setup
+Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/) and tests in [`tests/`](./tests/).
 
-Sync the maintainer environment before editing skills, tests, or maintainer docs:
-
-```bash
-uv sync --dev
-```
-
-### Workflow
-
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/), maintainer docs in [`docs/`](./docs/), and install metadata in [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), [`.mcp.json`](./.mcp.json), [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
-
-Keep the repo honest about its Apple docs-first policy. When a skill changes, update the relevant tests and maintainer guidance in the same pass rather than letting the packaging or guidance drift. Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the normal contributor workflow and review expectations.
-
-### Validation
+Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [AGENTS.md](./AGENTS.md) for agent-facing repo rules.
 
 Run the repository test suite for skill and metadata changes:
 
@@ -107,31 +93,30 @@ uv run pytest
 ```text
 .
 ├── .codex-plugin/
-├── .claude-plugin/
 ├── .mcp.json
+├── docs/
+├── shared/
+├── skills/
+├── tests/
 ├── AGENTS.md
 ├── CONTRIBUTING.md
 ├── README.md
-├── ROADMAP.md
-├── docs/maintainers/
-├── shared/
-├── skills/
-└── tests/
+└── ROADMAP.md
 ```
 
 ## Active Skills
 
+- `apple-ui-accessibility-workflow`
+- `author-swift-docc-docs`
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
-- `author-swift-docc-docs`
 - `explore-apple-swift-docs`
-- `apple-ui-accessibility-workflow`
 - `format-swift-sources`
 - `structure-swift-sources`
-- `swiftui-app-architecture-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`
 - `swift-package-workflow`
+- `swiftui-app-architecture-workflow`
 - `sync-swift-package-guidance`
 - `sync-xcode-project-guidance`
 - `xcode-app-project-workflow`
@@ -140,8 +125,8 @@ uv run pytest
 
 ## Release Notes
 
-Use Git history and GitHub releases to track shipped changes for this repository.
+Use GitHub releases and Git history to track shipped changes for this repository.
 
 ## License
 
-See [LICENSE](./LICENSE).
+This repository is licensed under Apache 2.0. See [LICENSE](./LICENSE).

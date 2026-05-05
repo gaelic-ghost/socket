@@ -34,7 +34,6 @@ def test_apply_repo_creates_expected_discovery_mirrors(tmp_path: Path) -> None:
     assert any(action["action"] == "create-symlink" for action in actions)
     assert (tmp_path / ".agents" / "skills").is_symlink()
     assert os.readlink(tmp_path / ".agents" / "skills") == "../skills"
-    assert (tmp_path / ".claude" / "skills").is_symlink()
     assert "README.md" in created_paths
     assert "AGENTS.md" in created_paths
     agents_text = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")

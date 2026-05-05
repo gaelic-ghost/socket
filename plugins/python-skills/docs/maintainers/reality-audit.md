@@ -19,8 +19,6 @@ Check that:
 - the active skill inventory matches the actual `skills/*/SKILL.md` directories
 - the repository layout snippet matches the real repo
 - `.codex-plugin/plugin.json` exists and points at `./skills/`
-- `.claude-plugin/marketplace.json` exists and points at root `skills/`
-- `.claude/skills` is the expected POSIX mirror
 - `ROADMAP.md` uses checklist-style sections and milestone progress
 
 ## Skill Contract Audit
@@ -48,7 +46,6 @@ For each `agents/openai.yaml`:
 For repo-level packaging policy:
 
 - OpenAI packaging files are present, valid, and described as the active release surface
-- Claude packaging is present as a thin repo-root marketplace catalog and never described as a second authored skill tree
 - shared skill content is still described as the single-source workflow surface
 - Root `skills/` is the canonical workflow-authoring surface.
 - The Codex plugin root is described consistently as the repo root.

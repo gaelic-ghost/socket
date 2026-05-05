@@ -61,7 +61,7 @@ Use Git history for placeholder-stage changes. Add GitHub release tracking once 
 
 ## License
 
-See [LICENSE](./LICENSE).
+See the Socket root [LICENSE](../../LICENSE).
 
 ## Repository Layout
 

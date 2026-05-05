@@ -394,7 +394,6 @@ Update the `maintain-project-contributing` base schema to:
 - `skills/maintain-project-contributing/references/section-schema.md`
 - `skills/maintain-project-contributing/tests/test_maintain_project_contributing.py`
 - `.codex-plugin/plugin.json`
-- `.claude-plugin/marketplace.json` only if discovery wording needs refresh
 
 ## Validation Expectations For The Implementation Pass
 

@@ -182,7 +182,7 @@ This repository is intentionally source-first.
 - Root `skills/` is canonical.
 - Root `.codex-plugin/plugin.json` is the packaged plugin manifest for this source repo.
 - The manifest declares `"skills": "./skills/"` so Codex knows this plugin bundles the authored skill surface.
-- `.agents/skills` and `.claude/skills` are local authoring mirrors.
+- `.agents/skills` is the local authoring mirror.
 - This repository does not track a nested repo-local Codex plugin install surface for itself.
 - This repository does not track a repo-local marketplace file for itself.
 - User installs should normally come through the Git-backed `socket` marketplace with `codex plugin marketplace add gaelic-ghost/socket`.

@@ -7,9 +7,8 @@ It diagrams real current workflows, captures their inputs and outputs, and descr
 ## Packaging Context
 
 - Root `skills/` is the canonical workflow-authoring surface.
-- `.agents/skills` and `.claude/skills` mirror root `skills/` for local project discovery on macOS and Linux.
+- `.agents/skills` mirrors root `skills/` for local project discovery on macOS and Linux.
 - `.agents/plugins/marketplace.json` points local Codex discovery directly at root `skills/`.
-- `.claude-plugin/marketplace.json` points the repo-root Claude marketplace catalog directly at root `skills/`.
 
 ## Product Direction
 

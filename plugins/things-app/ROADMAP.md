@@ -51,7 +51,7 @@ In Progress
 
 - [ ] Expand the repo-root maintainer tooling once more than one root skill needs Python-backed verification.
 - [ ] Add broader bundled-server smoke coverage when new Things tool families or auth-sensitive update flows are introduced.
-- [ ] Revisit packaging mirrors if the repo starts shipping additional host-specific discovery surfaces beyond the current Codex and Claude layout.
+- [ ] Revisit packaging mirrors if the repo starts shipping additional Codex discovery surfaces.
 
 ## History
 

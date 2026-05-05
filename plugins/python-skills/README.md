@@ -55,7 +55,7 @@ Use `python-skills` when the work is specifically about:
 
 ### Direct Skill Installation
 
-The canonical authored surface is [`skills/`](./skills/). This repository supports direct skill installation from that shared tree into the standard Codex or Claude skill locations when you want one skill or a small subset instead of the whole packaged plugin.
+The canonical authored surface is [`skills/`](./skills/). This repository supports direct skill installation from that shared tree into standard Codex skill locations when you want one skill or a small subset instead of the whole packaged plugin.
 
 ### Packaged Plugin Installation
 
@@ -70,8 +70,6 @@ For Codex, keep these surfaces distinct:
 - installed plugin cache: `~/.codex/plugins/cache/$MARKETPLACE_NAME/python-skills/local/`
 - enabled-state config: `~/.codex/config.toml`
 
-For Claude-side discovery, this repo keeps the marketplace catalog at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json), which points directly at root [`skills/`](./skills/).
-
 ### Codex Limitation Warning
 
 OpenAI's documented Codex plugin system supports repo marketplaces, personal marketplaces, staged plugin directories, installed plugin caches, and enabled-state config, but it does not provide proper repo-private plugin scoping beyond that marketplace model.
@@ -80,7 +78,7 @@ OpenAI's documented Codex plugin system supports repo marketplaces, personal mar
 
 ### Setup
 
-Treat root [`skills/`](./skills/) as the source of truth for shipped workflow content. Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) as install-surface metadata and discovery wiring, not as second authored trees.
+Treat root [`skills/`](./skills/) as the source of truth for shipped workflow content. Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) as install-surface metadata and discovery wiring, not as a second authored tree.
 
 ### Workflow
 
@@ -108,7 +106,7 @@ Use `socket` Git history and GitHub releases to track shipped changes for this d
 
 ## License
 
-See [LICENSE](./LICENSE).
+See the Socket root [LICENSE](../../LICENSE).
 
 ## Active Skills
 
@@ -124,22 +122,15 @@ This repository intentionally keeps authored content and plugin metadata separat
 
 - root [`skills/`](./skills/) is the canonical authored workflow surface
 - [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) defines the Codex plugin metadata at the repo root
-- [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) carries the repo-root Claude marketplace catalog
-- [`.claude/skills`](./.claude/skills) is a symlink back to the canonical root skill tree
 
 ## Repository Layout
 
 ```text
 .
-├── .claude/
-│   └── skills -> ../skills
-├── .claude-plugin/
-│   └── marketplace.json
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
 ├── CONTRIBUTING.md
-├── LICENSE
 ├── README.md
 ├── ROADMAP.md
 ├── docs/

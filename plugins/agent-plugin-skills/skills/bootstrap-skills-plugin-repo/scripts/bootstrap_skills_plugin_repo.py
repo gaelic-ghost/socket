@@ -32,9 +32,6 @@ def expected_files(repo_root: Path, _plugin_name: str) -> dict[Path, str]:
 __pycache__/
 .pytest_cache/
 *.pyc
-.claude/settings.local.json
-.claude/local-settings.json
-.claude/.local/
 """,
         repo_root / "README.md": f"# {repo_root.name}\n\nInstallable maintainer skills for skills-export repositories.\n",
         repo_root / "AGENTS.md": """# AGENTS.md
@@ -58,7 +55,6 @@ Machine-local dependency paths are expressly prohibited in any project that is p
 def expected_symlinks(repo_root: Path, _plugin_name: str) -> dict[Path, str]:
     return {
         repo_root / ".agents" / "skills": "../skills",
-        repo_root / ".claude" / "skills": "../skills",
     }
 
 

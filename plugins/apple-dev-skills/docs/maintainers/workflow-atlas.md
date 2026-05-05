@@ -120,7 +120,6 @@ flowchart TD
 - If this repository later grows top-level `mcps/` or `apps/`, those directories are valid export surfaces too.
 - The repository must not reintroduce a nested packaged plugin tree or any other second export surface under `plugins/`.
 - Shared workflow behavior should remain skill-scoped so both ecosystems can use the same deterministic scripts and references.
-- Claude-only extras should remain optional convenience layers rather than canonical workflow requirements.
 - Subagents in either ecosystem are runtime delegation helpers with separate context and tool policy. They are not the canonical authoring format for the repo's Apple workflows.
 - Repo docs should keep the layers explicit:
   - `AGENTS.md` for durable policy

@@ -10,7 +10,7 @@ For the durable map of Codex marketplace sources, catalogs, plugin root payloads
 2. skill-local runtime files inside each skill directory
 3. repo docs: `README.md`, `AGENTS.md`, `ROADMAP.md`
 4. maintainer docs under `docs/maintainers/`
-5. local discovery mirrors only: `.agents/skills`, `.claude/skills`
+5. local discovery mirror only: `.agents/skills`
 
 ## Hard Boundaries
 
@@ -27,7 +27,7 @@ For the durable map of Codex marketplace sources, catalogs, plugin root payloads
 
 - Root `skills/` is canonical.
 - `.codex-plugin/plugin.json` includes `"skills": "./skills/"`.
-- `.agents/skills` and `.claude/skills` are POSIX symlink mirrors to `../skills`.
+- `.agents/skills` is a POSIX symlink mirror to `../skills`.
 - README and AGENTS say plainly that this repo exports installable skills, that user installs normally come through the Git-backed `socket` marketplace, and that OpenAI documents marketplace-based plugin discovery rather than a richer repo-private plugin scope.
 - ROADMAP matches the live exported skill set.
 - Maintainer tooling guidance includes `uv sync --dev`, repo-local `pyproject.toml` dev dependencies for `pytest`, `ruff`, and `mypy`, plus the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` commands when those checks are part of the shipped workflow.

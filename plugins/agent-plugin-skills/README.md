@@ -119,7 +119,7 @@ Use Git history and GitHub releases to track shipped changes to the maintainer-s
 
 ## License
 
-See [LICENSE](./LICENSE).
+See the Socket root [LICENSE](../../LICENSE).
 
 ## Active Skills
 

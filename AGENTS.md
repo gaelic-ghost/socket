@@ -49,7 +49,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - When a repository ships reusable skills, treat the top-level authored surface such as `skills/`, `mcps/`, or `apps/` as the source of truth. Treat plugin manifests, marketplace files, and nested packaged plugin roots as packaging metadata unless a nearer `AGENTS.md` explicitly says otherwise.
 - Keep the root README short, nontechnical, and focused on end users or agents installing and using the Socket marketplace. Put contributor workflow and maintainer procedures in `CONTRIBUTING.md` or `docs/maintainers/`, and put durable agent-facing operating rules in this file.
 - Keep installed skills independent from repo-level docs under `docs/`.
-- Prefer POSIX symlink discovery mirrors over duplicate or hardlinked skill trees when a repo exposes `.agents/skills` or `.claude/skills`.
+- Prefer POSIX symlink discovery mirrors over duplicate or hardlinked skill trees when a repo exposes `.agents/skills`.
 - Do not track consumer-side install copies, cache directories, or machine-local runtime state in git.
 - Keep the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, docs, automation prompts, scripts, and marketplace metadata.
 - If docs and scripts disagree, fix the script or narrow the documented contract so they match.
@@ -61,7 +61,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - For Python-backed repositories in `socket`, use `uv` as the maintainer baseline and declare repo-local dev dependencies in `pyproject.toml` instead of relying on globally installed tools.
 - Prefer a root or package-local dev group that explicitly includes the Python maintainer tools the repo expects to run, including `pytest`, `ruff`, and `mypy` when those checks are part of the workflow.
 - Prefer `uv sync --dev`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` for repos that actually ship those Python-backed validation surfaces.
-- When OpenAI or Claude product behavior matters, prefer official docs first. When describing Codex plugin boundaries, say plainly that repo-visible plugins come from the documented marketplace model and that OpenAI does not currently document a richer repo-private scoping model.
+- When OpenAI product behavior matters, prefer official docs first. When describing Codex plugin boundaries, say plainly that repo-visible plugins come from the documented marketplace model and that OpenAI does not currently document a richer repo-private scoping model.
 - Use these terms consistently:
   - `skill`: reusable workflow-authoring unit
   - `plugin`: installable distribution bundle

@@ -115,4 +115,4 @@ If a task starts to require a new maintainer workflow, a new supported repo fami
 
 ## License and Contribution Terms
 
-Contributions are governed by the repository license. See [LICENSE](./LICENSE) for the applicable terms.
+Contributions are governed by the Socket root license. See [LICENSE](../../LICENSE) for the applicable terms.

@@ -36,8 +36,6 @@ echo "Validating root docs presence..."
 echo "Validating local discovery mirrors..."
 [[ -L ".agents/skills" ]] || fail "Expected .agents/skills to be a symlink to ../skills"
 [[ "$(readlink .agents/skills)" == "../skills" ]] || fail "Expected .agents/skills -> ../skills"
-[[ -L ".claude/skills" ]] || fail "Expected .claude/skills to be a symlink to ../skills"
-[[ "$(readlink .claude/skills)" == "../skills" ]] || fail "Expected .claude/skills -> ../skills"
 [[ ! -e "plugins/apple-dev-skills" ]] || fail "Did not expect a nested plugins/apple-dev-skills tree."
 
 echo "Validating root README contract..."

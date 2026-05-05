@@ -23,7 +23,7 @@ For maintainer policy and source-of-truth boundaries, see [AGENTS.md](./AGENTS.m
 
 - reusable Things-oriented skills under [`skills/`](./skills/)
 - a bundled FastMCP server under [`mcp/`](./mcp/)
-- thin Codex and Claude plugin packaging metadata at the repo root
+- thin Codex plugin packaging metadata at the repo root
 
 ### Status
 
@@ -48,7 +48,7 @@ If you want to use the workflow guidance, start with the skills under [`skills/`
 Use the surface that matches the job:
 
 - root [`skills/`](./skills/) for Things reminder and planning workflows
-- root plugin metadata for Codex or Claude installation and discovery
+- root plugin metadata for Codex installation and discovery
 - [`mcp/`](./mcp/) for the local FastMCP server, its docs, and its server-specific checks
 
 The current active skills are intentionally narrow:
@@ -84,7 +84,7 @@ Keep the source-of-truth boundaries straight:
 
 - edit root [`skills/`](./skills/) when workflow behavior changes
 - edit [`mcp/`](./mcp/) when server behavior changes
-- treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json), and [`.mcp.json`](./.mcp.json) as install metadata, not as the source of truth for workflow logic
+- treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) and [`.mcp.json`](./.mcp.json) as install metadata, not as the source of truth for workflow logic
 
 When a change touches more than one surface, update the nearby docs in the same pass so the mixed-repo model stays explicit and accurate.
 
@@ -119,10 +119,6 @@ make smoke-json
 
 ```text
 .
-├── .claude/
-│   └── skills -> ../skills
-├── .claude-plugin/
-│   └── plugin.json
 ├── .codex-plugin/
 │   └── plugin.json
 ├── .mcp.json
@@ -174,13 +170,9 @@ This repository keeps authored workflow content and packaging metadata separate 
 
 - root `skills/` is the canonical workflow-authoring surface
 - [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) points Codex at the root skills and bundled MCP config
-- [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json) describes the Claude plugin package
-- [`.claude/skills`](./.claude/skills) is the checked-in discovery mirror currently present in this repo
 - the bundled FastMCP server stays self-contained under [`mcp/`](./mcp/)
 
 Helpful references:
 
 - [OpenAI Codex Skills](https://developers.openai.com/codex/skills)
 - [OpenAI Codex plugins](https://developers.openai.com/codex/plugins)
-- [Claude Code Skills](https://code.claude.com/docs/en/skills)
-- [Claude Code Plugins](https://code.claude.com/docs/en/plugins)

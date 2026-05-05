@@ -2,7 +2,7 @@
 
 ## Active Surface
 
-`python-skills` now ships with five bundled skills under root `skills/` and repo-root plugin metadata for Codex plus a repo-root Claude marketplace catalog:
+`python-skills` now ships with five bundled skills under root `skills/` and repo-root plugin metadata for Codex:
 
 - `bootstrap-python-mcp-service`
 - `bootstrap-python-service`
@@ -12,7 +12,7 @@
 
 These are the only active bundled skill surfaces that root docs, plugin metadata, and marketplace metadata should present.
 
-OpenAI packaging is the live release surface today. Claude Code compatibility and packaging should stay additive over the same shared skill bodies rather than creating a second authored surface.
+OpenAI packaging is the live release surface today.
 
 Treat `productivity-skills` as the baseline maintainer layer for general repo-doc and maintenance work. Use `python-skills` when Python-, `uv`-, FastAPI-, FastMCP-, or pytest-specific behavior should actively change the workflow.
 
@@ -72,7 +72,6 @@ Each active skill should maintain the full repo contract:
 - Root `README.md`: install surface and discovery guidance
 - `skills/`: canonical workflow-authoring surface
 - `.codex-plugin/plugin.json`: Codex plugin distribution contract
-- `.claude-plugin/marketplace.json`: repo-shared Claude marketplace contract
 - `ROADMAP.md`: milestone history and near-term intent
 - `AGENTS.md`: repo-local authoring and validation policy
 - `docs/maintainers/reality-audit.md`: audit checklist for shipped reality
@@ -82,8 +81,6 @@ Future vendor surfaces should follow the same split:
 
 - shared skill content stays under `skills/`
 - OpenAI-specific packaging stays at the repo root through `.codex-plugin/plugin.json`
-- Claude-specific discovery stays at the repo root through `.claude-plugin/marketplace.json`
-- discovery mirrors stay explicit through `.claude/skills`
 
 ## Validation Ownership
 

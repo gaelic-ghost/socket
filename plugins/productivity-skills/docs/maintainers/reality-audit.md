@@ -74,9 +74,7 @@ All active repo-authored skills live under `skills/`.
 ### Discovery Surfaces
 
 - `.agents/skills`
-- `.claude/skills`
 - `.agents/plugins/marketplace.json`
-- `.claude-plugin/marketplace.json`
 
 ### Maintainer Surfaces
 
@@ -200,6 +198,5 @@ Use these conventions when editing repo-maintainer guidance.
 - When the target repository is itself a skills-export or plugin-export repo, the narrower maintainer guidance belongs in `agent-plugin-skills` instead of being forced into this baseline layer.
 - Agent-stack repo-maintainer skills now live in `/Users/galew/Workspace/agent-plugin-skills`, not in this repository.
 - Root `skills/` is the canonical workflow-authoring surface.
-- `.agents/skills` and `.claude/skills` are POSIX symlink mirrors into root `skills/`.
+- `.agents/skills` is a POSIX symlink mirror into root `skills/`.
 - `.agents/plugins/marketplace.json` points local Codex discovery directly at root `skills/`.
-- `.claude-plugin/marketplace.json` points the repo-root Claude marketplace catalog directly at root `skills/`.

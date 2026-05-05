@@ -84,7 +84,7 @@ Planned
 
 ### Scope
 
-- [ ] Add durable process support for noticing changes in the Agent Skills standard, OpenAI docs, and Claude docs and turning those changes into actionable maintainer work.
+- [ ] Add durable process support for noticing changes in the Agent Skills standard and OpenAI docs and turning those changes into actionable maintainer work.
 
 ### Tickets
 
@@ -104,7 +104,7 @@ Planned
 
 ### Scope
 
-- [ ] Add a workflow for evaluating shipped skills against real agent runtimes such as Codex and Claude Code.
+- [ ] Add a workflow for evaluating shipped skills against real Codex runtimes.
 
 ### Tickets
 

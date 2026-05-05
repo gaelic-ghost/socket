@@ -50,11 +50,11 @@ Active
 
 ## Backlog Candidates
 
-- [ ] Revisit the older Claude Code optimization plan as additive portability work once the core maintainer docs are aligned again.
+- [ ] Add lightweight validation for future Codex metadata changes once the core maintainer docs are aligned again.
 
 ## History
 
 - Completed Milestones 1 through 6 by establishing the repository, adding the Python bootstrap, FastAPI, FastMCP, and pytest workflows, and aligning the initial maintainer contract.
-- Completed Milestones 8 through 10 by adding Claude-compatible packaging, aligning the repo with the shared skills and plugin standards, and adding the dedicated FastAPI and FastMCP integration workflow.
+- Completed Milestones 8 through 10 by aligning the repo with the shared skills and plugin standards and adding the dedicated FastAPI and FastMCP integration workflow.
 - Added GitHub Actions validation so the documented repo-metadata and pytest checks now run automatically on `main` and pull requests.
-- Reframed the stale planned Claude optimization milestone into backlog work and made documentation alignment the active planning surface.
+- Made documentation alignment the active planning surface.
