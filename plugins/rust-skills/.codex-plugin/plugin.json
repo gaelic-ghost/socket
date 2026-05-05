@@ -1,6 +1,6 @@
 {
   "name": "rust-skills",
-  "version": "6.7.1",
+  "version": "6.7.2",
   "description": "Standalone plugin repository for future Rust-focused Codex skills.",
   "author": {
     "name": "Gale",
