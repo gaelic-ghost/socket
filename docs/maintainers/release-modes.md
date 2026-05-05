@@ -18,8 +18,9 @@ Both modes treat `socket` as the release owner for the umbrella repository:
 8. create the `socket` tag locally from the reviewed `main`
 9. push the tag
 10. create the GitHub release from the existing tag
-11. verify `git log origin/main..main` is empty
-12. account for every local branch not contained by `main`
+11. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
+12. verify `git log origin/main..main` is empty
+13. account for every local branch not contained by `main`
 
 The difference is that `subtrees` adds a child-repository sync gate before tagging or before claiming the release is done.
 
@@ -82,4 +83,5 @@ After tagging:
 - push the `socket` tag
 - create the GitHub release from the existing tag
 - verify the release object exists on GitHub
+- run `codex plugin marketplace upgrade socket` so Gale's local Codex install sees the released marketplace state
 - if a child release landed outside `socket`, verify `socket` either contains that child state or explicitly records why the sync is deferred. For Speak Swiftly, the Socket catalog follows `gaelic-ghost/SpeakSwiftlyServer` directly, so standalone SpeakSwiftlyServer releases normally require no local subtree sync.

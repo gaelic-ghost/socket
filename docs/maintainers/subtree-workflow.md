@@ -192,6 +192,7 @@ For socket releases:
 6. create the release tag locally from `main`
 7. push the tag
 8. create the GitHub release from the existing tag
+9. run `codex plugin marketplace upgrade socket`
 
 Use `vx.x.x` tags for socket releases. When a release used `subtrees` mode, do not create the tag until every touched subtree-managed child has been pulled, pushed, deferred with a stated reason, or confirmed untouched.
 
