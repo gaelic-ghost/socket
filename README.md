@@ -25,11 +25,11 @@ Gale's Codex plugin marketplace for macOS users and Apple/Swift devs. Includes c
 
 ### What This Project Is
 
-TBD
+Socket is a monorepo of Codex Plugins I've built while beginning to use coding agents to assist in my projects. It includes a variety of plugins, from productivity tools to apple dev workflow systems, docs access to a local TTS system. 
 
 ### Motivation
 
-TBD
+It became obvious to me that these things needed specialized tooling to do specialized work. Not seeing much of what I wanted on offer, I set out to build that myself. Eventually, I moved all my individual plugin repos to this monorepo for easier maintenance, updates, releases, etc.
 
 ## Quick Start
 
