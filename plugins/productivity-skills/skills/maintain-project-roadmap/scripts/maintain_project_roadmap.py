@@ -16,7 +16,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import yaml
 
@@ -447,7 +447,6 @@ def render_milestone_body(existing_body: str, settings: Dict[str, object]) -> st
     template_map = milestone_subsection_templates(settings)
     alias_map = subsection_alias_lookup(settings)
     _preamble, subsections = split_subsections(existing_body)
-    subsection_lookup = {name: body for name, body in subsections}
     canonical_lookup: Dict[str, str] = {}
 
     for name, body in subsections:
@@ -520,7 +519,6 @@ def validate_schema(
 ) -> List[Finding]:
     settings = config_settings(config)
     required = required_sections(settings)
-    order = section_order(settings)
     section_alias_map = alias_lookup(settings)
     milestone_child_alias_map = subsection_alias_lookup(settings)
     required_children = required_milestone_subsections(settings)
