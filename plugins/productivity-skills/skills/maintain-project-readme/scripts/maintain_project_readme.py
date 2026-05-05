@@ -37,6 +37,11 @@ CONTRIBUTOR_PROCEDURE_HEADINGS = {
     "Review Workflow",
     "Maintainer Workflow",
 }
+USER_AUTHORED_OVERVIEW_SUBSECTIONS = {
+    "Status",
+    "What This Project Is",
+    "Motivation",
+}
 
 
 @dataclass
@@ -314,6 +319,19 @@ def toc_entries(body: str) -> List[str]:
     return entries
 
 
+def contains_placeholder_content(heading: str, body: str) -> bool:
+    if heading != "Overview":
+        return any(pattern.search(body) for pattern in PLACEHOLDER_PATTERNS)
+
+    preamble, subsections = split_subsections(body)
+    bodies_to_check: List[str] = [preamble]
+    for subsection, subsection_body in subsections:
+        if subsection in USER_AUTHORED_OVERVIEW_SUBSECTIONS and subsection_body.strip() == "TBD":
+            continue
+        bodies_to_check.append(subsection_body)
+    return any(pattern.search("\n".join(bodies_to_check)) for pattern in PLACEHOLDER_PATTERNS)
+
+
 def alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
     aliases = section_aliases(settings)
     reverse: Dict[str, str] = {}
@@ -485,7 +503,7 @@ def validate_schema(
         body = lookup.get(heading)
         if not body:
             continue
-        if any(pattern.search(body) for pattern in PLACEHOLDER_PATTERNS):
+        if contains_placeholder_content(heading, body):
             content_issues.append(
                 Issue(
                     issue_id=f"placeholder-content-{slugify_heading(heading)}",

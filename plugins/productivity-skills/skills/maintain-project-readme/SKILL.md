@@ -23,17 +23,18 @@ This skill is the primary layer for README maintenance. It defines the canonical
 3. In `check-only`, audit title and summary requirements, top-level section names and order, required subsection names, the required table of contents, and placeholder-style content.
 4. In `apply`, keep edits bounded to the target `README.md` while normalizing the README into the configured canonical structure.
 5. Preserve preamble material such as badges, callouts, screenshots, and extra intro prose before the first H2 while normalizing the structural contract around it.
-6. Use the bundled README template when bootstrapping a missing `README.md` or when a downstream workflow needs a canonical starter document.
-7. Re-run the same audit to confirm post-fix status.
-8. For skills, plugin, or hybrid repositories, keep the same hard-enforced schema while grounding install, discovery, packaging, and maintainer wording in the real repo surface instead of inventing ordinary-app sections that are not actually shipped.
+6. When bootstrapping a missing `README.md`, ask the user for text for `Overview > Status`, `Overview > What This Project Is`, and `Overview > Motivation` before writing those subsections.
+7. Use the bundled README template when bootstrapping a missing `README.md` or when a downstream workflow needs a canonical starter document; if the user has not provided text for any Overview subsection, leave that subsection body exactly `TBD`.
+8. Re-run the same audit to confirm post-fix status.
+9. For skills, plugin, or hybrid repositories, keep the same hard-enforced schema while grounding install, discovery, packaging, and maintainer wording in the real repo surface instead of inventing ordinary-app sections that are not actually shipped.
 
 ## Writing Expectations
 
 - `README.md` is product-focused: write it for end users, evaluators, integrators, and their agents who need to understand what the project is, whether it fits, how to try it, and where the shipped surface lives.
 - Contributor, maintainer, release, validation, branch, review, and local development procedures belong in `CONTRIBUTING.md` or a linked maintainer document. In `README.md`, keep only the shortest useful pointer to that contributor path.
-- `Overview > Status` should be very short and plain: one simple, blunt sentence stating about whether the project is just starting out, exploratory, in early development, stable enough to try, actively available, or superseded/inactive.
-- `Overview > What This Project Is` must be written by the user in the user's own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
-- `Overview > Motivation` must be written by the user in the user's own words. If there is no user-authored content available for this section, insert "TBD" and remind the user to author it.
+- `Overview > Status`, `Overview > What This Project Is`, and `Overview > Motivation` must be written by the user in the user's own words, never by the agent.
+- If one of those Overview subsections already contains text, leave that text intact and untouched unless the user explicitly provides replacement text for that exact subsection.
+- If one of those Overview subsections is empty or missing, set the subsection body to exactly `TBD`; for new README files, ask the user for text to place there before falling back to `TBD`.
 - `Quick Start` should stay human-focused, short, concise, and end-user friendly, or explicitly say the project is still too early for a real quick start and direct curious readers to `Development`.
 - `Usage` should stay human-focused, concise, and informative. Prefer fenced code blocks with info strings when examples help.
 - `Development` should stay short and reader-oriented. Prefer a direct link to `CONTRIBUTING.md` for setup, workflow, validation, review, and maintainer commands instead of duplicating those procedures in the README.

@@ -183,6 +183,9 @@ demo-project keeps the structure tight.
     assert "## Table of Contents" in updated
     assert "## Quick Start" in updated
     assert "### Status" in updated
+    assert "### Status\n\nTBD" in updated
+    assert "### What This Project Is\n\nTBD" in updated
+    assert "### Motivation\n\nTBD" in updated
     assert "For setup, local workflow, validation, and contribution expectations" in updated
     assert "## Repo Structure" in updated
     assert "## Release Notes" in updated
@@ -217,6 +220,86 @@ demo-project keeps the structure tight.
     assert "Additional intro context that should remain before the canonical H2 block." in updated
     assert updated.index("![CI](https://example.com/badge.svg)") < updated.index("## Table of Contents")
     assert report["post_fix_status"] == []
+
+
+def test_apply_mode_preserves_user_authored_overview_subsections(tmp_path: Path) -> None:
+    readme = tmp_path / "README.md"
+    status = "demo-project is stable enough for local README maintenance checks."
+    what = "demo-project is Gale's authored description of the shipped README maintainer surface."
+    motivation = "Gale keeps this repo separate so README maintenance behavior has one explicit home."
+    write(
+        readme,
+        f"""
+# demo-project
+
+A compact demo project for README maintenance.
+
+## Overview
+
+### Status
+
+{status}
+
+### What This Project Is
+
+{what}
+
+### Motivation
+
+{motivation}
+""".strip(),
+    )
+    report, _md = run(tmp_path, run_mode="apply")
+    updated = readme.read_text(encoding="utf-8")
+    assert status in updated
+    assert what in updated
+    assert motivation in updated
+    assert report["post_fix_status"] == []
+
+
+def test_overview_tbd_is_allowed_but_other_placeholders_are_reported(tmp_path: Path) -> None:
+    write(
+        tmp_path / "README.md",
+        valid_readme()
+        .replace(
+            "demo-project is active and maintained as a reference repository for README schema work.",
+            "TBD",
+        )
+        .replace(
+            "demo-project is a small repository used to exercise the README maintainer contract.",
+            "TBD",
+        )
+        .replace(
+            "It keeps the shared README structure explicit and testable.",
+            "TBD",
+        )
+        .replace(
+            "Run the smallest happy path for trying the project quickly.",
+            "TBD",
+        ),
+    )
+    report, _md = run(tmp_path)
+    issue_ids = {issue["issue_id"] for issue in report["content_quality_issues"]}
+    assert "placeholder-content-overview" not in issue_ids
+    assert "placeholder-content-quick-start" in issue_ids
+
+
+def test_overview_tbd_is_allowed_with_mixed_user_authored_content(tmp_path: Path) -> None:
+    write(
+        tmp_path / "README.md",
+        valid_readme()
+        .replace(
+            "demo-project is a small repository used to exercise the README maintainer contract.",
+            "TBD",
+        )
+        .replace(
+            "It keeps the shared README structure explicit and testable.",
+            "TBD",
+        ),
+    )
+    report, _md = run(tmp_path)
+    issue_ids = {issue["issue_id"] for issue in report["content_quality_issues"]}
+    assert "placeholder-content-overview" not in issue_ids
 
 
 def test_custom_config_can_extend_base_schema(tmp_path: Path) -> None:
@@ -328,6 +411,9 @@ def test_apply_mode_bootstraps_missing_readme_from_template(tmp_path: Path) -> N
     assert "## Table of Contents" in content
     assert "## Quick Start" in content
     assert "### Status" in content
+    assert "### Status\n\nTBD" in content
+    assert "### What This Project Is\n\nTBD" in content
+    assert "### Motivation\n\nTBD" in content
     assert "For setup, local workflow, validation, and contribution expectations" in content
     assert "## Repo Structure" in content
     assert "```text" in content

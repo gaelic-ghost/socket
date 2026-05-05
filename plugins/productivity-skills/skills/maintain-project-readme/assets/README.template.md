@@ -16,15 +16,15 @@
 
 ### Status
 
-Write one short, plain sentence stating whether this project is just starting out, exploratory, in early development, stable enough to try, actively available, or superseded/inactive.
+TBD
 
 ### What This Project Is
 
-Describe the concrete shipped surface, primary audience, and the main repo boundaries for this project.
+TBD
 
 ### Motivation
 
-Describe why this project exists, what problem it solves, or why this repo is maintained separately.
+TBD
 
 ## Quick Start
 

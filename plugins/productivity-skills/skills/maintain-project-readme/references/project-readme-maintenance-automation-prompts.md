@@ -21,8 +21,9 @@ Execution policy:
 - If <APPLY_FIXES_TRUE_FALSE> is true, run bounded README fixes and re-check.
 - Preserve existing preamble content such as badges, callouts, screenshots, and intro prose before the first H2.
 - Treat the configured README structure as hard-enforced.
-- Keep `Status` very short and plain about maturity or availability.
-- Treat `What This Project Is` and `Motivation` as user-authored sections that should not be replaced with invented claims. Remind the user to author them, if they've yet to do so.
+- Treat `Status`, `What This Project Is`, and `Motivation` as user-authored Overview subsections that should never be written or replaced with invented claims.
+- For an existing README, leave text in those Overview subsections intact; for empty or missing Overview subsection bodies, use exactly `TBD`.
+- For a new README, ask the user for text for those Overview subsections before falling back to `TBD`.
 - Keep `Quick Start` and `Usage` short, succinct, human-focused and end-user friendly; prefer fenced code blocks with info strings in `Usage` when examples help.
 - Never invent commands, setup steps, or unsupported product claims.
 - Never edit files other than the target `README.md`.
@@ -67,8 +68,9 @@ If needed, use README config override <README_CONFIG_OR_NONE>.
 Load the canonical README config first, then run `check-only`, then bounded README fixes, then re-check.
 Preserve badges, callouts, screenshots, and extra intro prose before the first H2.
 Treat the configured structure as hard-enforced.
-Keep `Status` very short and plain about maturity or availability.
-Treat `What This Project Is` and `Motivation` as user-authored sections that should not be replaced with invented claims.
+Treat `Status`, `What This Project Is`, and `Motivation` as user-authored Overview subsections that should never be written or replaced with invented claims.
+For existing READMEs, leave text in those Overview subsections intact; for empty or missing Overview subsection bodies, use exactly `TBD`.
+For new READMEs, ask the user for text for those Overview subsections before falling back to `TBD`.
 Keep `Quick Start` and `Usage` human-focused and end-user friendly; prefer fenced code blocks with info strings in `Usage` when examples help.
 Do not invent commands or edit files other than the target `README.md`.
 Write outputs to <REPORT_MD_PATH> and <REPORT_JSON_PATH>.
