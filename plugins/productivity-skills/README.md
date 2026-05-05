@@ -99,7 +99,6 @@ See the Socket root [LICENSE](../../LICENSE).
 │   └── plugin.json
 ├── AGENTS.md
 ├── README.md
-├── ROADMAP.md
 ├── docs/
 ├── pyproject.toml
 ├── skills/

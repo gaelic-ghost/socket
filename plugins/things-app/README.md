@@ -124,7 +124,6 @@ make smoke-json
 ├── .mcp.json
 ├── AGENTS.md
 ├── README.md
-├── ROADMAP.md
 ├── mcp/
 ├── pyproject.toml
 └── skills/

@@ -11,6 +11,7 @@ Gale's Codex plugin marketplace for macOS users and Apple/Swift devs. Includes c
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Usage](#usage)
+- [Plugin Status](#plugin-status)
 - [Development](#development)
 - [Repo Structure](#repo-structure)
 - [Release Notes](#release-notes)
@@ -61,9 +62,31 @@ Currently available from the catalog:
 - `swiftasb-skills`
 - `things-app`
 
+## Plugin Status
+
+Apple Dev Skills keeps its own roadmap because it is the remaining subtree-managed child with a deeper standalone release surface. Other child planning now lives in [TODO.md](./TODO.md).
+
+Current Socket catalog shape:
+
+- `agent-plugin-skills`: active maintainer skills for skills-export and plugin-export repositories
+- `apple-dev-skills`: active Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
+- `cardhop-app`: active mixed skill plus bundled MCP server for Cardhop.app contact workflows
+- `productivity-skills`: active general-purpose maintainer and documentation workflow baseline
+- `python-skills`: active Python, `uv`, FastAPI, FastMCP, and pytest workflow plugin
+- `speak-swiftly`: active Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
+- `swiftasb-skills`: active SwiftASB companion guidance
+- `things-app`: active mixed skill plus bundled MCP server for Things.app workflows
+
+Placeholder plugin directories are intentionally visible but not installable until real skill or workflow content exists:
+
+- `dotnet-skills`
+- `rust-skills`
+- `spotify`
+- `web-dev-skills`
+
 ## Development
 
-For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
+For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For the consolidated child backlog, see [TODO.md](./TODO.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
 
 ## Repo Structure
 
@@ -78,6 +101,7 @@ For setup, local workflow, validation, review, release, and maintainer expectati
 ├── AGENTS.md
 ├── CONTRIBUTING.md
 ├── README.md
+├── TODO.md
 └── ROADMAP.md
 ```
 

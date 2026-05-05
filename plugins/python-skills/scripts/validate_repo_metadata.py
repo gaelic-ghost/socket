@@ -36,16 +36,6 @@ README_REQUIRED_HEADINGS = [
     "## License",
 ]
 
-ROADMAP_REQUIRED_HEADINGS = [
-    "# Project Roadmap",
-    "## Table of Contents",
-    "## Vision",
-    "## Product Principles",
-    "## Milestone Progress",
-    "## Backlog Candidates",
-    "## History",
-]
-
 PATH_REFERENCE_RE = re.compile(
     r"(?:\[[^\]]+\]\()?((?:scripts|references|assets|agents)/[A-Za-z0-9._/\-]+)(?:\))?"
 )
@@ -231,24 +221,6 @@ def validate_readme(repo_root: Path) -> list[Finding]:
     return findings
 
 
-def validate_roadmap(repo_root: Path) -> list[Finding]:
-    findings: list[Finding] = []
-    roadmap = repo_root / "ROADMAP.md"
-    text = roadmap.read_text()
-    for heading in ROADMAP_REQUIRED_HEADINGS:
-        if heading not in text:
-            findings.append(Finding("ROADMAP.md", f"missing heading: {heading}"))
-    if "### Status" not in text:
-        findings.append(Finding("ROADMAP.md", "missing Status subsections"))
-    if "### Scope" not in text:
-        findings.append(Finding("ROADMAP.md", "missing Scope subsections"))
-    if "### Tickets" not in text:
-        findings.append(Finding("ROADMAP.md", "missing Tickets subsections"))
-    if "### Exit Criteria" not in text:
-        findings.append(Finding("ROADMAP.md", "missing Exit Criteria subsections"))
-    return findings
-
-
 def validate_skill_dir(repo_root: Path, skill_dir: Path) -> list[Finding]:
     findings: list[Finding] = []
     skill_md = skill_dir / "SKILL.md"
@@ -387,7 +359,6 @@ def run(repo_root: Path) -> list[Finding]:
     if not skill_dirs:
         findings.append(Finding("skills", "no bundled skill directories found under skills/"))
     findings.extend(validate_readme(repo_root))
-    findings.extend(validate_roadmap(repo_root))
     findings.extend(
         validate_plugin_manifest(
             repo_root,

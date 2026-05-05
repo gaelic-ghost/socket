@@ -95,7 +95,6 @@ When the skill wording or packaging metadata changes, also review the root docs 
 ├── .mcp.json
 ├── AGENTS.md
 ├── README.md
-├── ROADMAP.md
 ├── mcp/
 └── skills/
     └── cardhop-contact-workflow/

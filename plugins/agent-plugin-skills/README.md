@@ -102,7 +102,6 @@ uv run mypy .
 │   └── plugin.json
 ├── AGENTS.md
 ├── README.md
-├── ROADMAP.md
 ├── docs/
 │   └── maintainers/
 ├── skills/

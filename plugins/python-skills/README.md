@@ -131,7 +131,6 @@ This repository intentionally keeps authored content and plugin metadata separat
 │   └── plugin.json
 ├── AGENTS.md
 ├── README.md
-├── ROADMAP.md
 ├── pyproject.toml
 ├── scripts/
 │   └── validate_repo_metadata.py

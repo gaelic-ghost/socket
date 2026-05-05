@@ -41,7 +41,7 @@ There is no meaningful runtime usage yet. Today this repository is a packaging p
 
 ### Setup
 
-Review [AGENTS.md](./AGENTS.md), [ROADMAP.md](./ROADMAP.md), and the plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) before expanding the repo.
+Review [AGENTS.md](./AGENTS.md), the Socket root [TODO.md](../../TODO.md), and the plugin manifest at [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) before expanding the repo.
 
 ### Workflow
 
@@ -70,7 +70,5 @@ See the Socket root [LICENSE](../../LICENSE).
 ├── .codex-plugin/
 │   └── plugin.json
 ├── AGENTS.md
-├── LICENSE
-├── README.md
-└── ROADMAP.md
+└── README.md
 ```
