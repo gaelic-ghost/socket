@@ -6,19 +6,21 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### agent-plugin-skills
 
-- [ ] Finish docs visibility and wording hardening across exported skills.
+- [ ] Overhaul the exported skills around Codex/OpenAI plus the open `.agents/skills` discovery mirror only.
+- [ ] Remove stale sync-audit expectations for retired child maintainer docs such as reality-audit and install-surface docs.
+- [ ] Refresh tests and bootstrap output so generated guidance matches the current collapsed Socket docs model.
 - [ ] Keep Git-backed Codex marketplace install and update guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
 - [ ] Add a maintainer workflow for moving or re-homing skills between repositories.
-- [ ] Add durable process support for noticing changes in the Agent Skills standard and OpenAI docs.
+- [ ] Add durable process support for noticing changes in OpenAI Codex docs and the open `.agents` skill discovery convention.
 - [ ] Define an eval workflow for shipped skills against real Codex runtimes.
 
 ### cardhop-app
 
-- [ ] Finish initial Socket adoption for the Cardhop child plugin.
 - [ ] Keep `cardhop-contact-workflow`, bundled MCP server docs, `.mcp.json`, and plugin metadata aligned.
 - [ ] Validate the bundled MCP server from `plugins/cardhop-app/mcp/`.
+- [ ] Add root or child validation coverage once the Cardhop skill or MCP surface grows beyond the current single workflow.
 
 ### productivity-skills
 
@@ -30,10 +32,16 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### python-skills
 
-- [ ] Finish documentation and maintainer-surface alignment around `skills/`, `.codex-plugin/plugin.json`, and Socket-root contribution workflow.
-- [ ] Keep `README.md`, `AGENTS.md`, and Socket-root contributor guidance clearly separated.
+- [ ] Tighten child-specific `AGENTS.md` and validator expectations after the README collapse.
+- [ ] Keep `skills/`, `.codex-plugin/plugin.json`, and Socket-root contribution workflow boundaries clearly separated.
 - [ ] Confirm `uv run scripts/validate_repo_metadata.py` and `uv run pytest` still pass after docs or metadata changes.
 - [ ] Add lightweight validation for future Codex metadata changes.
+
+### swiftasb-skills
+
+- [ ] Sync `swiftasb-skills` with current SwiftASB source and docs.
+- [ ] Re-check explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills against the current SwiftASB client API and runtime behavior.
+- [ ] Add focused validation only if the plugin gains metadata, examples, or generated checks that need more than root marketplace validation.
 
 ### things-app
 
@@ -42,6 +50,12 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Expand repo-root maintainer tooling once more than one root skill needs Python-backed verification.
 - [ ] Add broader bundled-server smoke coverage when new Things tool families or auth-sensitive update flows are introduced.
 - [ ] Revisit packaging mirrors if the repo starts shipping additional Codex discovery surfaces.
+
+## Cross-Child Validation
+
+- [ ] Evaluate one root validation command for marketplace metadata, plugin manifests, child README/AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment.
+- [ ] Decide which checks belong centrally in Socket and which should remain child-local behavior tests.
+- [ ] Retire or update stale child validators when their expected docs have been collapsed into root docs.
 
 ## Placeholder Child Plugins
 
