@@ -40,6 +40,8 @@ The base contract requires:
 
 ## Writing Expectations
 
+- Keep the whole CONTRIBUTING guide near 300 lines or less by default. Treat 350 lines as a soft ceiling that should trigger consolidation into shorter sections or links to maintainer docs.
+- Keep most top-level sections near 45 lines or less and most subsections near 25 lines or less. Prefer one clear rule plus a link to canonical detail over repeated process narration.
 - `Overview > Who This Guide Is For` should stay short and plainly explain who this guide serves.
 - `Overview > Before You Start` should call out the most important prerequisites before someone begins work.
 - `Contribution Workflow` should describe how contributors choose work, make changes, and ask for review without drifting into repo history or product overview prose.
@@ -48,6 +50,7 @@ The base contract requires:
 - `Development Expectations > Accessibility Expectations` should keep the contributor contract short, point contributors back to `ACCESSIBILITY.md`, and make accessibility part of normal change quality for relevant work.
 - `Development Expectations > Verification` should prefer fenced code blocks with language info strings when commands help contributors validate changes.
 - `Communication` should stay practical and concise, focused on how contributors surface uncertainty or larger-scope questions.
+- Keep CONTRIBUTING, README, AGENTS, and ACCESSIBILITY responsibilities distinct. Contributor workflow lives here; product overview belongs in `README.md`; durable agent rules belong in `AGENTS.md`; detailed accessibility standards belong in `ACCESSIBILITY.md`.
 
 ## Codex Subagent Fit
 

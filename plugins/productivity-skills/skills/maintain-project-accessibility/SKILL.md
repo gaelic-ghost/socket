@@ -42,6 +42,8 @@ The base contract requires:
 
 ## Writing Expectations
 
+- Keep the whole ACCESSIBILITY document near 300 lines or less by default. Treat 350 lines as a soft ceiling that should trigger consolidation into concise standards, known gaps, support paths, and evidence links.
+- Keep most top-level sections near 45 lines or less and most subsections near 25 lines or less. Prefer current evidence and clear obligations over broad accessibility essays.
 - `Overview > Status` should stay short, plain, and current.
 - `Overview > Scope` should state exactly which project surfaces this accessibility contract covers.
 - `Standards Baseline > Target Standard` should explicitly name the target standard or internal accessibility baseline.
@@ -50,6 +52,7 @@ The base contract requires:
 - `Engineering Workflow > Definition of Done` should make accessibility a merge-quality requirement for relevant changes.
 - `Known Gaps` should always exist, even when it only records that there are no currently documented exceptions.
 - `Verification and Evidence` should prefer grounded tools, commands, audit dates, and review history over general promises.
+- Keep ACCESSIBILITY, CONTRIBUTING, README, and AGENTS responsibilities distinct. Accessibility standards, gaps, and evidence live here; contributor reminders should link here from `CONTRIBUTING.md`; product summary stays in `README.md`; agent-specific enforcement or routing belongs in `AGENTS.md`.
 
 ## Codex Subagent Fit
 

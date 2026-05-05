@@ -58,6 +58,7 @@ In Progress
 ## Backlog Candidates
 
 - [ ] Overhaul `agent-plugin-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
+- [ ] Add a `productivity-skills:maintain-project-docs` umbrella workflow after a dedicated `maintain-project-todo` skill exists. It should run the individual docs skills together, enforce the splits between `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ACCESSIBILITY.md`, `ROADMAP.md`, and `TODO.md`, and prevent repeated content from drifting across files.
 - [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child README/AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
 - [ ] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open.
 

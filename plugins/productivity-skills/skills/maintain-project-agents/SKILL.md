@@ -40,11 +40,14 @@ The base contract requires:
 ## Writing Expectations
 
 - Keep the file compact, practical, and repo-specific.
+- Keep the whole AGENTS file near 250 lines or less by default. Treat 300 lines as a soft ceiling that should trigger consolidation, trimming, or moving non-agent material to README, CONTRIBUTING, TODO, ROADMAP, or maintainer docs.
+- Keep most top-level sections near 40 lines or less and most subsections near 20 lines or less. Prefer durable rules, routing, and commands over long explanations or historical context.
 - `Repository Scope > Where To Look First` should route Codex toward the few highest-value files or directories, not try to summarize the whole repo.
 - `Commands` should prefer fenced code blocks with language info strings for setup and validation commands.
 - `Review and Delivery` should explain what good handoff looks like and what “done” means in this repo, including grounded verification and nearby updates when they matter.
 - `Safety Boundaries` should stay concrete, high-signal, and easy to scan.
 - `Local Overrides` should briefly explain whether more specific AGENTS files or fallback instruction files exist below this root, and make clear that closer guidance refines this root file later in the instruction chain.
+- Keep AGENTS focused on durable agent-facing rules. Product explanation belongs in `README.md`; contributor workflow belongs in `CONTRIBUTING.md`; backlog planning belongs in `TODO.md` or `ROADMAP.md`; detailed architecture or release procedures belong in linked maintainer docs when they would bloat this file.
 
 ## Alignment With Official Codex Guidance
 

@@ -32,6 +32,9 @@ This skill is the primary layer for README maintenance. It defines the canonical
 
 - `README.md` is product-focused: write it for end users, evaluators, integrators, and their agents who need to understand what the project is, whether it fits, how to try it, and where the shipped surface lives.
 - Contributor, maintainer, release, validation, branch, review, and local development procedures belong in `CONTRIBUTING.md` or a linked maintainer document. In `README.md`, keep only the shortest useful pointer to that contributor path.
+- Keep the whole README near 250 lines or less by default. Treat 300 lines as a soft ceiling that should trigger consolidation unless the user explicitly wants a long-form README.
+- Keep most generated or agent-edited top-level sections near 40 lines or less. Split or hoist content only when it clarifies ownership; otherwise trim repetition and link to the canonical owner.
+- The user-authored `Overview` subsections may be longer when the user supplies that text. Do not shorten `Overview > Status`, `Overview > What This Project Is`, or `Overview > Motivation` unless the user explicitly asks.
 - `Overview > Status`, `Overview > What This Project Is`, and `Overview > Motivation` must be written by the user in the user's own words, never by the agent.
 - If one of those Overview subsections already contains text, leave that text intact and untouched unless the user explicitly provides replacement text for that exact subsection.
 - If one of those Overview subsections is empty or missing, set the subsection body to exactly `TBD`; for new README files, ask the user for text to place there before falling back to `TBD`.
@@ -39,6 +42,7 @@ This skill is the primary layer for README maintenance. It defines the canonical
 - `Usage` should stay human-focused, concise, and informative. Prefer fenced code blocks with info strings when examples help.
 - `Development` should stay short and reader-oriented. Prefer a direct link to `CONTRIBUTING.md` for setup, workflow, validation, review, and maintainer commands instead of duplicating those procedures in the README.
 - `Repo Structure` should be a small directory tree or outline diagram, not a prose section.
+- Keep README, CONTRIBUTING, TODO, ROADMAP, and AGENTS responsibilities distinct. Product summary and end-user fit belong here; contribution workflow belongs in `CONTRIBUTING.md`; backlog details belong in `TODO.md` or `ROADMAP.md`; agent-facing maintainer rules belong in `AGENTS.md`.
 
 ## Codex Subagent Fit
 
