@@ -31,11 +31,12 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "codex plugin marketplace add gaelic-ghost/socket",
                 "codex plugin marketplace upgrade socket",
                 "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
-                "ordinary user installs should use Git-backed marketplace sources",
-                "declare the required dev dependencies in `pyproject.toml`",
+                "Git-backed marketplace sources",
+                "dev dependencies in `pyproject.toml`",
                 "`pytest`, `ruff`, and `mypy`",
-                "the plugin manifest points to bundled skills with `\"skills\": \"./skills/\"`",
-                "Follow the current OpenAI plugin structure literally: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root.",
+                "`\"skills\": \"./skills/\"`",
+                "Only `plugin.json` belongs in `.codex-plugin/`",
+                "refresh the official OpenAI docs",
             ]
         )
         + "\n",
@@ -45,12 +46,14 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
         "\n".join(
             [
                 "canonical authored and exported surface",
-                'the manifest points to it with `"skills": "./skills/"`',
+                'manifest points to bundled skills with `"skills": "./skills/"`',
+                "`hooks/`",
                 "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
                 "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
-                "Do not recreate nested staged plugin directories",
                 "Default user-facing install and update guidance to Git-backed marketplace sources",
-                "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
+                "`skills/install-plugin-to-socket`",
+                "`skills/validate-plugin-install-surfaces`",
+                "check the current OpenAI Codex docs",
             ]
         )
         + "\n",
@@ -117,6 +120,16 @@ def test_audit_repo_flags_missing_guidance_and_forbidden_path(tmp_path: Path) ->
     assert "missing-symlink" in issue_ids
     assert "forbidden-path" in issue_ids
     assert "missing-plugin-manifest" in issue_ids
+
+
+def test_audit_repo_does_not_require_optional_maintainer_docs(tmp_path: Path) -> None:
+    _write_repo(tmp_path, "example-skills")
+    (tmp_path / "docs" / "maintainers" / "reality-audit.md").unlink()
+    (tmp_path / "docs" / "maintainers" / "codex-plugin-install-surfaces.md").unlink()
+
+    findings = m.audit_repo(tmp_path, "example-skills")
+
+    assert findings == []
 
 
 def test_audit_repo_flags_manifest_without_skills_component(tmp_path: Path) -> None:

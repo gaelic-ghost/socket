@@ -33,10 +33,14 @@ __pycache__/
 .pytest_cache/
 *.pyc
 """,
-        repo_root / "README.md": f"# {repo_root.name}\n\nInstallable maintainer skills for skills-export repositories.\n",
+        repo_root / "README.md": f"# {repo_root.name}\n\nInstallable maintainer skills for skills-export and plugin-export repositories.\n",
         repo_root / "AGENTS.md": """# AGENTS.md
 
 Root `skills/` is canonical.
+
+Before changing Codex plugin, skill, MCP, hooks, marketplace, or subagent guidance, check the current OpenAI Codex docs. Keep repo guidance focused on durable local policy rather than copying the full upstream docs.
+
+Only `plugin.json` belongs in `.codex-plugin/`. Keep `skills/`, `.app.json`, `.mcp.json`, `hooks/`, and `assets/` at the plugin root. Plugin manifests should point to bundled skill folders with `"skills": "./skills/"`.
 
 Default user-facing Codex plugin install and update guidance to Git-backed marketplace sources with `codex plugin marketplace add <owner>/<repo>` and `codex plugin marketplace upgrade <marketplace-name>`. Explicit refs such as `<owner>/<repo>@vX.Y.Z` are for pinned reproducible installs. Manual local marketplace roots and copied plugin payloads are development, unpublished-testing, or fallback paths.
 

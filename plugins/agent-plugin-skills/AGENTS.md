@@ -11,8 +11,10 @@ This file is the Agent Plugin Skills child-repo override for work done from `soc
 
 ## Local Rules
 
-- Keep Codex plugin guidance aligned with current OpenAI plugin docs: only `plugin.json` belongs in `.codex-plugin/`, while `skills/` stays at the plugin root and the manifest points to it with `"skills": "./skills/"`.
-- Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`; those retired workflows encouraged manual install-surface thinking that this repo now keeps out of the standard Codex path.
+- Before changing Codex plugin, skill, MCP, hooks, or marketplace guidance, check the current OpenAI Codex docs. Keep this repo's skills focused on `socket` and skills-export repo policy rather than copying the full upstream docs.
+- Keep Codex plugin structure aligned with current OpenAI docs: only `plugin.json` belongs in `.codex-plugin/`, while `skills/`, `.app.json`, `.mcp.json`, `hooks/`, and `assets/` stay at the plugin root. The manifest points to bundled skills with `"skills": "./skills/"`.
+- Default user-facing install and update guidance to Git-backed marketplace sources. Do not recreate nested staged plugin directories, manual-first local install stories, `skills/install-plugin-to-socket`, or `skills/validate-plugin-install-surfaces`.
+- Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch. Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly.
 - When a skill contract changes, update the nearby skill docs, maintainer docs, and tests in the same pass.
 
 ## Validation

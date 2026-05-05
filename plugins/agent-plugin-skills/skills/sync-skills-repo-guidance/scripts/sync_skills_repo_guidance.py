@@ -19,20 +19,23 @@ README_SNIPPETS = [
     "codex plugin marketplace add gaelic-ghost/socket",
     "codex plugin marketplace upgrade socket",
     "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
-    "ordinary user installs should use Git-backed marketplace sources",
-    "declare the required dev dependencies in `pyproject.toml`",
+    "Git-backed marketplace sources",
+    "dev dependencies in `pyproject.toml`",
     "`pytest`, `ruff`, and `mypy`",
-    "the plugin manifest points to bundled skills with `\"skills\": \"./skills/\"`",
-    "only `plugin.json` belongs in `.codex-plugin/`",
+    "`\"skills\": \"./skills/\"`",
+    "Only `plugin.json` belongs in `.codex-plugin/`",
+    "refresh the official OpenAI docs",
 ]
 AGENTS_SNIPPETS = [
     "canonical authored and exported surface",
-    'the manifest points to it with `"skills": "./skills/"`',
+    'manifest points to bundled skills with `"skills": "./skills/"`',
+    "`hooks/`",
     "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
     "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
-    "Do not recreate nested staged plugin directories",
     "Default user-facing install and update guidance to Git-backed marketplace sources",
-    "Do not recreate `skills/install-plugin-to-socket` or `skills/validate-plugin-install-surfaces`",
+    "`skills/install-plugin-to-socket`",
+    "`skills/validate-plugin-install-surfaces`",
+    "check the current OpenAI Codex docs",
 ]
 AUDIT_SNIPPETS = [
     "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
@@ -95,15 +98,12 @@ def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
     findings.extend(_check_file_contains(repo_root, repo_root / "README.md", README_SNIPPETS, "readme"))
     findings.extend(_check_file_contains(repo_root, repo_root / "AGENTS.md", AGENTS_SNIPPETS, "agents"))
     findings.extend(_check_file_contains(repo_root, repo_root / ".gitignore", GITIGNORE_SNIPPETS, "gitignore"))
-    findings.extend(_check_file_contains(repo_root, repo_root / "docs" / "maintainers" / "reality-audit.md", AUDIT_SNIPPETS, "reality-audit"))
-    findings.extend(
-        _check_file_contains(
-            repo_root,
-            repo_root / "docs" / "maintainers" / "codex-plugin-install-surfaces.md",
-            INSTALL_SURFACES_SNIPPETS,
-            "install-surfaces",
-        )
-    )
+    reality_audit = repo_root / "docs" / "maintainers" / "reality-audit.md"
+    if reality_audit.exists():
+        findings.extend(_check_file_contains(repo_root, reality_audit, AUDIT_SNIPPETS, "reality-audit"))
+    install_surfaces = repo_root / "docs" / "maintainers" / "codex-plugin-install-surfaces.md"
+    if install_surfaces.exists():
+        findings.extend(_check_file_contains(repo_root, install_surfaces, INSTALL_SURFACES_SNIPPETS, "install-surfaces"))
     findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))
     manifest_path = repo_root / ".codex-plugin" / "plugin.json"
     if not manifest_path.exists():

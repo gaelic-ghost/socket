@@ -9,7 +9,9 @@ Bootstrap or align a skills-export repository.
 
 ## Codex Model Note
 
-State plainly that OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that. This repository pattern allows root `.codex-plugin` packaging, and standalone plugin repositories should carry a repo-local marketplace when they are meant to be installed directly. Do not normalize nested staged plugin directories or installer-era helper workflows for this repo family.
+State plainly that OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that. This repository pattern allows root `.codex-plugin` packaging. Do not normalize nested staged plugin directories or installer-era helper workflows for this repo family.
+
+Before adding detailed guidance about Codex Plugins, Skills, MCP, Hooks, marketplaces, or subagents, refresh the relevant OpenAI Codex docs. Keep generated repo guidance focused on durable local policy and link to the official docs for details that can drift.
 
 ## Codex Plugin Root Structure
 
@@ -17,7 +19,7 @@ When bootstrapping or aligning a plugin repo, follow the current OpenAI plugin s
 
 - every plugin has a manifest at `.codex-plugin/plugin.json`
 - only `plugin.json` belongs in `.codex-plugin/`
-- `skills/`, `.app.json`, `.mcp.json`, and `assets/` belong at the plugin root
+- `skills/`, `.app.json`, `.mcp.json`, `hooks/`, and `assets/` belong at the plugin root
 - plugin manifests should point to bundled skill folders with `"skills": "./skills/"`
 - marketplace `source.path` should point at the plugin root directory
 
@@ -40,32 +42,17 @@ When creating or aligning skills that can benefit from parallel support work, ad
 
 Do not add subagent guidance to every skill by default. Use `docs/maintainers/codex-subagent-skill-guidance.md` to decide whether the target skill has real parallelizable support work.
 
-## Codex Install-Surface Map
+## Codex Install Guidance
 
-When bootstrapping or aligning repo guidance, teach Codex plugin wiring with five separate surfaces:
+Bootstrap docs should make the Git-backed marketplace path the default user install/update story:
 
-- tracked marketplace source
-  - preferred user path: `codex plugin marketplace add <owner>/<repo>`
-  - update path: `codex plugin marketplace upgrade <marketplace-name>`
-  - role: Codex-managed Git checkout for a marketplace source
-- marketplace catalog
-  - personal: `~/.agents/plugins/marketplace.json`
-  - repo: `$REPO_ROOT/.agents/plugins/marketplace.json`
-  - role: the catalog Codex reads from; each plugin entry points at a plugin root
-- plugin root payload
-  - common personal pattern: `~/.codex/plugins/<plugin-name>`
-  - common repo pattern from the docs: `$REPO_ROOT/plugins/<plugin-name>`
-  - Git-backed marketplace pattern: a plugin root inside the tracked marketplace checkout
-  - role: the plugin root payload on disk
-- installed plugin cache
-  - `~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/`
-  - role: Codex's installed copy for runtime loading
-- enabled-state config
-  - documented plugin path: `~/.codex/config.toml`
-  - role: on or off state keyed by plugin plus marketplace identity, such as `[plugins."my-plugin@socket"]`
+```bash
+codex plugin marketplace add <owner>/<repo>
+codex plugin marketplace upgrade <marketplace-name>
+```
 
-Bootstrap docs should make the Git-backed marketplace path the default user install/update story. Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs. Use manual local marketplace or copied-payload instructions only for local development, unpublished testing, or fallback cases.
+Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible installs. Use manual local marketplace or copied-payload instructions only for local development, unpublished testing, or fallback cases.
 
-Bootstrap docs should keep discovery mirrors, plugin packaging, marketplace sources, marketplace catalogs, plugin root payload directories, cache paths, and config-state separate. Do not blur "where Codex can see a plugin", "where the plugin payload lives", "how Codex updates the marketplace", and "whether the plugin is enabled" into one sentence.
+Keep discovery mirrors, plugin packaging, marketplace catalogs, plugin payload directories, installed cache paths, and config-state separate. Do not blur "where Codex can see a plugin", "where the plugin payload lives", "how Codex updates the marketplace", and "whether the plugin is enabled" into one sentence.
 
 If you mention project-scoped `.codex/config.toml`, describe it as a general Codex config surface from the config reference, not as a separate documented plugin install surface.
