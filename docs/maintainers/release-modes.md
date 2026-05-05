@@ -18,9 +18,12 @@ Both modes treat `socket` as the release owner for the umbrella repository:
 8. create the `socket` tag locally from the reviewed `main`
 9. push the tag
 10. create the GitHub release from the existing tag
-11. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
+11. verify the GitHub release object exists
 12. verify `git log origin/main..main` is empty
 13. account for every local branch not contained by `main`
+14. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
+
+`codex plugin marketplace upgrade socket` is always the final release step. Never run it before the GitHub release exists and has been verified, subtree accounting is complete, and branch accounting has been recorded.
 
 The difference is that `subtrees` adds a child-repository sync gate before tagging or before claiming the release is done.
 
@@ -40,7 +43,13 @@ scripts/release.sh major
 scripts/release.sh custom 1.2.3
 ```
 
-After a version bump lands on `main`, create the matching `vX.Y.Z` tag from `main`, push it, and create the GitHub release with `gh release create --verify-tag`.
+After a version bump lands on `main`, run the executable pre-tag gate:
+
+```bash
+scripts/release.sh release-ready X.Y.Z
+```
+
+Only after that gate passes, create the matching `vX.Y.Z` tag from `main`, push it, create the GitHub release with `gh release create --verify-tag`, verify the release object, complete branch accounting, and then run `codex plugin marketplace upgrade socket` as the final step.
 
 ## Subtrees Mode
 
@@ -75,6 +84,7 @@ Before tagging `socket`:
 - confirm the subtree policy table above was followed
 - run `uv run scripts/validate_socket_metadata.py`
 - confirm local `main` is fast-forwarded to `origin/main`
+- run `scripts/release.sh release-ready X.Y.Z`
 - confirm `git log origin/main..main` is empty
 - enumerate every local branch not contained by `main` and account for each one
 
@@ -83,5 +93,7 @@ After tagging:
 - push the `socket` tag
 - create the GitHub release from the existing tag
 - verify the release object exists on GitHub
-- run `codex plugin marketplace upgrade socket` so Gale's local Codex install sees the released marketplace state
 - if a child release landed outside `socket`, verify `socket` either contains that child state or explicitly records why the sync is deferred. For Speak Swiftly, the Socket catalog follows `gaelic-ghost/SpeakSwiftlyServer` directly, so standalone SpeakSwiftlyServer releases normally require no local subtree sync.
+- confirm `git log origin/main..main` is empty
+- enumerate every local branch not contained by `main` and account for each one
+- run `codex plugin marketplace upgrade socket` so Gale's local Codex install sees the released marketplace state; this is the final step and must not happen earlier

@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
 import tomllib
 from dataclasses import dataclass
@@ -22,6 +23,14 @@ IGNORED_PARTS = {".build", ".git", ".venv", "__pycache__", "node_modules"}
 EXCLUDED_VERSION_PATHS = {
     Path("plugins/SpeakSwiftlyServer/.codex-plugin/plugin.json"),
 }
+SUBTREE_GATES = (
+    {
+        "name": "apple-dev-skills",
+        "prefix": "plugins/apple-dev-skills",
+        "remote": "apple-dev-skills",
+        "branch": "main",
+    },
+)
 
 
 class VersionToolError(RuntimeError):
@@ -44,12 +53,33 @@ def repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
+def run_git(root: Path, args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=root,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if check and result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise VersionToolError(f"`git {' '.join(args)}` failed. {detail}")
+    return result
+
+
 def validate_semver(version: str) -> str:
     if not SEMVER_RE.fullmatch(version):
         raise VersionToolError(
             f"Expected a semantic version like 1.2.3 for custom bumps, but got {version!r}."
         )
     return version
+
+
+def normalize_release_version(version: str | None) -> str:
+    if version is None:
+        raise VersionToolError("release-ready requires the release version, for example 6.6.13.")
+    return validate_semver(version.removeprefix("v"))
 
 
 def bump_version(version: str, mode: str) -> str:
@@ -245,6 +275,103 @@ def render_inventory(targets: list[VersionTarget]) -> int:
     return 0
 
 
+def previous_release_ref(root: Path) -> str | None:
+    result = run_git(root, ["describe", "--tags", "--abbrev=0", "HEAD^"], check=False)
+    if result.returncode != 0:
+        return None
+    ref = result.stdout.strip()
+    return ref or None
+
+
+def changed_files_since_previous_release(root: Path) -> set[str]:
+    previous_ref = previous_release_ref(root)
+    diff_args = ["diff", "--name-only", "HEAD"] if previous_ref is None else ["diff", "--name-only", f"{previous_ref}..HEAD"]
+    result = run_git(root, diff_args)
+    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+
+
+def ensure_clean_checkout(root: Path) -> None:
+    result = run_git(root, ["status", "--porcelain"])
+    if result.stdout.strip():
+        raise VersionToolError(
+            "Release-ready gate requires a clean checkout. Commit or stash local changes before tagging."
+        )
+
+
+def ensure_main_matches_origin(root: Path) -> None:
+    branch = run_git(root, ["branch", "--show-current"]).stdout.strip()
+    if branch != "main":
+        raise VersionToolError(f"Release-ready gate must run on local main, but the current branch is {branch!r}.")
+    head = run_git(root, ["rev-parse", "HEAD"]).stdout.strip()
+    origin_main = run_git(root, ["rev-parse", "origin/main"]).stdout.strip()
+    if head != origin_main:
+        raise VersionToolError(
+            "Release-ready gate requires local main to match origin/main before tagging. "
+            "Push or fast-forward main first."
+        )
+
+
+def ensure_tag_is_available(root: Path, version: str) -> None:
+    tag = f"v{version}"
+    local_tag = run_git(root, ["tag", "-l", tag]).stdout.strip()
+    if local_tag:
+        raise VersionToolError(f"Release tag {tag} already exists locally; do not create the GitHub release twice.")
+    remote_tag = run_git(root, ["ls-remote", "--tags", "origin", f"refs/tags/{tag}"]).stdout.strip()
+    if remote_tag:
+        raise VersionToolError(f"Release tag {tag} already exists on origin; do not create the GitHub release twice.")
+
+
+def ensure_versions_match_release(targets: list[VersionTarget], version: str) -> None:
+    versions = read_versions(targets)
+    if versions != [version]:
+        joined_versions = ", ".join(versions)
+        raise VersionToolError(
+            f"Release-ready gate expected every maintained version surface to be {version}, "
+            f"but found: {joined_versions}."
+        )
+
+
+def ensure_subtree_gates(root: Path, changed_files: set[str]) -> list[str]:
+    accounted: list[str] = []
+    for gate in SUBTREE_GATES:
+        prefix = gate["prefix"]
+        touched = any(path == prefix or path.startswith(f"{prefix}/") for path in changed_files)
+        if not touched:
+            accounted.append(f"{gate['name']}: untouched")
+            continue
+        split = run_git(root, ["subtree", "split", f"--prefix={prefix}", "HEAD"]).stdout.strip().splitlines()[-1]
+        remote_ref = f"refs/heads/{gate['branch']}"
+        remote = run_git(root, ["ls-remote", gate["remote"], remote_ref]).stdout.strip()
+        remote_head = remote.split()[0] if remote else ""
+        if split != remote_head:
+            raise VersionToolError(
+                f"{gate['name']} changed in this release, but {gate['remote']}/{gate['branch']} "
+                "does not match the current subtree split. Run "
+                f"`git subtree push --prefix={prefix} {gate['remote']} {gate['branch']}` before tagging or "
+                "creating the GitHub release."
+            )
+        accounted.append(f"{gate['name']}: pushed to {gate['remote']}/{gate['branch']}")
+    return accounted
+
+
+def render_release_ready(root: Path, targets: list[VersionTarget], version: str) -> int:
+    ensure_versions_match_release(targets, version)
+    ensure_clean_checkout(root)
+    ensure_main_matches_origin(root)
+    ensure_tag_is_available(root, version)
+    changed_files = changed_files_since_previous_release(root)
+    subtree_accounting = ensure_subtree_gates(root, changed_files)
+    print(f"Release-ready gate passed for v{version}.")
+    print("Subtree accounting:")
+    for line in subtree_accounting:
+        print(f"- {line}")
+    print(
+        "Next release steps: create and push the tag, create and verify the GitHub release, "
+        "run branch accounting, then run `codex plugin marketplace upgrade socket` as the final step only."
+    )
+    return 0
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -253,13 +380,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "mode",
-        choices=["inventory", "patch", "minor", "major", "custom"],
-        help="Inventory current versions or apply a semantic version bump.",
+        choices=["inventory", "patch", "minor", "major", "custom", "release-ready"],
+        help="Inventory, apply a semantic version bump, or verify release gates before tagging.",
     )
     parser.add_argument(
         "version",
         nargs="?",
-        help="Explicit semantic version for custom mode, for example 1.2.3.",
+        help="Explicit semantic version for custom or release-ready mode, for example 1.2.3.",
     )
     return parser.parse_args(argv)
 
@@ -272,6 +399,8 @@ def main(argv: list[str]) -> int:
         raise VersionToolError("No maintained version targets were found in this repository.")
     if args.mode == "inventory":
         return render_inventory(targets)
+    if args.mode == "release-ready":
+        return render_release_ready(root, targets, normalize_release_version(args.version))
     desired_version = determine_target_version(targets, args.mode, args.version)
     changed_files, unchanged_files = apply_version(root, targets, desired_version)
     if changed_files:

@@ -164,3 +164,63 @@ def test_main_inventory_reports_misalignment(tmp_path: Path, monkeypatch: pytest
     output = capsys.readouterr().out
     assert exit_code == 0
     assert "Version sets: 1.2.3, 2.0.0" in output
+
+
+def test_release_ready_requires_subtree_push_before_tagging(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    root = make_repo(tmp_path)
+    targets = release_version.discover_targets(root)
+    git_outputs = {
+        ("status", "--porcelain"): "",
+        ("branch", "--show-current"): "main\n",
+        ("rev-parse", "HEAD"): "socket-head\n",
+        ("rev-parse", "origin/main"): "socket-head\n",
+        ("tag", "-l", "v1.2.3"): "",
+        ("ls-remote", "--tags", "origin", "refs/tags/v1.2.3"): "",
+        ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.2\n",
+        ("diff", "--name-only", "v1.2.2..HEAD"): "plugins/apple-dev-skills/pyproject.toml\n",
+        ("subtree", "split", "--prefix=plugins/apple-dev-skills", "HEAD"): "local-subtree-head\n",
+        ("ls-remote", "apple-dev-skills", "refs/heads/main"): "remote-subtree-head\trefs/heads/main\n",
+    }
+
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        output = git_outputs[tuple(args)]
+        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
+
+    with pytest.raises(release_version.VersionToolError, match="does not match the current subtree split"):
+        release_version.render_release_ready(root, targets, "1.2.3")
+
+
+def test_release_ready_prints_marketplace_upgrade_as_final_step(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = make_repo(tmp_path)
+    targets = release_version.discover_targets(root)
+    git_outputs = {
+        ("status", "--porcelain"): "",
+        ("branch", "--show-current"): "main\n",
+        ("rev-parse", "HEAD"): "socket-head\n",
+        ("rev-parse", "origin/main"): "socket-head\n",
+        ("tag", "-l", "v1.2.3"): "",
+        ("ls-remote", "--tags", "origin", "refs/tags/v1.2.3"): "",
+        ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.2\n",
+        ("diff", "--name-only", "v1.2.2..HEAD"): "plugins/apple-dev-skills/pyproject.toml\n",
+        ("subtree", "split", "--prefix=plugins/apple-dev-skills", "HEAD"): "subtree-head\n",
+        ("ls-remote", "apple-dev-skills", "refs/heads/main"): "subtree-head\trefs/heads/main\n",
+    }
+
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        output = git_outputs[tuple(args)]
+        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
+
+    exit_code = release_version.render_release_ready(root, targets, "1.2.3")
+
+    output = capsys.readouterr().out
+    assert exit_code == 0
+    assert "apple-dev-skills: pushed to apple-dev-skills/main" in output
+    assert "`codex plugin marketplace upgrade socket` as the final step only" in output
