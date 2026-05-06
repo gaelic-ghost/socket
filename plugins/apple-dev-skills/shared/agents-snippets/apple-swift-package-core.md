@@ -73,6 +73,8 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Run `swift build` and `swift test` as the default validation checks after package-level changes.
 - Use `xcodebuild` for package validation when configuration-specific Apple-platform behavior matters, when test plans must be exercised, or when package builds depend on Xcode-managed SDK or Metal-toolchain behavior.
 - When package test plans are part of the contract, keep `.xctestplan` files versioned alongside the package-facing Xcode integration and exercise them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
+- Prefer normal SwiftPM parallel test execution for ordinary Swift Testing and XCTest runs. Do not serialize regular package tests just because they use Swift, XCTest, async tests, fixtures, or test plans.
+- Treat tests that load large local AI or ML models, especially models over 500 million parameters, as heavy system-resource tests. Run those tests sequentially, one at a time, and call `unload_models` on Gale's live TTS service before the heavy run and `reload_models` after it ends, even when the run fails or is interrupted.
 - Validate both Debug and Release paths when behavior or optimization differences matter, and treat tagged releases as a signal to verify both the everyday Debug developer path and the Release artifact path before publishing.
 - Keep toolchain selection explicit and reproducible across local development and CI when supporting multiple Swift versions or platforms.
 - Prefer portable SwiftPM and CLI workflows for server-side or cross-platform Swift code, and avoid assuming Apple-only SDKs or Xcode-only behavior unless the project explicitly requires them.

@@ -7,6 +7,14 @@
 - Use XCUITest for UI automation and prefer explicit wait APIs such as `waitForExistence(timeout:)`, `waitForNonExistence(timeout:)`, and related state waits instead of fixed sleeps.
 - Keep deeper UI automation mechanics in `references/xcuitest-and-xcuiautomation.md` instead of overloading this summary file.
 
+## Test scheduling and live TTS model pressure
+
+- Prefer normal Xcode and XCTest parallel execution for ordinary Swift Testing, XCTest, and XCUITest runs when the project, scheme, destination, and test plan support it. Do not serialize regular tests just because they use Swift, XCTest, async tests, UI automation, or `.xctestplan` matrices.
+- Treat tests that load large local AI or ML models, especially models over 500 million parameters, as heavy system-resource tests. Run those tests sequentially, one at a time, and do not run them concurrently with other build, test, simulator, or model-loading work.
+- Before starting a heavy model-loading test run on Gale's machine, call `unload_models` on the live TTS service so routine speech output is not competing for memory and accelerator resources.
+- After the heavy model-loading test run ends, call `reload_models` on the live TTS service, even when the test run fails or is interrupted.
+- If `unload_models` or `reload_models` is unavailable, blocked, or fails, report that explicitly before continuing with or claiming completion of the heavy test run.
+
 ## Test plans
 
 - Version `.xctestplan` files when the project needs repeatable configurations for environment variables, launch arguments, localization, sanitizers, diagnostics, or code coverage.

@@ -26,6 +26,8 @@
 - After regenerating an XcodeGen project, review both the spec diff and generated `.xcodeproj` diff, then validate the affected scheme with explicit `xcodebuild` commands.
 - Prefer Swift Testing for modern unit-style tests, keep XCTest where Apple tooling or dependencies still require it, and use XCUITest with explicit element wait APIs instead of fixed sleeps.
 - Keep `.xctestplan` files versioned when the project depends on repeatable test-plan configurations, and inspect or run them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
+- Prefer normal Xcode and XCTest parallel execution for ordinary Swift Testing, XCTest, and XCUITest runs when the project, scheme, destination, and test plan support it. Do not serialize regular tests just because they use Swift, XCTest, async tests, UI automation, or `.xctestplan` matrices.
+- Treat tests that load large local AI or ML models, especially models over 500 million parameters, as heavy system-resource tests. Run those tests sequentially, one at a time, and call `unload_models` on Gale's live TTS service before the heavy run and `reload_models` after it ends, even when the run fails or is interrupted.
 - Prefer a checked-in repo-root `.swiftformat` file as the Swift formatting source of truth.
 - Prefer a pre-commit hook such as `scripts/repo-maintenance/hooks/pre-commit.sample` that formats staged Swift sources and then verifies them with `swiftformat --lint` before commit.
 - Treat SwiftLint as an optional complementary signal layer for clarity, safety, and maintainability after SwiftFormat owns formatting shape.

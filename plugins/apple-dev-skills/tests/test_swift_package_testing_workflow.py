@@ -83,6 +83,21 @@ class SwiftPackageTestingWorkflowTests(unittest.TestCase):
         self.assertIn("runtime UI accessibility verification", reference_text)
         self.assertIn("semantic formatting", reference_text)
 
+    def test_skill_documents_heavy_model_test_scheduling(self) -> None:
+        reference_text = (
+            ROOT / "skills/swift-package-testing-workflow/references/package-resources-testing-and-builds.md"
+        ).read_text(encoding="utf-8")
+        snippet_text = (
+            ROOT / "skills/sync-swift-package-guidance/references/snippets/apple-swift-package-core.md"
+        ).read_text(encoding="utf-8")
+
+        for text in (reference_text, snippet_text):
+            self.assertIn("normal SwiftPM parallel test execution", text)
+            self.assertIn("over 500 million parameters", text)
+            self.assertIn("sequentially, one at a time", text)
+            self.assertIn("unload_models", text)
+            self.assertIn("reload_models", text)
+
 
 if __name__ == "__main__":
     unittest.main()

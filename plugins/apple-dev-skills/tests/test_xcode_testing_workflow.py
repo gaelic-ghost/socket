@@ -126,6 +126,21 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
         self.assertIn(".xctestplan", reference_text)
         self.assertIn("xcodegen generate", reference_text)
 
+    def test_skill_documents_heavy_model_test_scheduling(self) -> None:
+        reference_text = (
+            ROOT / "skills/xcode-testing-workflow/references/testing-plans-file-membership-and-configurations.md"
+        ).read_text(encoding="utf-8")
+        snippet_text = (
+            ROOT / "skills/sync-xcode-project-guidance/references/snippets/apple-xcode-project-core.md"
+        ).read_text(encoding="utf-8")
+
+        for text in (reference_text, snippet_text):
+            self.assertIn("normal Xcode and XCTest parallel execution", text)
+            self.assertIn("over 500 million parameters", text)
+            self.assertIn("sequentially, one at a time", text)
+            self.assertIn("unload_models", text)
+            self.assertIn("reload_models", text)
+
 
 if __name__ == "__main__":
     unittest.main()

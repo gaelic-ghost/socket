@@ -24,6 +24,14 @@
 - When package-facing Xcode integration uses `.xctestplan` files, keep them versioned and exercise them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
 - Keep UI automation, runtime accessibility verification, and deeper Xcode-native `.xctestplan` matrix work in `xcode-testing-workflow`.
 
+## Test scheduling and live TTS model pressure
+
+- Prefer normal SwiftPM parallel test execution for ordinary Swift Testing and XCTest runs. Do not serialize regular package tests just because they use Swift, XCTest, async tests, fixtures, or test plans.
+- Treat tests that load large local AI or ML models, especially models over 500 million parameters, as heavy system-resource tests. Run those tests sequentially, one at a time, and do not run them concurrently with other build, test, or model-loading work.
+- Before starting a heavy model-loading test run on Gale's machine, call `unload_models` on the live TTS service so routine speech output is not competing for memory and accelerator resources.
+- After the heavy model-loading test run ends, call `reload_models` on the live TTS service, even when the test run fails or is interrupted.
+- If `unload_models` or `reload_models` is unavailable, blocked, or fails, report that explicitly before continuing with or claiming completion of the heavy test run.
+
 ## Accessibility-related test boundaries
 
 - Package-side tests can validate semantic formatting, model-derived accessible strings, or other non-UI logic that feeds accessibility behavior.
