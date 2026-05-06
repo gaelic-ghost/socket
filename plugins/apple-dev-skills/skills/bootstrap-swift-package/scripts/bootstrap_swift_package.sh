@@ -194,7 +194,7 @@ package.dependencies.append(
     .package(
         url: "https://github.com/apple/swift-configuration",
         from: "1.2.0",
-        traits: [.defaults, "Reloading", "YAML"]
+        traits: [.defaults, "Reloading", "YAML", "CommandLineArguments"]
     )
 )
 
@@ -521,8 +521,8 @@ mkdir -p "$target_dir"
     failed "Validation failed: Package.swift does not preserve the default swift-configuration package dependency."
   fi
 
-  if ! grep -Fq 'traits: [.defaults, "Reloading", "YAML"]' Package.swift; then
-    failed "Validation failed: Package.swift does not preserve the default swift-configuration traits [.defaults, \"Reloading\", \"YAML\"]."
+  if ! grep -Fq 'traits: [.defaults, "Reloading", "YAML", "CommandLineArguments"]' Package.swift; then
+    failed "Validation failed: Package.swift does not preserve the default swift-configuration traits [.defaults, \"Reloading\", \"YAML\", \"CommandLineArguments\"]."
   fi
 
   if ! grep -Fq '.product(name: "Configuration", package: "swift-configuration")' Package.swift; then

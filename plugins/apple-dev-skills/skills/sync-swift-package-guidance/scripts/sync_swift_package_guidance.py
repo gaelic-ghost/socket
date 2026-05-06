@@ -25,6 +25,7 @@ REQUIRED_STRINGS = [
     "swift-configuration",
     "Reloading",
     "YAML",
+    "CommandLineArguments",
 ]
 
 IGNORED_XCODE_MARKER_PARTS = {".build", ".swiftpm"}

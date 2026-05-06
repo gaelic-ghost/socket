@@ -58,7 +58,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `Package.swift`
    - `.swiftformat`
    - explicit `swiftLanguageModes: [.v6]` in `Package.swift`
-   - default `swift-configuration` dependency in `Package.swift` with the `Configuration` product on the primary target and package traits `Reloading` and `YAML`
+   - default `swift-configuration` dependency in `Package.swift` with the `Configuration` product on the primary target and package traits `Reloading`, `YAML`, and `CommandLineArguments`
    - `// swift-tools-version:` remains `6.1` or newer when the generated manifest keeps trait-enabled dependencies
    - `.git`
    - `AGENTS.md`
@@ -73,7 +73,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
    - keep the generated repo aligned with the checked-in `.swiftformat` plus format-then-verify pre-commit-hook baseline in that snippet
    - keep the generated manifest aligned with the explicit Swift 6 default language-mode declaration `swiftLanguageModes: [.v6]`
-   - keep the generated manifest aligned with the default `swift-configuration` dependency, using the `Configuration` product and package traits `.defaults`, `Reloading`, and `YAML`
+   - keep the generated manifest aligned with the default `swift-configuration` dependency, using the `Configuration` product and package traits `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`
    - treat the generated `// swift-tools-version:` as a starting point that can be lowered to match the real package compatibility target, but never below `6.1` while trait-enabled dependencies remain in the manifest
    - preserve the project-appropriate logging and telemetry guidance from that snippet
 8. Hand off package execution guidance cleanly:
@@ -103,7 +103,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - validation runs unless `--skip-validation` is passed
   - supported and validated Swift toolchain floor is `6.1+`
   - generated manifests should preserve an explicit Swift 6 language-mode declaration with `swiftLanguageModes: [.v6]` when the active manifest surface supports it
-  - generated manifests include `swift-configuration` by default with the `Configuration` product on the primary target and traits `.defaults`, `Reloading`, and `YAML`
+  - generated manifests include `swift-configuration` by default with the `Configuration` product on the primary target and traits `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`
   - generated manifests may lower `// swift-tools-version:` from the scaffold default when the package should support an older Swift 6 toolchain, but they should never go below `6.1` while trait-enabled dependencies remain in the manifest
   - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
 

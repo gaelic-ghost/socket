@@ -35,7 +35,7 @@ The generated manifest should include `swift-configuration` by default:
 
 - dependency URL: `https://github.com/apple/swift-configuration`
 - version requirement: `from: "1.2.0"`
-- dependency traits: `.defaults`, `Reloading`, and `YAML`
+- dependency traits: `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`
 - primary target product: `.product(name: "Configuration", package: "swift-configuration")`
 
 ## Testing Modes

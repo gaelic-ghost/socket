@@ -90,7 +90,7 @@ Verification:
 - Confirm `Package.swift`, `AGENTS.md`, `Tests/`, and `.git` exist.
 - Confirm `Package.swift` keeps the explicit Swift 6 language-mode declaration `swiftLanguageModes: [.v6]`.
 - Confirm `Package.swift` keeps `// swift-tools-version:` at `6.1` or newer while the trait-enabled `swift-configuration` dependency remains in the manifest, even if it is lowered from the scaffold default.
-- Confirm `Package.swift` includes `swift-configuration` from `1.2.0`, enables `.defaults`, `Reloading`, and `YAML`, and adds the `Configuration` product to the primary target.
+- Confirm `Package.swift` includes `swift-configuration` from `1.2.0`, enables `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`, and adds the `Configuration` product to the primary target.
 - If validation is enabled, verify `swift build` and `swift test` success.
 - If branch protection is configured, require the GitHub Actions check context `validate`, not `Validate Repo Maintenance / validate`.
 
