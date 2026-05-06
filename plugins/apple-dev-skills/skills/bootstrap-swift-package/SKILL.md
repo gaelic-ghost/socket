@@ -45,11 +45,11 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `minus-two -> current-minus-two`
 3. Run `scripts/run_workflow.py` so documented defaults are loaded from customization state and normalized into one JSON contract.
 4. Select testing mode before scaffold creation:
-   - require a supported and validated `Swift 5.10+` toolchain floor before bootstrap planning continues
+   - require a supported and validated `Swift 6.1+` toolchain floor before bootstrap planning continues because the generated manifest uses PackageDescription package traits for the default `swift-configuration` dependency
    - prefer `swift-testing` on supported toolchains that expose `swift package init --enable-swift-testing`
    - use explicit XCTest-selection flags when `xctest` is requested and the active toolchain exposes them
    - fall back to the toolchain's default XCTest template only when `xctest` is requested and the active `swift package init` command exposes no testing-selection flags at all
-   - stop with `blocked` when the local toolchain is older than `5.10` or when the active `swift package init` command cannot guarantee the requested testing mode
+   - stop with `blocked` when the local toolchain is older than `6.1` or when the active `swift package init` command cannot guarantee the requested testing mode
 5. Let the wrapper invoke the bundled script:
    ```bash
    scripts/bootstrap_swift_package.sh --name <Name> --type <library|executable|tool> --destination <dir> --platform <mac|macos|mobile|ios|multiplatform|both> --version-profile <latest-major|current-minus-one|current-minus-two|latest|minus-one|minus-two> --testing-mode <swift-testing|xctest>
@@ -58,7 +58,8 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `Package.swift`
    - `.swiftformat`
    - explicit `swiftLanguageModes: [.v6]` in `Package.swift`
-   - `// swift-tools-version:` remains `6.0` or newer, even when it is lowered from the scaffold default
+   - default `swift-configuration` dependency in `Package.swift` with the `Configuration` product on the primary target and package traits `Reloading` and `YAML`
+   - `// swift-tools-version:` remains `6.1` or newer when the generated manifest keeps trait-enabled dependencies
    - `.git`
    - `AGENTS.md`
    - `scripts/repo-maintenance/hooks/pre-commit.sample`
@@ -72,7 +73,8 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
    - keep the generated repo aligned with the checked-in `.swiftformat` plus format-then-verify pre-commit-hook baseline in that snippet
    - keep the generated manifest aligned with the explicit Swift 6 default language-mode declaration `swiftLanguageModes: [.v6]`
-   - treat the generated `// swift-tools-version:` as a starting point that can be lowered to match the real package compatibility target, but never below `6.0`
+   - keep the generated manifest aligned with the default `swift-configuration` dependency, using the `Configuration` product and package traits `.defaults`, `Reloading`, and `YAML`
+   - treat the generated `// swift-tools-version:` as a starting point that can be lowered to match the real package compatibility target, but never below `6.1` while trait-enabled dependencies remain in the manifest
    - preserve the project-appropriate logging and telemetry guidance from that snippet
 8. Hand off package execution guidance cleanly:
    - use `swift build` and `swift test` by default
@@ -99,9 +101,10 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - `version_profile` defaults to `current-minus-one`
   - `testing_mode` defaults to `swift-testing`
   - validation runs unless `--skip-validation` is passed
-  - supported and validated Swift toolchain floor is `5.10+`
+  - supported and validated Swift toolchain floor is `6.1+`
   - generated manifests should preserve an explicit Swift 6 language-mode declaration with `swiftLanguageModes: [.v6]` when the active manifest surface supports it
-  - generated manifests may lower `// swift-tools-version:` from the scaffold default when the package should support an older Swift 6 toolchain, but they should never go below `6.0`
+  - generated manifests include `swift-configuration` by default with the `Configuration` product on the primary target and traits `.defaults`, `Reloading`, and `YAML`
+  - generated manifests may lower `// swift-tools-version:` from the scaffold default when the package should support an older Swift 6 toolchain, but they should never go below `6.1` while trait-enabled dependencies remain in the manifest
   - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs
@@ -126,7 +129,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 
 - Stop with `blocked` if `swift` is missing.
 - Stop with `blocked` if `swift --version` cannot be parsed into a supported toolchain version.
-- Stop with `blocked` if the local Swift toolchain is older than `5.10`.
+- Stop with `blocked` if the local Swift toolchain is older than `6.1`.
 - Stop with `blocked` if `git` is missing.
 - Stop with `blocked` if `assets/AGENTS.md` is missing.
 - Stop with `blocked` if the target exists and contains non-ignorable files.
@@ -138,7 +141,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Preferred path is always `scripts/bootstrap_swift_package.sh`.
 - Use manual `swift package init` guidance only when the script is unavailable or the user explicitly asks for the manual path.
 - `tool` is an advanced explicit passthrough, not a default branch of the workflow.
-- Within the supported `Swift 5.10+` floor, prefer current `swift package init` testing flags when the active toolchain exposes them; only rely on the older default XCTest template when `xctest` is requested and the active `swift package init` command exposes no testing-selection flags at all.
+- Within the supported `Swift 6.1+` floor, prefer current `swift package init` testing flags when the active toolchain exposes them; only rely on the older default XCTest template when `xctest` is requested and the active `swift package init` command exposes no testing-selection flags at all.
 - After a successful scaffold, hand off ordinary package execution tasks to `swift-package-build-run-workflow` or `swift-package-testing-workflow`.
 - After a successful scaffold, hand off Xcode-managed package build or run tasks to `xcode-build-run-workflow`.
 - After a successful scaffold, hand off Xcode-managed package test tasks to `xcode-testing-workflow`.

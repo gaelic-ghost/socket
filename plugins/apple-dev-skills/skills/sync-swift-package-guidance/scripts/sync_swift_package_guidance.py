@@ -22,6 +22,9 @@ REQUIRED_STRINGS = [
     "scripts/repo-maintenance/validate-all.sh",
     "scripts/repo-maintenance/sync-shared.sh",
     "scripts/repo-maintenance/release.sh",
+    "swift-configuration",
+    "Reloading",
+    "YAML",
 ]
 
 IGNORED_XCODE_MARKER_PARTS = {".build", ".swiftpm"}

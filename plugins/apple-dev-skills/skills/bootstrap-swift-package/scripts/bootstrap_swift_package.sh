@@ -29,7 +29,7 @@ failed() {
 load_swift_version() {
   swift_version_output="$(swift --version 2>/dev/null || true)"
   if [[ -z "$swift_version_output" ]]; then
-    blocked "Unable to determine the local Swift toolchain version. The bootstrap skill supports Swift 5.10+."
+    blocked "Unable to determine the local Swift toolchain version. The bootstrap skill supports Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
   fi
 
   if [[ "$swift_version_output" =~ Swift[[:space:]]+version[[:space:]]+([0-9]+)\.([0-9]+) ]]; then
@@ -38,18 +38,18 @@ load_swift_version() {
     return 0
   fi
 
-  blocked "Unable to parse the local Swift toolchain version from 'swift --version'. The bootstrap skill supports Swift 5.10+."
+  blocked "Unable to parse the local Swift toolchain version from 'swift --version'. The bootstrap skill supports Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
 }
 
 ensure_supported_swift_toolchain() {
   load_swift_version
 
-  if (( swift_major_version < 5 )); then
-    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated floor is Swift 5.10+."
+  if (( swift_major_version < 6 )); then
+    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated floor is Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
   fi
 
-  if (( swift_major_version == 5 && swift_minor_version < 10 )); then
-    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated floor is Swift 5.10+."
+  if (( swift_major_version == 6 && swift_minor_version < 1 )); then
+    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated floor is Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
   fi
 }
 
@@ -181,6 +181,29 @@ ensure_swift_language_mode() {
     tail -n +"$closing_line_num" Package.swift
   } > Package.swift.tmp
   mv Package.swift.tmp Package.swift
+}
+
+ensure_swift_configuration_dependency() {
+  if grep -Eq '^[[:space:]]*\.package\([[:space:]]*url:[[:space:]]*"https://github\.com/apple/swift-configuration"' Package.swift; then
+    return 0
+  fi
+
+  cat >> Package.swift <<EOF
+
+package.dependencies.append(
+    .package(
+        url: "https://github.com/apple/swift-configuration",
+        from: "1.2.0",
+        traits: [.defaults, "Reloading", "YAML"]
+    )
+)
+
+for target in package.targets where target.name == "$name" {
+    target.dependencies.append(
+        .product(name: "Configuration", package: "swift-configuration")
+    )
+}
+EOF
 }
 
 swift_package_init_supports() {
@@ -468,6 +491,7 @@ mkdir -p "$target_dir"
   fi
 
   ensure_swift_language_mode
+  ensure_swift_configuration_dependency
 
   if [[ "$initialize_git" == "true" ]]; then
     git init >/dev/null 2>&1
@@ -491,6 +515,18 @@ mkdir -p "$target_dir"
 
   if (( swift_major_version >= 6 )) && ! grep -Eq '^[[:space:]]*swiftLanguageModes:[[:space:]]*\[[^]]*\.v6[^]]*\][[:space:]]*,?[[:space:]]*$' Package.swift; then
     failed "Validation failed: Package.swift does not preserve the explicit Swift 6 language-mode declaration swiftLanguageModes: [.v6]."
+  fi
+
+  if ! grep -Fq 'https://github.com/apple/swift-configuration' Package.swift; then
+    failed "Validation failed: Package.swift does not preserve the default swift-configuration package dependency."
+  fi
+
+  if ! grep -Fq 'traits: [.defaults, "Reloading", "YAML"]' Package.swift; then
+    failed "Validation failed: Package.swift does not preserve the default swift-configuration traits [.defaults, \"Reloading\", \"YAML\"]."
+  fi
+
+  if ! grep -Fq '.product(name: "Configuration", package: "swift-configuration")' Package.swift; then
+    failed "Validation failed: Package.swift does not preserve the default Configuration product dependency for the primary target."
   fi
 
   if [[ "$initialize_git" == "true" ]] && [[ ! -d .git ]]; then

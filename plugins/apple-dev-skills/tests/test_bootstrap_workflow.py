@@ -176,8 +176,8 @@ class BootstrapWorkflowTests(unittest.TestCase):
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 5.10 (swift-5.10-RELEASE)
-Target: arm64-apple-macosx14.0
+Apple Swift version 6.1 (swift-6.1-RELEASE)
+Target: arm64-apple-macosx15.0
 EOF
   exit 0
 fi
@@ -211,7 +211,7 @@ exec "{real_swift}" "$@"
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 6.0 (swift-6.0-RELEASE)
+Apple Swift version 6.1 (swift-6.1-RELEASE)
 Target: arm64-apple-macosx15.0
 EOF
   exit 0
@@ -272,14 +272,14 @@ exec "{real_swift}" "$@"
         self.assertIn("does not support Swift Testing", payload["stderr"])
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain floor coverage")
-    def test_dry_run_accepts_swift_5_10_floor(self) -> None:
+    def test_dry_run_accepts_swift_6_1_floor(self) -> None:
         real_swift = shutil.which("swift")
         assert real_swift is not None
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 5.10 (swift-5.10-RELEASE)
-Target: arm64-apple-macosx14.0
+Apple Swift version 6.1 (swift-6.1-RELEASE)
+Target: arm64-apple-macosx15.0
 EOF
   exit 0
 fi
@@ -301,14 +301,14 @@ exec "{real_swift}" "$@"
         self.assertEqual(payload["status"], "success")
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain floor coverage")
-    def test_dry_run_blocks_swift_5_9_toolchain(self) -> None:
+    def test_dry_run_blocks_swift_6_0_toolchain(self) -> None:
         real_swift = shutil.which("swift")
         assert real_swift is not None
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 5.9.2 (swift-5.9.2-RELEASE)
-Target: arm64-apple-macosx14.0
+Apple Swift version 6.0 (swift-6.0-RELEASE)
+Target: arm64-apple-macosx15.0
 EOF
   exit 0
 fi
@@ -326,7 +326,7 @@ exec "{real_swift}" "$@"
             )
         self.assertEqual(code, 1)
         self.assertEqual(payload["status"], "blocked")
-        self.assertIn("Swift 5.10+", payload["stderr"])
+        self.assertIn("Swift 6.1+", payload["stderr"])
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain floor coverage")
     def test_dry_run_blocks_unparseable_swift_version(self) -> None:
@@ -405,6 +405,9 @@ exec "{real_swift}" "$@"
             self.assertIn(".executableTarget(", manifest_text)
             self.assertIn(".testTarget(", manifest_text)
             self.assertIn("swiftLanguageModes: [.v6]", manifest_text)
+            self.assertIn("https://github.com/apple/swift-configuration", manifest_text)
+            self.assertIn('traits: [.defaults, "Reloading", "YAML"]', manifest_text)
+            self.assertIn('.product(name: "Configuration", package: "swift-configuration")', manifest_text)
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for end-to-end bootstrap success")
     def test_wrapper_normalizes_shell_success(self) -> None:
@@ -421,6 +424,9 @@ exec "{real_swift}" "$@"
             self.assertTrue(payload["resolved_path"].endswith("DemoPkg"))
             manifest_text = (Path(payload["resolved_path"]) / "Package.swift").read_text(encoding="utf-8")
             self.assertIn("swiftLanguageModes: [.v6]", manifest_text)
+            self.assertIn("https://github.com/apple/swift-configuration", manifest_text)
+            self.assertIn('traits: [.defaults, "Reloading", "YAML"]', manifest_text)
+            self.assertIn('.product(name: "Configuration", package: "swift-configuration")', manifest_text)
             self.assertEqual(payload["testing_mode"], "swift-testing")
             self.assertEqual(payload["testing_strategy"], "init-flags")
             self.assertEqual(payload["swift_toolchain"], "6.3")
@@ -476,6 +482,8 @@ exec "{real_swift}" "$@"
             package_dir = Path(payload["resolved_path"])
             manifest_text = (package_dir / "Package.swift").read_text(encoding="utf-8")
             self.assertIn("swift-argument-parser", manifest_text)
+            self.assertIn("swift-configuration", manifest_text)
+            self.assertIn('traits: [.defaults, "Reloading", "YAML"]', manifest_text)
             self.assertIn('.macOS("26.0")', manifest_text)
             self.assertNotIn('.iOS("26.0")', manifest_text)
             self.assertTrue((package_dir / ".git").is_dir())

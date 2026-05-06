@@ -29,16 +29,23 @@ Choose `multiplatform` unless platform scope is explicitly constrained.
 - `minus-two`: Alias for `current-minus-two`
 
 The bootstrap script applies these by patching `Package.swift` with string platform versions.
-On current Swift 6-era manifests, the bootstrap workflow should also keep the package language mode explicit with `swiftLanguageModes: [.v6]` instead of relying on implicit defaults. Treat `swiftLanguageVersions` as the legacy alias when older manifest surfaces force that spelling. The generated `// swift-tools-version:` is a starting point, not a permanent ceiling, so lowering it to match the real package compatibility target is often appropriate as long as it stays at `6.0` or newer.
+On current Swift 6-era manifests, the bootstrap workflow should also keep the package language mode explicit with `swiftLanguageModes: [.v6]` instead of relying on implicit defaults. Treat `swiftLanguageVersions` as the legacy alias when older manifest surfaces force that spelling. The generated `// swift-tools-version:` is a starting point, not a permanent ceiling, so lowering it to match the real package compatibility target is often appropriate as long as it stays at `6.1` or newer while the default trait-enabled `swift-configuration` dependency remains in the manifest.
+
+The generated manifest should include `swift-configuration` by default:
+
+- dependency URL: `https://github.com/apple/swift-configuration`
+- version requirement: `from: "1.2.0"`
+- dependency traits: `.defaults`, `Reloading`, and `YAML`
+- primary target product: `.product(name: "Configuration", package: "swift-configuration")`
 
 ## Testing Modes
 
-- Supported and validated Swift toolchain floor: `5.10+`.
-- Toolchains older than `5.10`, including `5.9`, are outside the supported bootstrap floor and should be blocked with clear upgrade guidance.
+- Supported and validated Swift toolchain floor: `6.1+`.
+- Toolchains older than `6.1`, including `6.0`, are outside the supported bootstrap floor because the generated manifest uses PackageDescription package traits and should be blocked with clear upgrade guidance.
 - `swift-testing`: preferred default on current toolchains that expose `swift package init --enable-swift-testing`.
 - `xctest`: use when the package must stay on XCTest or when the active toolchain does not support Swift Testing selection the way the workflow requires.
 
-On supported Swift toolchains, the bootstrap workflow should prefer `swift package init` testing flags over patching stale templates after the fact. When the active toolchain is older than `5.10`, stop with a clear blocked message instead of attempting best-effort compatibility below the supported floor. When `swift-testing` is requested on a supported toolchain that still lacks the relevant selection flags, stop with a clear toolchain error instead of silently claiming Swift Testing support that the local CLI cannot provide.
+On supported Swift toolchains, the bootstrap workflow should prefer `swift package init` testing flags over patching stale templates after the fact. When the active toolchain is older than `6.1`, stop with a clear blocked message instead of attempting best-effort compatibility below the supported floor. When `swift-testing` is requested on a supported toolchain that still lacks the relevant selection flags, stop with a clear toolchain error instead of silently claiming Swift Testing support that the local CLI cannot provide.
 
 When `xctest` is requested on a supported toolchain that exposes no testing-selection flags at all, the workflow may rely on the toolchain's default XCTest template and then verify the generated package shape instead of pretending newer flags exist. If a supported toolchain exposes partial testing-selection flags but still cannot guarantee the requested mode, stop with a clear blocked message instead of guessing.
 
