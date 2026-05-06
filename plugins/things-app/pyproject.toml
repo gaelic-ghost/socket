@@ -1,6 +1,6 @@
 [project]
 name = "things-app-maintenance"
-version = "6.7.7"
+version = "6.7.8"
 description = "Maintainer-only Python tooling baseline for things-app skills and plugin packaging."
 requires-python = ">=3.11"
 dependencies = []
