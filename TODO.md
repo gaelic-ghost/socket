@@ -41,8 +41,8 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### swiftasb-skills
 
-- [ ] Sync `swiftasb-skills` with current SwiftASB source and docs.
-- [ ] Re-check explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills against the current SwiftASB client API and runtime behavior.
+- [x] Sync `swiftasb-skills` with current SwiftASB source and docs.
+- [x] Re-check explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills against the current SwiftASB client API and runtime behavior.
 - [ ] Add focused validation only if the plugin gains metadata, examples, or generated checks that need more than root marketplace validation.
 
 ### things-app
