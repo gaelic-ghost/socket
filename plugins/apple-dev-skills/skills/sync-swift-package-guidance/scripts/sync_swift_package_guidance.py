@@ -26,6 +26,9 @@ REQUIRED_STRINGS = [
     "Reloading",
     "YAML",
     "CommandLineArguments",
+    "PropertyList",
+    "Logging",
+    "SwiftLog.Logger",
 ]
 
 IGNORED_XCODE_MARKER_PARTS = {".build", ".swiftpm"}

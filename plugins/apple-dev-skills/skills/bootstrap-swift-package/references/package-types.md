@@ -38,6 +38,8 @@ The generated manifest should include `swift-configuration` by default:
 - dependency traits: `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`
 - primary target product: `.product(name: "Configuration", package: "swift-configuration")`
 
+The `PropertyList` trait is also available when a package should parse property-list configuration, and the `Logging` trait is available when configuration access should integrate with `SwiftLog.Logger`.
+
 ## Testing Modes
 
 - Supported and validated Swift toolchain floor: `6.1+`.
