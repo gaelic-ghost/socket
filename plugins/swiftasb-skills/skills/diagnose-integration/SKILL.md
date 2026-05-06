@@ -2,7 +2,7 @@
 name: diagnose-integration
 description: Diagnose SwiftASB integration failures across Codex CLI discovery, app-server startup, initialization, threads, turns, approvals, MCP status, diagnostics, history paging, and live-test isolation.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.3 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,7 +17,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(xcodebuild:*)
 
 Find the concrete failure point in a SwiftASB integration and explain it in terms the app maintainer can act on.
 
-The job is not just to say that "Codex failed." A useful diagnosis identifies which boundary failed: package dependency wiring, Codex CLI discovery, app-server process startup, initialization, thread creation, turn lifecycle, interactive request routing, MCP status, diagnostic stream handling, local history reads, or live-test isolation.
+The job is not just to say that "Codex failed." A useful diagnosis identifies which boundary failed: package dependency wiring, Codex CLI discovery, app-server process startup, initialization, app-wide library refresh, thread creation, turn lifecycle, interactive request routing, model capability reads, MCP status, hook diagnostics, diagnostic stream handling, local history reads, or live-test isolation.
 
 ## When To Use
 
@@ -36,10 +36,12 @@ Verify current SwiftASB docs and public API before naming exact symbols:
 - `Sources/SwiftASB/SwiftASB.docc/HandlingTurnProgressAndApprovals.md`
 - `Sources/SwiftASB/SwiftASB.docc/ReadingDiagnosticsAndHistory.md`
 - `Sources/SwiftASB/SwiftASB.docc/AppWideCapabilities.md`
+- `Sources/SwiftASB/SwiftASB.docc/ThreadHistoryAndObservables.md`
+- `Sources/SwiftASB/Public/CodexAppServer+Library.swift`
 - `Sources/SwiftASB/Public/CodexDiagnostics.swift`
 - `Sources/SwiftASB/Public/CodexErrors.swift`
 
-The current Codex app-server API includes lifecycle operations such as `thread/start`, `thread/resume`, `thread/fork`, `turn/start`, `turn/steer`, `turn/interrupt`, `model/list`, and `mcpServerStatus/list`, plus notifications for thread status, command output, MCP startup status, and skills/plugin state. Use the official [Codex app-server docs](https://developers.openai.com/codex/app-server#api-overview) when the diagnosis depends on upstream app-server behavior rather than SwiftASB's public wrapper.
+The current Codex app-server API includes lifecycle operations such as `thread/start`, `thread/resume`, `thread/fork`, `turn/start`, `turn/steer`, `turn/interrupt`, `model/list`, `modelProvider/capabilities/read`, `mcpServerStatus/list`, and `hooks/list`, plus notifications for thread status, command output, MCP startup status, hook activity, and skills/plugin state. Use the official [Codex app-server docs](https://developers.openai.com/codex/app-server#api-overview) when the diagnosis depends on upstream app-server behavior rather than SwiftASB's public wrapper.
 
 ## Diagnostic Workflow
 
@@ -54,11 +56,12 @@ The current Codex app-server API includes lifecycle operations such as `thread/s
    - Codex CLI discovery
    - app-server process startup
    - initialization
+   - app-wide library reconciliation or snapshots
    - thread lifecycle
    - turn lifecycle
    - approval or elicitation response handling
    - diagnostics stream
-   - app-wide model or MCP capability snapshots
+   - app-wide model, MCP, or hook snapshots
    - local history or remote turn paging
    - test isolation
 3. Verify the smallest source-of-truth fact that can confirm or reject the classification.
@@ -120,6 +123,18 @@ Check whether the app is:
 - expecting remote turn paging before history has materialized
 - treating thread status notifications as terminal turn completion
 
+### App-Wide Library
+
+Use `CodexAppServer.makeLibrary(configuration:)` when a UI or package needs stored-thread lists before choosing a thread.
+
+If a library surface does not update, check whether the app is:
+
+- expecting repository-root grouping when `Library.GroupedBy.cwd` matches exact app-server `cwd` metadata
+- copying library arrays into a second state store instead of observing the library companion directly
+- relying on app-wide snapshots before `refreshAppSnapshots()` has loaded model, MCP, and hook data
+- treating `selectedThreadID` as stored Codex metadata instead of library-local UI selection state
+- hiding reconciliation or snapshot errors from the user-facing diagnostics view
+
 ### Turn Lifecycle
 
 Use `CodexThread.startTextTurn(...)` to create a `CodexTurnHandle`. Use that handle for active-turn events, steering, interruption, interactive responses, and completion handoff.
@@ -156,14 +171,17 @@ If a request response fails, check that the response is sent through the matchin
 
 Diagnostics explain what the runtime is warning about. They are not approval prompts and do not need responses.
 
-### Models And MCP Status
+### Models, MCP Status, And Hooks
 
 Use app-wide snapshots for settings, inspectors, and runtime health:
 
 - `CodexAppServer.listModels(...)`
+- `CodexAppServer.readModelCapabilities()`
 - `CodexAppServer.listMcpServerStatuses(...)`
+- `CodexAppServer.listHooks(...)`
+- `CodexAppServer.Library.refreshAppSnapshots()`
 
-If an MCP issue appears in the UI, inspect whether the app is showing configured server status, auth state, tools/resources metadata, or startup notifications. Do not infer MCP health only from a failed turn unless the app-wide status surface has also been checked.
+If a model, MCP, or hook issue appears in the UI, inspect whether the app is showing model feature gates, configured server status, auth state, tools/resources metadata, hook diagnostics, or startup notifications. Do not infer runtime health only from a failed turn unless the app-wide status surface has also been checked.
 
 ### History And Paging
 

@@ -2,7 +2,7 @@
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.3 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,7 +17,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*)
 
 Pick the smallest correct way for a project to use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) before code changes begin.
 
-The practical decision is who owns the local Codex runtime, who owns each conversation thread, where active turn state is shown, and how much SwiftASB behavior should be exposed through the user's own app or package API.
+The practical decision is who owns the local Codex runtime, who owns the app-wide stored-thread library, who owns each conversation thread, where active turn state is shown, and how much SwiftASB behavior should be exposed through the user's own app or package API.
 
 ## When To Use
 
@@ -34,6 +34,7 @@ Verify current SwiftASB docs and public API before naming exact symbols:
 - `README.md`
 - `Sources/SwiftASB/SwiftASB.docc/GettingStartedWithSwiftASB.md`
 - `Sources/SwiftASB/SwiftASB.docc/SwiftUIObservableCompanions.md`
+- `Sources/SwiftASB/SwiftASB.docc/ThreadHistoryAndObservables.md`
 - `Sources/SwiftASB/Public/`
 
 For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple documentation first. SwiftASB chooses the Codex integration shape; Apple frameworks still own app lifecycle, view updates, window behavior, and project execution.
@@ -57,10 +58,12 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - automation or one-shot task execution
 3. Choose the SwiftASB owner:
    - app-wide model owns `CodexAppServer`
+   - app-wide or window-scoped launcher model owns `CodexAppServer.Library` when the UI lists stored threads before a thread is chosen
    - document or workspace model owns `CodexThread`
    - active task model owns `CodexTurnHandle`
 4. Choose the state surface:
    - SwiftUI observable companions
+   - app-wide library companion
    - AppKit controller-owned models
    - command-line event loop
    - package API values and async streams
@@ -74,10 +77,11 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
 
 ### SwiftUI App
 
-Use an app or workspace model to own `CodexAppServer`, then create a `CodexThread` per conversation or workspace. Store SwiftASB observable companions in a view model instead of replaying raw events into unrelated state.
+Use an app or workspace model to own `CodexAppServer`, then create a `CodexAppServer.Library` when the UI needs a launcher, sidebar, or project browser before choosing a thread. Create a `CodexThread` per conversation or workspace. Store SwiftASB observable companions in a view model instead of replaying raw events into unrelated state.
 
 Prefer:
 
+- `CodexAppServer.makeLibrary(configuration:)` for stored-thread sidebars, cwd grouping, library-local selection, Git branch metadata, and app-wide model/MCP/hook snapshots
 - `CodexThread.makeDashboard()` for thread-wide activity
 - `CodexTurnHandle.minimap` for active turn state
 - recent companions for inspector rails and completed history
@@ -92,6 +96,7 @@ Use an application, document, or window-controller-owned model to hold SwiftASB 
 Plan:
 
 - where `CodexAppServer` starts and stops
+- whether the app, scene, window, or document owns a `CodexAppServer.Library`
 - which window or document owns each `CodexThread`
 - how menu or toolbar actions start, steer, interrupt, or inspect turns
 - how streamed events reach AppKit views safely
@@ -106,7 +111,7 @@ Avoid building SwiftUI observable companions unless the tool also feeds a UI.
 
 ### Helper Service
 
-Use a long-lived owner for `CodexAppServer`, but keep thread ownership and cancellation explicit. Document how the service starts, stops, exposes status, and avoids overlapping same-thread turns.
+Use a long-lived owner for `CodexAppServer`, but keep library refreshes, thread ownership, and cancellation explicit. Document how the service starts, stops, exposes status, and avoids overlapping same-thread turns.
 
 Treat service interruption, process cleanup, and logs as part of the product behavior.
 
@@ -128,7 +133,7 @@ Return:
 
 1. `Chosen shape`: one of SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed.
 2. `SwiftASB owners`: who owns `CodexAppServer`, `CodexThread`, and `CodexTurnHandle`.
-3. `State surface`: observable companions, AppKit model, CLI stream, package API, or tests.
+3. `State surface`: library companion, observable companions, AppKit model, CLI stream, package API, or tests.
 4. `User-visible behavior`: progress, approvals, errors, diagnostics, history, and cancellation.
 5. `Validation path`: exact build/test family to run.
 6. `Next skill`: the next SwiftASB or Apple workflow skill.

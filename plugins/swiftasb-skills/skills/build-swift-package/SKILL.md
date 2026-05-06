@@ -2,7 +2,7 @@
 name: build-swift-package
 description: Build or refactor a Swift package API on top of SwiftASB without leaking raw app-server wire models, while keeping live Codex probes opt-in, isolated, timeout-bounded, and documented.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, package libraries, command-line tools, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.3 or newer, Swift 6, SwiftPM, package libraries, command-line tools, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,7 +17,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*)
 
 Help a Swift package use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) internally while exposing the package's own small, Swift-native API to its callers.
 
-The real job is to keep the package's public surface understandable. SwiftASB can own Codex runtime startup, typed threads, turns, events, diagnostics, and local history inside the implementation, but the package author should decide deliberately whether consumers see SwiftASB handles directly or a narrower domain-specific API.
+The real job is to keep the package's public surface understandable. SwiftASB can own Codex runtime startup, app-wide library state, typed threads, turns, events, diagnostics, and local history inside the implementation, but the package author should decide deliberately whether consumers see SwiftASB handles directly or a narrower domain-specific API.
 
 ## Required Documentation Gate
 
@@ -54,13 +54,16 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/SwiftASB.docc/GettingStartedWithSwiftASB.md`
 - `Sources/SwiftASB/SwiftASB.docc/HandlingTurnProgressAndApprovals.md`
 - `Sources/SwiftASB/SwiftASB.docc/ReadingDiagnosticsAndHistory.md`
+- `Sources/SwiftASB/SwiftASB.docc/ThreadHistoryAndObservables.md`
+- `Sources/SwiftASB/Public/CodexAppServer+Library.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexThread.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.0.1`, package integrations should prefer:
+As of SwiftASB `v1.0.3`, package integrations should prefer:
 
-- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, model reads, and MCP status reads
+- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, model capability reads, MCP status reads, and hook diagnostics
+- `CodexAppServer.makeLibrary(configuration:)` when the package intentionally exposes app-wide stored-thread lists, cwd grouping, library-local selection, Git branch metadata, or app-wide model/MCP/hook snapshots
 - `CodexThread` for conversation-scoped turn creation, thread actions, request responses, and local history
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, and completion handoff
 - package-owned public types for the user's domain when consumers do not need direct SwiftASB handles
@@ -74,7 +77,7 @@ As of SwiftASB `v1.0.1`, package integrations should prefer:
    - public dependency: expose selected SwiftASB handles only when consumers genuinely need them
 4. Add SwiftASB as a dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.0.0`
+   - minimum version: `1.0.3` when using app-wide library or app-snapshot guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 5. Add the dependency to the target that owns Codex behavior, not every target by default.
 6. Keep startup, turn, approval, cancellation, diagnostics, and history errors descriptive and package-specific.

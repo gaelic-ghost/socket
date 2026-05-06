@@ -2,7 +2,7 @@
 name: build-swiftui-app
 description: Build or refactor a SwiftUI app feature on top of SwiftASB using framework-owned SwiftUI state, SwiftASB thread and turn handles, observable companions, clear runtime diagnostics, and safe validation.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.3 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -15,9 +15,9 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(xcodebuild:*)
 
 ## Purpose
 
-Help a SwiftUI app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start Codex work, show live progress, handle approvals or user input, and expose recent thread history without replaying raw app-server protocol payloads into app state.
+Help a SwiftUI app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start Codex work, show live progress, handle approvals or user input, list stored threads, and expose recent thread history without replaying raw app-server protocol payloads into app state.
 
-The real job is to connect SwiftUI views to SwiftASB's Swift-native handles and observable companions. SwiftUI owns view lifetime and rendering. SwiftASB owns the local Codex app-server process, thread and turn handles, typed events, request responses, diagnostics, and recent-history companions.
+The real job is to connect SwiftUI views to SwiftASB's Swift-native handles and observable companions. SwiftUI owns view lifetime and rendering. SwiftASB owns the local Codex app-server process, app-wide library companion, thread and turn handles, typed events, request responses, diagnostics, and recent-history companions.
 
 ## Required Documentation Gate
 
@@ -51,14 +51,17 @@ Verify current SwiftASB docs and public API before editing:
 - [SwiftASB GitHub repository](https://github.com/gaelic-ghost/SwiftASB)
 - `Sources/SwiftASB/SwiftASB.docc/GettingStartedWithSwiftASB.md`
 - `Sources/SwiftASB/SwiftASB.docc/SwiftUIObservableCompanions.md`
+- `Sources/SwiftASB/SwiftASB.docc/ThreadHistoryAndObservables.md`
 - `Sources/SwiftASB/SwiftASB.docc/HandlingTurnProgressAndApprovals.md`
+- `Sources/SwiftASB/Public/CodexAppServer+Library.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexThread+Dashboard.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.0.1`, SwiftUI-facing integrations should prefer:
+As of SwiftASB `v1.0.3`, SwiftUI-facing integrations should prefer:
 
-- `CodexAppServer` for process startup, initialization, diagnostics, thread creation, and app-wide capability reads
+- `CodexAppServer` for process startup, initialization, diagnostics, thread creation, stored-thread operations, and app-wide capability reads
+- `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd grouping, library-local selection, Git branch metadata, and model/MCP/hook snapshots
 - `CodexThread` for conversation-scoped turn creation, request routing, thread actions, and local history
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, and completion handoff
 - `CodexThread.makeDashboard()` for thread-level current state
@@ -71,19 +74,21 @@ As of SwiftASB `v1.0.1`, SwiftUI-facing integrations should prefer:
 2. Read Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.0.0`
+   - minimum version: `1.0.3` when using app-wide library or app-snapshot guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 4. Choose the owner object:
    - app-wide model owns `CodexAppServer`
+   - app-wide, scene, or workspace model owns `CodexAppServer.Library` when the UI needs stored-thread lists before a thread is selected
    - workspace, document, or conversation model owns `CodexThread`
    - active-turn method or model owns `CodexTurnHandle`
 5. Start and initialize the app-server from an explicit async entrypoint.
 6. Create or resume a thread through `CodexAppServer`.
-7. Create observable companions from the thread and current turn.
-8. Render state from companions directly where possible.
-9. Route approval and elicitation responses through the owning `CodexTurnHandle` or `CodexThread`.
-10. Make startup, compatibility, turn, approval, cancellation, and shutdown errors human-readable.
-11. Validate with the repository's documented SwiftPM or Xcode path.
+7. Create `CodexAppServer.Library` from the app server when the UI has a launcher, sidebar, project browser, or app-wide diagnostics surface.
+8. Create observable companions from the thread and current turn.
+9. Render state from companions directly where possible.
+10. Route approval and elicitation responses through the owning `CodexTurnHandle` or `CodexThread`.
+11. Make startup, compatibility, turn, approval, cancellation, and shutdown errors human-readable.
+12. Validate with the repository's documented SwiftPM or Xcode path.
 
 ## State Ownership Pattern
 
@@ -98,6 +103,7 @@ import SwiftASB
 final class CodexWorkspaceModel {
     private let appServer = CodexAppServer()
 
+    var library: CodexAppServer.Library?
     var thread: CodexThread?
     var dashboard: CodexThread.Dashboard?
     var currentMinimap: CodexTurnHandle.Minimap?
@@ -121,10 +127,26 @@ final class CodexWorkspaceModel {
                 .init(currentDirectoryPath: workspacePath)
             )
             self.thread = thread
+            library = try await appServer.makeLibrary(
+                configuration: .init(
+                    sortedBy: .turnFinishedNewestFirst,
+                    groupedBy: .cwd,
+                    query: .unarchived(limit: 30),
+                    mcpServerStatusRequest: .init(detail: .toolsAndAuthOnly)
+                )
+            )
             dashboard = await thread.makeDashboard()
         } catch {
             errorMessage = "SwiftASB could not start the local Codex runtime: \(error)"
         }
+    }
+
+    func refreshAppSnapshots() async {
+        await library?.refreshAppSnapshots()
+    }
+
+    func selectThread(_ threadID: String?) {
+        library?.selectThread(threadID)
     }
 
     func run(_ prompt: String) async {
@@ -161,6 +183,7 @@ Use this as a shape, not as a file to paste blindly. Match the app's real lifeti
 
 - Show Codex runtime startup and compatibility failures before offering turn controls.
 - Disable same-thread turn controls while one turn is active, or create a separate thread when concurrent work is truly intended.
+- Use `library` for stored-thread sidebars, cwd grouping, library-local selection, app-wide model capabilities, MCP server status, and hook diagnostics.
 - Use `dashboard` for thread-wide current activity.
 - Use `currentMinimap` for the active turn's command, file-edit, dynamic-tool, collab-tool, MCP, and compaction activity.
 - Use recent companions for inspector rails and completed history instead of building a second cache from raw events.

@@ -2,7 +2,7 @@
 name: build-appkit-app
 description: Build or refactor an AppKit app feature on top of SwiftASB using explicit application, window, document, thread, and turn ownership with main-actor UI updates and clear runtime diagnostics.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.1 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.0.3 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -15,9 +15,9 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(xcodebuild:*)
 
 ## Purpose
 
-Help an AppKit app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start local Codex work, show thread and turn progress, answer approvals or elicitation requests, and expose recent history from app-owned controllers or models.
+Help an AppKit app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start local Codex work, show thread and turn progress, answer approvals or elicitation requests, list stored threads, and expose recent history from app-owned controllers or models.
 
-The real job is to keep AppKit's app, window, document, and view-controller lifetimes in charge of UI behavior while SwiftASB owns the local Codex subprocess, typed thread and turn handles, events, request responses, diagnostics, and local history.
+The real job is to keep AppKit's app, window, document, and view-controller lifetimes in charge of UI behavior while SwiftASB owns the local Codex subprocess, app-wide library companion, typed thread and turn handles, events, request responses, diagnostics, and local history.
 
 ## Required Documentation Gate
 
@@ -56,13 +56,16 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/SwiftASB.docc/GettingStartedWithSwiftASB.md`
 - `Sources/SwiftASB/SwiftASB.docc/HandlingTurnProgressAndApprovals.md`
 - `Sources/SwiftASB/SwiftASB.docc/ReadingDiagnosticsAndHistory.md`
+- `Sources/SwiftASB/SwiftASB.docc/ThreadHistoryAndObservables.md`
+- `Sources/SwiftASB/Public/CodexAppServer+Library.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexThread+Dashboard.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.0.1`, AppKit-facing integrations should prefer:
+As of SwiftASB `v1.0.3`, AppKit-facing integrations should prefer:
 
-- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, model reads, and MCP status reads
+- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, model capability reads, MCP status reads, and hook diagnostics
+- `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd grouping, library-local selection, Git branch metadata, and model/MCP/hook snapshots
 - `CodexThread` for conversation-scoped turn creation, thread events, thread actions, request responses, and local history
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, minimap state, and completion handoff
 - `CodexThread.makeDashboard()` and `CodexTurnHandle.minimap` as UI-friendly current-state mirrors
@@ -74,10 +77,11 @@ As of SwiftASB `v1.0.1`, AppKit-facing integrations should prefer:
 2. Read the Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.0.0`
+   - minimum version: `1.0.3` when using app-wide library or app-snapshot guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 4. Choose the SwiftASB owner:
    - application-level model owns `CodexAppServer` when one runtime serves many windows
+   - application, window, or document model owns `CodexAppServer.Library` when the UI needs stored-thread lists before a thread is selected
    - document or window model owns `CodexThread` when work belongs to one workspace or document
    - active command method or controller owns `CodexTurnHandle` while one turn is running
 5. Start and initialize the app-server from an explicit async lifecycle point.
@@ -99,6 +103,7 @@ import SwiftASB
 @MainActor
 final class CodexWorkspaceWindowController: NSWindowController {
     private let appServer: CodexAppServer
+    private var library: CodexAppServer.Library?
     private var thread: CodexThread?
     private var currentTurn: CodexTurnHandle?
 
@@ -130,6 +135,14 @@ final class CodexWorkspaceWindowController: NSWindowController {
 
                 thread = try await appServer.startThread(
                     .init(currentDirectoryPath: workspacePath)
+                )
+                library = try await appServer.makeLibrary(
+                    configuration: .init(
+                        sortedBy: .turnFinishedNewestFirst,
+                        groupedBy: .cwd,
+                        query: .unarchived(limit: 30),
+                        mcpServerStatusRequest: .init(detail: .toolsAndAuthOnly)
+                    )
                 )
                 statusField.stringValue = "Codex is ready."
             } catch {
@@ -184,6 +197,7 @@ Use this as a shape, not as a file to paste blindly. Match the app's actual nib/
 - Show Codex runtime startup and compatibility failures before enabling menu or toolbar actions.
 - Keep menu validation tied to real state: no thread, active turn, waiting approval, or idle.
 - Disable same-thread start actions while a turn is active, or create a separate thread when concurrent work is truly intended.
+- Use a `CodexAppServer.Library` for source lists, launchers, project browsers, stored-thread selection, app-wide model capabilities, MCP status, and hook diagnostics.
 - Show approvals as concrete AppKit UI: sheet, popover, panel, or inspector row that names the command, file change, permission, or MCP action.
 - Use `dashboard` and `minimap` state for activity views instead of replaying every raw event into controller-owned arrays.
 - Keep document and window closure explicit: interrupt active work or make it clear that background work continues elsewhere.
