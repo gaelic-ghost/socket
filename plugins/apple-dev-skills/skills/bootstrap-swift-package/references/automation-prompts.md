@@ -89,7 +89,7 @@ Constraints:
 Verification:
 - Confirm `Package.swift`, `AGENTS.md`, `Tests/`, and `.git` exist.
 - Confirm `Package.swift` keeps the explicit Swift 6 language-mode declaration `swiftLanguageModes: [.v6]`.
-- Confirm `Package.swift` keeps `// swift-tools-version:` at `6.1` or newer while the trait-enabled `swift-configuration` dependency remains in the manifest, even if it is lowered from the scaffold default.
+- Confirm `Package.swift` keeps `// swift-tools-version:` at `6.2` or newer while the trait-enabled `swift-configuration` dependency remains in the manifest, even if it is lowered from the scaffold default.
 - Confirm `Package.swift` includes `swift-configuration` from `1.2.0`, enables `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`, and adds the `Configuration` product to the primary target.
 - Confirm the generated guidance notes that `PropertyList` is available for property-list configuration parsing and `Logging` is available for `SwiftLog.Logger` integration.
 - If validation is enabled, verify `swift build` and `swift test` success.

@@ -176,8 +176,8 @@ class BootstrapWorkflowTests(unittest.TestCase):
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 6.1 (swift-6.1-RELEASE)
-Target: arm64-apple-macosx15.0
+Apple Swift version 6.2 (swift-6.2-RELEASE)
+Target: arm64-apple-macosx26.0
 EOF
   exit 0
 fi
@@ -211,8 +211,8 @@ exec "{real_swift}" "$@"
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 6.1 (swift-6.1-RELEASE)
-Target: arm64-apple-macosx15.0
+Apple Swift version 6.2 (swift-6.2-RELEASE)
+Target: arm64-apple-macosx26.0
 EOF
   exit 0
 fi
@@ -271,15 +271,15 @@ exec "{real_swift}" "$@"
         self.assertIn("toolchain selection issue", payload["next_step"])
         self.assertIn("does not support Swift Testing", payload["stderr"])
 
-    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain floor coverage")
-    def test_dry_run_accepts_swift_6_1_floor(self) -> None:
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain-window coverage")
+    def test_dry_run_accepts_swift_6_2_window(self) -> None:
         real_swift = shutil.which("swift")
         assert real_swift is not None
         script_body = f"""#!/bin/sh
 if [ "$1" = "--version" ]; then
   cat <<'EOF'
-Apple Swift version 6.1 (swift-6.1-RELEASE)
-Target: arm64-apple-macosx15.0
+Apple Swift version 6.2 (swift-6.2-RELEASE)
+Target: arm64-apple-macosx26.0
 EOF
   exit 0
 fi
@@ -300,7 +300,35 @@ exec "{real_swift}" "$@"
         self.assertEqual(code, 0)
         self.assertEqual(payload["status"], "success")
 
-    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain floor coverage")
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain-window coverage")
+    def test_dry_run_blocks_swift_6_1_toolchain(self) -> None:
+        real_swift = shutil.which("swift")
+        assert real_swift is not None
+        script_body = f"""#!/bin/sh
+if [ "$1" = "--version" ]; then
+  cat <<'EOF'
+Apple Swift version 6.1 (swift-6.1-RELEASE)
+Target: arm64-apple-macosx15.0
+EOF
+  exit 0
+fi
+if [ "$1" = "package" ] && [ "$2" = "init" ] && [ "$3" = "--help" ]; then
+  exec "{real_swift}" "$@"
+fi
+exec "{real_swift}" "$@"
+"""
+        with fake_swift_in_path(script_body) as env:
+            code, payload = self.run_script(
+                "--name",
+                "DemoPkg",
+                "--dry-run",
+                env=env,
+            )
+        self.assertEqual(code, 1)
+        self.assertEqual(payload["status"], "blocked")
+        self.assertIn("Swift 6.3.x and 6.2.x", payload["stderr"])
+
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain-window coverage")
     def test_dry_run_blocks_swift_6_0_toolchain(self) -> None:
         real_swift = shutil.which("swift")
         assert real_swift is not None
@@ -326,9 +354,9 @@ exec "{real_swift}" "$@"
             )
         self.assertEqual(code, 1)
         self.assertEqual(payload["status"], "blocked")
-        self.assertIn("Swift 6.1+", payload["stderr"])
+        self.assertIn("Swift 6.3.x and 6.2.x", payload["stderr"])
 
-    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain floor coverage")
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain-window coverage")
     def test_dry_run_blocks_unparseable_swift_version(self) -> None:
         real_swift = shutil.which("swift")
         assert real_swift is not None

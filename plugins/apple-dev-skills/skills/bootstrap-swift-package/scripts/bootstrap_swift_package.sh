@@ -29,7 +29,7 @@ failed() {
 load_swift_version() {
   swift_version_output="$(swift --version 2>/dev/null || true)"
   if [[ -z "$swift_version_output" ]]; then
-    blocked "Unable to determine the local Swift toolchain version. The bootstrap skill supports Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
+    blocked "Unable to determine the local Swift toolchain version. The bootstrap skill supports Swift 6.3.x and 6.2.x because the default swift-configuration dependency uses PackageDescription package traits."
   fi
 
   if [[ "$swift_version_output" =~ Swift[[:space:]]+version[[:space:]]+([0-9]+)\.([0-9]+) ]]; then
@@ -38,18 +38,18 @@ load_swift_version() {
     return 0
   fi
 
-  blocked "Unable to parse the local Swift toolchain version from 'swift --version'. The bootstrap skill supports Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
+  blocked "Unable to parse the local Swift toolchain version from 'swift --version'. The bootstrap skill supports Swift 6.3.x and 6.2.x because the default swift-configuration dependency uses PackageDescription package traits."
 }
 
 ensure_supported_swift_toolchain() {
   load_swift_version
 
   if (( swift_major_version < 6 )); then
-    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated floor is Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
+    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated window is Swift 6.3.x and 6.2.x because the default swift-configuration dependency uses PackageDescription package traits."
   fi
 
-  if (( swift_major_version == 6 && swift_minor_version < 1 )); then
-    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated floor is Swift 6.1+ because the default swift-configuration dependency uses PackageDescription package traits."
+  if (( swift_major_version == 6 && swift_minor_version < 2 )); then
+    blocked "Swift $swift_major_version.$swift_minor_version is too old for this bootstrap workflow. The supported and validated window is Swift 6.3.x and 6.2.x because the default swift-configuration dependency uses PackageDescription package traits."
   fi
 }
 
