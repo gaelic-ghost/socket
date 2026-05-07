@@ -202,6 +202,7 @@ Planned
 - [ ] Decide which implementation surface should own the offload path.
 - [ ] Define the input and output contract for the offload path so verification work can be delegated without losing decision-useful detail.
 - [ ] Cover the highest-value offload cases first, including `swift build`, `swift test`, `xcodebuild`, preview refresh, diagnostics refresh, and noisy failure summarization.
+- [ ] Cover performance-sensitive Apple silicon package and Xcode workflows, including `OSSignposter`, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Audio, MLX, local AI, and trace artifact reporting.
 - [ ] Document when the main agent should stay local versus when it should hand verification work to the offload path.
 - [ ] Add validation or smoke-test coverage once the implementation surface is chosen.
 
