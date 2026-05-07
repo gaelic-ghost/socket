@@ -2,7 +2,7 @@
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.2 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,7 +17,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*)
 
 Pick the smallest correct way for a project to use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) before code changes begin.
 
-The practical decision is who owns the local Codex runtime, who owns the app-wide stored-thread library, who owns each conversation thread, where active turn state is shown, and how much SwiftASB behavior should be exposed through the user's own app or package API.
+The practical decision is who owns the local Codex runtime, who owns the app-wide stored-thread library, who owns each conversation thread, where active turn state is shown, where app-server-owned filesystem/config/extension/MCP-resource facts appear, and how much SwiftASB behavior should be exposed through the user's own app or package API.
 
 ## When To Use
 
@@ -60,7 +60,8 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - sandbox-safe file browser or fuzzy file picker
    - command/file activity monitor
    - approval and elicitation UI
-   - model, MCP, hook, config, extension, or permission diagnostics
+   - model, MCP, hook, config, extension, remote-control, or permission diagnostics
+   - MCP resource viewer or inspector
    - package API for other apps
    - automation or one-shot task execution
 3. Choose the SwiftASB owner:
@@ -68,7 +69,7 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - app-wide or window-scoped launcher model owns `CodexAppServer.Library` when the UI lists stored threads before a thread is chosen
    - document or workspace model owns `CodexThread`
    - active task model owns `CodexTurnHandle`
-   - app-server-owned filesystem/config/extension/workspace reads stay on `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexWorkspace`
+   - app-server-owned filesystem/config/extension/MCP-resource/workspace reads stay on `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, `CodexAppServer.readMcpResource(_:)`, and `CodexWorkspace`
 4. Choose the state surface:
    - SwiftUI observable companions
    - app-wide library companion
@@ -89,9 +90,10 @@ Use an app or workspace model to own `CodexAppServer`, then create a `CodexAppSe
 
 Prefer:
 
-- `CodexAppServer.makeLibrary(configuration:)` for stored-thread sidebars, cwd grouping, library-local selection, Git branch metadata, and app-wide model/MCP/hook snapshots
+- `CodexAppServer.makeLibrary(configuration:)` for stored-thread sidebars, cwd grouping, library-local selection, Git branch metadata, and app-wide model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
 - `CodexAppServer.ThreadListQD` for repeatable thread-list intent across direct reads and library loading
-- `CodexAppServer.fs` and `CodexFS.FileDiscoveryQD` for sandbox-safe metadata, directory, file-byte, watch, and fuzzy file-discovery UI
+- `CodexAppServer.fs` and `CodexFS.FileDiscoveryQD` for sandbox-safe metadata, directory, file-byte, watch, fuzzy file-discovery UI, highlight ranges, and ranking explanations
+- `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents
 - `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexWorkspace` for diagnostics and runtime facts that should come from the app-server
 - `CodexThread.makeDashboard()` for thread-wide activity
 - `CodexTurnHandle.minimap` for active turn state
@@ -109,7 +111,7 @@ Plan:
 - where `CodexAppServer` starts and stops
 - whether the app, scene, window, or document owns a `CodexAppServer.Library`
 - which window or document owns each `CodexThread`
-- where filesystem/config/extension/workspace facts are shown without direct app-process filesystem assumptions
+- where filesystem/config/extension/MCP-resource/workspace facts are shown without direct app-process filesystem assumptions
 - how menu or toolbar actions start, steer, interrupt, or inspect turns
 - how streamed events reach AppKit views safely
 
@@ -127,7 +129,7 @@ Use a long-lived owner for `CodexAppServer`, but keep library refreshes, thread 
 
 Treat service interruption, process cleanup, and logs as part of the product behavior.
 
-Use `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexWorkspace` when the service needs Codex-owned workspace facts instead of reading local config, plugin, skill, or filesystem state directly.
+Use `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, `CodexAppServer.readMcpResource(_:)`, and `CodexWorkspace` when the service needs Codex-owned workspace facts instead of reading local config, plugin, skill, MCP resource, or filesystem state directly.
 
 ### Package Library
 
@@ -148,7 +150,7 @@ Return:
 1. `Chosen shape`: one of SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed.
 2. `SwiftASB owners`: who owns `CodexAppServer`, `CodexThread`, and `CodexTurnHandle`.
 3. `State surface`: library companion, observable companions, AppKit model, CLI stream, package API, or tests.
-4. `User-visible behavior`: progress, approvals, errors, diagnostics, history, filesystem/config/extension/workspace facts, and cancellation.
+4. `User-visible behavior`: progress, approvals, errors, diagnostics, history, filesystem/config/extension/MCP-resource/workspace facts, and cancellation.
 5. `Validation path`: exact build/test family to run.
 6. `Next skill`: the next SwiftASB or Apple workflow skill.
 

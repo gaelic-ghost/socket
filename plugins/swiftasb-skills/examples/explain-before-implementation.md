@@ -10,7 +10,7 @@ What SwiftASB would do here: SwiftASB would let the SwiftUI app start the local 
 
 What the app would own: The app still owns its windows, navigation, inspector layout, persistence choices, user preferences, and approval UI. SwiftUI and Observation should own view updates.
 
-What SwiftASB would own: `CodexAppServer` owns the subprocess and app-wide capability reads, `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` own app-server-routed facts, `CodexThread` owns one conversation, `CodexTurnHandle` owns one active turn, and companions such as `Dashboard`, `Minimap`, `RecentTurns`, `RecentFiles`, and `RecentCommands` provide UI-friendly state.
+What SwiftASB would own: `CodexAppServer` owns the subprocess, app-wide capability reads, MCP resource reads, and diagnostics, `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` own app-server-routed facts, `CodexThread` owns one conversation and stored-thread actions, `CodexTurnHandle` owns one active turn, and companions such as `Dashboard`, `Minimap`, `RecentTurns`, `RecentFiles`, and `RecentCommands` provide UI-friendly state.
 
 Tradeoffs: The app depends on a local Codex CLI runtime, same-thread overlapping turns are rejected, and compatibility follows SwiftASB's reviewed Codex support window.
 
@@ -20,7 +20,7 @@ Next integration step: Use `swiftasb:choose-integration-shape`, then `swiftasb:b
 
 Recommendation: SwiftASB is a good fit if each document or workspace window needs its own Codex thread.
 
-What SwiftASB would do here: SwiftASB would provide the typed runtime, thread, turn, filesystem/config/extension, workspace-permission, diagnostic, and history surfaces. The AppKit app can connect those surfaces to window-controller actions, menu validation, toolbar controls, sheets, panels, and inspector views.
+What SwiftASB would do here: SwiftASB would provide the typed runtime, thread, turn, filesystem/config/extension/MCP-resource, workspace-permission, diagnostic, and history surfaces. The AppKit app can connect those surfaces to window-controller actions, menu validation, toolbar controls, sheets, panels, and inspector views.
 
 What the app would own: AppKit still owns application lifecycle, document/window ownership, main-actor UI updates, menu state, toolbar actions, and user-facing presentation.
 

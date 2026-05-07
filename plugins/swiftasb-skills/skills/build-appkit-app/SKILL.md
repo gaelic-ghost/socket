@@ -2,7 +2,7 @@
 name: build-appkit-app
 description: Build or refactor an AppKit app feature on top of SwiftASB using explicit application, window, document, thread, and turn ownership with main-actor UI updates and clear runtime diagnostics.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.0 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.2 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -15,9 +15,9 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(xcodebuild:*)
 
 ## Purpose
 
-Help an AppKit app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start local Codex work, show thread and turn progress, answer approvals or elicitation requests, list stored threads, inspect app-server-owned filesystem/config/extension/workspace facts, and expose recent history from app-owned controllers or models.
+Help an AppKit app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start local Codex work, show thread and turn progress, answer approvals or elicitation requests, list stored threads, archive or unarchive stored threads, inspect app-server-owned filesystem/config/extension/MCP-resource/workspace facts, and expose recent history from app-owned controllers or models.
 
-The real job is to keep AppKit's app, window, document, and view-controller lifetimes in charge of UI behavior while SwiftASB owns the local Codex subprocess, app-wide library companion, app-server-routed filesystem/config/extension reads, workspace permission facts, typed thread and turn handles, events, request responses, diagnostics, and local history.
+The real job is to keep AppKit's app, window, document, and view-controller lifetimes in charge of UI behavior while SwiftASB owns the local Codex subprocess, app-wide library companion, app-server-routed filesystem/config/extension/MCP-resource reads, workspace permission facts, typed thread and turn handles, events, request responses, diagnostics, and local history.
 
 ## Required Documentation Gate
 
@@ -64,20 +64,24 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/SwiftASB.docc/ThreadManagement.md`
 - `Sources/SwiftASB/Public/CodexAppServer+Library.swift`
 - `Sources/SwiftASB/Public/CodexAppServer+CodexExtensions.swift`
+- `Sources/SwiftASB/Public/CodexAppServer+MCP.swift`
 - `Sources/SwiftASB/Public/CodexFS.swift`
 - `Sources/SwiftASB/Public/CodexConfig.swift`
 - `Sources/SwiftASB/Public/CodexWorkspace.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
+- `Sources/SwiftASB/Public/CodexDiagnostics.swift`
+- `Sources/SwiftASB/Public/CodexThread.swift`
 - `Sources/SwiftASB/Public/CodexThread+Dashboard.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.1.0`, AppKit-facing integrations should prefer:
+As of SwiftASB `v1.1.2`, AppKit-facing integrations should prefer:
 
-- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, model capability reads, MCP status reads, and hook diagnostics
-- `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd or repository grouping, library-local selection, Git branch metadata, and model/MCP/hook snapshots
-- `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned file metadata, directory/file reads, file discovery, effective config, app, skill, plugin, and collaboration-mode inventory
+- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, MCP resource reads, model capability reads, MCP status reads, and hook diagnostics
+- `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd or repository grouping, library-local selection, Git branch metadata, and model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
+- `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned file metadata, directory/file reads, file discovery with match metadata, effective config, app, skill, plugin, and collaboration-mode inventory
+- `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents
 - `CodexWorkspace` for session cwd, Git metadata, active permission profile, and runtime filesystem/network permission facts
-- `CodexThread` for conversation-scoped turn creation, thread events, thread actions, thread goals, request responses, and local history
+- `CodexThread` for conversation-scoped turn creation, thread events, thread actions, archive/unarchive, thread goals, request responses, and local history
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, minimap state, and completion handoff
 - `CodexThread.makeDashboard()` and `CodexTurnHandle.minimap` as UI-friendly current-state mirrors
 - local history helpers and recent companions for inspector panels, transcript sidebars, and completed work views
@@ -89,7 +93,7 @@ As of SwiftASB `v1.1.0`, AppKit-facing integrations should prefer:
 2. Read the Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.1.0` when using app-wide library, filesystem, config, extension, workspace, query-descriptor, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.1.2` when using app-wide library, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 4. Choose the SwiftASB owner:
    - application-level model owns `CodexAppServer` when one runtime serves many windows
@@ -99,7 +103,7 @@ As of SwiftASB `v1.1.0`, AppKit-facing integrations should prefer:
 5. Start and initialize the app-server from an explicit async lifecycle point.
 6. Create, resume, or fork a thread for the window, document, or workspace.
 7. Route menu and toolbar actions into local controller methods that start, steer, interrupt, or inspect turns.
-8. Use `appServer.fs`, `appServer.config`, `appServer.extensions`, and `CodexWorkspace` when inspectors, preferences, file pickers, or diagnostics need Codex-owned filesystem, config, plugin/skill/app, collaboration-mode, or permission facts.
+8. Use `appServer.fs`, `appServer.config`, `appServer.extensions`, `appServer.readMcpResource(_:)`, and `CodexWorkspace` when inspectors, preferences, file pickers, MCP panes, or diagnostics need Codex-owned filesystem, config, plugin/skill/app, collaboration-mode, resource, or permission facts.
 9. Update AppKit views on the main actor from SwiftASB events, dashboard, minimap, diagnostics, and local history.
 10. Route approval and elicitation responses through the matching `CodexTurnHandle` or `CodexThread`.
 11. Make startup, compatibility, turn, approval, cancellation, and shutdown errors human-readable.
@@ -211,13 +215,15 @@ Use this as a shape, not as a file to paste blindly. Match the app's actual nib/
 - Keep menu validation tied to real state: no thread, active turn, waiting approval, or idle.
 - Disable same-thread start actions while a turn is active, or create a separate thread when concurrent work is truly intended.
 - Use a `CodexAppServer.Library` for source lists, launchers, project browsers, stored-thread selection, app-wide model capabilities, MCP status, and hook diagnostics.
-- Use `CodexAppServer.fs` and `CodexFS.FileDiscoveryQD` for sandbox-safe file pickers, metadata inspectors, directory browsers, file-byte previews, and watches.
+- Use `CodexAppServer.fs` and `CodexFS.FileDiscoveryQD` for sandbox-safe file pickers, metadata inspectors, directory browsers, file-byte previews, watches, highlighted matches, and ranking explanations.
+- Use `CodexAppServer.readMcpResource(_:)` when the app needs to show text or blob resource contents advertised by a configured MCP server.
 - Use `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexWorkspace` for preferences or diagnostics panes that show effective config, requirements, available apps/skills/plugins, collaboration modes, active profile, and filesystem/network permissions.
+- Use `CodexThread.archive()` and `CodexThread.unarchive()` for archive UI actions when the app already owns the selected thread handle.
 - Use `CodexThread.readGoal()`, `setGoal(_:)`, `clearGoal()`, `setName(_:)`, `updateMetadata(gitInfo:)`, `compactContext()`, and `rollbackLastTurns(_:)` from explicit menu, toolbar, inspector, or document actions that already own the selected thread.
 - Show approvals as concrete AppKit UI: sheet, popover, panel, or inspector row that names the command, file change, permission, or MCP action.
 - Use `dashboard` and `minimap` state for activity views instead of replaying every raw event into controller-owned arrays.
 - Keep document and window closure explicit: interrupt active work or make it clear that background work continues elsewhere.
-- Surface diagnostics and MCP status in places a Mac maintainer can actually inspect, such as a status item, inspector, log pane, or preferences diagnostics view.
+- Surface diagnostics, including config warnings, deprecation notices, MCP status changes, and remote-control status changes, in places a Mac maintainer can actually inspect, such as a status item, inspector, log pane, or preferences diagnostics view.
 
 ## Validation
 
