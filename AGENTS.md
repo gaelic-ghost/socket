@@ -64,6 +64,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Prefer a root or package-local dev group that explicitly includes the Python maintainer tools the repo expects to run, including `pytest`, `ruff`, and `mypy` when those checks are part of the workflow.
 - Prefer `uv sync --dev`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` for repos that actually ship those Python-backed validation surfaces.
 - When OpenAI product behavior matters, prefer official docs first. When describing Codex plugin boundaries, say plainly that repo-visible plugins come from the documented marketplace model and that OpenAI does not currently document a richer repo-private scoping model.
+- When SwiftPM behavior or manifest syntax matters, use the Dash.app docset workflow first when available. The relevant Swift Package Manager docs are exposed through the `swiftlang/swift-package-manager` and `SwiftPackageIndex/swift-package-manager` docsets; fall back to the canonical GitHub repositories only when local docsets are unavailable or insufficient.
 - Use these terms consistently:
   - `skill`: reusable workflow-authoring unit
   - `plugin`: installable distribution bundle
