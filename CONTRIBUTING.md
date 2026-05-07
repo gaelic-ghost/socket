@@ -184,6 +184,8 @@ scripts/release.sh custom 1.2.3
 
 `patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
 
+Sometimes `socket` needs a patch-only release even when the visible root catalog shape did not otherwise change. This is the current maintainer workaround for refreshing Git-backed plugin entries that Codex resolves through the Socket marketplace, including `speak-swiftly` from `gaelic-ghost/SpeakSwiftlyServer`. Treat those bumps as real releases: run the shared version bump, validate the marketplace metadata, follow the release-ready gate, complete any required subtree accounting, tag the Socket release, create the GitHub release, and run `codex plugin marketplace upgrade socket` last.
+
 ## Pull Request Expectations
 
 A good root PR should make the changed superproject surface obvious. Include:

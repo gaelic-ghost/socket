@@ -113,6 +113,8 @@ scripts/release.sh custom 1.2.3
 
 `patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
 
+Expect occasional patch-only Socket releases whose practical purpose is to make Codex refresh Git-backed plugin entries exposed through the Socket marketplace, especially `speak-swiftly` from the standalone `gaelic-ghost/SpeakSwiftlyServer` source. These are still real Socket releases, not cache-only chores: bump the shared version surfaces, validate, run the release-ready gate, satisfy any subtree accounting, tag and publish the Socket release, and only then run `codex plugin marketplace upgrade socket`.
+
 For full release sequencing, use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md). Use `standard` when only the `socket` superproject changes. Use `subtrees` when the release also needs subtree pull/push accounting.
 
 ## Review and Delivery

@@ -1,6 +1,6 @@
 {
   "name": "python-skills",
-  "version": "6.7.13",
+  "version": "6.7.14",
   "description": "Bundled Python-focused Codex skills for uv bootstrapping, FastAPI and FastMCP scaffolding, FastAPI/FastMCP integration, and pytest workflows.",
   "author": {
     "name": "Gale",
