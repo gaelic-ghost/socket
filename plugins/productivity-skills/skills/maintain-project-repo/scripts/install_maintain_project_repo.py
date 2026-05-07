@@ -77,7 +77,7 @@ def assets_root() -> Path:
 
 def target_pairs(profile: str, skip_github_workflow: bool) -> list[tuple[Path, Path]]:
     root = assets_root()
-    pairs = []
+    pairs: list[tuple[Path, Path]] = []
 
     def add_pair(source_relative: str, target_relative: str) -> None:
         target = Path(target_relative)

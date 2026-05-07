@@ -11,6 +11,7 @@ dev = [
   "pytest>=9.0.3",
   "PyYAML>=6.0.0",
   "ruff>=0.14.0",
+  "types-PyYAML>=6.0.12.20250915",
 ]
 
 [tool.pytest.ini_options]
@@ -18,5 +19,17 @@ testpaths = [
   "tests",
   "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/tests",
   "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/tests",
+  "plugins/productivity-skills/skills/maintain-project-repo/tests",
+]
+
+[tool.mypy]
+files = [
+  "scripts",
+  "tests",
+  "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/scripts",
+  "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/tests",
+  "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/scripts",
+  "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/tests",
+  "plugins/productivity-skills/skills/maintain-project-repo/scripts",
   "plugins/productivity-skills/skills/maintain-project-repo/tests",
 ]

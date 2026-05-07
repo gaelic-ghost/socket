@@ -71,6 +71,8 @@ uv sync --dev
 
 If a root or child-repo workflow depends on Python quality tooling, declare that tooling in the relevant repo's `pyproject.toml` dev dependencies rather than assuming a machine-global install. Treat `pytest`, `ruff`, and `mypy` as the normal Python maintainer baseline when the repo's shipped validation surface uses them.
 
+At the `socket` root, run `uv run mypy` without a path argument. The root mypy config intentionally checks root maintainer scripts, root tests, and package-shaped child maintainer code instead of crawling every standalone skill `scripts/` directory as one Python module namespace.
+
 The root validation path does not require application secrets. If your change involves subtree sync or GitHub operations, make sure your git remotes and GitHub authentication are already configured on your machine before you start those steps.
 
 ### Runtime Behavior
@@ -147,6 +149,7 @@ Root baseline validation:
 
 ```bash
 uv sync --dev
+uv run mypy
 uv run scripts/validate_socket_metadata.py
 ```
 
@@ -162,7 +165,7 @@ scripts/release.sh custom 1.2.3
 
 Use the release modes in [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) when preparing the actual release. Use `standard` for root-only releases and `subtrees` when a release also needs subtree pull/push accounting.
 
-If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` commands where that repo's contributors will actually look.
+If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy` commands where that repo's contributors will actually look.
 
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
 

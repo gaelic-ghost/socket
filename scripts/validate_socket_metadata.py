@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import NoReturn
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -18,7 +19,7 @@ INSTALLATION_POLICIES = {"AVAILABLE", "INSTALLED_BY_DEFAULT", "NOT_AVAILABLE"}
 AUTHENTICATION_POLICIES = {"ON_INSTALL", "ON_FIRST_USE"}
 
 
-def fail(message: str) -> None:
+def fail(message: str) -> NoReturn:
     print(message, file=sys.stderr)
     raise SystemExit(1)
 
