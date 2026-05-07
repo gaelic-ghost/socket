@@ -14,6 +14,7 @@
 - Treat `scripts/repo-maintenance/config/profile.env` as the installed `maintain-project-repo` profile marker, and keep it on the `swift-package` profile for plain package repos.
 - Read relevant SwiftPM, Swift, and Apple documentation before proposing package-structure, dependency, manifest, concurrency, or architecture changes.
 - Prefer Dash or local Swift docs first, then official Swift or Apple docs when local docs are insufficient.
+- When SwiftPM behavior, manifest syntax, package plugins, resources, products, targets, or dependency rules matter, prefer the Dash.app docset workflow with the `swiftlang/swift-package-manager` docset first; fall back to the canonical `swiftlang/swift-package-manager` GitHub repository only when the local docset is unavailable or insufficient.
 - Prefer the simplest correct Swift that is easiest to read and reason about.
 - Prefer synthesized and framework-provided behavior over extra wrappers and boilerplate.
 - For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; prefer optional parameters with explicit default values over additional methods or overloads when the difference is optional behavior on the same operation.

@@ -40,6 +40,8 @@ Use this skill as the primary execution workflow for non-testing work in existin
    - mutation
 2. Apply the Apple and Swift docs gate before any design, architecture, implementation, or refactor guidance:
    - use `explore-apple-swift-docs` to gather the relevant SwiftPM, Swift, or Apple documentation first
+   - when SwiftPM behavior, manifest syntax, package plugins, resources, products, targets, or dependency rules matter, prefer the Dash.app docset workflow with the `swiftlang/swift-package-manager` docset first
+   - fall back to the canonical `swiftlang/swift-package-manager` GitHub repository only when the local Dash docset is unavailable or insufficient
    - state the documented API behavior, package rule, or workflow requirement being relied on before proposing changes
    - do not rely on memory as the primary source when docs exist
    - if the docs and the current code conflict, stop and report that conflict
