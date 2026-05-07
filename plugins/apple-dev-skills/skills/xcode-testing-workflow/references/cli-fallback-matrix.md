@@ -13,6 +13,14 @@
 - Tool lookup:
   - `xcrun --find swift`
   - `xcrun --find xcodebuild`
+  - `xcrun --find xctrace`
+- Instruments:
+  - `xcrun xctrace version`
+  - `xcrun xctrace list templates`
+  - `xcrun xctrace record --template 'Time Profiler' --time-limit 30s --output traces/<name>.trace --launch -- <command> <args>`
+  - `xcrun xctrace record --template 'Metal System Trace' --time-limit 30s --output traces/<name>.trace --launch -- <command> <args>`
+  - `xcrun xctrace record --template 'Allocations' --output traces/<name>.trace --launch -- <command> <args>`
+  - `xcrun xctrace record --template 'Time Profiler' --time-limit 30s --output traces/<name>.trace --attach <pid-or-process-name>`
 - Simulator-related tools:
   - `xcrun simctl list`
 

@@ -44,3 +44,9 @@
 - Use `xcodebuild` when schemes, destinations, configurations, test plans, or Apple-managed SDK and toolchain behavior matter.
 - Validate Release builds intentionally when optimization or packaging can change behavior.
 - Treat tagged releases as a cue to verify both the everyday Debug path and the Release artifact path before publishing.
+
+## Performance-sensitive package workloads
+
+- Use `performance-sensitive-testing-and-profiling.md` when a package test or executable workload needs repeatable timing, allocation, VM, CPU, GPU, Audio, Metal, MLX, local AI, streaming, or Apple silicon performance evidence.
+- Keep ordinary correctness tests in Swift Testing or XCTest, but do not treat passing package tests as proof that performance-sensitive workloads have been profiled.
+- Prefer package-owned signposts and Release executable harnesses before handing off to Xcode-managed Instruments or `xctrace` interpretation.

@@ -40,3 +40,9 @@
 - Use Debug builds for the normal edit-build-run loop.
 - Validate Release builds explicitly when optimization, launch behavior, watchdog timing, or packaging can change runtime behavior.
 - Treat tagged releases as a signal to build and validate both Debug and Release paths, and when shipping artifacts verify the Release behavior without relying on a debugger attachment.
+
+## Instruments and performance profiling
+
+- Use `instruments-performance-profiling.md` when Xcode-managed tests or diagnostics need Time Profiler, Metal System Trace, Allocations, VM Tracker, Points of Interest, `OSSignposter`, `xctrace`, or `.trace` artifact interpretation.
+- Keep package-owned workload design and signpost placement in `swift-package-testing-workflow` unless the next step depends on schemes, destinations, app hosts, test plans, or Instruments UI inspection.
+- Prefer Apple silicon as the baseline profiling architecture unless the target repository explicitly declares Intel Mac support.

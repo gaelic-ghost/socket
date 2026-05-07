@@ -7,7 +7,7 @@ description: Guide Swift Testing, XCTest holdouts, xctestplan handoff conditions
 
 ## Purpose
 
-Use this skill as the primary execution workflow for test-focused work in existing Swift Package Manager repositories. Keep it focused on Swift Testing, XCTest holdouts, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, filters, retries, fixtures, and package-level test diagnosis instead of broad manifest and build/run work. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, test-surface command planning, and clean handoff to the build/run or Xcode-oriented surfaces when the request drifts.
+Use this skill as the primary execution workflow for test-focused work in existing Swift Package Manager repositories. Keep it focused on Swift Testing, XCTest holdouts, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, performance-sensitive package workload profiling, filters, retries, fixtures, and package-level test diagnosis instead of broad manifest and build/run work. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, test-surface command planning, and clean handoff to the build/run or Xcode-oriented surfaces when the request drifts.
 
 ## When To Use
 
@@ -15,6 +15,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Use this skill for Swift Testing-first package work, XCTest holdouts, async-test design, semantic accessibility-test boundaries, and test-fixture organization.
 - Use this skill for package-level `.xctestplan` execution when the package surface needs Xcode test-plan follow-through.
 - Use this skill when the request is about test selection, filtering, retries, failures, flaky tests, or test-only Debug/Release validation.
+- Use this skill when the request is about package-first performance-sensitive testing, signpost placement, Release workload harnesses, or profiling-ready package test design for Audio, Metal, MLX, local AI, streaming, or other Apple silicon-sensitive workloads.
 - Do not use this skill for broad manifest edits, dependency work, package resources, plugin flows, or ordinary build and run work.
 - Do not use this skill for brand-new package bootstrap from nothing.
 - Do not use this skill for repo-guidance alignment in an existing package repo.
@@ -47,8 +48,9 @@ Use this skill as the primary execution workflow for test-focused work in existi
    - preserve its package-appropriate logging, telemetry, structured-concurrency, and Swift Testing guidance
 4. Run `scripts/run_workflow.py` to resolve repo shape, confirm the request stays on the testing surface, and plan the package-testing command path.
 5. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, accessibility-related semantic tests, fixtures, async test discipline, or test-related Debug/Release validation.
-6. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-testing-workflow`.
-7. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
+6. Use `references/performance-sensitive-testing-and-profiling.md` when the request touches package-first instrumentation, `OSSignposter`, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Audio, MLX, local AI, streaming, or other performance-sensitive Apple silicon workloads.
+7. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-testing-workflow`.
+8. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
 
 ## Inputs
 
@@ -100,6 +102,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
   - Xcode MCP mutation tools
   - `.xctestplan` execution or package test behavior that is more authoritative through Xcode-managed Apple SDK integration
   - direct test execution through Xcode-native destinations, UI testing, or `.xctestplan` handling inside an Xcode-managed workspace
+  - Instruments UI inspection, `.trace` artifact interpretation, or `xctrace` capture that depends on Xcode-managed schemes, destinations, app hosts, or test plans
 - Recommend `apple-ui-accessibility-workflow` when the user is really asking how the UI should expose semantics to assistive technologies instead of how a package-side test should be organized.
 - Hand off to `xcode-build-run-workflow` when package test work instead crosses into direct changes inside `.xcodeproj`, `.xcworkspace`, or `.pbxproj` managed scope.
 - Recommend `sync-swift-package-guidance` when the request is really about repo guidance instead of execution.
@@ -120,6 +123,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - `references/workflow-policy.md`
 - `references/repo-shape-detection.md`
 - `references/package-resources-testing-and-builds.md`
+- `references/performance-sensitive-testing-and-profiling.md`
 - `references/xcode-handoff-conditions.md`
 
 ### Contract References
