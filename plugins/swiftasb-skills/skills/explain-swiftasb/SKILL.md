@@ -2,7 +2,7 @@
 name: explain-swiftasb
 description: Explain SwiftASB in user-facing terms, including what it does, what it does not do, adoption tradeoffs, licensing, and when it is or is not the right foundation for a Swift app or package.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.2 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.4 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,7 +17,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*)
 
 Help a user understand whether [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) is the right foundation for their Swift app, tool, or package before implementation starts.
 
-Start with the real job: SwiftASB lets Swift code drive the local Codex app-server through a Swift-native API. It owns the local Codex subprocess, typed request and response conversion, app-wide stored-thread library state, app-server-routed filesystem/config/extension/MCP-resource reads, workspace permission facts, thread and turn handles, interactive request handling, diagnostics, local history reads, and SwiftUI-friendly observable companions.
+Start with the real job: SwiftASB lets Swift code drive the local Codex app-server through a Swift-native API. It owns the local Codex subprocess, typed request and response conversion, app-wide stored-thread library state, project identity and thread-source facts, app-server-routed filesystem/config/extension/MCP-resource reads, workspace permission facts, thread and turn handles, interactive request handling, diagnostics, local history reads, and SwiftUI-friendly observable companions.
 
 ## When To Use
 
@@ -36,16 +36,17 @@ Before giving exact API claims, inspect the current SwiftASB source of truth:
 - the public files under `Sources/SwiftASB/Public/`
 - the latest release notes or tags
 
-As of SwiftASB `v1.1.2`, the supported public surface centers on:
+As of SwiftASB `v1.1.4`, the supported public surface centers on:
 
 - `CodexAppServer`, the owner of the local Codex subprocess, stored-thread operations, app-wide library creation, MCP resource reads, diagnostics, and capability reads
-- `CodexAppServer.Library`, the app-wide observable companion for stored-thread lists, cwd or repository grouping, selection, Git branch metadata, and model/MCP/hook snapshots
+- `CodexAppServer.Library`, the app-wide observable companion for stored-thread lists, cwd or repository grouping, selection, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source badges, and model/MCP/hook snapshots
 - `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned filesystem reads, effective config reads, and app/skill/plugin/collaboration-mode inventory
 - `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents advertised by configured servers
-- `CodexWorkspace` for app-server-owned cwd, Git, filesystem, network, and permission-profile facts on thread sessions and requests
+- `CodexWorkspace` for app-server-owned cwd, project identity, Git repository facts, filesystem, network, and permission-profile facts on thread sessions and requests
 - `CodexThread`, the handle for one Codex conversation thread
 - `CodexTurnHandle`, the handle for one active turn
 - query descriptors such as `CodexAppServer.ThreadListQD`, `CodexFS.FileDiscoveryQD`, `CodexThread.HistoryWindowQD`, `CodexThread.RecentFilesQD`, and `CodexThread.RecentCommandsQD`
+- thread source filtering and labels through `CodexAppServer.ThreadListSourceKind` and `CodexAppServer.ThreadSource`
 - observable companions such as `CodexThread.Dashboard`, `CodexTurnHandle.Minimap`, `RecentTurns`, `RecentFiles`, and `RecentCommands`
 - diagnostics such as config warnings, deprecation notices, MCP server status changes, and remote-control status changes
 - thread management actions such as archive, unarchive, rename, metadata updates, compaction, and rollback
@@ -63,7 +64,7 @@ Generated `CodexWire...` models are internal scaffolding, not the recommended ap
    - async streams for live thread and turn events
    - typed approval and elicitation responses
    - observable companions for app-wide libraries, SwiftUI inspectors, rails, and progress views
-   - app-server-routed filesystem, config, extension, MCP-resource, workspace, and permission facts for sandboxed clients
+   - app-server-routed filesystem, config, extension, MCP-resource, workspace, project identity, thread source, and permission facts for sandboxed clients
    - UI-ready fuzzy file-discovery match metadata, highlight ranges, and ranking reasons
    - repeatable query descriptors for thread lists, file discovery, history windows, recent files, and recent commands
    - local history helpers for recent turns, files, and commands
@@ -81,7 +82,7 @@ SwiftASB is a good fit when the user needs a Swift app or package to:
 
 - start or control local Codex work
 - show live command, file-edit, MCP, hook, approval, diagnostic, library, or history state
-- show workspace, filesystem, config, extension, model, MCP, hook, diagnostic, or permission facts from the app-server instead of reading local machine state directly
+- show workspace, project identity, thread source, filesystem, config, extension, model, MCP, hook, diagnostic, or permission facts from the app-server instead of reading local machine state directly
 - build SwiftUI or AppKit surfaces around Codex conversations
 - keep raw app-server protocol models out of their own public API
 - use typed Swift handles for threads, turns, approvals, elicitation, diagnostics, and recent history
@@ -101,7 +102,7 @@ Answer in this order:
 1. `Recommendation`: one direct fit call.
 2. `What SwiftASB would do here`: plain-language role.
 3. `What the app would own`: UI, product behavior, persistence choices, and user policy.
-4. `What SwiftASB would own`: app-server process, app-wide library state, filesystem/config/extension/MCP-resource/workspace reads, typed thread and turn API, events, requests, diagnostics, query descriptors, and companions.
+4. `What SwiftASB would own`: app-server process, app-wide library state, project identity, thread source, filesystem/config/extension/MCP-resource/workspace reads, typed thread and turn API, events, requests, diagnostics, query descriptors, and companions.
 5. `Tradeoffs`: runtime, compatibility, same-thread turn policy, and licensing.
 6. `Next integration step`: the next skill or repo action.
 

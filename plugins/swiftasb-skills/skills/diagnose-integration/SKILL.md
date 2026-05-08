@@ -1,8 +1,8 @@
 ---
 name: diagnose-integration
-description: Diagnose SwiftASB integration failures across Codex CLI discovery, app-server startup, initialization, threads, turns, approvals, MCP status and resources, filesystem/config/extension/workspace reads, diagnostics, history paging, and live-test isolation.
+description: Diagnose SwiftASB integration failures across Codex CLI discovery, app-server startup, initialization, threads, turns, approvals, MCP status and resources, project identity, thread source, filesystem/config/extension/workspace reads, diagnostics, history paging, and live-test isolation.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.2 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.4 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,12 +17,12 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(xcodebuild:*)
 
 Find the concrete failure point in a SwiftASB integration and explain it in terms the app maintainer can act on.
 
-The job is not just to say that "Codex failed." A useful diagnosis identifies which boundary failed: package dependency wiring, Codex CLI discovery, app-server process startup, initialization, app-wide library refresh, thread creation, stored-thread archive state, turn lifecycle, interactive request routing, filesystem/config/extension/MCP-resource/workspace reads, model capability reads, MCP status, hook diagnostics, diagnostic stream handling, local history reads, or live-test isolation.
+The job is not just to say that "Codex failed." A useful diagnosis identifies which boundary failed: package dependency wiring, Codex CLI discovery, app-server process startup, initialization, app-wide library refresh, project identity or thread-source mapping, thread creation, stored-thread archive state, turn lifecycle, interactive request routing, filesystem/config/extension/MCP-resource/workspace reads, model capability reads, MCP status, hook diagnostics, diagnostic stream handling, local history reads, or live-test isolation.
 
 ## When To Use
 
 - Use this skill when a SwiftASB-backed app, CLI, helper service, package, or test harness fails.
-- Use this skill when logs mention `CodexAppServerError`, app-server transport failures, protocol failures, same-thread turn rejection, missing Codex CLI, MCP status or resource issues, approval or elicitation problems, filesystem/config/extension/workspace read failures, config warnings, deprecation notices, remote-control status changes, or history paging failures.
+- Use this skill when logs mention `CodexAppServerError`, app-server transport failures, protocol failures, same-thread turn rejection, missing Codex CLI, MCP status or resource issues, approval or elicitation problems, filesystem/config/extension/workspace read failures, project identity or thread-source mismatches, config warnings, deprecation notices, remote-control status changes, or history paging failures.
 - Use this skill before changing SwiftASB integration code when the failure boundary is still unclear.
 - Use this skill when deciding whether a failing check should be a normal unit test, an opt-in live Codex probe, or an app-level integration test.
 
@@ -43,6 +43,7 @@ Verify current SwiftASB docs and public API before naming exact symbols:
 - `Sources/SwiftASB/SwiftASB.docc/CodexWorkspace.md`
 - `Sources/SwiftASB/SwiftASB.docc/ThreadManagement.md`
 - `Sources/SwiftASB/Public/CodexAppServer+Library.swift`
+- `Sources/SwiftASB/Public/CodexAppServer+LoadedThreads.swift`
 - `Sources/SwiftASB/Public/CodexAppServer+CodexExtensions.swift`
 - `Sources/SwiftASB/Public/CodexAppServer+MCP.swift`
 - `Sources/SwiftASB/Public/CodexFS.swift`
@@ -67,7 +68,7 @@ The current Codex app-server API includes lifecycle operations such as `thread/s
    - app-server process startup
    - initialization
    - app-wide library reconciliation or snapshots
-   - filesystem, config, extension, MCP-resource, or workspace-permission reads
+   - filesystem, config, extension, MCP-resource, workspace-permission, project-identity, or thread-source reads
    - thread lifecycle
    - stored-thread archive or unarchive
    - turn lifecycle
@@ -87,7 +88,7 @@ The current Codex app-server API includes lifecycle operations such as `thread/s
 Check that the package dependency is real and remote-fetchable:
 
 ```swift
-.package(url: "https://github.com/gaelic-ghost/SwiftASB", from: "1.1.2")
+.package(url: "https://github.com/gaelic-ghost/SwiftASB", from: "1.1.4")
 ```
 
 Then check the target that talks to Codex depends on:
@@ -145,6 +146,8 @@ If a library surface does not update, check whether the app is:
 - expecting repository-root grouping when `Library.GroupedBy.cwd` matches exact app-server `cwd` metadata
 - copying library arrays into a second state store instead of observing the library companion directly
 - relying on app-wide snapshots before `refreshAppSnapshots()` has loaded model, MCP, and hook data
+- grouping project rows by old ad hoc Git fields instead of `CodexWorkspace.ProjectInfo`
+- drawing source badges from guessed client labels instead of `CodexAppServer.ThreadSource`
 - ignoring app-server app/skill/MCP status notifications that now trigger snapshot refreshes
 - treating `selectedThreadID` as stored Codex metadata instead of library-local UI selection state
 - hiding reconciliation or snapshot errors from the user-facing diagnostics view
@@ -159,7 +162,7 @@ Use app-server-owned fact surfaces when a sandboxed app, helper, or package shou
 - `CodexAppServer.config` for effective config and requirements reads
 - `CodexAppServer.extensions` for apps, skills, plugins, and collaboration modes
 - `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents
-- `CodexWorkspace` values on requests and thread sessions for active permission profile, cwd, Git metadata, and filesystem/network permissions
+- `CodexWorkspace` values on requests and thread sessions for active permission profile, cwd, project identity, Git repository facts, and filesystem/network permissions
 
 If one of these surfaces fails, check whether the app passed the right current directory, expected direct disk semantics from an app-server read, asked for unpromoted mutation behavior, or hid app-server permission/profile facts behind a local fallback.
 
