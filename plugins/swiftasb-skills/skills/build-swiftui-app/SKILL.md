@@ -2,7 +2,7 @@
 name: build-swiftui-app
 description: Build or refactor a SwiftUI app feature on top of SwiftASB using framework-owned SwiftUI state, SwiftASB thread and turn handles, observable companions, clear runtime diagnostics, and safe validation.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.1.4 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.2.0 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -15,9 +15,9 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(xcodebuild:*)
 
 ## Purpose
 
-Help a SwiftUI app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start Codex work, show live progress, handle approvals or user input, list stored threads, archive or unarchive stored threads, inspect app-server-owned project identity, thread source, filesystem/config/extension/MCP-resource/workspace facts, and expose recent thread history without replaying raw app-server protocol payloads into app state.
+Help a SwiftUI app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to start Codex work, show live progress, handle approvals or user input, list stored threads, archive or unarchive stored threads, inspect app-server-owned worktree, project identity, thread source, filesystem/config/extension/MCP-resource/workspace facts, and expose recent thread history without replaying raw app-server protocol payloads into app state.
 
-The real job is to connect SwiftUI views to SwiftASB's Swift-native handles and observable companions. SwiftUI owns view lifetime and rendering. SwiftASB owns the local Codex app-server process, app-wide library companion, project identity and thread-source facts, app-server-routed filesystem/config/extension/MCP-resource reads, workspace permission facts, thread and turn handles, typed events, request responses, diagnostics, and recent-history companions.
+The real job is to connect SwiftUI views to SwiftASB's Swift-native handles and observable companions. SwiftUI owns view lifetime and rendering. SwiftASB owns the local Codex app-server process, app-wide library companion, stable worktree groups, repository/worktree filters, project identity and thread-source facts, app-server-owned worktree snapshots, app-server-routed filesystem/config/extension/MCP-resource reads, workspace permission facts, thread and turn handles, typed events, request responses, diagnostics, and recent-history companions.
 
 ## Required Documentation Gate
 
@@ -72,13 +72,13 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexThread+Dashboard.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.1.4`, SwiftUI-facing integrations should prefer:
+As of SwiftASB `v1.2.0`, SwiftUI-facing integrations should prefer:
 
 - `CodexAppServer` for process startup, initialization, diagnostics, thread creation, stored-thread operations, MCP resource reads, and app-wide capability reads
-- `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd or repository grouping, library-local selection, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source badges, and model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
+- `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, library-local selection, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source badges, and model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
 - `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned file metadata, directory/file reads, file discovery with match metadata, effective config, app, skill, plugin, and collaboration-mode inventory
 - `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents
-- `CodexWorkspace` for session cwd, project identity, Git repository facts, active permission profile, and runtime filesystem/network permission facts
+- `CodexWorkspace` for session cwd, app-server-owned worktree snapshots, project identity, Git repository facts, active permission profile, and runtime filesystem/network permission facts
 - `CodexThread` for conversation-scoped turn creation, request routing, archive/unarchive, thread actions, thread goals, and local history
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, and completion handoff
 - `CodexThread.makeDashboard()` for thread-level current state
@@ -92,7 +92,7 @@ As of SwiftASB `v1.1.4`, SwiftUI-facing integrations should prefer:
 2. Read Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.1.4` when using app-wide library, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.2.0` when using app-wide library, stable worktree groups, repository/worktree filters, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 4. Choose the owner object:
    - app-wide model owns `CodexAppServer`
@@ -102,7 +102,7 @@ As of SwiftASB `v1.1.4`, SwiftUI-facing integrations should prefer:
 5. Start and initialize the app-server from an explicit async entrypoint.
 6. Create or resume a thread through `CodexAppServer`.
 7. Create `CodexAppServer.Library` from the app server when the UI has a launcher, sidebar, project browser, or app-wide diagnostics surface.
-8. Use `appServer.fs`, `appServer.config`, `appServer.extensions`, `appServer.readMcpResource(_:)`, and `CodexWorkspace` when SwiftUI needs filesystem, config, plugin/skill/app, collaboration-mode, MCP-resource, project identity, thread source, or permission facts from Codex.
+8. Use `appServer.fs`, `appServer.config`, `appServer.extensions`, `appServer.readMcpResource(_:)`, and `CodexWorkspace` when SwiftUI needs filesystem, config, plugin/skill/app, collaboration-mode, MCP-resource, worktree, project identity, thread source, or permission facts from Codex.
 9. Create observable companions from the thread and current turn.
 10. Render state from companions directly where possible.
 11. Route approval and elicitation responses through the owning `CodexTurnHandle` or `CodexThread`.
@@ -202,11 +202,11 @@ Use this as a shape, not as a file to paste blindly. Match the app's real lifeti
 
 - Show Codex runtime startup and compatibility failures before offering turn controls.
 - Disable same-thread turn controls while one turn is active, or create a separate thread when concurrent work is truly intended.
-- Use `library` for stored-thread sidebars, cwd or repository grouping, project identity display, thread-source badges, library-local selection, app-wide model capabilities, MCP server status, and hook diagnostics.
+- Use `library` for stored-thread sidebars, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, project identity display, thread-source badges, library-local selection, app-wide model capabilities, MCP server status, and hook diagnostics.
 - Use `CodexAppServer.ThreadListQD` when the same sidebar query should drive both direct `listThreads` reads and library loading.
 - Use `CodexAppServer.fs` and `CodexFS.FileDiscoveryQD` for sandbox-safe file pickers, metadata panes, directory browsers, file-byte previews, watches, highlighted matches, and ranking explanations.
 - Use `CodexAppServer.readMcpResource(_:)` when the UI needs to show text or blob resource contents advertised by a configured MCP server.
-- Use `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexWorkspace` for diagnostics views that show effective config, requirements, available apps/skills/plugins, collaboration modes, project identity, active profile, and filesystem/network permissions.
+- Use `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexWorkspace` for diagnostics views that show effective config, requirements, available apps/skills/plugins, collaboration modes, worktree snapshots, project identity, active profile, and filesystem/network permissions.
 - Use `CodexThread.readGoal()`, `setGoal(_:)`, `clearGoal()`, `setName(_:)`, `archive()`, `unarchive()`, `updateMetadata(gitInfo:)`, `compactContext()`, and `rollbackLastTurns(_:)` from app-facing actions that already own the selected thread.
 - Use `dashboard` for thread-wide current activity.
 - Use `currentMinimap` for the active turn's command, file-edit, dynamic-tool, collab-tool, MCP, and compaction activity.
