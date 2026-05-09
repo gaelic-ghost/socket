@@ -1,10 +1,12 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI, Xcode, and DocC workflow skills for Codex.
+Apple, Swift, SwiftUI, Xcode, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
-The Socket marketplace is the easiest way to install Apple Dev Skills alongside the companion Productivity Skills workflows that Apple bootstrap and guidance-sync skills can use.
+Promo audio: [Apple Dev Skills Codex Workflows Promo](./docs/media/apple-dev-skills-codex-workflows-promo.mp3)
+
+The Socket marketplace is the easiest way to install Apple Dev Skills alongside the companion Productivity Skills workflows.
 
 ## Table of Contents
 
@@ -21,15 +23,17 @@ The Socket marketplace is the easiest way to install Apple Dev Skills alongside 
 
 ### Status
 
-`apple-dev-skills` is active and usable as a Codex plugin.
+`apple-dev-skills` is maintained and supported by Gale as a key component of the Socket Marketplace.
 
 ### What This Project Is
 
-This repository is the canonical source of truth for Gale's Apple, Swift, and Xcode workflow skills. It gives agents focused workflows for reading Apple docs first, working with Swift and SwiftUI, using Xcode safely, building and testing Swift packages or Xcode projects, writing DocC, and keeping Apple repo guidance aligned.
+Apple development work has sharp edges around framework behavior, Xcode project state, documentation, accessibility, and build tooling. This plugin keeps helps agents move *swiftly* through a challenging landscape, instead of fumbling over mountains of implicit behavior.
+
+This repository is the canonical source of truth for Gale's Apple, Swift, and Xcode workflow skills.
 
 ### Motivation
 
-Apple development work has sharp edges around framework behavior, Xcode project state, documentation, accessibility, and build tooling. This plugin keeps those rules in one place so agents can move carefully without turning every Swift or Xcode task into guesswork.
+I wanted to build stuff faster, but agents were struggling with Swift, declarative frameworks, Xcode and `.pbxproj`, the `swift build` `xcodebuild` split, etc. I figured I could improve that a bit. it's gone pretty well, so far~
 
 ## Quick Start
 
@@ -39,13 +43,13 @@ The easiest way to install Apple Dev Skills with its companion workflows is thro
 codex plugin marketplace add gaelic-ghost/socket
 ```
 
+Restart Codex, open the plugin directory, choose `Socket`, and install or enable `apple-dev-skills`. Install `productivity-skills` from the same marketplace too if you want the Apple bootstrap and guidance-sync workflows.
+
 When the Socket marketplace changes, refresh it:
 
 ```bash
 codex plugin marketplace upgrade socket
 ```
-
-Restart Codex, open the plugin directory, choose `Socket`, and install or enable `apple-dev-skills`. Install `productivity-skills` from the same marketplace too if you want the Apple bootstrap and guidance-sync workflows.
 
 ## Usage
 

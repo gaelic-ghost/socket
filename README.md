@@ -1,10 +1,10 @@
 # socket
 
-Gale's Codex plugin marketplace for macOS users and Apple/Swift devs. Includes companion plugins for my other packages, like SwiftASB.
+*The macOS Marketplace for Codex*
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Productivity Skills featured above installable Socket child plugins.](./docs/media/codex-plugin-directory-socket-productivity-skills.png)
 
-`Socket` is the "marketplace", or catalog, of available plugins. Add `socket` to Codex, then use Codex to choose which individual plugins you wanna install.
+Promo audio: [Socket Codex Marketplace Promo](./docs/media/socket-codex-marketplace-promo.mp3)
 
 ## Table of Contents
 
@@ -21,15 +21,15 @@ Gale's Codex plugin marketplace for macOS users and Apple/Swift devs. Includes c
 
 ### Status
 
-`socket` is active, maintained, and used by Gale daily.
+`socket` is maintained and supported by Gale.
 
 ### What This Project Is
 
-Socket is a monorepo of Codex Plugins I've built while beginning to use coding agents to assist in my projects. It includes a variety of plugins, from productivity tools to apple dev workflow systems, docs access to a local TTS system. 
+Socket is a Marketplace of Plugins, Hooks, and MCP servers for Apple Platform Devs
 
 ### Motivation
 
-It became obvious to me that these things needed specialized tooling to do specialized work. Not seeing much of what I wanted on offer, I set out to build that myself. Eventually, I moved all my individual plugin repos to this monorepo for easier maintenance, updates, releases, etc.
+Agents are great, but to do specialized work, they need specialized tools. As I continued building skills for my workflows, I needed a place to distribute them from. Socket is that place. I hope you find these as useful as I have.
 
 ## Quick Start
 
@@ -39,13 +39,15 @@ Add the `socket` marketplace to Codex with:
 codex plugin marketplace add gaelic-ghost/socket
 ```
 
+After adding `socket`, restart your Codex, open the plugin directory, select `Socket`, and then install your choice of plugins.
+
 When the marketplace changes, refresh it with:
 
 ```bash
 codex plugin marketplace upgrade socket
 ```
 
-After adding or upgrading `socket`, restart your Codex, open the plugin directory, select `Socket`, and then install or enable whichever plugins you want.
+Newly added plugins can be installed from the same plugin directory inside Codex.
 
 ## Usage
 
@@ -68,16 +70,16 @@ Apple Dev Skills keeps its own roadmap because it is the remaining subtree-manag
 
 Current Socket catalog shape:
 
-- `agent-plugin-skills`: active maintainer skills for skills-export and plugin-export repositories
-- `apple-dev-skills`: active Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
-- `cardhop-app`: active mixed skill plus bundled MCP server for Cardhop.app contact workflows
-- `productivity-skills`: active general-purpose maintainer and documentation workflow baseline
-- `python-skills`: active Python, `uv`, FastAPI, FastMCP, and pytest workflow plugin
-- `speak-swiftly`: active Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
-- `swiftasb-skills`: active SwiftASB companion guidance
-- `things-app`: active mixed skill plus bundled MCP server for Things.app workflows
+- `agent-plugin-skills`: maintainer skills for skills-export and plugin-export repositories
+- `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
+- `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
+- `productivity-skills`: general-purpose maintainer and documentation workflow baseline
+- `python-skills`: Python, `uv`, FastAPI, FastMCP, and pytest workflow plugin
+- `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
+- `swiftasb-skills`: SwiftASB companion guidance
+- `things-app`: mixed skill plus bundled MCP server for Things.app workflows
 
-Placeholder plugin directories are intentionally visible but not installable until real skill or workflow content exists:
+Placeholder directories for future plugins (not available for install):
 
 - `dotnet-skills`
 - `rust-skills`
@@ -111,4 +113,4 @@ Use GitHub releases and Git history for root `socket` changes. Child plugins may
 
 ## License
 
-The `socket` superproject is licensed under the Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
+The `socket` superproject, and all nested projects, are licensed under the Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
