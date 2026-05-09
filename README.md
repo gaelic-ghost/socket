@@ -4,6 +4,8 @@ Gale's Codex plugin marketplace for macOS users and Apple/Swift devs. Includes c
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Productivity Skills featured above installable Socket child plugins.](./docs/media/codex-plugin-directory-socket-productivity-skills.png)
 
+Promo audio: [Socket Codex Marketplace Promo](./docs/media/socket-codex-marketplace-promo.mp3)
+
 `Socket` is the "marketplace", or catalog, of available plugins. Add `socket` to Codex, then use Codex to choose which individual plugins you wanna install.
 
 ## Table of Contents
