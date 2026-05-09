@@ -59,6 +59,26 @@ version = "1.2.3"
         json.dumps({"name": "python-skills", "version": "1.2.3"}, indent=2) + "\n",
     )
     write(
+        tmp_path / "plugins" / "apple-dev-skills" / "pyproject.toml",
+        """[project]
+name = "apple-dev-skills-maintainer"
+version = "1.2.3"
+""",
+    )
+    write(
+        tmp_path / "plugins" / "apple-dev-skills" / "uv.lock",
+        """version = 1
+
+[[package]]
+name = "apple-dev-skills-maintainer"
+version = "1.2.3"
+""",
+    )
+    write(
+        tmp_path / "plugins" / "apple-dev-skills" / ".codex-plugin" / "plugin.json",
+        json.dumps({"name": "apple-dev-skills", "version": "1.2.3"}, indent=2) + "\n",
+    )
+    write(
         tmp_path / "plugins" / "things-app" / ".codex-plugin" / "plugin.json",
         json.dumps({"name": "things-app", "version": "1.2.3"}, indent=2) + "\n",
     )
@@ -125,6 +145,8 @@ def test_custom_updates_manifests_and_lockfiles(tmp_path: Path) -> None:
 
     assert "pyproject.toml" in changed_files
     assert "uv.lock" in changed_files
+    assert "plugins/apple-dev-skills/.codex-plugin/plugin.json" in changed_files
+    assert "plugins/apple-dev-skills/uv.lock" in changed_files
     assert "plugins/python-skills/.codex-plugin/plugin.json" in changed_files
     assert "plugins/things-app/mcp/uv.lock" in changed_files
     assert unchanged_files == []
@@ -166,7 +188,9 @@ def test_main_inventory_reports_misalignment(tmp_path: Path, monkeypatch: pytest
     assert "Version sets: 1.2.3, 2.0.0" in output
 
 
-def test_release_ready_requires_subtree_push_before_tagging(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_release_ready_requires_subtree_push_for_substantive_child_change(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     root = make_repo(tmp_path)
     targets = release_version.discover_targets(root)
     git_outputs = {
@@ -177,7 +201,7 @@ def test_release_ready_requires_subtree_push_before_tagging(tmp_path: Path, monk
         ("tag", "-l", "v1.2.3"): "",
         ("ls-remote", "--tags", "origin", "refs/tags/v1.2.3"): "",
         ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.2\n",
-        ("diff", "--name-only", "v1.2.2..HEAD"): "plugins/apple-dev-skills/pyproject.toml\n",
+        ("diff", "--name-only", "v1.2.2..HEAD"): "plugins/apple-dev-skills/skills/example/SKILL.md\n",
         ("subtree", "split", "--prefix=plugins/apple-dev-skills", "HEAD"): "local-subtree-head\n",
         ("ls-remote", "apple-dev-skills", "refs/heads/main"): "remote-subtree-head\trefs/heads/main\n",
     }
@@ -193,6 +217,44 @@ def test_release_ready_requires_subtree_push_before_tagging(tmp_path: Path, monk
         release_version.render_release_ready(root, targets, "1.2.3")
 
 
+def test_release_ready_skips_subtree_push_for_version_only_child_change(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = make_repo(tmp_path)
+    targets = release_version.discover_targets(root)
+    git_outputs = {
+        ("status", "--porcelain"): "",
+        ("branch", "--show-current"): "main\n",
+        ("rev-parse", "HEAD"): "socket-head\n",
+        ("rev-parse", "origin/main"): "socket-head\n",
+        ("tag", "-l", "v1.2.3"): "",
+        ("ls-remote", "--tags", "origin", "refs/tags/v1.2.3"): "",
+        ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.2\n",
+        (
+            "diff",
+            "--name-only",
+            "v1.2.2..HEAD",
+        ): (
+            "plugins/apple-dev-skills/.codex-plugin/plugin.json\n"
+            "plugins/apple-dev-skills/pyproject.toml\n"
+            "plugins/apple-dev-skills/uv.lock\n"
+        ),
+    }
+
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        output = git_outputs[tuple(args)]
+        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
+
+    exit_code = release_version.render_release_ready(root, targets, "1.2.3")
+
+    output = capsys.readouterr().out
+    assert exit_code == 0
+    assert "apple-dev-skills: version-only changes; no subtree push required" in output
+
+
 def test_release_ready_prints_marketplace_upgrade_as_final_step(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
@@ -206,7 +268,7 @@ def test_release_ready_prints_marketplace_upgrade_as_final_step(
         ("tag", "-l", "v1.2.3"): "",
         ("ls-remote", "--tags", "origin", "refs/tags/v1.2.3"): "",
         ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.2\n",
-        ("diff", "--name-only", "v1.2.2..HEAD"): "plugins/apple-dev-skills/pyproject.toml\n",
+        ("diff", "--name-only", "v1.2.2..HEAD"): "plugins/apple-dev-skills/skills/example/SKILL.md\n",
         ("subtree", "split", "--prefix=plugins/apple-dev-skills", "HEAD"): "subtree-head\n",
         ("ls-remote", "apple-dev-skills", "refs/heads/main"): "subtree-head\trefs/heads/main\n",
     }

@@ -63,6 +63,8 @@ Subtrees mode is standard mode plus this extra gate:
 4. rerun root validation after any subtree operation
 5. re-check `git log origin/main..main` and `git branch --no-merged main` before cleanup or final status
 
+Shared-version-only edits under a subtree-managed child count as `no subtree action` when every touched child file is one of the maintained version surfaces updated by the root version helper, including adjacent `uv.lock` self-version entries. Any other touched file under the child remains substantive and must still pass the subtree accounting gate before tagging.
+
 This mode is not the same as `maintain-project-repo`'s `submodule` mode. `socket` is still the umbrella repository being released, not a child checkout waiting for a parent pointer update.
 
 ## Current Subtree Policy

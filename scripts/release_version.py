@@ -331,13 +331,26 @@ def ensure_versions_match_release(targets: list[VersionTarget], version: str) ->
         )
 
 
-def ensure_subtree_gates(root: Path, changed_files: set[str]) -> list[str]:
+def version_only_paths(targets: list[VersionTarget]) -> set[str]:
+    paths: set[str] = set()
+    for target in targets:
+        paths.add(target.display_path)
+        if target.kind == "pyproject":
+            paths.add(target.path.with_name("uv.lock").as_posix())
+    return paths
+
+
+def ensure_subtree_gates(root: Path, changed_files: set[str], version_paths: set[str]) -> list[str]:
     accounted: list[str] = []
     for gate in SUBTREE_GATES:
         prefix = gate["prefix"]
-        touched = any(path == prefix or path.startswith(f"{prefix}/") for path in changed_files)
-        if not touched:
+        touched_paths = sorted(path for path in changed_files if path == prefix or path.startswith(f"{prefix}/"))
+        if not touched_paths:
             accounted.append(f"{gate['name']}: untouched")
+            continue
+        substantive_paths = [path for path in touched_paths if path not in version_paths]
+        if not substantive_paths:
+            accounted.append(f"{gate['name']}: version-only changes; no subtree push required")
             continue
         split = run_git(root, ["subtree", "split", f"--prefix={prefix}", "HEAD"]).stdout.strip().splitlines()[-1]
         remote_ref = f"refs/heads/{gate['branch']}"
@@ -360,7 +373,7 @@ def render_release_ready(root: Path, targets: list[VersionTarget], version: str)
     ensure_main_matches_origin(root)
     ensure_tag_is_available(root, version)
     changed_files = changed_files_since_previous_release(root)
-    subtree_accounting = ensure_subtree_gates(root, changed_files)
+    subtree_accounting = ensure_subtree_gates(root, changed_files, version_only_paths(targets))
     print(f"Release-ready gate passed for v{version}.")
     print("Subtree accounting:")
     for line in subtree_accounting:
