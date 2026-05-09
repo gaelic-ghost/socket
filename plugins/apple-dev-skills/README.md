@@ -4,6 +4,8 @@ Apple, Swift, SwiftUI, Xcode, and DocC workflow skills for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
+Promo audio: [Apple Dev Skills Codex Workflows Promo](./docs/media/apple-dev-skills-codex-workflows-promo.mp3)
+
 The Socket marketplace is the easiest way to install Apple Dev Skills alongside the companion Productivity Skills workflows that Apple bootstrap and guidance-sync skills can use.
 
 ## Table of Contents
