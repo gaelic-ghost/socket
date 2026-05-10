@@ -206,7 +206,7 @@ wheels = [
 
 [[package]]
 name = "python-skills-maintainer"
-version = "6.7.22"
+version = "6.7.23"
 source = { virtual = "." }
 
 [package.dev-dependencies]
