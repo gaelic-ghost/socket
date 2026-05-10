@@ -2,7 +2,7 @@
 name: build-swiftui-app
 description: Build or refactor a SwiftUI app feature on top of SwiftASB using framework-owned SwiftUI state, SwiftASB thread and turn handles, observable companions, clear runtime diagnostics, and safe validation.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.0 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.1 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -67,15 +67,19 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexFS.swift`
 - `Sources/SwiftASB/Public/CodexConfig.swift`
 - `Sources/SwiftASB/Public/CodexWorkspace.swift`
+- `Sources/SwiftASB/Public/CodexAppServer+Bootstrap.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexDiagnostics.swift`
+- `Sources/SwiftASB/Public/CodexErrors.swift`
 - `Sources/SwiftASB/Public/CodexThread.swift`
 - `Sources/SwiftASB/Public/CodexThread+Dashboard.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.3.0`, SwiftUI-facing integrations should prefer:
+As of SwiftASB `v1.3.1`, SwiftUI-facing integrations should prefer:
 
-- `CodexAppServer` for process startup, initialization, diagnostics, thread creation, stored-thread operations, MCP resource reads, feature-operation-event streams, and app-wide capability reads
+- `CodexAppServer.start(_:)` with `CodexAppServer.StartupRequest` for normal one-call startup, compatibility validation, initialization, and typed `CodexAppServerStartupError` failures
+- lower-level `CodexAppServer.start()`, `cliExecutableDiagnostics()`, and `initialize(_:)` only when the app intentionally owns custom diagnostics, compatibility policy, or test setup before initialization
+- `CodexAppServer` for process ownership, diagnostics, thread creation, stored-thread operations, MCP resource reads, feature-operation-event streams, and app-wide capability reads
 - `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, selected-worktree Git status, library-local selection, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source badges, and model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
 - `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned file metadata, directory/file reads, file discovery with match metadata, effective config, app, skill, plugin, collaboration-mode inventory, plugin detail reads, and already-configured marketplace upgrades
 - `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents
@@ -95,14 +99,14 @@ As of SwiftASB `v1.3.0`, SwiftUI-facing integrations should prefer:
 2. Read Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.3.0` when using app-wide library, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.3.1` when using one-call startup with typed startup errors, app-wide library, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 4. Choose the owner object:
    - app-wide model owns `CodexAppServer`
    - app-wide, scene, or workspace model owns `CodexAppServer.Library` when the UI needs stored-thread lists before a thread is selected
    - workspace, document, or conversation model owns `CodexThread`
    - active-turn method or model owns `CodexTurnHandle`
-5. Start and initialize the app-server from an explicit async entrypoint.
+5. Start the app-server from an explicit async entrypoint, using `appServer.start(_:)` for normal clients and the lower-level `start()` plus `initialize(_:)` sequence only for custom diagnostics or tests.
 6. Create or resume a thread through `CodexAppServer`.
 7. Create `CodexAppServer.Library` from the app server when the UI has a launcher, sidebar, project browser, or app-wide diagnostics surface.
 8. Use `appServer.fs`, `appServer.config`, `appServer.extensions`, `appServer.readMcpResource(_:)`, `CodexWorkspace`, and `SwiftASBFeaturePolicy` when SwiftUI needs filesystem, config, plugin/skill/app, collaboration-mode, marketplace-maintenance, MCP-resource, worktree, selected Git status, project identity, thread source, permission facts, or feature-category choices from Codex.
@@ -133,9 +137,7 @@ final class CodexWorkspaceModel {
 
     func start(workspacePath: String) async {
         do {
-            try await appServer.start()
-            _ = try await appServer.cliExecutableDiagnostics()
-            try await appServer.initialize(
+            let session = try await appServer.start(
                 .init(
                     clientInfo: .init(
                         name: "ExampleApp",
@@ -144,6 +146,7 @@ final class CodexWorkspaceModel {
                     )
                 )
             )
+            _ = session.cliExecutableDiagnostics
 
             let thread = try await appServer.startThread(
                 .init(currentDirectoryPath: workspacePath)
@@ -203,7 +206,7 @@ Use this as a shape, not as a file to paste blindly. Match the app's real lifeti
 
 ## UI Guidance
 
-- Show Codex runtime startup and compatibility failures before offering turn controls.
+- Show `CodexAppServerStartupError` startup and compatibility failures before offering turn controls.
 - Disable same-thread turn controls while one turn is active, or create a separate thread when concurrent work is truly intended.
 - Use `library` for stored-thread sidebars, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, selected Git status, project identity display, thread-source badges, library-local selection, app-wide model capabilities, MCP server status, and hook diagnostics.
 - Show `library.selectedGitStatus`, `lastGitStatusReadAt`, and `latestGitStatusErrorDescription` when a selected-worktree status panel needs branch, SHA, remotes, dirty/untracked counts, or refresh failures.
@@ -247,5 +250,5 @@ Live Codex integration tests should be opt-in, isolated in temporary workspaces,
 - Do not put raw generated `CodexWire...` models into SwiftUI view state.
 - Do not introduce a command bus or broad coordinator just to forward SwiftASB events; use local model methods and SwiftASB handles unless the app already has a real architecture surface for that job.
 - Do not start overlapping turns on the same thread; SwiftASB rejects that because the live app-server does not expose a reliable independent lifecycle for them.
-- Do not hide local Codex CLI discovery, compatibility, or startup failures behind generic "failed" messages.
+- Do not hide local Codex CLI discovery, compatibility, or startup failures behind generic "failed" messages; preserve `CodexAppServerStartupError` cases when mapping errors into UI text.
 - Do not run multiple SwiftPM or Xcode build/test commands concurrently.

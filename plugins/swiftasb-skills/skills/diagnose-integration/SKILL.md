@@ -2,7 +2,7 @@
 name: diagnose-integration
 description: Diagnose SwiftASB integration failures across Codex CLI discovery, app-server startup, initialization, threads, turns, approvals, MCP status and resources, worktree grouping, selected Git status, project identity, thread source, filesystem/config/extension/workspace reads, feature policy, feature-operation events, diagnostics, history paging, and live-test isolation.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -50,6 +50,8 @@ Verify current SwiftASB docs and public API before naming exact symbols:
 - `Sources/SwiftASB/Public/CodexFS.swift`
 - `Sources/SwiftASB/Public/CodexConfig.swift`
 - `Sources/SwiftASB/Public/CodexWorkspace.swift`
+- `Sources/SwiftASB/Public/CodexAppServer+Bootstrap.swift`
+- `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexDiagnostics.swift`
 - `Sources/SwiftASB/Public/CodexErrors.swift`
 
@@ -90,7 +92,7 @@ The current Codex app-server API includes lifecycle operations such as `thread/s
 Check that the package dependency is real and remote-fetchable:
 
 ```swift
-.package(url: "https://github.com/gaelic-ghost/SwiftASB", from: "1.3.0")
+.package(url: "https://github.com/gaelic-ghost/SwiftASB", from: "1.3.1")
 ```
 
 Then check the target that talks to Codex depends on:
@@ -105,9 +107,9 @@ Do not commit machine-local package paths such as `/Users/...`, `~/...`, or `../
 
 SwiftASB expects a local Codex CLI runtime. A diagnosis should tell the maintainer which executable was attempted and whether SwiftASB reported it as supported.
 
-For SwiftASB `v1.3.0`, treat Codex CLI `0.130.x` as the current reviewed schema family unless the SwiftASB README or release notes have moved that support window.
+For SwiftASB `v1.3.1`, treat Codex CLI `0.130.x` as the current reviewed schema family unless the SwiftASB README or release notes have moved that support window.
 
-Use `CodexAppServer.cliExecutableDiagnostics()` after `start()` and before or after initialization when a UI or CLI needs to show:
+For normal clients, `CodexAppServer.start(_:)` returns `StartupSession.cliExecutableDiagnostics` after launching, validating the selected Codex CLI against the reviewed support window, and initializing. Use `CodexAppServer.cliExecutableDiagnostics()` after lower-level `start()` when a UI, CLI, or test intentionally needs to show executable facts before deciding whether to initialize.
 
 - resolved executable path
 - version string
@@ -118,15 +120,23 @@ If the app requires a fixed binary, inspect whether it passes `CodexAppServer.Co
 
 ### App-Server Startup And Initialization
 
-The expected order is:
+The expected order for most clients is:
+
+1. create `CodexAppServer`
+2. call `start(_:)` with client metadata
+3. inspect `StartupSession.cliExecutableDiagnostics` when the UI needs selected-CLI facts
+4. create, resume, or fork a thread
+
+When diagnosing SwiftASB `v1.3.1` or newer, first check whether the thrown error is `CodexAppServerStartupError`. `codexCLINotFound` points at executable discovery, `incompatibleCodexCLI` and `unknownCodexCLIVersion` point at reviewed-support-window validation, `launchFailed` points at process startup, and `initializeFailed` points at protocol initialization or malformed client metadata.
+
+Use the lower-level sequence only when the app intentionally owns custom diagnostics or compatibility decisions:
 
 1. create `CodexAppServer`
 2. call `start()`
-3. inspect `cliExecutableDiagnostics()` when needed
+3. inspect `cliExecutableDiagnostics()`
 4. call `initialize(_:)` once with client metadata
-5. create, resume, or fork a thread
 
-If initialization fails, separate process startup from protocol initialization. Startup failures are usually executable, environment, sandbox, or process problems. Initialization failures are usually protocol, compatibility, or malformed client metadata problems.
+If lower-level initialization fails, separate process startup from protocol initialization. Startup failures are usually executable, environment, sandbox, or process problems. Initialization failures are usually protocol, compatibility, or malformed client metadata problems.
 
 ### Thread Lifecycle
 

@@ -2,7 +2,7 @@
 name: build-appkit-app
 description: Build or refactor an AppKit app feature on top of SwiftASB using explicit application, window, document, thread, and turn ownership with main-actor UI updates and clear runtime diagnostics.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.0 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.1 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -70,15 +70,19 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexFS.swift`
 - `Sources/SwiftASB/Public/CodexConfig.swift`
 - `Sources/SwiftASB/Public/CodexWorkspace.swift`
+- `Sources/SwiftASB/Public/CodexAppServer+Bootstrap.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexDiagnostics.swift`
+- `Sources/SwiftASB/Public/CodexErrors.swift`
 - `Sources/SwiftASB/Public/CodexThread.swift`
 - `Sources/SwiftASB/Public/CodexThread+Dashboard.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.3.0`, AppKit-facing integrations should prefer:
+As of SwiftASB `v1.3.1`, AppKit-facing integrations should prefer:
 
-- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, MCP resource reads, model capability reads, MCP status reads, feature-operation-event streams, and hook diagnostics
+- `CodexAppServer.start(_:)` with `CodexAppServer.StartupRequest` for normal one-call subprocess startup, compatibility validation, initialization, and typed `CodexAppServerStartupError` failures
+- lower-level `CodexAppServer.start()`, `cliExecutableDiagnostics()`, and `initialize(_:)` only when the app intentionally owns custom diagnostics, compatibility policy, or test setup before initialization
+- `CodexAppServer` for subprocess ownership, diagnostics, stored-thread operations, MCP resource reads, model capability reads, MCP status reads, feature-operation-event streams, and hook diagnostics
 - `CodexAppServer.makeLibrary(configuration:)` for app-wide stored-thread lists, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, selected-worktree Git status, library-local selection, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source badges, and model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
 - `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned file metadata, directory/file reads, file discovery with match metadata, effective config, app, skill, plugin, collaboration-mode inventory, plugin detail reads, and already-configured marketplace upgrades
 - `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents
@@ -97,14 +101,14 @@ As of SwiftASB `v1.3.0`, AppKit-facing integrations should prefer:
 2. Read the Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.3.0` when using app-wide library, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.3.1` when using one-call startup with typed startup errors, app-wide library, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 4. Choose the SwiftASB owner:
    - application-level model owns `CodexAppServer` when one runtime serves many windows
    - application, window, or document model owns `CodexAppServer.Library` when the UI needs stored-thread lists before a thread is selected
    - document or window model owns `CodexThread` when work belongs to one workspace or document
    - active command method or controller owns `CodexTurnHandle` while one turn is running
-5. Start and initialize the app-server from an explicit async lifecycle point.
+5. Start the app-server from an explicit async lifecycle point, using `appServer.start(_:)` for normal clients and the lower-level `start()` plus `initialize(_:)` sequence only for custom diagnostics or tests.
 6. Create, resume, or fork a thread for the window, document, or workspace.
 7. Route menu and toolbar actions into local controller methods that start, steer, interrupt, or inspect turns.
 8. Use `appServer.fs`, `appServer.config`, `appServer.extensions`, `appServer.readMcpResource(_:)`, `CodexWorkspace`, and `SwiftASBFeaturePolicy` when inspectors, preferences, file pickers, MCP panes, or diagnostics need Codex-owned filesystem, config, plugin/skill/app, collaboration-mode, marketplace-maintenance, resource, worktree, selected Git status, project identity, thread source, permission facts, or feature-category choices.
@@ -142,9 +146,7 @@ final class CodexWorkspaceWindowController: NSWindowController {
     func connect(workspacePath: String) {
         Task { @MainActor in
             do {
-                try await appServer.start()
-                _ = try await appServer.cliExecutableDiagnostics()
-                try await appServer.initialize(
+                let session = try await appServer.start(
                     .init(
                         clientInfo: .init(
                             name: "ExampleApp",
@@ -153,6 +155,7 @@ final class CodexWorkspaceWindowController: NSWindowController {
                         )
                     )
                 )
+                _ = session.cliExecutableDiagnostics
 
                 thread = try await appServer.startThread(
                     .init(currentDirectoryPath: workspacePath)
@@ -215,7 +218,7 @@ Use this as a shape, not as a file to paste blindly. Match the app's actual nib/
 
 ## UI Guidance
 
-- Show Codex runtime startup and compatibility failures before enabling menu or toolbar actions.
+- Show `CodexAppServerStartupError` startup and compatibility failures before enabling menu or toolbar actions.
 - Keep menu validation tied to real state: no thread, active turn, waiting approval, or idle.
 - Disable same-thread start actions while a turn is active, or create a separate thread when concurrent work is truly intended.
 - Use a `CodexAppServer.Library` for source lists, launchers, project browsers, stored-thread selection, selected-worktree Git status, project identity display, thread-source badges, app-wide model capabilities, MCP status, and hook diagnostics.
@@ -252,5 +255,5 @@ Live Codex integration tests should be opt-in, isolated in temporary workspaces,
 - Do not put raw generated `CodexWire...` models into AppKit controller or view state.
 - Do not introduce a command bus or broad coordinator just to forward SwiftASB events; use local AppKit actions and SwiftASB handles unless the app already has a real architecture surface for that job.
 - Do not start overlapping turns on the same thread; SwiftASB rejects that because the live app-server does not expose a reliable independent lifecycle for them.
-- Do not hide local Codex CLI discovery, compatibility, or startup failures behind generic messages.
+- Do not hide local Codex CLI discovery, compatibility, or startup failures behind generic messages; preserve `CodexAppServerStartupError` cases when mapping errors into AppKit status text.
 - Do not run multiple SwiftPM or Xcode build/test commands concurrently.

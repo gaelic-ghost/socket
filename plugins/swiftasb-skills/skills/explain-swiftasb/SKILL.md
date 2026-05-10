@@ -2,7 +2,7 @@
 name: explain-swiftasb
 description: Explain SwiftASB in user-facing terms, including what it does, what it does not do, adoption tradeoffs, licensing, and when it is or is not the right foundation for a Swift app or package.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -37,9 +37,10 @@ Before giving exact API claims, inspect the current SwiftASB source of truth:
 - the public files under `Sources/SwiftASB/Public/`
 - the latest release notes or tags
 
-As of SwiftASB `v1.3.0`, the supported public surface centers on:
+As of SwiftASB `v1.3.1`, the supported public surface centers on:
 
-- `CodexAppServer`, the owner of the local Codex subprocess, stored-thread operations, app-wide library creation, MCP resource reads, diagnostics, feature-operation-event streams, and capability reads
+- `CodexAppServer`, the owner of the local Codex subprocess, one-call startup, stored-thread operations, app-wide library creation, MCP resource reads, diagnostics, feature-operation-event streams, and capability reads
+- `CodexAppServer.start(_:)`, `CodexAppServer.StartupRequest`, `CodexAppServer.StartupSession`, `CodexAppServer.StartupCompatibilityPolicy`, and `CodexAppServerStartupError` for normal startup, reviewed support-window validation, initialization, selected-CLI diagnostics, and typed startup failure handling
 - `CodexAppServer.Library`, the app-wide observable companion for stored-thread lists, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, selected-worktree Git status, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source badges, and model/MCP/hook snapshots
 - `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` for app-server-owned filesystem reads, effective config reads, app/skill/plugin/collaboration-mode inventory, plugin detail reads, and already-configured marketplace upgrades
 - `CodexAppServer.readMcpResource(_:)` for app-wide or thread-scoped MCP resource contents advertised by configured servers
@@ -72,7 +73,7 @@ Generated `CodexWire...` models are internal scaffolding, not the recommended ap
    - local history helpers for recent turns, files, and commands
 6. Describe the adoption costs:
    - the app depends on a local Codex runtime
-   - compatibility follows SwiftASB's reviewed Codex CLI support window; for SwiftASB `v1.3.0`, verify behavior against Codex CLI `0.130.x` before assuming a newer schema family is public
+   - compatibility follows SwiftASB's reviewed Codex CLI support window; for SwiftASB `v1.3.1`, verify behavior against Codex CLI `0.130.x` before assuming a newer schema family is public
    - SwiftASB-owned mutation helpers are feature-policy gated and should produce operation events instead of surprising silent writes
    - same-thread overlapping turns are rejected client-side
    - generated wire features are not all public API

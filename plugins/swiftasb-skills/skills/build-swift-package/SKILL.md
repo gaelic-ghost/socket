@@ -2,7 +2,7 @@
 name: build-swift-package
 description: Build or refactor a Swift package API on top of SwiftASB without leaking raw app-server wire models, while keeping live Codex probes opt-in, isolated, timeout-bounded, and documented.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.0 or newer, Swift 6, SwiftPM, package libraries, command-line tools, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.1 or newer, Swift 6, SwiftPM, package libraries, command-line tools, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -68,14 +68,18 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexFS.swift`
 - `Sources/SwiftASB/Public/CodexConfig.swift`
 - `Sources/SwiftASB/Public/CodexWorkspace.swift`
+- `Sources/SwiftASB/Public/CodexAppServer+Bootstrap.swift`
 - `Sources/SwiftASB/Public/CodexAppServer.swift`
 - `Sources/SwiftASB/Public/CodexDiagnostics.swift`
+- `Sources/SwiftASB/Public/CodexErrors.swift`
 - `Sources/SwiftASB/Public/CodexThread.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.3.0`, package integrations should prefer:
+As of SwiftASB `v1.3.1`, package integrations should prefer:
 
-- `CodexAppServer` for subprocess startup, initialization, diagnostics, stored-thread operations, MCP resource reads, model capability reads, MCP status reads, feature-operation-event streams, and hook diagnostics
+- `CodexAppServer.start(_:)` with `CodexAppServer.StartupRequest` for normal one-call subprocess startup, compatibility validation, initialization, and typed `CodexAppServerStartupError` failures
+- lower-level `CodexAppServer.start()`, `cliExecutableDiagnostics()`, and `initialize(_:)` only when the package intentionally owns custom diagnostics, compatibility policy, or test setup before initialization
+- `CodexAppServer` for subprocess ownership, diagnostics, stored-thread operations, MCP resource reads, model capability reads, MCP status reads, feature-operation-event streams, and hook diagnostics
 - `CodexAppServer.makeLibrary(configuration:)` when the package intentionally exposes app-wide stored-thread lists, cwd or repository grouping, stable worktree groups, repository/worktree filters, selected worktree or repository context, selected-worktree Git status, library-local selection, `CodexWorkspace.ProjectInfo` project identity, `CodexAppServer.ThreadSource` source facts, or app-wide model/MCP/hook snapshots that refresh when app-server app/skill/MCP state changes
 - `CodexAppServer.fs`, `CodexAppServer.config`, and `CodexAppServer.extensions` when the package intentionally exposes app-server-owned filesystem, config, app, skill, plugin, collaboration-mode facts, plugin detail reads, or already-configured marketplace upgrades
 - `CodexAppServer.readMcpResource(_:)` when the package intentionally exposes app-wide or thread-scoped MCP resource contents
@@ -95,7 +99,7 @@ As of SwiftASB `v1.3.0`, package integrations should prefer:
    - public dependency: expose selected SwiftASB handles only when consumers genuinely need them
 4. Add SwiftASB as a dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.3.0` when using app-wide library, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.3.1` when using one-call startup with typed startup errors, app-wide library, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 5. Add the dependency to the target that owns Codex behavior, not every target by default.
 6. Decide whether filesystem/config/extension/MCP-resource/workspace/worktree/selected-Git-status/project-identity/thread-source facts, feature-policy choices, or feature-operation events are part of the package API or only implementation detail.
@@ -138,8 +142,7 @@ public actor WorkspaceSummarizer {
     }
 
     public func summarize(_ request: WorkspaceSummaryRequest) async throws -> WorkspaceSummary {
-        try await appServer.start()
-        try await appServer.initialize(
+        _ = try await appServer.start(
             .init(
                 clientInfo: .init(
                     name: "WorkspaceSummarizer",
@@ -194,7 +197,7 @@ Use this as a shape, not as a file to paste blindly. Most packages should return
 - Put live Codex probes behind an explicit environment flag such as `SWIFTASB_LIVE_TESTS=1`.
 - Run live probes in temporary workspaces with hard timeouts.
 - Do not run live probes concurrently with other SwiftPM or Xcode build/test commands.
-- Make live failure text name the exact boundary: executable discovery, startup, initialization, thread start, turn start, request response, MCP resource read, diagnostics, history, or shutdown.
+- Make live failure text name the exact boundary: executable discovery, typed startup validation, initialization, thread start, turn start, request response, MCP resource read, diagnostics, history, or shutdown.
 
 ## Validation
 
@@ -221,5 +224,5 @@ If the package is also an Xcode app workspace, use the repository's documented X
 - Do not make live Codex subprocess work part of normal unit tests.
 - Do not expose raw generated app-server wire models as the default public API.
 - Do not treat same-thread overlapping turns as supported; SwiftASB rejects them because the live app-server does not expose a reliable independent lifecycle for that case.
-- Do not hide local Codex CLI discovery, compatibility, startup, or protocol failures behind generic errors.
+- Do not hide local Codex CLI discovery, compatibility, startup, or protocol failures behind generic errors; preserve `CodexAppServerStartupError` cases when mapping errors into package-owned error types.
 - Do not run multiple SwiftPM or Xcode build/test commands concurrently.

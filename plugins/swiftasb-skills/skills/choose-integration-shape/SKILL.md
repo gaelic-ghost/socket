@@ -2,7 +2,7 @@
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.3.1 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -69,6 +69,8 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - automation or one-shot task execution
 3. Choose the SwiftASB owner:
    - app-wide model owns `CodexAppServer`
+   - normal clients start with `CodexAppServer.start(_:)` so startup, compatibility validation, initialization, selected-CLI diagnostics, and typed startup errors stay in one SwiftASB-owned call
+   - lower-level startup remains a custom diagnostics or test path when the app must inspect the selected executable before deciding whether to initialize
    - app-wide or window-scoped launcher model owns `CodexAppServer.Library` when the UI lists stored threads before a thread is chosen
    - document or workspace model owns `CodexThread`
    - active task model owns `CodexTurnHandle`
@@ -105,7 +107,7 @@ Prefer:
 - `CodexThread.makeDashboard()` for thread-wide activity
 - `CodexTurnHandle.minimap` for active turn state
 - recent companions for inspector rails and completed history
-- explicit user-visible error strings for startup, compatibility, and turn failures
+- explicit user-visible error strings for `CodexAppServerStartupError`, compatibility, and turn failures
 
 Handoff: `swiftasb:build-swiftui-app`.
 
@@ -127,7 +129,7 @@ Handoff: `swiftasb:build-appkit-app`.
 
 ### Command-Line Tool
 
-Use `CodexAppServer` in a short-lived async main flow. Start, initialize, create or resume a thread, start a turn, stream terminal output or summary, and stop the app-server predictably.
+Use `CodexAppServer` in a short-lived async main flow. Call `start(_:)`, create or resume a thread, start a turn, stream terminal output or summary, and stop the app-server predictably. Use the lower-level startup calls only when the tool needs a diagnostics screen or custom compatibility decision before initialization.
 
 Avoid building SwiftUI observable companions unless the tool also feeds a UI.
 
