@@ -1,6 +1,7 @@
 {
   "interface": {
-    "displayName": "Socket"
+    "displayName": "Socket",
+    "banner": "./docs/media/socket-banner.jpg"
   },
   "name": "socket",
   "plugins": [

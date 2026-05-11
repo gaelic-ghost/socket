@@ -17,6 +17,7 @@ MARKETPLACE_PATH = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
 GIT_SOURCE_KINDS = {"url", "git-subdir"}
 INSTALLATION_POLICIES = {"AVAILABLE", "INSTALLED_BY_DEFAULT", "NOT_AVAILABLE"}
 AUTHENTICATION_POLICIES = {"ON_INSTALL", "ON_FIRST_USE"}
+MARKETPLACE_INTERFACE_ASSET_FIELDS = {"banner"}
 
 
 def fail(message: str) -> NoReturn:
@@ -74,6 +75,40 @@ def validate_git_source(
             f"Marketplace plugin `{plugin_name}` uses `git-subdir` and must define a "
             f"`./...` source.path, but found `{path}`."
         )
+
+
+def validate_marketplace_interface(marketplace: dict[str, object]) -> None:
+    interface = marketplace.get("interface")
+    if not isinstance(interface, dict):
+        fail("Root marketplace must define an `interface` object.")
+
+    display_name = interface.get("displayName")
+    if not isinstance(display_name, str) or not display_name:
+        fail("Root marketplace interface must define a non-empty `displayName`.")
+
+    for field_name in MARKETPLACE_INTERFACE_ASSET_FIELDS:
+        field_value = interface.get(field_name)
+        if field_value is None:
+            continue
+        if not isinstance(field_value, str) or not field_value.startswith("./"):
+            fail(
+                f"Root marketplace interface `{field_name}` must use a repo-relative "
+                f"`./...` path, but found `{field_value}`."
+            )
+
+        asset_path = (REPO_ROOT / field_value).resolve()
+        try:
+            asset_path.relative_to(REPO_ROOT.resolve())
+        except ValueError:
+            fail(
+                f"Root marketplace interface `{field_name}` points outside the "
+                f"repository root: {field_value}"
+            )
+        if not asset_path.is_file():
+            fail(
+                f"Root marketplace interface `{field_name}` points at a missing file: "
+                f"{field_value}"
+            )
 
 
 def validate_manifest_path(
@@ -302,6 +337,8 @@ def main() -> None:
     marketplace = load_json(MARKETPLACE_PATH)
     if not isinstance(marketplace, dict):
         fail("Root marketplace must decode to a JSON object.")
+
+    validate_marketplace_interface(marketplace)
 
     plugins = marketplace.get("plugins")
     if not isinstance(plugins, list) or not plugins:
