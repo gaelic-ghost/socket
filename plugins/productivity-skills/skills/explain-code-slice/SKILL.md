@@ -93,9 +93,9 @@ Treat comparison requests as first-class trigger cases, not as an advanced follo
 
 ## Codex subagent fit
 
-When subagents are explicitly requested or clearly called for by applicable workflow guidance, this skill can split read-heavy discovery for large code slices into bounded subagent tasks. Good subagent jobs include mapping call sites, reading tests, checking docs, or tracing one branch of a comparison, with each worker returning concise file references and findings.
+When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, this skill can split read-heavy discovery for large code slices into bounded subagent tasks. Good subagent jobs include mapping call sites, reading tests, checking docs, or tracing one branch of a comparison, with each worker returning concise file references and findings.
 
-Do not spawn subagents just because a slice is large. Use them when the request or applicable workflow guidance makes delegation part of the job. Keep the final explanation in the main thread so the user gets one coherent walkthrough, and keep any write or refactor follow-up outside this skill unless the user asks for that next step.
+Do not spawn subagents just because a slice is large. Use them when the request explicitly asks for delegation or applicable workflow guidance tells the agent to ask and the user allows it. Keep the final explanation in the main thread so the user gets one coherent walkthrough, and keep any write or refactor follow-up outside this skill unless the user asks for that next step.
 
 ## Detail levels
 

@@ -113,7 +113,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 
 ## Codex Subagent Fit
 
-When subagents are explicitly requested or clearly called for by applicable workflow guidance, use them for read-heavy repo-maintenance discovery before the main workflow installs, refreshes, or reports. Good jobs include inspecting existing validation scripts, checking CI wrapper shape, reading release docs, or inventorying repo-specific commands in separate directories.
+When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, use them for read-heavy repo-maintenance discovery before the main workflow installs, refreshes, or reports. Good jobs include inspecting existing validation scripts, checking CI wrapper shape, reading release docs, or inventorying repo-specific commands in separate directories.
 
 Keep managed file installation, refresh, and release guidance in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes. Subagents should return concise findings and file references so the main thread can make one coherent decision about the managed toolkit.
 

@@ -61,7 +61,7 @@ The base contract is shaped to match the official Codex `AGENTS.md` guidance:
 
 ## Codex Subagent Fit
 
-When subagents are explicitly requested or clearly called for by applicable workflow guidance, use them for bounded read-heavy checks before the main workflow edits or reports. Good jobs include auditing command accuracy, comparing repo instructions against nearby docs, checking safety boundaries, or reading nested guidance files in separate directories.
+When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, use them for bounded read-heavy checks before the main workflow edits or reports. Good jobs include auditing command accuracy, comparing repo instructions against nearby docs, checking safety boundaries, or reading nested guidance files in separate directories.
 
 Keep `apply` edits in the main thread because this skill owns one target `AGENTS.md` file and needs one coherent policy voice. If a target `AGENTS.md` mentions subagents, make the wording match OpenAI's current Codex rule: subagents need an explicit trigger, are best for bounded parallel discovery, tests, triage, and summarization, and may be called for by narrower plugin guidance that tells the agent to ask before delegation.
 

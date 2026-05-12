@@ -41,7 +41,7 @@ Use wording like this in applicable skills:
 ```markdown
 ## Codex Subagent Fit
 
-When subagents are explicitly requested or clearly called for by applicable workflow guidance, this skill can split read-heavy discovery into bounded subagent tasks and keep the main thread focused on decisions and final edits.
+When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, this skill can split read-heavy discovery into bounded subagent tasks and keep the main thread focused on decisions and final edits.
 
 Good subagent jobs for this skill:
 
