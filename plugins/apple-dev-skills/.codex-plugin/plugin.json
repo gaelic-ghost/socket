@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "6.7.26",
-  "description": "Apple development workflows for Codex, including SwiftUI architecture and DocC authoring guidance.",
+  "description": "Apple development workflows for Codex, including SwiftUI architecture, Safari integration, and DocC authoring guidance.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -18,6 +18,7 @@
     "xcode",
     "mcp",
     "swiftui",
+    "safari",
     "ios",
     "macos"
   ],
@@ -25,8 +26,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple, Swift, Xcode, SwiftUI, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for Swift, SwiftUI architecture, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling. Most workflows work standalone; bootstrap and guidance-sync workflows that install or refresh repo-maintenance files require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "shortDescription": "Apple, Swift, Xcode, SwiftUI, Safari, and DocC workflows for Codex.",
+    "longDescription": "Bundle Apple-platform development skills for Swift, SwiftUI architecture, Safari extension and SafariServices integration, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling. Most workflows work standalone; bootstrap and guidance-sync workflows that install or refresh repo-maintenance files require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -36,6 +37,7 @@
     "websiteURL": "https://github.com/gaelic-ghost/apple-dev-skills",
     "defaultPrompt": [
       "Explore the relevant Apple docs first, then explain the right SwiftUI or Xcode path for this repository.",
+      "Choose the right Safari extension, SafariServices, messaging, content blocker, or automation fallback path for this Mac app.",
       "Help me build, test, or debug this Swift or Xcode project using the repo's Apple workflows.",
       "Write or review DocC symbol comments, articles, extension files, and landing-page structure for this Swift repository.",
       "Sync the Apple project guidance in this repo without hand-editing Xcode project files, using Productivity Skills when repo-maintenance files must be installed or refreshed."
