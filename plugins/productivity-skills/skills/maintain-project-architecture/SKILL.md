@@ -71,7 +71,7 @@ When the user asks for a new slice explanation, use `explain-code-slice` for the
 
 ## Codex Subagent Fit
 
-When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy discovery. Good jobs include scanning package manifests, listing products and targets, finding entrypoints, or tracing one candidate slice. Keep writes to `ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` in the main thread so the architecture story stays coherent.
+When subagents are explicitly requested or clearly called for by applicable workflow guidance, use them for read-heavy discovery. Good jobs include scanning package manifests, listing products and targets, finding entrypoints, or tracing one candidate slice. Keep writes to `ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` in the main thread so the architecture story stays coherent.
 
 ## Output Contract
 

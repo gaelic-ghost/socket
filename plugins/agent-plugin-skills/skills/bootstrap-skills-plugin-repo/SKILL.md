@@ -35,10 +35,11 @@ When creating or aligning `AGENTS.md`, include strict dependency guidance:
 
 When creating or aligning skills that can benefit from parallel support work, add optional `Codex Subagent Fit` guidance that matches OpenAI's current Codex subagent docs:
 
-- Codex only spawns subagents when the user explicitly asks for subagents or parallel agent work.
+- Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them.
 - Good fits are bounded read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization.
 - Subagents should return concise findings, evidence, links, or file references instead of raw intermediate output.
 - Apply-mode or implementation edits should stay in the main thread unless the user explicitly asks for parallel implementation and each worker has a disjoint write scope.
+- Plugin-specific guidance can be stricter. For example, Codex Security repository-wide scans may require asking for subagent use because the scan quality depends on parallel file-pass review.
 
 Do not add subagent guidance to every skill by default. Use `docs/maintainers/codex-subagent-skill-guidance.md` to decide whether the target skill has real parallelizable support work.
 

@@ -10,7 +10,7 @@ OpenAI's Codex docs call this feature `subagents`.
 
 - A `subagent` is a delegated agent that Codex starts to handle a specific task.
 - A `subagent workflow` is a workflow where Codex runs parallel agents and combines their results.
-- Codex only spawns subagents when the user explicitly asks for subagents or parallel agent work.
+- Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them.
 - Subagents are best for bounded read-heavy discovery, tests, triage, log analysis, and summarization.
 - Write-heavy parallel work needs clear ownership because multiple agents editing code or docs at once can create conflicts and coordination overhead.
 
@@ -37,18 +37,19 @@ Weak candidates:
 
 When a skill includes a `Codex Subagent Fit` section, it should say:
 
-- subagents require an explicit user request
+- subagents require an explicit trigger, either from the user's request or from narrower workflow guidance that tells the agent to request permission before delegation
 - the subagent jobs must be bounded and independently useful
 - read-heavy discovery, triage, tests, docs pulling, and summarization are the default fit
 - workers should return concise evidence, findings, links, or file references instead of raw command logs
 - apply-mode or implementation edits should stay in the main thread unless the user asks for parallel implementation and each worker has a disjoint write scope
+- plugin-specific guidance can be stricter; for example, Codex Security repository-wide scans may require asking for subagent use because the scan quality depends on parallel file-pass review
 
 ## Review Checklist
 
 When auditing a skills repo, flag guidance that:
 
 - says or implies Codex will spawn subagents automatically
-- tells agents to delegate merely because a task is complex or lengthy
+- tells agents to delegate merely because a task is complex or lengthy, without a concrete workflow reason
 - recommends parallel writes without separate file ownership
 - hides token, latency, or coordination costs
 - asks subagents to dump raw exploratory output instead of distilled results

@@ -8,7 +8,7 @@ This is a maintainer-focused translation of the official Codex subagent docs for
 
 OpenAI's Codex docs use the term `subagent` for a delegated agent Codex starts to handle a specific task. A `subagent workflow` is a workflow where Codex runs parallel agents and combines their results.
 
-Codex only spawns subagents when the user explicitly asks for subagents or parallel agent work. Do not write skill guidance that implies subagents start automatically just because a skill is active.
+Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them. Do not write skill guidance that implies subagents start automatically just because a skill is active.
 
 ## Good Fits
 
@@ -32,7 +32,7 @@ Poor fits include:
 - one focused README, AGENTS, ROADMAP, CONTRIBUTING, ACCESSIBILITY, or API apply pass
 - write-heavy parallel edits to the same files or same tightly coupled document set
 - tasks where the main agent needs each result immediately before it can choose the next step
-- prompts where the user did not explicitly ask for subagents, delegation, or parallel agent work
+- prompts where neither the user nor applicable workflow guidance explicitly calls for subagents, delegation, or parallel agent work
 
 ## Skill Wording Pattern
 
@@ -41,7 +41,7 @@ Use wording like this in applicable skills:
 ```markdown
 ## Codex Subagent Fit
 
-When the user explicitly asks for subagents or parallel agent work, this skill can split read-heavy discovery into bounded subagent tasks and keep the main thread focused on decisions and final edits.
+When subagents are explicitly requested or clearly called for by applicable workflow guidance, this skill can split read-heavy discovery into bounded subagent tasks and keep the main thread focused on decisions and final edits.
 
 Good subagent jobs for this skill:
 
@@ -54,7 +54,7 @@ Keep apply-mode edits in the main thread unless the user explicitly asks for par
 
 The important parts are:
 
-- name that the user must ask explicitly
+- name the explicit trigger for delegation, whether it came from the user or from narrower workflow guidance that tells the agent to ask before use
 - limit subagents to bounded jobs
 - prefer read-heavy discovery, triage, tests, and summarization
 - ask workers for summaries, findings, and file references instead of raw intermediate output

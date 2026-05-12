@@ -52,7 +52,7 @@ The base contract requires:
 
 ## Codex Subagent Fit
 
-When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy API evidence gathering before the main workflow edits or reports. Good jobs include inventorying endpoints or public symbols, checking examples against tests, reading schema definitions, or comparing compatibility claims against release notes.
+When subagents are explicitly requested or clearly called for by applicable workflow guidance, use them for read-heavy API evidence gathering before the main workflow edits or reports. Good jobs include inventorying endpoints or public symbols, checking examples against tests, reading schema definitions, or comparing compatibility claims against release notes.
 
 Keep `apply` edits in the main thread because this skill owns one target `API.md` file and must avoid invented endpoints, schemas, credentials, or support promises. Ask workers for concise evidence and file references instead of replacement API prose.
 

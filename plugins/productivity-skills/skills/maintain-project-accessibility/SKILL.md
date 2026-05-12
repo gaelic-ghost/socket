@@ -56,7 +56,7 @@ The base contract requires:
 
 ## Codex Subagent Fit
 
-When the user explicitly asks for subagents or parallel agent work, use subagents only for read-heavy accessibility evidence gathering before the main workflow edits or reports. Good jobs include checking documented verification commands, inventorying UI surfaces, reading known-gap notes, or comparing accessibility claims against repo evidence.
+When subagents are explicitly requested or clearly called for by applicable workflow guidance, use them for read-heavy accessibility evidence gathering before the main workflow edits or reports. Good jobs include checking documented verification commands, inventorying UI surfaces, reading known-gap notes, or comparing accessibility claims against repo evidence.
 
 Keep `apply` edits in the main thread because this skill owns one target `ACCESSIBILITY.md` file and must avoid unsupported compliance claims. Ask workers for concise evidence, risks, and file references rather than drafted conformance language.
 

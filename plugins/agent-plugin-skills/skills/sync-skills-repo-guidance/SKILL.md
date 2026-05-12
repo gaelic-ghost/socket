@@ -62,12 +62,13 @@ When syncing `AGENTS.md`, include strict dependency guidance:
 When auditing target skills, treat subagent guidance as useful only when it is explicit, bounded, and tied to real parallel support work. Match OpenAI's current Codex wording:
 
 - use `subagent` and `subagent workflow` rather than vague older `multi-agent` language
-- say Codex only spawns subagents when the user explicitly asks for subagents or parallel agent work
+- say Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them
 - prefer subagents for read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization
 - ask workers for concise findings, evidence, links, or file references instead of raw intermediate output
 - keep write-heavy apply work in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes
+- preserve plugin-specific guidance that is stricter about subagent use, such as Codex Security repository-wide scan workflows that ask for subagents because the file-pass review depends on parallel workers
 
-Flag skill guidance that implies automatic delegation, recommends parallel writes without ownership boundaries, or adds subagent advice to narrow single-file or sequential workflows.
+Flag skill guidance that implies automatic delegation, recommends parallel writes without ownership boundaries, adds subagent advice to narrow single-file or sequential workflows, or suppresses narrower plugin guidance that explicitly calls for subagents.
 
 ## Codex Hooks Guidance
 
