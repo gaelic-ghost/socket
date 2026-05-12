@@ -8,6 +8,7 @@
 - Distributing your Safari Web Extension: https://developer.apple.com/documentation/safariservices/distributing-your-safari-web-extension
 - Packaging a Web Extension for Safari: https://developer.apple.com/documentation/safariservices/packaging-a-web-extension-for-safari
 - Packaging and distributing Safari Web Extensions with App Store Connect: https://developer.apple.com/documentation/safariservices/packaging-and-distributing-safari-web-extensions-with-app-store-connect
+- Adding a web development tool to Safari Web Inspector: https://developer.apple.com/documentation/safariservices/adding-a-web-development-tool-to-safari-web-inspector
 
 ## Debugging Order
 
@@ -24,6 +25,13 @@
 - Temporary extension loading is useful for quick macOS Safari checks, but it is not a substitute for an Xcode project when testing iOS, app-extension messaging, native app coordination, or distribution.
 - Unsigned extension testing requires Safari developer settings and resets when Safari quits.
 - Use the containing macOS app install path when validating real app-extension packaging behavior.
+
+## Web Inspector Extension Development
+
+- Treat Safari Web Inspector Extensions as developer-tool panels that extend Web Inspector, not as ordinary end-user extension UI.
+- Verify Web Inspector developer features before debugging the extension itself.
+- Validate the Web Inspector panel loads before testing inspected-page data exchange.
+- Keep console and diagnostic output clear about whether a failure is in the Web Inspector extension UI, inspected-page messaging, the containing app, or native messaging.
 
 ## Safari App Extension Debugging
 

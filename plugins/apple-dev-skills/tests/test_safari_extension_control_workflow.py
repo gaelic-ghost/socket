@@ -16,10 +16,24 @@ class SafariExtensionControlWorkflowTests(unittest.TestCase):
         decision_text = self.read("skills/safari-extension-control-workflow/references/extension-shape-decision.md")
 
         self.assertIn("Safari Web Extension", skill_text)
+        self.assertIn("Safari Web Inspector Extension", skill_text)
         self.assertIn("Safari App Extension", skill_text)
         self.assertIn("Content blocker", skill_text)
         self.assertIn("ASWebAuthenticationSession", decision_text)
         self.assertIn("Safari App Extensions are macOS-only", decision_text)
+        self.assertIn(".safariextz", decision_text)
+        self.assertIn("no JavaScript execution path", decision_text)
+
+    def test_web_inspector_extension_path_is_first_class(self) -> None:
+        skill_text = self.read("skills/safari-extension-control-workflow/SKILL.md")
+        inspector_text = self.read("skills/safari-extension-control-workflow/references/web-inspector-extensions.md")
+        prompt_text = self.read("skills/safari-extension-control-workflow/agents/openai.yaml")
+
+        self.assertIn("web-inspector-extensions.md", skill_text)
+        self.assertIn("developer tools", inspector_text)
+        self.assertIn("Safari Web Inspector", inspector_text)
+        self.assertIn("inspected-page", inspector_text)
+        self.assertIn("Safari Web Inspector Extensions", prompt_text)
 
     def test_skill_keeps_control_surfaces_bounded(self) -> None:
         skill_text = self.read("skills/safari-extension-control-workflow/SKILL.md")

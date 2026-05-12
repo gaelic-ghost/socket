@@ -401,7 +401,7 @@ Completed
 
 ### Scope
 
-- [x] Add a dedicated Safari workflow for choosing between Safari Web Extensions, Safari App Extensions, content blockers, SafariServices APIs, app-to-extension messaging, authentication surfaces, and external automation fallbacks.
+- [x] Add a dedicated Safari workflow for choosing between Safari Web Extensions, Safari Web Inspector Extensions, Safari App Extensions, content blockers, SafariServices APIs, app-to-extension messaging, authentication surfaces, and external automation fallbacks.
 - [x] Keep the workflow docs-first and explicit about Apple-documented Safari behavior before implementation choices.
 - [x] Teach agents to treat "control Safari from a macOS app" as a scoped integration question rather than assuming unrestricted browser control.
 - [x] Keep Xcode target, signing, entitlement, build, run, and testing work routed into the existing Xcode skills.
@@ -409,14 +409,14 @@ Completed
 ### Tickets
 
 - [x] Add `safari-extension-control-workflow` with repo-standard skill metadata, OpenAI interface metadata, customization contract files, and shared Xcode policy snippet coverage.
-- [x] Add references for extension-shape choice, SafariServices control surfaces, messaging and shared data, permissions, testing, debugging, and distribution.
+- [x] Add references for extension-shape choice, Safari Web Inspector Extensions, SafariServices control surfaces, messaging and shared data, permissions, testing, debugging, and distribution.
 - [x] Add targeted pytest coverage for extension-shape boundaries, supported control surfaces, messaging contexts, privacy posture, and explicit handoffs.
 - [x] Update the active skill inventory, repo validator, shared-snippet sync script, README, and customization review counts.
 
 ### Exit Criteria
 
 - [x] The repository ships `safari-extension-control-workflow` as the explicit owner for Safari extension and SafariServices integration-shape guidance.
-- [x] The workflow keeps WebExtension, Safari App Extension, content blocker, authentication, and external automation paths distinct.
+- [x] The workflow keeps WebExtension, Safari Web Inspector Extension, Safari App Extension, content blocker, authentication, and external automation paths distinct.
 - [x] The skill is covered by repo validation and targeted tests.
 
 ## Backlog Candidates
@@ -425,7 +425,7 @@ Completed
 
 ## History
 
-- Added `safari-extension-control-workflow` as the explicit owner for Safari Web Extension, Safari App Extension, SafariServices, messaging, content blocker, authentication, and external automation decision guidance.
+- Added `safari-extension-control-workflow` as the explicit owner for Safari Web Extension, Safari Web Inspector Extension, Safari App Extension, SafariServices, messaging, content blocker, authentication, and external automation decision guidance.
 - Tightened Xcode project guidance so tracked `.pbxproj` diffs produced by Xcode, XcodeGen, or other project-aware workflows are treated as critical project state that must be reviewed, staged, and committed before push, merge, release, or cleanup.
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.

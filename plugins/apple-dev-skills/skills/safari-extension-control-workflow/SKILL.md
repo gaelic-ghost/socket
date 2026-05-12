@@ -1,6 +1,6 @@
 ---
 name: safari-extension-control-workflow
-description: Guide macOS Safari integration decisions across Safari Web Extensions, Safari App Extensions, SafariServices APIs, content blockers, extension messaging, and app-to-Safari control surfaces. Use when the user wants a Mac app to extend, message, open, inspect, or coordinate with Safari without confusing WebExtension, native extension, content blocker, authentication, or AppleScript-style automation paths.
+description: Guide macOS Safari integration decisions across Safari Web Extensions, Safari Web Inspector Extensions, Safari App Extensions, SafariServices APIs, content blockers, extension messaging, and app-to-Safari control surfaces. Use when the user wants a Mac app to extend, message, open, inspect, debug, or coordinate with Safari without confusing WebExtension, Web Inspector, native extension, content blocker, authentication, or AppleScript-style automation paths.
 ---
 
 # Safari Extension Control Workflow
@@ -9,13 +9,13 @@ description: Guide macOS Safari integration decisions across Safari Web Extensio
 
 Guide Safari integration work for macOS apps, with enough platform awareness to choose the right Safari extension or SafariServices surface before implementation starts.
 
-This skill owns the decision between Safari Web Extensions, Safari App Extensions, content blockers, SafariServices APIs, app-to-extension messaging, and limited external automation paths. It is not a generic browser-extension guide and it is not a replacement for `xcode-build-run-workflow` or `xcode-testing-workflow`.
+This skill owns the decision between Safari Web Extensions, Safari Web Inspector Extensions, Safari App Extensions, content blockers, SafariServices APIs, app-to-extension messaging, and limited external automation paths. It is not a generic browser-extension guide and it is not a replacement for `xcode-build-run-workflow` or `xcode-testing-workflow`.
 
 ## When To Use
 
 - Use this skill when the user wants a macOS app to extend Safari, communicate with Safari content, or coordinate native app state with a Safari extension.
-- Use this skill when choosing between a Safari Web Extension, Safari App Extension, Safari content blocker, `SFSafariApplication`, `SFSafariExtensionManager`, `SFSafariViewController`, `ASWebAuthenticationSession`, AppleScript, Shortcuts, or URL-opening behavior.
-- Use this skill when the work involves WebExtension manifests, native messaging, app groups, injected scripts, toolbar items, content blockers, Safari profiles, temporary extension loading, unsigned extension testing, or App Store distribution.
+- Use this skill when choosing between a Safari Web Extension, Safari Web Inspector Extension, Safari App Extension, Safari content blocker, `SFSafariApplication`, `SFSafariExtensionManager`, `SFSafariViewController`, `ASWebAuthenticationSession`, AppleScript, Shortcuts, or URL-opening behavior.
+- Use this skill when the work involves WebExtension manifests, Web Inspector developer-tool panels, native messaging, app groups, injected scripts, toolbar items, content blockers, Safari profiles, temporary extension loading, unsigned extension testing, or App Store distribution.
 - Use this skill when a user says they want to "control Safari" from a Mac app and the first job is distinguishing supported SafariServices control from broader GUI or scripting automation.
 - Recommend `explore-apple-swift-docs` when the user primarily needs direct Apple documentation lookup rather than integration-shape guidance.
 - Recommend `xcode-build-run-workflow` when the next step is target setup, build settings, entitlements, signing, file membership, running the containing app, or guarded Xcode project mutation.
@@ -26,6 +26,7 @@ This skill owns the decision between Safari Web Extensions, Safari App Extension
 
 1. Classify the Safari integration request:
    - WebExtension-compatible browser feature
+   - Web Inspector developer-tool feature
    - macOS-only Safari App Extension feature
    - declarative content blocking
    - containing app to extension messaging
@@ -40,6 +41,7 @@ This skill owns the decision between Safari Web Extensions, Safari App Extension
    - if no relevant Apple documentation can be found, say that explicitly before proceeding
 3. Choose the supported integration surface:
    - Safari Web Extension for cross-browser-style JavaScript, HTML, CSS, manifest, browser APIs, iOS, visionOS, Mac web apps, or extension portability
+   - Safari Web Inspector Extension for developer-facing tools that extend Safari Web Inspector rather than user-facing browsing behavior
    - Safari App Extension for macOS-only native extension behavior that uses SafariServices classes and can share data with a containing Mac app
    - Content blocker when the feature is declarative blocking and does not need to inspect page content or run arbitrary page logic
    - `SFSafariApplication` and related Safari App Extension proxies only for supported Safari extension interactions such as opening windows, sending app-to-extension messages, or working with Safari windows, tabs, pages, and toolbar items from the extension context
@@ -74,6 +76,7 @@ This skill owns the decision between Safari Web Extensions, Safari App Extension
 - Defaults:
   - docs-first guidance always applies
   - prefer Safari Web Extensions for portable browser-extension behavior
+  - prefer Safari Web Inspector Extensions only for developer tools that live inside Safari Web Inspector
   - prefer Safari App Extensions only when the macOS-only native extension model is the real requirement
   - prefer SafariServices and AuthenticationServices over GUI scripting when the documented API surface covers the job
 
@@ -84,7 +87,7 @@ This skill owns the decision between Safari Web Extensions, Safari App Extension
   - `handoff`: the request belongs to another Apple Dev skill after Safari-aware classification
   - `blocked`: the request lacks enough context or relies on unsupported Safari behavior
 - `path_type`
-  - `primary`: the recommendation uses a documented SafariServices, Web Extension, App Extension, content blocker, or authentication path
+  - `primary`: the recommendation uses a documented SafariServices, Web Extension, Web Inspector Extension, App Extension, content blocker, or authentication path
   - `fallback`: the recommendation depends on external automation because the documented Safari API surface does not cover the requested behavior
 - `output`
   - resolved Safari integration class
@@ -102,6 +105,7 @@ This skill owns the decision between Safari Web Extensions, Safari App Extension
 - Do not collapse Safari Web Extension native messaging, Safari App Extension injected-script messaging, and app-group shared storage into one vague "bridge"; name the exact contexts and transport.
 - Do not recommend a Safari App Extension for portable WebExtension behavior unless a macOS-only native extension requirement is explicit.
 - Do not recommend a Safari Web Extension for arbitrary native control of Safari outside the browser-extension permission model.
+- Do not recommend a Safari Web Inspector Extension for ordinary end-user browser customization; Web Inspector extensions are developer tools.
 - Stop with `blocked` when the feature requires user-private Safari data or privileged browser control that Apple does not expose through the documented APIs and the user has not explicitly opted into external automation.
 
 ## Fallbacks and Handoffs
@@ -126,6 +130,7 @@ Keep the first release focused on the documented Safari surface decision. If fut
 ### Workflow References
 
 - `references/extension-shape-decision.md`
+- `references/web-inspector-extensions.md`
 - `references/safari-services-control-surfaces.md`
 - `references/messaging-shared-data-and-permissions.md`
 - `references/testing-debugging-and-distribution.md`
