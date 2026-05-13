@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI, Xcode, DocC, and `Dash.app` workflows for Codex.
+Apple, Swift, SwiftUI, Safari, Xcode, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -57,6 +57,7 @@ Use Apple Dev Skills when an agent is helping with:
 
 - Swift and SwiftUI implementation
 - Xcode build, run, test, and project workflows
+- Safari extension and SafariServices integration choices
 - Swift package bootstrap, build, and testing
 - Apple UI accessibility work
 - DocC comments, articles, and documentation catalogs
@@ -116,6 +117,7 @@ uv run pytest
 - `bootstrap-xcode-app-project`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
+- `safari-extension-control-workflow`
 - `structure-swift-sources`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`
