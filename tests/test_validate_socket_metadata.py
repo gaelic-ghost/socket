@@ -28,6 +28,9 @@ def make_marketplace_repo(tmp_path: Path, manifest: dict[str, object]) -> Path:
         repo_root / ".agents" / "plugins" / "marketplace.json",
         json.dumps(
             {
+                "interface": {
+                    "displayName": "Test Marketplace",
+                },
                 "plugins": [
                     {
                         "name": "example-skills",
@@ -62,6 +65,9 @@ def make_remote_marketplace_repo(
         repo_root / ".agents" / "plugins" / "marketplace.json",
         json.dumps(
             {
+                "interface": {
+                    "displayName": "Test Marketplace",
+                },
                 "plugins": [
                     {
                         "name": "speak-swiftly",
@@ -131,6 +137,9 @@ def test_main_accepts_unavailable_empty_placeholder_plugin(
         repo_root / ".agents" / "plugins" / "marketplace.json",
         json.dumps(
             {
+                "interface": {
+                    "displayName": "Test Marketplace",
+                },
                 "plugins": [
                     {
                         "name": "placeholder-skills",

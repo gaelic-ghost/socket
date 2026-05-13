@@ -24,7 +24,7 @@
 ## Milestone Progress
 
 - Milestone 5: SwiftASB skills plugin - In Progress
-- Milestone 6: Dotnet skills plugin - Planned
+- Milestone 6: Dotnet skills plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -61,31 +61,31 @@ In Progress
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
-- [ ] Turn the placeholder `dotnet-skills` child plugin into an installable `.NET` guidance plugin.
-- [ ] Treat F# and C# as equal first-party `.NET` language choices in plugin metadata, skill descriptions, examples, scaffolding guidance, and diagnostics.
-- [ ] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, custom package manager, private template feed, or machine-local SDK state.
+- [x] Turn the placeholder `dotnet-skills` child plugin into an installable `.NET` guidance plugin.
+- [x] Treat F# and C# as equal first-party `.NET` language choices in plugin metadata, skill descriptions, examples, scaffolding guidance, and diagnostics.
+- [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, custom package manager, private template feed, or machine-local SDK state.
 
 ### Tickets
 
 - [x] Record the detailed plugin plan in [`docs/maintainers/dotnet-skills-plugin-plan.md`](./docs/maintainers/dotnet-skills-plugin-plan.md).
-- [ ] Update `plugins/dotnet-skills/AGENTS.md` with the F#/C# parity policy and `.NET` validation expectations.
-- [ ] Update `plugins/dotnet-skills/.codex-plugin/plugin.json` so plugin metadata includes F# and avoids C#-only wording.
-- [ ] Add first-slice skills for project-shape choice, solution bootstrap, F# project implementation, C# project implementation, and test workflow.
-- [ ] Switch the root marketplace entry for `dotnet-skills` from placeholder to installable only after real skill content exists.
-- [ ] Update root README and maintainer docs so users understand the new installable child plugin surface.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
+- [x] Update `plugins/dotnet-skills/AGENTS.md` with the F#/C# parity policy and `.NET` validation expectations.
+- [x] Update `plugins/dotnet-skills/.codex-plugin/plugin.json` so plugin metadata includes F# and avoids C#-only wording.
+- [x] Add first-slice skills for project-shape choice, solution bootstrap, F# project implementation, C# project implementation, and test workflow.
+- [x] Switch the root marketplace entry for `dotnet-skills` from placeholder to installable only after real skill content exists.
+- [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `dotnet-skills` as an installable child plugin.
-- [ ] The new skills can help an agent choose a `.NET` project shape before implementation.
-- [ ] The new skills guide F# and C# implementation without making either language a secondary path.
-- [ ] The testing guidance uses `dotnet test` as the stable command surface while respecting repo-local test framework choices.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] The Socket marketplace exposes `dotnet-skills` as an installable child plugin.
+- [x] The new skills can help an agent choose a `.NET` project shape before implementation.
+- [x] The new skills guide F# and C# implementation without making either language a secondary path.
+- [x] The testing guidance uses `dotnet test` as the stable command surface while respecting repo-local test framework choices.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Backlog Candidates
 

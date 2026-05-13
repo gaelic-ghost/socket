@@ -48,7 +48,7 @@
         "path": "./plugins/dotnet-skills"
       },
       "policy": {
-        "installation": "NOT_AVAILABLE",
+        "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"

@@ -60,6 +60,7 @@ Currently available from the catalog:
 - `agent-plugin-skills`
 - `apple-dev-skills`
 - `cardhop-app`
+- `dotnet-skills`
 - `productivity-skills`
 - `python-skills`
 - `speak-swiftly`
@@ -75,6 +76,7 @@ Current Socket catalog shape:
 - `agent-plugin-skills`: maintainer skills for skills-export and plugin-export repositories
 - `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
+- `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, and test workflow guidance
 - `productivity-skills`: general-purpose maintainer and documentation workflow baseline
 - `python-skills`: Python, `uv`, FastAPI, FastMCP, and pytest workflow plugin
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
@@ -83,7 +85,6 @@ Current Socket catalog shape:
 
 Placeholder directories for future plugins (not available for install):
 
-- `dotnet-skills`
 - `rust-skills`
 - `spotify`
 - `web-dev-skills`

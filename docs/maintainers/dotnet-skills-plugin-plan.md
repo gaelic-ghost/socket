@@ -1,4 +1,4 @@
-# Dotnet Skills Plugin Plan
+# .NET Skills Plugin Plan
 
 This plan records the first durable shape for a Socket-hosted `.NET` skills plugin.
 
@@ -31,7 +31,7 @@ The child plugin should own its Codex-facing guidance surface:
 - plugin metadata, skill metadata, `AGENTS.md`, or maintainer notes that explain the plugin's role
 - any validation scripts needed for the plugin's own authored guidance
 
-The root Socket marketplace already lists `dotnet-skills` as a placeholder plugin. Keep it unavailable for install until the child plugin ships real content. When the first skills land, switch the marketplace entry from `NOT_AVAILABLE` to `AVAILABLE` in the same pass as the skill content, root docs, and validation updates.
+The root Socket marketplace now lists `dotnet-skills` as an installable child plugin because the first real skills have landed. If the plugin ever loses its exported skill content, switch the marketplace entry back to `NOT_AVAILABLE` in the same pass.
 
 ## F# And C# Parity
 
@@ -189,18 +189,18 @@ Diagnostics should report what broke, where it broke, the likely cause, and the 
 
 The first slice should be intentionally small but installable:
 
-- [ ] Update `plugins/dotnet-skills/AGENTS.md` with the F#/C# parity policy and `.NET` validation expectations.
-- [ ] Update `plugins/dotnet-skills/.codex-plugin/plugin.json` so plugin metadata includes F# and avoids C#-only wording.
-- [ ] Add `dotnet:choose-project-shape`.
-- [ ] Add `dotnet:bootstrap-solution`.
-- [ ] Add `dotnet:build-fsharp-project`.
-- [ ] Add `dotnet:build-csharp-project`.
-- [ ] Add `dotnet:testing-workflow`.
-- [ ] Wire skill metadata consistently across `SKILL.md` and `agents/openai.yaml` if the child plugin uses per-skill agent metadata.
-- [ ] Switch the root marketplace entry for `dotnet-skills` to installable only after real skill content exists.
-- [ ] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
-- [ ] Run `uv run scripts/validate_socket_metadata.py`.
-- [ ] Run any child-plugin validation added by the new plugin.
+- [x] Update `plugins/dotnet-skills/AGENTS.md` with the F#/C# parity policy and `.NET` validation expectations.
+- [x] Update `plugins/dotnet-skills/.codex-plugin/plugin.json` so plugin metadata includes F# and avoids C#-only wording.
+- [x] Add `dotnet:choose-project-shape`.
+- [x] Add `dotnet:bootstrap-solution`.
+- [x] Add `dotnet:build-fsharp-project`.
+- [x] Add `dotnet:build-csharp-project`.
+- [x] Add `dotnet:testing-workflow`.
+- [x] Decide not to add per-skill `agents/openai.yaml` metadata in the first slice because this child plugin follows the existing SwiftASB skills shape.
+- [x] Switch the root marketplace entry for `dotnet-skills` to installable only after real skill content exists.
+- [x] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
+- [x] Run `uv run scripts/validate_socket_metadata.py`.
+- [x] Run any child-plugin validation added by the new plugin; no child-local validator was added in the first slice.
 
 ## Later Slices
 
@@ -232,48 +232,48 @@ These are useful but should not block the first installable plugin:
 
 ### Skill Names
 
-Decide whether skill names should use short names such as `build-fsharp-project` or longer names such as `build-dotnet-fsharp-project`.
+Decision for the first slice: use short names such as `build-fsharp-project` because the plugin namespace already supplies the `.NET` context.
 
-Short names read better inside the `dotnet-skills` plugin namespace. Longer names are more self-describing when copied outside plugin context.
+Longer names can be reconsidered only if skills are later copied outside the `dotnet-skills` plugin context.
 
 ### Scaffolding Depth
 
-Decide whether `dotnet:bootstrap-solution` should be pure guidance or ship a small script.
+Decision for the first slice: keep `dotnet:bootstrap-solution` as pure guidance.
 
-Pure guidance is easier to keep correct early. A script becomes useful if Gale wants repeatable solution scaffolds with F# and C# parity baked into command generation, but it also creates a validation and maintenance surface immediately.
+A script becomes useful if Gale wants repeatable solution scaffolds with F# and C# parity baked into command generation, but it also creates a validation and maintenance surface. Defer that until the guidance shape proves itself.
 
 ### Default Test Frameworks
 
-Decide the default testing guidance for F# and C#.
+Decision for the first slice: do not declare a universal test-framework default.
 
-The first version can avoid declaring a universal test-framework default by reading existing repo choices first and using `dotnet test` as the stable command surface. If the plugin eventually scaffolds tests, it should choose explicit defaults and explain why.
+Read existing repo choices first and use `dotnet test` as the stable command surface. If the plugin later scaffolds tests, it should choose explicit defaults and explain why.
 
 ### Formatting And Analyzer Policy
 
-Decide how opinionated the plugin should be about `dotnet format`, analyzers, `.editorconfig`, warnings-as-errors, and language-specific style.
+Decision for the first slice: respect existing repo configuration and keep new-project style guidance conservative.
 
-The first version should probably respect existing repo configuration and add conservative `.editorconfig` guidance for new scaffolds. A later `tooling-style-workflow` can make the policy more complete.
+A later `tooling-style-workflow` can make `dotnet format`, analyzers, `.editorconfig`, warnings-as-errors, and language-specific style more complete.
 
 ### ASP.NET Core Timing
 
-Decide whether ASP.NET Core service guidance belongs in the first release or the second slice.
+Decision for the first slice: defer ASP.NET Core service guidance to the second slice.
 
-The current recommendation is second slice. Core `.NET` solution, language, and test guidance should land first so web-service guidance can reuse stable project and validation rules.
+Core `.NET` solution, language, and test guidance should land first so web-service guidance can reuse stable project and validation rules.
 
 ### Versioning And Marketplace Timing
 
-Decide whether the first implementation should ship as a Socket minor release.
+Decision for the first implementation: treat this as a likely Socket minor release candidate.
 
-Because this turns a placeholder plugin into an installable plugin with real user-facing capability, a minor release is the likely SemVer shape once implementation lands.
+Because this turns a placeholder plugin into an installable plugin with real user-facing capability, a minor release is the likely SemVer shape for publication.
 
 ## Definition Of Done
 
 The plugin is ready for first release when:
 
-- [ ] Socket exposes `dotnet-skills` as an installable child plugin.
-- [ ] The plugin metadata names both F# and C#.
-- [ ] The skills consistently treat F# and C# as equal first-party `.NET` choices.
-- [ ] Ambiguous scaffolding guidance asks for language preference instead of silently choosing C#.
-- [ ] The first skill set covers project choice, solution bootstrap, F# implementation, C# implementation, and testing workflow.
-- [ ] The guidance uses official Microsoft documentation as the source of truth for `.NET` SDK, CLI, language, test, and package behavior.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] Socket exposes `dotnet-skills` as an installable child plugin.
+- [x] The plugin metadata names both F# and C#.
+- [x] The skills consistently treat F# and C# as equal first-party `.NET` choices.
+- [x] Ambiguous scaffolding guidance asks for language preference instead of silently choosing C#.
+- [x] The first skill set covers project choice, solution bootstrap, F# implementation, C# implementation, and testing workflow.
+- [x] The guidance uses official Microsoft documentation as the source of truth for `.NET` SDK, CLI, language, test, and package behavior.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.

@@ -54,3 +54,14 @@ def test_swiftasb_skills_marketplace_installs_in_temporary_codex_home(
     assert (plugin_root / "skills" / "build-appkit-app" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "build-swift-package" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "diagnose-integration" / "SKILL.md").is_file()
+
+
+def test_dotnet_skills_plugin_exposes_first_slice() -> None:
+    plugin_root = REPO_ROOT / "plugins" / "dotnet-skills"
+
+    assert (plugin_root / ".codex-plugin" / "plugin.json").is_file()
+    assert (plugin_root / "skills" / "choose-project-shape" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "bootstrap-solution" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "build-fsharp-project" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "build-csharp-project" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "testing-workflow" / "SKILL.md").is_file()
