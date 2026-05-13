@@ -1,6 +1,6 @@
 {
   "name": "apple-dev-skills",
-  "version": "6.7.26",
+  "version": "6.8.0",
   "description": "Apple development workflows for Codex, including SwiftUI architecture, Safari extensions, and DocC authoring guidance.",
   "author": {
     "name": "Gale",
