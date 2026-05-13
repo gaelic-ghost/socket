@@ -40,7 +40,7 @@ Keep the distinction clear:
 - webpage JavaScript is not the same as the injected script context
 - injected scripts communicate through the `safari` namespace Apple documents for Safari App Extensions
 - containing-app messages to the extension use `SFSafariApplication.dispatchMessage`
-- page messages back to scripts use `SFSafariPage.dispatchMessageToScript`
+- extension-side dispatch to the injected script context uses `SFSafariPage.dispatchMessageToScript`
 
 ## Permission And Privacy Rules
 

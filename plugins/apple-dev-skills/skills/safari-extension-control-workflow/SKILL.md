@@ -110,7 +110,7 @@ This skill owns the decision between Safari Web Extensions, Safari Web Inspector
 
 ## Fallbacks and Handoffs
 
-- Recommend `explore-apple-swift-docs` when the real need is direct Apple docs lookup for SafariServices, Web Extensions, App Extensions, AuthenticationServices, or App Extensions.
+- Recommend `explore-apple-swift-docs` when the real need is direct Apple docs lookup for SafariServices, Web Extensions, App Extensions, Web Inspector Extensions, or AuthenticationServices.
 - Recommend `xcode-build-run-workflow` when the next step is creating targets, adding entitlements, wiring app groups, signing, running the containing app, or debugging build/install state.
 - Recommend `xcode-testing-workflow` when the next step is repeatable test design or extension-state verification.
 - Recommend `swiftui-app-architecture-workflow` when Safari integration shape is settled and the native app shell needs scene, command, focus, settings, or menu ownership guidance.
