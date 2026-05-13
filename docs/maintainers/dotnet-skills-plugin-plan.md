@@ -185,6 +185,83 @@ This skill should cover:
 
 Diagnostics should report what broke, where it broke, the likely cause, and the smallest useful next check.
 
+### `dotnet:aspnet-core-service-workflow`
+
+Guide agents through ASP.NET Core service work after the core `.NET` project shape is settled.
+
+This skill should cover:
+
+- host project ownership
+- F# service, C# service, and mixed C# host plus F# domain-library shapes
+- endpoint behavior
+- configuration and secret boundaries
+- dependency injection only where it solves a real dependency boundary
+- domain tests versus endpoint or integration tests
+- `dotnet build` and `dotnet test` validation
+
+It should not make ASP.NET Core the default `.NET` project shape when a library, CLI, or package would fit better.
+
+### `dotnet:fsharp-csharp-interop`
+
+Guide agents through mixed F# and C# solution boundaries.
+
+This skill should cover:
+
+- when mixed language projects are useful enough to justify the boundary
+- project-reference direction
+- F# domain libraries consumed by C# hosts
+- C# infrastructure projects consumed by F# apps or libraries
+- public API shape for options, records, discriminated unions, nullability, and async/task interop
+- tests from the consuming side when a boundary is public or fragile
+
+It should avoid flattening F# domain modeling into C#-shaped classes just for convenience.
+
+### `dotnet:ci-workflow`
+
+Guide agents through .NET CI setup and maintenance.
+
+This skill should cover:
+
+- SDK setup
+- `global.json` versus workflow-pinned SDKs
+- restore, build, test, format, and pack checks
+- F# and C# path filters
+- OS and SDK matrix decisions
+- keeping local and CI commands aligned
+
+It should not publish packages unless the user explicitly asks for release automation.
+
+### `dotnet:upgrade-workflow`
+
+Guide agents through .NET SDK, target framework, package, and language-version upgrades.
+
+This skill should cover:
+
+- current SDK and target framework inventory
+- `global.json`
+- package version sources
+- official breaking-change notes
+- F# compiler or language-version behavior
+- C# nullable and analyzer behavior
+- staged restore, build, test, and pack validation
+- migration notes for contributors or package consumers
+
+### `dotnet:tooling-style-workflow`
+
+Guide agents through .NET formatting and analyzer alignment.
+
+This skill should cover:
+
+- `.editorconfig`
+- `dotnet format`
+- analyzers
+- warnings-as-errors
+- local .NET tools
+- CI style checks
+- which tooling actually applies to F# sources versus C# sources
+
+It should keep formatting-only sweeps separate from behavior changes when practical.
+
 ## First Implementation Slice
 
 The first slice should be intentionally small but installable:
@@ -202,22 +279,22 @@ The first slice should be intentionally small but installable:
 - [x] Run `uv run scripts/validate_socket_metadata.py`.
 - [x] Run any child-plugin validation added by the new plugin; no child-local validator was added in the first slice.
 
-## Later Slices
+## Second Implementation Slice
 
-After the first slice proves useful, add:
+The second slice broadens the plugin from core project/test guidance into package, service, interop, CI, upgrade, and tooling guidance:
 
-- [ ] `dotnet:package-workflow`.
-- [ ] `dotnet:diagnose-project`.
-- [ ] `dotnet:aspnet-core-service-workflow`.
-- [ ] `dotnet:fsharp-csharp-interop`.
-- [ ] `dotnet:ci-workflow`.
-- [ ] `dotnet:upgrade-workflow`.
-- [ ] `dotnet:tooling-style-workflow`.
+- [x] `dotnet:package-workflow`.
+- [x] `dotnet:diagnose-project`.
+- [x] `dotnet:aspnet-core-service-workflow`.
+- [x] `dotnet:fsharp-csharp-interop`.
+- [x] `dotnet:ci-workflow`.
+- [x] `dotnet:upgrade-workflow`.
+- [x] `dotnet:tooling-style-workflow`.
 - [ ] install testing with a temporary `CODEX_HOME`.
 
 ## Deferred Scope
 
-These are useful but should not block the first installable plugin:
+After the first two slices prove useful, consider deeper specialized workflows. These are useful but should not block the current installable plugin:
 
 - Blazor app workflows
 - .NET Aspire workflows

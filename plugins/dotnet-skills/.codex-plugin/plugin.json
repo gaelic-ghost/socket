@@ -1,7 +1,7 @@
 {
   "name": "dotnet-skills",
   "version": "6.8.0",
-  "description": "Codex skills for choosing, bootstrapping, building, and testing .NET projects with F# and C# as equal first-party languages.",
+  "description": "Codex skills for choosing, bootstrapping, building, testing, packaging, diagnosing, and maintaining .NET projects with F# and C# as equal first-party languages.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": ".NET Skills",
     "shortDescription": ".NET, F#, and C# workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through choosing .NET project shapes, bootstrapping reproducible solutions, building idiomatic F# and C# projects, and running test workflows through the .NET CLI.",
+    "longDescription": "Guide Codex agents through choosing .NET project shapes, bootstrapping reproducible solutions, building idiomatic F# and C# projects, running tests, validating packages, diagnosing failures, designing ASP.NET Core services, maintaining mixed-language boundaries, and aligning CI, upgrades, and tooling through the .NET CLI.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -35,7 +35,11 @@
       "Bootstrap a .NET solution while treating F# and C# as equal options.",
       "Build this F# project idiomatically instead of translating from C#.",
       "Build this C# project idiomatically while respecting existing repo conventions.",
-      "Run and explain the .NET testing workflow for this solution."
+      "Run and explain the .NET testing workflow for this solution.",
+      "Validate this .NET package surface without publishing it.",
+      "Diagnose why this .NET restore, build, test, or pack command failed.",
+      "Design the F# and C# boundary in this mixed .NET solution.",
+      "Align this .NET repo's CI, upgrade, formatting, and analyzer workflow."
     ],
     "brandColor": "#512BD4"
   }

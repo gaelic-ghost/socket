@@ -108,8 +108,8 @@ Use ASP.NET Core guidance only after the core solution, language, and test shape
 
 Handoff:
 
-- `dotnet:aspnet-core-service-workflow` when that later skill exists
-- `dotnet:bootstrap-solution` for the current first-slice scaffold guidance
+- `dotnet:aspnet-core-service-workflow` for service-specific guidance
+- `dotnet:bootstrap-solution` for scaffold guidance
 
 ### Mixed F# And C# Solution
 

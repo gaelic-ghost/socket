@@ -56,7 +56,7 @@ def test_swiftasb_skills_marketplace_installs_in_temporary_codex_home(
     assert (plugin_root / "skills" / "diagnose-integration" / "SKILL.md").is_file()
 
 
-def test_dotnet_skills_plugin_exposes_first_slice() -> None:
+def test_dotnet_skills_plugin_exposes_expected_skill_inventory() -> None:
     plugin_root = REPO_ROOT / "plugins" / "dotnet-skills"
 
     assert (plugin_root / ".codex-plugin" / "plugin.json").is_file()
@@ -65,3 +65,10 @@ def test_dotnet_skills_plugin_exposes_first_slice() -> None:
     assert (plugin_root / "skills" / "build-fsharp-project" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "build-csharp-project" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "testing-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "package-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "diagnose-project" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "aspnet-core-service-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "fsharp-csharp-interop" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "ci-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "upgrade-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "tooling-style-workflow" / "SKILL.md").is_file()

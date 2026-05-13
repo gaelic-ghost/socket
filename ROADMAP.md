@@ -75,6 +75,7 @@ In Progress
 - [x] Update `plugins/dotnet-skills/AGENTS.md` with the F#/C# parity policy and `.NET` validation expectations.
 - [x] Update `plugins/dotnet-skills/.codex-plugin/plugin.json` so plugin metadata includes F# and avoids C#-only wording.
 - [x] Add first-slice skills for project-shape choice, solution bootstrap, F# project implementation, C# project implementation, and test workflow.
+- [x] Add second-slice skills for package workflow, diagnostics, ASP.NET Core services, F#/C# interop, CI, upgrades, and tooling/style alignment.
 - [x] Switch the root marketplace entry for `dotnet-skills` from placeholder to installable only after real skill content exists.
 - [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
