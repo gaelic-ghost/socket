@@ -35,9 +35,15 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 ### python-skills
 
 - [x] Tighten child-specific `AGENTS.md` and validator expectations after the README collapse.
-- [ ] Keep `skills/`, `.codex-plugin/plugin.json`, and Socket-root contribution workflow boundaries clearly separated.
-- [ ] Confirm `uv run scripts/validate_repo_metadata.py` and `uv run pytest` still pass after docs or metadata changes.
-- [ ] Add lightweight validation for future Codex metadata changes.
+- [x] Fix the child validator so it no longer expects a removed child `README.md`.
+- [x] Record the expansion plan in [`docs/maintainers/python-skills-plugin-plan.md`](./docs/maintainers/python-skills-plugin-plan.md).
+- [ ] Add `choose-python-project-shape`.
+- [ ] Add `build-python-project`.
+- [ ] Add `diagnose-python-project`.
+- [ ] Add `python-package-workflow`.
+- [ ] Add `python-tooling-style-workflow`.
+- [ ] Update `plugins/python-skills/.codex-plugin/plugin.json` after the new skills exist.
+- [ ] Confirm `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` pass after skill or metadata changes.
 
 ### swiftasb-skills
 
