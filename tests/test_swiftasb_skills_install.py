@@ -71,6 +71,7 @@ def test_dotnet_skills_plugin_exposes_expected_skill_inventory() -> None:
     plugin_root = REPO_ROOT / "plugins" / "dotnet-skills"
 
     assert (plugin_root / ".codex-plugin" / "plugin.json").is_file()
+    assert (plugin_root / "assets" / "sharp-icon.jpg").is_file()
     assert (plugin_root / "skills" / "choose-project-shape" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "bootstrap-solution" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "build-fsharp-project" / "SKILL.md").is_file()
