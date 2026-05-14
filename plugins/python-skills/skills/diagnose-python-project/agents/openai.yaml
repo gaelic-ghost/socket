@@ -1,0 +1,8 @@
+interface:
+  display_name: "Diagnose Python Project"
+  short_description: "Diagnose uv, import, pytest, Ruff, mypy, FastAPI, FastMCP, and package failures."
+  brand_color: "#B45309"
+  default_prompt: "Use $diagnose-python-project to classify the failing Python command by phase, identify the first meaningful error, explain the likely cause, and return the smallest useful next check or fix."
+
+policy:
+  allow_implicit_invocation: true

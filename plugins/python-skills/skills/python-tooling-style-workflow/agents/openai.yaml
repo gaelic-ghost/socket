@@ -1,0 +1,8 @@
+interface:
+  display_name: "Python Tooling And Style Workflow"
+  short_description: "Align uv, Ruff, mypy, pytest, dependency groups, and local validation."
+  brand_color: "#0891B2"
+  default_prompt: "Use $python-tooling-style-workflow to inspect existing Python tooling, align Ruff, mypy, pytest, dependency groups, and uv validation commands without overriding repo-local conventions."
+
+policy:
+  allow_implicit_invocation: true

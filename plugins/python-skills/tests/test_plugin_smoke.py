@@ -34,7 +34,7 @@ def test_plugin_manifest_and_marketplace_contract() -> None:
     assert manifest["name"] == "python-skills"
     assert manifest["skills"] == "./skills/"
     assert manifest["interface"]["displayName"] == "Python Skills"
-    assert manifest["interface"]["category"] == "Productivity"
+    assert manifest["interface"]["category"] == "Developer Tools"
 
     assert ".codex-plugin/plugin.json" in agents_text
     assert "Root [`skills/`](./skills/) is the authored workflow surface" in agents_text

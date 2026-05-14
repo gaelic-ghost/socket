@@ -231,12 +231,12 @@ The first slice should repair the current child contract and add the core missin
 - [x] Fix `plugins/python-skills/scripts/validate_repo_metadata.py` so it validates the child `AGENTS.md`, plugin manifest, and skill metadata without expecting a removed child `README.md`.
 - [x] Update child tests so they assert the current no-child-README contract.
 - [x] Record this expansion plan.
-- [ ] Add `python-skills:choose-python-project-shape`.
-- [ ] Add `python-skills:build-python-project`.
-- [ ] Add `python-skills:diagnose-python-project`.
-- [ ] Add `python-skills:python-package-workflow`.
-- [ ] Add `python-skills:python-tooling-style-workflow`.
-- [ ] Update `plugins/python-skills/.codex-plugin/plugin.json` default prompts and long description after the new skills exist.
+- [x] Add `python-skills:choose-python-project-shape`.
+- [x] Add `python-skills:build-python-project`.
+- [x] Add `python-skills:diagnose-python-project`.
+- [x] Add `python-skills:python-package-workflow`.
+- [x] Add `python-skills:python-tooling-style-workflow`.
+- [x] Update `plugins/python-skills/.codex-plugin/plugin.json` default prompts and long description after the new skills exist.
 - [ ] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
 - [ ] Run root Socket metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
@@ -294,9 +294,9 @@ The validator repair alone is a maintenance fix. Adding the new skill inventory 
 
 The expansion is ready when:
 
-- [ ] The child validator passes without requiring a child `README.md`.
+- [x] The child validator passes without requiring a child `README.md`.
 - [ ] The plugin has a documented skill naming convention and expansion plan.
-- [ ] The first new skill set covers project choice, implementation, diagnostics, packaging, and tooling/style alignment.
+- [x] The first new skill set covers project choice, implementation, diagnostics, packaging, and tooling/style alignment.
 - [ ] The guidance consistently uses `uv` for Python command examples.
 - [ ] The guidance uses official documentation as the source of truth for Python packaging, `uv`, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
 - [ ] Root Socket docs, plugin metadata, child validation, and root validation agree on the exported Python skill surface.
