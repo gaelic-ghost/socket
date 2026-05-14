@@ -14,9 +14,9 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(dotnet:*)
 
 ## Purpose
 
-Run and explain .NET tests without assuming one language or test framework owns the platform.
+Run and explain .NET tests without assuming one language owns the platform.
 
-The stable command surface is `dotnet test`. The repository's existing test framework, project layout, SDK pin, and CI commands are the source of truth for how broad the check should be.
+The stable command surface is `dotnet test`. The repository's existing test framework, project layout, SDK pin, and CI commands are the source of truth for how broad the check should be. For new scaffolds with no repo-local test framework, recommend xUnit as the default test template.
 
 ## When To Use
 
@@ -33,6 +33,7 @@ Use official Microsoft documentation first:
 - [.NET CLI documentation](https://learn.microsoft.com/dotnet/core/tools/)
 - [F# documentation](https://learn.microsoft.com/dotnet/fsharp/)
 - [C# documentation](https://learn.microsoft.com/dotnet/csharp/)
+- [Unit testing C# with xUnit and `dotnet test`](https://learn.microsoft.com/dotnet/core/testing/unit-testing-csharp-with-xunit)
 
 Inspect the repository before running broad checks:
 
@@ -51,6 +52,19 @@ Choose the narrowest useful test command first:
 - compile issue without tests: `dotnet build`
 
 Use solution-level `dotnet test` before commit, push, PR, release, or any change that could affect multiple projects.
+
+## Test Framework Choice
+
+Preserve the repository's current test framework in existing projects.
+
+For new scaffolds without a repo-local convention, recommend xUnit:
+
+```bash
+dotnet new xunit --language "F#" --name MyLibrary.Tests --output tests/MyLibrary.Tests
+dotnet new xunit --language "C#" --name MyLibrary.Tests --output tests/MyLibrary.Tests
+```
+
+The recommendation is a scaffold default, not a migration rule. Do not replace MSTest, NUnit, or another established test stack unless the user asks for that migration.
 
 ## Failure Triage
 
@@ -103,7 +117,7 @@ Return:
 ## Guardrails
 
 - Do not run multiple build or test toolchains concurrently.
-- Do not declare a universal F# or C# test framework default in this first slice.
+- Do not replace an existing test framework with xUnit unless the user explicitly asks for that migration.
 - Do not hide restore or build failures under a generic "tests failed" summary.
 - Do not skip tests after behavior changes when a relevant test surface exists.
 - Do not broaden to package publishing or release workflow unless the user explicitly asks.

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -45,6 +46,16 @@ def test_swiftasb_skills_marketplace_installs_in_temporary_codex_home(
 
     marketplace_path = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
     assert marketplace_path.is_file()
+
+    marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    dotnet_entry = next(
+        plugin for plugin in marketplace["plugins"] if plugin["name"] == "dotnet-skills"
+    )
+    assert dotnet_entry["policy"]["installation"] == "AVAILABLE"
+    assert dotnet_entry["source"] == {
+        "source": "local",
+        "path": "./plugins/dotnet-skills",
+    }
 
     plugin_root = REPO_ROOT / "plugins" / "swiftasb-skills"
     assert (plugin_root / ".codex-plugin" / "plugin.json").is_file()

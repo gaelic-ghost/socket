@@ -2,7 +2,7 @@
 
 This plan records the first durable shape for a Socket-hosted `.NET` skills plugin.
 
-The plugin's job is to help agents build, test, package, and maintain `.NET` projects while treating F# and C# as equal first-party language choices. Gale personally prefers F#, so the plugin should avoid silently centering C# in examples, scaffold defaults, skill names, or decision language.
+The plugin's job is to help agents build, test, package, and maintain `.NET` projects while treating F# and C# as equal first-party language choices. F# should stay visibly first-class, so the plugin should avoid silently centering C# in examples, scaffold defaults, skill names, or decision language.
 
 ## Intent
 
@@ -44,7 +44,7 @@ That means:
 - ask for language preference before scaffolding when the user's request is ambiguous
 - present F# and C# as peer options in project-shape and bootstrap guidance
 - include F# in plugin keywords, skill descriptions, examples, and testing guidance
-- prefer F# examples first when the user is Gale or when no broader user-facing default is required
+- prefer F# examples first when no broader user-facing default is required
 - include both `.fsproj` and `.csproj` examples when the guidance is language-neutral but project-file details matter
 - call out F# compile-order behavior, module organization, records, discriminated unions, options, async/task interop, and testing style explicitly instead of treating F# as C# with different syntax
 - call out C# nullable reference types, records/classes, analyzers, async/task behavior, and idiomatic project layout explicitly instead of treating C# as the universal `.NET` baseline
@@ -317,13 +317,13 @@ Longer names can be reconsidered only if skills are later copied outside the `do
 
 Decision for the first slice: keep `dotnet:bootstrap-solution` as pure guidance.
 
-A script becomes useful if Gale wants repeatable solution scaffolds with F# and C# parity baked into command generation, but it also creates a validation and maintenance surface. Defer that until the guidance shape proves itself.
+A script becomes useful if repeatable solution scaffolds with F# and C# parity need to be baked into command generation, but it also creates a validation and maintenance surface. Defer that until the guidance shape proves itself.
 
 ### Default Test Frameworks
 
-Decision for the first slice: do not declare a universal test-framework default.
+Updated decision: recommend xUnit as the default scaffold template for new F# and C# test projects.
 
-Read existing repo choices first and use `dotnet test` as the stable command surface. If the plugin later scaffolds tests, it should choose explicit defaults and explain why.
+Read existing repo choices first and preserve them in existing projects. For new scaffolds without a repo-local test framework, use `dotnet new xunit` because it is the common .NET CLI template path documented by Microsoft, then use `dotnet test` as the stable command surface.
 
 ### Formatting And Analyzer Policy
 

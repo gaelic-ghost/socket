@@ -23,7 +23,7 @@ Promo audio: [Socket Codex Marketplace Promo](./docs/media/socket-codex-marketpl
 
 ### Status
 
-`socket` is maintained and supported by Gale.
+`socket` is maintained by Gaelic Ghost.
 
 ### What This Project Is
 
@@ -31,7 +31,7 @@ Socket is a Marketplace of Plugins, Hooks, and MCP servers for Apple Platform De
 
 ### Motivation
 
-Agents are great, but to do specialized work, they need specialized tools. As I continued building skills for my workflows, I needed a place to distribute them from. Socket is that place. I hope you find these as useful as I have.
+Agents are great, but to do specialized work, they need specialized tools. Socket is a shared catalog for focused Codex plugins, hooks, skills, and MCP-backed workflows.
 
 ## Quick Start
 
@@ -53,7 +53,7 @@ Newly added plugins can be installed from the same plugin directory inside Codex
 
 ## Usage
 
-Use `socket` when you want one Codex catalog for Gale's agent-focused plugin set.
+Use `socket` when you want one Codex catalog for focused agent workflow plugins.
 
 Currently available from the catalog:
 

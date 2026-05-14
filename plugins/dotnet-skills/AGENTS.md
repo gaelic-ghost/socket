@@ -16,7 +16,7 @@ This file is the .NET Skills child-repo override for work done from `socket`. Fo
 - Do not describe F# as secondary, niche, or merely compatible with .NET.
 - Do not silently choose C# when the user has not named a language.
 - Ask for language preference before scaffolding when the user's request is ambiguous.
-- Prefer F# examples first when working for Gale or when no broader public default is required.
+- Prefer F# examples first when no broader public default is required, so F# stays visibly first-class in neutral examples.
 - Keep .NET examples grounded in the `dotnet` CLI unless a repository already documents a different tool path.
 - Use official Microsoft documentation first for .NET SDK, CLI, F#, C#, ASP.NET Core, testing, package, and project behavior.
 - Keep package dependencies fetchable from NuGet, GitHub, package registries, or other real remote repositories; do not commit machine-local SDK, package, or project references.

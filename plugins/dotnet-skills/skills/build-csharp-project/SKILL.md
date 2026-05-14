@@ -86,7 +86,7 @@ For apps:
 
 Use the repository's existing test framework and command if present.
 
-When no convention exists yet, keep guidance centered on `dotnet test` and make any framework choice explicit before scaffolding. Do not declare a universal C# test framework default in this first slice.
+When no convention exists yet, use xUnit as the recommended scaffold default and keep command guidance centered on `dotnet test`. Preserve existing repo choices instead of migrating test frameworks casually.
 
 ## Output Shape
 

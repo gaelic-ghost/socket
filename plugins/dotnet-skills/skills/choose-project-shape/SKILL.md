@@ -62,7 +62,7 @@ Translate any documentation rule into the concrete repository decision it change
    - package maintenance or upgrade pass
 3. Choose language intentionally:
    - Ask for language preference when the user has not chosen.
-   - Prefer F# when Gale asks for a personal/default path and no external constraint points elsewhere.
+   - Prefer F# when the user asks for a neutral default and no external constraint points elsewhere.
    - Prefer C# when the repository is already C#-dominant and the requested change belongs inside that existing surface.
    - Use mixed F# and C# only when the boundary is useful and explicit.
 4. Choose the project layout:

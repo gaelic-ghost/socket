@@ -12,7 +12,7 @@
 
 ## Vision
 
-- Keep `socket` as the honest superproject layer for Gale's public Codex plugin and skills ecosystem, with subtree imports, root marketplace wiring, and cross-repo maintainer guidance kept consistent.
+- Keep `socket` as the honest superproject layer for a public Codex plugin and skills ecosystem, with subtree imports, root marketplace wiring, and cross-repo maintainer guidance kept consistent.
 
 ## Product Principles
 

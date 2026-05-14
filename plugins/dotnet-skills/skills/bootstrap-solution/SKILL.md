@@ -49,6 +49,7 @@ dotnet --list-sdks
 - project shape
 - language: F#, C#, or mixed
 - test project expectation
+- test framework expectation; default to xUnit for new scaffolds unless the repo or user chooses another framework
 - SDK pinning expectation
 - git initialization or commit expectation
 
@@ -70,11 +71,13 @@ If the user has not selected F# or C#, ask before scaffolding.
    - avoid inventing a machine-local SDK path
 4. Create projects with the `dotnet` CLI.
 5. Add project references.
-6. Add tests when the project has behavior worth preserving.
+6. Add tests when the project has behavior worth preserving. Use the existing repo test framework if one exists; otherwise default new scaffolds to xUnit.
 7. Run validation.
 8. Report the generated paths and exact commands.
 
 ## Command Recipes
+
+These recipes use xUnit intentionally. It is the recommended default for new scaffolds in this plugin because it is a common .NET CLI test template and Microsoft documents `dotnet test` workflows with xUnit examples. Preserve existing repo test-framework choices when adding to an established repository.
 
 F# console app with tests:
 
@@ -142,5 +145,6 @@ Return:
 - Do not scaffold into a non-empty directory without checking the user's intent.
 - Do not silently choose C#.
 - Do not add a scaffolding script for this first slice; this skill is guidance-only.
+- Do not replace an existing test framework with xUnit unless the user explicitly asks for that migration.
 - Do not publish packages.
 - Do not commit generated files unless the user asks for a commit or the active repo workflow calls for one.
