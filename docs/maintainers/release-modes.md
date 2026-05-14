@@ -10,18 +10,19 @@ Both modes treat `socket` as the release owner for the umbrella repository:
 
 1. make the intended commits
 2. validate the changed surface
-3. publish through a branch and pull request when the change is not already on `main`
-4. check CI and fix failures before continuing
-5. check PR comments and requested changes before continuing
-6. merge to `main`
-7. fast-forward local `main`
-8. create the `socket` tag locally from the reviewed `main`
-9. push the tag
-10. create the GitHub release from the existing tag
-11. verify the GitHub release object exists
-12. verify `git log origin/main..main` is empty
-13. account for every local branch not contained by `main`
-14. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
+3. run the relevant temporary `CODEX_HOME` smoke check from [`plugin-install-testing.md`](./plugin-install-testing.md)
+4. publish through a branch and pull request when the change is not already on `main`
+5. check CI and fix failures before continuing
+6. check PR comments and requested changes before continuing
+7. merge to `main`
+8. fast-forward local `main`
+9. create the `socket` tag locally from the reviewed `main`
+10. push the tag
+11. create the GitHub release from the existing tag
+12. verify the GitHub release object exists
+13. verify `git log origin/main..main` is empty
+14. account for every local branch not contained by `main`
+15. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
 
 `codex plugin marketplace upgrade socket` is always the final release step. Never run it before the GitHub release exists and has been verified, subtree accounting is complete, and branch accounting has been recorded.
 
@@ -85,6 +86,7 @@ Before tagging `socket`:
 
 - confirm the subtree policy table above was followed
 - run `uv run scripts/validate_socket_metadata.py`
+- run the relevant temporary `CODEX_HOME` smoke check from [`plugin-install-testing.md`](./plugin-install-testing.md)
 - confirm local `main` is fast-forwarded to `origin/main`
 - run `scripts/release.sh release-ready X.Y.Z`
 - confirm `git log origin/main..main` is empty

@@ -165,6 +165,13 @@ scripts/release.sh custom 1.2.3
 
 Use the release modes in [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) when preparing the actual release. Use `standard` for root-only releases and `subtrees` when a release also needs subtree pull/push accounting.
 
+Before opening or merging a release PR that changes marketplace entries,
+plugin manifests, or child plugin payloads, run the appropriate temporary
+`CODEX_HOME` smoke check from
+[`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md)
+so the release proves the marketplace add path without touching a production
+Codex install.
+
 If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy` commands where that repo's contributors will actually look.
 
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
