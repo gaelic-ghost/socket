@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -46,6 +47,16 @@ def test_swiftasb_skills_marketplace_installs_in_temporary_codex_home(
     marketplace_path = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
     assert marketplace_path.is_file()
 
+    marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    dotnet_entry = next(
+        plugin for plugin in marketplace["plugins"] if plugin["name"] == "dotnet-skills"
+    )
+    assert dotnet_entry["policy"]["installation"] == "AVAILABLE"
+    assert dotnet_entry["source"] == {
+        "source": "local",
+        "path": "./plugins/dotnet-skills",
+    }
+
     plugin_root = REPO_ROOT / "plugins" / "swiftasb-skills"
     assert (plugin_root / ".codex-plugin" / "plugin.json").is_file()
     assert (plugin_root / "skills" / "explain-swiftasb" / "SKILL.md").is_file()
@@ -54,3 +65,22 @@ def test_swiftasb_skills_marketplace_installs_in_temporary_codex_home(
     assert (plugin_root / "skills" / "build-appkit-app" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "build-swift-package" / "SKILL.md").is_file()
     assert (plugin_root / "skills" / "diagnose-integration" / "SKILL.md").is_file()
+
+
+def test_dotnet_skills_plugin_exposes_expected_skill_inventory() -> None:
+    plugin_root = REPO_ROOT / "plugins" / "dotnet-skills"
+
+    assert (plugin_root / ".codex-plugin" / "plugin.json").is_file()
+    assert (plugin_root / "assets" / "sharp-icon.jpg").is_file()
+    assert (plugin_root / "skills" / "choose-project-shape" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "bootstrap-solution" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "build-fsharp-project" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "build-csharp-project" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "testing-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "package-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "diagnose-project" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "aspnet-core-service-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "fsharp-csharp-interop" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "ci-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "upgrade-workflow" / "SKILL.md").is_file()
+    assert (plugin_root / "skills" / "tooling-style-workflow" / "SKILL.md").is_file()

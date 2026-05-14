@@ -1,33 +1,48 @@
 {
   "name": "dotnet-skills",
-  "version": "6.8.0",
-  "description": "Standalone plugin repository for future .NET-focused Codex skills.",
+  "version": "6.9.0",
+  "description": "Codex skills for choosing, bootstrapping, building, testing, packaging, diagnosing, and maintaining .NET projects with F# and C# as equal first-party languages.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
     "url": "https://github.com/gaelic-ghost"
   },
-  "homepage": "https://github.com/gaelic-ghost/dotnet-skills",
-  "repository": "https://github.com/gaelic-ghost/dotnet-skills",
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/dotnet-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
   "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",
     "skills",
     "dotnet",
+    "fsharp",
     "csharp"
   ],
+  "skills": "./skills/",
   "interface": {
-    "displayName": "Dotnet Skills",
-    "shortDescription": "Future .NET-focused Codex skills.",
-    "longDescription": "Standalone plugin repository for future .NET-focused Codex skills and maintainer workflows.",
-    "developerName": "Gale",
+    "displayName": ".NET Skills",
+    "shortDescription": ".NET, F#, and C# workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through choosing .NET project shapes, bootstrapping reproducible solutions, building idiomatic F# and C# projects, running tests, validating packages, diagnosing failures, designing ASP.NET Core services, maintaining mixed-language boundaries, and aligning CI, upgrades, and tooling through the .NET CLI.",
+    "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/gaelic-ghost/dotnet-skills",
-    "brandColor": "#512BD4"
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/dotnet-skills",
+    "defaultPrompt": [
+      "Choose the right .NET project shape before we start implementing.",
+      "Bootstrap a .NET solution while treating F# and C# as equal options.",
+      "Build this F# project idiomatically instead of translating from C#.",
+      "Build this C# project idiomatically while respecting existing repo conventions.",
+      "Run and explain the .NET testing workflow for this solution.",
+      "Validate this .NET package surface without publishing it.",
+      "Diagnose why this .NET restore, build, test, or pack command failed.",
+      "Design the F# and C# boundary in this mixed .NET solution.",
+      "Align this .NET repo's CI, upgrade, formatting, and analyzer workflow."
+    ],
+    "brandColor": "#512BD4",
+    "composerIcon": "./assets/sharp-icon.jpg",
+    "logo": "./assets/sharp-icon.jpg"
   }
 }

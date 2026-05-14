@@ -52,6 +52,19 @@ Expected result for the Speak Swiftly catalog split:
 - Removing `socket` leaves no configured marketplace in the temporary Codex
   home.
 
+For ordinary child-plugin releases, inspect the changed plugin entry instead of
+`speak-swiftly`. The smoke check should verify:
+
+- Codex reports an added marketplace named `socket` from the local checkout.
+- The changed child plugin entry has the expected `policy.installation` value.
+- The changed child plugin entry points at the expected source path or
+  Git-backed source.
+- The changed child plugin root exposes `.codex-plugin/plugin.json`.
+- The changed child plugin manifest exposes every expected `skills`, `hooks`,
+  `mcpServers`, or `apps` component.
+- Removing `socket` leaves no configured marketplace in the temporary Codex
+  home.
+
 ## Socket Git-Backed Test
 
 Run this after the Socket branch has landed in GitHub state that users can

@@ -28,6 +28,9 @@ def make_marketplace_repo(tmp_path: Path, manifest: dict[str, object]) -> Path:
         repo_root / ".agents" / "plugins" / "marketplace.json",
         json.dumps(
             {
+                "interface": {
+                    "displayName": "Test Marketplace",
+                },
                 "plugins": [
                     {
                         "name": "example-skills",
@@ -62,6 +65,9 @@ def make_remote_marketplace_repo(
         repo_root / ".agents" / "plugins" / "marketplace.json",
         json.dumps(
             {
+                "interface": {
+                    "displayName": "Test Marketplace",
+                },
                 "plugins": [
                     {
                         "name": "speak-swiftly",
@@ -106,6 +112,49 @@ def test_main_accepts_plugin_manifest_with_root_skills_component(
     run_validator(repo_root, monkeypatch)
 
 
+def test_main_accepts_plugin_manifest_with_interface_assets(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_marketplace_repo(
+        tmp_path,
+        {
+            "name": "example-skills",
+            "skills": "./skills/",
+            "interface": {
+                "composerIcon": "./assets/icon.jpg",
+                "logo": "./assets/logo.jpg",
+                "screenshots": ["./assets/screenshot.jpg"],
+            },
+        },
+    )
+    plugin_root = repo_root / "plugins" / "example-skills"
+    write(plugin_root / "assets" / "icon.jpg", "icon")
+    write(plugin_root / "assets" / "logo.jpg", "logo")
+    write(plugin_root / "assets" / "screenshot.jpg", "screenshot")
+
+    run_validator(repo_root, monkeypatch)
+
+
+def test_main_rejects_plugin_manifest_with_missing_interface_asset(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_marketplace_repo(
+        tmp_path,
+        {
+            "name": "example-skills",
+            "skills": "./skills/",
+            "interface": {
+                "composerIcon": "./assets/missing.jpg",
+            },
+        },
+    )
+
+    with pytest.raises(SystemExit):
+        run_validator(repo_root, monkeypatch)
+
+
 def test_main_rejects_plugin_manifest_missing_root_skills_component(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -131,6 +180,9 @@ def test_main_accepts_unavailable_empty_placeholder_plugin(
         repo_root / ".agents" / "plugins" / "marketplace.json",
         json.dumps(
             {
+                "interface": {
+                    "displayName": "Test Marketplace",
+                },
                 "plugins": [
                     {
                         "name": "placeholder-skills",

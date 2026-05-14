@@ -23,7 +23,7 @@ Promo audio: [Socket Codex Marketplace Promo](./docs/media/socket-codex-marketpl
 
 ### Status
 
-`socket` is maintained and supported by Gale.
+`socket` is maintained by Gaelic Ghost.
 
 ### What This Project Is
 
@@ -31,7 +31,7 @@ Socket is a Marketplace of Plugins, Hooks, and MCP servers for Apple Platform De
 
 ### Motivation
 
-Agents are great, but to do specialized work, they need specialized tools. As I continued building skills for my workflows, I needed a place to distribute them from. Socket is that place. I hope you find these as useful as I have.
+Agents are great, but to do specialized work, they need specialized tools. Socket is a shared catalog for focused Codex plugins, hooks, skills, and MCP-backed workflows.
 
 ## Quick Start
 
@@ -53,13 +53,14 @@ Newly added plugins can be installed from the same plugin directory inside Codex
 
 ## Usage
 
-Use `socket` when you want one Codex catalog for Gale's agent-focused plugin set.
+Use `socket` when you want one Codex catalog for focused agent workflow plugins.
 
 Currently available from the catalog:
 
 - `agent-plugin-skills`
 - `apple-dev-skills`
 - `cardhop-app`
+- `dotnet-skills`
 - `productivity-skills`
 - `python-skills`
 - `speak-swiftly`
@@ -75,6 +76,7 @@ Current Socket catalog shape:
 - `agent-plugin-skills`: maintainer skills for skills-export and plugin-export repositories
 - `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
+- `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `productivity-skills`: general-purpose maintainer and documentation workflow baseline
 - `python-skills`: Python, `uv`, FastAPI, FastMCP, and pytest workflow plugin
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
@@ -83,7 +85,6 @@ Current Socket catalog shape:
 
 Placeholder directories for future plugins (not available for install):
 
-- `dotnet-skills`
 - `rust-skills`
 - `spotify`
 - `web-dev-skills`

@@ -18,6 +18,8 @@ GIT_SOURCE_KINDS = {"url", "git-subdir"}
 INSTALLATION_POLICIES = {"AVAILABLE", "INSTALLED_BY_DEFAULT", "NOT_AVAILABLE"}
 AUTHENTICATION_POLICIES = {"ON_INSTALL", "ON_FIRST_USE"}
 MARKETPLACE_INTERFACE_ASSET_FIELDS = {"banner"}
+PLUGIN_INTERFACE_ASSET_FIELDS = {"composerIcon", "logo"}
+PLUGIN_INTERFACE_ASSET_LIST_FIELDS = {"screenshots"}
 
 
 def fail(message: str) -> NoReturn:
@@ -194,6 +196,49 @@ def manifest_exports_content(*, plugin_root: Path, plugin_manifest: dict[str, ob
     return False
 
 
+def validate_plugin_interface_assets(
+    *,
+    plugin_name: str,
+    plugin_root: Path,
+    plugin_manifest: dict[str, object],
+) -> None:
+    interface = plugin_manifest.get("interface")
+    if interface is None:
+        return
+    if not isinstance(interface, dict):
+        fail(f"Packaged plugin manifest for `{plugin_name}` has an invalid `interface` object.")
+
+    for field_name in PLUGIN_INTERFACE_ASSET_FIELDS:
+        field_value = interface.get(field_name)
+        if field_value is None:
+            continue
+        validate_manifest_path(
+            plugin_name=plugin_name,
+            plugin_root=plugin_root,
+            field_name=f"interface.{field_name}",
+            field_value=field_value,
+            expected_kind="file",
+        )
+
+    for field_name in PLUGIN_INTERFACE_ASSET_LIST_FIELDS:
+        field_value = interface.get(field_name)
+        if field_value is None:
+            continue
+        if not isinstance(field_value, list):
+            fail(
+                f"Packaged plugin manifest for `{plugin_name}` must define "
+                f"`interface.{field_name}` as a list of repo-relative paths."
+            )
+        for index, item in enumerate(field_value):
+            validate_manifest_path(
+                plugin_name=plugin_name,
+                plugin_root=plugin_root,
+                field_name=f"interface.{field_name}[{index}]",
+                field_value=item,
+                expected_kind="file",
+            )
+
+
 def validate_local_plugin_entry(
     *,
     name: str,
@@ -251,6 +296,12 @@ def validate_local_plugin_entry(
             "MCP servers, hooks, or apps. Empty placeholder plugins must use "
             "policy.installation `NOT_AVAILABLE` until they ship content."
         )
+
+    validate_plugin_interface_assets(
+        plugin_name=name,
+        plugin_root=plugin_root,
+        plugin_manifest=plugin_manifest,
+    )
 
     skills_dir = plugin_root / "skills"
     skills_path = plugin_manifest.get("skills")
