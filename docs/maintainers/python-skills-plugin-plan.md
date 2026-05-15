@@ -249,7 +249,7 @@ The second slice should cover repeated project operations that become more valua
 - [x] Decide whether to broaden `uv-pytest-unit-testing` into `python-testing-workflow`; keep `uv-pytest-unit-testing` for this release so existing prompts and routing remain compatible.
 - [ ] Decide whether ongoing FastAPI service maintenance needs a dedicated `fastapi-service-workflow`.
 - [ ] Decide whether ongoing FastMCP server maintenance needs a dedicated `fastmcp-service-workflow`.
-- [ ] Add install testing with a temporary `CODEX_HOME` if the exported skill surface or plugin metadata changes enough to need plugin-install verification.
+- [x] Add install testing with a temporary `CODEX_HOME` if the exported skill surface or plugin metadata changes enough to need plugin-install verification.
 
 ## Deferred Scope
 
