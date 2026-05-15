@@ -44,7 +44,7 @@ Use official documentation first:
 
 1. Inventory current state:
    ```bash
-   rg -n "requires-python|dependencies|optional-dependencies|dependency-groups|tool.uv|tool.pytest|tool.ruff|tool.mypy|fastapi|fastmcp|pydantic|pytest|ruff|mypy" pyproject.toml uv.lock .github docs README.md
+   rg -n "requires-python|dependencies|optional-dependencies|dependency-groups|tool.uv|tool.pytest|tool.ruff|tool.mypy|fastapi|fastmcp|pydantic|pytest|ruff|mypy"
    rg --files -g 'pyproject.toml' -g 'uv.lock' -g '.python-version' -g '.github/workflows/*.yml' -g '.github/workflows/*.yaml'
    ```
 2. Decide upgrade boundary:

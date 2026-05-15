@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -98,6 +99,8 @@ def test_apply_creates_architecture_files_and_detects_products(tmp_path: Path) -
     assert (architecture_dir / "ARCHITECTURE.md").is_file()
     assert (architecture_dir / "SLICES.md").is_file()
     assert (architecture_dir / "architecture.json").is_file()
+    model = json.loads((architecture_dir / "architecture.json").read_text(encoding="utf-8"))
+    assert model["projectRoot"] == "."
     architecture = (architecture_dir / "ARCHITECTURE.md").read_text(encoding="utf-8")
     assert "## Product Map" in architecture
     assert "`DemoCore`" in architecture

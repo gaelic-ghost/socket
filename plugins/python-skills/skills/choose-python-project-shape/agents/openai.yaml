@@ -1,6 +1,6 @@
 interface:
   display_name: "Choose Python Project Shape"
-  short_description: "Choose Python package, service, MCP, workspace, test, tooling, package, CI, or upgrade shape."
+  short_description: "Choose Python package, service, MCP, workspace, test, tooling, CI, or upgrade shape."
   brand_color: "#2563EB"
   default_prompt: "Use $choose-python-project-shape to inspect this repository, choose the smallest correct Python project shape, recommend the next Python skill, and return exact uv validation commands before implementation starts."
 
