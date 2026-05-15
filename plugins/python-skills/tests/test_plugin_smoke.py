@@ -29,15 +29,19 @@ def run_command(*args: str, cwd: Path | None = None) -> subprocess.CompletedProc
 
 def test_plugin_manifest_and_marketplace_contract() -> None:
     manifest = json.loads((REPO_ROOT / ".codex-plugin" / "plugin.json").read_text())
-    readme_text = (REPO_ROOT / "README.md").read_text()
+    agents_text = (REPO_ROOT / "AGENTS.md").read_text()
 
     assert manifest["name"] == "python-skills"
     assert manifest["skills"] == "./skills/"
+    assert manifest["homepage"] == "https://github.com/gaelic-ghost/socket/tree/main/plugins/python-skills"
+    assert manifest["repository"] == "https://github.com/gaelic-ghost/socket"
     assert manifest["interface"]["displayName"] == "Python Skills"
-    assert manifest["interface"]["category"] == "Productivity"
+    assert manifest["interface"]["category"] == "Developer Tools"
+    assert manifest["interface"]["websiteURL"] == "https://github.com/gaelic-ghost/socket/tree/main/plugins/python-skills"
 
-    assert ".codex-plugin/plugin.json" in readme_text
-    assert "root [`skills/`](./skills/) is the canonical authored workflow surface" in readme_text
+    assert ".codex-plugin/plugin.json" in agents_text
+    assert "Root [`skills/`](./skills/) is the authored workflow surface" in agents_text
+    assert not (REPO_ROOT / "README.md").exists()
 
 
 def test_fastapi_scaffold_smoke(tmp_path: Path) -> None:

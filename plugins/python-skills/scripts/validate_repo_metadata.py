@@ -21,21 +21,6 @@ import yaml
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 HEX_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
-README_REQUIRED_HEADINGS = [
-    "# python-skills",
-    "## Table of Contents",
-    "## Overview",
-    "## Setup",
-    "## Usage",
-    "## Development",
-    "## Verification",
-    "## Release Notes",
-    "## Active Skills",
-    "## Packaging",
-    "## Repository Layout",
-    "## License",
-]
-
 PATH_REFERENCE_RE = re.compile(
     r"(?:\[[^\]]+\]\()?((?:scripts|references|assets|agents)/[A-Za-z0-9._/\-]+)(?:\))?"
 )
@@ -211,13 +196,23 @@ def find_skill_dirs(repo_root: Path) -> list[Path]:
     )
 
 
-def validate_readme(repo_root: Path) -> list[Finding]:
+def validate_child_guidance(repo_root: Path) -> list[Finding]:
     findings: list[Finding] = []
-    readme = repo_root / "README.md"
-    text = readme.read_text()
-    for heading in README_REQUIRED_HEADINGS:
-        if heading not in text:
-            findings.append(Finding("README.md", f"missing heading: {heading}"))
+    agents = repo_root / "AGENTS.md"
+    if not agents.is_file():
+        return [Finding("AGENTS.md", "missing child guidance file")]
+
+    text = agents.read_text()
+    required_snippets = [
+        "`python-skills` is a monorepo-owned Socket child",
+        "Root [`skills/`](./skills/) is the authored workflow surface.",
+        "The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).",
+        "Do not reintroduce maintained per-skill `README.md` files",
+        "Keep user-facing and maintainer-facing Python command examples expressed with `uv`.",
+    ]
+    for snippet in required_snippets:
+        if snippet not in text:
+            findings.append(Finding("AGENTS.md", f"missing guidance snippet: {snippet}"))
     return findings
 
 
@@ -343,22 +338,12 @@ def validate_plugin_manifest(
     return findings
 
 
-def validate_doc_inventory(repo_root: Path, skill_dirs: list[Path]) -> list[Finding]:
-    findings: list[Finding] = []
-    readme_text = (repo_root / "README.md").read_text()
-    for skill_dir in skill_dirs:
-        skill_name = skill_dir.name
-        if f"`{skill_name}`" not in readme_text:
-            findings.append(Finding("README.md", f"skill missing from root docs: {skill_name}"))
-    return findings
-
-
 def run(repo_root: Path) -> list[Finding]:
     findings: list[Finding] = []
     skill_dirs = find_skill_dirs(repo_root)
     if not skill_dirs:
         findings.append(Finding("skills", "no bundled skill directories found under skills/"))
-    findings.extend(validate_readme(repo_root))
+    findings.extend(validate_child_guidance(repo_root))
     findings.extend(
         validate_plugin_manifest(
             repo_root,
@@ -367,7 +352,6 @@ def run(repo_root: Path) -> list[Finding]:
             require_skills_interface=True,
         )
     )
-    findings.extend(validate_doc_inventory(repo_root, skill_dirs))
     for skill_dir in skill_dirs:
         findings.extend(validate_skill_dir(repo_root, skill_dir))
     return findings

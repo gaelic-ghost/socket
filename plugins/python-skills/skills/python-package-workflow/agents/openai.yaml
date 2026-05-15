@@ -1,0 +1,8 @@
+interface:
+  display_name: "Python Package Workflow"
+  short_description: "Validate Python package metadata, builds, artifacts, and release boundaries."
+  brand_color: "#7C3AED"
+  default_prompt: "Use $python-package-workflow to inspect pyproject package metadata, validate dependency boundaries, build the package with uv when appropriate, run local smoke checks, and avoid publishing unless explicitly requested."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,8 @@
+interface:
+  display_name: "Build Python Project"
+  short_description: "Implement Python changes with uv, tests, package layout, Ruff, and mypy."
+  brand_color: "#0F766E"
+  default_prompt: "Use $build-python-project to inspect the existing Python project shape, implement the requested behavior in the repo's own style, add focused tests, and validate with the narrowest useful uv commands."
+
+policy:
+  allow_implicit_invocation: true

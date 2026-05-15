@@ -433,7 +433,7 @@ def detect_model(project_root: Path) -> dict[str, Any]:
     return {
         "schemaVersion": 1,
         "generatedBy": "maintain-project-architecture",
-        "projectRoot": str(project_root),
+        "projectRoot": ".",
         "detectedAt": datetime.now(timezone.utc).isoformat(),
         "detectionSource": source,
         "products": [item for item in products if item.get("name")],

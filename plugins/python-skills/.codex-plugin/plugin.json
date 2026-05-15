@@ -1,14 +1,14 @@
 {
   "name": "python-skills",
-  "version": "6.9.0",
-  "description": "Bundled Python-focused Codex skills for uv bootstrapping, FastAPI and FastMCP scaffolding, FastAPI/FastMCP integration, and pytest workflows.",
+  "version": "6.10.0",
+  "description": "Bundled Python-focused Codex skills for uv bootstrapping, project implementation, diagnostics, packaging, tooling, CI, upgrades, FastAPI, FastMCP, and pytest workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
     "url": "https://github.com/gaelic-ghost"
   },
-  "homepage": "https://github.com/gaelic-ghost/python-skills",
-  "repository": "https://github.com/gaelic-ghost/python-skills",
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/python-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
   "license": "Apache-2.0",
   "keywords": [
     "codex",
@@ -18,22 +18,34 @@
     "fastapi",
     "fastmcp",
     "pytest",
-    "integration"
+    "integration",
+    "packaging",
+    "diagnostics",
+    "tooling",
+    "ci",
+    "upgrades"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Python Skills",
-    "shortDescription": "Python bootstrap, integration, scaffold, and pytest workflows for Codex.",
-    "longDescription": "Bundle reusable Codex skills for uv project bootstrapping, FastAPI and FastMCP service scaffolding, FastAPI/FastMCP integration work, and pytest setup in Python repositories.",
+    "shortDescription": "Python project, uv, FastAPI, FastMCP, pytest, package, tooling, CI, and upgrade workflows for Codex.",
+    "longDescription": "Bundle reusable Codex skills for choosing Python project shapes, building uv-managed Python projects, diagnosing Python failures, validating package surfaces, aligning tooling, maintaining CI, planning upgrades, bootstrapping FastAPI and FastMCP services, integrating FastAPI/FastMCP apps, and setting up pytest workflows.",
     "developerName": "gaelic-ghost",
-    "category": "Productivity",
+    "category": "Developer Tools",
     "capabilities": [
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/gaelic-ghost/python-skills",
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/python-skills",
     "defaultPrompt": [
       "Bootstrap a new uv FastAPI service with typed settings and a committed .env baseline.",
+      "Choose the right Python project shape before we start implementing.",
+      "Build this Python project while respecting its uv, package layout, tests, Ruff, and mypy conventions.",
+      "Diagnose why this Python uv, import, pytest, Ruff, mypy, FastAPI, FastMCP, or package command failed.",
+      "Validate this Python package surface without publishing it.",
+      "Align this Python repo's uv, Ruff, mypy, pytest, dependency-group, and validation workflow.",
+      "Align this Python repo's CI with local uv validation commands.",
+      "Plan this Python dependency, framework, lockfile, or tooling upgrade with staged validation.",
       "Set up pytest defaults for this uv workspace and show the right package-targeted test commands.",
       "Add a FastMCP surface to an existing FastAPI project and choose the right combined-app pattern."
     ],

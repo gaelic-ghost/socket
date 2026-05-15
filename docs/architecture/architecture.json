@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-05-05T00:41:53.011781+00:00",
+  "detectedAt": "2026-05-15T15:49:48.243930+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -37,6 +37,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -99,6 +103,54 @@
       "path": "plugins/cardhop-app/.codex-plugin/plugin.json"
     },
     {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/build-csharp-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/choose-project-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/ci-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/diagnose-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/fsharp-csharp-interop/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/package-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/testing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/tooling-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/upgrade-workflow/SKILL.md"
+    },
+    {
       "kind": "codex-plugin-manifest",
       "path": "plugins/dotnet-skills/.codex-plugin/plugin.json"
     },
@@ -156,7 +208,35 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/choose-python-project-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/diagnose-python-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -283,7 +363,9 @@
       "kind": "codex-plugin",
       "name": "dotnet-skills",
       "path": "plugins/dotnet-skills",
-      "targets": []
+      "targets": [
+        "skills:plugins/dotnet-skills/skills"
+      ]
     },
     {
       "evidence": [
@@ -416,7 +498,7 @@
       "targets": []
     }
   ],
-  "projectRoot": "/Users/galew/Workspace/gaelic-ghost/socket",
+  "projectRoot": ".",
   "relationships": [
     {
       "evidence": [
@@ -513,6 +595,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/format-swift-sources"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/safari-extension-control-workflow"
     },
     {
       "evidence": [
@@ -674,6 +768,150 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/aspnet-core-service-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/bootstrap-solution"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/build-csharp-project/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/build-csharp-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/build-fsharp-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/choose-project-shape/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/choose-project-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/ci-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/ci-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/diagnose-project/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/diagnose-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/fsharp-csharp-interop/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/fsharp-csharp-interop"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/package-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/package-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/testing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/testing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/tooling-style-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/tooling-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/upgrade-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/upgrade-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
         }
       ],
@@ -818,6 +1056,42 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/build-python-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/choose-python-project-shape/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/choose-python-project-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/diagnose-python-project/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/diagnose-python-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
         }
       ],
@@ -825,6 +1099,54 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:python-skills/integrate-fastapi-fastmcp"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-ci-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-package-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-tooling-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-upgrade-workflow"
     },
     {
       "evidence": [
@@ -1327,6 +1649,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/safari-extension-control-workflow",
+      "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
         }
       ],
@@ -1483,6 +1817,150 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/aspnet-core-service-workflow",
+      "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/bootstrap-solution",
+      "path": "plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/build-csharp-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/build-csharp-project",
+      "path": "plugins/dotnet-skills/skills/build-csharp-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/build-fsharp-project",
+      "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/choose-project-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/choose-project-shape",
+      "path": "plugins/dotnet-skills/skills/choose-project-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/ci-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/ci-workflow",
+      "path": "plugins/dotnet-skills/skills/ci-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/diagnose-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/diagnose-project",
+      "path": "plugins/dotnet-skills/skills/diagnose-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/fsharp-csharp-interop/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/fsharp-csharp-interop",
+      "path": "plugins/dotnet-skills/skills/fsharp-csharp-interop/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/package-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/package-workflow",
+      "path": "plugins/dotnet-skills/skills/package-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/testing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/testing-workflow",
+      "path": "plugins/dotnet-skills/skills/testing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/tooling-style-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/tooling-style-workflow",
+      "path": "plugins/dotnet-skills/skills/tooling-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/upgrade-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/upgrade-workflow",
+      "path": "plugins/dotnet-skills/skills/upgrade-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
         }
       ],
@@ -1627,12 +2105,96 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/build-python-project",
+      "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/choose-python-project-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/choose-python-project-shape",
+      "path": "plugins/python-skills/skills/choose-python-project-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/diagnose-python-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/diagnose-python-project",
+      "path": "plugins/python-skills/skills/diagnose-python-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:python-skills/integrate-fastapi-fastmcp",
       "path": "plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-ci-workflow",
+      "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-package-workflow",
+      "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-tooling-style-workflow",
+      "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-upgrade-workflow",
+      "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
     },
     {
       "dependencies": [],

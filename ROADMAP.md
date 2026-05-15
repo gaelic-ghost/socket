@@ -7,6 +7,7 @@
 - [Milestone Progress](#milestone-progress)
 - [Milestone 5: SwiftASB skills plugin](#milestone-5-swiftasb-skills-plugin)
 - [Milestone 6: Dotnet skills plugin](#milestone-6-dotnet-skills-plugin)
+- [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -25,6 +26,7 @@
 
 - Milestone 5: SwiftASB skills plugin - In Progress
 - Milestone 6: Dotnet skills plugin - In Progress
+- Milestone 7: Python skills plugin expansion - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -87,6 +89,41 @@ In Progress
 - [x] The new skills guide F# and C# implementation without making either language a secondary path.
 - [x] The testing guidance uses `dotnet test` as the stable command surface while respecting repo-local test framework choices.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
+## Milestone 7: Python skills plugin expansion
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Repair the `python-skills` child validator so it matches the current monorepo-owned child docs model without reintroducing a child README.
+- [x] Record the detailed expansion plan in [`docs/maintainers/python-skills-plugin-plan.md`](./docs/maintainers/python-skills-plugin-plan.md).
+- [x] Expand `python-skills` from scaffold-heavy coverage into ongoing project choice, implementation, diagnostics, packaging, tooling/style, CI, and upgrade workflows.
+- [x] Keep the existing `uv`, FastAPI, FastMCP, and pytest skill surfaces intact unless a later cleanup deliberately renames or replaces one without leaving duplicate long-term surfaces.
+
+### Tickets
+
+- [x] Update `plugins/python-skills/scripts/validate_repo_metadata.py` and child tests so validation targets `AGENTS.md`, plugin metadata, and skill metadata instead of a removed child `README.md`.
+- [x] Add `python-skills:choose-python-project-shape`.
+- [x] Add `python-skills:build-python-project`.
+- [x] Add `python-skills:diagnose-python-project`.
+- [x] Add `python-skills:python-package-workflow`.
+- [x] Add `python-skills:python-tooling-style-workflow`.
+- [x] Add `python-skills:python-ci-workflow`.
+- [x] Add `python-skills:python-upgrade-workflow`.
+- [x] Keep `python-skills:uv-pytest-unit-testing` as the release-compatible pytest workflow name for now.
+- [x] Update Python plugin metadata after the first new skill slice lands.
+- [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The child validator passes without requiring a child `README.md`.
+- [x] The Python skill inventory covers project choice, implementation, diagnostics, packaging, tooling/style alignment, CI, and upgrades in addition to existing scaffold, integration, and pytest workflows.
+- [x] The Python plugin guidance consistently uses `uv` for command examples and official documentation as the source of truth for Python packaging, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
+- [x] Root Socket docs, marketplace wiring, child validation, and root validation agree on the exported Python skill surface.
 
 ## Backlog Candidates
 

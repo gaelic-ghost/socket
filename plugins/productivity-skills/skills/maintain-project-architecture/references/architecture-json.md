@@ -8,7 +8,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "maintain-project-architecture",
-  "projectRoot": "/path/to/repo",
+  "projectRoot": ".",
   "detectedAt": "2026-05-03T00:00:00Z",
   "products": [],
   "targets": [],
