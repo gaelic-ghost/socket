@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-05-14T23:00:09.343443+00:00",
+  "detectedAt": "2026-05-15T15:28:43.389437+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -224,11 +224,19 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -1096,6 +1104,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-ci-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
         }
       ],
@@ -1115,6 +1135,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:python-skills/python-tooling-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-upgrade-workflow"
     },
     {
       "evidence": [
@@ -2121,6 +2153,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-ci-workflow",
+      "path": "plugins/python-skills/skills/python-ci-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/python-skills/skills/python-package-workflow/SKILL.md"
         }
       ],
@@ -2139,6 +2183,18 @@
       "kind": "codex-skill",
       "name": "skill:python-skills/python-tooling-style-workflow",
       "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-upgrade-workflow",
+      "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
     },
     {
       "dependencies": [],

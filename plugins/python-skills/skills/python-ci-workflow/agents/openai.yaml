@@ -1,0 +1,8 @@
+interface:
+  display_name: "Python CI Workflow"
+  short_description: "Align Python CI around uv, pytest, Ruff, mypy, package builds, and local validation parity."
+  brand_color: "#2563EB"
+  default_prompt: "Use $python-ci-workflow to inspect this repository's Python CI, align it with local uv validation commands, choose matrix and cache scope, and avoid publishing unless explicitly requested."
+
+policy:
+  allow_implicit_invocation: true

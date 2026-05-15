@@ -80,8 +80,10 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:python-skills/choose-python-project-shape` (codex-skill) at `plugins/python-skills/skills/choose-python-project-shape/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/diagnose-python-project` (codex-skill) at `plugins/python-skills/skills/diagnose-python-project/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/integrate-fastapi-fastmcp` (codex-skill) at `plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md` depends on: no declared dependencies.
+- `skill:python-skills/python-ci-workflow` (codex-skill) at `plugins/python-skills/skills/python-ci-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/python-package-workflow` (codex-skill) at `plugins/python-skills/skills/python-package-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/python-tooling-style-workflow` (codex-skill) at `plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:python-skills/python-upgrade-workflow` (codex-skill) at `plugins/python-skills/skills/python-upgrade-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/uv-pytest-unit-testing` (codex-skill) at `plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md` depends on: no declared dependencies.
 - `skill:swiftasb-skills/build-appkit-app` (codex-skill) at `plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md` depends on: no declared dependencies.
 - `skill:swiftasb-skills/build-swift-package` (codex-skill) at `plugins/swiftasb-skills/skills/build-swift-package/SKILL.md` depends on: no declared dependencies.
@@ -162,8 +164,10 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/python-skills/skills/choose-python-project-shape/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/diagnose-python-project/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md`.
+- `skill-manifest` evidence from `plugins/python-skills/skills/python-ci-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/python-package-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/python-skills/skills/python-upgrade-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/python-skills/.codex-plugin/plugin.json`.
 - `codex-plugin-manifest` evidence from `plugins/rust-skills/.codex-plugin/plugin.json`.

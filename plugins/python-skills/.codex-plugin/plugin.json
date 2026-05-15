@@ -1,7 +1,7 @@
 {
   "name": "python-skills",
   "version": "6.9.0",
-  "description": "Bundled Python-focused Codex skills for uv bootstrapping, project implementation, diagnostics, packaging, tooling, FastAPI, FastMCP, and pytest workflows.",
+  "description": "Bundled Python-focused Codex skills for uv bootstrapping, project implementation, diagnostics, packaging, tooling, CI, upgrades, FastAPI, FastMCP, and pytest workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -21,13 +21,15 @@
     "integration",
     "packaging",
     "diagnostics",
-    "tooling"
+    "tooling",
+    "ci",
+    "upgrades"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Python Skills",
-    "shortDescription": "Python project, uv, FastAPI, FastMCP, pytest, packaging, and tooling workflows for Codex.",
-    "longDescription": "Bundle reusable Codex skills for choosing Python project shapes, building uv-managed Python projects, diagnosing Python failures, validating package surfaces, aligning tooling, bootstrapping FastAPI and FastMCP services, integrating FastAPI/FastMCP apps, and setting up pytest workflows.",
+    "shortDescription": "Python project, uv, FastAPI, FastMCP, pytest, package, tooling, CI, and upgrade workflows for Codex.",
+    "longDescription": "Bundle reusable Codex skills for choosing Python project shapes, building uv-managed Python projects, diagnosing Python failures, validating package surfaces, aligning tooling, maintaining CI, planning upgrades, bootstrapping FastAPI and FastMCP services, integrating FastAPI/FastMCP apps, and setting up pytest workflows.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -42,6 +44,8 @@
       "Diagnose why this Python uv, import, pytest, Ruff, mypy, FastAPI, FastMCP, or package command failed.",
       "Validate this Python package surface without publishing it.",
       "Align this Python repo's uv, Ruff, mypy, pytest, dependency-group, and validation workflow.",
+      "Align this Python repo's CI with local uv validation commands.",
+      "Plan this Python dependency, framework, lockfile, or tooling upgrade with staged validation.",
       "Set up pytest defaults for this uv workspace and show the right package-targeted test commands.",
       "Add a FastMCP surface to an existing FastAPI project and choose the right combined-app pattern."
     ],

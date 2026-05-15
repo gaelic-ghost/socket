@@ -78,7 +78,7 @@ Current Socket catalog shape:
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `productivity-skills`: general-purpose maintainer and documentation workflow baseline
-- `python-skills`: Python, `uv`, project implementation, diagnostics, packaging, tooling, FastAPI, FastMCP, and pytest workflow plugin
+- `python-skills`: Python, `uv`, project implementation, diagnostics, packaging, tooling, CI, upgrades, FastAPI, FastMCP, and pytest workflow plugin
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance
 - `things-app`: mixed skill plus bundled MCP server for Things.app workflows

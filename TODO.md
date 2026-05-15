@@ -42,8 +42,11 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [x] Add `diagnose-python-project`.
 - [x] Add `python-package-workflow`.
 - [x] Add `python-tooling-style-workflow`.
+- [x] Add `python-ci-workflow`.
+- [x] Add `python-upgrade-workflow`.
+- [x] Keep `uv-pytest-unit-testing` as the release-compatible pytest workflow name for now.
 - [x] Update `plugins/python-skills/.codex-plugin/plugin.json` after the new skills exist.
-- [ ] Confirm `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` pass after skill or metadata changes.
+- [x] Confirm `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` pass after the second skill slice.
 
 ### swiftasb-skills
 

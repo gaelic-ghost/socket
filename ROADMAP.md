@@ -100,8 +100,8 @@ In Progress
 
 - [x] Repair the `python-skills` child validator so it matches the current monorepo-owned child docs model without reintroducing a child README.
 - [x] Record the detailed expansion plan in [`docs/maintainers/python-skills-plugin-plan.md`](./docs/maintainers/python-skills-plugin-plan.md).
-- [x] Expand `python-skills` from scaffold-heavy coverage into ongoing project choice, implementation, diagnostics, packaging, and tooling/style workflows.
-- [ ] Keep the existing `uv`, FastAPI, FastMCP, and pytest skill surfaces intact unless a later cleanup deliberately renames or replaces one without leaving duplicate long-term surfaces.
+- [x] Expand `python-skills` from scaffold-heavy coverage into ongoing project choice, implementation, diagnostics, packaging, tooling/style, CI, and upgrade workflows.
+- [x] Keep the existing `uv`, FastAPI, FastMCP, and pytest skill surfaces intact unless a later cleanup deliberately renames or replaces one without leaving duplicate long-term surfaces.
 
 ### Tickets
 
@@ -111,16 +111,19 @@ In Progress
 - [x] Add `python-skills:diagnose-python-project`.
 - [x] Add `python-skills:python-package-workflow`.
 - [x] Add `python-skills:python-tooling-style-workflow`.
+- [x] Add `python-skills:python-ci-workflow`.
+- [x] Add `python-skills:python-upgrade-workflow`.
+- [x] Keep `python-skills:uv-pytest-unit-testing` as the release-compatible pytest workflow name for now.
 - [x] Update Python plugin metadata after the first new skill slice lands.
-- [ ] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
 - [x] The child validator passes without requiring a child `README.md`.
-- [x] The Python skill inventory covers project choice, implementation, diagnostics, packaging, and tooling/style alignment in addition to existing scaffold, integration, and pytest workflows.
-- [ ] The Python plugin guidance consistently uses `uv` for command examples and official documentation as the source of truth for Python packaging, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
-- [ ] Root Socket docs, marketplace wiring, child validation, and root validation agree on the exported Python skill surface.
+- [x] The Python skill inventory covers project choice, implementation, diagnostics, packaging, tooling/style alignment, CI, and upgrades in addition to existing scaffold, integration, and pytest workflows.
+- [x] The Python plugin guidance consistently uses `uv` for command examples and official documentation as the source of truth for Python packaging, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
+- [x] Root Socket docs, marketplace wiring, child validation, and root validation agree on the exported Python skill surface.
 
 ## Backlog Candidates
 

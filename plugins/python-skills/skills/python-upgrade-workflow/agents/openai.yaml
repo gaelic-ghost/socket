@@ -1,0 +1,8 @@
+interface:
+  display_name: "Python Upgrade Workflow"
+  short_description: "Plan and validate Python, dependency, framework, lockfile, and tooling upgrades."
+  brand_color: "#7C3AED"
+  default_prompt: "Use $python-upgrade-workflow to inventory Python requirements, dependencies, uv lockfile state, frameworks, tooling versions, compatibility impact, and staged validation before applying an upgrade."
+
+policy:
+  allow_implicit_invocation: true

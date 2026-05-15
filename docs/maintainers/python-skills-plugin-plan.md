@@ -237,16 +237,16 @@ The first slice should repair the current child contract and add the core missin
 - [x] Add `python-skills:python-package-workflow`.
 - [x] Add `python-skills:python-tooling-style-workflow`.
 - [x] Update `plugins/python-skills/.codex-plugin/plugin.json` default prompts and long description after the new skills exist.
-- [ ] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [ ] Run root Socket metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
+- [x] Run root Socket metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ## Second Implementation Slice
 
 The second slice should cover repeated project operations that become more valuable after the core skill set lands:
 
-- [ ] Add `python-skills:python-ci-workflow`.
-- [ ] Add `python-skills:python-upgrade-workflow`.
-- [ ] Decide whether to broaden `uv-pytest-unit-testing` into `python-testing-workflow`.
+- [x] Add `python-skills:python-ci-workflow`.
+- [x] Add `python-skills:python-upgrade-workflow`.
+- [x] Decide whether to broaden `uv-pytest-unit-testing` into `python-testing-workflow`; keep `uv-pytest-unit-testing` for this release so existing prompts and routing remain compatible.
 - [ ] Decide whether ongoing FastAPI service maintenance needs a dedicated `fastapi-service-workflow`.
 - [ ] Decide whether ongoing FastMCP server maintenance needs a dedicated `fastmcp-service-workflow`.
 - [ ] Add install testing with a temporary `CODEX_HOME` if the exported skill surface or plugin metadata changes enough to need plugin-install verification.
@@ -295,8 +295,9 @@ The validator repair alone is a maintenance fix. Adding the new skill inventory 
 The expansion is ready when:
 
 - [x] The child validator passes without requiring a child `README.md`.
-- [ ] The plugin has a documented skill naming convention and expansion plan.
+- [x] The plugin has a documented skill naming convention and expansion plan.
 - [x] The first new skill set covers project choice, implementation, diagnostics, packaging, and tooling/style alignment.
-- [ ] The guidance consistently uses `uv` for Python command examples.
-- [ ] The guidance uses official documentation as the source of truth for Python packaging, `uv`, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
-- [ ] Root Socket docs, plugin metadata, child validation, and root validation agree on the exported Python skill surface.
+- [x] The second new skill set covers CI and upgrade workflows.
+- [x] The guidance consistently uses `uv` for Python command examples.
+- [x] The guidance uses official documentation as the source of truth for Python packaging, `uv`, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
+- [x] Root Socket docs, plugin metadata, child validation, and root validation agree on the exported Python skill surface.
