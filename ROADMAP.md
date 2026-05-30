@@ -147,7 +147,7 @@ In Progress
 - [x] Create `plugins/server-side-swift/` with its own `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
 - [x] Add `server-side-swift:vapor-server-workflow` as the first skill for Vapor service creation, route work, middleware, Fluent migrations, environment configuration, local run commands, tests, and deployment handoffs.
 - [x] Wire `server-side-swift` into the root Socket marketplace as a normal local child plugin.
-- [ ] Add `server-side-swift:hummingbird-server-workflow` for Hummingbird services, including route composition, middleware, request/response modeling, local run commands, tests, and SwiftPM-first validation.
+- [x] Add `server-side-swift:hummingbird-server-workflow` for Hummingbird services, including route composition, middleware, request/response modeling, local run commands, tests, and SwiftPM-first validation.
 - [ ] Add an OpenAPI workflow for generating, serving, validating, or consuming OpenAPI descriptions in server-side Swift services without tying the skill to one web framework by default.
 - [ ] Add an RPC workflow for Swift service boundaries that may use JSON-RPC, gRPC, MCP-like transports, or framework-specific client/server contracts, with explicit guidance for when plain HTTP routes are the simpler fit.
 - [ ] Add a SwiftNIO workflow for lower-level event-loop, channel, bootstrap, byte-buffer, back-pressure, and nonblocking-I/O work when a service needs NIO directly instead of a higher-level framework.
