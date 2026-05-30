@@ -76,7 +76,7 @@ Apple Dev Skills keeps its own roadmap because it is the remaining subtree-manag
 Current Socket catalog shape:
 
 - `agent-plugin-skills`: maintainer skills for skills-export and plugin-export repositories
-- `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
+- `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, Swift OpenAPI client, Safari, and DocC workflows with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `productivity-skills`: general-purpose maintainer and documentation workflow baseline
