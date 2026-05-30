@@ -1,5 +1,6 @@
 {
-  "version": "6.11.0",
+  "name": "server-side-swift",
+  "version": "6.11.1",
   "description": "Codex skills for building, running, and maintaining server-side Swift services, starting with Vapor, Hummingbird, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
