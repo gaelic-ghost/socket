@@ -48,6 +48,14 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [x] Update `plugins/python-skills/.codex-plugin/plugin.json` after the new skills exist.
 - [x] Confirm `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` pass after the second skill slice.
 
+### server-side-swift
+
+- [x] Create the Socket-owned `server-side-swift` plugin surface.
+- [x] Add the first real Vapor-focused server-side Swift skill.
+- [ ] Add validation coverage for skill metadata and exported skill inventory once central Socket child-skill validation exists.
+- [ ] Decide whether future server-side Swift skills should cover SwiftNIO, Hummingbird, deployment, or database workflows as separate skills.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
 ### swiftasb-skills
 
 - [x] Sync `swiftasb-skills` with current SwiftASB source and docs.
