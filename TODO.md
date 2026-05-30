@@ -56,6 +56,16 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Decide whether future server-side Swift skills should cover SwiftNIO, Hummingbird, deployment, or database workflows as separate skills.
 - [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
 
+### rust-skills
+
+- [x] Author the first real Rust-focused skill tranche for Codex.
+- [x] Add Rust CLI and library implementation guidance after the first planning and validation slice.
+- [x] Add Rust package and CI workflow guidance.
+- [x] Update docs to describe shipped behavior once real skill content exists.
+- [x] Switch the root marketplace entry for `rust-skills` from placeholder to installable after real skill content exists.
+- [ ] Add focused validation only if the plugin gains generated examples, scripts, or metadata checks that need more than root marketplace validation.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
 ### swiftasb-skills
 
 - [x] Sync `swiftasb-skills` with current SwiftASB source and docs.
@@ -81,13 +91,6 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 ### dotnet-skills
 
 - [ ] Author the first real .NET-focused skill for Codex.
-- [ ] Update docs to describe shipped behavior once real skill content exists.
-- [ ] Add the minimum validation or smoke coverage needed for the shipped skill surface.
-- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
-
-### rust-skills
-
-- [ ] Author the first real Rust-focused skill for Codex.
 - [ ] Update docs to describe shipped behavior once real skill content exists.
 - [ ] Add the minimum validation or smoke coverage needed for the shipped skill surface.
 - [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.

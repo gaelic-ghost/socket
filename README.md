@@ -64,6 +64,7 @@ Currently available from the catalog:
 - `productivity-skills`
 - `python-skills`
 - `server-side-swift`
+- `rust-skills`
 - `speak-swiftly`
 - `swiftasb-skills`
 - `things-app`
@@ -81,13 +82,13 @@ Current Socket catalog shape:
 - `productivity-skills`: general-purpose maintainer and documentation workflow baseline
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
 - `server-side-swift`: server-side Swift and Vapor service workflows with SwiftPM-first build, run, test, migration, and diagnostics guidance
+- `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance
 - `things-app`: mixed skill plus bundled MCP server for Things.app workflows
 
 Placeholder directories for future plugins (not available for install):
 
-- `rust-skills`
 - `spotify`
 - `web-dev-skills`
 

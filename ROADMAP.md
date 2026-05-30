@@ -9,6 +9,7 @@
 - [Milestone 6: Dotnet skills plugin](#milestone-6-dotnet-skills-plugin)
 - [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
+- [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -29,6 +30,7 @@
 - Milestone 6: Dotnet skills plugin - In Progress
 - Milestone 7: Python skills plugin expansion - In Progress
 - Milestone 8: Server-Side Swift skills plugin - In Progress
+- Milestone 9: Rust skills plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -161,6 +163,37 @@ In Progress
 - [ ] The plugin gives agents clear framework-specific paths for Vapor and Hummingbird without duplicating generic SwiftPM or Apple-platform workflow guidance.
 - [ ] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
+## Milestone 9: Rust skills plugin
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Turn the placeholder `rust-skills` child plugin into an installable Rust guidance plugin.
+- [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, custom package manager, private template feed, generated scaffold script, or machine-local toolchain state.
+- [x] Keep Rust workflow guidance grounded in official Rust, Cargo, rustup, rustfmt, and Clippy documentation.
+
+### Tickets
+
+- [x] Record the detailed plugin plan in [`docs/maintainers/rust-skills-plugin-plan.md`](./docs/maintainers/rust-skills-plugin-plan.md).
+- [x] Update `plugins/rust-skills/AGENTS.md` with Rust workflow policy and validation expectations.
+- [x] Update `plugins/rust-skills/.codex-plugin/plugin.json` so plugin metadata describes shipped Rust guidance.
+- [x] Add first-slice skills for project-shape choice, Cargo bootstrap, testing, and tooling/style alignment.
+- [x] Add implementation skills for Rust CLI and library crate work.
+- [x] Add package and CI workflow skills for publish-facing and automation guidance.
+- [x] Switch the root marketplace entry for `rust-skills` from placeholder to installable only after real skill content exists.
+- [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `rust-skills` as an installable child plugin.
+- [x] The new skills can help an agent choose a Rust project shape before implementation.
+- [x] The new skills guide Cargo bootstrap, CLI and library implementation, package preparation, CI alignment, testing, formatting, linting, and toolchain alignment without bundling broad runtime behavior.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Backlog Candidates
 
