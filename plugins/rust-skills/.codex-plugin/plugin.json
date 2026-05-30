@@ -1,7 +1,8 @@
 {
   "name": "rust-skills",
   "version": "6.10.2",
-  "description": "Standalone plugin repository for future Rust-focused Codex skills.",
+  "description": "Rust, Cargo, rustup, crate, workspace, testing, linting, formatting, package, and CI workflow skills.",
+  "skills": "./skills/",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -18,8 +19,8 @@
   ],
   "interface": {
     "displayName": "Rust Skills",
-    "shortDescription": "Future Rust-focused Codex skills.",
-    "longDescription": "Standalone plugin repository for future Rust-focused Codex skills and maintainer workflows.",
+    "shortDescription": "Rust and Cargo workflow skills for Codex.",
+    "longDescription": "Guidance for choosing Rust project shapes, bootstrapping Cargo crates and workspaces, testing Rust projects, and aligning rustfmt, Clippy, toolchain, package, and CI workflows.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
