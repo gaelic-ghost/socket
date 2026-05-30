@@ -8,6 +8,7 @@
 - [Milestone 5: SwiftASB skills plugin](#milestone-5-swiftasb-skills-plugin)
 - [Milestone 6: Dotnet skills plugin](#milestone-6-dotnet-skills-plugin)
 - [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
+- [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -27,6 +28,7 @@
 - Milestone 5: SwiftASB skills plugin - In Progress
 - Milestone 6: Dotnet skills plugin - In Progress
 - Milestone 7: Python skills plugin expansion - In Progress
+- Milestone 8: Server-Side Swift skills plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -124,6 +126,41 @@ In Progress
 - [x] The Python skill inventory covers project choice, implementation, diagnostics, packaging, tooling/style alignment, CI, and upgrades in addition to existing scaffold, integration, and pytest workflows.
 - [x] The Python plugin guidance consistently uses `uv` for command examples and official documentation as the source of truth for Python packaging, pytest, Ruff, mypy, FastAPI, FastMCP, and CI behavior.
 - [x] Root Socket docs, marketplace wiring, child validation, and root validation agree on the exported Python skill surface.
+
+## Milestone 8: Server-Side Swift skills plugin
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Add a Socket-hosted `server-side-swift` child plugin that owns server-side Swift workflow guidance separately from `apple-dev-skills`.
+- [x] Keep the plugin as a guidance surface rather than a bundled runtime: do not add local daemons, template feeds, deployment services, or MCP servers until a later plan explicitly calls for that scope.
+- [x] Keep Apple-platform app, simulator, preview, and Xcode project workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftPM-first service work.
+- [ ] Expand the plugin beyond the first Vapor workflow into a small family of framework, protocol, runtime, observability, and deployment-adjacent server-side Swift skills.
+
+### Tickets
+
+- [x] Create `plugins/server-side-swift/` with its own `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
+- [x] Add `server-side-swift:vapor-server-workflow` as the first skill for Vapor service creation, route work, middleware, Fluent migrations, environment configuration, local run commands, tests, and deployment handoffs.
+- [x] Wire `server-side-swift` into the root Socket marketplace as a normal local child plugin.
+- [ ] Add `server-side-swift:hummingbird-server-workflow` for Hummingbird services, including route composition, middleware, request/response modeling, local run commands, tests, and SwiftPM-first validation.
+- [ ] Add an OpenAPI workflow for generating, serving, validating, or consuming OpenAPI descriptions in server-side Swift services without tying the skill to one web framework by default.
+- [ ] Add an RPC workflow for Swift service boundaries that may use JSON-RPC, gRPC, MCP-like transports, or framework-specific client/server contracts, with explicit guidance for when plain HTTP routes are the simpler fit.
+- [ ] Add a SwiftNIO workflow for lower-level event-loop, channel, bootstrap, byte-buffer, back-pressure, and nonblocking-I/O work when a service needs NIO directly instead of a higher-level framework.
+- [ ] Add Swift observability and tracing guidance that covers Swift Logging, Metrics, Distributed Tracing, and OpenTelemetry-style instrumentation for service diagnostics.
+- [ ] Add a Docker workflow for server-side Swift packages, including Dockerfile shape, Compose-local development, Linux image concerns, environment configuration, and build/test handoffs.
+- [ ] Add an Apple Containerization workflow for Apple's container tooling, keeping it distinct from generic Docker guidance and tied to current official Apple documentation.
+- [ ] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
+
+### Exit Criteria
+
+- [ ] The Socket marketplace exposes `server-side-swift` as an installable child plugin with metadata that matches its shipped skill inventory.
+- [ ] The plugin gives agents clear framework-specific paths for Vapor and Hummingbird without duplicating generic SwiftPM or Apple-platform workflow guidance.
+- [ ] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
+- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Backlog Candidates
 
