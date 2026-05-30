@@ -7,7 +7,7 @@ metadata:
   owner: gaelic-ghost
   repo: socket
   category: server-side-swift-vapor
-allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(vapor:*) Bash(curl:*)
+allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(brew:*) Bash(swift:*) Bash(vapor:*) Bash(curl:*)
 ---
 
 # Vapor Server Workflow
