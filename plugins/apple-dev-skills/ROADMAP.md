@@ -19,6 +19,7 @@
 - [Milestone 41: Swift Package Extension Workflow](#milestone-41-swift-package-extension-workflow)
 - [Milestone 42: Safari Extension And Control Workflow](#milestone-42-safari-extension-and-control-workflow)
 - [Milestone 43: Client Auth, Keychain, and App Sync Workflow](#milestone-43-client-auth-keychain-and-app-sync-workflow)
+- [Milestone 44: Swift OpenAPI Client Workflow](#milestone-44-swift-openapi-client-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -51,6 +52,7 @@
 - Milestone 41: Swift Package Extension Workflow - Planned
 - Milestone 42: Safari Extension And Control Workflow - Completed
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
+- Milestone 44: Swift OpenAPI Client Workflow - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -446,6 +448,30 @@ Planned
 
 - [ ] The repository ships an Apple client auth and app-sync workflow skill with clear Keychain, authentication, credential-refresh, and sync-state guidance.
 - [ ] The workflow clearly separates client responsibilities from server authentication, persistence, OpenAPI, and RPC concerns.
+
+## Milestone 44: Swift OpenAPI Client Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add an Apple-platform client-side workflow for generated Swift OpenAPI clients, keeping app integration separate from server-side Vapor and Hummingbird transports.
+- [x] Require Apple and Swift docs checks for `URLSession`, SwiftPM plugins, Xcode package integration, app lifecycle, and UI-state behavior before making design or implementation claims.
+- [x] Keep server API contract and transport changes handed off to the server-side Swift plugin instead of making Apple Dev Skills own backend behavior.
+
+### Tickets
+
+- [x] Add `swift-openapi-client-workflow` with guidance for `swift-openapi-generator`, `OpenAPIRuntime`, `OpenAPIURLSession`, `URLSessionTransport`, generated `Client`, response handling, cancellation, and app-facing service boundaries.
+- [x] Add skill interface metadata for the plugin directory.
+- [x] Update Apple Dev Skills plugin metadata, README active skill inventory, and roadmap status.
+
+### Exit Criteria
+
+- [x] Apple app agents have a first stop for generated OpenAPI clients.
+- [x] The workflow keeps generated client code out of UI views when a small app-facing service is the cleaner boundary.
+- [x] The workflow names server-side OpenAPI/RPC, Xcode build/run, Xcode testing, Swift package, and docs-exploration handoffs.
 
 ## Backlog Candidates
 

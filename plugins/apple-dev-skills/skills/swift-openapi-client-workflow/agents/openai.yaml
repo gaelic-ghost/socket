@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift OpenAPI Client Workflow"
+  short_description: "Integrate generated Swift OpenAPI clients into Apple apps"
+  default_prompt: "Use $swift-openapi-client-workflow to add, integrate, test, or diagnose Swift OpenAPI Generator client code in an Apple-platform app or Swift package with OpenAPIURLSession, OpenAPIRuntime, URLSessionTransport, Apple docs, and clear handoffs to server-side OpenAPI or Xcode workflows when the task crosses that boundary."

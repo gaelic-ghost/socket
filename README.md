@@ -76,12 +76,12 @@ Apple Dev Skills keeps its own roadmap because it is the remaining subtree-manag
 Current Socket catalog shape:
 
 - `agent-plugin-skills`: maintainer skills for skills-export and plugin-export repositories
-- `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, and DocC workflows with its own roadmap
+- `apple-dev-skills`: Apple, Swift, SwiftUI, Xcode, Swift OpenAPI client, Safari, and DocC workflows with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `productivity-skills`: general-purpose maintainer and documentation workflow baseline
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
-- `server-side-swift`: server-side Swift, Vapor, Hummingbird, and persistence workflows with SwiftPM-first build, run, test, framework-specific migration, database, and diagnostics guidance
+- `server-side-swift`: server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, and RPC-fit workflows with SwiftPM-first build, run, test, framework-specific migration, database, generated transport, and diagnostics guidance
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance
