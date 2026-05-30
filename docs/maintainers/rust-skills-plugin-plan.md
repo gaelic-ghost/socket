@@ -6,10 +6,11 @@ The plugin's job is to help agents choose Rust project shapes, bootstrap Cargo c
 
 ## Intent
 
-The `rust-skills` plugin should help agents do four things:
+The `rust-skills` plugin should help agents do five things:
 
 - choose a Rust crate, package, workspace, or maintenance shape before implementation starts
 - bootstrap reproducible Cargo projects without inventing local-only templates or package sources
+- implement Rust CLI and library crates with clear public boundaries, diagnostics, tests, and validation
 - run and explain Rust build, test, lint, format, package, and CI workflows
 - keep Rust guidance grounded in official Rust language, Cargo, rustup, rustfmt, and Clippy documentation
 
