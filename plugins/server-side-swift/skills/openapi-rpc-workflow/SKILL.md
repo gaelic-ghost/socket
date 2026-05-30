@@ -42,7 +42,7 @@ Prefer current local docs first when available, then official online docs:
 - If querying Dash directly, inspect each docset's `Contents/Resources/docSet.dsidx` with `sqlite3` and search for symbols or guide titles before falling back to the web.
 - Use [apple/swift-openapi-generator](https://github.com/apple/swift-openapi-generator) for generator behavior, package plugin setup, examples, supported OpenAPI features, and links to generated-code documentation.
 - Use [apple/swift-openapi-runtime](https://github.com/apple/swift-openapi-runtime) for generated runtime types and middleware concepts.
-- Use [hummingbird-project/swift-openapi-hummingbird](https://github.com/hummingbird-project/swift-openapi-hummingbird) for Hummingbird server transport behavior.
+- Use [swift-server/swift-openapi-hummingbird](https://github.com/swift-server/swift-openapi-hummingbird) for Hummingbird server transport behavior.
 - Use [vapor/swift-openapi-vapor](https://github.com/vapor/swift-openapi-vapor) for Vapor server transport behavior.
 - Use [Swift Package Manager documentation](https://docs.swift.org/swiftpm/documentation/packagemanagerdocs/) for SwiftPM plugin, target, build, and test behavior.
 - Use [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator) only when the repository is intentionally using the Java-based OpenAPI Generator CLI instead of Apple's Swift package plugin.
