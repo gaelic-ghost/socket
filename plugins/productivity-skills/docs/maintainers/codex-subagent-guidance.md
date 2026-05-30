@@ -8,7 +8,9 @@ This is a maintainer-focused translation of the official Codex subagent docs for
 
 OpenAI's Codex docs use the term `subagent` for a delegated agent Codex starts to handle a specific task. A `subagent workflow` is a workflow where Codex runs parallel agents and combines their results.
 
-Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them. Do not write skill guidance that implies subagents start automatically just because a skill is active.
+Current Codex releases enable subagent workflows by default. Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow tells the agent to ask first and the user grants explicit permission. Do not write skill guidance that implies subagents start automatically just because a skill is active.
+
+Codex ships built-in `default`, `worker`, and `explorer` agents. Custom agents live in `~/.codex/agents/` for personal agents or `.codex/agents/` for project-scoped agents, with global limits under `[agents]` in Codex config.
 
 ## Good Fits
 
@@ -41,7 +43,7 @@ Use wording like this in applicable skills:
 ```markdown
 ## Codex Subagent Fit
 
-When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, this skill can split read-heavy discovery into bounded subagent tasks and keep the main thread focused on decisions and final edits.
+When the user explicitly requests subagents, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, this skill can split read-heavy discovery into bounded subagent tasks and keep the main thread focused on decisions and final edits.
 
 Good subagent jobs for this skill:
 
@@ -54,7 +56,7 @@ Keep apply-mode edits in the main thread unless the user explicitly asks for par
 
 The important parts are:
 
-- name the explicit trigger for delegation, whether it came from the user or from narrower workflow guidance that tells the agent to ask before use
+- name the explicit trigger for delegation, whether it came directly from the user or from narrower workflow guidance that tells the agent to ask and receive permission before use
 - limit subagents to bounded jobs
 - prefer read-heavy discovery, triage, tests, and summarization
 - ask workers for summaries, findings, and file references instead of raw intermediate output

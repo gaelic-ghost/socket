@@ -8,12 +8,16 @@ This is a maintainer-focused translation of the official Codex Hooks docs for re
 
 Codex Hooks are a Codex extensibility framework. They run scripts at specific Codex lifecycle events so a repository, user, or managed environment can add checks, context, logging, or guardrails around a Codex session.
 
-Hooks are behind a feature flag:
+Hooks are enabled by default. To disable them in `config.toml`, use the
+canonical feature key:
 
 ```toml
 [features]
-codex_hooks = true
+hooks = false
 ```
+
+`codex_hooks` still works as a deprecated alias, but skill and repo guidance
+should use `features.hooks`.
 
 Codex discovers hooks next to active config layers in either `hooks.json` or inline `[hooks]` tables in `config.toml`. The most common locations are:
 
@@ -32,7 +36,12 @@ The current official Codex Hooks guide documents these main events:
 - `PreToolUse`: can inspect supported tool calls before they run.
 - `PermissionRequest`: can allow, deny, or decline to decide on approval requests.
 - `PostToolUse`: can inspect supported tool results after they run.
+- `PreCompact`: can inspect or stop a compaction before it runs.
+- `PostCompact`: can inspect or stop after a compaction completes.
 - `UserPromptSubmit`: can inspect the user prompt before it is sent.
+- `SubagentStart`: can add context when a subagent starts.
+- `SubagentStop`: can inspect subagent completion and ask Codex to continue
+  the subagent flow.
 - `Stop`: can tell Codex to continue after a turn stops.
 
 Do not describe every event as a hard enforcement boundary. `PreToolUse` and `PostToolUse` are useful guardrails, but the docs state that they do not intercept every possible tool path today.
@@ -67,7 +76,7 @@ Use wording like this in applicable skills:
 ```markdown
 ## Codex Hooks Fit
 
-When a repository documents Codex Hooks, keep the guidance explicit: hooks require `features.codex_hooks = true`, project-local hooks load only from trusted `.codex/` layers, and hooks may live in `hooks.json` or inline `[hooks]` config.
+When a repository documents Codex Hooks, keep the guidance explicit: hooks are enabled by default, may be disabled with `features.hooks = false`, project-local hooks load only from trusted `.codex/` layers, and hooks may live in `hooks.json` or inline `[hooks]` config.
 
 Good hook guidance names the lifecycle event, the matcher scope, the script location, and the user-visible effect. Do not present hooks as a replacement for AGENTS.md, normal approval policy, tests, or git hooks.
 ```
@@ -76,13 +85,16 @@ Good hook guidance names the lifecycle event, the matcher scope, the script loca
 
 When auditing hooks guidance, flag wording that:
 
-- omits the `features.codex_hooks` feature flag
+- uses deprecated `features.codex_hooks` wording instead of canonical `features.hooks`
+- implies hooks are disabled by default
 - implies project-local hooks load in untrusted projects
 - says higher-precedence config layers replace lower-precedence hooks
 - treats `PreToolUse` or `PostToolUse` as complete enforcement for all tool paths
 - confuses Codex Hooks with git pre-commit hooks or repo-maintenance hook scripts
 - uses relative repo-local script paths instead of resolving from the git root or another stable absolute path
 - leaves hook behavior vague instead of naming the event, matcher, and expected effect
+- omits the trust-review requirement for non-managed command hooks, including
+  plugin-bundled hooks
 
 ## Official References
 

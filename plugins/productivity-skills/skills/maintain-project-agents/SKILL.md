@@ -61,13 +61,13 @@ The base contract is shaped to match the official Codex `AGENTS.md` guidance:
 
 ## Codex Subagent Fit
 
-When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, use them for bounded read-heavy checks before the main workflow edits or reports. Good jobs include auditing command accuracy, comparing repo instructions against nearby docs, checking safety boundaries, or reading nested guidance files in separate directories.
+When the user explicitly requests subagents, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, use them for bounded read-heavy checks before the main workflow edits or reports. Good jobs include auditing command accuracy, comparing repo instructions against nearby docs, checking safety boundaries, or reading nested guidance files in separate directories.
 
-Keep `apply` edits in the main thread because this skill owns one target `AGENTS.md` file and needs one coherent policy voice. If a target `AGENTS.md` mentions subagents, make the wording match OpenAI's current Codex rule: subagents need an explicit trigger, are best for bounded parallel discovery, tests, triage, and summarization, and may be called for by narrower plugin guidance that tells the agent to ask before delegation.
+Keep `apply` edits in the main thread because this skill owns one target `AGENTS.md` file and needs one coherent policy voice. If a target `AGENTS.md` mentions subagents, make the wording match OpenAI's current Codex rule: subagents need an explicit trigger, are best for bounded parallel discovery, tests, triage, and summarization, and may be called for by narrower plugin guidance that tells the agent to ask and receive permission before delegation.
 
 ## Codex Hooks Fit
 
-When a target `AGENTS.md` mentions OpenAI Codex Hooks, keep the wording narrow and operational. Hooks are optional lifecycle scripts loaded from `hooks.json` or inline `[hooks]` config when `features.codex_hooks = true`; project-local hooks load only from trusted `.codex/` layers.
+When a target `AGENTS.md` mentions OpenAI Codex Hooks, keep the wording narrow and operational. Hooks are lifecycle scripts loaded from `hooks.json` or inline `[hooks]` config; they are enabled by default and can be disabled with `features.hooks = false`. Project-local hooks load only from trusted `.codex/` layers.
 
 Use hooks guidance in `AGENTS.md` only when the repo actually owns hook behavior or wants to warn contributors about repo-local Codex runtime checks. Name the event, matcher, script location, and user-visible effect. Do not present hooks as a replacement for `AGENTS.md`, approval policy, tests, or ordinary validation commands.
 

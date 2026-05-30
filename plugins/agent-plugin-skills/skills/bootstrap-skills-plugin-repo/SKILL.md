@@ -21,6 +21,8 @@ When bootstrapping or aligning a plugin repo, follow the current OpenAI plugin s
 - only `plugin.json` belongs in `.codex-plugin/`
 - `skills/`, `.app.json`, `.mcp.json`, `hooks/`, and `assets/` belong at the plugin root
 - plugin manifests should point to bundled skill folders with `"skills": "./skills/"`
+- plugin manifests may point to bundled lifecycle hooks with `"hooks": "./hooks/hooks.json"`; if hooks live at `./hooks/hooks.json`, Codex checks that default path automatically
+- plugin-bundled hooks are non-managed hooks, so installing or enabling a plugin does not make those hooks trusted automatically
 - marketplace `source.path` should point at the plugin root directory
 
 ## Dependency Provenance
@@ -35,7 +37,8 @@ When creating or aligning `AGENTS.md`, include strict dependency guidance:
 
 When creating or aligning skills that can benefit from parallel support work, add optional `Codex Subagent Fit` guidance that matches OpenAI's current Codex subagent docs:
 
-- Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them.
+- Current Codex releases enable subagent workflows by default, but Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask first and the user grants explicit permission.
+- Built-in agents include `default`, `worker`, and `explorer`; mention project-scoped custom agents under `.codex/agents/` only when the repo intentionally owns agent configuration.
 - Good fits are bounded read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization.
 - Subagents should return concise findings, evidence, links, or file references instead of raw intermediate output.
 - Apply-mode or implementation edits should stay in the main thread unless the user explicitly asks for parallel implementation and each worker has a disjoint write scope.

@@ -10,7 +10,8 @@ OpenAI's Codex docs call this feature `subagents`.
 
 - A `subagent` is a delegated agent that Codex starts to handle a specific task.
 - A `subagent workflow` is a workflow where Codex runs parallel agents and combines their results.
-- Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them.
+- Current Codex releases enable subagent workflows by default, but Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask first and the user grants explicit permission.
+- Built-in agents include `default`, `worker`, and `explorer`; project-scoped custom agents live under `.codex/agents/` when a repo intentionally owns that setup.
 - Subagents are best for bounded read-heavy discovery, tests, triage, log analysis, and summarization.
 - Write-heavy parallel work needs clear ownership because multiple agents editing code or docs at once can create conflicts and coordination overhead.
 
@@ -37,7 +38,7 @@ Weak candidates:
 
 When a skill includes a `Codex Subagent Fit` section, it should say:
 
-- subagents require an explicit trigger, either from the user's request or from narrower workflow guidance that tells the agent to request permission before delegation
+- subagents require an explicit trigger, either from the user's request or from narrower workflow guidance that tells the agent to request and receive permission before delegation
 - the subagent jobs must be bounded and independently useful
 - read-heavy discovery, triage, tests, docs pulling, and summarization are the default fit
 - workers should return concise evidence, findings, links, or file references instead of raw command logs

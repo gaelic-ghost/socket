@@ -54,7 +54,7 @@ The base contract requires:
 
 ## Codex Subagent Fit
 
-When subagents are explicitly requested, or applicable workflow guidance tells the agent to ask and the user allows it, use them for read-heavy contribution-guide discovery before the main workflow edits or reports. Good jobs include checking setup commands, comparing PR expectations against repo policy, reading workflow docs, or verifying contributor-facing tool requirements.
+When the user explicitly requests subagents, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, use them for read-heavy contribution-guide discovery before the main workflow edits or reports. Good jobs include checking setup commands, comparing PR expectations against repo policy, reading workflow docs, or verifying contributor-facing tool requirements.
 
 Keep `apply` edits in the main thread because this skill owns one target `CONTRIBUTING.md` file and needs one coherent contributor contract. Ask workers for concise evidence and file references, not replacement guide prose.
 

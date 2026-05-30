@@ -21,6 +21,8 @@ When this skill touches Codex packaging guidance, keep the plugin-root structure
 - only `plugin.json` belongs in `.codex-plugin/`
 - `skills/`, `.app.json`, `.mcp.json`, `hooks/`, and `assets/` belong at the plugin root
 - plugin manifests should point to bundled skill folders with `"skills": "./skills/"`
+- plugin manifests may point to bundled lifecycle hooks with `"hooks": "./hooks/hooks.json"`; if hooks live at `./hooks/hooks.json`, Codex checks that default path automatically
+- plugin-bundled hooks are non-managed hooks, so installing or enabling a plugin does not make those hooks trusted automatically
 - marketplace entries point `source.path` at the plugin root directory, not at `.codex-plugin/`
 
 ## Codex Install Guidance
@@ -62,7 +64,8 @@ When syncing `AGENTS.md`, include strict dependency guidance:
 When auditing target skills, treat subagent guidance as useful only when it is explicit, bounded, and tied to real parallel support work. Match OpenAI's current Codex wording:
 
 - use `subagent` and `subagent workflow` rather than vague older `multi-agent` language
-- say Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask for and use subagents when the task clearly depends on them
+- say current Codex releases enable subagent workflows by default, but Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask first and the user grants explicit permission
+- mention built-in `default`, `worker`, and `explorer` agents only when agent configuration matters; avoid turning custom `.codex/agents/` setup into default skill boilerplate
 - prefer subagents for read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization
 - ask workers for concise findings, evidence, links, or file references instead of raw intermediate output
 - keep write-heavy apply work in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes
@@ -74,4 +77,4 @@ Flag skill guidance that implies automatic delegation, recommends parallel write
 
 When auditing target skills or plugin-repo docs that mention OpenAI Codex Hooks, keep hooks conceptually separate from marketplace and install-surface guidance. Hooks are Codex runtime lifecycle scripts; plugins may bundle lifecycle config, but hooks are not themselves a plugin install surface.
 
-Flag hooks guidance that omits `features.codex_hooks = true`, implies project-local hooks load without a trusted `.codex/` layer, treats `PreToolUse` or `PostToolUse` as complete enforcement for every tool path, or confuses Codex Hooks with git pre-commit hooks or repo-maintenance hook scripts.
+Flag hooks guidance that uses deprecated `features.codex_hooks` wording instead of canonical `features.hooks`, implies hooks are disabled by default, implies project-local hooks load without a trusted `.codex/` layer, treats `PreToolUse` or `PostToolUse` as complete enforcement for every tool path, omits non-managed hook trust review, or confuses Codex Hooks with git pre-commit hooks or repo-maintenance hook scripts.

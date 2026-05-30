@@ -13,7 +13,7 @@ Codex plugin wiring has five separate jobs:
    - Lists discoverable plugins.
    - In Socket, this is [`.agents/plugins/marketplace.json`](../../.agents/plugins/marketplace.json).
 3. Plugin root payload
-   - Contains `.codex-plugin/plugin.json` and bundled surfaces such as `skills/`, `.mcp.json`, `hooks/`, or `assets/`.
+   - Contains `.codex-plugin/plugin.json` and bundled surfaces such as `skills/`, `.app.json`, `.mcp.json`, `hooks/`, or `assets/`.
    - Socket child plugin entries normally point at `./plugins/<child>`.
 4. Installed plugin cache
    - Codex-owned runtime copy under `~/.codex/plugins/cache/...`.
@@ -27,6 +27,7 @@ Codex plugin wiring has five separate jobs:
 - The Socket root is a marketplace catalog, not an aggregate plugin payload.
 - Child plugins stay independently listed unless a future aggregate plugin is deliberately added.
 - Marketplace `source.path` points at the plugin root, not at `.codex-plugin/`.
+- Plugin-bundled hooks may be declared in the manifest or discovered at `./hooks/hooks.json`, but installing or enabling a plugin does not automatically trust those hooks.
 - Git-backed marketplace add and upgrade commands are the default user-facing install and update path.
 - Manual local marketplace roots and copied payload folders are for development, unpublished testing, or fallback only.
 - Repo-visible plugins come from marketplace catalogs. OpenAI does not currently document a richer repo-private plugin scoping model beyond that marketplace model.
