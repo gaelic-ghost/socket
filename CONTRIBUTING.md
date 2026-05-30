@@ -101,6 +101,7 @@ The installable local child entries currently point at:
 - `./plugins/cardhop-app`
 - `./plugins/productivity-skills`
 - `./plugins/python-skills`
+- `./plugins/server-side-swift`
 - `./plugins/swiftasb-skills`
 - `./plugins/things-app`
 
