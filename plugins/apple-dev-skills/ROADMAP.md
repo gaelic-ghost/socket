@@ -18,6 +18,7 @@
 - [Milestone 40: SwiftUI UI Architecture Workflow](#milestone-40-swiftui-ui-architecture-workflow)
 - [Milestone 41: Swift Package Extension Workflow](#milestone-41-swift-package-extension-workflow)
 - [Milestone 42: Safari Extension And Control Workflow](#milestone-42-safari-extension-and-control-workflow)
+- [Milestone 43: Client Auth, Keychain, and App Sync Workflow](#milestone-43-client-auth-keychain-and-app-sync-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -49,6 +50,7 @@
 - Milestone 40: SwiftUI UI Architecture Workflow - Completed
 - Milestone 41: Swift Package Extension Workflow - Planned
 - Milestone 42: Safari Extension And Control Workflow - Completed
+- Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -418,6 +420,32 @@ Completed
 - [x] The repository ships `safari-extension-control-workflow` as the explicit owner for Safari extension and SafariServices integration-shape guidance.
 - [x] The workflow keeps WebExtension, Safari Web Inspector Extension, Safari App Extension, content blocker, authentication, and external automation paths distinct.
 - [x] The skill is covered by repo validation and targeted tests.
+
+## Milestone 43: Client Auth, Keychain, and App Sync Workflow
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a dedicated Apple client workflow for app-side authentication, secure credential storage, and sync behavior in iOS, macOS, and related Apple-platform apps.
+- [ ] Keep Keychain, ASWebAuthenticationSession, Sign in with Apple, URLSession credential handling, token refresh, background refresh, and app-side sync guidance grounded in current Apple documentation.
+- [ ] Keep this client workflow separate from server-side authentication, server persistence, OpenAPI, and RPC guidance while documenting clear handoffs to those plugins when an app crosses that boundary.
+
+### Tickets
+
+- [ ] Define the skill boundary so it owns Apple client auth, Keychain storage, credential refresh, and app-side sync without duplicating server authentication or transport-contract workflow.
+- [ ] Gather Apple documentation anchors for Keychain Services, Authentication Services, Sign in with Apple, URLSession authentication, background tasks, push notification handoffs, and relevant data-protection behavior.
+- [ ] Add guidance for token storage, refresh timing, logout and credential revocation, multi-account behavior, app group or extension sharing, and operator-facing auth errors.
+- [ ] Add app-sync guidance for local cache shape, offline edits, conflict handling, change tokens or cursors, retry behavior, background refresh, and user-visible sync status.
+- [ ] Define handoffs to `server-side-swift` for backend auth and sync contracts, and to OpenAPI or RPC skills when generated clients or transport schemas are the primary concern.
+- [ ] Add tests and maintainer docs once the workflow shape is stable.
+
+### Exit Criteria
+
+- [ ] The repository ships an Apple client auth and app-sync workflow skill with clear Keychain, authentication, credential-refresh, and sync-state guidance.
+- [ ] The workflow clearly separates client responsibilities from server authentication, persistence, OpenAPI, and RPC concerns.
 
 ## Backlog Candidates
 

@@ -1,7 +1,7 @@
 {
   "name": "server-side-swift",
-  "version": "6.11.1",
-  "description": "Codex skills for building, running, and maintaining server-side Swift services, starting with Vapor, Hummingbird, and SwiftPM-first workflows.",
+  "version": "6.12.0",
+  "description": "Codex skills for building, running, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -18,13 +18,16 @@
     "server-side-swift",
     "vapor",
     "hummingbird",
+    "fluent",
+    "database",
+    "persistence",
     "swiftpm"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side Swift",
-    "shortDescription": "Server-side Swift, Vapor, and Hummingbird workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor and Hummingbird documentation, local run commands, app structure, routing, middleware, request contexts, Fluent migrations, environment configuration, tests, and deployment handoffs.",
+    "shortDescription": "Server-side Swift, Vapor, Hummingbird, and persistence workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor and Hummingbird documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -39,9 +42,11 @@
       "Inspect this Hummingbird app and explain its router, middleware, request contexts, and run commands.",
       "Add a Vapor route with tests while keeping domain logic outside handlers.",
       "Add a Hummingbird route with tests while keeping domain logic outside handlers.",
-      "Set up Fluent migrations and explain the migration commands.",
+      "Plan a server-side Swift persistence change with models, migrations, queries, and tests.",
+      "Set up Fluent models and migrations and explain the migration commands.",
+      "Add database-backed behavior to a Hummingbird service without copying Vapor app structure.",
       "Diagnose why this Vapor build, run, migrate, or local server command failed.",
-      "Diagnose why this Hummingbird build, run, route, or local server command failed."
+      "Diagnose why this Hummingbird build, run, route, database, or local server command failed."
     ],
     "brandColor": "#0EA5E9"
   }

@@ -52,8 +52,9 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 - [x] Create the Socket-owned `server-side-swift` plugin surface.
 - [x] Add the first real Vapor-focused server-side Swift skill.
+- [x] Add a persistence workflow for Fluent, database migrations, query design, Hummingbird database handoffs, and docs routing.
 - [ ] Add validation coverage for skill metadata and exported skill inventory once central Socket child-skill validation exists.
-- [ ] Decide whether future server-side Swift skills should cover SwiftNIO, Hummingbird, deployment, or database workflows as separate skills.
+- [ ] Decide whether future server-side Swift skills should cover SwiftNIO, deployment, authentication, app sync, or additional database workflows as separate skills.
 - [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
 
 ### rust-skills
