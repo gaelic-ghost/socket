@@ -1,7 +1,7 @@
 {
   "name": "server-side-swift",
-  "version": "6.11.0",
-  "description": "Codex skills for building, running, and maintaining server-side Swift services, starting with Vapor and SwiftPM-first workflows.",
+  "version": "6.11.1",
+  "description": "Codex skills for building, running, and maintaining server-side Swift services, starting with Vapor, Hummingbird, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -17,13 +17,14 @@
     "swift",
     "server-side-swift",
     "vapor",
+    "hummingbird",
     "swiftpm"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side Swift",
-    "shortDescription": "Server-side Swift and Vapor workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor documentation, Vapor Toolbox usage, local run commands, app structure, routing, middleware, Fluent migrations, environment configuration, tests, and deployment handoffs.",
+    "shortDescription": "Server-side Swift, Vapor, and Hummingbird workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor and Hummingbird documentation, local run commands, app structure, routing, middleware, request contexts, Fluent migrations, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -33,10 +34,14 @@
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-swift",
     "defaultPrompt": [
       "Create a Vapor service plan using current Vapor CLI and SwiftPM workflows.",
+      "Create a Hummingbird service plan using current Hummingbird docs and SwiftPM workflows.",
       "Inspect this Vapor app and explain its routes, configuration, and run commands.",
+      "Inspect this Hummingbird app and explain its router, middleware, request contexts, and run commands.",
       "Add a Vapor route with tests while keeping domain logic outside handlers.",
+      "Add a Hummingbird route with tests while keeping domain logic outside handlers.",
       "Set up Fluent migrations and explain the migration commands.",
-      "Diagnose why this Vapor build, run, migrate, or local server command failed."
+      "Diagnose why this Vapor build, run, migrate, or local server command failed.",
+      "Diagnose why this Hummingbird build, run, route, or local server command failed."
     ],
     "brandColor": "#0EA5E9"
   }
