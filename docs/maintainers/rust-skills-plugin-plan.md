@@ -95,6 +95,31 @@ This skill covers:
 - test layout
 - initial build, test, format, and lint validation
 
+### `rust:build-cli-project`
+
+Guide agents through implementing Rust command-line tools.
+
+This skill covers:
+
+- keeping CLI parsing separate from domain behavior
+- choosing dependencies from existing repo policy or explicit user approval
+- shaping user-facing output and exit behavior
+- testing command behavior without turning every test into a shell process
+- handing off to Cargo validation and packaging workflows
+
+### `rust:build-library-crate`
+
+Guide agents through implementing reusable Rust library crates.
+
+This skill covers:
+
+- public API ownership
+- module visibility
+- error types
+- feature flags
+- documentation examples
+- unit, integration, and doctest boundaries
+
 ### `rust:testing-workflow`
 
 Guide agents through Rust test execution and failure triage.
@@ -124,8 +149,6 @@ This skill covers:
 
 ## Next Skill Candidates
 
-- `rust:build-cli-project`
-- `rust:build-library-crate`
 - `rust:package-workflow`
 - `rust:ci-workflow`
 - `rust:upgrade-workflow`
@@ -138,6 +161,7 @@ This skill covers:
 - [x] Update `plugins/rust-skills/AGENTS.md` with Rust workflow policy and validation expectations.
 - [x] Update `plugins/rust-skills/.codex-plugin/plugin.json` so plugin metadata describes shipped Rust guidance.
 - [x] Add first-slice skills for project-shape choice, Cargo bootstrap, testing, and tooling/style alignment.
+- [x] Add implementation skills for Rust CLI and library crate work.
 - [x] Switch the root marketplace entry for `rust-skills` to installable only after real skill content exists.
 - [x] Update root README and TODO so users understand the new installable child plugin surface.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
@@ -146,5 +170,5 @@ This skill covers:
 
 - [x] The Socket marketplace exposes `rust-skills` as an installable child plugin.
 - [x] The new skills can help an agent choose a Rust project shape before implementation.
-- [x] The new skills guide Cargo bootstrap, testing, formatting, linting, and toolchain alignment without bundling a runtime service.
+- [x] The new skills guide Cargo bootstrap, CLI and library implementation, testing, formatting, linting, and toolchain alignment without bundling a runtime service.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.

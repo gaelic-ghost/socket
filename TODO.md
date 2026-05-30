@@ -59,6 +59,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 ### rust-skills
 
 - [x] Author the first real Rust-focused skill tranche for Codex.
+- [x] Add Rust CLI and library implementation guidance after the first planning and validation slice.
 - [x] Update docs to describe shipped behavior once real skill content exists.
 - [x] Switch the root marketplace entry for `rust-skills` from placeholder to installable after real skill content exists.
 - [ ] Add focused validation only if the plugin gains generated examples, scripts, or metadata checks that need more than root marketplace validation.
