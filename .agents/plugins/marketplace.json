@@ -30,28 +30,16 @@
       "category": "Developer Tools"
     },
     {
-      "name": "swiftasb-skills",
+      "name": "cardhop-app",
       "source": {
         "source": "local",
-        "path": "./plugins/swiftasb-skills"
+        "path": "./plugins/cardhop-app"
       },
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Developer Tools"
-    },
-    {
-      "name": "server-side-swift",
-      "source": {
-        "source": "local",
-        "path": "./plugins/server-side-swift"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Developer Tools"
+      "category": "Productivity"
     },
     {
       "name": "dotnet-skills",
@@ -78,28 +66,22 @@
       "category": "Productivity"
     },
     {
-      "name": "speak-swiftly",
+      "name": "python-skills",
       "source": {
-        "source": "url",
-        "url": "https://github.com/gaelic-ghost/SpeakSwiftlyServer.git",
-        "ref": "main"
+        "source": "local",
+        "path": "./plugins/python-skills"
       },
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity",
-      "description": "Local Speak Swiftly speech, playback, runtime operation, MCP, and Codex final-reply TTS hooks.",
-      "interface": {
-        "displayName": "Speak Swiftly",
-        "shortDescription": "Local speech and playback workflows for Codex."
-      }
+      "category": "Developer Tools"
     },
     {
-      "name": "python-skills",
+      "name": "server-side-swift",
       "source": {
         "source": "local",
-        "path": "./plugins/python-skills"
+        "path": "./plugins/server-side-swift"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -120,16 +102,34 @@
       "category": "Developer Tools"
     },
     {
-      "name": "cardhop-app",
+      "name": "speak-swiftly",
       "source": {
-        "source": "local",
-        "path": "./plugins/cardhop-app"
+        "source": "url",
+        "url": "https://github.com/gaelic-ghost/SpeakSwiftlyServer.git",
+        "ref": "main"
       },
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "description": "Local Speak Swiftly speech, playback, runtime operation, MCP, and Codex final-reply TTS hooks.",
+      "interface": {
+        "displayName": "Speak Swiftly",
+        "shortDescription": "Local speech and playback workflows for Codex."
+      }
+    },
+    {
+      "name": "swiftasb-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/swiftasb-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     },
     {
       "name": "things-app",
