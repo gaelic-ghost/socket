@@ -148,6 +148,7 @@ In Progress
 - [x] Add `server-side-swift:vapor-server-workflow` as the first skill for Vapor service creation, route work, middleware, Fluent migrations, environment configuration, local run commands, tests, and deployment handoffs.
 - [x] Wire `server-side-swift` into the root Socket marketplace as a normal local child plugin.
 - [x] Add `server-side-swift:hummingbird-server-workflow` for Hummingbird services, including route composition, middleware, request/response modeling, local run commands, tests, and SwiftPM-first validation.
+- [x] Add `server-side-swift:persistence-workflow` for server-side Swift persistence, including Fluent models, database migrations, query design, Hummingbird database handoffs, tests, and docs routing through official docs, GitHub sources, or checked Dash docsets.
 - [ ] Add an OpenAPI workflow for generating, serving, validating, or consuming OpenAPI descriptions in server-side Swift services without tying the skill to one web framework by default.
 - [ ] Add an RPC workflow for Swift service boundaries that may use JSON-RPC, gRPC, MCP-like transports, or framework-specific client/server contracts, with explicit guidance for when plain HTTP routes are the simpler fit.
 - [ ] Add a SwiftNIO workflow for lower-level event-loop, channel, bootstrap, byte-buffer, back-pressure, and nonblocking-I/O work when a service needs NIO directly instead of a higher-level framework.
@@ -160,7 +161,7 @@ In Progress
 ### Exit Criteria
 
 - [ ] The Socket marketplace exposes `server-side-swift` as an installable child plugin with metadata that matches its shipped skill inventory.
-- [ ] The plugin gives agents clear framework-specific paths for Vapor and Hummingbird without duplicating generic SwiftPM or Apple-platform workflow guidance.
+- [ ] The plugin gives agents clear framework-specific paths for Vapor, Hummingbird, and persistence work without duplicating generic SwiftPM or Apple-platform workflow guidance.
 - [ ] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
