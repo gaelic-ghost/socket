@@ -6,11 +6,11 @@ Use these examples when an agent needs to explain SwiftASB before implementation
 
 Recommendation: SwiftASB is a good fit for this app.
 
-What SwiftASB would do here: SwiftASB would let the SwiftUI app start the local Codex runtime, open a thread for the workspace, start turns, read app-server-owned workspace, worktree, and selected Git status facts, and read live progress through Swift-native handles instead of replaying raw app-server JSON.
+What SwiftASB would do here: SwiftASB would let the SwiftUI app start the local Codex runtime, open a thread for the workspace, start text or plan-mode turns, read app-server-owned workspace, worktree, and selected Git status facts, and read live progress, plan, and goal state through Swift-native handles instead of replaying raw app-server JSON.
 
 What the app would own: The app still owns its windows, navigation, inspector layout, persistence choices, user preferences, and approval UI. SwiftUI and Observation should own view updates.
 
-What SwiftASB would own: `CodexAppServer` owns the subprocess, one-call startup, app-wide library and inventory reads, feature-operation events, and diagnostics, `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexAppServer.mcp` own app-server-routed facts, extension detail, marketplace maintenance, MCP installs, and MCP resource reads, `CodexThread` owns one conversation and stored-thread actions, `CodexTurnHandle` owns one active turn, and companions such as `Inventory`, `Library`, `Dashboard`, `Minimap`, `RecentTurns`, `RecentFiles`, and `RecentCommands` provide UI-friendly state.
+What SwiftASB would own: `CodexAppServer` owns the subprocess, one-call startup, app-wide library and inventory reads, feature-operation events, and diagnostics, `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, and `CodexAppServer.mcp` own app-server-routed facts, extension detail, marketplace maintenance, MCP installs, and MCP resource reads, `CodexThread` owns one conversation, stored-thread actions, text turns, plan-mode turns, and thread goals, `CodexTurnHandle` owns one active turn, and companions such as `Inventory`, `Library`, `Dashboard`, `Agenda`, `Minimap`, `RecentTurns`, `RecentFiles`, and `RecentCommands` provide UI-friendly state.
 
 Tradeoffs: The app depends on a local Codex CLI runtime, same-thread overlapping turns are rejected, and startup validates against SwiftASB's reviewed Codex support window unless the host app explicitly chooses a looser startup compatibility policy.
 
@@ -20,11 +20,11 @@ Next integration step: Use `swiftasb:choose-integration-shape`, then `swiftasb:b
 
 Recommendation: SwiftASB is a good fit if each document or workspace window needs its own Codex thread.
 
-What SwiftASB would do here: SwiftASB would provide the typed runtime, thread, turn, filesystem/config/extension/MCP, workspace-permission, worktree, selected Git status, app-wide inventory, feature-operation, diagnostic, and history surfaces. The AppKit app can connect those surfaces to window-controller actions, menu validation, toolbar controls, sheets, panels, and inspector views.
+What SwiftASB would do here: SwiftASB would provide the typed runtime, thread, turn, plan/goal, filesystem/config/extension/MCP, workspace-permission, worktree, selected Git status, app-wide inventory, feature-operation, diagnostic, and history surfaces. The AppKit app can connect those surfaces to window-controller actions, menu validation, toolbar controls, sheets, panels, and inspector views.
 
 What the app would own: AppKit still owns application lifecycle, document/window ownership, main-actor UI updates, menu state, toolbar actions, and user-facing presentation.
 
-What SwiftASB would own: SwiftASB owns Codex one-call startup, initialization, thread creation or resume, active turn events, request responses, interruption, app-server-owned fact reads, selected Git status refresh, app-wide inventory refresh, diagnostics, feature-operation events, and local history reads.
+What SwiftASB would own: SwiftASB owns Codex one-call startup, initialization, thread creation or resume, active turn events, plan updates, goal reads and mutations, request responses, interruption, app-server-owned fact reads, selected Git status refresh, app-wide inventory refresh, diagnostics, feature-operation events, and local history reads.
 
 Tradeoffs: The app needs explicit process lifetime decisions. A window controller should not secretly own app-wide Codex runtime work if multiple windows share one runtime.
 
@@ -38,7 +38,7 @@ What SwiftASB would do here: SwiftASB would sit inside the package implementatio
 
 What the package would own: The package owns its public API, versioning promises, test strategy, runtime documentation, and consumer-facing error model.
 
-What SwiftASB would own: SwiftASB owns app-server one-call startup, typed startup errors, app-server-owned fact reads, worktree snapshots, selected Git status, app-wide inventory, MCP helpers, feature policy, feature-operation events, thread and turn handles, diagnostics, interactive request routing, query descriptors, and local history helpers.
+What SwiftASB would own: SwiftASB owns app-server one-call startup, typed startup errors, app-server-owned fact reads, worktree snapshots, selected Git status, app-wide inventory, MCP helpers, feature policy, feature-operation events, thread, agenda, and turn handles, diagnostics, interactive request routing, query descriptors, and local history helpers.
 
 Tradeoffs: Normal `swift test` should stay deterministic. Live Codex probes need explicit environment flags, temporary workspaces, serial execution, and hard timeouts.
 

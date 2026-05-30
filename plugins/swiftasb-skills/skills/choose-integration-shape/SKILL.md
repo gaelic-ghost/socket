@@ -2,7 +2,7 @@
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.5.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -17,7 +17,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*)
 
 Pick the smallest correct way for a project to use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) before code changes begin.
 
-The practical decision is who owns the local Codex runtime, who owns the app-wide stored-thread library and inventory companions, who owns each conversation thread, where active turn state is shown, where app-server-owned worktree, selected Git status, project identity, thread source, filesystem/config/extension/MCP facts appear, which SwiftASB feature categories the host app enables, and how much SwiftASB behavior should be exposed through the user's own app or package API.
+The practical decision is who owns the local Codex runtime, who owns the app-wide stored-thread library and inventory companions, who owns each conversation thread and its agenda, where active turn state is shown, where app-server-owned worktree, selected Git status, project identity, thread source, filesystem/config/extension/MCP facts appear, which SwiftASB feature categories the host app enables, and how much SwiftASB behavior should be exposed through the user's own app or package API.
 
 ## When To Use
 
@@ -67,7 +67,7 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - model, MCP, hook, config, extension, remote-control, feature-operation, or permission diagnostics
    - selected-worktree Git status or marketplace-maintenance UI
    - app-wide inventory UI, MCP install UI, MCP resource viewer, or MCP inspector
-   - code-review or explicit shell-command UI
+   - plan/goal UI, code-review UI, or explicit shell-command UI
    - package API for other apps
    - automation or one-shot task execution
 3. Choose the SwiftASB owner:
@@ -80,6 +80,7 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - routine app-wide catalogs stay on `CodexAppServer.makeInventory(configuration:)`; advanced extension pagination and marketplace upgrades stay on `CodexAppServer.extensions`
    - app-server-owned filesystem/config/extension/MCP/workspace/worktree/project-identity/thread-source reads stay on `CodexAppServer.fs`, `CodexAppServer.config`, `CodexAppServer.extensions`, `CodexAppServer.mcp`, and `CodexWorkspace`
    - app-wide feature authority stays in `SwiftASBFeaturePolicy`, and mutation visibility comes from `CodexAppServer.featureOperationEvents()`
+   - plan and goal UI stays on `CodexThread.makeAgenda()`, `CodexThread.startPlanningTurn(...)`, and `CodexThread` goal helpers
    - code-review starts stay on `CodexThread.startReview(against:placement:)`
    - user-level shell commands stay behind a visible host-app opt-in to `shellCommandExecution`
 4. Choose the state surface:
@@ -114,6 +115,7 @@ Prefer:
 - `CodexThread.startReview(against:placement:)` for app-server code review UI
 - `CodexThread.sendShellCommand(_:)` only when the app deliberately exposes high-impact user-level shell execution and enables `shellCommandExecution`
 - `CodexThread.makeDashboard()` for thread-wide activity
+- `CodexThread.makeAgenda()` and `CodexThread.startPlanningTurn(...)` for current goal, accepted plan, proposed plan text, and explicit plan-mode controls
 - `CodexTurnHandle.minimap` for active turn state
 - recent companions for inspector rails and completed history
 - explicit user-visible error strings for `CodexAppServerStartupError`, compatibility, and turn failures
