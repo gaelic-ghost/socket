@@ -2,7 +2,7 @@
 
 This plan records the first durable shape for a Socket-hosted Rust skills plugin.
 
-The plugin's job is to help agents choose Rust project shapes, bootstrap Cargo crates and workspaces, test and validate Rust projects, and keep Rust tooling guidance grounded in official Rust documentation.
+The plugin's job is to help agents choose Rust project shapes, bootstrap Cargo crates and workspaces, implement CLI and library crates, prepare package surfaces, align CI, test and validate Rust projects, and keep Rust tooling guidance grounded in official Rust documentation.
 
 ## Intent
 
@@ -11,7 +11,7 @@ The `rust-skills` plugin should help agents do five things:
 - choose a Rust crate, package, workspace, or maintenance shape before implementation starts
 - bootstrap reproducible Cargo projects without inventing local-only templates or package sources
 - implement Rust CLI and library crates with clear public boundaries, diagnostics, tests, and validation
-- run and explain Rust build, test, lint, format, package, and CI workflows
+- prepare package surfaces and run Rust build, test, lint, format, package, and CI workflows
 - keep Rust guidance grounded in official Rust language, Cargo, rustup, rustfmt, and Clippy documentation
 
 This is a companion guidance plugin, not a runtime plugin. The first version should not bundle an MCP server, custom package manager, private template feed, generated scaffold script, or machine-local toolchain state.
@@ -54,6 +54,11 @@ Use official Rust documentation first:
 - [The Rust Programming Language](https://doc.rust-lang.org/book/)
 - [The Cargo Book](https://doc.rust-lang.org/cargo/)
 - [`cargo new`](https://doc.rust-lang.org/cargo/commands/cargo-new.html)
+- [Cargo manifest format](https://doc.rust-lang.org/cargo/reference/manifest.html)
+- [`cargo package`](https://doc.rust-lang.org/cargo/commands/cargo-package.html)
+- [`cargo publish`](https://doc.rust-lang.org/cargo/commands/cargo-publish.html)
+- [Cargo workspaces](https://doc.rust-lang.org/cargo/reference/workspaces.html)
+- [Cargo features reference](https://doc.rust-lang.org/cargo/reference/features.html)
 - [Cargo tests guide](https://doc.rust-lang.org/cargo/guide/tests.html)
 - [Cargo continuous integration guide](https://doc.rust-lang.org/cargo/guide/continuous-integration.html)
 - [The rustup book](https://rust-lang.github.io/rustup/)
@@ -134,6 +139,33 @@ This skill covers:
 - feature-gated test matrices
 - failure filtering and targeted reruns
 
+### `rust:package-workflow`
+
+Guide agents through publish-facing Cargo package preparation.
+
+This skill covers:
+
+- manifest metadata
+- `rust-version` and MSRV checks
+- lockfile policy
+- path dependency restrictions
+- package inclusion and exclusion
+- dry-run package validation
+- publish versus no-publish decisions
+
+### `rust:ci-workflow`
+
+Guide agents through Rust CI validation design.
+
+This skill covers:
+
+- local-to-CI command alignment
+- format, lint, build, test, docs, package, and MSRV checks
+- workspace and feature matrix choices
+- toolchain component setup
+- warnings-as-errors policy
+- cache and artifact boundaries
+
 ### `rust:tooling-style-workflow`
 
 Align Rust formatting, linting, toolchain, and CI behavior with repository policy.
@@ -150,8 +182,6 @@ This skill covers:
 
 ## Next Skill Candidates
 
-- `rust:package-workflow`
-- `rust:ci-workflow`
 - `rust:upgrade-workflow`
 - `rust:ffi-workflow`
 - `rust:wasm-workflow`
@@ -163,6 +193,7 @@ This skill covers:
 - [x] Update `plugins/rust-skills/.codex-plugin/plugin.json` so plugin metadata describes shipped Rust guidance.
 - [x] Add first-slice skills for project-shape choice, Cargo bootstrap, testing, and tooling/style alignment.
 - [x] Add implementation skills for Rust CLI and library crate work.
+- [x] Add package and CI workflow skills for publish-facing and automation guidance.
 - [x] Switch the root marketplace entry for `rust-skills` to installable only after real skill content exists.
 - [x] Update root README and TODO so users understand the new installable child plugin surface.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
@@ -171,5 +202,5 @@ This skill covers:
 
 - [x] The Socket marketplace exposes `rust-skills` as an installable child plugin.
 - [x] The new skills can help an agent choose a Rust project shape before implementation.
-- [x] The new skills guide Cargo bootstrap, CLI and library implementation, testing, formatting, linting, and toolchain alignment without bundling a runtime service.
+- [x] The new skills guide Cargo bootstrap, CLI and library implementation, package preparation, CI alignment, testing, formatting, linting, and toolchain alignment without bundling a runtime service.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.

@@ -93,7 +93,7 @@ Use a library package when the primary output is an API consumed by tests, examp
 Handoff:
 
 - `rust:testing-workflow` for unit, integration, and doctest coverage
-- future `rust:package-workflow` when crate metadata or publication matters
+- `rust:package-workflow` when crate metadata or publication matters
 
 ### Cargo Workspace
 

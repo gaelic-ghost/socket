@@ -1,7 +1,7 @@
 {
   "name": "rust-skills",
   "version": "6.10.2",
-  "description": "Rust, Cargo, rustup, crate, workspace, CLI, library, testing, linting, formatting, package, and CI workflow skills.",
+  "description": "Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, testing, linting, and formatting workflow skills.",
   "skills": "./skills/",
   "author": {
     "name": "Gale",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "Rust Skills",
     "shortDescription": "Rust and Cargo workflow skills for Codex.",
-    "longDescription": "Guidance for choosing Rust project shapes, bootstrapping Cargo crates and workspaces, implementing CLI and library crates, testing Rust projects, and aligning rustfmt, Clippy, toolchain, package, and CI workflows.",
+    "longDescription": "Guidance for choosing Rust project shapes, bootstrapping Cargo crates and workspaces, implementing CLI and library crates, preparing Cargo package surfaces, aligning CI, testing Rust projects, and coordinating rustfmt, Clippy, and toolchain workflows.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

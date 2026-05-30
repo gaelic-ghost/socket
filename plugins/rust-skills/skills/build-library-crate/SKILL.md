@@ -113,7 +113,7 @@ cargo clippy -p package-name --all-targets --all-features
 cargo fmt --check
 ```
 
-For publishable crates, defer packaging details to future `rust:package-workflow`.
+For publishable crates, defer packaging details to `rust:package-workflow`.
 
 ## Output Shape
 
@@ -124,7 +124,7 @@ Return:
 3. `Visibility`: what is public, `pub(crate)`, or private and why.
 4. `Tests`: unit, integration, doctest, or feature coverage added or recommended.
 5. `Validation`: exact Cargo commands run or skipped with the concrete reason.
-6. `Next skill`: usually `rust:testing-workflow`, `rust:tooling-style-workflow`, or future `rust:package-workflow`.
+6. `Next skill`: usually `rust:testing-workflow`, `rust:tooling-style-workflow`, or `rust:package-workflow`.
 
 ## Guardrails
 

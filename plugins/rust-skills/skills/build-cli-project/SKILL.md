@@ -107,7 +107,7 @@ Return:
 3. `Dependencies`: reused, added, or intentionally avoided dependencies.
 4. `Tests`: unit, integration, or process-level coverage added or recommended.
 5. `Validation`: exact Cargo commands run or skipped with the concrete reason.
-6. `Next skill`: usually `rust:testing-workflow`, `rust:tooling-style-workflow`, or future `rust:package-workflow`.
+6. `Next skill`: usually `rust:testing-workflow`, `rust:tooling-style-workflow`, or `rust:package-workflow`.
 
 ## Guardrails
 
