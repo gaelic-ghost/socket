@@ -39,8 +39,11 @@ Primary sources:
 - [Vapor Fluent GitHub repository](https://github.com/vapor/fluent)
 - [Vapor GitHub organization](https://github.com/vapor)
 - [Hummingbird docs](https://docs.hummingbird.codes/)
+- [Hummingbird persistent data docs](https://docs.hummingbird.codes/2.0/documentation/hummingbird/persistentdata/)
 - [Hummingbird GitHub repository](https://github.com/hummingbird-project/hummingbird)
+- [Hummingbird Fluent package](https://github.com/hummingbird-project/hummingbird-fluent)
 - [Hummingbird GitHub organization](https://github.com/hummingbird-project)
+- [Swift.org database and persistence package catalog](https://www.swift.org/packages/database.html)
 
 For Dash.app:
 
@@ -99,6 +102,7 @@ For Hummingbird projects:
 
 - do not assume Fluent or any ORM is already part of the service
 - inspect how the `Application`, router, service lifecycle, and dependencies are currently constructed
+- check Hummingbird's persistent-data docs and ecosystem packages before choosing PostgresNIO, HummingbirdFluent, a direct driver, or another package
 - choose a database client or repository shape that fits the existing Hummingbird service instead of copying Vapor app structure
 - keep database clients, pools, or repositories created at app startup and passed into the handlers or context path already used by the project
 - keep request context values per-request; do not turn request context into a generic dependency container
