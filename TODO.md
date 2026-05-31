@@ -24,8 +24,8 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### productivity-skills
 
-- [ ] Add `maintain-project-todo` for canonical `TODO.md` maintenance and clear backlog ownership.
-- [ ] Add `maintain-project-docs` after `maintain-project-todo` exists so one umbrella workflow can coordinate README, CONTRIBUTING, AGENTS, ACCESSIBILITY, ROADMAP, and TODO splits.
+- [x] Fold issue-sized TODO/FIXME and bug-fix ticket tracking into `maintain-project-roadmap` through the canonical `Small Tickets` section instead of adding a separate `maintain-project-todo` workflow.
+- [ ] Add `maintain-project-docs` after `maintain-project-roadmap` owns small-ticket tracking so one umbrella workflow can coordinate README, CONTRIBUTING, AGENTS, ACCESSIBILITY, and ROADMAP splits.
 - [ ] Add `maintain-project-security` for canonical `SECURITY.md` maintenance.
 - [ ] Add `maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.

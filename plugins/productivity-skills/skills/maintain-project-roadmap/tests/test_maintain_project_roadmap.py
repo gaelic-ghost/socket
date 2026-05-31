@@ -51,6 +51,7 @@ Use this roadmap to track milestone-level delivery through checklist sections.
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
 - [Milestone 0: Foundation](#milestone-0-foundation)
+- [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -84,6 +85,10 @@ Planned
 
 - [ ] Describe what must be true before this milestone counts as complete.
 
+## Small Tickets
+
+- [ ] Record issue-sized fixes that are not yet attached to a milestone.
+
 ## Backlog Candidates
 
 - [ ] Record future work that is not yet attached to a milestone.
@@ -105,7 +110,7 @@ def test_missing_table_of_contents_is_reported(tmp_path: Path) -> None:
     write(
         tmp_path / "ROADMAP.md",
         valid_roadmap().replace(
-            "## Table of Contents\n\n- [Vision](#vision)\n- [Product Principles](#product-principles)\n- [Milestone Progress](#milestone-progress)\n- [Milestone 0: Foundation](#milestone-0-foundation)\n- [Backlog Candidates](#backlog-candidates)\n- [History](#history)\n\n",
+            "## Table of Contents\n\n- [Vision](#vision)\n- [Product Principles](#product-principles)\n- [Milestone Progress](#milestone-progress)\n- [Milestone 0: Foundation](#milestone-0-foundation)\n- [Small Tickets](#small-tickets)\n- [Backlog Candidates](#backlog-candidates)\n- [History](#history)\n\n",
             "",
         ),
     )
@@ -179,6 +184,7 @@ def test_apply_mode_bootstraps_missing_roadmap_from_template(tmp_path: Path) -> 
     assert "### Status" in content
     assert "- Milestone 0: Foundation - Planned" in content
     assert "### Exit Criteria" in content
+    assert "## Small Tickets" in content
     assert "## History" in content
     assert report["findings"] == []
 
@@ -211,6 +217,7 @@ def test_apply_mode_repairs_missing_sections_and_progress(tmp_path: Path) -> Non
     assert "### Status" in updated
     assert "### Tickets" in updated
     assert "### Exit Criteria" in updated
+    assert "## Small Tickets" in updated
     assert "## Backlog Candidates" in updated
     assert "## History" in updated
     assert report["findings"] == []

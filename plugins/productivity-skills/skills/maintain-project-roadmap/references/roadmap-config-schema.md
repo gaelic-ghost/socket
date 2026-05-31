@@ -31,5 +31,7 @@ Base interpretation notes:
 
 - `Milestone Progress` should summarize milestone names plus statuses only.
 - `Scope` should stay outcome- and boundary-oriented.
+- `Small Tickets` should hold issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
 - `Tickets` should carry actionable checklist work.
+- `Backlog Candidates` should hold plausible future work that is not yet committed to a milestone or small-ticket item.
 - `History` should stay high-signal and record only notable roadmap changes.

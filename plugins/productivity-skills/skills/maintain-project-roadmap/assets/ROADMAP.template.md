@@ -8,6 +8,7 @@ Use this roadmap to track milestone-level delivery through checklist sections.
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
 - [Milestone 0: Foundation](#milestone-0-foundation)
+- [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -42,6 +43,10 @@ Planned
 ### Exit Criteria
 
 - [ ] Describe what must be true before this milestone counts as complete.
+
+## Small Tickets
+
+- [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
 
 ## Backlog Candidates
 

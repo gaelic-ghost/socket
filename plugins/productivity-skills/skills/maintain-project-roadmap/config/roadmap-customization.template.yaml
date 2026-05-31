@@ -14,6 +14,7 @@ settings:
     - Vision
     - Product Principles
     - Milestone Progress
+    - Small Tickets
     - Backlog Candidates
     - History
   sectionOrder:
@@ -21,6 +22,7 @@ settings:
     - Product Principles
     - Milestone Progress
     - __MILESTONES__
+    - Small Tickets
     - Backlog Candidates
     - History
   requiredMilestoneSubsections:
@@ -31,6 +33,13 @@ settings:
   sectionAliases:
     Product Principles:
       - Product principles
+    Small Tickets:
+      - Small tickets
+      - TODO
+      - Todo
+      - TODOs
+      - Fixes
+      - Bug Fixes
     Backlog Candidates:
       - Backlog candidates
   milestoneSubsectionAliases:
@@ -43,6 +52,8 @@ settings:
       - Describe the long-term outcome this roadmap is meant to deliver, not just what the project currently is.
     Product Principles: |
       - State the few planning and delivery rules that should shape roadmap decisions and tradeoffs.
+    Small Tickets: |
+      - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
     Backlog Candidates: |
       - [ ] Record plausible future work that is not yet committed to a milestone.
     History: |

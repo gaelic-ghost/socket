@@ -1,13 +1,13 @@
 ---
 name: maintain-project-roadmap
-description: Maintain checklist-style ROADMAP.md files against a hard-enforced canonical base schema with deterministic check-only and bounded apply modes. Use when a project roadmap needs a durable checklist baseline that downstream plugins can extend or customize without weakening the shared roadmap contract.
+description: Maintain checklist-style ROADMAP.md files against a hard-enforced canonical base schema with deterministic check-only and bounded apply modes. Use when a project roadmap needs milestone planning, small-ticket tracking for issue-sized fixes or TODO/FIXME imports, and a durable checklist baseline that downstream plugins can extend or customize without weakening the shared roadmap contract.
 ---
 
 # Maintain Project Roadmap
 
 Maintain checklist-style `ROADMAP.md` files through one deterministic base-template workflow.
 
-This skill is the general template layer for roadmap maintenance. It defines the canonical shared checklist-roadmap contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit configuration instead of ad hoc structure drift.
+This skill is the general template layer for roadmap maintenance. It defines the canonical shared checklist-roadmap contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit configuration instead of ad hoc structure drift. It also owns small planning tickets that are too small or too unplanned for a milestone, so ordinary bug-fix TODOs do not need a separate `TODO.md` surface by default.
 
 ## Inputs
 
@@ -20,7 +20,7 @@ This skill is the general template layer for roadmap maintenance. It defines the
 
 1. Validate the project root and resolve the target `ROADMAP.md`.
 2. Load the canonical roadmap schema from the built-in template config, then merge any explicit customization override.
-3. In `check-only`, audit title requirements, top-level section names and order, the required table of contents, milestone ordering, milestone subsection names, milestone status values, milestone progress consistency, checkbox syntax, and legacy format.
+3. In `check-only`, audit title requirements, top-level section names and order, the required table of contents, milestone ordering, milestone subsection names, milestone status values, milestone progress consistency, small-ticket placement, checkbox syntax, and legacy format.
 4. In `apply`, keep edits bounded to the target `ROADMAP.md` while normalizing the roadmap into the configured canonical checklist structure.
 5. Preserve useful preamble material before the first H2 when normalizing the structural contract around it.
 6. Use the bundled roadmap template when bootstrapping a missing `ROADMAP.md`.
@@ -35,6 +35,7 @@ This skill is the general template layer for roadmap maintenance. It defines the
 - `Milestone > Scope` should describe boundary and intended outcome, not duplicate the ticket list.
 - `Milestone > Tickets` should be the actionable checklist for work inside the milestone.
 - `Milestone > Exit Criteria` should define what must be true before the milestone counts as complete.
+- `Small Tickets` should hold issue-sized fixes, TODO/FIXME imports, and cleanup work that is not substantial enough for a milestone yet. Keep these as checklist items that can be linked to GitHub issues, source comments, or milestone tickets when the evidence exists.
 - `Backlog Candidates` should hold plausible future work that is not yet committed to a milestone.
 - `History` should record only notable roadmap changes such as milestone additions, scope cuts, resets, or major replans.
 

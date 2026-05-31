@@ -60,6 +60,9 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - use `scripts/repo-maintenance/release.sh --mode standard` from a feature branch or worktree when protected `main` owns the final release line
    - use `scripts/repo-maintenance/release.sh --mode standard --remote-ci-mode defer` when full local validation has run and the repository's GitHub CI is intentionally heavy; Codex should schedule a native thread Timer/Wakeup or heartbeat automation when available, then resume the release in the same thread instead of leaving a shell process open just to poll remote checks
    - use `scripts/repo-maintenance/release.sh --mode submodule` only when the repo is checked out as a submodule and the parent pointer update remains a separate follow-up
+   - before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch still not contained by the local base branch and account for each one as already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete
+   - verify commit reachability in the exact local repository and remote before saying work is on `main`, merged, recovered, preserved, or safe to clean up
+   - do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until branch accounting is complete and any non-base history is merged or preserved on an explicit archive ref
 
 ## Inputs
 
@@ -108,6 +111,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
 - The generated GitHub Actions wrapper uses Node 24-compatible Actions versions, with `actions/checkout@v6.0.2` as the current validated floor. Newer stable official action versions are allowed and often preferred after checking release notes and running the relevant validation. Apple profiles report the runner-selected Xcode with shell commands instead of using the Node 20-based `maxim-lobanov/setup-xcode@v1` action.
 - Standard release mode defaults to full remote CI watching, but supports `--remote-ci-mode defer` for repositories whose GitHub CI is too heavy to justify keeping a Codex thread and shell process awake. Deferred mode still requires full local validation, branch push, PR creation, and initial check discovery before pausing.
+- Treat branch accounting as a hard completion gate for release and cleanup work, not as follow-up tidying. If `git branch --no-merged <base>` reports local branches after a merge, account for each branch explicitly before deleting anything or reporting the workflow complete.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the repo still needs to be created.
 - Recommend `sync-swift-package-guidance` or `sync-xcode-project-guidance` when AGENTS alignment is still the missing baseline after `maintain-project-repo` is present.
 

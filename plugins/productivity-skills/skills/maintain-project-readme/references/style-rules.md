@@ -11,6 +11,6 @@
 - Use exactly `TBD` for any empty or missing Overview subsection body, and ask the user for those subsection texts before bootstrapping a new README.
 - Keep `Quick Start` and `Usage` human-focused and end-user friendly.
 - Prefer fenced code blocks with info strings in `Usage` when concrete examples help.
-- Keep README content distinct from `CONTRIBUTING.md`, `TODO.md`, `ROADMAP.md`, and `AGENTS.md`.
+- Keep README content distinct from `CONTRIBUTING.md`, `ROADMAP.md`, and `AGENTS.md`; small-ticket planning belongs in `ROADMAP.md` by default.
 - Keep generated scaffolding readable enough for a maintainer to refine quickly.
 - Preserve useful repo-specific prose when it already fits the configured section contract.

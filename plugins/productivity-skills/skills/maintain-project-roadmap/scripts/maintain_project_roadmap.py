@@ -398,6 +398,7 @@ def build_migrated_from_legacy(text: str, settings: Dict[str, object]) -> str:
     section_bodies: Dict[str, str] = {
         "Vision": "- Preserve the long-term project direction while migrating this roadmap into checklist format.",
         "Product Principles": "- Keep roadmap updates checklist-based, reviewable, and tied to real delivery.",
+        "Small Tickets": section_template_map.get("Small Tickets", ""),
         "Backlog Candidates": section_template_map.get("Backlog Candidates", ""),
     }
 
@@ -779,6 +780,19 @@ def validate_schema(
                     category="schema",
                     severity="medium",
                     message="'Backlog Candidates' should appear after milestone sections.",
+                    file=str(roadmap_path),
+                    auto_fixable=True,
+                )
+            )
+    if "Small Tickets" in positions and milestones:
+        last_milestone_position = max(positions[heading] for heading, _body in milestones)
+        if positions["Small Tickets"] < last_milestone_position:
+            findings.append(
+                Finding(
+                    finding_id="small-tickets-order",
+                    category="schema",
+                    severity="medium",
+                    message="'Small Tickets' should appear after milestone sections.",
                     file=str(roadmap_path),
                     auto_fixable=True,
                 )

@@ -203,6 +203,26 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("transient indexing gaps", release_env)
         self.assertIn("native thread Timer/Wakeup or heartbeat automation", release_env)
 
+    def test_branch_accounting_guidance_is_documented(self) -> None:
+        skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
+        release_modes = (ROOT / "skills/maintain-project-repo/references/release-modes.md").read_text(
+            encoding="utf-8"
+        )
+        automation_prompts = (ROOT / "skills/maintain-project-repo/references/automation-prompts.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in (skill_text, release_modes):
+            with self.subTest(surface=text[:32]):
+                self.assertIn("branch accounting", text)
+                self.assertIn("git branch --no-merged <base>", text)
+                self.assertIn("commit reachability", text)
+                self.assertIn("temporary rescue refs", text)
+                self.assertIn("explicit archive ref", text)
+
+        self.assertIn("accounts for every local branch not contained by `main`", automation_prompts)
+        self.assertIn("do not delete local branches, remote branches, worktrees, archive refs", automation_prompts)
+
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")

@@ -28,7 +28,11 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 - wait for the pushed tag to become visible on the remote before creating the GitHub release
 - create the GitHub release unless skipped
 - wait for the GitHub release object to become readable after creation
-- prune stale remote tracking refs and delete local branches already merged into `main` where safe
+- verify `git log origin/main..main` or the repository's equivalent base/remote comparison is empty before claiming the local base branch is synchronized
+- enumerate every local branch still not contained by `main` and account for each branch as already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete
+- prune stale remote tracking refs and delete only local branches already merged into `main` after branch accounting proves they are safe
+
+Treat branch accounting as a hard completion gate, not optional cleanup. Use `git branch --no-merged <base>` or the repository's equivalent branch inventory before cleanup, and do not say a release, publish, merge, or cleanup step is done until every local branch not contained by the local base branch has been accounted for. Do not say work is on `main`, merged, recovered, preserved, or safe to clean up until commit reachability has been verified in the exact local repository and remote that statement refers to. Do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until branch accounting is complete and any non-base history is either merged or preserved on an explicit archive ref.
 
 Example:
 
@@ -38,7 +42,7 @@ bash scripts/repo-maintenance/release.sh --mode standard --version v1.2.0
 
 When a release intentionally has no repo version surfaces, pass `--skip-version-bump`. When the PR comment pass has already been handled and only historical comments remain visible through GitHub, rerun with `--review-comments-addressed`.
 
-By default, standard release mode uses `--remote-ci-mode full`, which blocks in the script while `gh pr checks --watch` waits for GitHub CI. For repositories where full local validation has already run and GitHub CI normally takes more than a couple minutes, use `--remote-ci-mode defer` during the first release pass. The script still runs local validation, pushes the release branch, opens or updates the PR, and waits until GitHub reports initial checks; then it pauses with a continuation command instead of polling the whole CI run. Codex should use the native thread Timer/Wakeup or heartbeat automation when the current Codex surface exposes it, then wake in the same thread, inspect the PR/check state, and rerun the same release command without `--remote-ci-mode defer` to finish the CI gate, review-comment gate, merge, tag, GitHub release, and cleanup.
+By default, standard release mode uses `--remote-ci-mode full`, which blocks in the script while `gh pr checks --watch` waits for GitHub CI. For repositories where full local validation has already run and GitHub CI normally takes more than a couple minutes, use `--remote-ci-mode defer` during the first release pass. The script still runs local validation, pushes the release branch, opens or updates the PR, and waits until GitHub reports initial checks; then it pauses with a continuation command instead of polling the whole CI run. Codex should use the native thread Timer/Wakeup or heartbeat automation when the current Codex surface exposes it, then wake in the same thread, inspect the PR/check state, and rerun the same release command without `--remote-ci-mode defer` to finish the CI gate, review-comment gate, merge, tag, GitHub release, branch accounting, and cleanup.
 
 GitHub visibility waits default to `REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS=120` and `REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS=5`. More specific overrides such as `REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_PR_REVIEW_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_REMOTE_BRANCH_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_REMOTE_TAG_TIMEOUT_SECONDS`, and `REPO_MAINTENANCE_GH_RELEASE_TIMEOUT_SECONDS` can narrow individual gates without editing the script. Timeout failures should name the delayed surface and the last observed state so maintainers can tell indexing lag apart from real CI, review, branch, tag, or release failures.
 
@@ -54,6 +58,7 @@ Use this mode when the current repository is checked out as a git submodule insi
 - wait for the pushed branch and tag to become visible on the remote
 - create the GitHub release when `gh` is available
 - wait for the GitHub release object to become readable after creation
+- verify the submodule branch and tag are visible on the intended remote before calling that work preserved or released
 - leave the parent-repo pointer update as a separate explicit follow-up step
 
 Example:
