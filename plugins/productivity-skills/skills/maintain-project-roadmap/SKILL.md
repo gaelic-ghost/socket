@@ -15,16 +15,20 @@ This skill is the general template layer for roadmap maintenance. It defines the
 - Required: `--run-mode <check-only|apply>`
 - Optional: `--roadmap-path <path>`
 - Optional: `--config <path>`
+- Optional: `--collect-source-tickets`
+- Optional: `--collect-github-issues`
+- Optional: `--github-repo <owner/repo>`
 
 ## Workflow
 
 1. Validate the project root and resolve the target `ROADMAP.md`.
 2. Load the canonical roadmap schema from the built-in template config, then merge any explicit customization override.
 3. In `check-only`, audit title requirements, top-level section names and order, the required table of contents, milestone ordering, milestone subsection names, milestone status values, milestone progress consistency, small-ticket placement, checkbox syntax, and legacy format.
-4. In `apply`, keep edits bounded to the target `ROADMAP.md` while normalizing the roadmap into the configured canonical checklist structure.
-5. Preserve useful preamble material before the first H2 when normalizing the structural contract around it.
-6. Use the bundled roadmap template when bootstrapping a missing `ROADMAP.md`.
-7. Re-run the same audit to confirm post-fix status.
+4. When requested, collect small-ticket candidates from source TODO/FIXME comments or open GitHub issues and report them under `small_ticket_candidates`.
+5. In `apply`, keep edits bounded to the target `ROADMAP.md` while normalizing the roadmap into the configured canonical checklist structure. If source or GitHub ticket collection was requested, append new candidates to `Small Tickets` without rewriting source files.
+6. Preserve useful preamble material before the first H2 when normalizing the structural contract around it.
+7. Use the bundled roadmap template when bootstrapping a missing `ROADMAP.md`.
+8. Re-run the same audit to confirm post-fix status.
 
 ## Writing Expectations
 
@@ -45,6 +49,13 @@ When the user explicitly requests subagents, or applicable workflow guidance tel
 
 Keep `apply` edits in the main thread because this skill owns one target roadmap and must preserve one coherent planning structure. Ask workers for concise findings, candidate changes, and references instead of direct roadmap rewrites.
 
+## Small Ticket Collection
+
+- Use `--collect-source-tickets` to scan ordinary source and documentation files for TODO/FIXME comments and report candidate `Small Tickets` entries with repo-relative file and line references.
+- Use `--collect-github-issues` to call `gh issue list` for open issues. Pass `--github-repo <owner/repo>` when the current checkout's GitHub remote is not the intended issue source.
+- In `check-only`, collection is report-only and does not mutate files.
+- In `apply`, collection appends new entries to `Small Tickets` in `ROADMAP.md`. It does not rewrite source comments yet; source comment rewrites need a separate explicit mode so code files are not changed as a side effect of roadmap normalization.
+
 ## Canonical Base Contract
 
 The authoritative default shared roadmap structure lives in:
@@ -61,15 +72,17 @@ Treat those two files as the source of truth for the canonical base schema and t
   - `customization_state`
   - `schema_contract`
   - `findings`
+  - `small_ticket_candidates`
   - `apply_actions`
   - `errors`
-- If there are no findings, no apply actions, and no errors, output exactly `No findings.`
+- If there are no findings, no small-ticket candidates, no apply actions, and no errors, output exactly `No findings.`
 
 ## Guardrails
 
 - Never auto-commit, auto-push, or open a PR.
 - Never invent roadmap status, milestone names, or ticket details that are not grounded in the existing file or the canonical template scaffolding.
 - Never edit files other than the target `ROADMAP.md`.
+- Never rewrite source TODO/FIXME comments unless a future explicit source-rewrite mode is implemented and requested.
 - Keep checklist-style `ROADMAP.md` as the canonical format.
 - Treat legacy table-style roadmap layouts as migration sources, not as an alternate canonical output mode.
 

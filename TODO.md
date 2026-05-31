@@ -29,6 +29,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Add `maintain-project-security` for canonical `SECURITY.md` maintenance.
 - [ ] Add `maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
+- [ ] Evaluate `design-agent-automation-workflow` as a framework-neutral planning skill for choosing between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, and Hermes-specific workflows.
 - [ ] Add lightweight validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Add validation checks for README layout and active skill inventory consistency.
 

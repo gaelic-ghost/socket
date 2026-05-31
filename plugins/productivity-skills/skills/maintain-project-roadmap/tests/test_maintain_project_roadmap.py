@@ -19,6 +19,9 @@ def run(
     run_mode: str = "check-only",
     roadmap_path: Path | None = None,
     config: Path | None = None,
+    collect_source_tickets: bool = False,
+    collect_github_issues: bool = False,
+    github_repo: str | None = None,
 ):
     args = argparse.Namespace(
         project_root=str(project_root),
@@ -30,6 +33,9 @@ def run(
         print_json=False,
         print_md=False,
         fail_on_issues=False,
+        collect_source_tickets=collect_source_tickets,
+        collect_github_issues=collect_github_issues,
+        github_repo=github_repo,
     )
     return MODULE.run_maintenance(args)
 
@@ -221,6 +227,60 @@ def test_apply_mode_repairs_missing_sections_and_progress(tmp_path: Path) -> Non
     assert "## Backlog Candidates" in updated
     assert "## History" in updated
     assert report["findings"] == []
+
+
+def test_collect_source_tickets_reports_todo_and_fixme_candidates(tmp_path: Path) -> None:
+    write(tmp_path / "ROADMAP.md", valid_roadmap())
+    write(
+        tmp_path / "Sources" / "Demo.swift",
+        """
+struct Demo {
+    // TODO: Add persistence retry coverage.
+    #warning("FIXME: Replace temporary network fallback")
+}
+""".strip(),
+    )
+
+    report, markdown = run(tmp_path, collect_source_tickets=True)
+    candidates = report["small_ticket_candidates"]
+    assert len(candidates) == 2
+    assert {candidate["kind"] for candidate in candidates} == {"TODO", "FIXME"}
+    assert candidates[0]["file"] == "Sources/Demo.swift"
+    assert "Small Ticket Candidates" in markdown
+    assert "Add persistence retry coverage" in markdown
+
+
+def test_apply_mode_appends_collected_source_tickets_to_small_tickets(tmp_path: Path) -> None:
+    roadmap = tmp_path / "ROADMAP.md"
+    write(roadmap, valid_roadmap())
+    write(tmp_path / "Sources" / "Demo.swift", "// TODO: Add persistence retry coverage.\n")
+
+    report, _markdown = run(tmp_path, run_mode="apply", collect_source_tickets=True)
+    updated = roadmap.read_text(encoding="utf-8")
+    assert report["findings"] == []
+    assert report["apply_actions"][-1]["action"] == "append-small-ticket-candidates"
+    assert "- [ ] TODO: Add persistence retry coverage. ([Sources/Demo.swift:1](Sources/Demo.swift#L1))" in updated
+
+
+def test_collect_github_issues_reports_issue_candidates(tmp_path: Path, monkeypatch) -> None:
+    write(tmp_path / "ROADMAP.md", valid_roadmap())
+
+    class Result:
+        returncode = 0
+        stdout = (
+            '[{"number": 42, "title": "Fix flaky release gate", '
+            '"url": "https://github.com/example/repo/issues/42", "labels": [{"name": "bug"}]}]'
+        )
+        stderr = ""
+
+    monkeypatch.setattr(MODULE, "run_gh_issue_list", lambda project_root, github_repo: Result())
+
+    report, markdown = run(tmp_path, collect_github_issues=True, github_repo="example/repo")
+    candidates = report["small_ticket_candidates"]
+    assert len(candidates) == 1
+    assert candidates[0]["source"] == "github"
+    assert candidates[0]["number"] == 42
+    assert "Fix flaky release gate" in markdown
 
 
 def test_invalid_parallel_marker_is_reported_and_apply_mode_removes_it(tmp_path: Path) -> None:

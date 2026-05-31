@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -32,6 +33,45 @@ PLACEHOLDER_PATTERNS = [
     re.compile(r"\bTBD\b", re.IGNORECASE),
     re.compile(r"<[^>]+>"),
 ]
+SOURCE_TICKET_RE = re.compile(
+    r"(?:^|\s)(?://|#warning\(?\"?|#|/\*|<!--|--)\s*"
+    r"(?P<kind>TODO|FIXME)\b(?:\s*[:\-]\s*|\s+)(?P<body>.+?)"
+    r"(?:\*/|-->|\"\)?\s*)?$",
+    re.IGNORECASE,
+)
+SOURCE_TICKET_EXTENSIONS = {
+    ".c",
+    ".cc",
+    ".cpp",
+    ".cs",
+    ".css",
+    ".go",
+    ".h",
+    ".hpp",
+    ".html",
+    ".java",
+    ".js",
+    ".jsx",
+    ".kt",
+    ".m",
+    ".mm",
+    ".py",
+    ".rb",
+    ".rs",
+    ".sh",
+    ".swift",
+    ".ts",
+    ".tsx",
+}
+IGNORED_SOURCE_PARTS = {
+    ".build",
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pycache__",
+    "node_modules",
+}
 
 MILESTONE_SLOT = "__MILESTONES__"
 
@@ -66,6 +106,38 @@ class ApplyAction:
         return {"action": self.action, "reason": self.reason, "file": self.file}
 
 
+@dataclass
+class SmallTicketCandidate:
+    source: str
+    kind: str
+    title: str
+    detail: str
+    file: str = ""
+    line: Optional[int] = None
+    url: str = ""
+    number: Optional[int] = None
+
+    def identity(self) -> str:
+        if self.url:
+            return self.url
+        if self.file and self.line is not None:
+            return f"{self.file}#L{self.line}"
+        return f"{self.source}:{self.kind}:{self.title}"
+
+    def to_dict(self) -> Dict[str, object]:
+        return {
+            "source": self.source,
+            "kind": self.kind,
+            "title": self.title,
+            "detail": self.detail,
+            "file": self.file,
+            "line": self.line,
+            "url": self.url,
+            "number": self.number,
+            "identity": self.identity(),
+        }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Audit and optionally apply bounded checklist ROADMAP maintenance from a hard-enforced schema."
@@ -79,6 +151,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--print-json", action="store_true", help="Print JSON report")
     parser.add_argument("--print-md", action="store_true", help="Print markdown report")
     parser.add_argument("--fail-on-issues", action="store_true", help="Exit non-zero when findings remain")
+    parser.add_argument(
+        "--collect-source-tickets",
+        action="store_true",
+        help="Scan source files for TODO/FIXME comments and report or append Small Tickets entries.",
+    )
+    parser.add_argument(
+        "--collect-github-issues",
+        action="store_true",
+        help="Collect open GitHub issues with gh and report or append Small Tickets entries.",
+    )
+    parser.add_argument(
+        "--github-repo",
+        help="Optional GitHub OWNER/REPO override for --collect-github-issues.",
+    )
     return parser.parse_args()
 
 
@@ -91,6 +177,13 @@ def read_text(path: Path) -> str:
 
 def write_text(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
+
+
+def relative_path(project_root: Path, path: Path) -> str:
+    try:
+        return path.relative_to(project_root).as_posix()
+    except ValueError:
+        return path.as_posix()
 
 
 def normalize_whitespace(text: str) -> str:
@@ -360,6 +453,111 @@ def has_legacy_format(text: str) -> bool:
     return False
 
 
+def is_ignored_source_path(path: Path) -> bool:
+    return any(part in IGNORED_SOURCE_PARTS for part in path.parts)
+
+
+def source_ticket_title(body: str) -> str:
+    normalized = re.sub(r"\s+", " ", body).strip()
+    normalized = normalized.strip("*/#- ")
+    if len(normalized) <= 90:
+        return normalized
+    return normalized[:87].rstrip() + "..."
+
+
+def collect_source_ticket_candidates(project_root: Path) -> List[SmallTicketCandidate]:
+    candidates: List[SmallTicketCandidate] = []
+    for path in sorted(project_root.rglob("*")):
+        if not path.is_file() or is_ignored_source_path(path):
+            continue
+        if path.suffix.lower() not in SOURCE_TICKET_EXTENSIONS:
+            continue
+        rel_path = relative_path(project_root, path)
+        if rel_path == "ROADMAP.md":
+            continue
+        try:
+            lines = read_text(path).splitlines()
+        except OSError:
+            continue
+        for line_number, line in enumerate(lines, start=1):
+            match = SOURCE_TICKET_RE.search(line)
+            if not match:
+                continue
+            body = match.group("body").strip()
+            if not body or re.fullmatch(r"(TODO|FIXME)-\d+", body, flags=re.IGNORECASE):
+                continue
+            kind = match.group("kind").upper()
+            candidates.append(
+                SmallTicketCandidate(
+                    source="source",
+                    kind=kind,
+                    title=source_ticket_title(body),
+                    detail=body,
+                    file=rel_path,
+                    line=line_number,
+                )
+            )
+    return candidates
+
+
+def run_gh_issue_list(project_root: Path, github_repo: Optional[str]) -> subprocess.CompletedProcess[str]:
+    args = [
+        "gh",
+        "issue",
+        "list",
+        "--state",
+        "open",
+        "--limit",
+        "100",
+        "--json",
+        "number,title,url,labels",
+    ]
+    if github_repo:
+        args.extend(["--repo", github_repo])
+    return subprocess.run(args, cwd=project_root, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def collect_github_issue_candidates(project_root: Path, github_repo: Optional[str]) -> Tuple[List[SmallTicketCandidate], List[str]]:
+    result = run_gh_issue_list(project_root, github_repo)
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "gh issue list failed without output"
+        return [], [f"GitHub issue collection failed: {detail}"]
+    try:
+        issues = json.loads(result.stdout or "[]")
+    except json.JSONDecodeError as error:
+        return [], [f"GitHub issue collection returned invalid JSON: {error}"]
+    if not isinstance(issues, list):
+        return [], ["GitHub issue collection returned an unexpected JSON shape."]
+
+    candidates: List[SmallTicketCandidate] = []
+    for issue in issues:
+        if not isinstance(issue, dict):
+            continue
+        title = str(issue.get("title", "")).strip()
+        url = str(issue.get("url", "")).strip()
+        number_value = issue.get("number")
+        number = number_value if isinstance(number_value, int) else None
+        if not title or not url or number is None:
+            continue
+        labels = issue.get("labels", [])
+        label_names = [
+            str(label.get("name", "")).strip()
+            for label in labels
+            if isinstance(label, dict) and str(label.get("name", "")).strip()
+        ]
+        candidates.append(
+            SmallTicketCandidate(
+                source="github",
+                kind="GitHub Issue",
+                title=title,
+                detail=", ".join(label_names),
+                url=url,
+                number=number,
+            )
+        )
+    return candidates, []
+
+
 def parse_legacy_milestones(text: str) -> List[Tuple[int, str, str]]:
     rows: List[Tuple[int, str, str]] = []
     lines = text.splitlines()
@@ -511,6 +709,62 @@ def render_document(
             rendered_lines.extend(["", f"## {heading}", "", body.strip()])
 
     return normalize_whitespace("\n".join(rendered_lines))
+
+
+def small_ticket_line(candidate: SmallTicketCandidate) -> str:
+    if candidate.source == "github" and candidate.url and candidate.number is not None:
+        return f"- [ ] GitHub #{candidate.number}: {candidate.title} ([#{candidate.number}]({candidate.url}))"
+    if candidate.file and candidate.line is not None:
+        file_link = f"{candidate.file}#L{candidate.line}"
+        return f"- [ ] {candidate.kind}: {candidate.title} ([{candidate.file}:{candidate.line}]({file_link}))"
+    return f"- [ ] {candidate.kind}: {candidate.title}"
+
+
+def existing_small_ticket_body(roadmap_text: str) -> str:
+    _preamble, sections = split_sections(roadmap_text)
+    return section_map(sections).get("Small Tickets", "")
+
+
+def filter_new_small_ticket_candidates(roadmap_text: str, candidates: Sequence[SmallTicketCandidate]) -> List[SmallTicketCandidate]:
+    existing_text = roadmap_text
+    existing_small_tickets = existing_small_ticket_body(roadmap_text)
+    new_candidates: List[SmallTicketCandidate] = []
+    for candidate in candidates:
+        identity = candidate.identity()
+        if identity in existing_text:
+            continue
+        if small_ticket_line(candidate) in existing_small_tickets:
+            continue
+        new_candidates.append(candidate)
+    return new_candidates
+
+
+def append_small_ticket_candidates(roadmap_text: str, candidates: Sequence[SmallTicketCandidate]) -> Tuple[str, int]:
+    if not candidates:
+        return roadmap_text, 0
+    preamble, sections = split_sections(roadmap_text)
+    updated_sections: List[Tuple[str, str]] = []
+    inserted = 0
+    found = False
+    for heading, body in sections:
+        if heading != "Small Tickets":
+            updated_sections.append((heading, body))
+            continue
+        found = True
+        lines = body.rstrip().splitlines() if body.strip() else []
+        if lines and lines[-1].strip():
+            lines.append("")
+        for candidate in candidates:
+            lines.append(small_ticket_line(candidate))
+            inserted += 1
+        updated_sections.append((heading, "\n".join(lines).strip()))
+    if not found:
+        return roadmap_text, 0
+
+    rendered = preamble.strip()
+    for heading, body in updated_sections:
+        rendered += f"\n\n## {heading}\n\n{body.strip()}"
+    return normalize_whitespace(rendered), inserted
 
 
 def validate_schema(
@@ -981,6 +1235,20 @@ def markdown_report(report: Dict[str, object]) -> str:
     else:
         lines.append("- None.")
 
+    lines.extend(["", "## Small Ticket Candidates", ""])
+    if report["small_ticket_candidates"]:
+        for candidate in report["small_ticket_candidates"]:
+            if candidate["source"] == "github":
+                lines.append(f"- GitHub #{candidate['number']}: {candidate['title']} ({candidate['url']})")
+            elif candidate["file"] and candidate["line"]:
+                lines.append(
+                    f"- {candidate['kind']} in `{candidate['file']}:{candidate['line']}`: {candidate['title']}"
+                )
+            else:
+                lines.append(f"- {candidate['kind']}: {candidate['title']}")
+    else:
+        lines.append("- None.")
+
     lines.extend(["", "## Errors", ""])
     if report["errors"]:
         lines.extend(f"- {error}" for error in report["errors"])
@@ -1018,6 +1286,7 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
         "customization_state": {},
         "schema_contract": {},
         "findings": [],
+        "small_ticket_candidates": [],
         "apply_actions": [],
         "errors": [],
     }
@@ -1055,8 +1324,30 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
         report["errors"].append(f"ROADMAP path does not exist: {roadmap_path}")
         return report, markdown_report(report)
 
+    small_ticket_candidates: List[SmallTicketCandidate] = []
+    if args.collect_source_tickets:
+        small_ticket_candidates.extend(collect_source_ticket_candidates(project_root))
+    if args.collect_github_issues:
+        github_candidates, github_errors = collect_github_issue_candidates(project_root, args.github_repo)
+        small_ticket_candidates.extend(github_candidates)
+        report["errors"].extend(github_errors)
+    if small_ticket_candidates:
+        small_ticket_candidates = filter_new_small_ticket_candidates(roadmap_text, small_ticket_candidates)
+    report["small_ticket_candidates"] = [candidate.to_dict() for candidate in small_ticket_candidates]
+
     if args.run_mode == "apply" and not report["errors"]:
         updated_text, actions = apply_fixes(project_root, roadmap_path, roadmap_text, config)
+        new_candidates = filter_new_small_ticket_candidates(updated_text, small_ticket_candidates)
+        updated_text, inserted_count = append_small_ticket_candidates(updated_text, new_candidates)
+        if inserted_count:
+            write_text(roadmap_path, updated_text)
+            actions.append(
+                ApplyAction(
+                    action="append-small-ticket-candidates",
+                    reason=f"Appended {inserted_count} collected source or GitHub issue candidate(s) to Small Tickets.",
+                    file=str(roadmap_path),
+                )
+            )
         report["apply_actions"] = [action.to_dict() for action in actions]
         post_findings = validate_schema(roadmap_path, updated_text, config)
         report["findings"] = [finding.to_dict() for finding in post_findings]
@@ -1080,7 +1371,12 @@ def main() -> int:
     elif args.print_md:
         sys.stdout.write(markdown)
     else:
-        if not unresolved_issues(report) and not report["apply_actions"] and not report["errors"]:
+        if (
+            not unresolved_issues(report)
+            and not report["small_ticket_candidates"]
+            and not report["apply_actions"]
+            and not report["errors"]
+        ):
             sys.stdout.write("No findings.\n")
         else:
             sys.stdout.write(markdown)

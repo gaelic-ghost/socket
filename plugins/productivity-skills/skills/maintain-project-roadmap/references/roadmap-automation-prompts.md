@@ -6,6 +6,7 @@ Use this section order in this file: Suitability, App template, CLI template, Pl
 
 - Codex App: `Conditional` - useful for recurring checklist-roadmap audits, bounded updates, and legacy migrations that stay limited to `ROADMAP.md`
 - Codex CLI: `Conditional` - useful for scripted check/apply workflows when roadmap edits stay limited to one file
+- Source and GitHub ticket collection: `Conditional` - useful when a planning sweep should report or append TODO/FIXME comments and open GitHub issues as `Small Tickets`
 
 ## Codex App Automation Prompt Template
 
@@ -25,16 +26,19 @@ Execution policy:
 - Ensure milestone progress matches the actual milestone sections, order, and milestone status values.
 - Ensure checklist items use valid markdown checkbox syntax.
 - Allow `[P]` only inside milestone `Tickets` subsections.
+- If requested, collect source TODO/FIXME comments or open GitHub issues as `Small Tickets` candidates.
 - If legacy table-style format is detected:
   - In `apply` mode: migrate in-place to checklist standard while preserving useful milestone identity.
   - In `check-only` mode: report migration required without editing.
 - Never edit unrelated files.
+- Never rewrite source TODO/FIXME comments.
 - Never commit, push, or open PRs.
 
 Output contract:
 - Report whether the roadmap matches the configured checklist contract.
 - If updates were applied, summarize structural changes and why.
 - If check-only, report required changes without editing.
+- If ticket collection is requested, report `small_ticket_candidates` with source, title, and links.
 
 No-findings handling:
 - If no updates are needed, output exactly `No findings.` and archive the run.
@@ -69,6 +73,7 @@ Validate:
 - checklist items use valid markdown checkbox syntax
 - `[P]` appears only in milestone `Tickets` subsections
 - if legacy table-style sections are present, report that migration is required
+- if requested, source TODO/FIXME comments or open GitHub issues that could become `Small Tickets`
 
 If no updates are needed, output exactly `No findings.`.
 Otherwise output a concise required-changes report.
@@ -94,6 +99,7 @@ Enforce the configured checklist roadmap structure:
 - milestone progress aligned with milestone sections and statuses
 - valid checkbox syntax
 
+If ticket collection is requested, append new source TODO/FIXME or GitHub issue candidates to `Small Tickets` in ROADMAP.md without editing source files.
 If legacy table-style format is present, migrate in-place using the canonical checklist template as the target structure.
 Keep edits minimal, deterministic, and grounded in the existing roadmap plus bundled scaffold wording.
 Never edit other files.
@@ -108,6 +114,7 @@ If blocked by permissions or sandboxing, report the minimum required access.
 - `<PROJECT_ROOT_ABS_PATH>`: absolute project path
 - `<ROADMAP_PATH_DEFAULT_PROJECT_ROOT_ROADMAP_MD>`: absolute path to `ROADMAP.md`
 - `<UPDATE_MODE_CHECK_ONLY_OR_APPLY>`: `check-only` or `apply`
+- Optional ticket collection flags: `--collect-source-tickets`, `--collect-github-issues`, and `--github-repo <owner/repo>`
 
 ## Customization Points
 
