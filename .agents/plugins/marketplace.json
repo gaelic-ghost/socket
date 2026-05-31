@@ -18,6 +18,18 @@
       "category": "Developer Tools"
     },
     {
+      "name": "android-dev-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/android-dev-skills"
+      },
+      "policy": {
+        "installation": "NOT_AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "apple-dev-skills",
       "source": {
         "source": "local",

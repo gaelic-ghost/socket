@@ -1,0 +1,35 @@
+{
+  "name": "android-dev-skills",
+  "version": "6.14.0",
+  "description": "Placeholder plugin repository for future Android, Kotlin, and Java Codex skills.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/android-dev-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "Apache-2.0",
+  "keywords": [
+    "android",
+    "kotlin",
+    "java",
+    "gradle",
+    "codex",
+    "plugin",
+    "skills"
+  ],
+  "interface": {
+    "displayName": "Android Dev Skills",
+    "shortDescription": "Future Android, Kotlin, and Java Codex skills.",
+    "longDescription": "Reserve a dedicated plugin surface for Android project maintenance, Kotlin-first implementation, Java interoperability, Gradle workflows, emulator-aware validation, and release guidance.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/android-dev-skills",
+    "brandColor": "#3DDC84"
+  }
+}

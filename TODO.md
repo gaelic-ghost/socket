@@ -16,6 +16,15 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Add durable process support for noticing changes in OpenAI Codex docs and the open `.agents` skill discovery convention.
 - [ ] Define an eval workflow for shipped skills against real Codex runtimes.
 
+### android-dev-skills
+
+- [ ] Author the first real Android-focused skill tranche for Codex.
+- [ ] Start Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
+- [ ] Cover project-shape discovery, Gradle and Android Gradle Plugin alignment, build variants, dependency updates, unit tests, lint, emulator-aware validation handoffs, and release readiness.
+- [ ] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
+- [ ] Update docs and validation once the exported Android skill surface is real.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
 ### cardhop-app
 
 - [ ] Keep `cardhop-contact-workflow`, bundled MCP server docs, `.mcp.json`, and plugin metadata aligned.
