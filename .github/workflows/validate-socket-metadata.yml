@@ -12,9 +12,11 @@ jobs:
 
     steps:
       - name: Check out repository
+        # This is a validated floor, not a ceiling; update to newer stable official versions when validated.
         uses: actions/checkout@v6.0.2
 
       - name: Set up uv
+        # This is a validated floor, not a ceiling; update to newer stable official versions when validated.
         uses: astral-sh/setup-uv@v8.0.0
 
       - name: Sync root maintainer environment

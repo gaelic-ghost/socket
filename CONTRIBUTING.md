@@ -73,6 +73,8 @@ If a root or child-repo workflow depends on Python quality tooling, declare that
 
 At the `socket` root, run `uv run mypy` without a path argument. The root mypy config intentionally checks root maintainer scripts, root tests, and package-shaped child maintainer code instead of crawling every standalone skill `scripts/` directory as one Python module namespace.
 
+Versioned guidance in this repository is a floor unless it explicitly says an exact pin is required. For GitHub Actions, runners, language toolchains, package managers, and stack versions, prefer newer stable versions when official release notes or documentation support the update and the relevant local or CI validation passes.
+
 The root validation path does not require application secrets. If your change involves subtree sync or GitHub operations, make sure your git remotes and GitHub authentication are already configured on your machine before you start those steps.
 
 ### Runtime Behavior

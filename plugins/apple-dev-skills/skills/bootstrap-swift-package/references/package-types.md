@@ -42,12 +42,12 @@ The `PropertyList` trait is also available when a package should parse property-
 
 ## Testing Modes
 
-- Supported and validated Swift toolchain window: Swift `6.3.x` and `6.2.x`.
+- Supported and validated Swift toolchain floor: Swift `6.2`. Newer stable Swift toolchains are allowed and preferred when validation passes.
 - Toolchains older than `6.2`, including `6.1` and `6.0`, are outside the supported bootstrap window because the generated manifest uses PackageDescription package traits and should be blocked with clear upgrade guidance.
 - `swift-testing`: preferred default on current toolchains that expose `swift package init --enable-swift-testing`.
 - `xctest`: use when the package must stay on XCTest or when the active toolchain does not support Swift Testing selection the way the workflow requires.
 
-On supported Swift toolchains, the bootstrap workflow should prefer `swift package init` testing flags over patching stale templates after the fact. When the active toolchain is older than `6.2`, stop with a clear blocked message instead of attempting best-effort compatibility below the supported window. When `swift-testing` is requested on a supported toolchain that still lacks the relevant selection flags, stop with a clear toolchain error instead of silently claiming Swift Testing support that the local CLI cannot provide.
+On supported Swift toolchains, the bootstrap workflow should prefer `swift package init` testing flags over patching stale templates after the fact. When the active toolchain is older than `6.2`, stop with a clear blocked message instead of attempting best-effort compatibility below the supported floor. When `swift-testing` is requested on a supported toolchain that still lacks the relevant selection flags, stop with a clear toolchain error instead of silently claiming Swift Testing support that the local CLI cannot provide.
 
 When `xctest` is requested on a supported toolchain that exposes no testing-selection flags at all, the workflow may rely on the toolchain's default XCTest template and then verify the generated package shape instead of pretending newer flags exist. If a supported toolchain exposes partial testing-selection flags but still cannot guarantee the requested mode, stop with a clear blocked message instead of guessing.
 

@@ -34,7 +34,7 @@
 - Keep plugin packaging thin and secondary to the workflow-authoring surface.
 - Keep standalone install behavior honest: Apple-only workflows should remain usable from `apple-dev-skills` alone through the Git-backed marketplace path, while repo-maintenance bootstrap and sync workflows should name their `productivity-skills` companion requirement and the optional `socket` marketplace path.
 - Expand the repo deliberately instead of adding loosely related helper features ad hoc.
-- Keep Swift package workflow guidance focused on the latest Swift toolchain minor and the previous minor. As of this roadmap update, the supported window is Swift `6.3.x` and `6.2.x`.
+- Keep Swift package workflow guidance focused on the latest stable Swift toolchain minor and the previous stable minor. The current trait-enabled bootstrap floor is Swift `6.2`; newer stable Swift toolchains should be used when validated, and the documented floor/window should move forward as part of normal maintenance.
 
 ## Milestone Progress
 
@@ -355,7 +355,7 @@ Planned
 - [ ] Add a dedicated SwiftPM package-extension workflow for package plugins, Xcode-capable package plugins, Swift macros, package traits, generated source, plugin permissions, and trait-aware build or test planning.
 - [ ] Keep this workflow package-first while giving agents clear handoff rules for Xcode-managed execution, Xcode project plugin context, generated build products, macro expansion inspection, and package-trait matrices.
 - [ ] Treat this as a durable building-block change: it keeps `swift-package-build-run-workflow` from becoming a broad catch-all again and gives package-extension work one explicit owner.
-- [ ] Keep the active Swift support window focused on the latest minor and previous minor. Current implementation target: Swift `6.3.x` and `6.2.x`.
+- [ ] Keep the active Swift support window focused on the latest stable minor and previous stable minor. Current minimum implementation floor: Swift `6.2`.
 
 ### Design Direction
 
@@ -379,7 +379,7 @@ Planned
 
 - [ ] Slice 1: add the new skill skeleton, workflow references, docs anchors, and initial runtime router contract.
 - [ ] Slice 2: update existing SwiftPM skills to route plugin, macro, trait, and generated-source work into `swift-package-extension-workflow`.
-- [ ] Slice 3: update shared Swift package snippets, bootstrap guidance, and sync assets with the current Swift `6.3.x` / `6.2.x` support window and trait-aware package guidance.
+- [ ] Slice 3: update shared Swift package snippets, bootstrap guidance, and sync assets with the current Swift `6.2` floor, the latest stable Swift toolchain window, and trait-aware package guidance.
 - [ ] Slice 4: add tests for skill metadata, routing, reference presence, command planning, support-window enforcement, and guidance-sync preservation.
 - [ ] Slice 5: run the docs validator, pytest suite, and any focused bootstrap dry-run checks needed before release.
 
@@ -394,7 +394,7 @@ Planned
 
 - [ ] The repository ships `swift-package-extension-workflow` as the explicit owner for SwiftPM package plugins, macros, traits, generated source, and Xcode-capable package plugin guidance.
 - [ ] Existing Swift package skills route extension work to the new skill without duplicating its policy.
-- [ ] Bootstrap and guidance-sync outputs encode the Swift `6.3.x` / `6.2.x` support window.
+- [ ] Bootstrap and guidance-sync outputs encode the Swift `6.2` floor and allow newer stable Swift toolchains after validation.
 - [ ] The skill is covered by repo validation and targeted tests.
 
 ## Milestone 42: Safari Extension And Control Workflow

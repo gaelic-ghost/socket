@@ -326,7 +326,7 @@ exec "{real_swift}" "$@"
             )
         self.assertEqual(code, 1)
         self.assertEqual(payload["status"], "blocked")
-        self.assertIn("Swift 6.3.x and 6.2.x", payload["stderr"])
+        self.assertIn("Swift 6.2 or newer", payload["stderr"])
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain-window coverage")
     def test_dry_run_blocks_swift_6_0_toolchain(self) -> None:
@@ -354,7 +354,7 @@ exec "{real_swift}" "$@"
             )
         self.assertEqual(code, 1)
         self.assertEqual(payload["status"], "blocked")
-        self.assertIn("Swift 6.3.x and 6.2.x", payload["stderr"])
+        self.assertIn("Swift 6.2 or newer", payload["stderr"])
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for toolchain-window coverage")
     def test_dry_run_blocks_unparseable_swift_version(self) -> None:

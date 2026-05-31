@@ -14,6 +14,7 @@ jobs:
     name: validate
     runs-on: macos-26
     steps:
+      # This is a validated floor, not a ceiling; update to newer stable official versions when validated.
       - uses: actions/checkout@v6.0.2
       - name: Report selected Xcode
         run: xcode-select --print-path
