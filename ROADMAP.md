@@ -205,7 +205,7 @@ In Progress
 - [ ] Add a `productivity-skills:maintain-project-docs` umbrella workflow after a dedicated `maintain-project-todo` skill exists. It should run the individual docs skills together, enforce the splits between `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ACCESSIBILITY.md`, `ROADMAP.md`, and `TODO.md`, and prevent repeated content from drifting across files.
 - [ ] Create a quicker full-auto Socket patch-refresh script for trusted maintainer use. It should bump the shared patch version, validate metadata, satisfy release-ready and subtree gates, push `main` and any required subtree split, tag and publish the GitHub release, verify branch accounting, and run `codex plugin marketplace upgrade socket` as the final step.
 - [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
-- [ ] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open.
+- [x] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open: [gaelic-ghost/SpeakSwiftlyServer#98](https://github.com/gaelic-ghost/SpeakSwiftlyServer/issues/98).
 
 ## History
 
