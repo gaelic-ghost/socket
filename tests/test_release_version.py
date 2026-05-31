@@ -286,3 +286,120 @@ def test_release_ready_prints_marketplace_upgrade_as_final_step(
     assert exit_code == 0
     assert "apple-dev-skills: pushed to apple-dev-skills/main" in output
     assert "`codex plugin marketplace upgrade socket` as the final step only" in output
+
+
+def test_patch_refresh_runs_marketplace_upgrade_last(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = make_repo(tmp_path)
+    commands: list[tuple[str, tuple[str, ...]]] = []
+
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        command = tuple(args)
+        commands.append(("git", command))
+        outputs = {
+            ("branch", "--show-current"): "main\n",
+            ("status", "--porcelain"): "",
+            ("tag", "-l", "v1.2.4"): "",
+            ("ls-remote", "--tags", "origin", "refs/tags/v1.2.4"): "",
+            ("push", "origin", "main"): "",
+            ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.3\n",
+            (
+                "diff",
+                "--name-only",
+                "v1.2.3..HEAD",
+            ): (
+                "pyproject.toml\n"
+                "uv.lock\n"
+                "plugins/apple-dev-skills/.codex-plugin/plugin.json\n"
+                "plugins/apple-dev-skills/pyproject.toml\n"
+                "plugins/apple-dev-skills/uv.lock\n"
+            ),
+            ("rev-parse", "HEAD"): "socket-head\n",
+            ("rev-parse", "origin/main"): "socket-head\n",
+            ("tag", "v1.2.4"): "",
+            ("push", "origin", "v1.2.4"): "",
+            ("log", "origin/main..main", "--oneline"): "",
+            ("branch", "--no-merged", "main"): "",
+        }
+        if command[:1] == ("add",):
+            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        if command[:2] == ("commit", "-m"):
+            assert command[2] == "release: bump socket patch to 1.2.4"
+            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        output = outputs[command]
+        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+
+    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        command = tuple(args)
+        commands.append(("cmd", command))
+        return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
+    monkeypatch.setattr(release_version, "run_command", fake_run_command)
+
+    targets = release_version.discover_targets(root)
+    exit_code = release_version.render_patch_refresh(root, targets, allow_unmerged_branches=False)
+
+    output = capsys.readouterr().out
+    assert exit_code == 0
+    assert "Patch-refresh release completed for v1.2.4." in output
+    assert commands[-1] == ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket"))
+    assert ("cmd", ("uv", "run", "scripts/validate_socket_metadata.py")) in commands
+    assert ("git", ("push", "origin", "main")) in commands
+    assert ("git", ("push", "origin", "v1.2.4")) in commands
+    assert any(command[0] == "cmd" and command[1][:3] == ("gh", "release", "create") for command in commands)
+    assert ("cmd", ("gh", "release", "view", "v1.2.4")) in commands
+
+
+def test_patch_refresh_stops_before_marketplace_upgrade_when_branch_accounting_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = make_repo(tmp_path)
+    commands: list[tuple[str, tuple[str, ...]]] = []
+
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        command = tuple(args)
+        commands.append(("git", command))
+        outputs = {
+            ("branch", "--show-current"): "main\n",
+            ("status", "--porcelain"): "",
+            ("tag", "-l", "v1.2.4"): "",
+            ("ls-remote", "--tags", "origin", "refs/tags/v1.2.4"): "",
+            ("push", "origin", "main"): "",
+            ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.3\n",
+            ("diff", "--name-only", "v1.2.3..HEAD"): "pyproject.toml\nuv.lock\n",
+            ("rev-parse", "HEAD"): "socket-head\n",
+            ("rev-parse", "origin/main"): "socket-head\n",
+            ("tag", "v1.2.4"): "",
+            ("push", "origin", "v1.2.4"): "",
+            ("log", "origin/main..main", "--oneline"): "",
+            ("branch", "--no-merged", "main"): "  feature/unfinished\n",
+        }
+        if command[:1] == ("add",):
+            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        if command[:2] == ("commit", "-m"):
+            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        output = outputs[command]
+        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+
+    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        command = tuple(args)
+        commands.append(("cmd", command))
+        return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
+    monkeypatch.setattr(release_version, "run_command", fake_run_command)
+
+    targets = release_version.discover_targets(root)
+    with pytest.raises(release_version.VersionToolError, match="feature/unfinished"):
+        release_version.render_patch_refresh(root, targets, allow_unmerged_branches=False)
+
+    assert ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket")) not in commands
+    assert not any(command[0] == "git" and command[1][:2] == ("commit", "-m") for command in commands)
+    assert ("git", ("push", "origin", "main")) not in commands
+    assert ("git", ("tag", "v1.2.4")) not in commands

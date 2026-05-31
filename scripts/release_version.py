@@ -9,6 +9,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 import tomllib
 from dataclasses import dataclass
 from pathlib import Path
@@ -65,6 +66,21 @@ def run_git(root: Path, args: list[str], check: bool = True) -> subprocess.Compl
     if check and result.returncode != 0:
         detail = result.stderr.strip() or result.stdout.strip()
         raise VersionToolError(f"`git {' '.join(args)}` failed. {detail}")
+    return result
+
+
+def run_command(root: Path, args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        args,
+        cwd=root,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if check and result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise VersionToolError(f"`{' '.join(args)}` failed. {detail}")
     return result
 
 
@@ -311,6 +327,12 @@ def ensure_main_matches_origin(root: Path) -> None:
         )
 
 
+def ensure_on_main(root: Path) -> None:
+    branch = run_git(root, ["branch", "--show-current"]).stdout.strip()
+    if branch != "main":
+        raise VersionToolError(f"Patch-refresh must run on local main, but the current branch is {branch!r}.")
+
+
 def ensure_tag_is_available(root: Path, version: str) -> None:
     tag = f"v{version}"
     local_tag = run_git(root, ["tag", "-l", tag]).stdout.strip()
@@ -367,6 +389,81 @@ def ensure_subtree_gates(root: Path, changed_files: set[str], version_paths: set
     return accounted
 
 
+def push_required_subtrees(root: Path, changed_files: set[str], version_paths: set[str]) -> list[str]:
+    accounting: list[str] = []
+    for gate in SUBTREE_GATES:
+        prefix = gate["prefix"]
+        touched_paths = sorted(path for path in changed_files if path == prefix or path.startswith(f"{prefix}/"))
+        if not touched_paths:
+            accounting.append(f"{gate['name']}: untouched")
+            continue
+        substantive_paths = [path for path in touched_paths if path not in version_paths]
+        if not substantive_paths:
+            accounting.append(f"{gate['name']}: version-only changes; no subtree push required")
+            continue
+        run_git(root, ["subtree", "push", f"--prefix={prefix}", gate["remote"], gate["branch"]])
+        accounting.append(f"{gate['name']}: pushed to {gate['remote']}/{gate['branch']}")
+    return accounting
+
+
+def release_notes(version: str, subtree_accounting: list[str]) -> str:
+    accounting_lines = "\n".join(f"- {line}" for line in subtree_accounting)
+    return (
+        f"# Socket v{version}\n\n"
+        "## What changed\n\n"
+        "- Bumped the shared Socket patch version for a trusted maintainer patch refresh.\n"
+        "- Refreshed Git-backed Socket marketplace consumers after the release was published.\n\n"
+        "## Breaking changes\n\n"
+        "- None.\n\n"
+        "## Migration/upgrade notes\n\n"
+        "- Run `codex plugin marketplace upgrade socket` to refresh a local Codex install.\n\n"
+        "## Verification performed\n\n"
+        "- Ran `uv run scripts/validate_socket_metadata.py`.\n"
+        "- Ran `scripts/release.sh release-ready "
+        f"{version}`.\n"
+        "- Verified the GitHub release object after creation.\n"
+        "- Verified branch accounting before the marketplace upgrade.\n\n"
+        "## Subtree accounting\n\n"
+        f"{accounting_lines}\n"
+    )
+
+
+def local_branches_not_contained_by_main(root: Path) -> list[str]:
+    result = run_git(root, ["branch", "--no-merged", "main"])
+    return [line.strip().lstrip("* ").strip() for line in result.stdout.splitlines() if line.strip()]
+
+
+def ensure_unmerged_branches_accounted(root: Path, *, allow_unmerged_branches: bool) -> list[str]:
+    branches = local_branches_not_contained_by_main(root)
+    if branches and not allow_unmerged_branches:
+        joined = ", ".join(branches)
+        raise VersionToolError(
+            "Branch accounting found local branches not contained by main: "
+            f"{joined}. Re-run with --allow-unmerged-branches only after each branch is explicitly accounted for."
+        )
+    return branches
+
+
+def verify_branch_accounting(root: Path, *, allow_unmerged_branches: bool) -> list[str]:
+    ahead = run_git(root, ["log", "origin/main..main", "--oneline"]).stdout.strip()
+    if ahead:
+        raise VersionToolError(
+            "Branch accounting requires local main to have no commits ahead of origin/main. "
+            "Push main before continuing."
+        )
+    return ensure_unmerged_branches_accounted(root, allow_unmerged_branches=allow_unmerged_branches)
+
+
+def render_branch_accounting(branches: list[str], *, allow_unmerged_branches: bool) -> None:
+    print("Branch accounting:")
+    if not branches:
+        print("- No local branches are outside main.")
+        return
+    status = "trusted maintainer override accepted" if allow_unmerged_branches else "requires manual accounting"
+    for branch in branches:
+        print(f"- {branch}: {status}")
+
+
 def render_release_ready(root: Path, targets: list[VersionTarget], version: str) -> int:
     ensure_versions_match_release(targets, version)
     ensure_clean_checkout(root)
@@ -385,6 +482,78 @@ def render_release_ready(root: Path, targets: list[VersionTarget], version: str)
     return 0
 
 
+def render_patch_refresh(root: Path, targets: list[VersionTarget], *, allow_unmerged_branches: bool) -> int:
+    ensure_on_main(root)
+    ensure_clean_checkout(root)
+    preflight_branches = ensure_unmerged_branches_accounted(root, allow_unmerged_branches=allow_unmerged_branches)
+    if preflight_branches:
+        render_branch_accounting(preflight_branches, allow_unmerged_branches=allow_unmerged_branches)
+    desired_version = determine_target_version(targets, "patch", None)
+    ensure_tag_is_available(root, desired_version)
+    changed_files, unchanged_files = apply_version(root, targets, desired_version)
+    print(f"Aligned maintained version surfaces to {desired_version}.")
+    print("Updated files:")
+    for path in changed_files:
+        print(f"- {path}")
+    if unchanged_files:
+        print("Already current:")
+        for path in unchanged_files:
+            print(f"- {path}")
+
+    print("Validating root marketplace metadata...")
+    run_command(root, ["uv", "run", "scripts/validate_socket_metadata.py"])
+    print("Committing patch version bump...")
+    run_git(root, ["add", *changed_files])
+    run_git(root, ["commit", "-m", f"release: bump socket patch to {desired_version}"])
+    print("Pushing main...")
+    run_git(root, ["push", "origin", "main"])
+
+    refreshed_targets = discover_targets(root)
+    changed_since_release = changed_files_since_previous_release(root)
+    print("Checking required subtree pushes...")
+    subtree_accounting = push_required_subtrees(root, changed_since_release, version_only_paths(refreshed_targets))
+    print("Subtree push accounting:")
+    for line in subtree_accounting:
+        print(f"- {line}")
+
+    print("Running release-ready gate...")
+    render_release_ready(root, refreshed_targets, desired_version)
+    tag = f"v{desired_version}"
+    print(f"Tagging and pushing {tag}...")
+    run_git(root, ["tag", tag])
+    run_git(root, ["push", "origin", tag])
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".md", delete=False) as notes_file:
+        notes_file.write(release_notes(desired_version, subtree_accounting))
+        notes_path = Path(notes_file.name)
+    try:
+        print(f"Creating GitHub release {tag}...")
+        run_command(
+            root,
+            [
+                "gh",
+                "release",
+                "create",
+                tag,
+                "--verify-tag",
+                "--title",
+                tag,
+                "--notes-file",
+                str(notes_path),
+            ],
+        )
+    finally:
+        notes_path.unlink(missing_ok=True)
+    print(f"Verifying GitHub release {tag}...")
+    run_command(root, ["gh", "release", "view", tag])
+    print("Verifying branch accounting...")
+    branches = verify_branch_accounting(root, allow_unmerged_branches=allow_unmerged_branches)
+    render_branch_accounting(branches, allow_unmerged_branches=allow_unmerged_branches)
+    print("Refreshing the local Codex marketplace cache...")
+    run_command(root, ["codex", "plugin", "marketplace", "upgrade", "socket"])
+    print(f"Patch-refresh release completed for {tag}.")
+    return 0
+
+
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -393,13 +562,24 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "mode",
-        choices=["inventory", "patch", "minor", "major", "custom", "release-ready"],
-        help="Inventory, apply a semantic version bump, or verify release gates before tagging.",
+        choices=["inventory", "patch", "minor", "major", "custom", "release-ready", "patch-refresh"],
+        help=(
+            "Inventory, apply a semantic version bump, verify release gates before tagging, "
+            "or run a trusted-maintainer patch refresh."
+        ),
     )
     parser.add_argument(
         "version",
         nargs="?",
         help="Explicit semantic version for custom or release-ready mode, for example 1.2.3.",
+    )
+    parser.add_argument(
+        "--allow-unmerged-branches",
+        action="store_true",
+        help=(
+            "Allow patch-refresh to continue after listing local branches not contained by main. "
+            "Use only after each branch has been explicitly accounted for."
+        ),
     )
     return parser.parse_args(argv)
 
@@ -414,6 +594,12 @@ def main(argv: list[str]) -> int:
         return render_inventory(targets)
     if args.mode == "release-ready":
         return render_release_ready(root, targets, normalize_release_version(args.version))
+    if args.mode == "patch-refresh":
+        if args.version is not None:
+            raise VersionToolError("patch-refresh calculates the next patch version automatically; do not pass a version.")
+        return render_patch_refresh(root, targets, allow_unmerged_branches=args.allow_unmerged_branches)
+    if args.allow_unmerged_branches:
+        raise VersionToolError("--allow-unmerged-branches is only valid with patch-refresh.")
     desired_version = determine_target_version(targets, args.mode, args.version)
     changed_files, unchanged_files = apply_version(root, targets, desired_version)
     if changed_files:

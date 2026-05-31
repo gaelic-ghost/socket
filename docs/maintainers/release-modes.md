@@ -44,6 +44,26 @@ scripts/release.sh major
 scripts/release.sh custom 1.2.3
 ```
 
+Trusted maintainers can use the patch-refresh helper when the intended release
+is the standard patch-only Socket refresh described above:
+
+```bash
+scripts/release.sh patch-refresh
+```
+
+`patch-refresh` bumps the shared patch version, validates root marketplace
+metadata, commits and pushes `main`, pushes any required subtree split, runs the
+`release-ready` gate, tags `main`, publishes and verifies the GitHub release,
+verifies branch accounting, and then runs `codex plugin marketplace upgrade
+socket` as the final step. If local branches are not contained by `main`, the
+helper stops during its branch-accounting preflight before it bumps the version;
+after accounting for those branches explicitly, a trusted maintainer may rerun
+with:
+
+```bash
+scripts/release.sh patch-refresh --allow-unmerged-branches
+```
+
 After a version bump lands on `main`, run the executable pre-tag gate:
 
 ```bash
