@@ -1,6 +1,6 @@
 {
   "name": "server-side-swift",
-  "version": "6.13.2",
+  "version": "6.13.3",
   "description": "Codex skills for building, running, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
