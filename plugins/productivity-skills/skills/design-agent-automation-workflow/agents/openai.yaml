@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Agent Automation Workflow"
+  short_description: "Choose and scaffold the right agent or automation surface before implementation."
+  default_prompt: "Use $design-agent-automation-workflow to classify the automation goal, choose between Codex app automations, codex exec, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet, and return a framework-neutral plan with safety, validation, and implementation handoff."

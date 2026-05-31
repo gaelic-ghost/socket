@@ -155,9 +155,9 @@ as the default Socket maintainer automation runtime.
 
 ## Dedicated Skill Recommendation
 
-Add a future `productivity-skills:design-agent-automation-workflow` skill if
-Gale starts repeating agent or automation planning work across repositories.
-The useful shape is a planning and scaffolding skill, not a runtime framework:
+Use `productivity-skills:design-agent-automation-workflow` when agent or
+automation planning work needs a reusable decision pass across repositories.
+The skill is a planning and scaffolding surface, not a runtime framework:
 
 - classify the work as app automation, `codex exec`, subagent fan-out, Agents
   SDK service, LangGraph graph, Hermes integration, or "do not automate yet"

@@ -25,11 +25,12 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 ### productivity-skills
 
 - [x] Fold issue-sized TODO/FIXME and bug-fix ticket tracking into `maintain-project-roadmap` through the canonical `Small Tickets` section instead of adding a separate `maintain-project-todo` workflow.
-- [ ] Add `maintain-project-docs` after `maintain-project-roadmap` owns small-ticket tracking so one umbrella workflow can coordinate README, CONTRIBUTING, AGENTS, ACCESSIBILITY, and ROADMAP splits.
+- [x] Add `maintain-project-docs` after `maintain-project-roadmap` owns small-ticket tracking so one umbrella workflow can coordinate README, CONTRIBUTING, AGENTS, ACCESSIBILITY, and ROADMAP splits.
 - [ ] Add `maintain-project-security` for canonical `SECURITY.md` maintenance.
 - [ ] Add `maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
-- [ ] Evaluate `design-agent-automation-workflow` as a framework-neutral planning skill for choosing between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, and Hermes-specific workflows.
+- [x] Add `design-agent-automation-workflow` as a framework-neutral planning skill for choosing between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet.
+- [ ] Forward-test `design-agent-automation-workflow` against real agent and automation planning requests before adding deterministic scaffolding scripts.
 - [ ] Add lightweight validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Add validation checks for README layout and active skill inventory consistency.
 

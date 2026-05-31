@@ -33,6 +33,7 @@
     "defaultPrompt": [
       "Install or refresh the repo-maintenance toolkit for this project and explain the local entrypoints.",
       "Explain this code slice in plain language and compare the relevant alternatives.",
+      "Design an agent or automation workflow and choose the smallest suitable surface before implementation.",
       "Help me update the README, AGENTS guidance, accessibility standards, roadmap, or maintainer docs without flattening the existing structure."
     ],
     "brandColor": "#14B8A6"
