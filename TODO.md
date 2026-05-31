@@ -34,6 +34,11 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Add lightweight validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Add validation checks for README layout and active skill inventory consistency.
 
+### apple-dev-skills
+
+- [x] Publish the Phase 1 standalone compatibility release so `gaelic-ghost/apple-dev-skills` points at the Socket-hosted plugin payload while preserving `codex plugin marketplace upgrade apple-dev-skills`.
+- [ ] Complete Phase 2 of the Socket migration soon: make `plugins/apple-dev-skills` monorepo-owned, remove subtree release gates, update Socket docs and duplicate-install guidance, add compatibility marketplace smoke coverage, validate, and publish the Socket release.
+
 ### python-skills
 
 - [x] Tighten child-specific `AGENTS.md` and validator expectations after the README collapse.

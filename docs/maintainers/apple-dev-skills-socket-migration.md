@@ -21,11 +21,13 @@ This plan moves `apple-dev-skills` from a subtree-published standalone plugin pa
 ## Current State
 
 - Socket lists `apple-dev-skills` as a local child plugin at `./plugins/apple-dev-skills`.
-- The standalone `gaelic-ghost/apple-dev-skills` repository is still a subtree sync target and standalone marketplace.
-- The standalone repository currently owns a full copy of the plugin payload: `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`, `skills/`, `.mcp.json`, README, AGENTS, tests, and maintainer files.
+- The standalone `gaelic-ghost/apple-dev-skills` repository is now a compatibility marketplace and README pointer as of `v6.14.1`.
+- The standalone repository preserves the `apple-dev-skills` marketplace name, but its marketplace entry sources the plugin payload from `https://github.com/gaelic-ghost/socket.git` at `./plugins/apple-dev-skills`.
 - Socket releases currently treat substantive `plugins/apple-dev-skills` changes as a subtree gate.
 
 ## Phase 1: Standalone Compatibility Release
+
+Status: complete in `gaelic-ghost/apple-dev-skills` `v6.14.1`.
 
 Phase 1 changes only the standalone `gaelic-ghost/apple-dev-skills` repository.
 
@@ -66,6 +68,8 @@ Phase 1 changes only the standalone `gaelic-ghost/apple-dev-skills` repository.
 After Phase 1, users who installed only `apple-dev-skills` still have a working marketplace and upgrade path, but the payload comes from Socket.
 
 ## Phase 2: Socket Ownership Conversion
+
+Status: next near-term Socket roadmap item.
 
 Phase 2 changes Socket after the compatibility release is available.
 
