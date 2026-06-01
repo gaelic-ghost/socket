@@ -9,6 +9,7 @@ from pathlib import Path
 from socket_steward.agent import ask_socket_steward
 from socket_steward.audit import run_audit
 from socket_steward.plan import plan_docs_sync
+from socket_steward.proposal import DEFAULT_DOCS_SYNC_REPORT, build_docs_sync_proposal, write_report
 
 
 def main() -> int:
@@ -17,9 +18,9 @@ def main() -> int:
     repo_root = Path(args.repo_root)
 
     if args.command == "audit":
-        report = run_audit(repo_root, args.audit_name)
-        print(report.as_json() if args.json else report.as_text())
-        return 1 if report.status == "FAIL" else 0
+        audit_report = run_audit(repo_root, args.audit_name)
+        print(audit_report.as_json() if args.json else audit_report.as_text())
+        return 1 if audit_report.status == "FAIL" else 0
 
     if args.command == "ask":
         if "OPENAI_API_KEY" not in os.environ:
@@ -35,6 +36,19 @@ def main() -> int:
     if args.command == "plan":
         plan = plan_docs_sync(repo_root)
         print(plan.as_json() if args.json else plan.as_text())
+        return 0
+
+    if args.command == "propose":
+        proposal_report = build_docs_sync_proposal(repo_root)
+        if args.output is None:
+            print(proposal_report.as_markdown())
+        else:
+            try:
+                written_path = write_report(repo_root, args.output, proposal_report)
+            except ValueError as error:
+                print(error, file=sys.stderr)
+                return 2
+            print(f"Socket Steward wrote proposal report to {written_path}")
         return 0
 
     parser.print_help()
@@ -63,6 +77,22 @@ def _build_parser() -> argparse.ArgumentParser:
     plan_parser = subparsers.add_parser("plan", help="Create a deterministic read-only plan.")
     plan_parser.add_argument("plan_name", choices=("docs-sync",))
     plan_parser.add_argument("--json", action="store_true", help="Print the plan as JSON.")
+
+    propose_parser = subparsers.add_parser(
+        "propose",
+        help="Create a Markdown proposal report without applying documentation edits.",
+    )
+    propose_parser.add_argument("proposal_name", choices=("docs-sync",))
+    propose_parser.add_argument(
+        "--output",
+        type=Path,
+        nargs="?",
+        const=DEFAULT_DOCS_SYNC_REPORT,
+        help=(
+            "Write the proposal under docs/agents. Defaults to "
+            "docs/agents/socket-steward-docs-sync.md when no path is provided."
+        ),
+    )
 
     return parser
 

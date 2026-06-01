@@ -16,6 +16,8 @@ uv run socket-steward audit guidance
 uv run socket-steward audit marketplace
 uv run socket-steward audit docs
 uv run socket-steward plan docs-sync
+uv run socket-steward propose docs-sync
+uv run socket-steward propose docs-sync --output
 ```
 
 Ask the agent a repo-maintenance question:
@@ -35,7 +37,8 @@ uv run mypy .
 
 ## Boundaries
 
-- Audit commands do not call the OpenAI API.
-- The agent is read-only in this first slice.
+- Audit, plan, and proposal commands do not call the OpenAI API.
+- The steward does not apply proposed documentation edits in this slice.
+- Proposal report writes are limited to `docs/agents/`.
 - Write, apply, commit, push, release, LaunchAgent, and app behavior are future
   slices after the repo-local contract proves useful.

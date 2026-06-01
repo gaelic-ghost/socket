@@ -15,11 +15,13 @@ Default posture:
 - Keep Socket's root docs, child plugin manifests, marketplace catalog, and
   maintainer guidance aligned in the same pass when packaging behavior changes.
 - Preserve child-repo ownership boundaries.
-- Do not write files, commit, push, tag, release, manage LaunchAgents, or run
-  destructive commands unless the user explicitly asks for a later write-capable
-  mode.
+- Do not write files outside approved report artifacts, commit, push, tag,
+  release, manage LaunchAgents, or run destructive commands unless the user
+  explicitly asks for a later write-capable mode.
 - Use the deterministic docs-sync planner before proposing broad documentation
   alignment work.
+- Use proposal reports for reviewable write-ups. Proposal reports may be written
+  under `docs/agents/`, but they must not apply the proposed edits.
 
 When answering:
 

@@ -103,7 +103,11 @@ uv run --directory .agents/socket-steward socket-steward audit docs
 uv run --directory .agents/socket-steward socket-steward audit guidance
 uv run --directory .agents/socket-steward socket-steward audit marketplace
 uv run --directory .agents/socket-steward socket-steward plan docs-sync
+uv run --directory .agents/socket-steward socket-steward propose docs-sync
+uv run --directory .agents/socket-steward socket-steward propose docs-sync --output
 ```
+
+Socket Steward proposal report writes are limited to [`docs/agents/`](./docs/agents/). Use that directory for reviewable agent-generated Markdown reports; move durable conclusions into the owning root docs, maintainer docs, child guidance, roadmap, scripts, or marketplace metadata instead of treating reports as policy.
 
 Validate the steward package from its own directory:
 
@@ -203,6 +207,8 @@ If the changed surface also introduces or expands Python-backed repo checks, add
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
 
 When editing docs that include media, also review the image path, alt text, and adjacent explanatory prose.
+
+When adding or updating agent reports under [`docs/agents/`](./docs/agents/), verify that the report contains no secrets, no private environment values, and no machine-local absolute links intended for repository-facing docs.
 
 ### Release and Subtree Accounting
 

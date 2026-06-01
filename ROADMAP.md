@@ -203,6 +203,7 @@ In Progress
 
 - [x] Add the first repo-local Socket Steward prototype as a Python `uv` project under `.agents/socket-steward`, using deterministic read-only audits plus an optional OpenAI Agents SDK `ask` path before any write, LaunchAgent, or app behavior.
 - [x] Expand Socket Steward with a docs-sync planning command that emits structured recommended edits for README, CONTRIBUTING, AGENTS, ROADMAP, marketplace metadata, and child plugin guidance without applying them.
+- [x] Add `docs/agents/` as the repo-local report surface and let Socket Steward write reviewable docs-sync proposal reports there without applying the proposed documentation edits.
 - [ ] Add a guarded Socket Steward write mode only after the read-only audit and planning contracts are stable, with explicit approval boundaries for file edits, validation, git operations, release workflow, and future background execution.
 - [x] Overhaul `agent-plugin-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
 - [x] Add a `productivity-skills:maintain-project-docs` umbrella workflow after `maintain-project-roadmap` owns small-ticket tracking. It should run the individual docs skills together, enforce the splits between `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ACCESSIBILITY.md`, and `ROADMAP.md`, and prevent repeated content from drifting across files.
@@ -219,6 +220,7 @@ In Progress
 
 - Added the first repo-local Socket Steward prototype under `.agents/socket-steward`, giving the superproject a Python and OpenAI Agents SDK maintainer-agent scaffold with offline docs, guidance, and marketplace audits before any write-capable or background-service behavior.
 - Added Socket Steward's first docs-sync planner so the repo-local agent can produce structured read-only documentation alignment work before any guarded write mode exists.
+- Added `docs/agents/` for repo-local agent report artifacts and limited Socket Steward proposal writes to that directory.
 - Released `v6.7.0` after aggressively simplifying Socket documentation: root README and CONTRIBUTING split, child roadmap consolidation into root planning docs, child README collapse with user-owned `TBD` overview sections, nested maintainer doc cleanup, workflow atlas removal, and unsupported non-Codex surface removal.
 - Queued future `mlx-skills` and `coreml-skills` guidance plugins for Apple Silicon ML and Core ML workflows.
 - Added the placeholder `android-dev-skills` child plugin surface and queued a Kotlin-first Android guidance plugin for future Socket work.

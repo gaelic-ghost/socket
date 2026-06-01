@@ -105,6 +105,7 @@ For setup, local workflow, validation, review, release, and maintainer expectati
 │   ├── plugins/marketplace.json
 │   └── socket-steward/
 ├── docs/
+│   ├── agents/
 │   ├── media/
 │   └── maintainers/
 ├── plugins/
