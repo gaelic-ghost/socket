@@ -74,7 +74,7 @@ Only after that gate passes, create the matching `vX.Y.Z` tag from `main`, push 
 
 ## Subtrees Mode
 
-Use `subtrees` when a `socket` release also changes, imports, refreshes, or depends on a subtree-managed child repository.
+Use `subtrees` when a `socket` release also changes, imports, refreshes, or depends on a currently subtree-managed child repository.
 
 Subtrees mode is standard mode plus this extra gate:
 
@@ -92,14 +92,16 @@ This mode is not the same as `maintain-project-repo`'s `submodule` mode. `socket
 
 | Child | Prefix | Remote | Direction | Rule |
 | --- | --- | --- | --- | --- |
-| `apple-dev-skills` | `plugins/apple-dev-skills` | `apple-dev-skills` | pull and push | Work may start in `socket`; push back with `git subtree push` when the child repo should receive the socket-authored change. |
+| None | n/a | n/a | n/a | No child plugin currently requires a Socket release-time subtree pull or push. |
+
+`plugins/apple-dev-skills` is now the canonical Socket-hosted Apple Dev Skills payload. The standalone `gaelic-ghost/apple-dev-skills` repository is a compatibility marketplace and README pointer that redirects to Socket, so Socket release tooling must not push the payload subtree back into that compatibility repo unless a future migration explicitly restores that workflow.
 
 ## Subtrees Mode Checklist
 
 Before opening or merging the `socket` release PR:
 
 - verify which subtree-managed children are touched
-- for `apple-dev-skills`, decide whether the socket commit must be pushed back to the child remote before the umbrella release
+- for `apple-dev-skills`, record `no subtree action` while the standalone repository remains only the compatibility redirect to Socket
 - keep subtree sync commits isolated from unrelated docs, marketplace, or version-bump commits
 
 Before tagging `socket`:

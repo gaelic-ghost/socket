@@ -29,7 +29,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - When a commit is made in `socket`, push the current branch as the normal checkpoint unless Gale asks for local-only work or the branch is intentionally incomplete. Pushing the branch does not imply opening a PR, waiting on CI, tagging, or releasing.
 - Prefer small, focused commits over broad mixed changes.
 - For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
-- For `apple-dev-skills`, keep subtree sync operations explicit and isolated from unrelated edits.
+- Treat `plugins/apple-dev-skills` as the canonical Socket-owned Apple Dev Skills payload. The standalone `gaelic-ghost/apple-dev-skills` repository is a compatibility marketplace and README pointer that redirects to Socket; do not subtree-push Socket payload changes back into that compatibility repo unless a future migration explicitly restores that workflow.
 - Treat `SpeakSwiftlyServer` as a standalone Git-backed plugin source, not as a local `plugins/` mirror. Speak Swiftly plugin payload edits belong in the standalone checkout and reach Socket users through the Git-backed marketplace entry.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
@@ -50,7 +50,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - When a repository ships reusable skills, treat the top-level authored surface such as `skills/`, `mcps/`, or `apps/` as the source of truth. Treat plugin manifests, marketplace files, and nested packaged plugin roots as packaging metadata unless a nearer `AGENTS.md` explicitly says otherwise.
 - Keep the root README short, nontechnical, and focused on end users or agents installing and using the Socket marketplace. Put contributor workflow and maintainer procedures in `CONTRIBUTING.md` or `docs/maintainers/`, and put durable agent-facing operating rules in this file.
 - Keep installed skills independent from repo-level docs under `docs/`.
-- Do not add root-level `README.md` files to monorepo-owned child plugin directories by default. Keep child root guidance in `AGENTS.md`, plugin metadata, skill metadata, root Socket docs, and root planning docs unless a child has a real standalone public install surface or server-specific docs. `apple-dev-skills` keeps its public README because it is still subtree-managed and standalone-installable; bundled MCP servers may keep their own `mcp/README.md` files.
+- Do not add root-level `README.md` files to monorepo-owned child plugin directories by default. Keep child root guidance in `AGENTS.md`, plugin metadata, skill metadata, root Socket docs, and root planning docs unless a child has a real standalone public install surface or server-specific docs. `apple-dev-skills` keeps its public README because it is the canonical Socket-hosted payload for users arriving through the standalone compatibility marketplace; bundled MCP servers may keep their own `mcp/README.md` files.
 - Prefer POSIX symlink discovery mirrors over duplicate or hardlinked skill trees when a repo exposes `.agents/skills`.
 - Do not track consumer-side install copies, cache directories, or machine-local runtime state in git.
 - Keep the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, docs, automation prompts, scripts, and marketplace metadata.
@@ -94,11 +94,11 @@ uv run scripts/validate_socket_metadata.py
 ### Optional Project Commands
 
 ```bash
-git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
-git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
+git subtree pull --prefix=<prefix> <remote> main
+git subtree push --prefix=<prefix> <remote> main
 ```
 
-Use these commands only when the work is intentionally publishing or syncing the remaining subtree-managed child repo.
+Use these commands only when the work is intentionally publishing or syncing a currently subtree-managed child repo. Do not use them for `apple-dev-skills` while the standalone repository is only the compatibility redirect to Socket.
 
 ### Shared Version Workflow
 

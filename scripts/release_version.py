@@ -24,14 +24,7 @@ IGNORED_PARTS = {".build", ".git", ".venv", "__pycache__", "node_modules"}
 EXCLUDED_VERSION_PATHS = {
     Path("plugins/SpeakSwiftlyServer/.codex-plugin/plugin.json"),
 }
-SUBTREE_GATES = (
-    {
-        "name": "apple-dev-skills",
-        "prefix": "plugins/apple-dev-skills",
-        "remote": "apple-dev-skills",
-        "branch": "main",
-    },
-)
+SUBTREE_GATES: tuple[dict[str, str], ...] = ()
 
 
 class VersionToolError(RuntimeError):
@@ -408,6 +401,8 @@ def push_required_subtrees(root: Path, changed_files: set[str], version_paths: s
 
 def release_notes(version: str, subtree_accounting: list[str]) -> str:
     accounting_lines = "\n".join(f"- {line}" for line in subtree_accounting)
+    if not accounting_lines:
+        accounting_lines = "- No subtree push required; Socket owns the canonical plugin payloads for this release."
     return (
         f"# Socket v{version}\n\n"
         "## What changed\n\n"
