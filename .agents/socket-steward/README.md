@@ -35,6 +35,7 @@ uv sync --dev
 uv run pytest
 uv run ruff check .
 uv run mypy .
+uv run python evals/run_local.py
 ```
 
 ## Boundaries
