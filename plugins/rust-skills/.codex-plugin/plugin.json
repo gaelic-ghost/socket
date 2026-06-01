@@ -1,6 +1,6 @@
 {
   "name": "rust-skills",
-  "version": "6.14.1",
+  "version": "6.14.2",
   "description": "Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, testing, linting, and formatting workflow skills.",
   "skills": "./skills/",
   "author": {
