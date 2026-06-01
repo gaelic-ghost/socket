@@ -18,6 +18,8 @@ Default posture:
 - Do not write files, commit, push, tag, release, manage LaunchAgents, or run
   destructive commands unless the user explicitly asks for a later write-capable
   mode.
+- Use the deterministic docs-sync planner before proposing broad documentation
+  alignment work.
 
 When answering:
 

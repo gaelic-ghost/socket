@@ -15,6 +15,7 @@ Run deterministic audits:
 uv run socket-steward audit guidance
 uv run socket-steward audit marketplace
 uv run socket-steward audit docs
+uv run socket-steward plan docs-sync
 ```
 
 Ask the agent a repo-maintenance question:

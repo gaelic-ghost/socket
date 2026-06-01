@@ -8,6 +8,7 @@ from pathlib import Path
 
 from socket_steward.agent import ask_socket_steward
 from socket_steward.audit import run_audit
+from socket_steward.plan import plan_docs_sync
 
 
 def main() -> int:
@@ -29,6 +30,11 @@ def main() -> int:
             )
             return 2
         print(asyncio.run(ask_socket_steward(args.question, repo_root)))
+        return 0
+
+    if args.command == "plan":
+        plan = plan_docs_sync(repo_root)
+        print(plan.as_json() if args.json else plan.as_text())
         return 0
 
     parser.print_help()
@@ -53,6 +59,10 @@ def _build_parser() -> argparse.ArgumentParser:
 
     ask_parser = subparsers.add_parser("ask", help="Ask the OpenAI Agents SDK steward.")
     ask_parser.add_argument("question")
+
+    plan_parser = subparsers.add_parser("plan", help="Create a deterministic read-only plan.")
+    plan_parser.add_argument("plan_name", choices=("docs-sync",))
+    plan_parser.add_argument("--json", action="store_true", help="Print the plan as JSON.")
 
     return parser
 

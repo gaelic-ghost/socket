@@ -102,6 +102,7 @@ Use it as maintainer assistance, not as a release gate or background service:
 uv run --directory .agents/socket-steward socket-steward audit docs
 uv run --directory .agents/socket-steward socket-steward audit guidance
 uv run --directory .agents/socket-steward socket-steward audit marketplace
+uv run --directory .agents/socket-steward socket-steward plan docs-sync
 ```
 
 Validate the steward package from its own directory:
