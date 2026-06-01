@@ -101,7 +101,9 @@ For setup, local workflow, validation, review, release, and maintainer expectati
 
 ```text
 .
-├── .agents/plugins/marketplace.json
+├── .agents/
+│   ├── plugins/marketplace.json
+│   └── socket-steward/
 ├── docs/
 │   ├── media/
 │   └── maintainers/

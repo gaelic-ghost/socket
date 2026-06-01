@@ -1,0 +1,34 @@
+[project]
+name = "socket-steward"
+version = "0.1.0"
+description = "Repo-local OpenAI Agents SDK steward for Socket maintainer audits."
+requires-python = ">=3.11"
+dependencies = [
+  "openai-agents>=0.6.0",
+  "pydantic>=2.0.0",
+]
+
+[project.scripts]
+socket-steward = "socket_steward.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.0",
+  "ruff>=0.14.0",
+  "mypy>=1.20.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.mypy]
+files = ["src", "tests"]
+strict = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

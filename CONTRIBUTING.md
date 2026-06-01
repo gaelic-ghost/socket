@@ -92,6 +92,26 @@ You can verify that baseline with:
 uv run scripts/validate_socket_metadata.py
 ```
 
+### Repo-Local Steward
+
+The repo-local Socket Steward prototype lives at [`.agents/socket-steward/`](./.agents/socket-steward/). It is a Python `uv` project built around the OpenAI Agents SDK, with deterministic read-only audits available without API credentials and an optional agent-backed `ask` command when `OPENAI_API_KEY` is available.
+
+Use it as maintainer assistance, not as a release gate or background service:
+
+```bash
+uv run --directory .agents/socket-steward socket-steward audit docs
+uv run --directory .agents/socket-steward socket-steward audit guidance
+uv run --directory .agents/socket-steward socket-steward audit marketplace
+```
+
+Validate the steward package from its own directory:
+
+```bash
+uv run --directory .agents/socket-steward pytest
+uv run --directory .agents/socket-steward ruff check .
+uv run --directory .agents/socket-steward mypy .
+```
+
 ### Marketplace Shape
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json). It is a catalog, not a root aggregate plugin.
