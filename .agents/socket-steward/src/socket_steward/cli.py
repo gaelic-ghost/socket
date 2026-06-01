@@ -10,6 +10,7 @@ from socket_steward.agent import ask_socket_steward
 from socket_steward.audit import run_audit
 from socket_steward.plan import plan_docs_sync
 from socket_steward.proposal import DEFAULT_DOCS_SYNC_REPORT, build_docs_sync_proposal, write_report
+from socket_steward.workflow import apply_docs_sync, prepare_docs_sync
 
 
 def main() -> int:
@@ -50,6 +51,25 @@ def main() -> int:
                 return 2
             print(f"Socket Steward wrote proposal report to {written_path}")
         return 0
+
+    if args.command == "prepare":
+        output_path = DEFAULT_DOCS_SYNC_REPORT if args.output else None
+        prepared = prepare_docs_sync(repo_root, output_path=output_path)
+        print(prepared.as_json() if args.json else prepared.as_text())
+        return 1 if prepared.status == "FAIL" else 0
+
+    if args.command == "apply":
+        try:
+            result = apply_docs_sync(
+                repo_root,
+                confirm=args.confirm,
+                output_path=args.output,
+            )
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 2
+        print(result.as_text())
+        return 1 if result.status == "NEEDS-REVIEW" else 0
 
     parser.print_help()
     return 2
@@ -92,6 +112,35 @@ def _build_parser() -> argparse.ArgumentParser:
             "Write the proposal under docs/agents. Defaults to "
             "docs/agents/socket-steward-docs-sync.md when no path is provided."
         ),
+    )
+
+    prepare_parser = subparsers.add_parser(
+        "prepare",
+        help="Run audits, docs-sync planning, and proposal generation in order.",
+    )
+    prepare_parser.add_argument("workflow_name", choices=("docs-sync",))
+    prepare_parser.add_argument(
+        "--output",
+        action="store_true",
+        help="Write the proposal report to docs/agents/socket-steward-docs-sync.md.",
+    )
+    prepare_parser.add_argument("--json", action="store_true", help="Print the run as JSON.")
+
+    apply_parser = subparsers.add_parser(
+        "apply",
+        help="Run guarded docs-sync apply behavior.",
+    )
+    apply_parser.add_argument("apply_name", choices=("docs-sync",))
+    apply_parser.add_argument(
+        "--confirm",
+        action="store_true",
+        help="Required. Confirms that guarded apply behavior may write the proposal report.",
+    )
+    apply_parser.add_argument(
+        "--output",
+        type=Path,
+        default=DEFAULT_DOCS_SYNC_REPORT,
+        help="Proposal report path under docs/agents.",
     )
 
     return parser

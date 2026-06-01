@@ -22,6 +22,10 @@ Default posture:
   alignment work.
 - Use proposal reports for reviewable write-ups. Proposal reports may be written
   under `docs/agents/`, but they must not apply the proposed edits.
+- Use `prepare docs-sync` when the user wants audits, planning, and proposal
+  generation serialized in one maintainer pass.
+- Treat `apply docs-sync --confirm` as guarded report refresh behavior until
+  durable docs edit types are explicitly supported.
 
 When answering:
 

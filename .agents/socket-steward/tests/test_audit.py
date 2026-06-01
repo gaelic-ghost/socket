@@ -5,6 +5,7 @@ from pathlib import Path
 from socket_steward.audit import run_audit
 from socket_steward.plan import plan_docs_sync
 from socket_steward.proposal import build_docs_sync_proposal, write_report
+from socket_steward.workflow import apply_docs_sync, prepare_docs_sync
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -62,3 +63,29 @@ def test_report_rejects_paths_outside_docs_agents(tmp_path: Path) -> None:
         assert "under docs/agents" in str(error)
     else:
         raise AssertionError("write_report should reject paths outside docs/agents")
+
+
+def test_prepare_docs_sync_runs_audit_plan_and_proposal() -> None:
+    prepared = prepare_docs_sync(REPO_ROOT)
+
+    assert prepared.status == "PASS"
+    assert [audit.audit for audit in prepared.audits] == ["docs", "guidance", "marketplace"]
+    assert prepared.plan.name == "docs-sync"
+    assert prepared.proposal.name == "Socket Steward Docs Sync Proposal"
+
+
+def test_apply_docs_sync_requires_confirmation(tmp_path: Path) -> None:
+    try:
+        apply_docs_sync(tmp_path, confirm=False)
+    except ValueError as error:
+        assert "--confirm" in str(error)
+    else:
+        raise AssertionError("apply_docs_sync should require confirmation")
+
+
+def test_apply_docs_sync_refreshes_report_when_confirmed(tmp_path: Path) -> None:
+    result = apply_docs_sync(tmp_path, confirm=True)
+
+    assert result.status in {"PASS", "NEEDS-REVIEW"}
+    assert result.report_path == tmp_path / "docs" / "agents" / "socket-steward-docs-sync.md"
+    assert result.report_path.is_file()

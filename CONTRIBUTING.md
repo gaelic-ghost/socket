@@ -105,9 +105,11 @@ uv run --directory .agents/socket-steward socket-steward audit marketplace
 uv run --directory .agents/socket-steward socket-steward plan docs-sync
 uv run --directory .agents/socket-steward socket-steward propose docs-sync
 uv run --directory .agents/socket-steward socket-steward propose docs-sync --output
+uv run --directory .agents/socket-steward socket-steward prepare docs-sync --output
+uv run --directory .agents/socket-steward socket-steward apply docs-sync --confirm
 ```
 
-Socket Steward proposal report writes are limited to [`docs/agents/`](./docs/agents/). Use that directory for reviewable agent-generated Markdown reports; move durable conclusions into the owning root docs, maintainer docs, child guidance, roadmap, scripts, or marketplace metadata instead of treating reports as policy.
+Socket Steward proposal report writes are limited to [`docs/agents/`](./docs/agents/). Use that directory for reviewable agent-generated Markdown reports; move durable conclusions into the owning root docs, maintainer docs, child guidance, roadmap, scripts, or marketplace metadata instead of treating reports as policy. The first guarded `apply docs-sync --confirm` mode refreshes the proposal report only; it does not mutate durable docs for TODO plans yet.
 
 Validate the steward package from its own directory:
 

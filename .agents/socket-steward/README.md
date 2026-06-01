@@ -18,6 +18,8 @@ uv run socket-steward audit docs
 uv run socket-steward plan docs-sync
 uv run socket-steward propose docs-sync
 uv run socket-steward propose docs-sync --output
+uv run socket-steward prepare docs-sync --output
+uv run socket-steward apply docs-sync --confirm
 ```
 
 Ask the agent a repo-maintenance question:
@@ -40,5 +42,10 @@ uv run mypy .
 - Audit, plan, and proposal commands do not call the OpenAI API.
 - The steward does not apply proposed documentation edits in this slice.
 - Proposal report writes are limited to `docs/agents/`.
-- Write, apply, commit, push, release, LaunchAgent, and app behavior are future
-  slices after the repo-local contract proves useful.
+- `prepare docs-sync --output` runs audits, planning, and proposal report writing
+  in order.
+- `apply docs-sync --confirm` is guarded and currently refreshes the proposal
+  report only. It reports `NEEDS-REVIEW` instead of mutating durable docs when
+  the docs-sync plan has TODO items.
+- Durable docs writes, commits, pushes, releases, LaunchAgent, and app behavior
+  are future slices after the repo-local contract proves useful.
