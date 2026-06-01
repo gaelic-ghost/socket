@@ -22,6 +22,12 @@ def run(
     collect_source_tickets: bool = False,
     collect_github_issues: bool = False,
     github_repo: str | None = None,
+    ticket_section: str | None = None,
+    ticket_text: str | None = None,
+    ticket_state: str = "open",
+    ticket_source: str | None = None,
+    ticket_match: str | None = None,
+    allow_duplicate: bool = False,
 ):
     args = argparse.Namespace(
         project_root=str(project_root),
@@ -36,6 +42,12 @@ def run(
         collect_source_tickets=collect_source_tickets,
         collect_github_issues=collect_github_issues,
         github_repo=github_repo,
+        ticket_section=ticket_section,
+        ticket_text=ticket_text,
+        ticket_state=ticket_state,
+        ticket_source=ticket_source,
+        ticket_match=ticket_match,
+        allow_duplicate=allow_duplicate,
     )
     return MODULE.run_maintenance(args)
 
@@ -260,6 +272,80 @@ def test_apply_mode_appends_collected_source_tickets_to_small_tickets(tmp_path: 
     assert report["findings"] == []
     assert report["apply_actions"][-1]["action"] == "append-small-ticket-candidates"
     assert "- [ ] TODO: Add persistence retry coverage. ([Sources/Demo.swift:1](Sources/Demo.swift#L1))" in updated
+
+
+def test_apply_mode_adds_backlog_ticket(tmp_path: Path) -> None:
+    roadmap = tmp_path / "ROADMAP.md"
+    write(roadmap, valid_roadmap())
+
+    report, _markdown = run(
+        tmp_path,
+        run_mode="apply",
+        ticket_section="Backlog Candidates",
+        ticket_text="Add guarded Socket Steward roadmap apply support",
+        ticket_source="docs/agents/socket-steward-docs-sync.md",
+    )
+
+    updated = roadmap.read_text(encoding="utf-8")
+    assert report["findings"] == []
+    assert report["apply_actions"][-1]["action"] == "add-roadmap-ticket"
+    assert (
+        "- [ ] Add guarded Socket Steward roadmap apply support "
+        "(docs/agents/socket-steward-docs-sync.md)"
+    ) in updated
+
+
+def test_apply_mode_updates_existing_small_ticket_state(tmp_path: Path) -> None:
+    roadmap = tmp_path / "ROADMAP.md"
+    write(
+        roadmap,
+        valid_roadmap().replace(
+            "- [ ] Record issue-sized fixes that are not yet attached to a milestone.",
+            "- [ ] Add guarded Socket Steward roadmap apply support",
+        ),
+    )
+
+    report, _markdown = run(
+        tmp_path,
+        run_mode="apply",
+        ticket_section="Small Tickets",
+        ticket_text="Add guarded Socket Steward roadmap apply support",
+        ticket_state="done",
+    )
+
+    updated = roadmap.read_text(encoding="utf-8")
+    assert report["findings"] == []
+    assert report["apply_actions"][-1]["action"] == "update-roadmap-ticket"
+    assert "- [x] Add guarded Socket Steward roadmap apply support" in updated
+
+
+def test_apply_mode_adds_milestone_ticket(tmp_path: Path) -> None:
+    roadmap = tmp_path / "ROADMAP.md"
+    write(roadmap, valid_roadmap())
+
+    report, _markdown = run(
+        tmp_path,
+        run_mode="apply",
+        ticket_section="Milestone 0: Tickets",
+        ticket_text="Wire roadmap ticket mutation into Socket Steward apply",
+    )
+
+    updated = roadmap.read_text(encoding="utf-8")
+    assert report["findings"] == []
+    assert report["apply_actions"][-1]["action"] == "add-roadmap-ticket"
+    assert "- [ ] Wire roadmap ticket mutation into Socket Steward apply" in updated
+
+
+def test_ticket_mutation_requires_apply_mode(tmp_path: Path) -> None:
+    write(tmp_path / "ROADMAP.md", valid_roadmap())
+
+    report, _markdown = run(
+        tmp_path,
+        ticket_section="Backlog Candidates",
+        ticket_text="Add guarded Socket Steward roadmap apply support",
+    )
+
+    assert "Roadmap ticket mutation requires --run-mode apply." in report["errors"]
 
 
 def test_collect_github_issues_reports_issue_candidates(tmp_path: Path, monkeypatch) -> None:

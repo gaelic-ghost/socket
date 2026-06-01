@@ -38,6 +38,9 @@ scaffold another stack-owned skill or implementation pass can use.
    approvals, retries, observability, deployment, or integration with an
    existing runtime.
 5. Identify ownership:
+   - prefer existing agent skills, plugins, scripts, and official workflow
+     surfaces before adding new automation code, so business process knowledge
+     has one maintained source of truth
    - prompt or skill-only work stays in this planning skill
    - Python implementation belongs in `python-skills`
    - web or TypeScript implementation belongs in the Build Web Apps plugin or the repo's owning JavaScript/TypeScript workflow
@@ -51,6 +54,10 @@ scaffold another stack-owned skill or implementation pass can use.
 
 ## Decision Rules
 
+- Prefer reusing an existing skill, plugin, repo script, or official tool when
+  one already owns the task. Add a new agent/service only when the existing
+  workflow cannot express the needed state, approval, scheduling, or integration
+  boundary.
 - Prefer Codex app automations for recurring check-ins, reminders, inbox
   reports, and skill-backed background tasks where Codex should stay the user
   interface.
@@ -95,6 +102,9 @@ prompt, issue body, project note, or implementation brief.
   this skill.
 - Do not invent scheduler, queue, auth, deployment, or observability features
   that are not grounded in the target repo or official docs.
+- Do not duplicate business-process logic that already belongs to an existing
+  agent skill, plugin, repo script, or official workflow surface. Delegate,
+  invoke, or extend the owner instead.
 - Do not suggest unattended write automation unless the validation path,
   rollback path, and approval boundary are explicit.
 - Do not use Codex subagents unless the user requested them or applicable

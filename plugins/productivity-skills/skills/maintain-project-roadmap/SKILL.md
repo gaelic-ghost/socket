@@ -18,6 +18,12 @@ This skill is the general template layer for roadmap maintenance. It defines the
 - Optional: `--collect-source-tickets`
 - Optional: `--collect-github-issues`
 - Optional: `--github-repo <owner/repo>`
+- Optional: `--ticket-section <Small Tickets|Backlog Candidates|Milestone N: Tickets>`
+- Optional: `--ticket-text <checklist item text>`
+- Optional: `--ticket-state <open|done>`
+- Optional: `--ticket-source <repo-relative source>`
+- Optional: `--ticket-match <existing checklist item text>`
+- Optional: `--allow-duplicate`
 
 ## Workflow
 
@@ -26,9 +32,10 @@ This skill is the general template layer for roadmap maintenance. It defines the
 3. In `check-only`, audit title requirements, top-level section names and order, the required table of contents, milestone ordering, milestone subsection names, milestone status values, milestone progress consistency, small-ticket placement, checkbox syntax, and legacy format.
 4. When requested, collect small-ticket candidates from source TODO/FIXME comments or open GitHub issues and report them under `small_ticket_candidates`.
 5. In `apply`, keep edits bounded to the target `ROADMAP.md` while normalizing the roadmap into the configured canonical checklist structure. If source or GitHub ticket collection was requested, append new candidates to `Small Tickets` without rewriting source files.
-6. Preserve useful preamble material before the first H2 when normalizing the structural contract around it.
-7. Use the bundled roadmap template when bootstrapping a missing `ROADMAP.md`.
-8. Re-run the same audit to confirm post-fix status.
+6. If an explicit roadmap ticket mutation was requested, add or update one checklist item in `Small Tickets`, `Backlog Candidates`, or a milestone `Tickets` subsection. Dedupe by default, and use `--allow-duplicate` only when the duplicate is intentional.
+7. Preserve useful preamble material before the first H2 when normalizing the structural contract around it.
+8. Use the bundled roadmap template when bootstrapping a missing `ROADMAP.md`.
+9. Re-run the same audit to confirm post-fix status.
 
 ## Writing Expectations
 
@@ -56,6 +63,50 @@ Keep `apply` edits in the main thread because this skill owns one target roadmap
 - In `check-only`, collection is report-only and does not mutate files.
 - In `apply`, collection appends new entries to `Small Tickets` in `ROADMAP.md`. It does not rewrite source comments yet; source comment rewrites need a separate explicit mode so code files are not changed as a side effect of roadmap normalization.
 
+## Explicit Ticket Mutation
+
+Use explicit ticket mutation when another agent, skill, report, or maintainer
+workflow has one known checklist item to add or update in `ROADMAP.md`.
+
+Examples:
+
+```bash
+scripts/maintain_project_roadmap.py \
+  --project-root . \
+  --run-mode apply \
+  --ticket-section "Backlog Candidates" \
+  --ticket-text "Add guarded Socket Steward roadmap apply support" \
+  --ticket-source "docs/agents/socket-steward-docs-sync.md"
+```
+
+```bash
+scripts/maintain_project_roadmap.py \
+  --project-root . \
+  --run-mode apply \
+  --ticket-section "Small Tickets" \
+  --ticket-text "Add guarded Socket Steward roadmap apply support" \
+  --ticket-state done
+```
+
+```bash
+scripts/maintain_project_roadmap.py \
+  --project-root . \
+  --run-mode apply \
+  --ticket-section "Milestone 2: Tickets" \
+  --ticket-text "Wire roadmap ticket mutation into Socket Steward apply"
+```
+
+Rules:
+
+- Ticket mutation requires `--run-mode apply`.
+- Ticket mutation requires both `--ticket-section` and `--ticket-text`.
+- Supported sections are `Small Tickets`, `Backlog Candidates`, and `Milestone N: Tickets`.
+- `--ticket-state open` writes `[ ]`; `--ticket-state done` writes `[x]`.
+- `--ticket-source` must be repo-relative or inside the project root when passed as an absolute path.
+- Existing matching checklist items are updated by default instead of duplicated.
+- Use `--ticket-match` when the existing item text differs from the replacement text.
+- Use `--allow-duplicate` only when an intentional duplicate checklist item is needed.
+
 ## Canonical Base Contract
 
 The authoritative default shared roadmap structure lives in:
@@ -82,6 +133,7 @@ Treat those two files as the source of truth for the canonical base schema and t
 - Never auto-commit, auto-push, or open a PR.
 - Never invent roadmap status, milestone names, or ticket details that are not grounded in the existing file or the canonical template scaffolding.
 - Never edit files other than the target `ROADMAP.md`.
+- Never use explicit ticket mutation as a generic prose editor; it may only add or update one checklist item per run.
 - Never rewrite source TODO/FIXME comments unless a future explicit source-rewrite mode is implemented and requested.
 - Keep checklist-style `ROADMAP.md` as the canonical format.
 - Treat legacy table-style roadmap layouts as migration sources, not as an alternate canonical output mode.

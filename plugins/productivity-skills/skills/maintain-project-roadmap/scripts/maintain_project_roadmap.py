@@ -165,6 +165,33 @@ def parse_args() -> argparse.Namespace:
         "--github-repo",
         help="Optional GitHub OWNER/REPO override for --collect-github-issues.",
     )
+    parser.add_argument(
+        "--ticket-section",
+        help=(
+            "Optional roadmap checklist target. Use 'Small Tickets', 'Backlog Candidates', "
+            "or 'Milestone N: Tickets'. Requires --run-mode apply and --ticket-text."
+        ),
+    )
+    parser.add_argument("--ticket-text", help="Optional roadmap checklist item text to add or update.")
+    parser.add_argument(
+        "--ticket-state",
+        choices=["open", "done"],
+        default="open",
+        help="Checklist state for --ticket-text. Defaults to open.",
+    )
+    parser.add_argument(
+        "--ticket-source",
+        help="Optional repo-relative source reference appended to a new checklist item.",
+    )
+    parser.add_argument(
+        "--ticket-match",
+        help="Optional existing checklist item text to update instead of matching --ticket-text.",
+    )
+    parser.add_argument(
+        "--allow-duplicate",
+        action="store_true",
+        help="Append --ticket-text even when a matching checklist item already exists.",
+    )
     return parser.parse_args()
 
 
@@ -767,6 +794,182 @@ def append_small_ticket_candidates(roadmap_text: str, candidates: Sequence[Small
     return normalize_whitespace(rendered), inserted
 
 
+def normalize_ticket_text(text: str) -> str:
+    normalized = re.sub(r"^\s*-\s+\[[ xX]\]\s+", "", text).strip()
+    normalized = re.sub(r"\s+\([^)]*\)\s*$", "", normalized).strip()
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized
+
+
+def roadmap_ticket_line(text: str, state: str, source: str = "") -> str:
+    checkbox = "x" if state == "done" else " "
+    line = f"- [{checkbox}] {normalize_ticket_text(text)}"
+    if source:
+        line += f" ({source})"
+    return line
+
+
+def render_sections(preamble: str, sections: Sequence[Tuple[str, str]]) -> str:
+    rendered = preamble.strip()
+    for heading, body in sections:
+        rendered += f"\n\n## {heading}\n\n{body.strip()}"
+    return normalize_whitespace(rendered)
+
+
+def parse_ticket_section(section: str) -> Tuple[str, Optional[int], str]:
+    normalized = section.strip()
+    milestone_match = re.fullmatch(
+        r"Milestone\s+(\d+)(?::\s*(?:Tickets)?)?",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    if milestone_match:
+        return "milestone", int(milestone_match.group(1)), "Tickets"
+
+    milestone_tickets_match = re.fullmatch(
+        r"Milestone\s+(\d+)\s*:\s*Tickets",
+        normalized,
+        flags=re.IGNORECASE,
+    )
+    if milestone_tickets_match:
+        return "milestone", int(milestone_tickets_match.group(1)), "Tickets"
+
+    if normalized in {"Small Tickets", "Backlog Candidates"}:
+        return "top-level", None, normalized
+
+    return "unknown", None, normalized
+
+
+def mutate_checklist_body(
+    body: str,
+    *,
+    ticket_text: str,
+    ticket_state: str,
+    ticket_source: str,
+    ticket_match: Optional[str],
+    allow_duplicate: bool,
+) -> Tuple[str, str]:
+    desired_text = normalize_ticket_text(ticket_text)
+    match_text = normalize_ticket_text(ticket_match or ticket_text)
+    new_line = roadmap_ticket_line(desired_text, ticket_state, ticket_source)
+    lines = body.rstrip().splitlines() if body.strip() else []
+
+    if not allow_duplicate:
+        for index, line in enumerate(lines):
+            if not CHECKBOX_RE.match(line):
+                continue
+            if normalize_ticket_text(line) != match_text:
+                continue
+            lines[index] = roadmap_ticket_line(desired_text, ticket_state, ticket_source)
+            return "\n".join(lines).strip(), "update-roadmap-ticket"
+
+    if lines and lines[-1].strip():
+        lines.append("")
+    lines.append(new_line)
+    return "\n".join(lines).strip(), "add-roadmap-ticket"
+
+
+def apply_roadmap_ticket_request(
+    project_root: Path,
+    roadmap_text: str,
+    *,
+    section: str,
+    ticket_text: str,
+    ticket_state: str,
+    ticket_source: str,
+    ticket_match: Optional[str],
+    allow_duplicate: bool,
+) -> Tuple[str, ApplyAction]:
+    source = ticket_source.strip()
+    if source:
+        source_path = Path(source).expanduser()
+        if source_path.is_absolute():
+            try:
+                source = source_path.resolve().relative_to(project_root).as_posix()
+            except ValueError as error:
+                raise ValueError(
+                    "Roadmap ticket source must be repo-relative or inside the project root."
+                ) from error
+
+    target_type, milestone_number, target_name = parse_ticket_section(section)
+    if target_type == "unknown":
+        raise ValueError(
+            "Unsupported --ticket-section. Use 'Small Tickets', 'Backlog Candidates', "
+            "or 'Milestone N: Tickets'."
+        )
+
+    preamble, sections = split_sections(roadmap_text)
+
+    if target_type == "top-level":
+        updated_sections: List[Tuple[str, str]] = []
+        action_name: Optional[str] = None
+        for heading, body in sections:
+            if heading != target_name:
+                updated_sections.append((heading, body))
+                continue
+            updated_body, action_name = mutate_checklist_body(
+                body,
+                ticket_text=ticket_text,
+                ticket_state=ticket_state,
+                ticket_source=source,
+                ticket_match=ticket_match,
+                allow_duplicate=allow_duplicate,
+            )
+            updated_sections.append((heading, updated_body))
+        if action_name:
+            return render_sections(preamble, updated_sections), ApplyAction(
+                action=action_name,
+                reason=f"Updated {target_name} with roadmap ticket: {normalize_ticket_text(ticket_text)}.",
+                file="ROADMAP.md",
+            )
+        raise ValueError(f"ROADMAP is missing required section '## {target_name}'.")
+
+    updated_sections = []
+    action_name: Optional[str] = None
+    for heading, body in sections:
+        parsed = parse_milestone_heading(heading)
+        if not parsed or parsed[0] != milestone_number:
+            updated_sections.append((heading, body))
+            continue
+
+        sub_preamble, subsections = split_subsections(body)
+        updated_subsections: List[Tuple[str, str]] = []
+        found_tickets = False
+        for subheading, subbody in subsections:
+            if subheading != target_name:
+                updated_subsections.append((subheading, subbody))
+                continue
+            found_tickets = True
+            updated_body, action_name = mutate_checklist_body(
+                subbody,
+                ticket_text=ticket_text,
+                ticket_state=ticket_state,
+                ticket_source=source,
+                ticket_match=ticket_match,
+                allow_duplicate=allow_duplicate,
+            )
+            updated_subsections.append((subheading, updated_body))
+
+        if not found_tickets:
+            raise ValueError(f"Milestone {milestone_number} is missing '### Tickets'.")
+
+        rendered_body = sub_preamble.strip()
+        for subheading, subbody in updated_subsections:
+            rendered_body += f"\n\n### {subheading}\n\n{subbody.strip()}"
+        updated_sections.append((heading, rendered_body.strip()))
+    if action_name:
+        return render_sections(preamble, updated_sections), ApplyAction(
+            action=action_name,
+            reason=(
+                f"Updated Milestone {milestone_number} Tickets with roadmap ticket: "
+                f"{normalize_ticket_text(ticket_text)}."
+            ),
+            file="ROADMAP.md",
+        )
+
+    raise ValueError(f"ROADMAP is missing milestone {milestone_number}.")
+
+
 def validate_schema(
     roadmap_path: Path,
     roadmap_text: str,
@@ -1291,6 +1494,15 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
         "errors": [],
     }
 
+    ticket_requested = bool(args.ticket_section or args.ticket_text or args.ticket_match or args.ticket_source)
+    if ticket_requested:
+        if args.run_mode != "apply":
+            report["errors"].append("Roadmap ticket mutation requires --run-mode apply.")
+        if not args.ticket_section:
+            report["errors"].append("Roadmap ticket mutation requires --ticket-section.")
+        if not args.ticket_text:
+            report["errors"].append("Roadmap ticket mutation requires --ticket-text.")
+
     if not project_root.is_dir():
         report["errors"].append(f"Project root does not exist or is not a directory: {project_root}")
         return report, markdown_report(report)
@@ -1348,6 +1560,22 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
                     file=str(roadmap_path),
                 )
             )
+        if ticket_requested and args.ticket_section and args.ticket_text:
+            try:
+                updated_text, ticket_action = apply_roadmap_ticket_request(
+                    project_root,
+                    updated_text,
+                    section=args.ticket_section,
+                    ticket_text=args.ticket_text,
+                    ticket_state=args.ticket_state,
+                    ticket_source=args.ticket_source or "",
+                    ticket_match=args.ticket_match,
+                    allow_duplicate=bool(args.allow_duplicate),
+                )
+                write_text(roadmap_path, updated_text)
+                actions.append(ticket_action)
+            except ValueError as error:
+                report["errors"].append(str(error))
         report["apply_actions"] = [action.to_dict() for action in actions]
         post_findings = validate_schema(roadmap_path, updated_text, config)
         report["findings"] = [finding.to_dict() for finding in post_findings]
