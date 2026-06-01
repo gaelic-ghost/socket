@@ -26,8 +26,9 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 - create the annotated release tag locally from the reviewed local `main`
 - push the tag
 - wait for the pushed tag to become visible on the remote before creating the GitHub release
-- create the GitHub release unless skipped
+- create the GitHub release unless skipped, passing `--prerelease` for SemVer prerelease tags such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes
 - wait for the GitHub release object to become readable after creation
+- verify the GitHub release object's prerelease metadata matches the release tag before calling release publication complete
 - verify `git log origin/main..main` or the repository's equivalent base/remote comparison is empty before claiming the local base branch is synchronized
 - enumerate every local branch still not contained by `main` and account for each branch as already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete
 - prune stale remote tracking refs and delete only local branches already merged into `main` after branch accounting proves they are safe
@@ -56,8 +57,9 @@ Use this mode when the current repository is checked out as a git submodule insi
 - create the release tag locally
 - push the branch and tag in the submodule repository
 - wait for the pushed branch and tag to become visible on the remote
-- create the GitHub release when `gh` is available
+- create the GitHub release when `gh` is available, passing `--prerelease` for SemVer prerelease tags such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes
 - wait for the GitHub release object to become readable after creation
+- verify the GitHub release object's prerelease metadata matches the release tag before calling release publication complete
 - verify the submodule branch and tag are visible on the intended remote before calling that work preserved or released
 - leave the parent-repo pointer update as a separate explicit follow-up step
 

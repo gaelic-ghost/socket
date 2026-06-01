@@ -10,6 +10,7 @@
 - [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
+- [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -198,6 +199,13 @@ In Progress
 - [x] The new skills can help an agent choose a Rust project shape before implementation.
 - [x] The new skills guide Cargo bootstrap, CLI and library implementation, package preparation, CI alignment, testing, formatting, linting, and toolchain alignment without bundling broad runtime behavior.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
+## Small Tickets
+
+- [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
+
+- [x] GitHub #61: Teach repo-maintenance prerelease GitHub metadata ([#61](https://github.com/gaelic-ghost/socket/issues/61))
+- [x] GitHub #60: Apple Dev Skills workflow helper is missing PyYAML runtime dependency ([#60](https://github.com/gaelic-ghost/socket/issues/60))
 
 ## Backlog Candidates
 

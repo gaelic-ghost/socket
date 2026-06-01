@@ -193,6 +193,30 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         )
         self.assertIn('wait_for_github_release "$RELEASE_TAG"', release_step)
 
+    def test_release_helpers_preserve_prerelease_github_metadata(self) -> None:
+        common_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/common.sh").read_text(
+            encoding="utf-8"
+        )
+        release_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release.sh").read_text(
+            encoding="utf-8"
+        )
+        release_step = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release/40-github-release.sh").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("is_semver_prerelease_tag", common_script)
+        self.assertIn("expected_github_prerelease_value", common_script)
+        self.assertIn("github_release_create_prerelease_flag", common_script)
+        self.assertIn("verify_github_release_prerelease_metadata", common_script)
+        self.assertIn("--json isPrerelease --jq .isPrerelease", common_script)
+        self.assertIn("prerelease metadata mismatch", common_script)
+
+        for release_text in (release_script, release_step):
+            with self.subTest(surface=release_text[:32]):
+                self.assertIn('prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"', release_text)
+                self.assertIn("gh release create \"$RELEASE_TAG\" --verify-tag --generate-notes $prerelease_flag", release_text)
+                self.assertIn('verify_github_release_prerelease_metadata "$RELEASE_TAG"', release_text)
+
     def test_release_env_documents_github_wait_defaults(self) -> None:
         release_env = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/config/release.env").read_text(
             encoding="utf-8"
@@ -222,6 +246,18 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
 
         self.assertIn("accounts for every local branch not contained by `main`", automation_prompts)
         self.assertIn("do not delete local branches, remote branches, worktrees, archive refs", automation_prompts)
+
+    def test_prerelease_release_metadata_guidance_is_documented(self) -> None:
+        skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
+        release_modes = (ROOT / "skills/maintain-project-repo/references/release-modes.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in (skill_text, release_modes):
+            with self.subTest(surface=text[:32]):
+                self.assertIn("SemVer prerelease", text)
+                self.assertIn("--prerelease", text)
+                self.assertIn("prerelease metadata", text)
 
     def test_refresh_preserves_repo_specific_extra_script(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

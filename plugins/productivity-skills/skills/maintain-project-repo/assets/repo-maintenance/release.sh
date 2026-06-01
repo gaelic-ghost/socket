@@ -398,18 +398,23 @@ create_github_release() {
   fi
 
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would create a GitHub release for $RELEASE_TAG with gh release create --verify-tag."
+    prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"
+    log "Would create a GitHub release for $RELEASE_TAG with gh release create --verify-tag${prerelease_flag:+ $prerelease_flag}."
     return 0
   fi
 
   if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+    verify_github_release_prerelease_metadata "$RELEASE_TAG"
     log "GitHub release $RELEASE_TAG already exists."
     return 0
   fi
 
-  gh release create "$RELEASE_TAG" --verify-tag --generate-notes
+  prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"
+  # shellcheck disable=SC2086
+  gh release create "$RELEASE_TAG" --verify-tag --generate-notes $prerelease_flag
   log "Created GitHub release $RELEASE_TAG."
   wait_for_github_release "$RELEASE_TAG"
+  verify_github_release_prerelease_metadata "$RELEASE_TAG"
 }
 
 cleanup_merged_branches() {

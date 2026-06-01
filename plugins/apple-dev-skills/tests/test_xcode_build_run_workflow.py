@@ -136,6 +136,14 @@ class XcodeBuildRunWorkflowTests(unittest.TestCase):
         self.assertIn("treat that diff as critical project state", reference_text)
         self.assertIn("commit it with the branch before any push, merge, release", reference_text)
 
+    def test_plain_python_invocation_can_recover_missing_pyyaml_through_uv_script_metadata(self) -> None:
+        script_text = SCRIPT.read_text(encoding="utf-8")
+
+        self.assertIn("APPLE_DEV_SKILLS_UV_SCRIPT_REEXEC", script_text)
+        self.assertIn('"uv"', script_text)
+        self.assertIn('"run", "--script"', script_text)
+        self.assertIn("inline PyYAML dependency", script_text)
+
 
 if __name__ == "__main__":
     unittest.main()

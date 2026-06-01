@@ -11,12 +11,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shlex
+import shutil
 import subprocess
 import sys
 from pathlib import Path
-
-import customization_config
 
 
 VALID_OPERATION_TYPES = {
@@ -28,6 +28,49 @@ VALID_OPERATION_TYPES = {
     "package-toolchain-management",
     "mutation",
 }
+
+
+def load_customization_config():
+    try:
+        import customization_config as loaded_config
+    except ModuleNotFoundError as error:
+        if error.name != "yaml":
+            raise
+        reexec_with_uv_script()
+    return loaded_config
+
+
+def reexec_with_uv_script() -> None:
+    if os.environ.get("APPLE_DEV_SKILLS_UV_SCRIPT_REEXEC") == "1":
+        print(
+            "ERROR: xcode-build-run-workflow still cannot import PyYAML after re-running through "
+            "`uv run --script`. Confirm uv can read this script's inline dependency metadata and "
+            "install PyYAML.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
+    uv_path = shutil.which("uv")
+    if uv_path is None:
+        print(
+            "ERROR: xcode-build-run-workflow requires PyYAML for customization config, but PyYAML "
+            "is not installed in this Python environment and uv is unavailable. Run this helper as "
+            "`uv run --script run_workflow.py ...` or install uv so the script can resolve its "
+            "inline PyYAML dependency.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
+    env = dict(os.environ)
+    env["APPLE_DEV_SKILLS_UV_SCRIPT_REEXEC"] = "1"
+    os.execve(
+        uv_path,
+        [uv_path, "run", "--script", str(Path(__file__).resolve()), *sys.argv[1:]],
+        env,
+    )
+
+
+customization_config = load_customization_config()
 
 
 def normalize_request_text(text: str | None) -> str:
