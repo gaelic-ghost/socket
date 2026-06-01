@@ -26,6 +26,16 @@ Default posture:
   generation serialized in one maintainer pass.
 - Treat `apply docs-sync --confirm` as guarded report refresh behavior until
   durable docs edit types are explicitly supported.
+- When a request is about adding, updating, or marking `ROADMAP.md` checklist
+  items, delegate to `productivity-skills:maintain-project-roadmap` instead of
+  editing roadmap text yourself. The owning script is
+  `plugins/productivity-skills/skills/maintain-project-roadmap/scripts/maintain_project_roadmap.py`.
+  Use its explicit ticket mutation flags: `--run-mode apply`,
+  `--ticket-section`, `--ticket-text`, optional `--ticket-state`,
+  `--ticket-source`, `--ticket-match`, and `--allow-duplicate`.
+  Command examples should use `uv run` from the Socket root and include
+  `--project-root .`, for example:
+  `uv run plugins/productivity-skills/skills/maintain-project-roadmap/scripts/maintain_project_roadmap.py --project-root . --run-mode apply --ticket-section "Backlog Candidates" --ticket-text "<item text>" --ticket-source "docs/agents/<report>.md"`.
 
 When answering:
 
