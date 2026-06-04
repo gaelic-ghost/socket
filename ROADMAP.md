@@ -206,30 +206,32 @@ In Progress
 
 ### Status
 
-Planned
+Implemented locally
 
 ### Scope
 
-- [ ] Add a narrow `web-dev-skills` workflow for Expo SDK 56+ inline native modules and `expo-type-information`.
-- [ ] Keep the skill docs-first and current-docs-first because Expo marks inline modules as experimental and the SDK 56 surface may change frequently.
-- [ ] Route Swift, Apple-platform API, Xcode, simulator, signing, and iOS validation details through `apple-dev-skills` instead of copying Apple workflow guidance into `web-dev-skills`.
-- [ ] Keep the first version as companion guidance only: do not bundle Expo, EAS, SourceKitten, native build tooling, an MCP server, template feed, or sample app.
+- [x] Add a narrow `web-dev-skills` workflow for Expo SDK 56+ inline native modules and `expo-type-information`.
+- [x] Keep the skill docs-first and current-docs-first because Expo marks inline modules as experimental and the SDK 56 surface may change frequently.
+- [x] Route Swift, Apple-platform API, Xcode, simulator, signing, and iOS validation details through `apple-dev-skills` instead of copying Apple workflow guidance into `web-dev-skills`.
+- [x] Keep the first version as companion guidance only: do not bundle Expo, EAS, SourceKitten, native build tooling, an MCP server, template feed, or sample app.
 
 ### Tickets
 
 - [x] Record the detailed plan in [`docs/maintainers/expo-inline-native-modules-skill-plan.md`](./docs/maintainers/expo-inline-native-modules-skill-plan.md).
-- [ ] Add `web-dev-skills:expo-inline-native-modules-workflow`.
-- [ ] Update `plugins/web-dev-skills/AGENTS.md` with Expo and React Native native-boundary guidance.
-- [ ] Update `plugins/web-dev-skills/.codex-plugin/plugin.json` metadata so the plugin advertises the Expo inline native module workflow.
-- [ ] Decide whether the root marketplace entry needs to move from placeholder to installable as part of the first implementation slice.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Add `web-dev-skills:expo-inline-native-modules-workflow`.
+- [x] Update `plugins/web-dev-skills/AGENTS.md` with Expo and React Native native-boundary guidance.
+- [x] Update `plugins/web-dev-skills/.codex-plugin/plugin.json` metadata so the plugin advertises the Expo inline native module workflow.
+- [x] Decide whether the root marketplace entry needs to move from placeholder to installable as part of the first implementation slice.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
-- [ ] The skill helps an agent inspect a live Expo app, verify SDK support, choose between inline modules, standalone Expo modules, config plugins, and direct native edits, then validate the chosen path.
-- [ ] The skill treats `Module.generated.ts` as volatile generated output and `Module.tsx` as the stable editable wrapper when using `expo-type-information`.
-- [ ] The skill requires current official Expo documentation for SDK 56 inline module and type generation behavior before making claims or edits.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the exported `web-dev-skills` surface.
+- [x] The skill helps an agent inspect a live Expo app, verify SDK support, choose between inline modules, standalone Expo modules, config plugins, and direct native edits, then validate the chosen path.
+- [x] The skill treats `Module.generated.ts` as volatile generated output and `Module.tsx` as the stable editable wrapper when using `expo-type-information`.
+- [x] The skill requires current official Expo documentation for SDK 56 inline module and type generation behavior before making claims or edits.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the exported `web-dev-skills` surface.
+
+Decision note: the root marketplace entry remains `NOT_AVAILABLE` in this slice. Moving it to an installable catalog entry would widen the user-facing marketplace surface beyond the first skill implementation.
 
 ## Small Tickets
 

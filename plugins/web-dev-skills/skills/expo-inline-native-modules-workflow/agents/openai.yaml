@@ -1,0 +1,8 @@
+interface:
+  display_name: "Expo Inline Native Modules Workflow"
+  short_description: "Guide Expo SDK 56+ inline Swift/Kotlin modules, type generation, and native-boundary validation."
+  brand_color: "#38BDF8"
+  default_prompt: "Use $expo-inline-native-modules-workflow to refresh official Expo inline module and type generation docs, inspect the Expo app, choose the right native shape, keep Swift/Xcode/signing work routed to Apple Dev Skills, and validate native-boundary changes serially."
+
+policy:
+  allow_implicit_invocation: true

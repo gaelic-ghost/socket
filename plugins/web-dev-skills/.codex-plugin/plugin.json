@@ -1,33 +1,40 @@
 {
   "name": "web-dev-skills",
   "version": "6.14.2",
-  "description": "Standalone plugin repository for future web-focused Codex skills.",
+  "description": "Codex skills for focused web and Expo native-boundary workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
     "url": "https://github.com/gaelic-ghost"
   },
-  "homepage": "https://github.com/gaelic-ghost/web-dev-skills",
-  "repository": "https://github.com/gaelic-ghost/web-dev-skills",
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/web-dev-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
   "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",
     "skills",
     "web",
-    "frontend"
+    "frontend",
+    "expo",
+    "react-native",
+    "native-modules"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Web Dev Skills",
-    "shortDescription": "Future web-focused Codex skills.",
-    "longDescription": "Standalone plugin repository for future web-focused Codex skills and maintainer workflows.",
-    "developerName": "Gale",
+    "shortDescription": "Web and Expo native-boundary workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through focused web development workflows, starting with Expo SDK 56+ inline native modules, expo-type-information, live Expo app inspection, native-shape decisions, and validation handoffs to Apple Dev Skills where appropriate.",
+    "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/gaelic-ghost/web-dev-skills",
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/web-dev-skills",
+    "defaultPrompt": [
+      "Work through an Expo SDK 56+ inline native module change with current Expo docs, live project inspection, type generation, and native-boundary validation."
+    ],
     "brandColor": "#38BDF8"
   }
 }
