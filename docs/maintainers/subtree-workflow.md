@@ -1,6 +1,6 @@
 # Monorepo Workflow
 
-This document explains how `socket` is maintained after the monorepo simplification that left `apple-dev-skills` as the remaining subtree-managed child repository.
+This document explains how `socket` is maintained after the monorepo simplification that made the Socket checkout the canonical source for its local child plugin payloads.
 
 ## What Socket Owns
 
@@ -16,13 +16,13 @@ Treat Gale's local `socket` checkout as the normal day-to-day working checkout o
 
 Direct work on local `main` is the default for `socket`. Use a feature branch or a dedicated worktree only when a change needs extra isolation for safety, review, or overlapping parallel work.
 
-`socket` is the source of truth for every child directory under `plugins/` except `plugins/apple-dev-skills/`.
+`socket` is the source of truth for every local child directory under `plugins/`, including `plugins/apple-dev-skills/`.
 
 For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
 
 For coordinated guidance that spans multiple monorepo-owned child repositories, edit the relevant child directories directly and update the root docs only enough to explain the cross-child policy or discovery reason.
 
-For `apple-dev-skills`, when a change should publish back to its source repository, work in `plugins/apple-dev-skills/`, commit in `socket`, and then use `git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main`.
+For `apple-dev-skills`, work in `plugins/apple-dev-skills/` and commit in `socket`. The standalone `gaelic-ghost/apple-dev-skills` repository is now a compatibility marketplace and README pointer that redirects to Socket, so do not subtree-push Socket payload changes back into that repository unless a future migration explicitly restores that workflow.
 
 For Speak Swiftly plugin payload work, use the standalone `SpeakSwiftlyServer` checkout. Socket users receive that payload through the Git-backed marketplace entry, so `socket` no longer imports the standalone source tree under `plugins/`.
 
@@ -53,42 +53,27 @@ When a remote catalog entry is added, update the root marketplace validator so i
 
 ## Current Named Remotes
 
-The superproject keeps `origin` for `socket` and a child-repository remote for `apple-dev-skills`.
+The superproject keeps `origin` for `socket`.
 
-Current child-repo remotes:
+Some local checkouts may still have an `apple-dev-skills` remote from the older subtree workflow. Treat that remote as historical compatibility context only while the standalone repository remains a Socket pointer.
 
-- `apple-dev-skills`
+If a new subtree-managed child repository is introduced later, add its matching named remote first and update this document plus [`release-modes.md`](./release-modes.md) in the same pass.
 
-If a new subtree-managed child repository is introduced later, add its matching named remote first.
+## Apple Dev Skills Compatibility Pointer
 
-## Subtree Work For Apple Dev Skills
+`plugins/apple-dev-skills` is the canonical Socket-owned Apple Dev Skills payload. Make ordinary Apple Dev Skills payload changes directly in that directory and commit them in `socket`.
 
-Use dedicated commits for `apple-dev-skills` subtree work.
+Current release-time direction:
 
-Current subtree direction:
-
-| Child | Prefix | Remote | Default direction |
+| Child | Prefix | Standalone repository | Release-time action |
 | --- | --- | --- | --- |
-| `apple-dev-skills` | `plugins/apple-dev-skills` | `apple-dev-skills` | pull and push |
+| `apple-dev-skills` | `plugins/apple-dev-skills` | `gaelic-ghost/apple-dev-skills` | `no subtree action` while the standalone repository is only the compatibility pointer |
 
-Typical pull flow:
-
-```bash
-git fetch apple-dev-skills
-git subtree pull --prefix=plugins/apple-dev-skills apple-dev-skills main
-```
-
-Typical push flow:
-
-```bash
-git subtree push --prefix=plugins/apple-dev-skills apple-dev-skills main
-```
-
-After subtree work:
+When Apple Dev Skills changes land:
 
 - verify the directory shape under `plugins/apple-dev-skills/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
-- if the subtree work is part of a coordinated release-prep pass, use [`release-modes.md`](./release-modes.md) and account for whether the child needs pull, push, or no subtree action
+- if the work is part of a coordinated release-prep pass, use [`release-modes.md`](./release-modes.md) and record `no subtree action` for `apple-dev-skills` while the standalone repository remains the compatibility pointer
 
 ## Shared Version Workflow
 
@@ -108,7 +93,8 @@ That workflow updates the maintained `pyproject.toml` and `.codex-plugin/plugin.
 
 Use `subtrees` mode from [`release-modes.md`](./release-modes.md) when a `socket` release also needs subtree accounting. That mode treats the umbrella repository like a standard protected-main release and adds the subtree gate before tagging:
 
-- `apple-dev-skills`: pull or push as needed for the child state that the release owns
+- `apple-dev-skills`: record `no subtree action` while the standalone repository remains only the compatibility pointer
+- future subtree-managed children: pull or push as needed for the child state that the release owns
 - all subtree sync decisions: record whether the child was pulled, pushed, intentionally deferred, or not touched
 
 ## Add A New Subtree-Managed Child Repository
@@ -200,9 +186,9 @@ Use `vx.x.x` tags for socket releases. When a release used `subtrees` mode, do n
 
 - The socket marketplace still points at a directory that no longer exists in `plugins/`.
 - A child directory vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
-- `apple-dev-skills` still expects subtree sync, but its named remote is missing or points nowhere useful.
+- `apple-dev-skills` is accidentally treated as a live subtree push target even though the standalone repository is only the compatibility pointer.
 - Socket docs still describe the old all-subtree model after the monorepo has already moved on.
-- `apple-dev-skills` subtree work lands without a follow-up pass over root marketplace wiring and docs.
+- Apple Dev Skills payload work lands without a follow-up pass over root marketplace wiring and docs when the packaging surface changed.
 - Socket docs or marketplace entries reintroduce a local SpeakSwiftlyServer mirror even though Speak Swiftly is served from the standalone Git-backed repository.
 
 ## Practical Rule Of Thumb
