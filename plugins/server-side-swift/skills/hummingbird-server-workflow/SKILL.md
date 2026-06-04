@@ -40,6 +40,8 @@ Use official Hummingbird documentation first:
 - [Request Contexts](https://docs.hummingbird.codes/2.0/documentation/hummingbird/requestcontexts/)
 - [Error Handling](https://docs.hummingbird.codes/2.0/documentation/hummingbird/errorhandling/)
 - [Hummingbird Testing](https://docs.hummingbird.codes/2.0/documentation/hummingbird/testing/)
+- [Hummingbird ecosystem](https://hummingbird.codes/ecosystem/)
+- [Hummingbird GitHub organization](https://github.com/hummingbird-project)
 
 Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swift server package documentation for toolchain, package, lifecycle, event-loop, deployment, or observability behavior when Hummingbird docs do not own the rule being used.
 
@@ -73,6 +75,28 @@ Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swif
 6. Keep request and response models typed and small enough to test directly.
 7. Keep request context additions deliberate, because they become per-request data that middleware and handlers depend on.
 8. Validate with the narrowest useful SwiftPM, Hummingbird testing, or HTTP check.
+
+## Hummingbird Ecosystem Package Preference
+
+When a Hummingbird service needs framework-adjacent behavior, prefer maintained packages from the `hummingbird-project` GitHub organization when they fit the need and match the project's Hummingbird major version.
+
+Check Hummingbird-aligned packages first for:
+
+- authentication: Hummingbird Auth
+- persistence and migrations: Hummingbird Fluent, Hummingbird Postgres, Postgres migrations, Valkey or Redis integration, and Swift Jobs drivers
+- background jobs and durable work: Swift Jobs and Swift Jobs Workflows
+- transport and API surfaces: OpenAPI Hummingbird, WebSocket support, SSE, compression, and Lambda runtime support
+- rendering and examples: Swift Mustache, the Hummingbird template, and Hummingbird examples
+
+Use the official Hummingbird ecosystem page for closely aligned packages outside the core organization when the project needs observability, JWT, WebAuthn, APNS, AWS, MQTT, or another Swift server integration that Hummingbird documents as ecosystem-fit.
+
+Before recommending or adding any package:
+
+- verify current documentation or source, repository maintenance status, and package version compatibility
+- inspect the existing `Package.swift` dependency style, exact-version policy, and target ownership
+- choose the package that fits the current Hummingbird app shape instead of copying Vapor patterns
+- explain why the aligned Hummingbird package fits better than a generic Swift package or custom code
+- avoid archived packages, stale Hummingbird-major-version packages, or packages that turn request context into a generic dependency container
 
 ## Project Creation
 

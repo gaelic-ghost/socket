@@ -72,7 +72,8 @@ Use Swift Package Manager and Swift.org documentation for package, target, depen
    - read model or reporting query
    - test fixture or ephemeral database setup
 3. Choose the narrowest fitting data-access path:
-   - Fluent for Vapor projects already using Fluent models, migrations, and `req.db`
+   - official Vapor Fluent and Vapor database drivers first for Vapor projects already using Fluent models, migrations, and `req.db`
+   - Hummingbird-specific persistence packages first for Hummingbird services before direct drivers or generic database clients
    - a documented direct database client when the service needs SQL-specific behavior or does not use Fluent
    - a small repository or query helper when route handlers are accumulating duplicated database code
    - existing repo conventions when a project already has a tested persistence boundary
@@ -85,6 +86,7 @@ Use Swift Package Manager and Swift.org documentation for package, target, depen
 
 For Vapor projects that use Fluent:
 
+- check the official Vapor Fluent docs, Fluent package, and Vapor-maintained database drivers before adding community or generic persistence packages
 - keep models, migrations, and database configuration aligned with current Vapor Fluent docs
 - register database drivers and migrations in app configuration
 - run migrations with the documented app command, usually `swift run App migrate`
@@ -102,7 +104,7 @@ For Hummingbird projects:
 
 - do not assume Fluent or any ORM is already part of the service
 - inspect how the `Application`, router, service lifecycle, and dependencies are currently constructed
-- check Hummingbird's persistent-data docs and ecosystem packages before choosing PostgresNIO, HummingbirdFluent, a direct driver, or another package
+- check Hummingbird's persistent-data docs and Hummingbird-specific packages such as HummingbirdPostgres, HummingbirdFluent, PostgresMigrations, and Valkey or Redis integrations before choosing PostgresNIO, a direct driver, or a generic database package
 - choose a database client or repository shape that fits the existing Hummingbird service instead of copying Vapor app structure
 - keep database clients, pools, or repositories created at app startup and passed into the handlers or context path already used by the project
 - keep request context values per-request; do not turn request context into a generic dependency container

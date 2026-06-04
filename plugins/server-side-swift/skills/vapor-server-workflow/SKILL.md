@@ -38,6 +38,8 @@ Use official Vapor documentation first:
 - [Vapor commands](https://docs.vapor.codes/advanced/commands/)
 - [Vapor environment](https://docs.vapor.codes/basics/environment/)
 - [Vapor Fluent migrations](https://docs.vapor.codes/fluent/migration/)
+- [Vapor GitHub organization](https://github.com/vapor)
+- [Vapor Community GitHub organization](https://github.com/vapor-community)
 
 Use Swift.org or Swift Package Manager documentation for Swift toolchain and package behavior when Vapor docs do not own the rule being used.
 
@@ -68,6 +70,30 @@ Use Swift.org or Swift Package Manager documentation for Swift toolchain and pac
 6. Keep configuration explicit and environment-safe.
 7. Add tests at the smallest level that proves behavior.
 8. Validate with the narrowest useful SwiftPM, Vapor app, or HTTP check.
+
+## Vapor Ecosystem Package Preference
+
+When a Vapor service needs framework-adjacent behavior, prefer maintained packages from the official `vapor` GitHub organization when they fit the need and match the project's Vapor major version.
+
+Check official Vapor packages first for:
+
+- ORM, migrations, and database drivers: Fluent, Fluent drivers, FluentKit, SQLKit, Postgres, MySQL, SQLite, and MongoDB packages
+- authentication and tokens: Authentication, JWT, and JWTKit
+- background jobs: Queues and official queue drivers
+- cache or ephemeral state: Redis or the repository's existing cache choice
+- templating and HTML: Leaf and LeafKit
+- OpenAPI-backed servers: OpenAPIVapor
+- WebSocket, multipart, routing, console, APNS, templates, and Vapor Toolbox support
+
+Check `vapor-community` next when official Vapor packages do not cover the need and the community package is maintained, current, and a better fit than a generic third-party package. Common examples include HTML rendering, OAuth or identity flows, Stripe, SendGrid, Mailgun, Wallet, CSRF, SQLKit extras, Valkey support, Lambda runtime support, and service-specific providers.
+
+Before recommending or adding any package:
+
+- verify current documentation or source, repository maintenance status, and package version compatibility
+- inspect the existing `Package.swift` dependency style, exact-version policy, and target ownership
+- choose the narrowest package that fits the service behavior instead of adding a broad framework around one feature
+- explain why the aligned Vapor or Vapor Community package fits better than a generic Swift package or custom code
+- avoid archived packages, stale Vapor-major-version packages, or packages that force unrelated architecture changes
 
 ## Vapor Toolbox Usage
 

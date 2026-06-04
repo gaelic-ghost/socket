@@ -1,6 +1,6 @@
 {
   "name": "server-side-swift",
-  "version": "6.15.0",
+  "version": "6.15.1",
   "description": "Codex skills for building, running, containerizing, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, Docker, Apple Containerization, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
@@ -44,6 +44,8 @@
     "defaultPrompt": [
       "Create a Vapor service plan using current Vapor CLI and SwiftPM workflows.",
       "Create a Hummingbird service plan using current Hummingbird docs and SwiftPM workflows.",
+      "Choose a Vapor-aligned package from the Vapor or Vapor Community ecosystem for this service need.",
+      "Choose a Hummingbird-aligned package from the Hummingbird ecosystem for this service need.",
       "Add Swift OpenAPI Generator to a server-side Swift package and wire the generated API to Vapor or Hummingbird.",
       "Decide whether this Swift service boundary should use OpenAPI, JSON-RPC, gRPC, MCP-style tools, or ordinary HTTP routes.",
       "Add a Dockerfile and Compose workflow for this server-side Swift package.",
