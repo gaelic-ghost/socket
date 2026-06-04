@@ -49,6 +49,15 @@ Use official Expo documentation first:
 
 When Swift, Xcode, signing, simulator, or Apple framework facts matter, route through Apple Dev Skills and official Apple documentation instead of relying on Expo guidance alone.
 
+## References
+
+Use the focused reference tables when choosing a native shape or validation path:
+
+- [Native shape decision](./references/native-shape-decision.md)
+- [Validation matrix](./references/validation-matrix.md)
+
+These references are local workflow aids, not permanent API references. Refresh official Expo docs before using SDK-version-sensitive details.
+
 ## Inspection Contract
 
 Before editing an Expo app, inspect the live project:
@@ -65,6 +74,26 @@ Before editing an Expo app, inspect the live project:
 Report the intended edit scope before changing native code, generated TypeScript, package dependencies, Expo config, or generated native projects.
 
 Do not run `npx expo prebuild --clean`, native builds, EAS builds, or package installation until the likely side effects are identified and the user's request authorizes that level of change.
+
+## Danger Commands
+
+Treat these commands as high-side-effect operations. Do not run them until the intended side effects are clear and the user's request authorizes that level of change:
+
+- package-manager install or sync commands that change dependencies or lockfiles
+- `npx expo prebuild`, because it updates generated native projects from Expo config
+- `npx expo prebuild --clean`, because it deletes and regenerates native project directories
+- `npx expo run:ios` and `npx expo run:android`, because they run local native build toolchains
+- EAS build commands, because they use remote build resources, credentials, and account/project state
+
+Use [Validation matrix](./references/validation-matrix.md) before choosing one of these commands.
+
+## Handoff Map
+
+- Use this skill to decide the native boundary, inspect the live Expo app, choose validation scope, and report native-boundary risk.
+- Use the built-in `expo-module` skill for standalone or local Expo module implementation.
+- Use the built-in `expo-dev-client` skill for development build distribution and dev-client setup.
+- Use the built-in `upgrading-expo` skill for Expo SDK upgrades and dependency-alignment work.
+- Use Apple Dev Skills for Swift API design, Apple framework behavior, Xcode validation, simulators, signing, capabilities, entitlements, App Store behavior, and Apple platform availability claims.
 
 ## Native Shape Decision
 

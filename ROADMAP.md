@@ -239,6 +239,7 @@ Decision note: the root marketplace entry is installable now that `web-dev-skill
 
 - [x] GitHub #61: Teach repo-maintenance prerelease GitHub metadata ([#61](https://github.com/gaelic-ghost/socket/issues/61))
 - [x] GitHub #60: Apple Dev Skills workflow helper is missing PyYAML runtime dependency ([#60](https://github.com/gaelic-ghost/socket/issues/60))
+- [x] Hardened `web-dev-skills:expo-inline-native-modules-workflow` with native-shape decision and validation reference tables.
 
 ## Backlog Candidates
 
