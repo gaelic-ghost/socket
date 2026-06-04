@@ -53,6 +53,8 @@
       "Diagnose why this Vapor build, run, migrate, or local server command failed.",
       "Diagnose why this Hummingbird build, run, route, database, or local server command failed."
     ],
-    "brandColor": "#0EA5E9"
+    "brandColor": "#0EA5E9",
+    "composerIcon": "./assets/swift-bird-icon.png",
+    "logo": "./assets/swift-bird-icon.png"
   }
 }

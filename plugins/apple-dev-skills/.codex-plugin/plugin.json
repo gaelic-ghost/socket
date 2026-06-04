@@ -45,6 +45,8 @@
       "Write or review DocC symbol comments, articles, extension files, and landing-page structure for this Swift repository.",
       "Sync the Apple project guidance in this repo without hand-editing Xcode project files, using Productivity Skills when repo-maintenance files must be installed or refreshed."
     ],
-    "brandColor": "#0A84FF"
+    "brandColor": "#0A84FF",
+    "composerIcon": "./assets/xcode-hammer-icon.png",
+    "logo": "./assets/xcode-hammer-icon.png"
   }
 }

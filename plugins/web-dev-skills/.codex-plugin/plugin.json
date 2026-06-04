@@ -35,6 +35,8 @@
     "defaultPrompt": [
       "Work through an Expo SDK 56+ inline native module change with current Expo docs, live project inspection, type generation, and native-boundary validation."
     ],
-    "brandColor": "#38BDF8"
+    "brandColor": "#38BDF8",
+    "composerIcon": "./assets/globe-icon.png",
+    "logo": "./assets/globe-icon.png"
   }
 }

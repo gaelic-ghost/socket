@@ -28,6 +28,8 @@
       "Write"
     ],
     "websiteURL": "https://github.com/gaelic-ghost/rust-skills",
-    "brandColor": "#CE422B"
+    "brandColor": "#CE422B",
+    "composerIcon": "./assets/rustacean-icon.png",
+    "logo": "./assets/rustacean-icon.png"
   }
 }

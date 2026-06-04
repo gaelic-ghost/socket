@@ -49,6 +49,8 @@
       "Set up pytest defaults for this uv workspace and show the right package-targeted test commands.",
       "Add a FastMCP surface to an existing FastAPI project and choose the right combined-app pattern."
     ],
-    "brandColor": "#0F766E"
+    "brandColor": "#0F766E",
+    "composerIcon": "./assets/python-snake-icon.png",
+    "logo": "./assets/python-snake-icon.png"
   }
 }
