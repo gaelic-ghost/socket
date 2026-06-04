@@ -10,6 +10,7 @@
 - [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
+- [Milestone 10: Expo inline native modules workflow](#milestone-10-expo-inline-native-modules-workflow)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -32,6 +33,7 @@
 - Milestone 7: Python skills plugin expansion - In Progress
 - Milestone 8: Server-Side Swift skills plugin - In Progress
 - Milestone 9: Rust skills plugin - In Progress
+- Milestone 10: Expo inline native modules workflow - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -200,6 +202,35 @@ In Progress
 - [x] The new skills guide Cargo bootstrap, CLI and library implementation, package preparation, CI alignment, testing, formatting, linting, and toolchain alignment without bundling broad runtime behavior.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
+## Milestone 10: Expo inline native modules workflow
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a narrow `web-dev-skills` workflow for Expo SDK 56+ inline native modules and `expo-type-information`.
+- [ ] Keep the skill docs-first and current-docs-first because Expo marks inline modules as experimental and the SDK 56 surface may change frequently.
+- [ ] Route Swift, Apple-platform API, Xcode, simulator, signing, and iOS validation details through `apple-dev-skills` instead of copying Apple workflow guidance into `web-dev-skills`.
+- [ ] Keep the first version as companion guidance only: do not bundle Expo, EAS, SourceKitten, native build tooling, an MCP server, template feed, or sample app.
+
+### Tickets
+
+- [x] Record the detailed plan in [`docs/maintainers/expo-inline-native-modules-skill-plan.md`](./docs/maintainers/expo-inline-native-modules-skill-plan.md).
+- [ ] Add `web-dev-skills:expo-inline-native-modules-workflow`.
+- [ ] Update `plugins/web-dev-skills/AGENTS.md` with Expo and React Native native-boundary guidance.
+- [ ] Update `plugins/web-dev-skills/.codex-plugin/plugin.json` metadata so the plugin advertises the Expo inline native module workflow.
+- [ ] Decide whether the root marketplace entry needs to move from placeholder to installable as part of the first implementation slice.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [ ] The skill helps an agent inspect a live Expo app, verify SDK support, choose between inline modules, standalone Expo modules, config plugins, and direct native edits, then validate the chosen path.
+- [ ] The skill treats `Module.generated.ts` as volatile generated output and `Module.tsx` as the stable editable wrapper when using `expo-type-information`.
+- [ ] The skill requires current official Expo documentation for SDK 56 inline module and type generation behavior before making claims or edits.
+- [ ] Root Socket docs, marketplace wiring, and validation agree on the exported `web-dev-skills` surface.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -245,6 +276,7 @@ In Progress
 - Completed [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37) by hardening release and PR scripts around delayed GitHub state.
 - Completed [#39](https://github.com/gaelic-ghost/socket/issues/39) by adding the Swift Package Index add-package gate and one-shot script around the documented `SwiftPackageIndex/PackageList` Add Package issue form.
 - Planned a `swiftasb-skills` child plugin to help agents explain SwiftASB and build SwiftUI, AppKit, and Swift package integrations from a Socket-visible guidance surface.
+- Planned a `web-dev-skills` Expo inline native modules workflow for SDK 56+ inline Swift/Kotlin modules, `expo-type-information`, CNG/prebuild validation, and Apple Dev Skills handoffs.
 - Updated `productivity-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
 - Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.
