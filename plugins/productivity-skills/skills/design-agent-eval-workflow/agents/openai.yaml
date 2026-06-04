@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Agent Eval Workflow"
+  short_description: "Design evals for agent, skill, prompt, and automation behavior."
+  default_prompt: "Use $design-agent-eval-workflow to define behavior under test, choose eval cases and graders, decide whether the workflow is fit for full-auto, auto-with-escalation, human-review, or manual-only-for-now, and return a framework-neutral eval plan with safety gates, cadence, scaffold, and implementation handoff."

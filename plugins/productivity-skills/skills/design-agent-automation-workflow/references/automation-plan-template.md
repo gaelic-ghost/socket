@@ -8,7 +8,7 @@ issue body, or handoff note.
 
 ## Recommendation
 
-Chosen surface: `<codex-app-automation|codex-exec|codex-subagents|agents-sdk-service|langgraph-graph|hermes-workflow|no-automation-yet>`
+Chosen surface: `<codex-app-automation|codex-exec|codex-subagents|agents-sdk-service|langgraph-graph|hermes-workflow|full-auto|auto-with-escalation|no-automation-yet>`
 
 Why this surface:
 - `<one sentence tied to schedule, state, approvals, retries, observability, or runtime ownership>`
@@ -21,18 +21,21 @@ Why this surface:
 - OpenAI Agents SDK service: `<why not first, or "not applicable">`
 - LangGraph graph: `<why not first, or "not applicable">`
 - Hermes-specific workflow: `<why not first, or "not applicable">`
+- Full-auto execution: `<why yes/no, tied to validation and rollback confidence>`
+- Auto-with-escalation: `<why yes/no, tied to exact escalation triggers>`
 - No automation yet: `<why automation is justified, or why it is the recommendation>`
 
 ## State And Safety
 
 - Trigger:
+- Automation target:
 - State that must persist:
 - Read scope:
 - Write scope:
 - Secret or credential handling:
-- Human approval gate:
+- Escalation or human approval gate:
 - Retry policy:
-- Rollback or stop condition:
+- Rollback, no-op, or stop condition:
 
 ## Scaffold
 

@@ -13,6 +13,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = [
+  "skills/design-agent-eval-workflow/tests",
   "skills/design-agent-automation-workflow/tests",
   "skills/maintain-project-agents/tests",
   "skills/maintain-project-accessibility/tests",

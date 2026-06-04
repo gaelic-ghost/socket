@@ -24,7 +24,9 @@ automation surface.
 | OpenAI Agents SDK service | Application code should own tools, handoffs, guardrails, human review, state, tracing, and server integration. | A Codex prompt or one-shot CLI job can complete the work with simpler review boundaries. |
 | LangGraph graph | The workflow is a long-running stateful graph with persistence, durable execution, human-in-the-loop pauses, streaming, and explicit resume behavior. | The task is a simple one-repo automation or prompt-level workflow that does not need graph state. |
 | Hermes-specific workflow | The desired runtime is Hermes Agent itself, especially its memory, skills, messaging gateway, scheduled automation, provider, or terminal backend model. | The workflow is ordinary Codex repo maintenance or framework-neutral planning. |
-| No automation yet | The outcome, validation, owner, approval gate, or rollback path is unclear. | The user already has a bounded repeatable task with known checks and a safe first run. |
+| Full-auto execution | The workflow has bounded inputs, explicit write scope, deterministic or reviewable validation, durable failure reporting, bounded retries, and rollback, no-op, or draft behavior. | The workflow has unbounded external side effects, unclear success criteria, or no reliable stop condition. |
+| Auto-with-escalation | Most of the workflow is safe, but one exact decision still needs user review when a named trigger fires. | The whole workflow is still underspecified, or escalation would happen on nearly every run. |
+| No automation yet | The outcome, validation, owner, approval gate, or rollback path is unclear after narrowing the workflow. | The user already has a bounded repeatable task with known checks and a safe first run. |
 
 ## Required Questions
 
@@ -32,11 +34,28 @@ automation surface.
   message, or another service?
 - What state must survive between runs?
 - What can write to the repository, filesystem, external service, or user data?
-- Where does human approval happen, and what exactly is approved?
+- Which parts are safe for full automation, and which exact trigger escalates?
+- Where does human approval happen, if anywhere, and what exactly is approved?
 - What retries are allowed, and what failure record remains after a retry stops?
 - What trace, log, report, or artifact proves the workflow behaved correctly?
 - Which stack-owned plugin or official docs should own implementation after this
   planning pass?
+
+## Full-Auto Fit Checks
+
+A workflow is a good full-automation candidate when all of these are true:
+
+- inputs are bounded or normalized before execution
+- write scope is explicit and narrow
+- validation is deterministic or reviewable enough to catch material failures
+- failures leave a durable report
+- retries are bounded
+- rollback, no-op, or draft behavior prevents irreversible damage
+- external side effects are absent or explicitly approved in advance
+
+If one check fails, prefer `auto-with-escalation` and name the missing gate. Use
+human-in-the-loop only for the exact decision that cannot be made safe through
+scope, sandboxing, validation, rollback, or orchestration.
 
 ## Handoff Rules
 

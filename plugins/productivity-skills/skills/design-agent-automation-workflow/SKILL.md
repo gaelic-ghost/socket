@@ -1,6 +1,6 @@
 ---
 name: design-agent-automation-workflow
-description: Design framework-neutral agent and automation workflows before implementation. Use when choosing between Codex app automations, codex exec, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet, and when the user wants a planning/scaffolding pass that delegates stack-specific implementation to the owning plugin or official docs.
+description: Design framework-neutral agent and automation workflows before implementation. Use when choosing between Codex app automations, codex exec, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, full-auto execution, auto-with-escalation, or no automation yet, and when the user wants a planning/scaffolding pass that delegates stack-specific implementation to the owning plugin or official docs.
 ---
 
 # Design Agent Automation Workflow
@@ -8,24 +8,27 @@ description: Design framework-neutral agent and automation workflows before impl
 Design agent and automation workflows before implementation.
 
 This skill is a framework-neutral planning surface. It helps choose the smallest
-defensible automation shape, name the safety and state boundaries, and produce a
-scaffold another stack-owned skill or implementation pass can use.
+defensible automation shape, name the safety and state boundaries, decide
+whether the task is fit for full automation or needs exact escalation gates, and
+produce a scaffold another stack-owned skill or implementation pass can use.
 
 ## Inputs
 
 - Required: the automation goal or workflow idea
-- Useful: target repository, cadence, write surface, expected outputs, human
-  approval points, state needs, retry needs, observability needs, and preferred
-  runtime constraints
+- Useful: target repository, cadence, write surface, expected outputs, full-auto
+  eligibility, escalation points, state needs, retry needs, observability needs,
+  and preferred runtime constraints
 - Optional: known framework preference, deployment target, language stack, or
   existing scheduler/service
 
 ## Workflow
 
 1. Restate the intended real-world outcome and the smallest useful first run.
-2. Decide whether automation is appropriate yet. If the work still needs human
-   judgment, unstable product direction, or unclear validation, recommend a
-   manual checklist or one-shot planning pass.
+2. Decide whether automation is appropriate yet. Prefer safe full automation
+   when bounded scope, validation, rollback or draft behavior, and side-effect
+   controls make it reasonably reliable. Use human review only for the exact
+   decision that cannot be made safe through narrower scope, deterministic
+   checks, retries, rollback, sandboxing, or an orchestration layer.
 3. Classify the best-fit surface:
    - Codex app automation
    - `codex exec` or Codex GitHub Action
@@ -33,6 +36,8 @@ scaffold another stack-owned skill or implementation pass can use.
    - OpenAI Agents SDK service
    - LangGraph graph
    - Hermes-specific workflow
+   - full-auto execution
+   - auto-with-escalation
    - no automation yet
 4. Name the practical reason for the choice: schedule, isolation, state,
    approvals, retries, observability, deployment, or integration with an
@@ -58,6 +63,12 @@ scaffold another stack-owned skill or implementation pass can use.
   one already owns the task. Add a new agent/service only when the existing
   workflow cannot express the needed state, approval, scheduling, or integration
   boundary.
+- Prefer full automation when the workflow has bounded inputs, explicit write
+  scope, deterministic or reviewable validation, durable failure reporting,
+  bounded retries, and rollback, no-op, or draft behavior for unsafe outcomes.
+- Prefer auto-with-escalation when one specific decision remains unsafe or
+  ambiguous. Name the exact escalation trigger instead of making the whole
+  workflow human-reviewed.
 - Prefer Codex app automations for recurring check-ins, reminders, inbox
   reports, and skill-backed background tasks where Codex should stay the user
   interface.
@@ -75,8 +86,9 @@ scaffold another stack-owned skill or implementation pass can use.
 - Prefer Hermes-specific workflows only when the work intentionally targets the
   Hermes Agent runtime, Hermes memory/skills/automation model, messaging
   gateways, or Hermes provider configuration.
-- Prefer no automation yet when the goal, validation, approval boundary, or
-  owner is still unclear.
+- Prefer no automation yet only when the goal, validation, owner, write scope,
+  or rollback/escalation boundary is still unclear after trying to narrow the
+  workflow.
 
 ## Output Contract
 
@@ -84,7 +96,8 @@ Return a concise plan with these sections:
 
 - `Recommendation`: one chosen surface and one sentence explaining why
 - `Not Chosen`: short reasons the other plausible surfaces are not first
-- `State And Safety`: state, approvals, secrets, permissions, and write scope
+- `State And Safety`: state, automation target, escalation gates, secrets,
+  permissions, write scope, and rollback/no-op behavior
 - `Scaffold`: prompt, job shape, graph shape, or service outline
 - `Validation`: how the first run should prove it worked
 - `Handoff`: which skill, plugin, repo, or official docs should own
@@ -106,7 +119,10 @@ prompt, issue body, project note, or implementation brief.
   agent skill, plugin, repo script, or official workflow surface. Delegate,
   invoke, or extend the owner instead.
 - Do not suggest unattended write automation unless the validation path,
-  rollback path, and approval boundary are explicit.
+  rollback/no-op path, and escalation boundary are explicit.
+- Do not use human review as a blanket fallback when a narrower automation,
+  validation gate, rollback path, or orchestration agent would make the task
+  reasonably safe.
 - Do not use Codex subagents unless the user requested them or applicable
   workflow guidance tells the agent to ask and receive permission first.
 - Keep the first version small enough to review: one workflow, one repo, or one

@@ -30,6 +30,8 @@ def test_skill_metadata_names_framework_neutral_scope() -> None:
         "OpenAI Agents SDK",
         "LangGraph",
         "Hermes",
+        "full-auto",
+        "auto-with-escalation",
         "no automation yet",
     ]:
         assert required in description
@@ -41,6 +43,8 @@ def test_skill_body_preserves_planning_not_runtime_boundary() -> None:
     assert "framework-neutral planning surface" in body
     assert "Do not implement framework runtime code" in body
     assert "Do not wrap OpenAI Agents SDK, LangGraph, Hermes, or Codex runtimes" in body
+    assert "Prefer safe full automation" in body
+    assert "Use human review only for the exact" in body
     assert "Return a concise plan with these sections" in body
 
 
@@ -51,6 +55,8 @@ def test_openai_interface_metadata_matches_skill() -> None:
     assert interface["display_name"] == "Design Agent Automation Workflow"
     assert "agent or automation surface" in interface["short_description"]
     assert "$design-agent-automation-workflow" in interface["default_prompt"]
+    assert "safe full automation" in interface["default_prompt"]
+    assert "auto-with-escalation" in interface["default_prompt"]
     assert "implementation handoff" in interface["default_prompt"]
 
 
@@ -64,6 +70,8 @@ def test_framework_reference_covers_all_selection_surfaces() -> None:
         "OpenAI Agents SDK service",
         "LangGraph graph",
         "Hermes-specific workflow",
+        "Full-auto execution",
+        "Auto-with-escalation",
         "No automation yet",
     ]:
         assert required in reference

@@ -14,7 +14,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
 - [ ] Add a maintainer workflow for moving or re-homing skills between repositories.
 - [ ] Add durable process support for noticing changes in OpenAI Codex docs and the open `.agents` skill discovery convention.
-- [ ] Define an eval workflow for shipped skills against real Codex runtimes.
+- [x] Move framework-neutral agent and skill eval design into `productivity-skills:design-agent-eval-workflow`; keep runtime-specific eval implementation with the owning plugin or repo.
 
 ### android-dev-skills
 
@@ -39,7 +39,9 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Add `maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
 - [x] Add `design-agent-automation-workflow` as a framework-neutral planning skill for choosing between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet.
-- [ ] Forward-test `design-agent-automation-workflow` against real agent and automation planning requests before adding deterministic scaffolding scripts.
+- [x] Skew `design-agent-automation-workflow` toward safe full automation by default, with exact escalation gates instead of broad human review when a task can be made reasonably safe.
+- [x] Add `design-agent-eval-workflow` for agent, skill, prompt, and automation eval design before runtime-specific implementation.
+- [ ] Forward-test `design-agent-automation-workflow` and `design-agent-eval-workflow` against real agent, automation, and eval planning requests before adding deterministic scaffolding scripts.
 - [ ] Add lightweight validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Add validation checks for README layout and active skill inventory consistency.
 
