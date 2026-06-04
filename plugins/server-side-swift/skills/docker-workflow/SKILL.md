@@ -64,7 +64,8 @@ Use Vapor, Hummingbird, SwiftPM, or Linux distribution documentation when the co
 4. Prefer a multi-stage Dockerfile for production images.
 5. Keep build inputs explicit and cache-friendly.
 6. Keep secrets out of images, layers, build args, logs, and committed Compose files.
-7. Validate the image with the narrowest useful build, test, run, or HTTP check.
+7. Check runtime safety before treating an image as production-ready.
+8. Validate the image with the narrowest useful build, test, run, or HTTP check.
 
 ## Dockerfile Shape
 
@@ -76,13 +77,43 @@ For production server-side Swift images:
 - copy only the built executable, needed resources, and required runtime assets into the final image
 - use a runtime base image that matches the Swift runtime and Linux distribution requirements
 - set `WORKDIR` explicitly
+- run as a non-root user when the service does not need privileged container behavior
 - expose only the documented service port when `EXPOSE` is useful for readers or tooling
 - define `ENTRYPOINT` as the server executable when the image should run like the service command
 - use `CMD` only for default arguments that operators may override
+- keep `SIGTERM` and graceful shutdown behavior visible when the service, framework, or deployment target depends on clean shutdown
+- choose platform and architecture deliberately when building on Apple silicon for Linux deployment, CI, or multi-architecture registries
 
 Use named build stages such as `build`, `test`, `debug`, and `runtime` when the image has more than one stage. Named stages make later `COPY --from=<stage>` instructions easier to maintain when the Dockerfile changes.
 
 Do not leave build tools, package-manager caches, source checkout credentials, test fixtures, or debugging tools in the production runtime image unless the runtime truly needs them.
+
+## Build Context And Runtime Assets
+
+Check `.dockerignore` as part of every Dockerfile change. It should normally exclude build output, source-control internals, editor state, local secrets, and host-only test artifacts that do not belong in image layers.
+
+For Swift services, inspect whether the executable needs runtime assets beyond the compiled binary:
+
+- package resources declared through SwiftPM
+- Vapor public files, Leaf templates, migrations, or command resources
+- Hummingbird static files, certificates, fixture data, or generated assets
+- OpenAPI documents or generated support files that the service reads at runtime
+- configuration examples that are safe to ship versus ignored local overrides
+
+If a resource is needed at runtime, copy it intentionally into the final image and name why it is required. If it is only for tests, local development, or docs, keep it out of the production runtime stage.
+
+## Runtime Safety
+
+Before calling an image production-ready, check:
+
+- non-root execution, file ownership, and writable directories used by the app
+- graceful shutdown behavior for `SIGTERM` and the hosting platform's stop timeout
+- health check shape when the deployment target expects container health reporting
+- explicit port binding and host binding, especially when a framework defaults to localhost
+- whether debug flags, package caches, shell history, test data, or diagnostic tools survived into the runtime image
+- whether the chosen platform and architecture match the deployment target, especially when building on Apple silicon
+
+Do not add a health check endpoint just to satisfy Docker if the service does not have a real readiness or liveness signal. Hand route design to the Vapor or Hummingbird workflow when the application needs a new health route.
 
 ## Compose Shape
 
@@ -123,8 +154,9 @@ Prefer this order:
 2. Build the image with the repository's documented tag.
 3. Build a specific target such as `test`, `debug`, or `runtime` when the Dockerfile provides one.
 4. Run the container with explicit port and environment values.
-5. Use `curl` against the running service only when runtime HTTP behavior matters.
-6. Use `docker compose up --build` only when multiple services are part of the behavior being proven.
+5. Inspect the final image enough to catch root-user, missing-resource, entry-point, or accidental-debug-tool problems when production readiness is in scope.
+6. Use `curl` against the running service only when runtime HTTP behavior matters.
+7. Use `docker compose up --build` only when multiple services are part of the behavior being proven.
 
 When a Docker command fails, report the exact image, stage, instruction, service, port, environment variable, or mounted path involved. Include the likely cause, such as a Swift toolchain mismatch, missing Linux package, wrong executable name, wrong working directory, missing resource copy, architecture mismatch, bad secret path, or service dependency not ready.
 
@@ -147,3 +179,4 @@ Return:
 - Do not add Docker files to an ordinary route or model change unless deployment scope was requested.
 - Do not leave duplicate production and development Dockerfiles when one multi-stage Dockerfile plus Compose overrides would be clearer.
 - Do not treat Docker Desktop as the only possible Docker-compatible runtime unless the user's machine or repository explicitly requires it.
+- Do not ship a production runtime image as root, with missing SwiftPM resources, or with avoidable debug tooling unless the repository documents that requirement.

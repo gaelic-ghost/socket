@@ -62,6 +62,7 @@ Treat documentation on a repository's `main` branch as current-branch documentat
    - supported macOS version for the selected release
    - installed `container` CLI or package source checkout
    - installed Linux kernel or documented kernel setup path
+   - started container system services when the selected command needs them
 4. Decide whether the repository needs a committed change:
    - no change when the task is local runtime diagnosis only
    - docs or scripts when the workflow is repeatable for contributors
@@ -78,6 +79,20 @@ Use plain language when choosing between the paths:
 - Containerization Swift API work means writing Swift code against Apple's packages to manage images, registries, filesystems, VMs, or containerized processes.
 
 Prefer Docker guidance when the service needs portable deployment artifacts for Linux hosts, CI, or common container platforms. Prefer Apple Containerization guidance when the user specifically wants Apple's local macOS runtime, lower-level Swift APIs, or a comparison on Apple silicon.
+
+## Capability Probe
+
+Before recommending concrete Apple `container` commands, scripts, or flags, run or request the smallest probe that proves the local tool and docs match the intended workflow:
+
+- identify the installed `container` version or the checked source/release tag
+- open the matching release documentation when release-stable behavior matters
+- verify the host is an Apple silicon Mac on a supported macOS version
+- verify whether the container system service is started, and start it only through the documented command path when needed
+- verify kernel setup status through documented prompts, docs, or CLI diagnostics
+- inspect `container --help` and the relevant subcommand help before using Docker-like flags
+- record whether the task depends on Rosetta, amd64 images, registry credentials, networking, volumes, or published ports
+
+If any probe fails, report the missing capability and stop before adding repo scripts or docs that would encode a workflow the machine cannot run.
 
 ## CLI Workflow
 
