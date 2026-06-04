@@ -33,7 +33,7 @@
 - Milestone 7: Python skills plugin expansion - In Progress
 - Milestone 8: Server-Side Swift skills plugin - In Progress
 - Milestone 9: Rust skills plugin - In Progress
-- Milestone 10: Expo inline native modules workflow - Planned
+- Milestone 10: Expo inline native modules workflow - Implemented
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -206,7 +206,7 @@ In Progress
 
 ### Status
 
-Implemented locally
+Implemented
 
 ### Scope
 
@@ -231,7 +231,7 @@ Implemented locally
 - [x] The skill requires current official Expo documentation for SDK 56 inline module and type generation behavior before making claims or edits.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported `web-dev-skills` surface.
 
-Decision note: the root marketplace entry remains `NOT_AVAILABLE` in this slice. Moving it to an installable catalog entry would widen the user-facing marketplace surface beyond the first skill implementation.
+Decision note: the root marketplace entry is installable now that `web-dev-skills` ships real skill content.
 
 ## Small Tickets
 
@@ -278,7 +278,7 @@ Decision note: the root marketplace entry remains `NOT_AVAILABLE` in this slice.
 - Completed [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37) by hardening release and PR scripts around delayed GitHub state.
 - Completed [#39](https://github.com/gaelic-ghost/socket/issues/39) by adding the Swift Package Index add-package gate and one-shot script around the documented `SwiftPackageIndex/PackageList` Add Package issue form.
 - Planned a `swiftasb-skills` child plugin to help agents explain SwiftASB and build SwiftUI, AppKit, and Swift package integrations from a Socket-visible guidance surface.
-- Planned a `web-dev-skills` Expo inline native modules workflow for SDK 56+ inline Swift/Kotlin modules, `expo-type-information`, CNG/prebuild validation, and Apple Dev Skills handoffs.
+- Added and exposed a `web-dev-skills` Expo inline native modules workflow for SDK 56+ inline Swift/Kotlin modules, `expo-type-information`, CNG/prebuild validation, and Apple Dev Skills handoffs.
 - Updated `productivity-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
 - Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.

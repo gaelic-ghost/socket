@@ -68,6 +68,7 @@ Currently available from the catalog:
 - `speak-swiftly`
 - `swiftasb-skills`
 - `things-app`
+- `web-dev-skills`
 
 ## Plugin Status
 
@@ -86,12 +87,12 @@ Current Socket catalog shape:
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance
 - `things-app`: mixed skill plus bundled MCP server for Things.app workflows
+- `web-dev-skills`: Expo SDK 56+ inline native modules, type generation, native-boundary inspection, and validation handoff guidance
 
 Placeholder directories for future plugins (not available for install):
 
 - `android-dev-skills`
 - `spotify`
-- `web-dev-skills`
 
 ## Development
 
