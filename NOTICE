@@ -13,3 +13,47 @@ carry their own license files, notices, packaging metadata, and release
 contracts. Review each child repository's own shipped legal surfaces
 before reusing or redistributing that child surface independently of the
 root superproject.
+
+Third-Party Trademarks And Brand References
+
+This repository and the packaged plugin surfaces under `plugins/` refer to
+third-party technologies, developer tools, programming languages, product
+names, and visual identities for identification, compatibility, and workflow
+description only. Those references do not imply sponsorship, endorsement,
+approval, or affiliation unless a plugin surface says so through an explicit
+written license or partnership statement.
+
+Socket, Gaelic Ghost, and the plugins in this repository are independent
+projects and are not affiliated with, authorized by, sponsored by, endorsed
+by, or otherwise approved by Apple Inc., the Swift open source project, the
+Rust Project, the Rust Foundation, Microsoft Corporation, or the Microsoft
+group of companies.
+
+Apple, Xcode, Swift, SwiftUI, SwiftData, Safari, TestFlight, and the Swift
+Logo are trademarks of Apple Inc., registered in the U.S. and other
+countries and regions. The Apple logo is a trademark of Apple Inc. Any
+Apple, Xcode, Swift, SwiftUI, SwiftData, Safari, TestFlight, or Swift Logo
+reference in this repository is referential and descriptive.
+
+Rust and Cargo are trademarks of the Rust Foundation. Rust-related plugin
+artwork in this repository is project-specific artwork for Socket's Rust
+workflow plugin and is not official Rust Project or Rust Foundation artwork.
+To the extent any Rust or Cargo logo artwork is reused, adapted, or visually
+referenced, the Rust and Cargo logos are owned by the Rust Foundation and
+distributed under the Creative Commons Attribution license, and use of those
+logos, names, and brands is also governed by the Rust Language Trademark
+Policy. The Rustacean/Ferris mascot artwork by Karen Rustad Tolva is
+available under the CC0 1.0 Universal Public Domain Dedication; Socket's
+Rust-related artwork is modified and stylized from that general mascot
+concept.
+
+Microsoft, .NET, C#, F#, ASP.NET, and related Microsoft product and service
+names are trademarks of the Microsoft group of companies. Any Microsoft or
+.NET reference in this repository is referential and descriptive.
+
+All other third-party trademarks, service marks, names, logos, and brand
+features are the property of their respective owners.
+
+This notice does not grant any license or permission to use third-party
+trademarks, logos, icons, trade dress, or brand features outside the
+referential uses allowed by the applicable owner policies or by law.
