@@ -159,8 +159,8 @@ In Progress
 - [ ] Add Swift observability and tracing guidance that covers Swift Logging, Metrics, Distributed Tracing, and OpenTelemetry-style instrumentation for service diagnostics.
 - [ ] Add a server authentication and authorization workflow covering Vapor and Hummingbird auth boundaries, sessions, JWT, OAuth/OIDC handoffs, password storage, middleware placement, and security-sensitive testing without duplicating client Keychain guidance.
 - [ ] Add a server app-sync workflow covering sync contracts, conflict handling, incremental change feeds, idempotent writes, cursor/token semantics, background job handoffs, and API-shape coordination without absorbing the separate OpenAPI or RPC workflow.
-- [ ] Add a Docker workflow for server-side Swift packages, including Dockerfile shape, Compose-local development, Linux image concerns, environment configuration, and build/test handoffs.
-- [ ] Add an Apple Containerization workflow for Apple's container tooling, keeping it distinct from generic Docker guidance and tied to current official Apple documentation.
+- [x] Add a Docker workflow for server-side Swift packages, including Dockerfile shape, Compose-local development, Linux image concerns, environment configuration, and build/test handoffs.
+- [x] Add an Apple Containerization workflow for Apple's container tooling, keeping it distinct from generic Docker guidance and tied to current official Apple documentation.
 - [x] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
 
