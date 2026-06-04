@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI, Safari, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple, Swift, SwiftUI, Icon Composer app icons, Safari, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -57,6 +57,7 @@ Use Apple Dev Skills when an agent is helping with:
 
 - Swift and SwiftUI implementation
 - Xcode build, run, test, and project workflows
+- Icon Composer app icon design, preview, and Xcode handoff
 - Safari extension and SafariServices integration choices
 - Swift OpenAPI client generation and `URLSession` transport integration
 - Swift package bootstrap, build, and testing
@@ -118,6 +119,7 @@ uv run pytest
 - `bootstrap-xcode-app-project`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
+- `icon-composer-app-icon-workflow`
 - `safari-extension-control-workflow`
 - `structure-swift-sources`
 - `swift-openapi-client-workflow`

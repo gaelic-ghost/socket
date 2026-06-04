@@ -20,6 +20,7 @@
 - [Milestone 42: Safari Extension And Control Workflow](#milestone-42-safari-extension-and-control-workflow)
 - [Milestone 43: Client Auth, Keychain, and App Sync Workflow](#milestone-43-client-auth-keychain-and-app-sync-workflow)
 - [Milestone 44: Swift OpenAPI Client Workflow](#milestone-44-swift-openapi-client-workflow)
+- [Milestone 45: Icon Composer App Icon Workflow](#milestone-45-icon-composer-app-icon-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -53,6 +54,7 @@
 - Milestone 42: Safari Extension And Control Workflow - Completed
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
+- Milestone 45: Icon Composer App Icon Workflow - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -473,6 +475,25 @@ Completed
 - [x] The workflow keeps generated client code out of UI views when a small app-facing service is the cleaner boundary.
 - [x] The workflow names server-side OpenAPI/RPC, Xcode build/run, Xcode testing, Swift package, and docs-exploration handoffs.
 
+## Milestone 45: Icon Composer App Icon Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a dedicated Icon Composer workflow skill for Apple app icon production across brief intake, source artwork preparation, GUI guidance, preview export, and Xcode handoff.
+- [x] Keep the workflow docs-first and explicit about current Apple Icon Composer behavior before design or integration choices.
+- [x] Prefer mature Mac-native artwork tools such as Pixelmator Pro, Acorn 8, and Retrobatch when image editing or batch export work is needed.
+- [x] Include Computer Use guidance for operating Icon Composer's GUI without silently making destructive file or project changes.
+- [x] Preserve the future packaged Mac App Store agent direction without folding that product into the first skill implementation.
+
+### Exit Criteria
+
+- [x] The repository ships `icon-composer-app-icon-workflow` as the explicit owner for Icon Composer app icon production guidance.
+- [x] The workflow names `ictool` preview export, source artwork preparation, Computer Use, and Xcode workflow handoffs without pretending the design pass is fully automated.
+
 ## Backlog Candidates
 
 - [ ] Record plausible future work that is not yet committed to a milestone.
@@ -480,6 +501,7 @@ Completed
 ## History
 
 - Added `safari-extension-control-workflow` as the explicit owner for Safari Web Extension, Safari Web Inspector Extension, Safari App Extension, SafariServices, messaging, content blocker, authentication, and external automation decision guidance.
+- Added `icon-composer-app-icon-workflow` as the explicit owner for Icon Composer app icon production, including Mac-native artwork preparation, Computer Use GUI guidance, `ictool` preview export, Xcode handoff, and future packaged-agent direction.
 - Tightened Xcode project guidance so tracked `.pbxproj` diffs produced by Xcode, XcodeGen, or other project-aware workflows are treated as critical project state that must be reviewed, staged, and committed before push, merge, release, or cleanup.
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.

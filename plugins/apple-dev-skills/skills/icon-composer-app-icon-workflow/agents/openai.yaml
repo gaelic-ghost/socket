@@ -1,0 +1,4 @@
+interface:
+  display_name: "Icon Composer App Icon Workflow"
+  short_description: "Design Apple app icons with Icon Composer"
+  default_prompt: "Use $icon-composer-app-icon-workflow to plan, operate, preview, and integrate an Apple app icon with Icon Composer, starting from current Apple docs, checking local Icon Composer and ictool availability, preparing Mac-native source artwork, using Computer Use carefully for the GUI when requested, exporting review previews, and handing Xcode project integration to the Xcode workflow skills."
