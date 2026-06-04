@@ -1,7 +1,7 @@
 {
   "name": "server-side-swift",
   "version": "6.14.5",
-  "description": "Codex skills for building, running, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, and SwiftPM-first workflows.",
+  "description": "Codex skills for building, running, containerizing, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, Docker, Apple Containerization, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -23,13 +23,17 @@
     "persistence",
     "openapi",
     "rpc",
+    "docker",
+    "containerization",
+    "apple-container",
+    "oci",
     "swiftpm"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side Swift",
-    "shortDescription": "Server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, and RPC workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Hummingbird, and Swift OpenAPI documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, environment configuration, tests, and deployment handoffs.",
+    "shortDescription": "Server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, RPC, Docker, and Apple Containerization workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Hummingbird, Swift OpenAPI, Docker, and Apple Containerization documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -42,6 +46,10 @@
       "Create a Hummingbird service plan using current Hummingbird docs and SwiftPM workflows.",
       "Add Swift OpenAPI Generator to a server-side Swift package and wire the generated API to Vapor or Hummingbird.",
       "Decide whether this Swift service boundary should use OpenAPI, JSON-RPC, gRPC, MCP-style tools, or ordinary HTTP routes.",
+      "Add a Dockerfile and Compose workflow for this server-side Swift package.",
+      "Diagnose why this Swift service Docker image fails to build, start, or bind its port.",
+      "Plan an Apple Containerization workflow for running this Swift service locally on Apple silicon.",
+      "Compare Docker and Apple's container CLI for this server-side Swift development workflow.",
       "Inspect this Vapor app and explain its routes, configuration, and run commands.",
       "Inspect this Hummingbird app and explain its router, middleware, request contexts, and run commands.",
       "Inspect this OpenAPI-backed Swift service and explain its contract, generated symbols, transport, and validation commands.",
