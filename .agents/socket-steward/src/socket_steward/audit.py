@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -112,8 +113,53 @@ def _audit_docs(repo_root: Path) -> AuditReport:
                         path="ROADMAP.md",
                     )
                 )
+        findings.extend(_stale_roadmap_status_findings(text))
 
     return _report("docs", findings)
+
+
+def _stale_roadmap_status_findings(text: str) -> list[AuditFinding]:
+    findings: list[AuditFinding] = []
+    for title, body in _milestone_sections(text):
+        status_match = re.search(r"(?ms)^### Status\s*\n\s*(.+?)\s*(?:\n### |\Z)", body)
+        if status_match is None:
+            continue
+
+        status = status_match.group(1).strip()
+        if status != "In Progress":
+            continue
+
+        checkbox_lines = re.findall(r"(?m)^- \[[ xX]\] .+$", body)
+        if not checkbox_lines:
+            continue
+
+        open_items = [line for line in checkbox_lines if line.startswith("- [ ]")]
+        if open_items:
+            continue
+
+        findings.append(
+            AuditFinding(
+                code="roadmap-status-stale",
+                severity="warning",
+                message=(
+                    f"{title} is marked In Progress, but every checklist item "
+                    "in the milestone is complete. Update the status or add the "
+                    "remaining concrete work."
+                ),
+                path="ROADMAP.md",
+            )
+        )
+    return findings
+
+
+def _milestone_sections(text: str) -> tuple[tuple[str, str], ...]:
+    matches = list(re.finditer(r"(?m)^## (Milestone \d+: .+)$", text))
+    sections: list[tuple[str, str]] = []
+    for index, match in enumerate(matches):
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        sections.append((match.group(1), text[start:end]))
+    return tuple(sections)
 
 
 def _audit_guidance(repo_root: Path) -> AuditReport:

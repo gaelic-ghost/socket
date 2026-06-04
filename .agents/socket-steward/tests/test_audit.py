@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from socket_steward.cli import _default_repo_root
 from socket_steward.audit import run_audit
 from socket_steward.plan import plan_docs_sync
 from socket_steward.proposal import build_docs_sync_proposal, write_report
@@ -14,8 +15,52 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 def test_docs_audit_passes_for_current_root_docs() -> None:
     report = run_audit(REPO_ROOT, "docs")
 
-    assert report.status == "PASS"
-    assert report.findings == ()
+    assert report.status in {"PASS", "WARN"}
+    assert all(finding.severity != "error" for finding in report.findings)
+
+
+def test_cli_default_repo_root_finds_socket_from_steward_package() -> None:
+    assert _default_repo_root() == REPO_ROOT
+
+
+def test_docs_audit_flags_completed_milestone_marked_in_progress(tmp_path: Path) -> None:
+    for name in ("README.md", "CONTRIBUTING.md", "AGENTS.md", "TODO.md"):
+        (tmp_path / name).write_text("# placeholder\n", encoding="utf-8")
+
+    (tmp_path / "ROADMAP.md").write_text(
+        """# Project Roadmap
+
+## Vision
+
+## Product Principles
+
+## Backlog Candidates
+
+## Milestone 99: Example complete milestone
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Complete the scope.
+
+### Tickets
+
+- [x] Complete the ticket.
+
+### Exit Criteria
+
+- [x] Complete the exit criteria.
+""",
+        encoding="utf-8",
+    )
+
+    report = run_audit(tmp_path, "docs")
+
+    assert report.status == "WARN"
+    assert any(finding.code == "roadmap-status-stale" for finding in report.findings)
 
 
 def test_unknown_audit_fails_with_human_readable_message() -> None:

@@ -16,7 +16,7 @@ from socket_steward.workflow import apply_docs_sync, prepare_docs_sync
 def main() -> int:
     parser = _build_parser()
     args = parser.parse_args()
-    repo_root = Path(args.repo_root)
+    repo_root = Path(args.repo_root) if args.repo_root else _default_repo_root()
 
     if args.command == "audit":
         audit_report = run_audit(repo_root, args.audit_name)
@@ -82,8 +82,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--repo-root",
-        default=".",
-        help="Path to the Socket repository root. Defaults to the current directory.",
+        default=None,
+        help=(
+            "Path to the Socket repository root. Defaults to the nearest parent "
+            "with Socket root docs and marketplace metadata."
+        ),
     )
     subparsers = parser.add_subparsers(dest="command")
 
@@ -144,6 +147,18 @@ def _build_parser() -> argparse.ArgumentParser:
     )
 
     return parser
+
+
+def _default_repo_root() -> Path:
+    for start in (Path.cwd(), Path(__file__).resolve()):
+        for candidate in (start, *start.parents):
+            if (
+                (candidate / "ROADMAP.md").is_file()
+                and (candidate / "AGENTS.md").is_file()
+                and (candidate / ".agents" / "plugins" / "marketplace.json").is_file()
+            ):
+                return candidate
+    return Path.cwd()
 
 
 if __name__ == "__main__":
