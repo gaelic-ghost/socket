@@ -110,6 +110,10 @@ swift run
 
 Use `vapor new MyService -n` only when the user wants the non-interactive bare template and the documented options fit the task. Otherwise, preserve the interactive template questions because they choose real project features such as Fluent, database support, or Leaf.
 
+## Codex GUI Local Environment
+
+When a Vapor repo should be easy to use from Codex GUI Worktree mode, start from `templates/codex-local-environments/vapor.toml`. Keep the copied file under `.codex/environments/`, keep paths repo-relative, and adjust the executable name only when the app target is not `App`.
+
 ## App Structure
 
 For typical Vapor 4 projects:

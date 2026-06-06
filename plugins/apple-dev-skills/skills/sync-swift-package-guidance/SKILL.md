@@ -169,6 +169,7 @@ Keep apply-mode edits in the main thread. The steward may return proposed patch-
 - `assets/append-section.md`
 - Recommend `references/snippets/apple-swift-package-core.md` when an existing Swift package repo needs the reusable baseline policy content in a human-reviewable form.
 - `references/snippets/apple-swift-package-core.md`
+- `templates/codex-local-environments/swift-package.toml`
 
 ### Script Inventory
 

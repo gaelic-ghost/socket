@@ -78,6 +78,7 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Prefer edits through Xcode-aware project structure and keep project file changes intentional and reviewed closely.
 - Use `xcodebuild` for Apple platform integration validation, including scheme, destination or SDK, and configuration-specific build or test runs.
 - Keep `xcodebuild` invocations reproducible in automation by passing explicit schemes, destinations or SDKs, and configurations when relevant.
+- For Codex GUI worktree-first Xcode repos, use a portable `.codex/environments/*.toml` local environment file when the repo wants shared app setup or action buttons. Start from `apple-dev-skills/templates/codex-local-environments/xcode-project.toml`, keep paths repo-relative, and prefer `-derivedDataPath ./DerivedData` or another ignored repo-local build directory instead of user-global DerivedData.
 - When scripts or terminal workflows add files on disk, verify that Xcode project membership, target membership, build-phase membership, and resource-bundle inclusion all match the intended result; files appearing in the directory tree alone are not enough.
 - Direct filesystem edits outside `.pbxproj` are generally safe when Xcode is closed or when the current project is not open in Xcode, but still verify that the Xcode project picks up the intended files and memberships afterward.
 - Prefer Debug builds for everyday edit-build-test loops, but validate Release builds explicitly when optimization, packaging, launch behavior, watchdog timing, or deployment realism matters.

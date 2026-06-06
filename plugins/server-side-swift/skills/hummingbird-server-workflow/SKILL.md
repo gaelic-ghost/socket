@@ -111,6 +111,10 @@ swift run
 
 When adding Hummingbird to an existing package, edit `Package.swift` through normal SwiftPM dependency rules and follow current Hummingbird docs for package products. Do not copy a template over an existing service unless the user explicitly asks for replacement.
 
+## Codex GUI Local Environment
+
+When a Hummingbird repo should be easy to use from Codex GUI Worktree mode, start from `templates/codex-local-environments/hummingbird.toml`. Keep the copied file under `.codex/environments/`, keep paths repo-relative, and replace `EXECUTABLE_NAME` with the repo's actual executable target.
+
 ## App Structure
 
 For typical Hummingbird 2 projects:

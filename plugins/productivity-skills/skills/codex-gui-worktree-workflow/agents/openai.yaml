@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex GUI Worktree Workflow"
+  short_description: "Plan Codex app worktree-first workflows, local environments, actions, and stack handoffs."
+  default_prompt: "Use $codex-gui-worktree-workflow to plan or align a repo for Codex GUI worktree-first development, choose between Codex managed worktrees, permanent Codex worktrees, plain Git worktrees, and Worktrunk-managed worktrees, keep local environment files portable, explain sandbox and auto-review boundaries, and hand stack-specific build, test, run, or Xcode commands to the owning stack plugin."

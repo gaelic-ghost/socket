@@ -164,6 +164,7 @@ Keep apply-mode edits in the main thread. The steward may return proposed patch-
 - `assets/append-section.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when an existing Xcode repo needs the reusable baseline policy content in a human-reviewable form.
 - `references/snippets/apple-xcode-project-core.md`
+- `templates/codex-local-environments/xcode-project.toml`
 
 ### Script Inventory
 

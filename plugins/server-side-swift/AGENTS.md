@@ -13,6 +13,7 @@ This file is the Server-Side Swift child-plugin override for work done from `soc
 
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
 - Prefer Swift Package Manager as the source of truth for server-side Swift package structure, dependencies, builds, tests, and run commands.
+- For Codex GUI worktree-first server-side Swift repos, keep local environment files portable and repo-owned. Start from `templates/codex-local-environments/`, keep paths repo-relative, and adjust executable names instead of committing machine-local paths.
 - Use official framework documentation first for server-side Swift libraries and tools. For Vapor work, use the official Vapor docs before proposing CLI usage, app structure, migrations, deployment, or runtime changes. For Hummingbird work, use the official Hummingbird docs before proposing app setup, routes, middleware, request contexts, testing, service lifecycle, deployment, or runtime changes.
 - For Docker work, use current official Docker documentation and Swift Docker image sources before proposing Dockerfile, Compose, BuildKit, image, registry, or runtime changes.
 - For Apple Containerization work, use the official `apple/containerization` and `apple/container` documentation for the relevant branch or release before proposing `container` CLI commands, Containerization Swift API use, host requirements, kernel setup, Rosetta behavior, image, registry, or runtime changes.
