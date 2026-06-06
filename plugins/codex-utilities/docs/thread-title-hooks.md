@@ -53,10 +53,41 @@ The proposed name is currently the last path component of `cwd`, truncated to
 `CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH` characters. The default maximum
 is `48`.
 
+Projectless Codex chat directories are treated specially. If `cwd` appears under
+the default Codex chat root:
+
+```text
+~/Documents/Codex/YYYY-MM-DD/<thread-directory>
+```
+
+the hook skips prefixing by default so projectless chats keep Codex's generated
+title. Override the root with `CODEX_UTILITIES_PROJECTLESS_ROOT`. To opt into a
+shared projectless prefix such as `Chat`, set
+`CODEX_UTILITIES_PROJECTLESS_THREAD_PREFIX`.
+
 The thread id candidate is read from `thread_id`, `threadId`, `session_id`, then
 `sessionId`. Current Codex hook docs describe `session_id`; keep rename mode
 disabled by default until a live GUI new-thread test confirms that value is the
 same id accepted by `thread/name/set`.
+
+A live projectless thread created after trusting the plugin hook produced this
+`SessionStart` payload shape:
+
+```json
+{
+  "session_id": "019e9e4e-e0c5-7591-ac1d-51c09ef83faa",
+  "transcript_path": "~/.codex/sessions/2026/06/06/rollout-2026-06-06T15-00-30-019e9e4e-e0c5-7591-ac1d-51c09ef83faa.jsonl",
+  "cwd": "~/Documents/Codex/2026-06-06/codex-utilities-projectless-hook-test",
+  "hook_event_name": "SessionStart",
+  "model": "gpt-5.5",
+  "permission_mode": "default",
+  "source": "startup"
+}
+```
+
+The payload did not include an explicit saved-project or projectless marker, so
+the projectless rule is path-based until Codex exposes richer thread metadata to
+hooks.
 
 ## Rename Transport
 

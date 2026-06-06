@@ -39,16 +39,16 @@ async function handleThreadTitle(payload, config) {
     };
   }
 
-  const prefix = titlePrefixFromPayload(payload, config);
-  if (!prefix) {
+  const prefixPlan = titlePrefixPlanFromPayload(payload, config);
+  if (!prefixPlan.prefix) {
     return {
       ...base,
       action: "skipped",
-      reason: "SessionStart payload did not include a usable cwd for title prefixing.",
+      reason: prefixPlan.reason,
     };
   }
 
-  const proposedName = prefix;
+  const proposedName = prefixPlan.prefix;
   const planned = { ...base, action: "planned", threadId, proposedName };
   if (config.mode === "dry-run") {
     return planned;
@@ -84,6 +84,12 @@ function readConfig() {
     process.env.CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH,
     48,
   );
+  const projectlessRoot =
+    process.env.CODEX_UTILITIES_PROJECTLESS_ROOT ??
+    path.join(os.homedir(), "Documents", "Codex");
+  const projectlessThreadPrefix = optionalTrimmedStringFromEnv(
+    process.env.CODEX_UTILITIES_PROJECTLESS_THREAD_PREFIX,
+  );
   const timeoutMs = positiveIntegerFromEnv(
     process.env.CODEX_UTILITIES_APP_SERVER_TIMEOUT_MS,
     1500,
@@ -96,6 +102,8 @@ function readConfig() {
     mode,
     payloadLogPath: path.join(dataDir, "session-start.jsonl"),
     pluginVersion: readPluginVersion(pluginRoot),
+    projectlessRoot,
+    projectlessThreadPrefix,
     socketPath,
     timeoutMs,
   };
@@ -127,6 +135,14 @@ function positiveIntegerFromEnv(rawValue, fallback) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
+function optionalTrimmedStringFromEnv(rawValue) {
+  if (typeof rawValue !== "string") {
+    return null;
+  }
+  const trimmed = rawValue.trim();
+  return trimmed ? trimmed : null;
+}
+
 function threadIdFromPayload(payload) {
   for (const key of ["thread_id", "threadId", "session_id", "sessionId"]) {
     if (typeof payload[key] === "string" && payload[key].trim()) {
@@ -136,17 +152,50 @@ function threadIdFromPayload(payload) {
   return null;
 }
 
-function titlePrefixFromPayload(payload, config) {
+function titlePrefixPlanFromPayload(payload, config) {
   if (typeof payload.cwd !== "string") {
-    return null;
+    return {
+      prefix: null,
+      reason: "SessionStart payload did not include a usable cwd for title prefixing.",
+    };
+  }
+  if (isProjectlessCodexChatCwd(payload.cwd, config.projectlessRoot)) {
+    if (config.projectlessThreadPrefix) {
+      return {
+        prefix: truncateTitlePrefix(config.projectlessThreadPrefix, config.maxPrefixLength),
+        reason: null,
+      };
+    }
+    return {
+      prefix: null,
+      reason:
+        "SessionStart cwd looks like a projectless Codex chat directory, and no projectless title prefix is configured.",
+    };
   }
   const prefix = path.basename(payload.cwd).replace(/\s+/g, " ").trim();
   if (!prefix) {
-    return null;
+    return {
+      prefix: null,
+      reason: "SessionStart payload cwd did not include a usable final path component.",
+    };
   }
-  return prefix.length > config.maxPrefixLength
-    ? prefix.slice(0, config.maxPrefixLength).trim()
-    : prefix;
+  return {
+    prefix: truncateTitlePrefix(prefix, config.maxPrefixLength),
+    reason: null,
+  };
+}
+
+function isProjectlessCodexChatCwd(cwd, projectlessRoot) {
+  const relativePath = path.relative(path.resolve(projectlessRoot), path.resolve(cwd));
+  if (!relativePath || relativePath.startsWith("..") || path.isAbsolute(relativePath)) {
+    return false;
+  }
+  const [datePart] = relativePath.split(path.sep);
+  return /^\d{4}-\d{2}-\d{2}$/.test(datePart);
+}
+
+function truncateTitlePrefix(prefix, maxPrefixLength) {
+  return prefix.length > maxPrefixLength ? prefix.slice(0, maxPrefixLength).trim() : prefix;
 }
 
 async function setThreadName({ socketPath, threadId, name, timeoutMs }) {
