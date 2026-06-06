@@ -153,6 +153,7 @@ def test_main_accepts_plugin_with_read_only_custom_agent(
             [
                 'name = "swift-steward"',
                 'description = "Read-heavy Swift repo-maintenance steward."',
+                'model = "gpt-5.4-mini"',
                 'sandbox_mode = "read-only"',
                 'nickname_candidates = ["Swift Steward"]',
                 'developer_instructions = """Return a draft patch plan for review. Do not apply edits."""',
@@ -182,6 +183,35 @@ def test_main_rejects_custom_agent_without_read_only_sandbox(
                 'name = "swift-steward"',
                 'description = "Read-heavy Swift repo-maintenance steward."',
                 'sandbox_mode = "workspace-write"',
+                'developer_instructions = """Return a draft patch plan for review. Do not apply edits."""',
+                "",
+            ]
+        ),
+    )
+
+    with pytest.raises(SystemExit):
+        run_validator(repo_root, monkeypatch)
+
+
+def test_main_rejects_custom_agent_with_empty_model(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_marketplace_repo(
+        tmp_path,
+        {
+            "name": "example-skills",
+            "skills": "./skills/",
+        },
+    )
+    write(
+        repo_root / "plugins" / "example-skills" / ".codex" / "agents" / "swift-steward.toml",
+        '\n'.join(
+            [
+                'name = "swift-steward"',
+                'description = "Read-heavy Swift repo-maintenance steward."',
+                'model = ""',
+                'sandbox_mode = "read-only"',
                 'developer_instructions = """Return a draft patch plan for review. Do not apply edits."""',
                 "",
             ]

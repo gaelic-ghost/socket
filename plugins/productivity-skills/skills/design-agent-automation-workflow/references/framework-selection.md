@@ -28,6 +28,11 @@ automation surface.
 | Auto-with-escalation | Most of the workflow is safe, but one exact decision still needs user review when a named trigger fires. | The whole workflow is still underspecified, or escalation would happen on nearly every run. |
 | No automation yet | The outcome, validation, owner, approval gate, or rollback path is unclear after narrowing the workflow. | The user already has a bounded repeatable task with known checks and a safe first run. |
 
+For read-heavy custom Codex subagent roles, prefer a role-local model choice over
+a global policy. `gpt-5.4-mini` is a good soft default for bounded exploration
+or audit workers; use a stronger model or omit the model override when the
+worker owns hard synthesis, ambiguous debugging, or write-plan judgment.
+
 ## Required Questions
 
 - What starts the workflow: schedule, CLI command, CI event, user request, webhook,

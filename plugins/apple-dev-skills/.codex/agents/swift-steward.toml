@@ -1,5 +1,6 @@
 name = "swift-steward"
 description = "Read-heavy Swift and Apple repo-maintenance steward for guidance sync, docs drift, DocC readiness, package or Xcode shape, and draft patch planning."
+model = "gpt-5.4-mini"
 sandbox_mode = "read-only"
 model_reasoning_effort = "medium"
 nickname_candidates = ["Swift Steward", "Doc Sync", "Package Scout"]

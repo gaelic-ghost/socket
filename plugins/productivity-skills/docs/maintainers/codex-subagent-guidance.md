@@ -23,6 +23,26 @@ standalone custom agent file currently requires `name`, `description`, and
 `developer_instructions`, and can include supported `config.toml` keys such as
 model, sandbox, MCP server, and skill configuration.
 
+## Model Selection
+
+Do not put a blanket subagent model rule in generated `AGENTS.md` files or in
+global user guidance. Prefer the current Codex default unless a custom role has
+a concrete reason to pin a model.
+
+For bounded read-heavy custom agents, such as repo-maintenance explorers that
+scan docs, search code, inspect tests, or prepare draft patch plans for later
+review, `gpt-5.4-mini` is a good role-local default. OpenAI's model docs
+describe it as a faster, more efficient model for high-volume workloads and
+explicitly include subagents in its intended use. Escalate to a stronger model,
+or omit the model field and let the parent session choose, when the worker owns
+hard architecture synthesis, ambiguous debugging, security reasoning, or
+write-plan decisions that need deeper judgment.
+
+Keep the model choice separate from write ownership. A smaller read-heavy worker
+can gather evidence quickly, but the main thread should still review findings,
+choose edits, apply patches, and run validation unless the user explicitly
+approves a disjoint parallel implementation pass.
+
 Subagents inherit the parent run's sandbox policy. In interactive sessions,
 approval requests can surface from inactive agent threads. In non-interactive
 flows, or when a fresh approval cannot be surfaced, an action that needs new

@@ -90,6 +90,14 @@ The main agent should keep final write ownership. A steward subagent may return
 draft patches, but the main agent should review, edit, save for later, or apply
 them only after the user approves that step.
 
+## Model Policy
+
+Set the first steward roles to `model = "gpt-5.4-mini"` because their initial
+contract is bounded, read-heavy exploration and draft patch planning. This is a
+role-local default, not a global Codex rule: harder synthesis, ambiguous
+debugging, security-sensitive reasoning, or write-plan ownership can still use a
+stronger model or omit the model field so the parent session decides.
+
 ## Output Contract
 
 Each steward run should return:
@@ -134,6 +142,8 @@ logs or long exploratory transcripts.
 - OpenAI Codex Subagents: <https://developers.openai.com/codex/subagents>
 - OpenAI Codex Subagent concepts:
   <https://developers.openai.com/codex/concepts/subagents>
+- OpenAI GPT-5.4 mini model:
+  <https://developers.openai.com/api/docs/models/gpt-5.4-mini>
 - LangGraph overview: <https://docs.langchain.com/oss/python/langgraph>
 - LangGraph persistence:
   <https://docs.langchain.com/oss/python/langgraph/persistence>

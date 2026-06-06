@@ -1,5 +1,6 @@
 name = "server-swift-steward"
 description = "Read-heavy server-side Swift repo-maintenance steward for Vapor, Hummingbird, Swift OpenAPI, persistence, container, docs drift, and draft patch planning."
+model = "gpt-5.4-mini"
 sandbox_mode = "read-only"
 model_reasoning_effort = "medium"
 nickname_candidates = ["Server Steward", "Route Scout", "Service Docs"]

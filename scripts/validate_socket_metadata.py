@@ -281,6 +281,13 @@ def validate_custom_agent_file(*, plugin_name: str, agent_path: Path) -> str:
             "have an explicit apply contract."
         )
 
+    model = agent.get("model")
+    if model is not None and (not isinstance(model, str) or not model.strip()):
+        fail(
+            f"Custom agent `{relative_path}` for `{plugin_name}` must define "
+            "`model` as a non-empty string when present."
+        )
+
     instructions = cast(str, agent["developer_instructions"])
     lowered_instructions = instructions.lower()
     for term in CUSTOM_AGENT_REVIEW_TERMS:
