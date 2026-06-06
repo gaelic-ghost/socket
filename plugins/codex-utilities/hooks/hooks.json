@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "sh ${PLUGIN_ROOT}/hooks/capture-session-start.sh",
-            "statusMessage": "Capturing Codex SessionStart payload",
+            "statusMessage": "Running Codex Utilities SessionStart hook",
             "timeout": 10
           }
         ]
