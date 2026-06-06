@@ -39,4 +39,3 @@ or deciding which framework owns a mixed macOS app.
 
 - Stop if both frameworks can mutate the same state without a single owner.
 - Stop if the bridge grows into a second app architecture hidden inside a view.
-

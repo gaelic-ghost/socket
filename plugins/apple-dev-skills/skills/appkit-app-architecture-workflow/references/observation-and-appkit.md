@@ -38,4 +38,3 @@ updates.
 - Do not describe Observation as a replacement for AppKit's responder chain,
   target/action, or menu validation.
 - Do not hide main-actor requirements inside detached tasks.
-

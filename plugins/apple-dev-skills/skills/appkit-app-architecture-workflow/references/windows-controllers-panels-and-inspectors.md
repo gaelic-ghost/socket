@@ -34,4 +34,3 @@ multiwindow ownership.
 - Stop if a view controller starts owning app-wide services, global menu state,
   persistence migrations, and selected model state at the same time.
 - Stop if a panel writes to a model without a clear selected owner or undo path.
-

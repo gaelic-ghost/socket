@@ -34,4 +34,3 @@ migration.
 - Persistence stores durable state.
 - A restoration archive should not become the only copy of user data unless the
   user-visible contract truly says the state is transient.
-

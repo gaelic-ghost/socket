@@ -38,4 +38,3 @@ resources, or whether an app-level model should exist.
   window, document, menu, and persistence behavior.
 - Stop if SwiftUI `App` or scene structure is already the real app lifecycle
   owner; route that decision to `swiftui-app-architecture-workflow`.
-

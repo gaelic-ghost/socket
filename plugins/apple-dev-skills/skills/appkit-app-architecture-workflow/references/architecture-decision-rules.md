@@ -44,4 +44,3 @@ Return one path:
 3. "The Apple behavior this relies on is ..."
 4. "The tradeoff is ..."
 5. "The next step is ..."
-

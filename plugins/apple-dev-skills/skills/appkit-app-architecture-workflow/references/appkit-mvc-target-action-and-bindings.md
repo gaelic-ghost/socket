@@ -34,4 +34,3 @@ delegates, target/action, AppKit bindings, or how models should change from UI.
 - Do not create a new coordinator when an existing delegate, target/action, or
   responder-chain path already names the owner clearly.
 - Do not let bindings hide important side effects or validation.
-

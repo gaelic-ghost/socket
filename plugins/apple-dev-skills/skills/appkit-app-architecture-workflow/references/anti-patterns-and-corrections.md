@@ -66,4 +66,3 @@ Symptom: AppKit and SwiftUI both own and mutate the same model state.
 
 Correction: pick one model owner and pass state or commands across the hosting
 boundary explicitly.
-

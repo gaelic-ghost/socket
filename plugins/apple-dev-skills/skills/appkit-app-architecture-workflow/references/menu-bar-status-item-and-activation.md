@@ -35,4 +35,3 @@ quit behavior.
   that may fail to open.
 - Do not put global status-item authority inside a SwiftUI leaf view hosted by a
   popover.
-

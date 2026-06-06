@@ -40,4 +40,3 @@ validation.
 - In AppKit-owned apps, hosted SwiftUI views should call explicit model or
   controller inputs rather than inventing a parallel command system that bypasses
   menu validation.
-

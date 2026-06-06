@@ -2,4 +2,3 @@ interface:
   display_name: "AppKit App Architecture Workflow"
   short_description: "Choose AppKit app ownership and state flow"
   default_prompt: "Use $appkit-app-architecture-workflow to decide where AppKit responsibilities belong across app delegates, menu bar status items, responder-chain menus, windows, controllers, restoration, archiving, Observation, and mixed AppKit/SwiftUI composition. Start by anchoring the recommendation in current Apple AppKit behavior. If the request is really SwiftUI app structure, hand off to $swiftui-app-architecture-workflow. If the request is really Apple-docs lookup, hand off to $explore-apple-swift-docs. If the request becomes build, run, diagnostics, mutation, or test work, hand off to $xcode-build-run-workflow or $xcode-testing-workflow."
-

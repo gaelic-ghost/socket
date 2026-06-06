@@ -243,4 +243,3 @@ document them explicitly before letting runtime behavior depend on them.
 ### Script Inventory
 
 - `scripts/customization_config.py`
-

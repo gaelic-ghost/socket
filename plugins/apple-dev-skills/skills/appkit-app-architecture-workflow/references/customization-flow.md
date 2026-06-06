@@ -20,4 +20,3 @@ Only add runtime behavior after documenting:
 - the allowed values
 - which recommendation changes when the setting is present
 - how tests prove the change is applied
-
