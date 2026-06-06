@@ -125,6 +125,8 @@ logs or long exploratory transcripts.
   parallel implementation and the write scope is disjoint.
 - Do not invent plugin manifest support for custom agents until Codex documents
   that installed plugins expose custom-agent files directly.
+- Describe this release as source-bundled custom-agent definitions in plugin
+  roots, not as automatic plugin-manifest agent exposure.
 - If a proposed patch set is useful, return it as a reviewable artifact for the
   main agent to apply with normal repository validation.
 

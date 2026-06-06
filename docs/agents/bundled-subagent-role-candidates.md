@@ -36,7 +36,9 @@ instead of adding another Apple or server-side Swift role.
 
 ## Implemented Roles
 
-These roles are now bundled in their owning plugin roots:
+These project-scoped custom-agent definitions are now source-bundled in their
+owning plugin roots. This inventory does not claim Codex plugin manifests expose
+custom-agent files automatically:
 
 - `apple-dev-skills/.codex/agents/swift-steward.toml`
 - `server-side-swift/.codex/agents/server-swift-steward.toml`
