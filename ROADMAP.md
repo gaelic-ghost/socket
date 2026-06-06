@@ -11,6 +11,7 @@
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
 - [Milestone 10: Expo inline native modules workflow](#milestone-10-expo-inline-native-modules-workflow)
+- [Milestone 11: Codex Utilities plugin](#milestone-11-codex-utilities-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -34,6 +35,7 @@
 - Milestone 8: Server-Side Swift skills plugin - In Progress
 - Milestone 9: Rust skills plugin - Implemented
 - Milestone 10: Expo inline native modules workflow - Implemented
+- Milestone 11: Codex Utilities plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -232,6 +234,39 @@ Implemented
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported `web-dev-skills` surface.
 
 Decision note: the root marketplace entry is installable now that `web-dev-skills` ships real skill content.
+
+## Milestone 11: Codex Utilities plugin
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Add a Socket-hosted `codex-utilities` child plugin for local Codex runtime utilities that do not belong to a language-specific skill pack, app integration, or repository-maintenance plugin.
+- [x] Keep the first slice capture-only: record real `SessionStart` hook payloads before mutating thread titles.
+- [x] Prefer Codex App Server metadata operations for future thread renaming instead of invoking `codex exec` as a separate agent run.
+- [x] Add disabled-by-default `dry-run` and `rename` modes so the same hook can test title prefixing without changing the normal install behavior.
+- [ ] Add thread-title mutation only after a real new-thread test confirms the captured `session_id` maps to the target thread id.
+
+### Tickets
+
+- [x] Create `plugins/codex-utilities/` with its own `.codex-plugin/plugin.json`, `AGENTS.md`, `hooks/`, `scripts/`, and local design note.
+- [x] Add a `SessionStart` hook that captures stdin to a local JSONL runtime log.
+- [x] Add a Node stdlib App Server control-socket client for opt-in `thread/name/set` tests.
+- [x] Wire `codex-utilities` into the root Socket marketplace as a normal local child plugin.
+- [x] Update root README so users can see the new installable plugin surface.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [ ] Run a dry-run hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
+- [ ] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `codex-utilities` as an installable child plugin.
+- [ ] The first hook captures `SessionStart` payloads without writing captured data into the Socket repository.
+- [ ] Thread-title automation has a confirmed target-thread identity before it calls `thread/name/set`.
+- [x] Opt-in thread-title automation can be tested without invoking `codex exec` or starting a separate agent run.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Small Tickets
 
