@@ -74,6 +74,7 @@ swift_major_version=""
 swift_minor_version=""
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 agents_template="$script_dir/../assets/AGENTS.md"
+local_environment_template="$script_dir/../../../templates/codex-local-environments/swift-package.toml"
 maintain_project_repo_runner="$script_dir/../../../../productivity-skills/skills/maintain-project-repo/scripts/run_workflow.py"
 maintain_project_repo_missing_message="Validation failed: bootstrap-swift-package needs productivity-skills/maintain-project-repo to install repo-maintenance files, but the runner was missing at $maintain_project_repo_runner. Install productivity-skills alongside apple-dev-skills, or add the socket marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and enable both apple-dev-skills and productivity-skills from the Socket catalog, then rerun this workflow."
 
@@ -440,6 +441,10 @@ if [[ "$copy_agents" == "true" ]] && [[ ! -f "$agents_template" ]]; then
   blocked "Template missing: $agents_template"
 fi
 
+if [[ ! -f "$local_environment_template" ]]; then
+  blocked "Template missing: $local_environment_template"
+fi
+
 target_dir="$destination/$name"
 
 if [[ -e "$destination" && ! -d "$destination" ]]; then
@@ -501,6 +506,9 @@ mkdir -p "$target_dir"
     cp "$agents_template" AGENTS.md
   fi
 
+  mkdir -p .codex/environments
+  cp "$local_environment_template" .codex/environments/swift-package.toml
+
   if [[ -x "$maintain_project_repo_runner" ]]; then
     "$maintain_project_repo_runner" --repo-root "$target_dir" --operation install --profile swift-package >/dev/null
   else
@@ -537,6 +545,10 @@ mkdir -p "$target_dir"
     failed "Validation failed: AGENTS.md missing."
   fi
 
+  if [[ ! -f .codex/environments/swift-package.toml ]]; then
+    failed "Validation failed: .codex/environments/swift-package.toml missing."
+  fi
+
   if [[ ! -d Tests ]]; then
     failed "Validation failed: Tests target directory missing."
   fi
@@ -568,6 +580,7 @@ if [[ "$copy_agents" == "true" ]]; then
 else
   echo "AGENTS: skipped"
 fi
+echo "Codex environment: installed .codex/environments/swift-package.toml"
 if [[ "$run_validation" == "true" ]]; then
   echo "Validation: swift build + swift test passed"
 else

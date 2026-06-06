@@ -62,6 +62,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `// swift-tools-version:` remains `6.2` or newer when the generated manifest keeps trait-enabled dependencies
    - `.git`
    - `AGENTS.md`
+   - `.codex/environments/swift-package.toml`
    - `scripts/repo-maintenance/hooks/pre-commit.sample`
    - `scripts/repo-maintenance/validate-all.sh`
    - `scripts/repo-maintenance/release.sh`
@@ -105,6 +106,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - generated manifests should preserve an explicit Swift 6 language-mode declaration with `swiftLanguageModes: [.v6]` when the active manifest surface supports it
   - generated manifests include `swift-configuration` by default with the `Configuration` product on the primary target and traits `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`
   - generated manifests may lower `// swift-tools-version:` from the scaffold default when the package should support the previous supported Swift minor, but they should never go below the current `6.2` floor while trait-enabled dependencies remain in the manifest
+  - Codex GUI local environments are installed from `templates/codex-local-environments/swift-package.toml` into `.codex/environments/swift-package.toml`
   - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs
@@ -121,6 +123,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - normalized inputs
   - resolved `testing_strategy`
   - detected `swift_toolchain` on real runs
+  - installed `.codex/environments/swift-package.toml`
   - installed `maintain-project-repo` paths
   - validation result
   - one concise next step

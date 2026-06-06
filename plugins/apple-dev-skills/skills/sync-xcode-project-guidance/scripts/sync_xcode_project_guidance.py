@@ -58,6 +58,41 @@ def read_asset(name: str) -> str:
     return (Path(__file__).resolve().parents[1] / "assets" / name).read_text(encoding="utf-8").rstrip() + "\n"
 
 
+def local_environment_scheme_name(detected_state: dict, workspace_path: str | None) -> str:
+    if workspace_path:
+        return Path(workspace_path).stem
+    for key in ("workspace", "project"):
+        value = detected_state.get(key)
+        if value:
+            return Path(value).stem
+    return "SCHEME_NAME"
+
+
+def install_local_environment(repo_root: Path, detected_state: dict, workspace_path: str | None) -> str:
+    template_path = (
+        Path(__file__).resolve().parents[3]
+        / "templates"
+        / "codex-local-environments"
+        / "xcode-project.toml"
+    )
+    target_path = repo_root / ".codex" / "environments" / "xcode-project.toml"
+
+    if not template_path.is_file():
+        raise RuntimeError(f"Codex local environment template is missing: {template_path}")
+    if target_path.exists() and not target_path.is_file():
+        raise RuntimeError(f"Codex local environment target exists but is not a regular file: {target_path}")
+
+    scheme_name = local_environment_scheme_name(detected_state, workspace_path)
+    template_text = template_path.read_text(encoding="utf-8").replace("SCHEME_NAME", scheme_name)
+    if not target_path.exists():
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(template_text, encoding="utf-8")
+        return f"installed .codex/environments/xcode-project.toml from template with scheme {scheme_name}"
+    if target_path.read_text(encoding="utf-8") == template_text:
+        return "left matching .codex/environments/xcode-project.toml unchanged"
+    return "preserved existing .codex/environments/xcode-project.toml because it differs from the template"
+
+
 def maintain_project_repo_runner() -> Path:
     script_path = Path(__file__).resolve()
     candidate_paths: list[Path] = []
@@ -199,6 +234,23 @@ def main() -> int:
             print(json.dumps(payload, indent=2, sort_keys=True))
             return 1
         validation_result = "validated"
+
+    try:
+        actions.append(install_local_environment(repo_root, detected_state, args.workspace_path))
+    except RuntimeError as exc:
+        payload = {
+            "status": "failed",
+            "path_type": "primary",
+            "repo_root": str(repo_root),
+            "agents_path": str(agents_path),
+            "detected_state": detected_state,
+            "validation_result": validation_result,
+            "actions": actions,
+            "stderr": str(exc),
+            "next_step": "Resolve the Codex local environment template or target path issue, then rerun sync-xcode-project-guidance.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     try:
         runner = maintain_project_repo_runner()

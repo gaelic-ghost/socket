@@ -45,6 +45,21 @@ def write_text(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def install_local_environment(target_dir: Path, scheme_name: str) -> str:
+    template_path = (
+        Path(__file__).resolve().parents[3]
+        / "templates"
+        / "codex-local-environments"
+        / "xcode-project.toml"
+    )
+    target_path = target_dir / ".codex" / "environments" / "xcode-project.toml"
+    if not template_path.is_file():
+        raise RuntimeError(f"Codex local environment template is missing: {template_path}")
+    template_text = template_path.read_text(encoding="utf-8").replace("SCHEME_NAME", scheme_name)
+    write_text(target_path, template_text)
+    return str(target_path)
+
+
 def render_app_file(name: str) -> str:
     return f"""import SwiftUI
 
@@ -218,6 +233,20 @@ def main() -> int:
     write_text(target_dir / "Sources/App/App.swift", render_app_file(args.name))
     write_text(target_dir / "Sources/App/ContentView.swift", render_content_view())
     write_text(target_dir / f"Tests/{args.name}Tests/{args.name}Tests.swift", render_test_file(args.name))
+    try:
+        local_environment_path = install_local_environment(target_dir, args.name)
+    except RuntimeError as exc:
+        payload = {
+            "status": "failed",
+            "path_type": "primary",
+            "resolved_path": str(target_dir),
+            "normalized_inputs": normalized_inputs,
+            "validation_result": "failed (codex local environment install)",
+            "stderr": str(exc),
+            "next_step": "Resolve the Codex local environment template path and rerun bootstrap-xcode-app-project.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     agents_copied = False
     if args.copy_agents:
@@ -330,6 +359,7 @@ def main() -> int:
         "validation_result": validation_result,
         "generator": "xcodegen",
         "project_file": str(target_dir / f"{args.name}.xcodeproj"),
+        "local_environment_path": local_environment_path,
         "agents_copied": agents_copied,
         "stdout": proc_install_toolkit.stdout + proc_generate.stdout + validation_stdout,
         "stderr": proc_install_toolkit.stderr + proc_generate.stderr + validation_stderr,

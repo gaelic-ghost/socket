@@ -91,6 +91,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - `repo_root=.` when omitted
   - `writeMode=sync-if-needed`
   - validation runs unless `--skip-validation` is passed
+  - successful mutating runs install `.codex/environments/swift-package.toml` from `templates/codex-local-environments/swift-package.toml` when missing, leave matching files unchanged, and preserve customized existing files
   - successful mutating runs refresh `maintain-project-repo` output in place
 
 ## Outputs
@@ -107,6 +108,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - detected package and Xcode markers
   - `AGENTS.md` path
   - actions applied or planned
+  - installed or preserved `.codex/environments/swift-package.toml`
   - refreshed `maintain-project-repo` paths
   - validation result
   - one concise next step or handoff
@@ -118,6 +120,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Stop with `blocked` if the repo root looks ambiguous because it contains both `Package.swift` and Xcode app markers.
 - Stop with `blocked` if the chosen `writeMode` does not allow the mutation the repo still needs, such as creating a missing `AGENTS.md` or appending the bounded Swift package guidance section.
 - Stop with `blocked` if the target `AGENTS.md` path exists but is not a regular file.
+- Fail with a clear message if the Codex local environment template is missing or the target `.codex/environments/swift-package.toml` path exists but is not a regular file.
 
 ## Fallbacks and Handoffs
 

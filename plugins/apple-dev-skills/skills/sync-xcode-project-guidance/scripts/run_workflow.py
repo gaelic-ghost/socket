@@ -172,6 +172,12 @@ def main() -> int:
         elif normalized_inputs["report_only"]:
             actions.append("report that AGENTS.md is missing the bounded Xcode guidance section")
 
+    local_environment_path = repo_root / ".codex" / "environments" / "xcode-project.toml"
+    if local_environment_path.exists():
+        actions.append("inspect existing .codex/environments/xcode-project.toml without overwriting local edits")
+    else:
+        actions.append("install .codex/environments/xcode-project.toml from template")
+
     if args.dry_run:
         payload = {
             "status": "success",

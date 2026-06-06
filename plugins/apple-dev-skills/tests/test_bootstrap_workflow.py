@@ -78,6 +78,7 @@ class BootstrapWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["normalized_inputs"]["testing_mode"], "xctest")
             self.assertFalse(payload["normalized_inputs"]["initialize_git"])
             self.assertFalse(payload["normalized_inputs"]["copy_agents_md"])
+            self.assertIsNone(payload.get("local_environment_installed"))
             self.assertEqual(payload["testing_strategy"], "init-flags")
             self.assertIn("--testing-mode", payload["command"])
             self.assertIn("xctest", payload["command"])

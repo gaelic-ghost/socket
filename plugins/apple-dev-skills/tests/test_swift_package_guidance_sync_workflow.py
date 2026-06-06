@@ -146,6 +146,12 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
                 'REPO_MAINTENANCE_PROFILE="swift-package"',
                 Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
             )
+            local_environment_path = Path(tmpdir, ".codex/environments/swift-package.toml")
+            self.assertTrue(local_environment_path.is_file())
+            local_environment_text = local_environment_path.read_text(encoding="utf-8")
+            self.assertIn('name = "swift-package"', local_environment_text)
+            self.assertIn('command = "swift test"', local_environment_text)
+            self.assertIn("installed .codex/environments/swift-package.toml from template", payload["actions"])
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
             workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
             self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
@@ -233,6 +239,27 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
                 Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
             )
 
+    def test_sync_preserves_existing_local_environment(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
+            local_environment_path = repo_root / ".codex/environments/swift-package.toml"
+            local_environment_path.parent.mkdir(parents=True)
+            local_environment_path.write_text('version = 1\nname = "custom-swift-package"\n', encoding="utf-8")
+
+            code, payload = self.run_script("--repo-root", tmpdir)
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(
+                local_environment_path.read_text(encoding="utf-8"),
+                'version = 1\nname = "custom-swift-package"\n',
+            )
+            self.assertIn(
+                "preserved existing .codex/environments/swift-package.toml because it differs from the template",
+                payload["actions"],
+            )
+
     def test_write_mode_can_disable_append_behavior(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
@@ -277,6 +304,7 @@ class SwiftPackageGuidanceSyncWorkflowTests(unittest.TestCase):
                 / "maintain-project-repo"
             )
             shutil.copytree(ROOT / "skills/sync-swift-package-guidance", apple_skill)
+            shutil.copytree(ROOT / "templates", cache_root / "apple-dev-skills" / "6.5.1" / "templates")
             shutil.copytree(ROOT.parent / "productivity-skills/skills/maintain-project-repo", productivity_skill)
 
             repo_root = Path(tmpdir) / "Repo"

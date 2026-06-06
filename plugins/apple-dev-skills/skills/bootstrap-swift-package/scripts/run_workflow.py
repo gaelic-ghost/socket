@@ -30,6 +30,7 @@ def parse_output(stdout: str) -> dict:
         "validation_result": None,
         "git_initialized": None,
         "agents_copied": None,
+        "local_environment_installed": None,
         "testing_mode": None,
         "testing_strategy": None,
         "swift_toolchain": None,
@@ -43,6 +44,8 @@ def parse_output(stdout: str) -> dict:
             result["git_initialized"] = line.endswith("initialized")
         elif line.startswith("AGENTS: "):
             result["agents_copied"] = line.endswith("copied")
+        elif line.startswith("Codex environment: "):
+            result["local_environment_installed"] = "installed" in line
         elif line.startswith("Swift toolchain: "):
             result["swift_toolchain"] = line.split(": ", 1)[1].strip()
         elif line.startswith("Testing mode: "):
@@ -243,6 +246,7 @@ def main() -> int:
         "validation_result": parsed["validation_result"],
         "git_initialized": parsed["git_initialized"],
         "agents_copied": parsed["agents_copied"],
+        "local_environment_installed": parsed["local_environment_installed"],
         "testing_mode": parsed["testing_mode"],
         "testing_strategy": parsed["testing_strategy"],
         "swift_toolchain": parsed["swift_toolchain"],

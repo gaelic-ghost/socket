@@ -60,6 +60,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - treat `ask` as a legacy explicit-blocking value only when the user or customization state supplies it intentionally
 7. Create the project:
    - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold, `project.yml`, checked-in `.xcconfig` files, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
+   - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
    - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, targets, sources, schemes, packages, config files, test plans, and `minimumXcodeGenVersion`
    - keep nontrivial build settings in external `.xcconfig` files by default and wire them through the XcodeGen spec instead of duplicating settings inline
    - for `xcode`, use a guarded guidance path for now instead of pretending the repo supports full GUI automation already
@@ -67,6 +68,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify the expected app files exist
    - verify `.swiftformat` exists
    - verify `AGENTS.md` exists when enabled
+   - verify `.codex/environments/xcode-project.toml` exists and uses the generated app target name for Codex GUI actions
    - verify generated guidance says tracked `.pbxproj` changes must be reviewed, staged, and committed before push, merge, release, or cleanup
    - verify `scripts/repo-maintenance/hooks/pre-commit.sample` exists
    - verify `scripts/repo-maintenance/validate-all.sh` and `scripts/repo-maintenance/release.sh` exist
@@ -97,6 +99,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - `ui_stack` defaults to `swiftui`
   - `project_generator` defaults to `xcodegen`
   - `copy_agents_md` defaults to `true`
+  - Codex GUI local environments are installed from `templates/codex-local-environments/xcode-project.toml` into `.codex/environments/xcode-project.toml`
   - validation runs unless `--skip-validation` is passed
   - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
 
@@ -114,6 +117,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - normalized inputs
   - resolved bundle identifier
   - generator path
+  - installed `.codex/environments/xcode-project.toml`
   - installed `maintain-project-repo` paths
   - validation result
   - one concise next step or handoff

@@ -92,6 +92,15 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',
                 Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
             )
+            local_environment_path = Path(tmpdir, ".codex/environments/xcode-project.toml")
+            self.assertTrue(local_environment_path.is_file())
+            local_environment_text = local_environment_path.read_text(encoding="utf-8")
+            self.assertIn('name = "xcode-project"', local_environment_text)
+            self.assertIn("xcodebuild -scheme Demo -derivedDataPath ./DerivedData test", local_environment_text)
+            self.assertIn(
+                "installed .codex/environments/xcode-project.toml from template with scheme Demo",
+                payload["actions"],
+            )
             self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
             workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
             self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
@@ -125,6 +134,24 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',
                 Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
+            )
+
+    def test_sync_preserves_existing_local_environment(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Demo.xcodeproj").mkdir()
+            local_environment_path = repo_root / ".codex/environments/xcode-project.toml"
+            local_environment_path.parent.mkdir(parents=True)
+            local_environment_path.write_text('version = 1\nname = "custom-xcode"\n', encoding="utf-8")
+
+            code, payload = self.run_script("--repo-root", tmpdir)
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(local_environment_path.read_text(encoding="utf-8"), 'version = 1\nname = "custom-xcode"\n')
+            self.assertIn(
+                "preserved existing .codex/environments/xcode-project.toml because it differs from the template",
+                payload["actions"],
             )
 
     def test_write_mode_can_disable_append_behavior(self) -> None:
@@ -171,6 +198,7 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
                 / "maintain-project-repo"
             )
             shutil.copytree(ROOT / "skills/sync-xcode-project-guidance", apple_skill)
+            shutil.copytree(ROOT / "templates", cache_root / "apple-dev-skills" / "6.5.1" / "templates")
             shutil.copytree(ROOT.parent / "productivity-skills/skills/maintain-project-repo", productivity_skill)
 
             repo_root = Path(tmpdir) / "Repo"
