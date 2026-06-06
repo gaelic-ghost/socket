@@ -93,9 +93,9 @@ Treat comparison requests as first-class trigger cases, not as an advanced follo
 
 ## Codex subagent fit
 
-When the user explicitly requests subagents, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, this skill can split read-heavy discovery for large code slices into bounded subagent tasks. Good subagent jobs include mapping call sites, reading tests, checking docs, or tracing one branch of a comparison, with each worker returning concise file references and findings.
+When the user explicitly requests subagents, `code-slice-tracer`, parallel code tracing, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, use the `code-slice-tracer` custom-agent role for bounded read-heavy discovery. Good tracer jobs include mapping call sites, reading tests, checking docs, finding data-shape changes, or tracing one branch of a comparison, with each worker returning concise file references and findings.
 
-Do not spawn subagents just because a slice is large. Use them when the request explicitly asks for delegation or applicable workflow guidance tells the agent to ask and the user grants explicit permission. Keep the final explanation in the main thread so the user gets one coherent walkthrough, and keep any write or refactor follow-up outside this skill unless the user asks for that next step.
+Do not spawn subagents just because a slice is large. Use them when the request explicitly asks for delegation or applicable workflow guidance tells the agent to ask and the user grants explicit permission. Keep the final explanation in the main thread so the user gets one coherent walkthrough, and keep any `SLICES.md`, write, or refactor follow-up outside the tracer role unless the user asks for that next step.
 
 ## Detail levels
 

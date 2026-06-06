@@ -18,6 +18,7 @@ This file is the Productivity Skills child-repo override for work done from `soc
 - `bootstrap-skills-plugin-repo` and `sync-skills-repo-guidance` moved to `agent-plugin-skills` and should stay there.
 - Treat `maintain-project-repo` release choreography as release-only guidance; it does not override narrower document-maintenance skills that forbid auto-commit, auto-push, or PR creation.
 - Use the `repo-docs-auditor` custom-agent role only for explicit-trigger subagent workflows: broad read-heavy repo-document audits, stale-command checks, cross-document drift scans, and review-packet planning. Keep final edits, validation, commits, pushes, PRs, and releases in the main thread.
+- Use the `code-slice-tracer` custom-agent role only for explicit-trigger subagent workflows: bounded call-site mapping, branch tracing, test/doc correlation, and comparison support. Keep the final explanation and any `SLICES.md` writes in the main thread.
 
 ## Validation
 
