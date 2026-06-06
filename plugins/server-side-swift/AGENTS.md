@@ -20,3 +20,4 @@ This file is the Server-Side Swift child-plugin override for work done from `soc
 - Keep server-side Swift examples portable across macOS and Linux unless the target repository documents an Apple-only service environment.
 - Keep dependencies fetchable from GitHub, package registries, package-manager URLs, or other real remote repositories. Do not commit machine-local package paths.
 - Do not add bundled services, local daemons, deployment scripts, template feeds, or MCP servers unless a later plan explicitly calls for that scope.
+- Use the `server-swift-steward` custom-agent role only for explicit-trigger subagent workflows: broad read-heavy server-side Swift repo-maintenance scans, docs drift checks, and draft patch planning. Keep final edits, validation, commits, pushes, releases, migrations, and service execution in the main thread unless Gale explicitly approves a narrower write scope.

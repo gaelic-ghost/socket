@@ -130,6 +130,19 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.
 - Recommend `sync-xcode-project-guidance` when the repo root is really an Xcode app project rather than a plain Swift package.
 
+## Codex Subagent Fit
+
+When the user explicitly asks for subagents, `swift-steward`, draft patch planning, or asks to keep working while broad Swift package repo-maintenance discovery happens in parallel, use the `swift-steward` custom-agent role for read-heavy discovery before this skill applies guidance sync.
+
+Good `swift-steward` jobs for this skill:
+
+- classify the package shape and flag ambiguous SwiftPM/Xcode boundaries
+- inspect `AGENTS.md`, README, CONTRIBUTING, ROADMAP, `Package.swift`, `.swiftformat`, `.swiftlint.yml`, and `scripts/repo-maintenance/`
+- compare current repo guidance against this skill's current SwiftPM baseline
+- return a draft patch plan, affected files, validation commands, and blockers
+
+Keep apply-mode edits in the main thread. The steward may return draft patch text or a proposed diff summary, but the main agent should review it with the user before saving, editing, or applying it.
+
 ## Customization
 
 - Use `references/customization-flow.md`.
