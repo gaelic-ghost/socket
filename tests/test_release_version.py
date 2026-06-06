@@ -258,7 +258,7 @@ def test_release_ready_skips_subtree_push_for_version_only_child_change(
     assert "apple-dev-skills" not in output
 
 
-def test_release_ready_prints_marketplace_upgrade_as_final_step(
+def test_release_ready_prints_cache_refresh_as_final_step(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     root = make_repo(tmp_path)
@@ -286,10 +286,10 @@ def test_release_ready_prints_marketplace_upgrade_as_final_step(
     output = capsys.readouterr().out
     assert exit_code == 0
     assert "pushed to apple-dev-skills/main" not in output
-    assert "`codex plugin marketplace upgrade socket` as the final step only" in output
+    assert "best-effort Mac mini refresh as the final cache-refresh steps only" in output
 
 
-def test_patch_refresh_runs_marketplace_upgrade_last(
+def test_patch_refresh_runs_cache_refreshes_last(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     root = make_repo(tmp_path)
@@ -347,12 +347,78 @@ def test_patch_refresh_runs_marketplace_upgrade_last(
     output = capsys.readouterr().out
     assert exit_code == 0
     assert "Patch-refresh release completed for v1.2.4." in output
-    assert commands[-1] == ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket"))
+    assert commands[-2] == ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket"))
+    assert commands[-1] == (
+        "cmd",
+        (
+            "ssh",
+            "-o",
+            "BatchMode=yes",
+            "-o",
+            "ConnectTimeout=5",
+            "galem@mac-mini.local",
+            "codex plugin marketplace upgrade socket",
+        ),
+    )
     assert ("cmd", ("uv", "run", "scripts/validate_socket_metadata.py")) in commands
     assert ("git", ("push", "origin", "main")) in commands
     assert ("git", ("push", "origin", "v1.2.4")) in commands
     assert any(command[0] == "cmd" and command[1][:3] == ("gh", "release", "create") for command in commands)
     assert ("cmd", ("gh", "release", "view", "v1.2.4")) in commands
+    assert "Mac mini marketplace refresh succeeded on galem@mac-mini.local." in output
+
+
+def test_patch_refresh_reports_mac_mini_refresh_failure_without_failing_release(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = make_repo(tmp_path)
+    commands: list[tuple[str, tuple[str, ...]]] = []
+
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        command = tuple(args)
+        commands.append(("git", command))
+        outputs = {
+            ("branch", "--show-current"): "main\n",
+            ("status", "--porcelain"): "",
+            ("tag", "-l", "v1.2.4"): "",
+            ("ls-remote", "--tags", "origin", "refs/tags/v1.2.4"): "",
+            ("push", "origin", "main"): "",
+            ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.3\n",
+            ("diff", "--name-only", "v1.2.3..HEAD"): "pyproject.toml\nuv.lock\n",
+            ("rev-parse", "HEAD"): "socket-head\n",
+            ("rev-parse", "origin/main"): "socket-head\n",
+            ("tag", "v1.2.4"): "",
+            ("push", "origin", "v1.2.4"): "",
+            ("log", "origin/main..main", "--oneline"): "",
+            ("branch", "--no-merged", "main"): "",
+        }
+        if command[:1] == ("add",):
+            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        if command[:2] == ("commit", "-m"):
+            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        output = outputs[command]
+        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+
+    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        command = tuple(args)
+        commands.append(("cmd", command))
+        if command[:1] == ("ssh",):
+            assert check is False
+            return type("Result", (), {"returncode": 255, "stdout": "", "stderr": "host unreachable"})()
+        return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
+    monkeypatch.setattr(release_version, "run_command", fake_run_command)
+
+    targets = release_version.discover_targets(root)
+    exit_code = release_version.render_patch_refresh(root, targets, allow_unmerged_branches=False)
+
+    output = capsys.readouterr().out
+    assert exit_code == 0
+    assert "Mac mini marketplace refresh could not run on galem@mac-mini.local. host unreachable" in output
+    assert "Patch-refresh release completed for v1.2.4." in output
 
 
 def test_patch_refresh_stops_before_marketplace_upgrade_when_branch_accounting_fails(
