@@ -1,28 +1,24 @@
-import crypto from "node:crypto";
+import { spawn } from "node:child_process";
 import fs from "node:fs";
-import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const pluginRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const payloadText = await readStdin();
-const payload = parsePayload(payloadText);
-const config = readConfig();
-
-fs.mkdirSync(config.dataDir, { recursive: true });
-appendJsonl(config.payloadLogPath, payloadText.trimEnd() || "{}");
-
-const decision = await handleThreadTitle(payload, config);
-appendJsonl(config.decisionLogPath, JSON.stringify(decision));
-
 async function handleThreadTitle(payload, config) {
+  const eventName =
+    typeof payload.hook_event_name === "string" && payload.hook_event_name.trim()
+      ? payload.hook_event_name.trim()
+      : "unknown";
+  const threadId = threadIdFromPayload(payload);
   const base = {
     at: new Date().toISOString(),
+    eventName,
     mode: config.mode,
     source: payload.source ?? null,
-    sessionId: threadIdFromPayload(payload),
+    sessionId: threadId,
+    turnId: typeof payload.turn_id === "string" ? payload.turn_id : null,
     cwd: typeof payload.cwd === "string" ? payload.cwd : null,
   };
 
@@ -30,12 +26,11 @@ async function handleThreadTitle(payload, config) {
     return { ...base, action: "capture-only" };
   }
 
-  const threadId = threadIdFromPayload(payload);
   if (!threadId) {
     return {
       ...base,
       action: "skipped",
-      reason: "SessionStart payload did not include session_id or thread_id.",
+      reason: "Codex hook payload did not include session_id or thread_id.",
     };
   }
 
@@ -48,18 +43,80 @@ async function handleThreadTitle(payload, config) {
     };
   }
 
-  const proposedName = prefixPlan.prefix;
-  const planned = { ...base, action: "planned", threadId, proposedName };
+  if (eventName !== "Stop") {
+    return {
+      ...base,
+      action: "skipped",
+      prefix: prefixPlan.prefix,
+      reason: "Generated title prefixing waits for the Stop hook because SessionStart runs before Codex creates a thread title.",
+    };
+  }
+
+  const state = readState(config.statePath);
+  if (state.threads[threadId]?.applied === true) {
+    return {
+      ...base,
+      action: "skipped",
+      prefix: prefixPlan.prefix,
+      reason: "Thread title prefix was already handled for this thread.",
+    };
+  }
+
+  const threadRead = await readThreadWithGeneratedTitle(threadId, config);
+  if (!threadRead.thread) {
+    return {
+      ...base,
+      action: "failed",
+      prefix: prefixPlan.prefix,
+      reason: threadRead.reason,
+    };
+  }
+
+  const currentName = currentThreadName(threadRead.thread);
+  if (!currentName) {
+    return {
+      ...base,
+      action: "skipped",
+      prefix: prefixPlan.prefix,
+      reason: "Codex App Server did not return a generated thread title before the Stop hook timeout.",
+    };
+  }
+
+  const proposedName = prefixedThreadName(prefixPlan.prefix, currentName);
+  const planned = {
+    ...base,
+    action: "planned",
+    currentName,
+    prefix: prefixPlan.prefix,
+    proposedName,
+    threadId,
+  };
+
+  if (proposedName === currentName) {
+    writeThreadState(config.statePath, state, threadId, {
+      applied: true,
+      at: new Date().toISOString(),
+      currentName,
+      proposedName,
+      reason: "already-prefixed",
+    });
+    return { ...planned, action: "already-prefixed" };
+  }
+
   if (config.mode === "dry-run") {
     return planned;
   }
 
   try {
-    await setThreadName({
-      socketPath: config.socketPath,
-      threadId,
-      name: proposedName,
-      timeoutMs: config.timeoutMs,
+    await withAppServerClient(config, async (client) => {
+      await client.request("thread/name/set", { threadId, name: proposedName });
+    });
+    writeThreadState(config.statePath, state, threadId, {
+      applied: true,
+      at: new Date().toISOString(),
+      currentName,
+      proposedName,
+      reason: "renamed",
     });
     return { ...planned, action: "renamed" };
   } catch (error) {
@@ -75,10 +132,6 @@ function readConfig() {
   const dataDir =
     process.env.CODEX_UTILITIES_DATA_DIR ??
     path.join(os.homedir(), ".codex", "codex-utilities", "hooks");
-  const codexHome = process.env.CODEX_HOME ?? path.join(os.homedir(), ".codex");
-  const socketPath =
-    process.env.CODEX_UTILITIES_APP_SERVER_SOCKET ??
-    path.join(codexHome, "app-server-control", "app-server-control.sock");
   const mode = modeFromEnv(process.env.CODEX_UTILITIES_THREAD_TITLE_MODE);
   const maxPrefixLength = positiveIntegerFromEnv(
     process.env.CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH,
@@ -92,20 +145,32 @@ function readConfig() {
   );
   const timeoutMs = positiveIntegerFromEnv(
     process.env.CODEX_UTILITIES_APP_SERVER_TIMEOUT_MS,
-    1500,
+    2500,
+  );
+  const titlePollAttempts = positiveIntegerFromEnv(
+    process.env.CODEX_UTILITIES_THREAD_TITLE_POLL_ATTEMPTS,
+    4,
+  );
+  const titlePollDelayMs = positiveIntegerFromEnv(
+    process.env.CODEX_UTILITIES_THREAD_TITLE_POLL_DELAY_MS,
+    500,
   );
 
   return {
+    appServerCommand: process.env.CODEX_UTILITIES_APP_SERVER_COMMAND ?? "codex",
+    appServerArgs: ["app-server"],
     dataDir,
     decisionLogPath: path.join(dataDir, "thread-title-decisions.jsonl"),
     maxPrefixLength,
     mode,
-    payloadLogPath: path.join(dataDir, "session-start.jsonl"),
+    payloadLogPath: path.join(dataDir, "thread-title-payloads.jsonl"),
     pluginVersion: readPluginVersion(pluginRoot),
     projectlessRoot,
     projectlessThreadPrefix,
-    socketPath,
+    statePath: path.join(dataDir, "thread-title-state.json"),
     timeoutMs,
+    titlePollAttempts,
+    titlePollDelayMs,
   };
 }
 
@@ -156,7 +221,7 @@ function titlePrefixPlanFromPayload(payload, config) {
   if (typeof payload.cwd !== "string") {
     return {
       prefix: null,
-      reason: "SessionStart payload did not include a usable cwd for title prefixing.",
+      reason: "Codex hook payload did not include a usable cwd for title prefixing.",
     };
   }
   if (isProjectlessCodexChatCwd(payload.cwd, config.projectlessRoot)) {
@@ -169,14 +234,14 @@ function titlePrefixPlanFromPayload(payload, config) {
     return {
       prefix: null,
       reason:
-        "SessionStart cwd looks like a projectless Codex chat directory, and no projectless title prefix is configured.",
+        "Hook cwd looks like a projectless Codex chat directory, and no projectless title prefix is configured.",
     };
   }
   const prefix = path.basename(payload.cwd).replace(/\s+/g, " ").trim();
   if (!prefix) {
     return {
       prefix: null,
-      reason: "SessionStart payload cwd did not include a usable final path component.",
+      reason: "Hook payload cwd did not include a usable final path component.",
     };
   }
   return {
@@ -198,145 +263,91 @@ function truncateTitlePrefix(prefix, maxPrefixLength) {
   return prefix.length > maxPrefixLength ? prefix.slice(0, maxPrefixLength).trim() : prefix;
 }
 
-async function setThreadName({ socketPath, threadId, name, timeoutMs }) {
-  const socket = await connectWebSocket(socketPath, timeoutMs);
+function prefixedThreadName(prefix, currentName) {
+  return currentName.startsWith(`${prefix}: `) ? currentName : `${prefix}: ${currentName}`;
+}
+
+function currentThreadName(thread) {
+  if (typeof thread.name === "string" && thread.name.trim()) {
+    return thread.name.trim();
+  }
+  if (typeof thread.title === "string" && thread.title.trim()) {
+    return thread.title.trim();
+  }
+  return null;
+}
+
+async function readThreadWithGeneratedTitle(threadId, config) {
+  let lastReason = "Codex App Server did not return thread data.";
+  for (let attempt = 1; attempt <= config.titlePollAttempts; attempt += 1) {
+    try {
+      const response = await withAppServerClient(config, (client) =>
+        client.request("thread/read", { threadId, includeTurns: false }),
+      );
+      if (response?.thread) {
+        const name = currentThreadName(response.thread);
+        if (name || attempt === config.titlePollAttempts) {
+          return { thread: response.thread };
+        }
+        lastReason = "Codex App Server returned the thread before a generated title was available.";
+      }
+    } catch (error) {
+      lastReason = error instanceof Error ? error.message : String(error);
+      break;
+    }
+    await delay(config.titlePollDelayMs);
+  }
+  return { thread: null, reason: lastReason };
+}
+
+async function withAppServerClient(config, callback) {
+  const client = new JsonRpcStdioClient(config);
   try {
-    await socket.request("initialize", {
+    await client.start();
+    await client.request("initialize", {
       clientInfo: {
         name: "codex_utilities_hook",
         title: "Codex Utilities Hook",
         version: config.pluginVersion,
       },
       capabilities: {
-        experimentalApi: false,
+        experimentalApi: true,
         optOutNotificationMethods: ["thread/name/updated"],
       },
     });
-    socket.notify("initialized");
-    await socket.request("thread/name/set", { threadId, name });
+    client.notify("initialized", {});
+    return await callback(client);
   } finally {
-    socket.close();
+    client.close();
   }
 }
 
-async function connectWebSocket(socketPath, timeoutMs) {
-  if (!fs.existsSync(socketPath)) {
-    throw new Error(`Codex App Server control socket was not found at ${socketPath}.`);
+class JsonRpcStdioClient {
+  constructor(config) {
+    this.config = config;
+    this.nextId = 1;
+    this.outputBuffer = "";
+    this.pending = new Map();
+    this.process = null;
   }
 
-  const rawSocket = net.createConnection(socketPath);
-  rawSocket.setTimeout(timeoutMs);
-  rawSocket.setNoDelay(true);
-
-  await new Promise((resolve, reject) => {
-    const onConnect = () => {
-      cleanup();
-      resolve();
-    };
-    const onError = (error) => {
-      cleanup();
-      reject(error);
-    };
-    const onTimeout = () => {
-      cleanup();
-      reject(new Error(`Timed out connecting to Codex App Server socket at ${socketPath}.`));
-    };
-
-    function cleanup() {
-      rawSocket.off("connect", onConnect);
-      rawSocket.off("error", onError);
-      rawSocket.off("timeout", onTimeout);
-    }
-
-    rawSocket.once("connect", onConnect);
-    rawSocket.once("error", onError);
-    rawSocket.once("timeout", onTimeout);
-  });
-
-  await performWebSocketHandshake(rawSocket, timeoutMs);
-
-  const client = new JsonRpcWebSocketClient(rawSocket, timeoutMs);
-  rawSocket.on("data", (chunk) => client.receive(chunk));
-  rawSocket.on("error", (error) => client.fail(error));
-  rawSocket.on("close", () => client.closeFromServer());
-  return client;
-}
-
-async function performWebSocketHandshake(rawSocket, timeoutMs) {
-  const key = crypto.randomBytes(16).toString("base64");
-  const expectedAccept = crypto
-    .createHash("sha1")
-    .update(`${key}258EAFA5-E914-47DA-95CA-C5AB0DC85B11`)
-    .digest("base64");
-  const request = [
-    "GET / HTTP/1.1",
-    "Host: localhost",
-    "Connection: Upgrade",
-    "Upgrade: websocket",
-    "Sec-WebSocket-Version: 13",
-    `Sec-WebSocket-Key: ${key}`,
-    "",
-    "",
-  ].join("\r\n");
-
-  rawSocket.write(request);
-  const response = await readHttpHeaders(rawSocket, timeoutMs);
-  if (!/^HTTP\/1\.1 101\b/i.test(response)) {
-    throw new Error("Codex App Server socket did not accept the WebSocket upgrade.");
-  }
-  const acceptHeader = response
-    .split("\r\n")
-    .find((line) => line.toLowerCase().startsWith("sec-websocket-accept:"));
-  const actualAccept = acceptHeader?.split(":").slice(1).join(":").trim();
-  if (actualAccept !== expectedAccept) {
-    throw new Error("Codex App Server WebSocket upgrade returned an unexpected accept key.");
-  }
-}
-
-async function readHttpHeaders(rawSocket, timeoutMs) {
-  let buffer = Buffer.alloc(0);
-  return await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("Timed out waiting for Codex App Server WebSocket upgrade."));
-    }, timeoutMs);
-
-    const onData = (chunk) => {
-      buffer = Buffer.concat([buffer, chunk]);
-      const end = buffer.indexOf("\r\n\r\n");
-      if (end === -1) {
+  async start() {
+    this.process = spawn(this.config.appServerCommand, this.config.appServerArgs, {
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+    this.process.stdout.setEncoding("utf8");
+    this.process.stdout.on("data", (chunk) => this.receive(chunk));
+    this.process.stderr.on("data", () => {
+      return;
+    });
+    this.process.on("error", (error) => this.fail(error));
+    this.process.on("exit", (code, signal) => {
+      if (this.pending.size === 0) {
         return;
       }
-      cleanup();
-      const extra = buffer.subarray(end + 4);
-      if (extra.length > 0) {
-        rawSocket.unshift(extra);
-      }
-      resolve(buffer.subarray(0, end + 4).toString("utf8"));
-    };
-    const onError = (error) => {
-      cleanup();
-      reject(error);
-    };
-
-    function cleanup() {
-      clearTimeout(timer);
-      rawSocket.off("data", onData);
-      rawSocket.off("error", onError);
-    }
-
-    rawSocket.on("data", onData);
-    rawSocket.once("error", onError);
-  });
-}
-
-class JsonRpcWebSocketClient {
-  constructor(rawSocket, timeoutMs) {
-    this.nextId = 1;
-    this.pending = new Map();
-    this.rawSocket = rawSocket;
-    this.timeoutMs = timeoutMs;
-    this.readBuffer = Buffer.alloc(0);
+      const detail = signal ? `signal ${signal}` : `exit code ${code}`;
+      this.fail(new Error(`Codex App Server exited before responding (${detail}).`));
+    });
   }
 
   request(method, params) {
@@ -346,65 +357,45 @@ class JsonRpcWebSocketClient {
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error(`Timed out waiting for ${method} response from Codex App Server.`));
-      }, this.timeoutMs);
+      }, this.config.timeoutMs);
       this.pending.set(id, { method, resolve, reject, timer });
     });
   }
 
   notify(method, params) {
-    const message = params === undefined ? { method } : { method, params };
-    this.send(message);
+    this.send({ method, params });
   }
 
   send(message) {
-    this.rawSocket.write(encodeTextFrame(JSON.stringify(message)));
+    this.process.stdin.write(`${JSON.stringify(message)}\n`);
   }
 
   receive(chunk) {
-    try {
-      this.readBuffer = Buffer.concat([this.readBuffer, chunk]);
-      while (true) {
-        const parsed = decodeFrame(this.readBuffer);
-        if (!parsed) {
-          return;
-        }
-        this.readBuffer = this.readBuffer.subarray(parsed.frameLength);
-        if (parsed.opcode === 0x8) {
-          this.closeFromServer();
-          return;
-        }
-        if (parsed.opcode !== 0x1) {
-          continue;
-        }
-        this.routeMessage(parsed.payload.toString("utf8"));
+    this.outputBuffer += chunk;
+    const lines = this.outputBuffer.split("\n");
+    this.outputBuffer = lines.pop() ?? "";
+    for (const line of lines) {
+      if (!line.trim()) {
+        continue;
       }
-    } catch (error) {
-      this.fail(error);
-      try {
-        this.rawSocket.destroy();
-      } catch {
-        return;
-      }
+      this.routeMessage(line);
     }
   }
 
-  routeMessage(text) {
+  routeMessage(line) {
     let message;
     try {
-      message = JSON.parse(text);
+      message = JSON.parse(line);
     } catch {
       return;
     }
-
     if (!Object.hasOwn(message, "id")) {
       return;
     }
-
     const pending = this.pending.get(message.id);
     if (!pending) {
       return;
     }
-
     clearTimeout(pending.timer);
     this.pending.delete(message.id);
     if (message.error) {
@@ -426,99 +417,42 @@ class JsonRpcWebSocketClient {
     this.pending.clear();
   }
 
-  closeFromServer() {
-    this.fail(new Error("Codex App Server closed the control socket connection."));
-  }
-
   close() {
+    if (!this.process) {
+      return;
+    }
     try {
-      this.rawSocket.end(encodeCloseFrame());
+      this.process.stdin.end();
     } catch {
-      this.rawSocket.destroy();
+      return;
+    }
+    if (!this.process.killed) {
+      this.process.kill();
     }
   }
 }
 
-function encodeTextFrame(text) {
-  const payload = Buffer.from(text, "utf8");
-  return encodeClientFrame(0x1, payload);
+function readState(statePath) {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(statePath, "utf8"));
+    if (parsed && typeof parsed === "object" && typeof parsed.threads === "object") {
+      return parsed;
+    }
+  } catch {
+    return { threads: {} };
+  }
+  return { threads: {} };
 }
 
-function encodeCloseFrame() {
-  return encodeClientFrame(0x8, Buffer.alloc(0));
-}
-
-function encodeClientFrame(opcode, payload) {
-  const mask = crypto.randomBytes(4);
-  const header = [];
-  header.push(0x80 | opcode);
-
-  if (payload.length < 126) {
-    header.push(0x80 | payload.length);
-  } else if (payload.length <= 0xffff) {
-    header.push(0x80 | 126, (payload.length >> 8) & 0xff, payload.length & 0xff);
-  } else {
-    const lengthBuffer = Buffer.alloc(8);
-    lengthBuffer.writeBigUInt64BE(BigInt(payload.length));
-    header.push(0x80 | 127, ...lengthBuffer);
-  }
-
-  const masked = Buffer.alloc(payload.length);
-  for (let index = 0; index < payload.length; index += 1) {
-    masked[index] = payload[index] ^ mask[index % 4];
-  }
-  return Buffer.concat([Buffer.from(header), mask, masked]);
-}
-
-function decodeFrame(buffer) {
-  if (buffer.length < 2) {
-    return null;
-  }
-
-  const opcode = buffer[0] & 0x0f;
-  const masked = (buffer[1] & 0x80) !== 0;
-  let payloadLength = buffer[1] & 0x7f;
-  let offset = 2;
-
-  if (payloadLength === 126) {
-    if (buffer.length < offset + 2) {
-      return null;
-    }
-    payloadLength = buffer.readUInt16BE(offset);
-    offset += 2;
-  } else if (payloadLength === 127) {
-    if (buffer.length < offset + 8) {
-      return null;
-    }
-    const length = buffer.readBigUInt64BE(offset);
-    if (length > BigInt(Number.MAX_SAFE_INTEGER)) {
-      throw new Error("Codex App Server returned an oversized WebSocket frame.");
-    }
-    payloadLength = Number(length);
-    offset += 8;
-  }
-
-  let mask;
-  if (masked) {
-    if (buffer.length < offset + 4) {
-      return null;
-    }
-    mask = buffer.subarray(offset, offset + 4);
-    offset += 4;
-  }
-
-  const frameLength = offset + payloadLength;
-  if (buffer.length < frameLength) {
-    return null;
-  }
-
-  const payload = Buffer.from(buffer.subarray(offset, frameLength));
-  if (masked) {
-    for (let index = 0; index < payload.length; index += 1) {
-      payload[index] ^= mask[index % 4];
-    }
-  }
-  return { frameLength, opcode, payload };
+function writeThreadState(statePath, state, threadId, entry) {
+  const nextState = {
+    ...state,
+    threads: {
+      ...state.threads,
+      [threadId]: entry,
+    },
+  };
+  fs.writeFileSync(statePath, `${JSON.stringify(nextState, null, 2)}\n`);
 }
 
 function parsePayload(payloadText) {
@@ -537,6 +471,10 @@ function appendJsonl(filePath, line) {
   fs.appendFileSync(filePath, `${line}\n`);
 }
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function readStdin() {
   let buffer = "";
   process.stdin.setEncoding("utf8");
@@ -547,3 +485,13 @@ async function readStdin() {
 
   return buffer;
 }
+
+const payloadText = await readStdin();
+const payload = parsePayload(payloadText);
+const config = readConfig();
+
+fs.mkdirSync(config.dataDir, { recursive: true });
+appendJsonl(config.payloadLogPath, payloadText.trimEnd() || "{}");
+
+const decision = await handleThreadTitle(payload, config);
+appendJsonl(config.decisionLogPath, JSON.stringify(decision));

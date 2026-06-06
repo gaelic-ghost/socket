@@ -6,8 +6,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh ${PLUGIN_ROOT}/hooks/capture-session-start.sh",
+            "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
             "statusMessage": "Running Codex Utilities SessionStart hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
+            "statusMessage": "Running Codex Utilities Stop hook",
             "timeout": 10
           }
         ]

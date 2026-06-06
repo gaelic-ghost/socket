@@ -1,7 +1,7 @@
 # Codex Thread Title Hook Notes
 
-Codex Utilities starts with a safe `SessionStart` hook. By default, the hook
-records the actual payload that Codex provides when a thread starts so
+Codex Utilities starts with safe `SessionStart` and `Stop` hooks. By default,
+the hooks record the actual payloads that Codex provides around a thread so
 thread-name automation can be designed from real data instead of guessing.
 
 ## Name
@@ -11,12 +11,13 @@ behavior rather than a language, framework, app, or repository-maintenance
 domain. It follows the Socket convention of hyphen-case plugin IDs with a
 reader-facing display name in plugin metadata.
 
-## Current Hook
+## Current Hooks
 
-The current hook listens for `SessionStart` with the `startup` matcher and runs:
+The current hooks listen for `SessionStart` with the `startup` matcher and
+`Stop`. Both run:
 
 ```sh
-sh ${PLUGIN_ROOT}/hooks/capture-session-start.sh
+sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh
 ```
 
 This command path is intentionally provisional. The live Codex hook docs do not
@@ -28,7 +29,7 @@ in an installed plugin cache.
 The script appends stdin to:
 
 ```text
-~/.codex/codex-utilities/hooks/session-start.jsonl
+~/.codex/codex-utilities/hooks/thread-title-payloads.jsonl
 ```
 
 It also writes structured hook decisions to:
@@ -37,7 +38,13 @@ It also writes structured hook decisions to:
 ~/.codex/codex-utilities/hooks/thread-title-decisions.jsonl
 ```
 
-Set `CODEX_UTILITIES_DATA_DIR` to redirect both paths during tests.
+Per-thread rename state is written to:
+
+```text
+~/.codex/codex-utilities/hooks/thread-title-state.json
+```
+
+Set `CODEX_UTILITIES_DATA_DIR` to redirect these paths during tests.
 
 ## Thread Title Modes
 
@@ -46,12 +53,22 @@ Set `CODEX_UTILITIES_DATA_DIR` to redirect both paths during tests.
 - `capture` is the default. It records payloads and decisions without changing
   thread metadata.
 - `dry-run` records the thread id candidate and proposed prefix without calling
-  App Server.
-- `rename` calls App Server `thread/name/set` with the proposed name.
+  `thread/name/set`.
+- `rename` uses the `Stop` hook to read the generated title and then call App
+  Server `thread/name/set` once per thread.
 
-The proposed name is currently the last path component of `cwd`, truncated to
+`SessionStart` never renames the thread because it runs before Codex creates the
+generated title. `Stop` reads the current generated title with App Server
+`thread/read`, prefixes it, and records per-thread state so later turns do not
+keep rewriting the title.
+
+The prefix is the last path component of `cwd`, truncated to
 `CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH` characters. The default maximum
-is `48`.
+is `48`. The generated title is preserved after the prefix:
+
+```text
+socket: Implement Stop hook title prefixing
+```
 
 Projectless Codex chat directories are treated specially. If `cwd` appears under
 the default Codex chat root:
@@ -66,9 +83,7 @@ shared projectless prefix such as `Chat`, set
 `CODEX_UTILITIES_PROJECTLESS_THREAD_PREFIX`.
 
 The thread id candidate is read from `thread_id`, `threadId`, `session_id`, then
-`sessionId`. Current Codex hook docs describe `session_id`; keep rename mode
-disabled by default until a live GUI new-thread test confirms that value is the
-same id accepted by `thread/name/set`.
+`sessionId`. Current Codex hook docs describe `session_id`.
 
 A live projectless thread created after trusting the plugin hook produced this
 `SessionStart` payload shape:
@@ -102,16 +117,21 @@ calls a better fit than launching `codex exec`.
 new agent run. That makes a metadata-only update depend on another model turn
 and risks making the naming utility visible as its own thread activity.
 
-The hook's rename mode connects directly to the Codex App Server unix control
-socket:
+The hook's rename mode starts a short-lived App Server JSONL stdio process:
 
-```text
-~/.codex/app-server-control/app-server-control.sock
+```sh
+codex app-server
 ```
 
-Override that path with `CODEX_UTILITIES_APP_SERVER_SOCKET`. The control socket
-uses WebSocket frames over a unix socket, so the hook uses a small Node stdlib
-client instead of sending plain JSONL to `codex app-server proxy`.
+Override the command with `CODEX_UTILITIES_APP_SERVER_COMMAND`. The hook sends
+`initialize`, `initialized`, `thread/read`, and `thread/name/set` over stdio.
+This path works with the regular CLI install and does not require the managed
+app-server daemon or the standalone Codex installer.
+
+`CODEX_UTILITIES_THREAD_TITLE_POLL_ATTEMPTS` and
+`CODEX_UTILITIES_THREAD_TITLE_POLL_DELAY_MS` control the bounded wait for Codex's
+generated title during the `Stop` hook. If the title is still missing when the
+poll expires, the hook skips the rename and can try again on a later `Stop`.
 
 An MCP tool can still be useful as an operator-facing helper, but it should be
 implemented as a thin path to App Server metadata operations rather than as an
@@ -140,23 +160,20 @@ Before testing, confirm the active Codex config uses the current feature keys:
 `features.plugin_hooks` are not required and should not appear in operator
 guidance.
 
-An installed `codex-utilities@socket` 6.16.0 probe did not expose or run the
-plugin-bundled `SessionStart` hook in the Codex GUI settings or in
-`codex exec --dangerously-bypass-hook-trust`. Current Codex docs say
-plugin-bundled hooks load alongside other hook sources and do not document a
-`SessionStart` exclusion, so treat that result as a product behavior mismatch or
-loading-order limitation until confirmed upstream. A user-level or project-local
-hook is the better live test surface for the thread-title flow.
+An installed `codex-utilities@socket` 6.16.0 probe initially did not expose the
+plugin-bundled `SessionStart` hook until the Codex GUI was restarted. After the
+restart, the hook appeared in settings, was trusted, and captured real
+`SessionStart` payloads.
 
 1. Install or refresh the Socket marketplace plugin locally.
 2. Confirm the hook source is visible in Codex hook settings or `/hooks`.
-3. Trust the `codex-utilities` `SessionStart` hook if it appears.
+3. Trust the `codex-utilities` `SessionStart` and `Stop` hooks if they appear.
 4. Start a new thread in a known working directory with the default `capture`
    mode.
 5. Compare the captured `session_id` with the new thread id.
-6. Repeat with `CODEX_UTILITIES_THREAD_TITLE_MODE=dry-run` and inspect
+6. Run a first-turn `Stop` dry-run with `CODEX_UTILITIES_THREAD_TITLE_MODE=dry-run` and inspect
    `thread-title-decisions.jsonl`.
-7. Only after that identity is confirmed, repeat with
+7. Only after the generated-title prefix is confirmed, repeat with
    `CODEX_UTILITIES_THREAD_TITLE_MODE=rename`.
 8. Keep the model-mediated prefix route as a comparison path if direct App
    Server renaming loses too much of Codex's generated-title quality.
