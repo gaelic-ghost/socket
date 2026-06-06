@@ -19,8 +19,8 @@ Use a Codex subagent role first.
 
 The first role should live in `apple-dev-skills` as `swift-steward`. It should
 handle SwiftPM, Xcode, DocC, Apple docs, AGENTS guidance, and
-`maintain-project-repo` readiness scans. It should return findings and draft
-patch plans to the main agent rather than applying edits itself.
+`maintain-project-repo` readiness scans. It should return review packets to the
+main agent rather than applying edits itself.
 
 Add a sibling `server-swift-steward` role in `server-side-swift` for server-side
 Swift repositories. That role should handle Vapor, Hummingbird, Swift OpenAPI,
@@ -39,8 +39,8 @@ Do not start with an OpenAI Agents SDK service. A service would own tools,
 guardrails, state, tracing, and approval flow in application code. The current
 workflow can be expressed as a Codex role contract plus existing skills.
 
-Do not make the subagent an apply-mode editor yet. Draft patches are useful, but
-the first safe version should return patch plans or proposed diffs for the main
+Do not make the subagent an apply-mode editor yet. Proposed patch sets are
+useful, but the first safe version should return review packets for the main
 agent and Gale to review before any file changes are applied.
 
 ## Role Boundaries
@@ -85,17 +85,17 @@ Good trigger phrases include:
 - "sync guidance while we keep working"
 - "do repo maintenance with a subagent"
 - "use swift-steward"
-- "prepare draft patches for guidance sync"
+- "prepare review packets for guidance sync"
 - "check this Swift repo for maintenance drift"
 
 The main agent should keep final write ownership. A steward subagent may return
-draft patches, but the main agent should review, edit, save for later, or apply
-them only after the user approves that step.
+proposed patch sets, but the main agent should review, edit, save for later, or
+apply them only after the user approves that step.
 
 ## Model Policy
 
 Set the first steward roles to `model = "gpt-5.4-mini"` because their initial
-contract is bounded, read-heavy exploration and draft patch planning. This is a
+contract is bounded, read-heavy exploration and review-packet planning. This is a
 role-local default, not a global Codex rule: harder synthesis, ambiguous
 debugging, security-sensitive reasoning, or write-plan ownership can still use a
 stronger model or omit the model field so the parent session decides.
@@ -125,22 +125,30 @@ logs or long exploratory transcripts.
   parallel implementation and the write scope is disjoint.
 - Do not invent plugin manifest support for custom agents until Codex documents
   that installed plugins expose custom-agent files directly.
-- If a draft patch is useful, return it as a reviewable artifact for the main
-  agent to apply with normal repository validation.
+- If a proposed patch set is useful, return it as a reviewable artifact for the
+  main agent to apply with normal repository validation.
 
 ## Implementation Slices
 
-1. Add project-scoped custom-agent draft files in the child plugin roots so the
-   role contract is concrete and reviewable.
-2. Teach `sync-swift-package-guidance` and `sync-xcode-project-guidance` when to
-   ask for or use `swift-steward` for broad discovery.
-3. Add similar server-side guidance once a server-side repo-maintenance or
-   guidance-sync workflow exists there.
-4. Add concrete review-packet report generation after the role contract is
-   stable.
-5. Consider a repo-local LangGraph sidecar only for a specific repository that
-   needs persisted maintenance state, resumable handoffs, or repeated CLI
-   commands.
+Completed for the first release:
+
+1. Added project-scoped custom-agent files in the child plugin roots so the role
+   contracts are concrete and reviewable.
+2. Taught `sync-swift-package-guidance` and `sync-xcode-project-guidance` when
+   to ask for or use `swift-steward` for broad discovery.
+3. Added the sibling `server-swift-steward` role and server-side Swift guidance
+   boundary.
+4. Added the shared review-packet contract and validator coverage for steward,
+   auditor, and triager-style roles.
+5. Added adjacent read-heavy roles that support the same maintenance story:
+   `repo-docs-auditor`, `code-slice-tracer`, and `skills-repo-guidance-sync`.
+
+Deferred until a specific repository needs it:
+
+- repo-local LangGraph or OpenAI Agents SDK sidecars with persisted maintenance
+  state, resumable handoffs, or repeated CLI commands
+- write-capable steward workflows, guarded apply modes, or parallel
+  implementation beyond disjoint user-approved scopes
 
 ## Sources
 

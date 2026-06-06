@@ -77,14 +77,14 @@ Apple Dev Skills keeps its own roadmap because it is the remaining subtree-manag
 
 Current Socket catalog shape:
 
-- `agent-plugin-skills`: maintainer skills for skills-export and plugin-export repositories
-- `apple-dev-skills`: Apple, Swift, SwiftUI, AppKit, Xcode, Swift OpenAPI client, Safari, and DocC workflows with its own roadmap
+- `agent-plugin-skills`: maintainer skills and a read-only guidance-sync subagent role for skills-export and plugin-export repositories
+- `apple-dev-skills`: Apple, Swift, SwiftUI, AppKit, Xcode, Swift OpenAPI client, Safari, DocC workflows, and the `swift-steward` subagent role with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `codex-utilities`: local Codex runtime utilities, starting with a capture-only SessionStart hook for thread-title automation research
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
-- `productivity-skills`: general-purpose maintainer and documentation workflow baseline
+- `productivity-skills`: general-purpose maintainer and documentation workflows plus read-only docs-audit and code-tracing subagent roles
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
-- `server-side-swift`: server-side Swift support for building, running, containerizing, and maintaining services with frameworks like Vapor and Hummingbird
+- `server-side-swift`: server-side Swift support and the `server-swift-steward` subagent role for services with frameworks like Vapor and Hummingbird
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance

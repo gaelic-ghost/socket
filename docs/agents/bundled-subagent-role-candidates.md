@@ -22,9 +22,9 @@ workflow knowledge.
 
 Strong candidates:
 
-1. `productivity-skills`: `repo-docs-auditor`
-2. `productivity-skills`: `code-slice-tracer`
-3. `agent-plugin-skills`: `skills-repo-guidance-sync`
+1. `productivity-skills`: `repo-docs-auditor` (implemented)
+2. `productivity-skills`: `code-slice-tracer` (implemented)
+3. `agent-plugin-skills`: `skills-repo-guidance-sync` (implemented)
 4. `things-app`: `things-route-auditor`
 5. `cardhop-app`: `cardhop-contact-auditor`
 6. `python-skills`: `python-validation-triager`
@@ -33,6 +33,16 @@ Strong candidates:
 
 Keep `swift-steward` and `server-swift-steward` as the Swift-family roles
 instead of adding another Apple or server-side Swift role.
+
+## Implemented Roles
+
+These roles are now bundled in their owning plugin roots:
+
+- `apple-dev-skills/.codex/agents/swift-steward.toml`
+- `server-side-swift/.codex/agents/server-swift-steward.toml`
+- `productivity-skills/.codex/agents/repo-docs-auditor.toml`
+- `productivity-skills/.codex/agents/code-slice-tracer.toml`
+- `agent-plugin-skills/.codex/agents/skills-repo-guidance-sync.toml`
 
 ## Strong Candidates
 
