@@ -80,6 +80,22 @@ An MCP tool can still be useful as an operator-facing helper, but it should be
 implemented as a thin path to App Server metadata operations rather than as an
 agent loop.
 
+## Tested Alternate Route
+
+An adjacent thread tested a more model-mediated route for prefixing thread
+names. A `SessionStart` hook injected developer context that asked the new
+thread itself to call its rename tool. That successfully renamed a generated
+title to:
+
+```text
+heya-codex-i-d-like-to: Inspect thread naming controls
+```
+
+This route is worth keeping as a future refinement option because it preserves
+Codex's generated title and only adds the project prefix around it. The tradeoff
+is that it depends on model and tool compliance, and the instruction is more
+visible inside the new thread than the direct App Server hook route.
+
 ## Next Test
 
 1. Install or refresh the Socket marketplace plugin locally.
@@ -91,3 +107,5 @@ agent loop.
    `thread-title-decisions.jsonl`.
 6. Only after that identity is confirmed, repeat with
    `CODEX_UTILITIES_THREAD_TITLE_MODE=rename`.
+7. Keep the model-mediated prefix route as a comparison path if direct App
+   Server renaming loses too much of Codex's generated-title quality.
