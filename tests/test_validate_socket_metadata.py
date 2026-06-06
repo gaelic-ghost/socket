@@ -222,7 +222,7 @@ def test_main_rejects_custom_agent_with_empty_model(
         run_validator(repo_root, monkeypatch)
 
 
-def test_main_rejects_steward_agent_without_report_contract(
+def test_main_rejects_review_packet_agent_without_report_contract(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -234,11 +234,11 @@ def test_main_rejects_steward_agent_without_report_contract(
         },
     )
     write(
-        repo_root / "plugins" / "example-skills" / ".codex" / "agents" / "swift-steward.toml",
+        repo_root / "plugins" / "example-skills" / ".codex" / "agents" / "repo-docs-auditor.toml",
         '\n'.join(
             [
-                'name = "swift-steward"',
-                'description = "Read-heavy Swift repo-maintenance steward."',
+                'name = "repo-docs-auditor"',
+                'description = "Read-heavy docs auditor."',
                 'sandbox_mode = "read-only"',
                 'developer_instructions = """Return a draft patch plan for review. Do not apply edits."""',
                 "",
