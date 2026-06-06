@@ -21,6 +21,8 @@ Use this file for durable guidance inside the Codex Utilities Socket plugin.
 - The MCP and skill belong in this plugin because they are local Codex runtime utilities.
 - The signed macOS runtime belongs in the separate `UtilitiesForCodex` app repository, not inside this plugin payload.
 - Do not bundle a `.app` inside `codex-utilities`; the plugin should detect and talk to the installed app through a local transport.
+- Codex GUI restart coordination should follow the same split: the installed app owns pending restart requests, waiting, cancellation, status, and final quit/reopen execution; this plugin owns the MCP request/cancel/status tools and the agent-facing skill policy.
+- Do not implement `when-idle` by polling Codex process state alone. Treat automatic waiting as blocked until `UtilitiesForCodex` has a supported GUI thread-status source outside the current assistant turn.
 
 ## Runtime Data
 
