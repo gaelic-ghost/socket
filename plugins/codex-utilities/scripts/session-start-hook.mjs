@@ -139,7 +139,7 @@ async function setThreadName({ socketPath, threadId, name, timeoutMs }) {
       clientInfo: {
         name: "codex_utilities_hook",
         title: "Codex Utilities Hook",
-        version: "0.1.0",
+        version: "6.15.4",
       },
       capabilities: {
         experimentalApi: false,
