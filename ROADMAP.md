@@ -248,6 +248,8 @@ In Progress
 - [x] Prefer Codex App Server metadata operations for future thread renaming instead of invoking `codex exec` as a separate agent run.
 - [x] Keep explicit `capture` and `dry-run` modes so the same hook can test title prefixing without changing thread metadata.
 - [x] Enable thread-title mutation by default after a real new-thread test confirmed the captured `session_id` maps to the target thread id and Codex GUI hook settings provide the behavior toggle.
+- [x] Prefix titles on the second `Stop` hook by default so Codex's own generated-title writer has settled before the plugin writes the project prefix.
+- [x] Add a diagnostic `PostToolUse` hook log so title-generation timing can be compared against hook-visible tool activity.
 - [ ] Add a desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` app instead of bundling a macOS app inside the plugin.
 - [ ] Add Codex GUI restart request/cancel/status tools and a narrow skill that delegates waiting and final restart execution to `UtilitiesForCodex`.
 - [ ] Add an agent configuration sync surface that lets `UtilitiesForCodex` discover, diff, and safely render compatible guidance/config for normal Codex, Xcode Codex, and Xcode Claude while `codex-utilities` owns the agent-facing adapter and policy.

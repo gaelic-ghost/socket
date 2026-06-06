@@ -10,14 +10,18 @@ Use this file for durable guidance inside the Codex Utilities Socket plugin.
 
 ## Current Utility
 
-- The first utility is a thread-title hook pair that records `SessionStart` and
-  `Stop` payloads to local JSONL files.
+- The first utility is a thread-title hook set that records `SessionStart`,
+  `Stop`, and `PostToolUse` payloads to local JSONL files.
 - `rename` mode is the default because Codex GUI hook settings already provide
   the operator-facing enable/disable toggle for this behavior.
 - `capture` and `dry-run` modes are explicit test levers for thread-title
   prefixing, enabled with `CODEX_UTILITIES_THREAD_TITLE_MODE`.
-- `Stop` is the only hook event that may prefix generated titles because
-  `SessionStart` runs before Codex creates the generated thread title.
+- `Stop` is the only hook event that may prefix generated titles. By default,
+  prefix only on the second `Stop` for a thread because the first `Stop` can run
+  before Codex's generated title exists or before Codex's title writer has
+  settled.
+- `PostToolUse` is diagnostic only. It records compact tool-use summaries so the
+  title-generation timing can be compared against normal tool activity.
 
 ## Planned Desktop Bridge Utility
 
@@ -33,6 +37,7 @@ Use this file for durable guidance inside the Codex Utilities Socket plugin.
 - Default runtime payload path: `~/.codex/codex-utilities/hooks/thread-title-payloads.jsonl`
 - Thread title decisions are recorded in `~/.codex/codex-utilities/hooks/thread-title-decisions.jsonl`
 - Per-thread rename state is recorded in `~/.codex/codex-utilities/hooks/thread-title-state.json`
+- Post-tool-use summaries are recorded in `~/.codex/codex-utilities/hooks/tool-use-events.jsonl`
 - Override with `CODEX_UTILITIES_DATA_DIR` when testing.
 - Do not store captured hook payloads in the Socket repository.
 

@@ -1,9 +1,9 @@
 # Codex Thread Title Hook Notes
 
 Codex Utilities provides `SessionStart` and `Stop` hooks for prefixing generated
-thread titles with the project directory name. By default, a trusted and enabled
-hook renames project threads; disable the hook in Codex GUI settings to turn the
-behavior off.
+thread titles with the project directory name, plus a `PostToolUse` diagnostic
+hook for timing research. By default, a trusted and enabled hook renames project
+threads; disable the hook in Codex GUI settings to turn the behavior off.
 
 ## Name
 
@@ -14,8 +14,8 @@ reader-facing display name in plugin metadata.
 
 ## Current Hooks
 
-The current hooks listen for `SessionStart` with the `startup` matcher and
-`Stop`. Both run:
+The current hooks listen for `SessionStart` with the `startup` matcher, `Stop`,
+and `PostToolUse`. All three run:
 
 ```sh
 sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh
@@ -43,6 +43,12 @@ Per-thread rename state is written to:
 ~/.codex/codex-utilities/hooks/thread-title-state.json
 ```
 
+Post-tool-use summaries are written to:
+
+```text
+~/.codex/codex-utilities/hooks/tool-use-events.jsonl
+```
+
 Set `CODEX_UTILITIES_DATA_DIR` to redirect these paths during tests.
 
 ## Thread Title Modes
@@ -56,9 +62,15 @@ Set `CODEX_UTILITIES_DATA_DIR` to redirect these paths during tests.
   `thread/name/set`.
 
 `SessionStart` never renames the thread because it runs before Codex creates the
-generated title. `Stop` reads the current generated title with App Server
-`thread/read`, prefixes it, and records per-thread state so later turns do not
-keep rewriting the title.
+generated title. By default, the first `Stop` for a thread also waits without
+renaming because GUI tests showed Codex can generate or rewrite the title after
+that hook fires. The second `Stop` reads the current generated title with App
+Server `thread/read`, prefixes it, and records per-thread state so later turns
+do not keep rewriting the title.
+
+`CODEX_UTILITIES_THREAD_TITLE_MIN_STOP_COUNT` controls the Stop count threshold.
+The default is `2`. Set it to `1` only when deliberately testing first-turn
+renames.
 
 The prefix is the last path component of `cwd`, truncated to
 `CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH` characters. The default maximum
@@ -135,6 +147,17 @@ An MCP tool can still be useful as an operator-facing helper, but it should be
 implemented as a thin path to App Server metadata operations rather than as an
 agent loop.
 
+## Tool Timing Diagnostics
+
+The `PostToolUse` hook records compact summaries in `tool-use-events.jsonl` and
+the raw payload in `thread-title-payloads.jsonl`. The compact summary includes
+the timestamp, thread id candidate, turn id, cwd, best-effort tool name, tool id,
+status, and sorted payload keys.
+
+This diagnostic hook is intentionally read-only. It exists to answer whether
+Codex's title generation appears as a hook-visible tool event and to compare
+that timing with `Stop` decisions.
+
 ## Tested Alternate Route
 
 An adjacent thread tested a more model-mediated route for prefixing thread
@@ -165,12 +188,17 @@ restart, the hook appeared in settings, was trusted, and captured real
 
 1. Install or refresh the Socket marketplace plugin locally.
 2. Confirm the hook source is visible in Codex hook settings or `/hooks`.
-3. Trust the `codex-utilities` `SessionStart` and `Stop` hooks if they appear.
+3. Trust the `codex-utilities` `SessionStart`, `Stop`, and `PostToolUse` hooks
+   if they appear.
 4. Start a new thread in a known working directory.
 5. Confirm `thread-title-decisions.jsonl` records `SessionStart` and `Stop`
    decisions for the new thread.
-6. Confirm the generated title is prefixed after the first `Stop` event.
-7. Use `CODEX_UTILITIES_THREAD_TITLE_MODE=capture` or `dry-run` only when
+6. Confirm the first `Stop` records the wait-for-second-Stop decision.
+7. Send a second turn, then confirm the generated title is prefixed after the
+   second `Stop` event.
+8. Inspect `tool-use-events.jsonl` to see whether title generation appears as a
+   hook-visible tool event.
+9. Use `CODEX_UTILITIES_THREAD_TITLE_MODE=capture` or `dry-run` only when
    debugging the hook without mutating thread metadata.
-8. Keep the model-mediated prefix route as a comparison path if direct App
+10. Keep the model-mediated prefix route as a comparison path if direct App
    Server renaming loses too much of Codex's generated-title quality.

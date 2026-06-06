@@ -24,6 +24,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
+            "statusMessage": "Logging Codex Utilities tool-use hook",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

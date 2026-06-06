@@ -11,6 +11,16 @@ async function handleThreadTitle(payload, config) {
     typeof payload.hook_event_name === "string" && payload.hook_event_name.trim()
       ? payload.hook_event_name.trim()
       : "unknown";
+  if (!["SessionStart", "Stop"].includes(eventName)) {
+    return {
+      at: new Date().toISOString(),
+      eventName,
+      mode: config.mode,
+      action: "ignored",
+      reason: "Thread title prefixing only handles SessionStart and Stop hook events.",
+    };
+  }
+
   const threadId = threadIdFromPayload(payload);
   const base = {
     at: new Date().toISOString(),
@@ -62,6 +72,23 @@ async function handleThreadTitle(payload, config) {
     };
   }
 
+  const stopCount = stopCountForThread(state, threadId) + 1;
+  if (stopCount < config.minStopCountBeforeRename) {
+    writeThreadState(config.statePath, state, threadId, {
+      ...state.threads[threadId],
+      applied: false,
+      lastStopAt: new Date().toISOString(),
+      stopCount,
+    });
+    return {
+      ...base,
+      action: "skipped",
+      prefix: prefixPlan.prefix,
+      reason: `Waiting for Stop hook ${config.minStopCountBeforeRename} before prefixing the generated thread title.`,
+      stopCount,
+    };
+  }
+
   const threadRead = await readThreadWithGeneratedTitle(threadId, config);
   if (!threadRead.thread) {
     return {
@@ -69,6 +96,7 @@ async function handleThreadTitle(payload, config) {
       action: "failed",
       prefix: prefixPlan.prefix,
       reason: threadRead.reason,
+      stopCount,
     };
   }
 
@@ -79,6 +107,7 @@ async function handleThreadTitle(payload, config) {
       action: "skipped",
       prefix: prefixPlan.prefix,
       reason: "Codex App Server did not return a generated thread title before the Stop hook timeout.",
+      stopCount,
     };
   }
 
@@ -94,17 +123,19 @@ async function handleThreadTitle(payload, config) {
 
   if (proposedName === currentName) {
     writeThreadState(config.statePath, state, threadId, {
+      ...state.threads[threadId],
       applied: true,
       at: new Date().toISOString(),
       currentName,
       proposedName,
       reason: "already-prefixed",
+      stopCount,
     });
-    return { ...planned, action: "already-prefixed" };
+    return { ...planned, action: "already-prefixed", stopCount };
   }
 
   if (config.mode === "dry-run") {
-    return planned;
+    return { ...planned, stopCount };
   }
 
   try {
@@ -112,20 +143,53 @@ async function handleThreadTitle(payload, config) {
       await client.request("thread/name/set", { threadId, name: proposedName });
     });
     writeThreadState(config.statePath, state, threadId, {
+      ...state.threads[threadId],
       applied: true,
       at: new Date().toISOString(),
       currentName,
       proposedName,
       reason: "renamed",
+      stopCount,
     });
-    return { ...planned, action: "renamed" };
+    return { ...planned, action: "renamed", stopCount };
   } catch (error) {
     return {
       ...planned,
       action: "failed",
       reason: error instanceof Error ? error.message : String(error),
+      stopCount,
     };
   }
+}
+
+function toolUseSummaryFromPayload(payload, config) {
+  const eventName =
+    typeof payload.hook_event_name === "string" && payload.hook_event_name.trim()
+      ? payload.hook_event_name.trim()
+      : "unknown";
+  if (eventName !== "PostToolUse") {
+    return null;
+  }
+
+  return {
+    at: new Date().toISOString(),
+    eventName,
+    sessionId: threadIdFromPayload(payload),
+    turnId: typeof payload.turn_id === "string" ? payload.turn_id : null,
+    cwd: typeof payload.cwd === "string" ? payload.cwd : null,
+    toolName: firstStringField(payload, [
+      "tool_name",
+      "toolName",
+      "name",
+      "tool",
+      "function_name",
+      "functionName",
+    ]),
+    toolId: firstStringField(payload, ["tool_id", "toolId", "call_id", "callId", "id"]),
+    status: firstStringField(payload, ["status", "result", "outcome"]),
+    payloadKeys: Object.keys(payload).sort(),
+    payloadPath: config.payloadLogPath,
+  };
 }
 
 function readConfig() {
@@ -155,6 +219,10 @@ function readConfig() {
     process.env.CODEX_UTILITIES_THREAD_TITLE_POLL_DELAY_MS,
     500,
   );
+  const minStopCountBeforeRename = positiveIntegerFromEnv(
+    process.env.CODEX_UTILITIES_THREAD_TITLE_MIN_STOP_COUNT,
+    2,
+  );
 
   return {
     appServerCommand: process.env.CODEX_UTILITIES_APP_SERVER_COMMAND ?? "codex",
@@ -162,6 +230,7 @@ function readConfig() {
     dataDir,
     decisionLogPath: path.join(dataDir, "thread-title-decisions.jsonl"),
     maxPrefixLength,
+    minStopCountBeforeRename,
     mode,
     payloadLogPath: path.join(dataDir, "thread-title-payloads.jsonl"),
     pluginVersion: readPluginVersion(pluginRoot),
@@ -171,6 +240,7 @@ function readConfig() {
     timeoutMs,
     titlePollAttempts,
     titlePollDelayMs,
+    toolUseLogPath: path.join(dataDir, "tool-use-events.jsonl"),
   };
 }
 
@@ -206,6 +276,15 @@ function optionalTrimmedStringFromEnv(rawValue) {
   }
   const trimmed = rawValue.trim();
   return trimmed ? trimmed : null;
+}
+
+function firstStringField(payload, keys) {
+  for (const key of keys) {
+    if (typeof payload[key] === "string" && payload[key].trim()) {
+      return payload[key].trim();
+    }
+  }
+  return null;
 }
 
 function threadIdFromPayload(payload) {
@@ -435,13 +514,24 @@ class JsonRpcStdioClient {
 function readState(statePath) {
   try {
     const parsed = JSON.parse(fs.readFileSync(statePath, "utf8"));
-    if (parsed && typeof parsed === "object" && typeof parsed.threads === "object") {
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      parsed.threads &&
+      typeof parsed.threads === "object" &&
+      !Array.isArray(parsed.threads)
+    ) {
       return parsed;
     }
   } catch {
     return { threads: {} };
   }
   return { threads: {} };
+}
+
+function stopCountForThread(state, threadId) {
+  const rawStopCount = state.threads[threadId]?.stopCount;
+  return Number.isInteger(rawStopCount) && rawStopCount > 0 ? rawStopCount : 0;
 }
 
 function writeThreadState(statePath, state, threadId, entry) {
@@ -492,6 +582,11 @@ const config = readConfig();
 
 fs.mkdirSync(config.dataDir, { recursive: true });
 appendJsonl(config.payloadLogPath, payloadText.trimEnd() || "{}");
+
+const toolUseSummary = toolUseSummaryFromPayload(payload, config);
+if (toolUseSummary) {
+  appendJsonl(config.toolUseLogPath, JSON.stringify(toolUseSummary));
+}
 
 const decision = await handleThreadTitle(payload, config);
 appendJsonl(config.decisionLogPath, JSON.stringify(decision));
