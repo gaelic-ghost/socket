@@ -199,6 +199,11 @@ exit 1
                 (target / "Configurations" / "App-Shared.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertTrue((target / "AGENTS.md").exists())
+            local_environment_path = target / ".codex" / "environments" / "xcode-project.toml"
+            self.assertTrue(local_environment_path.exists())
+            local_environment_text = local_environment_path.read_text(encoding="utf-8")
+            self.assertIn("xcodebuild -scheme DemoApp -derivedDataPath ./DerivedData build", local_environment_text)
+            self.assertEqual(payload["local_environment_path"], str(local_environment_path))
             agents_text = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("xcode-build-run-workflow", agents_text)
             self.assertIn("xcode-testing-workflow", agents_text)

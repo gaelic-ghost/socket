@@ -1,0 +1,21 @@
+# Copy to .codex/environments/swift-package.toml and adjust action names if needed.
+version = 1
+name = "swift-package"
+
+[setup]
+script = "swift package resolve"
+
+[[actions]]
+name = "resolve"
+icon = "tool"
+command = "swift package resolve"
+
+[[actions]]
+name = "build"
+icon = "tool"
+command = "swift build"
+
+[[actions]]
+name = "test"
+icon = "tool"
+command = "swift test"

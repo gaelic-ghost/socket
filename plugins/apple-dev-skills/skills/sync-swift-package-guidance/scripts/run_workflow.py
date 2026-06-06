@@ -191,6 +191,12 @@ def main() -> int:
         elif normalized_inputs["report_only"]:
             actions.append("report that AGENTS.md is missing the bounded Swift package guidance section")
 
+    local_environment_path = repo_root / ".codex" / "environments" / "swift-package.toml"
+    if local_environment_path.exists():
+        actions.append("inspect existing .codex/environments/swift-package.toml without overwriting local edits")
+    else:
+        actions.append("install .codex/environments/swift-package.toml from template")
+
     if args.dry_run:
         payload = {
             "status": "success",

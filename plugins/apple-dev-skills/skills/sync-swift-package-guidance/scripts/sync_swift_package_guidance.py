@@ -85,6 +85,30 @@ def read_asset(name: str) -> str:
     return (Path(__file__).resolve().parents[1] / "assets" / name).read_text(encoding="utf-8").rstrip() + "\n"
 
 
+def install_local_environment(repo_root: Path) -> str:
+    template_path = (
+        Path(__file__).resolve().parents[3]
+        / "templates"
+        / "codex-local-environments"
+        / "swift-package.toml"
+    )
+    target_path = repo_root / ".codex" / "environments" / "swift-package.toml"
+
+    if not template_path.is_file():
+        raise RuntimeError(f"Codex local environment template is missing: {template_path}")
+    if target_path.exists() and not target_path.is_file():
+        raise RuntimeError(f"Codex local environment target exists but is not a regular file: {target_path}")
+
+    template_text = template_path.read_text(encoding="utf-8")
+    if not target_path.exists():
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(template_text, encoding="utf-8")
+        return "installed .codex/environments/swift-package.toml from template"
+    if target_path.read_text(encoding="utf-8") == template_text:
+        return "left matching .codex/environments/swift-package.toml unchanged"
+    return "preserved existing .codex/environments/swift-package.toml because it differs from the template"
+
+
 def maintain_project_repo_runner() -> Path:
     script_path = Path(__file__).resolve()
     candidate_paths: list[Path] = []
@@ -241,6 +265,23 @@ def main() -> int:
             print(json.dumps(payload, indent=2, sort_keys=True))
             return 1
         validation_result = "validated"
+
+    try:
+        actions.append(install_local_environment(repo_root))
+    except RuntimeError as exc:
+        payload = {
+            "status": "failed",
+            "path_type": "primary",
+            "repo_root": str(repo_root),
+            "agents_path": str(agents_path),
+            "detected_state": detected_state,
+            "validation_result": validation_result,
+            "actions": actions,
+            "stderr": str(exc),
+            "next_step": "Resolve the Codex local environment template or target path issue, then rerun sync-swift-package-guidance.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
 
     try:
         runner = maintain_project_repo_runner()

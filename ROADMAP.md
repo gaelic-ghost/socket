@@ -286,6 +286,7 @@ In Progress
 - [x] GitHub #60: Apple Dev Skills workflow helper is missing PyYAML runtime dependency ([#60](https://github.com/gaelic-ghost/socket/issues/60))
 - [x] Hardened `web-dev-skills:expo-inline-native-modules-workflow` with native-shape decision and validation reference tables.
 - [x] Added Server-Side Swift ecosystem package preference guidance for Vapor, Vapor Community, and Hummingbird-aligned packages.
+- [x] Added `productivity-skills:codex-gui-worktree-workflow` for general Codex GUI worktree-first planning, plus Apple and server-side Swift local environment templates in their owning stack plugins.
 
 ## Backlog Candidates
 
@@ -311,6 +312,7 @@ In Progress
 - [x] Add `agent-plugin-skills:skills-repo-guidance-sync` as a read-only custom-agent role for plugin-root policy audits, marketplace wording checks, Codex docs freshness, `.agents/skills` discovery mirrors, and generated guidance drift.
 - [ ] Add privacy-fenced app plugin auditor roles only after their read/write boundaries are explicit: `things-app:things-route-auditor` for read-only Things route and digest planning, and `cardhop-app:cardhop-contact-auditor` for schema, health, route, and dry-run preview checks.
 - [ ] Add language validation triager roles after one shared contract is agreed: `python-skills:python-validation-triager`, `rust-skills:rust-validation-triager`, and `dotnet-skills:dotnet-validation-triager`, each report-first and scoped to logs, manifests, CI, test, tooling, package, and upgrade evidence.
+- [ ] Add Codex GUI local environment templates and auto-copy/install behavior to `dotnet-skills` for F#, C#, and mixed `.NET` repos, keeping setup/actions portable and preserving customized `.codex/environments/*.toml` files the same way the SwiftPM and Xcode workflows do.
 - [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `productivity-skills:roadmap-triage-worker`, `productivity-skills:automation-plan-designer`, `swiftasb-skills:swiftasb-steward`, and `web-dev-skills:expo-native-boundary-scout`.
 - [ ] Keep placeholder or write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward`, `spotify`, or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
@@ -361,6 +363,7 @@ In Progress
 - Updated `socket` and plugin guidance so ordinary user installs and updates default to Git-backed Codex marketplace sources and official marketplace add/upgrade commands.
 - Loosened coordinated Codex subagent guidance so skills preserve OpenAI's explicit-trigger model while allowing narrower workflow guidance, such as Codex Security repository-wide scans, to ask for and use subagents when the task depends on parallel file-pass review.
 - Added coordinated Codex subagent guidance across `agent-plugin-skills` and `productivity-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
+- Added `productivity-skills:codex-gui-worktree-workflow` as the general Codex GUI worktree-first planning surface, while keeping SwiftPM, Xcode, Vapor, Hummingbird, and server-side Swift local environment templates inside their stack-specific plugins.
 - Prepared the `v6.1.0` minor release by adding the `maintain-project-api` productivity skill and keeping the monorepo-owned child docs, tests, and shared version surfaces aligned.
 - Added explicit `standard` and `subtrees` release-mode guidance, including the pull-only `SpeakSwiftlyServer` rule for `socket` subtree sync.
 - Published `apple-dev-skills` `v6.0.11` after adding direct regression coverage for SwiftPM-generated `.swiftpm/xcode/package.xcworkspace` classification and synced the released child state back into `socket`.

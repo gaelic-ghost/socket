@@ -1,0 +1,26 @@
+# Copy to .codex/environments/swift-server-package.toml and replace EXECUTABLE_NAME.
+version = 1
+name = "swift-server-package"
+
+[setup]
+script = "swift package resolve"
+
+[[actions]]
+name = "resolve"
+icon = "tool"
+command = "swift package resolve"
+
+[[actions]]
+name = "build"
+icon = "tool"
+command = "swift build"
+
+[[actions]]
+name = "test"
+icon = "tool"
+command = "swift test"
+
+[[actions]]
+name = "run"
+icon = "play"
+command = "swift run EXECUTABLE_NAME"

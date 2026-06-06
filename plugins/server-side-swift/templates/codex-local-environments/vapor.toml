@@ -1,0 +1,26 @@
+# Copy to .codex/environments/vapor.toml and adjust the executable name if needed.
+version = 1
+name = "vapor"
+
+[setup]
+script = "swift package resolve"
+
+[[actions]]
+name = "build"
+icon = "tool"
+command = "swift build"
+
+[[actions]]
+name = "test"
+icon = "tool"
+command = "swift test"
+
+[[actions]]
+name = "serve"
+icon = "play"
+command = "swift run App serve"
+
+[[actions]]
+name = "migrate"
+icon = "database"
+command = "swift run App migrate"

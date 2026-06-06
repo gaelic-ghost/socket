@@ -87,6 +87,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - `repo_root=.` when omitted
   - `writeMode=sync-if-needed`
   - validation runs unless `--skip-validation` is passed
+  - successful mutating runs install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` when missing, replace `SCHEME_NAME` with the workspace or project stem, leave matching files unchanged, and preserve customized existing files
   - successful mutating runs refresh `maintain-project-repo` output in place
 
 ## Outputs
@@ -103,6 +104,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - detected workspace or project markers
   - `AGENTS.md` path
   - actions applied or planned
+  - installed or preserved `.codex/environments/xcode-project.toml`
   - refreshed `maintain-project-repo` paths
   - validation result
   - one concise next step or handoff
@@ -114,6 +116,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Stop with `blocked` if the repo appears to be a SwiftPM-only package without Xcode-managed app markers.
 - Stop with `blocked` if the chosen `writeMode` does not allow the mutation the repo still needs, such as creating a missing `AGENTS.md` or appending the bounded Xcode guidance section.
 - Stop with `blocked` if the target `AGENTS.md` path exists but is not a regular file.
+- Fail with a clear message if the Codex local environment template is missing or the target `.codex/environments/xcode-project.toml` path exists but is not a regular file.
 
 ## Fallbacks and Handoffs
 
@@ -164,6 +167,7 @@ Keep apply-mode edits in the main thread. The steward may return proposed patch-
 - `assets/append-section.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when an existing Xcode repo needs the reusable baseline policy content in a human-reviewable form.
 - `references/snippets/apple-xcode-project-core.md`
+- `templates/codex-local-environments/xcode-project.toml`
 
 ### Script Inventory
 

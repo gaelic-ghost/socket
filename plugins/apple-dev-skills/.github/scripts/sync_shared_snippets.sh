@@ -35,12 +35,14 @@ sync_one \
   "$ROOT_DIR/skills/explore-apple-swift-docs/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/safari-extension-control-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftui-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/appkit-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/sync-xcode-project-guidance/references/snippets/apple-xcode-project-core.md"
 
 sync_one \
   "$ROOT_DIR/shared/agents-snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-build-run-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-testing-workflow/references/snippets/apple-swift-package-core.md" \
+  "$ROOT_DIR/skills/swift-package-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/bootstrap-swift-package/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/sync-swift-package-guidance/references/snippets/apple-swift-package-core.md"
 
