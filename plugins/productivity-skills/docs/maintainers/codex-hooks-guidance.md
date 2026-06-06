@@ -17,7 +17,9 @@ hooks = false
 ```
 
 `codex_hooks` still works as a deprecated alias, but skill and repo guidance
-should use `features.hooks`.
+should use `features.hooks`. Do not use older plugin-gating keys such as
+`features.plugin_hooks`; current Codex releases expose plugin support through
+the stable plugin feature and hook support through `features.hooks`.
 
 Codex discovers hooks next to active config layers in either `hooks.json` or inline `[hooks]` tables in `config.toml`. The most common locations are:
 
@@ -86,6 +88,7 @@ Good hook guidance names the lifecycle event, the matcher scope, the script loca
 When auditing hooks guidance, flag wording that:
 
 - uses deprecated `features.codex_hooks` wording instead of canonical `features.hooks`
+- refers to removed or legacy plugin-hook gates such as `features.plugin_hooks`
 - implies hooks are disabled by default
 - implies project-local hooks load in untrusted projects
 - says higher-precedence config layers replace lower-precedence hooks

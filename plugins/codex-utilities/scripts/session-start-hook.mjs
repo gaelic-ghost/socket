@@ -3,6 +3,9 @@ import fs from "node:fs";
 import net from "node:net";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const pluginRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const payloadText = await readStdin();
 const payload = parsePayload(payloadText);
@@ -92,9 +95,23 @@ function readConfig() {
     maxPrefixLength,
     mode,
     payloadLogPath: path.join(dataDir, "session-start.jsonl"),
+    pluginVersion: readPluginVersion(pluginRoot),
     socketPath,
     timeoutMs,
   };
+}
+
+function readPluginVersion(pluginRoot) {
+  const manifestPath = path.join(pluginRoot, ".codex-plugin", "plugin.json");
+  try {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    if (typeof manifest.version === "string" && manifest.version.trim()) {
+      return manifest.version.trim();
+    }
+  } catch {
+    return "unknown";
+  }
+  return "unknown";
 }
 
 function modeFromEnv(rawMode) {
@@ -139,7 +156,7 @@ async function setThreadName({ socketPath, threadId, name, timeoutMs }) {
       clientInfo: {
         name: "codex_utilities_hook",
         title: "Codex Utilities Hook",
-        version: "6.15.4",
+        version: config.pluginVersion,
       },
       capabilities: {
         experimentalApi: false,
