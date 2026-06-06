@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh ${PLUGIN_ROOT}/hooks/capture-session-start.sh",
+            "statusMessage": "Capturing Codex SessionStart payload",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

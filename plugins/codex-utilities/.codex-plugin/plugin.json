@@ -1,0 +1,23 @@
+{
+  "name": "codex-utilities",
+  "version": "0.1.0",
+  "description": "Local Codex runtime utilities for thread, hook, and app-server workflows.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Codex Utilities",
+    "shortDescription": "Local Codex runtime helpers for hooks and thread utilities.",
+    "longDescription": "Codex Utilities collects small local Codex runtime helpers that do not belong to a language-specific skill pack. Its first utility captures SessionStart hook payloads so thread naming automation can be designed against real Codex app data.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": "Help me inspect local Codex runtime utility behavior."
+  }
+}
