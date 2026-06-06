@@ -103,6 +103,8 @@ The MCP shim should not silently start broad UI automation or bypass permission 
 
 The MCP shim should not decide thread idleness by looking only at process state. A running Codex process does not prove another assistant turn is active, and a quiet process does not prove all GUI threads have finished.
 
+The restart coordinator should fail closed when it cannot confirm idleness from a supported thread-status source immediately before the final quit/reopen step. Assistant-supplied `observed_active_thread_ids` can explain the request, but they must not be treated as authoritative after a delay.
+
 ## Codex GUI Restart Plan
 
 The restart workflow belongs in `codex-utilities` because it is a local Codex runtime utility. It is not an Apple development workflow, a general productivity workflow, or a repo-maintenance skill.
@@ -115,7 +117,7 @@ The app/plugin split should be:
 
 The first restart implementation should support `if-idle` before `when-idle`.
 
-For `if-idle`, the assistant can call Codex GUI thread-listing tools during the current turn, pass the observed active-thread set into the MCP request, and let the app schedule a delayed restart only when no other active threads were observed.
+For `if-idle`, the assistant can call Codex GUI thread-listing tools during the current turn, pass the observed active-thread set into the MCP request, and let the app schedule a delayed restart only when no other active threads were observed. Before it actually quits and reopens Codex, the app must re-check supported thread state and cancel or block the restart if another thread became active or the supported thread-status source is unavailable.
 
 For `when-idle`, the app needs a supported way to observe GUI thread state after the assistant turn ends. Until that exists, the MCP tool should return a blocked status that says automatic waiting is unavailable instead of pretending process polling is equivalent to thread idleness.
 
