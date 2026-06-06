@@ -80,7 +80,7 @@ Current Socket catalog shape:
 - `agent-plugin-skills`: maintainer skills plus a source-bundled guidance-sync custom-agent definition for skills-export and plugin-export repositories
 - `apple-dev-skills`: Apple, Swift, SwiftUI, AppKit, Xcode, Swift OpenAPI client, Safari, DocC workflows, and the source-bundled `swift-steward` custom-agent definition with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
-- `codex-utilities`: local Codex runtime utilities, starting with a capture-only SessionStart hook for thread-title automation research
+- `codex-utilities`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `productivity-skills`: general-purpose maintainer, documentation, Codex GUI worktree workflow, and automation-design workflows plus source-bundled docs-audit and code-tracing custom-agent definitions
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details

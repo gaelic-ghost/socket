@@ -188,11 +188,11 @@ function readPluginVersion(pluginRoot) {
 }
 
 function modeFromEnv(rawMode) {
-  const mode = (rawMode ?? "capture").trim().toLowerCase();
+  const mode = (rawMode ?? "rename").trim().toLowerCase();
   if (["capture", "dry-run", "rename"].includes(mode)) {
     return mode;
   }
-  return "capture";
+  return "rename";
 }
 
 function positiveIntegerFromEnv(rawValue, fallback) {

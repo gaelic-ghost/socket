@@ -12,12 +12,12 @@ Use this file for durable guidance inside the Codex Utilities Socket plugin.
 
 - The first utility is a thread-title hook pair that records `SessionStart` and
   `Stop` payloads to local JSONL files.
-- Capture mode is the default and must remain safe for normal installs.
-- `dry-run` and `rename` modes are test levers for thread-title prefixing,
-  enabled with `CODEX_UTILITIES_THREAD_TITLE_MODE`.
-- Do not enable `rename` by default. `Stop` is the only hook event that may
-  prefix generated titles because `SessionStart` runs before Codex creates the
-  generated thread title.
+- `rename` mode is the default because Codex GUI hook settings already provide
+  the operator-facing enable/disable toggle for this behavior.
+- `capture` and `dry-run` modes are explicit test levers for thread-title
+  prefixing, enabled with `CODEX_UTILITIES_THREAD_TITLE_MODE`.
+- `Stop` is the only hook event that may prefix generated titles because
+  `SessionStart` runs before Codex creates the generated thread title.
 
 ## Planned Desktop Bridge Utility
 
