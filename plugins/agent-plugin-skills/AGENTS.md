@@ -16,6 +16,7 @@ This file is the Agent Plugin Skills child-repo override for work done from `soc
 - Default user-facing install and update guidance to Git-backed marketplace sources. Do not recreate nested staged plugin directories, manual-first local install stories, `skills/install-plugin-to-socket`, or `skills/validate-plugin-install-surfaces`.
 - Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch. Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly.
 - When a skill contract changes, update the nearby skill docs, maintainer docs, and tests in the same pass.
+- Use the `skills-repo-guidance-sync` custom-agent role only for explicit-trigger subagent workflows: broad read-heavy skills/plugin repo guidance audits, Codex docs freshness checks, discovery mirror drift, marketplace wording checks, and review-packet planning. Keep final edits, validation, commits, pushes, PRs, and releases in the main thread.
 
 ## Validation
 

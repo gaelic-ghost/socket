@@ -61,6 +61,17 @@ When syncing `AGENTS.md`, include strict dependency guidance:
 
 ## Codex Subagent Guidance
 
+When the user explicitly requests subagents, `skills-repo-guidance-sync`, review-packet planning, or asks to keep working while broad skills-repo guidance discovery happens in parallel, use the `skills-repo-guidance-sync` custom-agent role for bounded read-heavy discovery before this skill applies guidance sync.
+
+Good `skills-repo-guidance-sync` jobs for this skill:
+
+- inspect AGENTS, README, maintainer docs, discovery mirrors, and plugin metadata for drift
+- compare plugin, skill, hook, marketplace, and subagent claims against current official Codex docs
+- inventory stale install-surface wording, unsupported non-Codex surfaces, and machine-local dependency guidance
+- return a review packet with proposed patch set, validation handoff, affected files, and blockers
+
+Keep apply-mode edits in the main thread. The guidance sync worker may return proposed patch-set entries, but the main agent should review them with the user before saving, editing, or applying any edits.
+
 When auditing target skills, treat subagent guidance as useful only when it is explicit, bounded, and tied to real parallel support work. Match OpenAI's current Codex wording:
 
 - use `subagent` and `subagent workflow` rather than vague older `multi-agent` language

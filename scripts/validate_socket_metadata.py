@@ -24,6 +24,7 @@ PLUGIN_INTERFACE_ASSET_LIST_FIELDS = {"screenshots"}
 CUSTOM_AGENT_REQUIRED_FIELDS = {"name", "description", "developer_instructions"}
 CUSTOM_AGENT_REVIEW_TERMS = ("draft", "review")
 REVIEW_PACKET_AGENT_NAME_PARTS = ("steward", "auditor", "triager")
+REVIEW_PACKET_AGENT_NAMES = {"skills-repo-guidance-sync"}
 REVIEW_PACKET_AGENT_REPORT_TERMS = ("review packet", "proposed patch set", "validation handoff")
 
 
@@ -300,7 +301,9 @@ def validate_custom_agent_file(*, plugin_name: str, agent_path: Path) -> str:
                 "review-oriented."
             )
 
-    if any(name_part in agent_name for name_part in REVIEW_PACKET_AGENT_NAME_PARTS):
+    if agent_name in REVIEW_PACKET_AGENT_NAMES or any(
+        name_part in agent_name for name_part in REVIEW_PACKET_AGENT_NAME_PARTS
+    ):
         for term in REVIEW_PACKET_AGENT_REPORT_TERMS:
             if term not in lowered_instructions:
                 fail(

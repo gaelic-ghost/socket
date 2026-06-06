@@ -250,6 +250,39 @@ def test_main_rejects_review_packet_agent_without_report_contract(
         run_validator(repo_root, monkeypatch)
 
 
+def test_main_rejects_named_review_packet_agent_without_report_contract(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_marketplace_repo(
+        tmp_path,
+        {
+            "name": "example-skills",
+            "skills": "./skills/",
+        },
+    )
+    write(
+        repo_root
+        / "plugins"
+        / "example-skills"
+        / ".codex"
+        / "agents"
+        / "skills-repo-guidance-sync.toml",
+        '\n'.join(
+            [
+                'name = "skills-repo-guidance-sync"',
+                'description = "Read-heavy skills guidance sync."',
+                'sandbox_mode = "read-only"',
+                'developer_instructions = """Return a draft guidance audit for review. Do not apply edits."""',
+                "",
+            ]
+        ),
+    )
+
+    with pytest.raises(SystemExit):
+        run_validator(repo_root, monkeypatch)
+
+
 def test_main_rejects_custom_agent_without_review_boundary(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

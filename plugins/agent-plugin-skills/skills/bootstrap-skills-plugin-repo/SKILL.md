@@ -35,6 +35,8 @@ When creating or aligning `AGENTS.md`, include strict dependency guidance:
 
 ## Codex Subagent Guidance
 
+For existing repositories that need broad guidance drift discovery before edits, prefer `sync-skills-repo-guidance` and its `skills-repo-guidance-sync` custom-agent role. Use this bootstrap skill for new repository structure or structural alignment after the main thread has reviewed any subagent findings.
+
 When creating or aligning skills that can benefit from parallel support work, add optional `Codex Subagent Fit` guidance that matches OpenAI's current Codex subagent docs:
 
 - Current Codex releases enable subagent workflows by default, but Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask first and the user grants explicit permission.
