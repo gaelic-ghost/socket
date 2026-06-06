@@ -19,6 +19,12 @@ The current hook listens for `SessionStart` with the `startup` matcher and runs:
 sh ${PLUGIN_ROOT}/hooks/capture-session-start.sh
 ```
 
+This command path is intentionally provisional. The live Codex hook docs do not
+document `${PLUGIN_ROOT}` expansion for plugin-bundled hook commands, and the
+managed-hook guidance recommends absolute script paths for managed hooks. Before
+enabling `rename` mode, confirm how Codex resolves plugin-relative hook commands
+in an installed plugin cache.
+
 The script appends stdin to:
 
 ```text
@@ -98,14 +104,28 @@ visible inside the new thread than the direct App Server hook route.
 
 ## Next Test
 
+Before testing, confirm the active Codex config uses the current feature keys:
+`features.hooks = true` and the stable plugin feature. Removed keys such as
+`features.plugin_hooks` are not required and should not appear in operator
+guidance.
+
+An installed `codex-utilities@socket` 6.16.0 probe did not expose or run the
+plugin-bundled `SessionStart` hook in the Codex GUI settings or in
+`codex exec --dangerously-bypass-hook-trust`. Current Codex docs say
+plugin-bundled hooks load alongside other hook sources and do not document a
+`SessionStart` exclusion, so treat that result as a product behavior mismatch or
+loading-order limitation until confirmed upstream. A user-level or project-local
+hook is the better live test surface for the thread-title flow.
+
 1. Install or refresh the Socket marketplace plugin locally.
-2. Trust the `codex-utilities` `SessionStart` hook.
-3. Start a new thread in a known working directory with the default `capture`
+2. Confirm the hook source is visible in Codex hook settings or `/hooks`.
+3. Trust the `codex-utilities` `SessionStart` hook if it appears.
+4. Start a new thread in a known working directory with the default `capture`
    mode.
-4. Compare the captured `session_id` with the new thread id.
-5. Repeat with `CODEX_UTILITIES_THREAD_TITLE_MODE=dry-run` and inspect
+5. Compare the captured `session_id` with the new thread id.
+6. Repeat with `CODEX_UTILITIES_THREAD_TITLE_MODE=dry-run` and inspect
    `thread-title-decisions.jsonl`.
-6. Only after that identity is confirmed, repeat with
+7. Only after that identity is confirmed, repeat with
    `CODEX_UTILITIES_THREAD_TITLE_MODE=rename`.
-7. Keep the model-mediated prefix route as a comparison path if direct App
+8. Keep the model-mediated prefix route as a comparison path if direct App
    Server renaming loses too much of Codex's generated-title quality.
