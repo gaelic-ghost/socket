@@ -15,6 +15,13 @@ Use this file for durable guidance inside the Codex Utilities Socket plugin.
 - `dry-run` and `rename` modes are test levers for thread-title prefixing, enabled with `CODEX_UTILITIES_THREAD_TITLE_MODE`.
 - Do not enable `rename` by default until the payload and target thread identity have been confirmed against a real new-thread test.
 
+## Planned Desktop Bridge Utility
+
+- Keep the desktop bridge MCP and skill plan in `docs/desktop-bridge-mcp-skill-plan.md`.
+- The MCP and skill belong in this plugin because they are local Codex runtime utilities.
+- The signed macOS runtime belongs in the separate `UtilitiesForCodex` app repository, not inside this plugin payload.
+- Do not bundle a `.app` inside `codex-utilities`; the plugin should detect and talk to the installed app through a local transport.
+
 ## Runtime Data
 
 - Default runtime data path: `~/.codex/codex-utilities/hooks/session-start.jsonl`

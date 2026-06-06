@@ -248,6 +248,7 @@ In Progress
 - [x] Prefer Codex App Server metadata operations for future thread renaming instead of invoking `codex exec` as a separate agent run.
 - [x] Add disabled-by-default `dry-run` and `rename` modes so the same hook can test title prefixing without changing the normal install behavior.
 - [ ] Add thread-title mutation only after a real new-thread test confirms the captured `session_id` maps to the target thread id.
+- [ ] Add a desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` app instead of bundling a macOS app inside the plugin.
 
 ### Tickets
 
@@ -259,6 +260,9 @@ In Progress
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 - [ ] Run a dry-run hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
 - [ ] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
+- [x] Record the desktop bridge MCP and skill plan in `plugins/codex-utilities/docs/desktop-bridge-mcp-skill-plan.md`.
+- [ ] Add a bridge-status-only MCP server once `UtilitiesForCodex` exposes a local status endpoint.
+- [ ] Add a `desktop-bridge` skill after the MCP status surface exists.
 
 ### Exit Criteria
 
@@ -267,6 +271,7 @@ In Progress
 - [ ] Thread-title automation has a confirmed target-thread identity before it calls `thread/name/set`.
 - [x] Opt-in thread-title automation can be tested without invoking `codex exec` or starting a separate agent run.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [ ] Desktop bridge MCP and skill surfaces are available without packaging the signed macOS app inside the plugin cache.
 
 ## Small Tickets
 
@@ -317,6 +322,7 @@ In Progress
 - Added the first repo-local Socket Steward prototype under `.agents/socket-steward`, giving the superproject a Python and OpenAI Agents SDK maintainer-agent scaffold with offline docs, guidance, and marketplace audits before any write-capable or background-service behavior.
 - Added Socket Steward's first docs-sync planner so the repo-local agent can produce structured read-only documentation alignment work before any guarded write mode exists.
 - Added `docs/agents/` for repo-local agent report artifacts and limited Socket Steward proposal writes to that directory.
+- Planned a `codex-utilities` desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` macOS app over a local transport instead of bundling a signed app in the plugin cache.
 - Added serialized Socket Steward prepare/apply commands so maintainers can run audit, docs-sync planning, and proposal refresh in one guarded pass.
 - Extended the roadmap maintainer skill with one-ticket add/update flags and updated automation-design guidance to prefer existing skills, plugins, scripts, and official workflow owners as the source of truth for workflow knowledge.
 - Removed the stale Apple Dev Skills release-time subtree push gate after the standalone Apple Dev Skills repository became a compatibility marketplace pointer to Socket's canonical `plugins/apple-dev-skills` payload.
