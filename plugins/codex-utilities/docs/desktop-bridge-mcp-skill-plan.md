@@ -37,8 +37,13 @@ Planned tools:
 - `set_value(app, element_index, value)`: set an Accessibility value when supported.
 - `select_text(app, element_index, text, prefix, suffix, selection)`: select text or place the cursor before/after a text range.
 - `perform_secondary_action(app, element_index, action)`: invoke a named secondary Accessibility action exposed by an element.
+- `request_codex_gui_restart(mode, requesting_thread_id, observed_active_thread_ids, delay_seconds, reason)`: ask the installed app to schedule a user-requested Codex GUI restart.
+- `cancel_codex_gui_restart(request_id)`: cancel a pending restart before the app executes it.
+- `get_codex_gui_restart_status(request_id?)`: report pending, waiting, cancelled, blocked, failed, or completed restart state.
 
 The first implementation slice should ship `get_bridge_status()` only. UI action tools should wait until the app reports stable permission state and the skill policy is in place.
+
+Codex GUI restart tools can ship as their own small surface after the app exposes a restart coordinator endpoint. They do not need to wait for desktop UI action tools because they use a different safety model: explicit user restart intent plus thread-state checks.
 
 ## Planned Skill Surface
 
@@ -55,6 +60,19 @@ The skill should tell agents:
 - Stop and report clear diagnostics when the app is not installed, not running, or missing permissions.
 
 The skill should mirror the useful shape of first-party Computer Use without copying its app-bundle packaging model.
+
+Add a separate `codex-gui-restart` skill under `plugins/codex-utilities/skills/codex-gui-restart/`.
+
+That skill should tell agents:
+
+- Use it only when the user explicitly asks to restart Codex GUI.
+- Inspect current GUI thread status before requesting `if-idle`.
+- Exclude the requesting thread from the set of other active threads.
+- Use `if-idle` when the user wants a restart only if no other threads are active.
+- Use `when-idle` only when the user explicitly wants the app to wait for other active threads.
+- Treat `when-idle` as blocked unless `UtilitiesForCodex` reports that it has a supported app-side thread-status source.
+- Report the scheduled restart status before ending the assistant turn.
+- Do not use restart tools as a generic cache refresh, plugin update, or troubleshooting step without user intent.
 
 ## Confirmation Policy
 
@@ -78,8 +96,40 @@ The MCP shim should fail closed with descriptive messages:
 - Transport unavailable: name the expected Unix socket path or discovery mechanism.
 - Permission missing: name the missing macOS permission and point to the app's permission status view.
 - Unsupported action: name the target app, element, and requested action.
+- Restart blocked: name the active thread count, the observed thread ids when available, or the missing supported thread-status source.
+- Restart scheduled: report the mode, delay, requesting thread id when available, and cancellation/status path.
 
 The MCP shim should not silently start broad UI automation or bypass permission prompts.
+
+The MCP shim should not decide thread idleness by looking only at process state. A running Codex process does not prove another assistant turn is active, and a quiet process does not prove all GUI threads have finished.
+
+The restart coordinator should fail closed when it cannot confirm idleness from a supported thread-status source immediately before the final quit/reopen step. Assistant-supplied `observed_active_thread_ids` can explain the request, but they must not be treated as authoritative after a delay.
+
+## Codex GUI Restart Plan
+
+The restart workflow belongs in `codex-utilities` because it is a local Codex runtime utility. It is not an Apple development workflow, a general productivity workflow, or a repo-maintenance skill.
+
+The app/plugin split should be:
+
+- `UtilitiesForCodex`: owns pending restart requests, cancellation, status, waiting behavior, and final macOS quit/reopen execution.
+- `codex-utilities` MCP shim: exposes request, cancel, and status tools that talk to the app over the local transport.
+- `codex-gui-restart` skill: tells agents when it is safe to call those tools and how to report the result.
+
+The first restart implementation should support `if-idle` before `when-idle`.
+
+For `if-idle`, the assistant can call Codex GUI thread-listing tools during the current turn, pass the observed active-thread set into the MCP request, and let the app schedule a delayed restart only when no other active threads were observed. Before it actually quits and reopens Codex, the app must re-check supported thread state and cancel or block the restart if another thread became active or the supported thread-status source is unavailable.
+
+For `when-idle`, the app needs a supported way to observe GUI thread state after the assistant turn ends. Until that exists, the MCP tool should return a blocked status that says automatic waiting is unavailable instead of pretending process polling is equivalent to thread idleness.
+
+The restart request payload should stay small and explicit:
+
+- `mode`: `if-idle` or `when-idle`.
+- `requesting_thread_id`: the GUI thread that asked for the restart, when known.
+- `observed_active_thread_ids`: other active thread ids observed before the request.
+- `delay_seconds`: short delay before quit/reopen.
+- `reason`: short user-visible explanation.
+
+The skill should ask the app for status after scheduling. If a restart is pending, the final assistant response should tell the user that Codex may quit and reopen after the configured delay.
 
 ## Transport Plan
 
@@ -96,6 +146,8 @@ Open questions:
 - Whether a signed command-line helper inside the app bundle is needed later.
 - Whether XPC becomes preferable once helper registration or login item behavior is needed.
 - Whether localhost is worth supporting only as a diagnostic fallback.
+- Whether a supported Codex App Server or GUI endpoint can report thread status outside the current assistant turn.
+- Whether `when-idle` should use persistent app state or remain memory-only until the coordinator is proven.
 
 ## Implementation Slices
 
@@ -128,6 +180,15 @@ Open questions:
 - Add click, type, set-value, select-text, and secondary-action tools.
 - Keep action tools behind clear skill policy and descriptive app diagnostics.
 
+### Slice 6: Codex GUI Restart Tools
+
+- Add restart request, cancellation, and status tools once `UtilitiesForCodex` exposes the coordinator endpoint.
+- Implement `if-idle` first using assistant-provided observed thread state.
+- Return blocked diagnostics for `when-idle` until a supported app-side thread-status source exists.
+- Add `skills/codex-gui-restart/SKILL.md` with the explicit user-intent, active-thread inspection, and final-status reporting rules.
+
 ## Current Decision
 
 Plan the MCP and skill inside `codex-utilities`, but keep the actual app runtime in the public `gaelic-ghost/UtilitiesForCodex` repository.
+
+For Codex GUI restart coordination, keep the waiting and restart execution in `UtilitiesForCodex`; keep the agent-facing request/cancel/status tools and operational skill in `codex-utilities`. Do not claim automatic `when-idle` support until the installed app has a supported thread-status source outside the current assistant turn.
