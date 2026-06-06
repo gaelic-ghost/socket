@@ -8,8 +8,9 @@ from __future__ import annotations
 
 import json
 import sys
+import tomllib
 from pathlib import Path
-from typing import NoReturn
+from typing import NoReturn, cast
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -20,6 +21,8 @@ AUTHENTICATION_POLICIES = {"ON_INSTALL", "ON_FIRST_USE"}
 MARKETPLACE_INTERFACE_ASSET_FIELDS = {"banner"}
 PLUGIN_INTERFACE_ASSET_FIELDS = {"composerIcon", "logo"}
 PLUGIN_INTERFACE_ASSET_LIST_FIELDS = {"screenshots"}
+CUSTOM_AGENT_REQUIRED_FIELDS = {"name", "description", "developer_instructions"}
+CUSTOM_AGENT_REVIEW_TERMS = ("draft", "review")
 
 
 def fail(message: str) -> NoReturn:
@@ -34,6 +37,18 @@ def load_json(path: Path) -> object:
         fail(f"Required JSON file is missing: {path}")
     except json.JSONDecodeError as exc:
         fail(f"JSON file is invalid at {path}:{exc.lineno}:{exc.colno}: {exc.msg}")
+
+
+def load_toml(path: Path) -> dict[str, object]:
+    try:
+        data = tomllib.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        fail(f"Required TOML file is missing: {path}")
+    except tomllib.TOMLDecodeError as exc:
+        fail(f"TOML file is invalid at {path}: {exc}")
+    if not isinstance(data, dict):
+        fail(f"TOML file must decode to an object: {path}")
+    return data
 
 
 def validate_optional_git_selector(
@@ -239,6 +254,85 @@ def validate_plugin_interface_assets(
             )
 
 
+def validate_custom_agent_file(*, plugin_name: str, agent_path: Path) -> str:
+    agent = load_toml(agent_path)
+    relative_path = agent_path.relative_to(REPO_ROOT)
+
+    for field_name in sorted(CUSTOM_AGENT_REQUIRED_FIELDS):
+        field_value = agent.get(field_name)
+        if not isinstance(field_value, str) or not field_value.strip():
+            fail(
+                f"Custom agent `{relative_path}` for `{plugin_name}` must define a "
+                f"non-empty `{field_name}` string."
+            )
+
+    agent_name = cast(str, agent["name"])
+    if agent_path.stem != agent_name:
+        fail(
+            f"Custom agent `{relative_path}` for `{plugin_name}` declares name "
+            f"`{agent_name}` but the file stem is `{agent_path.stem}`."
+        )
+
+    sandbox_mode = agent.get("sandbox_mode")
+    if sandbox_mode != "read-only":
+        fail(
+            f"Custom agent `{relative_path}` for `{plugin_name}` must use "
+            '`sandbox_mode = "read-only"` until write-capable steward workflows '
+            "have an explicit apply contract."
+        )
+
+    instructions = cast(str, agent["developer_instructions"])
+    lowered_instructions = instructions.lower()
+    for term in CUSTOM_AGENT_REVIEW_TERMS:
+        if term not in lowered_instructions:
+            fail(
+                f"Custom agent `{relative_path}` for `{plugin_name}` must mention "
+                f"`{term}` in developer_instructions so draft-patch output stays "
+                "review-oriented."
+            )
+
+    nickname_candidates = agent.get("nickname_candidates")
+    if nickname_candidates is not None:
+        if not isinstance(nickname_candidates, list) or not nickname_candidates:
+            fail(
+                f"Custom agent `{relative_path}` for `{plugin_name}` must define "
+                "`nickname_candidates` as a non-empty list when present."
+            )
+        for index, nickname in enumerate(nickname_candidates):
+            if not isinstance(nickname, str) or not nickname.strip():
+                fail(
+                    f"Custom agent `{relative_path}` for `{plugin_name}` has an invalid "
+                    f"`nickname_candidates[{index}]` value."
+                )
+
+    return agent_name
+
+
+def validate_custom_agents(*, plugin_name: str, plugin_root: Path) -> None:
+    agents_root = plugin_root / ".codex" / "agents"
+    if not agents_root.exists():
+        return
+    if not agents_root.is_dir():
+        fail(
+            f"Custom agent path for `{plugin_name}` must be a directory: "
+            f"{agents_root.relative_to(REPO_ROOT)}"
+        )
+
+    agent_paths = sorted(agents_root.glob("*.toml"))
+    if not agent_paths:
+        fail(
+            f"Custom agent directory for `{plugin_name}` has no TOML files: "
+            f"{agents_root.relative_to(REPO_ROOT)}"
+        )
+
+    seen_names: set[str] = set()
+    for agent_path in agent_paths:
+        agent_name = validate_custom_agent_file(plugin_name=plugin_name, agent_path=agent_path)
+        if agent_name in seen_names:
+            fail(f"Custom agent name `{agent_name}` is duplicated for `{plugin_name}`.")
+        seen_names.add(agent_name)
+
+
 def validate_local_plugin_entry(
     *,
     name: str,
@@ -302,6 +396,7 @@ def validate_local_plugin_entry(
         plugin_root=plugin_root,
         plugin_manifest=plugin_manifest,
     )
+    validate_custom_agents(plugin_name=name, plugin_root=plugin_root)
 
     skills_dir = plugin_root / "skills"
     skills_path = plugin_manifest.get("skills")
