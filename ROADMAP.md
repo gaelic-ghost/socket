@@ -246,10 +246,11 @@ In Progress
 - [x] Add a Socket-hosted `codex-utilities` child plugin for local Codex runtime utilities that do not belong to a language-specific skill pack, app integration, or repository-maintenance plugin.
 - [x] Keep the first slice capture-only: record real `SessionStart` hook payloads before mutating thread titles.
 - [x] Prefer Codex App Server metadata operations for future thread renaming instead of invoking `codex exec` as a separate agent run.
-- [x] Add disabled-by-default `dry-run` and `rename` modes so the same hook can test title prefixing without changing the normal install behavior.
-- [ ] Add thread-title mutation only after a real new-thread test confirms the captured `session_id` maps to the target thread id.
+- [x] Keep explicit `capture` and `dry-run` modes so the same hook can test title prefixing without changing thread metadata.
+- [x] Enable thread-title mutation by default after a real new-thread test confirmed the captured `session_id` maps to the target thread id and Codex GUI hook settings provide the behavior toggle.
 - [ ] Add a desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` app instead of bundling a macOS app inside the plugin.
 - [ ] Add Codex GUI restart request/cancel/status tools and a narrow skill that delegates waiting and final restart execution to `UtilitiesForCodex`.
+- [ ] Add an agent configuration sync surface that lets `UtilitiesForCodex` discover, diff, and safely render compatible guidance/config for normal Codex, Xcode Codex, and Xcode Claude while `codex-utilities` owns the agent-facing adapter and policy.
 
 ### Tickets
 
@@ -259,14 +260,17 @@ In Progress
 - [x] Wire `codex-utilities` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README so users can see the new installable plugin surface.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
-- [ ] Run a dry-run hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
-- [ ] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
+- [x] Run a hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
+- [x] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
 - [x] Record the desktop bridge MCP and skill plan in `plugins/codex-utilities/docs/desktop-bridge-mcp-skill-plan.md`.
 - [ ] Add a bridge-status-only MCP server once `UtilitiesForCodex` exposes a local status endpoint.
 - [ ] Add a `desktop-bridge` skill after the MCP status surface exists.
 - [x] Extend the desktop bridge MCP and skill plan with Codex GUI restart coordination.
 - [ ] Add a `codex-gui-restart` skill after `UtilitiesForCodex` exposes restart request, cancellation, and status endpoints.
 - [ ] Implement `if-idle` restart requests before `when-idle`; keep automatic waiting blocked until the app has a supported thread-status source.
+- [x] Record the UtilitiesForCodex agent configuration sync plan in `plugins/codex-utilities/docs/agent-configuration-sync-plan.md`.
+- [ ] Add a read-only bridge/status tool for agent configuration sync after `UtilitiesForCodex` can report detected target homes, versions, and compatibility-profile status.
+- [ ] Add an agent-facing sync skill after the app exposes dry-run previews and backup-backed apply endpoints.
 
 ### Exit Criteria
 
@@ -277,6 +281,7 @@ In Progress
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 - [ ] Desktop bridge MCP and skill surfaces are available without packaging the signed macOS app inside the plugin cache.
 - [ ] Codex GUI restart requests require explicit user intent, report pending/cancelled/blocked/completed status clearly, and never infer thread idleness from process state alone.
+- [ ] Agent configuration sync previews omit unsupported keys by default, preserve target-owned files, and route writes through `UtilitiesForCodex` rather than direct plugin-side filesystem mutation.
 
 ## Small Tickets
 
@@ -331,6 +336,7 @@ In Progress
 - Added `docs/agents/` for repo-local agent report artifacts and limited Socket Steward proposal writes to that directory.
 - Planned a `codex-utilities` desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` macOS app over a local transport instead of bundling a signed app in the plugin cache.
 - Planned Codex GUI restart request/cancel/status tools and a narrow skill that keep restart execution in `UtilitiesForCodex` and leave automatic `when-idle` waiting blocked until a supported thread-status source exists.
+- Planned a UtilitiesForCodex agent configuration sync surface so normal Codex, Xcode Codex, and Xcode Claude can be discovered, diffed, and rendered through target-specific compatibility rules while `codex-utilities` remains the Codex-facing adapter.
 - Added serialized Socket Steward prepare/apply commands so maintainers can run audit, docs-sync planning, and proposal refresh in one guarded pass.
 - Extended the roadmap maintainer skill with one-ticket add/update flags and updated automation-design guidance to prefer existing skills, plugins, scripts, and official workflow owners as the source of truth for workflow knowledge.
 - Removed the stale Apple Dev Skills release-time subtree push gate after the standalone Apple Dev Skills repository became a compatibility marketplace pointer to Socket's canonical `plugins/apple-dev-skills` payload.
