@@ -22,6 +22,7 @@ Provide one consistent automation contract for deterministic native Apple app bo
 - Do not use this workflow for plain Swift packages, libraries, or tools.
 - Keep changes scoped to `<DESTINATION_DIR>/<PROJECT_NAME>`.
 - Refuse to overwrite a non-empty target directory.
+- Treat omitted `project_generator` as `xcodegen`.
 - Treat `project_generator=xcode` as a guided path unless and until a safe automated path exists.
 
 ## Status Values
@@ -53,7 +54,7 @@ Create a new app project with:
 - Project kind: <PROJECT_KIND>
 - Platform: <PLATFORM>
 - UI stack: <UI_STACK>
-- Project generator: <PROJECT_GENERATOR>
+- Project generator: <PROJECT_GENERATOR, defaults to xcodegen when omitted>
 - Bundle identifier: <BUNDLE_IDENTIFIER>
 - Org identifier: <ORG_IDENTIFIER>
 - Skip validation: <SKIP_VALIDATION>

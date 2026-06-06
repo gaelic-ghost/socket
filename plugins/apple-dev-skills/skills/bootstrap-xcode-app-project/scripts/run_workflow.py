@@ -109,7 +109,7 @@ def main() -> int:
     project_kind = args.project_kind or "app"
     platform_raw = args.platform or str(settings.get("defaultPlatform", "ask"))
     ui_stack_raw = args.ui_stack or "swiftui"
-    generator_raw = args.project_generator or "ask"
+    generator_raw = args.project_generator or "xcodegen"
     org_identifier = args.org_identifier or str(settings.get("defaultOrgIdentifier", "com.example"))
     copy_agents = bool(settings.get("copyAgentsMd", True))
 
@@ -169,8 +169,8 @@ def main() -> int:
     if generator == "ask":
         payload = blocked_payload(
             normalized_inputs,
-            "Choose --project-generator xcode or --project-generator xcodegen and rerun the workflow.",
-            stderr="The generator preference is required when defaults are set to ask.",
+            "Choose --project-generator xcodegen for the default generated-project path or --project-generator xcode for the guided Xcode path.",
+            stderr="The generator preference is set to ask, so the workflow is blocking instead of choosing the default XcodeGen path.",
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1

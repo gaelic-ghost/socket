@@ -55,12 +55,13 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
 5. Run `scripts/run_workflow.py` to normalize inputs, load customization state, and select the supported bootstrap path.
 6. Resolve the generator path:
-   - prefer `xcodegen` only when the user asked for it explicitly
+   - prefer `xcodegen` by default for new app projects unless the user explicitly prefers the standard Xcode project-creation flow
    - use `xcode` only when the user explicitly prefers the standard Xcode project-creation flow
-   - if the generator setting is `ask`, stop with a clear next step rather than guessing
+   - treat `ask` as a legacy explicit-blocking value only when the user or customization state supplies it intentionally
 7. Create the project:
-   - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold, `project.yml`, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
-   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, targets, sources, schemes, packages, test plans, and `minimumXcodeGenVersion`
+   - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold, `project.yml`, checked-in `.xcconfig` files, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
+   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, targets, sources, schemes, packages, config files, test plans, and `minimumXcodeGenVersion`
+   - keep nontrivial build settings in external `.xcconfig` files by default and wire them through the XcodeGen spec instead of duplicating settings inline
    - for `xcode`, use a guarded guidance path for now instead of pretending the repo supports full GUI automation already
 8. Validate the scaffold:
    - verify the expected app files exist
@@ -94,7 +95,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - `destination` defaults to `.`
   - `platform` defaults to `ask` unless explicitly set
   - `ui_stack` defaults to `swiftui`
-  - `project_generator` defaults to `ask`
+  - `project_generator` defaults to `xcodegen`
   - `copy_agents_md` defaults to `true`
   - validation runs unless `--skip-validation` is passed
   - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
@@ -122,7 +123,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Stop with `blocked` if `name` is missing.
 - Stop with `blocked` if `project_kind` is not `app`.
 - Stop with `blocked` if the platform cannot be resolved safely.
-- Stop with `blocked` if `project_generator=ask` and the request does not make the generator preference clear.
+- Stop with `blocked` if `project_generator=ask` and the request intentionally asks not to choose the default generator.
 - Stop with `blocked` if `ui_stack` is not supported by the current implementation path.
 - Stop with `blocked` if the target directory already exists and contains non-ignorable files.
 - Stop with `blocked` if `project_generator=xcodegen` and `xcodegen` is not available on `PATH`.

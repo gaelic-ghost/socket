@@ -8,10 +8,11 @@ Describe the supported generator choices for `bootstrap-xcode-app-project`.
 
 ### `xcodegen`
 
-- Use when the user explicitly prefers reproducible generated project files.
+- Use by default for new Xcode app, framework, and workspace repositories unless the user explicitly prefers the standard Xcode project-creation flow or the repository has a concrete reason to avoid a generator dependency.
 - This is the currently supported mutating implementation path in the first iteration of the skill.
 - The project spec may be YAML or JSON; this skill emits YAML as `project.yml`.
-- Current project-spec concepts this skill should keep aligned include `options.minimumXcodeGenVersion`, `options.projectFormat`, targets, sources, settings, schemes, Swift packages, and test-plan references.
+- Current project-spec concepts this skill should keep aligned include `options.minimumXcodeGenVersion`, `options.projectFormat`, targets, sources, settings, config files, schemes, Swift packages, and test-plan references.
+- Prefer checked-in external `.xcconfig` files for nontrivial build settings and wire them from the XcodeGen spec rather than duplicating settings inline.
 - After generation, future project-structure edits should change the spec set and rerun `xcodegen generate` instead of hand-editing generated `.pbxproj` files.
 - Reference:
   - [XcodeGen Project Spec documentation](https://yonaskolb.github.io/XcodeGen/Docs/ProjectSpec.html)
@@ -27,10 +28,10 @@ Describe the supported generator choices for `bootstrap-xcode-app-project`.
 
 ### `ask`
 
-- Use when the request does not make the generator preference clear.
-- Block with a concise next step instead of silently choosing a generator.
+- Use only when the user or customization state intentionally wants an explicit blocking prompt instead of the default generator.
+- Block with a concise next step instead of silently choosing a different generator.
 
 ## Policy
 
-- Be cautious about centering the whole workflow around `XcodeGen`. It is an extra dependency and an extra abstraction layer, so it should only be preferred when it clearly improves reproducibility or team maintenance.
-- Treat the standard Xcode path as the baseline conceptual model because it reflects Apple's first-party project-creation flow.
+- Prefer XcodeGen for new repositories because it keeps project structure reproducible, reviewable, and easier to regenerate from text.
+- Treat the standard Xcode path as a guided fallback because it reflects Apple's first-party project-creation flow and may still be the right choice when a repository should avoid a generator dependency.

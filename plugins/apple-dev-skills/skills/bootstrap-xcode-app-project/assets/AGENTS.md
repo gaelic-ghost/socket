@@ -19,6 +19,10 @@
 - Keep data flow straight and dependency direction unidirectional.
 - Treat the `.xcworkspace` or `.xcodeproj` as the source of truth for app integration, schemes, and build settings.
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
+- For new Xcode app, framework, and workspace repositories, prefer XcodeGen plus checked-in `.xcconfig` files by default unless there is a concrete reason to avoid that generator dependency.
+- If this repo is XcodeGen-backed, treat `project.yml`, `project.yaml`, and any included XcodeGen specs as the source of truth for generated targets, schemes, build settings, build configurations, packages, and file membership.
+- For XcodeGen-backed projects, edit the spec set and rerun `xcodegen generate` instead of hand-editing generated `.pbxproj` files.
+- Prefer external `.xcconfig` files for nontrivial build settings, wire them from the XcodeGen spec, keep secrets out of committed configs, and review config diffs with the spec and generated project diff.
 - Prefer Swift Testing for modern unit-style tests, keep XCTest where Apple tooling or dependencies still require it, and use XCUITest with explicit element wait APIs instead of fixed sleeps.
 - Keep `.xctestplan` files versioned when the project depends on repeatable test-plan configurations, and inspect or run them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
 - Prefer a checked-in repo-root `.swiftformat` file as the Swift formatting source of truth.

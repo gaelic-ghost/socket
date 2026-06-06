@@ -100,9 +100,9 @@ targets:
       properties:
         CFBundleDisplayName: {name}
     settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: {bundle_identifier}
-        SWIFT_VERSION: "5.0"
+      configFiles:
+        Debug: Configurations/App-Debug.xcconfig
+        Release: Configurations/App-Release.xcconfig
     scheme:
       testTargets:
         - {name}Tests
@@ -114,6 +114,27 @@ targets:
         group: Tests
     dependencies:
       - target: {name}
+"""
+
+
+def render_app_shared_xcconfig(bundle_identifier: str) -> str:
+    return f"""// Shared non-secret app build settings.
+PRODUCT_BUNDLE_IDENTIFIER = {bundle_identifier}
+SWIFT_VERSION = 5.0
+"""
+
+
+def render_debug_xcconfig() -> str:
+    return """#include "App-Shared.xcconfig"
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG $(inherited)
+"""
+
+
+def render_release_xcconfig() -> str:
+    return """#include "App-Shared.xcconfig"
+
+SWIFT_COMPILATION_MODE = wholemodule
 """
 
 
@@ -191,6 +212,9 @@ def main() -> int:
     target_dir.mkdir(parents=True, exist_ok=True)
 
     write_text(target_dir / "project.yml", render_project_yml(args.name, args.platform, args.bundle_identifier))
+    write_text(target_dir / "Configurations/App-Shared.xcconfig", render_app_shared_xcconfig(args.bundle_identifier))
+    write_text(target_dir / "Configurations/App-Debug.xcconfig", render_debug_xcconfig())
+    write_text(target_dir / "Configurations/App-Release.xcconfig", render_release_xcconfig())
     write_text(target_dir / "Sources/App/App.swift", render_app_file(args.name))
     write_text(target_dir / "Sources/App/ContentView.swift", render_content_view())
     write_text(target_dir / f"Tests/{args.name}Tests/{args.name}Tests.swift", render_test_file(args.name))

@@ -85,13 +85,19 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Prefer direct filesystem edits in Xcode-managed scope only when the workflow already accounts for project-file and scheme integrity.
 - Never edit `.pbxproj` files directly. If a project-file change is needed and no safe project-aware tool is available, stop and ask for an Xcode-mediated project change instead. When `.pbxproj` is tracked and Xcode, XcodeGen, or another project-aware workflow legitimately changes it, treat that diff as critical project state: review it, stage it, and commit it with the branch before any push, merge, release, or cleanup.
 
-## XcodeGen-Backed Project Guidance
+## XcodeGen and Build Configuration Defaults
 
+- For new Xcode app, framework, and workspace repositories, prefer an XcodeGen-backed project by default unless the user explicitly asks for a hand-managed Xcode project or the repository has a concrete reason to avoid a generator dependency.
 - If the repo contains `project.yml`, `project.yaml`, or clearly named included XcodeGen spec files, treat the XcodeGen spec set as the source of truth for generated project structure.
-- For XcodeGen-backed repos, make target membership, resource membership, build settings, schemes, Swift package declarations, test plans, project references, and generation options in the XcodeGen specs instead of editing the generated `.pbxproj`.
+- For XcodeGen-backed repos, make target membership, resource membership, schemes, Swift package declarations, test plans, project references, build configurations, generation options, and project-level settings in the XcodeGen specs instead of editing the generated `.pbxproj`.
+- Prefer external `.xcconfig` files as the default home for nontrivial build settings. Keep build settings in XcodeGen inline settings only when they are small, local, and clearer there.
+- Use `.xcconfig` files for settings that vary by Debug, Release, CI, local development, signing, bundle identity, compiler flags, Swift settings, deployment variants, or environment-specific behavior.
+- Keep configuration layering explicit. Prefer a small shared base config, then per-configuration or per-target configs that include the base and override only what changes.
+- In XcodeGen specs, wire build configurations to their matching `.xcconfig` files instead of duplicating the same settings across generated project objects.
+- Do not put secrets in `.xcconfig` files. Use build settings only for non-secret configuration values, references to externally supplied values, or local developer placeholders that are safe to commit.
 - Before changing generated project structure, inspect the root spec plus any `include` entries so the edit lands in the owning spec rather than duplicating settings in the wrong file.
-- After changing XcodeGen specs, run `xcodegen generate` from the spec root, or `xcodegen generate --spec <path>` when the project uses a non-default spec path.
+- After changing XcodeGen specs or `.xcconfig` files, run `xcodegen generate` from the spec root, or `xcodegen generate --spec <path>` when the project uses a non-default spec path.
 - If the spec uses environment variables or generation hooks, preserve and document the required environment before regenerating so CI and other contributors can reproduce the project.
-- Review both the spec diff and the generated `.xcodeproj` diff after regeneration. Generated `.pbxproj` changes are acceptable output when they come from XcodeGen, but they should still be reviewed for unintended target, scheme, or setting churn.
+- Review the spec diff, `.xcconfig` diff, and generated `.xcodeproj` diff after regeneration. Generated `.pbxproj` changes are acceptable output when they come from XcodeGen, but they should still be reviewed for unintended target, scheme, signing, or build-setting churn.
 - Validate regenerated projects with explicit `xcodebuild` commands for the affected scheme, destination or SDK, and configuration.
-- Do not introduce XcodeGen into an existing hand-managed Xcode project unless the user explicitly asks for that migration and accepts the extra generator dependency.
+- For existing hand-managed Xcode projects, do not migrate to XcodeGen or externalize build settings into `.xcconfig` files unless the user explicitly asks for that migration. When they do, treat it as a project-structure migration with before/after validation.

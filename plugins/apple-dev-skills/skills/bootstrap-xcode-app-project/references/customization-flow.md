@@ -29,7 +29,7 @@ Adjust the documented bootstrap defaults while keeping runtime behavior grounded
 3. Persist the metadata change with `scripts/customization_config.py apply --input <yaml-file>`.
 4. Re-run `scripts/customization_config.py effective` and confirm the stored values match the docs.
 5. Use `scripts/customization_config.py reset` only when the user explicitly wants to clear customization state.
-6. Verify runtime defaults with `uv run scripts/run_workflow.py --name DemoApp --platform macos --project-generator xcodegen --dry-run`.
+6. Verify runtime defaults with `uv run scripts/run_workflow.py --name DemoApp --platform macos --dry-run`.
 
 ## Validation
 

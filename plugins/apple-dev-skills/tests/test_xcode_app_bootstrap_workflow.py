@@ -67,7 +67,7 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
             )
             env = dict(os.environ)
             env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
-            code, payload = self.run_script("--name", "DemoApp", "--project-generator", "xcodegen", "--dry-run", env=env)
+            code, payload = self.run_script("--name", "DemoApp", "--dry-run", env=env)
             self.assertEqual(code, 0)
             self.assertEqual(payload["normalized_inputs"]["platform"], "macos")
             self.assertEqual(payload["normalized_inputs"]["ui_stack"], "swiftui")
@@ -188,10 +188,21 @@ exit 1
             self.assertEqual(payload["status"], "success")
             target = Path(payload["resolved_path"])
             self.assertTrue((target / "project.yml").exists())
+            project_yml = (target / "project.yml").read_text(encoding="utf-8")
+            self.assertIn("configFiles:", project_yml)
+            self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
+            self.assertTrue((target / "Configurations" / "App-Shared.xcconfig").exists())
+            self.assertTrue((target / "Configurations" / "App-Debug.xcconfig").exists())
+            self.assertTrue((target / "Configurations" / "App-Release.xcconfig").exists())
+            self.assertIn(
+                "PRODUCT_BUNDLE_IDENTIFIER = com.example.DemoApp",
+                (target / "Configurations" / "App-Shared.xcconfig").read_text(encoding="utf-8"),
+            )
             self.assertTrue((target / "AGENTS.md").exists())
             agents_text = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("xcode-build-run-workflow", agents_text)
             self.assertIn("xcode-testing-workflow", agents_text)
+            self.assertIn("XcodeGen plus checked-in `.xcconfig` files", agents_text)
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
