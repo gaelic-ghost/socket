@@ -1,4 +1,4 @@
 interface:
   display_name: "Sync Swift Package Guidance"
   short_description: "Align AGENTS and workflow guidance for Swift package repos"
-  default_prompt: "Use $sync-swift-package-guidance to add or merge AGENTS.md and Swift package workflow guidance into an existing Swift Package Manager repository. When the user asks for subagents, swift-steward, draft patch planning, or parallel repo-maintenance discovery, delegate the read-heavy scan to the swift-steward custom-agent role before the main thread reviews and applies any edits."
+  default_prompt: "Use $sync-swift-package-guidance to add or merge AGENTS.md and Swift package workflow guidance into an existing Swift Package Manager repository. When the user asks for subagents, swift-steward, review-packet planning, or parallel repo-maintenance discovery, delegate the read-heavy scan to the swift-steward custom-agent role before the main thread reviews and applies any edits."

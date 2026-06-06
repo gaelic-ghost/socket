@@ -127,16 +127,16 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 
 ## Codex Subagent Fit
 
-When the user explicitly asks for subagents, `swift-steward`, draft patch planning, or asks to keep working while broad Xcode repo-maintenance discovery happens in parallel, use the `swift-steward` custom-agent role for read-heavy discovery before this skill applies guidance sync.
+When the user explicitly asks for subagents, `swift-steward`, review-packet planning, or asks to keep working while broad Xcode repo-maintenance discovery happens in parallel, use the `swift-steward` custom-agent role for read-heavy discovery before this skill applies guidance sync.
 
 Good `swift-steward` jobs for this skill:
 
 - classify the project shape and flag ambiguous SwiftPM/Xcode boundaries
 - inspect `AGENTS.md`, README, CONTRIBUTING, ROADMAP, Xcode project/workspace markers, `.swiftformat`, `.swiftlint.yml`, and `scripts/repo-maintenance/`
 - compare current repo guidance against this skill's current Xcode baseline
-- return a draft patch plan, affected files, validation commands, and blockers
+- return a review packet with proposed patch set, validation handoff, affected files, and blockers
 
-Keep apply-mode edits in the main thread. The steward may return draft patch text or a proposed diff summary, but the main agent should review it with the user before saving, editing, or applying it.
+Keep apply-mode edits in the main thread. The steward may return proposed patch-set entries, but the main agent should review them with the user before saving, editing, or applying any edits.
 
 ## Customization
 

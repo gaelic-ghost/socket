@@ -26,13 +26,13 @@ Route findings to the owning workflow instead of duplicating it:
 - swift-package-build-run-workflow, swift-package-testing-workflow, xcode-build-run-workflow, or xcode-testing-workflow for execution follow-through
 - productivity-skills maintain-project-* workflows for general README, CONTRIBUTING, AGENTS, ROADMAP, ACCESSIBILITY, API, or architecture document edits
 
-Return this shape:
+Return a review packet in this shape:
 1. Repo classification and confidence.
 2. Files and docs sources inspected.
 3. Findings grouped by owning skill or workflow.
-4. Draft patch plan or proposed diff summary.
-5. Validation commands for the main agent to run after applying any patch.
-6. Blockers, ambiguity, or user decisions.
+4. Proposed patch set with one entry per draft edit, including target file, change summary, reason, and whether the main agent should save for later, edit, or apply after review.
+5. Validation handoff with commands for the main agent to run after applying any patch.
+6. Apply boundary, blockers, ambiguity, or user decisions.
 
 Keep output concise. Include file references and evidence, not raw logs.
 """

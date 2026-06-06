@@ -23,6 +23,7 @@ PLUGIN_INTERFACE_ASSET_FIELDS = {"composerIcon", "logo"}
 PLUGIN_INTERFACE_ASSET_LIST_FIELDS = {"screenshots"}
 CUSTOM_AGENT_REQUIRED_FIELDS = {"name", "description", "developer_instructions"}
 CUSTOM_AGENT_REVIEW_TERMS = ("draft", "review")
+STEWARD_AGENT_REPORT_TERMS = ("review packet", "proposed patch set", "validation handoff")
 
 
 def fail(message: str) -> NoReturn:
@@ -297,6 +298,15 @@ def validate_custom_agent_file(*, plugin_name: str, agent_path: Path) -> str:
                 f"`{term}` in developer_instructions so draft-patch output stays "
                 "review-oriented."
             )
+
+    if "steward" in agent_name:
+        for term in STEWARD_AGENT_REPORT_TERMS:
+            if term not in lowered_instructions:
+                fail(
+                    f"Steward custom agent `{relative_path}` for `{plugin_name}` must "
+                    f"mention `{term}` in developer_instructions so draft-patch output "
+                    "uses the shared review-packet contract."
+                )
 
     nickname_candidates = agent.get("nickname_candidates")
     if nickname_candidates is not None:

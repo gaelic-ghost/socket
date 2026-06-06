@@ -54,7 +54,8 @@ agent and Gale to review before any file changes are applied.
 - identify whether `sync-swift-package-guidance`,
   `sync-xcode-project-guidance`, `author-swift-docc-docs`, or a build/test
   workflow should own the next edit
-- return draft patch plans, affected files, validation commands, and blockers
+- return review packets with proposed patch sets, validation handoff, and
+  blockers
 
 `server-swift-steward` owns read-heavy discovery for server-side Swift
 repositories:
@@ -65,7 +66,8 @@ repositories:
   Dockerfiles, Compose files, OpenAPI specs, docs, and repo-maintenance scripts
 - compare current guidance against Server-Side Swift skills and official
   framework docs
-- return draft patch plans, affected files, validation commands, and blockers
+- return review packets with proposed patch sets, validation handoff, and
+  blockers
 
 `productivity-skills` remains the owner for general repo-document maintenance
 and `maintain-project-repo` installation or refresh behavior. The steward role
@@ -98,16 +100,18 @@ role-local default, not a global Codex rule: harder synthesis, ambiguous
 debugging, security-sensitive reasoning, or write-plan ownership can still use a
 stronger model or omit the model field so the parent session decides.
 
-## Output Contract
+## Review Packet Contract
 
 Each steward run should return:
 
 - repo classification and confidence
 - documents, manifests, scripts, and docs sources inspected
 - findings grouped by owning skill or workflow
-- draft patch plan or proposed diff summary
-- validation commands to run after applying any patch
-- blockers, ambiguity, and required user decisions
+- proposed patch set with one entry per draft edit, including target file,
+  change summary, reason, and whether the main agent should save for later,
+  edit, or apply after review
+- validation handoff with commands to run after applying any patch
+- apply boundary, blockers, ambiguity, and required user decisions
 
 The worker should return concise evidence and file references, not raw command
 logs or long exploratory transcripts.
@@ -132,7 +136,8 @@ logs or long exploratory transcripts.
    ask for or use `swift-steward` for broad discovery.
 3. Add similar server-side guidance once a server-side repo-maintenance or
    guidance-sync workflow exists there.
-4. Add draft-patch report generation after the role contract is stable.
+4. Add concrete review-packet report generation after the role contract is
+   stable.
 5. Consider a repo-local LangGraph sidecar only for a specific repository that
    needs persisted maintenance state, resumable handoffs, or repeated CLI
    commands.

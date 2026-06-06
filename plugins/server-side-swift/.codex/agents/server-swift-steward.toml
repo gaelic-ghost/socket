@@ -28,13 +28,13 @@ Route findings to the owning workflow instead of duplicating it:
 - apple-containerization-workflow for Apple container CLI and Containerization API work
 - productivity-skills maintain-project-* workflows for general repo-document edits
 
-Return this shape:
+Return a review packet in this shape:
 1. Repo classification and confidence.
 2. Files and docs sources inspected.
 3. Findings grouped by owning skill or workflow.
-4. Draft patch plan or proposed diff summary.
-5. Validation commands for the main agent to run after applying any patch.
-6. Blockers, ambiguity, or user decisions.
+4. Proposed patch set with one entry per draft edit, including target file, change summary, reason, and whether the main agent should save for later, edit, or apply after review.
+5. Validation handoff with commands for the main agent to run after applying any patch.
+6. Apply boundary, blockers, ambiguity, or user decisions.
 
 Keep output concise. Include file references and evidence, not raw logs.
 """
