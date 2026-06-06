@@ -294,6 +294,7 @@ def test_patch_refresh_runs_cache_refreshes_last(
 ) -> None:
     root = make_repo(tmp_path)
     commands: list[tuple[str, tuple[str, ...]]] = []
+    monkeypatch.setenv("SOCKET_MAC_MINI_REFRESH", "always")
 
     def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
         assert repo_root == root
@@ -373,6 +374,7 @@ def test_patch_refresh_reports_mac_mini_refresh_failure_without_failing_release(
 ) -> None:
     root = make_repo(tmp_path)
     commands: list[tuple[str, tuple[str, ...]]] = []
+    monkeypatch.setenv("SOCKET_MAC_MINI_REFRESH", "always")
 
     def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
         assert repo_root == root
@@ -419,6 +421,27 @@ def test_patch_refresh_reports_mac_mini_refresh_failure_without_failing_release(
     assert exit_code == 0
     assert "Mac mini marketplace refresh could not run on galem@mac-mini.local. host unreachable" in output
     assert "Patch-refresh release completed for v1.2.4." in output
+
+
+def test_mac_mini_refresh_skips_by_default_outside_gale_home(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    commands: list[tuple[str, ...]] = []
+    monkeypatch.setenv("HOME", str(tmp_path / "collaborator"))
+    monkeypatch.delenv("SOCKET_MAC_MINI_REFRESH", raising=False)
+
+    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == tmp_path
+        commands.append(tuple(args))
+        return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+
+    monkeypatch.setattr(release_version, "run_command", fake_run_command)
+
+    release_version.refresh_mac_mini_marketplace(tmp_path)
+
+    output = capsys.readouterr().out
+    assert commands == []
+    assert "Mac mini marketplace refresh skipped because this release is not running from /Users/galew" in output
 
 
 def test_patch_refresh_stops_before_marketplace_upgrade_when_branch_accounting_fails(
