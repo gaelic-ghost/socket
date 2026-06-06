@@ -21,6 +21,7 @@
 - [Milestone 43: Client Auth, Keychain, and App Sync Workflow](#milestone-43-client-auth-keychain-and-app-sync-workflow)
 - [Milestone 44: Swift OpenAPI Client Workflow](#milestone-44-swift-openapi-client-workflow)
 - [Milestone 45: Icon Composer App Icon Workflow](#milestone-45-icon-composer-app-icon-workflow)
+- [Milestone 46: AppKit App Architecture Workflow](#milestone-46-appkit-app-architecture-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -55,6 +56,7 @@
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
 - Milestone 45: Icon Composer App Icon Workflow - Completed
+- Milestone 46: AppKit App Architecture Workflow - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -494,6 +496,33 @@ Completed
 - [x] The repository ships `icon-composer-app-icon-workflow` as the explicit owner for Icon Composer app icon production guidance.
 - [x] The workflow names `ictool` preview export, source artwork preparation, Computer Use, and Xcode workflow handoffs without pretending the design pass is fully automated.
 
+## Milestone 46: AppKit App Architecture Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a dedicated AppKit workflow skill for macOS app architecture across app delegates, menu bar apps, responder-chain menus, windows, controllers, restoration, archiving, Observation, and mixed AppKit/SwiftUI composition.
+- [x] Keep the skill grounded in current Apple AppKit behavior instead of treating AppKit as legacy-only or steering macOS apps toward SwiftUI by default.
+- [x] Make the workflow explicitly resistant to common agent anti-patterns, especially SwiftUI-only steering, catch-all app delegates, controller dumping grounds, restoration-as-storage, unsafe archives, hidden command buses, and split ownership across AppKit and SwiftUI.
+
+### Tickets
+
+- [x] Define the skill boundary so it owns AppKit application architecture guidance without replacing the lower-level Apple docs routing skill, SwiftUI architecture workflow, accessibility workflow, or Xcode execution workflows.
+- [x] Cover practical AppKit app-structure topics including `NSApplication`, app delegates, status items, menu bar apps, activation policy, menus, responder-chain actions, menu validation, windows, controllers, panels, inspectors, restoration, documents, and workspaces.
+- [x] Cover AppKit MVC, target/action, delegates, bindings, object archiving, persistence choices, migration boundaries, and Observation/AppKit interop.
+- [x] Cover mixed AppKit/SwiftUI composition through `NSHostingView`, `NSHostingController`, representable bridges, and single-owner state guidance.
+- [x] Add tests and maintainer docs once the workflow shape is stable.
+
+### Exit Criteria
+
+- [x] The repository ships a documented AppKit app architecture workflow skill that covers menu bar apps, responder-chain menus, window/controller ownership, restoration, MVC, archiving, Observation, and mixed AppKit/SwiftUI composition.
+- [x] The workflow gives maintainers concrete guardrails against AppKit undercoverage and framework-bias anti-patterns.
+
+Completed Milestone 46 by shipping `appkit-app-architecture-workflow`, grounding the workflow in AppKit app lifecycle, status-item, responder-chain, controller, restoration, archiving, Observation, and hosting boundaries, adding reference files for the major AppKit architecture surfaces, and covering the shipped surface with repo-validator and targeted pytest checks.
+
 ## Backlog Candidates
 
 - [ ] Record plausible future work that is not yet committed to a milestone.
@@ -502,6 +531,7 @@ Completed
 
 - Added `safari-extension-control-workflow` as the explicit owner for Safari Web Extension, Safari Web Inspector Extension, Safari App Extension, SafariServices, messaging, content blocker, authentication, and external automation decision guidance.
 - Added `icon-composer-app-icon-workflow` as the explicit owner for Icon Composer app icon production, including Mac-native artwork preparation, Computer Use GUI guidance, `ictool` preview export, Xcode handoff, and future packaged-agent direction.
+- Added `appkit-app-architecture-workflow` as the explicit owner for AppKit app architecture guidance, including app delegates, status items, responder-chain menus, windows, controllers, restoration, archiving, Observation, and mixed AppKit/SwiftUI composition.
 - Tightened Xcode project guidance so tracked `.pbxproj` diffs produced by Xcode, XcodeGen, or other project-aware workflows are treated as critical project state that must be reviewed, staged, and committed before push, merge, release, or cleanup.
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.
