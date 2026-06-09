@@ -116,9 +116,6 @@ CODEX_HOME="$TEST_CODEX_HOME" codex plugin marketplace upgrade apple-dev-skills
 jq '.plugins[] | select(.name == "apple-dev-skills")' \
   "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/.agents/plugins/marketplace.json"
 
-jq '{name, version, displayName: .interface.displayName, skills, mcpServers}' \
-  "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/plugins/apple-dev-skills/.codex-plugin/plugin.json"
-
 test ! -e "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/skills"
 test ! -e "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/.codex-plugin"
 
@@ -134,13 +131,16 @@ Expected result:
 - The cached compatibility marketplace entry uses `source.source: git-subdir`,
   points at `https://github.com/gaelic-ghost/socket.git`, sets
   `path: ./plugins/apple-dev-skills`, and sets `ref: main`.
-- The cached Socket-hosted plugin manifest declares `name: apple-dev-skills`,
-  the Apple Dev Skills display name, `skills: ./skills/`, and Xcode MCP
-  registration through `./.mcp.json`.
 - The cached compatibility repository root does not expose a stale local
   `skills/` tree or `.codex-plugin/` root.
 - Removing `apple-dev-skills` leaves no configured marketplace in the temporary
   Codex home.
+
+Codex does not materialize the nested Socket `git-subdir` payload merely by
+adding or upgrading the compatibility marketplace. To inspect the actual
+Socket-hosted `apple-dev-skills` plugin manifest, run the Socket Git-backed test
+above and inspect
+`.tmp/marketplaces/socket/plugins/apple-dev-skills/.codex-plugin/plugin.json`.
 
 ## Standalone SpeakSwiftlyServer Test
 

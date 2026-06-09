@@ -62,7 +62,8 @@ Phase 1 changes only the standalone `gaelic-ghost/apple-dev-skills` repository.
    - `codex plugin marketplace add gaelic-ghost/apple-dev-skills`
    - `codex plugin marketplace upgrade apple-dev-skills`
    - verify the cached marketplace uses `source_type = "git"`
-   - verify the cached plugin manifest under the Socket subdirectory exposes `apple-dev-skills`
+   - verify the cached compatibility marketplace entry uses `source.source: git-subdir` and points at `https://github.com/gaelic-ghost/socket.git` with `path: ./plugins/apple-dev-skills`
+   - verify the cached compatibility repository root does not expose a stale local `skills/` tree or `.codex-plugin/` root
    - remove the marketplace and confirm the temporary config is empty
 
 After Phase 1, users who installed only `apple-dev-skills` still have a working marketplace and upgrade path, but the payload comes from Socket.
