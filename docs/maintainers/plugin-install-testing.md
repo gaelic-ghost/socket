@@ -96,6 +96,52 @@ If the cached Socket marketplace still shows the old local
 Check `last_revision` in the temporary `config.toml` and wait until the intended
 Socket branch has merged or install with an explicit test ref.
 
+## Apple Dev Skills Compatibility Marketplace Test
+
+The standalone `gaelic-ghost/apple-dev-skills` repository is a compatibility
+marketplace pointer. It should not carry a local skill payload, `.codex-plugin`
+root, or `.agents/skills` discovery mirror. Its marketplace entry should keep
+the `apple-dev-skills` marketplace name while sourcing the plugin payload from
+Socket at `./plugins/apple-dev-skills`.
+
+Run this after the standalone compatibility pointer has landed in GitHub state
+that users can fetch:
+
+```bash
+TEST_CODEX_HOME="$(mktemp -d /private/tmp/apple-dev-skills-codex-home.XXXXXX)"
+
+CODEX_HOME="$TEST_CODEX_HOME" codex plugin marketplace add gaelic-ghost/apple-dev-skills
+CODEX_HOME="$TEST_CODEX_HOME" codex plugin marketplace upgrade apple-dev-skills
+
+jq '.plugins[] | select(.name == "apple-dev-skills")' \
+  "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/.agents/plugins/marketplace.json"
+
+jq '{name, version, displayName: .interface.displayName, skills, mcpServers}' \
+  "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/plugins/apple-dev-skills/.codex-plugin/plugin.json"
+
+test ! -e "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/skills"
+test ! -e "$TEST_CODEX_HOME/.tmp/marketplaces/apple-dev-skills/.codex-plugin"
+
+CODEX_HOME="$TEST_CODEX_HOME" codex plugin marketplace remove apple-dev-skills
+test ! -s "$TEST_CODEX_HOME/config.toml"
+rm -rf "$TEST_CODEX_HOME"
+```
+
+Expected result:
+
+- Codex reports `source_type = "git"` for `marketplaces.apple-dev-skills`.
+- `upgrade apple-dev-skills` succeeds.
+- The cached compatibility marketplace entry uses `source.source: git-subdir`,
+  points at `https://github.com/gaelic-ghost/socket.git`, sets
+  `path: ./plugins/apple-dev-skills`, and sets `ref: main`.
+- The cached Socket-hosted plugin manifest declares `name: apple-dev-skills`,
+  the Apple Dev Skills display name, `skills: ./skills/`, and Xcode MCP
+  registration through `./.mcp.json`.
+- The cached compatibility repository root does not expose a stale local
+  `skills/` tree or `.codex-plugin/` root.
+- Removing `apple-dev-skills` leaves no configured marketplace in the temporary
+  Codex home.
+
 ## Standalone SpeakSwiftlyServer Test
 
 The standalone repository owns the plugin payload. Run standalone install tests

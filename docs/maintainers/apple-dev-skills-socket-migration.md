@@ -1,6 +1,6 @@
 # Apple Dev Skills Socket Migration
 
-This plan moves `apple-dev-skills` from a subtree-published standalone plugin payload into the Socket superproject while preserving update behavior for users who only installed `gaelic-ghost/apple-dev-skills`.
+This note records the completed move of `apple-dev-skills` from a subtree-published standalone plugin payload into the Socket superproject while preserving update behavior for users who only installed `gaelic-ghost/apple-dev-skills`.
 
 ## Goals
 
@@ -23,7 +23,7 @@ This plan moves `apple-dev-skills` from a subtree-published standalone plugin pa
 - Socket lists `apple-dev-skills` as a local child plugin at `./plugins/apple-dev-skills`.
 - The standalone `gaelic-ghost/apple-dev-skills` repository is now a compatibility marketplace and README pointer as of `v6.14.1`.
 - The standalone repository preserves the `apple-dev-skills` marketplace name, but its marketplace entry sources the plugin payload from `https://github.com/gaelic-ghost/socket.git` at `./plugins/apple-dev-skills`.
-- Socket releases currently treat substantive `plugins/apple-dev-skills` changes as a subtree gate.
+- Socket releases treat substantive `plugins/apple-dev-skills` changes as ordinary monorepo-owned payload changes and do not push them back to the compatibility repository.
 
 ## Phase 1: Standalone Compatibility Release
 
@@ -69,26 +69,15 @@ After Phase 1, users who installed only `apple-dev-skills` still have a working 
 
 ## Phase 2: Socket Ownership Conversion
 
-Status: next near-term Socket roadmap item.
+Status: complete.
 
-Phase 2 changes Socket after the compatibility release is available.
+Phase 2 changed Socket after the compatibility release became available.
 
 1. Treat `plugins/apple-dev-skills` as monorepo-owned source, not a subtree-managed child.
-2. Remove `apple-dev-skills` from Socket subtree gates:
-   - `AGENTS.md`
-   - `CONTRIBUTING.md`
-   - `docs/maintainers/subtree-workflow.md`
-   - `docs/maintainers/release-modes.md`
-   - `docs/maintainers/plugin-packaging-strategy.md`
-   - `scripts/release_version.py`
-   - release-version tests
-3. Update Socket README wording:
-   - Apple Dev Skills is a normal Socket child plugin.
-   - The standalone repository is a compatibility pointer.
+2. Remove `apple-dev-skills` from Socket subtree gates.
+3. Update Socket README, CONTRIBUTING, roadmap, release, subtree, and packaging docs.
 4. Update plugin install testing docs with an Apple Dev Skills compatibility test.
-5. Add duplicate-install guidance:
-   - prefer `apple-dev-skills@socket` when both Socket and standalone marketplaces are configured
-   - keep the standalone marketplace as a compatibility route for users who only want Apple Dev Skills
+5. Keep duplicate-install guidance: prefer `apple-dev-skills@socket` when both Socket and standalone marketplaces are configured, while preserving the standalone marketplace as a compatibility route for users who only want Apple Dev Skills.
 6. Run full Socket validation and publish a Socket release.
 
 ## Duplicate Install Policy
@@ -105,4 +94,4 @@ This mirrors the Speak Swiftly duplicate-enable repair preference, but with Sock
 
 Phase 1 is a standalone Apple Dev Skills patch release. It should not require a Socket release unless Socket docs or metadata change in the same pass.
 
-Phase 2 is a Socket release. Once Phase 2 lands, ordinary Socket releases should no longer need subtree pull or push accounting for Apple Dev Skills.
+Phase 2 is a Socket release. Once Phase 2 lands, ordinary Socket releases no longer need subtree pull or push accounting for Apple Dev Skills.

@@ -73,7 +73,7 @@ Currently available from the catalog:
 
 ## Plugin Status
 
-Apple Dev Skills keeps its own roadmap because it is the remaining subtree-managed child with a deeper standalone release surface. Other child planning now lives in [TODO.md](./TODO.md).
+Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its public README because existing users can still arrive through the standalone compatibility marketplace. Other child planning now lives in [TODO.md](./TODO.md).
 
 Current Socket catalog shape:
 

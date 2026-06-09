@@ -117,11 +117,11 @@ Once several child repos have stable plugin packaging, decide whether `socket` n
 
 ## Apple Dev Skills Migration Plan
 
-`apple-dev-skills` is the last subtree-managed child plugin that still publishes
-back to a standalone plugin repository. The planned migration is to make
-`socket/plugins/apple-dev-skills` the canonical authored payload while leaving
-`gaelic-ghost/apple-dev-skills` online as a compatibility marketplace and README
-pointer for users who installed only that repository.
+`apple-dev-skills` used to be the last subtree-managed child plugin that
+published back to a standalone plugin repository. It is now Socket-owned under
+`socket/plugins/apple-dev-skills`, while `gaelic-ghost/apple-dev-skills` stays
+online as a compatibility marketplace and README pointer for users who
+installed only that repository.
 
 Use [apple-dev-skills-socket-migration.md](./apple-dev-skills-socket-migration.md)
-for the two-phase migration checklist.
+for the completed two-phase migration record.
