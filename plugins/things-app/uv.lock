@@ -120,7 +120,7 @@ wheels = [
 
 [[package]]
 name = "things-app-maintenance"
-version = "6.17.3"
+version = "6.17.4"
 source = { virtual = "." }
 
 [package.dev-dependencies]
