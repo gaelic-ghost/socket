@@ -1,7 +1,7 @@
 ---
 name: diagnose-integration
 description: Diagnose SwiftASB integration failures across Codex CLI discovery, app-server startup, initialization, threads, turns, approvals, inventory, MCP install/status/resources, reviews, shell commands, worktree grouping, selected Git status, project identity, thread source, filesystem/config/extension/workspace reads, feature policy, feature-operation events, diagnostics, history paging, and live-test isolation.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost

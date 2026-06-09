@@ -1,7 +1,7 @@
 ---
 name: build-cli-project
 description: Implement Rust command-line tools after the project shape is chosen, including argument parsing boundaries, command dispatch, stdin/stdout/stderr behavior, exit codes, configuration input, error messages, tests, and Cargo validation. Use for Rust CLI feature work, CLI refactors, or new binary crate implementation.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
   repo: socket

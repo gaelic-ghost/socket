@@ -1,7 +1,7 @@
 ---
 name: choose-project-shape
 description: Choose the right Rust project shape before implementation, including crate type, Cargo package or workspace layout, edition and MSRV checks, validation commands, package boundaries, and documentation updates. Use when a user wants to start, restructure, or extend a Rust project and the binary, library, workspace, CLI, service, proc macro, FFI, embedded, no_std, or maintenance shape is not already settled.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
   repo: socket

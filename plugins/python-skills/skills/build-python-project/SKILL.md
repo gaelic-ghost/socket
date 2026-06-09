@@ -1,7 +1,7 @@
 ---
 name: build-python-project
 description: Build or modify idiomatic Python projects using uv, explicit package layout, typed configuration, focused tests, Ruff, mypy, and repo-local validation without overriding established conventions.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients implementing Python changes in uv-managed projects, packages, CLIs, FastAPI services, FastMCP servers, and workspaces.
 metadata:
   owner: gaelic-ghost

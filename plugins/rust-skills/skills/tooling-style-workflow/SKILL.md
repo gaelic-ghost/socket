@@ -1,7 +1,7 @@
 ---
 name: tooling-style-workflow
 description: Align Rust formatting, linting, toolchain, and CI behavior with repository policy, including cargo fmt, rustfmt style edition, cargo clippy, rust-toolchain.toml, MSRV checks, warnings-as-errors decisions, and validation command selection. Use when configuring or fixing Rust style, lint, toolchain, or CI workflows.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
   repo: socket

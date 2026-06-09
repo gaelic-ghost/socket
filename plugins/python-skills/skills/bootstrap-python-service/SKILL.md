@@ -1,7 +1,7 @@
 ---
 name: bootstrap-python-service
 description: Bootstrap Python FastAPI services on macOS using uv with consistent project and workspace scaffolds. Use when creating a new backend/API service from scratch, scaffolding a single uv service project, scaffolding a uv workspace with package/service members, customizing scaffold defaults through layered YAML profiles, initializing pytest+ruff+mypy defaults, creating README.md, initializing git, and running initial validation commands.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv, git, FastAPI-oriented Python workflows, and shell access for the bundled scripts.
 metadata:
   owner: gaelic-ghost

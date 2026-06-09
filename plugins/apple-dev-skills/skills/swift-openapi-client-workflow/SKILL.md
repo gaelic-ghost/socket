@@ -1,7 +1,7 @@
 ---
 name: swift-openapi-client-workflow
 description: Build, integrate, test, and diagnose Swift OpenAPI Generator clients in Apple-platform apps and Swift packages using OpenAPIURLSession, OpenAPIRuntime, URLSessionTransport, SwiftPM plugins, Apple docs, Dash docsets, and clear handoffs to server-side Swift OpenAPI workflows when the API contract or server transport changes.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
   repo: apple-dev-skills

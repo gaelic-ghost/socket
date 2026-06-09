@@ -1,7 +1,7 @@
 ---
 name: upgrade-workflow
 description: Plan and validate .NET SDK, target framework, package, and language-version upgrades for F#, C#, and mixed solutions with compatibility checks and staged validation.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients upgrading .NET SDK projects in F#, C#, and mixed-language solutions.
 metadata:
   owner: gaelic-ghost

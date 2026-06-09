@@ -363,7 +363,7 @@ Planned
 - [ ] Complete Phase 2 of the Apple Dev Skills Socket migration soon. Treat `plugins/apple-dev-skills` as monorepo-owned source, remove Apple Dev Skills from subtree release gates, update Socket docs and duplicate-install guidance, add the compatibility marketplace smoke test, run full Socket validation, and publish the Socket release that makes the ownership change durable.
 - [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
 - [x] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open: [gaelic-ghost/SpeakSwiftlyServer#98](https://github.com/gaelic-ghost/SpeakSwiftlyServer/issues/98).
-- [ ] Decide whether to move future Socket versions from Apache 2.0 to a source-available, free-for-noncommercial-use model. Start from [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md), get legal review before changing license files, and account for existing Apache 2.0 releases.
+- [x] Move future Socket versions from Apache 2.0 to PolyForm Noncommercial 1.0.0 plus separate commercial licensing, preserving historical Apache 2.0 text for previously licensed versions and recording the policy in [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md).
 
 ## History
 

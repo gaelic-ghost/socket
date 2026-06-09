@@ -1,7 +1,7 @@
 ---
 name: python-ci-workflow
 description: Design and maintain Python CI workflows around uv, pytest, Ruff, mypy, package build checks, dependency caching, Python version matrices, and local-command parity.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients maintaining Python CI for uv-managed projects, packages, services, FastAPI apps, FastMCP servers, and workspaces.
 metadata:
   owner: gaelic-ghost

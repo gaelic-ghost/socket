@@ -1,7 +1,7 @@
 ---
 name: build-fsharp-project
 description: Build or modify idiomatic F# .NET projects using explicit modules, domain types, functional data flow, file ordering, async/task interop, tests, and repo-local validation.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with F# projects on the .NET SDK.
 metadata:
   owner: gaelic-ghost

@@ -1,7 +1,7 @@
 ---
 name: maintain-project-repo
 description: Install or refresh the profile-aware local-first maintain-project-repo toolkit for Swift, Xcode, and general repositories, including validate, sync, and release entrypoints plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts instead of ad hoc GitHub-only helpers.
-license: MIT
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   semver: 0.2.1
 ---

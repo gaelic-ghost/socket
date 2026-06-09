@@ -1,7 +1,7 @@
 ---
 name: python-upgrade-workflow
 description: Plan and validate Python version, dependency, uv lockfile, FastAPI, FastMCP, Pydantic, Ruff, mypy, pytest, and package metadata upgrades with staged checks.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients upgrading Python, uv-managed dependencies, package metadata, frameworks, and maintainer tooling.
 metadata:
   owner: gaelic-ghost

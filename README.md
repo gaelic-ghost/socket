@@ -126,4 +126,8 @@ Use GitHub releases and Git history for root `socket` changes. Child plugins may
 
 ## License
 
-The `socket` superproject, and all nested projects, are licensed under the Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
+The `socket` superproject, and all nested projects, are licensed under the PolyForm Noncommercial License 1.0.0 for future public versions. See [LICENSE](./LICENSE), [NOTICE](./NOTICE), and [COMMERCIAL-USE.md](./COMMERCIAL-USE.md).
+
+Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>.
+
+Socket versions published before the PolyForm Noncommercial change remain available under the license terms that applied to those versions. The historical Apache License 2.0 text is preserved in [LICENSE-APACHE-2.0](./LICENSE-APACHE-2.0).

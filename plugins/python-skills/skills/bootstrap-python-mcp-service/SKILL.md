@@ -1,7 +1,7 @@
 ---
 name: bootstrap-python-mcp-service
 description: Bootstrap Python MCP server projects and workspaces on macOS using uv and FastMCP with consistent defaults. Use when creating a new MCP server from scratch, scaffolding a single uv MCP project, scaffolding a uv workspace with package/service members, customizing scaffold defaults through layered YAML profiles, initializing pytest+ruff+mypy defaults, creating README.md, initializing git, running initial validation checks, or starting from OpenAPI/FastAPI with MCP mapping guidance.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv, git, FastMCP-oriented Python workflows, and access to the fastmcp_docs MCP server for live framework guidance.
 metadata:
   owner: gaelic-ghost

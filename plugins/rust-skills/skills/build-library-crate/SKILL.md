@@ -1,7 +1,7 @@
 ---
 name: build-library-crate
 description: Implement reusable Rust library crates after the project shape is chosen, including public API design, module visibility, error types, feature flags, documentation examples, unit tests, integration tests, doctests, and Cargo validation. Use for Rust library implementation, API refactors, crate-boundary cleanup, or package-facing behavior.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
   repo: socket

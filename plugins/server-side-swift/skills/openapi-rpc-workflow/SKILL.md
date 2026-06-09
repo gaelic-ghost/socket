@@ -1,7 +1,7 @@
 ---
 name: openapi-rpc-workflow
 description: Design, generate, implement, test, and diagnose Swift OpenAPI and RPC-style server contracts using Swift OpenAPI Generator, OpenAPIRuntime, OpenAPIHummingbird, OpenAPIVapor, SwiftPM plugins, Dash docsets, official GitHub/SPI documentation, and clear handoffs to Vapor or Hummingbird workflows.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Swift OpenAPI Generator, OpenAPIRuntime, Hummingbird, Vapor, SwiftPM, and server-side Swift services on macOS or Linux.
 metadata:
   owner: gaelic-ghost

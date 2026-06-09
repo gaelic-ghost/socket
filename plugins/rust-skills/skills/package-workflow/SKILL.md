@@ -1,7 +1,7 @@
 ---
 name: package-workflow
 description: Prepare and validate Rust Cargo package surfaces, including Cargo.toml metadata, rust-version and MSRV policy, license/readme/repository fields, include and exclude rules, path dependency restrictions, Cargo.lock policy, cargo package dry runs, and publish versus no-publish decisions. Use for publishable crates, package metadata cleanup, crates.io readiness, or release-adjacent Rust package checks.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
   repo: socket

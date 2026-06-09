@@ -83,4 +83,6 @@ Raise questions before widening scope into new skills, new export surfaces, or b
 
 ## License and Contribution Terms
 
-This repository is licensed under Apache 2.0. See [LICENSE](./LICENSE) for the governing contribution and reuse terms.
+This repository is licensed under the PolyForm Noncommercial License 1.0.0. See [LICENSE](./LICENSE) for the governing contribution and reuse terms.
+
+Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>. See the Socket root [COMMERCIAL-USE.md](../../COMMERCIAL-USE.md) for the current commercial-use policy.

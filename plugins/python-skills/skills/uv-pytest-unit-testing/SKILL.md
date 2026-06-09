@@ -1,7 +1,7 @@
 ---
 name: uv-pytest-unit-testing
 description: Set up and run unit tests for Python uv projects and uv workspaces with pytest. Use when creating or updating pytest configuration in pyproject.toml, installing pytest dev dependencies with uv, running tests in a workspace member package via `uv run --package`, customizing pytest workflow defaults through layered YAML profiles, organizing tests with fixtures/markers/parametrize, or troubleshooting test discovery and import failures.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv-managed Python projects, pytest, and shell access for the bundled scripts.
 metadata:
   owner: gaelic-ghost

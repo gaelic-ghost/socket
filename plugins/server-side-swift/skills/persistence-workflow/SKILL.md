@@ -1,7 +1,7 @@
 ---
 name: persistence-workflow
 description: Plan, build, test, and diagnose server-side Swift persistence, database, ORM, model, migration, query, transaction, and repository work for Vapor, Hummingbird, Fluent, and SwiftPM services.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with server-side Swift persistence in SwiftPM projects on macOS or Linux.
 metadata:
   owner: gaelic-ghost

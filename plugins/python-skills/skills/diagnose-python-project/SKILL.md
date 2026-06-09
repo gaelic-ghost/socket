@@ -1,7 +1,7 @@
 ---
 name: diagnose-python-project
 description: Diagnose Python uv sync, lock, import, test, Ruff, mypy, FastAPI, FastMCP, packaging, and CI failures with concrete phase classification and next checks.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients diagnosing Python projects that use uv, pytest, Ruff, mypy, FastAPI, FastMCP, and Python package metadata.
 metadata:
   owner: gaelic-ghost

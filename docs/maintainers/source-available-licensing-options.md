@@ -1,27 +1,29 @@
 # Source-Available Licensing Options
 
-This document is an exploratory maintainer note, not legal advice.
+This document is a maintainer note, not legal advice.
 
-Gale wants to explore moving Socket from broad Apache 2.0 reuse toward a free-for-non-commercial-use model where businesses that profit from Socket, its plugins, or its skill corpus need to negotiate commercial terms.
+Gale decided to move future Socket versions from broad Apache 2.0 reuse toward a free-for-non-commercial-use model where businesses that profit from Socket, its plugins, or its skill corpus need to negotiate commercial terms.
 
 ## Current State
 
-Socket is currently Apache 2.0 at the root.
+Socket is currently PolyForm Noncommercial 1.0.0 at the root for future public versions.
 
 Relevant surfaces:
 
-- [`LICENSE`](../../LICENSE) contains Apache License 2.0.
-- [`NOTICE`](../../NOTICE) says the repository is licensed under Apache License 2.0 and warns that child repositories and packaged plugin surfaces may carry their own legal surfaces.
-- [`README.md`](../../README.md) says the `socket` superproject and all nested projects are Apache 2.0.
-- [`CONTRIBUTING.md`](../../CONTRIBUTING.md) says contributions are made under Apache 2.0 unless explicitly stated otherwise.
-- Many `SKILL.md` files carry `license: Apache-2.0` in frontmatter.
-- `plugins/apple-dev-skills/LICENSE` is also Apache 2.0.
+- [`LICENSE`](../../LICENSE) contains PolyForm Noncommercial 1.0.0.
+- [`COMMERCIAL-USE.md`](../../COMMERCIAL-USE.md) states the commercial-use policy and contact path.
+- [`NOTICE`](../../NOTICE) includes Socket's PolyForm `Required Notice:` line.
+- [`README.md`](../../README.md) says the `socket` superproject and nested projects are PolyForm Noncommercial 1.0.0 for future public versions.
+- [`CONTRIBUTING.md`](../../CONTRIBUTING.md) says contributions are made under PolyForm Noncommercial 1.0.0 unless explicitly stated otherwise, and calls out that Gale may offer separate commercial licenses.
+- `SKILL.md` files should carry `license: PolyForm-Noncommercial-1.0.0` in frontmatter when they belong to this licensing surface.
+- `plugins/apple-dev-skills/LICENSE` is also PolyForm Noncommercial 1.0.0.
+- [`LICENSE-APACHE-2.0`](../../LICENSE-APACHE-2.0) preserves the historical Apache 2.0 text for previously published Apache-licensed versions.
 
 Practical implication:
 
 - Existing Apache 2.0 grants for already-published versions should be treated as continuing for those versions.
 - A future licensing change can govern future versions only if Gale controls the required copyrights or has contributor permission to relicense.
-- Before accepting outside contributions under a new commercial model, Socket needs contribution terms that preserve Gale's ability to offer commercial licenses.
+- Before accepting outside contributions under this commercial model, Socket needs contribution terms that preserve Gale's ability to offer commercial licenses.
 
 ## Licensing Goal
 
@@ -41,7 +43,7 @@ The target posture is:
 - Current Codex plugin marketplace behavior may expect license metadata to be simple. Any license metadata changes need install testing.
 - Child surfaces may need different migration timing. `apple-dev-skills` has its own `LICENSE` and README wording, while other child plugins mostly rely on root legal surfaces plus `SKILL.md` frontmatter.
 
-## Candidate Models
+## Candidate Models Considered
 
 ### Option A: PolyForm Noncommercial With Commercial Licenses
 
@@ -154,7 +156,7 @@ Best fit:
 
 ## Recommendation
 
-The strongest first candidate is:
+The chosen model is:
 
 ```text
 Future public versions: PolyForm Noncommercial 1.0.0
@@ -169,7 +171,7 @@ Reason:
 - It is designed for software, unlike Creative Commons NonCommercial.
 - It keeps the first migration understandable.
 
-Recommended fallback:
+Fallback considered:
 
 ```text
 Future public versions: Business Source License 1.1
@@ -185,22 +187,23 @@ Use this only if a delayed open-source conversion is desirable.
 
 ### Phase 1: Decide Policy
 
-- Decide whether the restriction applies to all of Socket or only selected child plugins.
-- Decide whether commercial internal use, consulting use, vendor embedding, training-data use, hosted-service use, and paid courseware use are all commercial.
-- Decide whether charities, educational institutions, public research organizations, government institutions, and individual contractors get noncommercial treatment.
-- Decide whether old versions should ever convert back to Apache 2.0.
-- Ask a lawyer to review the chosen public license and commercial-license posture before changing legal files.
+- [x] Decide whether the restriction applies to all of Socket or only selected child plugins.
+- [x] Decide whether commercial internal use, consulting use, vendor embedding, training-data use, hosted-service use, and paid courseware use are all commercial.
+- [x] Decide whether contractors, employees working for employers, startups, businesses training models, and nonprofits doing commerce are commercial.
+- [x] Decide whether charities, educational institutions, public research organizations, and government institutions need narrower repo-specific clarification beyond PolyForm's permitted-use text.
+- [x] Decide whether old versions should ever convert back to Apache 2.0.
+- [ ] Ask a lawyer to review the chosen public license, commercial-use policy, and commercial-license posture before publishing a release with this legal surface.
 
 ### Phase 2: Prepare Repo Surfaces
 
-- Add a new root license file for the selected public license.
-- Update `NOTICE` to explain old-version Apache terms versus future-version terms.
-- Update `README.md` license wording.
-- Update `CONTRIBUTING.md` so contributions after the change are made under terms that allow Gale to offer commercial licenses.
-- Update child plugin README or license files where they currently state Apache 2.0.
-- Update `SKILL.md` frontmatter license values consistently.
-- Update marketplace metadata if it carries license fields.
-- Add a `COMMERCIAL-LICENSE.md` or `COMMERCIAL-USE.md` contact note with plain-language examples.
+- [x] Add a new root license file for the selected public license.
+- [x] Update `NOTICE` to explain old-version Apache terms versus future-version terms.
+- [x] Update `README.md` license wording.
+- [x] Update `CONTRIBUTING.md` so contributions after the change are made under terms that allow Gale to offer commercial licenses.
+- [x] Update child plugin README or license files where they currently state Apache 2.0.
+- [x] Update `SKILL.md` frontmatter license values consistently.
+- [x] Update marketplace metadata if it carries license fields.
+- [x] Add a `COMMERCIAL-USE.md` contact note with plain-language examples.
 
 ### Phase 3: Validate Tooling
 
@@ -218,22 +221,23 @@ Use this only if a delayed open-source conversion is desirable.
 
 ## Commercial-Use Questions To Answer
 
-- Does a developer using Socket at work for their employer count as commercial use?
-- Does an independent contractor using Socket for a paid client count as commercial use?
-- Does a company using Socket internally without redistributing it count as commercial use?
-- Does a startup prototype count as commercial use before revenue?
-- Does a paid course, book, or training program using Socket examples count as commercial use?
-- Does training or evaluating commercial AI systems on Socket skill content count as commercial use?
-- Does Apple, OpenAI, Anthropic, Microsoft, or another vendor using Socket ideas, skills, or plugin content in product work require a commercial license?
+- A developer using Socket at work for their employer is commercial use, whether or not the employer explicitly approved that use.
+- An independent contractor, freelancer, consultant, sole proprietor, agency, or studio using Socket for paid services or a paid client is commercial use.
+- A company using Socket internally without redistributing it is commercial use.
+- A startup using Socket before or after revenue is commercial use.
+- A paid course, book, training program, workshop, or consulting engagement using Socket examples or Socket-derived material is commercial use.
+- A business training, evaluating, benchmarking, designing, or improving commercial AI systems, software, developer tools, agents, models, products, services, or workflows using Socket skill content is commercial use.
+- A nonprofit, charity, foundation, trade group, association, or similar organization using Socket to provide services, sell work, run operations, support paid programs, reduce organizational costs, or otherwise conduct commerce is commercial use.
+- Apple, OpenAI, Anthropic, Microsoft, or another vendor using Socket content, skills, examples, prompts, metadata, plugin code, or packaged artifacts in product work requires a commercial license.
 
 The answers should be written before the license changes so users do not have to infer Gale's intent.
 
 ## Initial Commercial-Use Draft Language
 
-This is not final legal text.
+This text moved into [`COMMERCIAL-USE.md`](../../COMMERCIAL-USE.md) as the current repo policy. It should still receive legal review.
 
 ```text
-Socket is free for personal, hobby, educational, research, public-interest, and other noncommercial use under the public license for this version.
+Socket is free for personal, hobby, educational, research, public-interest, and other noncommercial use under the PolyForm Noncommercial License 1.0.0.
 
 Commercial use requires a separate written license from Gale. Commercial use includes using Socket, its plugins, skills, documentation, examples, prompts, MCP servers, hooks, or packaged artifacts for a business, employer, client, paid product, hosted service, commercial training, paid consulting, product development, or other activity intended to generate revenue, reduce business costs, or provide commercial advantage.
 
@@ -242,9 +246,9 @@ For commercial licensing, contact Gale W at mail@galewilliams.com.
 
 ## Decision Checklist
 
-- [ ] Decide whether to use PolyForm Noncommercial, BSL, FSL, or another lawyer-reviewed source-available license.
-- [ ] Decide whether the license change applies to all child plugins at once.
-- [ ] Decide whether to keep `apple-dev-skills` in lockstep with Socket.
+- [x] Decide whether to use PolyForm Noncommercial, BSL, FSL, or another lawyer-reviewed source-available license.
+- [x] Decide whether the license change applies to all child plugins at once.
+- [x] Decide whether to keep `apple-dev-skills` in lockstep with Socket.
 - [ ] Decide whether to require a CLA, DCO plus outbound license grant, or another contribution term before accepting outside contributions.
 - [ ] Decide whether to tag one final Apache 2.0 release before the switch.
 - [ ] Run install testing before publishing the changed marketplace.

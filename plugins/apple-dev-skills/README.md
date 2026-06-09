@@ -141,4 +141,6 @@ Use GitHub releases and Git history to track shipped changes for this repository
 
 ## License
 
-This repository is licensed under Apache 2.0. See [LICENSE](./LICENSE).
+This repository is licensed under the PolyForm Noncommercial License 1.0.0. See [LICENSE](./LICENSE).
+
+Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>. See the Socket root [COMMERCIAL-USE.md](../../COMMERCIAL-USE.md) for the current commercial-use policy.

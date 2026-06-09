@@ -108,9 +108,12 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ## Legal And Licensing
 
-- [ ] Decide whether future Socket versions should move from Apache 2.0 to a source-available, free-for-noncommercial-use model.
-- [ ] Use [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md) as the starting point for legal review and migration planning.
-- [ ] If the license changes, update root license files, child legal surfaces, contribution terms, skill frontmatter, marketplace metadata, install testing, and release notes together.
+- [x] Move future Socket versions from Apache 2.0 to PolyForm Noncommercial 1.0.0 plus separate commercial licensing.
+- [x] Preserve historical Apache 2.0 text for previously licensed versions in `LICENSE-APACHE-2.0`.
+- [x] Add `COMMERCIAL-USE.md` with Gale's commercial-use policy and commercial licensing contact.
+- [x] Use [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md) as the maintainer record for legal review and migration planning.
+- [ ] Decide whether to require a CLA, DCO plus outbound license grant, or another contribution term before accepting outside contributions.
+- [ ] Install-test the changed marketplace metadata before publishing a release with the new license surface.
 
 ## Placeholder Child Plugins
 

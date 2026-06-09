@@ -1,7 +1,7 @@
 ---
 name: build-csharp-project
 description: Build or modify idiomatic C# .NET projects using nullable-aware APIs, records/classes, async/task behavior, analyzer conventions, tests, and repo-local validation.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with C# projects on the .NET SDK.
 metadata:
   owner: gaelic-ghost

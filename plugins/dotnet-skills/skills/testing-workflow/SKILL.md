@@ -1,7 +1,7 @@
 ---
 name: testing-workflow
 description: Run, filter, debug, and explain .NET tests for F#, C#, and mixed solutions using dotnet test while respecting repo-local test framework choices.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with .NET SDK test workflows for F#, C#, and mixed-language solutions.
 metadata:
   owner: gaelic-ghost

@@ -1,7 +1,7 @@
 ---
 name: choose-python-project-shape
 description: Choose the right Python project shape before implementation, including uv project versus workspace layout, package, CLI, FastAPI, FastMCP, testing, packaging, tooling, and validation boundaries.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Python, uv-managed projects, FastAPI, FastMCP, pytest, Ruff, mypy, and Python packaging workflows.
 metadata:
   owner: gaelic-ghost

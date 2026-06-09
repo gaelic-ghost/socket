@@ -1,7 +1,7 @@
 ---
 name: bootstrap-solution
 description: Bootstrap or guide a reproducible .NET solution with explicit F# or C# language choice, SDK selection, project layout, test project setup, and initial validation commands.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with .NET SDK, F#, C#, and the dotnet CLI on macOS or other supported .NET development environments.
 metadata:
   owner: gaelic-ghost

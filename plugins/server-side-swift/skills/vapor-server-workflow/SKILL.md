@@ -1,7 +1,7 @@
 ---
 name: vapor-server-workflow
 description: Plan, build, run, test, and diagnose Vapor server-side Swift services using current Vapor documentation, Vapor Toolbox project creation, SwiftPM-first commands, routing, middleware, Fluent migrations, environment configuration, and deployment handoffs.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
   owner: gaelic-ghost

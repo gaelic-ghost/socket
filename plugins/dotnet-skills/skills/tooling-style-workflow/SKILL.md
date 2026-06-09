@@ -1,7 +1,7 @@
 ---
 name: tooling-style-workflow
 description: Align .NET formatting, analyzers, .editorconfig, warnings-as-errors, local tools, and validation commands for F#, C#, and mixed solutions without overriding repo-local conventions.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients maintaining .NET style and tooling workflows for F#, C#, and mixed-language solutions.
 metadata:
   owner: gaelic-ghost

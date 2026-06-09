@@ -263,4 +263,8 @@ When docs and scripts disagree, fix the script or narrow the documented contract
 
 ## License and Contribution Terms
 
-Unless a contribution explicitly says otherwise in writing, contributions to `socket` are made under the Apache License 2.0 terms in [LICENSE](./LICENSE). The root legal-notice surface for this superproject lives in [NOTICE](./NOTICE).
+Unless a contribution explicitly says otherwise in writing, contributions to `socket` are made under the PolyForm Noncommercial License 1.0.0 terms in [LICENSE](./LICENSE). The root legal-notice surface for this superproject lives in [NOTICE](./NOTICE).
+
+Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>. See [COMMERCIAL-USE.md](./COMMERCIAL-USE.md) for the current commercial-use policy.
+
+Do not submit contributions to `socket` unless you have the right to license them under these terms and understand that Gale may offer separate commercial licenses for Socket.

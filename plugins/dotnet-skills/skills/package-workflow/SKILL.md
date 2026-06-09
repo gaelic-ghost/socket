@@ -1,7 +1,7 @@
 ---
 name: package-workflow
 description: Validate .NET package surfaces for F# and C# libraries with project metadata, dotnet pack, local package smoke checks, semantic versioning, and release-boundary guidance.
-license: Apache-2.0
+license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with NuGet package-oriented .NET SDK projects in F#, C#, or mixed-language solutions.
 metadata:
   owner: gaelic-ghost
