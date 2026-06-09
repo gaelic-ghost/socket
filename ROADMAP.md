@@ -12,6 +12,7 @@
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
 - [Milestone 10: Expo inline native modules workflow](#milestone-10-expo-inline-native-modules-workflow)
 - [Milestone 11: Codex Utilities plugin](#milestone-11-codex-utilities-plugin)
+- [Milestone 12: Xcode 27 agentic tooling workflows](#milestone-12-xcode-27-agentic-tooling-workflows)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -36,6 +37,7 @@
 - Milestone 9: Rust skills plugin - Implemented
 - Milestone 10: Expo inline native modules workflow - Implemented
 - Milestone 11: Codex Utilities plugin - In Progress
+- Milestone 12: Xcode 27 agentic tooling workflows - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -285,6 +287,37 @@ In Progress
 - [ ] Codex GUI restart requests require explicit user intent, report pending/cancelled/blocked/completed status clearly, and never infer thread idleness from process state alone.
 - [ ] Agent configuration sync previews omit unsupported keys by default, preserve target-owned files, and route writes through `UtilitiesForCodex` rather than direct plugin-side filesystem mutation.
 
+## Milestone 12: Xcode 27 agentic tooling workflows
+
+### Status
+
+Planned
+
+### Scope
+
+- [x] Record the detailed implementation plan in [`docs/maintainers/xcode-27-agentic-tooling-plan.md`](./docs/maintainers/xcode-27-agentic-tooling-plan.md).
+- [ ] Add Xcode 27 coding-intelligence support to the existing `apple-dev-skills` plugin instead of creating a separate `apple-dev-beta` plugin.
+- [ ] Keep ACP-specific exploration outside Socket unless a future Xcode workflow needs to mention Xcode's ACP agent setup.
+- [ ] Update existing SwiftUI, AppKit, UIKit, Icon Composer, build, and testing guidance where Xcode 27 beta docs change real workflow behavior.
+
+### Tickets
+
+- [ ] Add `apple-dev-skills:xcode-coding-intelligence-workflow` for Xcode Intelligence setup, Xcode-hosted agents, chat providers, ACP agent entries, Xcode-only config homes, command/tool permissions, and external-agent access through `xcrun mcpbridge`.
+- [ ] Add `apple-dev-skills:xcode-agent-localization-workflow` for agent-assisted string catalog, translation, glossary, XLIFF, and human-review workflows.
+- [ ] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
+- [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.
+- [ ] Keep `apple-dev-skills:xcode-agent-plugin-workflow` blocked until the live Xcode 27 beta plug-in import and package shape is verified.
+- [ ] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
+- [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
+- [ ] Refresh AppKit, UIKit, and Icon Composer guidance for the Xcode 27 beta changes recorded in the plan.
+
+### Exit Criteria
+
+- [ ] Apple Dev Skills exposes clear Xcode 27 agentic-tooling workflows without a separate beta plugin.
+- [ ] Existing build and test workflows keep execution ownership and link to the setup workflow only where needed.
+- [ ] Beta-specific claims are source-linked, dated, and clearly separated from stable guidance.
+- [ ] Socket root docs, Apple Dev Skills metadata, and validation agree on the exported skill surface.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -330,6 +363,7 @@ In Progress
 - [ ] Complete Phase 2 of the Apple Dev Skills Socket migration soon. Treat `plugins/apple-dev-skills` as monorepo-owned source, remove Apple Dev Skills from subtree release gates, update Socket docs and duplicate-install guidance, add the compatibility marketplace smoke test, run full Socket validation, and publish the Socket release that makes the ownership change durable.
 - [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
 - [x] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open: [gaelic-ghost/SpeakSwiftlyServer#98](https://github.com/gaelic-ghost/SpeakSwiftlyServer/issues/98).
+- [ ] Decide whether to move future Socket versions from Apache 2.0 to a source-available, free-for-noncommercial-use model. Start from [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md), get legal review before changing license files, and account for existing Apache 2.0 releases.
 
 ## History
 

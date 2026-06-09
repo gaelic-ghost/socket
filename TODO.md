@@ -49,6 +49,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 - [x] Publish the Phase 1 standalone compatibility release so `gaelic-ghost/apple-dev-skills` points at the Socket-hosted plugin payload while preserving `codex plugin marketplace upgrade apple-dev-skills`.
 - [ ] Complete Phase 2 of the Socket migration soon: make `plugins/apple-dev-skills` monorepo-owned, remove subtree release gates, update Socket docs and duplicate-install guidance, add compatibility marketplace smoke coverage, validate, and publish the Socket release.
+- [ ] Add the Xcode 27 agentic tooling workflows from [`docs/maintainers/xcode-27-agentic-tooling-plan.md`](./docs/maintainers/xcode-27-agentic-tooling-plan.md), starting with `xcode-coding-intelligence-workflow`.
 
 ### python-skills
 
@@ -104,6 +105,12 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Evaluate one root validation command for marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Decide which checks belong centrally in Socket and which should remain child-local behavior tests.
 - [ ] Retire or update stale child validators when their expected docs have been collapsed into root docs.
+
+## Legal And Licensing
+
+- [ ] Decide whether future Socket versions should move from Apache 2.0 to a source-available, free-for-noncommercial-use model.
+- [ ] Use [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md) as the starting point for legal review and migration planning.
+- [ ] If the license changes, update root license files, child legal surfaces, contribution terms, skill frontmatter, marketplace metadata, install testing, and release notes together.
 
 ## Placeholder Child Plugins
 
