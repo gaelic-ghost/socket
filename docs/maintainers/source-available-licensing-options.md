@@ -17,7 +17,7 @@ Relevant surfaces:
 - [`CONTRIBUTING.md`](../../CONTRIBUTING.md) says contributions are made under PolyForm Noncommercial 1.0.0 unless explicitly stated otherwise, and calls out that Gale may offer separate commercial licenses.
 - `SKILL.md` files should carry `license: PolyForm-Noncommercial-1.0.0` in frontmatter when they belong to this licensing surface.
 - `plugins/apple-dev-skills/LICENSE` is also PolyForm Noncommercial 1.0.0.
-- [`LICENSE-APACHE-2.0`](../../LICENSE-APACHE-2.0) preserves the historical Apache 2.0 text for previously published Apache-licensed versions.
+- [`LICENSE-HISTORICAL-APACHE-2.0`](../../LICENSE-HISTORICAL-APACHE-2.0) preserves the historical Apache 2.0 text for previously published Apache-licensed versions.
 
 Practical implication:
 
@@ -203,7 +203,7 @@ Use this only if a delayed open-source conversion is desirable.
 - [x] Update child plugin README or license files where they currently state Apache 2.0.
 - [x] Update `SKILL.md` frontmatter license values consistently.
 - [x] Update marketplace metadata if it carries license fields.
-- [x] Add a `COMMERCIAL-USE.md` contact note with plain-language examples.
+- [x] Add a short `COMMERCIAL-USE.md` contact note for commercial licensing.
 
 ### Phase 3: Validate Tooling
 
@@ -234,7 +234,7 @@ The answers should be written before the license changes so users do not have to
 
 ## Initial Commercial-Use Draft Language
 
-This text moved into [`COMMERCIAL-USE.md`](../../COMMERCIAL-USE.md) as the current repo policy. It should still receive legal review.
+This earlier draft was superseded by the shorter contact-oriented note in [`COMMERCIAL-USE.md`](../../COMMERCIAL-USE.md). It remains here as historical planning context and should not be treated as the active public text.
 
 ```text
 Socket is free for personal, hobby, educational, research, public-interest, and other noncommercial use under the PolyForm Noncommercial License 1.0.0.

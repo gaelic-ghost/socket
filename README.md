@@ -130,4 +130,4 @@ The `socket` superproject, and all nested projects, are licensed under the PolyF
 
 Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>.
 
-Socket versions published before the PolyForm Noncommercial change remain available under the license terms that applied to those versions. The historical Apache License 2.0 text is preserved in [LICENSE-APACHE-2.0](./LICENSE-APACHE-2.0).
+Socket versions published before the PolyForm Noncommercial change remain available under the license terms that applied to those versions. The historical Apache License 2.0 text is preserved in [LICENSE-HISTORICAL-APACHE-2.0](./LICENSE-HISTORICAL-APACHE-2.0).

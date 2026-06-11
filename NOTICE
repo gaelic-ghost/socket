@@ -14,7 +14,7 @@ policy.
 Socket versions published before the PolyForm Noncommercial change remain
 available under the license terms that applied to those versions. The
 historical Apache License 2.0 text is preserved in
-[LICENSE-APACHE-2.0](./LICENSE-APACHE-2.0).
+[LICENSE-HISTORICAL-APACHE-2.0](./LICENSE-HISTORICAL-APACHE-2.0).
 
 This NOTICE file applies to the `socket` superproject layer itself,
 including the root documentation, root marketplace metadata, and root
