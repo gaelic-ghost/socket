@@ -192,7 +192,7 @@ Use this only if a delayed open-source conversion is desirable.
 - [x] Decide whether contractors, employees working for employers, startups, businesses training models, and nonprofits doing commerce are commercial.
 - [x] Decide whether charities, educational institutions, public research organizations, and government institutions need narrower repo-specific clarification beyond PolyForm's permitted-use text.
 - [x] Decide whether old versions should ever convert back to Apache 2.0.
-- [ ] Ask a lawyer to review the chosen public license, commercial-use policy, and commercial-license posture before publishing a release with this legal surface.
+- [ ] Ask a lawyer to review the chosen public license, commercial-use policy, and commercial-license posture before relying on it for enforcement, paid licensing negotiations, or outside-contribution intake.
 
 ### Phase 2: Prepare Repo Surfaces
 
@@ -207,17 +207,17 @@ Use this only if a delayed open-source conversion is desirable.
 
 ### Phase 3: Validate Tooling
 
-- Run root metadata validation.
-- Run child validation for any plugin whose frontmatter or metadata changed.
-- Install-test the Socket marketplace with the changed metadata in a temporary `CODEX_HOME`.
-- Confirm Codex still displays or installs the plugins without license-field assumptions breaking.
+- [x] Run root metadata validation.
+- [x] Run child validation for any plugin whose frontmatter or metadata changed.
+- [x] Install-test the Socket marketplace with the changed metadata in a temporary `CODEX_HOME`.
+- [x] Confirm Codex still displays or installs the plugins without license-field assumptions breaking.
 
 ### Phase 4: Release
 
-- Treat the licensing change as a major or at least clearly called-out release.
-- Tag the last Apache 2.0 version clearly before the license change.
-- Publish release notes that explain the first version under the new license.
-- Preserve archived Apache 2.0 terms for old versions.
+- [x] Treat the licensing change as a clearly called-out release.
+- [ ] Identify the last Apache 2.0 release tag in this maintainer note.
+- [x] Publish release notes that explain the first version under the new license.
+- [x] Preserve archived Apache 2.0 terms for old versions.
 
 ## Commercial-Use Questions To Answer
 
@@ -250,5 +250,5 @@ For commercial licensing, contact Gale W at mail@galewilliams.com.
 - [x] Decide whether the license change applies to all child plugins at once.
 - [x] Decide whether to keep `apple-dev-skills` in lockstep with Socket.
 - [ ] Decide whether to require a CLA, DCO plus outbound license grant, or another contribution term before accepting outside contributions.
-- [ ] Decide whether to tag one final Apache 2.0 release before the switch.
-- [ ] Run install testing before publishing the changed marketplace.
+- [ ] Identify the last Apache 2.0 release tag in this maintainer note.
+- [x] Run install testing before publishing the changed marketplace.

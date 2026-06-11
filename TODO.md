@@ -113,7 +113,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [x] Add `COMMERCIAL-USE.md` with Gale's commercial-use policy and commercial licensing contact.
 - [x] Use [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md) as the maintainer record for legal review and migration planning.
 - [ ] Decide whether to require a CLA, DCO plus outbound license grant, or another contribution term before accepting outside contributions.
-- [ ] Install-test the changed marketplace metadata before publishing a release with the new license surface.
+- [x] Install-test and publish the changed marketplace metadata with the new license surface.
 
 ## Placeholder Child Plugins
 
