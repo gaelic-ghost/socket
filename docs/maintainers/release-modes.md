@@ -23,14 +23,10 @@ Both modes treat `socket` as the release owner for the umbrella repository:
 13. verify `git log origin/main..main` is empty
 14. account for every local branch not contained by `main`
 15. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
-16. when running from Gale's MacBook, refresh the Mac mini Codex marketplace
-    cache over SSH when it is reachable
 
 The marketplace cache refreshes are always the final release steps. Never run
 them before the GitHub release exists and has been verified, subtree accounting
-is complete, and branch accounting has been recorded. The Mac mini refresh runs
-automatically only from `/Users/galew`, is best-effort, and should report clearly
-when the remote host is unavailable.
+is complete, and branch accounting has been recorded.
 
 The difference is that `subtrees` adds a child-repository sync gate before tagging or before claiming the release is done.
 
@@ -60,10 +56,9 @@ scripts/release.sh patch-refresh
 `patch-refresh` bumps the shared patch version, validates root marketplace
 metadata, commits and pushes `main`, pushes any required subtree split, runs the
 `release-ready` gate, tags `main`, publishes and verifies the GitHub release,
-verifies branch accounting, runs `codex plugin marketplace upgrade socket`, and
-then tries a best-effort Mac mini refresh over SSH only when running from Gale's
-MacBook. If local branches are not contained by `main`, the helper stops during
-its branch-accounting preflight before it bumps the version; after accounting for
+verifies branch accounting, and runs `codex plugin marketplace upgrade socket`.
+If local branches are not contained by `main`, the helper stops during its
+branch-accounting preflight before it bumps the version; after accounting for
 those branches explicitly, a trusted maintainer may rerun with:
 
 ```bash
@@ -79,13 +74,7 @@ scripts/release.sh release-ready X.Y.Z
 Only after that gate passes, create the matching `vX.Y.Z` tag from `main`, push
 it, create the GitHub release with `gh release create --verify-tag`, verify the
 release object, complete branch accounting, run `codex plugin marketplace
-upgrade socket`, and refresh the Mac mini marketplace cache over SSH when it is
-reachable.
-
-The Mac mini refresh uses `galem@mac-mini.local` by default. Set
-`SOCKET_MAC_MINI_REFRESH=always` to force it from another machine,
-`SOCKET_MAC_MINI_REFRESH=never` to skip it, or `SOCKET_MAC_MINI_SSH_TARGET` to
-override the SSH target.
+upgrade socket`.
 
 ## Subtrees Mode
 
@@ -138,4 +127,3 @@ After tagging:
 - confirm `git log origin/main..main` is empty
 - enumerate every local branch not contained by `main` and account for each one
 - run `codex plugin marketplace upgrade socket` so Gale's local Codex install sees the released marketplace state; this must not happen earlier
-- when running from Gale's MacBook, refresh the Mac mini marketplace cache over SSH when it is reachable; report the remote failure clearly when it is not

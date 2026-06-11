@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import subprocess
 import sys
@@ -26,10 +25,6 @@ EXCLUDED_VERSION_PATHS = {
     Path("plugins/SpeakSwiftlyServer/.codex-plugin/plugin.json"),
 }
 SUBTREE_GATES: tuple[dict[str, str], ...] = ()
-DEFAULT_RELEASE_OWNER_HOME = Path("/Users/galew")
-DEFAULT_MAC_MINI_SSH_TARGET = "galem@mac-mini.local"
-MAC_MINI_REFRESH_ENV = "SOCKET_MAC_MINI_REFRESH"
-MAC_MINI_SSH_TARGET_ENV = "SOCKET_MAC_MINI_SSH_TARGET"
 
 
 class VersionToolError(RuntimeError):
@@ -80,61 +75,6 @@ def run_command(root: Path, args: list[str], check: bool = True) -> subprocess.C
         detail = result.stderr.strip() or result.stdout.strip()
         raise VersionToolError(f"`{' '.join(args)}` failed. {detail}")
     return result
-
-
-def mac_mini_ssh_target() -> str:
-    return os.environ.get(MAC_MINI_SSH_TARGET_ENV, DEFAULT_MAC_MINI_SSH_TARGET).strip()
-
-
-def should_refresh_mac_mini() -> tuple[bool, str | None]:
-    mode = os.environ.get(MAC_MINI_REFRESH_ENV, "auto").strip().lower()
-    if mode in {"0", "false", "never", "no", "skip"}:
-        return False, f"Mac mini marketplace refresh skipped because {MAC_MINI_REFRESH_ENV}={mode}."
-    if mode in {"1", "always", "force", "true", "yes"}:
-        return True, None
-    if mode not in {"", "auto"}:
-        return (
-            False,
-            f"Mac mini marketplace refresh skipped because {MAC_MINI_REFRESH_ENV}={mode!r} is not recognized. "
-            "Use auto, always, or never.",
-        )
-    home = Path.home()
-    if home == DEFAULT_RELEASE_OWNER_HOME:
-        return True, None
-    return (
-        False,
-        "Mac mini marketplace refresh skipped because this release is not running from "
-        f"{DEFAULT_RELEASE_OWNER_HOME} (current home is {home}). Set {MAC_MINI_REFRESH_ENV}=always to force it.",
-    )
-
-
-def refresh_mac_mini_marketplace(root: Path) -> None:
-    should_refresh, reason = should_refresh_mac_mini()
-    if not should_refresh:
-        print(reason)
-        return
-    target = mac_mini_ssh_target()
-    if not target:
-        print(f"Mac mini marketplace refresh skipped because {MAC_MINI_SSH_TARGET_ENV} is empty.")
-        return
-    result = run_command(
-        root,
-        [
-            "ssh",
-            "-o",
-            "BatchMode=yes",
-            "-o",
-            "ConnectTimeout=5",
-            target,
-            "codex plugin marketplace upgrade socket",
-        ],
-        check=False,
-    )
-    if result.returncode == 0:
-        print(f"Mac mini marketplace refresh succeeded on {target}.")
-        return
-    detail = result.stderr.strip() or result.stdout.strip() or f"ssh exited with {result.returncode}."
-    print(f"Mac mini marketplace refresh could not run on {target}. {detail}")
 
 
 def validate_semver(version: str) -> str:
@@ -472,10 +412,6 @@ def release_notes(version: str, subtree_accounting: list[str]) -> str:
         "- None.\n\n"
         "## Migration/upgrade notes\n\n"
         "- Run `codex plugin marketplace upgrade socket` to refresh a local Codex install.\n\n"
-        f"- The release helper also tries `ssh {DEFAULT_MAC_MINI_SSH_TARGET} "
-        "codex plugin marketplace upgrade socket` as a best-effort Mac mini refresh when it runs from "
-        f"`{DEFAULT_RELEASE_OWNER_HOME}`. Set `{MAC_MINI_REFRESH_ENV}=always` to force it, "
-        f"`{MAC_MINI_REFRESH_ENV}=never` to skip it, or `{MAC_MINI_SSH_TARGET_ENV}` to override the target.\n\n"
         "## Verification performed\n\n"
         "- Ran `uv run scripts/validate_socket_metadata.py`.\n"
         "- Ran `scripts/release.sh release-ready "
@@ -537,7 +473,7 @@ def render_release_ready(root: Path, targets: list[VersionTarget], version: str)
     print(
         "Next release steps: create and push the tag, create and verify the GitHub release, "
         "run branch accounting, then run the local `codex plugin marketplace upgrade socket` refresh "
-        "and the best-effort Mac mini refresh as the final cache-refresh steps only."
+        "as the final cache-refresh step only."
     )
     return 0
 
@@ -610,8 +546,6 @@ def render_patch_refresh(root: Path, targets: list[VersionTarget], *, allow_unme
     render_branch_accounting(branches, allow_unmerged_branches=allow_unmerged_branches)
     print("Refreshing the local Codex marketplace cache...")
     run_command(root, ["codex", "plugin", "marketplace", "upgrade", "socket"])
-    print("Refreshing the Mac mini Codex marketplace cache over SSH...")
-    refresh_mac_mini_marketplace(root)
     print(f"Patch-refresh release completed for {tag}.")
     return 0
 
