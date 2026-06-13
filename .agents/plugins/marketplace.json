@@ -180,6 +180,18 @@
       "category": "Developer Tools"
     },
     {
+      "name": "reverse-engineering-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/reverse-engineering-skills"
+      },
+      "policy": {
+        "installation": "NOT_AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "codex-utilities",
       "source": {
         "source": "local",

@@ -119,6 +119,15 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ## Placeholder Child Plugins
 
+### reverse-engineering-skills
+
+- [ ] Author the first real reverse-engineering skill tranche for Codex.
+- [ ] Start with artifact triage and evidence notes before platform-specific decompilation workflows.
+- [ ] Cover .NET assemblies, Unity managed and IL2CPP artifacts, Apple binaries, symbols, crash logs, and decompiler or disassembler output review.
+- [ ] Add tool-specific guidance for Cutter, Ghidra, Malimite, Hopper, and adjacent tools only after hands-on workflow preferences are clearer.
+- [ ] Update docs and validation once the exported reverse-engineering skill surface is real.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
 ### dotnet-skills
 
 - [ ] Author the first real .NET-focused skill for Codex.
