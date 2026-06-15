@@ -177,3 +177,38 @@ patch release if the dependency updates are clean.
 
 Do not tag the release until the final alert query has been recorded in this
 note or a follow-up remediation note.
+
+## Remediation Log
+
+### 2026-06-15 MCP Lockfile Refresh
+
+Commit `2b209d0d` refreshed these executable MCP server lockfiles:
+
+- `plugins/cardhop-app/mcp/uv.lock`
+- `plugins/things-app/mcp/uv.lock`
+
+Both lockfiles now resolve the vulnerable packages above Dependabot's patched
+floors:
+
+| Package | Patched floor | Resolved version |
+| --- | --- | --- |
+| `fastmcp` | `3.2.0` | `3.4.2` |
+| `authlib` | `1.6.12` | `1.7.2` |
+| `PyJWT` | `2.12.0` | `2.13.0` |
+| `python-multipart` | `0.0.27` | `0.0.32` |
+| `starlette` | `1.0.1` | `1.3.1` |
+| `idna` | `3.15` | `3.18` |
+| `python-dotenv` | `1.2.2` | `1.2.2` |
+| `cryptography` | `46.0.7` | `49.0.0` |
+| `Pygments` | `2.20.0` | `2.20.0` |
+| `pytest` | `9.0.3` | `9.1.0` |
+
+Validation passed from each MCP directory:
+
+- `uv run pytest`
+- `uv run ruff check .`
+- `uv run mypy .`
+
+The immediate post-push Dependabot API query on 2026-06-15 still listed the old
+MCP alerts. Treat that as a GitHub rescan delay unless a later query still shows
+the MCP alerts after GitHub has reprocessed the updated lockfiles.
