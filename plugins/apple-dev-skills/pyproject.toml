@@ -2,12 +2,12 @@
 name = "apple-dev-skills-maintainer"
 version = "6.17.9"
 description = "Maintainer tooling for the apple-dev-skills repository"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
 
 [dependency-groups]
 dev = [
-  "pytest>=8.4.1,<9",
+  "pytest>=9.0.3",
   "PyYAML>=6.0.2,<7",
 ]
 

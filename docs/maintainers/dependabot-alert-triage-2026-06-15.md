@@ -212,3 +212,35 @@ Validation passed from each MCP directory:
 The immediate post-push Dependabot API query on 2026-06-15 still listed the old
 MCP alerts. Treat that as a GitHub rescan delay unless a later query still shows
 the MCP alerts after GitHub has reprocessed the updated lockfiles.
+
+### 2026-06-15 Plugin Maintainer Lockfile Refresh
+
+The second remediation slice refreshed the remaining non-MCP plugin maintainer
+lockfiles:
+
+- `plugins/agent-plugin-skills/uv.lock`
+- `plugins/apple-dev-skills/uv.lock`
+- `plugins/productivity-skills/uv.lock`
+- `plugins/python-skills/uv.lock`
+- `plugins/things-app/uv.lock`
+
+All five lockfiles now resolve `pytest` to `9.1.0`, above Dependabot's patched
+floor of `9.0.3`. The refresh also moved the remaining `Pygments` alerts to
+`2.20.0`, above Dependabot's patched floor of `2.20.0`.
+
+`plugins/apple-dev-skills/pyproject.toml` now requires Python `>=3.10` for its
+maintainer tooling because `pytest>=9.0.3` no longer supports Python 3.9. This
+does not change the Apple skill content; it only narrows the Python version used
+to run that child repo's maintainer tests.
+
+Validation passed:
+
+- `plugins/agent-plugin-skills`: `uv run pytest`, `uv run ruff check .`,
+  `uv run mypy .`
+- `plugins/apple-dev-skills`: `bash .github/scripts/validate_repo_docs.sh`,
+  `uv run pytest`
+- `plugins/productivity-skills`: `uv run pytest`
+- `plugins/python-skills`: `uv run scripts/validate_repo_metadata.py`,
+  `uv run pytest`, `uv run ruff check .`, `uv run mypy .`
+- `plugins/things-app`: `uv run pytest`
+- Socket root: `uv run scripts/validate_socket_metadata.py`
