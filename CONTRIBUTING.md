@@ -267,4 +267,12 @@ Unless a contribution explicitly says otherwise in writing, contributions to `so
 
 Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>. See [COMMERCIAL-USE.md](./COMMERCIAL-USE.md) for the current commercial-use policy.
 
-Do not submit contributions to `socket` unless you have the right to license them under these terms and understand that Gale may offer separate commercial licenses for Socket.
+Outside contributions must be signed off under the [Developer Certificate of Origin](./DCO.md). Add a `Signed-off-by:` line to each commit using your real name and an email address you are willing to have recorded in public Git history:
+
+```text
+Signed-off-by: Your Name <you@example.com>
+```
+
+By submitting a contribution, you grant Gale W a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to use, copy, modify, publish, distribute, sublicense, relicense, and otherwise make your contribution available as part of Socket, including under the public Socket license and under separate written commercial licenses offered by Gale.
+
+Do not submit contributions to `socket` unless you have the right to make the DCO certification, grant these rights, and understand that Gale may offer separate commercial licenses for Socket.

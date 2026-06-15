@@ -192,7 +192,7 @@ Use this only if a delayed open-source conversion is desirable.
 - [x] Decide whether contractors, employees working for employers, startups, businesses training models, and nonprofits doing commerce are commercial.
 - [x] Decide whether charities, educational institutions, public research organizations, and government institutions need narrower repo-specific clarification beyond PolyForm's permitted-use text.
 - [x] Decide whether old versions should ever convert back to Apache 2.0.
-- [ ] Ask a lawyer to review the chosen public license, commercial-use policy, and commercial-license posture before relying on it for enforcement, paid licensing negotiations, or outside-contribution intake.
+- [ ] Ask a lawyer to review the chosen public license, commercial-use policy, outbound contribution grant, and commercial-license posture before relying on them for enforcement, paid licensing negotiations, or outside-contribution intake.
 
 ### Phase 2: Prepare Repo Surfaces
 
@@ -200,6 +200,7 @@ Use this only if a delayed open-source conversion is desirable.
 - [x] Update `NOTICE` to explain old-version Apache terms versus future-version terms.
 - [x] Update `README.md` license wording.
 - [x] Update `CONTRIBUTING.md` so contributions after the change are made under terms that allow Gale to offer commercial licenses.
+- [x] Add a DCO sign-off requirement plus an outbound contribution grant for future outside contributions.
 - [x] Update child plugin README or license files where they currently state Apache 2.0.
 - [x] Update `SKILL.md` frontmatter license values consistently.
 - [x] Update marketplace metadata if it carries license fields.
@@ -249,6 +250,6 @@ For commercial licensing, contact Gale W at mail@galewilliams.com.
 - [x] Decide whether to use PolyForm Noncommercial, BSL, FSL, or another lawyer-reviewed source-available license.
 - [x] Decide whether the license change applies to all child plugins at once.
 - [x] Decide whether to keep `apple-dev-skills` in lockstep with Socket.
-- [ ] Decide whether to require a CLA, DCO plus outbound license grant, or another contribution term before accepting outside contributions.
+- [x] Require DCO sign-off plus an outbound commercial licensing grant before accepting outside contributions.
 - [ ] Identify the last Apache 2.0 release tag in this maintainer note.
 - [x] Run install testing before publishing the changed marketplace.
