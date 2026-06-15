@@ -327,6 +327,7 @@ Planned
 - [x] Hardened `web-dev-skills:expo-inline-native-modules-workflow` with native-shape decision and validation reference tables.
 - [x] Added Server-Side Swift ecosystem package preference guidance for Vapor, Vapor Community, and Hummingbird-aligned packages.
 - [x] Added `productivity-skills:codex-gui-worktree-workflow` for general Codex GUI worktree-first planning, plus Apple and server-side Swift local environment templates in their owning stack plugins.
+- [ ] Explore adding a DCO/sign-off status check for pull requests. Keep the investigation focused on enforcing sign-offs for command-line contributors without blocking Gale's direct-main maintenance workflow.
 
 ## Backlog Candidates
 
