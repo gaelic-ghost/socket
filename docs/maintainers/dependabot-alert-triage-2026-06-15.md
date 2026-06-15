@@ -116,3 +116,64 @@ If a lock refresh cannot clear an alert because an upstream package constrains a
 vulnerable transitive dependency, record the blocking package and decide between
 a targeted lower-bound override, an upstream issue, or a temporary documented
 deferral.
+
+## Remediation Plan
+
+### Slice 1: MCP Server Lockfiles
+
+Goal: clear the critical and high alerts first by refreshing the executable
+Cardhop and Things MCP server dependency sets.
+
+1. From `plugins/cardhop-app/mcp`, run `uv lock --upgrade`.
+2. Validate Cardhop MCP from `plugins/cardhop-app/mcp`:
+   - `uv run pytest`
+   - `uv run ruff check .`
+   - `uv run mypy .`
+3. From `plugins/things-app/mcp`, run `uv lock --upgrade`.
+4. Validate Things MCP from `plugins/things-app/mcp`:
+   - `uv run pytest`
+   - `uv run ruff check .`
+   - `uv run mypy .`
+5. Commit the two MCP lockfile refreshes if validation passes.
+
+If either MCP lock refresh cannot reach the patched package versions, inspect
+the locked dependency chain with `uv tree` from the affected MCP directory and
+record the package that blocks the patched version.
+
+### Slice 2: Remaining Plugin Lockfiles
+
+Goal: clear the remaining medium and low alerts in skill/plugin lockfiles after
+the executable MCP server surfaces are handled.
+
+Refresh and validate these lockfiles one child at a time:
+
+1. `plugins/agent-plugin-skills/uv.lock`
+2. `plugins/apple-dev-skills/uv.lock`
+3. `plugins/productivity-skills/uv.lock`
+4. `plugins/python-skills/uv.lock`
+5. `plugins/things-app/uv.lock`
+
+For each child, run `uv lock --upgrade` from the owning plugin root, then run
+that child's local validation if it exists. Prefer the child `AGENTS.md` and
+`pyproject.toml` scripts over inventing a root-level check.
+
+Commit the non-MCP lockfile refreshes separately from Slice 1 unless the diff is
+tiny and all validation is clean.
+
+### Slice 3: Alert Verification And Release
+
+Goal: verify GitHub agrees the alerts are resolved, then publish a normal Socket
+patch release if the dependency updates are clean.
+
+1. Run root validation:
+   - `uv run scripts/validate_socket_metadata.py`
+2. Re-query open Dependabot alerts from GitHub.
+3. If alerts remain, classify each remaining alert as:
+   - blocked by an upstream constraint,
+   - intentionally deferred,
+   - or missed by the lock refresh and still actionable.
+4. If the alert count reaches zero or only documented deferrals remain, release
+   a Socket patch version with the repo-owned release script.
+
+Do not tag the release until the final alert query has been recorded in this
+note or a follow-up remediation note.
