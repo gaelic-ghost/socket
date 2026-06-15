@@ -4,13 +4,12 @@ This file is the Reverse Engineering Skills child-repo override for work done fr
 
 ## Scope
 
-- `reverse-engineering-skills` is a monorepo-owned placeholder source for future binary inspection, decompilation, disassembly, symbol, and artifact-analysis Codex skills.
-- Keep the repo intentionally minimal until the first real skill tranche lands.
-- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) is the required plugin root today.
+- `reverse-engineering-skills` is a monorepo-owned Socket child and the canonical source of truth for reverse-engineering workflow skills.
+- Root [`skills/`](./skills/) is the authored workflow surface.
+- The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 ## Local Rules
 
-- Do not present this repository as already shipping reverse-engineering workflows before real skills exist.
 - Keep this plugin focused on technical inspection workflows, artifact handling, reproducible notes, and evidence quality.
 - Treat user, project, client, and repository scope decisions as external to the skill. The skill should not decide whether a reverse-engineering task is legitimate, authorized, or acceptable.
 - Preserve original artifacts by default. Prefer copying inputs into a clearly named working area, recording hashes or identifying metadata when useful, and documenting tool versions and commands used.

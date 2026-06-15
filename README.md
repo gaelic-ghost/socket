@@ -64,6 +64,7 @@ Currently available from the catalog:
 - `dotnet-skills`
 - `productivity-skills`
 - `python-skills`
+- `reverse-engineering-skills`
 - `server-side-swift`
 - `rust-skills`
 - `speak-swiftly`
@@ -84,6 +85,7 @@ Current Socket catalog shape:
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `productivity-skills`: general-purpose maintainer, documentation, Codex GUI worktree workflow, and automation-design workflows plus source-bundled docs-audit and code-tracing custom-agent definitions
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
+- `reverse-engineering-skills`: binary inspection, artifact triage, and reproducible reverse-engineering note workflows
 - `server-side-swift`: server-side Swift support plus the source-bundled `server-swift-steward` custom-agent definition for services with frameworks like Vapor and Hummingbird
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
@@ -94,7 +96,6 @@ Current Socket catalog shape:
 Placeholder directories for future plugins (not available for install):
 
 - `android-dev-skills`
-- `reverse-engineering-skills`
 - `spotify`
 
 ## Development

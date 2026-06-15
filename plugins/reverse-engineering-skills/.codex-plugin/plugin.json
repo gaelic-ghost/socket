@@ -2,6 +2,7 @@
   "name": "reverse-engineering-skills",
   "version": "6.17.7",
   "description": "Placeholder plugin repository for future reverse engineering, decompilation, disassembly, symbol, and artifact-analysis Codex skills.",
+  "skills": "./skills/",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -24,8 +25,8 @@
   ],
   "interface": {
     "displayName": "Reverse Engineering Skills",
-    "shortDescription": "Future binary inspection and decompilation workflow skills.",
-    "longDescription": "Reserve a dedicated plugin surface for reverse engineering workflows across Unity, .NET assemblies, IL2CPP artifacts, Apple binaries, symbols, crash logs, decompiled output, and reproducible artifact-analysis notes.",
+    "shortDescription": "Binary inspection and decompilation workflow skills.",
+    "longDescription": "Guidance for reverse engineering workflows across artifact triage, reproducible analysis notes, Unity, .NET assemblies, IL2CPP artifacts, Apple binaries, symbols, crash logs, decompiled output, and disassembler output.",
     "defaultPrompt": "Use Reverse Engineering Skills when the task centers on compiled artifacts, decompiled output, disassembly, symbols, crash logs, or binary metadata. Start by identifying the artifact shape, preserving original inputs, choosing the least confusing inspection path, and recording which tool produced each observation.",
     "developerName": "Gale",
     "category": "Developer Tools",

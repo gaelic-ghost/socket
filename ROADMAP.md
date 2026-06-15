@@ -39,7 +39,7 @@
 - Milestone 10: Expo inline native modules workflow - Implemented
 - Milestone 11: Codex Utilities plugin - In Progress
 - Milestone 12: Xcode 27 agentic tooling workflows - Planned
-- Milestone 13: Reverse Engineering skills plugin - Planned
+- Milestone 13: Reverse Engineering skills plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -293,7 +293,7 @@ In Progress
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
@@ -328,29 +328,29 @@ Planned
 
 ### Scope
 
-- [x] Add a Socket-hosted `reverse-engineering-skills` child plugin placeholder for future binary inspection, decompilation, disassembly, symbol, and artifact-analysis workflows.
+- [x] Add a Socket-hosted `reverse-engineering-skills` child plugin for binary inspection, decompilation, disassembly, symbol, and artifact-analysis workflows.
 - [x] Keep the plugin as a guidance surface rather than a bundled runtime: do not add decompilers, disassemblers, debugger integrations, sample binaries, MCP servers, or machine-local tool state until a later plan explicitly calls for that scope.
 - [x] Keep the skill surface technical: artifact triage, tool selection, copied working files, observed output, inferred behavior, and reproducible evidence notes.
-- [ ] Add first-slice skills for artifact triage and evidence notes before platform-specific decompilation workflows.
+- [x] Add first-slice skills for artifact triage and evidence notes before platform-specific decompilation workflows.
 - [ ] Add platform and tool workflows after Gale has tried representative artifacts in Cutter, Ghidra, Malimite, Hopper, and adjacent tools.
 
 ### Tickets
 
 - [x] Record the detailed plan in [`docs/maintainers/reverse-engineering-skills-plugin-plan.md`](./docs/maintainers/reverse-engineering-skills-plugin-plan.md).
 - [x] Create `plugins/reverse-engineering-skills/` with `.codex-plugin/plugin.json` and `AGENTS.md`.
-- [x] Wire `reverse-engineering-skills` into the root Socket marketplace as `NOT_AVAILABLE`.
-- [x] Update root README and TODO so users understand the placeholder surface.
-- [ ] Add `reverse-engineering:triage-artifact`.
-- [ ] Add `reverse-engineering:evidence-notes-workflow`.
+- [x] Wire `reverse-engineering-skills` into the root Socket marketplace as `NOT_AVAILABLE` while it was a placeholder.
+- [x] Update root README and TODO so users understand the shipped first skill surface.
+- [x] Add `reverse-engineering:triage-artifact`.
+- [x] Add `reverse-engineering:evidence-notes-workflow`.
 - [ ] Add `reverse-engineering:tool-selection-workflow` after the first hands-on tool comparison.
 - [ ] Add .NET, Unity, Apple binary, and decompiler-output review workflows after the first two common workflows land.
-- [ ] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
-- [ ] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
+- [x] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
+- [x] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
 - [ ] Unity, .NET, Apple binary, and tool-selection workflows each have a clear owner skill or an explicit reason to stay backlog-only.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 

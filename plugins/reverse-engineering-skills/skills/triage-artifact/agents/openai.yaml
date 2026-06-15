@@ -1,0 +1,4 @@
+interface:
+  display_name: "Triage Artifact"
+  short_description: "Classify compiled artifacts before deeper reverse engineering."
+  default_prompt: "Use this skill to classify an unknown binary, assembly, bundle, archive, crash log, symbol file, metadata file, or decompiler output before choosing deeper reverse-engineering tools."

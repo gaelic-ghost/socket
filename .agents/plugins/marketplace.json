@@ -186,7 +186,7 @@
         "path": "./plugins/reverse-engineering-skills"
       },
       "policy": {
-        "installation": "NOT_AVAILABLE",
+        "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"

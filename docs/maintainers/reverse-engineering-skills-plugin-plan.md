@@ -29,11 +29,11 @@ plugins/reverse-engineering-skills/
 The child plugin owns its Codex-facing guidance surface:
 
 - `.codex-plugin/plugin.json`
-- `skills/` once the first real skill tranche lands
+- `skills/`
 - plugin metadata, skill metadata, `AGENTS.md`, and maintainer notes that explain the plugin's role
 - any validation scripts needed for the plugin's own authored guidance
 
-The root Socket marketplace should list `reverse-engineering-skills` as `NOT_AVAILABLE` until it exports real skill content. Switch the marketplace entry to installable only after at least one useful `SKILL.md` exists and root validation passes.
+The root Socket marketplace lists `reverse-engineering-skills` as installable now that the first real skill content exists. If the plugin ever loses its exported skill content, switch the marketplace entry back to `NOT_AVAILABLE` in the same pass.
 
 ## Boundaries With Existing Plugins
 
@@ -66,7 +66,7 @@ Use official or canonical project sources first when a skill names a tool or for
 
 When a skill relies on tool behavior, translate the relevant behavior into practical workflow guidance. Do not drop citations into a skill as a substitute for explaining what command output means, what artifact it came from, or what uncertainty remains.
 
-## Proposed Skill Inventory
+## Shipped Skill Inventory
 
 ### `reverse-engineering:triage-artifact`
 
@@ -80,6 +80,24 @@ This skill should cover:
 - platform, architecture, and runtime clues
 - debug symbols, stripped symbols, metadata, resources, manifests, and dependency hints
 - a short next-step recommendation with the least invasive useful inspection path
+
+### `reverse-engineering:evidence-notes-workflow`
+
+Create durable analysis notes for reverse-engineering sessions.
+
+This skill covers:
+
+- artifact inventory
+- tool and command inventory
+- copied working files versus original inputs
+- observations, inferences, and open questions
+- screenshots or snippets when useful
+- follow-up validation tasks
+- concise handoff summaries for another agent or future session
+
+## Proposed Skill Inventory
+
+The following skills are planned after the common triage and notes surfaces have been used on real artifacts.
 
 ### `reverse-engineering:dotnet-decompilation-workflow`
 
@@ -149,31 +167,17 @@ This skill should cover:
 - comparing multiple tool outputs when they disagree
 - avoiding edits to original artifacts unless the user explicitly asks for patching or transformation work
 
-### `reverse-engineering:evidence-notes-workflow`
-
-Create durable analysis notes for reverse-engineering sessions.
-
-This skill should cover:
-
-- artifact inventory
-- tool and command inventory
-- copied working files versus original inputs
-- observations, inferences, and open questions
-- screenshots or snippets when useful
-- follow-up validation tasks
-- concise handoff summaries for another agent or future session
-
 ## First Slice
 
 - [x] Create `plugins/reverse-engineering-skills/` with `.codex-plugin/plugin.json` and `AGENTS.md`.
 - [x] Add this maintainer plan.
-- [x] Wire `reverse-engineering-skills` into the root Socket marketplace as `NOT_AVAILABLE`.
+- [x] Wire `reverse-engineering-skills` into the root Socket marketplace as `NOT_AVAILABLE` while it was a placeholder.
 - [x] Update README, ROADMAP, and TODO so users understand the placeholder surface.
-- [ ] Add `reverse-engineering:triage-artifact` as the first skill.
-- [ ] Add `reverse-engineering:evidence-notes-workflow` before deeper platform-specific skills so all later workflows share the same note discipline.
+- [x] Add `reverse-engineering:triage-artifact` as the first skill.
+- [x] Add `reverse-engineering:evidence-notes-workflow` before deeper platform-specific skills so all later workflows share the same note discipline.
 - [ ] Add `reverse-engineering:tool-selection-workflow` after Gale has tried Cutter, Ghidra, Malimite, and Hopper on representative artifacts.
-- [ ] Switch the root marketplace entry to installable only after real skill content exists.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each marketplace-facing update.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each marketplace-facing update.
 
 ## Next Skill Candidates
 
@@ -187,7 +191,7 @@ This skill should cover:
 
 ## Exit Criteria
 
-- [ ] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
-- [ ] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
+- [x] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
+- [x] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
 - [ ] Unity, .NET, and Apple binary workflows each have a clear owner skill or an explicit reason to stay backlog-only.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
