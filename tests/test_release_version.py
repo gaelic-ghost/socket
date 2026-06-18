@@ -4,6 +4,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -103,6 +104,19 @@ version = "1.2.3"
         json.dumps({"name": "speak-swiftly-server", "version": "9.8.7"}, indent=2) + "\n",
     )
     return tmp_path
+
+
+def make_evidence() -> Any:
+    return release_version.ReleaseEvidence(
+        commit="socket-head",
+        captured_at="2026-06-18T12:00:00Z",
+        marketplace_smoke={
+            "status": "passed",
+            "marketplace": "socket",
+            "source_type": "local",
+        },
+        dependabot_alerts=(),
+    )
 
 
 def test_discover_targets_ignores_build_artifacts(tmp_path: Path) -> None:
@@ -286,21 +300,20 @@ def test_release_ready_prints_cache_refresh_as_final_step(
     output = capsys.readouterr().out
     assert exit_code == 0
     assert "pushed to apple-dev-skills/main" not in output
-    assert "best-effort Mac mini refresh as the final cache-refresh steps only" in output
+    assert "as the final cache-refresh step only" in output
 
 
-def test_patch_refresh_runs_cache_refreshes_last(
+def test_patch_refresh_captures_evidence_and_runs_cache_refresh_last(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     root = make_repo(tmp_path)
     commands: list[tuple[str, tuple[str, ...]]] = []
-    monkeypatch.setenv("SOCKET_MAC_MINI_REFRESH", "always")
 
     def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
         assert repo_root == root
         command = tuple(args)
         commands.append(("git", command))
-        outputs = {
+        outputs: dict[tuple[str, ...], str] = {
             ("branch", "--show-current"): "main\n",
             ("status", "--porcelain"): "",
             ("tag", "-l", "v1.2.4"): "",
@@ -333,14 +346,27 @@ def test_patch_refresh_runs_cache_refreshes_last(
         output = outputs[command]
         return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
 
-    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
+    def fake_run_command(
+        repo_root: Path,
+        args: list[str],
+        check: bool = True,
+        env: dict[str, str] | None = None,
+    ) -> object:
         assert repo_root == root
+        assert env is None
         command = tuple(args)
         commands.append(("cmd", command))
         return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
 
+    def fake_capture_release_evidence(repo_root: Path, output_path: Path) -> object:
+        assert repo_root == root
+        assert output_path == root / ".socket-release-evidence.json"
+        commands.append(("evidence", (str(output_path),)))
+        return make_evidence()
+
     monkeypatch.setattr(release_version, "run_git", fake_run_git)
     monkeypatch.setattr(release_version, "run_command", fake_run_command)
+    monkeypatch.setattr(release_version, "capture_release_evidence", fake_capture_release_evidence)
 
     targets = release_version.discover_targets(root)
     exit_code = release_version.render_patch_refresh(root, targets, allow_unmerged_branches=False)
@@ -348,100 +374,126 @@ def test_patch_refresh_runs_cache_refreshes_last(
     output = capsys.readouterr().out
     assert exit_code == 0
     assert "Patch-refresh release completed for v1.2.4." in output
-    assert commands[-2] == ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket"))
-    assert commands[-1] == (
-        "cmd",
-        (
-            "ssh",
-            "-o",
-            "BatchMode=yes",
-            "-o",
-            "ConnectTimeout=5",
-            "galem@mac-mini.local",
-            "codex plugin marketplace upgrade socket",
-        ),
-    )
+    assert commands[-1] == ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket"))
     assert ("cmd", ("uv", "run", "scripts/validate_socket_metadata.py")) in commands
     assert ("git", ("push", "origin", "main")) in commands
     assert ("git", ("push", "origin", "v1.2.4")) in commands
+    assert commands.index(("evidence", (str(root / ".socket-release-evidence.json"),))) < commands.index(
+        ("git", ("tag", "v1.2.4"))
+    )
     assert any(command[0] == "cmd" and command[1][:3] == ("gh", "release", "create") for command in commands)
     assert ("cmd", ("gh", "release", "view", "v1.2.4")) in commands
-    assert "Mac mini marketplace refresh succeeded on galem@mac-mini.local." in output
+    assert "Capturing release evidence..." in output
 
 
-def test_patch_refresh_reports_mac_mini_refresh_failure_without_failing_release(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+def test_capture_release_evidence_records_marketplace_smoke_and_dependabot(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     root = make_repo(tmp_path)
-    commands: list[tuple[str, tuple[str, ...]]] = []
-    monkeypatch.setenv("SOCKET_MAC_MINI_REFRESH", "always")
+    output_path = root / ".socket-release-evidence.json"
 
     def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
         assert repo_root == root
-        command = tuple(args)
-        commands.append(("git", command))
-        outputs = {
-            ("branch", "--show-current"): "main\n",
+        outputs: dict[tuple[str, ...], str] = {
             ("status", "--porcelain"): "",
-            ("tag", "-l", "v1.2.4"): "",
-            ("ls-remote", "--tags", "origin", "refs/tags/v1.2.4"): "",
-            ("push", "origin", "main"): "",
-            ("describe", "--tags", "--abbrev=0", "HEAD^"): "v1.2.3\n",
-            ("diff", "--name-only", "v1.2.3..HEAD"): "pyproject.toml\nuv.lock\n",
             ("rev-parse", "HEAD"): "socket-head\n",
-            ("rev-parse", "origin/main"): "socket-head\n",
-            ("tag", "v1.2.4"): "",
-            ("push", "origin", "v1.2.4"): "",
-            ("log", "origin/main..main", "--oneline"): "",
-            ("branch", "--no-merged", "main"): "",
         }
-        if command[:1] == ("add",):
-            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
-        if command[:2] == ("commit", "-m"):
-            return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
-        output = outputs[command]
-        return type("Result", (), {"returncode": 0, "stdout": output, "stderr": ""})()
+        return type(
+            "Result",
+            (),
+            {"returncode": 0, "stdout": outputs[tuple(args)], "stderr": ""},
+        )()
 
-    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
+    def fake_run_command(
+        repo_root: Path,
+        args: list[str],
+        check: bool = True,
+        env: dict[str, str] | None = None,
+    ) -> object:
         assert repo_root == root
         command = tuple(args)
-        commands.append(("cmd", command))
-        if command[:1] == ("ssh",):
-            assert check is False
-            return type("Result", (), {"returncode": 255, "stdout": "", "stderr": "host unreachable"})()
-        return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+        if command == ("codex", "plugin", "marketplace", "add", str(root)):
+            assert env is not None
+            codex_home = Path(env["CODEX_HOME"])
+            write(
+                codex_home / "config.toml",
+                f"""[marketplaces.socket]
+source_type = "local"
+source = "{root}"
+""",
+            )
+            return type("Result", (), {"returncode": 0, "stdout": "Added marketplace `socket`.", "stderr": ""})()
+        if command == ("codex", "plugin", "marketplace", "remove", "socket"):
+            assert env is not None
+            (Path(env["CODEX_HOME"]) / "config.toml").write_text("", encoding="utf-8")
+            return type("Result", (), {"returncode": 0, "stdout": "Removed marketplace `socket`.", "stderr": ""})()
+        if command == ("gh", "api", release_version.DEPENDABOT_ALERTS_ENDPOINT):
+            assert env is None
+            payload = [
+                {
+                    "number": 42,
+                    "dependency": {
+                        "package": {"name": "example-package"},
+                        "manifest_path": "plugins/example/uv.lock",
+                    },
+                    "security_advisory": {"severity": "high"},
+                }
+            ]
+            return type(
+                "Result",
+                (),
+                {"returncode": 0, "stdout": json.dumps(payload), "stderr": ""},
+            )()
+        raise AssertionError(f"Unexpected command: {command}")
 
     monkeypatch.setattr(release_version, "run_git", fake_run_git)
     monkeypatch.setattr(release_version, "run_command", fake_run_command)
 
-    targets = release_version.discover_targets(root)
-    exit_code = release_version.render_patch_refresh(root, targets, allow_unmerged_branches=False)
+    evidence = release_version.capture_release_evidence(root, output_path)
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
 
-    output = capsys.readouterr().out
-    assert exit_code == 0
-    assert "Mac mini marketplace refresh could not run on galem@mac-mini.local. host unreachable" in output
-    assert "Patch-refresh release completed for v1.2.4." in output
+    assert evidence.commit == "socket-head"
+    assert evidence.marketplace_smoke["status"] == "passed"
+    assert evidence.dependabot_alerts[0]["number"] == 42
+    assert payload["dependabot"]["open_alert_count"] == 1
+    assert payload["dependabot"]["alerts"][0]["package"] == "example-package"
 
 
-def test_mac_mini_refresh_skips_by_default_outside_gale_home(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+def test_release_notes_include_captured_evidence() -> None:
+    notes = release_version.release_notes("1.2.4", [], make_evidence())
+
+    assert "temporary `CODEX_HOME` Socket marketplace add/remove smoke test" in notes
+    assert "found 0 open alert(s)" in notes
+    assert "Captured release evidence at `2026-06-18T12:00:00Z`" in notes
+
+
+def test_load_release_evidence_rejects_a_different_commit(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    commands: list[tuple[str, ...]] = []
-    monkeypatch.setenv("HOME", str(tmp_path / "collaborator"))
-    monkeypatch.delenv("SOCKET_MAC_MINI_REFRESH", raising=False)
+    root = make_repo(tmp_path)
+    evidence_file = root / ".socket-release-evidence.json"
+    evidence_file.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "commit": "older-commit",
+                "captured_at": "2026-06-18T12:00:00Z",
+                "marketplace_smoke": {"status": "passed"},
+                "dependabot": {"alerts": []},
+            }
+        ),
+        encoding="utf-8",
+    )
 
-    def fake_run_command(repo_root: Path, args: list[str], check: bool = True) -> object:
-        assert repo_root == tmp_path
-        commands.append(tuple(args))
-        return type("Result", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+    def fake_run_git(repo_root: Path, args: list[str], check: bool = True) -> object:
+        assert repo_root == root
+        assert args == ["rev-parse", "HEAD"]
+        return type("Result", (), {"returncode": 0, "stdout": "current-commit\n", "stderr": ""})()
 
-    monkeypatch.setattr(release_version, "run_command", fake_run_command)
+    monkeypatch.setattr(release_version, "run_git", fake_run_git)
 
-    release_version.refresh_mac_mini_marketplace(tmp_path)
-
-    output = capsys.readouterr().out
-    assert commands == []
-    assert "Mac mini marketplace refresh skipped because this release is not running from /Users/galew" in output
+    with pytest.raises(release_version.VersionToolError, match="stale"):
+        release_version.load_release_evidence(root, evidence_file)
 
 
 def test_patch_refresh_stops_before_marketplace_upgrade_when_branch_accounting_fails(

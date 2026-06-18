@@ -205,6 +205,21 @@ plugin manifests, or child plugin payloads, run the appropriate temporary
 so the release proves the marketplace add path without touching a production
 Codex install.
 
+Before preparing release notes, capture the local marketplace smoke result and
+the current GitHub Dependabot alert state in one ignored worktree-local
+artifact:
+
+```bash
+scripts/release.sh release-evidence
+scripts/release.sh release-notes X.Y.Z
+```
+
+The evidence command writes `.socket-release-evidence.json`, ties the results
+to the current commit, and rejects stale evidence when release notes are
+generated from a different commit. `patch-refresh` runs both evidence checks
+and incorporates their summary into its generated GitHub release notes
+automatically.
+
 If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy` commands where that repo's contributors will actually look.
 
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
@@ -229,7 +244,7 @@ scripts/release.sh custom 1.2.3
 
 `patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
 
-Sometimes `socket` needs a patch-only release even when the visible root catalog shape did not otherwise change. This is the current maintainer workaround for refreshing Git-backed plugin entries that Codex resolves through the Socket marketplace, including `speak-swiftly` from `gaelic-ghost/SpeakSwiftlyServer`. Treat those bumps as real releases: run the shared version bump, validate the marketplace metadata, follow the release-ready gate, complete any required subtree accounting, tag the Socket release, create the GitHub release, and run `codex plugin marketplace upgrade socket`.
+Sometimes `socket` needs a patch-only release even when the visible root catalog shape did not otherwise change. This is the current maintainer workaround for refreshing Git-backed plugin entries that Codex resolves through the Socket marketplace, including `speak-swiftly` from `gaelic-ghost/SpeakSwiftlyServer`. Treat those bumps as real releases: run the shared version bump, validate the marketplace metadata, follow the release-ready gate, capture release evidence, complete any required subtree accounting, tag the Socket release, create the GitHub release, and run `codex plugin marketplace upgrade socket`.
 
 Trusted maintainers can run that patch-refresh sequence with:
 
