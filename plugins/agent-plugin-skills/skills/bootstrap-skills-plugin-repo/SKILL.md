@@ -62,3 +62,16 @@ Use explicit refs such as `<owner>/<repo>@vX.Y.Z` only for pinned reproducible i
 Keep discovery mirrors, plugin packaging, marketplace catalogs, plugin payload directories, installed cache paths, and config-state separate. Do not blur "where Codex can see a plugin", "where the plugin payload lives", "how Codex updates the marketplace", and "whether the plugin is enabled" into one sentence.
 
 If you mention project-scoped `.codex/config.toml`, describe it as a general Codex config surface from the config reference, not as a separate documented plugin install surface.
+
+## GitHub Repository Settings
+
+When the bootstrapped repository has a GitHub remote, use
+`productivity-skills:maintain-project-repo` to audit or apply the current
+recommended GitHub repository settings. Keep local structure bootstrap separate
+from server-side settings mutation, keep visibility changes approval-gated, and
+preserve any documented maintainer direct-push workflow.
+
+The GitHub settings pass should cover repository features, merge modes,
+Dependabot and security settings, private vulnerability reporting for public
+repos, web commit sign-off when DCO applies, and branch protection that requires
+the actual CI check context without requiring unavailable reviewers.

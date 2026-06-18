@@ -105,7 +105,7 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Evaluate one root validation command for marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Decide which checks belong centrally in Socket and which should remain child-local behavior tests.
 - [ ] Retire or update stale child validators when their expected docs have been collapsed into root docs.
-- [ ] Remediate the 2026-06-15 Dependabot alert inventory, starting with the Cardhop and Things MCP server lockfiles recorded in [`docs/maintainers/dependabot-alert-triage-2026-06-15.md`](./docs/maintainers/dependabot-alert-triage-2026-06-15.md).
+- [x] Remediate the 2026-06-15 Dependabot alert inventory, starting with the Cardhop and Things MCP server lockfiles recorded in [`docs/maintainers/dependabot-alert-triage-2026-06-15.md`](./docs/maintainers/dependabot-alert-triage-2026-06-15.md).
 
 ## Legal And Licensing
 

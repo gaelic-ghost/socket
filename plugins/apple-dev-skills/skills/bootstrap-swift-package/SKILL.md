@@ -69,6 +69,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `Tests/`
    - `swift build` and `swift test` unless `--skip-validation` was requested
    - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
+   - when a GitHub remote is created or already exists, route repository
+     settings audit or mutation through `productivity-skills:maintain-project-repo`
+     instead of embedding a separate Apple-specific baseline
 7. Ensure the generated guidance encodes the shared Swift policy:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md`
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
@@ -150,6 +153,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful scaffold, hand off Xcode-managed package test tasks to `xcode-testing-workflow`.
 - After a successful scaffold, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful scaffold, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
+- When the new package is published to GitHub, use
+  `productivity-skills:maintain-project-repo` to audit repository features,
+  merge modes, security automation, sign-off policy, and branch protection.
 - After a successful scaffold, hand off later repo-guidance alignment work to `sync-swift-package-guidance`.
 - For ordinary package work, prefer `swift build` and `swift test`.
 - For package builds that need Xcode-managed SDK or toolchain behavior, use `xcode-build-run-workflow` and `xcodebuild` guidance instead of stretching the bootstrap skill into an execution skill.

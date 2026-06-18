@@ -328,7 +328,8 @@ Planned
 - [x] Added Server-Side Swift ecosystem package preference guidance for Vapor, Vapor Community, and Hummingbird-aligned packages.
 - [x] Added `productivity-skills:codex-gui-worktree-workflow` for general Codex GUI worktree-first planning, plus Apple and server-side Swift local environment templates in their owning stack plugins.
 - [ ] Explore adding a DCO/sign-off status check for pull requests. Keep the investigation focused on enforcing sign-offs for command-line contributors without blocking Gale's direct-main maintenance workflow.
-- [ ] Audit and update the default and recommended GitHub repository settings in all relevant skills, especially bootstrap and sync workflows. Determine whether this should stay distributed across existing skills or become a dedicated GitHub repository-maintenance skill.
+- [x] Audit and update the default and recommended GitHub repository settings in relevant repo-maintenance, skill-repo, and Apple bootstrap/sync workflows. Keep the canonical baseline in `productivity-skills:maintain-project-repo` while leaving the dedicated GitHub skill decision open.
+- [ ] Determine whether GitHub repository settings should remain owned by `productivity-skills:maintain-project-repo` with distributed handoffs or become a dedicated GitHub repository-maintenance skill.
 
 ## Backlog Candidates
 

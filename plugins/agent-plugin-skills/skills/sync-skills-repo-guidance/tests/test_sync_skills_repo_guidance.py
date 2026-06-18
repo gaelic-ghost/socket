@@ -146,3 +146,11 @@ def test_audit_repo_flags_manifest_without_skills_component(tmp_path: Path) -> N
     findings = m.audit_repo(tmp_path, "example-skills")
 
     assert any(finding.issue_id == "missing-skills-component" for finding in findings)
+
+
+def test_skill_audits_github_settings_through_repo_maintenance_owner() -> None:
+    skill_text = (Path(__file__).resolve().parents[1] / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "productivity-skills:maintain-project-repo" in skill_text
+    assert "Keep this audit read-only unless the user requested settings changes" in skill_text
+    assert "visibility changes" in skill_text

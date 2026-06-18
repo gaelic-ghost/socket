@@ -89,3 +89,15 @@ Flag skill guidance that implies automatic delegation, recommends parallel write
 When auditing target skills or plugin-repo docs that mention OpenAI Codex Hooks, keep hooks conceptually separate from marketplace and install-surface guidance. Hooks are Codex runtime lifecycle scripts; plugins may bundle lifecycle config, but hooks are not themselves a plugin install surface.
 
 Flag hooks guidance that uses deprecated `features.codex_hooks` wording instead of canonical `features.hooks`, refers to removed or legacy plugin-hook gates such as `features.plugin_hooks`, implies hooks are disabled by default, implies project-local hooks load without a trusted `.codex/` layer, treats `PreToolUse` or `PostToolUse` as complete enforcement for every tool path, omits non-managed hook trust review, or confuses Codex Hooks with git pre-commit hooks or repo-maintenance hook scripts.
+
+## GitHub Repository Settings
+
+When the target repository has a GitHub remote, include repository settings in
+the sync audit and route the canonical baseline through
+`productivity-skills:maintain-project-repo`. Report drift in repository
+features, merge modes, Dependabot and security settings, private vulnerability
+reporting, web commit sign-off, and branch protection.
+
+Keep this audit read-only unless the user requested settings changes. Do not
+infer visibility changes, do not require reviewers a single-maintainer repo
+does not have, and do not block a documented maintainer direct-push workflow.

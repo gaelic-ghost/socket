@@ -73,6 +73,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify `scripts/repo-maintenance/hooks/pre-commit.sample` exists
    - verify `scripts/repo-maintenance/validate-all.sh` and `scripts/repo-maintenance/release.sh` exist
    - verify branch protection, when enabled, requires the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
+   - when a GitHub remote is created or already exists, route repository
+     settings audit or mutation through `productivity-skills:maintain-project-repo`
+     instead of embedding a separate Xcode-specific baseline
    - if validation is enabled, verify project generation and basic project introspection succeeded
 9. Hand off existing-project work cleanly:
    - recommend `sync-xcode-project-guidance` when the repo guidance should be refreshed or merged after creation
@@ -142,6 +145,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful bootstrap, hand off to `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, `.xctestplan`, and test diagnosis work.
 - After a successful bootstrap, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful bootstrap, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
+- When the app repository is published to GitHub, use
+  `productivity-skills:maintain-project-repo` to audit repository features,
+  merge modes, security automation, sign-off policy, and branch protection.
 - Recommend `bootstrap-swift-package` directly when the task is really package bootstrap.
 - Recommend `sync-xcode-project-guidance` when the repo already exists and only needs repo-guidance or documentation alignment.
 

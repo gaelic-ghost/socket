@@ -247,6 +247,27 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("accounts for every local branch not contained by `main`", automation_prompts)
         self.assertIn("do not delete local branches, remote branches, worktrees, archive refs", automation_prompts)
 
+    def test_github_repository_settings_baseline_is_documented(self) -> None:
+        skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
+        settings_reference = (
+            ROOT / "skills/maintain-project-repo/references/github-repository-settings.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("references/github-repository-settings.md", skill_text)
+        self.assertIn("keep the audit read-only unless the user requested settings changes", skill_text)
+
+        for expected in (
+            "Dependabot alerts and security updates enabled",
+            "private vulnerability reporting enabled for public repositories",
+            "web commit sign-off required when the repository uses DCO",
+            "preserve documented owner or maintainer direct pushes",
+            "visibility changes",
+            "gh repo edit",
+            "gh api",
+        ):
+            with self.subTest(expected=expected):
+                self.assertIn(expected, settings_reference)
+
     def test_prerelease_release_metadata_guidance_is_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
         release_modes = (ROOT / "skills/maintain-project-repo/references/release-modes.md").read_text(
