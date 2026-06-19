@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain GitHub Repository"
+  short_description: "Audit and align GitHub repository settings"
+  default_prompt: "Use $maintain-github-repository to audit this GitHub repository against the recommended settings baseline, explain drift, and apply only the changes I request."

@@ -14,6 +14,6 @@ def test_bootstrap_and_sync_skills_route_github_settings_to_repo_maintenance() -
 
     for relative_path in skill_paths:
         skill_text = (ROOT / relative_path).read_text(encoding="utf-8")
-        assert "productivity-skills:maintain-project-repo" in skill_text
+        assert "productivity-skills:maintain-github-repository" in skill_text
         assert "repository features" in skill_text
         assert "branch protection" in skill_text

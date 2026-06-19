@@ -1,4 +1,4 @@
 interface:
   display_name: "Maintain Project Repo"
-  short_description: "Install local-first validation, sync, and release scripts"
-  default_prompt: "Use $maintain-project-repo to install or refresh local-first validate, sync, and release entrypoints plus thin CI wrappers."
+  short_description: "Install repo tooling or run protected-main releases"
+  default_prompt: "Use $maintain-project-repo to install or refresh repo-owned validation, sync, and release tooling, or to execute an explicitly requested protected-main release, publish, tag, GitHub release, cleanup, and branch-accounting workflow."

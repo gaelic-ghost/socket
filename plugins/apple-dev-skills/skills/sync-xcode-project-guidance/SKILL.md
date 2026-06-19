@@ -73,7 +73,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `scripts/repo-maintenance/release.sh`
    - protected branches, when configured, require the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
    - when a GitHub remote exists, route repository settings audit or mutation
-     through `productivity-skills:maintain-project-repo`
+     through `productivity-skills:maintain-github-repository`
 10. Hand off ongoing engineering work cleanly:
    - recommend `xcode-build-run-workflow` or `xcode-testing-workflow` for active Xcode collaboration after the repo guidance is aligned
    - recommend `bootstrap-xcode-app-project` only when the user actually needs a fresh repo instead of guidance sync
@@ -127,7 +127,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful sync, hand off ongoing test execution and test diagnosis work to `xcode-testing-workflow`.
 - After a successful sync, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful sync, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
-- When a GitHub remote exists, use `productivity-skills:maintain-project-repo`
+- When a GitHub remote exists, use `productivity-skills:maintain-github-repository`
   to audit repository features, merge modes, security automation, sign-off
   policy, and branch protection without changing visibility implicitly.
 - Recommend `bootstrap-xcode-app-project` when the repository still needs to be created from scratch.

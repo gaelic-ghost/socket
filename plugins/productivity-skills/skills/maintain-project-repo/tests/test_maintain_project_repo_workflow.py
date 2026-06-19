@@ -247,26 +247,37 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("accounts for every local branch not contained by `main`", automation_prompts)
         self.assertIn("do not delete local branches, remote branches, worktrees, archive refs", automation_prompts)
 
-    def test_github_repository_settings_baseline_is_documented(self) -> None:
+    def test_release_and_publish_triggers_are_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
-        settings_reference = (
-            ROOT / "skills/maintain-project-repo/references/github-repository-settings.md"
-        ).read_text(encoding="utf-8")
+        trigger_reference = (ROOT / "skills/maintain-project-repo/references/trigger-eval.md").read_text(
+            encoding="utf-8"
+        )
+        openai_yaml = (ROOT / "skills/maintain-project-repo/agents/openai.yaml").read_text(encoding="utf-8")
 
-        self.assertIn("references/github-repository-settings.md", skill_text)
-        self.assertIn("keep the audit read-only unless the user requested settings changes", skill_text)
+        self.assertIn("references/trigger-eval.md", skill_text)
+        self.assertIn("maintain-github-repository", skill_text)
 
         for expected in (
-            "Dependabot alerts and security updates enabled",
-            "private vulnerability reporting enabled for public repositories",
-            "web commit sign-off required when the repository uses DCO",
-            "preserve documented owner or maintainer direct pushes",
-            "visibility changes",
-            "gh repo edit",
-            "gh api",
+            "release or publish a version",
+            "bump and tag a release",
+            "create the GitHub release",
+            "protected-main release",
+            "release cleanup and branch accounting",
         ):
             with self.subTest(expected=expected):
-                self.assertIn(expected, settings_reference)
+                self.assertIn(expected, skill_text)
+
+        for expected in (
+            "Release version 1.4.0.",
+            "Publish this package.",
+            "Tag this commit and create the GitHub release.",
+            "Prepare this branch for a protected-main release.",
+            "Apply my normal GitHub repository settings.",
+        ):
+            with self.subTest(expected=expected):
+                self.assertIn(expected, trigger_reference)
+
+        self.assertIn("protected-main release, publish, tag, GitHub release", openai_yaml)
 
     def test_prerelease_release_metadata_guidance_is_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")

@@ -23,5 +23,6 @@ testpaths = [
   "skills/maintain-project-contributing/tests",
   "skills/maintain-project-docs/tests",
   "skills/maintain-project-roadmap/tests",
+  "skills/maintain-github-repository/tests",
   "skills/maintain-project-repo/tests",
 ]

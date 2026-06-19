@@ -94,7 +94,7 @@ Flag hooks guidance that uses deprecated `features.codex_hooks` wording instead 
 
 When the target repository has a GitHub remote, include repository settings in
 the sync audit and route the canonical baseline through
-`productivity-skills:maintain-project-repo`. Report drift in repository
+`productivity-skills:maintain-github-repository`. Report drift in repository
 features, merge modes, Dependabot and security settings, private vulnerability
 reporting, web commit sign-off, and branch protection.
 

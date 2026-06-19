@@ -55,6 +55,6 @@ def test_audit_repo_flags_forbidden_nested_plugin_dir(tmp_path: Path) -> None:
 def test_skill_routes_github_settings_to_repo_maintenance_owner() -> None:
     skill_text = (Path(__file__).resolve().parents[1] / "SKILL.md").read_text(encoding="utf-8")
 
-    assert "productivity-skills:maintain-project-repo" in skill_text
+    assert "productivity-skills:maintain-github-repository" in skill_text
     assert "web commit sign-off when DCO applies" in skill_text
     assert "documented maintainer direct-push workflow" in skill_text

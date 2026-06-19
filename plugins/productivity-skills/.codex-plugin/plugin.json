@@ -16,13 +16,14 @@
     "productivity",
     "maintainer",
     "documentation",
-    "workflow"
+    "workflow",
+    "github"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Broadly useful workflow and maintainer skills for Codex.",
-    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, accessibility standards, roadmap work, code explanation, Codex GUI worktree workflow planning, agent automation design, agent eval design, and reusable maintainer-toolkit workflows.",
+    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, accessibility standards, roadmap work, code explanation, Codex GUI worktree workflow planning, agent automation design, agent eval design, GitHub repository settings, and reusable maintainer and release workflows.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [
@@ -32,6 +33,8 @@
     "websiteURL": "https://github.com/gaelic-ghost/productivity-skills",
     "defaultPrompt": [
       "Install or refresh the repo-maintenance toolkit for this project and explain the local entrypoints.",
+      "Audit or align this GitHub repository's features, merge methods, security automation, sign-off policy, and branch protection.",
+      "Release or publish this project through its protected-main repo-maintenance workflow.",
       "Explain this code slice in plain language and compare the relevant alternatives.",
       "Plan a Codex GUI worktree-first workflow for this repo, including local environments, actions, sandbox notes, and stack handoffs.",
       "Design an agent or automation workflow and choose the smallest suitable surface before implementation.",

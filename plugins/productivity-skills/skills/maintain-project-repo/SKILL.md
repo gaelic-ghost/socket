@@ -1,6 +1,6 @@
 ---
 name: maintain-project-repo
-description: Install or refresh the profile-aware local-first maintain-project-repo toolkit for Swift, Xcode, and general repositories, including validate, sync, release, and GitHub repository-settings guidance plus thin CI and pre-commit samples. Use when a repo needs reusable maintainer scripts or a settings audit instead of ad hoc GitHub-only helpers.
+description: Install or refresh the profile-aware local-first maintain-project-repo toolkit, or execute its protected-main release workflow. Use when the user asks to install or refresh repo-owned validate, sync, and release scripts; release or publish a version; bump and tag a release; create the GitHub release; prepare or merge a protected-main release; or complete release cleanup and branch accounting. Do not use for ordinary edits, local Git work, documentation maintenance, or GitHub repository-settings audits.
 license: PolyForm-Noncommercial-1.0.0
 metadata:
   semver: 0.2.1
@@ -17,7 +17,10 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - Use this skill when a Swift or Xcode repo needs one local entrypoint for validation, shared sync work, and releases.
 - Use this skill when a repo has GitHub Actions or local shell helpers that should become thin wrappers around repo-owned scripts.
 - Use this skill when a repo needs a protected-main standard release flow and a submodule-aware release flow.
-- Use this skill when a GitHub-hosted repo needs its repository features, merge modes, security automation, sign-off policy, or branch protection audited or aligned.
+- Use this skill when the user asks to release or publish a version.
+- Use this skill when the user asks to bump versions, tag a release, create a
+  GitHub release, prepare or merge a protected-main release, or finish release
+  cleanup and branch accounting.
 - Use this skill when the user wants a local-first alternative to putting maintainer logic under `.github/scripts/`.
 - Do not use this skill to make ordinary questions, investigations, local edits, or documentation maintenance take a full PR, CI, release, tag, and cleanup path.
 - Do not run or recommend the release choreography unless the user is actually asking to release, publish, merge, tag, open a release PR, or prepare the repo for that protected-main release workflow.
@@ -55,17 +58,11 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - `scripts/repo-maintenance/release.sh`
    - `.github/workflows/validate-repo-maintenance.yml` when workflow installation is enabled
    - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
-7. Audit GitHub repository settings when a GitHub remote exists and the user
-   requested bootstrap, sync, settings alignment, or repository-wide
-   maintenance:
-   - read `references/github-repository-settings.md`
-   - report current, recommended, unavailable, and planned values separately
-   - keep the audit read-only unless the user requested settings changes
-   - apply supported general toggles with `gh repo edit` and use documented
-     `gh api` endpoints for security, sign-off, auto-close, and branch
-     protection settings
-   - keep visibility changes separately approval-gated
-   - preserve documented maintainer direct-push workflows
+7. Hand off GitHub repository settings work:
+   - use `maintain-github-repository` for repository features, merge methods,
+     Dependabot, secret scanning, push protection, vulnerability reporting,
+     sign-off policy, branch protection, and rulesets
+   - keep settings alignment separate from release choreography
 8. Hand off follow-on work cleanly:
    - use `scripts/repo-maintenance/validate-all.sh` for local validation
    - use `scripts/repo-maintenance/sync-shared.sh` for repo-local shared sync tasks
@@ -154,7 +151,7 @@ When a repo needs Codex Hooks guidance, record that hooks are enabled by default
 - `references/repo-maintenance-layout.md`
 - `references/release-modes.md`
 - `references/pre-commit-vs-ci.md`
-- `references/github-repository-settings.md`
+- `references/trigger-eval.md`
 
 ### Contract References
 
