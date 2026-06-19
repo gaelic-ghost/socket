@@ -4,3 +4,4 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 .venv/
+.socket-release-evidence.json

@@ -10,19 +10,21 @@ Both modes treat `socket` as the release owner for the umbrella repository:
 
 1. make the intended commits
 2. validate the changed surface
-3. run the relevant temporary `CODEX_HOME` smoke check from [`plugin-install-testing.md`](./plugin-install-testing.md)
-4. publish through a branch and pull request when the change is not already on `main`
-5. check CI and fix failures before continuing
-6. check PR comments and requested changes before continuing
-7. merge to `main`
-8. fast-forward local `main`
-9. create the `socket` tag locally from the reviewed `main`
-10. push the tag
-11. create the GitHub release from the existing tag
-12. verify the GitHub release object exists
-13. verify `git log origin/main..main` is empty
-14. account for every local branch not contained by `main`
-15. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
+3. publish through a branch and pull request when the change is not already on `main`
+4. check CI and fix failures before continuing
+5. check PR comments and requested changes before continuing
+6. merge to `main`
+7. fast-forward local `main`
+8. run the `release-ready` gate
+9. capture release evidence from the reviewed `main` commit with `scripts/release.sh release-evidence`
+10. generate the release-note draft with `scripts/release.sh release-notes X.Y.Z`
+11. create the `socket` tag locally from the reviewed `main`
+12. push the tag
+13. create the GitHub release from the existing tag
+14. verify the GitHub release object exists
+15. verify `git log origin/main..main` is empty
+16. account for every local branch not contained by `main`
+17. refresh the local Codex marketplace cache with `codex plugin marketplace upgrade socket`
 
 The marketplace cache refreshes are always the final release steps. Never run
 them before the GitHub release exists and has been verified, subtree accounting
@@ -55,8 +57,10 @@ scripts/release.sh patch-refresh
 
 `patch-refresh` bumps the shared patch version, validates root marketplace
 metadata, commits and pushes `main`, pushes any required subtree split, runs the
-`release-ready` gate, tags `main`, publishes and verifies the GitHub release,
-verifies branch accounting, and runs `codex plugin marketplace upgrade socket`.
+`release-ready` gate, captures commit-bound marketplace and Dependabot evidence,
+tags `main`, publishes and verifies the GitHub release with that evidence in the
+release notes, verifies branch accounting, and runs `codex plugin marketplace
+upgrade socket`.
 If local branches are not contained by `main`, the helper stops during its
 branch-accounting preflight before it bumps the version; after accounting for
 those branches explicitly, a trusted maintainer may rerun with:
@@ -70,6 +74,19 @@ After a version bump lands on `main`, run the executable pre-tag gate:
 ```bash
 scripts/release.sh release-ready X.Y.Z
 ```
+
+Then capture evidence from that exact commit and generate the release-note
+draft:
+
+```bash
+scripts/release.sh release-evidence
+scripts/release.sh release-notes X.Y.Z > /private/tmp/socket-vX.Y.Z-notes.md
+```
+
+The ignored `.socket-release-evidence.json` artifact records the commit,
+timestamp, isolated marketplace add/remove result, direct Dependabot API
+result, and open-alert details. `release-notes` refuses evidence captured from
+a different commit. Re-run `release-evidence` after any commit change.
 
 Only after that gate passes, create the matching `vX.Y.Z` tag from `main`, push
 it, create the GitHub release with `gh release create --verify-tag`, verify the
@@ -112,9 +129,10 @@ Before tagging `socket`:
 
 - confirm the subtree policy table above was followed
 - run `uv run scripts/validate_socket_metadata.py`
-- run the relevant temporary `CODEX_HOME` smoke check from [`plugin-install-testing.md`](./plugin-install-testing.md)
 - confirm local `main` is fast-forwarded to `origin/main`
 - run `scripts/release.sh release-ready X.Y.Z`
+- run `scripts/release.sh release-evidence`
+- prepare the GitHub release notes with `scripts/release.sh release-notes X.Y.Z`
 - confirm `git log origin/main..main` is empty
 - enumerate every local branch not contained by `main` and account for each one
 
