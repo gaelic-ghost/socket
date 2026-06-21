@@ -462,6 +462,8 @@ source = "{root}"
 def test_release_notes_include_captured_evidence() -> None:
     notes = release_version.release_notes("1.2.4", [], make_evidence())
 
+    assert "Bumped the shared Socket version for the requested release." in notes
+    assert "patch version" not in notes
     assert "temporary `CODEX_HOME` Socket marketplace add/remove smoke test" in notes
     assert "found 0 open alert(s)" in notes
     assert "Captured release evidence at `2026-06-18T12:00:00Z`" in notes

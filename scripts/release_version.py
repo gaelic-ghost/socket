@@ -620,7 +620,7 @@ def release_notes(
     return (
         f"# Socket v{version}\n\n"
         "## What changed\n\n"
-        "- Bumped the shared Socket patch version for a trusted maintainer patch refresh.\n"
+        "- Bumped the shared Socket version for the requested release.\n"
         "- Refreshed Git-backed Socket marketplace consumers after the release was published.\n\n"
         "## Breaking changes\n\n"
         "- None.\n\n"
