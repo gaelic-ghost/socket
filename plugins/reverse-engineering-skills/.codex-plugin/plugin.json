@@ -1,6 +1,6 @@
 {
   "name": "reverse-engineering-skills",
-  "version": "6.19.0",
+  "version": "6.20.0",
   "description": "Workflow skills for reverse engineering, decompilation, disassembly, symbol, and artifact-analysis tasks.",
   "skills": "./skills/",
   "author": {
