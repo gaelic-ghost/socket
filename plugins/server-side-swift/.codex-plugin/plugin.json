@@ -17,7 +17,9 @@
     "swift",
     "server-side-swift",
     "vapor",
+    "vapor-5",
     "hummingbird",
+    "hb",
     "fluent",
     "database",
     "persistence",
@@ -33,7 +35,7 @@
   "interface": {
     "displayName": "Server-Side Swift",
     "shortDescription": "Server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, RPC, Docker, and Apple Containerization workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Hummingbird, Swift OpenAPI, Docker, and Apple Containerization documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, environment configuration, tests, and deployment handoffs.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Swift OpenAPI, Docker, and Apple Containerization documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -42,8 +44,8 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-swift",
     "defaultPrompt": [
-      "Create a Vapor service plan using current Vapor CLI and SwiftPM workflows.",
-      "Create a Hummingbird service plan using current Hummingbird docs and SwiftPM workflows.",
+      "Create a Vapor service plan using current Vapor CLI, Vapor 5 alpha posture, and SwiftPM workflows.",
+      "Create a Hummingbird service plan using the official hb CLI, current Hummingbird docs, and SwiftPM workflows.",
       "Choose a Vapor-aligned package from the Vapor or Vapor Community ecosystem for this service need.",
       "Choose a Hummingbird-aligned package from the Hummingbird ecosystem for this service need.",
       "Add Swift OpenAPI Generator to a server-side Swift package and wire the generated API to Vapor or Hummingbird.",
@@ -53,6 +55,7 @@
       "Plan an Apple Containerization workflow for running this Swift service locally on Apple silicon.",
       "Compare Docker and Apple's container CLI for this server-side Swift development workflow.",
       "Inspect this Vapor app and explain its routes, configuration, and run commands.",
+      "Assess whether this Vapor 4 app is ready for a Vapor 5 alpha spike without treating alpha APIs as stable.",
       "Inspect this Hummingbird app and explain its router, middleware, request contexts, and run commands.",
       "Inspect this OpenAPI-backed Swift service and explain its contract, generated symbols, transport, and validation commands.",
       "Add a Vapor route with tests while keeping domain logic outside handlers.",
@@ -61,7 +64,7 @@
       "Set up Fluent models and migrations and explain the migration commands.",
       "Add database-backed behavior to a Hummingbird service without copying Vapor app structure.",
       "Diagnose why this Vapor build, run, migrate, or local server command failed.",
-      "Diagnose why this Hummingbird build, run, route, database, or local server command failed."
+      "Diagnose why this Hummingbird build, hb command, run, route, database, or local server command failed."
     ],
     "brandColor": "#0EA5E9",
     "composerIcon": "./assets/swift-bird-icon.png",

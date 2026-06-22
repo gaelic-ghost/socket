@@ -1,6 +1,6 @@
 ---
 name: vapor-server-workflow
-description: Plan, build, run, test, and diagnose Vapor server-side Swift services using current Vapor documentation, Vapor Toolbox project creation, SwiftPM-first commands, routing, middleware, Fluent migrations, environment configuration, and deployment handoffs.
+description: Plan, build, run, test, and diagnose Vapor server-side Swift services using current Vapor documentation, Vapor Toolbox project creation, SwiftPM-first commands, routing, middleware, Fluent migrations, Vapor 5 alpha adoption posture, environment configuration, and deployment handoffs.
 license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
@@ -21,6 +21,7 @@ The practical decision is what the HTTP service exposes, which target owns the V
 ## When To Use
 
 - Use this skill when creating a new Vapor service with the Vapor Toolbox.
+- Use this skill when evaluating or migrating toward Vapor 5 alpha, but keep alpha work explicitly experimental until Vapor publishes a stable Vapor 5 release and migration path.
 - Use this skill when modifying Vapor routes, route groups, controllers, middleware, app configuration, commands, migrations, or local server behavior.
 - Use this skill when diagnosing `vapor new`, `swift build`, `swift test`, `swift run`, `swift run App serve`, migration, or local HTTP failures in a Vapor project.
 - Use this skill when deciding whether an existing Swift package should become a Vapor service or stay a library consumed by one.
@@ -39,9 +40,14 @@ Use official Vapor documentation first:
 - [Vapor environment](https://docs.vapor.codes/basics/environment/)
 - [Vapor Fluent migrations](https://docs.vapor.codes/fluent/migration/)
 - [Vapor GitHub organization](https://github.com/vapor)
+- [Vapor repository](https://github.com/vapor/vapor)
+- [Vapor 5 Alpha 1 release](https://github.com/vapor/vapor/releases/tag/5.0.0-alpha.1)
+- [Vapor 5 alpha source tag](https://github.com/vapor/vapor/tree/5.0.0-alpha.1)
 - [Vapor Community GitHub organization](https://github.com/vapor-community)
 
 Use Swift.org or Swift Package Manager documentation for Swift toolchain and package behavior when Vapor docs do not own the rule being used.
+
+For Vapor 5, treat GitHub releases and tagged source as the authoritative alpha surface until official Vapor 5 documentation and migration guides exist. Check current release notes before recommending alpha APIs, package products, macros, server internals, platform requirements, or migration steps.
 
 ## Planning Workflow
 
@@ -109,6 +115,24 @@ swift run
 ```
 
 Use `vapor new MyService -n` only when the user wants the non-interactive bare template and the documented options fit the task. Otherwise, preserve the interactive template questions because they choose real project features such as Fluent, database support, or Leaf.
+
+## Vapor 5 Alpha Adoption
+
+Vapor 4 remains the normal stable default for new production services, existing app maintenance, package recommendations, Fluent migrations, and docs-backed examples while Vapor 5 is alpha.
+
+Vapor 5 is the planned future default once Vapor publishes a stable Vapor 5 release, stable docs, and a migration path that fits the target project. Until then, use Vapor 5 only when the user explicitly asks to evaluate alpha behavior, the repository is already intentionally tracking Vapor 5, or the task is a migration-readiness audit.
+
+When evaluating Vapor 5 alpha:
+
+- say that the current official release is a prerelease alpha, not stable Vapor behavior
+- read the current Vapor 5 release notes and tagged source before making API claims
+- prefer a branch, experiment package, or small spike over replacing a working Vapor 4 service in place
+- pin exact prerelease versions or source revisions used for the experiment
+- inventory Vapor 4 dependencies such as Fluent, Leaf, Queues, Auth, JWT, OpenAPIVapor, Vapor Community packages, middleware, and custom commands before assuming they have Vapor 5 equivalents
+- look for source-level changes around structured concurrency, type-safe routing, macros, server internals, testing, platform requirements, and package products
+- keep production runbooks, deployment docs, and migration commands on Vapor 4 unless the repo has already chosen a Vapor 5 alpha track
+
+Do not present Vapor 5 alpha examples as stable documentation. If a Vapor 5 API is only visible in source or release notes, say that plainly and include the exact tag or release used.
 
 ## Codex GUI Local Environment
 
