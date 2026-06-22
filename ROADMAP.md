@@ -311,6 +311,7 @@ In Progress
 - [ ] Add `apple-dev-skills:xcode-agent-localization-workflow` for agent-assisted string catalog, translation, glossary, XLIFF, and human-review workflows.
 - [ ] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
 - [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.
+- [ ] Investigate the Xcode MCP surface against the current Xcode 27 beta, including `mcpbridge` command help, exported Xcode-visible skills, tool names, permission gates, session behavior, and differences from the last checked surface.
 - [ ] Keep `apple-dev-skills:xcode-agent-plugin-workflow` blocked until the live Xcode 27 beta plug-in import and package shape is verified.
 - [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
 - [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
@@ -395,6 +396,8 @@ Planned
 - [x] Audit and update the default and recommended GitHub repository settings in relevant repo-maintenance, skill-repo, and Apple bootstrap/sync workflows.
 - [x] Add `productivity-skills:maintain-github-repository` as the dedicated owner for GitHub repository settings audits and requested alignment, while keeping release and publish choreography in `maintain-project-repo`.
 - [x] GitHub #81: Strengthen `maintain-project-repo` release, publish, tag, protected-main, cleanup, and branch-accounting triggers while routing settings-only requests to `maintain-github-repository` ([#81](https://github.com/gaelic-ghost/socket/issues/81)).
+- [ ] Investigate guidance consolidation opportunities that reduce repeated setup, routing, validation, and handoff text across skills while preserving the owner boundaries needed for accurate tool use and lower token load.
+- [ ] Investigate further standardization and automation for shared skill scaffolding, evidence capture, validation prompts, and generated references so common workflow knowledge is maintained once and reused with lower token load.
 
 ## Backlog Candidates
 
