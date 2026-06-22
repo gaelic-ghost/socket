@@ -8,8 +8,8 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 
 ## Current State Summary
 
-- The active skill surface ships `18` separate `references/customization.template.yaml` files.
-- The active skill surface ships `18` separate `scripts/customization_config.py` entrypoints.
+- The active skill surface ships `19` separate `references/customization.template.yaml` files.
+- The active skill surface ships `19` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
 - The current templates expose `21` knobs total:
   - `20` are documented as `runtime-enforced`
@@ -30,7 +30,7 @@ Milestone 20 audited a larger surface before the implementation pass landed.
 - Milestone 27 applied the approved reduction so the live surface now reflects the smaller counts in the current-state summary above.
 - Milestone 38 later added the narrower `author-swift-docc-docs` skill with one runtime-enforced tutorial-handling knob, which is included in the current-state counts above.
 - The current-state counts also include `structure-swift-sources`, which now ships runtime-enforced header-policy and split-threshold knobs for the structural-cleanup workflow.
-- The current-state counts now also include the policy-only `apple-ui-accessibility-workflow`, `safari-extension-control-workflow`, `swiftui-app-architecture-workflow`, and `appkit-app-architecture-workflow` surfaces, all of which keep the customization-file contract without introducing runtime knobs.
+- The current-state counts now also include the no-runtime-knob `apple-ui-accessibility-workflow`, `safari-extension-control-workflow`, `swiftui-app-architecture-workflow`, `appkit-app-architecture-workflow`, and `xcode-coding-intelligence-workflow` surfaces, all of which keep the customization-file contract without introducing runtime knobs.
 
 ## Decision
 

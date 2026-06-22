@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Coding Intelligence Workflow"
+  short_description: "Set up Xcode coding agents and MCP handoffs"
+  default_prompt: "Use $xcode-coding-intelligence-workflow to plan Xcode Intelligence setup, Xcode-hosted agents, external-agent access through xcrun mcpbridge, command/tool permissions, and handoffs to $xcode-build-run-workflow or $xcode-testing-workflow for execution."

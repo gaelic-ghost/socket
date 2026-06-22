@@ -58,6 +58,7 @@ Use Apple Dev Skills when an agent is helping with:
 - Swift and SwiftUI implementation
 - AppKit and mixed AppKit/SwiftUI architecture
 - Xcode build, run, test, and project workflows
+- Xcode coding intelligence, Xcode-hosted agents, and external-agent MCP setup
 - Icon Composer app icon design, preview, and Xcode handoff
 - Safari extension and SafariServices integration choices
 - Swift OpenAPI client generation and `URLSession` transport integration
@@ -133,6 +134,7 @@ uv run pytest
 - `sync-xcode-project-guidance`
 - `xcode-app-project-workflow`
 - `xcode-build-run-workflow`
+- `xcode-coding-intelligence-workflow`
 - `xcode-testing-workflow`
 
 ## Release Notes

@@ -126,6 +126,13 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
         self.assertIn(".xctestplan", reference_text)
         self.assertIn("xcodegen generate", reference_text)
 
+    def test_skill_routes_coding_intelligence_setup_to_owner(self) -> None:
+        skill_text = (ROOT / "skills/xcode-testing-workflow/SKILL.md").read_text(encoding="utf-8")
+
+        self.assertIn("xcode-coding-intelligence-workflow", skill_text)
+        self.assertIn("Xcode Intelligence setup", skill_text)
+        self.assertIn("external-agent access through `xcrun mcpbridge`", skill_text)
+
     def test_skill_documents_heavy_model_test_scheduling(self) -> None:
         reference_text = (
             ROOT / "skills/xcode-testing-workflow/references/testing-plans-file-membership-and-configurations.md"

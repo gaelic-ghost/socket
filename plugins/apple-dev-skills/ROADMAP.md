@@ -22,6 +22,8 @@
 - [Milestone 44: Swift OpenAPI Client Workflow](#milestone-44-swift-openapi-client-workflow)
 - [Milestone 45: Icon Composer App Icon Workflow](#milestone-45-icon-composer-app-icon-workflow)
 - [Milestone 46: AppKit App Architecture Workflow](#milestone-46-appkit-app-architecture-workflow)
+- [Milestone 47: Xcode Coding Intelligence Workflow](#milestone-47-xcode-coding-intelligence-workflow)
+- [Milestone 48: Core AI and Foundation Models Workflow Planning](#milestone-48-core-ai-and-foundation-models-workflow-planning)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -57,6 +59,8 @@
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
 - Milestone 45: Icon Composer App Icon Workflow - Completed
 - Milestone 46: AppKit App Architecture Workflow - Completed
+- Milestone 47: Xcode Coding Intelligence Workflow - Completed
+- Milestone 48: Core AI and Foundation Models Workflow Planning - Planned
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -523,6 +527,59 @@ Completed
 
 Completed Milestone 46 by shipping `appkit-app-architecture-workflow`, grounding the workflow in AppKit app lifecycle, status-item, responder-chain, controller, restoration, archiving, Observation, and hosting boundaries, adding reference files for the major AppKit architecture surfaces, and covering the shipped surface with repo-validator and targeted pytest checks.
 
+## Milestone 47: Xcode Coding Intelligence Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a dedicated Xcode coding-intelligence workflow for Xcode Intelligence setup, Xcode-hosted agents, external-agent access through `xcrun mcpbridge`, command and tool permissions, Xcode-only agent configuration homes, and setup handoffs.
+- [x] Keep build, run, preview, file-membership, and project-integrity execution with `xcode-build-run-workflow`.
+- [x] Keep Swift Testing, XCTest, XCUITest, and `.xctestplan` execution with `xcode-testing-workflow`.
+- [x] Mark Xcode 27 beta claims with the date checked and separate them from local Xcode 26.5 `mcpbridge` evidence.
+
+### Tickets
+
+- [x] Ship `xcode-coding-intelligence-workflow` with setup, agent-surface, MCP bridge, permission, artifact, and source-evidence references.
+- [x] Add plugin metadata and README inventory entries for the new workflow.
+- [x] Update `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permission questions route to the new workflow.
+- [x] Add targeted tests for the new workflow and routing boundaries.
+
+### Exit Criteria
+
+- [x] The repository ships a documented Xcode coding-intelligence workflow skill.
+- [x] Existing Xcode execution skills keep execution ownership while linking to the setup workflow only where needed.
+- [x] Beta-specific claims are dated, source-linked, and separated from stable or local-tool evidence.
+
+Completed Milestone 47 by shipping `xcode-coding-intelligence-workflow`, updating the active skill inventory and plugin metadata, adding routing notes from build/test execution skills, and covering the new setup and permission boundary with targeted tests.
+
+## Milestone 48: Core AI and Foundation Models Workflow Planning
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Decide which Apple Dev Skills workflow should own app-facing Foundation Models guidance, including on-device models, Private Cloud Compute, dynamic profiles, multimodal prompts, Vision tools, Spotlight-backed retrieval, evaluations, and provider packages.
+- [ ] Decide whether Core AI model conversion, optimization, and runtime work belongs in Apple Dev Skills, a future Socket `coreai-skills` child plugin, or a handoff to Apple-owned `coreai-models` skills.
+- [ ] Keep stable Apple Intelligence and Core AI pages, beta Foundation Models claims, and Apple GitHub open-source projects separated by status and date checked.
+
+### Tickets
+
+- [ ] Record the first detailed root Socket plan for Core AI and Foundation Models workflow ownership.
+- [ ] Gather official Apple source anchors for Apple Intelligence, Core AI, Foundation Models, Private Cloud Compute, Core AI Models, Core AI PyTorch Extensions, and Core AI Optimization.
+- [ ] Treat Music Intelligence and Media Analyzer as open investigation items until an official Apple developer documentation or source surface is verified.
+- [ ] Define handoffs to future `mlx-skills` and `coreml-skills` so Apple Dev Skills does not absorb model conversion, model packaging, or ML runtime maintenance by accident.
+- [ ] Add a first app-facing workflow only after the ownership split is clear enough to avoid a catch-all AI skill.
+
+### Exit Criteria
+
+- [ ] Maintainers have a source-linked ownership decision for Foundation Models, Core AI, MLX, Core ML, and adjacent Apple Intelligence workflows.
+- [ ] Any shipped skill distinguishes stable, beta, and open-source exploratory surfaces.
+
 ## Backlog Candidates
 
 - [ ] Record plausible future work that is not yet committed to a milestone.
@@ -532,6 +589,7 @@ Completed Milestone 46 by shipping `appkit-app-architecture-workflow`, grounding
 - Added `safari-extension-control-workflow` as the explicit owner for Safari Web Extension, Safari Web Inspector Extension, Safari App Extension, SafariServices, messaging, content blocker, authentication, and external automation decision guidance.
 - Added `icon-composer-app-icon-workflow` as the explicit owner for Icon Composer app icon production, including Mac-native artwork preparation, Computer Use GUI guidance, `ictool` preview export, Xcode handoff, and future packaged-agent direction.
 - Added `appkit-app-architecture-workflow` as the explicit owner for AppKit app architecture guidance, including app delegates, status items, responder-chain menus, windows, controllers, restoration, archiving, Observation, and mixed AppKit/SwiftUI composition.
+- Added `xcode-coding-intelligence-workflow` as the explicit owner for Xcode Intelligence setup, Xcode-hosted agents, external-agent MCP access through `xcrun mcpbridge`, command/tool permission boundaries, and execution-skill handoffs.
 - Made XcodeGen plus checked-in `.xcconfig` files the default for new Xcode app-project bootstrap, updated shared Xcode project guidance to prefer external build configuration files for nontrivial build settings, and kept hand-managed Xcode projects as an explicit guided fallback or migration choice.
 - Tightened Xcode project guidance so tracked `.pbxproj` diffs produced by Xcode, XcodeGen, or other project-aware workflows are treated as critical project state that must be reviewed, staged, and committed before push, merge, release, or cleanup.
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.

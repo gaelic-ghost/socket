@@ -16,6 +16,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Use this skill when direct filesystem mutation around an Xcode-managed project may be required.
 - Use this skill for file-membership and target-membership verification after on-disk edits.
 - Use this skill for Debug/Release build-configuration work, artifacts, archives, toolchain checks, and Metal-toolchain-aware build execution.
+- Recommend `xcode-coding-intelligence-workflow` when the request is primarily about Xcode Intelligence setup, Xcode-hosted agents, external-agent access through `xcrun mcpbridge`, command/tool permissions, or Xcode-only agent configuration homes.
 - Do not use this skill as the default path for Swift Testing, XCTest, XCUITest, `.xctestplan`, flaky-test diagnosis, retries, or test filtering.
 - Recommend `xcode-testing-workflow` when the task is primarily about tests or test diagnosis.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift documentation lookup rather than execution work.
@@ -91,6 +92,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Official CLI execution is the only fallback path when the primary agent-side MCP path cannot complete.
 - Use `references/mcp-failure-handoff.md` for the canonical fallback and handoff payload.
 - Use `references/allowlist-guidance.md` when a safe official CLI fallback is blocked by local rules.
+- Recommend `xcode-coding-intelligence-workflow` when the request becomes Xcode Intelligence setup, Xcode-hosted agent setup, external-agent MCP configuration, or command/tool permission work.
 - Hand off to `xcode-testing-workflow` when the request becomes primarily about Swift Testing, XCTest, XCUITest, `.xctestplan`, flaky tests, test retries, or test filtering.
 - Recommend `explore-apple-swift-docs` directly when the task becomes Apple or Swift docs exploration work.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` directly when the task becomes ordinary SwiftPM package work.

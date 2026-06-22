@@ -14,6 +14,7 @@
 - [Milestone 11: Codex Utilities plugin](#milestone-11-codex-utilities-plugin)
 - [Milestone 12: Xcode 27 agentic tooling workflows](#milestone-12-xcode-27-agentic-tooling-workflows)
 - [Milestone 13: Reverse Engineering skills plugin](#milestone-13-reverse-engineering-skills-plugin)
+- [Milestone 14: Core AI and Foundation Models workflow ownership](#milestone-14-core-ai-and-foundation-models-workflow-ownership)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -40,6 +41,7 @@
 - Milestone 11: Codex Utilities plugin - In Progress
 - Milestone 12: Xcode 27 agentic tooling workflows - Planned
 - Milestone 13: Reverse Engineering skills plugin - In Progress
+- Milestone 14: Core AI and Foundation Models workflow ownership - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -299,18 +301,18 @@ In Progress
 ### Scope
 
 - [x] Record the detailed implementation plan in [`docs/maintainers/xcode-27-agentic-tooling-plan.md`](./docs/maintainers/xcode-27-agentic-tooling-plan.md).
-- [ ] Add Xcode 27 coding-intelligence support to the existing `apple-dev-skills` plugin instead of creating a separate `apple-dev-beta` plugin.
+- [x] Add Xcode 27 coding-intelligence support to the existing `apple-dev-skills` plugin instead of creating a separate `apple-dev-beta` plugin.
 - [ ] Keep ACP-specific exploration outside Socket unless a future Xcode workflow needs to mention Xcode's ACP agent setup.
 - [ ] Update existing SwiftUI, AppKit, UIKit, Icon Composer, build, and testing guidance where Xcode 27 beta docs change real workflow behavior.
 
 ### Tickets
 
-- [ ] Add `apple-dev-skills:xcode-coding-intelligence-workflow` for Xcode Intelligence setup, Xcode-hosted agents, chat providers, ACP agent entries, Xcode-only config homes, command/tool permissions, and external-agent access through `xcrun mcpbridge`.
+- [x] Add `apple-dev-skills:xcode-coding-intelligence-workflow` for Xcode Intelligence setup, Xcode-hosted agents, chat providers, ACP agent entries, Xcode-only config homes, command/tool permissions, and external-agent access through `xcrun mcpbridge`.
 - [ ] Add `apple-dev-skills:xcode-agent-localization-workflow` for agent-assisted string catalog, translation, glossary, XLIFF, and human-review workflows.
 - [ ] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
 - [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.
 - [ ] Keep `apple-dev-skills:xcode-agent-plugin-workflow` blocked until the live Xcode 27 beta plug-in import and package shape is verified.
-- [ ] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
+- [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
 - [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
 - [ ] Refresh AppKit, UIKit, and Icon Composer guidance for the Xcode 27 beta changes recorded in the plan.
 
@@ -354,6 +356,31 @@ In Progress
 - [x] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
 - [ ] Unity, .NET, Apple binary, and tool-selection workflows each have a clear owner skill or an explicit reason to stay backlog-only.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
+## Milestone 14: Core AI and Foundation Models workflow ownership
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Record the ownership split for Apple's app-facing Foundation Models workflows, Core AI model runtime and conversion workflows, and adjacent MLX/Core ML guidance before adding another installable child plugin or Apple Dev Skills surface.
+- [ ] Keep stable Apple developer pages, beta WWDC26 Foundation Models claims, and Apple-owned open-source Core AI repositories separated by status and date checked.
+- [ ] Decide whether Core AI work should be handled by Apple Dev Skills, a future Socket `coreai-skills` child plugin, a future `mlx-skills` or `coreml-skills` plugin, or a handoff to Apple-owned `coreai-models` skills.
+
+### Tickets
+
+- [x] Record the first source-linked plan in [`docs/maintainers/core-ai-foundation-models-skill-plan.md`](./docs/maintainers/core-ai-foundation-models-skill-plan.md).
+- [ ] Design the first app-facing Foundation Models workflow only after the boundary between Apple Intelligence app integration and model-runtime work is clear.
+- [ ] Evaluate Apple-owned Core AI GitHub repos before deciding whether Socket should duplicate, wrap, or simply hand off to their skill surfaces.
+- [ ] Keep Music Intelligence and Media Analyzer as explicit open investigations until official Apple developer docs or source references are verified.
+- [ ] Revisit the existing `mlx-skills` and `coreml-skills` backlog candidates once the Core AI ownership plan has enough evidence.
+
+### Exit Criteria
+
+- [ ] Socket has a clear skill/plugin ownership decision for Foundation Models, Private Cloud Compute, Core AI, MLX, Core ML, and adjacent Apple Intelligence surfaces.
+- [ ] Any shipped skill distinguishes stable, beta, and exploratory/open-source claims and links to official Apple docs or Apple-owned source.
 
 ## Small Tickets
 

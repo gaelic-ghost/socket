@@ -124,8 +124,9 @@ active_skill_mds=(
   "./skills/bootstrap-xcode-app-project/SKILL.md"
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
+  "./skills/xcode-coding-intelligence-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 18 ]] || fail "Expected exactly 18 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 19 ]] || fail "Expected exactly 19 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -210,6 +211,7 @@ for file in \
   "skills/xcode-app-project-workflow/SKILL.md" \
   "skills/xcode-testing-workflow/SKILL.md" \
   "skills/xcode-build-run-workflow/SKILL.md" \
+  "skills/xcode-coding-intelligence-workflow/SKILL.md" \
   "skills/author-swift-docc-docs/SKILL.md" \
   "skills/safari-extension-control-workflow/SKILL.md" \
   "skills/appkit-app-architecture-workflow/SKILL.md" \

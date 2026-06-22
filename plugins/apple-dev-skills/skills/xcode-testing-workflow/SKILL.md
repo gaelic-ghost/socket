@@ -16,6 +16,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - Use this skill for Instruments and `xctrace` follow-through when performance-sensitive tests need Time Profiler, Metal System Trace, Allocations, VM Tracker, Points of Interest, signpost-aligned traces, or `.trace` artifact interpretation.
 - Use this skill for Xcode MCP operations and official Apple CLI fallback when the work is primarily about tests rather than build/run.
 - Use this skill when direct filesystem mutation around tests or test plans may be required.
+- Recommend `xcode-coding-intelligence-workflow` when the request is primarily about Xcode Intelligence setup, Xcode-hosted agents, external-agent access through `xcrun mcpbridge`, command/tool permissions, or Xcode-only agent configuration homes.
 - Do not use this skill as the default path for ordinary build, run, preview, archive, or general project-integrity work.
 - Recommend `xcode-build-run-workflow` when the task is primarily about build, run, previews, file membership, archives, toolchains, or guarded non-test mutation work.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift documentation lookup rather than execution work.
@@ -93,6 +94,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - Official CLI execution is the only fallback path when the primary agent-side MCP path cannot complete.
 - Use `references/mcp-failure-handoff.md` for the canonical fallback and handoff payload.
 - Use `references/allowlist-guidance.md` when a safe official CLI fallback is blocked by local rules.
+- Recommend `xcode-coding-intelligence-workflow` when the request becomes Xcode Intelligence setup, Xcode-hosted agent setup, external-agent MCP configuration, or command/tool permission work.
 - Hand off to `xcode-build-run-workflow` when the request becomes primarily about build, run, previews, archives, file membership, or toolchains.
 - Recommend `explore-apple-swift-docs` directly when the task becomes Apple or Swift docs exploration work.
 - Recommend `swift-package-testing-workflow` directly when the task becomes package-first test execution, package workload design, signpost placement, or SwiftPM-first profiling harness work.

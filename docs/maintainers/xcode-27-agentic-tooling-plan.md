@@ -30,6 +30,19 @@ Official Apple documentation checked on 2026-06-09:
 - [AppKit updates](https://developer.apple.com/documentation/Updates/AppKit)
 - [Agent Client Protocol](https://agentclientprotocol.com/)
 
+Refresh checked on 2026-06-22:
+
+- [Xcode](https://developer.apple.com/xcode/)
+- [What's new in Xcode](https://developer.apple.com/xcode/whats-new/)
+- [What’s new in Xcode 27](https://developer.apple.com/videos/play/wwdc2026/258/)
+- [Xcode, agents, and you](https://developer.apple.com/videos/play/wwdc2026/259/)
+- [Meet agentic coding in Xcode](https://developer.apple.com/videos/play/tech-talks/111428/)
+- [Translate your app using agents in Xcode](https://developer.apple.com/videos/play/wwdc2026/213/)
+- [Get the most out of Device Hub](https://developer.apple.com/videos/play/wwdc2026/260/)
+- Local `xcodebuild -version` and `xcrun mcpbridge --help` output from Xcode 26.5 build 17F42.
+
+Refresh note: no current Apple page found in this pass made ACP the documented Xcode setup surface. Keep ACP claims unresolved unless live Xcode documentation proves them.
+
 Important current Xcode 27 signals:
 
 - Xcode integrates coding intelligence directly into the workspace, including conversations, transcript panes, artifacts panes, plan mode, source-editor coding tools, generated fixes, previews, playgrounds, and rollback through conversation history.
@@ -254,11 +267,13 @@ uv run scripts/validate_socket_metadata.py
 
 ### Slice 2: First Skill
 
-- Add `plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md`.
-- Add `plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/agents/openai.yaml`.
-- Add concise references for setup, MCP bridge routing, Xcode-only config homes, and permission boundaries.
-- Update Apple Dev Skills metadata to advertise the new skill.
-- Update existing Xcode build/test skills to route setup questions to this skill.
+- [x] Add `plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md`.
+- [x] Add `plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/agents/openai.yaml`.
+- [x] Add concise references for setup, MCP bridge routing, Xcode-only config homes, and permission boundaries.
+- [x] Update Apple Dev Skills metadata to advertise the new skill.
+- [x] Update existing Xcode build/test skills to route setup questions to this skill.
+
+Completed on 2026-06-22 with the first practical setup and permission workflow. Xcode 27 claims are dated beta-era claims, and local `mcpbridge` behavior is recorded separately from Xcode 27 behavior because this authoring machine had Xcode 26.5 installed.
 
 Validation:
 
