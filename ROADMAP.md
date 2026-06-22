@@ -324,7 +324,7 @@ In Progress
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
@@ -352,7 +352,7 @@ Planned
 - [x] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
 - [x] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
 - [ ] Unity, .NET, Apple binary, and tool-selection workflows each have a clear owner skill or an explicit reason to stay backlog-only.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Small Tickets
 

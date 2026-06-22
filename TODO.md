@@ -31,6 +31,14 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Validate the bundled MCP server from `plugins/cardhop-app/mcp/`.
 - [ ] Add root or child validation coverage once the Cardhop skill or MCP surface grows beyond the current single workflow.
 
+### dotnet-skills
+
+- [x] Author the first real .NET-focused skill tranche for Codex.
+- [x] Update docs to describe shipped behavior once real skill content exists.
+- [x] Add the minimum validation or smoke coverage needed for the shipped skill surface.
+- [ ] Add Codex GUI local environment templates and auto-copy/install behavior for F#, C#, and mixed `.NET` repos.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
 ### productivity-skills
 
 - [x] Fold issue-sized TODO/FIXME and bug-fix ticket tracking into `maintain-project-roadmap` through the canonical `Small Tickets` section instead of adding a separate `maintain-project-todo` workflow.
@@ -110,12 +118,20 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Add broader bundled-server smoke coverage when new Things tool families or auth-sensitive update flows are introduced.
 - [ ] Revisit packaging mirrors if the repo starts shipping additional Codex discovery surfaces.
 
+### web-dev-skills
+
+- [x] Author the first real web-focused skill for Codex.
+- [x] Update docs to describe shipped behavior once real skill content exists.
+- [x] Add the minimum validation or smoke coverage needed for the shipped skill surface.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
 ## Cross-Child Validation
 
 - [ ] Evaluate one root validation command for marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Decide which checks belong centrally in Socket and which should remain child-local behavior tests.
 - [ ] Retire or update stale child validators when their expected docs have been collapsed into root docs.
 - [x] Remediate the 2026-06-15 Dependabot alert inventory, starting with the Cardhop and Things MCP server lockfiles recorded in [`docs/maintainers/dependabot-alert-triage-2026-06-15.md`](./docs/maintainers/dependabot-alert-triage-2026-06-15.md).
+- [x] Merge the 2026-06-21 Dependabot `pydantic-settings` 2.14.2 lockfile bumps for Cardhop and Things MCP servers after child validation passes.
 
 ## Legal And Licensing
 
@@ -128,23 +144,9 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ## Placeholder Child Plugins
 
-### dotnet-skills
-
-- [ ] Author the first real .NET-focused skill for Codex.
-- [ ] Update docs to describe shipped behavior once real skill content exists.
-- [ ] Add the minimum validation or smoke coverage needed for the shipped skill surface.
-- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
-
 ### spotify
 
 - [ ] Author the first real Spotify-focused Codex workflow.
 - [ ] Add the first maintained Spotify skill, app, or MCP-backed workflow under the canonical exported surface.
 - [ ] Update docs and validation once the exported Spotify surface is real.
 - [ ] Decide whether Socket remains the canonical home after the first real shipped workflow.
-
-### web-dev-skills
-
-- [ ] Author the first real web-focused skill for Codex.
-- [ ] Update docs to describe shipped behavior once real skill content exists.
-- [ ] Add the minimum validation or smoke coverage needed for the shipped skill surface.
-- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.

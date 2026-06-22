@@ -1,7 +1,7 @@
 {
   "name": "reverse-engineering-skills",
   "version": "6.19.0",
-  "description": "Placeholder plugin repository for future reverse engineering, decompilation, disassembly, symbol, and artifact-analysis Codex skills.",
+  "description": "Workflow skills for reverse engineering, decompilation, disassembly, symbol, and artifact-analysis tasks.",
   "skills": "./skills/",
   "author": {
     "name": "Gale",
