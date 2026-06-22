@@ -1,13 +1,13 @@
 ---
 name: hummingbird-server-workflow
-description: Plan, build, run, test, and diagnose Hummingbird server-side Swift services using current Hummingbird documentation, SwiftPM-first commands, routing, middleware, request contexts, typed request and response models, service lifecycle, and deployment handoffs.
+description: Plan, build, run, test, and diagnose Hummingbird server-side Swift services using current Hummingbird documentation, the official hb CLI for new apps, SwiftPM-first commands, routing, middleware, request contexts, typed request and response models, service lifecycle, and deployment handoffs.
 license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Hummingbird, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
   owner: gaelic-ghost
   repo: socket
   category: server-side-swift-hummingbird
-allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(curl:*)
+allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(brew:*) Bash(swift:*) Bash(hb:*) Bash(curl:*)
 ---
 
 # Hummingbird Server Workflow
@@ -36,6 +36,8 @@ Use official Hummingbird documentation first:
 - [Hummingbird documentation](https://docs.hummingbird.codes/)
 - [Hummingbird framework overview](https://docs.hummingbird.codes/2.0/documentation/hummingbird/)
 - [Create a Hummingbird application](https://docs.hummingbird.codes/2.0/tutorials/hummingbird/todos-1-template/)
+- [Hummingbird hb CLI](https://github.com/hummingbird-project/hb)
+- [Hummingbird Homebrew tap](https://github.com/hummingbird-project/homebrew-tap)
 - [Middleware](https://docs.hummingbird.codes/2.0/documentation/hummingbird/middlewareguide/)
 - [Request Contexts](https://docs.hummingbird.codes/2.0/documentation/hummingbird/requestcontexts/)
 - [Error Handling](https://docs.hummingbird.codes/2.0/documentation/hummingbird/errorhandling/)
@@ -66,10 +68,11 @@ Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swif
    - OpenAPI-backed server transport
 3. Confirm the documented Hummingbird command and API path before running or recommending commands.
 4. Keep SwiftPM as the default execution surface:
-   - create from the Hummingbird template when the user wants the official template flow
+   - create fresh apps with the official `hb` CLI when the user wants Hummingbird's current project-creation flow
+   - use the Hummingbird template repository only when current docs, the CLI, or the user explicitly calls for template inspection or fallback
    - build with `swift build`
    - test with `swift test`
-   - run locally with the package's documented `swift run` command
+   - run locally with the package's documented `swift run` command or with `hb watch` when live rebuild-and-run behavior is the goal
    - inspect available executable commands with `swift run <executable> --help` when the package uses `AsyncParsableCommand`
 5. Keep domain logic outside route closures when it has meaningful behavior.
 6. Keep request and response models typed and small enough to test directly.
@@ -100,13 +103,23 @@ Before recommending or adding any package:
 
 ## Project Creation
 
-Hummingbird documents a template-based creation flow. Use it when the user wants a fresh Hummingbird app and accepts the official template as the starting point:
+Hummingbird now ships the official `hb` command line tool. Prefer it for fresh Hummingbird apps when the user accepts Hummingbird's current scaffold and Homebrew is an acceptable installer:
+
+```bash
+brew tap hummingbird-project/tap
+brew install hb
+hb init MyService
+cd MyService
+swift run
+```
+
+Use `hb watch` when the user wants the CLI to watch source changes, rebuild the executable, and restart the local service during development. Treat `hb watch` as local developer convenience, not as the production run command.
+
+Hummingbird still publishes a template repository and tutorial material. Use that template flow only when the current `hb` CLI does not fit the task, the user explicitly asks for the template, or you need to inspect the generated project shape documented by Hummingbird:
 
 ```bash
 git clone https://github.com/hummingbird-project/template
 ./template/configure.sh MyService
-cd MyService
-swift run
 ```
 
 When adding Hummingbird to an existing package, edit `Package.swift` through normal SwiftPM dependency rules and follow current Hummingbird docs for package products. Do not copy a template over an existing service unless the user explicitly asks for replacement.
