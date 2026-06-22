@@ -25,9 +25,9 @@ Top priorities:
 4. Define Socket-owned F# `.fsx` conventions for typed hooks and compact local
    maintenance scripts, but do not migrate Python validators or the current Node
    hook until portability and startup costs are measured.
-5. Add a root skill-surface audit script that reports large skills, duplicate
+5. Use the root skill-surface audit script to keep large skills, duplicate
    snippets, stale current-version wording, missing handoff references, and
-   repeated boilerplate.
+   repeated boilerplate visible before manual cleanup.
 
 ## Evidence Snapshot
 
@@ -51,12 +51,16 @@ Top priorities:
   maintenance-script conventions item covering launch shape, repo-local
   `DOTNET_CLI_HOME`, event JSON types, validation, and graduation to compiled
   F# tools.
+- `scripts/audit_skill_surfaces.py --top 5` now reports 87 skill files, 12,703
+  skill lines, 264 reference files, 11,439 reference lines, 17 exact duplicate
+  reference groups, 4 version-sensitive lines, and 0 missing expected handoffs
+  with the current skill-specific expectation map.
 
 ## Quick Wins
 
-### 1. Add a root token-surface audit script
+### 1. Keep the root token-surface audit script report-only
 
-Create `scripts/audit_skill_surfaces.py` with a report-only default that emits:
+`scripts/audit_skill_surfaces.py` now has a report-only default that emits:
 
 - skill line counts by plugin and skill
 - reference line counts by plugin and reference
@@ -65,8 +69,9 @@ Create `scripts/audit_skill_surfaces.py` with a report-only default that emits:
 - version-sensitive phrases such as `As of SwiftASB v...`
 - missing expected handoff references for known cross-skill boundaries
 
-This should not fail release validation at first. Start with advisory output so
-maintainers can see hotspots without blocking unrelated plugin work.
+Keep it advisory for now so maintainers can see hotspots without blocking
+unrelated plugin work. If it becomes a release gate later, split strict checks
+from exploratory checks first.
 
 Evidence:
 
@@ -367,24 +372,25 @@ policy until at least one proof exists.
 
 ## Recommended Next Steps
 
-1. Add `scripts/audit_skill_surfaces.py` in report-only mode and run it in this
-   branch to create a baseline.
-2. Add Apple snippet sync check mode and wire it into Apple child validation.
-3. Draft a SwiftASB shared-reference or generated-mirror plan, then shrink one
+1. Add Apple snippet sync check mode and wire it into Apple child validation.
+2. Draft a SwiftASB shared-reference or generated-mirror plan, then shrink one
    SwiftASB skill as a proof of shape.
-4. Add an `.fsx` convention proposal and one small report-only proof script, then
+3. Add an `.fsx` convention proposal and one small report-only proof script, then
    compare it against Python and the current Node hook before recommending
    migrations.
-5. Compact productivity subagent sections to skill-specific examples plus a
+4. Compact productivity subagent sections to skill-specific examples plus a
    shared-guidance pointer.
-6. Add a check-only Socket stewardship automation once the audit script exists,
-   so future token and drift issues are found without hand-scanning.
+5. Add a check-only Socket stewardship automation around
+   `scripts/audit_skill_surfaces.py`, so future token and drift issues are found
+   without hand-scanning.
 
 ## Validation
 
 This report is a docs-only proposal. Run root metadata validation after adding
-the file:
+the file. After adding the audit script, also run the focused script tests:
 
 ```bash
+uv run pytest tests/test_audit_skill_surfaces.py
+uv run scripts/audit_skill_surfaces.py --top 5
 uv run scripts/validate_socket_metadata.py
 ```
