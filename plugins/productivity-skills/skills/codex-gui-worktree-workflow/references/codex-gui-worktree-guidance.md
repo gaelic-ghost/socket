@@ -9,6 +9,19 @@ Use this reference when a repo wants Codex GUI worktree-first development as the
 - Plain Git worktrees and Worktrunk-managed worktrees are best for terminal-first branch management. Open those paths as their own Codex app project or path-specific new thread when the GUI should work there.
 - Worktrunk bridge work belongs to a separate integration project, not to ordinary repo guidance.
 
+## Branch And Handoff Hygiene
+
+When a Codex-managed worktree should start from an existing branch, verify the
+branch exists before creating the thread or worktree. For a brand-new branch,
+create the branch first, or start the worker from the current working tree and
+have the worker create or switch to the branch before editing.
+
+Avoid keeping the same branch checked out in multiple live worktrees. If one
+checkout commits or fast-forwards the branch, the other checkout can be left
+with stale index or working-tree state even when every change is already safely
+committed. Before handing a thread back to a base checkout, check both the
+source and destination with `git status --short --branch`.
+
 ## Local Environment Shape
 
 Local environment files should live under `.codex/environments/` in the target repo when they are meant to be shared. Keep them portable:

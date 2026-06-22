@@ -29,6 +29,7 @@ This is a general productivity workflow. It owns the Codex app workflow decision
    - Codex sandboxing and auto-review
 2. Inspect the target repo shape:
    - Git repository state and worktree list
+   - whether the intended base or feature branch is already checked out in another live worktree
    - existing `.codex/environments/*.toml`
    - repo `AGENTS.md`
    - existing validation or maintainer scripts
@@ -38,9 +39,11 @@ This is a general productivity workflow. It owns the Codex app workflow decision
    - permanent Codex worktree for long-lived branches that should stay visible as app projects
    - plain Git or Worktrunk-managed worktree for terminal-first branch management
    - path-specific new Codex thread or app project when a terminal-created worktree should become a GUI workspace
+   - when starting a Codex thread from a named existing branch, verify the branch ref exists first; for new branch work, create the branch first or start from the current working tree and have the worker create or switch to the branch
 4. Shape general repo guidance:
    - explain that Codex GUI worktrees are Git worktrees plus app-owned thread association, handoff, snapshots, cleanup, review pane state, local environment setup, and action buttons
    - explain that terminal-created Git or Worktrunk worktrees are not automatically Codex-managed app worktrees
+   - warn that keeping the same branch checked out in two live worktrees can leave one checkout's index and files stale after commits land elsewhere
    - state that auto-review reviews approval requests without expanding writable roots or sandbox permissions
    - keep `.codex/environments/*.toml` portable and repo-owned
 5. Delegate stack-specific commands:
@@ -67,6 +70,8 @@ Return a concise plan or implementation summary with:
 
 - Do not claim Codex can control where Codex-managed worktrees are created if current docs say it cannot.
 - Do not treat shell `cwd` changes as moving an existing Codex GUI project.
+- Do not ask Codex to create a managed worktree from a branch name that has not been created yet.
+- Do not intentionally keep the same branch checked out in multiple active worktrees except as a short-lived recovery step; if it happens, verify both checkout statuses before handoff or cleanup.
 - Do not commit machine-local absolute paths, private checkout paths, user-specific DerivedData locations, secrets, local package paths, or local dependency paths.
 - Do not make global `danger-full-access` or broad writable-root changes as a convenience fix for noisy approvals.
 - Do not imply auto-review expands the sandbox boundary.
