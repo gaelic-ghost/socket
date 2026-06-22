@@ -29,16 +29,28 @@ Some Apple documentation pages are JavaScript-rendered. When a page body is not 
 Checked with:
 
 ```bash
+DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcodebuild -version
+DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcrun --find mcpbridge
+DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcrun mcpbridge --help
 xcodebuild -version
 xcrun mcpbridge --help
 ```
 
-Observed local Xcode version: Xcode 26.5, build 17F42.
+Observed beta Xcode version: Xcode 27.0, build 27A5194q.
+
+Observed beta `mcpbridge` path:
+
+```text
+/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer/usr/bin/mcpbridge
+```
+
+Earlier default-developer-dir check observed Xcode 26.5, build 17F42.
 
 Observed `mcpbridge` behavior:
 
 - default mode is a STDIO bridge for Xcode MCP tools
 - `run-agent <agent-name>` launches a coding agent with Xcode-provided configuration
+- `run-agent skills export [--output-dir <path>] [--replace-existing]` exports globally available `SKILL.md` bundles through the same Xcode connection logic
 - `--dry-run` prints the resolved command without executing
 - `--no-xcode-tools` omits Xcode MCP tools from agent config
 - `MCP_XCODE_PID` selects a specific Xcode process
@@ -48,4 +60,4 @@ Observed `mcpbridge` behavior:
 
 - ACP-specific Xcode setup: no current Apple page found in this pass that made ACP the documented Xcode setup surface. Mention ACP only as unresolved or when live Xcode documentation proves it.
 - Xcode plug-in package shape: keep blocked until live Xcode 27 beta inspection verifies import/package details.
-- Xcode 27 beta behavior on Gale's machine: this branch was authored from a machine with Xcode 26.5 installed, so local Xcode 27 behavior was not verified here.
+- Xcode 27 beta UI behavior on Gale's machine: command-line tool availability was verified from the beta app, but Xcode UI settings, external-agent permission toggles, project-session behavior, and live agent execution were not verified here.

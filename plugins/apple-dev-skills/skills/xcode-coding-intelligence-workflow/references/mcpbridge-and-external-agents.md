@@ -1,6 +1,6 @@
 # MCP Bridge And External Agents
 
-Last checked with local `xcrun mcpbridge --help` from Xcode 26.5 on 2026-06-22.
+Last checked with local `xcrun mcpbridge --help` from Xcode 27.0 beta build 27A5194q on 2026-06-22.
 
 ## What `xcrun mcpbridge` Does
 
@@ -42,6 +42,16 @@ xcrun mcpbridge run-agent --dry-run <agent-name>
 
 Use `--no-xcode-tools` only when intentionally launching the agent with Xcode-provided configuration but without Xcode MCP tools in the agent config.
 
+## Exporting Xcode-Visible Skill Bundles
+
+Xcode 27.0 beta's `mcpbridge` help also exposes:
+
+```bash
+xcrun mcpbridge run-agent skills export [--output-dir <path>] [--replace-existing]
+```
+
+Use this as an inspection or setup path only. Exported skill bundles are generated from the Xcode-visible agent environment and should not replace authored Socket skill sources unless the user explicitly asks for a comparison or import workflow.
+
 ## Preconditions
 
 Before expecting Xcode tools to work through an external agent:
@@ -51,6 +61,7 @@ Before expecting Xcode tools to work through an external agent:
 - External-agent access must be enabled in Xcode's Intelligence settings.
 - The agent or client must be configured to start `xcrun mcpbridge`.
 - The requested tool permission must be allowed by Xcode and by the external client.
+- Skill export paths should target a temporary or explicitly requested output directory, not a source-controlled skill tree by default.
 
 ## Failure Language
 

@@ -458,7 +458,7 @@ exec "{real_swift}" "$@"
             self.assertIn('.product(name: "Configuration", package: "swift-configuration")', manifest_text)
             self.assertEqual(payload["testing_mode"], "swift-testing")
             self.assertEqual(payload["testing_strategy"], "init-flags")
-            self.assertEqual(payload["swift_toolchain"], "6.3")
+            self.assertRegex(payload["swift_toolchain"], r"^6\.[0-9]+$")
             package_dir = Path(payload["resolved_path"])
             self.assertTrue((package_dir / ".swiftformat").is_file())
             self.assertTrue((package_dir / "scripts" / "repo-maintenance" / "validate-all.sh").is_file())

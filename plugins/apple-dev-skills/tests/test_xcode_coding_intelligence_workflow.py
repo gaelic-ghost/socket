@@ -17,6 +17,7 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
 
         self.assertIn("Xcode Intelligence setup", skill_text)
         self.assertIn("xcrun mcpbridge", skill_text)
+        self.assertIn("Xcode-provided skill exports", skill_text)
         self.assertIn("command and tool permissions", skill_text)
         self.assertIn("Recommend `xcode-build-run-workflow`", skill_text)
         self.assertIn("Recommend `xcode-testing-workflow`", skill_text)
@@ -29,8 +30,9 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
 
         self.assertIn("checked against Apple developer pages and WWDC26 transcripts on 2026-06-22", skill_text)
         self.assertIn("Do not claim Xcode 27 beta behavior is stable Xcode behavior.", skill_text)
-        self.assertIn("Observed local Xcode version: Xcode 26.5, build 17F42.", evidence_text)
-        self.assertIn("Xcode 27 beta behavior on Gale's machine", evidence_text)
+        self.assertIn("Observed beta Xcode version: Xcode 27.0, build 27A5194q.", evidence_text)
+        self.assertIn("Earlier default-developer-dir check observed Xcode 26.5, build 17F42.", evidence_text)
+        self.assertIn("Xcode 27 beta UI behavior on Gale's machine", evidence_text)
 
     def test_external_agent_reference_documents_mcpbridge_preconditions(self) -> None:
         bridge_text = self.read("skills/xcode-coding-intelligence-workflow/references/mcpbridge-and-external-agents.md")
@@ -38,6 +40,7 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
         self.assertIn("codex mcp add xcode -- xcrun mcpbridge", bridge_text)
         self.assertIn("MCP_XCODE_PID", bridge_text)
         self.assertIn("xcrun mcpbridge run-agent --dry-run <agent-name>", bridge_text)
+        self.assertIn("xcrun mcpbridge run-agent skills export", bridge_text)
         self.assertIn("External-agent access must be enabled", bridge_text)
         self.assertIn("The relevant project or workspace should be open in Xcode", bridge_text)
 

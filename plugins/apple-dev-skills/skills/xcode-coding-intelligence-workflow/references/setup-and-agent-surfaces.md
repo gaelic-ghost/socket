@@ -32,12 +32,15 @@ As of 2026-06-22, Apple's Xcode 27 pages and WWDC26 transcripts describe:
 
 Treat these as beta-era Xcode 27 claims until the installed Xcode and current Apple docs confirm the behavior for the target machine.
 
+Local beta tool check on 2026-06-22 verified Xcode 27.0 beta build 27A5194q at `/Users/galew/Applications/Betas/Xcode-beta.app`. The local check verified `xcodebuild -version`, `xcrun --find mcpbridge`, and `xcrun mcpbridge --help`; it did not verify Xcode UI settings, project-session permissions, or agent execution inside a running Xcode session.
+
 ## Surface Classification
 
 Use this split before giving setup advice:
 
 - `xcode-hosted`: Xcode starts the agent or chat provider and owns the assistant UI, artifacts, project context, and permissions.
 - `external-mcp`: another client starts the agent and connects to Xcode through `xcrun mcpbridge`.
+- `skill-export`: `xcrun mcpbridge run-agent skills export` writes Xcode-visible skill bundles for inspection or setup; keep authored Socket skills as the source of truth unless an import is explicitly requested.
 - `chat-provider`: Xcode uses a model provider for code chat or coding tools, but no autonomous agent permission is implied until Xcode documents that path.
 - `plugin`: Xcode plug-in packaging or import behavior. Keep this research-first until live Xcode documentation and local inspection verify the package shape.
 - `acp`: agent protocol setup. Do not claim Apple-documented ACP setup unless current Apple docs or local Xcode inspection show it.
