@@ -1,7 +1,7 @@
 {
   "name": "server-side-swift",
   "version": "6.21.0",
-  "description": "Codex skills for building, running, containerizing, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, Docker, Apple Containerization, and SwiftPM-first workflows.",
+  "description": "Codex skills for building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -26,6 +26,8 @@
     "openapi",
     "rpc",
     "docker",
+    "fly.io",
+    "flyctl",
     "containerization",
     "apple-container",
     "oci",
@@ -34,8 +36,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side Swift",
-    "shortDescription": "Server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, RPC, Docker, and Apple Containerization workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Swift OpenAPI, Docker, and Apple Containerization documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, environment configuration, tests, and deployment handoffs.",
+    "shortDescription": "Server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, RPC, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Swift OpenAPI, Docker, Apple Containerization, and Fly.io documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, fly.toml deployment configuration, Fly secrets, health checks, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -52,6 +54,8 @@
       "Decide whether this Swift service boundary should use OpenAPI, JSON-RPC, gRPC, MCP-style tools, or ordinary HTTP routes.",
       "Add a Dockerfile and Compose workflow for this server-side Swift package.",
       "Diagnose why this Swift service Docker image fails to build, start, or bind its port.",
+      "Prepare this Vapor or Hummingbird service for Fly.io deployment with Dockerfile, fly.toml, secrets, health checks, and validation.",
+      "Diagnose why this Swift service fails to deploy or pass health checks on Fly.io.",
       "Plan an Apple Containerization workflow for running this Swift service locally on Apple silicon.",
       "Compare Docker and Apple's container CLI for this server-side Swift development workflow.",
       "Inspect this Vapor app and explain its routes, configuration, and run commands.",
