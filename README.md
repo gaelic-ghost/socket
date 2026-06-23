@@ -96,6 +96,7 @@ Current Socket catalog shape:
 Placeholder directories for future plugins (not available for install):
 
 - `android-dev-skills`
+- `server-side-jvm`
 - `spotify`
 
 ## Development

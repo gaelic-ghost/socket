@@ -1,0 +1,41 @@
+{
+  "name": "server-side-jvm",
+  "version": "7.0.0",
+  "description": "Placeholder plugin repository for future server-side JVM, Java, Scala, and Clojure Codex skills.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-jvm",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "jvm",
+    "java",
+    "scala",
+    "clojure",
+    "gradle",
+    "maven",
+    "sbt",
+    "backend",
+    "server-side",
+    "functional-programming",
+    "codex",
+    "plugin",
+    "skills"
+  ],
+  "interface": {
+    "displayName": "Server-Side JVM",
+    "shortDescription": "Future server-side JVM, Java, Scala, and Clojure Codex skills.",
+    "longDescription": "Reserve a dedicated plugin surface for server-side JVM project maintenance, Java and Scala implementation, future Clojure workflows, Gradle, Maven, SBT, functional backend design, tests, packaging, diagnostics, CI, and release-readiness guidance.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-jvm",
+    "brandColor": "#7C3AED"
+  }
+}
