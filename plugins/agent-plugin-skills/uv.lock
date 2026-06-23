@@ -8,7 +8,7 @@ resolution-markers = [
 
 [[package]]
 name = "agent-plugin-skills-maintenance"
-version = "7.1.1"
+version = "7.1.2"
 source = { virtual = "." }
 
 [package.dev-dependencies]
