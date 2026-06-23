@@ -1,6 +1,6 @@
 ---
 name: hummingbird-server-workflow
-description: Plan, build, run, test, and diagnose Hummingbird server-side Swift services using current Hummingbird documentation, the official hb CLI for new apps, SwiftPM-first commands, routing, middleware, request contexts, typed request and response models, service lifecycle, and deployment handoffs.
+description: Plan, build, run, test, and diagnose existing Hummingbird server-side Swift services using current Hummingbird documentation, SwiftPM-first commands, routing, middleware, request contexts, typed request and response models, service lifecycle, and deployment handoffs. Hand fresh service creation to bootstrap-hummingbird-service.
 license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Hummingbird, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
@@ -20,10 +20,11 @@ The practical decision is what the HTTP service exposes, which executable owns t
 
 ## When To Use
 
-- Use this skill when creating or modifying a Hummingbird service.
+- Use this skill when modifying an existing Hummingbird service.
 - Use this skill when changing Hummingbird routes, route groups, middleware, request contexts, application configuration, persistent request data, file middleware, service lifecycle integration, or local server behavior.
 - Use this skill when diagnosing `swift build`, `swift test`, `swift run`, application startup, route matching, middleware, request decoding, response encoding, or local HTTP failures in a Hummingbird project.
 - Use this skill when deciding whether an existing Swift package should become a Hummingbird service or stay a library consumed by one.
+- Use `bootstrap-hummingbird-service` instead when the user wants to start, begin, create, scaffold, or bootstrap a fresh Hummingbird service.
 - Use this skill when comparing Hummingbird to Vapor only long enough to choose the correct framework-specific workflow.
 - Do not use this skill for generic Swift package work that has no Hummingbird-specific behavior. Hand that work to a SwiftPM package workflow when available.
 - Do not use this skill for Vapor services unless the task is a comparison or migration involving Hummingbird.
@@ -67,8 +68,8 @@ Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swif
    - background service with HTTP health or control routes
    - OpenAPI-backed server transport
 3. Confirm the documented Hummingbird command and API path before running or recommending commands.
-4. Keep SwiftPM as the default execution surface:
-   - create fresh apps with the official `hb` CLI when the user wants Hummingbird's current project-creation flow
+4. Keep SwiftPM as the default execution surface after project creation:
+   - hand fresh service creation to `bootstrap-hummingbird-service`
    - use the Hummingbird template repository only when current docs, the CLI, or the user explicitly calls for template inspection or fallback
    - build with `swift build`
    - test with `swift test`
@@ -101,19 +102,18 @@ Before recommending or adding any package:
 - explain why the aligned Hummingbird package fits better than a generic Swift package or custom code
 - avoid archived packages, stale Hummingbird-major-version packages, or packages that turn request context into a generic dependency container
 
-## Project Creation
+## Project Creation Handoff
 
-Hummingbird now ships the official `hb` command line tool. Prefer it for fresh Hummingbird apps when the user accepts Hummingbird's current scaffold and Homebrew is an acceptable installer:
+Fresh Hummingbird services belong to `bootstrap-hummingbird-service`. That bootstrap path starts with the official `hb` command line tool, uses Hummingbird's built-in or generated configuration support, defaults to Fluent ORM with PostgreSQL, creates a Docker Compose PostgreSQL dependency surface, and installs repo-local `AGENTS.md` guidance for the generated service.
 
 ```bash
 brew tap hummingbird-project/tap
 brew install hb
 hb init MyService
 cd MyService
-swift run
 ```
 
-Use `hb watch` when the user wants the CLI to watch source changes, rebuild the executable, and restart the local service during development. Treat `hb watch` as local developer convenience, not as the production run command.
+Use `hb watch` when the user wants the CLI to watch source changes, rebuild the executable, and restart the local service during development after the project exists. Treat `hb watch` as local developer convenience, not as the production run command.
 
 Hummingbird still publishes a template repository and tutorial material. Use that template flow only when the current `hb` CLI does not fit the task, the user explicitly asks for the template, or you need to inspect the generated project shape documented by Hummingbird:
 
@@ -145,7 +145,7 @@ Do not introduce a service, repository, coordinator, or manager unless it remove
 
 Do not commit secrets.
 
-Use environment variables or the repository's existing configuration conventions for deployment-sensitive values. When diagnosing configuration, state which value is missing, where the app reads it, which command was running, and what local or deployment setup likely needs correction.
+Use Hummingbird's built-in or generated configuration support, environment variables, or the repository's existing configuration conventions for deployment-sensitive values. When diagnosing configuration, state which value is missing, where the app reads it, which command was running, and what local or deployment setup likely needs correction.
 
 If a template-generated executable exposes hostname, port, or log-level options, preserve that command-line shape unless the user explicitly wants to change how the service is configured.
 
@@ -227,3 +227,4 @@ Return:
 - Do not claim Hummingbird API behavior from memory when current official docs can be checked.
 - Do not use Hummingbird request context as a catch-all app dependency bag.
 - Do not add Docker, Apple Containerization, CI, or cloud deployment files without explicit deployment scope.
+- Do not bootstrap fresh Hummingbird services manually; use `bootstrap-hummingbird-service` unless Gale explicitly approves an exception.

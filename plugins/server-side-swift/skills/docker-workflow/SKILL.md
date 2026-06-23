@@ -24,6 +24,7 @@ The practical decision is which Swift executable becomes the container entry poi
 - Use this skill when diagnosing `docker build`, `docker run`, `docker compose`, Linux dependency, architecture, permissions, port binding, environment, or image-size problems in a Swift service.
 - Use this skill when preparing a Vapor or Hummingbird service for a generic Docker-compatible runtime, registry, CI image build, or hosted Linux deployment.
 - Use this skill when deciding whether Docker belongs in the current change or should stay a deployment handoff.
+- Use `bootstrap-vapor-service` or `bootstrap-hummingbird-service` instead when the Docker work is the default local PostgreSQL Compose surface for a fresh service.
 - Do not use this skill for normal Vapor routes, Hummingbird routes, persistence models, OpenAPI contracts, or SwiftPM package work unless container behavior is the reason for the change.
 - Do not use this skill for Apple's `container` CLI or Containerization Swift APIs unless the task is a comparison with Docker. Use `apple-containerization-workflow` for Apple Containerization work.
 
@@ -61,6 +62,7 @@ Use Fly.io documentation and `fly-io-deployment-workflow` when Docker image work
 3. Choose the smallest fitting container surface:
    - Dockerfile only when the service just needs an image
    - Compose when multiple local services must start together
+   - fresh Vapor and Hummingbird services get Compose-local PostgreSQL from their bootstrap skills
    - separate debug or test target only when it proves a real failure mode
    - no Docker change when SwiftPM local validation is enough for the user's task
 4. Prefer a multi-stage Dockerfile for production images.
@@ -120,6 +122,8 @@ Do not add a health check endpoint just to satisfy Docker if the service does no
 ## Compose Shape
 
 Use Compose when local development needs multiple services, such as a Swift app plus Postgres, Redis, or another dependency.
+
+For fresh Vapor and Hummingbird services, Compose-local PostgreSQL is part of the bootstrap baseline. Keep that baseline in `bootstrap-vapor-service` and `bootstrap-hummingbird-service`; use this skill when the Compose stack grows beyond the default local database or when a production image, registry, CI image build, or deployment runtime needs design.
 
 When adding or editing Compose files:
 

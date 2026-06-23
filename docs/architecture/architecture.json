@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-06-23T14:18:33.093328+00:00",
+  "detectedAt": "2026-06-23T18:54:40.293182+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -348,7 +348,47 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/server-side-jvm/skills/build-java-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-jvm/skills/build-scala-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-jvm/skills/build-tooling-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-jvm/skills/choose-service-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-jvm/skills/testing-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/server-side-jvm/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/app-sync-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/bootstrap-hummingbird-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/bootstrap-vapor-service/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -356,7 +396,15 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/fly-io-deployment-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -365,6 +413,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -580,6 +632,20 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/server-side-jvm/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "server-side-jvm",
+      "path": "plugins/server-side-jvm",
+      "targets": [
+        "skills:plugins/server-side-jvm/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/server-side-swift/.codex-plugin/plugin.json"
         }
       ],
@@ -664,6 +730,7 @@
         "productivity-skills",
         "python-skills",
         "server-side-swift",
+        "server-side-jvm",
         "rust-skills",
         "speak-swiftly",
         "swiftasb-skills",
@@ -1605,6 +1672,78 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/server-side-jvm/skills/build-java-service/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-jvm/build-java-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-jvm/skills/build-scala-service/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-jvm/build-scala-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-jvm/skills/build-tooling-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-jvm/build-tooling-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-jvm/skills/choose-service-shape/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-jvm/choose-service-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-jvm/skills/testing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-jvm/testing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/app-sync-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/app-sync-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
         }
       ],
@@ -1612,6 +1751,42 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:server-side-swift/apple-containerization-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/auth-authorization-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/bootstrap-hummingbird-service/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/bootstrap-hummingbird-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/bootstrap-vapor-service/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/bootstrap-vapor-service"
     },
     {
       "evidence": [
@@ -1629,6 +1804,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/fly-io-deployment-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/fly-io-deployment-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
         }
       ],
@@ -1636,6 +1823,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:server-side-swift/hummingbird-server-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/observability-tracing-workflow"
     },
     {
       "evidence": [
@@ -1660,6 +1859,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:server-side-swift/persistence-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/swiftnio-workflow"
     },
     {
       "evidence": [
@@ -1984,6 +2195,30 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/server-side-swift"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:server-side-jvm"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/server-side-jvm"
     },
     {
       "evidence": [
@@ -3086,12 +3321,120 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/server-side-jvm/skills/build-java-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-jvm/build-java-service",
+      "path": "plugins/server-side-jvm/skills/build-java-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-jvm/skills/build-scala-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-jvm/build-scala-service",
+      "path": "plugins/server-side-jvm/skills/build-scala-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-jvm/skills/build-tooling-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-jvm/build-tooling-workflow",
+      "path": "plugins/server-side-jvm/skills/build-tooling-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-jvm/skills/choose-service-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-jvm/choose-service-shape",
+      "path": "plugins/server-side-jvm/skills/choose-service-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-jvm/skills/testing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-jvm/testing-workflow",
+      "path": "plugins/server-side-jvm/skills/testing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/app-sync-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/app-sync-workflow",
+      "path": "plugins/server-side-swift/skills/app-sync-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:server-side-swift/apple-containerization-workflow",
       "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/auth-authorization-workflow",
+      "path": "plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/bootstrap-hummingbird-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/bootstrap-hummingbird-service",
+      "path": "plugins/server-side-swift/skills/bootstrap-hummingbird-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/bootstrap-vapor-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/bootstrap-vapor-service",
+      "path": "plugins/server-side-swift/skills/bootstrap-vapor-service/SKILL.md"
     },
     {
       "dependencies": [],
@@ -3110,12 +3453,36 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/fly-io-deployment-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/fly-io-deployment-workflow",
+      "path": "plugins/server-side-swift/skills/fly-io-deployment-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:server-side-swift/hummingbird-server-workflow",
       "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/observability-tracing-workflow",
+      "path": "plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -3140,6 +3507,18 @@
       "kind": "codex-skill",
       "name": "skill:server-side-swift/persistence-workflow",
       "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/swiftnio-workflow",
+      "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
     },
     {
       "dependencies": [],

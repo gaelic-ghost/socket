@@ -23,6 +23,7 @@ The practical decision is which persistence tool owns the data access, how model
 - Use this skill when adding or changing Fluent models, migrations, relations, queries, transactions, or database configuration.
 - Use this skill when a Vapor service needs database behavior that goes beyond route setup.
 - Use this skill when a Hummingbird service needs database access, repository boundaries, migration handoffs, or driver selection.
+- Use `bootstrap-vapor-service` or `bootstrap-hummingbird-service` instead when the database choice is part of fresh service creation.
 - Use this skill when comparing Fluent, direct SQL, a package-specific database client, or a small repository/query helper for a Swift service.
 - Use this skill when diagnosing failed migrations, missing schema, broken relations, connection-pool problems, query errors, transaction behavior, or database-backed tests.
 - Do not use this skill for route, middleware, request-context, server startup, or deployment-only work unless persistence is the reason for the change.
@@ -72,6 +73,7 @@ Use Swift Package Manager and Swift.org documentation for package, target, depen
    - read model or reporting query
    - test fixture or ephemeral database setup
 3. Choose the narrowest fitting data-access path:
+   - fresh Vapor and Hummingbird services default to Fluent ORM with PostgreSQL through their bootstrap skills
    - official Vapor Fluent and Vapor database drivers first for Vapor projects already using Fluent models, migrations, and `req.db`
    - Hummingbird-specific persistence packages first for Hummingbird services before direct drivers or generic database clients
    - a documented direct database client when the service needs SQL-specific behavior or does not use Fluent
@@ -102,7 +104,8 @@ When the work is mostly route, middleware, command, environment, or Vapor app st
 
 For Hummingbird projects:
 
-- do not assume Fluent or any ORM is already part of the service
+- do not assume Fluent or any ORM is already part of an existing service
+- for fresh services, route to `bootstrap-hummingbird-service`, where Fluent ORM with PostgreSQL is Gale's strong default
 - inspect how the `Application`, router, service lifecycle, and dependencies are currently constructed
 - check Hummingbird's persistent-data docs and Hummingbird-specific packages such as HummingbirdPostgres, HummingbirdFluent, PostgresMigrations, and Valkey or Redis integrations before choosing PostgresNIO, a direct driver, or a generic database package
 - choose a database client or repository shape that fits the existing Hummingbird service instead of copying Vapor app structure
@@ -156,3 +159,4 @@ Return:
 - Do not claim a database driver, Dash docset, package API, or migration command from memory when current docs or local project files can be checked.
 - Do not introduce a repository, service, manager, or helper unless it removes concrete duplication, clarifies a real dependency boundary, or makes tests meaningfully simpler.
 - Do not move client-side Apple persistence guidance into this skill.
+- Do not ask Gale to re-decide direct Postgres versus Fluent for fresh services; Fluent ORM with PostgreSQL is the consistency default unless Gale explicitly asks for a different persistence model.

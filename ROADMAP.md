@@ -177,6 +177,7 @@ In Progress
 - [x] Add an Apple Containerization workflow for Apple's container tooling, keeping it distinct from generic Docker guidance and tied to current official Apple documentation.
 - [x] Add a Fly.io deployment workflow for Vapor and Hummingbird services, including Dockerfile handoffs, `fly.toml`, secrets, health checks, Postgres attachment, process groups, and deploy validation.
 - [x] Update Hummingbird guidance to prefer the official `hb` CLI for fresh apps, and record a Vapor 5 alpha adoption posture that keeps Vapor 4 as the stable default until Vapor 5 is stable.
+- [x] Add `server-side-swift:bootstrap-hummingbird-service` and `server-side-swift:bootstrap-vapor-service` for CLI-first fresh service creation, repo-local `AGENTS.md` guidance assets, Hummingbird configuration support, Vapor `Environment`, Fluent ORM, PostgreSQL, and Docker Compose local database defaults.
 - [x] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
 

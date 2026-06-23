@@ -1,7 +1,7 @@
 {
   "name": "server-side-swift",
   "version": "7.1.1",
-  "description": "Codex skills for building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
+  "description": "Codex skills for bootstrapping, building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Hummingbird, persistence, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -16,13 +16,18 @@
     "skills",
     "swift",
     "server-side-swift",
+    "bootstrap",
     "vapor",
+    "vapor-cli",
     "vapor-5",
     "hummingbird",
     "hb",
     "fluent",
+    "fluent-postgres",
+    "postgresql",
     "database",
     "persistence",
+    "compose",
     "openapi",
     "rpc",
     "swiftnio",
@@ -45,8 +50,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side Swift",
-    "shortDescription": "Server-side Swift, Vapor, Hummingbird, persistence, OpenAPI, RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with SwiftPM-first workflows, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Swift OpenAPI, Docker, Apple Containerization, Fly.io, SwiftNIO, Swift Logging, Swift Metrics, Swift Distributed Tracing, authentication, authorization, and app-sync documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, fly.toml deployment configuration, Fly secrets, health checks, observability signals, auth boundaries, sync contracts, environment configuration, tests, and deployment handoffs.",
+    "shortDescription": "Server-side Swift bootstrap, Vapor, Hummingbird, persistence, OpenAPI, RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first bootstrap workflows for Vapor and Hummingbird, SwiftPM-first execution, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Vapor Environment, Hummingbird configuration support, Fluent ORM, PostgreSQL, Compose-local database defaults, generated service AGENTS guidance, Swift OpenAPI, Docker, Apple Containerization, Fly.io, SwiftNIO, Swift Logging, Swift Metrics, Swift Distributed Tracing, authentication, authorization, and app-sync documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, fly.toml deployment configuration, Fly secrets, health checks, observability signals, auth boundaries, sync contracts, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -55,6 +60,8 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-swift",
     "defaultPrompt": [
+      "Bootstrap a Hummingbird service with hb, Hummingbird configuration support, Fluent, PostgreSQL, Compose, and generated AGENTS guidance.",
+      "Bootstrap a Vapor service with vapor new, Vapor Environment, Fluent, PostgreSQL, Compose, and generated AGENTS guidance.",
       "Create a Vapor service plan using current Vapor CLI, Vapor 5 alpha posture, and SwiftPM workflows.",
       "Create a Hummingbird service plan using the official hb CLI, current Hummingbird docs, and SwiftPM workflows.",
       "Choose a Vapor-aligned package from the Vapor or Vapor Community ecosystem for this service need.",

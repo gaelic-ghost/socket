@@ -1,6 +1,6 @@
 ---
 name: vapor-server-workflow
-description: Plan, build, run, test, and diagnose Vapor server-side Swift services using current Vapor documentation, Vapor Toolbox project creation, SwiftPM-first commands, routing, middleware, Fluent migrations, Vapor 5 alpha adoption posture, environment configuration, and deployment handoffs.
+description: Plan, build, run, test, and diagnose existing Vapor server-side Swift services using current Vapor documentation, SwiftPM-first commands, routing, middleware, Fluent migrations, Vapor 5 alpha adoption posture, environment configuration, and deployment handoffs. Hand fresh service creation to bootstrap-vapor-service.
 license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
@@ -20,7 +20,7 @@ The practical decision is what the HTTP service exposes, which target owns the V
 
 ## When To Use
 
-- Use this skill when creating a new Vapor service with the Vapor Toolbox.
+- Use `bootstrap-vapor-service` when creating a new Vapor service with the Vapor Toolbox.
 - Use this skill when evaluating or migrating toward Vapor 5 alpha, but keep alpha work explicitly experimental until Vapor publishes a stable Vapor 5 release and migration path.
 - Use this skill when modifying Vapor routes, route groups, controllers, middleware, app configuration, commands, migrations, or local server behavior.
 - Use this skill when diagnosing `vapor new`, `swift build`, `swift test`, `swift run`, `swift run App serve`, migration, or local HTTP failures in a Vapor project.
@@ -67,7 +67,7 @@ For Vapor 5, treat GitHub releases and tagged source as the authoritative alpha 
    - background command plus HTTP health surface
 3. Confirm the documented command path before running or recommending commands.
 4. Keep SwiftPM as the default execution surface after creation:
-   - create with `vapor new <name>` when the user wants Vapor's template flow
+   - hand fresh service creation to `bootstrap-vapor-service`
    - build with `swift build`
    - test with `swift test`
    - run locally with `swift run` or `swift run App serve`
@@ -102,20 +102,19 @@ Before recommending or adding any package:
 - explain why the aligned Vapor or Vapor Community package fits better than a generic Swift package or custom code
 - avoid archived packages, stale Vapor-major-version packages, or packages that force unrelated architecture changes
 
-## Vapor Toolbox Usage
+## Project Creation Handoff
 
-The Vapor Toolbox is useful for creating a new Vapor project, but current Vapor documentation does not require it for ordinary development after the package exists.
+Fresh Vapor services belong to `bootstrap-vapor-service`. That bootstrap path starts with the official Vapor CLI, uses Vapor's built-in `Environment` system, defaults to Fluent ORM with PostgreSQL, creates a Docker Compose PostgreSQL dependency surface, and installs repo-local `AGENTS.md` guidance for the generated service.
 
-Use this default creation path on macOS when the user wants a fresh Vapor app and Homebrew is the accepted local package manager:
+Use this default creation path only as part of the bootstrap workflow:
 
 ```bash
 brew install vapor
 vapor new MyService
 cd MyService
-swift run
 ```
 
-Use `vapor new MyService -n` only when the user wants the non-interactive bare template and the documented options fit the task. Otherwise, preserve the interactive template questions because they choose real project features such as Fluent, database support, or Leaf.
+Use `vapor new MyService -n` only when the user wants the non-interactive bare template and the documented options fit the task. Otherwise, preserve the interactive template questions because they choose real project features such as Fluent, database support, or Leaf. For Gale's default Vapor bootstrap, answer the interactive prompts to include Fluent and choose PostgreSQL unless Gale explicitly approves a project-specific exception.
 
 ## Vapor 5 Alpha Adoption
 
@@ -155,7 +154,7 @@ Do not introduce a service, repository, coordinator, or manager unless it remove
 
 Do not commit secrets.
 
-Use environment variables for deployment-sensitive values. For local development, follow existing repo conventions first. If none exist, recommend committed safe defaults and ignored local overrides rather than hard-coded credentials.
+Use Vapor's built-in `Environment` system for runtime environment and process settings. Use environment variables for deployment-sensitive values. For local development, follow existing repo conventions first. If none exist, recommend committed safe defaults and ignored local overrides rather than hard-coded credentials.
 
 When diagnosing configuration, state which variable is missing, where Vapor reads it, which command was running, and what local or deployment setup likely needs correction.
 
@@ -235,3 +234,4 @@ Return:
 - Do not run migration reverts or destructive database commands without explicit user approval.
 - Do not claim Vapor CLI behavior from memory when current official docs can be checked.
 - Do not use obsolete Vapor Toolbox command habits when SwiftPM is the documented path for the task.
+- Do not bootstrap fresh Vapor services manually; use `bootstrap-vapor-service` unless Gale explicitly approves an exception.

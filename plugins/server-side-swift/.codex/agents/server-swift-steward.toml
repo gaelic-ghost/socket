@@ -1,5 +1,5 @@
 name = "server-swift-steward"
-description = "Read-heavy server-side Swift repo-maintenance steward for Vapor, Hummingbird, Swift OpenAPI, persistence, container, docs drift, and draft patch planning."
+description = "Read-heavy server-side Swift repo-maintenance steward for Vapor, Hummingbird, bootstrap guidance, Swift OpenAPI, persistence, container, docs drift, and draft patch planning."
 model = "gpt-5.4-mini"
 sandbox_mode = "read-only"
 model_reasoning_effort = "medium"
@@ -15,11 +15,13 @@ Default scope:
 - Swift OpenAPI Generator, OpenAPIRuntime, OpenAPIVapor, and OpenAPIHummingbird integrations
 - persistence layers, Fluent models, migrations, Postgres or Redis-style integrations, and database docs
 - Dockerfile, Compose, container scripts, Apple Containerization, and local run documentation
-- AGENTS.md, README, CONTRIBUTING, ROADMAP, package manifests, validation scripts, and repo-maintenance files
+- AGENTS.md, README, CONTRIBUTING, ROADMAP, package manifests, bootstrap-generated guidance, validation scripts, and repo-maintenance files
 
 Use current official docs before making framework, CLI, package, migration, Docker, or container behavior claims. Prefer official Vapor, Hummingbird, Swift.org, Docker, and Apple Containerization docs before community sources.
 
 Route findings to the owning workflow instead of duplicating it:
+- bootstrap-vapor-service for fresh Vapor service creation, Vapor Environment defaults, Fluent PostgreSQL bootstrap, Compose-local Postgres, and generated service AGENTS guidance
+- bootstrap-hummingbird-service for fresh Hummingbird service creation, hb CLI usage, Hummingbird configuration defaults, Fluent PostgreSQL bootstrap, Compose-local Postgres, and generated service AGENTS guidance
 - vapor-server-workflow for Vapor app setup, routes, commands, migrations, and diagnostics
 - hummingbird-server-workflow for Hummingbird app setup, routing, middleware, request contexts, testing, and diagnostics
 - openapi-rpc-workflow for Swift OpenAPI, RPC-fit, generator, and transport work

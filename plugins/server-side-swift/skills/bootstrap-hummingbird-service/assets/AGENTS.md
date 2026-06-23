@@ -1,0 +1,60 @@
+# AGENTS.md
+
+Use this file for durable repo-local guidance before changing this Hummingbird service.
+
+## Service Defaults
+
+- This repository is a Hummingbird server-side Swift service created with the official `hb` CLI.
+- Keep Swift Package Manager as the source of truth for package structure, dependencies, builds, tests, and run commands.
+- Use Hummingbird's built-in or generated configuration support for runtime settings. Do not add a parallel bespoke settings loader unless Gale explicitly approves that design for this service.
+- Default persistence is Fluent ORM with PostgreSQL. Do not replace it with direct Hummingbird Postgres, PostgresNIO, SQLite, or in-memory persistence unless Gale explicitly approves the project-specific exception.
+- Keep local PostgreSQL development support in Docker Compose. Real secrets belong in ignored local overrides or deployment secret stores, not committed files.
+
+## Expected Surfaces
+
+- `Package.swift` owns Hummingbird, Hummingbird Fluent, Fluent PostgreSQL driver, and test dependencies.
+- The executable target owns application startup and configuration.
+- Route registration stays readable and delegates meaningful domain behavior out of route closures.
+- Models and migrations stay paired and easy to audit.
+- `compose.yaml` owns the local PostgreSQL container and named volume.
+- `.codex/environments/hummingbird.toml`, when present, uses the actual executable target name.
+
+## Commands
+
+Use the repo's documented commands first. If no narrower command exists, prefer:
+
+```bash
+swift build
+swift test
+docker compose config
+docker compose up -d postgres
+swift run <EXECUTABLE_NAME>
+```
+
+Use `hb watch` only for local rebuild-and-run development.
+
+## Configuration And Secrets
+
+- Keep host, port, log level, database URL, migration behavior, and testing toggles in the Hummingbird configuration path.
+- Committed development defaults must be fake, local-only, and safe.
+- Do not commit real database passwords, tokens, private keys, `.env.*` files with secrets, or machine-local dependency paths.
+- Error and log messages must name the missing setting, the config source being read, and the likely local or deployment fix.
+
+## Persistence
+
+- Use Fluent models, migrations, and query APIs for normal database-backed behavior.
+- Register migrations explicitly and run them through the app's documented migration command.
+- Keep request/response DTOs separate from database models when the API shape and stored shape differ.
+- Do not run destructive migrations, database drops, volume deletion, or migration reverts without explicit approval.
+
+## Docker Compose
+
+- Compose is the local dependency surface, not automatically the production deployment model.
+- Keep the PostgreSQL service name, database name, user, password, port, and volume names obvious.
+- Do not bake secrets into images, build args, committed Compose files, or logs.
+
+## Handoffs
+
+- Use `server-side-swift:hummingbird-server-workflow` for routes, middleware, request contexts, service lifecycle, and Hummingbird tests.
+- Use `server-side-swift:persistence-workflow` for models, migrations, query design, transactions, and database-backed tests.
+- Use `server-side-swift:docker-workflow` for production Dockerfiles, image builds, registries, and container runtime validation.
