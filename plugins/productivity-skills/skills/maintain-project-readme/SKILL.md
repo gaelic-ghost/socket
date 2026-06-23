@@ -46,7 +46,7 @@ This skill is the primary layer for README maintenance. It defines the canonical
 
 ## Codex Subagent Fit
 
-When the user explicitly requests subagents, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, use them for read-heavy README discovery before the main workflow edits or reports. Good jobs include checking source docs, inventorying commands, inspecting sibling package metadata, or comparing README claims against one upstream source per worker.
+Use the shared trigger and sandbox policy in `docs/maintainers/codex-subagent-guidance.md`. This skill is a good fit for read-heavy README discovery before the main workflow edits or reports: checking source docs, inventorying commands, inspecting sibling package metadata, or comparing README claims against one upstream source per worker.
 
 Keep `apply` edits in the main thread because this skill has one target file and a hard-enforced schema. Ask subagents to return concise evidence and file references, not replacement README prose.
 

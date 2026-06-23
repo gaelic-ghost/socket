@@ -40,7 +40,7 @@ When content belongs in another file, report the mismatch instead of copying or 
 
 ## Codex Subagent Fit
 
-When the user explicitly requests subagents, `repo-docs-auditor`, review-packet planning, or asks to keep working while broad repo-doc discovery happens in parallel, use the `repo-docs-auditor` custom-agent role for bounded read-heavy discovery before this skill coordinates owner docs workflows. Good jobs include checking docs for stale commands, comparing roadmap claims against repo evidence, inventorying nested `AGENTS.md` overrides, and finding cross-document responsibility drift.
+Use the shared trigger and sandbox policy in `docs/maintainers/codex-subagent-guidance.md`. This skill is a good fit for `repo-docs-auditor`, review-packet planning, and broad repo-doc discovery before this skill coordinates owner docs workflows: checking docs for stale commands, comparing roadmap claims against repo evidence, inventorying nested `AGENTS.md` overrides, and finding cross-document responsibility drift.
 
 Keep `apply` edits in the main thread. The auditor may return proposed patch-set entries, but the main agent should review them with the user before saving, editing, or applying any documentation edits.
 

@@ -133,6 +133,9 @@ shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
 [[ -f "$shared_xcode_snippet" ]] || fail "Missing shared snippet: $shared_xcode_snippet"
 [[ -f "$shared_package_snippet" ]] || fail "Missing shared snippet: $shared_package_snippet"
 
+echo "Validating shared snippet sync..."
+bash .github/scripts/sync_shared_snippets.sh --check
+
 for skill_md in "${active_skill_mds[@]}"; do
   skill_dir="${skill_md%/SKILL.md}"
   [[ -f "$skill_dir/agents/openai.yaml" ]] || fail "Missing $skill_dir/agents/openai.yaml"

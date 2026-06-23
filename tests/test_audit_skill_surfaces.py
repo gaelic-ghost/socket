@@ -129,3 +129,45 @@ def test_markdown_report_includes_primary_sections(tmp_path: Path) -> None:
     assert "## Exact Duplicate References" in markdown
     assert "## Version-Sensitive Lines" in markdown
     assert "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md:3" in markdown
+
+
+def test_main_writes_markdown_report_to_output_path(tmp_path: Path) -> None:
+    repo_root = make_repo(tmp_path / "repo")
+    output_path = Path("docs/agents/skill-surface-audit.md")
+
+    exit_code = audit_skill_surfaces.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--top",
+            "1",
+            "--output",
+            str(output_path),
+        ]
+    )
+
+    rendered = (repo_root / output_path).read_text(encoding="utf-8")
+    assert exit_code == 0
+    assert rendered.startswith("# Socket Skill Surface Audit")
+    assert "## Missing Expected Handoffs" in rendered
+
+
+def test_main_writes_json_report_to_output_path(tmp_path: Path) -> None:
+    repo_root = make_repo(tmp_path / "repo")
+    output_path = tmp_path / "audit.json"
+
+    exit_code = audit_skill_surfaces.main(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--format",
+            "json",
+            "--output",
+            str(output_path),
+        ]
+    )
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert exit_code == 0
+    assert payload["skill_count"] == 3
+    assert payload["reference_count"] == 2

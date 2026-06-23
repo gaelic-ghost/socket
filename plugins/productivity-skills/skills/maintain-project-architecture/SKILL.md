@@ -71,7 +71,7 @@ When the user asks for a new slice explanation, use `explain-code-slice` for the
 
 ## Codex Subagent Fit
 
-When the user explicitly requests subagents, or applicable workflow guidance tells the agent to ask and the user grants explicit permission, use them for read-heavy discovery. Good jobs include scanning package manifests, listing products and targets, finding entrypoints, or tracing one candidate slice. Keep writes to `ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` in the main thread so the architecture story stays coherent.
+Use the shared trigger and sandbox policy in `docs/maintainers/codex-subagent-guidance.md`. This skill is a good fit for read-heavy discovery: scanning package manifests, listing products and targets, finding entrypoints, or tracing one candidate slice. Keep writes to `ARCHITECTURE.md`, `SLICES.md`, and `architecture.json` in the main thread so the architecture story stays coherent.
 
 ## Output Contract
 

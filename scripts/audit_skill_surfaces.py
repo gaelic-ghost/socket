@@ -363,6 +363,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repo-root", type=Path, default=REPO_ROOT, help="Socket repository root to audit.")
     parser.add_argument("--top", type=int, default=10, help="Number of largest skills and references to show.")
     parser.add_argument(
+        "--output",
+        type=Path,
+        help="Optional path for writing the rendered report. Parent directories are created automatically.",
+    )
+    parser.add_argument(
         "--format",
         choices=("markdown", "json"),
         default="markdown",
@@ -376,9 +381,17 @@ def main(argv: list[str] | None = None) -> int:
     output_format: Literal["markdown", "json"] = args.format
     report = build_report(args.repo_root.resolve(), top=args.top)
     if output_format == "json":
-        print(json.dumps(report_to_json(report), indent=2, sort_keys=True))
+        rendered = json.dumps(report_to_json(report), indent=2, sort_keys=True) + "\n"
     else:
-        print(render_markdown(report), end="")
+        rendered = render_markdown(report)
+    if args.output:
+        output_path = args.output
+        if not output_path.is_absolute():
+            output_path = args.repo_root.resolve() / output_path
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(rendered, encoding="utf-8")
+    else:
+        print(rendered, end="")
     return 0
 
 

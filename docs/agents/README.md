@@ -18,3 +18,18 @@ Guidelines:
 - Link to repo-relative files instead of machine-local absolute paths.
 - Remove or archive stale reports once their durable conclusions move into the
   owning docs.
+
+## Check-Only Skill Surface Audit
+
+Use the root skill-surface audit when a maintainer or Codex automation needs a
+fresh token-efficiency and drift snapshot without editing skills:
+
+```bash
+uv run scripts/audit_skill_surfaces.py \
+  --top 10 \
+  --output docs/agents/skill-surface-audit.md
+```
+
+Treat the generated report as review material. Move durable conclusions into the
+owning roadmap, maintainer docs, validation scripts, or skill sources before
+considering the report resolved.
