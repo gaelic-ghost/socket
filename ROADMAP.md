@@ -152,7 +152,7 @@ In Progress
 - [x] Add a Socket-hosted `server-side-swift` child plugin that owns server-side Swift workflow guidance separately from `apple-dev-skills`.
 - [x] Keep the plugin as a guidance surface rather than a bundled runtime: do not add local daemons, template feeds, deployment services, or MCP servers until a later plan explicitly calls for that scope.
 - [x] Keep Apple-platform app, simulator, preview, and Xcode project workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftPM-first service work.
-- [ ] Expand the plugin beyond the first Vapor workflow into a small family of framework, protocol, runtime, observability, and deployment-adjacent server-side Swift skills.
+- [x] Expand the plugin beyond the first Vapor workflow into a small family of framework, protocol, runtime, observability, and deployment-adjacent server-side Swift skills.
 
 ### Tickets
 
@@ -163,22 +163,23 @@ In Progress
 - [x] Add `server-side-swift:persistence-workflow` for server-side Swift persistence, including Fluent models, database migrations, query design, Hummingbird database handoffs, tests, and docs routing through official docs, GitHub sources, or checked Dash docsets.
 - [x] Add an OpenAPI workflow for generating, serving, validating, or consuming OpenAPI descriptions in server-side Swift services without tying the skill to one web framework by default.
 - [x] Add an RPC workflow for Swift service boundaries that may use JSON-RPC, gRPC, MCP-like transports, or framework-specific client/server contracts, with explicit guidance for when plain HTTP routes are the simpler fit.
-- [ ] Add a SwiftNIO workflow for lower-level event-loop, channel, bootstrap, byte-buffer, back-pressure, and nonblocking-I/O work when a service needs NIO directly instead of a higher-level framework.
-- [ ] Add Swift observability and tracing guidance that covers Swift Logging, Metrics, Distributed Tracing, and OpenTelemetry-style instrumentation for service diagnostics.
-- [ ] Add a server authentication and authorization workflow covering Vapor and Hummingbird auth boundaries, sessions, JWT, OAuth/OIDC handoffs, password storage, middleware placement, and security-sensitive testing without duplicating client Keychain guidance.
-- [ ] Add a server app-sync workflow covering sync contracts, conflict handling, incremental change feeds, idempotent writes, cursor/token semantics, background job handoffs, and API-shape coordination without absorbing the separate OpenAPI or RPC workflow.
+- [x] Add a SwiftNIO workflow for lower-level event-loop, channel, bootstrap, byte-buffer, back-pressure, and nonblocking-I/O work when a service needs NIO directly instead of a higher-level framework.
+- [x] Add Swift observability and tracing guidance that covers Swift Logging, Metrics, Distributed Tracing, and OpenTelemetry-style instrumentation for service diagnostics.
+- [x] Add a server authentication and authorization workflow covering Vapor and Hummingbird auth boundaries, sessions, JWT, OAuth/OIDC handoffs, password storage, middleware placement, and security-sensitive testing without duplicating client Keychain guidance.
+- [x] Add a server app-sync workflow covering sync contracts, conflict handling, incremental change feeds, idempotent writes, cursor/token semantics, background job handoffs, and API-shape coordination without absorbing the separate OpenAPI or RPC workflow.
 - [x] Add a Docker workflow for server-side Swift packages, including Dockerfile shape, Compose-local development, Linux image concerns, environment configuration, and build/test handoffs.
 - [x] Add an Apple Containerization workflow for Apple's container tooling, keeping it distinct from generic Docker guidance and tied to current official Apple documentation.
+- [x] Add a Fly.io deployment workflow for Vapor and Hummingbird services, including Dockerfile handoffs, `fly.toml`, secrets, health checks, Postgres attachment, process groups, and deploy validation.
 - [x] Update Hummingbird guidance to prefer the official `hb` CLI for fresh apps, and record a Vapor 5 alpha adoption posture that keeps Vapor 4 as the stable default until Vapor 5 is stable.
 - [x] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `server-side-swift` as an installable child plugin with metadata that matches its shipped skill inventory.
-- [ ] The plugin gives agents clear framework-specific paths for Vapor, Hummingbird, and persistence work without duplicating generic SwiftPM or Apple-platform workflow guidance.
-- [ ] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] The Socket marketplace exposes `server-side-swift` as an installable child plugin with metadata that matches its shipped skill inventory.
+- [x] The plugin gives agents clear framework-specific paths for Vapor, Hummingbird, and persistence work without duplicating generic SwiftPM or Apple-platform workflow guidance.
+- [x] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 9: Rust skills plugin
 

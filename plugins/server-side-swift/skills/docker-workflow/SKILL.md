@@ -41,6 +41,8 @@ Use current official docs before claiming Docker behavior:
 
 Use Vapor, Hummingbird, SwiftPM, or Linux distribution documentation when the container work depends on framework commands, package targets, runtime libraries, or OS packages.
 
+Use Fly.io documentation and `fly-io-deployment-workflow` when Docker image work is being prepared for Fly-specific `fly.toml`, `fly launch`, `fly deploy`, Fly secrets, Fly process groups, Fly health checks, or Fly Postgres attachment.
+
 ## Planning Workflow
 
 1. Inspect project shape:

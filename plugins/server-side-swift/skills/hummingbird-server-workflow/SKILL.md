@@ -199,11 +199,14 @@ When no target exists, distinguish:
 - local development run
 - Docker image or Compose workflow
 - Apple Containerization workflow
+- Fly.io deployment
 - Linux process manager or system service
 - hosted platform deployment
 - database migration or background service timing
 
 Do not add Docker, CI, process-manager, cloud deployment, or Apple Containerization files as part of a route or local development change unless the user asked for deployment scope.
+
+Use `fly-io-deployment-workflow` when the task involves `fly.toml`, `fly launch`, `fly deploy`, Fly secrets, Fly health checks, Fly process groups, Fly Postgres attachment, or production port binding for a Hummingbird service. Keep Hummingbird router, middleware, request context, application lifecycle, command-line options, and framework tests here; hand Fly-specific config and deploy validation to the Fly workflow.
 
 ## Output Shape
 

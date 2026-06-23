@@ -39,6 +39,7 @@ Use official Vapor documentation first:
 - [Vapor commands](https://docs.vapor.codes/advanced/commands/)
 - [Vapor environment](https://docs.vapor.codes/basics/environment/)
 - [Vapor Fluent migrations](https://docs.vapor.codes/fluent/migration/)
+- [Vapor Fly deployment](https://docs.vapor.codes/deploy/fly/)
 - [Vapor GitHub organization](https://github.com/vapor)
 - [Vapor repository](https://github.com/vapor/vapor)
 - [Vapor 5 Alpha 1 release](https://github.com/vapor/vapor/releases/tag/5.0.0-alpha.1)
@@ -206,11 +207,14 @@ When no target exists, distinguish:
 
 - local development run
 - Docker image or Compose workflow
+- Fly.io deployment
 - Linux process manager or system service
 - hosted platform deployment
 - database migration timing
 
 Do not add Docker, CI, process-manager, or cloud deployment files as part of a route or local development change unless the user asked for deployment scope.
+
+Use `fly-io-deployment-workflow` when the task involves `fly.toml`, `fly launch`, `fly deploy`, Fly secrets, Fly Postgres attachment, Fly health checks, Fly process groups, or production port binding for a Vapor service. Keep Vapor route, command, environment, server binding, and Fluent migration behavior here; hand Fly-specific config and deploy validation to the Fly workflow.
 
 ## Output Shape
 
