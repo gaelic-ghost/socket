@@ -473,6 +473,7 @@ Planned
 
 - [x] Record the first source-linked platform comparison in [`docs/maintainers/agent-portability-options.md`](./docs/maintainers/agent-portability-options.md).
 - [x] Focus the first implementation pass on locally installed Xcode 27 beta and OpenCode CLI/Desktop, with Zed deferred until the first source-of-truth and export decisions are proven.
+- [x] Record the detailed Xcode install-support plan in [`docs/maintainers/xcode-plugin-install-support-plan.md`](./docs/maintainers/xcode-plugin-install-support-plan.md).
 - [ ] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
 - [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
 - [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
@@ -486,6 +487,9 @@ Planned
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
 - [ ] Evaluate Xcode 27 beta adapters using `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer`, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23.
 - [ ] Add a Socket-to-Xcode install support assessment that classifies each child plugin across Xcode-launched Codex, Xcode internal plug-ins, and external agents using Xcode MCP.
+- [ ] Add disposable Xcode import fixture generation for skill-only, skill-plus-MCP, and hook-recognition probes.
+- [ ] Capture a public Socket Git URL import matrix from Xcode Beta before claiming user-facing Xcode install support.
+- [ ] Runtime-validate representative Xcode imports before claiming hooks, MCP servers, app config, or custom-agent behavior works inside Xcode.
 - [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy after the Xcode and OpenCode first pass.
 - [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
 

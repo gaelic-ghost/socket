@@ -87,6 +87,7 @@ Sources:
 
 - [Extending and customizing agents](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)
 - [Xcode 27 agentic tooling skill plan](./xcode-27-agentic-tooling-plan.md)
+- [Xcode plug-in install support plan](./xcode-plugin-install-support-plan.md)
 
 ### Claude Code
 
