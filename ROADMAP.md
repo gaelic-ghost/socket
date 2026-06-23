@@ -451,7 +451,7 @@ In Progress
 - [ ] Keep `server-side-jvm:build-clojure-service` as a future candidate until the Java and Scala foundations are stable.
 - [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
@@ -459,7 +459,7 @@ In Progress
 - [x] The new skills can help an agent choose a JVM backend shape before implementation.
 - [x] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
 - [x] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Small Tickets
 
