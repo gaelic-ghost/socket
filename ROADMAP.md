@@ -485,6 +485,7 @@ Planned
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
 - [ ] Evaluate Xcode 27 beta adapters using `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer`, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in package import only after the package shape is verified locally. Initial live beta MCP bridge and skill export evidence was captured on 2026-06-23.
+- [ ] Add a Socket-to-Xcode install support assessment that classifies each child plugin across Xcode-launched Codex, Xcode internal plug-ins, and external agents using Xcode MCP.
 - [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy after the Xcode and OpenCode first pass.
 - [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
 

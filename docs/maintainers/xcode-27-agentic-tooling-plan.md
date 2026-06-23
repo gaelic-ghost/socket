@@ -329,6 +329,9 @@ uv run pytest
 
 - Add `xcode-agent-plugin-workflow` only after live Xcode 27 beta inspection confirms enough import/package details to make the skill useful.
 - If the live import surface is too vague, keep this as a roadmap item and do not ship speculative instructions.
+- Use a harmless fixture before trying to package Socket itself. The fixture should contain one skill and one inert MCP server declaration if the import UI accepts that shape.
+- Record whether Xcode accepts a Git URL, local file, archive, or manifest URL, and whether it writes Codex, Gemini, or Xcode-native configuration.
+- Do not treat local Xcode binary strings as a public schema. They are useful probe hints only.
 
 ### Slice 6: Xcode-Visible Skill Comparison
 
@@ -336,11 +339,23 @@ uv run pytest
 - Decide whether any Xcode 27 beta guidance should be copied into Socket-authored references, summarized with Apple source links, or left as Xcode-owned built-in expertise.
 - Keep Socket's authored skills independent from the local export directory unless a later task explicitly approves an import path.
 
+### Slice 7: Socket-To-Xcode Install Assessment
+
+- Inventory Socket child plugins by component type: skills, MCP servers, hooks, apps, and `agents/openai.yaml`.
+- For each plugin, classify support for:
+  - Xcode-launched Codex through `~/Library/Developer/Xcode/CodingAssistant/codex`
+  - Xcode internal agents through the Xcode Plug-ins UI
+  - external agents using `xcrun mcpbridge`
+- Treat skill-only plugins as likely first candidates for Xcode internal-agent support.
+- Treat local MCP plugins as requiring path, dependency, authentication, and permission handling before they can be full-fidelity Xcode plug-ins.
+- Treat Codex hooks, Codex apps, and OpenAI custom-agent metadata as non-portable until Xcode exposes matching component contracts.
+
 ## Open Questions
 
 - Does Xcode 27 beta expose enough plug-in package structure to support a real Socket-authored Xcode plug-in?
 - Can one authored skill surface be packaged for both Codex and Xcode, or does Xcode require a separate distribution artifact?
 - Should Xcode-launched Codex config sync remain entirely in `codex-utilities`, with Apple Dev Skills only describing the Xcode side?
+- Should Socket ship a dedicated Xcode plug-in artifact per child plugin, a generated aggregate Xcode manifest, or only a dry-run/apply adapter for Xcode-launched Codex until Apple's plug-in schema is public?
 - Which Apple Dev Skills workflow should own UIKit guidance if UIKit-specific beta changes keep accumulating?
 - Should beta-support notes live directly in skills, in per-skill references, or in one beta compatibility reference that skills link to?
 

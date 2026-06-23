@@ -52,6 +52,12 @@ Apple documents Xcode agent customization through Xcode Intelligence settings, X
 
 Apple also documents an Xcode plug-in UI that can install plug-ins containing subagents, MCP servers, and skills, but the public page does not expose enough package-format detail to author a Socket-to-Xcode plugin adapter yet.
 
+Xcode support needs three different answers:
+
+- Xcode-launched Codex: likely supportable first. Xcode gives Codex its own home under `~/Library/Developer/Xcode/CodingAssistant/codex`, and local inspection found a Codex plugin cache, `skills/`, `rules/`, and `config.toml` there. Socket should treat this as a separate Codex install target with its own preview/apply flow, not as normal `~/.codex`.
+- Xcode internal agents through Xcode plug-ins: not ready to promise until the plug-in package format is verified. Apple's docs say Xcode plug-ins can contain subagents, MCP servers, and skills, but the public article only documents the UI flow, not a manifest schema. Local binary strings in Xcode 27 beta expose names such as `MarketplaceManifest`, `ExternalPluginJSON`, `CodexPluginWriter`, `GeminiPluginWriter`, `InlineMCPServer`, `PluginFormat`, `ImportSource`, and `Git URL`; treat those as evidence for the next probe, not as a public contract.
+- External agents controlling Xcode: already have a documented integration path through `xcrun mcpbridge`. External agents usually need Socket installed in their own host plus Xcode's external-agent MCP toggle and an open project in Xcode. They do not need a Socket Xcode plug-in merely to control Xcode.
+
 Local validation target:
 
 - Use `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` for Xcode 27 beta checks until the active command-line developer directory is intentionally changed.
@@ -66,6 +72,8 @@ Practical Socket implication:
 - Keep Xcode-specific workflow guidance in `apple-dev-skills`, especially `xcode-coding-intelligence-workflow`.
 - Treat Xcode-exported skills as comparison evidence unless a later task deliberately imports or adapts them into Socket-authored skill roots.
 - Prefer a read-only local probe first: inspect Xcode's CodingAssistant folders, Xcode MCP bridge behavior, and any plug-in import artifacts before writing config.
+- Add a Socket-to-Xcode install assessment before adding a writer. The assessment should classify each Socket child plugin as skill-only, MCP-backed, app-backed, hook-backed, or custom-agent-backed, then report which parts can work in Xcode-launched Codex, Xcode internal agents, and external agents.
+- Treat Codex hooks, Codex apps, and `agents/openai.yaml` as non-portable by default until Xcode exposes a matching component contract. Skills are the most portable component; MCP servers are potentially portable but need install-path, dependency, auth, and permission handling.
 
 Sources:
 
@@ -209,7 +217,16 @@ Practical Socket implication:
 - [x] Open the beta Xcode app and target the live process through `MCP_XCODE_PID`.
 - [x] Inspect Xcode `run-agent --dry-run codex` and skill export behavior without mutating user state.
 - Inspect Xcode CodingAssistant config folders in more detail before writing any Xcode-launched Codex config.
+- Probe Xcode's Plug-ins import UI with a harmless fixture before adding a Socket export or package adapter.
 - Record the concrete Xcode plug-in import/package evidence before adding a Socket export or package adapter.
+
+### Slice 3A: Xcode Install Support Assessment
+
+- Add a dry-run report for Xcode support that inventories every Socket child plugin and classifies its skills, MCP servers, hooks, apps, and custom-agent metadata.
+- For each child plugin, report support separately for Xcode-launched Codex, Xcode internal agents through plug-ins, and external agents using Xcode MCP.
+- Mark skill-only payloads as likely-first candidates for Xcode internal agents once package shape is known.
+- Mark local MCP payloads as requiring install-path and dependency handling before Xcode internal-agent support.
+- Mark hooks and Codex apps as Codex-specific unless Xcode exposes equivalent component types.
 
 ### Slice 4: Host Config Adapters
 
