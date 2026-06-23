@@ -15,6 +15,8 @@
 - [Milestone 12: Xcode 27 agentic tooling workflows](#milestone-12-xcode-27-agentic-tooling-workflows)
 - [Milestone 13: Reverse Engineering skills plugin](#milestone-13-reverse-engineering-skills-plugin)
 - [Milestone 14: Core AI and Foundation Models workflow ownership](#milestone-14-core-ai-and-foundation-models-workflow-ownership)
+- [Milestone 15: Android Dev Skills plugin](#milestone-15-android-dev-skills-plugin)
+- [Milestone 16: Server-Side JVM skills plugin](#milestone-16-server-side-jvm-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -42,6 +44,8 @@
 - Milestone 12: Xcode 27 agentic tooling workflows - Planned
 - Milestone 13: Reverse Engineering skills plugin - In Progress
 - Milestone 14: Core AI and Foundation Models workflow ownership - Planned
+- Milestone 15: Android Dev Skills plugin - Planned
+- Milestone 16: Server-Side JVM skills plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -384,6 +388,79 @@ Planned
 - [ ] Socket has a clear skill/plugin ownership decision for Foundation Models, Private Cloud Compute, Core AI, MLX, Core ML, and adjacent Apple Intelligence surfaces.
 - [ ] Any shipped skill distinguishes stable, beta, and exploratory/open-source claims and links to official Apple docs or Apple-owned source.
 
+## Milestone 15: Android Dev Skills plugin
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin.
+- [ ] Keep Android guidance Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
+- [ ] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
+- [ ] Keep Android app and platform guidance separate from server-side JVM backend and shared non-Android JVM library guidance.
+
+### Tickets
+
+- [x] Keep `plugins/android-dev-skills/` as a placeholder with `.codex-plugin/plugin.json` and `AGENTS.md`.
+- [x] Keep the root Socket marketplace entry as `NOT_AVAILABLE` while it is a placeholder.
+- [x] Record the detailed plan in [`docs/maintainers/android-dev-skills-plugin-plan.md`](./docs/maintainers/android-dev-skills-plugin-plan.md).
+- [ ] Add `android-dev:choose-project-shape` for Android app, library, multi-module, Kotlin, Java, Compose, XML view, test, lint, signing, release, and dependency-maintenance routing.
+- [ ] Add `android-dev:gradle-agp-workflow` for Gradle wrapper, Android Gradle Plugin, Kotlin plugin, Java toolchain, SDK, variants, flavors, signing config, namespace, dependency, and targeted task alignment.
+- [ ] Add `android-dev:build-kotlin-android` for Kotlin-first Android implementation, Compose or XML boundaries, coroutines, lifecycle-aware work, AndroidX, state, persistence, and validation.
+- [ ] Add `android-dev:java-android-workflow` for Java-only Android maintenance and Kotlin/Java interop boundaries.
+- [ ] Add `android-dev:testing-lint-workflow` for local unit tests, instrumentation and Compose UI test handoffs, lint configuration, targeted Gradle tasks, and emulator-aware validation handoffs.
+- [ ] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
+- [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
+- [ ] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [ ] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
+- [ ] The new skills can help an agent choose an Android project shape before implementation.
+- [ ] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
+- [ ] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
+## Milestone 16: Server-Side JVM skills plugin
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Turn the placeholder `server-side-jvm` child plugin into an installable JVM backend guidance plugin.
+- [x] Treat Java and Scala as equal first-party JVM language choices, with future Clojure support planned without renaming the plugin.
+- [x] Prefer functional style where it fits the selected language and framework, especially for Scala and future Clojure guidance.
+- [x] Keep server-side JVM backend and shared non-Android JVM library guidance separate from Android app and platform guidance.
+
+### Tickets
+
+- [x] Create `plugins/server-side-jvm/` with `.codex-plugin/plugin.json` and `AGENTS.md`.
+- [x] Wire `server-side-jvm` into the root Socket marketplace as `NOT_AVAILABLE` while it is a placeholder.
+- [x] Record the detailed plan in [`docs/maintainers/server-side-jvm-skills-plugin-plan.md`](./docs/maintainers/server-side-jvm-skills-plugin-plan.md).
+- [x] Add `server-side-jvm:choose-service-shape` for Java, Scala, future Clojure, shared JVM libraries, Gradle, Maven, SBT, framework, package, CI, deployment, and diagnostics routing.
+- [x] Add `server-side-jvm:build-tooling-workflow` for Gradle, Maven, SBT, Java toolchains, dependencies, multi-module boundaries, test, package, and local run commands.
+- [x] Add `server-side-jvm:build-java-service` for idiomatic Java backend implementation.
+- [x] Add `server-side-jvm:build-scala-service` for idiomatic Scala backend implementation with functional design treated as first-class.
+- [x] Add `server-side-jvm:testing-workflow` for Gradle, Maven, SBT, JUnit, ScalaTest, MUnit, unit, integration, contract, service-level tests, and readable failure summaries.
+- [ ] Add package/runtime, persistence, observability, CI, and upgrade workflows after the first skill slice lands.
+- [ ] Keep `server-side-jvm:build-clojure-service` as a future candidate until the Java and Scala foundations are stable.
+- [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `server-side-jvm` as an installable child plugin after real skill content lands.
+- [x] The new skills can help an agent choose a JVM backend shape before implementation.
+- [x] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
+- [x] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -398,6 +475,7 @@ Planned
 - [x] Add `productivity-skills:maintain-github-repository` as the dedicated owner for GitHub repository settings audits and requested alignment, while keeping release and publish choreography in `maintain-project-repo`.
 - [x] GitHub #81: Strengthen `maintain-project-repo` release, publish, tag, protected-main, cleanup, and branch-accounting triggers while routing settings-only requests to `maintain-github-repository` ([#81](https://github.com/gaelic-ghost/socket/issues/81)).
 - [ ] Investigate `uv audit` as a Socket validation and release-evidence input. Decide whether the first adoption belongs in root validation, Python-backed child plugin validation, release evidence capture, or reusable Python project-maintenance guidance, and test the `--locked`, `--frozen`, JSON output, ignore, and OSV service options before making it a required gate.
+- [ ] Generalize Codex GUI local environment templates across stack plugins. Start from the root Socket `uv sync --dev` environment, preserve customized `.codex/environments/*.toml` files, keep setup scripts repo-relative, and let each stack plugin own templates for its common project shapes instead of installing global tool dependencies.
 - [ ] Investigate guidance consolidation opportunities that reduce repeated setup, routing, validation, and handoff text across skills while preserving the owner boundaries needed for accurate tool use and lower token load.
 - [ ] Investigate further standardization and automation for shared skill scaffolding, evidence capture, validation prompts, and generated references so common workflow knowledge is maintained once and reused with lower token load.
 

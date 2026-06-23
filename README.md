@@ -86,6 +86,7 @@ Current Socket catalog shape:
 - `productivity-skills`: general-purpose maintainer, documentation, Dice MCP job-search with bundled remote MCP config, Codex GUI worktree workflow, and automation-design workflows plus source-bundled docs-audit and code-tracing custom-agent definitions
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
 - `reverse-engineering-skills`: binary inspection, artifact triage, and reproducible reverse-engineering note workflows
+- `server-side-jvm`: server-side JVM, Java, Scala, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
 - `server-side-swift`: server-side Swift, Vapor, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io support plus the source-bundled `server-swift-steward` custom-agent definition
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository

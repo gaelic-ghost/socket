@@ -19,9 +19,11 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 ### android-dev-skills
 
 - [ ] Author the first real Android-focused skill tranche for Codex.
+- [x] Record the detailed first skill plan in [`docs/maintainers/android-dev-skills-plugin-plan.md`](./docs/maintainers/android-dev-skills-plugin-plan.md).
 - [ ] Start Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
 - [ ] Cover project-shape discovery, Gradle and Android Gradle Plugin alignment, build variants, dependency updates, unit tests, lint, emulator-aware validation handoffs, and release readiness.
 - [ ] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
+- [ ] Keep Android app/platform guidance separate from `server-side-jvm` backend and shared non-Android JVM library guidance.
 - [ ] Update docs and validation once the exported Android skill surface is real.
 - [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
 
@@ -83,6 +85,18 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [x] Add a persistence workflow for Fluent, database migrations, query design, Hummingbird database handoffs, and docs routing.
 - [ ] Add validation coverage for skill metadata and exported skill inventory once central Socket child-skill validation exists.
 - [ ] Decide whether future server-side Swift skills should cover SwiftNIO, deployment, authentication, app sync, or additional database workflows as separate skills.
+- [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
+
+### server-side-jvm
+
+- [x] Create the Socket-owned `server-side-jvm` placeholder plugin surface.
+- [x] Record the detailed first skill plan in [`docs/maintainers/server-side-jvm-skills-plugin-plan.md`](./docs/maintainers/server-side-jvm-skills-plugin-plan.md).
+- [x] Author the first real server-side JVM skill tranche for Codex.
+- [x] Treat Java and Scala as equal first-party JVM language choices, with future Clojure support planned without renaming the plugin.
+- [x] Prefer functional style where it fits the selected language and framework, especially for Scala and future Clojure guidance.
+- [ ] Cover package/runtime handoffs, persistence, observability, CI, and upgrades after the first project-shape, build-tooling, implementation, and testing slice.
+- [x] Keep Android app/platform guidance separate from `android-dev-skills`.
+- [x] Update docs and validation once the exported server-side JVM skill surface is real.
 - [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
 
 ### rust-skills

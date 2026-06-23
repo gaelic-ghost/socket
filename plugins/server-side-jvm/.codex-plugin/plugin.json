@@ -1,0 +1,51 @@
+{
+  "name": "server-side-jvm",
+  "version": "7.0.0",
+  "description": "Codex skills for choosing, building, testing, and maintaining server-side JVM backend projects with Java and Scala as equal first-party languages and future Clojure support planned.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-jvm",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "jvm",
+    "java",
+    "scala",
+    "clojure",
+    "gradle",
+    "maven",
+    "sbt",
+    "backend",
+    "server-side",
+    "functional-programming",
+    "codex",
+    "plugin",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Server-Side JVM",
+    "shortDescription": "Server-side JVM, Java, Scala, Gradle, Maven, SBT, and testing workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through choosing JVM backend project shapes, preserving Android boundaries, maintaining Gradle, Maven, and SBT build tooling, implementing idiomatic Java and Scala services, treating functional Scala design as first-class, running and triaging JVM tests, and leaving a clear path for future Clojure, persistence, observability, packaging, CI, and upgrade workflows.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-jvm",
+    "defaultPrompt": [
+      "Choose the right server-side JVM project shape before we start implementing.",
+      "Inspect this JVM repository and decide whether Gradle, Maven, or SBT owns the build workflow.",
+      "Build this Java service change idiomatically while respecting existing repo conventions.",
+      "Build this Scala service change with functional design treated as first-class.",
+      "Run and explain the JVM testing workflow for this service."
+    ],
+    "brandColor": "#7C3AED",
+    "composerIcon": "./assets/java-coffee-cup-icon.png",
+    "logo": "./assets/java-coffee-cup-icon.png"
+  }
+}
