@@ -48,13 +48,18 @@ Current documented anchors to verify against the live docs:
 
 Before a live workflow, inspect the Mac and report what is available:
 
-1. Locate Icon Composer. Common path:
+1. Locate Icon Composer. Common stable path:
    `/Applications/Xcode.app/Contents/Applications/Icon Composer.app`
-2. Verify the app is present before promising GUI guidance.
-3. Locate `ictool`. Common path:
+2. Check the beta Xcode app path as needed:
+   `/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Applications/Icon Composer.app`
+3. Verify the app is present before promising GUI guidance.
+4. Open Icon Composer when the task needs live GUI inspection, document editing, platform preview, or behavior that only the app can show. Do not report that Icon Composer behavior is unverifiable merely because the app was not already open.
+5. Locate `ictool`. Common stable path:
    `/Applications/Xcode.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool`
-4. Run `ictool --help` or `ictool --version` when preview export is part of the task.
-5. Identify the target app project shape before promising Xcode integration.
+6. Check the beta `ictool` path as needed:
+   `/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool`
+7. Run `ictool --help` or `ictool --version` when preview export is part of the task.
+8. Identify the target app project shape before promising Xcode integration.
 
 Do not assume Icon Composer exists just because Xcode exists. Older Xcode installs, alternate Xcode locations, or standalone Icon Composer installs can change the path.
 

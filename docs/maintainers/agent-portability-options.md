@@ -21,6 +21,7 @@ Start with Xcode 27 beta and OpenCode.
 Those are the two locally installed targets available for immediate smoke tests on Gale's machine:
 
 - Xcode 27 beta: `/Users/galew/Applications/Betas/Xcode-beta.app`, verified with `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcodebuild -version` as Xcode 27.0 build 27A5194q.
+- Xcode 27 beta live bridge: verified on 2026-06-23 with the beta app open and selected through `MCP_XCODE_PID`; `run-agent --dry-run codex` resolved the beta-scoped Codex runtime, and `run-agent skills export` produced seven Xcode-visible skills for inspection.
 - Active command-line Xcode: `/Applications/Xcode.app`, currently Xcode 26.5 build 17F42 through the default `xcodebuild -version`.
 - OpenCode CLI: `/opt/homebrew/bin/opencode`, verified as 1.17.9.
 - OpenCode Desktop: `/Applications/OpenCode.app`, present locally.
@@ -54,6 +55,8 @@ Apple also documents an Xcode plug-in UI that can install plug-ins containing su
 Local validation target:
 
 - Use `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` for Xcode 27 beta checks until the active command-line developer directory is intentionally changed.
+- Open `/Users/galew/Applications/Betas/Xcode-beta.app` for live beta UI, MCP, agent, and plug-in checks instead of treating a closed app as a blocker.
+- Use `MCP_XCODE_PID` when stable and beta Xcode processes could both exist or when the bridge must target the beta process explicitly.
 - Keep the default Xcode 26.5 path untouched unless a task explicitly needs `xcode-select` changes.
 
 Practical Socket implication:
@@ -61,6 +64,7 @@ Practical Socket implication:
 - Support Xcode Codex as a separate Codex target, not as a raw mirror of normal `~/.codex`.
 - Add an Xcode export plan only after the Xcode plug-in package shape is verified locally.
 - Keep Xcode-specific workflow guidance in `apple-dev-skills`, especially `xcode-coding-intelligence-workflow`.
+- Treat Xcode-exported skills as comparison evidence unless a later task deliberately imports or adapts them into Socket-authored skill roots.
 - Prefer a read-only local probe first: inspect Xcode's CodingAssistant folders, Xcode MCP bridge behavior, and any plug-in import artifacts before writing config.
 
 Sources:
@@ -201,8 +205,10 @@ Practical Socket implication:
 
 ### Slice 3: Xcode 27 Beta Probe And Adapter Plan
 
-- Probe the Xcode 27 beta target through explicit `DEVELOPER_DIR`.
-- Inspect Xcode CodingAssistant config folders and Xcode MCP bridge behavior without mutating user state.
+- [x] Probe the Xcode 27 beta target through explicit `DEVELOPER_DIR`.
+- [x] Open the beta Xcode app and target the live process through `MCP_XCODE_PID`.
+- [x] Inspect Xcode `run-agent --dry-run codex` and skill export behavior without mutating user state.
+- Inspect Xcode CodingAssistant config folders in more detail before writing any Xcode-launched Codex config.
 - Record the concrete Xcode plug-in import/package evidence before adding a Socket export or package adapter.
 
 ### Slice 4: Host Config Adapters

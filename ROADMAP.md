@@ -318,7 +318,7 @@ In Progress
 - [ ] Add `apple-dev-skills:xcode-agent-localization-workflow` for agent-assisted string catalog, translation, glossary, XLIFF, and human-review workflows.
 - [ ] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
 - [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.
-- [ ] Investigate the Xcode MCP surface against the current Xcode 27 beta, including `mcpbridge` command help, exported Xcode-visible skills, tool names, permission gates, session behavior, and differences from the last checked surface.
+- [ ] Investigate the Xcode MCP surface against the current Xcode 27 beta, including `mcpbridge` command help, exported Xcode-visible skills, tool names, permission gates, session behavior, and differences from the last checked surface. Live beta `run-agent --dry-run codex` and `skills export` behavior was verified on 2026-06-23; tool names, permission gates, project-session behavior, and plug-in import shape still need follow-up.
 - [ ] Keep `apple-dev-skills:xcode-agent-plugin-workflow` blocked until the live Xcode 27 beta plug-in import and package shape is verified.
 - [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
 - [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
@@ -472,7 +472,7 @@ Planned
 ### Scope
 
 - [x] Record the first source-linked platform comparison in [`docs/maintainers/agent-portability-options.md`](./docs/maintainers/agent-portability-options.md).
-- [ ] Focus the first implementation pass on locally installed Xcode 27 beta and OpenCode CLI/Desktop, with Zed deferred until the first source-of-truth and export decisions are proven.
+- [x] Focus the first implementation pass on locally installed Xcode 27 beta and OpenCode CLI/Desktop, with Zed deferred until the first source-of-truth and export decisions are proven.
 - [ ] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
 - [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
 - [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
@@ -484,7 +484,7 @@ Planned
 - [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
-- [ ] Evaluate Xcode 27 beta adapters using `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer`, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in package import only after the package shape is verified locally.
+- [ ] Evaluate Xcode 27 beta adapters using `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer`, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in package import only after the package shape is verified locally. Initial live beta MCP bridge and skill export evidence was captured on 2026-06-23.
 - [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy after the Xcode and OpenCode first pass.
 - [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
 
@@ -492,7 +492,7 @@ Planned
 
 - [ ] Socket can report which authored skills are portable without changing installed user state.
 - [ ] At least one OpenCode dry-run can show exactly what would be added, skipped, or transformed for a non-Codex host.
-- [ ] Xcode 27 beta support claims are backed by explicit beta-toolchain evidence rather than the default Xcode 26.5 command-line selection.
+- [x] Xcode 27 beta support claims are backed by explicit beta-toolchain evidence rather than the default Xcode 26.5 command-line selection.
 - [ ] Docs clearly distinguish common Agent Skills from Codex plugins, Claude Code plugins, OpenCode plugins, Xcode plug-ins, Zed extensions, and MCP servers.
 - [ ] No non-Codex support claim is user-facing unless it is backed by official docs, local smoke evidence, or both.
 

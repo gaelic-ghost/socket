@@ -50,6 +50,9 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
    - exploratory agent protocol or plug-in surface: do not ship implementation guidance until Apple's current docs and local Xcode inspection verify the package and permission shape
 4. Plan setup:
    - verify the target Xcode version and whether the relevant behavior is stable, beta, or local-only
+   - check whether the intended Xcode app is running and open it when needed for project context, MCP bridge connection, agent settings, or UI/plugin inspection
+   - for Gale's Xcode 27 beta checks, prefer `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` and open `/Users/galew/Applications/Betas/Xcode-beta.app` when the beta UI or live bridge state is required
+   - do not change global `xcode-select` unless the user explicitly asks for that system-wide switch
    - verify the project is open in Xcode before expecting Xcode MCP tools to work
    - verify external-agent access is enabled before configuring an external MCP client
    - use `xcrun mcpbridge` as the Xcode-provided STDIO bridge for external MCP clients
@@ -115,7 +118,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 - Do not mutate normal Codex config, Xcode-launched agent config, shell rc files, keychains, or provider credentials without explicit user intent.
 - Do not store provider API keys in repo files or app binaries.
 - Stop with `blocked` when no relevant Apple documentation or local Xcode evidence can be found for a requested setup claim.
-- Stop with `blocked` when the user asks for external-agent Xcode tool use but Xcode is not running, the project is not open, or external-agent access is disabled.
+- If Xcode is not running and the requested setup depends on a live Xcode session, open the intended stable or beta Xcode app and continue verification. Stop with `blocked` only when Xcode cannot be opened, the required project or workspace cannot be opened or identified, external-agent access is disabled and cannot be inspected, or the user has forbidden launching the app.
 
 ## Fallbacks and Handoffs
 

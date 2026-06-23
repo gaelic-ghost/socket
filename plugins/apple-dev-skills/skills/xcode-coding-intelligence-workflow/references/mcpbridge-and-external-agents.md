@@ -63,10 +63,12 @@ Before expecting Xcode tools to work through an external agent:
 - The requested tool permission must be allowed by Xcode and by the external client.
 - Skill export paths should target a temporary or explicitly requested output directory, not a source-controlled skill tree by default.
 
+Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. For Gale's Xcode 27 beta work, open `/Users/galew/Applications/Betas/Xcode-beta.app` and use `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` for matching command-line checks. Use stable `/Applications/Xcode.app` when the task targets stable Xcode. Ask first only when opening Xcode would be disruptive, would require signing in, would alter global developer-directory selection, or conflicts with a user-stated constraint.
+
 ## Failure Language
 
 Use concrete setup errors. Prefer messages like:
 
-- "Xcode MCP setup is blocked because no Xcode process is running. Open the target project in Xcode, then retry the MCP bridge."
+- "Xcode MCP setup needs a live Xcode session. I opened the target Xcode app and will retry the MCP bridge after the project is available."
 - "Xcode MCP setup is ambiguous because multiple Xcode processes are running. Set MCP_XCODE_PID to the intended Xcode process id before retrying."
 - "External-agent Xcode access is not ready because Xcode Intelligence settings have not allowed external agents."

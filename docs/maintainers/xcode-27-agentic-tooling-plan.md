@@ -41,6 +41,15 @@ Refresh checked on 2026-06-22:
 - [Get the most out of Device Hub](https://developer.apple.com/videos/play/wwdc2026/260/)
 - Local `xcodebuild -version` and `xcrun mcpbridge --help` output from Xcode 26.5 build 17F42.
 
+Live beta probe checked on 2026-06-23:
+
+- Xcode 27 beta was opened from `/Users/galew/Applications/Betas/Xcode-beta.app`.
+- `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent --dry-run codex` resolved Xcode's beta-scoped Codex executable and `CODEX_HOME`.
+- `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent skills export --output-dir /private/tmp/socket-xcode-skills-probe --replace-existing` exported seven Xcode-visible skills for inspection.
+- Exported skill names: `swiftui-whats-new-27`, `swiftui-specialist`, `c-bounds-safety`, `device-interaction`, `audit-xcode-security-settings`, `uikit-app-modernization`, and `test-modernizer`.
+
+Live-app setup note: do not treat "Xcode is not running" as a final blocker for Xcode Intelligence, MCP, or plug-in inspection work. Open the intended stable or beta Xcode app, select the intended process with `MCP_XCODE_PID` when needed, and retry the check before reporting a blocker.
+
 Refresh note: no current Apple page found in this pass made ACP the documented Xcode setup surface. Keep ACP claims unresolved unless live Xcode documentation proves them.
 
 Important current Xcode 27 signals:
@@ -52,6 +61,7 @@ Important current Xcode 27 signals:
 - Xcode-hosted agents can use built-in Xcode guidance and skills.
 - Xcode can assist with localization by adding languages, updating string catalogs, translating strings, and setting machine-translation state.
 - Device Hub is now the central Xcode surface for simulated and physical device interaction, environment inspection, pairing, screenshots, videos, and diagnostics.
+- Xcode 27 beta can provide a beta-scoped Codex runtime and export Xcode-visible skills through `xcrun mcpbridge run-agent` when the beta app is running and selected explicitly.
 
 ## Proposed Skill Surfaces
 
@@ -78,6 +88,7 @@ Scope:
 
 - Verify external-agent access is enabled before expecting MCP tools to work.
 - Require the relevant Xcode project to be open in Xcode before relying on Xcode MCP capabilities.
+- Open the intended stable or beta Xcode app before declaring live Xcode Intelligence or MCP setup blocked by missing app state.
 - Explain Xcode-only agent configuration homes:
 
   ```text
@@ -275,6 +286,8 @@ uv run scripts/validate_socket_metadata.py
 
 Completed on 2026-06-22 with the first practical setup and permission workflow. Xcode 27 claims are dated beta-era claims, and local `mcpbridge` behavior is recorded separately from Xcode 27 behavior because this authoring machine had Xcode 26.5 installed.
 
+Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app now has confirmed `run-agent --dry-run codex` and `run-agent skills export` evidence when selected through `DEVELOPER_DIR` plus `MCP_XCODE_PID`. Exported Xcode-visible skills remain inspection evidence, not Socket-authored source of truth.
+
 Validation:
 
 ```bash
@@ -316,6 +329,12 @@ uv run pytest
 
 - Add `xcode-agent-plugin-workflow` only after live Xcode 27 beta inspection confirms enough import/package details to make the skill useful.
 - If the live import surface is too vague, keep this as a roadmap item and do not ship speculative instructions.
+
+### Slice 6: Xcode-Visible Skill Comparison
+
+- Compare the exported Xcode-visible skills against existing Socket Apple Dev Skills.
+- Decide whether any Xcode 27 beta guidance should be copied into Socket-authored references, summarized with Apple source links, or left as Xcode-owned built-in expertise.
+- Keep Socket's authored skills independent from the local export directory unless a later task explicitly approves an import path.
 
 ## Open Questions
 
