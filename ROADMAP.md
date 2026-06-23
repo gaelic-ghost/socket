@@ -152,7 +152,7 @@ In Progress
 - [x] Add a Socket-hosted `server-side-swift` child plugin that owns server-side Swift workflow guidance separately from `apple-dev-skills`.
 - [x] Keep the plugin as a guidance surface rather than a bundled runtime: do not add local daemons, template feeds, deployment services, or MCP servers until a later plan explicitly calls for that scope.
 - [x] Keep Apple-platform app, simulator, preview, and Xcode project workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftPM-first service work.
-- [ ] Expand the plugin beyond the first Vapor workflow into a small family of framework, protocol, runtime, observability, and deployment-adjacent server-side Swift skills.
+- [x] Expand the plugin beyond the first Vapor workflow into a small family of framework, protocol, runtime, observability, and deployment-adjacent server-side Swift skills.
 
 ### Tickets
 
@@ -176,10 +176,10 @@ In Progress
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `server-side-swift` as an installable child plugin with metadata that matches its shipped skill inventory.
-- [ ] The plugin gives agents clear framework-specific paths for Vapor, Hummingbird, and persistence work without duplicating generic SwiftPM or Apple-platform workflow guidance.
-- [ ] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] The Socket marketplace exposes `server-side-swift` as an installable child plugin with metadata that matches its shipped skill inventory.
+- [x] The plugin gives agents clear framework-specific paths for Vapor, Hummingbird, and persistence work without duplicating generic SwiftPM or Apple-platform workflow guidance.
+- [x] Protocol, runtime, observability, tracing, Docker, and Apple Containerization guidance each has a clear owner skill or an explicit reason to stay backlog-only.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 9: Rust skills plugin
 
