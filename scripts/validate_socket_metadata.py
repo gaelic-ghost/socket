@@ -26,6 +26,7 @@ CUSTOM_AGENT_REVIEW_TERMS = ("draft", "review")
 REVIEW_PACKET_AGENT_NAME_PARTS = ("steward", "auditor", "triager")
 REVIEW_PACKET_AGENT_NAMES = {"skills-repo-guidance-sync"}
 REVIEW_PACKET_AGENT_REPORT_TERMS = ("review packet", "proposed patch set", "validation handoff")
+MCP_SERVER_TRANSPORT_FIELDS = ("command", "url")
 
 
 def fail(message: str) -> NoReturn:
@@ -212,6 +213,65 @@ def manifest_exports_content(*, plugin_root: Path, plugin_manifest: dict[str, ob
             return True
 
     return False
+
+
+def validate_mcp_server_entry(*, plugin_name: str, server_name: str, server_config: object) -> None:
+    if not isinstance(server_config, dict):
+        fail(
+            f"MCP server `{server_name}` for `{plugin_name}` must be a JSON object, "
+            f"but found `{server_config}`."
+        )
+
+    transport_fields = [field for field in MCP_SERVER_TRANSPORT_FIELDS if field in server_config]
+    if len(transport_fields) != 1:
+        allowed = " or ".join(MCP_SERVER_TRANSPORT_FIELDS)
+        fail(
+            f"MCP server `{server_name}` for `{plugin_name}` must define exactly one "
+            f"transport field, {allowed}."
+        )
+
+    for field_name in transport_fields:
+        field_value = server_config[field_name]
+        if not isinstance(field_value, str) or not field_value:
+            fail(
+                f"MCP server `{server_name}` for `{plugin_name}` has an invalid "
+                f"`{field_name}` value: {field_value}."
+            )
+
+
+def validate_mcp_config(*, plugin_name: str, mcp_config_path: Path, mcp_config: object) -> None:
+    if not isinstance(mcp_config, dict):
+        fail(
+            f"MCP server configuration for `{plugin_name}` must decode to a JSON object: "
+            f"{mcp_config_path.relative_to(REPO_ROOT)}"
+        )
+
+    if "mcpServers" in mcp_config:
+        servers = mcp_config["mcpServers"]
+        if not isinstance(servers, dict) or not servers:
+            fail(
+                f"MCP server configuration for `{plugin_name}` must define a non-empty "
+                f"`mcpServers` object: {mcp_config_path.relative_to(REPO_ROOT)}"
+            )
+    else:
+        servers = mcp_config
+        if not servers:
+            fail(
+                f"MCP server configuration for `{plugin_name}` must define at least one "
+                f"server: {mcp_config_path.relative_to(REPO_ROOT)}"
+            )
+
+    for server_name, server_config in servers.items():
+        if not isinstance(server_name, str) or not server_name:
+            fail(
+                f"MCP server configuration for `{plugin_name}` has an invalid server "
+                f"name: {server_name}."
+            )
+        validate_mcp_server_entry(
+            plugin_name=plugin_name,
+            server_name=server_name,
+            server_config=server_config,
+        )
 
 
 def validate_plugin_interface_assets(
@@ -458,11 +518,7 @@ def validate_local_plugin_entry(
             expected_kind="file",
         )
         mcp_config = load_json(mcp_config_path)
-        if not isinstance(mcp_config, dict):
-            fail(
-                f"MCP server configuration for `{name}` must decode to a JSON object: "
-                f"{mcp_config_path.relative_to(REPO_ROOT)}"
-            )
+        validate_mcp_config(plugin_name=name, mcp_config_path=mcp_config_path, mcp_config=mcp_config)
 
 
 def validate_plugin_entry(entry: object, seen_names: set[str]) -> None:

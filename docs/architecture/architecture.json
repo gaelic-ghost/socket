@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-05-15T15:49:48.243930+00:00",
+  "detectedAt": "2026-06-23T14:18:33.093328+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -13,6 +13,14 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/agent-plugin-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/android-dev-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/appkit-app-architecture-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -40,11 +48,19 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/icon-composer-app-icon-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swift-openapi-client-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -80,6 +96,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/xcode-testing-workflow/SKILL.md"
     },
     {
@@ -101,6 +121,10 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/cardhop-app/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/codex-utilities/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -156,7 +180,27 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -180,6 +224,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
     },
     {
@@ -189,6 +237,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+    },
+    {
+      "kind": "mcp-config",
+      "path": "plugins/productivity-skills/.mcp.json"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -247,8 +299,80 @@
       "path": "plugins/python-skills/.codex-plugin/plugin.json"
     },
     {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/reverse-engineering-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/bootstrap-cargo-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/build-cli-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/build-library-crate/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/choose-project-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/ci-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/package-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/testing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/rust-skills/skills/tooling-style-workflow/SKILL.md"
+    },
+    {
       "kind": "codex-plugin-manifest",
       "path": "plugins/rust-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/docker-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/server-side-swift/.codex-plugin/plugin.json"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -299,6 +423,10 @@
       "path": "plugins/things-app/.codex-plugin/plugin.json"
     },
     {
+      "kind": "skill-manifest",
+      "path": "plugins/web-dev-skills/skills/expo-inline-native-modules-workflow/SKILL.md"
+    },
+    {
       "kind": "codex-plugin-manifest",
       "path": "plugins/web-dev-skills/.codex-plugin/plugin.json"
     },
@@ -322,6 +450,18 @@
       "targets": [
         "skills:plugins/agent-plugin-skills/skills"
       ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/android-dev-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "android-dev-skills",
+      "path": "plugins/android-dev-skills",
+      "targets": []
     },
     {
       "evidence": [
@@ -357,6 +497,18 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/codex-utilities/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "codex-utilities",
+      "path": "plugins/codex-utilities",
+      "targets": []
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/dotnet-skills/.codex-plugin/plugin.json"
         }
       ],
@@ -378,7 +530,8 @@
       "name": "productivity-skills",
       "path": "plugins/productivity-skills",
       "targets": [
-        "skills:plugins/productivity-skills/skills"
+        "skills:plugins/productivity-skills/skills",
+        "mcp:plugins/productivity-skills/.mcp.json"
       ]
     },
     {
@@ -399,13 +552,43 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/reverse-engineering-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "reverse-engineering-skills",
+      "path": "plugins/reverse-engineering-skills",
+      "targets": [
+        "skills:plugins/reverse-engineering-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/rust-skills/.codex-plugin/plugin.json"
         }
       ],
       "kind": "codex-plugin",
       "name": "rust-skills",
       "path": "plugins/rust-skills",
-      "targets": []
+      "targets": [
+        "skills:plugins/rust-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/server-side-swift/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "server-side-swift",
+      "path": "plugins/server-side-swift",
+      "targets": [
+        "skills:plugins/server-side-swift/skills"
+      ]
     },
     {
       "evidence": [
@@ -458,7 +641,9 @@
       "kind": "codex-plugin",
       "name": "web-dev-skills",
       "path": "plugins/web-dev-skills",
-      "targets": []
+      "targets": [
+        "skills:plugins/web-dev-skills/skills"
+      ]
     },
     {
       "evidence": [
@@ -472,17 +657,21 @@
       "path": ".agents/plugins/marketplace.json",
       "targets": [
         "agent-plugin-skills",
+        "android-dev-skills",
         "apple-dev-skills",
-        "swiftasb-skills",
+        "cardhop-app",
         "dotnet-skills",
         "productivity-skills",
-        "speak-swiftly",
         "python-skills",
+        "server-side-swift",
         "rust-skills",
-        "cardhop-app",
+        "speak-swiftly",
+        "swiftasb-skills",
         "things-app",
         "spotify",
-        "web-dev-skills"
+        "web-dev-skills",
+        "reverse-engineering-skills",
+        "codex-utilities"
       ]
     },
     {
@@ -523,6 +712,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:agent-plugin-skills/sync-skills-repo-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/appkit-app-architecture-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/appkit-app-architecture-workflow"
     },
     {
       "evidence": [
@@ -600,6 +801,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/icon-composer-app-icon-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/icon-composer-app-icon-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
         }
       ],
@@ -619,6 +832,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/structure-swift-sources"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swift-openapi-client-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swift-openapi-client-workflow"
     },
     {
       "evidence": [
@@ -715,6 +940,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/xcode-build-run-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-coding-intelligence-workflow"
     },
     {
       "evidence": [
@@ -912,6 +1149,54 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/codex-gui-worktree-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/design-agent-automation-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/design-agent-eval-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/dice-job-search-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
         }
       ],
@@ -919,6 +1204,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:productivity-skills/explain-code-slice"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-github-repository"
     },
     {
       "evidence": [
@@ -984,6 +1281,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/maintain-project-docs"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
         }
       ],
@@ -1015,6 +1324,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:productivity-skills/maintain-project-roadmap"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/productivity-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin declares MCP servers",
+      "to": "target:mcp:plugins/productivity-skills/.mcp.json"
     },
     {
       "evidence": [
@@ -1164,6 +1485,198 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/evidence-notes-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/triage-artifact"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/bootstrap-cargo-project/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/bootstrap-cargo-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/build-cli-project/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/build-cli-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/build-library-crate/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/build-library-crate"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/choose-project-shape/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/choose-project-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/ci-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/ci-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/package-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/package-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/testing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/testing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/rust-skills/skills/tooling-style-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:rust-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:rust-skills/tooling-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/apple-containerization-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/docker-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/docker-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/hummingbird-server-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/openapi-rpc-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/persistence-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/vapor-server-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md"
         }
       ],
@@ -1271,6 +1784,18 @@
     {
       "evidence": [
         {
+          "kind": "skill-directory",
+          "path": "plugins/web-dev-skills/skills/expo-inline-native-modules-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:web-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:web-dev-skills/expo-inline-native-modules-workflow"
+    },
+    {
+      "evidence": [
+        {
           "kind": "plugin-marketplace",
           "path": ".agents/plugins/marketplace.json"
         }
@@ -1291,6 +1816,30 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/agent-plugin-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:android-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/android-dev-skills"
     },
     {
       "evidence": [
@@ -1326,7 +1875,7 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
-      "to": "product:swiftasb-skills"
+      "to": "product:cardhop-app"
     },
     {
       "evidence": [
@@ -1335,10 +1884,10 @@
           "path": ".agents/plugins/marketplace.json"
         }
       ],
-      "from": "product:swiftasb-skills",
+      "from": "product:cardhop-app",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
-      "to": "path:./plugins/swiftasb-skills"
+      "to": "path:./plugins/cardhop-app"
     },
     {
       "evidence": [
@@ -1398,18 +1947,6 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
-      "to": "product:speak-swiftly"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "plugin-marketplace",
-          "path": ".agents/plugins/marketplace.json"
-        }
-      ],
-      "from": "product:socket",
-      "kind": "exposes",
-      "label": "marketplace exposes plugin entry",
       "to": "product:python-skills"
     },
     {
@@ -1423,6 +1960,30 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/python-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:server-side-swift"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/server-side-swift"
     },
     {
       "evidence": [
@@ -1458,7 +2019,7 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
-      "to": "product:cardhop-app"
+      "to": "product:speak-swiftly"
     },
     {
       "evidence": [
@@ -1467,10 +2028,22 @@
           "path": ".agents/plugins/marketplace.json"
         }
       ],
-      "from": "product:cardhop-app",
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:swiftasb-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:swiftasb-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
-      "to": "path:./plugins/cardhop-app"
+      "to": "path:./plugins/swiftasb-skills"
     },
     {
       "evidence": [
@@ -1543,6 +2116,54 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/web-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:reverse-engineering-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/reverse-engineering-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:codex-utilities"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:codex-utilities",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/codex-utilities"
     }
   ],
   "schemaVersion": 1,
@@ -1571,6 +2192,18 @@
       "kind": "codex-skill",
       "name": "skill:agent-plugin-skills/sync-skills-repo-guidance",
       "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/appkit-app-architecture-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/appkit-app-architecture-workflow",
+      "path": "plugins/apple-dev-skills/skills/appkit-app-architecture-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -1649,6 +2282,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/icon-composer-app-icon-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/icon-composer-app-icon-workflow",
+      "path": "plugins/apple-dev-skills/skills/icon-composer-app-icon-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
         }
       ],
@@ -1667,6 +2312,18 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/structure-swift-sources",
       "path": "plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swift-openapi-client-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swift-openapi-client-workflow",
+      "path": "plugins/apple-dev-skills/skills/swift-openapi-client-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -1763,6 +2420,18 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/xcode-build-run-workflow",
       "path": "plugins/apple-dev-skills/skills/xcode-build-run-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-coding-intelligence-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -1961,12 +2630,72 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/codex-gui-worktree-workflow",
+      "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/design-agent-automation-workflow",
+      "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/design-agent-eval-workflow",
+      "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/dice-job-search-workflow",
+      "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:productivity-skills/explain-code-slice",
       "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-github-repository",
+      "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2033,6 +2762,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/maintain-project-docs",
+      "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
         }
       ],
@@ -2063,6 +2804,18 @@
       "kind": "codex-skill",
       "name": "skill:productivity-skills/maintain-project-roadmap",
       "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "mcp-config",
+          "path": "plugins/productivity-skills/.mcp.json"
+        }
+      ],
+      "kind": "mcp-config",
+      "name": "mcp:plugins/productivity-skills/.mcp.json",
+      "path": "plugins/productivity-skills/.mcp.json"
     },
     {
       "dependencies": [],
@@ -2213,6 +2966,198 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/evidence-notes-workflow",
+      "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/triage-artifact",
+      "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/bootstrap-cargo-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/bootstrap-cargo-project",
+      "path": "plugins/rust-skills/skills/bootstrap-cargo-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/build-cli-project/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/build-cli-project",
+      "path": "plugins/rust-skills/skills/build-cli-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/build-library-crate/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/build-library-crate",
+      "path": "plugins/rust-skills/skills/build-library-crate/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/choose-project-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/choose-project-shape",
+      "path": "plugins/rust-skills/skills/choose-project-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/ci-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/ci-workflow",
+      "path": "plugins/rust-skills/skills/ci-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/package-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/package-workflow",
+      "path": "plugins/rust-skills/skills/package-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/testing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/testing-workflow",
+      "path": "plugins/rust-skills/skills/testing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/rust-skills/skills/tooling-style-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:rust-skills/tooling-style-workflow",
+      "path": "plugins/rust-skills/skills/tooling-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/apple-containerization-workflow",
+      "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/docker-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/docker-workflow",
+      "path": "plugins/server-side-swift/skills/docker-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/hummingbird-server-workflow",
+      "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/openapi-rpc-workflow",
+      "path": "plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/persistence-workflow",
+      "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/vapor-server-workflow",
+      "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md"
         }
       ],
@@ -2315,6 +3260,18 @@
       "kind": "mcp-config",
       "name": "mcp:plugins/things-app/.mcp.json",
       "path": "plugins/things-app/.mcp.json"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/web-dev-skills/skills/expo-inline-native-modules-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:web-dev-skills/expo-inline-native-modules-workflow",
+      "path": "plugins/web-dev-skills/skills/expo-inline-native-modules-workflow/SKILL.md"
     }
   ]
 }

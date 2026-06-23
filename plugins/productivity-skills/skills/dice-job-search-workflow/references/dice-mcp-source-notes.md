@@ -8,6 +8,28 @@ Use this reference when maintaining `dice-job-search-workflow`.
 - Setup guide: https://www.dice.com/career-advice/how-to-connect-the-dice-mcp-server-to-your-ai-assistant
 - Launch article: https://www.dice.com/career-advice/dice-launches-mcp-server-for-ai-powered-job-search
 
+## Socket Plugin Config
+
+Productivity Skills exports Dice through the plugin manifest:
+
+```json
+{
+  "mcpServers": "./.mcp.json"
+}
+```
+
+The MCP config uses a plugin-provided remote HTTP server entry:
+
+```json
+{
+  "mcpServers": {
+    "dice": {
+      "url": "https://mcp.dice.com/mcp"
+    }
+  }
+}
+```
+
 ## Endpoint
 
 Dice documents the production endpoint as:
@@ -44,8 +66,8 @@ Optional parameters documented by Dice:
 ## Boundaries
 
 The first Socket-owned skill should stay guidance-only around Dice's external
-MCP server. It should not bundle a local Dice MCP server, proxy, scraper, cache,
-or automation runner.
+MCP server. It should bundle only the remote MCP config, not a local Dice MCP
+server, proxy, scraper, cache, or automation runner.
 
 Treat Dice result data as live and mutable. Search outputs should cite the
 search parameters and result evidence that were actually reviewed.

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dice": {
+      "url": "https://mcp.dice.com/mcp",
+      "note": "Registers Dice's documented remote MCP server for public technology job search. Basic usage does not require Dice authentication; the server exposes the Dice search_jobs tool over streamable HTTP."
+    }
+  }
+}

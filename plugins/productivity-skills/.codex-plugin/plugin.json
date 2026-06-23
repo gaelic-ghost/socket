@@ -23,10 +23,11 @@
     "mcp"
   ],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Productivity Skills",
     "shortDescription": "Broadly useful workflow and maintainer skills for Codex.",
-    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, accessibility standards, roadmap work, code explanation, Dice MCP job-search workflows, Codex GUI worktree workflow planning, agent automation design, agent eval design, GitHub repository settings, and reusable maintainer and release workflows.",
+    "longDescription": "Bundle general-purpose productivity and repository-maintenance skills for documentation, accessibility standards, roadmap work, code explanation, Dice MCP job-search workflows with a bundled remote MCP config, Codex GUI worktree workflow planning, agent automation design, agent eval design, GitHub repository settings, and reusable maintainer and release workflows.",
     "developerName": "Gale",
     "category": "Productivity",
     "capabilities": [

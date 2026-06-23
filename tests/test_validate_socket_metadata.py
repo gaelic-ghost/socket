@@ -112,6 +112,57 @@ def test_main_accepts_plugin_manifest_with_root_skills_component(
     run_validator(repo_root, monkeypatch)
 
 
+def test_main_accepts_plugin_manifest_with_streamable_http_mcp_config(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_marketplace_repo(
+        tmp_path,
+        {
+            "name": "example-skills",
+            "skills": "./skills/",
+            "mcpServers": "./.mcp.json",
+        },
+    )
+    write(
+        repo_root / "plugins" / "example-skills" / ".mcp.json",
+        json.dumps(
+            {
+                "mcpServers": {
+                    "dice": {
+                        "url": "https://mcp.dice.com/mcp",
+                    }
+                }
+            },
+            indent=2,
+        )
+        + "\n",
+    )
+
+    run_validator(repo_root, monkeypatch)
+
+
+def test_main_rejects_mcp_config_without_transport(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repo_root = make_marketplace_repo(
+        tmp_path,
+        {
+            "name": "example-skills",
+            "skills": "./skills/",
+            "mcpServers": "./.mcp.json",
+        },
+    )
+    write(
+        repo_root / "plugins" / "example-skills" / ".mcp.json",
+        json.dumps({"mcpServers": {"dice": {"note": "missing transport"}}}, indent=2) + "\n",
+    )
+
+    with pytest.raises(SystemExit):
+        run_validator(repo_root, monkeypatch)
+
+
 def test_main_accepts_plugin_manifest_with_interface_assets(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

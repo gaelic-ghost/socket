@@ -36,6 +36,7 @@ def test_skill_body_preserves_read_only_external_mcp_boundary() -> None:
     body = read(SKILL_ROOT / "SKILL.md")
 
     assert "https://mcp.dice.com/mcp" in body
+    assert "plugins/productivity-skills/.mcp.json" in body
     assert "read-only job-search data source" in body
     assert "Do not apply to jobs" in body
     assert "Do not build a local MCP server" in body
@@ -86,4 +87,6 @@ def test_reference_records_official_dice_surfaces() -> None:
         assert official_link in reference
 
     assert "The documented MCP tool is `search_jobs`" in reference
-    assert "should not bundle a local Dice MCP server" in reference
+    assert '"mcpServers": "./.mcp.json"' in reference
+    assert '"url": "https://mcp.dice.com/mcp"' in reference
+    assert "should bundle only the remote MCP config" in reference

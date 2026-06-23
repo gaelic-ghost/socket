@@ -5,7 +5,7 @@ description: Search and triage technology jobs through Dice's remote MCP server.
 
 # Dice Job Search Workflow
 
-Use Dice's remote MCP server as a read-only job-search data source for technology roles.
+Use the bundled Dice remote MCP config as a read-only job-search data source for technology roles.
 
 This skill helps the agent turn a job-search goal into bounded Dice MCP searches,
 compare returned jobs against the user's stated preferences, and produce useful
@@ -22,10 +22,11 @@ next actions without taking over the application or profile lifecycle.
 
 ## Source
 
-Dice documents a remote MCP endpoint at `https://mcp.dice.com/mcp` with a
-read-only `search_jobs` tool. No Dice login is required for basic public job
-search. Treat this as an external live data source whose listings, filters, and
-client setup details may change.
+Productivity Skills bundles a plugin-provided MCP config for Dice at
+`plugins/productivity-skills/.mcp.json`. Dice documents a remote MCP endpoint at
+`https://mcp.dice.com/mcp` with a read-only `search_jobs` tool. No Dice login is
+required for basic public job search. Treat this as an external live data source
+whose listings, filters, and client setup details may change.
 
 Official sources:
 
@@ -37,8 +38,12 @@ Official sources:
 
 1. Clarify the search goal in practical terms: target role, geography, work
    mode, seniority, technologies, employment type, recency, and hard filters.
-2. Verify whether a Dice MCP tool is available in the active session.
+2. Verify whether the plugin-provided Dice MCP server is enabled and available
+   in the active session.
    - If available, use it directly for read-only search.
+   - If the plugin is installed but Dice is disabled, tell the user to enable
+     the plugin-provided `dice` MCP server rather than hand-editing user config
+     first.
    - If unavailable, give setup or handoff guidance using the official endpoint
      and do not invent local server code.
 3. Prefer broad first searches, then narrow with filters after seeing the
