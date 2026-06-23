@@ -51,7 +51,7 @@
   "interface": {
     "displayName": "Server-Side Swift",
     "shortDescription": "Server-side Swift bootstrap, Vapor, Hummingbird, persistence, OpenAPI, RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first bootstrap workflows for Vapor and Hummingbird, SwiftPM-first execution, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Vapor Environment, Hummingbird configuration support, Fluent ORM, PostgreSQL, Compose-local database defaults, generated service AGENTS guidance, Swift OpenAPI, Docker, Apple Containerization, Fly.io, SwiftNIO, Swift Logging, Swift Metrics, Swift Distributed Tracing, authentication, authorization, and app-sync documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, fly.toml deployment configuration, Fly secrets, health checks, observability signals, auth boundaries, sync contracts, environment configuration, tests, and deployment handoffs.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first bootstrap workflows for Vapor and Hummingbird, SwiftPM-first execution, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, Vapor Environment, Hummingbird configuration support, Fluent ORM, PostgreSQL, CLI-generated Dockerfile and Compose defaults, generated service AGENTS guidance, Swift OpenAPI, Docker, Apple Containerization, Fly.io, SwiftNIO, Swift Logging, Swift Metrics, Swift Distributed Tracing, authentication, authorization, and app-sync documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, fly.toml deployment configuration, Fly secrets, health checks, observability signals, auth boundaries, sync contracts, environment configuration, tests, and deployment handoffs.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -60,8 +60,8 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-swift",
     "defaultPrompt": [
-      "Bootstrap a Hummingbird service with hb, Hummingbird configuration support, Fluent, PostgreSQL, Compose, and generated AGENTS guidance.",
-      "Bootstrap a Vapor service with vapor new, Vapor Environment, Fluent, PostgreSQL, Compose, and generated AGENTS guidance.",
+      "Bootstrap a Hummingbird service with hb, Hummingbird configuration support, Fluent, PostgreSQL, CLI-generated Docker files, Compose, and generated AGENTS guidance.",
+      "Bootstrap a Vapor service with vapor new, Vapor Environment, Fluent, PostgreSQL, CLI-generated Dockerfile and Compose support, and generated AGENTS guidance.",
       "Create a Vapor service plan using current Vapor CLI, Vapor 5 alpha posture, and SwiftPM workflows.",
       "Create a Hummingbird service plan using the official hb CLI, current Hummingbird docs, and SwiftPM workflows.",
       "Choose a Vapor-aligned package from the Vapor or Vapor Community ecosystem for this service need.",

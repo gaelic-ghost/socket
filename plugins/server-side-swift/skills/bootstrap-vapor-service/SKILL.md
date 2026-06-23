@@ -1,6 +1,6 @@
 ---
 name: bootstrap-vapor-service
-description: Bootstrap new Vapor server-side Swift services with the official Vapor CLI, Vapor Environment, Fluent ORM, PostgreSQL, Docker Compose local dependencies, generated AGENTS guidance, and SwiftPM validation. Use when creating a fresh Vapor service from scratch or maintaining this skill's bootstrap defaults.
+description: Bootstrap new Vapor server-side Swift services with the official Vapor CLI, Vapor Environment, Fluent ORM, PostgreSQL, CLI-generated Dockerfile and Docker Compose support, generated AGENTS guidance, and SwiftPM validation. Use when creating a fresh Vapor service from scratch or maintaining this skill's bootstrap defaults.
 license: PolyForm-Noncommercial-1.0.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, Vapor Toolbox, SwiftPM, Fluent, PostgreSQL, and Docker-backed local development on macOS or Linux.
 metadata:
@@ -16,7 +16,7 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(brew:*) Bash(swift:*) Bash(vapor
 
 Create a new Vapor service repository from nothing to a consistent, database-backed local baseline.
 
-The practical decision is not whether Vapor should use the CLI, Fluent, PostgreSQL, or its built-in `Environment` system. The default is already chosen: start with the official Vapor CLI, use Vapor's `Environment` API for runtime environment and process settings, choose Fluent ORM with PostgreSQL, and provide a Docker Compose Postgres service for local development.
+The practical decision is not whether Vapor should use the CLI, Fluent, PostgreSQL, Docker, or its built-in `Environment` system. The default is already chosen: start with the official Vapor CLI, use Vapor's `Environment` API for runtime environment and process settings, choose Fluent ORM with PostgreSQL, and preserve the CLI-generated Dockerfile and Docker Compose Postgres surface during bootstrap.
 
 ## When To Use
 
@@ -27,7 +27,7 @@ The practical decision is not whether Vapor should use the CLI, Fluent, PostgreS
 - Do not use this skill for ordinary routes, controllers, middleware, commands, migrations, or tests in an existing Vapor service. Use `vapor-server-workflow`.
 - Do not use this skill for existing persistence changes that are not part of initial bootstrap. Use `persistence-workflow`.
 - Do not use this skill for generic Docker image production work. Use `docker-workflow`.
-- Do not substitute a manual SwiftPM scaffold, a non-Fluent database layer, SQLite, or non-container local database setup unless the user explicitly approves that exception for the project.
+- Do not substitute a manual SwiftPM scaffold, discard the CLI-generated Docker files, use a non-Fluent database layer, use SQLite, or use non-container local database setup unless the user explicitly approves that exception for the project.
 
 ## Source Check
 
@@ -74,8 +74,10 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - use `Environment.get` or `Environment.process` for process settings
    - keep committed `.env` content as a safe template only
    - keep `.env.*` overrides ignored when they may contain local or secret values
-7. Add or verify local database container support:
-   - create or preserve `compose.yaml` with a `postgres` service
+7. Preserve and verify the CLI-generated container support:
+   - keep the Vapor-generated `.dockerignore`, `Dockerfile`, and Compose file
+   - preserve the generated app, migrate, revert, and database services when present
+   - adapt generated service names and database defaults only when needed for the project name or repo conventions
    - use safe development-only defaults
    - use a named volume for database storage
    - align host, port, database, user, and password with Vapor's local `.env` template
@@ -90,6 +92,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - `swift build`
    - `swift test`
    - `docker compose config`
+   - optional `docker build .`
    - optional `docker compose up -d postgres`
    - optional `swift run App migrate` after confirming the generated database config and migration list
    - optional `swift run App serve` only when runtime startup validation is requested
@@ -103,6 +106,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
 - persistence: Fluent ORM
 - database: PostgreSQL
 - local dependency runtime: Docker Compose Postgres service
+- service image baseline: preserve the CLI-generated Dockerfile
 - generated guidance: root `AGENTS.md`
 - app configuration: Vapor `Environment`
 - development database defaults:
@@ -136,12 +140,13 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
 
 - Strong default: use `vapor new`, Vapor `Environment`, Fluent ORM, PostgreSQL, and Docker Compose for every fresh Vapor service unless the user explicitly approves a project-specific exception.
 - Do not hand-roll a new SwiftPM project as the default Vapor bootstrap path.
+- Do not remove or postpone Docker files generated by `vapor new`; validate and keep them in the initial scaffold.
 - Do not bypass Vapor `Environment` with a second settings framework for standard runtime configuration.
 - Do not choose SQLite, MySQL, direct SQL, or non-Fluent persistence as the default bootstrap path.
 - Do not commit secrets, real database passwords, `.env.*` files with sensitive values, machine-local paths, or private dependency URLs.
 - Do not run destructive migrations, database drops, volume deletion, or migration reverts without explicit user approval.
 - Do not claim Vapor CLI behavior, generated file layouts, Fluent driver names, or migration commands from memory; check current Vapor docs, `vapor --help`, or generated scaffold files.
-- Do not add production Docker image files unless the user asks for containerized deployment or the target repo already treats a production image as part of its baseline.
+- Use `docker-workflow` only when changing beyond the CLI-generated Docker baseline, such as adding nonstandard services, registry publishing, CI image builds, deployment-runtime tuning, or image hardening.
 
 ## Fallbacks And Handoffs
 
