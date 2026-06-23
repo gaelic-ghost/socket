@@ -27,7 +27,7 @@ The practical job is to respect existing repo conventions, use `uv` for commands
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [uv documentation](https://docs.astral.sh/uv/)
 - [Ruff documentation](https://docs.astral.sh/ruff/)

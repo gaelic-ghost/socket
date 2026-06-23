@@ -28,7 +28,7 @@ The practical job is to inventory Python requirements, dependency groups, lockfi
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [uv documentation](https://docs.astral.sh/uv/)
 - [Python packaging user guide](https://packaging.python.org/)

@@ -19,7 +19,7 @@ The practical decision is what kind of crate or workspace the user needs, where 
 
 ## Source Check
 
-Use official Rust documentation first before making claims about Rust, Cargo, rustup, formatting, linting, testing, or package behavior:
+Use repo-local Rust files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Rust docsets, and then official Rust documentation when Dash/local coverage is missing or stale. Check one of those source-specific paths before making claims about Rust, Cargo, rustup, formatting, linting, testing, or package behavior:
 
 - [Rust documentation](https://doc.rust-lang.org/)
 - [The Cargo Book](https://doc.rust-lang.org/cargo/)

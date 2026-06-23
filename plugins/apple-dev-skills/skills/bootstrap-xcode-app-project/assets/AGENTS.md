@@ -10,7 +10,7 @@
 - Do not run the standard release workflow from `main`; when a protected-main release is explicitly requested, let it validate, bump versions, tag, push the branch and tag, open the release PR, watch CI, address valid PR comments or record out-of-scope concerns in `ROADMAP.md`, merge to protected `main`, fast-forward local `main`, and clean up stale branches.
 - Treat `scripts/repo-maintenance/config/profile.env` as the installed `maintain-project-repo` profile marker, and keep it on the `xcode-app` profile for native Apple app repos.
 - Read relevant Apple documentation before proposing or making Xcode, SwiftUI, lifecycle, or architecture changes.
-- Prefer Dash or local Apple docs first, then official Apple docs when local docs are insufficient.
+- Prefer Xcode MCP DocumentationSearch or local Apple docs first for Apple-owned SDK, framework, and lifecycle questions; use Dash MCP or Dash HTTP next when installed local package docs or multi-ecosystem docs are a better fit; then use official Apple docs when local docs are insufficient.
 - Prefer the simplest correct Swift that is easiest to read and reason about.
 - Prefer synthesized and framework-provided behavior over extra wrappers and boilerplate.
 - For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; prefer optional parameters with explicit default values over additional methods or overloads when the difference is optional behavior on the same operation.

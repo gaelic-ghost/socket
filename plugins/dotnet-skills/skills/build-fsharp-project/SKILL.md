@@ -27,7 +27,7 @@ The practical goal is readable domain modeling, explicit data flow, good module 
 
 ## Source Check
 
-Use official Microsoft documentation first:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale:
 
 - [F# documentation](https://learn.microsoft.com/dotnet/fsharp/)
 - [F# language reference](https://learn.microsoft.com/dotnet/fsharp/language-reference/)

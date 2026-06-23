@@ -27,7 +27,7 @@ The practical decision is how to use immutable data, explicit effects or futures
 
 ## Source Check
 
-Use official or canonical documentation first:
+Use repo-local JVM files, checked-out dependency sources, Dash MCP or Dash HTTP for installed JVM docsets, and then official or canonical documentation when Dash/local coverage is missing or stale:
 
 - [Scala documentation](https://docs.scala-lang.org/)
 - [Scala 3 Book](https://docs.scala-lang.org/scala3/book/introduction.html)

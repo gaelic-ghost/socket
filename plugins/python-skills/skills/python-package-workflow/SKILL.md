@@ -27,7 +27,7 @@ The practical job is to make package metadata explicit, build and test the packa
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [Python packaging user guide](https://packaging.python.org/)
 - [Writing `pyproject.toml`](https://packaging.python.org/guides/writing-pyproject-toml/)

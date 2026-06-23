@@ -8,7 +8,7 @@ Tune the runtime-supported defaults for Apple and Swift docs exploration, source
 
 | Knob | Default | Status | Effect |
 | --- | --- | --- | --- |
-| `defaultSourceOrder` | `xcode-mcp-docs,dash,official-web` | `runtime-enforced` | Controls the default docs-source order used by `scripts/run_workflow.py` for `explore` mode. |
+| `defaultSourceOrder` | `xcode-mcp-docs,dash,dash-http,official-web` | `runtime-enforced` | Controls the default docs-source order used by `scripts/run_workflow.py` for `explore` mode. |
 
 ## Runtime Behavior
 

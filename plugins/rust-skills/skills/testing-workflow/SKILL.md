@@ -19,7 +19,7 @@ Cargo test behavior matters because one command can compile and run unit tests, 
 
 ## Source Check
 
-Use official Rust documentation first:
+Use repo-local Rust files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Rust docsets, and then official Rust documentation when Dash/local coverage is missing or stale:
 
 - [Cargo tests guide](https://doc.rust-lang.org/cargo/guide/tests.html)
 - [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html)

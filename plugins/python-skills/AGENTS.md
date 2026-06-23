@@ -16,6 +16,7 @@ This file is the Python Skills child-repo override for work done from `socket`. 
 - Do not reintroduce a nested packaged plugin subtree for Codex.
 - Do not reintroduce maintained per-skill `README.md` files unless Gale explicitly asks for that public-doc surface again.
 - Keep user-facing and maintainer-facing Python command examples expressed with `uv`.
+- Use repo-local files, checked-out dependency sources, and Dash MCP or Dash HTTP for installed Python, `uv`, pytest, Ruff, mypy, FastAPI, and FastMCP docsets before reaching for web docs. Use official project documentation when Dash/local coverage is missing, stale, or a public latest-release citation is needed.
 - Use [`scripts/validate_repo_metadata.py`](./scripts/validate_repo_metadata.py) and [`tests/test_validate_repo_metadata.py`](./tests/test_validate_repo_metadata.py) as the mechanical source of truth for metadata rules.
 
 ## Validation

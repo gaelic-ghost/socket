@@ -27,7 +27,7 @@ The practical decision is which tool owns the project, which wrapper or pinned t
 
 ## Source Check
 
-Use official build tool documentation first:
+Use repo-local build files, checked-out dependency sources, Dash MCP or Dash HTTP for installed build-tool docsets, and then official build tool documentation when Dash/local coverage is missing or stale:
 
 - [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html)
 - [Gradle Toolchains for JVM projects](https://docs.gradle.org/current/userguide/toolchains.html)

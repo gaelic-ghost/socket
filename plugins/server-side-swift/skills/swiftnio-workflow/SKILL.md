@@ -29,7 +29,7 @@ The practical decision is whether the service really needs to own event loops, c
 
 ## Source Check
 
-Use current official docs and source before claiming SwiftNIO behavior:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Swift package DocC, and then official docs or source when Dash/local coverage is missing or stale. Check one of those source-specific paths before claiming SwiftNIO behavior:
 
 - [SwiftNIO repository](https://github.com/apple/swift-nio)
 - [SwiftNIO docs](https://apple.github.io/swift-nio/docs/current/NIOCore/)

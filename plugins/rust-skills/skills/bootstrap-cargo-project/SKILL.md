@@ -19,7 +19,7 @@ The user should leave with a clear package or workspace layout and validation co
 
 ## Source Check
 
-Use official Rust documentation first:
+Use repo-local Rust files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Rust docsets, and then official Rust documentation when Dash/local coverage is missing or stale:
 
 - [The Cargo Book](https://doc.rust-lang.org/cargo/)
 - [`cargo new`](https://doc.rust-lang.org/cargo/commands/cargo-new.html)

@@ -29,7 +29,7 @@ The practical decision is how clients and the server agree on state over time: w
 
 ## Source Check
 
-Use current official docs and source before claiming framework, protocol, or HTTP behavior:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Swift package DocC, and then official docs or source when Dash/local coverage is missing or stale. Check one of those source-specific paths before claiming framework, protocol, or HTTP behavior:
 
 - [HTTP Semantics RFC 9110](https://httpwg.org/specs/rfc9110.html)
 - [Vapor routing](https://docs.vapor.codes/basics/routing/)

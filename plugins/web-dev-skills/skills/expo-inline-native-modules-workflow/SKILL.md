@@ -35,7 +35,7 @@ Inline modules and `expo-type-information` are experimental and may change quick
 - `expo-type-information` commands, generated file names, type inference modes, or setup requirements
 - Expo SDK gates, React Native alignment, New Architecture assumptions, Expo Go support, CNG, prebuild, dev-client, local native builds, or EAS behavior
 
-Use official Expo documentation first:
+Use repo-local Expo files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Expo or React Native docsets, and then official Expo documentation when Dash/local coverage is missing, stale, or insufficient for the current experimental SDK behavior:
 
 - [Inline modules reference](https://docs.expo.dev/modules/inline-modules-reference/)
 - [Type generation reference](https://docs.expo.dev/modules/type-generation-reference/)

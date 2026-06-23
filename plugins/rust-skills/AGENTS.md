@@ -12,7 +12,7 @@ This file is the Rust Skills child-repo override for work done from `socket`. Fo
 ## Local Rules
 
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
-- Use official Rust project documentation first for Rust language, Cargo, rustup, rustfmt, Clippy, testing, package, workspace, edition, and CI behavior.
+- Use repo-local files, checked-out dependency sources, and Dash MCP or Dash HTTP for installed Rust, Cargo, rustup, rustfmt, Clippy, and crate docsets before reaching for web docs. Use official Rust project documentation when Dash/local coverage is missing, stale, or a public latest-release citation is needed.
 - Keep Rust examples grounded in `cargo` and `rustup` unless a repository already documents a different tool path.
 - Ask before choosing a crate or workspace shape when the user's request is ambiguous.
 - Prefer small crates with clear ownership boundaries. Use a Cargo workspace only when multiple crates, packages, or examples need shared dependency and validation behavior.

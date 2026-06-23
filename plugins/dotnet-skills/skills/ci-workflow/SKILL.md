@@ -27,7 +27,7 @@ The practical job is to choose SDK setup, restore/build/test commands, optional 
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [GitHub Actions and .NET](https://learn.microsoft.com/dotnet/devops/github-actions-overview)
 - [Create a .NET test validation GitHub workflow](https://learn.microsoft.com/dotnet/devops/dotnet-test-github-action)

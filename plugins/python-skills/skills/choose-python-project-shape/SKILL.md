@@ -27,7 +27,7 @@ The practical decision is what kind of Python surface the user needs, whether it
 
 ## Source Check
 
-Use official documentation first before making claims about Python packaging, `uv`, FastAPI, FastMCP, tests, linting, or typing:
+Use repo-local Python files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Python docsets, and then official project documentation when Dash/local coverage is missing or stale. Check one of those source-specific paths before making claims about Python packaging, `uv`, FastAPI, FastMCP, tests, linting, or typing:
 
 - [uv documentation](https://docs.astral.sh/uv/)
 - [Python packaging user guide](https://packaging.python.org/)

@@ -26,7 +26,7 @@ The useful answer is not "tests failed." It is what command failed, which projec
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [uv documentation](https://docs.astral.sh/uv/)
 - [pytest documentation](https://docs.pytest.org/en/stable/)

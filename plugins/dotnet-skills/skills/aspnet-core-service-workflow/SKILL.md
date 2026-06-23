@@ -27,7 +27,7 @@ The practical decision is what the service exposes, which project owns the HTTP 
 
 ## Source Check
 
-Use official Microsoft documentation first:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale:
 
 - [ASP.NET Core documentation](https://learn.microsoft.com/aspnet/core/)
 - [Minimal APIs documentation](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis)

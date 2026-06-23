@@ -19,7 +19,7 @@ The practical goal is to avoid accidental formatter churn, surprise MSRV changes
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [`cargo fmt`](https://doc.rust-lang.org/cargo/commands/cargo-fmt.html)
 - [`cargo clippy`](https://doc.rust-lang.org/cargo/commands/cargo-clippy.html)

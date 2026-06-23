@@ -24,7 +24,7 @@ DASH_INSTALL_REPO_NAME = {
     "user_contributed": "User Contributed Docsets",
     "cheatsheet": "Cheat Sheets",
 }
-VALID_SOURCES = {"xcode-mcp-docs", "dash", "official-web"}
+VALID_SOURCES = {"xcode-mcp-docs", "dash", "dash-http", "official-web"}
 
 
 def load_effective_config() -> dict:
@@ -40,7 +40,7 @@ def split_csv(raw: str) -> list[str]:
 
 def normalize_source_order(raw: str) -> list[str]:
     normalized = [item for item in split_csv(raw) if item in VALID_SOURCES]
-    return normalized or ["xcode-mcp-docs", "dash", "official-web"]
+    return normalized or ["xcode-mcp-docs", "dash", "dash-http", "official-web"]
 
 
 def run_json_script(script_name: str, args: list[str]) -> dict:
@@ -105,6 +105,9 @@ def select_source(
         elif preferred == "dash":
             if dash_available(dash_probe):
                 return preferred, order
+        elif preferred == "dash-http":
+            if dash_available(dash_probe):
+                return preferred, order
         elif preferred == "official-web":
             return preferred, order
 
@@ -113,7 +116,7 @@ def select_source(
             if not mcp_failure_reason:
                 return source, order
             continue
-        if source == "dash":
+        if source in {"dash", "dash-http"}:
             if dash_available(dash_probe):
                 return source, order
             continue
@@ -142,7 +145,7 @@ def explore_mode(args: argparse.Namespace, settings: dict) -> tuple[int, dict]:
             "next_step": "Provide --query for docs exploration.",
         }
 
-    order = normalize_source_order(str(settings.get("defaultSourceOrder", "xcode-mcp-docs,dash,official-web")))
+    order = normalize_source_order(str(settings.get("defaultSourceOrder", "xcode-mcp-docs,dash,dash-http,official-web")))
     preferred_source = args.preferred_source or "auto"
     include_snippets = True
     raw_matches = load_matches(args.query, 20)
@@ -179,6 +182,8 @@ def explore_mode(args: argparse.Namespace, settings: dict) -> tuple[int, dict]:
         next_step = (
             "Use Dash for the Apple or Swift lookup. If the needed docset is missing, rerun with --mode dash-install."
         )
+    elif selected_source == "dash-http":
+        next_step = "Use the Dash localhost HTTP API for the Apple or Swift lookup."
     else:
         next_step = "Use official Apple or Swift web docs for the lookup."
 
@@ -306,7 +311,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--mode", default="explore", choices=sorted(VALID_MODES))
     parser.add_argument("--query")
     parser.add_argument("--docs-kind")
-    parser.add_argument("--preferred-source", choices=["auto", "xcode-mcp-docs", "dash", "official-web"], default="auto")
+    parser.add_argument(
+        "--preferred-source",
+        choices=["auto", "xcode-mcp-docs", "dash", "dash-http", "official-web"],
+        default="auto",
+    )
     parser.add_argument("--docset-request")
     parser.add_argument("--mcp-failure-reason")
     parser.add_argument("--status-file")

@@ -30,7 +30,7 @@ The practical decision is which Swift executable becomes the container entry poi
 
 ## Source Check
 
-Use current official docs before claiming Docker behavior:
+Use repo-local Docker files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Docker docsets, and then official docs when Dash/local coverage is missing or stale. Check one of those source-specific paths before claiming Docker behavior:
 
 - [Dockerfile reference](https://docs.docker.com/reference/dockerfile/)
 - [Docker build best practices](https://docs.docker.com/build/building/best-practices/)

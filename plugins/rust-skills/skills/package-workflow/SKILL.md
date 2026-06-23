@@ -19,7 +19,7 @@ The practical goal is to catch package metadata drift, local-only dependencies, 
 
 ## Source Check
 
-Use official Cargo documentation first:
+Use repo-local Cargo files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Cargo docsets, and then official Cargo documentation when Dash/local coverage is missing or stale:
 
 - [Cargo manifest format](https://doc.rust-lang.org/cargo/reference/manifest.html)
 - [`cargo package`](https://doc.rust-lang.org/cargo/commands/cargo-package.html)

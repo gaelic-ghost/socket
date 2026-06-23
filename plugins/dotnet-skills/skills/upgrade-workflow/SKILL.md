@@ -28,7 +28,7 @@ The practical job is to inventory SDK and target framework state, choose the upg
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [.NET breaking changes reference](https://learn.microsoft.com/dotnet/core/compatibility/breaking-changes)
 - [Breaking changes may occur when porting code](https://learn.microsoft.com/dotnet/core/porting/breaking-changes)

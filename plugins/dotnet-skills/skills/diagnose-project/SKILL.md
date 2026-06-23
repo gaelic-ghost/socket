@@ -27,7 +27,7 @@ The useful answer is not "build failed." It is what command failed, which projec
 
 ## Source Check
 
-Use official Microsoft documentation first:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale:
 
 - [.NET CLI documentation](https://learn.microsoft.com/dotnet/core/tools/)
 - [`dotnet restore` documentation](https://learn.microsoft.com/dotnet/core/tools/dotnet-restore)

@@ -27,7 +27,7 @@ The practical goal is clear package boundaries, readable data flow, typed config
 
 ## Source Check
 
-Use official documentation first when implementation depends on package, tool, or framework behavior:
+Use repo-local Python files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Python docsets, and then official project documentation when Dash/local coverage is missing or stale when implementation depends on package, tool, or framework behavior:
 
 - [uv documentation](https://docs.astral.sh/uv/)
 - [Python packaging user guide](https://packaging.python.org/)

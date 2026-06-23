@@ -31,7 +31,7 @@ The practical decision is which persistence tool owns the data access, how model
 
 ## Source Check
 
-Use official framework and package documentation first. Check the current docs before claiming package names, APIs, migration commands, driver support, or CLI behavior.
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Swift package DocC first. Check official framework and package docs, GitHub releases, or tagged source when Dash/local coverage is missing, stale, or a public latest-release citation is needed before claiming package names, APIs, migration commands, driver support, or CLI behavior.
 
 Primary sources:
 

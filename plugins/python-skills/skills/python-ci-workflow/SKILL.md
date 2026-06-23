@@ -27,7 +27,7 @@ The practical job is to choose Python setup, `uv` installation, dependency sync,
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [GitHub Actions Python documentation](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python)
 - [uv GitHub Actions integration](https://docs.astral.sh/uv/guides/integration/github/)

@@ -27,7 +27,7 @@ The user should leave with a clear project layout, explicit F# or C# choice, pre
 
 ## Source Check
 
-Use official Microsoft documentation first:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale:
 
 - [.NET CLI documentation](https://learn.microsoft.com/dotnet/core/tools/)
 - [`dotnet new` documentation](https://learn.microsoft.com/dotnet/core/tools/dotnet-new)

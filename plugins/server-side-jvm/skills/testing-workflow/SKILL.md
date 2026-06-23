@@ -27,7 +27,7 @@ The practical decision is which module to test, which build tool command is auth
 
 ## Source Check
 
-Use official or canonical documentation first:
+Use repo-local JVM files, checked-out dependency sources, Dash MCP or Dash HTTP for installed JVM docsets, and then official or canonical documentation when Dash/local coverage is missing or stale:
 
 - [Gradle Java testing documentation](https://docs.gradle.org/current/userguide/java_testing.html)
 - [Maven Surefire Plugin documentation](https://maven.apache.org/surefire/maven-surefire-plugin/)

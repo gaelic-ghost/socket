@@ -18,7 +18,7 @@ This file is the .NET Skills child-repo override for work done from `socket`. Fo
 - Ask for language preference before scaffolding when the user's request is ambiguous.
 - Prefer F# examples first when no broader public default is required, so F# stays visibly first-class in neutral examples.
 - Keep .NET examples grounded in the `dotnet` CLI unless a repository already documents a different tool path.
-- Use official Microsoft documentation first for .NET SDK, CLI, F#, C#, ASP.NET Core, testing, package, and project behavior.
+- Use repo-local files, checked-out dependency sources, and Dash MCP or Dash HTTP for installed .NET, F#, C#, ASP.NET Core, NuGet, and SDK docsets before reaching for web docs. Use official Microsoft documentation when Dash/local coverage is missing, stale, or a public latest-release citation is needed.
 - Keep package dependencies fetchable from NuGet, GitHub, package registries, or other real remote repositories; do not commit machine-local SDK, package, or project references.
 - For validation guidance, prefer the narrowest relevant `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet pack` command for the project shape.
 - Do not add extra packaging layers, repo-local install machinery, broad maintainer automation, custom template feeds, or bundled MCP servers unless a later plan explicitly calls for that scope.

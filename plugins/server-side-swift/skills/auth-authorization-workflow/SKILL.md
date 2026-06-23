@@ -29,7 +29,7 @@ The practical decision is who the request represents, how that identity was veri
 
 ## Source Check
 
-Use current official docs and source before claiming auth behavior:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Swift package DocC, and then official docs or source when Dash/local coverage is missing or stale. Check one of those source-specific paths before claiming auth behavior:
 
 - [Vapor authentication](https://docs.vapor.codes/security/authentication/)
 - [Vapor JWT](https://docs.vapor.codes/security/jwt/)

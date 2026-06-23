@@ -351,6 +351,7 @@ def test_patch_refresh_captures_evidence_and_runs_cache_refresh_last(
         args: list[str],
         check: bool = True,
         env: dict[str, str] | None = None,
+        timeout_seconds: int | None = None,
     ) -> object:
         assert repo_root == root
         assert env is None

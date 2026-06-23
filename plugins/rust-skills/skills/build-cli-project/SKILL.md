@@ -19,7 +19,7 @@ The practical goal is a CLI that is easy to test, has descriptive operator-facin
 
 ## Source Check
 
-Use official Rust and Cargo documentation first:
+Use repo-local Rust files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Rust and Cargo docsets, and then official Rust and Cargo documentation when Dash/local coverage is missing or stale:
 
 - [The Rust Programming Language](https://doc.rust-lang.org/book/)
 - [The Cargo Book](https://doc.rust-lang.org/cargo/)

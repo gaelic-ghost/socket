@@ -1,4 +1,4 @@
 schemaVersion: 1
 isCustomized: false
 settings:
-  defaultSourceOrder: "xcode-mcp-docs,dash,official-web"
+  defaultSourceOrder: "xcode-mcp-docs,dash,dash-http,official-web"

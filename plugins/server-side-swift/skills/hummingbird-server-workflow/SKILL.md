@@ -32,7 +32,7 @@ The practical decision is what the HTTP service exposes, which executable owns t
 
 ## Source Check
 
-Use official Hummingbird documentation first:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Hummingbird DocC first, then official Hummingbird documentation when Dash/local coverage is missing or stale:
 
 - [Hummingbird documentation](https://docs.hummingbird.codes/)
 - [Hummingbird framework overview](https://docs.hummingbird.codes/2.0/documentation/hummingbird/)

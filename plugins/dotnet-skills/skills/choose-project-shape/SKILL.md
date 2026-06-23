@@ -27,7 +27,7 @@ The practical decision is what kind of project the user needs, whether F# or C# 
 
 ## Source Check
 
-Use official Microsoft documentation first before making claims about SDK, CLI, language, or project behavior:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale. Check one of those source-specific paths before making claims about SDK, CLI, language, or project behavior:
 
 - [.NET CLI documentation](https://learn.microsoft.com/dotnet/core/tools/)
 - [F# documentation](https://learn.microsoft.com/dotnet/fsharp/)

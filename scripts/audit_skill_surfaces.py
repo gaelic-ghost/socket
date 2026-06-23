@@ -18,8 +18,7 @@ from typing import Literal
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_REPEATED_PHRASES = (
     "When the user explicitly requests subagents",
-    "Use official documentation first",
-    "Use official docs first",
+    "Dash MCP or Dash HTTP",
     "Do not run multiple SwiftPM or Xcode build/test commands concurrently",
     "Run the repository's documented validation path",
     "Report the intended edit scope",

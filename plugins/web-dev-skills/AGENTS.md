@@ -12,6 +12,7 @@ This file is the Web Dev Skills child-repo override for work done from `socket`.
 
 - Do not recreate nested repo-local marketplace wiring or bundled copies of other plugin repos here.
 - Prefer adding actual skill content before expanding docs or workflow complexity.
+- Use repo-local files, checked-out dependency sources, and Dash MCP or Dash HTTP for installed TypeScript, JavaScript, Node.js, React, CSS, HTML, Expo, and related web docsets before reaching for web docs. Use official project documentation when Dash/local coverage is missing, stale, or a public latest-release citation is needed.
 
 ## Expo And React Native Native Boundaries
 

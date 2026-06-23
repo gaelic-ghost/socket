@@ -30,7 +30,7 @@ The practical decision is which Swift executable runs in the Fly Machine, which 
 
 ## Source Check
 
-Use current official docs before claiming Fly.io or framework deployment behavior:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Fly.io or Swift framework docsets, and then official docs when Dash/local coverage is missing or stale. Check one of those source-specific paths before claiming Fly.io or framework deployment behavior:
 
 - [Fly.io Dockerfile deployment](https://fly.io/docs/languages-and-frameworks/dockerfile/)
 - [Fly.io app configuration reference](https://fly.io/docs/reference/configuration/)

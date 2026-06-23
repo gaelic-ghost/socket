@@ -27,7 +27,7 @@ The practical decision is whether the work belongs in Java, Scala, future Clojur
 
 ## Source Check
 
-Use official or canonical documentation first before making claims about JVM, language, build, or framework behavior:
+Use repo-local JVM files, checked-out dependency sources, Dash MCP or Dash HTTP for installed JVM docsets, and then official or canonical documentation when Dash/local coverage is missing or stale. Check one of those source-specific paths before making claims about JVM, language, build, or framework behavior:
 
 - [Java documentation](https://docs.oracle.com/en/java/)
 - [OpenJDK documentation](https://openjdk.org/)

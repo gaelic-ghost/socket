@@ -565,6 +565,7 @@ Planned
 
 ## History
 
+- Aligned Socket documentation-source routing away from generic documentation aggregators by making Xcode MCP `DocumentationSearch` the Apple SDK default, Dash MCP/HTTP the preferred local-docs path for installed docsets across supported stacks, and canonical upstream docs/source the fallback when Dash/local coverage is missing or stale.
 - Added the first repo-local Socket Steward prototype under `.agents/socket-steward`, giving the superproject a Python and OpenAI Agents SDK maintainer-agent scaffold with offline docs, guidance, and marketplace audits before any write-capable or background-service behavior.
 - Added Socket Steward's first docs-sync planner so the repo-local agent can produce structured read-only documentation alignment work before any guarded write mode exists.
 - Added `docs/agents/` for repo-local agent report artifacts and limited Socket Steward proposal writes to that directory.

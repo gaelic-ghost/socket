@@ -31,7 +31,7 @@ The practical decision is what the HTTP service exposes, which target owns the V
 
 ## Source Check
 
-Use official Vapor documentation first:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Vapor DocC first, then official Vapor documentation when Dash/local coverage is missing or stale:
 
 - [Vapor installation](https://docs.vapor.codes/install/macos/)
 - [Vapor Hello, world](https://docs.vapor.codes/getting-started/hello-world/)

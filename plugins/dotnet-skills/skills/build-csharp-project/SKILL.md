@@ -27,7 +27,7 @@ The practical goal is clear nullable-aware APIs, focused types, useful async bou
 
 ## Source Check
 
-Use official Microsoft documentation first:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale:
 
 - [C# documentation](https://learn.microsoft.com/dotnet/csharp/)
 - [C# language reference](https://learn.microsoft.com/dotnet/csharp/language-reference/)

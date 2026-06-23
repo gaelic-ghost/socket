@@ -27,7 +27,7 @@ The stable command surface is `dotnet test`. The repository's existing test fram
 
 ## Source Check
 
-Use official Microsoft documentation first:
+Use repo-local .NET files, checked-out dependency sources, Dash MCP or Dash HTTP for installed .NET docsets, and then official Microsoft documentation when Dash/local coverage is missing or stale:
 
 - [`dotnet test` documentation](https://learn.microsoft.com/dotnet/core/tools/dotnet-test)
 - [.NET CLI documentation](https://learn.microsoft.com/dotnet/core/tools/)

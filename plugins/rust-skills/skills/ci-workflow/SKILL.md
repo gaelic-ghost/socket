@@ -19,7 +19,7 @@ The practical goal is to make CI prove the same behavior maintainers care about 
 
 ## Source Check
 
-Use official documentation first:
+Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for installed docsets, and then official project documentation when Dash/local coverage is missing or stale:
 
 - [Cargo continuous integration guide](https://doc.rust-lang.org/cargo/guide/continuous-integration.html)
 - [Cargo workspaces](https://doc.rust-lang.org/cargo/reference/workspaces.html)

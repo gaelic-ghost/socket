@@ -48,7 +48,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 - `docset_request`: required for `dash-install` and `dash-generate`
 - `approval`: required before side-effectful Dash install actions
 - Defaults:
-  - `explore` source order is `xcode-mcp-docs,dash,official-web`
+  - `explore` source order is `xcode-mcp-docs,dash,dash-http,official-web`
   - Dash install source priority is `built-in,user-contributed,cheatsheet`
   - default search result limit is `20`
   - default search snippets setting is `true`

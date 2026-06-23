@@ -29,7 +29,7 @@ The practical decision is what operators need to know from logs, metrics, traces
 
 ## Source Check
 
-Use current official docs and source before claiming observability behavior:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Swift package DocC, and then official docs or source when Dash/local coverage is missing or stale. Check one of those source-specific paths before claiming observability behavior:
 
 - [Swift Logging](https://github.com/apple/swift-log)
 - [Swift Metrics](https://github.com/apple/swift-metrics)

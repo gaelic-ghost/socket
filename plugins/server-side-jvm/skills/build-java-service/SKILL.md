@@ -27,7 +27,7 @@ The practical decision is how to fit the change into an existing Java service, k
 
 ## Source Check
 
-Use official or canonical documentation first:
+Use repo-local JVM files, checked-out dependency sources, Dash MCP or Dash HTTP for installed JVM docsets, and then official or canonical documentation when Dash/local coverage is missing or stale:
 
 - [Java documentation](https://docs.oracle.com/en/java/)
 - [OpenJDK documentation](https://openjdk.org/)

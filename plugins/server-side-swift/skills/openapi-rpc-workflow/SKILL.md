@@ -35,7 +35,7 @@ For RPC-style services, first identify whether the user really means OpenAPI-bac
 
 ## Source Check
 
-Prefer current local docs first when available, then official online docs:
+Prefer repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Swift package DocC first, then official online docs when Dash/local coverage is missing or stale:
 
 - Dash Swift docsets usually live under `~/Library/Application Support/Dash/Swift DocSets/`.
 - Look for `appleswiftopenapigenerator`, `appleswiftopenapiruntime`, `hummingbirdprojectswiftopenapihummingbird`, `vaporswiftopenapivapor`, `hummingbirdprojecthummingbird`, `vaporvapor`, and `swiftlangswiftpackagemanager`.
