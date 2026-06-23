@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dice Job Search Workflow"
+  short_description: "Search, triage, and plan job-search workflows with Dice's remote MCP server."
+  default_prompt: "Use $dice-job-search-workflow when I want Dice.com job-search help. Verify whether Dice MCP is available, use the documented search_jobs parameters for read-only searches, keep hard constraints explicit, compare roles against my resume evidence without inventing experience, and ask before applying, changing profile state, creating saved searches, or setting up recurring automation."

@@ -15,6 +15,7 @@ dev = [
 testpaths = [
   "skills/design-agent-eval-workflow/tests",
   "skills/design-agent-automation-workflow/tests",
+  "skills/dice-job-search-workflow/tests",
   "skills/maintain-project-agents/tests",
   "skills/maintain-project-accessibility/tests",
   "skills/maintain-project-api/tests",
