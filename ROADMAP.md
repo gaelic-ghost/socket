@@ -17,6 +17,7 @@
 - [Milestone 14: Core AI and Foundation Models workflow ownership](#milestone-14-core-ai-and-foundation-models-workflow-ownership)
 - [Milestone 15: Android Dev Skills plugin](#milestone-15-android-dev-skills-plugin)
 - [Milestone 16: Server-Side JVM skills plugin](#milestone-16-server-side-jvm-skills-plugin)
+- [Milestone 17: Cross-agent skill and plugin portability](#milestone-17-cross-agent-skill-and-plugin-portability)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -46,6 +47,7 @@
 - Milestone 14: Core AI and Foundation Models workflow ownership - Planned
 - Milestone 15: Android Dev Skills plugin - Planned
 - Milestone 16: Server-Side JVM skills plugin - In Progress
+- Milestone 17: Cross-agent skill and plugin portability - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -460,6 +462,36 @@ In Progress
 - [x] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
 - [x] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+
+## Milestone 17: Cross-agent skill and plugin portability
+
+### Status
+
+Planned
+
+### Scope
+
+- [x] Record the first source-linked platform comparison in [`docs/maintainers/agent-portability-options.md`](./docs/maintainers/agent-portability-options.md).
+- [ ] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
+- [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
+- [ ] Keep Hermes Agent support research-blocked until an official documentation or source repository is identified.
+
+### Tickets
+
+- [ ] Add a root portability inventory command that reports every `SKILL.md`, `.codex-plugin/plugin.json`, `.mcp.json`, hook, app config, and custom-agent definition with host-specific compatibility notes.
+- [ ] Add common skill constraint checks for Codex, OpenCode, and Zed, including skill name, frontmatter, description size, flat-layout, and catalog-budget risks.
+- [ ] Add a dry-run `.agents/skills` export plan for skill-only consumers such as Zed and OpenCode.
+- [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy without assuming Codex marketplace metadata carries over.
+- [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
+- [ ] Evaluate Xcode adapters for Xcode-launched Codex configuration and Xcode plug-in package import only after the package shape is verified locally.
+- [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
+
+### Exit Criteria
+
+- [ ] Socket can report which authored skills are portable without changing installed user state.
+- [ ] At least one target-specific dry-run can show exactly what would be added, skipped, or transformed for a non-Codex host.
+- [ ] Docs clearly distinguish common Agent Skills from Codex plugins, Claude Code plugins, OpenCode plugins, Xcode plug-ins, Zed extensions, and MCP servers.
+- [ ] No non-Codex support claim is user-facing unless it is backed by official docs, local smoke evidence, or both.
 
 ## Small Tickets
 

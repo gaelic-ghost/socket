@@ -1,0 +1,203 @@
+# Agent Portability Options
+
+This document records the first research pass for making Socket skills and plugins more portable across agent hosts while keeping the current Codex marketplace honest.
+
+Date checked: 2026-06-23.
+
+## Current Recommendation
+
+Treat Agent Skills as the first portability layer.
+
+Socket already keeps authored skills as `skills/<name>/SKILL.md` with optional `references/`, `scripts/`, and `assets/` folders. That shape maps cleanly to the emerging Agent Skills convention used by several current tools. The lowest-risk next step is to validate and, where needed, render those skill folders for each host's documented discovery paths.
+
+Treat plugins as host-specific package adapters.
+
+Codex, Claude Code, OpenCode, Xcode, and Zed each expose different plugin or extension concepts. Socket should not redefine its root as a generic plugin bundle until a concrete target needs that shape. Keep the current root as a Codex marketplace catalog, then add per-host export or install support as deliberate adapter outputs.
+
+## Platform Snapshot
+
+### Codex
+
+Socket's current primary surface is Codex-specific:
+
+- root marketplace catalog: `.agents/plugins/marketplace.json`
+- child plugin root: `plugins/<child>/.codex-plugin/plugin.json`
+- bundled Codex surfaces: `skills/`, `.mcp.json`, `hooks/`, `.app.json`, `agents/openai.yaml`, and related assets
+- user install path: `codex plugin marketplace add gaelic-ghost/socket`
+- refresh path: `codex plugin marketplace upgrade socket`
+
+The current root docs correctly say Socket is a marketplace catalog, not an aggregate plugin payload. That remains the right base model.
+
+### Xcode
+
+Apple documents Xcode agent customization through Xcode Intelligence settings, Xcode-only agent configuration folders, command and tool permissions, built-in skills, MCP, and Xcode plug-ins. The official page says product-specific configuration files live under `~/Library/Developer/Xcode/CodingAssistant`, with separate folders such as `codex`, `ClaudeAgentConfig`, and `gemini`, and that those configurations only affect agents launched in Xcode.
+
+Apple also documents an Xcode plug-in UI that can install plug-ins containing subagents, MCP servers, and skills, but the public page does not expose enough package-format detail to author a Socket-to-Xcode plugin adapter yet.
+
+Practical Socket implication:
+
+- Support Xcode Codex as a separate Codex target, not as a raw mirror of normal `~/.codex`.
+- Add an Xcode export plan only after the Xcode plug-in package shape is verified locally.
+- Keep Xcode-specific workflow guidance in `apple-dev-skills`, especially `xcode-coding-intelligence-workflow`.
+
+Sources:
+
+- [Extending and customizing agents](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents/)
+- [Xcode 27 agentic tooling skill plan](./xcode-27-agentic-tooling-plan.md)
+
+### Claude Code
+
+Claude Code has a richer configuration hierarchy than most targets in this pass. Current documentation describes managed, user, project, and local scopes. It also documents separate locations for settings, subagents, MCP servers, plugins, and `CLAUDE.md` context.
+
+Important current paths and surfaces:
+
+- project skills: `.claude/skills/`
+- user skills: `~/.claude/skills/`
+- project subagents: `.claude/agents/`
+- user subagents: `~/.claude/agents/`
+- project settings: `.claude/settings.json`
+- local settings: `.claude/settings.local.json`
+- project MCP servers: `.mcp.json`
+- context files: `CLAUDE.md` or `.claude/CLAUDE.md`
+- plugin control: `enabledPlugins`, `extraKnownMarketplaces`, `strictKnownMarketplaces`, and `strictPluginOnlyCustomization`
+
+Practical Socket implication:
+
+- Skills can likely be exported with little transformation when names and frontmatter stay within common constraints.
+- Codex `agents/openai.yaml` custom agents are not portable as-is; Claude Code needs `.claude/agents/` definitions.
+- Codex marketplace metadata does not become a Claude Code marketplace automatically. A Claude adapter needs its own settings, marketplace, or plugin registration path.
+- The Claude Code policy model is worth supporting explicitly because it can restrict customization to plugin-provided or managed surfaces.
+
+Sources:
+
+- [Claude Code settings](https://code.claude.com/docs/en/settings)
+- [Claude Code MCP](https://code.claude.com/docs/en/mcp)
+- [Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
+
+### OpenCode
+
+OpenCode documents first-class Agent Skills support and explicitly searches several compatible skill roots:
+
+- `.opencode/skills/<name>/SKILL.md`
+- `~/.config/opencode/skills/<name>/SKILL.md`
+- `.claude/skills/<name>/SKILL.md`
+- `~/.claude/skills/<name>/SKILL.md`
+- `.agents/skills/<name>/SKILL.md`
+- `~/.agents/skills/<name>/SKILL.md`
+
+It recognizes `name`, `description`, `license`, `compatibility`, and string-map `metadata` frontmatter fields. Unknown frontmatter fields are ignored. Skill names must be lowercase alphanumeric with single hyphen separators and must match the directory name.
+
+OpenCode plugins are a different surface: JavaScript or TypeScript modules loaded from `.opencode/plugins/` or `~/.config/opencode/plugins/`, plus npm package names listed in `opencode.json`.
+
+Practical Socket implication:
+
+- The `.agents/skills` discovery mirror is the strongest low-effort portability win for OpenCode.
+- OpenCode plugin support would require JavaScript or TypeScript adapter modules, not reuse of `.codex-plugin/plugin.json`.
+- OpenCode config can express MCP servers, permissions, agents, commands, plugins, and instructions, so a later adapter could render `opencode.json` for project-local testing.
+
+Sources:
+
+- [OpenCode Agent Skills](https://opencode.ai/docs/skills/)
+- [OpenCode Config](https://opencode.ai/docs/config/)
+- [OpenCode Plugins](https://opencode.ai/docs/plugins/)
+- [OpenCode MCP servers](https://opencode.ai/docs/mcp-servers/)
+
+### Zed
+
+Zed documents Agent Skills for the Zed Agent. Skills live in:
+
+- global: `~/.agents/skills/`
+- project-local: `<worktree>/.agents/skills/`
+
+Zed's skill format is a folder containing `SKILL.md`, with optional `scripts/`, `references/`, and `assets/`. It currently requires `name` and `description`, supports `disable-model-invocation`, and says other Agent Skills specification fields are planned. Zed has a 50KB catalog budget for skill names and descriptions, requires project-local skills to come from trusted worktrees, and does not discover remote registries at runtime.
+
+Zed extensions are separate from Agent Skills. Zed also supports MCP and external agents, but its docs state that Zed Skills apply to the Zed Agent; external agents and terminal threads use their own native systems.
+
+Practical Socket implication:
+
+- Zed is a strong target for `.agents/skills` output with no remote registry promise.
+- Skill descriptions need to stay concise because Zed enforces a catalog budget.
+- Socket should not assume Zed external agents consume Zed Skills. A Claude or Codex session inside Zed needs that external agent's own config path.
+
+Sources:
+
+- [Zed Skills](https://zed.dev/docs/ai/skills)
+- [Zed Agent Panel](https://zed.dev/docs/ai/agent-panel)
+- [Zed MCP](https://zed.dev/docs/ai/mcp)
+- [Zed External Agents](https://zed.dev/docs/ai/external-agents)
+
+### Hermes Agent
+
+No official Hermes Agent documentation source was found in this pass. Search results only exposed secondary academic references that mention Hermes Agent as an agent harness or always-on personal-agent stack. That is not enough evidence to define a Socket adapter.
+
+Practical Socket implication:
+
+- Keep Hermes Agent as research-blocked.
+- Do not add files, docs claims, or install instructions for Hermes until an authoritative documentation or source repository is identified.
+- If Hermes is confirmed later, start with its documented skill discovery paths, config files, tool/MCP model, and permission or persistence boundaries.
+
+## Likely Socket Work
+
+### Low-Risk Work
+
+- Add a root `skills` portability audit that validates common skill constraints across Codex, OpenCode, and Zed.
+- Keep or generate `.agents/skills` discovery mirrors for skill-only consumers.
+- Add concise compatibility notes to skill metadata where a host ignores unknown frontmatter.
+- Add a current-docs checklist for each target before claiming support.
+- Add an export dry-run command that reports what would be written for each target without mutating user homes.
+
+### Medium-Risk Work
+
+- Render project-local config examples for OpenCode and Claude Code.
+- Render Claude `.claude/agents/` equivalents for Codex `agents/openai.yaml` custom-agent roles.
+- Add per-target docs in `docs/maintainers/` and route them from the root packaging strategy.
+- Add install-surface smoke tests with temporary homes for OpenCode and Claude Code once their CLIs are locally available.
+
+### High-Risk Work
+
+- Build Xcode plug-in packages before the package format and import behavior are verified.
+- Convert Codex hooks to OpenCode or Claude plugins without a security and permission model pass.
+- Promise Hermes Agent support without official docs.
+- Create an aggregate cross-host Socket package before one target clearly needs that distribution shape.
+
+## Proposed Implementation Slices
+
+### Slice 1: Inventory And Constraints
+
+- Add a root portability report command that inventories every `SKILL.md`, plugin manifest, MCP config, hook, app config, and custom-agent definition.
+- Validate common skill-name and description constraints for Codex, OpenCode, and Zed.
+- Report host-specific blockers instead of mutating files.
+
+### Slice 2: Skills-Only Export
+
+- Add a dry-run exporter for `.agents/skills` from the authored Socket skill roots.
+- Decide whether exports should be symlink mirrors, generated copies, or install instructions.
+- Keep generated or consumer-side install output out of git unless the output is intentionally committed as a project-local fixture.
+
+### Slice 3: Host Config Adapters
+
+- Add target-specific renderers for:
+  - Claude Code project settings and `.claude/skills`
+  - OpenCode `opencode.json` and `.opencode/skills`
+  - Xcode-launched Codex config under the Xcode CodingAssistant home
+  - Zed project-local `.agents/skills`
+- Keep all writes behind dry-run, backup, and explicit apply gates.
+
+### Slice 4: Plugin And Tool Adapters
+
+- Evaluate whether Codex hooks, MCP registrations, and custom-agent roles have safe equivalents in Claude Code, OpenCode, Xcode, or Zed.
+- Add only adapters with a clear trust and permission story.
+- Keep host-specific adapters separate from Socket's existing Codex marketplace catalog.
+
+## Open Questions
+
+- Does the Agent Skills specification require any frontmatter fields or size limits beyond what Zed and OpenCode currently document?
+- Should Socket's source of truth stay as per-child `skills/`, or should a root export index own cross-host skill publishing?
+- Should project-local `.agents/skills` output be a generated mirror, symlink tree, or documented install command?
+- Which CLI surfaces are installed locally and stable enough for smoke tests?
+- What is the official Hermes Agent documentation or source repository?
+- What package format does Xcode expect for an imported agentic coding plug-in?
+
+## Decision Gate
+
+Do not change marketplace metadata, packaged plugin roots, or production install guidance until Slice 1 produces a real inventory and at least one target-specific dry-run shows what Socket would add, skip, or transform.
