@@ -44,6 +44,8 @@
       "Build this Scala service change with functional design treated as first-class.",
       "Run and explain the JVM testing workflow for this service."
     ],
-    "brandColor": "#7C3AED"
+    "brandColor": "#7C3AED",
+    "composerIcon": "./assets/java-coffee-cup-icon.png",
+    "logo": "./assets/java-coffee-cup-icon.png"
   }
 }
