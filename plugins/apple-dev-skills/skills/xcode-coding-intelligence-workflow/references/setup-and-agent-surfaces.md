@@ -42,9 +42,9 @@ Use this split before giving setup advice:
 
 - `xcode-hosted`: Xcode starts the agent or chat provider and owns the assistant UI, artifacts, project context, and permissions.
 - `external-mcp`: another client starts the agent and connects to Xcode through `xcrun mcpbridge`.
-- `skill-export`: `xcrun mcpbridge run-agent skills export` writes Xcode-visible skill bundles for inspection or setup; keep authored Socket skills as the source of truth unless an import is explicitly requested.
+- `plugin-import`: Xcode Settings > Intelligence > Plug-ins imports plug-ins, skills, hooks, and MCP servers from installed agent state, a local folder, or a remote Git URL; keep authored Socket skills as the source of truth unless an import or adaptation is explicitly requested.
 - `chat-provider`: Xcode uses a model provider for code chat or coding tools, but no autonomous agent permission is implied until Xcode documents that path.
-- `plugin`: Xcode plug-in packaging or import behavior. Keep this research-first until live Xcode documentation and local inspection verify the package shape.
+- `plugin`: Xcode plug-in packaging or import behavior. The import path is verified in Xcode 27 beta, but runtime behavior for hooks, MCP commands, and non-skill components still needs targeted validation.
 - `acp`: agent protocol setup. Do not claim Apple-documented ACP setup unless current Apple docs or local Xcode inspection show it.
 
 ## Handoff Rule

@@ -42,15 +42,11 @@ xcrun mcpbridge run-agent --dry-run <agent-name>
 
 Use `--no-xcode-tools` only when intentionally launching the agent with Xcode-provided configuration but without Xcode MCP tools in the agent config.
 
-## Exporting Xcode-Visible Skill Bundles
+## Plug-in Import Is Not A Bridge Subcommand
 
-Xcode 27.0 beta's `mcpbridge` help also exposes:
+Use Xcode Settings > Intelligence > Plug-ins for official plug-in imports. The local Xcode 27 beta UI can import from installed Codex state, a local folder, and a remote Git URL.
 
-```bash
-xcrun mcpbridge run-agent skills export [--output-dir <path>] [--replace-existing]
-```
-
-Use this as an inspection or setup path only. Exported skill bundles are generated from the Xcode-visible agent environment and should not replace authored Socket skill sources unless the user explicitly asks for a comparison or import workflow.
+Do not describe plug-in installation as an `mcpbridge` subcommand. `mcpbridge run-agent <agent-name>` launches an agent with Xcode-provided configuration; it does not install Xcode plug-ins by itself.
 
 ## Preconditions
 
@@ -61,7 +57,7 @@ Before expecting Xcode tools to work through an external agent:
 - External-agent access must be enabled in Xcode's Intelligence settings.
 - The agent or client must be configured to start `xcrun mcpbridge`.
 - The requested tool permission must be allowed by Xcode and by the external client.
-- Skill export paths should target a temporary or explicitly requested output directory, not a source-controlled skill tree by default.
+- Plug-in import probes should use a harmless fixture or a trusted Git URL first, and should stop before importing additional plug-ins unless the user asked to mutate Xcode state.
 
 Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. For Gale's Xcode 27 beta work, open `/Users/galew/Applications/Betas/Xcode-beta.app` and use `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` for matching command-line checks. Use stable `/Applications/Xcode.app` when the task targets stable Xcode. Ask first only when opening Xcode would be disruptive, would require signing in, would alter global developer-directory selection, or conflicts with a user-stated constraint.
 

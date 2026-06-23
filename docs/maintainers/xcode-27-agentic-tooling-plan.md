@@ -45,8 +45,11 @@ Live beta probe checked on 2026-06-23:
 
 - Xcode 27 beta was opened from `/Users/galew/Applications/Betas/Xcode-beta.app`.
 - `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent --dry-run codex` resolved Xcode's beta-scoped Codex executable and `CODEX_HOME`.
-- `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent skills export --output-dir /private/tmp/socket-xcode-skills-probe --replace-existing` exported seven Xcode-visible skills for inspection.
-- Exported skill names: `swiftui-whats-new-27`, `swiftui-specialist`, `c-bounds-safety`, `device-interaction`, `audit-xcode-security-settings`, `uikit-app-modernization`, and `test-modernizer`.
+- `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent codex skills export --output-dir /private/tmp/socket-xcode-plugin-fixture/after-file-import-skills --replace-existing` launched Xcode's beta-scoped Codex runtime, but that runtime reported `unrecognized subcommand 'export'`. Treat `skills export` as unusable from this Codex runtime until a later beta proves otherwise.
+- Xcode Beta Settings > Intelligence > Plug-ins was inspected through the official UI. The Add Plug-in sheet exposed `Import from Claude Code`, `Import from Codex`, `Add from file`, and `Add from URL`.
+- `Import from Codex` imported the installed `apple-dev-skills` plugin as `6 Skills - Hooks`.
+- `Add from file` imported a harmless fixture folder containing `.codex-plugin/plugin.json`, `skills/<name>/SKILL.md`, and `.mcp.json` as `1 Skill - 1 MCP Server`.
+- `Add from URL` rejected a local `file://` Git URL as invalid, but accepted `https://github.com/gaelic-ghost/socket.git` and enumerated Socket child plug-ins from the public repository before import.
 
 Live-app setup note: do not treat "Xcode is not running" as a final blocker for Xcode Intelligence, MCP, or plug-in inspection work. Open the intended stable or beta Xcode app, select the intended process with `MCP_XCODE_PID` when needed, and retry the check before reporting a blocker.
 
@@ -61,7 +64,8 @@ Important current Xcode 27 signals:
 - Xcode-hosted agents can use built-in Xcode guidance and skills.
 - Xcode can assist with localization by adding languages, updating string catalogs, translating strings, and setting machine-translation state.
 - Device Hub is now the central Xcode surface for simulated and physical device interaction, environment inspection, pairing, screenshots, videos, and diagnostics.
-- Xcode 27 beta can provide a beta-scoped Codex runtime and export Xcode-visible skills through `xcrun mcpbridge run-agent` when the beta app is running and selected explicitly.
+- Xcode 27 beta can provide a beta-scoped Codex runtime through `xcrun mcpbridge run-agent` when the beta app is running and selected explicitly.
+- Xcode 27 beta can import Socket-shaped plug-ins through its official Plug-ins UI from installed Codex state, a local folder, or a remote Git URL.
 
 ## Proposed Skill Surfaces
 
@@ -286,7 +290,7 @@ uv run scripts/validate_socket_metadata.py
 
 Completed on 2026-06-22 with the first practical setup and permission workflow. Xcode 27 claims are dated beta-era claims, and local `mcpbridge` behavior is recorded separately from Xcode 27 behavior because this authoring machine had Xcode 26.5 installed.
 
-Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app now has confirmed `run-agent --dry-run codex` and `run-agent skills export` evidence when selected through `DEVELOPER_DIR` plus `MCP_XCODE_PID`. Exported Xcode-visible skills remain inspection evidence, not Socket-authored source of truth.
+Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app now has confirmed `run-agent --dry-run codex` evidence when selected through `DEVELOPER_DIR` plus `MCP_XCODE_PID`. A direct `codex skills export` attempt through Xcode's beta-scoped Codex runtime failed, so Xcode plug-in support should use the official Plug-ins UI import paths instead of bridge-based skill export.
 
 Validation:
 
@@ -327,17 +331,27 @@ uv run pytest
 
 ### Slice 5: Xcode Plug-In Research
 
-- Add `xcode-agent-plugin-workflow` only after live Xcode 27 beta inspection confirms enough import/package details to make the skill useful.
-- If the live import surface is too vague, keep this as a roadmap item and do not ship speculative instructions.
-- Use a harmless fixture before trying to package Socket itself. The fixture should contain one skill and one inert MCP server declaration if the import UI accepts that shape.
-- Record whether Xcode accepts a Git URL, local file, archive, or manifest URL, and whether it writes Codex, Gemini, or Xcode-native configuration.
+- [x] Use a harmless fixture before trying to package Socket itself. The fixture contained one skill and one inert MCP server declaration.
+- [x] Record whether Xcode accepts a Git URL, local file, archive, or manifest URL, and whether it writes Codex, Gemini, or Xcode-native configuration.
+- Add `xcode-agent-plugin-workflow` after this evidence is shaped into a maintainer workflow and install support assessment.
+- Keep writer behavior behind a dry-run assessment before generating or applying any user-home config.
 - Do not treat local Xcode binary strings as a public schema. They are useful probe hints only.
+
+Observed import behavior:
+
+- Xcode accepts a local folder through `Add from file`.
+- Xcode rejects a local `file://` Git URL through `Add from URL`.
+- Xcode accepts the public Socket GitHub URL through `Add from URL` and enumerates child plug-ins before import.
+- Xcode writes imported plug-ins to `~/Library/Developer/Xcode/CodingAssistant/AgentPlugins`.
+- Xcode mirrors imported payloads into `~/Library/Developer/Xcode/CodingAssistant/codex/plugins/cache` and `~/Library/Developer/Xcode/CodingAssistant/gemini/.gemini/extensions`.
+- Xcode writes MCP server declarations from imported `.mcp.json` files into `~/Library/Developer/Xcode/CodingAssistant/mcp-servers.json`.
 
 ### Slice 6: Xcode-Visible Skill Comparison
 
 - Compare the exported Xcode-visible skills against existing Socket Apple Dev Skills.
 - Decide whether any Xcode 27 beta guidance should be copied into Socket-authored references, summarized with Apple source links, or left as Xcode-owned built-in expertise.
 - Keep Socket's authored skills independent from the local export directory unless a later task explicitly approves an import path.
+- Keep this slice blocked until an actual Xcode-visible skill export path works. The 2026-06-23 beta-scoped Codex runtime did not support `codex skills export`.
 
 ### Slice 7: Socket-To-Xcode Install Assessment
 
@@ -348,11 +362,12 @@ uv run pytest
   - external agents using `xcrun mcpbridge`
 - Treat skill-only plugins as likely first candidates for Xcode internal-agent support.
 - Treat local MCP plugins as requiring path, dependency, authentication, and permission handling before they can be full-fidelity Xcode plug-ins.
-- Treat Codex hooks, Codex apps, and OpenAI custom-agent metadata as non-portable until Xcode exposes matching component contracts.
+- Treat hooks as recognized by import but execution-unverified until a follow-up probe confirms behavior.
+- Treat Codex apps and OpenAI custom-agent metadata as non-portable until Xcode exposes matching component contracts.
 
 ## Open Questions
 
-- Does Xcode 27 beta expose enough plug-in package structure to support a real Socket-authored Xcode plug-in?
+- Which Socket child plug-ins can be imported from the public Git URL with full runtime behavior, not just recognized metadata?
 - Can one authored skill surface be packaged for both Codex and Xcode, or does Xcode require a separate distribution artifact?
 - Should Xcode-launched Codex config sync remain entirely in `codex-utilities`, with Apple Dev Skills only describing the Xcode side?
 - Should Socket ship a dedicated Xcode plug-in artifact per child plugin, a generated aggregate Xcode manifest, or only a dry-run/apply adapter for Xcode-launched Codex until Apple's plug-in schema is public?
