@@ -472,24 +472,27 @@ Planned
 ### Scope
 
 - [x] Record the first source-linked platform comparison in [`docs/maintainers/agent-portability-options.md`](./docs/maintainers/agent-portability-options.md).
+- [ ] Focus the first implementation pass on locally installed Xcode 27 beta and OpenCode CLI/Desktop, with Zed deferred until the first source-of-truth and export decisions are proven.
 - [ ] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
 - [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
+- [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
 - [ ] Keep Hermes Agent support research-blocked until an official documentation or source repository is identified.
 
 ### Tickets
 
 - [ ] Add a root portability inventory command that reports every `SKILL.md`, `.codex-plugin/plugin.json`, `.mcp.json`, hook, app config, and custom-agent definition with host-specific compatibility notes.
-- [ ] Add common skill constraint checks for Codex, OpenCode, and Zed, including skill name, frontmatter, description size, flat-layout, and catalog-budget risks.
-- [ ] Add a dry-run `.agents/skills` export plan for skill-only consumers such as Zed and OpenCode.
-- [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy without assuming Codex marketplace metadata carries over.
+- [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
+- [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
-- [ ] Evaluate Xcode adapters for Xcode-launched Codex configuration and Xcode plug-in package import only after the package shape is verified locally.
+- [ ] Evaluate Xcode 27 beta adapters using `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer`, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in package import only after the package shape is verified locally.
+- [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy after the Xcode and OpenCode first pass.
 - [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
 
 ### Exit Criteria
 
 - [ ] Socket can report which authored skills are portable without changing installed user state.
-- [ ] At least one target-specific dry-run can show exactly what would be added, skipped, or transformed for a non-Codex host.
+- [ ] At least one OpenCode dry-run can show exactly what would be added, skipped, or transformed for a non-Codex host.
+- [ ] Xcode 27 beta support claims are backed by explicit beta-toolchain evidence rather than the default Xcode 26.5 command-line selection.
 - [ ] Docs clearly distinguish common Agent Skills from Codex plugins, Claude Code plugins, OpenCode plugins, Xcode plug-ins, Zed extensions, and MCP servers.
 - [ ] No non-Codex support claim is user-facing unless it is backed by official docs, local smoke evidence, or both.
 

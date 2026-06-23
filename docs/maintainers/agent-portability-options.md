@@ -14,6 +14,23 @@ Treat plugins as host-specific package adapters.
 
 Codex, Claude Code, OpenCode, Xcode, and Zed each expose different plugin or extension concepts. Socket should not redefine its root as a generic plugin bundle until a concrete target needs that shape. Keep the current root as a Codex marketplace catalog, then add per-host export or install support as deliberate adapter outputs.
 
+## Near-Term Focus
+
+Start with Xcode 27 beta and OpenCode.
+
+Those are the two locally installed targets available for immediate smoke tests on Gale's machine:
+
+- Xcode 27 beta: `/Users/galew/Applications/Betas/Xcode-beta.app`, verified with `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcodebuild -version` as Xcode 27.0 build 27A5194q.
+- Active command-line Xcode: `/Applications/Xcode.app`, currently Xcode 26.5 build 17F42 through the default `xcodebuild -version`.
+- OpenCode CLI: `/opt/homebrew/bin/opencode`, verified as 1.17.9.
+- OpenCode Desktop: `/Applications/OpenCode.app`, present locally.
+
+Defer Zed until the Xcode and OpenCode paths prove the source-of-truth and export model. Zed is likely a strong skill-only target because it reads `.agents/skills`, but it should not drive the first adapter design.
+
+Treat AgentUtils as the future home for complex local orchestration.
+
+If a target needs user-home discovery, app-bundle detection, dry-run previews, backup-backed writes, service status, or cross-agent config rendering, the durable architecture should route that through Gale's local macOS utility app rather than putting broad machine-management behavior into Socket plugin payloads. Socket should own the agent-facing policy, docs, and lightweight adapter contract; AgentUtils should own macOS integration, filesystem safety, and local apply operations.
+
 ## Platform Snapshot
 
 ### Codex
@@ -34,11 +51,17 @@ Apple documents Xcode agent customization through Xcode Intelligence settings, X
 
 Apple also documents an Xcode plug-in UI that can install plug-ins containing subagents, MCP servers, and skills, but the public page does not expose enough package-format detail to author a Socket-to-Xcode plugin adapter yet.
 
+Local validation target:
+
+- Use `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` for Xcode 27 beta checks until the active command-line developer directory is intentionally changed.
+- Keep the default Xcode 26.5 path untouched unless a task explicitly needs `xcode-select` changes.
+
 Practical Socket implication:
 
 - Support Xcode Codex as a separate Codex target, not as a raw mirror of normal `~/.codex`.
 - Add an Xcode export plan only after the Xcode plug-in package shape is verified locally.
 - Keep Xcode-specific workflow guidance in `apple-dev-skills`, especially `xcode-coding-intelligence-workflow`.
+- Prefer a read-only local probe first: inspect Xcode's CodingAssistant folders, Xcode MCP bridge behavior, and any plug-in import artifacts before writing config.
 
 Sources:
 
@@ -94,6 +117,7 @@ Practical Socket implication:
 - The `.agents/skills` discovery mirror is the strongest low-effort portability win for OpenCode.
 - OpenCode plugin support would require JavaScript or TypeScript adapter modules, not reuse of `.codex-plugin/plugin.json`.
 - OpenCode config can express MCP servers, permissions, agents, commands, plugins, and instructions, so a later adapter could render `opencode.json` for project-local testing.
+- The first OpenCode implementation target should be project-local and reversible: a dry-run report plus optional `.opencode/skills` or `.agents/skills` fixture in a temporary checkout, not a global user install.
 
 Sources:
 
@@ -165,25 +189,33 @@ Practical Socket implication:
 ### Slice 1: Inventory And Constraints
 
 - Add a root portability report command that inventories every `SKILL.md`, plugin manifest, MCP config, hook, app config, and custom-agent definition.
-- Validate common skill-name and description constraints for Codex, OpenCode, and Zed.
+- Validate common skill-name and description constraints for Codex and OpenCode first.
+- Include Zed constraints in the report as informational follow-up, but do not let Zed-specific choices drive the first implementation.
 - Report host-specific blockers instead of mutating files.
 
-### Slice 2: Skills-Only Export
+### Slice 2: OpenCode Skills-Only Export
 
-- Add a dry-run exporter for `.agents/skills` from the authored Socket skill roots.
-- Decide whether exports should be symlink mirrors, generated copies, or install instructions.
+- Add a dry-run exporter for OpenCode-compatible skill output from the authored Socket skill roots.
+- Decide whether the first output should be `.agents/skills`, `.opencode/skills`, symlink mirrors, generated copies, or install instructions.
 - Keep generated or consumer-side install output out of git unless the output is intentionally committed as a project-local fixture.
 
-### Slice 3: Host Config Adapters
+### Slice 3: Xcode 27 Beta Probe And Adapter Plan
+
+- Probe the Xcode 27 beta target through explicit `DEVELOPER_DIR`.
+- Inspect Xcode CodingAssistant config folders and Xcode MCP bridge behavior without mutating user state.
+- Record the concrete Xcode plug-in import/package evidence before adding a Socket export or package adapter.
+
+### Slice 4: Host Config Adapters
 
 - Add target-specific renderers for:
-  - Claude Code project settings and `.claude/skills`
   - OpenCode `opencode.json` and `.opencode/skills`
   - Xcode-launched Codex config under the Xcode CodingAssistant home
+  - Claude Code project settings and `.claude/skills`
   - Zed project-local `.agents/skills`
 - Keep all writes behind dry-run, backup, and explicit apply gates.
+- Route heavier local discovery and apply operations through AgentUtils when the app exposes a supported contract.
 
-### Slice 4: Plugin And Tool Adapters
+### Slice 5: Plugin And Tool Adapters
 
 - Evaluate whether Codex hooks, MCP registrations, and custom-agent roles have safe equivalents in Claude Code, OpenCode, Xcode, or Zed.
 - Add only adapters with a clear trust and permission story.
