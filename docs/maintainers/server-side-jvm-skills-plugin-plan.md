@@ -37,7 +37,7 @@ The child plugin should own its Codex-facing guidance surface:
 - plugin metadata, skill metadata, `AGENTS.md`, or maintainer notes that explain the plugin's role
 - any validation scripts needed for the plugin's own authored guidance
 
-The root Socket marketplace should list `server-side-jvm` as `NOT_AVAILABLE` while it remains a placeholder. Switch the marketplace entry to `AVAILABLE` only after the first real skill content lands and root validation passes.
+The root Socket marketplace lists `server-side-jvm` as installable now that the first real skill content has landed. If the plugin ever loses its exported skill content, switch the marketplace entry back to `NOT_AVAILABLE` in the same pass.
 
 ## Boundary With Android Dev Skills
 
@@ -215,15 +215,15 @@ This skill should cover:
 - [x] Record this first detailed skill plan.
 - [x] Update root README, TODO, and ROADMAP so users understand the planned child plugin surface.
 - [x] Run root metadata validation for the placeholder marketplace and manifest wiring.
-- [ ] Add the first real skills for service-shape choice, build tooling, Java service work, Scala service work, and testing.
-- [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
-- [ ] Switch the root marketplace entry to installable only after real skill content exists.
-- [ ] Run root metadata validation again after real skill content lands.
+- [x] Add the first real skills for service-shape choice, build tooling, Java service work, Scala service work, and testing.
+- [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Run root metadata validation again after real skill content lands.
 
 ## Exit Criteria
 
-- [ ] The Socket marketplace exposes `server-side-jvm` as an installable child plugin after real skill content lands.
-- [ ] The new skills can help an agent choose a JVM backend shape before implementation.
-- [ ] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
-- [ ] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] The Socket marketplace exposes `server-side-jvm` as an installable child plugin after real skill content lands.
+- [x] The new skills can help an agent choose a JVM backend shape before implementation.
+- [x] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
+- [x] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.

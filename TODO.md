@@ -91,12 +91,12 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 - [x] Create the Socket-owned `server-side-jvm` placeholder plugin surface.
 - [x] Record the detailed first skill plan in [`docs/maintainers/server-side-jvm-skills-plugin-plan.md`](./docs/maintainers/server-side-jvm-skills-plugin-plan.md).
-- [ ] Author the first real server-side JVM skill tranche for Codex.
-- [ ] Treat Java and Scala as equal first-party JVM language choices, with future Clojure support planned without renaming the plugin.
-- [ ] Prefer functional style where it fits the selected language and framework, especially for Scala and future Clojure guidance.
-- [ ] Cover project-shape discovery, Gradle/Maven/SBT alignment, Java service work, Scala service work, tests, package/runtime handoffs, persistence, observability, CI, and upgrades.
-- [ ] Keep Android app/platform guidance separate from `android-dev-skills`.
-- [ ] Update docs and validation once the exported server-side JVM skill surface is real.
+- [x] Author the first real server-side JVM skill tranche for Codex.
+- [x] Treat Java and Scala as equal first-party JVM language choices, with future Clojure support planned without renaming the plugin.
+- [x] Prefer functional style where it fits the selected language and framework, especially for Scala and future Clojure guidance.
+- [ ] Cover package/runtime handoffs, persistence, observability, CI, and upgrades after the first project-shape, build-tooling, implementation, and testing slice.
+- [x] Keep Android app/platform guidance separate from `android-dev-skills`.
+- [x] Update docs and validation once the exported server-side JVM skill surface is real.
 - [ ] Decide whether the long-term home remains Socket-owned or becomes standalone.
 
 ### rust-skills

@@ -1,7 +1,7 @@
 {
   "name": "server-side-jvm",
   "version": "7.0.0",
-  "description": "Placeholder plugin repository for future server-side JVM, Java, Scala, and Clojure Codex skills.",
+  "description": "Codex skills for choosing, building, testing, and maintaining server-side JVM backend projects with Java and Scala as equal first-party languages and future Clojure support planned.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -25,10 +25,11 @@
     "plugin",
     "skills"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side JVM",
-    "shortDescription": "Future server-side JVM, Java, Scala, and Clojure Codex skills.",
-    "longDescription": "Reserve a dedicated plugin surface for server-side JVM project maintenance, Java and Scala implementation, future Clojure workflows, Gradle, Maven, SBT, functional backend design, tests, packaging, diagnostics, CI, and release-readiness guidance.",
+    "shortDescription": "Server-side JVM, Java, Scala, Gradle, Maven, SBT, and testing workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through choosing JVM backend project shapes, preserving Android boundaries, maintaining Gradle, Maven, and SBT build tooling, implementing idiomatic Java and Scala services, treating functional Scala design as first-class, running and triaging JVM tests, and leaving a clear path for future Clojure, persistence, observability, packaging, CI, and upgrade workflows.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -36,6 +37,13 @@
       "Write"
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-jvm",
+    "defaultPrompt": [
+      "Choose the right server-side JVM project shape before we start implementing.",
+      "Inspect this JVM repository and decide whether Gradle, Maven, or SBT owns the build workflow.",
+      "Build this Java service change idiomatically while respecting existing repo conventions.",
+      "Build this Scala service change with functional design treated as first-class.",
+      "Run and explain the JVM testing workflow for this service."
+    ],
     "brandColor": "#7C3AED"
   }
 }

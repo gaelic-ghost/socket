@@ -45,7 +45,7 @@
 - Milestone 13: Reverse Engineering skills plugin - In Progress
 - Milestone 14: Core AI and Foundation Models workflow ownership - Planned
 - Milestone 15: Android Dev Skills plugin - Planned
-- Milestone 16: Server-Side JVM skills plugin - Planned
+- Milestone 16: Server-Side JVM skills plugin - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -414,7 +414,7 @@ Planned
 - [ ] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
 - [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [ ] Switch the root marketplace entry to installable only after real skill content exists.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
@@ -422,43 +422,43 @@ Planned
 - [ ] The new skills can help an agent choose an Android project shape before implementation.
 - [ ] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
 - [ ] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 16: Server-Side JVM skills plugin
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
-- [ ] Turn the placeholder `server-side-jvm` child plugin into an installable JVM backend guidance plugin.
-- [ ] Treat Java and Scala as equal first-party JVM language choices, with future Clojure support planned without renaming the plugin.
-- [ ] Prefer functional style where it fits the selected language and framework, especially for Scala and future Clojure guidance.
-- [ ] Keep server-side JVM backend and shared non-Android JVM library guidance separate from Android app and platform guidance.
+- [x] Turn the placeholder `server-side-jvm` child plugin into an installable JVM backend guidance plugin.
+- [x] Treat Java and Scala as equal first-party JVM language choices, with future Clojure support planned without renaming the plugin.
+- [x] Prefer functional style where it fits the selected language and framework, especially for Scala and future Clojure guidance.
+- [x] Keep server-side JVM backend and shared non-Android JVM library guidance separate from Android app and platform guidance.
 
 ### Tickets
 
 - [x] Create `plugins/server-side-jvm/` with `.codex-plugin/plugin.json` and `AGENTS.md`.
 - [x] Wire `server-side-jvm` into the root Socket marketplace as `NOT_AVAILABLE` while it is a placeholder.
 - [x] Record the detailed plan in [`docs/maintainers/server-side-jvm-skills-plugin-plan.md`](./docs/maintainers/server-side-jvm-skills-plugin-plan.md).
-- [ ] Add `server-side-jvm:choose-service-shape` for Java, Scala, future Clojure, shared JVM libraries, Gradle, Maven, SBT, framework, package, CI, deployment, and diagnostics routing.
-- [ ] Add `server-side-jvm:build-tooling-workflow` for Gradle, Maven, SBT, Java toolchains, dependencies, multi-module boundaries, test, package, and local run commands.
-- [ ] Add `server-side-jvm:build-java-service` for idiomatic Java backend implementation.
-- [ ] Add `server-side-jvm:build-scala-service` for idiomatic Scala backend implementation with functional design treated as first-class.
-- [ ] Add `server-side-jvm:testing-workflow` for Gradle, Maven, SBT, JUnit, ScalaTest, MUnit, unit, integration, contract, service-level tests, and readable failure summaries.
+- [x] Add `server-side-jvm:choose-service-shape` for Java, Scala, future Clojure, shared JVM libraries, Gradle, Maven, SBT, framework, package, CI, deployment, and diagnostics routing.
+- [x] Add `server-side-jvm:build-tooling-workflow` for Gradle, Maven, SBT, Java toolchains, dependencies, multi-module boundaries, test, package, and local run commands.
+- [x] Add `server-side-jvm:build-java-service` for idiomatic Java backend implementation.
+- [x] Add `server-side-jvm:build-scala-service` for idiomatic Scala backend implementation with functional design treated as first-class.
+- [x] Add `server-side-jvm:testing-workflow` for Gradle, Maven, SBT, JUnit, ScalaTest, MUnit, unit, integration, contract, service-level tests, and readable failure summaries.
 - [ ] Add package/runtime, persistence, observability, CI, and upgrade workflows after the first skill slice lands.
 - [ ] Keep `server-side-jvm:build-clojure-service` as a future candidate until the Java and Scala foundations are stable.
-- [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
-- [ ] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
 - [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `server-side-jvm` as an installable child plugin after real skill content lands.
-- [ ] The new skills can help an agent choose a JVM backend shape before implementation.
-- [ ] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
-- [ ] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
+- [x] The Socket marketplace exposes `server-side-jvm` as an installable child plugin after real skill content lands.
+- [x] The new skills can help an agent choose a JVM backend shape before implementation.
+- [x] Java and Scala guidance are first-class, with future Clojure support planned without renaming the plugin.
+- [x] Android app guidance stays owned by `android-dev-skills`; backend and shared non-Android JVM library guidance stays owned by `server-side-jvm`.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Small Tickets
