@@ -1,0 +1,20 @@
+version = 1
+name = "socket-dev"
+
+[setup]
+script = "UV_CACHE_DIR=.codex/.cache/uv uv sync --dev"
+
+[[actions]]
+name = "sync"
+icon = "tool"
+command = "UV_CACHE_DIR=.codex/.cache/uv uv sync --dev"
+
+[[actions]]
+name = "validate"
+icon = "check-circle"
+command = "UV_CACHE_DIR=.codex/.cache/uv uv run scripts/validate_socket_metadata.py"
+
+[[actions]]
+name = "mypy"
+icon = "check-circle"
+command = "UV_CACHE_DIR=.codex/.cache/uv uv run mypy"
