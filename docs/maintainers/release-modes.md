@@ -59,8 +59,13 @@ scripts/release.sh patch-refresh
 metadata, commits and pushes `main`, pushes any required subtree split, runs the
 `release-ready` gate, captures commit-bound marketplace and Dependabot evidence,
 tags `main`, publishes and verifies the GitHub release with that evidence in the
-release notes, verifies branch accounting, and runs `codex plugin marketplace
-upgrade socket`.
+release notes, verifies branch accounting, and refreshes the local Socket
+marketplace cache. The helper tries `codex plugin marketplace upgrade socket`
+with a 45-second outer guard first. If the current Codex CLI still fails with
+its internal 30-second Git clone timeout and `fatal: early EOF`, the helper
+fast-forwards the existing configured Socket marketplace cache from the same Git
+source instead of leaving the release half-finished at the final local-refresh
+step.
 If local branches are not contained by `main`, the helper stops during its
 branch-accounting preflight before it bumps the version; after accounting for
 those branches explicitly, a trusted maintainer may rerun with:
@@ -144,4 +149,4 @@ After tagging:
 - if a child release landed outside `socket`, verify `socket` either contains that child state or explicitly records why the sync is deferred. For Speak Swiftly, the Socket catalog follows `gaelic-ghost/SpeakSwiftlyServer` directly, so standalone SpeakSwiftlyServer releases normally require no local subtree sync.
 - confirm `git log origin/main..main` is empty
 - enumerate every local branch not contained by `main` and account for each one
-- run `codex plugin marketplace upgrade socket` so Gale's local Codex install sees the released marketplace state; this must not happen earlier
+- run the Socket marketplace cache refresh so Gale's local Codex install sees the released marketplace state; this must not happen earlier. `patch-refresh` owns the supported retry/fallback path for the known Codex 30-second Git clone timeout.

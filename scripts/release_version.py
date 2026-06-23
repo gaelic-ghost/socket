@@ -80,19 +80,52 @@ def run_command(
     args: list[str],
     check: bool = True,
     env: dict[str, str] | None = None,
+    timeout_seconds: int | None = None,
 ) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(
-        args,
-        cwd=root,
-        check=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        env=env,
-    )
+    try:
+        result = subprocess.run(
+            args,
+            cwd=root,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            env=env,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise VersionToolError(
+            f"`{' '.join(args)}` timed out after {timeout_seconds}s."
+        ) from error
     if check and result.returncode != 0:
         detail = result.stderr.strip() or result.stdout.strip()
         raise VersionToolError(f"`{' '.join(args)}` failed. {detail}")
+    return result
+
+
+def run_git_in_path(
+    path: Path,
+    args: list[str],
+    check: bool = True,
+    timeout_seconds: int | None = None,
+) -> subprocess.CompletedProcess[str]:
+    try:
+        result = subprocess.run(
+            ["git", *args],
+            cwd=path,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise VersionToolError(
+            f"`git {' '.join(args)}` in {path} timed out after {timeout_seconds}s."
+        ) from error
+    if check and result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise VersionToolError(f"`git {' '.join(args)}` in {path} failed. {detail}")
     return result
 
 
@@ -674,6 +707,69 @@ def render_branch_accounting(branches: list[str], *, allow_unmerged_branches: bo
         print(f"- {branch}: {status}")
 
 
+def codex_home() -> Path:
+    return Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")).expanduser()
+
+
+def configured_socket_marketplace() -> tuple[Path, str]:
+    home = codex_home()
+    config_path = home / "config.toml"
+    if not config_path.is_file():
+        raise VersionToolError(
+            f"Codex config not found at {config_path}; cannot recover Socket marketplace cache."
+        )
+    config = tomllib.loads(config_path.read_text(encoding="utf-8"))
+    marketplaces = config.get("marketplaces")
+    socket_marketplace = marketplaces.get("socket") if isinstance(marketplaces, dict) else None
+    if not isinstance(socket_marketplace, dict):
+        raise VersionToolError(
+            "Codex config does not contain marketplaces.socket; cannot recover Socket marketplace cache."
+        )
+    if socket_marketplace.get("source_type") != "git":
+        raise VersionToolError(
+            "Codex marketplaces.socket is not a Git-backed marketplace; "
+            f"found source_type={socket_marketplace.get('source_type')!r}."
+        )
+    source = socket_marketplace.get("source")
+    if not isinstance(source, str) or not source:
+        raise VersionToolError("Codex marketplaces.socket does not have a non-empty Git source.")
+    return home / ".tmp" / "marketplaces" / "socket", source
+
+
+def refresh_socket_marketplace_cache(root: Path) -> None:
+    command = ["codex", "plugin", "marketplace", "upgrade", "socket"]
+    result = run_command(root, command, check=False, timeout_seconds=45)
+    if result.returncode == 0:
+        if result.stdout.strip():
+            print(result.stdout.strip())
+        return
+
+    detail = result.stderr.strip() or result.stdout.strip()
+    known_timeout = "timed out after 30s" in detail and "fatal: early EOF" in detail
+    if not known_timeout:
+        raise VersionToolError(f"`{' '.join(command)}` failed. {detail}")
+
+    print(
+        "Codex marketplace upgrade hit the known 30s clone timeout; "
+        "fast-forwarding the existing Socket marketplace cache instead."
+    )
+    cache_root, configured_source = configured_socket_marketplace()
+    if not (cache_root / ".git").is_dir():
+        raise VersionToolError(
+            f"Socket marketplace cache is missing at {cache_root}; cannot fast-forward fallback."
+        )
+    remote_url = run_git_in_path(cache_root, ["remote", "get-url", "origin"]).stdout.strip()
+    if remote_url != configured_source:
+        raise VersionToolError(
+            "Socket marketplace cache origin does not match the configured marketplace source: "
+            f"{remote_url!r} != {configured_source!r}."
+        )
+    run_git_in_path(cache_root, ["fetch", "origin", "main"], timeout_seconds=45)
+    run_git_in_path(cache_root, ["merge", "--ff-only", "origin/main"], timeout_seconds=45)
+    head = run_git_in_path(cache_root, ["rev-parse", "HEAD"]).stdout.strip()
+    print(f"Socket marketplace cache fast-forwarded to {head}.")
+
+
 def render_release_ready(root: Path, targets: list[VersionTarget], version: str) -> int:
     ensure_versions_match_release(targets, version)
     ensure_clean_checkout(root)
@@ -785,7 +881,7 @@ def render_patch_refresh(root: Path, targets: list[VersionTarget], *, allow_unme
     branches = verify_branch_accounting(root, allow_unmerged_branches=allow_unmerged_branches)
     render_branch_accounting(branches, allow_unmerged_branches=allow_unmerged_branches)
     print("Refreshing the local Codex marketplace cache...")
-    run_command(root, ["codex", "plugin", "marketplace", "upgrade", "socket"])
+    refresh_socket_marketplace_cache(root)
     print(f"Patch-refresh release completed for {tag}.")
     return 0
 
