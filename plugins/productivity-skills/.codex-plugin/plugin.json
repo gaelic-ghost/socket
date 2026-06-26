@@ -46,6 +46,8 @@
       "Design evals for an agent, skill, prompt, or automation and decide whether it is fit for safe full automation.",
       "Help me update the README, AGENTS guidance, accessibility standards, roadmap, or maintainer docs without flattening the existing structure."
     ],
-    "brandColor": "#14B8A6"
+    "brandColor": "#14B8A6",
+    "composerIcon": "./assets/productivity-skills-icon.svg",
+    "logo": "./assets/productivity-skills-icon.svg"
   }
 }

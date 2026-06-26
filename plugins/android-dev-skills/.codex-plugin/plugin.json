@@ -30,6 +30,11 @@
       "Write"
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/android-dev-skills",
-    "brandColor": "#3DDC84"
+    "defaultPrompt": [
+      "Plan a future Android, Kotlin, Java, Gradle, emulator-aware validation, or release-readiness workflow for this repository."
+    ],
+    "brandColor": "#3DDC84",
+    "composerIcon": "./assets/android-dev-icon.svg",
+    "logo": "./assets/android-dev-icon.svg"
   }
 }

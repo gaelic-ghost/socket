@@ -44,6 +44,8 @@
       "Split and reorganize these Swift source files by concern while preserving access control and validation.",
       "Modernize and clean up this existing Swift implementation with a complete formatting, API, pipeline, source organization, concurrency, testability, and validation pass."
     ],
-    "brandColor": "#F05138"
+    "brandColor": "#F05138",
+    "composerIcon": "./assets/swift-lang-icon.svg",
+    "logo": "./assets/swift-lang-icon.svg"
   }
 }

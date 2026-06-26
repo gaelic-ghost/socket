@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Android Dev Skills neon robot icon</title>
+  <desc id="desc">A dark circular badge with a neon Android robot head and cyan code brackets.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="44%" r="64%">
+      <stop offset="0%" stop-color="#10221d"/>
+      <stop offset="58%" stop-color="#06100f"/>
+      <stop offset="100%" stop-color="#020405"/>
+    </radialGradient>
+    <linearGradient id="bot" x1="148" y1="124" x2="374" y2="382" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b7ff5a"/>
+      <stop offset="52%" stop-color="#3ddc84"/>
+      <stop offset="100%" stop-color="#19f7ff"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0.35 0 0 0 0.1 0 1 0 0 1 0 0 0.55 0 0.65 0 0 0 1 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="scan" width="512" height="16" patternUnits="userSpaceOnUse">
+      <rect width="512" height="1.8" fill="#ffffff" opacity="0.04"/>
+    </pattern>
+  </defs>
+  <rect width="512" height="512" fill="#020405"/>
+  <circle cx="256" cy="256" r="224" fill="url(#bg)" stroke="#3ddc84" stroke-width="6"/>
+  <circle cx="256" cy="256" r="204" fill="none" stroke="#19f7ff" stroke-width="2" opacity="0.55"/>
+  <rect width="512" height="512" fill="url(#scan)"/>
+  <g filter="url(#glow)" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M173 186 129 130M339 186l44-56" stroke="#8cffdd" stroke-width="16"/>
+    <path d="M154 210h204l34 42v96l-38 38H158l-38-38v-96l34-42Z" fill="#071211" stroke="url(#bot)" stroke-width="16"/>
+    <path d="M176 210c15-45 43-70 80-70s65 25 80 70" fill="none" stroke="url(#bot)" stroke-width="16"/>
+    <circle cx="212" cy="273" r="13" fill="#b7ff5a"/>
+    <circle cx="300" cy="273" r="13" fill="#b7ff5a"/>
+    <path d="M213 333h86" stroke="#b7ff5a" stroke-width="13"/>
+    <path d="M108 284 70 322l38 38M404 284l38 38-38 38" fill="none" stroke="#19f7ff" stroke-width="18"/>
+  </g>
+</svg>

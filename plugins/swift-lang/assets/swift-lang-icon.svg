@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Swift Lang neon pipeline icon</title>
+  <desc id="desc">A dark circular badge with orange Swift-like geometry and cyan functional pipeline nodes.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#1b1320"/>
+      <stop offset="55%" stop-color="#07090f"/>
+      <stop offset="100%" stop-color="#020307"/>
+    </radialGradient>
+    <linearGradient id="swift" x1="122" y1="110" x2="392" y2="390" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffb347"/>
+      <stop offset="48%" stop-color="#ff5a3d"/>
+      <stop offset="100%" stop-color="#ff2d7a"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 1 0 0.35 0 0 0.45 0 0 0.2 0 0.22 0 0 0 1 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="scan" width="512" height="16" patternUnits="userSpaceOnUse">
+      <rect width="512" height="1.8" fill="#ffffff" opacity="0.045"/>
+    </pattern>
+  </defs>
+  <rect width="512" height="512" fill="#020307"/>
+  <circle cx="256" cy="256" r="224" fill="url(#bg)" stroke="#39f5ff" stroke-width="6" opacity="0.95"/>
+  <circle cx="256" cy="256" r="206" fill="none" stroke="#ff2d7a" stroke-width="2" opacity="0.5"/>
+  <rect width="512" height="512" fill="url(#scan)"/>
+  <g filter="url(#glow)">
+    <path d="M124 146c72 66 128 112 169 136-32-50-73-102-122-156 77 49 141 103 192 162 17-54 7-107-30-158 72 55 101 119 86 191 26 28 43 54 51 78-33-20-63-35-91-45-46 43-117 44-185 3-50-30-91-78-124-145 61 55 119 92 174 110-42-33-82-72-120-176Z" fill="url(#swift)" stroke="#ffd7a1" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M147 323h88l46 46h84" fill="none" stroke="#3af7ff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="145" cy="323" r="20" fill="#07131a" stroke="#3af7ff" stroke-width="10"/>
+    <circle cx="282" cy="369" r="18" fill="#07131a" stroke="#3af7ff" stroke-width="9"/>
+    <circle cx="366" cy="369" r="20" fill="#07131a" stroke="#3af7ff" stroke-width="10"/>
+  </g>
+</svg>

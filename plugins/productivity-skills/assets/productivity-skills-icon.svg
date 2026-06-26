@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Productivity Skills neon checklist icon</title>
+  <desc id="desc">A dark circular badge with a neon checklist, bolt, and gear-inspired orbit.</desc>
+  <defs>
+    <radialGradient id="bg" cx="48%" cy="42%" r="64%">
+      <stop offset="0%" stop-color="#1c1028"/>
+      <stop offset="58%" stop-color="#070712"/>
+      <stop offset="100%" stop-color="#020208"/>
+    </radialGradient>
+    <linearGradient id="line" x1="132" y1="126" x2="384" y2="386" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ff48d8"/>
+      <stop offset="48%" stop-color="#8b5cff"/>
+      <stop offset="100%" stop-color="#14f1ff"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0.75 0 0 0 0.7 0 0.35 0 0 0.2 0 0 1 0 1 0 0 0 1 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="scan" width="512" height="16" patternUnits="userSpaceOnUse">
+      <rect width="512" height="1.8" fill="#ffffff" opacity="0.042"/>
+    </pattern>
+  </defs>
+  <rect width="512" height="512" fill="#020208"/>
+  <circle cx="256" cy="256" r="224" fill="url(#bg)" stroke="#8b5cff" stroke-width="6"/>
+  <circle cx="256" cy="256" r="204" fill="none" stroke="#14f1ff" stroke-width="2" opacity="0.52"/>
+  <rect width="512" height="512" fill="url(#scan)"/>
+  <g filter="url(#glow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 142h175l42 42v194H150z" fill="#080812" stroke="url(#line)" stroke-width="15"/>
+    <path d="M325 142v48h48" stroke="#14f1ff" stroke-width="13"/>
+    <path d="M190 223l23 24 44-52M190 303l23 24 44-52" stroke="#ff48d8" stroke-width="18"/>
+    <path d="M282 238h55M282 318h55" stroke="#14f1ff" stroke-width="14"/>
+    <path d="M352 243 323 304h41l-49 76" fill="#080812" stroke="#f8ff65" stroke-width="15"/>
+    <path d="M117 256c0-86 62-153 139-153M395 256c0 86-62 153-139 153" stroke="#8b5cff" stroke-width="10" stroke-dasharray="22 22"/>
+  </g>
+</svg>
