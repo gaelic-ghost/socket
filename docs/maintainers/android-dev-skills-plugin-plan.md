@@ -2,7 +2,7 @@
 
 This plan records the first durable shape for a Socket-hosted Android development skills plugin.
 
-The plugin's job is to help agents maintain Android applications and libraries with Kotlin-first guidance, Java interoperability, Java-only project support where a repository requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation handoffs, lint, tests, and release readiness.
+The plugin's job is to help agents maintain Android applications and libraries with Kotlin-first guidance, Java interoperability, Java-only project support where a repository requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation handoffs, lint, tests, release readiness, and release automation routing.
 
 ## Intent
 
@@ -15,6 +15,8 @@ The `android-dev-skills` plugin should help agents do five things:
 - hand off emulator operation and device debugging to the existing Android testing plugin instead of bundling duplicate runtime tooling
 
 This is a companion guidance plugin, not a runtime plugin. The first version should not bundle Android Studio, Gradle, the Android SDK, an emulator controller, a device farm, a template feed, or machine-local SDK state.
+
+The first implementation tranche should include all six planned skills together so the marketplace does not expose a partial Android surface. Keep the plugin Socket-owned for the foreseeable future rather than planning a standalone repository split in the first release.
 
 ## Packaging Direction
 
@@ -68,14 +70,17 @@ That means:
 
 ## Documentation Sources
 
-Use official or canonical documentation first when authoring skills:
+Use repo-local files, checked-out dependency sources, and Dash.app docsets opportunistically when they cover the exact Android-adjacent surface being changed, especially Gradle, Java, command-line, or local reference material. Treat Dash as a fast local source, not as proof that Android-specific coverage is complete.
 
-- Android Developers documentation
-- Android Gradle Plugin and Gradle documentation
-- Kotlin documentation for Android-facing language behavior
-- Java documentation when Java-only or Java interop work matters
-- Jetpack Compose, AndroidX, AppCompat, Room, Navigation, WorkManager, and other AndroidX docs when those libraries are in scope
-- repository-selected testing, lint, CI, signing, release, and Play delivery documentation
+Use official or canonical online documentation as the authority for Android-specific behavior, current APIs, and release policy:
+
+- [Android Developers documentation](https://developer.android.com/docs)
+- [Android build and Android Gradle Plugin documentation](https://developer.android.com/build)
+- [Gradle documentation](https://docs.gradle.org/current/userguide/userguide.html)
+- [Kotlin documentation](https://kotlinlang.org/docs/home.html) for Android-facing language behavior
+- [Java documentation](https://docs.oracle.com/en/java/) when Java-only or Java interop work matters
+- [Jetpack Compose documentation](https://developer.android.com/compose), AndroidX, AppCompat, Room, Navigation, WorkManager, and other AndroidX docs when those libraries are in scope
+- repository-selected testing, lint, CI, signing, release automation, and [Play delivery documentation](https://developer.android.com/studio/publish)
 
 When a skill relies on documentation, translate the relevant rule into practical workflow guidance. Do not drop citations into a skill as a substitute for explaining the effect on project layout, build variants, validation, release behavior, or user-facing diagnostics.
 
@@ -114,12 +119,14 @@ This skill should cover:
 
 ### `android-dev:build-kotlin-android`
 
-Guide agents through Kotlin-first Android implementation.
+Guide agents through Kotlin-first Android implementation, deep enough to implement common UI tasks without pretending to replace specialized future Compose or XML view skills.
 
 This skill should cover:
 
 - activity, fragment, service, receiver, and app architecture ownership
 - Compose and XML view boundaries according to repo defaults
+- common Compose UI tasks such as screen composition, state hoisting, preview upkeep, modifiers, lists, forms, navigation touchpoints, theming, accessibility labels, and testable UI state
+- common XML/AppCompat tasks such as layout inflation, view binding or data binding when already present, resource updates, themes, strings, accessibility labels, RecyclerView-style list updates, and fragment or activity wiring
 - coroutines and lifecycle-aware work
 - AndroidX and Jetpack library use
 - nullability, state, persistence, and background work
@@ -164,7 +171,7 @@ This skill should cover:
 - app bundles and APKs
 - Play delivery handoffs
 - privacy, permissions, and changelog checks
-- repository-owned release automation when publish work is explicitly requested
+- repository-owned release automation routing when publish work is explicitly requested, including Gradle release tasks, CI release jobs, Fastlane, Play Developer Publishing API clients, or other repo-documented release systems
 
 ### Future Skill Candidates
 
@@ -183,7 +190,7 @@ This skill should cover:
 - [x] Record this first detailed skill plan.
 - [x] Update root README, TODO, and ROADMAP so users understand the planned child plugin surface.
 - [x] Run root metadata validation for the placeholder marketplace and manifest wiring.
-- [ ] Add the first real skills for project-shape choice, Gradle/AGP workflow, Kotlin Android work, Java Android and interop work, testing/lint, and release readiness.
+- [ ] Add the first real skills for project-shape choice, Gradle/AGP workflow, Kotlin Android work, Java Android and interop work, testing/lint, and release readiness in one implementation tranche.
 - [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [ ] Switch the root marketplace entry to installable only after real skill content exists.
 - [ ] Run root metadata validation again after real skill content lands.
@@ -193,5 +200,7 @@ This skill should cover:
 - [ ] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
 - [ ] The new skills can help an agent choose an Android project shape before implementation.
 - [ ] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
+- [ ] Kotlin Android guidance is deep enough for common Compose and XML UI implementation tasks while leaving specialized UI workflows as future skill candidates.
 - [ ] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
+- [ ] Release readiness includes release automation routing without starting publish workflows by default.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.

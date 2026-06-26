@@ -403,7 +403,9 @@ Planned
 
 - [ ] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin.
 - [ ] Keep Android guidance Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
+- [ ] Make Kotlin Android guidance deep enough for common Compose and XML UI implementation tasks.
 - [ ] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
+- [ ] Include release automation routing in release-readiness guidance without starting publish workflows by default.
 - [ ] Keep Android app and platform guidance separate from server-side JVM backend and shared non-Android JVM library guidance.
 
 ### Tickets
@@ -413,7 +415,7 @@ Planned
 - [x] Record the detailed plan in [`docs/maintainers/android-dev-skills-plugin-plan.md`](./docs/maintainers/android-dev-skills-plugin-plan.md).
 - [ ] Add `android-dev:choose-project-shape` for Android app, library, multi-module, Kotlin, Java, Compose, XML view, test, lint, signing, release, and dependency-maintenance routing.
 - [ ] Add `android-dev:gradle-agp-workflow` for Gradle wrapper, Android Gradle Plugin, Kotlin plugin, Java toolchain, SDK, variants, flavors, signing config, namespace, dependency, and targeted task alignment.
-- [ ] Add `android-dev:build-kotlin-android` for Kotlin-first Android implementation, Compose or XML boundaries, coroutines, lifecycle-aware work, AndroidX, state, persistence, and validation.
+- [ ] Add `android-dev:build-kotlin-android` for Kotlin-first Android implementation, common Compose and XML UI tasks, coroutines, lifecycle-aware work, AndroidX, state, persistence, and validation.
 - [ ] Add `android-dev:java-android-workflow` for Java-only Android maintenance and Kotlin/Java interop boundaries.
 - [ ] Add `android-dev:testing-lint-workflow` for local unit tests, instrumentation and Compose UI test handoffs, lint configuration, targeted Gradle tasks, and emulator-aware validation handoffs.
 - [ ] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
@@ -426,7 +428,9 @@ Planned
 - [ ] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
 - [ ] The new skills can help an agent choose an Android project shape before implementation.
 - [ ] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
+- [ ] Kotlin Android guidance is deep enough for common Compose and XML UI implementation tasks.
 - [ ] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
+- [ ] Release readiness includes release automation routing without starting publish workflows by default.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 16: Server-Side JVM skills plugin
