@@ -87,7 +87,7 @@ codex plugin marketplace add gaelic-ghost/apple-dev-skills
 codex plugin marketplace upgrade apple-dev-skills
 ```
 
-When installed as a Codex plugin, Apple Dev Skills also registers Xcode's built-in MCP bridge through `xcrun mcpbridge`. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools.
+When installed as a Codex plugin, Apple Dev Skills also registers Xcode's built-in MCP bridge through `xcrun mcpbridge` and the Xcode-selected LLDB MCP server through `xcrun lldb-mcp`. Users still need to allow external agents in Xcode's Intelligence settings, keep the relevant project open in Xcode before external Codex sessions can use Xcode-provided tools, and verify `lldb-mcp` startup against the installed Xcode because the LLDB MCP surface is still Xcode 27 beta-era behavior.
 
 ## Development
 

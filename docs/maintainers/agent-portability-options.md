@@ -2,7 +2,7 @@
 
 This document records the first research pass for making Socket skills and plugins more portable across agent hosts while keeping the current Codex marketplace honest.
 
-Date checked: 2026-06-23.
+Date checked: 2026-06-26.
 
 ## Current Recommendation
 
@@ -27,7 +27,7 @@ Those are the two locally installed targets available for immediate smoke tests 
 - OpenCode CLI: `/opt/homebrew/bin/opencode`, verified as 1.17.9.
 - OpenCode Desktop: `/Applications/OpenCode.app`, present locally.
 
-Defer Zed until the Xcode and OpenCode paths prove the source-of-truth and export model. Zed is likely a strong skill-only target because it reads `.agents/skills`, but it should not drive the first adapter design.
+Treat Zed as two separate surfaces. Zed's Codex external agent can use normal Codex state, so Socket needs no separate install path for Codex-in-Zed. Zed's first-party Agent remains a native skills and MCP target that should be evaluated separately from Codex plugin marketplace guidance.
 
 Treat AgentUtils as the future home for complex local orchestration.
 
@@ -160,6 +160,7 @@ Zed extensions are separate from Agent Skills. Zed also supports MCP and externa
 
 Practical Socket implication:
 
+- Codex-in-Zed through the bundled Codex ACP adapter should use the normal Codex marketplace path. Local testing on 2026-06-26 showed a Zed-hosted Codex session with `__CFBundleIdentifier=dev.zed.Zed`, inherited `HOME=/Users/galew`, no explicit `CODEX_HOME`, Socket plugins at `7.2.1`, and the normal Codex MCP server list available.
 - Zed is a strong target for `.agents/skills` output with no remote registry promise.
 - Skill descriptions need to stay concise because Zed enforces a catalog budget.
 - Socket should not assume Zed external agents consume Zed Skills. A Claude or Codex session inside Zed needs that external agent's own config path.

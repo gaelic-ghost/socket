@@ -322,6 +322,7 @@ In Progress
 - [ ] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
 - [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.
 - [ ] Investigate the Xcode MCP surface against the current Xcode 27 beta, including `mcpbridge` command help, tool names, permission gates, session behavior, and differences from the last checked surface. Live beta `run-agent --dry-run codex` behavior was verified on 2026-06-23; a direct beta-scoped `codex skills export` attempt failed, and tool names, permission gates, project-session behavior, and runtime plug-in execution still need follow-up.
+- [ ] Add a dedicated Xcode 27 beta LLDB MCP workflow skill after `xcrun lldb-mcp` startup is validated. Xcode 27 Beta 2 exposes `lldb-mcp`, and Apple Dev Skills now carries an experimental `xcode_lldb` MCP config entry, but local `--help` invocation failed on 2026-06-26 with a missing `lib_CompilerSwiftIDEUtils.dylib` rpath load.
 - [ ] Add `apple-dev-skills:xcode-agent-plugin-workflow` now that the live Xcode 27 beta plug-in import paths are verified through installed Codex state, local folder import, and public Git URL import.
 - [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
 - [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
@@ -497,6 +498,8 @@ Planned
 - [ ] Add disposable Xcode import fixture generation for skill-only, skill-plus-MCP, and hook-recognition probes.
 - [ ] Capture a public Socket Git URL import matrix from Xcode Beta before claiming user-facing Xcode install support.
 - [ ] Runtime-validate representative Xcode imports before claiming hooks, MCP servers, app config, or custom-agent behavior works inside Xcode.
+- [x] Record Zed Codex external-agent compatibility evidence. Local testing on 2026-06-26 showed Zed's bundled `codex-acp` session running with `__CFBundleIdentifier=dev.zed.Zed`, inherited `HOME=/Users/galew`, no explicit `CODEX_HOME`, Socket plugins at `7.2.1`, and the normal Codex MCP list available.
+- [ ] Evaluate Zed Agent native adapters separately from Codex-in-Zed, including Zed skills roots, Zed MCP configuration, and any export or install path that should stay distinct from Codex plugin marketplace guidance.
 - [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy after the Xcode and OpenCode first pass.
 - [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
 

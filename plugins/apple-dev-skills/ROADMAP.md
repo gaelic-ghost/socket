@@ -679,6 +679,30 @@ Planned
 - [x] Apple Dev keeps its standalone install promise while Socket users get a cleaner shared Swift language layer.
 - [x] Apple Dev docs and metadata explain the split between Apple-platform workflow ownership and shared Swift language cleanup ownership.
 
+## Milestone 51: Xcode LLDB MCP Workflow
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a dedicated Xcode 27 beta-era LLDB MCP workflow skill for debugger setup, target/session selection, breakpoint and expression workflows, crash investigation, and handoffs back to build/test skills.
+- [ ] Keep the workflow docs-first and beta-gated until `xcrun lldb-mcp` startup, help output, tool inventory, and MCP client behavior are validated against an installed Xcode 27 beta.
+- [ ] Keep Xcode-owned debugger integration separate from third-party debugger MCP servers and from normal `xcrun mcpbridge` project/build tools.
+
+### Tickets
+
+- [x] Add an experimental `xcode_lldb` MCP config entry that resolves through the selected Xcode toolchain with `xcrun lldb-mcp`.
+- [ ] Capture `xcrun lldb-mcp --help`, startup behavior, and tool inventory from Xcode 27 Beta 2 or a later beta before claiming the config is stable.
+- [ ] Document the observed Beta 2 rpath failure and the exact toolchain environment that fixes it, if Apple does not resolve the direct-launch issue in a later beta.
+- [ ] Add the workflow skill, metadata, README inventory entry, and targeted tests after the launch and tool-surface evidence exists.
+
+### Exit Criteria
+
+- [ ] Apple Dev Skills exposes a debugger workflow that can safely decide when to use LLDB MCP, normal Xcode UI debugging, `lldb`, `lldb-dap`, or existing build/test handoffs.
+- [ ] The plugin MCP config, README, skill guidance, and tests agree on whether `xcode_lldb` is experimental or stable.
+
 ## Backlog Candidates
 
 - [ ] Record plausible future work that is not yet committed to a milestone.
@@ -694,6 +718,7 @@ Planned
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.
 - Registered Xcode's built-in MCP bridge through the Codex plugin manifest so installed `apple-dev-skills` plugins expose the Xcode-owned MCP path without bundling a separate server package.
+- Added an experimental `xcode_lldb` MCP config entry for Xcode 27 beta-era `xcrun lldb-mcp` investigation while keeping the dedicated debugger workflow planned until startup validation succeeds.
 - Clarified the Apple `maintain-project-repo` branch-protection contract so generated and synced repos require the `validate` Actions check context instead of the workflow-title display string.
 - Completed Milestones 1 through 17 by establishing the repository, shipping the core Apple skill bundle, improving portability and customization guidance, adding bootstrap and repo-sync workflows, extracting Apple docs exploration into its own skill, and cleaning up the install surface around the top-level export model.
 - Completed Milestones 19 and 20 by shipping `format-swift-sources` and `structure-swift-sources` as distinct cleanup workflows with clear boundaries.

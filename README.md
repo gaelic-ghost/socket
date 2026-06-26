@@ -70,6 +70,12 @@ Xcode should enumerate the Socket child plug-ins from the public repository and 
 
 The Import from Codex path is still under evaluation for Xcode 27 beta. In current local testing, Xcode can see Codex-installed plug-ins, but it may select stale standalone or local-cache payloads when the same plug-in also exists outside the current Socket marketplace install. Prefer Add from URL for Socket until that beta behavior is better understood.
 
+### Zed
+
+For Zed's Codex external agent, install and update Socket through the normal Codex marketplace flow. Current local testing shows Zed's bundled `codex-acp` path inherits the user's normal Codex home by default, so Codex-in-Zed sees the same global `~/.codex` config, Socket marketplace cache, installed plug-ins, skills, and MCP servers as the regular Codex CLI and GUI unless Zed or the adapter is launched with an explicit `CODEX_HOME`.
+
+Zed's own first-party Agent uses Zed-native skills and MCP configuration. Treat that as a separate compatibility surface from Codex running inside Zed through ACP.
+
 ## Usage
 
 Use `socket` when you want one Codex catalog for focused agent workflow plugins.
