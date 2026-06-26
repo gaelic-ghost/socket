@@ -18,6 +18,7 @@
 - [Milestone 15: Android Dev Skills plugin](#milestone-15-android-dev-skills-plugin)
 - [Milestone 16: Server-Side JVM skills plugin](#milestone-16-server-side-jvm-skills-plugin)
 - [Milestone 17: Cross-agent skill and plugin portability](#milestone-17-cross-agent-skill-and-plugin-portability)
+- [Milestone 18: Swift Lang shared language plugin](#milestone-18-swift-lang-shared-language-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -48,6 +49,7 @@
 - Milestone 15: Android Dev Skills plugin - Planned
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - Planned
+- Milestone 18: Swift Lang shared language plugin - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -501,6 +503,40 @@ Planned
 - [x] Xcode 27 beta support claims are backed by explicit beta-toolchain evidence rather than the default Xcode 26.5 command-line selection.
 - [x] Docs clearly distinguish common Agent Skills from Codex plugins, Claude Code plugins, OpenCode plugins, Xcode plug-ins, Zed extensions, and MCP servers.
 - [ ] No non-Codex support claim is user-facing unless it is backed by official docs, local smoke evidence, or both.
+
+## Milestone 18: Swift Lang shared language plugin
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a Socket-hosted `swift-lang` child plugin for shared Swift language guidance across Apple apps, server-side Swift services, Swift packages, command-line tools, and libraries.
+- [ ] Keep the plugin as a normal marketplace plugin rather than a hidden include layer for `apple-dev-skills` or `server-side-swift`.
+- [ ] Move shared Swift style, formatting, source organization, modernization, and cleanup guidance into a dedicated language layer while preserving Apple Dev's standalone install behavior during the first migration release.
+- [ ] Encode Gale's preferred Swift style: Swifty, ergonomic, human-friendly APIs; functional data modeling; composable pipelines; clear monadic flow where practical; compact fluent chains when they improve readability; and explicit fallbacks when imperative code is clearer.
+
+### Tickets
+
+- [ ] Record the detailed plan in [`docs/maintainers/swift-lang-plugin-plan.md`](./docs/maintainers/swift-lang-plugin-plan.md).
+- [ ] Create `plugins/swift-lang/` with `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
+- [ ] Add `swift-lang:swift-api-style-workflow` for API naming, call-site ergonomics, access control, typed result shapes, consistency across sibling APIs, and human-friendly errors.
+- [ ] Add `swift-lang:swift-functional-pipelines-workflow` for functional data modeling, `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, chained transforms, and monadic composition boundaries.
+- [ ] Add `swift-lang:swift-format-style-workflow` for SwiftFormat, SwiftLint, formatter/linter responsibility, style defaults, Git hooks, and CI guidance.
+- [ ] Add `swift-lang:swift-source-organization-workflow` for file splitting, feature/layer layout, extension-file extraction, `// MARK:` discipline, file headers, TODO/FIXME ledgers, and stricter split thresholds.
+- [ ] Add `swift-lang:swift-modernization-cleanup-workflow` for complete modernization passes that sequence formatting, source inventory, file splitting, API cleanup, pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
+- [ ] Wire `swift-lang` into the root Socket marketplace as an installable child plugin.
+- [ ] Update Apple Dev and Server-Side Swift guidance to hand off shared Swift cleanup work to `swift-lang` when it is available.
+- [ ] Keep Apple Dev's existing `format-swift-sources` and `structure-swift-sources` available during the first release so standalone Apple-only installs do not break.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any new child-plugin validation added for `swift-lang`.
+
+### Exit Criteria
+
+- [ ] The Socket marketplace exposes `swift-lang` as an installable child plugin.
+- [ ] The plugin gives agents clear Swift language guidance without duplicating Apple-platform or server-framework ownership.
+- [ ] The functional Swift style policy is explicit enough to guide implementation, review comments, and modernization passes.
+- [ ] Apple Dev and Server-Side Swift guidance can route shared Swift cleanup work to `swift-lang` while preserving standalone Apple-only behavior for the first migration release.
 
 ## Small Tickets
 
