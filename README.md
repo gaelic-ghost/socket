@@ -51,6 +51,25 @@ codex plugin marketplace upgrade socket
 
 Newly added plugins can be installed from the same plugin directory inside Codex.
 
+### Xcode 27 Beta
+
+For Xcode 27 beta, add Socket through Xcode's official Plug-ins UI:
+
+1. Open Xcode Settings.
+2. Select Intelligence.
+3. Open Plug-ins.
+4. Choose Add Plug-in.
+5. Choose Add from URL.
+6. Enter:
+
+```text
+https://github.com/gaelic-ghost/socket.git
+```
+
+Xcode should enumerate the Socket child plug-ins from the public repository and let you import only the plug-ins you trust and need.
+
+The Import from Codex path is still under evaluation for Xcode 27 beta. In current local testing, Xcode can see Codex-installed plug-ins, but it may select stale standalone or local-cache payloads when the same plug-in also exists outside the current Socket marketplace install. Prefer Add from URL for Socket until that beta behavior is better understood.
+
 ## Usage
 
 Use `socket` when you want one Codex catalog for focused agent workflow plugins.
