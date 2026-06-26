@@ -24,6 +24,7 @@
 - [Milestone 46: AppKit App Architecture Workflow](#milestone-46-appkit-app-architecture-workflow)
 - [Milestone 47: Xcode Coding Intelligence Workflow](#milestone-47-xcode-coding-intelligence-workflow)
 - [Milestone 48: Core AI and Foundation Models Workflow Planning](#milestone-48-core-ai-and-foundation-models-workflow-planning)
+- [Milestone 49: Apple Media and Audio Workflow Skills](#milestone-49-apple-media-and-audio-workflow-skills)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -61,6 +62,7 @@
 - Milestone 46: AppKit App Architecture Workflow - Completed
 - Milestone 47: Xcode Coding Intelligence Workflow - Completed
 - Milestone 48: Core AI and Foundation Models Workflow Planning - Planned
+- Milestone 49: Apple Media and Audio Workflow Skills - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -579,6 +581,77 @@ Planned
 
 - [ ] Maintainers have a source-linked ownership decision for Foundation Models, Core AI, MLX, Core ML, and adjacent Apple Intelligence workflows.
 - [ ] Any shipped skill distinguishes stable, beta, and open-source exploratory surfaces.
+
+## Milestone 49: Apple Media and Audio Workflow Skills
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add focused Apple media and audio workflow skills for AVFAudio, AVFoundation, Core Media, and Core Audio modernization work.
+- [x] Treat repair and modernization of existing poor-quality implementations as first-class workflows, not as afterthoughts behind greenfield examples.
+- [x] Keep each workflow docs-first, with current Xcode or Apple Developer Documentation preferred for modern behavior and Apple documentation archive material used only for legacy Core Audio context or migration research.
+- [x] Keep Xcode build, run, signing, entitlements, target membership, simulator or device execution, and test mechanics routed into the existing Xcode execution skills.
+- [x] Keep the first implementation focused on practical app and package code repair rather than broad media-authoring theory, codec encyclopedias, or speculative wrapper architecture.
+
+### Planned Skill Split
+
+- [x] Ship `avfaudio-session-workflow` as the explicit owner for app audio intent, audio-session categories, modes, options, activation and deactivation, permissions, interruptions, route changes, Bluetooth or AirPlay routing, capture-session audio-session interaction, and spoken-audio or call-adjacent behavior.
+- [x] Ship `avaudio-engine-workflow` as the explicit owner for `AVAudioEngine`, node graph ownership, input and output nodes, player nodes, taps, source and sink nodes, `AVAudioFormat`, format conversion, manual rendering, offline processing, Audio Unit hosting through `AVAudioUnit`, and real-time callback safety.
+- [x] Ship `avfoundation-media-pipeline-workflow` as the explicit owner for AVFoundation capture, playback, media assets, async asset loading, asset readers and writers, sample-buffer append back-pressure, export or transcode pipeline shape, and AVPlayer or AVCapture handoffs.
+- [x] Ship `coremedia-timing-samplebuffer-workflow` as the explicit owner for `CMTime`, `CMTimeRange`, `CMClock`, `CMTimebase`, `CMFormatDescription`, `CMSampleBuffer`, attachments, readiness, presentation and decode timestamps, synchronization, and sample-buffer debugging.
+- [x] Ship `coreaudio-modernization-repair-workflow` as the explicit owner for legacy Core Audio and Audio Toolbox repair, including when to keep low-level C APIs, when to migrate toward AVFAudio, how to inspect `OSStatus` failures, how to bridge `AudioStreamBasicDescription`, and how to avoid unsafe callback, pointer, and lifetime patterns.
+
+### Repair Themes
+
+- [x] Main-thread blocking repair for `AVCaptureSession.startRunning()`, media loading, export, and other blocking media operations.
+- [x] Deprecated AVAsset synchronous property and `loadValuesAsynchronously(forKeys:)` modernization toward Swift concurrency and `AVAsyncProperty` loading.
+- [x] Audio-session category, mode, option, activation, deactivation, route-change, and interruption repair, including `notifyOthersOnDeactivation` and headphones-disconnect behavior.
+- [x] Microphone and capture permission repair, including `Info.plist` purpose-string gates, `AVAudioApplication.requestRecordPermission`, and `AVCaptureDevice` authorization paths.
+- [x] AVAudioEngine graph repair for unattached nodes, illegal runtime graph mutation, mixer or channel-count breakage, format mismatch, missing input or output hardware, and manual-rendering misuse.
+- [x] Real-time audio safety repair for render callbacks, taps, source nodes, sink nodes, allocation, locking, logging, actor isolation, and UI or main-actor leakage.
+- [x] Sample-buffer timing repair for invalid or drifting `CMTime`, missing format descriptions, bad presentation or decode timestamp handling, dropped buffers, writer back-pressure, and incorrect real-time input configuration.
+- [x] Legacy Core Audio repair for opaque `OSStatus` handling, unsafe pointer ownership, hand-rolled format structs, callback lifetime bugs, `AudioQueue` or Audio Unit code that should either be isolated behind a narrow boundary or replaced with AVFAudio.
+- [x] Operator-facing media and audio error repair so logs explain the framework surface, operation, likely cause, and next inspection point instead of reporting vague audio or media failure strings.
+
+### Planned Reference Structure
+
+- [x] `session-policy-and-repair.md`: categories, modes, options, activation lifecycle, permission gates, interruptions, route changes, capture-session interaction, privacy expectations, and app-audio ownership.
+- [x] `engine-graph-and-repair.md`: node graph construction, graph mutation, formats, taps, source and sink nodes, player scheduling, manual rendering, offline processing, and callback safety.
+- [x] `media-pipeline-and-repair.md`: capture-session setup, queueing, audio/video outputs, player behavior, async media loading, asset readers and writers, export, and sample-buffer append policy.
+- [x] `time-samplebuffer-and-repair.md`: `CMTime`, time ranges, clocks, timebases, format descriptions, sample buffers, attachments, timestamps, synchronization, and diagnostic probes.
+- [x] `coreaudio-modernization-and-repair.md`: Core Audio and Audio Toolbox concepts, archive-only references, low-level API retention criteria, migration paths to AVFAudio, `OSStatus` diagnostics, and unsafe legacy patterns.
+- [x] Cross-cutting repair anti-patterns are embedded in each workflow reference rather than centralized in a single large reference file.
+- [x] Validation and handoff expectations are covered in `validation-and-handoffs.md`, `diagnostics-and-handoffs.md`, and each workflow's `Fallbacks and Handoffs`.
+
+### Docs Anchors To Gather
+
+- [x] AVFAudio and AVFoundation current documentation for `AVAudioSession`, `AVAudioApplication`, interruptions, route changes, `AVAudioEngine`, manual rendering, stereo and spatial capture, `AVCaptureSession`, `AVPlayer`, async asset loading, asset readers, asset writers, and sample-buffer APIs.
+- [x] Core Media current documentation for `CMTime`, `CMTimeRange`, `CMClock`, `CMTimebase`, `CMFormatDescription`, `CMSampleBuffer`, sample attachments, and sample-buffer renderer synchronization.
+- [x] Core Audio and Audio Toolbox current documentation for `AudioStreamBasicDescription`, `AudioComponentDescription`, `AudioUnit`, `AudioQueue`, `AudioConverter`, and `OSStatus`-based diagnostics.
+- [x] Apple documentation archive pages for Core Audio Overview, Audio Session Programming Guide, Audio Queue Services, Audio Unit Programming Guide, and related legacy material, clearly marked as historical or migration context rather than default modern guidance.
+- [x] Current Apple sample-code or guide anchors for camera capture, audio capture, offline audio processing, route changes, interruptions, asset loading, asset writing, and sample-buffer playback where available.
+
+### Implementation Slices
+
+- [x] Slice 1: add the milestone research notes and source-anchor list, then decide whether to ship all five workflows together or stage the first release around session, engine, and timing repair.
+- [x] Slice 2: add the first skill skeletons, OpenAI interface metadata, customization contract files, and shared Xcode handoff wording.
+- [x] Slice 3: add the reference files for session policy, engine graph repair, media pipelines, Core Media timing, Core Audio modernization, anti-patterns, and validation handoffs.
+- [x] Slice 4: update README active skill inventory, plugin metadata, repo validator expectations, and any router or handoff notes from existing Xcode, SwiftUI, AppKit, accessibility, and docs-exploration skills.
+- [x] Slice 5: add targeted tests for skill metadata, docs-gate language, repair anti-pattern coverage, deprecated API modernization guidance, Xcode handoffs, and active inventory preservation.
+- [x] Slice 6: run the docs validator, targeted pytest files, full `uv run pytest`, and root Socket metadata validation before any release or marketplace refresh.
+
+### Exit Criteria
+
+- [x] The repository ships focused media and audio workflow skills instead of one catch-all AVFoundation skill.
+- [x] Each workflow states the documented Apple behavior it relies on before recommending design or repair changes.
+- [x] Repair guidance covers common existing-code failure modes for sessions, routes, interruptions, permissions, engine graphs, real-time callbacks, async media loading, sample-buffer timing, and legacy Core Audio code.
+- [x] The skills keep execution mechanics with `xcode-build-run-workflow` and `xcode-testing-workflow` instead of silently claiming runtime validation they did not perform.
+- [x] The active skill inventory, plugin metadata, tests, and docs validator agree with the shipped media and audio workflow surface.
+
+Completed Milestone 49 by shipping five focused media and audio workflow skills: `avfaudio-session-workflow`, `avaudio-engine-workflow`, `avfoundation-media-pipeline-workflow`, `coremedia-timing-samplebuffer-workflow`, and `coreaudio-modernization-repair-workflow`. The first release keeps the workflows docs-first, repair-oriented, and explicit about Xcode execution handoffs while avoiding one broad catch-all media skill.
 
 ## Backlog Candidates
 

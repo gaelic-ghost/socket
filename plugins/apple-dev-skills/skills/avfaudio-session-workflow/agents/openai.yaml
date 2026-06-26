@@ -1,0 +1,4 @@
+interface:
+  display_name: "AVFAudio Session Workflow"
+  short_description: "Repair Apple audio sessions and routes"
+  default_prompt: "Use $avfaudio-session-workflow to repair or design Apple app audio-session behavior across categories, modes, activation, permissions, interruptions, route changes, Bluetooth, AirPlay, and capture-session audio interaction."

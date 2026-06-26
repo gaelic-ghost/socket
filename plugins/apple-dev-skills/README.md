@@ -55,6 +55,11 @@ codex plugin marketplace upgrade socket
 
 Use Apple Dev Skills when an agent is helping with:
 
+- AVFAudio session, route, interruption, permission, and app-audio policy repair
+- AVAudioEngine graph, format, rendering, tap, and real-time callback repair
+- AVFoundation capture, playback, async asset loading, reader, writer, and export workflows
+- Core Media timing, sample-buffer, format-description, and synchronization diagnostics
+- Core Audio and Audio Toolbox modernization or legacy repair
 - Swift and SwiftUI implementation
 - AppKit and mixed AppKit/SwiftUI architecture
 - Xcode build, run, test, and project workflows
@@ -118,8 +123,13 @@ uv run pytest
 - `apple-ui-accessibility-workflow`
 - `appkit-app-architecture-workflow`
 - `author-swift-docc-docs`
+- `avaudio-engine-workflow`
+- `avfaudio-session-workflow`
+- `avfoundation-media-pipeline-workflow`
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
+- `coreaudio-modernization-repair-workflow`
+- `coremedia-timing-samplebuffer-workflow`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`

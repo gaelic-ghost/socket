@@ -1,0 +1,4 @@
+interface:
+  display_name: "AVFoundation Media Pipeline Workflow"
+  short_description: "Repair AVFoundation capture and media flows"
+  default_prompt: "Use $avfoundation-media-pipeline-workflow to repair or design AVFoundation capture, playback, async asset loading, readers, writers, export, sample-buffer appending, and AVPlayer or AVCapture pipeline boundaries."

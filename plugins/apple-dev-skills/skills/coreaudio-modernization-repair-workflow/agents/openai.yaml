@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Audio Modernization Repair Workflow"
+  short_description: "Modernize legacy Core Audio code"
+  default_prompt: "Use $coreaudio-modernization-repair-workflow to repair legacy Core Audio, Audio Toolbox, Audio Queue, Audio Unit, AudioConverter, AudioStreamBasicDescription, OSStatus, callback, pointer, and lifetime problems while preferring AVFAudio when it honestly covers the job."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "AVAudio Engine Workflow"
+  short_description: "Repair AVAudioEngine graphs and rendering"
+  default_prompt: "Use $avaudio-engine-workflow to repair or design AVAudioEngine graphs, node ownership, formats, taps, source and sink nodes, player scheduling, manual rendering, offline processing, and real-time callback safety."

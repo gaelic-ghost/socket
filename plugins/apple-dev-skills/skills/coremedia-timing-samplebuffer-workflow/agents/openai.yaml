@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Media Timing Sample Buffer Workflow"
+  short_description: "Repair Core Media timing and buffers"
+  default_prompt: "Use $coremedia-timing-samplebuffer-workflow to repair or design CMTime, CMTimeRange, CMClock, CMTimebase, CMFormatDescription, CMSampleBuffer, attachments, readiness, timestamp, synchronization, and sample-buffer debugging behavior."

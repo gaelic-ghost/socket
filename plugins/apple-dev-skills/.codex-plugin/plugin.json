@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "7.1.3",
-  "description": "Apple development workflows for Codex, including Xcode coding intelligence, SwiftUI and AppKit architecture, Icon Composer app icons, Safari extensions, Swift OpenAPI clients, and DocC authoring guidance.",
+  "description": "Apple development workflows for Codex, including media and audio repair, Xcode coding intelligence, SwiftUI and AppKit architecture, Icon Composer app icons, Safari extensions, Swift OpenAPI clients, and DocC authoring guidance.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -16,6 +16,12 @@
     "apple",
     "swift",
     "xcode",
+    "avfoundation",
+    "avfaudio",
+    "coremedia",
+    "coreaudio",
+    "audio",
+    "media",
     "coding-intelligence",
     "agents",
     "mcp",
@@ -30,8 +36,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple, Swift, Xcode coding intelligence, SwiftUI, AppKit, Icon Composer, Safari, OpenAPI client, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for Xcode coding intelligence setup, Xcode-hosted agents, external-agent MCP access through xcrun mcpbridge, Swift, SwiftUI and AppKit architecture, Icon Composer app icon production, Safari extension, Safari Web Inspector, SafariServices integration, generated Swift OpenAPI clients with URLSession transport, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling. Most workflows work standalone; bootstrap and guidance-sync workflows that install or refresh repo-maintenance files require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "shortDescription": "Apple, Swift, media/audio repair, Xcode, SwiftUI, AppKit, Safari, OpenAPI client, and DocC workflows for Codex.",
+    "longDescription": "Bundle Apple-platform development skills for AVFAudio session repair, AVAudioEngine graph repair, AVFoundation media pipelines, Core Media timing and sample-buffer diagnostics, Core Audio modernization, Xcode coding intelligence setup, Xcode-hosted agents, external-agent MCP access through xcrun mcpbridge, Swift, SwiftUI and AppKit architecture, Icon Composer app icon production, Safari extension, Safari Web Inspector, SafariServices integration, generated Swift OpenAPI clients with URLSession transport, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling. Most workflows work standalone; bootstrap and guidance-sync workflows that install or refresh repo-maintenance files require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -40,6 +46,7 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/apple-dev-skills",
     "defaultPrompt": [
+      "Repair or modernize Apple media and audio code across AVFAudio sessions, AVAudioEngine graphs, AVFoundation pipelines, Core Media timing, and legacy Core Audio surfaces.",
       "Explore the relevant Apple docs first, then explain the right SwiftUI, AppKit, or Xcode path for this repository.",
       "Set up Xcode coding intelligence, Xcode-hosted agents, external-agent MCP access through xcrun mcpbridge, and command/tool permission boundaries.",
       "Help me design and preview an Apple app icon using Icon Composer, local Mac artwork tools, ictool exports, and careful Computer Use guidance for the GUI.",
