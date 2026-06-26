@@ -8,6 +8,7 @@ This file is the Server-Side Swift child-plugin override for work done from `soc
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 - Treat `apple-dev-skills` as the Apple-platform specialist layer and `server-side-swift` as the server-side Swift layer. Do not put Vapor, SwiftNIO service-hosting, Linux deployment, database, or HTTP server guidance into Apple Dev Skills unless the task is specifically about Apple-platform integration.
+- Treat `swift-lang` as the shared Swift language layer when it is available through Socket. Route generic Swift API style, formatting, source organization, functional pipeline, and modernization cleanup questions there instead of duplicating those policies in server-side framework skills.
 
 ## Local Rules
 

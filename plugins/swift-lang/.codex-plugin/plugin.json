@@ -1,0 +1,49 @@
+{
+  "name": "swift-lang",
+  "version": "7.2.0",
+  "description": "Shared Swift language skills for API style, functional pipelines, formatting, source organization, and modernization cleanup.",
+  "skills": "./skills/",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swift-lang",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "swift",
+    "swiftpm",
+    "swift-format",
+    "swiftlint",
+    "swiftformat",
+    "functional-programming",
+    "api-design",
+    "source-organization",
+    "modernization",
+    "cleanup"
+  ],
+  "interface": {
+    "displayName": "Swift Lang",
+    "shortDescription": "Shared Swift language, style, formatting, organization, functional pipeline, and cleanup workflows for Codex.",
+    "longDescription": "Guide Codex agents through shared Swift language work across Apple apps, server-side services, packages, command-line tools, and libraries. The plugin owns Swifty API design, call-site ergonomics, functional data modeling, monadic pipeline style, SwiftFormat and SwiftLint policy, source organization, file splitting, and modernization cleanup passes while handing Apple-platform and server-framework execution to their specialist plugins.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swift-lang",
+    "defaultPrompt": [
+      "Review this Swift API for Swifty call-site ergonomics, naming, result shapes, errors, and consistency.",
+      "Refactor this Swift data flow into a clear functional pipeline with map, flatMap, compactMap, filter, reduce, Optional, Result, throws, async throws, or AsyncSequence where appropriate.",
+      "Set up or repair SwiftFormat and SwiftLint policy for this Swift repository.",
+      "Split and reorganize these Swift source files by concern while preserving access control and validation.",
+      "Modernize and clean up this existing Swift implementation with a complete formatting, API, pipeline, source organization, concurrency, testability, and validation pass."
+    ],
+    "brandColor": "#F05138"
+  }
+}

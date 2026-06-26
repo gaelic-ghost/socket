@@ -64,13 +64,13 @@
 - Milestone 47: Xcode Coding Intelligence Workflow - Completed
 - Milestone 48: Core AI and Foundation Models Workflow Planning - Planned
 - Milestone 49: Apple Media and Audio Workflow Skills - Completed
-- Milestone 50: Swift Lang Handoff And Compatibility - Planned
+- Milestone 50: Swift Lang Handoff And Compatibility - In Progress
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
@@ -663,21 +663,21 @@ Planned
 
 ### Scope
 
-- [ ] Preserve standalone `apple-dev-skills` behavior while Socket grows a dedicated `swift-lang` plugin for shared Swift language guidance.
-- [ ] Keep Apple Dev focused on Apple-platform docs, Xcode, SwiftUI, AppKit, UIKit, AVFoundation, AVFAudio, Core Media, Core Audio, DocC, Safari, SPI, and project-integrity workflows.
-- [ ] Route shared Swift style, formatting, source organization, functional data-flow, API ergonomics, and modernization cleanup guidance to `swift-lang` when that plugin is available.
+- [x] Preserve standalone `apple-dev-skills` behavior while Socket grows a dedicated `swift-lang` plugin for shared Swift language guidance.
+- [x] Keep Apple Dev focused on Apple-platform docs, Xcode, SwiftUI, AppKit, UIKit, AVFoundation, AVFAudio, Core Media, Core Audio, DocC, Safari, SPI, and project-integrity workflows.
+- [x] Route shared Swift style, formatting, source organization, functional data-flow, API ergonomics, and modernization cleanup guidance to `swift-lang` when that plugin is available.
 
 ### Tickets
 
-- [ ] Update Apple Dev skill handoffs so `format-swift-sources` and `structure-swift-sources` can point at `swift-lang` for shared-language cleanup without breaking Apple-only installs.
-- [ ] Keep Apple Dev's local formatting and structure skills available through the first `swift-lang` migration release.
+- [x] Update Apple Dev skill handoffs so `format-swift-sources` and `structure-swift-sources` can point at `swift-lang` for shared-language cleanup without breaking Apple-only installs.
+- [x] Keep Apple Dev's local formatting and structure skills available through the first `swift-lang` migration release.
 - [ ] Decide in a later release whether Apple Dev should keep Apple-flavored wrappers or deprecate the local copies in favor of `swift-lang`.
-- [ ] Ensure Apple-specific skills continue to require Apple documentation before implementation changes, even when the Swift language style work comes from `swift-lang`.
+- [x] Ensure Apple-specific skills continue to require Apple documentation before implementation changes, even when the Swift language style work comes from `swift-lang`.
 
 ### Exit Criteria
 
-- [ ] Apple Dev keeps its standalone install promise while Socket users get a cleaner shared Swift language layer.
-- [ ] Apple Dev docs and metadata explain the split between Apple-platform workflow ownership and shared Swift language cleanup ownership.
+- [x] Apple Dev keeps its standalone install promise while Socket users get a cleaner shared Swift language layer.
+- [x] Apple Dev docs and metadata explain the split between Apple-platform workflow ownership and shared Swift language cleanup ownership.
 
 ## Backlog Candidates
 

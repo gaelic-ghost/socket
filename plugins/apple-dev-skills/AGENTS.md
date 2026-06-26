@@ -6,6 +6,7 @@ This file is the Apple Dev Skills child-repo override for work done from `socket
 
 - This repository is the canonical home for Gale's Apple, Swift, and Xcode workflow skills.
 - Treat `productivity-skills` as the default baseline maintainer layer for general repo docs and maintenance work; this repo is the narrower specialist layer when Apple-specific behavior should change the workflow.
+- Treat `swift-lang` as the shared Swift language layer when it is available through Socket. Keep Apple Dev focused on Apple documentation, Apple frameworks, Xcode project integrity, platform app architecture, DocC, SPI, and execution handoffs.
 - Preserve standalone-install guidance for public users who install only `apple-dev-skills`, while allowing the public README quickstart to lead with the Socket marketplace when users want Apple Dev Skills plus companion workflows from one catalog.
 - Root `skills/` is the canonical authored and exported surface.
 - Keep shared reusable assets in [`shared/`](./shared/) and maintainer tests in [`tests/`](./tests/).

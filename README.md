@@ -65,7 +65,9 @@ Currently available from the catalog:
 - `productivity-skills`
 - `python-skills`
 - `reverse-engineering-skills`
+- `server-side-jvm`
 - `server-side-swift`
+- `swift-lang`
 - `rust-skills`
 - `speak-swiftly`
 - `swiftasb-skills`
@@ -88,6 +90,7 @@ Current Socket catalog shape:
 - `reverse-engineering-skills`: binary inspection, artifact triage, and reproducible reverse-engineering note workflows
 - `server-side-jvm`: server-side JVM, Java, Scala, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
 - `server-side-swift`: server-side Swift bootstrap, Vapor, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io support plus the source-bundled `server-swift-steward` custom-agent definition
+- `swift-lang`: shared Swift language, API style, functional pipelines, formatting, source organization, and modernization cleanup workflows
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance

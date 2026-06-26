@@ -49,7 +49,7 @@
 - Milestone 15: Android Dev Skills plugin - Planned
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - Planned
-- Milestone 18: Swift Lang shared language plugin - Planned
+- Milestone 18: Swift Lang shared language plugin - Implemented
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -372,7 +372,7 @@ In Progress
 
 ### Status
 
-Planned
+Implemented
 
 ### Scope
 
@@ -512,31 +512,33 @@ Planned
 
 ### Scope
 
-- [ ] Add a Socket-hosted `swift-lang` child plugin for shared Swift language guidance across Apple apps, server-side Swift services, Swift packages, command-line tools, and libraries.
-- [ ] Keep the plugin as a normal marketplace plugin rather than a hidden include layer for `apple-dev-skills` or `server-side-swift`.
-- [ ] Move shared Swift style, formatting, source organization, modernization, and cleanup guidance into a dedicated language layer while preserving Apple Dev's standalone install behavior during the first migration release.
-- [ ] Encode Gale's preferred Swift style: Swifty, ergonomic, human-friendly APIs; functional data modeling; composable pipelines; clear monadic flow where practical; compact fluent chains when they improve readability; and explicit fallbacks when imperative code is clearer.
+- [x] Add a Socket-hosted `swift-lang` child plugin for shared Swift language guidance across Apple apps, server-side Swift services, Swift packages, command-line tools, and libraries.
+- [x] Keep the plugin as a normal marketplace plugin rather than a hidden include layer for `apple-dev-skills` or `server-side-swift`.
+- [x] Move shared Swift style, formatting, source organization, modernization, and cleanup guidance into a dedicated language layer while preserving Apple Dev's standalone install behavior during the first migration release.
+- [x] Encode Gale's preferred Swift style: Swifty, ergonomic, human-friendly APIs; functional data modeling; composable pipelines; clear monadic flow where practical; compact fluent chains when they improve readability; and explicit fallbacks when imperative code is clearer.
 
 ### Tickets
 
-- [ ] Record the detailed plan in [`docs/maintainers/swift-lang-plugin-plan.md`](./docs/maintainers/swift-lang-plugin-plan.md).
-- [ ] Create `plugins/swift-lang/` with `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
-- [ ] Add `swift-lang:swift-api-style-workflow` for API naming, call-site ergonomics, access control, typed result shapes, consistency across sibling APIs, and human-friendly errors.
-- [ ] Add `swift-lang:swift-functional-pipelines-workflow` for functional data modeling, `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, chained transforms, and monadic composition boundaries.
-- [ ] Add `swift-lang:swift-format-style-workflow` for SwiftFormat, SwiftLint, formatter/linter responsibility, style defaults, Git hooks, and CI guidance.
-- [ ] Add `swift-lang:swift-source-organization-workflow` for file splitting, feature/layer layout, extension-file extraction, `// MARK:` discipline, file headers, TODO/FIXME ledgers, and stricter split thresholds.
-- [ ] Add `swift-lang:swift-modernization-cleanup-workflow` for complete modernization passes that sequence formatting, source inventory, file splitting, API cleanup, pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
-- [ ] Wire `swift-lang` into the root Socket marketplace as an installable child plugin.
-- [ ] Update Apple Dev and Server-Side Swift guidance to hand off shared Swift cleanup work to `swift-lang` when it is available.
-- [ ] Keep Apple Dev's existing `format-swift-sources` and `structure-swift-sources` available during the first release so standalone Apple-only installs do not break.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any new child-plugin validation added for `swift-lang`.
+- [x] Record the detailed plan in [`docs/maintainers/swift-lang-plugin-plan.md`](./docs/maintainers/swift-lang-plugin-plan.md).
+- [x] Create `plugins/swift-lang/` with `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
+- [x] Add `swift-lang:swift-api-style-workflow` for API naming, call-site ergonomics, access control, typed result shapes, consistency across sibling APIs, and human-friendly errors.
+- [x] Add `swift-lang:swift-functional-pipelines-workflow` for functional data modeling, `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, chained transforms, and monadic composition boundaries.
+- [x] Add `swift-lang:swift-format-style-workflow` for SwiftFormat, SwiftLint, formatter/linter responsibility, style defaults, Git hooks, and CI guidance.
+- [x] Add `swift-lang:swift-source-organization-workflow` for file splitting, feature/layer layout, extension-file extraction, `// MARK:` discipline, file headers, TODO/FIXME ledgers, and stricter split thresholds.
+- [x] Add `swift-lang:swift-modernization-cleanup-workflow` for complete modernization passes that sequence formatting, source inventory, file splitting, API cleanup, pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
+- [x] Wire `swift-lang` into the root Socket marketplace as an installable child plugin.
+- [x] Update Apple Dev and Server-Side Swift guidance to hand off shared Swift cleanup work to `swift-lang` when it is available.
+- [x] Keep Apple Dev's existing `format-swift-sources` and `structure-swift-sources` available during the first release so standalone Apple-only installs do not break.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any new child-plugin validation added for `swift-lang`.
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `swift-lang` as an installable child plugin.
-- [ ] The plugin gives agents clear Swift language guidance without duplicating Apple-platform or server-framework ownership.
-- [ ] The functional Swift style policy is explicit enough to guide implementation, review comments, and modernization passes.
-- [ ] Apple Dev and Server-Side Swift guidance can route shared Swift cleanup work to `swift-lang` while preserving standalone Apple-only behavior for the first migration release.
+- [x] The Socket marketplace exposes `swift-lang` as an installable child plugin.
+- [x] The plugin gives agents clear Swift language guidance without duplicating Apple-platform or server-framework ownership.
+- [x] The functional Swift style policy is explicit enough to guide implementation, review comments, and modernization passes.
+- [x] Apple Dev and Server-Side Swift guidance can route shared Swift cleanup work to `swift-lang` while preserving standalone Apple-only behavior for the first migration release.
+
+Implemented Milestone 18 by adding the `swift-lang` child plugin with five shared Swift language skills, wiring it into the Socket marketplace, documenting the Swift language ownership split, preserving Apple Dev's standalone formatting and structure skills, and validating the plugin, skill metadata, root marketplace, and Apple Dev docs.
 
 ## Small Tickets
 

@@ -70,7 +70,7 @@ Use Apple Dev Skills when an agent is helping with:
 - Swift package bootstrap, build, and testing
 - Apple UI accessibility work
 - DocC comments, articles, and documentation catalogs
-- Swift source formatting and file organization
+- Swift source formatting and file organization, with shared language cleanup routed to `swift-lang` when installed through Socket
 - Apple docs lookup before design or code changes
 - Apple-specific repo guidance setup or refresh
 

@@ -102,6 +102,18 @@
       "category": "Developer Tools"
     },
     {
+      "name": "swift-lang",
+      "source": {
+        "source": "local",
+        "path": "./plugins/swift-lang"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "server-side-jvm",
       "source": {
         "source": "local",
