@@ -18,17 +18,17 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ### android-dev-skills
 
-- [ ] Author the first real Android-focused skill tranche for Codex.
+- [x] Author the first real Android-focused skill tranche for Codex.
 - [x] Record the detailed first skill plan in [`docs/maintainers/android-dev-skills-plugin-plan.md`](./docs/maintainers/android-dev-skills-plugin-plan.md).
-- [ ] Start Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
-- [ ] Cover project-shape discovery, Gradle and Android Gradle Plugin alignment, build variants, dependency updates, unit tests, lint, emulator-aware validation handoffs, and release readiness.
-- [ ] Implement all six first-tranche Android skills together before switching the marketplace entry to installable.
-- [ ] Make Kotlin Android guidance deep enough for common Compose and XML UI tasks, not just routing language.
-- [ ] Include release automation routing for repositories that already own Gradle, CI, Fastlane, Play Developer Publishing API, or similar publish machinery.
-- [ ] Use relevant Dash.app docsets when installed, while keeping official Android and Google documentation authoritative for Android-specific behavior and release policy.
-- [ ] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
-- [ ] Keep Android app/platform guidance separate from `server-side-jvm` backend and shared non-Android JVM library guidance.
-- [ ] Update docs and validation once the exported Android skill surface is real.
+- [x] Start Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
+- [x] Cover project-shape discovery, Gradle and Android Gradle Plugin alignment, build variants, dependency updates, unit tests, lint, emulator-aware validation handoffs, and release readiness.
+- [x] Implement all six first-tranche Android skills together before switching the marketplace entry to installable.
+- [x] Make Kotlin Android guidance deep enough for common Compose and XML UI tasks, not just routing language.
+- [x] Include release automation routing for repositories that already own Gradle, CI, Fastlane, Play Developer Publishing API, or similar publish machinery.
+- [x] Use relevant Dash.app docsets when installed, while keeping official Android and Google documentation authoritative for Android-specific behavior and release policy.
+- [x] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
+- [x] Keep Android app/platform guidance separate from `server-side-jvm` backend and shared non-Android JVM library guidance.
+- [x] Update docs and validation once the exported Android skill surface is real.
 - [x] Keep the long-term home Socket-owned for the foreseeable future.
 
 ### cardhop-app

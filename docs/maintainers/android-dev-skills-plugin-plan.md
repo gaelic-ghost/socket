@@ -29,11 +29,11 @@ plugins/android-dev-skills/
 The child plugin should own its Codex-facing guidance surface:
 
 - `.codex-plugin/plugin.json`
-- `skills/` once real skills land
+- `skills/`
 - plugin metadata, skill metadata, `AGENTS.md`, or maintainer notes that explain the plugin's role
 - any validation scripts needed for the plugin's own authored guidance
 
-The root Socket marketplace should list `android-dev-skills` as `NOT_AVAILABLE` while it remains a placeholder. Switch the marketplace entry to `AVAILABLE` only after the first real skill content lands and root validation passes.
+The root Socket marketplace lists `android-dev-skills` as installable now that the first real skill content has landed. If the plugin ever loses its exported skill content, switch the marketplace entry back to `NOT_AVAILABLE` in the same pass.
 
 ## Boundary With Server-Side JVM
 
@@ -185,22 +185,22 @@ This skill should cover:
 
 ## Completion Checklist
 
-- [x] Keep `plugins/android-dev-skills/` as a placeholder with `.codex-plugin/plugin.json` and `AGENTS.md`.
+- [x] Keep `plugins/android-dev-skills/` as a placeholder with `.codex-plugin/plugin.json` and `AGENTS.md` until the first real skill tranche lands.
 - [x] Keep the root Socket marketplace entry as `NOT_AVAILABLE` while it is a placeholder.
 - [x] Record this first detailed skill plan.
 - [x] Update root README, TODO, and ROADMAP so users understand the planned child plugin surface.
 - [x] Run root metadata validation for the placeholder marketplace and manifest wiring.
-- [ ] Add the first real skills for project-shape choice, Gradle/AGP workflow, Kotlin Android work, Java Android and interop work, testing/lint, and release readiness in one implementation tranche.
-- [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
-- [ ] Switch the root marketplace entry to installable only after real skill content exists.
-- [ ] Run root metadata validation again after real skill content lands.
+- [x] Add the first real skills for project-shape choice, Gradle/AGP workflow, Kotlin Android work, Java Android and interop work, testing/lint, and release readiness in one implementation tranche.
+- [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Run root metadata validation again after real skill content lands.
 
 ## Exit Criteria
 
-- [ ] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
-- [ ] The new skills can help an agent choose an Android project shape before implementation.
-- [ ] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
-- [ ] Kotlin Android guidance is deep enough for common Compose and XML UI implementation tasks while leaving specialized UI workflows as future skill candidates.
-- [ ] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
-- [ ] Release readiness includes release automation routing without starting publish workflows by default.
-- [ ] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- [x] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
+- [x] The new skills can help an agent choose an Android project shape before implementation.
+- [x] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
+- [x] Kotlin Android guidance is deep enough for common Compose and XML UI implementation tasks while leaving specialized UI workflows as future skill candidates.
+- [x] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
+- [x] Release readiness includes release automation routing without starting publish workflows by default.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.

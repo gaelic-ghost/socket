@@ -1,7 +1,7 @@
 {
   "name": "android-dev-skills",
   "version": "7.2.1",
-  "description": "Placeholder plugin repository for future Android, Kotlin, and Java Codex skills.",
+  "description": "Android, Kotlin, Java, Gradle, Android Gradle Plugin, testing, lint, UI implementation, and release-readiness workflow skills.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -15,14 +15,21 @@
     "kotlin",
     "java",
     "gradle",
+    "android-gradle-plugin",
+    "compose",
+    "androidx",
+    "testing",
+    "lint",
+    "release",
     "codex",
     "plugin",
     "skills"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Android Dev Skills",
-    "shortDescription": "Future Android, Kotlin, and Java Codex skills.",
-    "longDescription": "Reserve a dedicated plugin surface for Android project maintenance, Kotlin-first implementation, Java interoperability, Gradle workflows, emulator-aware validation, and release guidance.",
+    "shortDescription": "Android, Kotlin, Java, Gradle, testing, lint, UI, and release workflow skills for Codex.",
+    "longDescription": "Guide Codex agents through Android project-shape decisions, Gradle and Android Gradle Plugin maintenance, Kotlin-first Android implementation, common Compose and XML UI tasks, Java Android and Kotlin/Java interoperability, Android tests and lint, emulator-aware validation handoffs, and release-readiness checks with release automation routing.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -31,7 +38,11 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/android-dev-skills",
     "defaultPrompt": [
-      "Plan a future Android, Kotlin, Java, Gradle, emulator-aware validation, or release-readiness workflow for this repository."
+      "Choose the right Android project shape before we start implementing.",
+      "Inspect this Android repository and decide which Gradle, AGP, module, and variant surfaces own the change.",
+      "Build this Kotlin Android UI or platform change while respecting existing Compose or XML conventions.",
+      "Maintain this Java Android or Kotlin/Java interop boundary without forcing a migration.",
+      "Run and explain the Android tests, lint checks, or release-readiness workflow for this project."
     ],
     "brandColor": "#3DDC84",
     "composerIcon": "./assets/android-dev-icon.svg",

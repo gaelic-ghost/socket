@@ -46,7 +46,7 @@
 - Milestone 12: Xcode 27 agentic tooling workflows - Planned
 - Milestone 13: Reverse Engineering skills plugin - In Progress
 - Milestone 14: Core AI and Foundation Models workflow ownership - Planned
-- Milestone 15: Android Dev Skills plugin - Planned
+- Milestone 15: Android Dev Skills plugin - Implemented
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - Planned
 - Milestone 18: Swift Lang shared language plugin - Implemented
@@ -397,40 +397,40 @@ Implemented
 
 ### Status
 
-Planned
+Implemented
 
 ### Scope
 
-- [ ] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin.
-- [ ] Keep Android guidance Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
-- [ ] Make Kotlin Android guidance deep enough for common Compose and XML UI implementation tasks.
-- [ ] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
-- [ ] Include release automation routing in release-readiness guidance without starting publish workflows by default.
-- [ ] Keep Android app and platform guidance separate from server-side JVM backend and shared non-Android JVM library guidance.
+- [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin.
+- [x] Keep Android guidance Kotlin-first while preserving Java interoperability and Java-only project support where repo defaults require it.
+- [x] Make Kotlin Android guidance deep enough for common Compose and XML UI implementation tasks.
+- [x] Keep emulator operation and device debugging handoffs aligned with the existing Android testing plugin instead of duplicating runtime tooling.
+- [x] Include release automation routing in release-readiness guidance without starting publish workflows by default.
+- [x] Keep Android app and platform guidance separate from server-side JVM backend and shared non-Android JVM library guidance.
 
 ### Tickets
 
 - [x] Keep `plugins/android-dev-skills/` as a placeholder with `.codex-plugin/plugin.json` and `AGENTS.md`.
 - [x] Keep the root Socket marketplace entry as `NOT_AVAILABLE` while it is a placeholder.
 - [x] Record the detailed plan in [`docs/maintainers/android-dev-skills-plugin-plan.md`](./docs/maintainers/android-dev-skills-plugin-plan.md).
-- [ ] Add `android-dev:choose-project-shape` for Android app, library, multi-module, Kotlin, Java, Compose, XML view, test, lint, signing, release, and dependency-maintenance routing.
-- [ ] Add `android-dev:gradle-agp-workflow` for Gradle wrapper, Android Gradle Plugin, Kotlin plugin, Java toolchain, SDK, variants, flavors, signing config, namespace, dependency, and targeted task alignment.
-- [ ] Add `android-dev:build-kotlin-android` for Kotlin-first Android implementation, common Compose and XML UI tasks, coroutines, lifecycle-aware work, AndroidX, state, persistence, and validation.
-- [ ] Add `android-dev:java-android-workflow` for Java-only Android maintenance and Kotlin/Java interop boundaries.
-- [ ] Add `android-dev:testing-lint-workflow` for local unit tests, instrumentation and Compose UI test handoffs, lint configuration, targeted Gradle tasks, and emulator-aware validation handoffs.
-- [ ] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
-- [ ] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
-- [ ] Switch the root marketplace entry to installable only after real skill content exists.
+- [x] Add `android-dev:choose-project-shape` for Android app, library, multi-module, Kotlin, Java, Compose, XML view, test, lint, signing, release, and dependency-maintenance routing.
+- [x] Add `android-dev:gradle-agp-workflow` for Gradle wrapper, Android Gradle Plugin, Kotlin plugin, Java toolchain, SDK, variants, flavors, signing config, namespace, dependency, and targeted task alignment.
+- [x] Add `android-dev:build-kotlin-android` for Kotlin-first Android implementation, common Compose and XML UI tasks, coroutines, lifecycle-aware work, AndroidX, state, persistence, and validation.
+- [x] Add `android-dev:java-android-workflow` for Java-only Android maintenance and Kotlin/Java interop boundaries.
+- [x] Add `android-dev:testing-lint-workflow` for local unit tests, instrumentation and Compose UI test handoffs, lint configuration, targeted Gradle tasks, and emulator-aware validation handoffs.
+- [x] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
+- [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
+- [x] Switch the root marketplace entry to installable only after real skill content exists.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
-- [ ] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
-- [ ] The new skills can help an agent choose an Android project shape before implementation.
-- [ ] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
-- [ ] Kotlin Android guidance is deep enough for common Compose and XML UI implementation tasks.
-- [ ] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
-- [ ] Release readiness includes release automation routing without starting publish workflows by default.
+- [x] The Socket marketplace exposes `android-dev-skills` as an installable child plugin after real skill content lands.
+- [x] The new skills can help an agent choose an Android project shape before implementation.
+- [x] Kotlin-first Android guidance and Java interoperability are both clear without making Java or Scala backend work Android-owned.
+- [x] Kotlin Android guidance is deep enough for common Compose and XML UI implementation tasks.
+- [x] Emulator operation and device debugging stay delegated to the Android testing plugin instead of being duplicated here.
+- [x] Release readiness includes release automation routing without starting publish workflows by default.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 16: Server-Side JVM skills plugin
@@ -596,7 +596,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with five share
 - [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `productivity-skills:roadmap-triage-worker`, `productivity-skills:automation-plan-designer`, `swiftasb-skills:swiftasb-steward`, and `web-dev-skills:expo-native-boundary-scout`.
 - [ ] Keep placeholder or write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward`, `spotify`, or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
-- [ ] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It should cover Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
+- [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It covers Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
 - [ ] Add an `mlx-skills` guidance plugin for Apple Silicon MLX project work. It should cover project-shape discovery, Python and Swift integration choices, model conversion or loading workflows, local performance validation, reproducibility notes, and clear boundaries with broader Python, Apple, and AI automation skills.
 - [ ] Add a `coreml-skills` guidance plugin for Core ML model integration and maintenance. It should cover model packaging, conversion handoffs, Swift and Apple-platform app integration, on-device validation, performance and memory checks, release readiness, and boundaries with `apple-dev-skills` so generic Xcode or SwiftUI work stays owned there.
 - [x] Add an `apple-dev-skills:appkit-app-architecture-workflow` skill so AppKit has a first-party architecture decision surface parallel to SwiftUI. It covers menu bar apps, status items, responder-chain menus, window and view-controller ownership, app and window restoration, AppKit MVC, object archiving and persistence choices, Observation with AppKit, and mixed AppKit/SwiftUI composition without steering agents inordinately toward either framework. Started from [`docs/agents/appkit-skills-coverage-plan.md`](./docs/agents/appkit-skills-coverage-plan.md).

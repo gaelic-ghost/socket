@@ -5,12 +5,11 @@ This file is the Android Dev Skills child-repo override for work done from `sock
 ## Scope
 
 - `android-dev-skills` is a monorepo-owned Socket child source for Android, Kotlin, and Java Codex skills, and should remain Socket-owned for the foreseeable future.
-- Keep the repo intentionally minimal until the first real skill lands.
-- [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) is the required plugin root today.
+- Root [`skills/`](./skills/) is the authored workflow surface.
+- The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
 ## Local Rules
 
-- Do not present this repository as already shipping Android workflows before real skills exist.
 - Prefer Kotlin-first Android guidance while preserving Java interoperability and Java-only project support when the repo being maintained requires it.
 - Make Kotlin Android guidance deep enough for common Compose and XML UI implementation tasks, including state, resources, accessibility labels, themes, lists, forms, navigation touchpoints, and focused validation.
 - Keep Android build and test guidance grounded in repo-local Gradle configuration, Android Gradle Plugin versions, checked-out dependency sources, relevant Dash.app docsets when installed, and official Android documentation.
