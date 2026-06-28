@@ -7,7 +7,7 @@ description: Guide legacy Core Audio and Audio Toolbox modernization and repair,
 
 ## Purpose
 
-Guide low-level Core Audio and Audio Toolbox repair. This skill owns the legacy and escape-hatch boundary: when to keep C APIs, when to isolate them, when to migrate toward AVFAudio, and how to make old callback, pointer, format, and `OSStatus` code understandable and safer.
+Guide low-level Core Audio and Audio Toolbox repair. This skill owns the legacy and escape-hatch boundary: when to keep C APIs, when to isolate them, when to migrate toward AVFAudio, and how to make old callback, pointer, buffer, format, and `OSStatus` code understandable and safer without erasing the Apple type boundary.
 
 It is not the default audio recommendation when AVFAudio covers the job.
 
@@ -32,6 +32,7 @@ It is not the default audio recommendation when AVFAudio covers the job.
    - read current Core Audio, Audio Toolbox, AVFAudio, or Core Audio Types docs first
    - use archive docs only to understand legacy code, not to override current guidance
    - state the documented behavior or legacy context relied on
+   - apply `../../shared/references/apple-media-type-ownership.md` before hiding Core Audio structures, pointers, callbacks, or `OSStatus` values behind generic Swift wrappers
 3. Decide retention versus migration:
    - keep low-level code only when it exposes needed behavior that AVFAudio does not cover
    - wrap retained low-level code behind a narrow boundary with explicit ownership
@@ -42,6 +43,7 @@ It is not the default audio recommendation when AVFAudio covers the job.
    - allocation, locking, logging, or actor hops in render callbacks
    - mismatched `AudioStreamBasicDescription`
    - unsafe `AudioBufferList` memory ownership
+   - `AudioComponentDescription`, `AudioStreamBasicDescription`, `AudioBufferList`, `AudioTimeStamp`, or `OSStatus` replaced with generic structs or errors before the low-level operation remains diagnosable
    - duplicate low-level and AVFAudio codepaths left behind after modernization
 5. Return one recommendation with:
    - low-level request class
@@ -58,6 +60,7 @@ It is not the default audio recommendation when AVFAudio covers the job.
 - `migration_goal`: optional goal such as `keep-low-level`, `wrap`, `migrate-to-avaudioengine`, `migrate-to-avaudiosession`, or `undecided`.
 - Defaults:
   - docs-first guidance always applies
+  - prefer Apple and Swift media types unless `../../shared/references/apple-media-type-ownership.md` identifies a concrete escape hatch
   - current docs outrank archive docs for modern recommendations
   - prefer AVFAudio when it honestly covers the behavior
 
@@ -81,6 +84,7 @@ It is not the default audio recommendation when AVFAudio covers the job.
 
 - Do not preserve duplicate legacy and modern codepaths after cleanup unless the user explicitly approves that compromise.
 - Do not recommend low-level C APIs by default when AVFAudio exposes the behavior directly.
+- Do not hide `AudioUnit`, `AudioQueueRef`, `AudioConverterRef`, `AudioComponentDescription`, `AudioStreamBasicDescription`, `AudioBufferList`, `AudioTimeStamp`, or `OSStatus` behind generic Swift wrappers until ownership, format, operation, and likely failure cause remain inspectable.
 - Do not claim render-callback, underrun, device, or format repair is verified without runtime evidence.
 - Do not log bare `OSStatus` values without operation context and at least one likely cause or inspection point.
 - Stop with `blocked` when the existing low-level code cannot be inspected enough to know whether migration is safe.
@@ -110,6 +114,7 @@ Use `references/customization-flow.md`.
 
 ### Support References
 
+- Use `../../shared/references/apple-media-type-ownership.md` for the shared Apple media type and framework-selection contract.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for low-level audio apps.
 
 ### Script Inventory

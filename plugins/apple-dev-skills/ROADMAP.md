@@ -655,6 +655,8 @@ Completed
 
 Completed Milestone 49 by shipping five focused media and audio workflow skills: `avfaudio-session-workflow`, `avaudio-engine-workflow`, `avfoundation-media-pipeline-workflow`, `coremedia-timing-samplebuffer-workflow`, and `coreaudio-modernization-repair-workflow`. The first release keeps the workflows docs-first, repair-oriented, and explicit about Xcode execution handoffs while avoiding one broad catch-all media skill.
 
+Follow-up hardening added a shared Apple media type ownership contract across the five media and audio workflows. The skills now strictly prefer AVFoundation, AVFAudio, Core Media, Core Audio, Audio Toolbox, and related Swift media types until an explicit app, package, test, wire, persistence, or cross-platform boundary makes those framework types unsuitable.
+
 ## Milestone 50: Swift Lang Handoff And Compatibility
 
 ### Status

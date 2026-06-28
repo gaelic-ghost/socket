@@ -9,6 +9,13 @@ Use async property loading when inspecting assets:
 - `try await asset.load(.metadata)`
 - tuple loading when several properties are needed together
 
+Keep loaded values in their Apple types until a real boundary requires conversion:
+
+- keep durations as `CMTime`, not `Double`, while they still participate in media timing
+- keep tracks as `AVAssetTrack` values while selecting, reading, or writing media
+- keep metadata as `AVMetadataItem` values while preserving identifiers, key spaces, locale, and data type
+- keep sample payloads as `CMSampleBuffer` values while writer readiness, timing, attachments, and format descriptions still matter
+
 Repair deprecated shapes:
 
 - Replace synchronous property reads on `AVAsset`, `AVAssetTrack`, and `AVMetadataItem` in Swift clients.

@@ -33,6 +33,7 @@
 - Keep child-repository ownership boundaries explicit instead of flattening repo-local behavior into `socket`.
 - Keep public imported plugin surfaces and root marketplace wiring aligned in the same pass.
 - Keep user-facing plugin install and update docs on the official Git-backed marketplace path.
+- Keep the base `main` checkout clean for coordination and release verification; do implementation work in branch-backed worktrees unless Gale explicitly approves direct-main work.
 
 ## Milestone Progress
 
@@ -615,6 +616,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with five share
 
 ## History
 
+- Made Socket worktree-first for implementation work while keeping the base `main` checkout as the clean coordination and release-verification surface.
 - Aligned Socket documentation-source routing away from generic documentation aggregators by making Xcode MCP `DocumentationSearch` the Apple SDK default, Dash MCP/HTTP the preferred local-docs path for installed docsets across supported stacks, and canonical upstream docs/source the fallback when Dash/local coverage is missing or stale.
 - Added the first repo-local Socket Steward prototype under `.agents/socket-steward`, giving the superproject a Python and OpenAI Agents SDK maintainer-agent scaffold with offline docs, guidance, and marketplace audits before any write-capable or background-service behavior.
 - Added Socket Steward's first docs-sync planner so the repo-local agent can produce structured read-only documentation alignment work before any guarded write mode exists.

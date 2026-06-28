@@ -12,13 +12,13 @@ This document explains how `socket` is maintained after the monorepo simplificat
 - coordinated guidance passes that intentionally keep multiple child skill repositories aligned
 - release tags and release notes for the superproject itself
 
-Treat Gale's local `socket` checkout as the normal day-to-day working checkout on `main`.
+Treat Gale's local `socket` checkout on `main` as the clean coordination and release-verification checkout.
 
-Direct work on local `main` is the default for `socket`. Use a feature branch or a dedicated worktree only when a change needs extra isolation for safety, review, or overlapping parallel work.
+Implementation work is worktree-first by default. Create or use a branch-backed worktree before changing `socket` code, docs, marketplace metadata, child-skill payloads, maintainer scripts, or repository configuration. Work directly on local `main` only when Gale explicitly asks for direct-main work, when the task is read-only, or when a repo-owned release helper explicitly owns the direct-main release operation.
 
 `socket` is the source of truth for every local child directory under `plugins/`, including `plugins/apple-dev-skills/`.
 
-For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` and commit in `socket`.
+For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` from the active `socket` feature worktree and commit in `socket`.
 
 For coordinated guidance that spans multiple monorepo-owned child repositories, edit the relevant child directories directly and update the root docs only enough to explain the cross-child policy or discovery reason.
 

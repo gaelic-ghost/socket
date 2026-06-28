@@ -8,6 +8,13 @@ Use current AVFAudio documentation before proposing changes. Start from:
 - `Responding to audio route changes`: route-change notifications and headphones-disconnect privacy behavior.
 - `AVCaptureSession` audio-session properties when capture code changes the shared app audio session.
 
+Type ownership:
+
+- Keep category, mode, options, route-sharing policy, route descriptions, port descriptions, and permission surfaces in AVFAudio or AVFoundation terms until a UI or persistence boundary requires a smaller app model.
+- Use `AVAudioSession.Category`, `AVAudioSession.Mode`, `AVAudioSession.CategoryOptions`, `AVAudioSession.RouteSharingPolicy`, `AVAudioSessionRouteDescription`, and `AVAudioSessionPortDescription` instead of free-form strings for app audio policy.
+- Use `AVAudioApplication.requestRecordPermission` for app recording permission and `AVCaptureDevice.authorizationStatus(for: .audio)` when capture-device authorization is the real question.
+- Introduce app-specific policy types only when they add domain meaning, such as "voice note capture" or "speakerphone call mode", and keep the conversion to AVFAudio category, mode, options, and activation explicit.
+
 Repair checklist:
 
 - Name the app's real audio goal first: playback, record, play-and-record, spoken audio, capture, call-adjacent, Bluetooth, AirPlay, or background-compatible behavior.

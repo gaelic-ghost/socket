@@ -7,7 +7,7 @@ description: Guide Core Media timing and sample-buffer implementation and repair
 
 ## Purpose
 
-Guide Core Media timing and sample-buffer repair. This skill owns the precise media-time boundary: `CMTime`, time ranges, clocks, timebases, format descriptions, sample buffers, attachments, readiness, presentation and decode timestamps, synchronization, and diagnostic probes.
+Guide Core Media timing and sample-buffer repair. This skill owns the precise media-time and sample payload boundary: `CMTime`, time ranges, clocks, timebases, format descriptions, sample buffers, attachments, readiness, presentation and decode timestamps, synchronization, and diagnostic probes.
 
 It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, and not a generic media-player workflow.
 
@@ -31,6 +31,7 @@ It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, an
 2. Apply the Apple docs gate:
    - read current Core Media or AVFoundation sample-buffer documentation first
    - state the documented timing or sample-buffer behavior relied on
+   - apply `../../shared/references/apple-media-type-ownership.md` before converting Core Media values to raw numbers, dictionaries, or app-specific sample wrappers
 3. Inspect timing invariants:
    - validity, timescale, epoch, and numeric value
    - presentation timestamp, decode timestamp, and duration
@@ -42,6 +43,7 @@ It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, an
    - invalid `CMTime` treated as zero
    - mismatched timescales or lossy conversion hidden in helpers
    - missing or wrong `CMFormatDescription`
+   - `CMSampleBuffer`, `CMFormatDescription`, attachments, readiness, or dropped-buffer metadata hidden behind opaque dictionaries before diagnostics
    - presentation and decode timestamps swapped or flattened
    - sample-buffer append without readiness or writer back-pressure
    - video synchronized to host time when audio-clock sync is required
@@ -60,6 +62,7 @@ It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, an
 - `media_context`: optional context such as `audio`, `video`, `metadata`, `captions`, or `mixed-media`.
 - Defaults:
   - docs-first guidance always applies
+  - prefer Apple and Swift media types unless `../../shared/references/apple-media-type-ownership.md` identifies a concrete escape hatch
   - keep exact timing values inspectable
   - prefer explicit invariants over helper code that hides timestamp behavior
 
@@ -83,6 +86,7 @@ It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, an
 ## Guards and Stop Conditions
 
 - Do not hide `CMTime` validity, timescale, duration, presentation timestamp, or decode timestamp behind vague time helper names.
+- Do not replace `CMTime`, `CMTimeRange`, `CMClock`, `CMTimebase`, `CMFormatDescription`, `CMSampleBuffer`, `CMSampleTimingInfo`, attachments, or readiness metadata with raw numbers, strings, or dictionaries until the framework invariants have been inspected and the conversion boundary is documented.
 - Do not claim drift, synchronization, dropped-buffer, or writer timing repair is verified without runtime evidence or inspected sample buffers.
 - Do not silently absorb capture, export, player, reader, or writer ownership that belongs to the AVFoundation pipeline workflow.
 - Do not recommend changing timestamps before identifying whether the source, transform, writer, display, or synchronizer owns the bug.
@@ -113,6 +117,7 @@ Use `references/customization-flow.md`.
 
 ### Support References
 
+- Use `../../shared/references/apple-media-type-ownership.md` for the shared Apple media type and framework-selection contract.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for sample-buffer apps.
 
 ### Script Inventory
