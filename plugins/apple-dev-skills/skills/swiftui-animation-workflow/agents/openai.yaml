@@ -1,0 +1,4 @@
+interface:
+  display_name: "SwiftUI Animation Workflow"
+  short_description: "Guide SwiftUI animation design and repair"
+  default_prompt: "Use $swiftui-animation-workflow to choose, implement, repair, and validate SwiftUI animation, transitions, symbol effects, phase or keyframe motion, and reduce-motion behavior with current Apple docs, handing symbol choice, accessibility, architecture, or Xcode validation to the owning skills."

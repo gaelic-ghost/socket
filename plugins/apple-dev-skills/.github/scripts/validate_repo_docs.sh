@@ -118,6 +118,8 @@ active_skill_mds=(
   "./skills/avfoundation-media-pipeline-workflow/SKILL.md"
   "./skills/coremedia-timing-samplebuffer-workflow/SKILL.md"
   "./skills/coreaudio-modernization-repair-workflow/SKILL.md"
+  "./skills/sf-symbols-workflow/SKILL.md"
+  "./skills/swiftui-animation-workflow/SKILL.md"
   "./skills/safari-extension-control-workflow/SKILL.md"
   "./skills/appkit-app-architecture-workflow/SKILL.md"
   "./skills/swiftui-app-architecture-workflow/SKILL.md"
@@ -131,7 +133,7 @@ active_skill_mds=(
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 24 ]] || fail "Expected exactly 24 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 26 ]] || fail "Expected exactly 26 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -226,6 +228,8 @@ for file in \
   "skills/avfoundation-media-pipeline-workflow/SKILL.md" \
   "skills/coremedia-timing-samplebuffer-workflow/SKILL.md" \
   "skills/coreaudio-modernization-repair-workflow/SKILL.md" \
+  "skills/sf-symbols-workflow/SKILL.md" \
+  "skills/swiftui-animation-workflow/SKILL.md" \
   "skills/safari-extension-control-workflow/SKILL.md" \
   "skills/appkit-app-architecture-workflow/SKILL.md" \
   "skills/swiftui-app-architecture-workflow/SKILL.md" \

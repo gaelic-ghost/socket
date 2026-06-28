@@ -4,7 +4,7 @@ This plan captures a candidate Apple Dev Skills expansion for SwiftUI animation,
 
 ## Status
 
-Planned.
+In progress. The first implementation slice shipped `sf-symbols-workflow` and `swiftui-animation-workflow`; Core Animation and Apple typography remain planned.
 
 ## Ownership
 
@@ -73,14 +73,14 @@ Before implementing these skills, run a short local evidence pass:
 - prefer Xcode-local documentation and Dash when available, then official Apple documentation
 - record current authoritative source links in the skill bodies only where they guide workflow decisions
 
-## First Implementation Slice
+## Implementation Slices
 
-Build the first slice as two skills:
+The first slice shipped two skills:
 
 1. `sf-symbols-workflow`, because it has the richest local-tool surface and the clearest boundary with existing Icon Composer guidance.
 2. `swiftui-animation-workflow`, because it fills the most common app-implementation gap without forcing lower-level Core Animation guidance into the same skill.
 
-After those land and validate, add `core-animation-layer-workflow` and `apple-typography-san-francisco-workflow` as a second slice.
+The next slice should add `core-animation-layer-workflow` and `apple-typography-san-francisco-workflow` or the broader `apple-typography-workflow` name if the implementation should also cover New York and custom app-font boundaries.
 
 ## Metadata And Validation Tasks
 
