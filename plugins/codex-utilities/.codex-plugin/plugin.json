@@ -1,6 +1,6 @@
 {
   "name": "codex-utilities",
-  "version": "7.2.1",
+  "version": "7.3.0",
   "description": "Local Codex runtime utilities for thread, hook, and app-server workflows.",
   "author": {
     "name": "Gale",
