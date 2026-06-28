@@ -1,0 +1,4 @@
+interface:
+  display_name: "SF Symbols Workflow"
+  short_description: "Guide SF Symbols selection, effects, and custom symbols"
+  default_prompt: "Use $sf-symbols-workflow to choose, customize, animate, color, validate, and integrate SF Symbols in an Apple app with current Apple docs and the local SF Symbols app, handing broader motion, accessibility, app-icon, or Xcode validation work to the owning skills."

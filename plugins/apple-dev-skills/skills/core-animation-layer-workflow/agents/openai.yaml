@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Animation Layer Workflow"
+  short_description: "Guide Core Animation layer and CAAnimation work"
+  default_prompt: "Use $core-animation-layer-workflow to decide, implement, repair, and validate Core Animation layer trees, CALayer subclasses, CAAnimation timing, transactions, and SwiftUI/AppKit/UIKit layer bridges."

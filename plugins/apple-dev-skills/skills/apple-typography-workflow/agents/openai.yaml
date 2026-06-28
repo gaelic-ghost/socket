@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Typography Workflow"
+  short_description: "Guide Apple system typography and custom font work"
+  default_prompt: "Use $apple-typography-workflow to choose, implement, repair, and validate Apple system typography, San Francisco and New York designs, Dynamic Type, custom fonts, and font asset integration."
