@@ -55,6 +55,7 @@ codex plugin marketplace upgrade socket
 
 Use Apple Dev Skills when an agent is helping with:
 
+- Strict Apple media type and framework selection across AVFoundation, AVFAudio, Core Media, Core Audio, and Audio Toolbox work
 - AVFAudio session, route, interruption, permission, and app-audio policy repair
 - AVAudioEngine graph, format, rendering, tap, and real-time callback repair
 - AVFoundation capture, playback, async asset loading, reader, writer, and export workflows

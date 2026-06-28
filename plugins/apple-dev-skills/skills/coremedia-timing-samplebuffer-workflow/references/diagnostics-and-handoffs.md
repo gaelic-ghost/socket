@@ -11,6 +11,14 @@ Useful diagnostics:
 - synchronizer rate and current time
 - control timebase clock and host-time relationship
 
+Keep diagnostics typed:
+
+- print `CMTime` value, timescale, flags, epoch, and validity before converting to seconds
+- print `CMSampleTimingInfo` presentation timestamp, decode timestamp, and duration separately
+- print `CMFormatDescription` media type and relevant extensions instead of only a codec label
+- print attachment keys and dropped-buffer reasons before deciding whether a buffer can be treated as ordinary media
+- print the source clock or timebase relationship when diagnosing drift or audio/video synchronization
+
 Hand off to `avfoundation-media-pipeline-workflow` when:
 
 - the owner of capture, reader, writer, export, or player state is unclear

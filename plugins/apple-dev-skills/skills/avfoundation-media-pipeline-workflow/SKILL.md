@@ -7,7 +7,7 @@ description: Guide AVFoundation media-pipeline implementation and repair, includ
 
 ## Purpose
 
-Guide AVFoundation capture, playback, asset loading, reader, writer, export, and sample-buffer pipeline design and repair. This skill owns media-pipeline shape and back-pressure policy, while leaving app audio-session policy, engine graphs, Core Media timing internals, and Xcode execution to their owning skills.
+Guide AVFoundation capture, playback, asset loading, reader, writer, export, and sample-buffer pipeline design and repair. This skill owns media-pipeline shape, typed AVFoundation surface choice, and back-pressure policy, while leaving app audio-session policy, engine graphs, Core Media timing internals, and Xcode execution to their owning skills.
 
 ## When To Use
 
@@ -29,6 +29,7 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 2. Apply the Apple docs gate:
    - read current AVFoundation documentation for the pipeline surface
    - state the documented behavior relied on before recommending changes
+   - apply `../../shared/references/apple-media-type-ownership.md` before introducing custom media wrappers, raw numeric timing, strings, or dictionaries
 3. Choose the pipeline owner and queues:
    - capture-session configuration owner
    - serial capture session queue
@@ -41,6 +42,7 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
    - deprecated synchronous AVAsset property reads in Swift clients
    - callback-based asset loading left in otherwise async Swift code
    - writer loops that ignore `isReadyForMoreMediaData`
+   - raw strings, dictionaries, or custom structs replacing `AVAsset`, `AVAssetTrack`, `AVPlayerItem`, `AVCaptureConnection`, `AVAssetReaderOutput`, `AVAssetWriterInput`, `CMSampleBuffer`, or writer receiver types without a documented boundary reason
    - capture authorization, recording permission, and `Info.plist` gates collapsed together
    - sample-buffer timing issues that need Core Media handoff
 5. Return one recommendation with:
@@ -58,6 +60,7 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 - `platform_context`: optional platform emphasis such as `ios`, `macos`, or `mixed-apple`.
 - Defaults:
   - docs-first guidance always applies
+  - prefer Apple and Swift media types unless `../../shared/references/apple-media-type-ownership.md` identifies a concrete escape hatch
   - prefer Swift concurrency asset loading for modern Swift clients
   - keep blocking session and media work off the main queue
 
@@ -80,6 +83,7 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 ## Guards and Stop Conditions
 
 - Do not run capture sessions, media loading, export, or writer loops on the main queue when docs identify the operation as blocking or asynchronous.
+- Do not replace AVFoundation or Core Media pipeline types with custom wrappers, strings, dictionaries, or raw numeric timing unless the conversion boundary and lost media information are explicit.
 - Do not claim capture, playback, export, camera, microphone, or route behavior is verified without runtime evidence.
 - Do not silently absorb Core Media timestamp, sample-buffer readiness, or timebase repair.
 - Do not collapse UI state, capture configuration, writer loops, and player ownership into one object unless the code is deliberately tiny and no persistent boundary is needed.
@@ -110,6 +114,7 @@ Use `references/customization-flow.md`.
 
 ### Support References
 
+- Use `../../shared/references/apple-media-type-ownership.md` for the shared Apple media type and framework-selection contract.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for media apps.
 
 ### Script Inventory

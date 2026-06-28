@@ -7,13 +7,13 @@ description: Guide AVFAudio audio-session implementation and repair for Apple ap
 
 ## Purpose
 
-Guide Apple app audio-session design and repair. This skill owns the app-level audio intent boundary: what the app tells the system it wants to do with audio, when it activates that intent, how it responds to interruption and route changes, and how it explains failures.
+Guide Apple app audio-session design and repair. This skill owns the app-level audio intent boundary: what the app tells the system it wants to do with audio, when it activates that intent, how it responds to interruption and route changes, how it preserves typed AVFAudio policy surfaces, and how it explains failures.
 
 It is not the audio-engine graph workflow, not the AVFoundation media-pipeline workflow, not the Core Media timing workflow, and not the Xcode execution workflow.
 
 ## When To Use
 
-- Use this skill when configuring or repairing `AVAudioSession`, `AVAudioApplication`, `AVAudioApplication.requestRecordPermission`, recording permission, categories, modes, options, route sharing, activation, deactivation, interruptions, route changes, Bluetooth, AirPlay, speaker routing, or capture-session audio-session behavior.
+- Use this skill when configuring or repairing `AVAudioSession`, `AVAudioApplication`, `AVAudioApplication.requestRecordPermission`, recording permission, categories, modes, options, `AVAudioSession.RouteSharingPolicy`, activation, deactivation, interruptions, route changes, Bluetooth, AirPlay, speaker routing, or capture-session audio-session behavior.
 - Use this skill when existing audio code plays from the wrong route, fails silently, captures silence, interrupts other audio incorrectly, fails around calls, ignores headphones disconnects, or logs vague audio errors.
 - Recommend `avaudio-engine-workflow` when the primary issue is an `AVAudioEngine` graph, node connection, tap, render callback, manual rendering, or format conversion.
 - Recommend `avfoundation-media-pipeline-workflow` when the primary issue is capture, playback, media assets, readers, writers, export, or sample-buffer append policy.
@@ -34,6 +34,7 @@ It is not the audio-engine graph workflow, not the AVFoundation media-pipeline w
    - read current AVFAudio or AVFoundation documentation first
    - use archive material only for legacy migration context
    - state the documented behavior relied on before recommending design or repair
+   - apply `../../shared/references/apple-media-type-ownership.md` before introducing string-backed audio policy, route, category, mode, or permission models
    - stop if current docs and code disagree in a way that changes the recommendation
 3. Choose the app-audio policy:
    - category, mode, route-sharing policy, and options
@@ -43,6 +44,7 @@ It is not the audio-engine graph workflow, not the AVFoundation media-pipeline w
    - capture-session automatic audio-session configuration stance
 4. Repair common failure modes:
    - missing microphone usage description or permission path
+   - category, mode, route, permission, or output policy modeled as free-form strings instead of `AVAudioSession` and `AVAudioApplication` types
    - using `overrideOutputAudioPort` when `defaultToSpeaker` is the durable intent
    - leaving other apps interrupted after deactivation instead of using `notifyOthersOnDeactivation` when appropriate
    - treating denied permission as a hardware failure
@@ -63,6 +65,7 @@ It is not the audio-engine graph workflow, not the AVFoundation media-pipeline w
 - `audio_goal`: optional goal such as `playback`, `recording`, `play-and-record`, `capture`, `spoken-audio`, `bluetooth`, `airplay`, or `repair`.
 - Defaults:
   - docs-first guidance always applies
+  - prefer Apple and Swift media types unless `../../shared/references/apple-media-type-ownership.md` identifies a concrete escape hatch
   - prefer current AVFAudio behavior over archive-era Audio Session Programming Guide text
   - prefer framework-owned behavior over custom route managers or broad audio coordinators
 
@@ -86,6 +89,7 @@ It is not the audio-engine graph workflow, not the AVFoundation media-pipeline w
 ## Guards and Stop Conditions
 
 - Do not treat audio-session state as a global dumping ground for unrelated playback, recording, engine, and capture responsibilities.
+- Do not replace `AVAudioSession` category, mode, options, route-sharing, route, port, or permission surfaces with stringly typed policy models unless the conversion boundary is explicit and framework state remains inspectable.
 - Do not claim runtime route, Bluetooth, AirPlay, microphone, speaker, or interruption behavior is verified without device, simulator, or manual validation evidence.
 - Do not use archive-era guidance to override current AVFAudio documentation.
 - Do not recommend broad custom route managers unless a documented framework behavior cannot express the app's real intent.
@@ -116,6 +120,7 @@ Use `references/customization-flow.md`.
 
 ### Support References
 
+- Use `../../shared/references/apple-media-type-ownership.md` for the shared Apple media type and framework-selection contract.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for audio-session apps.
 
 ### Script Inventory

@@ -7,7 +7,7 @@ description: Guide AVAudioEngine implementation and repair for Apple apps and pa
 
 ## Purpose
 
-Guide `AVAudioEngine` graph design and repair. This skill owns audio-node ownership, graph construction, connection formats, taps, manual rendering, offline processing, Audio Unit hosting through `AVAudioUnit`, and real-time safety boundaries.
+Guide `AVAudioEngine` graph design and repair. This skill owns audio-node ownership, graph construction, connection formats, typed AVFAudio buffer and format surfaces, taps, manual rendering, offline processing, Audio Unit hosting through `AVAudioUnit`, and real-time safety boundaries.
 
 It is not the app audio-session workflow, not the AVFoundation capture or asset workflow, and not a low-level Core Audio C API repair workflow except where AVAudioEngine wraps the lower-level behavior.
 
@@ -32,6 +32,7 @@ It is not the app audio-session workflow, not the AVFoundation capture or asset 
 2. Apply the Apple docs gate:
    - read current AVFAudio docs for the relevant engine, node, format, or rendering behavior
    - state the documented graph, format, or real-time behavior relied on
+   - apply `../../shared/references/apple-media-type-ownership.md` before introducing custom graph, buffer, format, or unit-hosting abstractions
 3. Map the graph:
    - engine owner and lifetime
    - attached nodes
@@ -45,6 +46,7 @@ It is not the app audio-session workflow, not the AVFoundation capture or asset 
    - input or output node used when hardware is unavailable
    - graph mutation that breaks mixer or channel-count assumptions
    - render callback that allocates, locks, logs, awaits, or touches UI
+   - hand-rolled format or buffer structs replacing `AVAudioFormat`, `AVAudioPCMBuffer`, `AVAudioFile`, `AVAudioConverter`, or `AudioStreamBasicDescription` while still configuring Apple audio APIs
    - completion handlers that mutate engine state from an arbitrary thread without a clear hop
 5. Return one recommendation with:
    - graph class
@@ -61,6 +63,7 @@ It is not the app audio-session workflow, not the AVFoundation capture or asset 
 - `platform_context`: optional platform emphasis such as `ios`, `macos`, or `mixed-apple`.
 - Defaults:
   - docs-first guidance always applies
+  - prefer Apple and Swift media types unless `../../shared/references/apple-media-type-ownership.md` identifies a concrete escape hatch
   - prefer AVAudioEngine and AVAudioUnit surfaces before lower-level callback APIs when they honestly fit
   - keep real-time render paths free of actor hops, locks, allocation, logging, and UI work
 
@@ -84,6 +87,7 @@ It is not the app audio-session workflow, not the AVFoundation capture or asset 
 ## Guards and Stop Conditions
 
 - Do not hide engine ownership behind a broad audio manager unless one owner must coordinate multiple independent graphs or lifetimes.
+- Do not replace `AVAudioEngine`, `AVAudioNode`, `AVAudioFormat`, `AVAudioPCMBuffer`, `AVAudioFile`, `AVAudioConverter`, or `AVAudioUnit` with custom wrappers or generic structs unless the Apple type boundary remains inspectable.
 - Do not claim audio graph, route, latency, underrun, or callback safety is verified without runtime evidence.
 - Do not put Swift concurrency, logging, allocation, blocking I/O, locks, or UI work in real-time render callbacks.
 - Do not silently migrate low-level Core Audio code to AVAudioEngine when the existing code depends on behavior AVAudioEngine does not expose.
@@ -114,6 +118,7 @@ Use `references/customization-flow.md`.
 
 ### Support References
 
+- Use `../../shared/references/apple-media-type-ownership.md` for the shared Apple media type and framework-selection contract.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for apps that host audio engines.
 
 ### Script Inventory

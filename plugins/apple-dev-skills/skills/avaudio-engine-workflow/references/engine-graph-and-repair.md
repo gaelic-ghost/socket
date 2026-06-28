@@ -9,6 +9,13 @@ Use current AVFAudio documentation before proposing graph changes. Start from:
 - `AVAudioSourceNode` and `AVAudioSinkNode`: render-block boundaries.
 - `AVAudioUnit`: async instantiation and underlying Core Audio unit access.
 
+Type ownership:
+
+- Keep graph topology in `AVAudioEngine`, `AVAudioNode`, `AVAudioInputNode`, `AVAudioOutputNode`, `AVAudioMixerNode`, `AVAudioPlayerNode`, `AVAudioSourceNode`, `AVAudioSinkNode`, and `AVAudioUnit` terms until the graph is inspected.
+- Keep audio formats and buffers as `AVAudioFormat`, `AVAudioPCMBuffer`, `AVAudioFile`, `AVAudioConverter`, or `AudioStreamBasicDescription` where those values still configure Apple APIs.
+- Use `AVAudioUnit` as the first modern hosting boundary for Audio Units; drop to Core Audio `AudioUnit` only when the required unit behavior is not exposed through AVFAudio.
+- Introduce custom graph or format descriptors only as app-domain summaries, test fixtures, or persistence shapes, and keep the conversion back to AVFAudio explicit.
+
 Repair checklist:
 
 - Draw the graph in text: owner, nodes, attachment order, connection order, formats, start, schedule, stop, and teardown.

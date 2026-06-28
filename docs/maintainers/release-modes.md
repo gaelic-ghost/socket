@@ -6,11 +6,11 @@ This document names the release modes used by `socket` so maintainer work follow
 
 Use `standard` when the release belongs only to the `socket` superproject. Use `subtrees` when the release also needs explicit accounting for subtree-managed child repositories.
 
-Both modes treat `socket` as the release owner for the umbrella repository:
+Both modes treat `socket` as the release owner for the umbrella repository. Prepare implementation changes in a branch-backed worktree by default, then use the clean `main` checkout for reviewed release verification after merge:
 
 1. make the intended commits
 2. validate the changed surface
-3. publish through a branch and pull request when the change is not already on `main`
+3. publish through a branch and pull request unless Gale explicitly approved direct-main release work
 4. check CI and fix failures before continuing
 5. check PR comments and requested changes before continuing
 6. merge to `main`
@@ -36,7 +36,7 @@ The difference is that `subtrees` adds a child-repository sync gate before taggi
 
 Use `standard` for root docs, root marketplace metadata, root validation scripts, monorepo-owned child directories, and shared version bumps that do not need child-repository subtree synchronization.
 
-Standard mode should feel like the protected-main flow from `maintain-project-repo`: changes land through the normal `socket` branch or local-main path, CI and review comments are cleared before tagging, local `main` is fast-forwarded after merge, and the tag is created from the reviewed `main` commit.
+Standard mode should feel like the protected-main flow from `maintain-project-repo`: changes land through the normal `socket` branch and worktree path unless Gale explicitly approved direct-main release work, CI and review comments are cleared before tagging, local `main` is fast-forwarded after merge, and the tag is created from the reviewed `main` commit.
 
 The root version helper remains a version-surface tool, not the full release driver:
 
@@ -55,7 +55,7 @@ is the standard patch-only Socket refresh described above:
 scripts/release.sh patch-refresh
 ```
 
-`patch-refresh` bumps the shared patch version, validates root marketplace
+`patch-refresh` is the main direct-main exception. It bumps the shared patch version, validates root marketplace
 metadata, commits and pushes `main`, pushes any required subtree split, runs the
 `release-ready` gate, captures commit-bound marketplace and Dependabot evidence,
 tags `main`, publishes and verifies the GitHub release with that evidence in the

@@ -18,4 +18,6 @@ Current guidance should come first for:
 - modern Swift error handling and concurrency boundaries
 - current platform privacy, sandbox, entitlement, and route behavior
 
+Archive context does not justify replacing Apple media types with generic local models. Even when legacy docs explain an old callback or queue shape, preserve the current Core Audio, Audio Toolbox, Core Audio Types, AVFAudio, AVFoundation, or Core Media type at the repair boundary until a documented escape hatch requires conversion.
+
 When using archive context, say that it is historical or migration context and name the current API surface that replaces or narrows it.
