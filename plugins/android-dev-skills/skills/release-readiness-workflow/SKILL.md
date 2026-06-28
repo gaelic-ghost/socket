@@ -2,6 +2,7 @@
 name: release-readiness-workflow
 description: Check Android release readiness without publishing by default, including versionCode and versionName, signing and keystore boundaries, release build types, R8/ProGuard, mapping outputs, app bundles, APKs, Play delivery handoffs, privacy, permissions, changelogs, and repository-owned release automation routing through Gradle, CI, Fastlane, or Play Developer Publishing API clients.
 license: PolyForm-Noncommercial-1.0.0
+compatibility: Designed for Codex and compatible Agent Skills clients working with Android release-preparation surfaces.
 metadata:
   owner: gaelic-ghost
   repo: socket

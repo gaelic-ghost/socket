@@ -2,6 +2,7 @@
 name: choose-project-shape
 description: Choose the right Android project, app, library, module, language, UI, build, test, lint, signing, release, or dependency-maintenance shape before implementation. Use when Android work needs routing across Kotlin, Java, Gradle, Android Gradle Plugin, Compose, XML views, emulator-aware validation, release readiness, or server-side JVM handoffs.
 license: PolyForm-Noncommercial-1.0.0
+compatibility: Designed for Codex and compatible Agent Skills clients working with Android app and library repositories on macOS or other supported Android development environments.
 metadata:
   owner: gaelic-ghost
   repo: socket

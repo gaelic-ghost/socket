@@ -2,6 +2,7 @@
 name: gradle-agp-workflow
 description: Inspect and maintain Android Gradle and Android Gradle Plugin workflows, including Gradle wrapper policy, AGP and Kotlin plugin versions, Java toolchains, Android SDK settings, namespaces, variants, flavors, signing config, version catalogs, dependencies, generated sources, build cache boundaries, and targeted assemble, test, lint, or bundle tasks.
 license: PolyForm-Noncommercial-1.0.0
+compatibility: Designed for Codex and compatible Agent Skills clients working with Gradle-backed Android projects.
 metadata:
   owner: gaelic-ghost
   repo: socket

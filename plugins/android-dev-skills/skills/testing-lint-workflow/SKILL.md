@@ -2,6 +2,7 @@
 name: testing-lint-workflow
 description: Plan, run, filter, and triage Android tests and lint, including local unit tests, instrumentation and Compose UI test handoffs, Gradle variant tasks, lint configuration, lint baselines, failure explanations, emulator-aware validation routing, and readable next checks.
 license: PolyForm-Noncommercial-1.0.0
+compatibility: Designed for Codex and compatible Agent Skills clients working with Android Gradle projects.
 metadata:
   owner: gaelic-ghost
   repo: socket
