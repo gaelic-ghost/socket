@@ -126,13 +126,18 @@ The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agent
 The installable local child entries currently point at:
 
 - `./plugins/agent-plugin-skills`
+- `./plugins/android-dev-skills`
 - `./plugins/apple-dev-skills`
 - `./plugins/cardhop-app`
+- `./plugins/codex-utilities`
 - `./plugins/dotnet-skills`
 - `./plugins/productivity-skills`
 - `./plugins/python-skills`
-- `./plugins/server-side-swift`
+- `./plugins/reverse-engineering-skills`
 - `./plugins/rust-skills`
+- `./plugins/server-side-jvm`
+- `./plugins/server-side-swift`
+- `./plugins/swift-lang`
 - `./plugins/swiftasb-skills`
 - `./plugins/things-app`
 - `./plugins/web-dev-skills`
