@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI animation and architecture, SF Symbols, AppKit, Icon Composer app icons, Safari, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple, Swift, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer app icons, Safari, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -63,6 +63,8 @@ Use Apple Dev Skills when an agent is helping with:
 - Core Audio and Audio Toolbox modernization or legacy repair
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
+- Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
+- Apple typography, San Francisco and New York system designs, Dynamic Type, custom fonts, and font asset boundaries
 - SF Symbols selection, rendering, custom symbols, variable color, symbol effects, and app integration
 - AppKit and mixed AppKit/SwiftUI architecture
 - Xcode build, run, test, and project workflows
@@ -131,7 +133,9 @@ uv run pytest
 - `avfoundation-media-pipeline-workflow`
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
+- `apple-typography-workflow`
 - `coreaudio-modernization-repair-workflow`
+- `core-animation-layer-workflow`
 - `coremedia-timing-samplebuffer-workflow`
 - `explore-apple-swift-docs`
 - `format-swift-sources`

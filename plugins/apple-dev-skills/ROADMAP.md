@@ -716,22 +716,22 @@ In Progress
 ### Scope
 
 - [x] Add first-slice Apple design workflow skills for SF Symbols and SwiftUI animation.
-- [ ] Add second-slice workflow skills for Core Animation layer work and Apple typography/San Francisco font-family guidance.
-- [ ] Keep design, symbol, animation, typography, and app-icon ownership split across focused Apple Dev Skills instead of expanding `swiftui-app-architecture-workflow` into a catch-all UI skill.
+- [x] Add second-slice workflow skills for Core Animation layer work and Apple typography/San Francisco font-family guidance.
+- [x] Keep design, symbol, animation, typography, and app-icon ownership split across focused Apple Dev Skills instead of expanding `swiftui-app-architecture-workflow` into a catch-all UI skill.
 
 ### Tickets
 
 - [x] Add `sf-symbols-workflow` for SF Symbols selection, app inspection, rendering modes, variable color, symbol effects, custom symbols, accessibility semantics, and Xcode integration handoffs.
 - [x] Add `swiftui-animation-workflow` for state-driven SwiftUI animation, transitions, symbol effects in motion context, phase/keyframe animation, reduce-motion behavior, and validation handoffs.
 - [x] Update Apple Dev plugin metadata, README active skill inventory, repo validator expectations, and targeted tests for the first slice.
-- [ ] Add `core-animation-layer-workflow` for `CALayer`, implicit and explicit animations, transactions, timing, shape/gradient/text layers, presentation-layer behavior, AppKit/UIKit bridging, and performance handoffs.
-- [ ] Add `apple-typography-san-francisco-workflow` or a broader `apple-typography-workflow` for system typography APIs, San Francisco family choices, Dynamic Type, accessibility, custom font boundaries, and redistribution warnings.
+- [x] Add `core-animation-layer-workflow` for `CALayer`, implicit and explicit animations, transactions, timing, shape/gradient/text layers, presentation-layer behavior, AppKit/UIKit bridging, and performance handoffs.
+- [x] Add `apple-typography-workflow` for system typography APIs, San Francisco and New York system designs, Dynamic Type, accessibility, custom font boundaries, and redistribution warnings.
 - [ ] Decide whether animated SF Symbols stay primarily in `sf-symbols-workflow` or whether `swiftui-animation-workflow` should own more symbol-effect implementation detail after field use.
 
 ### Exit Criteria
 
-- [ ] Apple Dev Skills has focused first-party guidance for SF Symbols, SwiftUI animation, Core Animation, and Apple typography without blurring architecture, app-icon, accessibility, and Xcode execution ownership.
-- [ ] The active skill inventory, plugin metadata, tests, and docs validator agree with the shipped design and animation workflow surface.
+- [x] Apple Dev Skills has focused first-party guidance for SF Symbols, SwiftUI animation, Core Animation, and Apple typography without blurring architecture, app-icon, accessibility, and Xcode execution ownership.
+- [x] The active skill inventory, plugin metadata, tests, and docs validator agree with the shipped design and animation workflow surface.
 
 ## Backlog Candidates
 
