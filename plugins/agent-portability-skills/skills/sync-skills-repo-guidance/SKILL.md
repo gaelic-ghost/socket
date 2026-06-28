@@ -1,11 +1,13 @@
 ---
 name: sync-skills-repo-guidance
-description: Audit guidance across AGENTS.md, optional README.md, maintainer docs, and discovery mirrors in an existing skills-export repository. Use when a skills repo may have stale guidance, missing discovery mirrors, or outdated references to the Agent Skills standard or OpenAI Codex docs. Defer narrow README-only or roadmap-only requests to the specialized maintainer skills.
+description: Audit guidance across AGENTS.md, optional README.md, maintainer docs, and discovery mirrors in an existing Agent Skills or Codex plugin repository. Use when a skills repo may have stale guidance, missing discovery mirrors, outdated OpenAI Codex policy, or unclear boundaries between portable skills and host-specific plugin surfaces. Defer narrow README-only, roadmap-only, or host-adapter design requests to the specialized maintainer skills.
 ---
 
 # Sync Skills Repo Guidance
 
-Audit an existing skills-export repository against the current house guidance and upstream standards.
+Audit an existing Agent Skills or Codex plugin repository against the current house guidance and upstream standards.
+
+This is the Codex and shared-skills guidance-sync workflow inside Agent Portability Skills. It should preserve the difference between portable Agent Skills and host-specific packaging such as Codex plugins, Xcode plug-ins, Zed extensions, OpenCode config, Claude Code settings, MCP declarations, hooks, apps, and custom agents.
 
 ## Codex Model Note
 
@@ -61,7 +63,7 @@ When syncing `AGENTS.md`, include strict dependency guidance:
 
 ## Codex Subagent Guidance
 
-When the user explicitly requests subagents, `skills-repo-guidance-sync`, review-packet planning, or asks to keep working while broad skills-repo guidance discovery happens in parallel, use the `skills-repo-guidance-sync` custom-agent role for bounded read-heavy discovery before this skill applies guidance sync.
+When the user explicitly requests subagents, `skills-repo-guidance-sync`, review-packet planning, or asks to keep working while broad skills-repo guidance discovery happens in parallel, use the `skills-repo-guidance-sync` custom-agent role for bounded read-heavy discovery before this skill applies guidance sync. When the target is the Socket superproject itself, consider Socket Steward's deterministic audits and proposal reports first so the repo-local maintainer agent stays tied into cross-Socket docs and marketplace maintenance.
 
 Good `skills-repo-guidance-sync` jobs for this skill:
 

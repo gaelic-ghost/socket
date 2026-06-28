@@ -24,7 +24,7 @@ Strong candidates:
 
 1. `productivity-skills`: `repo-docs-auditor` (implemented)
 2. `productivity-skills`: `code-slice-tracer` (implemented)
-3. `agent-plugin-skills`: `skills-repo-guidance-sync` (implemented)
+3. `agent-portability-skills`: `skills-repo-guidance-sync` (implemented)
 4. `things-app`: `things-route-auditor`
 5. `cardhop-app`: `cardhop-contact-auditor`
 6. `python-skills`: `python-validation-triager`
@@ -44,7 +44,7 @@ custom-agent files automatically:
 - `server-side-swift/.codex/agents/server-swift-steward.toml`
 - `productivity-skills/.codex/agents/repo-docs-auditor.toml`
 - `productivity-skills/.codex/agents/code-slice-tracer.toml`
-- `agent-plugin-skills/.codex/agents/skills-repo-guidance-sync.toml`
+- `agent-portability-skills/.codex/agents/skills-repo-guidance-sync.toml`
 
 ## Strong Candidates
 
@@ -94,7 +94,7 @@ Evidence:
 - `plugins/productivity-skills/skills/explain-code-slice/SKILL.md`
 - `plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md`
 
-### agent-plugin-skills: skills-repo-guidance-sync
+### agent-portability-skills: skills-repo-guidance-sync
 
 Good fit because the bootstrap and sync skills already audit plugin-root policy,
 marketplace wording, Codex docs freshness, and guidance drift in skills-export
@@ -113,8 +113,8 @@ generated guidance edits.
 
 Evidence:
 
-- `plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md`
-- `plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md`
+- `plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md`
+- `plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md`
 
 ### things-app: things-route-auditor
 

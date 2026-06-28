@@ -82,7 +82,7 @@ Use `socket` when you want one Codex catalog for focused agent workflow plugins.
 
 Currently available from the catalog:
 
-- `agent-plugin-skills`
+- `agent-portability-skills`
 - `android-dev-skills`
 - `apple-dev-skills`
 - `cardhop-app`
@@ -106,7 +106,7 @@ Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its 
 
 Current Socket catalog shape:
 
-- `agent-plugin-skills`: maintainer skills plus a source-bundled guidance-sync custom-agent definition for skills-export and plugin-export repositories
+- `agent-portability-skills`: maintainer skills plus a source-bundled guidance-sync custom-agent definition for Socket-owned agent skill portability, Codex plugin surfaces, and host adapter guidance
 - `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
 - `apple-dev-skills`: Apple, Swift, SwiftUI, AppKit, Xcode, Swift OpenAPI client, Safari, DocC workflows, and the source-bundled `swift-steward` custom-agent definition with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows

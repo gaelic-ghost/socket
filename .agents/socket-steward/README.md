@@ -3,6 +3,11 @@
 Socket Steward is a repo-local OpenAI Agents SDK prototype for maintaining this
 repository's docs, guidance, plugin catalog, and release workflow notes.
 
+It complements `agent-portability-skills`: Socket Steward owns repo-local audits,
+plans, and proposal reports, while Agent Portability Skills owns reusable
+agent-facing workflows for skill portability, Codex plugin surfaces, MCP and hook
+boundaries, and host adapter guidance.
+
 The first version is intentionally read-only by default. It can run deterministic
 audits without `OPENAI_API_KEY`, and it only calls the OpenAI Agents SDK when the
 `ask` command is used.

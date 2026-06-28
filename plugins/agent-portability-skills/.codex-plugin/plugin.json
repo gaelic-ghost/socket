@@ -1,0 +1,42 @@
+{
+  "name": "agent-portability-skills",
+  "version": "7.3.0",
+  "description": "Maintainer skills for Socket-owned agent skill portability, Codex plugin surfaces, and host adapter guidance.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/agent-portability-skills",
+  "repository": "https://github.com/gaelic-ghost/agent-portability-skills",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "maintainer",
+    "agent-skills",
+    "portability",
+    "mcp",
+    "hooks",
+    "zed",
+    "xcode",
+    "claude-code"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Portability Skills",
+    "shortDescription": "Maintainer skills for agent skill and plugin portability.",
+    "longDescription": "Installable maintainer skills for Socket-owned agent skill portability, Codex plugin surfaces, MCP and hook boundaries, and future host adapter guidance across tools such as Zed, Xcode, OpenCode, and Claude Code.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/agent-portability-skills",
+    "brandColor": "#61AFEF",
+    "composerIcon": "./assets/nema-6-50r-icon.png",
+    "logo": "./assets/nema-6-50r-icon.png"
+  }
+}

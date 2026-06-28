@@ -18,6 +18,7 @@ from typing import Any
 
 KNOWN_SOCKET_PLUGINS = {
     "agent-plugin-skills",
+    "agent-portability-skills",
     "apple-dev-skills",
     "cardhop-app",
     "dotnet-skills",

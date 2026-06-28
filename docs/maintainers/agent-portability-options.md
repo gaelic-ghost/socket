@@ -14,6 +14,8 @@ Treat plugins as host-specific package adapters.
 
 Codex, Claude Code, OpenCode, Xcode, and Zed each expose different plugin or extension concepts. Socket should not redefine its root as a generic plugin bundle until a concrete target needs that shape. Keep the current root as a Codex marketplace catalog, then add per-host export or install support as deliberate adapter outputs.
 
+Use `agent-portability-skills` as the reusable skill layer for these decisions. Socket Steward remains the repo-local audit, plan, and proposal engine under `.agents/socket-steward/`; Agent Portability Skills should own the agent-facing workflows that decide what is portable, what is Codex-specific, and what needs a host adapter.
+
 ## Near-Term Focus
 
 Start with Xcode 27 beta and OpenCode.

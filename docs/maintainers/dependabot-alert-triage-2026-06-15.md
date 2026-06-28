@@ -79,7 +79,7 @@ or low-severity runtime transitive dependencies in non-server plugin lockfiles:
 
 | Manifest | Alerts | Packages |
 | --- | ---: | --- |
-| `plugins/agent-plugin-skills/uv.lock` | 1 | `pytest` |
+| `plugins/agent-portability-skills/uv.lock` | 1 | `pytest` |
 | `plugins/apple-dev-skills/uv.lock` | 2 | `Pygments`, `pytest` |
 | `plugins/productivity-skills/uv.lock` | 2 | `Pygments`, `pytest` |
 | `plugins/python-skills/uv.lock` | 2 | `Pygments`, `pytest` |
@@ -104,7 +104,7 @@ Recommended remediation slice:
 | `plugins/apple-dev-skills/uv.lock` | 0 | 0 | 1 | 1 | 2 |
 | `plugins/productivity-skills/uv.lock` | 0 | 0 | 1 | 1 | 2 |
 | `plugins/python-skills/uv.lock` | 0 | 0 | 1 | 1 | 2 |
-| `plugins/agent-plugin-skills/uv.lock` | 0 | 0 | 1 | 0 | 1 |
+| `plugins/agent-portability-skills/uv.lock` | 0 | 0 | 1 | 0 | 1 |
 | `plugins/things-app/uv.lock` | 0 | 0 | 1 | 0 | 1 |
 
 ## Current Decision
@@ -147,7 +147,7 @@ the executable MCP server surfaces are handled.
 
 Refresh and validate these lockfiles one child at a time:
 
-1. `plugins/agent-plugin-skills/uv.lock`
+1. `plugins/agent-portability-skills/uv.lock`
 2. `plugins/apple-dev-skills/uv.lock`
 3. `plugins/productivity-skills/uv.lock`
 4. `plugins/python-skills/uv.lock`
@@ -218,7 +218,7 @@ the MCP alerts after GitHub has reprocessed the updated lockfiles.
 The second remediation slice refreshed the remaining non-MCP plugin maintainer
 lockfiles:
 
-- `plugins/agent-plugin-skills/uv.lock`
+- `plugins/agent-portability-skills/uv.lock`
 - `plugins/apple-dev-skills/uv.lock`
 - `plugins/productivity-skills/uv.lock`
 - `plugins/python-skills/uv.lock`
@@ -235,7 +235,7 @@ to run that child repo's maintainer tests.
 
 Validation passed:
 
-- `plugins/agent-plugin-skills`: `uv run pytest`, `uv run ruff check .`,
+- `plugins/agent-portability-skills`: `uv run pytest`, `uv run ruff check .`,
   `uv run mypy .`
 - `plugins/apple-dev-skills`: `bash .github/scripts/validate_repo_docs.sh`,
   `uv run pytest`

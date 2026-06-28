@@ -125,7 +125,7 @@ The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agent
 
 The installable local child entries currently point at:
 
-- `./plugins/agent-plugin-skills`
+- `./plugins/agent-portability-skills`
 - `./plugins/android-dev-skills`
 - `./plugins/apple-dev-skills`
 - `./plugins/cardhop-app`

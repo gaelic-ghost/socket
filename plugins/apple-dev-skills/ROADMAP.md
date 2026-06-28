@@ -10,7 +10,7 @@
 - [Milestone 25: macOS Menu Bar Extra for Skill Controls](#milestone-25-macos-menu-bar-extra-for-skill-controls)
 - [Milestone 26: Dash Direct MCP and Call Library](#milestone-26-dash-direct-mcp-and-call-library)
 - [Milestone 27: Repo Self-Compliance and Install-Surface Audit](#milestone-27-repo-self-compliance-and-install-surface-audit)
-- [Milestone 28: Use `Agent Plugin Skills` plugin selectively for plugin and export-surface alignment](#milestone-28-use-agent-plugin-skills-plugin-selectively-for-plugin-and-export-surface-alignment)
+- [Milestone 28: Use `Agent Portability Skills` plugin selectively for plugin and export-surface alignment](#milestone-28-use-agent-portability-skills-plugin-selectively-for-plugin-and-export-surface-alignment)
 - [Milestone 29: Swift and Xcode Testing Offload Workflow](#milestone-29-swift-and-xcode-testing-offload-workflow)
 - [Milestone 37: Apple UI Accessibility Workflow](#milestone-37-apple-ui-accessibility-workflow)
 - [Milestone 38: DocC Workflow](#milestone-38-docc-workflow)
@@ -49,7 +49,7 @@
 - Milestone 25: macOS Menu Bar Extra for Skill Controls - Planned
 - Milestone 26: Dash Direct MCP and Call Library - Completed
 - Milestone 27: Repo Self-Compliance and Install-Surface Audit - Completed
-- Milestone 28: Use `Agent Plugin Skills` plugin selectively for plugin and export-surface alignment - Completed
+- Milestone 28: Use `Agent Portability Skills` plugin selectively for plugin and export-surface alignment - Completed
 - Milestone 29: Swift and Xcode Testing Offload Workflow - Planned
 - Milestone 37: Apple UI Accessibility Workflow - Planned
 - Milestone 38: DocC Workflow - Completed
@@ -181,7 +181,7 @@ Completed
 
 Completed Milestone 27 by keeping the top-level `skills/` export story, local discovery symlinks, maintainer docs, and repo validator aligned with the live shipped surface, and by confirming that `bash .github/scripts/validate_repo_docs.sh` plus `uv run pytest` cover the intended self-compliance checks.
 
-## Milestone 28: Use `Agent Plugin Skills` plugin selectively for plugin and export-surface alignment
+## Milestone 28: Use `Agent Portability Skills` plugin selectively for plugin and export-surface alignment
 
 ### Status
 
@@ -189,12 +189,12 @@ Completed
 
 ### Scope
 
-- [x] Use the adjacent `agent-plugin-skills` maintainer workflows only where they still help with plugin-shape, export-surface, and install-metadata alignment, while keeping this repo's own contract focused on top-level exports only.
-- [x] Keep broader README and maintainer-doc standards anchored in `productivity-skills` rather than reopening a stale shared-docs-standards pass through `agent-plugin-skills`.
+- [x] Use the adjacent `agent-portability-skills` maintainer workflows only where they still help with plugin-shape, export-surface, and install-metadata alignment, while keeping this repo's own contract focused on top-level exports only.
+- [x] Keep broader README and maintainer-doc standards anchored in `productivity-skills` rather than reopening a stale shared-docs-standards pass through `agent-portability-skills`.
 
 ### Tickets
 
-- [x] Keep the personal-scope `agent-plugin-skills` install current for work on this repository without reintroducing a nested packaged plugin tree here.
+- [x] Keep the personal-scope `agent-portability-skills` install current for work on this repository without reintroducing a nested packaged plugin tree here.
 - [x] Use `maintain-plugin-repo` and `sync-skills-repo-guidance` only for the plugin-shape and export-surface checks that still belong in that repo's standards layer.
 - [x] Confirm that repo docs already align with the current `productivity-skills` documentation standards before treating docs wording drift as a Milestone 28 blocker.
 - [x] Align plugin metadata, export surfaces, ignores, and maintainer guidance with the current shared plugin standards without flattening repo-specific policy.
@@ -203,9 +203,9 @@ Completed
 ### Exit Criteria
 
 - [x] The repository validates cleanly against the current shared plugin and export-surface standards that still apply here.
-- [x] Repo docs, packaging metadata, marketplace wiring, and maintainer guidance describe the same live behavior without treating `agent-plugin-skills` as the owner of broader documentation standards.
+- [x] Repo docs, packaging metadata, marketplace wiring, and maintainer guidance describe the same live behavior without treating `agent-portability-skills` as the owner of broader documentation standards.
 
-Completed Milestone 28 by narrowing `agent-plugin-skills` to its still-relevant plugin and export-surface role, keeping broader documentation standards anchored in `productivity-skills`, and confirming through the repo validator plus maintainer-doc audit that the live repo shape already matches that narrower standards model.
+Completed Milestone 28 by narrowing `agent-portability-skills` to its still-relevant plugin and export-surface role, keeping broader documentation standards anchored in `productivity-skills`, and confirming through the repo validator plus maintainer-doc audit that the live repo shape already matches that narrower standards model.
 
 ## Milestone 29: Swift and Xcode Testing Offload Workflow
 
@@ -723,7 +723,7 @@ Planned
 - Completed Milestones 1 through 17 by establishing the repository, shipping the core Apple skill bundle, improving portability and customization guidance, adding bootstrap and repo-sync workflows, extracting Apple docs exploration into its own skill, and cleaning up the install surface around the top-level export model.
 - Completed Milestones 19 and 20 by shipping `format-swift-sources` and `structure-swift-sources` as distinct cleanup workflows with clear boundaries.
 - Completed Milestones 22 and 23 by expanding deterministic TODO/FIXME ledger normalization and finishing the customization consolidation review. See `docs/maintainers/customization-consolidation-review.md`.
-- Completed Milestones 27 and 28 by validating the top-level `skills/` export story against the live repo validator and tests, and by narrowing `agent-plugin-skills` usage to selective plugin and export-surface alignment while leaving broader docs standards with `productivity-skills`.
+- Completed Milestones 27 and 28 by validating the top-level `skills/` export story against the live repo validator and tests, and by narrowing `agent-portability-skills` usage to selective plugin and export-surface alignment while leaving broader docs standards with `productivity-skills`.
 - Completed Milestones 30 through 36 by shrinking the customization surface, adding the `maintain-project-repo` integration and shared extraction work, splitting execution workflows, and preserving guidance through the refactor.
 - Collapsed the older first-slice planning docs for Milestones 37, 38, and 40 plus the standalone execution guidance-preservation matrix into this roadmap history and the still-live maintainer docs once those decisions were absorbed into the shipped skills, validator rules, and synced guidance assets.
 - Tightened the Swift package guidance so the explicit Swift 6 language-mode default stays in place while making it clear that `// swift-tools-version:` may be lowered from the scaffold default when real package compatibility needs it, but never below `6.0`.

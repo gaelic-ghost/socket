@@ -1,6 +1,6 @@
 # Codex Subagent Skill Guidance
 
-Use this document when `agent-plugin-skills` needs to bootstrap or audit guidance about Codex subagents in skills-export and plugin-export repositories.
+Use this document when `agent-portability-skills` needs to bootstrap or audit guidance about Codex subagents in skills-export and plugin-export repositories.
 
 This document does not replace OpenAI's Codex docs. It gives these maintainer skills a narrow house pattern for teaching optional subagent use without overstating what Codex does automatically.
 

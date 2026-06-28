@@ -17,8 +17,8 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = [
   "tests",
-  "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/tests",
-  "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/tests",
+  "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests",
+  "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests",
   "plugins/productivity-skills/skills/maintain-project-repo/tests",
 ]
 
@@ -26,10 +26,10 @@ testpaths = [
 files = [
   "scripts",
   "tests",
-  "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/scripts",
-  "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/tests",
-  "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/scripts",
-  "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/tests",
+  "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/scripts",
+  "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests",
+  "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/scripts",
+  "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests",
   "plugins/productivity-skills/skills/maintain-project-repo/scripts",
   "plugins/productivity-skills/skills/maintain-project-repo/tests",
 ]

@@ -4,16 +4,22 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 
 ## Active Child Plugins
 
-### agent-plugin-skills
+### agent-portability-skills
 
+- [x] Rename the child plugin from `agent-plugin-skills` to `agent-portability-skills` so the marketplace identity matches the broader Socket portability role.
 - [x] Overhaul the exported skills around Codex/OpenAI plus the open `.agents/skills` discovery mirror only.
 - [x] Remove stale sync-audit expectations for retired child maintainer docs such as reality-audit and install-surface docs.
 - [x] Refresh tests and bootstrap output so generated guidance matches the current collapsed Socket docs model.
+- [ ] Keep Socket Steward tied into the workflow as the repo-local audit, plan, and proposal engine for cross-Socket docs and marketplace maintenance.
+- [ ] Add `audit-agent-surface-portability` for inventorying `SKILL.md`, `.codex-plugin`, `.mcp.json`, hooks, app config, custom agents, and host compatibility notes across Socket child plugins.
+- [ ] Add `design-agent-host-adapter` for deciding whether a host needs docs-only guidance, `.agents/skills` export, native MCP config, a plugin/package adapter, or no Socket-specific support.
+- [ ] Add `maintain-codex-plugin-surface` for Codex-specific marketplace, plugin manifest, hooks, MCP, app config, and enablement wording.
 - [ ] Keep Git-backed Codex marketplace install and update guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
 - [ ] Add a maintainer workflow for moving or re-homing skills between repositories.
 - [ ] Add durable process support for noticing changes in OpenAI Codex docs and the open `.agents` skill discovery convention.
+- [ ] Add Claude Code marketplace, plugin, skills, subagent, and MCP compatibility guidance after the first Socket portability audit and adapter-design skills land.
 - [x] Move framework-neutral agent and skill eval design into `productivity-skills:design-agent-eval-workflow`; keep runtime-specific eval implementation with the owning plugin or repo.
 
 ### android-dev-skills

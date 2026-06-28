@@ -1,11 +1,13 @@
 ---
 name: bootstrap-skills-plugin-repo
-description: Bootstrap or align a skills-export repository with root `skills/`, repo-local discovery mirrors, maintainer docs, and clear Codex plugin-boundary wording. Use when creating a new skills repo or structurally aligning an existing one. Do not use this for narrow README-only or roadmap-only maintenance.
+description: Bootstrap or align a source-first Agent Skills repository with root `skills/`, repo-local discovery mirrors, maintainer docs, and clear Codex plugin-boundary wording. Use when creating a new skills repo or structurally aligning an existing one. Do not use this for narrow README-only, roadmap-only, or host-adapter design work.
 ---
 
 # Bootstrap Skills Plugin Repo
 
-Bootstrap or align a skills-export repository.
+Bootstrap or align a source-first Agent Skills repository.
+
+This is the Codex-ready bootstrap workflow inside Agent Portability Skills. Use it for the shared skills repository shape first, then hand off to future host-adapter workflows when a target such as Zed Agent, Xcode, OpenCode, or Claude Code needs additional package or config decisions.
 
 ## Codex Model Note
 
@@ -35,7 +37,7 @@ When creating or aligning `AGENTS.md`, include strict dependency guidance:
 
 ## Codex Subagent Guidance
 
-For existing repositories that need broad guidance drift discovery before edits, prefer `sync-skills-repo-guidance` and its `skills-repo-guidance-sync` custom-agent role. Use this bootstrap skill for new repository structure or structural alignment after the main thread has reviewed any subagent findings.
+For existing repositories that need broad guidance drift discovery before edits, prefer `sync-skills-repo-guidance` and its `skills-repo-guidance-sync` custom-agent role. For Socket-wide docs, marketplace, or proposal planning, run Socket Steward first when its deterministic audits fit the question. Use this bootstrap skill for new repository structure or structural alignment after the main thread has reviewed any audit or subagent findings.
 
 When creating or aligning skills that can benefit from parallel support work, add optional `Codex Subagent Fit` guidance that matches OpenAI's current Codex subagent docs:
 

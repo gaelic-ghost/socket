@@ -6,10 +6,10 @@
   "name": "socket",
   "plugins": [
     {
-      "name": "agent-plugin-skills",
+      "name": "agent-portability-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/agent-plugin-skills"
+        "path": "./plugins/agent-portability-skills"
       },
       "policy": {
         "installation": "AVAILABLE",

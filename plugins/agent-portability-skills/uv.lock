@@ -7,7 +7,7 @@ resolution-markers = [
 ]
 
 [[package]]
-name = "agent-plugin-skills-maintenance"
+name = "agent-portability-skills-maintenance"
 version = "7.3.0"
 source = { virtual = "." }
 

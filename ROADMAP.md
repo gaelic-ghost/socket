@@ -484,12 +484,17 @@ Planned
 - [x] Record the detailed Xcode install-support plan in [`docs/maintainers/xcode-plugin-install-support-plan.md`](./docs/maintainers/xcode-plugin-install-support-plan.md).
 - [ ] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
 - [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
+- [x] Rename `agent-plugin-skills` to `agent-portability-skills` so the child plugin name matches the cross-host compatibility role.
+- [ ] Keep Socket Steward tied into this milestone as the repo-local audit, plan, and proposal engine, while `agent-portability-skills` owns reusable agent-facing portability workflows.
 - [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
 - [ ] Keep Hermes Agent support research-blocked until an official documentation or source repository is identified.
 
 ### Tickets
 
 - [ ] Add a root portability inventory command that reports every `SKILL.md`, `.codex-plugin/plugin.json`, `.mcp.json`, hook, app config, and custom-agent definition with host-specific compatibility notes.
+- [ ] Add `agent-portability-skills:audit-agent-surface-portability`.
+- [ ] Add `agent-portability-skills:design-agent-host-adapter`.
+- [ ] Add `agent-portability-skills:maintain-codex-plugin-surface`.
 - [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
@@ -574,7 +579,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with five share
 - [x] Extend `productivity-skills:maintain-project-roadmap` with explicit checklist ticket add/update flags so repo-local agents can delegate roadmap TODO mutations to the roadmap skill instead of duplicating roadmap editing logic.
 - [ ] Add a read-only Socket Steward fan-out experiment for broad docs and guidance scans. Start with deterministic sharding by file count or total line count, keep workers read-only, merge findings into one bounded report, and compare the result against the single-process audit before deciding whether subagent fan-out belongs in the durable steward workflow.
 - [ ] Add a guarded Socket Steward write mode only after the read-only audit and planning contracts are stable, with explicit approval boundaries for file edits, validation, git operations, release workflow, and future background execution.
-- [x] Overhaul `agent-plugin-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
+- [x] Overhaul `agent-portability-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
 - [x] Add a `productivity-skills:maintain-project-docs` umbrella workflow after `maintain-project-roadmap` owns small-ticket tracking. It should run the individual docs skills together, enforce the splits between `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ACCESSIBILITY.md`, and `ROADMAP.md`, and prevent repeated content from drifting across files.
 - [x] Add a first `productivity-skills:design-agent-automation-workflow` planning skill for agent and automation design. It chooses between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet while delegating stack-specific implementation to the owning plugin.
 - [x] Added `productivity-skills:design-agent-eval-workflow` for agent, skill, prompt, and automation eval planning, and skewed automation guidance toward safe full automation with exact escalation gates instead of broad human review.
@@ -589,7 +594,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with five share
 - [x] Inventory bundled subagent role candidates across Socket plugins and rank the strongest read-heavy candidates before adding more `.codex/agents` files.
 - [x] Add `productivity-skills:repo-docs-auditor` as the next bundled read-only custom-agent role. Keep it evidence-first across README, CONTRIBUTING, AGENTS, ACCESSIBILITY, ROADMAP, and command drift, and have it return review packets for the main thread to apply through the owner docs skills.
 - [x] Add `productivity-skills:code-slice-tracer` as a bounded code-reading custom-agent role for call-site tracing, test/doc correlation, and multi-slice explanation support without owning final prose or architecture-file writes.
-- [x] Add `agent-plugin-skills:skills-repo-guidance-sync` as a read-only custom-agent role for plugin-root policy audits, marketplace wording checks, Codex docs freshness, `.agents/skills` discovery mirrors, and generated guidance drift.
+- [x] Add `agent-portability-skills:skills-repo-guidance-sync` as a read-only custom-agent role for plugin-root policy audits, marketplace wording checks, Codex docs freshness, `.agents/skills` discovery mirrors, and generated guidance drift.
 - [ ] Add privacy-fenced app plugin auditor roles only after their read/write boundaries are explicit: `things-app:things-route-auditor` for read-only Things route and digest planning, and `cardhop-app:cardhop-contact-auditor` for schema, health, route, and dry-run preview checks.
 - [x] Add `productivity-skills:dice-job-search-workflow` after verifying Dice's official MCP docs and setup pages. Keep the first pass guidance-only around Dice's remote `search_jobs` MCP tool, bundle the remote MCP config for automatic setup, and preserve explicit authentication, rate-limit, saved-search, application-state, and privacy boundaries.
 - [ ] Investigate a Drafts.app MCP and automation skill covering the official Drafts MCP Server for Mac, JavaScript action scripting, Shortcuts, URL schemes, AppleScript, AI action helpers, and safe draft read/write boundaries. Decide whether the durable home is a dedicated Drafts app plugin, `productivity-skills`, or a general macOS automation skill before adding implementation guidance.
@@ -631,7 +636,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with five share
 - Added a bundled subagent role candidate inventory covering docs audit, code tracing, plugin guidance sync, Things and Cardhop auditors, validation triage roles, and no-for-now placeholder plugins.
 - Added the first Productivity Skills bundled custom-agent role, `repo-docs-auditor`, for read-only repo-document audits and review-packet planning before the main thread applies owner-doc skill edits.
 - Added `code-slice-tracer` as a read-only Productivity Skills custom-agent role for bounded call-site maps, branch tracing, test/doc correlation, and comparison support before the main thread writes the final code-slice explanation.
-- Added `skills-repo-guidance-sync` as a read-only Agent Plugin Skills custom-agent role for Codex docs freshness, plugin-root policy, discovery mirror drift, marketplace wording, and review-packet guidance sync.
+- Added `skills-repo-guidance-sync` as a read-only Agent Portability Skills custom-agent role for Codex docs freshness, plugin-root policy, discovery mirror drift, marketplace wording, and review-packet guidance sync.
 - Completed the first Swift Steward release set by aligning `swift-steward`, `server-swift-steward`, adjacent documentation and skills guidance, and the shared review-packet validator contract around read-only subagent discovery with main-thread apply ownership.
 - Added the placeholder `android-dev-skills` child plugin surface and queued a Kotlin-first Android guidance plugin for future Socket work.
 - Published `apple-dev-skills` `v6.14.1` as the Phase 1 compatibility release: the standalone repository now points its marketplace at Socket's `plugins/apple-dev-skills` payload while preserving `codex plugin marketplace upgrade apple-dev-skills` for existing standalone users.
@@ -645,11 +650,11 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with five share
 - Added and exposed a `web-dev-skills` Expo inline native modules workflow for SDK 56+ inline Swift/Kotlin modules, `expo-type-information`, CNG/prebuild validation, and Apple Dev Skills handoffs.
 - Updated `productivity-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
-- Added coordinated OpenAI Codex Hooks guidance across `agent-plugin-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.
+- Added coordinated OpenAI Codex Hooks guidance across `agent-portability-skills` and `productivity-skills`, with future `maintain-project-hooks` work tracked in the productivity roadmap.
 - Added `productivity-skills:maintain-project-docs` as an umbrella documentation sweep that runs the owner README, CONTRIBUTING, AGENTS, ACCESSIBILITY, and ROADMAP workflows serially while auditing cross-document responsibility drift.
 - Updated `socket` and plugin guidance so ordinary user installs and updates default to Git-backed Codex marketplace sources and official marketplace add/upgrade commands.
 - Loosened coordinated Codex subagent guidance so skills preserve OpenAI's explicit-trigger model while allowing narrower workflow guidance, such as Codex Security repository-wide scans, to ask for and use subagents when the task depends on parallel file-pass review.
-- Added coordinated Codex subagent guidance across `agent-plugin-skills` and `productivity-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
+- Added coordinated Codex subagent guidance across `agent-portability-skills` and `productivity-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
 - Added `productivity-skills:codex-gui-worktree-workflow` as the general Codex GUI worktree-first planning surface, while keeping SwiftPM, Xcode, Vapor, Hummingbird, and server-side Swift local environment templates inside their stack-specific plugins.
 - Prepared the `v6.1.0` minor release by adding the `maintain-project-api` productivity skill and keeping the monorepo-owned child docs, tests, and shared version surfaces aligned.
 - Added explicit `standard` and `subtrees` release-mode guidance, including the pull-only `SpeakSwiftlyServer` rule for `socket` subtree sync.

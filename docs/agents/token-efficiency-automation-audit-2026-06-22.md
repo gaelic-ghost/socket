@@ -40,7 +40,7 @@ Top priorities:
 - `apple-dev-skills` carries 23 skill-local snippet copies in three identical
   checksum groups.
 - `productivity-skills` repeats the phrase `When the user explicitly requests
-  subagents` in 10 maintainer skills, plus one `agent-plugin-skills` workflow.
+  subagents` in 10 maintainer skills, plus one `agent-portability-skills` workflow.
 - `swiftasb-skills` repeats startup, diagnostics, feature-operation, generated
   wire-model, same-thread overlap, and Apple handoff facts across multiple
   skills.

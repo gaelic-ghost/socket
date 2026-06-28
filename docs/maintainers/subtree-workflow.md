@@ -33,7 +33,7 @@ Each nested directory under `plugins/` keeps its own internal layout, docs, and 
 That means there is one important packaging rule to expect:
 
 1. A child repo exposes plugin packaging from the actual child-repo root it treats as installable.
-   Examples: `plugins/agent-plugin-skills/.codex-plugin/plugin.json` and `plugins/python-skills/.codex-plugin/plugin.json`
+   Examples: `plugins/agent-portability-skills/.codex-plugin/plugin.json` and `plugins/python-skills/.codex-plugin/plugin.json`
 
 The socket root marketplace must point at the actual packaged plugin root, not at an assumed one.
 

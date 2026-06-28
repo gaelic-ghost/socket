@@ -4,15 +4,15 @@
   "evidence": [
     {
       "kind": "skill-manifest",
-      "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+      "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+      "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
     },
     {
       "kind": "codex-plugin-manifest",
-      "path": "plugins/agent-plugin-skills/.codex-plugin/plugin.json"
+      "path": "plugins/agent-portability-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -493,14 +493,14 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
-          "path": "plugins/agent-plugin-skills/.codex-plugin/plugin.json"
+          "path": "plugins/agent-portability-skills/.codex-plugin/plugin.json"
         }
       ],
       "kind": "codex-plugin",
-      "name": "agent-plugin-skills",
-      "path": "plugins/agent-plugin-skills",
+      "name": "agent-portability-skills",
+      "path": "plugins/agent-portability-skills",
       "targets": [
-        "skills:plugins/agent-plugin-skills/skills"
+        "skills:plugins/agent-portability-skills/skills"
       ]
     },
     {
@@ -722,7 +722,7 @@
       "name": "socket",
       "path": ".agents/plugins/marketplace.json",
       "targets": [
-        "agent-plugin-skills",
+        "agent-portability-skills",
         "android-dev-skills",
         "apple-dev-skills",
         "cardhop-app",
@@ -760,25 +760,25 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+          "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
         }
       ],
-      "from": "product:agent-plugin-skills",
+      "from": "product:agent-portability-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:agent-plugin-skills/bootstrap-skills-plugin-repo"
+      "to": "target:skill:agent-portability-skills/bootstrap-skills-plugin-repo"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+          "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
         }
       ],
-      "from": "product:agent-plugin-skills",
+      "from": "product:agent-portability-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:agent-plugin-skills/sync-skills-repo-guidance"
+      "to": "target:skill:agent-portability-skills/sync-skills-repo-guidance"
     },
     {
       "evidence": [
@@ -2014,7 +2014,7 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
-      "to": "product:agent-plugin-skills"
+      "to": "product:agent-portability-skills"
     },
     {
       "evidence": [
@@ -2023,10 +2023,10 @@
           "path": ".agents/plugins/marketplace.json"
         }
       ],
-      "from": "product:agent-plugin-skills",
+      "from": "product:agent-portability-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
-      "to": "path:./plugins/agent-plugin-skills"
+      "to": "path:./plugins/agent-portability-skills"
     },
     {
       "evidence": [
@@ -2409,24 +2409,24 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+          "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:agent-plugin-skills/bootstrap-skills-plugin-repo",
-      "path": "plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+      "name": "skill:agent-portability-skills/bootstrap-skills-plugin-repo",
+      "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+          "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:agent-plugin-skills/sync-skills-repo-guidance",
-      "path": "plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md"
+      "name": "skill:agent-portability-skills/sync-skills-repo-guidance",
+      "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
     },
     {
       "dependencies": [],

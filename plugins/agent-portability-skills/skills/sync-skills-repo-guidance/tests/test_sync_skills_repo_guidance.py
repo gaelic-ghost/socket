@@ -30,7 +30,7 @@ def _write_repo(repo_root: Path, _plugin_name: str) -> None:
                 "OpenAI's documented Codex plugin system exposes repo-visible plugins through marketplace catalogs and does not document a richer repo-private scoping model beyond that.",
                 "codex plugin marketplace add gaelic-ghost/socket",
                 "codex plugin marketplace upgrade socket",
-                "`agent-plugin-skills` entry points at `./plugins/agent-plugin-skills`",
+                "`agent-portability-skills` entry points at `./plugins/agent-portability-skills`",
                 "Git-backed marketplace sources",
                 "dev dependencies in `pyproject.toml`",
                 "`pytest`, `ruff`, and `mypy`",

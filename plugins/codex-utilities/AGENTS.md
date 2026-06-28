@@ -6,7 +6,7 @@ Use this file for durable guidance inside the Codex Utilities Socket plugin.
 
 - This plugin is for local Codex runtime utilities that are not specific to one programming language, Apple platform workflow, external app, or skill-repository maintainer task.
 - Keep utilities small, explicit, and independently removable.
-- Do not add broad convenience tooling here when the behavior clearly belongs in `productivity-skills`, `agent-plugin-skills`, a language-specific `*-skills` plugin, or an app integration plugin.
+- Do not add broad convenience tooling here when the behavior clearly belongs in `productivity-skills`, `agent-portability-skills`, a language-specific `*-skills` plugin, or an app integration plugin.
 
 ## Current Utility
 

@@ -10,7 +10,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 
 <!-- Generated product inventory starts here. -->
 
-- `agent-plugin-skills` (codex-plugin) uses targets: skills:plugins/agent-plugin-skills/skills.
+- `agent-portability-skills` (codex-plugin) uses targets: skills:plugins/agent-portability-skills/skills.
 - `android-dev-skills` (codex-plugin) uses targets: no targets recorded.
 - `apple-dev-skills` (codex-plugin) uses targets: skills:plugins/apple-dev-skills/skills, mcp:plugins/apple-dev-skills/.mcp.json.
 - `cardhop-app` (codex-plugin) uses targets: skills:plugins/cardhop-app/skills, mcp:plugins/cardhop-app/.mcp.json.
@@ -26,7 +26,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `swiftasb-skills` (codex-plugin) uses targets: skills:plugins/swiftasb-skills/skills.
 - `things-app` (codex-plugin) uses targets: skills:plugins/things-app/skills, mcp:plugins/things-app/.mcp.json.
 - `web-dev-skills` (codex-plugin) uses targets: skills:plugins/web-dev-skills/skills.
-- `socket` (codex-plugin-marketplace) uses targets: agent-plugin-skills, android-dev-skills, apple-dev-skills, cardhop-app, dotnet-skills, productivity-skills, python-skills, server-side-swift, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, codex-utilities.
+- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, cardhop-app, dotnet-skills, productivity-skills, python-skills, server-side-swift, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, codex-utilities.
 - `speak-swiftly` (remote-plugin-entry) uses targets: no targets recorded.
 
 <!-- Generated product inventory ends here. -->
@@ -35,8 +35,8 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 
 <!-- Generated target inventory starts here. -->
 
-- `skill:agent-plugin-skills/bootstrap-skills-plugin-repo` (codex-skill) at `plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md` depends on: no declared dependencies.
-- `skill:agent-plugin-skills/sync-skills-repo-guidance` (codex-skill) at `plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md` depends on: no declared dependencies.
+- `skill:agent-portability-skills/bootstrap-skills-plugin-repo` (codex-skill) at `plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md` depends on: no declared dependencies.
+- `skill:agent-portability-skills/sync-skills-repo-guidance` (codex-skill) at `plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/appkit-app-architecture-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/appkit-app-architecture-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/apple-ui-accessibility-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/author-swift-docc-docs` (codex-skill) at `plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md` depends on: no declared dependencies.
@@ -154,9 +154,9 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 
 <!-- Generated evidence starts here. -->
 
-- `skill-manifest` evidence from `plugins/agent-plugin-skills/skills/bootstrap-skills-plugin-repo/SKILL.md`.
-- `skill-manifest` evidence from `plugins/agent-plugin-skills/skills/sync-skills-repo-guidance/SKILL.md`.
-- `codex-plugin-manifest` evidence from `plugins/agent-plugin-skills/.codex-plugin/plugin.json`.
+- `skill-manifest` evidence from `plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md`.
+- `skill-manifest` evidence from `plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md`.
+- `codex-plugin-manifest` evidence from `plugins/agent-portability-skills/.codex-plugin/plugin.json`.
 - `codex-plugin-manifest` evidence from `plugins/android-dev-skills/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/appkit-app-architecture-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md`.
