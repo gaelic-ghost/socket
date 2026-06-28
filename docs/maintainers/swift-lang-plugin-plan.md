@@ -24,6 +24,8 @@ documentation and execution workflows.
 `swift-lang` should be the shared language layer for:
 
 - Swift API design, naming, ergonomics, and call-site readability.
+- Swift error handling style, carrier choice, typed throws, domain errors, and
+  diagnostics.
 - Swift writing, style, formatting, and linting policy.
 - Swift source organization, file splitting, declaration grouping, and cleanup.
 - Swift modernization passes across packages, apps, services, and libraries.
@@ -95,6 +97,13 @@ Own functional data modeling, pipeline design, `Optional` and `Result` flows,
 throwing and async transformations, `AsyncSequence`, monadic composition, and
 the boundary where imperative code is clearer.
 
+### `swift-error-handling-style-workflow`
+
+Own language-level failure-shape decisions: `throws`, typed throws, `Result`,
+`Optional`, `AsyncSequence` failure types, small domain error enums, Cocoa
+bridging, `LocalizedError`, `CustomNSError`, recoverable errors, and concise
+diagnostic style.
+
 ### `swift-format-style-workflow`
 
 Own SwiftFormat and SwiftLint setup, formatter/linter responsibility split,
@@ -161,9 +170,10 @@ Later release:
 3. Port and tune formatting and source-organization guidance from Apple Dev into
    `swift-format-style-workflow` and `swift-source-organization-workflow`.
 4. Add `swift-modernization-cleanup-workflow` as the top-level repair workflow.
-5. Update Apple Dev and Server-Side Swift handoff guidance.
-6. Add focused tests or metadata validation coverage for the new plugin.
-7. Run root metadata validation and any new child-plugin validation.
+5. Add `swift-error-handling-style-workflow` for the house error-handling style.
+6. Update Apple Dev and Server-Side Swift handoff guidance.
+7. Add focused tests or metadata validation coverage for the new plugin.
+8. Run root metadata validation and any new child-plugin validation.
 
 ## Exit Criteria
 
