@@ -1,7 +1,7 @@
 {
   "name": "swift-lang",
   "version": "7.5.1",
-  "description": "Shared Swift language skills for API style, functional pipelines, formatting, source organization, and modernization cleanup.",
+  "description": "Shared Swift language skills for API style, error handling, functional pipelines, formatting, source organization, and modernization cleanup.",
   "skills": "./skills/",
   "author": {
     "name": "Gale",
@@ -21,6 +21,8 @@
     "swiftlint",
     "swiftformat",
     "functional-programming",
+    "error-handling",
+    "typed-throws",
     "api-design",
     "source-organization",
     "modernization",
@@ -28,8 +30,8 @@
   ],
   "interface": {
     "displayName": "Swift Lang",
-    "shortDescription": "Shared Swift language, style, formatting, organization, functional pipeline, and cleanup workflows for Codex.",
-    "longDescription": "Guide Codex agents through shared Swift language work across Apple apps, server-side services, packages, command-line tools, and libraries. The plugin owns Swifty API design, call-site ergonomics, functional data modeling, monadic pipeline style, SwiftFormat and SwiftLint policy, source organization, file splitting, and modernization cleanup passes while handing Apple-platform and server-framework execution to their specialist plugins.",
+    "shortDescription": "Shared Swift language, style, error handling, formatting, organization, functional pipeline, and cleanup workflows for Codex.",
+    "longDescription": "Guide Codex agents through shared Swift language work across Apple apps, server-side services, packages, command-line tools, and libraries. The plugin owns Swifty API design, call-site ergonomics, error handling style, functional data modeling, monadic pipeline style, SwiftFormat and SwiftLint policy, source organization, file splitting, and modernization cleanup passes while handing Apple-platform and server-framework execution to their specialist plugins.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -39,6 +41,7 @@
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swift-lang",
     "defaultPrompt": [
       "Review this Swift API for Swifty call-site ergonomics, naming, result shapes, errors, and consistency.",
+      "Design or repair this Swift error handling surface using throws, typed throws, Result, Optional, domain errors, and useful diagnostics.",
       "Refactor this Swift data flow into a clear functional pipeline with map, flatMap, compactMap, filter, reduce, Optional, Result, throws, async throws, or AsyncSequence where appropriate.",
       "Set up or repair SwiftFormat and SwiftLint policy for this Swift repository.",
       "Split and reorganize these Swift source files by concern while preserving access control and validation.",

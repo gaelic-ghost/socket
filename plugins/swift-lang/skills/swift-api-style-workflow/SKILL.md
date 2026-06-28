@@ -1,6 +1,6 @@
 ---
 name: swift-api-style-workflow
-description: Review, design, or repair Swift APIs for Swifty naming, call-site ergonomics, access control, typed result shapes, human-friendly errors, and consistency across sibling symbols. Use for shared Swift API style before Apple-platform or server-framework details.
+description: Review, design, or repair Swift APIs for Swifty naming, call-site ergonomics, access control, typed result shapes, human-friendly errors, and consistency across sibling symbols. Use swift-error-handling-style-workflow for deeper failure-shape decisions.
 license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
@@ -44,6 +44,7 @@ Use repo-local guidance first. When general Swift API behavior needs a source, p
    - prefer enum-backed choices over boolean soups or stringly-typed modes
 4. Tighten result and failure behavior:
    - use `throws`, typed domain errors, `Result`, or optional returns according to caller recovery needs
+   - hand deeper failure-shape design to `swift-error-handling-style-workflow`
    - make invalid states hard to construct
    - include operation, source, likely cause, and next inspection point in operator-facing errors and logs
 5. Remove accidental API weight:

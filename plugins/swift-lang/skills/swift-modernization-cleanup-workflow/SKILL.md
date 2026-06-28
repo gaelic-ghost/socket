@@ -1,6 +1,6 @@
 ---
 name: swift-modernization-cleanup-workflow
-description: Run complete modernization and repair passes over existing Swift code, sequencing formatting, source inventory, file splitting, API cleanup, functional pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
+description: Run complete modernization and repair passes over existing Swift code, sequencing formatting, source inventory, file splitting, API cleanup, error handling cleanup, functional pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
 license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
@@ -41,7 +41,7 @@ This is the top-level shared Swift repair workflow for poor-quality implementati
    - callback-heavy or nested async code
    - mutable shared state
    - imperative parser, loader, or transform pipelines
-   - weak error and log messages
+   - weak error shapes and log messages
    - duplicate helpers
    - stale TODO/FIXME comments
    - missing or weak tests around changed behavior
@@ -66,6 +66,7 @@ This is the top-level shared Swift repair workflow for poor-quality implementati
 - Prefer Swift concurrency over callback pyramids when the target platform and repository support it.
 - Prefer value flow over hidden mutation.
 - Prefer functional pipelines for transformation-heavy code.
+- Prefer `swift-error-handling-style-workflow` for broad failure-shape cleanup, typed throws decisions, domain error modeling, Cocoa bridging, and diagnostics.
 - Prefer typed domain models over dictionaries, strings, or loosely coupled tuples.
 - Prefer small support files with one clear job.
 - Prefer tests around behavior before and after risky cleanup.

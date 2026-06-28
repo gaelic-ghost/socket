@@ -1,6 +1,6 @@
 ---
 name: swift-functional-pipelines-workflow
-description: Design or repair Swift data modeling and data pipelines using functional, composable, monadic flows with Optional, Result, throws, async throws, AsyncSequence, map, flatMap, compactMap, filter, reduce, and clear imperative fallbacks when needed.
+description: Design or repair Swift data modeling and data pipelines using functional, composable, monadic flows with Optional, Result, throws, async throws, AsyncSequence, map, flatMap, compactMap, filter, reduce, and clear imperative fallbacks when needed. Use swift-error-handling-style-workflow for deeper error carrier and diagnostic decisions.
 license: PolyForm-Noncommercial-1.0.0
 metadata:
   owner: gaelic-ghost
@@ -36,6 +36,7 @@ The preferred feel is railway-oriented Swift: values move through named transfor
    - `Result` when failures must be stored, combined, or passed as values
    - `AsyncSequence` when values arrive over time
    - a small domain pipeline type only when standard carriers cannot express the flow clearly
+   - hand deeper error carrier, typed throws, domain error, Cocoa bridging, or diagnostics decisions to `swift-error-handling-style-workflow`
 3. Refactor toward composable stages:
    - parse
    - validate
