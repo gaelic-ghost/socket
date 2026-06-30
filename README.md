@@ -132,6 +132,8 @@ Placeholder directories for future plugins (not available for install):
 
 For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For the consolidated child backlog, see [TODO.md](./TODO.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
 
+For Xcode 27 beta Markdown editing and repository browsing, open [`Socket.xcworkspace`](./Socket.xcworkspace). It is a browse-only workspace for docs, plugin payloads, scripts, and marketplace metadata; it is not a root build surface.
+
 ## Repo Structure
 
 ```text
@@ -148,6 +150,7 @@ For setup, local workflow, validation, review, release, and maintainer expectati
 ├── AGENTS.md
 ├── CONTRIBUTING.md
 ├── README.md
+├── Socket.xcworkspace
 ├── TODO.md
 └── ROADMAP.md
 ```
