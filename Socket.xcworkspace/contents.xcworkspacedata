@@ -11,9 +11,6 @@
       location = "group:ROADMAP.md">
    </FileRef>
    <FileRef
-      location = "group:TODO.md">
-   </FileRef>
-   <FileRef
       location = "group:AGENTS.md">
    </FileRef>
    <FileRef
