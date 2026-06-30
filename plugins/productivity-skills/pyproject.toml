@@ -8,7 +8,9 @@ dependencies = []
 [dependency-groups]
 dev = [
   "pytest>=9.0.0",
+  "mypy>=1.19.0",
   "PyYAML>=6.0.0",
+  "types-PyYAML>=6.0.12.20250915",
 ]
 
 [tool.pytest.ini_options]

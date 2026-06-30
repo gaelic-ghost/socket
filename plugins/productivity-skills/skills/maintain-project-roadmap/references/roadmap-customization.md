@@ -62,3 +62,5 @@ Runtime policy:
 - in `apply`, migrate legacy layout into checklist-roadmap structure
 - preserve useful milestone identity where possible
 - use canonical template scaffolding when legacy content is incomplete
+- when a root `TODO.md` exists beside a canonical `ROADMAP.md`, report it as a migration-needed finding
+- do not automatically delete or flatten root `TODO.md`; move useful entries into `ROADMAP.md` milestones, `Small Tickets`, or `Backlog Candidates` in a reviewed documentation pass

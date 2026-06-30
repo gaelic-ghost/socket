@@ -16,7 +16,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import yaml
 
@@ -53,7 +53,7 @@ class Issue:
     auto_fixable: bool
     fixed: bool = False
 
-    def to_dict(self) -> Dict[str, object]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "issue_id": self.issue_id,
             "category": self.category,
@@ -196,13 +196,13 @@ def normalize_preamble(preamble: str, preserve_preamble: bool) -> str:
     return "\n".join(lines).strip()
 
 
-def read_yaml(path: Path) -> Dict[str, object]:
+def read_yaml(path: Path) -> Dict[str, Any]:
     data = yaml.safe_load(read_text(path))
     return data if isinstance(data, dict) else {}
 
 
-def deep_merge(base: Dict[str, object], override: Dict[str, object]) -> Dict[str, object]:
-    merged: Dict[str, object] = dict(base)
+def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = dict(base)
     for key, value in override.items():
         if isinstance(value, dict) and isinstance(merged.get(key), dict):
             merged[key] = deep_merge(merged[key], value)  # type: ignore[arg-type]
@@ -211,7 +211,7 @@ def deep_merge(base: Dict[str, object], override: Dict[str, object]) -> Dict[str
     return merged
 
 
-def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str, object]:
+def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str, Any]:
     default_path = Path(__file__).resolve().parents[1] / "config" / "accessibility-customization.template.yaml"
     default_config = read_yaml(default_path)
     loaded_path = default_path
@@ -238,22 +238,22 @@ def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str,
     return merged
 
 
-def config_settings(config: Dict[str, object]) -> Dict[str, object]:
+def config_settings(config: Dict[str, Any]) -> Dict[str, Any]:
     settings = config.get("settings", {})
     return settings if isinstance(settings, dict) else {}
 
 
-def required_sections(settings: Dict[str, object]) -> List[str]:
+def required_sections(settings: Dict[str, Any]) -> List[str]:
     values = settings.get("requiredSections", [])
     return [str(item) for item in values] if isinstance(values, list) else []
 
 
-def canonical_order(settings: Dict[str, object]) -> List[str]:
+def canonical_order(settings: Dict[str, Any]) -> List[str]:
     values = settings.get("sectionOrder", [])
     return [str(item) for item in values] if isinstance(values, list) else []
 
 
-def required_subsections(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def required_subsections(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("requiredSubsections", {})
     if not isinstance(raw, dict):
         return {}
@@ -264,7 +264,7 @@ def required_subsections(settings: Dict[str, object]) -> Dict[str, List[str]]:
     }
 
 
-def section_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def section_aliases(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("sectionAliases", {})
     if not isinstance(raw, dict):
         return {}
@@ -275,7 +275,7 @@ def section_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
     }
 
 
-def subsection_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def subsection_aliases(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("subsectionAliases", {})
     if not isinstance(raw, dict):
         return {}
@@ -286,14 +286,14 @@ def subsection_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
     }
 
 
-def section_templates(settings: Dict[str, object]) -> Dict[str, str]:
+def section_templates(settings: Dict[str, Any]) -> Dict[str, str]:
     raw = settings.get("sectionTemplates", {})
     if not isinstance(raw, dict):
         return {}
     return {str(key): str(value).strip() for key, value in raw.items()}
 
 
-def subsection_templates(settings: Dict[str, object]) -> Dict[str, str]:
+def subsection_templates(settings: Dict[str, Any]) -> Dict[str, str]:
     raw = settings.get("subsectionTemplates", {})
     if not isinstance(raw, dict):
         return {}
@@ -313,7 +313,7 @@ def toc_entries(body: str) -> List[str]:
     return entries
 
 
-def section_alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
+def section_alias_lookup(settings: Dict[str, Any]) -> Dict[str, str]:
     reverse: Dict[str, str] = {}
     for canonical, aliases in section_aliases(settings).items():
         for alias in aliases:
@@ -321,7 +321,7 @@ def section_alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
     return reverse
 
 
-def subsection_alias_lookup(settings: Dict[str, object]) -> Dict[Tuple[str, str], str]:
+def subsection_alias_lookup(settings: Dict[str, Any]) -> Dict[Tuple[str, str], str]:
     reverse: Dict[Tuple[str, str], str] = {}
     for canonical_path, aliases in subsection_aliases(settings).items():
         if "/" not in canonical_path:
@@ -342,7 +342,7 @@ def render_template_bootstrap() -> str:
     return normalize_whitespace(rendered)
 
 
-def render_section_body(heading: str, existing_body: str, settings: Dict[str, object]) -> str:
+def render_section_body(heading: str, existing_body: str, settings: Dict[str, Any]) -> str:
     required_children = required_subsections(settings).get(heading, [])
     section_template_map = section_templates(settings)
     subsection_template_map = subsection_templates(settings)
@@ -396,7 +396,7 @@ def find_subsection_body(
     sections_lookup: Dict[str, str],
     section_name: str,
     subsection_name: str,
-    settings: Dict[str, object],
+    settings: Dict[str, Any],
 ) -> str:
     section_alias_map = section_alias_lookup(settings)
     subsection_alias_map = subsection_alias_lookup(settings)
@@ -420,7 +420,7 @@ def find_subsection_body(
 def validate_schema(
     accessibility_path: Path,
     accessibility_text: str,
-    config: Dict[str, object],
+    config: Dict[str, Any],
 ) -> Tuple[List[Issue], List[Issue], List[Issue], List[Issue]]:
     settings = config_settings(config)
     required = required_sections(settings)
@@ -580,10 +580,10 @@ def validate_schema(
             )
 
     for heading in required:
-        body = lookup.get(heading)
-        if not body:
+        required_body = lookup.get(heading)
+        if not required_body:
             continue
-        if not body.strip():
+        if not required_body.strip():
             schema_issues.append(
                 Issue(
                     issue_id=f"empty-section-{slugify_heading(heading)}",
@@ -595,7 +595,7 @@ def validate_schema(
                     auto_fixable=True,
                 )
             )
-        if any(pattern.search(body) for pattern in PLACEHOLDER_PATTERNS):
+        if any(pattern.search(required_body) for pattern in PLACEHOLDER_PATTERNS):
             content_issues.append(
                 Issue(
                     issue_id=f"placeholder-content-{slugify_heading(heading)}",
@@ -774,7 +774,7 @@ def validate_schema(
 def apply_fixes(
     accessibility_path: Path,
     accessibility_text: str,
-    config: Dict[str, object],
+    config: Dict[str, Any],
 ) -> Tuple[str, List[Dict[str, str]]]:
     if not accessibility_text.strip():
         bootstrap = render_template_bootstrap()
@@ -836,7 +836,7 @@ def apply_fixes(
     ]
 
 
-def format_report(report: Dict[str, object]) -> str:
+def format_report(report: Dict[str, Any]) -> str:
     total_issues = (
         len(report["schema_violations"])
         + len(report["claim_integrity_issues"])
@@ -873,7 +873,7 @@ def format_report(report: Dict[str, object]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
+def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
     project_root = Path(args.project_root).expanduser().resolve()
     if not project_root.is_dir():
         raise ValueError(f"Project root does not exist or is not a directory: {project_root}")

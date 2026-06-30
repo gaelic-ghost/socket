@@ -11,7 +11,6 @@ REQUIRED_ROOT_DOCS = (
     "CONTRIBUTING.md",
     "ROADMAP.md",
     "AGENTS.md",
-    "TODO.md",
 )
 
 
@@ -177,7 +176,7 @@ def _audit_guidance(repo_root: Path) -> AuditReport:
     else:
         text = root_agents.read_text(encoding="utf-8")
         for phrase in (
-            "Treat Gale's local `socket` checkout as the normal day-to-day working checkout on `main`.",
+            "Treat Gale's local `socket` checkout on `main` as the clean coordination and release-verification checkout.",
             "Root docs and marketplace wiring are updated together when packaging or policy changed.",
             "Do not assume every child surface exposes `.codex-plugin/plugin.json` at its directory root.",
         ):

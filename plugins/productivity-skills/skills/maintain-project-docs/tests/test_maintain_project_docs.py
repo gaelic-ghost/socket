@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = ROOT / "skills/maintain-project-docs/scripts/maintain_project_docs.py"
 
 spec = importlib.util.spec_from_file_location("maintain_project_docs", SCRIPT)
+assert spec is not None and spec.loader is not None
 module = importlib.util.module_from_spec(spec)
-assert spec.loader is not None
 sys.modules["maintain_project_docs"] = module
 spec.loader.exec_module(module)
 
