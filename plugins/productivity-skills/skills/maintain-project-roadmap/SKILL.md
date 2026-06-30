@@ -29,7 +29,7 @@ This skill is the general template layer for roadmap maintenance. It defines the
 
 1. Validate the project root and resolve the target `ROADMAP.md`.
 2. Load the canonical roadmap schema from the built-in template config, then merge any explicit customization override.
-3. In `check-only`, audit title requirements, top-level section names and order, the required table of contents, milestone ordering, milestone subsection names, milestone status values, milestone progress consistency, small-ticket placement, checkbox syntax, and legacy format.
+3. In `check-only`, audit title requirements, top-level section names and order, the required table of contents, milestone ordering, milestone subsection names, milestone status values, milestone progress consistency, small-ticket placement, checkbox syntax, legacy format, and root `TODO.md` files that still need migration into the canonical roadmap structure.
 4. When requested, collect small-ticket candidates from source TODO/FIXME comments or open GitHub issues and report them under `small_ticket_candidates`.
 5. In `apply`, keep edits bounded to the target `ROADMAP.md` while normalizing the roadmap into the configured canonical checklist structure. If source or GitHub ticket collection was requested, append new candidates to `Small Tickets` without rewriting source files.
 6. If an explicit roadmap ticket mutation was requested, add or update one checklist item in `Small Tickets`, `Backlog Candidates`, or a milestone `Tickets` subsection. Dedupe by default, and use `--allow-duplicate` only when the duplicate is intentional.
@@ -49,6 +49,7 @@ This skill is the general template layer for roadmap maintenance. It defines the
 - `Small Tickets` should hold issue-sized fixes, TODO/FIXME imports, and cleanup work that is not substantial enough for a milestone yet. Keep these as checklist items that can be linked to GitHub issues, source comments, or milestone tickets when the evidence exists.
 - `Backlog Candidates` should hold plausible future work that is not yet committed to a milestone.
 - `History` should record only notable roadmap changes such as milestone additions, scope cuts, resets, or major replans.
+- A root `TODO.md` is a legacy planning surface once `ROADMAP.md` has `Small Tickets`. Report it as a migration-needed finding instead of treating it as a parallel canonical backlog.
 
 ## Codex Subagent Fit
 
@@ -137,6 +138,7 @@ Treat those two files as the source of truth for the canonical base schema and t
 - Never rewrite source TODO/FIXME comments unless a future explicit source-rewrite mode is implemented and requested.
 - Keep checklist-style `ROADMAP.md` as the canonical format.
 - Treat legacy table-style roadmap layouts as migration sources, not as an alternate canonical output mode.
+- Treat root `TODO.md` as a migration source, not as an alternate canonical output mode. Do not auto-delete or auto-flatten it; migrate useful entries into `ROADMAP.md` in a reviewed documentation pass.
 
 ## References
 

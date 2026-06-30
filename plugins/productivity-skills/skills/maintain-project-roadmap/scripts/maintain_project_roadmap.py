@@ -971,6 +971,7 @@ def apply_roadmap_ticket_request(
 
 
 def validate_schema(
+    project_root: Path,
     roadmap_path: Path,
     roadmap_text: str,
     config: Dict[str, object],
@@ -1255,6 +1256,23 @@ def validate_schema(
                 )
             )
 
+    legacy_todo_path = project_root / "TODO.md"
+    if "Small Tickets" in lookup and legacy_todo_path.is_file() and legacy_todo_path.resolve() != roadmap_path.resolve():
+        findings.append(
+            Finding(
+                finding_id="legacy-todo-md-migration-needed",
+                category="schema",
+                severity="medium",
+                message=(
+                    "Root TODO.md exists while ROADMAP.md has a canonical Small Tickets section. "
+                    "Migrate useful TODO.md backlog items into ROADMAP.md milestones, Small Tickets, "
+                    "or Backlog Candidates, then remove TODO.md in a reviewed documentation pass."
+                ),
+                file=str(legacy_todo_path),
+                auto_fixable=False,
+            )
+        )
+
     if has_legacy_format(roadmap_text):
         findings.append(
             Finding(
@@ -1518,7 +1536,7 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
 
     if roadmap_path.is_file():
         roadmap_text = read_text(roadmap_path)
-        findings = validate_schema(roadmap_path, roadmap_text, config)
+        findings = validate_schema(project_root, roadmap_path, roadmap_text, config)
         report["findings"] = [finding.to_dict() for finding in findings]
     elif args.run_mode == "apply":
         roadmap_text = ""
@@ -1577,7 +1595,7 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
             except ValueError as error:
                 report["errors"].append(str(error))
         report["apply_actions"] = [action.to_dict() for action in actions]
-        post_findings = validate_schema(roadmap_path, updated_text, config)
+        post_findings = validate_schema(project_root, roadmap_path, updated_text, config)
         report["findings"] = [finding.to_dict() for finding in post_findings]
 
     markdown = markdown_report(report)

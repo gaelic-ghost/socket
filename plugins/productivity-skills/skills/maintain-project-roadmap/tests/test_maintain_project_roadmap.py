@@ -419,6 +419,22 @@ def test_legacy_roadmap_is_migrated_in_apply_mode(tmp_path: Path) -> None:
     assert applied_report["findings"] == []
 
 
+def test_root_todo_md_is_reported_as_migration_needed(tmp_path: Path) -> None:
+    write(tmp_path / "ROADMAP.md", valid_roadmap())
+    write(tmp_path / "TODO.md", "# TODO\n\n- [ ] Move this into the roadmap.\n")
+
+    report, _md = run(tmp_path)
+    finding_ids = {finding["finding_id"] for finding in report["findings"]}
+    assert "legacy-todo-md-migration-needed" in finding_ids
+    todo_finding = next(
+        finding
+        for finding in report["findings"]
+        if finding["finding_id"] == "legacy-todo-md-migration-needed"
+    )
+    assert todo_finding["auto_fixable"] is False
+    assert todo_finding["file"].endswith("TODO.md")
+
+
 def test_custom_config_can_extend_base_schema(tmp_path: Path) -> None:
     config = tmp_path / "roadmap-config.yaml"
     write(
