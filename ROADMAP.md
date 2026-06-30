@@ -38,27 +38,27 @@
 
 ## Milestone Progress
 
-- Milestone 5: SwiftASB skills plugin - Implemented
-- Milestone 6: Dotnet skills plugin - Implemented
-- Milestone 7: Python skills plugin expansion - Implemented
-- Milestone 8: Server-Side Swift skills plugin - In Progress
-- Milestone 9: Rust skills plugin - Implemented
-- Milestone 10: Expo inline native modules workflow - Implemented
+- Milestone 5: SwiftASB skills plugin - Completed
+- Milestone 6: Dotnet skills plugin - Completed
+- Milestone 7: Python skills plugin expansion - Completed
+- Milestone 8: Server-Side Swift skills plugin - Completed
+- Milestone 9: Rust skills plugin - Completed
+- Milestone 10: Expo inline native modules workflow - Completed
 - Milestone 11: Codex Utilities plugin - In Progress
-- Milestone 12: Xcode 27 agentic tooling workflows - Planned
+- Milestone 12: Xcode 27 agentic tooling workflows - In Progress
 - Milestone 13: Reverse Engineering skills plugin - In Progress
-- Milestone 14: Core AI and Foundation Models workflow ownership - Planned
-- Milestone 15: Android Dev Skills plugin - Implemented
+- Milestone 14: Core AI and Foundation Models workflow ownership - Completed
+- Milestone 15: Android Dev Skills plugin - Completed
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - Planned
-- Milestone 18: Swift Lang shared language plugin - Implemented
+- Milestone 18: Swift Lang shared language plugin - Completed
 - Milestone 19: Project audit skills plugin - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -90,7 +90,7 @@ Implemented
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -121,7 +121,7 @@ Implemented
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -156,7 +156,7 @@ Implemented
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
@@ -197,7 +197,7 @@ In Progress
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -228,7 +228,7 @@ Implemented
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -357,7 +357,7 @@ In Progress
 - [x] Record the detailed plan in [`docs/maintainers/reverse-engineering-skills-plugin-plan.md`](./docs/maintainers/reverse-engineering-skills-plugin-plan.md).
 - [x] Create `plugins/reverse-engineering-skills/` with `.codex-plugin/plugin.json` and `AGENTS.md`.
 - [x] Wire `reverse-engineering-skills` into the root Socket marketplace as `NOT_AVAILABLE` while it was a placeholder.
-- [x] Update root README and TODO so users understand the shipped first skill surface.
+- [x] Update root README and planning docs so users understand the shipped first skill surface.
 - [x] Add `reverse-engineering:triage-artifact`.
 - [x] Add `reverse-engineering:evidence-notes-workflow`.
 - [ ] Add `reverse-engineering:tool-selection-workflow` after the first hands-on tool comparison.
@@ -376,7 +376,7 @@ In Progress
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -401,7 +401,7 @@ Implemented
 
 ### Status
 
-Implemented
+Completed
 
 ### Scope
 
@@ -523,7 +523,7 @@ Planned
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
@@ -539,7 +539,7 @@ Planned
 - [x] Add `swift-lang:swift-api-style-workflow` for API naming, call-site ergonomics, access control, typed result shapes, consistency across sibling APIs, and human-friendly errors.
 - [x] Add `swift-lang:swift-functional-pipelines-workflow` for functional data modeling, `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, chained transforms, and monadic composition boundaries.
 - [x] Add `swift-lang:swift-format-style-workflow` for SwiftFormat, SwiftLint, formatter/linter responsibility, style defaults, Git hooks, and CI guidance.
-- [x] Add `swift-lang:swift-source-organization-workflow` for file splitting, feature/layer layout, extension-file extraction, `// MARK:` discipline, file headers, TODO/FIXME ledgers, and stricter split thresholds.
+- [x] Add `swift-lang:swift-source-organization-workflow` for file splitting, feature/layer layout, extension-file extraction, `// MARK:` discipline, file headers, source cleanup ledgers, and stricter split thresholds.
 - [x] Add `swift-lang:swift-modernization-cleanup-workflow` for complete modernization passes that sequence formatting, source inventory, file splitting, API cleanup, pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
 - [x] Wire `swift-lang` into the root Socket marketplace as an installable child plugin.
 - [x] Update Apple Dev and Server-Side Swift guidance to hand off shared Swift cleanup work to `swift-lang` when it is available.
@@ -575,7 +575,7 @@ Planned
 - [ ] Add `project-audit:audit-project-quality` for evidence-backed quality, maintainability, and slop-risk grading.
 - [ ] Add later skills for architecture mapping, adoption-risk decisions, and remediation planning after the first two workflows prove useful.
 - [ ] Wire the plugin into the root marketplace as `NOT_AVAILABLE` while it is a placeholder, then switch it to installable only after real skill content exists.
-- [ ] Update root README and TODO when the plugin becomes installable.
+- [ ] Update root README and ROADMAP when the plugin becomes installable.
 - [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
@@ -600,7 +600,7 @@ Planned
 - [x] Audit and update the default and recommended GitHub repository settings in relevant repo-maintenance, skill-repo, and Apple bootstrap/sync workflows.
 - [x] Add `productivity-skills:maintain-github-repository` as the dedicated owner for GitHub repository settings audits and requested alignment, while keeping release and publish choreography in `maintain-project-repo`.
 - [x] GitHub #81: Strengthen `maintain-project-repo` release, publish, tag, protected-main, cleanup, and branch-accounting triggers while routing settings-only requests to `maintain-github-repository` ([#81](https://github.com/gaelic-ghost/socket/issues/81)).
-- [ ] Migrate the remaining root `TODO.md` backlog into canonical `ROADMAP.md` milestones, Small Tickets, or Backlog Candidates, then remove `TODO.md` in a reviewed documentation pass.
+- [x] Migrated the remaining root `TODO.md` backlog into canonical `ROADMAP.md` milestones, Small Tickets, or Backlog Candidates, then removed `TODO.md` in a reviewed documentation pass.
 - [ ] Investigate `uv audit` as a Socket validation and release-evidence input. Decide whether the first adoption belongs in root validation, Python-backed child plugin validation, release evidence capture, or reusable Python project-maintenance guidance, and test the `--locked`, `--frozen`, JSON output, ignore, and OSV service options before making it a required gate.
 - [ ] Generalize Codex GUI local environment templates across stack plugins. Start from the root Socket `uv sync --dev` environment, preserve customized `.codex/environments/*.toml` files, keep setup scripts repo-relative, and let each stack plugin own templates for its common project shapes instead of installing global tool dependencies.
 - [ ] Investigate guidance consolidation opportunities that reduce repeated setup, routing, validation, and handoff text across skills while preserving the owner boundaries needed for accurate tool use and lower token load.
@@ -623,6 +623,39 @@ Planned
 - [x] Reduce hand-carried patch-release work by capturing commit-bound temporary `CODEX_HOME` marketplace smoke evidence and the final Dependabot alert query, then incorporating both into generated release notes without changing release-ready, subtree, branch-accounting, tag, GitHub release, or final marketplace-upgrade gates.
 - [ ] Explore steward-assisted release and worktree orchestration. Start with Socket Steward release preflights and cache-refresh checks, then evaluate whether `swift-steward` or sibling roles should handle read-only release readiness, PR merge sequencing, branch accounting, and parallel worktree status reports while the main thread keeps write, merge, tag, and publish ownership.
 - [ ] Design a worker-thread orchestration workflow for Codex GUI and Socket Steward use. Capture the decisions before implementation: whether the durable surface is a new Productivity Skill, a Socket Steward command, or both; which fields belong in the worker launch envelope; how model and reasoning budgets are selected; how workers report branch, worktree, validation, and cleanup state back to the coordinator; which actions remain main-thread only; and when a finished worker thread or worktree should be archived, removed, or kept for follow-up.
+- [ ] Keep Socket Steward tied into cross-Socket docs, marketplace, audit, plan, and proposal workflows as the repo-local coordination surface.
+- [ ] Add `agent-portability-skills:audit-agent-surface-portability` for inventorying `SKILL.md`, `.codex-plugin`, `.mcp.json`, hooks, app config, custom agents, and host compatibility notes across Socket child plugins.
+- [ ] Add `agent-portability-skills:design-agent-host-adapter` for deciding whether a host needs docs-only guidance, `.agents/skills` export, native MCP config, a plugin or package adapter, or no Socket-specific support.
+- [ ] Add `agent-portability-skills:maintain-codex-plugin-surface` for Codex-specific marketplace, plugin manifest, hooks, MCP, app config, and enablement wording.
+- [ ] Keep Git-backed Codex marketplace install and update guidance ahead of local authoring notes.
+- [ ] Keep repo-local discovery mirror guidance separate from install guidance.
+- [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
+- [ ] Add a maintainer workflow for moving or re-homing skills between repositories.
+- [ ] Add durable process support for noticing changes in OpenAI Codex docs and the open `.agents` skill discovery convention.
+- [ ] Add Claude Code marketplace, plugin, skills, subagent, and MCP compatibility guidance after the first Socket portability audit and adapter-design skills land.
+- [ ] Keep `cardhop-contact-workflow`, bundled MCP server docs, `.mcp.json`, and plugin metadata aligned.
+- [ ] Validate the bundled Cardhop MCP server from `plugins/cardhop-app/mcp/`.
+- [ ] Add root or child Cardhop validation coverage once the Cardhop skill or MCP surface grows beyond the current single workflow.
+- [ ] Add `productivity-skills:maintain-project-security` for canonical `SECURITY.md` maintenance.
+- [ ] Add `productivity-skills:maintain-project-support` for canonical `SUPPORT.md` maintenance.
+- [ ] Add a future `productivity-skills:maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
+- [ ] Forward-test `productivity-skills:design-agent-automation-workflow` and `productivity-skills:design-agent-eval-workflow` against real agent, automation, and eval planning requests before adding deterministic scaffolding scripts.
+- [ ] Add lightweight Productivity validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
+- [ ] Add Productivity validation checks for README layout and active skill inventory consistency.
+- [ ] Add server-side Swift validation coverage for skill metadata and exported skill inventory once central Socket child-skill validation exists.
+- [ ] Decide whether future server-side Swift skills should cover SwiftNIO, deployment, authentication, app sync, or additional database workflows as separate skills.
+- [ ] Cover server-side JVM package/runtime handoffs, persistence, observability, CI, and upgrades after the first project-shape, build-tooling, implementation, and testing slice.
+- [ ] Cover reverse-engineering workflows for .NET assemblies, Unity managed and IL2CPP artifacts, Apple binaries, symbols, crash logs, and decompiler or disassembler output review.
+- [ ] Add tool-specific reverse-engineering guidance for Cutter, Ghidra, Malimite, Hopper, and adjacent tools after hands-on workflow preferences are clearer.
+- [ ] Finish Things guidance and maintenance modernization for the mixed Things skill plus bundled MCP server repo.
+- [ ] Keep root README and AGENTS guidance clear about whether Things changes belong in `skills/`, `mcp/`, or plugin metadata.
+- [ ] Expand Things repo-root maintainer tooling once more than one root skill needs Python-backed verification.
+- [ ] Add broader Things bundled-server smoke coverage when new tool families or auth-sensitive update flows are introduced.
+- [ ] Revisit Things packaging mirrors if the repo starts shipping additional Codex discovery surfaces.
+- [ ] Author the first real Spotify-focused Codex workflow.
+- [ ] Add the first maintained Spotify skill, app, or MCP-backed workflow under the canonical exported surface.
+- [ ] Update Socket docs and validation once the exported Spotify surface is real.
+- [ ] Decide whether Socket remains Spotify's canonical home after the first real shipped workflow.
 - [ ] Investigate Socket-owned F# `.fsx` hook and maintenance-script conventions. Define where scripts live, how Codex hook commands launch `dotnet fsi --exec`, which repo-local `DOTNET_CLI_HOME` cache paths must be gitignored, how event-specific hook JSON input/output types are modeled, which validation commands prove portability, and when a script should graduate into a compiled F# console tool for frequently fired hooks.
 - [ ] Plan a small evidence-first demo and comparison series for local-first AI-assisted macOS development. Show Socket and Gale-built local workflows against mainstream Codex, Xcode-integrated, courseware, or cloud-first workflows using concrete tasks such as Swift repo guidance sync, release maintenance, local inference handoff, worktree coordination, privacy-preserving docs audits, and quality-focused Apple-platform validation.
 - [x] Add root validator coverage for the first Swift Steward subagent role drafts, keeping custom-agent TOML parseable, read-only, name-aligned, and review-oriented before any write-capable steward workflow exists.

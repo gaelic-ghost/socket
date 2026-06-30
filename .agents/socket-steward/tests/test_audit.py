@@ -24,7 +24,7 @@ def test_cli_default_repo_root_finds_socket_from_steward_package() -> None:
 
 
 def test_docs_audit_flags_completed_milestone_marked_in_progress(tmp_path: Path) -> None:
-    for name in ("README.md", "CONTRIBUTING.md", "AGENTS.md", "TODO.md"):
+    for name in ("README.md", "CONTRIBUTING.md", "AGENTS.md"):
         (tmp_path / name).write_text("# placeholder\n", encoding="utf-8")
 
     (tmp_path / "ROADMAP.md").write_text(

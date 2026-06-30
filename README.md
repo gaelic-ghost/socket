@@ -102,7 +102,7 @@ Currently available from the catalog:
 
 ## Plugin Status
 
-Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its public README because existing users can still arrive through the standalone compatibility marketplace. Other child planning now lives in [TODO.md](./TODO.md).
+Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its public README because existing users can still arrive through the standalone compatibility marketplace. Other child planning now lives in [ROADMAP.md](./ROADMAP.md).
 
 Current Socket catalog shape:
 
@@ -130,7 +130,7 @@ Placeholder directories for future plugins (not available for install):
 
 ## Development
 
-For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For the consolidated child backlog, see [TODO.md](./TODO.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
+For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For the consolidated child backlog, see [ROADMAP.md](./ROADMAP.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
 
 For Xcode 27 beta Markdown editing and repository browsing, open [`Socket.xcworkspace`](./Socket.xcworkspace). It is a browse-only workspace for docs, plugin payloads, scripts, and marketplace metadata; it is not a root build surface.
 
@@ -151,7 +151,6 @@ For Xcode 27 beta Markdown editing and repository browsing, open [`Socket.xcwork
 ├── CONTRIBUTING.md
 ├── README.md
 ├── Socket.xcworkspace
-├── TODO.md
 └── ROADMAP.md
 ```
 

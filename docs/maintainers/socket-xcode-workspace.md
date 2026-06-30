@@ -17,7 +17,7 @@ package products, generated projects, or root-level Xcode build settings.
 The workspace references the root maintainer files plus the main authored
 source directories:
 
-- root docs such as `README.md`, `CONTRIBUTING.md`, `ROADMAP.md`, `TODO.md`,
+- root docs such as `README.md`, `CONTRIBUTING.md`, and `ROADMAP.md`,
   `AGENTS.md`, and `ACCESSIBILITY.md`
 - the root marketplace file at `.agents/plugins/marketplace.json`
 - `docs/`
