@@ -65,12 +65,14 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [ ] Forward-test `design-agent-automation-workflow` and `design-agent-eval-workflow` against real agent, automation, and eval planning requests before adding deterministic scaffolding scripts.
 - [ ] Add lightweight validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Add validation checks for README layout and active skill inventory consistency.
+- [ ] Decide whether unfamiliar-project intake, architecture mapping, quality grading, and slop-risk evaluation belong in a new `project-audit-skills` child plugin or as a focused `productivity-skills` expansion.
 
 ### apple-dev-skills
 
 - [x] Publish the Phase 1 standalone compatibility release so `gaelic-ghost/apple-dev-skills` points at the Socket-hosted plugin payload while preserving `codex plugin marketplace upgrade apple-dev-skills`.
 - [x] Complete Phase 2 of the Socket migration: make `plugins/apple-dev-skills` monorepo-owned, remove subtree release gates, update Socket docs and duplicate-install guidance, add compatibility marketplace smoke coverage, validate, and publish the Socket release.
 - [ ] Add the Xcode 27 agentic tooling workflows from [`docs/maintainers/xcode-27-agentic-tooling-plan.md`](./docs/maintainers/xcode-27-agentic-tooling-plan.md), starting with `xcode-coding-intelligence-workflow`.
+- [ ] Align SwiftUI and Xcode project guidance with Gale's coordinator-shaped, MVVM-C-adjacent structure preferences from [`docs/maintainers/apple-swift-structure-guidance-alignment.md`](./docs/maintainers/apple-swift-structure-guidance-alignment.md).
 
 ### python-skills
 
@@ -167,6 +169,13 @@ This file is the Socket-level backlog for child plugins that no longer keep thei
 - [x] Install-test and publish the changed marketplace metadata with the new license surface.
 
 ## Placeholder Child Plugins
+
+### project-audit-skills
+
+- [ ] Decide whether to create a dedicated `project-audit-skills` child plugin or fold the intake/audit surface into `productivity-skills`.
+- [ ] Use [`docs/maintainers/project-audit-skills-plugin-plan.md`](./docs/maintainers/project-audit-skills-plugin-plan.md) as the first scope record.
+- [ ] Add `project-audit:explore-project` and `project-audit:audit-project-quality` as the first real skills if a dedicated plugin is approved.
+- [ ] Keep any marketplace entry `NOT_AVAILABLE` until real skill content exists.
 
 ### spotify
 

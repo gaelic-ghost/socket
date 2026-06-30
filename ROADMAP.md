@@ -19,6 +19,7 @@
 - [Milestone 16: Server-Side JVM skills plugin](#milestone-16-server-side-jvm-skills-plugin)
 - [Milestone 17: Cross-agent skill and plugin portability](#milestone-17-cross-agent-skill-and-plugin-portability)
 - [Milestone 18: Swift Lang shared language plugin](#milestone-18-swift-lang-shared-language-plugin)
+- [Milestone 19: Project audit skills plugin](#milestone-19-project-audit-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -51,6 +52,7 @@
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - Planned
 - Milestone 18: Swift Lang shared language plugin - Implemented
+- Milestone 19: Project audit skills plugin - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -553,10 +555,42 @@ Planned
 
 Implemented Milestone 18 by adding the `swift-lang` child plugin with five shared Swift language skills, wiring it into the Socket marketplace, documenting the Swift language ownership split, preserving Apple Dev's standalone formatting and structure skills, and validating the plugin, skill metadata, root marketplace, and Apple Dev docs.
 
+## Milestone 19: Project audit skills plugin
+
+### Status
+
+Planned
+
+### Scope
+
+- [x] Record the first plugin plan in [`docs/maintainers/project-audit-skills-plugin-plan.md`](./docs/maintainers/project-audit-skills-plugin-plan.md).
+- [ ] Decide whether unfamiliar-project exploration, architecture mapping, quality grading, adoption-risk evaluation, and slop-risk review belong in a dedicated `project-audit-skills` child plugin or as a focused `productivity-skills` expansion.
+- [ ] Keep the first version guidance-only unless repeated use proves that a runtime scanner, MCP server, or structured report generator is worth the additional surface.
+- [ ] Route stack-specific findings to the existing language and platform plugins instead of duplicating Swift, Python, Rust, JVM, Android, web, or reverse-engineering guidance.
+
+### Tickets
+
+- [ ] Create `plugins/project-audit-skills/` only after the plugin boundary is approved.
+- [ ] Add `project-audit:explore-project` for read-only project intake maps.
+- [ ] Add `project-audit:audit-project-quality` for evidence-backed quality, maintainability, and slop-risk grading.
+- [ ] Add later skills for architecture mapping, adoption-risk decisions, and remediation planning after the first two workflows prove useful.
+- [ ] Wire the plugin into the root marketplace as `NOT_AVAILABLE` while it is a placeholder, then switch it to installable only after real skill content exists.
+- [ ] Update root README and TODO when the plugin becomes installable.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [ ] Socket has a clear ownership decision for unfamiliar-project intake and quality grading.
+- [ ] The first workflows produce evidence-backed maps and grades without making repository changes by default.
+- [ ] Stack-specific implementation advice routes to owning Socket plugins.
+- [ ] Root Socket docs, marketplace wiring, and validation agree on the exported project-audit surface.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
 
+- [x] Add a browse-only root `Socket.xcworkspace` for Xcode 27 beta Markdown editing and repository navigation without introducing a root build surface.
+- [x] Record Gale's coordinator-shaped, MVVM-C-adjacent Swift app-structure alignment plan for future Apple Dev Skills guidance updates.
 - [x] GitHub #61: Teach repo-maintenance prerelease GitHub metadata ([#61](https://github.com/gaelic-ghost/socket/issues/61))
 - [x] GitHub #60: Apple Dev Skills workflow helper is missing PyYAML runtime dependency ([#60](https://github.com/gaelic-ghost/socket/issues/60))
 - [x] Hardened `web-dev-skills:expo-inline-native-modules-workflow` with native-shape decision and validation reference tables.

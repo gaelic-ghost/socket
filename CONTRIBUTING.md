@@ -94,6 +94,12 @@ You can verify that baseline with:
 uv run scripts/validate_socket_metadata.py
 ```
 
+### Xcode Workspace
+
+The root [`Socket.xcworkspace`](./Socket.xcworkspace) is a browse-only workspace for maintainers who want to use Xcode's file navigator and Markdown editor, especially Xcode 27 beta's WYSIWYG Markdown surface. It references root docs, the marketplace file, `docs/`, `plugins/`, and `scripts/`, but it intentionally has no schemes, targets, package products, or root build settings.
+
+Do not add a generated `.xcodeproj`, root `Package.swift`, or workspace scheme only to improve documentation editing. If Socket later gains a real root build product, document that build surface separately and update the workspace guidance in [`docs/maintainers/socket-xcode-workspace.md`](./docs/maintainers/socket-xcode-workspace.md).
+
 ### Repo-Local Steward
 
 The repo-local Socket Steward prototype lives at [`.agents/socket-steward/`](./.agents/socket-steward/). It is a Python `uv` project built around the OpenAI Agents SDK, with deterministic read-only audits available without API credentials and an optional agent-backed `ask` command when `OPENAI_API_KEY` is available.

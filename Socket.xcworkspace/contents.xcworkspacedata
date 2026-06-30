@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:README.md">
+   </FileRef>
+   <FileRef
+      location = "group:CONTRIBUTING.md">
+   </FileRef>
+   <FileRef
+      location = "group:ROADMAP.md">
+   </FileRef>
+   <FileRef
+      location = "group:TODO.md">
+   </FileRef>
+   <FileRef
+      location = "group:AGENTS.md">
+   </FileRef>
+   <FileRef
+      location = "group:ACCESSIBILITY.md">
+   </FileRef>
+   <FileRef
+      location = "group:.agents/plugins/marketplace.json">
+   </FileRef>
+   <FileRef
+      location = "group:docs">
+   </FileRef>
+   <FileRef
+      location = "group:plugins">
+   </FileRef>
+   <FileRef
+      location = "group:scripts">
+   </FileRef>
+</Workspace>
