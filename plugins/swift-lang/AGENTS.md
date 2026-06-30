@@ -19,7 +19,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 - Keep Swift examples Swifty, ergonomic, compact, and functional when that improves clarity.
 - Prefer explicit inputs and outputs, value types, immutable local bindings, composable transforms, and straight data flow over hidden mutation or broad manager types.
 - Keep data modeling and pipelines monadic where practical: model stages as values flowing through `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, or small domain pipeline types. Do not force this style when it hides effects, fights Swift concurrency, or makes the code harder to test.
-- Prefer `throws` for ordinary fallible operations, typed throws for small closed domain failure sets that callers can usefully exhaust, `Result` when failure must be stored or composed as a value, and `Optional` only for ordinary absence that is not diagnostic.
+- Prefer typed throws for Swift-owned fallible operations when the error type can be named clearly. Use untyped `throws` when forwarding broad framework, filesystem, networking, database, plugin, or other open-ended failures without adding a useful typed boundary. Use `Result` when failure must be stored or composed as a value, and use `Optional` only for ordinary absence that is not diagnostic.
 - Prefer `map`, `flatMap`, `compactMap`, `filter`, `reduce`, `zip`, `forEach`, key paths, trailing closures, and fluent chains when the resulting code reads left-to-right as a real data flow.
 - Split long chains into named intermediate values when debugging, error reporting, or readability would improve.
 - Prefer small files and single-purpose support types. Split Swift files earlier than broad default style guides when a real concern boundary exists.

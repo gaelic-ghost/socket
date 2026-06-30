@@ -15,10 +15,10 @@ metadata:
 Make Swift failure behavior clear at the call site and useful when something
 breaks.
 
-The house style is concise, typed where it helps, and functional in feel:
-fallible values should move through explicit carriers, error messages should
-explain the failed operation, and recovery should happen at the boundary that
-can actually choose a next step.
+The house style is concise, typed by default for Swift-owned failure surfaces,
+and functional in feel: fallible values should move through explicit carriers,
+error messages should explain the failed operation, and recovery should happen
+at the boundary that can actually choose a next step.
 
 ## Source Check
 
@@ -59,9 +59,11 @@ Book, Swift Standard Library docs, Swift Evolution, and Apple Foundation docs:
 2. Choose the carrier:
    - nonoptional value when failure is impossible after construction
    - `Optional` when absence is expected and not diagnostic
-   - untyped `throws` or `async throws` for ordinary fallible operations
-   - typed throws for small closed error sets that callers should exhaustively
-     understand
+   - typed throws for Swift-owned fallible operations when the error type can be
+     named clearly
+   - untyped `throws` or `async throws` when the operation forwards broad,
+     open-ended framework, filesystem, networking, database, plugin, or
+     dependency failures without adding a useful typed boundary
    - `Result` when success or failure must be stored, combined, cached, tested,
      or delivered through a non-throwing callback
    - `AsyncSequence` failure types when values arrive over time and iteration can
@@ -69,6 +71,8 @@ Book, Swift Standard Library docs, Swift Evolution, and Apple Foundation docs:
    - existing framework errors when the platform already gives a precise error
      domain
 3. Model domain failures:
+   - prefer existing framework errors until a concrete custom domain, extension,
+     or call-site recovery need appears
    - prefer small `enum` errors with associated values when the cases are closed
      and meaningful
    - preserve underlying errors when they help diagnosis
@@ -81,6 +85,8 @@ Book, Swift Standard Library docs, Swift Evolution, and Apple Foundation docs:
    - use `try` and `try await` for straight-line fallible work
    - use `map`, `flatMap`, `mapError`, `Result.get()`, and typed transforms when
      the failure value is intentionally part of the pipeline
+   - prefer functional composition over imperative branching whenever it stays
+     accurate and readable
    - split long chains at diagnostic, side-effect, actor, or async boundaries
    - catch narrowly where recovery happens
    - let errors propagate when the current layer has no useful recovery decision
@@ -93,29 +99,37 @@ Book, Swift Standard Library docs, Swift Evolution, and Apple Foundation docs:
 
 ## House Defaults
 
-- Prefer `throws` for the common synchronous or structured-concurrency path.
-- Prefer typed throws only when the error set is part of the API contract, small
-  enough to stay stable, and useful for caller recovery or exhaustive tests.
+- Prefer typed throws for Swift-owned synchronous and structured-concurrency
+  APIs when the error type can be named clearly.
+- Prefer untyped `throws` when forwarding broad framework, filesystem,
+  networking, database, plugin, or dependency failures without changing their
+  meaning.
 - Prefer `Result` for value-level composition, storage, callback interop, batch
   outcomes, and tests that need to assert failure as data.
 - Prefer `Optional` only for ordinary absence. Do not erase useful failure
   information to make a pipeline look tidy.
 - Prefer existing Foundation, Cocoa, SwiftPM, SwiftNIO, Vapor, Hummingbird, or
-  framework error types when they already communicate the domain correctly.
-- Prefer small domain error enums over broad wrapper hierarchies.
+  framework error types until a concrete custom domain, extension, or recovery
+  need appears.
+- Prefer small domain error enums over broad wrapper hierarchies when custom
+  errors are needed.
 - Prefer preserving underlying errors over stringifying them.
 - Prefer direct propagation over local catch-and-rethrow wrappers that add no new
   context.
+- Prefer functional transforms, narrow recovery helpers, and value-level error
+  composition over broad imperative branching.
 - Prefer assertions, preconditions, or non-throwing validation for programmer
   mistakes only when recovery is not part of the API contract.
 
 ## Typed Throws Guidance
 
-Typed throws is a precision tool, not the default house style.
+Typed throws is the preferred house style for Swift-owned error surfaces, while
+untyped `throws` remains the right tool for open-ended failure domains.
 
 Use typed throws when:
 
 - the operation has a closed domain error set
+- the operation is Swift-owned and the error type can be named clearly
 - callers benefit from exhaustive `catch` handling
 - tests should assert every domain case
 - a generic API should preserve its caller's failure type
@@ -125,10 +139,20 @@ Use typed throws when:
 Avoid typed throws when:
 
 - the operation mostly forwards framework, filesystem, networking, database, or
-  plugin errors
+  plugin errors without adding a meaningful typed boundary
 - the API boundary is public and the error set is likely to grow
 - callers would immediately erase the type to `any Error`
 - the type annotation makes simple code noisier without changing recovery
+
+## Error Helper Direction
+
+A small shared helper package could become useful if several repositories start
+needing the same concise diagnostic, wrapping, or recovery helpers.
+
+Treat that as a separate design decision. A future package might explore generic
+helpers, variadic generics or parameter packs, and macros, but do not invent a
+local helper framework inside one app or skill unless the repeated call sites
+already exist and the package design has been discussed.
 
 ## Example Shapes
 
@@ -209,7 +233,7 @@ Return:
 - Do not add error abstraction layers without a real caller, recovery path, or
   interop need.
 - Do not wrap every underlying error just to make a local enum exhaustive.
-- Do not use typed throws as decoration on public APIs whose failures are still
+- Do not force typed throws onto APIs whose failures are still genuinely
   open-ended.
 - Do not hide recoverable failures in logs, `nil`, default values, or comments.
 - Do not over-functionalize error handling when a narrow `do`/`catch` is clearer.
