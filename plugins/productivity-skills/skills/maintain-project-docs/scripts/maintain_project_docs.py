@@ -9,7 +9,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
@@ -141,10 +141,10 @@ def build_child_command(args: argparse.Namespace, workflow: DocumentWorkflow, pr
     return command
 
 
-def run_child(args: argparse.Namespace, workflow: DocumentWorkflow, project_root: Path) -> Dict[str, object]:
+def run_child(args: argparse.Namespace, workflow: DocumentWorkflow, project_root: Path) -> Dict[str, Any]:
     command = build_child_command(args, workflow, project_root)
     proc = subprocess.run(command, cwd=project_root, capture_output=True, text=True, check=False)
-    child: Dict[str, object] = {
+    child: Dict[str, Any] = {
         "key": workflow.key,
         "label": workflow.label,
         "path": str(project_root / workflow.filename),
@@ -177,7 +177,7 @@ def heading_present(text: str, heading: str) -> bool:
     return re.search(pattern, text) is not None
 
 
-def responsibility_issue(file: Path, issue_id: str, message: str, destination: str) -> Dict[str, object]:
+def responsibility_issue(file: Path, issue_id: str, message: str, destination: str) -> Dict[str, Any]:
     return {
         "issue_id": issue_id,
         "severity": "warning",
@@ -187,9 +187,9 @@ def responsibility_issue(file: Path, issue_id: str, message: str, destination: s
     }
 
 
-def audit_responsibility_boundaries(project_root: Path, selected: Sequence[DocumentWorkflow]) -> List[Dict[str, object]]:
+def audit_responsibility_boundaries(project_root: Path, selected: Sequence[DocumentWorkflow]) -> List[Dict[str, Any]]:
     selected_keys = {workflow.key for workflow in selected}
-    issues: List[Dict[str, object]] = []
+    issues: List[Dict[str, Any]] = []
 
     def maybe_read(key: str, filename: str) -> Tuple[Path, str]:
         path = project_root / filename
@@ -264,7 +264,7 @@ def audit_responsibility_boundaries(project_root: Path, selected: Sequence[Docum
     return issues
 
 
-def child_issue_count(child: Dict[str, object]) -> int:
+def child_issue_count(child: Dict[str, Any]) -> int:
     report = child.get("report")
     if not isinstance(report, dict):
         return len(child.get("errors", []))
@@ -273,7 +273,7 @@ def child_issue_count(child: Dict[str, object]) -> int:
     )
 
 
-def child_fixes(child: Dict[str, object]) -> List[Dict[str, object]]:
+def child_fixes(child: Dict[str, Any]) -> List[Dict[str, Any]]:
     report = child.get("report")
     if not isinstance(report, dict):
         return []
@@ -281,7 +281,7 @@ def child_fixes(child: Dict[str, object]) -> List[Dict[str, object]]:
     return fixes if isinstance(fixes, list) else []
 
 
-def child_post_fix_status(child: Dict[str, object]) -> List[Dict[str, object]]:
+def child_post_fix_status(child: Dict[str, Any]) -> List[Dict[str, Any]]:
     report = child.get("report")
     if not isinstance(report, dict):
         return []
@@ -289,7 +289,7 @@ def child_post_fix_status(child: Dict[str, object]) -> List[Dict[str, object]]:
     return post_fix if isinstance(post_fix, list) else []
 
 
-def markdown_report(report: Dict[str, object]) -> str:
+def markdown_report(report: Dict[str, Any]) -> str:
     lines: List[str] = [
         "# Project Docs Maintenance Report",
         "",
@@ -332,16 +332,16 @@ def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
-def unresolved_issues(report: Dict[str, object]) -> bool:
+def unresolved_issues(report: Dict[str, Any]) -> bool:
     return bool(report["responsibility_issues"] or report["errors"] or report["post_fix_status"]) or any(
         child_issue_count(child) for child in report["document_reports"]
     )
 
 
-def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
+def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
     project_root = Path(args.project_root).expanduser().resolve()
     selected, selection_errors = select_workflows(args.include, args.skip)
-    report: Dict[str, object] = {
+    report: Dict[str, Any] = {
         "run_context": {
             "project_root": str(project_root),
             "run_mode": args.run_mode,

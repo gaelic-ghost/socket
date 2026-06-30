@@ -16,7 +16,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import yaml
 
@@ -55,7 +55,7 @@ class Issue:
     auto_fixable: bool
     fixed: bool = False
 
-    def to_dict(self) -> Dict[str, object]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "issue_id": self.issue_id,
             "category": self.category,
@@ -209,13 +209,13 @@ def is_skills_or_plugin_repo(project_root: Path) -> bool:
     return False
 
 
-def read_yaml(path: Path) -> Dict[str, object]:
+def read_yaml(path: Path) -> Dict[str, Any]:
     data = yaml.safe_load(read_text(path))
     return data if isinstance(data, dict) else {}
 
 
-def deep_merge(base: Dict[str, object], override: Dict[str, object]) -> Dict[str, object]:
-    merged: Dict[str, object] = dict(base)
+def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = dict(base)
     for key, value in override.items():
         if isinstance(value, dict) and isinstance(merged.get(key), dict):
             merged[key] = deep_merge(merged[key], value)  # type: ignore[arg-type]
@@ -224,7 +224,7 @@ def deep_merge(base: Dict[str, object], override: Dict[str, object]) -> Dict[str
     return merged
 
 
-def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str, object]:
+def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str, Any]:
     default_path = Path(__file__).resolve().parents[1] / "config" / "readme-customization.template.yaml"
     default_config = read_yaml(default_path)
     loaded_path = default_path
@@ -251,22 +251,22 @@ def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str,
     return merged
 
 
-def config_settings(config: Dict[str, object]) -> Dict[str, object]:
+def config_settings(config: Dict[str, Any]) -> Dict[str, Any]:
     settings = config.get("settings", {})
     return settings if isinstance(settings, dict) else {}
 
 
-def required_sections(settings: Dict[str, object]) -> List[str]:
+def required_sections(settings: Dict[str, Any]) -> List[str]:
     sections = settings.get("requiredSections", [])
     return [str(item) for item in sections] if isinstance(sections, list) else []
 
 
-def canonical_order(settings: Dict[str, object]) -> List[str]:
+def canonical_order(settings: Dict[str, Any]) -> List[str]:
     order = settings.get("sectionOrder", [])
     return [str(item) for item in order] if isinstance(order, list) else []
 
 
-def required_subsections(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def required_subsections(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("requiredSubsections", {})
     if not isinstance(raw, dict):
         return {}
@@ -277,7 +277,7 @@ def required_subsections(settings: Dict[str, object]) -> Dict[str, List[str]]:
     return normalized
 
 
-def section_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def section_aliases(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("sectionAliases", {})
     if not isinstance(raw, dict):
         return {}
@@ -288,14 +288,14 @@ def section_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
     return normalized
 
 
-def section_templates(settings: Dict[str, object]) -> Dict[str, str]:
+def section_templates(settings: Dict[str, Any]) -> Dict[str, str]:
     raw = settings.get("sectionTemplates", {})
     if not isinstance(raw, dict):
         return {}
     return {str(key): str(value).strip() for key, value in raw.items()}
 
 
-def subsection_templates(settings: Dict[str, object]) -> Dict[str, str]:
+def subsection_templates(settings: Dict[str, Any]) -> Dict[str, str]:
     raw = settings.get("subsectionTemplates", {})
     if not isinstance(raw, dict):
         return {}
@@ -332,7 +332,7 @@ def contains_placeholder_content(heading: str, body: str) -> bool:
     return any(pattern.search("\n".join(bodies_to_check)) for pattern in PLACEHOLDER_PATTERNS)
 
 
-def alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
+def alias_lookup(settings: Dict[str, Any]) -> Dict[str, str]:
     aliases = section_aliases(settings)
     reverse: Dict[str, str] = {}
     for canonical, names in aliases.items():
@@ -344,7 +344,7 @@ def alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
 def validate_schema(
     readme_path: Path,
     readme_text: str,
-    config: Dict[str, object],
+    config: Dict[str, Any],
 ) -> Tuple[List[Issue], List[Issue], List[Tuple[str, str]]]:
     settings = config_settings(config)
     required = required_sections(settings)
@@ -500,10 +500,10 @@ def validate_schema(
             )
 
     for heading in required:
-        body = lookup.get(heading)
-        if not body:
+        required_body = lookup.get(heading)
+        if not required_body:
             continue
-        if contains_placeholder_content(heading, body):
+        if contains_placeholder_content(heading, required_body):
             content_issues.append(
                 Issue(
                     issue_id=f"placeholder-content-{slugify_heading(heading)}",
@@ -515,7 +515,7 @@ def validate_schema(
                     auto_fixable=False,
                 )
             )
-        if not body.strip():
+        if not required_body.strip():
             schema_issues.append(
                 Issue(
                     issue_id=f"empty-section-{slugify_heading(heading)}",
@@ -528,7 +528,7 @@ def validate_schema(
                 )
             )
 
-        if heading == "Repo Structure" and "```text" not in body:
+        if heading == "Repo Structure" and "```text" not in required_body:
             content_issues.append(
                 Issue(
                     issue_id="repo-structure-missing-tree-outline",
@@ -542,7 +542,7 @@ def validate_schema(
             )
         if heading == "Development" and not required_subsections(settings).get("Development"):
             procedure_headings = [
-                subsection for subsection in collect_subsection_headings(body) if subsection in CONTRIBUTOR_PROCEDURE_HEADINGS
+                subsection for subsection in collect_subsection_headings(required_body) if subsection in CONTRIBUTOR_PROCEDURE_HEADINGS
             ]
             if procedure_headings:
                 content_issues.append(
@@ -586,7 +586,7 @@ def split_subsections(body: str) -> Tuple[str, List[Tuple[str, str]]]:
 def render_section_body(
     heading: str,
     existing_body: str,
-    settings: Dict[str, object],
+    settings: Dict[str, Any],
 ) -> str:
     required_children = required_subsections(settings).get(heading, [])
     section_template_map = section_templates(settings)
@@ -622,7 +622,7 @@ def render_section_body(
     return rendered or section_template_map.get(heading, "")
 
 
-def apply_fixes(project_root: Path, readme_path: Path, readme_text: str, config: Dict[str, object]) -> Tuple[str, List[Dict[str, str]]]:
+def apply_fixes(project_root: Path, readme_path: Path, readme_text: str, config: Dict[str, Any]) -> Tuple[str, List[Dict[str, str]]]:
     if not readme_text.strip():
         bootstrap = render_template_bootstrap(project_root)
         write_text(readme_path, bootstrap)
@@ -707,7 +707,7 @@ def apply_fixes(project_root: Path, readme_path: Path, readme_text: str, config:
     return updated, actions
 
 
-def markdown_report(report: Dict[str, object]) -> str:
+def markdown_report(report: Dict[str, Any]) -> str:
     lines = [
         "# Maintain Project README Report",
         "",
@@ -774,14 +774,14 @@ def markdown_report(report: Dict[str, object]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
-def unresolved_issues(report: Dict[str, object]) -> List[Dict[str, object]]:
-    items: List[Dict[str, object]] = []
+def unresolved_issues(report: Dict[str, Any]) -> List[Dict[str, Any]]:
+    items: List[Dict[str, Any]] = []
     for key in ["schema_violations", "content_quality_issues", "post_fix_status"]:
         items.extend(report[key])
     return items
 
 
-def schema_contract(config: Dict[str, object]) -> Dict[str, object]:
+def schema_contract(config: Dict[str, Any]) -> Dict[str, Any]:
     settings = config_settings(config)
     return {
         "required_sections": required_sections(settings),
@@ -790,11 +790,11 @@ def schema_contract(config: Dict[str, object]) -> Dict[str, object]:
     }
 
 
-def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
+def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
     project_root = Path(args.project_root).expanduser().resolve()
     readme_path = Path(args.readme_path).expanduser().resolve() if args.readme_path else project_root / "README.md"
 
-    report: Dict[str, object] = {
+    report: Dict[str, Any] = {
         "run_context": {
             "project_root": str(project_root),
             "readme_path": str(readme_path),

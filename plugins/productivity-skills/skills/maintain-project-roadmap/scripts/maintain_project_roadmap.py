@@ -17,7 +17,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import yaml
 
@@ -85,7 +85,7 @@ class Finding:
     file: str
     auto_fixable: bool
 
-    def to_dict(self) -> Dict[str, object]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "finding_id": self.finding_id,
             "category": self.category,
@@ -124,7 +124,7 @@ class SmallTicketCandidate:
             return f"{self.file}#L{self.line}"
         return f"{self.source}:{self.kind}:{self.title}"
 
-    def to_dict(self) -> Dict[str, object]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "source": self.source,
             "kind": self.kind,
@@ -217,13 +217,13 @@ def normalize_whitespace(text: str) -> str:
     return text.strip() + "\n"
 
 
-def read_yaml(path: Path) -> Dict[str, object]:
+def read_yaml(path: Path) -> Dict[str, Any]:
     data = yaml.safe_load(read_text(path))
     return data if isinstance(data, dict) else {}
 
 
-def deep_merge(base: Dict[str, object], override: Dict[str, object]) -> Dict[str, object]:
-    merged: Dict[str, object] = dict(base)
+def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = dict(base)
     for key, value in override.items():
         if isinstance(value, dict) and isinstance(merged.get(key), dict):
             merged[key] = deep_merge(merged[key], value)  # type: ignore[arg-type]
@@ -232,7 +232,7 @@ def deep_merge(base: Dict[str, object], override: Dict[str, object]) -> Dict[str
     return merged
 
 
-def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str, object]:
+def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str, Any]:
     default_path = Path(__file__).resolve().parents[1] / "config" / "roadmap-customization.template.yaml"
     default_config = read_yaml(default_path)
     loaded_path = default_path
@@ -259,64 +259,64 @@ def load_config(project_root: Path, config_override: Optional[str]) -> Dict[str,
     return merged
 
 
-def config_settings(config: Dict[str, object]) -> Dict[str, object]:
+def config_settings(config: Dict[str, Any]) -> Dict[str, Any]:
     settings = config.get("settings", {})
     return settings if isinstance(settings, dict) else {}
 
 
-def required_sections(settings: Dict[str, object]) -> List[str]:
+def required_sections(settings: Dict[str, Any]) -> List[str]:
     value = settings.get("requiredSections", [])
     return [str(item) for item in value] if isinstance(value, list) else []
 
 
-def section_order(settings: Dict[str, object]) -> List[str]:
+def section_order(settings: Dict[str, Any]) -> List[str]:
     value = settings.get("sectionOrder", [])
     return [str(item) for item in value] if isinstance(value, list) else []
 
 
-def required_milestone_subsections(settings: Dict[str, object]) -> List[str]:
+def required_milestone_subsections(settings: Dict[str, Any]) -> List[str]:
     value = settings.get("requiredMilestoneSubsections", [])
     return [str(item) for item in value] if isinstance(value, list) else []
 
 
-def status_values(settings: Dict[str, object]) -> List[str]:
+def status_values(settings: Dict[str, Any]) -> List[str]:
     value = settings.get("statusValues", [])
     return [str(item) for item in value] if isinstance(value, list) else []
 
 
-def section_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def section_aliases(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("sectionAliases", {})
     if not isinstance(raw, dict):
         return {}
     return {str(key): [str(item) for item in value] for key, value in raw.items() if isinstance(value, list)}
 
 
-def subsection_aliases(settings: Dict[str, object]) -> Dict[str, List[str]]:
+def subsection_aliases(settings: Dict[str, Any]) -> Dict[str, List[str]]:
     raw = settings.get("milestoneSubsectionAliases", {})
     if not isinstance(raw, dict):
         return {}
     return {str(key): [str(item) for item in value] for key, value in raw.items() if isinstance(value, list)}
 
 
-def section_templates(settings: Dict[str, object]) -> Dict[str, str]:
+def section_templates(settings: Dict[str, Any]) -> Dict[str, str]:
     raw = settings.get("sectionTemplates", {})
     if not isinstance(raw, dict):
         return {}
     return {str(key): str(value).strip() for key, value in raw.items()}
 
 
-def milestone_subsection_templates(settings: Dict[str, object]) -> Dict[str, str]:
+def milestone_subsection_templates(settings: Dict[str, Any]) -> Dict[str, str]:
     raw = settings.get("milestoneSubsectionTemplates", {})
     if not isinstance(raw, dict):
         return {}
     return {str(key): str(value).strip() for key, value in raw.items()}
 
 
-def allow_additional_sections(settings: Dict[str, object]) -> bool:
+def allow_additional_sections(settings: Dict[str, Any]) -> bool:
     return bool(settings.get("allowAdditionalSections", True))
 
 
-def preserve_preamble(settings: Dict[str, object]) -> bool:
+def preserve_preamble(settings: Dict[str, Any]) -> bool:
     return bool(settings.get("preservePreamble", True))
 
 
@@ -447,7 +447,7 @@ def parse_progress(body: str) -> Dict[int, Tuple[str, str]]:
     return progress
 
 
-def alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
+def alias_lookup(settings: Dict[str, Any]) -> Dict[str, str]:
     aliases = section_aliases(settings)
     reverse: Dict[str, str] = {}
     for canonical, names in aliases.items():
@@ -456,7 +456,7 @@ def alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
     return reverse
 
 
-def subsection_alias_lookup(settings: Dict[str, object]) -> Dict[str, str]:
+def subsection_alias_lookup(settings: Dict[str, Any]) -> Dict[str, str]:
     aliases = subsection_aliases(settings)
     reverse: Dict[str, str] = {}
     for canonical, names in aliases.items():
@@ -609,7 +609,7 @@ def parse_legacy_milestones(text: str) -> List[Tuple[int, str, str]]:
     return sorted(rows, key=lambda item: item[0])
 
 
-def build_migrated_from_legacy(text: str, settings: Dict[str, object]) -> str:
+def build_migrated_from_legacy(text: str, settings: Dict[str, Any]) -> str:
     rows = parse_legacy_milestones(text)
     if not rows:
         rows = [(0, "Foundation", "Planned")]
@@ -668,7 +668,7 @@ def normalize_milestone_subsection_body(body: str, subsection_name: str) -> str:
     return "\n".join(normalized_lines).strip()
 
 
-def render_milestone_body(existing_body: str, settings: Dict[str, object]) -> str:
+def render_milestone_body(existing_body: str, settings: Dict[str, Any]) -> str:
     required_children = required_milestone_subsections(settings)
     template_map = milestone_subsection_templates(settings)
     alias_map = subsection_alias_lookup(settings)
@@ -925,7 +925,7 @@ def apply_roadmap_ticket_request(
         raise ValueError(f"ROADMAP is missing required section '## {target_name}'.")
 
     updated_sections = []
-    action_name: Optional[str] = None
+    milestone_action_name: Optional[str] = None
     for heading, body in sections:
         parsed = parse_milestone_heading(heading)
         if not parsed or parsed[0] != milestone_number:
@@ -940,7 +940,7 @@ def apply_roadmap_ticket_request(
                 updated_subsections.append((subheading, subbody))
                 continue
             found_tickets = True
-            updated_body, action_name = mutate_checklist_body(
+            updated_body, milestone_action_name = mutate_checklist_body(
                 subbody,
                 ticket_text=ticket_text,
                 ticket_state=ticket_state,
@@ -957,9 +957,9 @@ def apply_roadmap_ticket_request(
         for subheading, subbody in updated_subsections:
             rendered_body += f"\n\n### {subheading}\n\n{subbody.strip()}"
         updated_sections.append((heading, rendered_body.strip()))
-    if action_name:
+    if milestone_action_name:
         return render_sections(preamble, updated_sections), ApplyAction(
-            action=action_name,
+            action=milestone_action_name,
             reason=(
                 f"Updated Milestone {milestone_number} Tickets with roadmap ticket: "
                 f"{normalize_ticket_text(ticket_text)}."
@@ -974,7 +974,7 @@ def validate_schema(
     project_root: Path,
     roadmap_path: Path,
     roadmap_text: str,
-    config: Dict[str, object],
+    config: Dict[str, Any],
 ) -> List[Finding]:
     settings = config_settings(config)
     required = required_sections(settings)
@@ -1288,7 +1288,7 @@ def validate_schema(
     return findings
 
 
-def apply_fixes(project_root: Path, roadmap_path: Path, roadmap_text: str, config: Dict[str, object]) -> Tuple[str, List[ApplyAction]]:
+def apply_fixes(project_root: Path, roadmap_path: Path, roadmap_text: str, config: Dict[str, Any]) -> Tuple[str, List[ApplyAction]]:
     if not roadmap_text.strip():
         bootstrap = render_template_bootstrap()
         write_text(roadmap_path, bootstrap)
@@ -1414,7 +1414,7 @@ def apply_fixes(project_root: Path, roadmap_path: Path, roadmap_text: str, confi
     return updated, actions
 
 
-def markdown_report(report: Dict[str, object]) -> str:
+def markdown_report(report: Dict[str, Any]) -> str:
     lines = [
         "# Maintain Project Roadmap Report",
         "",
@@ -1479,11 +1479,11 @@ def markdown_report(report: Dict[str, object]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
-def unresolved_issues(report: Dict[str, object]) -> List[Dict[str, object]]:
+def unresolved_issues(report: Dict[str, Any]) -> List[Dict[str, Any]]:
     return list(report["findings"])
 
 
-def schema_contract(config: Dict[str, object]) -> Dict[str, object]:
+def schema_contract(config: Dict[str, Any]) -> Dict[str, Any]:
     settings = config_settings(config)
     return {
         "required_sections": required_sections(settings),
@@ -1493,11 +1493,11 @@ def schema_contract(config: Dict[str, object]) -> Dict[str, object]:
     }
 
 
-def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, object], str]:
+def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
     project_root = Path(args.project_root).expanduser().resolve()
     roadmap_path = Path(args.roadmap_path).expanduser().resolve() if args.roadmap_path else (project_root / "ROADMAP.md")
 
-    report: Dict[str, object] = {
+    report: Dict[str, Any] = {
         "run_context": {
             "project_root": str(project_root),
             "roadmap_path": str(roadmap_path),
