@@ -21,7 +21,7 @@ This file is the Game Dev Skills child-repo override for work done from `socket`
 ## Validation
 
 ```bash
-python3 /Users/galew/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/<skill-name>
+uv run python "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" skills/<skill-name>
 ```
 
 Run the root Socket metadata validator after plugin metadata, marketplace wiring, or root docs change:

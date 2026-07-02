@@ -90,6 +90,7 @@ Guide Core Haptics and game-controller haptic feedback design, capability checks
 - [x] Add first-slice Apple game-development workflow skills.
 - [x] Wire `game-dev-skills` into the root Socket marketplace as installable.
 - [x] Update README and ROADMAP so users understand the new plugin surface.
+- [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ## Open Questions

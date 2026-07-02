@@ -54,7 +54,7 @@
 - Milestone 17: Cross-agent skill and plugin portability - Planned
 - Milestone 18: Swift Lang shared language plugin - Completed
 - Milestone 19: Project audit skills plugin - Planned
-- Milestone 20: Game Dev Skills plugin - In Progress
+- Milestone 20: Game Dev Skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -595,7 +595,7 @@ Planned
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
@@ -615,6 +615,7 @@ In Progress
 - [x] Add `game-dev-skills:core-haptics-game-feedback-workflow`.
 - [x] Wire `game-dev-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface.
+- [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
@@ -623,6 +624,8 @@ In Progress
 - [x] The first skill slice can route and guide Apple game work across SpriteKit, SceneKit, Game Controller input, Core Haptics feedback, and Apple Dev Skills handoffs.
 - [x] The plugin boundary is clear enough that reverse-engineering Unity artifacts stay with `reverse-engineering-skills`, generic Apple mechanics stay with `apple-dev-skills`, and game-specific authoring/profiling work stays here.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported game-dev skill surface.
+
+Completed Milestone 20 by adding the `game-dev-skills` child plugin, shipping the first Apple-platform game-development workflow slice, wiring the Socket marketplace entry, documenting the plugin boundary, and validating skill metadata, plugin metadata, and root marketplace wiring.
 
 ## Small Tickets
 
