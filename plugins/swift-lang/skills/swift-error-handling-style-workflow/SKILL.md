@@ -154,6 +154,10 @@ helpers, variadic generics or parameter packs, and macros, but do not invent a
 local helper framework inside one app or skill unless the repeated call sites
 already exist and the package design has been discussed.
 
+Use the root Socket maintainer plan at
+`docs/maintainers/errorhandles-package-plan.md` when deciding whether that helper
+belongs in Socket or in a separate Swift package repository.
+
 ## Example Shapes
 
 Straight-line fallible work:
