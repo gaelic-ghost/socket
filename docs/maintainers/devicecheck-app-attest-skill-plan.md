@@ -4,7 +4,7 @@ This plan captures a candidate Apple Dev Skills expansion for the DeviceCheck fr
 
 ## Status
 
-Planned. The recommended first implementation is one focused workflow skill, `devicecheck-app-attest-workflow`, rather than separate `device-identification` and `app-attest` skills.
+Implemented. The first implementation shipped one focused workflow skill, `devicecheck-app-attest-workflow`, rather than separate `device-identification` and `app-attest` skills.
 
 ## Ownership
 
@@ -67,26 +67,26 @@ Avoid scripts in the first slice unless a concrete backend stack needs one. If a
 ## Implementation Slices
 
 1. Planning and docs evidence:
-   - Add this plan and roadmap milestone.
-   - Keep the plan grounded in Xcode and Dash documentation lookups.
-   - Decide the one-skill shape unless implementation evidence shows the workflow becomes too large.
+   - [x] Add this plan and roadmap milestone.
+   - [x] Keep the plan grounded in Xcode and Dash documentation lookups.
+   - [x] Decide the one-skill shape unless implementation evidence shows the workflow becomes too large.
 2. Skill scaffold:
-   - Initialize `devicecheck-app-attest-workflow` under `plugins/apple-dev-skills/skills/`.
-   - Add references and generated `agents/openai.yaml`.
-   - Keep `SKILL.md` concise and move detailed validation checklists into references.
+   - [x] Initialize `devicecheck-app-attest-workflow` under `plugins/apple-dev-skills/skills/`.
+   - [x] Add references and generated `agents/openai.yaml`.
+   - [x] Keep `SKILL.md` concise and move detailed validation checklists into references.
 3. Metadata and inventory:
-   - Update `plugins/apple-dev-skills/.codex-plugin/plugin.json`.
-   - Update `plugins/apple-dev-skills/README.md` active skill inventory and prompt list.
-   - Update `plugins/apple-dev-skills/ROADMAP.md` status and ticket completion.
+   - [x] Update `plugins/apple-dev-skills/.codex-plugin/plugin.json`.
+   - [x] Update `plugins/apple-dev-skills/README.md` active skill inventory and prompt list.
+   - [x] Update `plugins/apple-dev-skills/ROADMAP.md` status and ticket completion.
 4. Tests and validation:
-   - Add targeted tests for frontmatter, routing boundaries, docs-gate language, server-handoff language, and metadata inventory.
-   - Run `bash .github/scripts/validate_repo_docs.sh` from `plugins/apple-dev-skills`.
-   - Run `uv run pytest` from `plugins/apple-dev-skills` when tests change.
-   - Run `uv run scripts/validate_socket_metadata.py` from the Socket root after metadata changes.
+   - [x] Add targeted tests for frontmatter, routing boundaries, docs-gate language, server-handoff language, and metadata inventory.
+   - [x] Run `bash .github/scripts/validate_repo_docs.sh` from `plugins/apple-dev-skills`.
+   - [x] Run `uv run pytest` from `plugins/apple-dev-skills` when tests change.
+   - [x] Run `uv run scripts/validate_socket_metadata.py` from the Socket root after metadata changes.
 
 ## Open Questions
 
-- Should the first implementation name the skill `devicecheck-app-attest-workflow`, or should it use the broader `apple-app-integrity-workflow` name to leave room for future fraud-risk signals?
+- The first implementation uses `devicecheck-app-attest-workflow`; a broader `apple-app-integrity-workflow` can still be considered later if another Apple integrity signal needs a shared owner.
 - Should server-validation guidance stay purely checklist-based at first, or should the initial skill include stack-specific examples for Swift server apps?
 - Should DeviceCheck two-bit state and App Attest stay permanently in one skill, or should DeviceCheck split out later if two-bit state becomes common outside App Attest integrity flows?
 - Should the first implementation include migration guidance for apps that already use custom device identifiers, receipt validation, or server-side abuse flags?

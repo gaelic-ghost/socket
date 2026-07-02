@@ -56,6 +56,7 @@ sync_one \
   "$ROOT_DIR/skills/format-swift-sources/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/explore-apple-swift-docs/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/safari-extension-control-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/devicecheck-app-attest-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftui-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/appkit-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/sync-xcode-project-guidance/references/snippets/apple-xcode-project-core.md" \
