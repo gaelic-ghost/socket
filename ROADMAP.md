@@ -538,6 +538,7 @@ Completed
 - [x] Create `plugins/swift-lang/` with `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
 - [x] Add `swift-lang:swift-api-style-workflow` for API naming, call-site ergonomics, access control, typed result shapes, consistency across sibling APIs, and human-friendly errors.
 - [x] Add `swift-lang:swift-functional-pipelines-workflow` for functional data modeling, `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, chained transforms, and monadic composition boundaries.
+- [x] Add `swift-lang:swift-error-handling-style-workflow` for language-level failure-shape decisions, typed throws guidance, domain errors, Cocoa bridging, and concise diagnostics.
 - [x] Add `swift-lang:swift-format-style-workflow` for SwiftFormat, SwiftLint, formatter/linter responsibility, style defaults, Git hooks, and CI guidance.
 - [x] Add `swift-lang:swift-source-organization-workflow` for file splitting, feature/layer layout, extension-file extraction, `// MARK:` discipline, file headers, source cleanup ledgers, and stricter split thresholds.
 - [x] Add `swift-lang:swift-modernization-cleanup-workflow` for complete modernization passes that sequence formatting, source inventory, file splitting, API cleanup, pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
@@ -553,7 +554,7 @@ Completed
 - [x] The functional Swift style policy is explicit enough to guide implementation, review comments, and modernization passes.
 - [x] Apple Dev and Server-Side Swift guidance can route shared Swift cleanup work to `swift-lang` while preserving standalone Apple-only behavior for the first migration release.
 
-Implemented Milestone 18 by adding the `swift-lang` child plugin with five shared Swift language skills, wiring it into the Socket marketplace, documenting the Swift language ownership split, preserving Apple Dev's standalone formatting and structure skills, and validating the plugin, skill metadata, root marketplace, and Apple Dev docs.
+Implemented Milestone 18 by adding the `swift-lang` child plugin with shared Swift language skills, wiring it into the Socket marketplace, documenting the Swift language ownership split, preserving Apple Dev's standalone formatting and structure skills, and validating the plugin, skill metadata, root marketplace, and Apple Dev docs.
 
 ## Milestone 19: Project audit skills plugin
 
@@ -602,6 +603,7 @@ Planned
 - [x] GitHub #81: Strengthen `maintain-project-repo` release, publish, tag, protected-main, cleanup, and branch-accounting triggers while routing settings-only requests to `maintain-github-repository` ([#81](https://github.com/gaelic-ghost/socket/issues/81)).
 - [x] Migrated the remaining root `TODO.md` backlog into canonical `ROADMAP.md` milestones, Small Tickets, or Backlog Candidates, then removed `TODO.md` in a reviewed documentation pass.
 - [ ] Investigate `uv audit` as a Socket validation and release-evidence input. Decide whether the first adoption belongs in root validation, Python-backed child plugin validation, release evidence capture, or reusable Python project-maintenance guidance, and test the `--locked`, `--frozen`, JSON output, ignore, and OSV service options before making it a required gate.
+- [ ] Explore an `ErrorHandles` Swift helper package for consistent, concise error construction, diagnostic context, typed wrapping, and recovery helpers. Use [`docs/maintainers/errorhandles-package-plan.md`](./docs/maintainers/errorhandles-package-plan.md) to keep the Swift package source outside Socket while keeping skills and adoption guidance in `plugins/swift-lang`.
 - [ ] Generalize Codex GUI local environment templates across stack plugins. Start from the root Socket `uv sync --dev` environment, preserve customized `.codex/environments/*.toml` files, keep setup scripts repo-relative, and let each stack plugin own templates for its common project shapes instead of installing global tool dependencies.
 - [ ] Investigate guidance consolidation opportunities that reduce repeated setup, routing, validation, and handoff text across skills while preserving the owner boundaries needed for accurate tool use and lower token load.
 - [ ] Investigate further standardization and automation for shared skill scaffolding, evidence capture, validation prompts, and generated references so common workflow knowledge is maintained once and reused with lower token load.

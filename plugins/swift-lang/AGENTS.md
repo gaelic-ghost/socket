@@ -7,7 +7,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 - `swift-lang` is a monorepo-owned Socket child and the canonical source of truth for shared Swift language workflow skills.
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
-- Treat `swift-lang` as the shared language layer for Swift API style, formatting, source organization, modernization cleanup, and functional data-flow guidance.
+- Treat `swift-lang` as the shared language layer for Swift API style, error handling, formatting, source organization, modernization cleanup, and functional data-flow guidance.
 - Treat `apple-dev-skills` as the Apple-platform specialist layer. Do not put Xcode project mutation, SwiftUI, AppKit, UIKit, AVFoundation, AVFAudio, Core Media, Core Audio, DocC, Safari, SPI, signing, simulator, or device execution guidance here unless it is only a handoff.
 - Treat `server-side-swift` as the server-side specialist layer. Do not put Vapor, Hummingbird, SwiftNIO service hosting, persistence, Docker, Fly.io, observability, auth, or deployment guidance here unless it is only a handoff.
 
@@ -19,6 +19,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 - Keep Swift examples Swifty, ergonomic, compact, and functional when that improves clarity.
 - Prefer explicit inputs and outputs, value types, immutable local bindings, composable transforms, and straight data flow over hidden mutation or broad manager types.
 - Keep data modeling and pipelines monadic where practical: model stages as values flowing through `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, or small domain pipeline types. Do not force this style when it hides effects, fights Swift concurrency, or makes the code harder to test.
+- Prefer typed throws for Swift-owned fallible operations when the error type can be named clearly. Use untyped `throws` when forwarding broad framework, filesystem, networking, database, plugin, or other open-ended failures without adding a useful typed boundary. Use `Result` when failure must be stored or composed as a value, and use `Optional` only for ordinary absence that is not diagnostic.
 - Prefer `map`, `flatMap`, `compactMap`, `filter`, `reduce`, `zip`, `forEach`, key paths, trailing closures, and fluent chains when the resulting code reads left-to-right as a real data flow.
 - Split long chains into named intermediate values when debugging, error reporting, or readability would improve.
 - Prefer small files and single-purpose support types. Split Swift files earlier than broad default style guides when a real concern boundary exists.
