@@ -44,7 +44,7 @@ Local probe results:
 ## Non-Goals
 
 - Do not build a separate custom Xcode installer before the official UI path is exhausted.
-- Do not change `xcode-select` globally.
+- Do not change `xcode-select` globally unless the task explicitly requires a system-wide default command-line tools switch. Prefer command-scoped `DEVELOPER_DIR` for beta checks.
 - Do not rewrite Socket as an aggregate non-Codex plugin bundle.
 - Do not claim hook execution, MCP server execution, app config, or custom-agent behavior works in Xcode until runtime probes verify those surfaces.
 - Do not treat Xcode-generated files as Socket source of truth.

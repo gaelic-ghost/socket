@@ -1,6 +1,6 @@
-# DeviceCheck and App Attest Skill Plan
+# DeviceCheck and App Attest Skill Record
 
-This plan captures a candidate Apple Dev Skills expansion for the DeviceCheck framework, including per-device DeviceCheck state and App Attest app-instance validation.
+This record captures the shipped Apple Dev Skills expansion for the DeviceCheck framework, including per-device DeviceCheck state and App Attest app-instance validation.
 
 ## Status
 
@@ -31,13 +31,13 @@ App Attest has important rollout and environment constraints:
 - App Attest does not prove that a device operating system is uncompromised; it supplies one signal for a broader fraud-risk decision.
 - On macOS, App Attest verification has macOS-specific signing identifier and key access-policy checks.
 
-## Proposed Skill
+## Implemented Skill
 
 ### `devicecheck-app-attest-workflow`
 
 Use for DeviceCheck and App Attest decisions in Apple-platform apps, including `DCDevice`, per-device two-bit state, `DCAppAttestService`, App Attest key lifecycle, server challenge design, attestation and assertion request shapes, app IDs, entitlements, sandbox versus production environments, rollout/rate-limit planning, and client/server handoffs.
 
-This skill should help an agent:
+This skill helps an agent:
 
 - classify whether the request is DeviceCheck two-bit device state, App Attest app-instance integrity, or a broader auth/session/sync concern
 - apply the Apple docs gate before making current framework, entitlement, platform, or server-endpoint claims
@@ -49,11 +49,11 @@ This skill should help an agent:
 - route generated client APIs to `swift-openapi-client-workflow`
 - route backend validation implementation to the relevant server-side Swift or API-contract workflow when available
 
-## Skill Shape
+## Shipped Skill Shape
 
-The first version should be guidance and routing, not a deterministic validator. App Attest server verification includes CBOR, COSE, ASN.1, certificate-chain, receipt, environment, signing-category, and counter checks, which are too stack-specific for a tiny first slice.
+The shipped first version is guidance and routing, not a deterministic validator. App Attest server verification includes CBOR, COSE, ASN.1, certificate-chain, receipt, environment, signing-category, and counter checks, which are too stack-specific for a tiny first slice.
 
-Recommended first payload:
+Shipped first payload:
 
 - `SKILL.md` with the core workflow, docs gate, classification, handoffs, and guardrails.
 - `agents/openai.yaml` metadata generated from the skill body.
@@ -84,7 +84,7 @@ Avoid scripts in the first slice unless a concrete backend stack needs one. If a
    - [x] Run `uv run pytest` from `plugins/apple-dev-skills` when tests change.
    - [x] Run `uv run scripts/validate_socket_metadata.py` from the Socket root after metadata changes.
 
-## Open Questions
+## Future Questions
 
 - The first implementation uses `devicecheck-app-attest-workflow`; a broader `apple-app-integrity-workflow` can still be considered later if another Apple integrity signal needs a shared owner.
 - Should server-validation guidance stay purely checklist-based at first, or should the initial skill include stack-specific examples for Swift server apps?
