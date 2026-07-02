@@ -84,6 +84,7 @@ For Hummingbird:
 - keep identity in request context only when middleware and handlers need it per request
 - preserve the app's existing router and middleware composition style
 - avoid copying Vapor-specific `req.auth` patterns into Hummingbird code
+- for `hb`-generated Lambda + API Gateway V2 projects, do not treat an openly reachable endpoint as protected just because it is deployed behind Lambda; use app or device evidence, API Gateway authorizers, signed tokens, or another explicit auth boundary before accepting sensitive requests
 
 For any framework:
 

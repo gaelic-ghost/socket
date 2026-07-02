@@ -71,6 +71,7 @@ Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swif
 4. Keep SwiftPM as the default execution surface after project creation:
    - hand fresh service creation to `bootstrap-hummingbird-service`
    - use the Hummingbird template repository only when current docs, the CLI, or the user explicitly calls for template inspection or fallback
+   - preserve the generated `swift-configuration` setup unless the repository has an intentional replacement
    - build with `swift build`
    - test with `swift test`
    - run locally with the package's documented `swift run` command or with `hb watch` when live rebuild-and-run behavior is the goal
@@ -104,7 +105,7 @@ Before recommending or adding any package:
 
 ## Project Creation Handoff
 
-Fresh Hummingbird services belong to `bootstrap-hummingbird-service`. That bootstrap path starts with the official `hb` command line tool, uses Hummingbird's built-in or generated configuration support, defaults to Fluent ORM with PostgreSQL, creates a Docker Compose PostgreSQL dependency surface, and installs repo-local `AGENTS.md` guidance for the generated service.
+Fresh Hummingbird services belong to `bootstrap-hummingbird-service`. That bootstrap path starts with the official `hb` command line tool, preserves the CLI-selected Server or Lambda shape, uses the generated `swift-configuration` support, defaults long-running Server apps to Fluent ORM with PostgreSQL, creates a Docker Compose PostgreSQL dependency surface when the app has local database needs, and installs repo-local `AGENTS.md` guidance for the generated service.
 
 ```bash
 brew tap hummingbird-project/tap
@@ -112,6 +113,8 @@ brew install hb
 hb init MyService
 cd MyService
 ```
+
+Current `hb` templates ask first whether the app is `Server` or `Lambda`. Lambda apps then select `APIGateway`, `APIGatewayV2`, or `FunctionURL`; OpenAPI remains a feature prompt. In a generated Lambda + OpenAPI Hummingbird project, `hummingbird-lambda` is the deployment adapter and `OpenAPIHummingbird` registers generated `APIProtocol` handlers on the router. Do not rewrite that shape to `swift-openapi-lambda` unless the project intentionally chooses that separate transport.
 
 Use `hb watch` when the user wants the CLI to watch source changes, rebuild the executable, and restart the local service during development after the project exists. Treat `hb watch` as local developer convenience, not as the production run command.
 
@@ -123,6 +126,8 @@ git clone https://github.com/hummingbird-project/template
 ```
 
 When adding Hummingbird to an existing package, edit `Package.swift` through normal SwiftPM dependency rules and follow current Hummingbird docs for package products. Do not copy a template over an existing service unless the user explicitly asks for replacement.
+
+When an existing Hummingbird repository needs its repo-local guidance, local Codex environment file, generated configuration assumptions, Server/Lambda distinction, OpenAPI transport notes, or command baseline refreshed, use `sync-hummingbird-service-guidance` instead of treating it as a fresh bootstrap.
 
 ## Codex GUI Local Environment
 

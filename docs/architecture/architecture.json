@@ -416,6 +416,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
     },
     {
@@ -1859,6 +1863,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:server-side-swift/persistence-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/sync-hummingbird-service-guidance"
     },
     {
       "evidence": [
@@ -3507,6 +3523,18 @@
       "kind": "codex-skill",
       "name": "skill:server-side-swift/persistence-workflow",
       "path": "plugins/server-side-swift/skills/persistence-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/sync-hummingbird-service-guidance",
+      "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
     },
     {
       "dependencies": [],
