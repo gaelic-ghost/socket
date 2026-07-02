@@ -1,0 +1,4 @@
+interface:
+  display_name: "SpriteKit Game Workflow"
+  short_description: "SpriteKit game workflow guidance."
+  default_prompt: "Use $spritekit-game-workflow for SpriteKit scenes, SKScene lifecycle, nodes, physics, actions, SpriteKit resources, GameplayKit handoffs, and Xcode validation routing."

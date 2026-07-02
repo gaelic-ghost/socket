@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Haptics Game Feedback"
+  short_description: "Game haptics feedback guidance."
+  default_prompt: "Use $core-haptics-game-feedback-workflow for Core Haptics, controller haptics, game feedback patterns, audio-haptic design, capability checks, and device-only validation handoffs."

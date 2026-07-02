@@ -1,0 +1,49 @@
+{
+  "name": "game-dev-skills",
+  "version": "7.8.0",
+  "description": "Apple platform game development workflow skills for SpriteKit, SceneKit, controller input, haptics, and game-stack routing.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/game-dev-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "game-development",
+    "apple",
+    "spritekit",
+    "scenekit",
+    "gameplaykit",
+    "game-controller",
+    "core-haptics",
+    "realitykit",
+    "metal",
+    "xcode",
+    "codex",
+    "plugin",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Game Dev Skills",
+    "shortDescription": "Apple game development workflow skills for Codex.",
+    "longDescription": "Guide Codex agents through Apple platform game development decisions and implementation work across SpriteKit, SceneKit, GameplayKit handoffs, Game Controller input, Core Haptics game feedback, RealityKit and Metal routing, assets, profiling, and device-aware validation.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/game-dev-skills",
+    "defaultPrompt": [
+      "Choose the right Apple game stack before we start implementing.",
+      "Build or repair this SpriteKit scene, game loop, physics, or resource flow.",
+      "Build or repair this SceneKit scene, node graph, camera, lighting, or asset flow.",
+      "Wire game controller, keyboard, mouse, or virtual-controller input for this Apple game.",
+      "Design or debug Core Haptics feedback for a game while keeping device validation honest."
+    ],
+    "brandColor": "#28D7FF"
+  }
+}
