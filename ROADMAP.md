@@ -328,6 +328,7 @@ In Progress
 - [ ] Add a dedicated Xcode 27 beta LLDB MCP workflow skill after `xcrun lldb-mcp` startup is validated. Xcode 27 Beta 2 exposes `lldb-mcp`, and Apple Dev Skills now carries an experimental `xcode_lldb` MCP config entry, but local `--help` invocation failed on 2026-06-26 with a missing `lib_CompilerSwiftIDEUtils.dylib` rpath load.
 - [ ] Add `apple-dev-skills:xcode-agent-plugin-workflow` now that the live Xcode 27 beta plug-in import paths are verified through installed Codex state, local folder import, and public Git URL import.
 - [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
+- [x] Document Xcode command-line toolchain selection for stable and beta Xcode installs, including command-scoped `DEVELOPER_DIR`, explicit global `xcode-select --switch`, restore steps, and current system-wide beta app paths.
 - [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
 - [ ] Refresh AppKit, UIKit, and Icon Composer guidance for the Xcode 27 beta changes recorded in the plan.
 
@@ -501,7 +502,7 @@ Planned
 - [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
-- [ ] Evaluate Xcode 27 beta adapters using `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer`, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23.
+- [ ] Evaluate Xcode 27 beta adapters using command-scoped `DEVELOPER_DIR` for the intended system-wide beta app, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23.
 - [ ] Add a Socket-to-Xcode install support assessment that classifies each child plugin across Xcode-launched Codex, Xcode internal plug-ins, and external agents using Xcode MCP.
 - [ ] Add disposable Xcode import fixture generation for skill-only, skill-plus-MCP, and hook-recognition probes.
 - [ ] Capture a public Socket Git URL import matrix from Xcode Beta before claiming user-facing Xcode install support.

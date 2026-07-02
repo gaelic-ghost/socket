@@ -34,6 +34,22 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
         self.assertIn("Earlier default-developer-dir check observed Xcode 26.5, build 17F42.", evidence_text)
         self.assertIn("Local Xcode 27 Beta Plug-in Import Probe", evidence_text)
 
+    def test_beta_path_guidance_uses_system_wide_app_locations(self) -> None:
+        skill_text = self.read("skills/xcode-coding-intelligence-workflow/SKILL.md")
+        bridge_text = self.read("skills/xcode-coding-intelligence-workflow/references/mcpbridge-and-external-agents.md")
+        setup_text = self.read("skills/xcode-coding-intelligence-workflow/references/setup-and-agent-surfaces.md")
+        evidence_text = self.read("skills/xcode-coding-intelligence-workflow/references/source-evidence.md")
+
+        for text in (skill_text, bridge_text, setup_text):
+            self.assertIn("/Applications/Xcode-beta.app", text)
+            self.assertIn("/Applications/Betas/Xcode-beta.app", text)
+            self.assertIn("command-scoped `DEVELOPER_DIR`", text)
+            self.assertNotIn("/Users/galew/Applications/Betas", text)
+
+        self.assertIn("Current path note", evidence_text)
+        self.assertIn("Observed beta Xcode version: Xcode 27.0, build 27A5209h.", evidence_text)
+        self.assertIn("historical evidence, not current guidance", evidence_text)
+
     def test_external_agent_reference_documents_mcpbridge_preconditions(self) -> None:
         bridge_text = self.read("skills/xcode-coding-intelligence-workflow/references/mcpbridge-and-external-agents.md")
 

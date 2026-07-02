@@ -22,10 +22,10 @@ Start with Xcode 27 beta and OpenCode.
 
 Those are the two locally installed targets available for immediate smoke tests on Gale's machine:
 
-- Xcode 27 beta: `/Users/galew/Applications/Betas/Xcode-beta.app`, verified with `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcodebuild -version` as Xcode 27.0 build 27A5194q.
+- Xcode 27 beta: `/Applications/Xcode-beta.app`, verified on 2026-07-02 with `DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild -version` as Xcode 27.0 build 27A5209h.
 - Xcode 27 beta live bridge: verified on 2026-06-23 with the beta app open and selected through `MCP_XCODE_PID`; `run-agent --dry-run codex` resolved the beta-scoped Codex runtime and Xcode-specific `CODEX_HOME`. A direct `codex skills export` attempt through that runtime failed in this beta with `unrecognized subcommand 'export'`, so do not rely on that as an install or export path.
 - Xcode 27 beta plug-in import: verified on 2026-06-23 through the Xcode Beta Settings UI. `Import from Codex`, `Add from file`, and `Add from URL` all recognized agentic plug-in payloads; `Add from URL` accepted `https://github.com/gaelic-ghost/socket.git` and enumerated Socket child plug-ins before import.
-- Active command-line Xcode: `/Applications/Xcode.app`, currently Xcode 26.5 build 17F42 through the default `xcodebuild -version`.
+- Active command-line Xcode: `/Applications/Xcode-beta.app/Contents/Developer`, currently Xcode 27.0 build 27A5209h through the default `xcodebuild -version`.
 - OpenCode CLI: `/opt/homebrew/bin/opencode`, verified as 1.17.9.
 - OpenCode Desktop: `/Applications/OpenCode.app`, present locally.
 
@@ -63,10 +63,10 @@ Xcode support needs three different answers:
 
 Local validation target:
 
-- Use `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer` for Xcode 27 beta checks until the active command-line developer directory is intentionally changed.
-- Open `/Users/galew/Applications/Betas/Xcode-beta.app` for live beta UI, MCP, agent, and plug-in checks instead of treating a closed app as a blocker.
+- Prefer command-scoped `DEVELOPER_DIR` for Xcode beta checks when the task should not change the global command-line developer directory. Current system-wide beta candidates are `/Applications/Xcode-beta.app` and `/Applications/Betas/Xcode-beta.app`.
+- Open the intended stable or beta Xcode app for live UI, MCP, agent, and plug-in checks instead of treating a closed app as a blocker.
 - Use `MCP_XCODE_PID` when stable and beta Xcode processes could both exist or when the bridge must target the beta process explicitly.
-- Keep the default Xcode 26.5 path untouched unless a task explicitly needs `xcode-select` changes.
+- Change global `xcode-select` only when the task explicitly needs the default command-line tools selection to change. Record the previous `xcode-select -p` value, switch with `sudo xcode-select --switch <Xcode.app/Contents/Developer>`, verify, and restore the previous path when the global check is finished.
 
 Practical Socket implication:
 

@@ -2,6 +2,8 @@
 
 This reference records the first practical source set for the Xcode 27 coding-intelligence workflow.
 
+Current path note: Gale now keeps Xcode betas in system-wide `/Applications` locations, including `/Applications/Xcode-beta.app` and sometimes `/Applications/Betas/Xcode-beta.app`. Older evidence below keeps the then-installed user-local path as historical evidence, not current guidance.
+
 ## Checked 2026-06-22
 
 ### Apple Developer
@@ -26,7 +28,7 @@ Some Apple documentation pages are JavaScript-rendered. When a page body is not 
 
 ### Local Xcode Tool Output
 
-Checked with:
+Checked with the then-installed beta path:
 
 ```bash
 DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer xcodebuild -version
@@ -64,7 +66,7 @@ Observed `mcpbridge` behavior:
 
 ### Local Xcode 27 Beta Live App Probe
 
-Checked with Xcode 27 beta running from:
+Checked with Xcode 27 beta running from the then-installed beta app path:
 
 ```text
 /Users/galew/Applications/Betas/Xcode-beta.app
@@ -108,6 +110,26 @@ Observed import behavior:
 - `Add from URL` asked for the URL of a Git repository containing plug-ins, skills, or MCP servers.
 - `Add from URL` rejected `file:///private/tmp/socket-xcode-plugin-fixture/socket-xcode-fixture` as invalid.
 - `Add from URL` accepted `https://github.com/gaelic-ghost/socket.git` and enumerated Socket child plug-ins from the public repository before import. No additional Socket child plug-ins were imported from this URL during the probe.
+
+## Checked 2026-07-02
+
+### Current Local Xcode Beta Path
+
+Current system-wide beta path check:
+
+```bash
+DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild -version
+xcode-select -p
+xcodebuild -version
+```
+
+Observed beta Xcode version: Xcode 27.0, build 27A5209h.
+
+Observed active developer directory:
+
+```text
+/Applications/Xcode-beta.app/Contents/Developer
+```
 
 Observed artifacts after import:
 

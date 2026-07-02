@@ -43,9 +43,9 @@ Refresh checked on 2026-06-22:
 
 Live beta probe checked on 2026-06-23:
 
-- Xcode 27 beta was opened from `/Users/galew/Applications/Betas/Xcode-beta.app`.
-- `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent --dry-run codex` resolved Xcode's beta-scoped Codex executable and `CODEX_HOME`.
-- `DEVELOPER_DIR=/Users/galew/Applications/Betas/Xcode-beta.app/Contents/Developer MCP_XCODE_PID=59740 xcrun mcpbridge run-agent codex skills export --output-dir /private/tmp/socket-xcode-plugin-fixture/after-file-import-skills --replace-existing` launched Xcode's beta-scoped Codex runtime, but that runtime reported `unrecognized subcommand 'export'`. Treat `skills export` as unusable from this Codex runtime until a later beta proves otherwise.
+- Xcode 27 beta was opened from the then-installed beta app path.
+- The matching beta `DEVELOPER_DIR` plus `MCP_XCODE_PID=59740 xcrun mcpbridge run-agent --dry-run codex` resolved Xcode's beta-scoped Codex executable and `CODEX_HOME`.
+- The matching beta `DEVELOPER_DIR` plus `MCP_XCODE_PID=59740 xcrun mcpbridge run-agent codex skills export --output-dir /private/tmp/socket-xcode-plugin-fixture/after-file-import-skills --replace-existing` launched Xcode's beta-scoped Codex runtime, but that runtime reported `unrecognized subcommand 'export'`. Treat `skills export` as unusable from this Codex runtime until a later beta proves otherwise.
 - Xcode Beta Settings > Intelligence > Plug-ins was inspected through the official UI. The Add Plug-in sheet exposed `Import from Claude Code`, `Import from Codex`, `Add from file`, and `Add from URL`.
 - `Import from Codex` imported the installed `apple-dev-skills` plugin as `6 Skills - Hooks`.
 - `Add from file` imported a harmless fixture folder containing `.codex-plugin/plugin.json`, `skills/<name>/SKILL.md`, and `.mcp.json` as `1 Skill - 1 MCP Server`.

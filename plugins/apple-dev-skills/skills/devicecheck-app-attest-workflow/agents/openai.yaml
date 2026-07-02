@@ -1,0 +1,4 @@
+interface:
+  display_name: "DeviceCheck App Attest Workflow"
+  short_description: "Plan DeviceCheck and App Attest flows"
+  default_prompt: "Use $devicecheck-app-attest-workflow to design a DeviceCheck or App Attest flow for an Apple-platform app, starting from current Apple docs and keeping client framework use, server challenges, entitlements, rollout constraints, backend validation, and handoffs to $xcode-build-run-workflow, $xcode-testing-workflow, $swift-openapi-client-workflow, or $explore-apple-swift-docs explicit."
