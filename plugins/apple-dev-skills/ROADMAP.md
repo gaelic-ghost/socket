@@ -27,6 +27,7 @@
 - [Milestone 49: Apple Media and Audio Workflow Skills](#milestone-49-apple-media-and-audio-workflow-skills)
 - [Milestone 50: Swift Lang Handoff And Compatibility](#milestone-50-swift-lang-handoff-and-compatibility)
 - [Milestone 52: Apple Design Animation And Symbols Workflow Skills](#milestone-52-apple-design-animation-and-symbols-workflow-skills)
+- [Milestone 53: DeviceCheck and App Attest Workflow](#milestone-53-devicecheck-and-app-attest-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -67,6 +68,7 @@
 - Milestone 49: Apple Media and Audio Workflow Skills - Completed
 - Milestone 50: Swift Lang Handoff And Compatibility - In Progress
 - Milestone 52: Apple Design Animation And Symbols Workflow Skills - In Progress
+- Milestone 53: DeviceCheck and App Attest Workflow - Planned
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -732,6 +734,33 @@ In Progress
 
 - [x] Apple Dev Skills has focused first-party guidance for SF Symbols, SwiftUI animation, Core Animation, and Apple typography without blurring architecture, app-icon, accessibility, and Xcode execution ownership.
 - [x] The active skill inventory, plugin metadata, tests, and docs validator agree with the shipped design and animation workflow surface.
+
+## Milestone 53: DeviceCheck and App Attest Workflow
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a dedicated Apple workflow for DeviceCheck and App Attest adoption in iOS, macOS, and related Apple-platform apps.
+- [ ] Keep `DCDevice` per-device two-bit state, `DCAppAttestService` key attestation, server challenges, assertions, receipts, fraud-risk metrics, App IDs, entitlements, sandbox/production behavior, rollout limits, and Xcode validation grounded in current Apple documentation.
+- [ ] Keep app-side framework use and client/server contract guidance separate from backend implementation, generated API clients, general auth, Keychain storage, or app-sync ownership.
+
+### Tickets
+
+- [ ] Use [the DeviceCheck and App Attest skill plan](../../docs/maintainers/devicecheck-app-attest-skill-plan.md) as the implementation source of truth.
+- [ ] Add `devicecheck-app-attest-workflow` with clear routing between DeviceCheck two-bit state, App Attest app-instance integrity, broader client auth, and server-side validation implementation.
+- [ ] Add references for DeviceCheck device state, App Attest client flow, App Attest server validation, App ID and entitlement setup, sandbox/production behavior, rollout/rate-limit planning, and macOS-specific validation notes.
+- [ ] Add skill interface metadata and update Apple Dev Skills plugin metadata, README active skill inventory, and default prompt list.
+- [ ] Add targeted tests for skill frontmatter, docs-gate language, DeviceCheck/App Attest routing boundaries, server-handoff language, and metadata inventory.
+- [ ] Run the Apple Dev Skills docs validator and pytest when the skill lands, then run the Socket metadata validator after plugin metadata changes.
+
+### Exit Criteria
+
+- [ ] The repository ships `devicecheck-app-attest-workflow` as the explicit owner for DeviceCheck and App Attest implementation-shape guidance.
+- [ ] The workflow states the documented Apple behavior it relies on before proposing app, entitlement, server-challenge, attestation, assertion, receipt, or rollout changes.
+- [ ] The workflow keeps server verification and API-contract implementation as explicit handoffs instead of hiding backend work inside Apple app guidance.
 
 ## Backlog Candidates
 
