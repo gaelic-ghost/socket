@@ -116,7 +116,7 @@ Current Socket catalog shape:
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
 - `reverse-engineering-skills`: binary inspection, artifact triage, and reproducible reverse-engineering note workflows
 - `server-side-jvm`: server-side JVM, Java, Scala, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
-- `server-side-swift`: server-side Swift bootstrap, Vapor, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io support plus the source-bundled `server-swift-steward` custom-agent definition
+- `server-side-swift`: server-side Swift bootstrap and guidance sync, Vapor, Hummingbird, hb Server/Lambda flows, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io support plus the source-bundled `server-swift-steward` custom-agent definition
 - `swift-lang`: shared Swift language, API style, error handling, functional pipelines, formatting, source organization, and modernization cleanup workflows
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository

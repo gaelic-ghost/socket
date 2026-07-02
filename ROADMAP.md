@@ -183,6 +183,8 @@ Completed
 - [x] Add a Fly.io deployment workflow for Vapor and Hummingbird services, including Dockerfile handoffs, `fly.toml`, secrets, health checks, Postgres attachment, process groups, and deploy validation.
 - [x] Update Hummingbird guidance to prefer the official `hb` CLI for fresh apps, and record a Vapor 5 alpha adoption posture that keeps Vapor 4 as the stable default until Vapor 5 is stable.
 - [x] Add `server-side-swift:bootstrap-hummingbird-service` and `server-side-swift:bootstrap-vapor-service` for CLI-first fresh service creation, repo-local `AGENTS.md` guidance assets, Hummingbird configuration support, Vapor `Environment`, Fluent ORM, PostgreSQL, CLI-generated Docker files, and Docker Compose local database defaults.
+- [x] Update Hummingbird guidance for current `hb` Server and Lambda prompts, generated `swift-configuration`, OpenAPIHummingbird plus `hummingbird-lambda` Lambda shape, and the separate `swift-openapi-lambda` transport distinction.
+- [x] Add `server-side-swift:sync-hummingbird-service-guidance` for existing Hummingbird repositories that need repo-local `AGENTS.md`, Codex local environment files, `hb` CLI assumptions, Server or Lambda shape, OpenAPI transport notes, and SwiftPM command guidance refreshed.
 - [x] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
 

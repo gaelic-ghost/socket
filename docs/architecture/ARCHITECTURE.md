@@ -127,6 +127,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:server-side-swift/observability-tracing-workflow` (codex-skill) at `plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/openapi-rpc-workflow` (codex-skill) at `plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/persistence-workflow` (codex-skill) at `plugins/server-side-swift/skills/persistence-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:server-side-swift/sync-hummingbird-service-guidance` (codex-skill) at `plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/swiftnio-workflow` (codex-skill) at `plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/vapor-server-workflow` (codex-skill) at `plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swiftasb-skills/build-appkit-app` (codex-skill) at `plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md` depends on: no declared dependencies.
@@ -257,6 +258,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/persistence-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/server-side-swift/.codex-plugin/plugin.json`.

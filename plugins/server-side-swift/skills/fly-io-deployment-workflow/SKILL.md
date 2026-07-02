@@ -119,6 +119,7 @@ For Hummingbird:
 - confirm the executable target and any command-line options exposed by the package
 - confirm the service binds to a container-reachable host and the same port named in Fly config
 - preserve template-generated host, port, and log-level flags unless the user explicitly wants a different configuration model
+- if the repository was generated as an `hb` Lambda app, stop and choose an appropriate Lambda deployment workflow instead of forcing the Fly.io long-running process model onto it
 
 When diagnosing failures, report the exact Fly internal port, container `EXPOSE` port when present, framework port, host binding, process command, and health-check path involved.
 
