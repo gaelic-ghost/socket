@@ -599,8 +599,8 @@ Completed
 
 ### Scope
 
-- [x] Add a Socket-hosted `game-dev-skills` child plugin for game-specific authoring, rendering-stack choice, input, haptics, profiling handoffs, and validation guidance.
-- [x] Keep the first slice Apple-platform-first rather than a broad engine plugin: SpriteKit, SceneKit, Game Controller input, Core Haptics game feedback, and Apple game-stack routing.
+- [x] Add a Socket-hosted `game-dev-skills` child plugin for game-specific authoring, rendering-stack choice, simulation, input, haptics, profiling handoffs, and validation guidance.
+- [x] Keep the first slices Apple-platform-first rather than a broad engine plugin: SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics game feedback, Xcode game profiling, and Apple game-stack routing.
 - [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle a game engine, template feed, simulator wrapper, profiler automation, MCP server, or local game runtime.
 - [x] Keep generic Swift, Xcode project integrity, simulator, signing, asset-catalog mechanics, and Apple docs exploration delegated to `apple-dev-skills` and shared Swift language guidance delegated to `swift-lang`.
 
@@ -611,8 +611,11 @@ Completed
 - [x] Add `game-dev-skills:choose-apple-game-stack`.
 - [x] Add `game-dev-skills:spritekit-game-workflow`.
 - [x] Add `game-dev-skills:scenekit-game-workflow`.
+- [x] Add `game-dev-skills:gameplaykit-simulation-workflow`.
 - [x] Add `game-dev-skills:game-controller-input-workflow`.
 - [x] Add `game-dev-skills:core-haptics-game-feedback-workflow`.
+- [x] Add `game-dev-skills:xcode-game-profiling-workflow`.
+- [x] Keep `game-dev-skills:metal-game-rendering-workflow` on the roadmap for a later shader and Metal rendering architecture slice.
 - [x] Wire `game-dev-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface.
 - [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
@@ -621,11 +624,11 @@ Completed
 ### Exit Criteria
 
 - [x] The Socket marketplace exposes `game-dev-skills` as an installable child plugin.
-- [x] The first skill slice can route and guide Apple game work across SpriteKit, SceneKit, Game Controller input, Core Haptics feedback, and Apple Dev Skills handoffs.
+- [x] The first skill slices can route and guide Apple game work across SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode game profiling, and Apple Dev Skills handoffs.
 - [x] The plugin boundary is clear enough that reverse-engineering Unity artifacts stay with `reverse-engineering-skills`, generic Apple mechanics stay with `apple-dev-skills`, and game-specific authoring/profiling work stays here.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported game-dev skill surface.
 
-Completed Milestone 20 by adding the `game-dev-skills` child plugin, shipping the first Apple-platform game-development workflow slice, wiring the Socket marketplace entry, documenting the plugin boundary, and validating skill metadata, plugin metadata, and root marketplace wiring.
+Completed Milestone 20 by adding the `game-dev-skills` child plugin, shipping the Apple-platform game-development workflow slices, wiring the Socket marketplace entry, documenting the plugin boundary, and validating skill metadata, plugin metadata, and root marketplace wiring. Metal rendering and shader architecture remain planned as a later dedicated slice.
 
 ## Small Tickets
 
@@ -651,6 +654,7 @@ Completed Milestone 20 by adding the `game-dev-skills` child plugin, shipping th
 
 ## Backlog Candidates
 
+- [ ] Add `game-dev-skills:metal-game-rendering-workflow` for a later shader and Metal rendering architecture slice. Scope it after concrete use cases decide whether it owns shader code, render-pass architecture, command encoding, resource layout, Metal debugger workflow, GPU counters, or all of those.
 - [x] Add the first repo-local Socket Steward prototype as a Python `uv` project under `.agents/socket-steward`, using deterministic read-only audits plus an optional OpenAI Agents SDK `ask` path before any write, LaunchAgent, or app behavior.
 - [x] Expand Socket Steward with a docs-sync planning command that emits structured recommended edits for README, CONTRIBUTING, AGENTS, ROADMAP, marketplace metadata, and child plugin guidance without applying them.
 - [x] Add `docs/agents/` as the repo-local report surface and let Socket Steward write reviewable docs-sync proposal reports there without applying the proposed documentation edits.

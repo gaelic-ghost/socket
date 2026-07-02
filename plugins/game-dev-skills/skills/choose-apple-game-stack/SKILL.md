@@ -63,6 +63,12 @@ Choose validation based on the claim being made:
 - Haptics and physical feel: require device or controller evidence; otherwise report a manual validation gap.
 - Performance and frame pacing: prefer Release builds and Instruments or `xctrace` evidence.
 
+## Follow-Up Skill Routing
+
+- Use `gameplaykit-simulation-workflow` when game rules, entity-component modeling, state machines, agents, pathfinding, randomization, or simulation update order own the problem.
+- Use `xcode-game-profiling-workflow` when frame pacing, stutter, CPU/GPU overlap, memory pressure, thermal state, trace capture, or profiling evidence owns the problem.
+- Keep Metal rendering and shader architecture as a future handoff when the work requires shader code, render-pass architecture, command encoding, resource layout, GPU counters, or Metal debugger workflow beyond profiling triage.
+
 ## Output Shape
 
 Return:

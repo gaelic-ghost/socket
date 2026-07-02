@@ -6,7 +6,7 @@ This plan records the first durable shape for a Socket-hosted game development s
 
 The `game-dev-skills` plugin should help agents choose and maintain game-specific project surfaces without turning `apple-dev-skills` into a catch-all for rendering, input, haptics, asset pipelines, profiling, and gameplay architecture.
 
-The first release is Apple-platform-first. It covers SpriteKit, SceneKit, Game Controller input, Core Haptics feedback, and rendering-stack choice across SpriteKit, SceneKit, RealityKit, Metal, and existing Apple app workflows.
+The first release is Apple-platform-first. It covers SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode game profiling, and rendering-stack choice across SpriteKit, SceneKit, RealityKit, Metal, and existing Apple app workflows.
 
 This is a companion guidance plugin, not a runtime plugin. The first version does not bundle a game engine, template feed, asset pipeline, simulator wrapper, profiler automation, MCP server, or local game runtime.
 
@@ -66,6 +66,10 @@ Guide SpriteKit scene, node, action, physics, camera, resource, GameplayKit inte
 
 Guide SceneKit scene, node graph, camera, lighting, material, animation, physics, asset, RealityKit migration, and Xcode validation work.
 
+### `game-dev-skills:gameplaykit-simulation-workflow`
+
+Guide GameplayKit entities, components, component systems, state machines, pathfinding, agents, randomization, renderer synchronization, and simulation validation.
+
 ### `game-dev-skills:game-controller-input-workflow`
 
 Guide Game Controller framework work for physical controllers, virtual controllers, keyboard and mouse game input, mappings, connection lifecycle, haptics handoffs, and device-aware validation.
@@ -74,11 +78,13 @@ Guide Game Controller framework work for physical controllers, virtual controlle
 
 Guide Core Haptics and game-controller haptic feedback design, capability checks, pattern ownership, audio-haptic boundaries, fallback behavior, accessibility, and physical-device validation.
 
+### `game-dev-skills:xcode-game-profiling-workflow`
+
+Guide Apple game profiling across frame pacing, stutter, CPU/GPU overlap, Game Performance and Game Memory templates, Metal Performance HUD routing, `xctrace`, trace evidence, and handoffs to rendering or shader work.
+
 ## Proposed Follow-Up Skill Inventory
 
-- `game-dev-skills:gameplaykit-simulation-workflow`
 - `game-dev-skills:metal-game-rendering-workflow`
-- `game-dev-skills:xcode-game-profiling-workflow`
 - `game-dev-skills:game-asset-pipeline-workflow`
 - `game-dev-skills:gamekit-game-center-workflow`
 - `game-dev-skills:unity-authoring-workflow`
@@ -88,6 +94,7 @@ Guide Core Haptics and game-controller haptic feedback design, capability checks
 - [x] Create `plugins/game-dev-skills/` with `.codex-plugin/plugin.json` and `AGENTS.md`.
 - [x] Add this maintainer plan.
 - [x] Add first-slice Apple game-development workflow skills.
+- [x] Add `gameplaykit-simulation-workflow` and `xcode-game-profiling-workflow` as the second Apple game-development skill slice.
 - [x] Wire `game-dev-skills` into the root Socket marketplace as installable.
 - [x] Update README and ROADMAP so users understand the new plugin surface.
 - [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
@@ -95,6 +102,5 @@ Guide Core Haptics and game-controller haptic feedback design, capability checks
 
 ## Open Questions
 
-- Should the next slice prioritize `GameplayKit` as its own simulation workflow, or should it remain a routing section inside SpriteKit and stack-choice guidance until more real use proves the split?
-- Should Metal game rendering be a game-dev skill first, or should the first version be a narrower profiling and shader-build handoff that leans on `apple-dev-skills` Xcode execution workflows?
+- What concrete scope should `metal-game-rendering-workflow` own beyond profiling triage: shader code, render-pass architecture, command encoding, resource layout, Metal debugger workflow, GPU counters, or all of those?
 - Should Unity authoring live in this plugin, or should a later engine-specific plugin own Unity once the authoring scope is concrete?

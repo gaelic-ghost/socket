@@ -45,6 +45,8 @@ Apple documentation describes SpriteKit as a high-performance 2D framework for g
 ## Handoffs
 
 - `choose-apple-game-stack` when the stack choice is still unclear.
+- `gameplaykit-simulation-workflow` when entity-component modeling, state machines, pathfinding, agents, randomization, or simulation update order owns the work.
+- `xcode-game-profiling-workflow` when SpriteKit frame pacing, stutter, texture/resource churn, physics cost, or per-frame update cost needs evidence.
 - `game-controller-input-workflow` for physical controllers, virtual controllers, keyboard, or mouse input.
 - `core-haptics-game-feedback-workflow` for custom haptics or controller rumble.
 - `apple-dev-skills:xcode-build-run-workflow` for project membership, scheme, build, run, simulator, and Metal-toolchain-aware execution mechanics.

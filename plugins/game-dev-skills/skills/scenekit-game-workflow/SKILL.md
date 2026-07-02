@@ -43,6 +43,8 @@ When new work is really modern 3D, spatial, or visionOS game work, consider Real
 ## Handoffs
 
 - `choose-apple-game-stack` when SceneKit versus RealityKit versus Metal is still unclear.
+- `gameplaykit-simulation-workflow` when entity-component modeling, state machines, pathfinding, agents, randomization, or simulation update order owns the work.
+- `xcode-game-profiling-workflow` when SceneKit frame pacing, CPU/GPU overlap, material/asset cost, memory pressure, or trace evidence owns the work.
 - `game-controller-input-workflow` for controller, keyboard, mouse, and virtual-controller input.
 - `core-haptics-game-feedback-workflow` for haptic feedback.
 - `apple-dev-skills:xcode-build-run-workflow` for project membership, schemes, build, run, resources, and simulator mechanics.

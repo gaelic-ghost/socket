@@ -5,7 +5,7 @@ This file is the Game Dev Skills child-repo override for work done from `socket`
 ## Scope
 
 - `game-dev-skills` is a monorepo-owned Socket child source for Codex game development workflow skills.
-- The first shipped scope is Apple platform game development: SpriteKit, SceneKit, GameplayKit routing, Game Controller input, Core Haptics game feedback, and related Xcode validation handoffs.
+- The shipped scope is Apple platform game development: SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics game feedback, Xcode game profiling, and related Xcode validation handoffs.
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 
