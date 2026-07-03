@@ -1,0 +1,4 @@
+interface:
+  display_name: "GameplayKit Simulation"
+  short_description: "GameplayKit simulation guidance."
+  default_prompt: "Use $gameplaykit-simulation-workflow for GameplayKit entities, components, component systems, state machines, pathfinding, agents, randomization, SpriteKit integration, and gameplay simulation validation."

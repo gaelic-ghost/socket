@@ -20,6 +20,7 @@
 - [Milestone 17: Cross-agent skill and plugin portability](#milestone-17-cross-agent-skill-and-plugin-portability)
 - [Milestone 18: Swift Lang shared language plugin](#milestone-18-swift-lang-shared-language-plugin)
 - [Milestone 19: Project audit skills plugin](#milestone-19-project-audit-skills-plugin)
+- [Milestone 20: Game Dev Skills plugin](#milestone-20-game-dev-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -53,6 +54,7 @@
 - Milestone 17: Cross-agent skill and plugin portability - Planned
 - Milestone 18: Swift Lang shared language plugin - Completed
 - Milestone 19: Project audit skills plugin - Planned
+- Milestone 20: Game Dev Skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -589,6 +591,45 @@ Planned
 - [ ] Stack-specific implementation advice routes to owning Socket plugins.
 - [ ] Root Socket docs, marketplace wiring, and validation agree on the exported project-audit surface.
 
+## Milestone 20: Game Dev Skills plugin
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a Socket-hosted `game-dev-skills` child plugin for game-specific authoring, rendering-stack choice, simulation, input, haptics, profiling handoffs, and validation guidance.
+- [x] Keep the first slices Apple-platform-first rather than a broad engine plugin: SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics game feedback, Xcode game profiling, and Apple game-stack routing.
+- [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle a game engine, template feed, simulator wrapper, profiler automation, MCP server, or local game runtime.
+- [x] Keep generic Swift, Xcode project integrity, simulator, signing, asset-catalog mechanics, and Apple docs exploration delegated to `apple-dev-skills` and shared Swift language guidance delegated to `swift-lang`.
+
+### Tickets
+
+- [x] Record the detailed plan in [`docs/maintainers/game-dev-skills-plugin-plan.md`](./docs/maintainers/game-dev-skills-plugin-plan.md).
+- [x] Create `plugins/game-dev-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, and authored `skills/` source.
+- [x] Add `game-dev-skills:choose-apple-game-stack`.
+- [x] Add `game-dev-skills:spritekit-game-workflow`.
+- [x] Add `game-dev-skills:scenekit-game-workflow`.
+- [x] Add `game-dev-skills:gameplaykit-simulation-workflow`.
+- [x] Add `game-dev-skills:game-controller-input-workflow`.
+- [x] Add `game-dev-skills:core-haptics-game-feedback-workflow`.
+- [x] Add `game-dev-skills:xcode-game-profiling-workflow`.
+- [x] Keep `game-dev-skills:metal-game-rendering-workflow` on the roadmap for a later shader and Metal rendering architecture slice.
+- [x] Wire `game-dev-skills` into the root Socket marketplace as an installable child plugin.
+- [x] Update root README and ROADMAP so users understand the new plugin surface.
+- [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `game-dev-skills` as an installable child plugin.
+- [x] The first skill slices can route and guide Apple game work across SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode game profiling, and Apple Dev Skills handoffs.
+- [x] The plugin boundary is clear enough that reverse-engineering Unity artifacts stay with `reverse-engineering-skills`, generic Apple mechanics stay with `apple-dev-skills`, and game-specific authoring/profiling work stays here.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the exported game-dev skill surface.
+
+Completed Milestone 20 by adding the `game-dev-skills` child plugin, shipping the Apple-platform game-development workflow slices, wiring the Socket marketplace entry, documenting the plugin boundary, and validating skill metadata, plugin metadata, and root marketplace wiring. Metal rendering and shader architecture remain planned as a later dedicated slice.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -613,6 +654,7 @@ Planned
 
 ## Backlog Candidates
 
+- [ ] Add `game-dev-skills:metal-game-rendering-workflow` for a later shader and Metal rendering architecture slice. Scope it after concrete use cases decide whether it owns shader code, render-pass architecture, command encoding, resource layout, Metal debugger workflow, GPU counters, or all of those.
 - [x] Add the first repo-local Socket Steward prototype as a Python `uv` project under `.agents/socket-steward`, using deterministic read-only audits plus an optional OpenAI Agents SDK `ask` path before any write, LaunchAgent, or app behavior.
 - [x] Expand Socket Steward with a docs-sync planning command that emits structured recommended edits for README, CONTRIBUTING, AGENTS, ROADMAP, marketplace metadata, and child plugin guidance without applying them.
 - [x] Add `docs/agents/` as the repo-local report surface and let Socket Steward write reviewable docs-sync proposal reports there without applying the proposed documentation edits.

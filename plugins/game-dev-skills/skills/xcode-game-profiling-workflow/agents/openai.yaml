@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Game Profiling"
+  short_description: "Xcode game profiling guidance."
+  default_prompt: "Use $xcode-game-profiling-workflow for Apple game profiling, frame pacing, stutter triage, Game Performance and Game Memory templates, Metal Performance HUD routing, xctrace evidence, and CPU/GPU handoffs."

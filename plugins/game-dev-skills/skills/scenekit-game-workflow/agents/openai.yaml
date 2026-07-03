@@ -1,0 +1,4 @@
+interface:
+  display_name: "SceneKit Game Workflow"
+  short_description: "SceneKit game workflow guidance."
+  default_prompt: "Use $scenekit-game-workflow for SceneKit scenes, SCNView or SwiftUI integration, nodes, cameras, lighting, physics, assets, RealityKit handoffs, and Xcode validation routing."

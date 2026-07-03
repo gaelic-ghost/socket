@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game Controller Input"
+  short_description: "Game controller input guidance."
+  default_prompt: "Use $game-controller-input-workflow for Game Controller framework input, keyboard and mouse game input, virtual controllers, controller discovery, mappings, haptics handoffs, and device validation."

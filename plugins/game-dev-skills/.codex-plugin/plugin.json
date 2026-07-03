@@ -1,0 +1,54 @@
+{
+  "name": "game-dev-skills",
+  "version": "7.9.0",
+  "description": "Apple platform game development workflow skills for SpriteKit, SceneKit, GameplayKit, controller input, haptics, profiling, and game-stack routing.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/game-dev-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "game-development",
+    "apple",
+    "spritekit",
+    "scenekit",
+    "gameplaykit",
+    "game-controller",
+    "core-haptics",
+    "realitykit",
+    "metal",
+    "instruments",
+    "xctrace",
+    "profiling",
+    "xcode",
+    "codex",
+    "plugin",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Game Dev Skills",
+    "shortDescription": "Apple game development workflow skills for Codex.",
+    "longDescription": "Guide Codex agents through Apple platform game development decisions and implementation work across SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics game feedback, Xcode game profiling, RealityKit and Metal routing, assets, and device-aware validation.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/game-dev-skills",
+    "defaultPrompt": [
+      "Choose the right Apple game stack before we start implementing.",
+      "Build or repair this SpriteKit scene, game loop, physics, or resource flow.",
+      "Build or repair this SceneKit scene, node graph, camera, lighting, or asset flow.",
+      "Design or repair this GameplayKit entity, component, state-machine, pathfinding, or agent system.",
+      "Wire game controller, keyboard, mouse, or virtual-controller input for this Apple game.",
+      "Design or debug Core Haptics feedback for a game while keeping device validation honest.",
+      "Profile this Apple game for frame pacing, stutter, CPU/GPU overlap, memory pressure, or trace evidence without turning profiling into shader architecture."
+    ],
+    "brandColor": "#28D7FF"
+  }
+}

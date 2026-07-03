@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Apple Game Stack"
+  short_description: "Choose an Apple game stack."
+  default_prompt: "Use $choose-apple-game-stack to inspect an Apple game project or idea, choose the smallest correct rendering, input, haptics, asset, and validation shape, and hand off to narrower game-dev or Apple Dev Skills workflows."
