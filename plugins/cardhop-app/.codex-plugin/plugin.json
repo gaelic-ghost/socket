@@ -1,6 +1,6 @@
 {
   "name": "cardhop-app",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "description": "Cardhop.app workflow guidance plus a bundled local MCP server for contact capture and updates on macOS.",
   "author": {
     "name": "Gale",
@@ -35,6 +35,8 @@
       "Help me update an existing Cardhop contact using a safe natural-language instruction.",
       "Check whether the local Cardhop.app MCP server is ready on this Mac."
     ],
-    "brandColor": "#2563EB"
+    "brandColor": "#2563EB",
+    "composerIcon": "./assets/cardhop-app-icon.svg",
+    "logo": "./assets/cardhop-app-icon.svg"
   }
 }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "HTTP/3 And QUIC Workflow"
+  short_description: "Plan and diagnose HTTP/3 or QUIC work."
+  default_prompt: "Use $http3-quic-workflow to plan, implement, or diagnose HTTP/3 and QUIC behavior with RFC checks, negotiated-protocol evidence, deployment constraints, fallback design, and stack-specific handoffs."

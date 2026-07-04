@@ -1,6 +1,6 @@
 {
   "name": "spotify",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "description": "Placeholder plugin repository for future Spotify-focused Codex workflows.",
   "author": {
     "name": "Gale",
@@ -28,6 +28,8 @@
       "Write"
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/spotify",
-    "brandColor": "#1DB954"
+    "brandColor": "#1DB954",
+    "composerIcon": "./assets/spotify-icon.svg",
+    "logo": "./assets/spotify-icon.svg"
   }
 }

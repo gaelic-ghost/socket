@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Game dev skills icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <pattern id="scan" width="512" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 9h512" stroke="#22d3ee" stroke-opacity=".08" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="84" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="84" fill="url(#scan)"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="#22d3ee" stroke-width="12"/>
+  <g filter="url(#glow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M152 288l36-68h136l36 68 30 62H122z" fill="#07111f" stroke="#22d3ee" stroke-width="14"/>
+    <path d="M201 257h64M233 225v64" stroke="#f472b6" stroke-width="16"/>
+    <circle cx="313" cy="252" r="14" fill="#a78bfa" stroke="#a78bfa" stroke-width="8"/>
+    <circle cx="350" cy="289" r="14" fill="#22d3ee" stroke="#22d3ee" stroke-width="8"/>
+    <path d="M168 188l34-34M344 188l-34-34" stroke="#a78bfa" stroke-width="14"/>
+  </g>
+</svg>

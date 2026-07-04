@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Network Transport"
+  short_description: "Choose a protocol before implementation."
+  default_prompt: "Use $choose-network-transport to inspect a networking feature, choose the smallest correct transport or real-time protocol, state maturity and infrastructure constraints, and hand off to the owning implementation workflow."

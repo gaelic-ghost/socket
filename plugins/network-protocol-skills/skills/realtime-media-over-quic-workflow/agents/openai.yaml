@@ -1,0 +1,4 @@
+interface:
+  display_name: "Realtime Media Over QUIC"
+  short_description: "Plan MoQ and QUIC media workflows."
+  default_prompt: "Use $realtime-media-over-quic-workflow to assess whether Media over QUIC fits a low-latency media workflow, check current IETF draft state, separate relay/client/server roles, and define fallback and validation."

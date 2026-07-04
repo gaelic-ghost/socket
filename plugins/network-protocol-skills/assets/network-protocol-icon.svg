@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Network protocol skills icon">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="48%" r="64%">
+      <stop offset="0" stop-color="#12203a"/>
+      <stop offset="0.58" stop-color="#060911"/>
+      <stop offset="1" stop-color="#02030a"/>
+    </radialGradient>
+    <pattern id="scan" width="512" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 9h512" stroke="#7dd3fc" stroke-opacity=".08" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="84" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="84" fill="url(#scan)"/>
+  <circle cx="256" cy="256" r="184" fill="none" stroke="#22d3ee" stroke-width="12" stroke-opacity=".82"/>
+  <circle cx="256" cy="256" r="126" fill="none" stroke="#f472b6" stroke-width="4" stroke-opacity=".55"/>
+  <g filter="url(#glow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 292l70-86h78l64-64" stroke="#22d3ee" stroke-width="20"/>
+    <path d="M218 207l42 102 94-53" stroke="#f472b6" stroke-width="16"/>
+    <path d="M296 118h72v72" stroke="#a78bfa" stroke-width="18"/>
+    <circle cx="150" cy="292" r="30" fill="#06111f" stroke="#22d3ee" stroke-width="14"/>
+    <circle cx="220" cy="206" r="26" fill="#06111f" stroke="#f472b6" stroke-width="14"/>
+    <circle cx="260" cy="309" r="26" fill="#06111f" stroke="#a78bfa" stroke-width="14"/>
+    <circle cx="354" cy="256" r="32" fill="#06111f" stroke="#22d3ee" stroke-width="14"/>
+  </g>
+</svg>

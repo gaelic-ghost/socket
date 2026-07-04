@@ -90,6 +90,7 @@ Currently available from the catalog:
 - `codex-utilities`
 - `dotnet-skills`
 - `game-dev-skills`
+- `network-protocol-skills`
 - `productivity-skills`
 - `python-skills`
 - `reverse-engineering-skills`
@@ -116,6 +117,7 @@ Current Socket catalog shape:
 - `codex-utilities`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `game-dev-skills`: Apple platform game development workflows for SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode game profiling, game-stack routing, and device-aware validation handoffs
+- `network-protocol-skills`: modern networking and application-protocol workflows for transport selection, HTTP/3 and QUIC planning, Media over QUIC draft-aware guidance, WebRTC signaling/media/data-channel work, and protocol diagnostics with stack-plugin handoffs
 - `productivity-skills`: general-purpose maintainer, documentation, Dice MCP job-search with bundled remote MCP config, Codex GUI worktree workflow, and automation-design workflows plus source-bundled docs-audit and code-tracing custom-agent definitions
 - `python-skills`: Python runtime and tooling workflows for Python-based projects; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
 - `reverse-engineering-skills`: binary inspection, artifact triage, and reproducible reverse-engineering note workflows

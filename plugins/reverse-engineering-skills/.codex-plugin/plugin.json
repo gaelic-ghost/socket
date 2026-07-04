@@ -1,6 +1,6 @@
 {
   "name": "reverse-engineering-skills",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "description": "Workflow skills for reverse engineering, decompilation, disassembly, symbol, and artifact-analysis tasks.",
   "skills": "./skills/",
   "author": {
@@ -35,6 +35,8 @@
       "Write"
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/reverse-engineering-skills",
-    "brandColor": "#B967FF"
+    "brandColor": "#B967FF",
+    "composerIcon": "./assets/reverse-engineering-icon.svg",
+    "logo": "./assets/reverse-engineering-icon.svg"
   }
 }
