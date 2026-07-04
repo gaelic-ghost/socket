@@ -1,6 +1,6 @@
 {
   "name": "android-dev-skills",
-  "version": "7.10.0",
+  "version": "8.0.0",
   "description": "Android, Kotlin, Java, Gradle, Android Gradle Plugin, testing, lint, UI implementation, and release-readiness workflow skills.",
   "author": {
     "name": "Gale",
@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/android-dev-skills",
   "repository": "https://github.com/gaelic-ghost/socket",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "android",
     "kotlin",

@@ -1,7 +1,7 @@
 ---
 name: auth-authorization-workflow
 description: Plan, implement, test, and diagnose server-side Swift authentication and authorization for Vapor and Hummingbird services, including Basic and Bearer auth, JWT, sessions, OAuth or OIDC handoffs, password hashing, token lifecycle, middleware placement, request context, route protection, authorization policy, security-sensitive tests, and deployment secret handoffs.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, Hummingbird, SwiftPM, JWT, sessions, OAuth/OIDC, password hashing, middleware, persistence, and server-side Swift services on macOS or Linux.
 metadata:
   owner: gaelic-ghost

@@ -1,7 +1,7 @@
 ---
 name: swift-source-organization-workflow
 description: Organize Swift source trees and files by concern, feature, and layer; split oversized files, extract extension files, normalize MARK sections, file headers, and TODO/FIXME ledgers with stricter split defaults. Use after formatting baseline is clear.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

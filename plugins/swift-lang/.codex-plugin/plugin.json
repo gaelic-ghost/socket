@@ -1,6 +1,6 @@
 {
   "name": "swift-lang",
-  "version": "7.10.0",
+  "version": "8.0.0",
   "description": "Shared Swift language skills for API style, error handling, functional pipelines, formatting, source organization, and modernization cleanup.",
   "skills": "./skills/",
   "author": {
@@ -10,7 +10,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/swift-lang",
   "repository": "https://github.com/gaelic-ghost/socket",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",

@@ -1,6 +1,6 @@
 {
   "name": "productivity-skills",
-  "version": "7.10.0",
+  "version": "8.0.0",
   "description": "Broadly useful productivity workflows for Codex.",
   "author": {
     "name": "Gale",
@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/productivity-skills",
   "repository": "https://github.com/gaelic-ghost/productivity-skills",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "codex",
     "skills",

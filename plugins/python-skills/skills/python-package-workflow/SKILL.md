@@ -1,7 +1,7 @@
 ---
 name: python-package-workflow
 description: Validate Python package surfaces with pyproject metadata, uv-managed builds, dependency boundaries, local smoke checks, semantic versioning, and release-boundary guidance.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients maintaining Python packages with uv, pyproject.toml, build metadata, tests, and package release preparation.
 metadata:
   owner: gaelic-ghost

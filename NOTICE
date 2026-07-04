@@ -3,28 +3,17 @@ Copyright 2026 Gale Williams
 
 Required Notice: Copyright 2026 Gale Williams (mailto:mail@galewilliams.com)
 
-This repository is licensed under the PolyForm Noncommercial License 1.0.0.
-See [LICENSE](./LICENSE) for the full license text.
-
-Commercial use requires a separate written commercial license from Gale.
-For commercial licensing, contact Gale W at <mail@galewilliams.com>.
-See [COMMERCIAL-USE.md](./COMMERCIAL-USE.md) for the current commercial-use
-policy.
-
-Socket versions published before the PolyForm Noncommercial change remain
-available under the license terms that applied to those versions. The
-historical Apache License 2.0 text is preserved in
-[LICENSE-HISTORICAL-APACHE-2.0](./LICENSE-HISTORICAL-APACHE-2.0).
+This repository is licensed under the Apache License 2.0.
+See LICENSE for the full license text.
 
 This NOTICE file applies to the `socket` superproject layer itself,
 including the root documentation, root marketplace metadata, and root
 maintainer automation that live in this repository.
 
-Child repositories and packaged plugin surfaces under `plugins/` may
-carry their own license files, notices, packaging metadata, and release
-contracts. Review each child repository's own shipped legal surfaces
-before reusing or redistributing that child surface independently of the
-root superproject.
+Child repositories and packaged plugin surfaces under `plugins/` may carry
+their own license files, notices, packaging metadata, and release contracts.
+Review each child repository's own shipped legal surfaces before reusing or
+redistributing that child surface independently of the root superproject.
 
 Third-Party Trademarks And Brand References
 

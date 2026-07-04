@@ -1,7 +1,7 @@
 ---
 name: fsharp-csharp-interop
 description: Design and maintain explicit F# and C# boundaries in mixed .NET solutions, including project references, public API shape, async/task interop, nullability, options, records, and package-facing contracts.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with mixed F# and C# .NET solutions.
 metadata:
   owner: gaelic-ghost

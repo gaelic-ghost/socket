@@ -1,8 +1,8 @@
 ---
 name: explain-swiftasb
 description: Explain SwiftASB in user-facing terms, including what it does, what it does not do, adoption tradeoffs, licensing, and when it is or is not the right foundation for a Swift app or package.
-license: PolyForm-Noncommercial-1.0.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+license: Apache-2.0
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -40,7 +40,7 @@ Before giving exact API claims, inspect the current SwiftASB source of truth:
 - the public files under `Sources/SwiftASB/Public/`
 - the latest release notes or tags
 
-As of SwiftASB `v1.6.0`, the supported public surface centers on:
+As of SwiftASB `v1.8.0`, the supported public surface centers on:
 
 - `CodexAppServer`, the owner of the local Codex subprocess, one-call startup, stored-thread operations, app-wide library and inventory creation, diagnostics, feature-operation-event streams, and capability reads
 - `CodexAppServer.start(_:)`, `CodexAppServer.StartupRequest`, `CodexAppServer.StartupSession`, `CodexAppServer.StartupCompatibilityPolicy`, and `CodexAppServerStartupError` for normal startup, reviewed support-window validation, initialization, selected-CLI diagnostics, and typed startup failure handling
@@ -56,6 +56,7 @@ As of SwiftASB `v1.6.0`, the supported public surface centers on:
 - `CodexThread.startReview(against:placement:)` and `CodexReviewHandle` for app-server code reviews from a thread, with inline or detached placement
 - `CodexThread.sendShellCommand(_:)` for explicit user-level shell access, gated by the disabled-by-default `shellCommandExecution` feature category
 - `CodexTurnHandle`, the handle for one active turn
+- `CodexTurnItem.Kind.sleep` for preserved upstream sleep turn item classification when clients switch over public turn item kinds
 - query descriptors such as `CodexAppServer.ThreadListQD`, `CodexFS.FileDiscoveryQD`, `CodexThread.HistoryWindowQD`, `CodexThread.RecentFilesQD`, and `CodexThread.RecentCommandsQD`
 - thread source filtering and labels through `CodexAppServer.ThreadListSourceKind` and `CodexAppServer.ThreadSource`
 - observable companions such as `CodexThread.Dashboard`, `CodexThread.Agenda`, `CodexTurnHandle.Minimap`, `RecentTurns`, `RecentFiles`, and `RecentCommands`
@@ -83,12 +84,12 @@ Generated `CodexWire...` models are internal scaffolding, not the recommended ap
    - explicit code-review and shell-command surfaces when the host app chooses to expose those actions
 6. Describe the adoption costs:
    - the app depends on a local Codex runtime
-   - compatibility follows SwiftASB's reviewed Codex CLI support window; for SwiftASB `v1.6.0`, verify behavior against Codex CLI `0.135.x` before assuming a newer schema family is public
+   - compatibility follows SwiftASB's reviewed Codex CLI support window; for SwiftASB `v1.8.0`, prefer Codex CLI `0.142.x` and treat compatible `0.141.x` installs as the reviewed prior-minor window
    - SwiftASB-owned mutation helpers are feature-policy gated and should produce operation events instead of surprising silent writes
    - `sendShellCommand(_:)` is high-impact user-level shell execution and must stay an explicit opt-in app feature
    - same-thread overlapping turns are rejected client-side
    - generated wire features are not all public API
-   - users must understand the package license before commercial use
+   - users must understand SwiftASB's package license before adoption
 7. Give a clear fit recommendation.
 
 ## Fit Guidance

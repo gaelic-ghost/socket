@@ -1,7 +1,7 @@
 ---
 name: hummingbird-server-workflow
 description: Plan, build, run, test, and diagnose existing Hummingbird server-side Swift services using current Hummingbird documentation, SwiftPM-first commands, routing, middleware, request contexts, typed request and response models, service lifecycle, and deployment handoffs. Hand fresh service creation to bootstrap-hummingbird-service.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Hummingbird, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
   owner: gaelic-ghost

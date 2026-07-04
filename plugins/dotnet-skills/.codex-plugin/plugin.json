@@ -1,6 +1,6 @@
 {
   "name": "dotnet-skills",
-  "version": "7.10.0",
+  "version": "8.0.0",
   "description": "Codex skills for choosing, bootstrapping, building, testing, packaging, diagnosing, and maintaining .NET projects with F# and C# as equal first-party languages.",
   "author": {
     "name": "Gale",
@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/dotnet-skills",
   "repository": "https://github.com/gaelic-ghost/socket",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",

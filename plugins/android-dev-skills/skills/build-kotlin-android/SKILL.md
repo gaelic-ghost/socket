@@ -1,7 +1,7 @@
 ---
 name: build-kotlin-android
 description: Implement Kotlin-first Android app or library changes, including activities, fragments, services, receivers, Compose UI, XML/AppCompat UI, AndroidX, lifecycle-aware coroutines, state, persistence touchpoints, resources, accessibility labels, navigation touchpoints, tests, lint, and validation while preserving repo conventions.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Kotlin-first Android projects.
 metadata:
   owner: gaelic-ghost

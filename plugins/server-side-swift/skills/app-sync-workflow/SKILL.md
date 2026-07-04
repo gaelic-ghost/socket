@@ -1,7 +1,7 @@
 ---
 name: app-sync-workflow
 description: Plan, implement, test, and diagnose app sync contracts in server-side Swift services, including incremental change feeds, cursor or token semantics, idempotent writes, conflict handling, optimistic concurrency, deleted-record/tombstone behavior, background job handoffs, API-shape coordination, and Vapor or Hummingbird integration.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, Hummingbird, SwiftPM, HTTP APIs, OpenAPI, RPC, persistence, background jobs, and client/server sync services on macOS or Linux.
 metadata:
   owner: gaelic-ghost

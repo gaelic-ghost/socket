@@ -292,9 +292,7 @@ When docs and scripts disagree, fix the script or narrow the documented contract
 
 ## License and Contribution Terms
 
-Unless a contribution explicitly says otherwise in writing, contributions to `socket` are made under the PolyForm Noncommercial License 1.0.0 terms in [LICENSE](./LICENSE). The root legal-notice surface for this superproject lives in [NOTICE](./NOTICE).
-
-Commercial use requires a separate written commercial license from Gale. For commercial licensing, contact Gale W at <mail@galewilliams.com>. See [COMMERCIAL-USE.md](./COMMERCIAL-USE.md) for the current commercial-use policy.
+Unless a contribution explicitly says otherwise in writing, contributions to `socket` are made under the Apache License 2.0 terms in [LICENSE](./LICENSE). The root legal-notice surface for this superproject lives in [NOTICE](./NOTICE).
 
 Outside contributions must be signed off under the [Developer Certificate of Origin](./DCO.md). Add a `Signed-off-by:` line to each commit using your real name and an email address you are willing to have recorded in public Git history:
 
@@ -302,6 +300,6 @@ Outside contributions must be signed off under the [Developer Certificate of Ori
 Signed-off-by: Your Name <you@example.com>
 ```
 
-By submitting a contribution, you grant Gale W a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to use, copy, modify, publish, distribute, sublicense, relicense, and otherwise make your contribution available as part of Socket, including under the public Socket license and under separate written commercial licenses offered by Gale.
+By submitting a contribution, you agree that, unless you explicitly state otherwise in writing, the contribution is submitted under the Apache License 2.0 as described in [LICENSE](./LICENSE).
 
-Do not submit contributions to `socket` unless you have the right to make the DCO certification, grant these rights, and understand that Gale may offer separate commercial licenses for Socket.
+Do not submit contributions to `socket` unless you have the right to make the DCO certification and submit the work under the Apache License 2.0.

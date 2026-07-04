@@ -1,7 +1,7 @@
 ---
 name: testing-workflow
 description: Run, filter, debug, and explain server-side JVM tests across Gradle, Maven, SBT, Java, Scala, JUnit, ScalaTest, MUnit, unit, integration, contract, and service-level test surfaces.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Java and Scala JVM backend test workflows.
 metadata:
   owner: gaelic-ghost

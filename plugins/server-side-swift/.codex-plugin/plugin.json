@@ -1,6 +1,6 @@
 {
   "name": "server-side-swift",
-  "version": "7.10.0",
+  "version": "8.0.0",
   "description": "Codex skills for bootstrapping, syncing, building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Hummingbird, hb, persistence, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/server-side-swift",
   "repository": "https://github.com/gaelic-ghost/socket",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",

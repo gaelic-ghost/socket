@@ -1,8 +1,8 @@
 ---
 name: diagnose-integration
 description: Diagnose SwiftASB integration failures across Codex CLI discovery, app-server startup, initialization, threads, turns, approvals, inventory, MCP install/status/resources, reviews, shell commands, worktree grouping, selected Git status, project identity, thread source, filesystem/config/extension/workspace reads, feature policy, feature-operation events, diagnostics, history paging, and live-test isolation.
-license: PolyForm-Noncommercial-1.0.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
+license: Apache-2.0
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, CLI tools, package libraries, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -98,7 +98,7 @@ The current Codex app-server API includes lifecycle operations such as `thread/s
 Check that the package dependency is real and remote-fetchable:
 
 ```swift
-.package(url: "https://github.com/gaelic-ghost/SwiftASB", from: "1.6.0")
+.package(url: "https://github.com/gaelic-ghost/SwiftASB", from: "1.8.0")
 ```
 
 Then check the target that talks to Codex depends on:
@@ -113,7 +113,7 @@ Do not commit machine-local package paths such as `/Users/...`, `~/...`, or `../
 
 SwiftASB expects a local Codex CLI runtime. A diagnosis should tell the maintainer which executable was attempted and whether SwiftASB reported it as supported.
 
-For SwiftASB `v1.6.0`, treat Codex CLI `0.135.x` as the current reviewed schema family unless the SwiftASB README or release notes have moved that support window.
+For SwiftASB `v1.8.0`, treat Codex CLI `0.142.x` as the preferred reviewed schema family. Compatible Codex CLI `0.141.x` installs remain in the prior-minor reviewed window; `0.140.x` is outside the default support window.
 
 For normal clients, `CodexAppServer.start(_:)` returns `StartupSession.cliExecutableDiagnostics` after launching, validating the selected Codex CLI against the reviewed support window, and initializing. Use `CodexAppServer.cliExecutableDiagnostics()` after lower-level `start()` when a UI, CLI, or test intentionally needs to show executable facts before deciding whether to initialize.
 
@@ -133,7 +133,7 @@ The expected order for most clients is:
 3. inspect `StartupSession.cliExecutableDiagnostics` when the UI needs selected-CLI facts
 4. create, resume, or fork a thread
 
-When diagnosing SwiftASB `v1.6.0` or newer, first check whether the thrown error is `CodexAppServerStartupError`. `codexCLINotFound` points at executable discovery, `incompatibleCodexCLI` and `unknownCodexCLIVersion` point at reviewed-support-window validation, `launchFailed` points at process startup, and `initializeFailed` points at protocol initialization or malformed client metadata.
+When diagnosing SwiftASB `v1.8.0` or newer, first check whether the thrown error is `CodexAppServerStartupError`. `codexCLINotFound` points at executable discovery, `incompatibleCodexCLI` and `unknownCodexCLIVersion` point at reviewed-support-window validation, `launchFailed` points at process startup, and `initializeFailed` points at protocol initialization or malformed client metadata.
 
 Use the lower-level sequence only when the app intentionally owns custom diagnostics or compatibility decisions:
 
@@ -219,6 +219,7 @@ If a turn does not behave as expected, check:
 - whether `complete()` is called only after terminal state when a sealed local snapshot is needed
 - whether cancellation uses `interrupt()` rather than dropping the handle silently
 - whether a planning control used `startPlanningTurn(...)` or `TurnCollaborationMode.plan(...)` instead of prompt text
+- whether custom switches over `CodexTurnItem.Kind` handle `.sleep` instead of treating Codex CLI `0.142.x` sleep items as unknown failures
 
 For plan and goal UI, use `CodexThread.makeAgenda()` to read the current goal, accepted plan, proposed plan deltas, and summary titles. If agenda state looks stale, check that the UI observes the `Agenda` object itself, that `makeAgenda()` succeeded in reading the initial goal, and that the app is not copying plan arrays into disconnected state. Goal mutations should go through `Agenda.setGoal(...)`, `pauseGoal()`, `resumeGoal()`, or `clearGoal()` when the agenda owns the view state.
 

@@ -1,7 +1,7 @@
 ---
 name: fly-io-deployment-workflow
 description: Plan, configure, deploy, and diagnose Fly.io deployments for server-side Swift services, including Vapor and Hummingbird apps, Dockerfile handoffs, fly.toml settings, environment variables, secrets, health checks, Postgres attachment, process groups, and deployment validation.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Fly.io, flyctl, Dockerfile-based Swift services, Vapor, Hummingbird, and server-side Swift projects on macOS or Linux.
 metadata:
   owner: gaelic-ghost

@@ -1,7 +1,7 @@
 ---
 name: ci-workflow
 description: Design, inspect, and align Rust CI workflows with local Cargo validation, including cargo fmt, cargo clippy, cargo test, cargo build, cargo doc, cargo package, workspace package selection, feature matrices, MSRV checks, rustup toolchain setup, Clippy warnings-as-errors policy, caches, artifacts, and GitHub Actions-style automation.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

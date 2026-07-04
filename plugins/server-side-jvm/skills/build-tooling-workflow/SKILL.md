@@ -1,7 +1,7 @@
 ---
 name: build-tooling-workflow
 description: Inspect and maintain server-side JVM build tooling across Gradle, Maven, and SBT, including wrapper policy, Java toolchains, dependencies, multi-module boundaries, local run commands, tests, package tasks, and machine-local dependency guardrails.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with server-side JVM repositories that use Gradle, Maven, or SBT.
 metadata:
   owner: gaelic-ghost

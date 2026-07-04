@@ -1,7 +1,7 @@
 ---
 name: ci-workflow
 description: Design and maintain .NET CI workflows for F#, C#, and mixed solutions with SDK setup, restore, build, test, format checks, package checks, caching, and matrix decisions.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with .NET projects and GitHub Actions or equivalent CI systems.
 metadata:
   owner: gaelic-ghost

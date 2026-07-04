@@ -1,7 +1,7 @@
 ---
 name: integrate-fastapi-fastmcp
 description: Integrate FastAPI and FastMCP applications in existing or evolving uv-managed Python projects. Use when adding a FastMCP server to an existing FastAPI app, folding an existing FastMCP server into a FastAPI project, serving both REST and MCP interfaces from one codebase, or graduating an auto-generated FastAPI-to-FastMCP server into a curated FastMCP application.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv-managed Python projects, FastAPI and FastMCP application code, shell access for uv commands, and access to the fastmcp_docs MCP server for current framework guidance.
 metadata:
   owner: gaelic-ghost

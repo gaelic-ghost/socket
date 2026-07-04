@@ -82,6 +82,7 @@ Completed
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
 - [x] Sync `swiftasb-skills` with current SwiftASB changes, starting from the live SwiftASB source and docs so the explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills match the current client API and runtime behavior.
 - [x] Refresh `swiftasb-skills` for SwiftASB `v1.6.0`, including plan-mode turn starts, `CodexThread.Agenda`, thread goal helpers, and plan/goal diagnostics across the existing skill set.
+- [x] Refresh `swiftasb-skills` for SwiftASB `v1.8.0`, including Codex CLI `0.142.x` compatibility guidance, the compatible `0.141.x` prior-minor window, `CodexTurnItem.Kind.sleep`, and ASBPresentation/ASBAppKit/ASBSwiftUI product guidance across the existing skill set.
 
 ### Exit Criteria
 
@@ -761,7 +762,7 @@ Completed Milestone 21 by adding the `cloud-deployment-skills` child plugin, shi
 - [x] Complete Phase 2 of the Apple Dev Skills Socket migration. Treat `plugins/apple-dev-skills` as monorepo-owned source, remove Apple Dev Skills from subtree release gates, update Socket docs and duplicate-install guidance, add the compatibility marketplace smoke test, run full Socket validation, and publish the Socket release that makes the ownership change durable.
 - [ ] Evaluate a centralized Socket validation setup that can check marketplace metadata, plugin manifests, child AGENTS shape, `SKILL.md` frontmatter, and `agents/openai.yaml` alignment from one root command while still leaving child-local tests where behavior needs them.
 - [x] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open: [gaelic-ghost/SpeakSwiftlyServer#98](https://github.com/gaelic-ghost/SpeakSwiftlyServer/issues/98).
-- [x] Move future Socket versions from Apache 2.0 to PolyForm Noncommercial 1.0.0 plus separate commercial licensing, preserving historical Apache 2.0 text for previously licensed versions and recording the policy in [`docs/maintainers/source-available-licensing-options.md`](./docs/maintainers/source-available-licensing-options.md).
+- [x] Restore Socket and the Apple Dev Skills compatibility surface to Apache License 2.0 after the source-available licensing experiment proved less useful than the adoption and goodwill of a standard permissive license.
 
 ## History
 

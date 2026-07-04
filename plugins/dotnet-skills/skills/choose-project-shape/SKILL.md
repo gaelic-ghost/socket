@@ -1,7 +1,7 @@
 ---
 name: choose-project-shape
 description: Choose the right .NET project shape before implementation, including F# versus C# language choice, solution layout, validation commands, package boundaries, and documentation updates.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with .NET SDK, F#, C#, and the dotnet CLI on macOS or other supported .NET development environments.
 metadata:
   owner: gaelic-ghost

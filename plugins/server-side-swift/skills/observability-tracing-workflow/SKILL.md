@@ -1,7 +1,7 @@
 ---
 name: observability-tracing-workflow
 description: Plan, implement, test, and diagnose observability for server-side Swift services, including Swift Logging, Swift Metrics, Swift Distributed Tracing, OpenTelemetry handoffs, request correlation, trace propagation, structured log fields, metric naming, health signals, privacy-safe diagnostics, and Vapor or Hummingbird integration.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Swift Logging, Swift Metrics, Swift Distributed Tracing, OpenTelemetry, Vapor, Hummingbird, SwiftNIO, and server-side Swift services on macOS or Linux.
 metadata:
   owner: gaelic-ghost
