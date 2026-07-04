@@ -39,6 +39,8 @@
       "Design a Swift package API that uses SwiftASB internally without leaking raw wire models.",
       "Diagnose why this SwiftASB-backed app or test is failing."
     ],
-    "brandColor": "#F05138"
+    "brandColor": "#F05138",
+    "composerIcon": "./assets/swiftasb-skills-icon.svg",
+    "logo": "./assets/swiftasb-skills-icon.svg"
   }
 }

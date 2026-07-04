@@ -1,0 +1,4 @@
+interface:
+  display_name: "Network Protocol Diagnostics"
+  short_description: "Diagnose protocol path failures."
+  default_prompt: "Use $network-protocol-diagnostics to preserve a protocol symptom, map the client-to-origin or media path, gather evidence, name the failing hop, and route fixes to the right stack or deployment workflow."

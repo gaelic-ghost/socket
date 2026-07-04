@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Reverse engineering skills icon">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="46%" r="68%">
+      <stop offset="0" stop-color="#1b1230"/>
+      <stop offset="1" stop-color="#020617"/>
+    </radialGradient>
+    <pattern id="scan" width="512" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 9h512" stroke="#c084fc" stroke-opacity=".09" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="84" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="84" fill="url(#scan)"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="#b967ff" stroke-width="12"/>
+  <g filter="url(#glow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M176 150h160l40 40v172H176z" fill="#080b16" stroke="#22d3ee" stroke-width="14"/>
+    <path d="M336 150v54h54" stroke="#22d3ee" stroke-width="14"/>
+    <path d="M212 250h92M212 294h70M212 338h112" stroke="#f472b6" stroke-width="12"/>
+    <path d="M168 196l-42 42 42 42M344 280l42-42-42-42" stroke="#a78bfa" stroke-width="14"/>
+  </g>
+</svg>

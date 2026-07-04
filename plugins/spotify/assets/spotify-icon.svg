@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Spotify plugin icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#04130b"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <pattern id="scan" width="512" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 9h512" stroke="#22c55e" stroke-opacity=".08" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="84" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="84" fill="url(#scan)"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="#1db954" stroke-width="12"/>
+  <g filter="url(#glow)" fill="none" stroke-linecap="round">
+    <circle cx="256" cy="256" r="112" stroke="#1db954" stroke-width="14"/>
+    <path d="M179 224c59-20 131-14 176 17" stroke="#22d3ee" stroke-width="16"/>
+    <path d="M193 267c45-14 105-10 146 15" stroke="#f472b6" stroke-width="14"/>
+    <path d="M211 306c33-9 73-6 105 12" stroke="#a78bfa" stroke-width="12"/>
+  </g>
+</svg>

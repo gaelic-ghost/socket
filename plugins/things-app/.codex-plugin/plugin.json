@@ -33,6 +33,8 @@
       "Fix or reschedule a Things reminder safely.",
       "Use the bundled Things MCP tools in this repo."
     ],
-    "brandColor": "#2563EB"
+    "brandColor": "#2563EB",
+    "composerIcon": "./assets/things-app-icon.svg",
+    "logo": "./assets/things-app-icon.svg"
   }
 }

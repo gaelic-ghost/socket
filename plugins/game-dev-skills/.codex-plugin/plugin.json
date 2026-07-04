@@ -49,6 +49,8 @@
       "Design or debug Core Haptics feedback for a game while keeping device validation honest.",
       "Profile this Apple game for frame pacing, stutter, CPU/GPU overlap, memory pressure, or trace evidence without turning profiling into shader architecture."
     ],
-    "brandColor": "#28D7FF"
+    "brandColor": "#28D7FF",
+    "composerIcon": "./assets/game-dev-skills-icon.svg",
+    "logo": "./assets/game-dev-skills-icon.svg"
   }
 }

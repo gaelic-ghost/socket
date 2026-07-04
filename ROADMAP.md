@@ -22,6 +22,7 @@
 - [Milestone 19: Project audit skills plugin](#milestone-19-project-audit-skills-plugin)
 - [Milestone 20: Game Dev Skills plugin](#milestone-20-game-dev-skills-plugin)
 - [Milestone 21: Cloud Deployment Skills plugin](#milestone-21-cloud-deployment-skills-plugin)
+- [Milestone 22: Network Protocol Skills plugin](#milestone-22-network-protocol-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -57,6 +58,7 @@
 - Milestone 19: Project audit skills plugin - Planned
 - Milestone 20: Game Dev Skills plugin - Completed
 - Milestone 21: Cloud Deployment Skills plugin - Completed
+- Milestone 22: Network Protocol Skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -663,6 +665,41 @@ Completed
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported cloud-deployment skill surface.
 
 Completed Milestone 21 by adding the `cloud-deployment-skills` child plugin, shipping the provider-routing workflow, wiring the Socket marketplace entry, documenting the AWS Agent Toolkit delegation, and keeping future provider expansion scoped to small official-tool routing slices.
+
+## Milestone 22: Network Protocol Skills plugin
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a Socket-hosted `network-protocol-skills` child plugin that owns protocol-level routing and diagnostics separately from stack-specific implementation plugins.
+- [x] Cover modern application transports and real-time protocols, including HTTP/3, QUIC, WebRTC, and Media over QUIC.
+- [x] Keep protocol maturity explicit: QUIC and HTTP/3 are RFC-backed, WebRTC uses W3C and IETF standards plus runtime-specific behavior, and Media over QUIC remains draft-driven.
+- [x] Keep implementation handoffs clear for `server-side-swift`, `rust-skills`, `python-skills`, `server-side-jvm`, `web-dev-skills`, `apple-dev-skills`, `android-dev-skills`, and `cloud-deployment-skills`.
+
+### Tickets
+
+- [x] Create `plugins/network-protocol-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, an icon asset, and authored `skills/` source.
+- [x] Add `network-protocol-skills:choose-network-transport` for choosing HTTP, SSE, WebSocket, HTTP/3, direct QUIC, WebRTC, MoQ, gRPC/RPC, or mixed transport shapes.
+- [x] Add `network-protocol-skills:http3-quic-workflow` for HTTP/3, QUIC, ALPN, Alt-Svc, UDP reachability, TLS, datagrams, and fallback planning.
+- [x] Add `network-protocol-skills:realtime-media-over-quic-workflow` for MoQ draft-state checks, relay/client/server topology, media packaging, live latency, and fallback planning.
+- [x] Add `network-protocol-skills:webrtc-workflow` for WebRTC signaling, ICE, STUN/TURN, DTLS, SRTP, data channels, media devices, SFU/MCU topology, and runtime constraints.
+- [x] Add `network-protocol-skills:network-protocol-diagnostics` for evidence-first diagnosis across HTTP version negotiation, QUIC, WebRTC, MoQ, proxies, CDNs, firewalls, NAT, qlog, and packet captures.
+- [x] Wire `network-protocol-skills` into the root Socket marketplace as an installable child plugin.
+- [x] Add icon assets to the new plugin and to existing Socket plugins that were missing manifest icon fields.
+- [x] Update root README, CONTRIBUTING, and ROADMAP so users and maintainers understand the new plugin surface.
+- [x] Run skill-folder validation and root metadata validation.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `network-protocol-skills` as an installable child plugin.
+- [x] The shipped skills route and guide protocol work across MoQ, HTTP/3, QUIC, WebRTC, transport selection, and diagnostics without absorbing stack-specific implementation ownership.
+- [x] Existing Socket plugin manifests that lacked icons now point at repo-owned icon assets.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the exported network-protocol skill surface.
+
+Completed Milestone 22 by adding the `network-protocol-skills` child plugin, shipping five protocol and diagnostics workflows, wiring the Socket marketplace entry, adding missing plugin icon assets, and keeping implementation handoffs delegated to the owning stack plugins.
 
 ## Small Tickets
 

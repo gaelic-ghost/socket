@@ -18,6 +18,9 @@
       "Read",
       "Write"
     ],
-    "defaultPrompt": "Help me inspect local Codex runtime utility behavior."
+    "defaultPrompt": "Help me inspect local Codex runtime utility behavior.",
+    "brandColor": "#A78BFA",
+    "composerIcon": "./assets/codex-utilities-icon.svg",
+    "logo": "./assets/codex-utilities-icon.svg"
   }
 }

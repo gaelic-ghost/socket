@@ -1,0 +1,4 @@
+interface:
+  display_name: "WebRTC Workflow"
+  short_description: "Plan and diagnose WebRTC work."
+  default_prompt: "Use $webrtc-workflow to plan or diagnose WebRTC media, data channels, signaling, ICE, TURN, SFU/MCU topology, browser/native constraints, and stack-specific implementation handoffs."

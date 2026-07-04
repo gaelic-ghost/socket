@@ -140,6 +140,7 @@ The installable local child entries currently point at:
 - `./plugins/codex-utilities`
 - `./plugins/dotnet-skills`
 - `./plugins/game-dev-skills`
+- `./plugins/network-protocol-skills`
 - `./plugins/productivity-skills`
 - `./plugins/python-skills`
 - `./plugins/reverse-engineering-skills`
