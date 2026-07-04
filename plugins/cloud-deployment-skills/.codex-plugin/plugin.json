@@ -1,0 +1,46 @@
+{
+  "name": "cloud-deployment-skills",
+  "version": "7.10.0",
+  "description": "Codex skills for routing cloud deployment work through official provider plugins, MCP servers, CLIs, and Socket-owned deployment guidance.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-deployment-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "cloud",
+    "deployment",
+    "aws",
+    "agent-toolkit",
+    "mcp",
+    "cloudflare",
+    "vercel",
+    "fly.io"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Cloud Deployment Skills",
+    "shortDescription": "Cloud provider and deployment routing guidance for Codex.",
+    "longDescription": "Guide Codex agents through cloud deployment routing, official provider plugin selection, credential and mutation safety checks, and provider handoffs. The first slice delegates AWS work to the official AWS Agent Toolkit for AWS and keeps Socket focused on thin cross-provider deployment decisions instead of duplicating AWS MCP, AWS CLI, or AWS SAM setup.",
+    "developerName": "gaelic-ghost",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-deployment-skills",
+    "defaultPrompt": [
+      "Choose the right cloud deployment path and route AWS work through the official AWS Agent Toolkit when appropriate.",
+      "Decide whether this deployment should use an official provider plugin, provider CLI, MCP server, framework-owned deploy workflow, or a Socket-owned provider skill."
+    ],
+    "brandColor": "#22D3EE",
+    "composerIcon": "./assets/cloud-deployment-icon.svg",
+    "logo": "./assets/cloud-deployment-icon.svg"
+  }
+}

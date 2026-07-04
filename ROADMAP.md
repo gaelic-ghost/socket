@@ -21,6 +21,7 @@
 - [Milestone 18: Swift Lang shared language plugin](#milestone-18-swift-lang-shared-language-plugin)
 - [Milestone 19: Project audit skills plugin](#milestone-19-project-audit-skills-plugin)
 - [Milestone 20: Game Dev Skills plugin](#milestone-20-game-dev-skills-plugin)
+- [Milestone 21: Cloud Deployment Skills plugin](#milestone-21-cloud-deployment-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -55,6 +56,7 @@
 - Milestone 18: Swift Lang shared language plugin - Completed
 - Milestone 19: Project audit skills plugin - Planned
 - Milestone 20: Game Dev Skills plugin - Completed
+- Milestone 21: Cloud Deployment Skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -629,6 +631,37 @@ Completed
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported game-dev skill surface.
 
 Completed Milestone 20 by adding the `game-dev-skills` child plugin, shipping the Apple-platform game-development workflow slices, wiring the Socket marketplace entry, documenting the plugin boundary, and validating skill metadata, plugin metadata, and root marketplace wiring. Metal rendering and shader architecture remain planned as a later dedicated slice.
+
+## Milestone 21: Cloud Deployment Skills plugin
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a thin Socket-hosted `cloud-deployment-skills` child plugin for cloud provider routing, official provider plugin selection, credential and mutation boundary checks, and cross-provider deployment handoffs.
+- [x] Delegate AWS MCP configuration, AWS CLI setup, AWS SAM setup, and curated AWS skill content to the official [`aws/agent-toolkit-for-aws`](https://github.com/aws/agent-toolkit-for-aws) marketplace and its `aws-core` plugin.
+- [x] Keep framework-specific deployment implementation in the owning stack plugins, such as Server-Side Swift Fly.io deployment guidance.
+- [x] Keep the first Socket slice guidance-only: do not bundle AWS MCP config, copied AWS skills, credential setup scripts, provider templates, or local cloud state.
+
+### Tickets
+
+- [x] Record the detailed plan in [`docs/maintainers/cloud-deployment-skills-plugin-plan.md`](./docs/maintainers/cloud-deployment-skills-plugin-plan.md).
+- [x] Create `plugins/cloud-deployment-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, an icon asset, and authored `skills/` source.
+- [x] Add `cloud-deployment-skills:cloud-deployment-routing-workflow` for provider routing, AWS Agent Toolkit handoff, mutation boundaries, and validation choices.
+- [x] Wire `cloud-deployment-skills` into the root Socket marketplace as an installable child plugin.
+- [x] Update root README and ROADMAP so users understand the new plugin surface and the AWS delegation decision.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `cloud-deployment-skills` as an installable child plugin.
+- [x] AWS work routes to the official AWS Agent Toolkit for AWS by default instead of duplicated Socket-owned AWS MCP, AWS CLI, or AWS SAM setup guidance.
+- [x] The plugin boundary is clear enough for future provider slices without absorbing framework-specific deployment workflows.
+- [x] Root Socket docs, marketplace wiring, and validation agree on the exported cloud-deployment skill surface.
+
+Completed Milestone 21 by adding the `cloud-deployment-skills` child plugin, shipping the provider-routing workflow, wiring the Socket marketplace entry, documenting the AWS Agent Toolkit delegation, and keeping future provider expansion scoped to small official-tool routing slices.
 
 ## Small Tickets
 

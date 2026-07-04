@@ -86,6 +86,7 @@ Currently available from the catalog:
 - `android-dev-skills`
 - `apple-dev-skills`
 - `cardhop-app`
+- `cloud-deployment-skills`
 - `codex-utilities`
 - `dotnet-skills`
 - `game-dev-skills`
@@ -111,6 +112,7 @@ Current Socket catalog shape:
 - `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
 - `apple-dev-skills`: Apple, Swift, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Xcode, strict media type selection for AVFoundation, AVFAudio, Core Media, Core Audio, Audio Toolbox, Swift OpenAPI client, Safari, DocC workflows, and the source-bundled `swift-steward` custom-agent definition with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
+- `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, and AWS handoff to the official AWS Agent Toolkit rather than duplicated AWS MCP, CLI, or SAM setup
 - `codex-utilities`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `game-dev-skills`: Apple platform game development workflows for SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode game profiling, game-stack routing, and device-aware validation handoffs
