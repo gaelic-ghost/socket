@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/agent-portability-skills",
   "repository": "https://github.com/gaelic-ghost/agent-portability-skills",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",

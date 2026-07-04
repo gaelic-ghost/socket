@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-deployment-skills",
   "repository": "https://github.com/gaelic-ghost/socket",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "Apache-2.0",
   "keywords": [
     "codex",
     "plugin",
