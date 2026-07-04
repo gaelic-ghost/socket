@@ -15,7 +15,8 @@ This file is the Cloud Inference Skills child-repo override for work done from `
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
 - Prefer official provider plugins, MCP servers, CLIs, SDKs, and docs before adding Socket-authored setup guidance.
 - Treat Runpod, Hugging Face, and AWS as preferred familiar surfaces when they fit the requested inference or training job.
-- For Runpod work, use the bundled Runpod MCP config when resource management or docs lookup benefits from MCP, and treat the `.agents/skills/companion-clis`, `.agents/skills/flash`, and `.agents/skills/runpodctl` directories as an upstream installed Runpod skill mirror tracked by `skills-lock.json`.
+- For Runpod work, use the bundled Runpod MCP config when resource management or docs lookup benefits from MCP, and treat `skills/companion-clis`, `skills/flash`, and `skills/runpodctl` as upstream Runpod skills tracked by `skills-lock.json`.
+- Keep `.agents/skills` as a symlink discovery mirror of the exported root `skills/` directories.
 - Do not hand-edit the upstream Runpod skill mirror. Refresh it with `npx skills update` or reinstall with `npx skills add runpod/skills` from this plugin root, then review the diff and security notes before committing.
 - For Hugging Face work, prefer the installed Hugging Face Codex plugin and official `huggingface_hub` CLI before adding Socket-owned API or repo-management guidance.
 - For AWS work, prefer the official AWS Agent Toolkit and AWS CLI or SDK surfaces before adding Socket-owned AWS guidance. Treat AWS Lambda inference as a fit only for small, latency-tolerant CPU or accelerator-backed workloads; route GPU or large-model serving to SageMaker, Bedrock, ECS/EKS, Batch, or another provider unless current AWS docs and project constraints support Lambda.

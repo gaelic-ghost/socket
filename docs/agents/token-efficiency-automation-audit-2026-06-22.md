@@ -180,9 +180,9 @@ Poor first `.fsx` candidates:
 
 Evidence:
 
-- `plugins/codex-utilities/hooks/run-thread-title-hook.sh` currently launches
+- `plugins/agentdeck/hooks/run-thread-title-hook.sh` currently launches
   the hook with `node`.
-- `plugins/codex-utilities/scripts/session-start-hook.mjs` hand-rolls hook JSON
+- `plugins/agentdeck/scripts/session-start-hook.mjs` hand-rolls hook JSON
   parsing, environment configuration, App Server JSON-RPC over stdio, state file
   updates, and JSONL logging in one 592-line script.
 - `plugins/dotnet-skills/AGENTS.md` treats F# and C# as equal first-party .NET
@@ -288,7 +288,7 @@ Recommended proof:
 2. Compare the same task in Python and `.fsx` for line count, startup time,
    dependency setup, error messages, and testability.
 3. Only after that comparison, decide whether the first durable `.fsx` home is
-   `dotnet-skills`, `codex-utilities`, or root Socket maintainer tooling.
+   `dotnet-skills`, `agentdeck`, or root Socket maintainer tooling.
 
 Keep the current `.mjs` hook unless the proof shows F# materially improves the
 hook's event model or maintainability. Node is already available in many Codex
@@ -337,18 +337,18 @@ stewardship report should include them so they do not silently become stale
 catalog clutter, but there is no evidence that they should be deleted in this
 audit.
 
-### 4. Decide whether `.fsx` belongs to `dotnet-skills` or `codex-utilities`
+### 4. Decide whether `.fsx` belongs to `dotnet-skills` or `agentdeck`
 
 There are two plausible ownership models:
 
 - `dotnet-skills` owns the authoring convention because `.fsx` is a .NET/F#
   runtime choice.
-- `codex-utilities` owns hook-specific conventions because hook event payloads,
+- `agentdeck` owns hook-specific conventions because hook event payloads,
   App Server JSON-RPC, and runtime data paths are Codex utility concerns.
 
 Recommendation: split the ownership. Put general `.fsx` style, validation, and
 project-shape guidance in `dotnet-skills`; put Codex hook payload contracts and
-runtime-data conventions in `codex-utilities`. Avoid a root Socket scripting
+runtime-data conventions in `agentdeck`. Avoid a root Socket scripting
 policy until at least one proof exists.
 
 ## Do Not Consolidate Yet

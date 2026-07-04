@@ -46,7 +46,7 @@ Translate documentation into the concrete project decision it changes.
    - AWS when the project already uses AWS accounts, IAM, S3, CloudWatch, Lambda, SageMaker, Bedrock, ECS, EKS, or Batch.
 4. Route to official tools:
    - Use `runpod` MCP for Runpod resource mutations and `runpod-docs` MCP for docs lookup when available.
-   - Use the project-scoped upstream Runpod skill mirror under `.agents/skills` for Runpod `flash`, `runpodctl`, and companion CLI details. Refresh that mirror with `npx skills update` or `npx skills add runpod/skills` instead of hand-editing it.
+   - Use the upstream Runpod skills under the exported `skills/` tree for Runpod `flash`, `runpodctl`, and companion CLI details. Refresh those skills with `npx skills update` or `npx skills add runpod/skills` instead of hand-editing them.
    - Use the Hugging Face Codex plugin and Hugging Face CLI for Hub, model, dataset, Space, endpoint, or job work when available.
    - Use the AWS Agent Toolkit and AWS CLI or SDKs for AWS inference work when available.
    - Use provider CLIs or docs for Vast.ai and CoreWeave until a provider-owned agent surface is available or a concrete repeated Socket workflow justifies a new slice.
@@ -73,9 +73,9 @@ Use `runpod-docs` MCP for docs questions. Use `runpod` MCP for resource operatio
 
 Use the installed upstream Runpod skills for details:
 
-- `.agents/skills/flash` for `runpod-flash` SDK and CLI workflows.
-- `.agents/skills/runpodctl` for Runpod CLI workflows.
-- `.agents/skills/companion-clis` for Hugging Face, GitHub, Docker, and AWS CLI support commonly needed around Runpod deployments.
+- `skills/flash` for `runpod-flash` SDK and CLI workflows.
+- `skills/runpodctl` for Runpod CLI workflows.
+- `skills/companion-clis` for Hugging Face, GitHub, Docker, and AWS CLI support commonly needed around Runpod deployments.
 
 ### Hugging Face
 

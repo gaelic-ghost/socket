@@ -124,7 +124,7 @@
     },
     {
       "kind": "codex-plugin-manifest",
-      "path": "plugins/codex-utilities/.codex-plugin/plugin.json"
+      "path": "plugins/agentdeck/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -553,12 +553,12 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
-          "path": "plugins/codex-utilities/.codex-plugin/plugin.json"
+          "path": "plugins/agentdeck/.codex-plugin/plugin.json"
         }
       ],
       "kind": "codex-plugin",
-      "name": "codex-utilities",
-      "path": "plugins/codex-utilities",
+      "name": "agentdeck",
+      "path": "plugins/agentdeck",
       "targets": []
     },
     {
@@ -742,7 +742,7 @@
         "spotify",
         "web-dev-skills",
         "reverse-engineering-skills",
-        "codex-utilities"
+        "agentdeck"
       ]
     },
     {
@@ -2402,7 +2402,7 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
-      "to": "product:codex-utilities"
+      "to": "product:agentdeck"
     },
     {
       "evidence": [
@@ -2411,10 +2411,10 @@
           "path": ".agents/plugins/marketplace.json"
         }
       ],
-      "from": "product:codex-utilities",
+      "from": "product:agentdeck",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
-      "to": "path:./plugins/codex-utilities"
+      "to": "path:./plugins/agentdeck"
     }
   ],
   "schemaVersion": 1,

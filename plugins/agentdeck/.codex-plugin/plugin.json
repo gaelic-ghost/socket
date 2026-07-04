@@ -1,5 +1,5 @@
 {
-  "name": "codex-utilities",
+  "name": "agentdeck",
   "version": "8.1.0",
   "description": "Local Codex runtime utilities for thread, hook, and app-server workflows.",
   "author": {
@@ -9,9 +9,9 @@
   },
   "hooks": "./hooks/hooks.json",
   "interface": {
-    "displayName": "Codex Utilities",
+    "displayName": "AgentDeck",
     "shortDescription": "Local Codex runtime helpers for hooks and thread utilities.",
-    "longDescription": "Codex Utilities collects small local Codex runtime helpers that do not belong to a language-specific skill pack. Its first utility captures SessionStart hook payloads so thread naming automation can be designed against real Codex app data.",
+    "longDescription": "AgentDeck collects small local Codex runtime helpers that do not belong to a language-specific skill pack. Its first utility captures SessionStart hook payloads so thread naming automation can be designed against real Codex app data.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -20,7 +20,7 @@
     ],
     "defaultPrompt": "Help me inspect local Codex runtime utility behavior.",
     "brandColor": "#A78BFA",
-    "composerIcon": "./assets/codex-utilities-icon.svg",
-    "logo": "./assets/codex-utilities-icon.svg"
+    "composerIcon": "./assets/agentdeck-icon.svg",
+    "logo": "./assets/agentdeck-icon.svg"
   }
 }

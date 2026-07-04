@@ -2,20 +2,20 @@
 
 ## Summary
 
-`codex-utilities` should own the agent-facing MCP and skill surfaces for a future desktop automation bridge, while the separate `Utilities for Codex` macOS app owns the stable installed runtime.
+`agentdeck` should own the agent-facing MCP and skill surfaces for a future desktop automation bridge, while the separate `AgentDeck` macOS app owns the stable installed runtime.
 
 The plugin should feel familiar to agents trained on first-party Computer Use: a small set of explicit UI-action tools, a read-first app-state tool, and a clear confirmation policy. It should not ship or cache the signed macOS app bundle.
 
 ## Repository Split
 
-- `gaelic-ghost/UtilitiesForCodex`: stable macOS app, signing identity, permission flow, local transport endpoint, Socket installer/status UI, and runtime diagnostics.
-- `socket/plugins/codex-utilities`: MCP shim, skill guidance, confirmation policy, install/troubleshooting docs, and lightweight plugin metadata.
+- `gaelic-ghost/AgentDeck`: stable macOS app, signing identity, permission flow, local transport endpoint, Socket installer/status UI, and runtime diagnostics.
+- `socket/plugins/agentdeck`: MCP shim, skill guidance, confirmation policy, install/troubleshooting docs, and lightweight plugin metadata.
 
 This split keeps the macOS trust boundary stable while preserving a hot-swappable agent-facing plugin adapter.
 
 ## Why This Belongs Here
 
-`codex-utilities` is already the Socket plugin for local Codex runtime utilities that are not language-specific, app-specific, or repository-maintenance workflows. A desktop bridge for Codex is a local Codex runtime utility.
+`agentdeck` is already the Socket plugin for local Codex runtime utilities that are not language-specific, app-specific, or repository-maintenance workflows. A desktop bridge for Codex is a local Codex runtime utility.
 
 It does not belong in:
 
@@ -26,7 +26,7 @@ It does not belong in:
 
 ## Planned MCP Surface
 
-The initial MCP server should be a stdio adapter that talks to the installed `Utilities for Codex` app over a local transport. Unix domain sockets are the preferred first transport to evaluate.
+The initial MCP server should be a stdio adapter that talks to the installed `AgentDeck` app over a local transport. Unix domain sockets are the preferred first transport to evaluate.
 
 Planned tools:
 
@@ -47,7 +47,7 @@ Codex GUI restart tools can ship as their own small surface after the app expose
 
 ## Planned Skill Surface
 
-Add a `desktop-bridge` skill under `plugins/codex-utilities/skills/desktop-bridge/`.
+Add a `desktop-bridge` skill under `plugins/agentdeck/skills/desktop-bridge/`.
 
 The skill should tell agents:
 
@@ -61,7 +61,7 @@ The skill should tell agents:
 
 The skill should mirror the useful shape of first-party Computer Use without copying its app-bundle packaging model.
 
-Add a separate `codex-gui-restart` skill under `plugins/codex-utilities/skills/codex-gui-restart/`.
+Add a separate `codex-gui-restart` skill under `plugins/agentdeck/skills/codex-gui-restart/`.
 
 That skill should tell agents:
 
@@ -70,7 +70,7 @@ That skill should tell agents:
 - Exclude the requesting thread from the set of other active threads.
 - Use `if-idle` when the user wants a restart only if no other threads are active.
 - Use `when-idle` only when the user explicitly wants the app to wait for other active threads.
-- Treat `when-idle` as blocked unless `UtilitiesForCodex` reports that it has a supported app-side thread-status source.
+- Treat `when-idle` as blocked unless `AgentDeck` reports that it has a supported app-side thread-status source.
 - Report the scheduled restart status before ending the assistant turn.
 - Do not use restart tools as a generic cache refresh, plugin update, or troubleshooting step without user intent.
 
@@ -107,12 +107,12 @@ The restart coordinator should fail closed when it cannot confirm idleness from 
 
 ## Codex GUI Restart Plan
 
-The restart workflow belongs in `codex-utilities` because it is a local Codex runtime utility. It is not an Apple development workflow, a general productivity workflow, or a repo-maintenance skill.
+The restart workflow belongs in `agentdeck` because it is a local Codex runtime utility. It is not an Apple development workflow, a general productivity workflow, or a repo-maintenance skill.
 
 The app/plugin split should be:
 
-- `UtilitiesForCodex`: owns pending restart requests, cancellation, status, waiting behavior, and final macOS quit/reopen execution.
-- `codex-utilities` MCP shim: exposes request, cancel, and status tools that talk to the app over the local transport.
+- `AgentDeck`: owns pending restart requests, cancellation, status, waiting behavior, and final macOS quit/reopen execution.
+- `agentdeck` MCP shim: exposes request, cancel, and status tools that talk to the app over the local transport.
 - `codex-gui-restart` skill: tells agents when it is safe to call those tools and how to report the result.
 
 The first restart implementation should support `if-idle` before `when-idle`.
@@ -154,12 +154,12 @@ Open questions:
 ### Slice 1: Plan and App Baseline
 
 - Add this plan.
-- Keep `codex-utilities` metadata hook-only until a real MCP server exists.
-- Bootstrap `UtilitiesForCodex` as the separate macOS runtime app.
+- Keep `agentdeck` metadata hook-only until a real MCP server exists.
+- Bootstrap `AgentDeck` as the separate macOS runtime app.
 
 ### Slice 2: Bridge Status MCP
 
-- Add a small MCP server under `plugins/codex-utilities/mcp/desktop-bridge/`.
+- Add a small MCP server under `plugins/agentdeck/mcp/desktop-bridge/`.
 - Implement `get_bridge_status()` only.
 - Return useful missing-app and missing-transport diagnostics.
 - Add plugin metadata only when the server is runnable.
@@ -182,13 +182,13 @@ Open questions:
 
 ### Slice 6: Codex GUI Restart Tools
 
-- Add restart request, cancellation, and status tools once `UtilitiesForCodex` exposes the coordinator endpoint.
+- Add restart request, cancellation, and status tools once `AgentDeck` exposes the coordinator endpoint.
 - Implement `if-idle` first using assistant-provided observed thread state.
 - Return blocked diagnostics for `when-idle` until a supported app-side thread-status source exists.
 - Add `skills/codex-gui-restart/SKILL.md` with the explicit user-intent, active-thread inspection, and final-status reporting rules.
 
 ## Current Decision
 
-Plan the MCP and skill inside `codex-utilities`, but keep the actual app runtime in the public `gaelic-ghost/UtilitiesForCodex` repository.
+Plan the MCP and skill inside `agentdeck`, but keep the actual app runtime in the public `gaelic-ghost/AgentDeck` repository.
 
-For Codex GUI restart coordination, keep the waiting and restart execution in `UtilitiesForCodex`; keep the agent-facing request/cancel/status tools and operational skill in `codex-utilities`. Do not claim automatic `when-idle` support until the installed app has a supported thread-status source outside the current assistant turn.
+For Codex GUI restart coordination, keep the waiting and restart execution in `AgentDeck`; keep the agent-facing request/cancel/status tools and operational skill in `agentdeck`. Do not claim automatic `when-idle` support until the installed app has a supported thread-status source outside the current assistant turn.

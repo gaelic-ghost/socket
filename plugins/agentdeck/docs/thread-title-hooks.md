@@ -1,13 +1,13 @@
 # Codex Thread Title Hook Notes
 
-Codex Utilities provides `SessionStart` and `Stop` hooks for prefixing generated
+AgentDeck provides `SessionStart` and `Stop` hooks for prefixing generated
 thread titles with the project directory name, plus a `PostToolUse` diagnostic
 hook for timing research. By default, a trusted and enabled hook renames project
 threads; disable the hook in Codex GUI settings to turn the behavior off.
 
 ## Name
 
-The plugin is named `codex-utilities` because this work is about Codex runtime
+The plugin is named `agentdeck` because this work is about Codex runtime
 behavior rather than a language, framework, app, or repository-maintenance
 domain. It follows the Socket convention of hyphen-case plugin IDs with a
 reader-facing display name in plugin metadata.
@@ -28,32 +28,32 @@ Codex GUI and trusting the plugin hooks.
 The script appends stdin to:
 
 ```text
-~/.codex/codex-utilities/hooks/thread-title-payloads.jsonl
+~/.codex/agentdeck/hooks/thread-title-payloads.jsonl
 ```
 
 It also writes structured hook decisions to:
 
 ```text
-~/.codex/codex-utilities/hooks/thread-title-decisions.jsonl
+~/.codex/agentdeck/hooks/thread-title-decisions.jsonl
 ```
 
 Per-thread rename state is written to:
 
 ```text
-~/.codex/codex-utilities/hooks/thread-title-state.json
+~/.codex/agentdeck/hooks/thread-title-state.json
 ```
 
 Post-tool-use summaries are written to:
 
 ```text
-~/.codex/codex-utilities/hooks/tool-use-events.jsonl
+~/.codex/agentdeck/hooks/tool-use-events.jsonl
 ```
 
-Set `CODEX_UTILITIES_DATA_DIR` to redirect these paths during tests.
+Set `AGENTDECK_DATA_DIR` to redirect these paths during tests.
 
 ## Thread Title Modes
 
-`CODEX_UTILITIES_THREAD_TITLE_MODE` controls the title behavior:
+`AGENTDECK_THREAD_TITLE_MODE` controls the title behavior:
 
 - `rename` is the default. It uses the `Stop` hook to read the generated title
   and then call App Server `thread/name/set` once per thread.
@@ -68,12 +68,12 @@ that hook fires. The second `Stop` reads the current generated title with App
 Server `thread/read`, prefixes it, and records per-thread state so later turns
 do not keep rewriting the title.
 
-`CODEX_UTILITIES_THREAD_TITLE_MIN_STOP_COUNT` controls the Stop count threshold.
+`AGENTDECK_THREAD_TITLE_MIN_STOP_COUNT` controls the Stop count threshold.
 The default is `2`. Set it to `1` only when deliberately testing first-turn
 renames.
 
 The prefix is the last path component of `cwd`, truncated to
-`CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH` characters. The default maximum
+`AGENTDECK_THREAD_TITLE_MAX_PREFIX_LENGTH` characters. The default maximum
 is `48`. The generated title is preserved after the prefix:
 
 ```text
@@ -88,9 +88,9 @@ the default Codex chat root:
 ```
 
 the hook skips prefixing by default so projectless chats keep Codex's generated
-title. Override the root with `CODEX_UTILITIES_PROJECTLESS_ROOT`. To opt into a
+title. Override the root with `AGENTDECK_PROJECTLESS_ROOT`. To opt into a
 shared projectless prefix such as `Chat`, set
-`CODEX_UTILITIES_PROJECTLESS_THREAD_PREFIX`.
+`AGENTDECK_PROJECTLESS_THREAD_PREFIX`.
 
 The thread id candidate is read from `thread_id`, `threadId`, `session_id`, then
 `sessionId`. Current Codex hook docs describe `session_id`.
@@ -102,7 +102,7 @@ A live projectless thread created after trusting the plugin hook produced this
 {
   "session_id": "019e9e4e-e0c5-7591-ac1d-51c09ef83faa",
   "transcript_path": "~/.codex/sessions/2026/06/06/rollout-2026-06-06T15-00-30-019e9e4e-e0c5-7591-ac1d-51c09ef83faa.jsonl",
-  "cwd": "~/Documents/Codex/2026-06-06/codex-utilities-projectless-hook-test",
+  "cwd": "~/Documents/Codex/2026-06-06/agentdeck-projectless-hook-test",
   "hook_event_name": "SessionStart",
   "model": "gpt-5.5",
   "permission_mode": "default",
@@ -133,13 +133,13 @@ The hook's rename mode starts a short-lived App Server JSONL stdio process:
 codex app-server
 ```
 
-Override the command with `CODEX_UTILITIES_APP_SERVER_COMMAND`. The hook sends
+Override the command with `AGENTDECK_APP_SERVER_COMMAND`. The hook sends
 `initialize`, `initialized`, `thread/read`, and `thread/name/set` over stdio.
 This path works with the regular CLI install and does not require the managed
 app-server daemon or the standalone Codex installer.
 
-`CODEX_UTILITIES_THREAD_TITLE_POLL_ATTEMPTS` and
-`CODEX_UTILITIES_THREAD_TITLE_POLL_DELAY_MS` control the bounded wait for Codex's
+`AGENTDECK_THREAD_TITLE_POLL_ATTEMPTS` and
+`AGENTDECK_THREAD_TITLE_POLL_DELAY_MS` control the bounded wait for Codex's
 generated title during the `Stop` hook. If the title is still missing when the
 poll expires, the hook skips the rename and can try again on a later `Stop`.
 
@@ -181,14 +181,14 @@ Before testing, confirm the active Codex config uses the current feature keys:
 `features.plugin_hooks` are not required and should not appear in operator
 guidance.
 
-An installed `codex-utilities@socket` 6.16.0 probe initially did not expose the
+An installed `agentdeck@socket` 6.16.0 probe initially did not expose the
 plugin-bundled `SessionStart` hook until the Codex GUI was restarted. After the
 restart, the hook appeared in settings, was trusted, and captured real
 `SessionStart` payloads.
 
 1. Install or refresh the Socket marketplace plugin locally.
 2. Confirm the hook source is visible in Codex hook settings or `/hooks`.
-3. Trust the `codex-utilities` `SessionStart`, `Stop`, and `PostToolUse` hooks
+3. Trust the `agentdeck` `SessionStart`, `Stop`, and `PostToolUse` hooks
    if they appear.
 4. Start a new thread in a known working directory.
 5. Confirm `thread-title-decisions.jsonl` records `SessionStart` and `Stop`
@@ -198,7 +198,7 @@ restart, the hook appeared in settings, was trusted, and captured real
    second `Stop` event.
 8. Inspect `tool-use-events.jsonl` to see whether title generation appears as a
    hook-visible tool event.
-9. Use `CODEX_UTILITIES_THREAD_TITLE_MODE=capture` or `dry-run` only when
+9. Use `AGENTDECK_THREAD_TITLE_MODE=capture` or `dry-run` only when
    debugging the hook without mutating thread metadata.
 10. Keep the model-mediated prefix route as a comparison path if direct App
    Server renaming loses too much of Codex's generated-title quality.

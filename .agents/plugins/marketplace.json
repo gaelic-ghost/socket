@@ -252,10 +252,10 @@
       "category": "Developer Tools"
     },
     {
-      "name": "codex-utilities",
+      "name": "agentdeck",
       "source": {
         "source": "local",
-        "path": "./plugins/codex-utilities"
+        "path": "./plugins/agentdeck"
       },
       "policy": {
         "installation": "AVAILABLE",

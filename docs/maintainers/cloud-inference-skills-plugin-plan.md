@@ -41,7 +41,7 @@ Bundle Runpod's official MCP configuration because it provides direct agent valu
 - `runpod`: stdio server via `npx -y @runpod/mcp-server@latest`, requiring `RUNPOD_API_KEY` from the Codex MCP environment.
 - `runpod-docs`: unauthenticated remote docs MCP at `https://docs.runpod.io/mcp`.
 
-Keep Runpod's upstream agent skills as a project-scoped installed mirror under `.agents/skills/`, tracked by `skills-lock.json`. Refresh the mirror with Runpod's official package rather than hand-editing the copied skill files:
+Keep Runpod's upstream agent skills under the exported `skills/` tree, tracked by `skills-lock.json`, with `.agents/skills/` as a symlink discovery mirror. Refresh the upstream skills with Runpod's official package rather than hand-editing the copied skill files:
 
 ```bash
 npx skills add runpod/skills
@@ -57,7 +57,7 @@ Do not duplicate Hugging Face or AWS setup while their first-party Codex plugins
 
 ## Checklist
 
-- [x] Create `plugins/cloud-inference-skills/` with `.codex-plugin/plugin.json`, `.mcp.json`, `AGENTS.md`, an icon asset, authored `skills/` source, and project-scoped upstream Runpod skill mirror.
+- [x] Create `plugins/cloud-inference-skills/` with `.codex-plugin/plugin.json`, `.mcp.json`, `AGENTS.md`, an icon asset, authored `skills/` source, and exported upstream Runpod skills.
 - [x] Add `cloud-inference-skills:cloud-inference-routing-workflow`.
 - [x] Bundle Runpod's official MCP server config without committing API keys.
 - [x] Install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills with `npx skills add runpod/skills`.
