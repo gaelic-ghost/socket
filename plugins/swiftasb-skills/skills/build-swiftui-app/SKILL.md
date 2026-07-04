@@ -2,7 +2,7 @@
 name: build-swiftui-app
 description: Build or refactor a SwiftUI app feature on top of SwiftASB using framework-owned SwiftUI state, SwiftASB thread and turn handles, observable companions, clear runtime diagnostics, and safe validation.
 license: PolyForm-Noncommercial-1.0.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, SwiftUI, Observation, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -81,7 +81,7 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexThread+Agenda.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.6.0`, SwiftUI-facing integrations should prefer:
+As of SwiftASB `v1.8.0`, SwiftUI-facing integrations should prefer:
 
 - `CodexAppServer.start(_:)` with `CodexAppServer.StartupRequest` for normal one-call startup, compatibility validation, initialization, and typed `CodexAppServerStartupError` failures
 - lower-level `CodexAppServer.start()`, `cliExecutableDiagnostics()`, and `initialize(_:)` only when the app intentionally owns custom diagnostics, compatibility policy, or test setup before initialization
@@ -100,8 +100,10 @@ As of SwiftASB `v1.6.0`, SwiftUI-facing integrations should prefer:
 - `CodexThread.makeAgenda()` for current goal state, accepted plan snapshots, proposed plan text, and summary titles
 - `CodexThread.startPlanningTurn(...)` and `CodexAppServer.TurnCollaborationMode.plan(...)` for explicit plan-mode UI controls
 - `CodexTurnHandle.minimap` for active-turn current state
+- `CodexTurnItem.Kind.sleep` when custom turn-history or minimap-adjacent UI switches over public turn item kinds
 - `CodexThread.makeRecentTurns(...)`, `makeRecentFiles(...)`, and `makeRecentCommands(...)` for local history views
 - `CodexAppServer.ThreadListQD`, `CodexFS.FileDiscoveryQD`, `CodexThread.HistoryWindowQD`, `CodexThread.RecentFilesQD`, and `CodexThread.RecentCommandsQD` when SwiftUI state needs repeatable query intent
+- optional `ASBPresentation`, `ASBAppKit`, and `ASBSwiftUI` products when the app wants ready-made sidebar, agenda, or dashboard panels over SwiftASB presentation snapshots
 
 ## Implementation Workflow
 
@@ -109,8 +111,9 @@ As of SwiftASB `v1.6.0`, SwiftUI-facing integrations should prefer:
 2. Read Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.6.0` when using one-call startup with typed startup errors, app-wide library or inventory, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP installs/status/resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, code-review starts, shell-command execution, plan/goal UI, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.8.0` when using current one-call startup, Codex CLI `0.142.x` compatibility, app-wide library or inventory, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP installs/status/resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, code-review starts, shell-command execution, plan/goal UI, sleep turn-item classification, presentation products, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
+   - optional products: `ASBPresentation`, `ASBAppKit`, and `ASBSwiftUI` when the app uses SwiftASB's reusable presentation snapshots or native UI panels
 4. Choose the owner object:
    - app-wide model owns `CodexAppServer`
    - app-wide, scene, or workspace model owns `CodexAppServer.Library` when the UI needs stored-thread lists before a thread is selected
@@ -264,6 +267,8 @@ Use this as a shape, not as a file to paste blindly. Match the app's real lifeti
 - Use `CodexThread.sendShellCommand(_:)` only behind explicit user opt-in for high-impact shell execution; preserve shell syntax and explain that it does not inherit the thread sandbox policy.
 - Use `dashboard` for thread-wide current activity. Use `thread.startPlanningTurn(...)` for Plan buttons instead of sending slash commands through a text prompt.
 - Use `currentMinimap` for the active turn's command, file-edit, dynamic-tool, collab-tool, MCP, and compaction activity.
+- Handle `CodexTurnItem.Kind.sleep` explicitly in custom turn item switches so UI remains forward-safe for Codex CLI `0.142.x` history and live events.
+- Use `ASBThreadSidebar`, `ASBAgendaPanel`, and `ASBDashboardPanel` from `ASBSwiftUI` when the app wants SwiftASB-owned presentation snapshots rendered with packaged UI instead of custom panels.
 - Use recent companions for inspector rails and completed history instead of building a second cache from raw events.
 - Keep approval and elicitation prompts user-facing and concrete: tell the user what command, file change, permission, or MCP action is being requested.
 - Keep cancellation visible and reversible where the app's product model allows it.

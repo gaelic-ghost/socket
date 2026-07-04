@@ -2,7 +2,7 @@
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
 license: PolyForm-Noncommercial-1.0.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -66,7 +66,7 @@ For SwiftUI, AppKit, SwiftPM, or Xcode behavior, use Apple Dev Skills and Apple 
    - approval and elicitation UI
    - model, MCP, hook, config, extension, remote-control, feature-operation, or permission diagnostics
    - selected-worktree Git status or marketplace-maintenance UI
-   - app-wide inventory UI, MCP install UI, MCP resource viewer, or MCP inspector
+   - app-wide inventory UI, MCP install UI, MCP resource viewer, MCP inspector, or reusable ASBPresentation/ASBAppKit/ASBSwiftUI UI surface
    - plan/goal UI, code-review UI, or explicit shell-command UI
    - package API for other apps
    - automation or one-shot task execution
@@ -118,6 +118,7 @@ Prefer:
 - `CodexThread.makeAgenda()` and `CodexThread.startPlanningTurn(...)` for current goal, accepted plan, proposed plan text, and explicit plan-mode controls
 - `CodexTurnHandle.minimap` for active turn state
 - recent companions for inspector rails and completed history
+- `ASBPresentation`, `ASBAppKit`, and `ASBSwiftUI` products when the app wants ready-made sidebar, agenda, or dashboard surfaces over SwiftASB presentation snapshots
 - explicit user-visible error strings for `CodexAppServerStartupError`, compatibility, and turn failures
 
 Handoff: `swiftasb:build-swiftui-app`.
@@ -135,6 +136,7 @@ Plan:
 - whether the helper exposes feature-category toggles or only uses SwiftASB defaults
 - how menu or toolbar actions start, steer, interrupt, or inspect turns
 - how streamed events reach AppKit views safely
+- whether `ASBAppKit` or `ASBPresentation` can provide the sidebar or presentation snapshot layer instead of custom controller state
 
 Handoff: `swiftasb:build-appkit-app`.
 

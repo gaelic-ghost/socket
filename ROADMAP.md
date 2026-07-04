@@ -82,6 +82,7 @@ Completed
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
 - [x] Sync `swiftasb-skills` with current SwiftASB changes, starting from the live SwiftASB source and docs so the explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills match the current client API and runtime behavior.
 - [x] Refresh `swiftasb-skills` for SwiftASB `v1.6.0`, including plan-mode turn starts, `CodexThread.Agenda`, thread goal helpers, and plan/goal diagnostics across the existing skill set.
+- [x] Refresh `swiftasb-skills` for SwiftASB `v1.8.0`, including Codex CLI `0.142.x` compatibility guidance, the compatible `0.141.x` prior-minor window, `CodexTurnItem.Kind.sleep`, and ASBPresentation/ASBAppKit/ASBSwiftUI product guidance across the existing skill set.
 
 ### Exit Criteria
 

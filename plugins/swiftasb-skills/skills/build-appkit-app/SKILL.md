@@ -2,7 +2,7 @@
 name: build-appkit-app
 description: Build or refactor an AppKit app feature on top of SwiftASB using explicit application, window, document, thread, and turn ownership with main-actor UI updates and clear runtime diagnostics.
 license: PolyForm-Noncommercial-1.0.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -85,7 +85,7 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexThread+Agenda.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.6.0`, AppKit-facing integrations should prefer:
+As of SwiftASB `v1.8.0`, AppKit-facing integrations should prefer:
 
 - `CodexAppServer.start(_:)` with `CodexAppServer.StartupRequest` for normal one-call subprocess startup, compatibility validation, initialization, and typed `CodexAppServerStartupError` failures
 - lower-level `CodexAppServer.start()`, `cliExecutableDiagnostics()`, and `initialize(_:)` only when the app intentionally owns custom diagnostics, compatibility policy, or test setup before initialization
@@ -100,9 +100,11 @@ As of SwiftASB `v1.6.0`, AppKit-facing integrations should prefer:
 - `CodexThread` for conversation-scoped text turns, plan-mode turns, thread events, thread actions, archive/unarchive, thread goals, request responses, and local history
 - `CodexThread.startReview(against:placement:)` for code-review UI, and `CodexThread.sendShellCommand(_:)` only for explicit user-level shell actions when `shellCommandExecution` is enabled
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, minimap state, and completion handoff
+- `CodexTurnItem.Kind.sleep` when custom transcript, history, or activity UI switches over public turn item kinds
 - `CodexThread.makeDashboard()`, `CodexThread.makeAgenda()`, and `CodexTurnHandle.minimap` as UI-friendly current-state mirrors
 - local history helpers and recent companions for inspector panels, transcript sidebars, and completed work views
 - query descriptors such as `CodexAppServer.ThreadListQD`, `CodexFS.FileDiscoveryQD`, `CodexThread.HistoryWindowQD`, `CodexThread.RecentFilesQD`, and `CodexThread.RecentCommandsQD` for repeatable sidebar, file-picker, inspector, and history intent
+- optional `ASBPresentation` and `ASBAppKit` products when the app wants SwiftASB presentation snapshots or the packaged AppKit thread sidebar view
 
 ## Implementation Workflow
 
@@ -110,8 +112,9 @@ As of SwiftASB `v1.6.0`, AppKit-facing integrations should prefer:
 2. Read the Apple docs for the framework behavior the change relies on.
 3. Add SwiftASB as a package dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.6.0` when using one-call startup with typed startup errors, app-wide library or inventory, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP installs/status/resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, code-review starts, shell-command execution, plan/goal UI, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.8.0` when using current one-call startup, Codex CLI `0.142.x` compatibility, app-wide library or inventory, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP installs/status/resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, code-review starts, shell-command execution, plan/goal UI, sleep turn-item classification, presentation products, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
+   - optional products: `ASBPresentation` and `ASBAppKit` when the app uses SwiftASB's reusable presentation snapshots or packaged AppKit views
 4. Choose the SwiftASB owner:
    - application-level model owns `CodexAppServer` when one runtime serves many windows
    - application, window, or document model owns `CodexAppServer.Library` when the UI needs stored-thread lists before a thread is selected
@@ -250,6 +253,8 @@ Use this as a shape, not as a file to paste blindly. Match the app's actual nib/
 - Use `CodexThread.sendShellCommand(_:)` only behind explicit user opt-in for high-impact shell execution; preserve shell syntax and explain that it does not inherit the thread sandbox policy.
 - Show approvals as concrete AppKit UI: sheet, popover, panel, or inspector row that names the command, file change, permission, or MCP action.
 - Use `dashboard` and `minimap` state for activity views instead of replaying every raw event into controller-owned arrays.
+- Handle `CodexTurnItem.Kind.sleep` explicitly in custom turn item switches so AppKit transcript and activity UI remains current with Codex CLI `0.142.x` events.
+- Use `ASBThreadSidebarView` from `ASBAppKit` when the app wants the packaged dense source-list renderer over `ASBPresentation` snapshots.
 - Keep document and window closure explicit: interrupt active work or make it clear that background work continues elsewhere.
 - Surface diagnostics, including config warnings, deprecation notices, MCP status changes, and remote-control status changes, in places a Mac maintainer can actually inspect, such as a status item, inspector, log pane, or preferences diagnostics view.
 

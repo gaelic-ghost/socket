@@ -2,7 +2,7 @@
 name: build-swift-package
 description: Build or refactor a Swift package API on top of SwiftASB without leaking raw app-server wire models, while keeping live Codex probes opt-in, isolated, timeout-bounded, and documented.
 license: PolyForm-Noncommercial-1.0.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.6.0 or newer, Swift 6, SwiftPM, package libraries, command-line tools, and local Codex app-server integrations.
+compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, package libraries, command-line tools, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -82,7 +82,7 @@ Verify current SwiftASB docs and public API before editing:
 - `Sources/SwiftASB/Public/CodexThread+Agenda.swift`
 - `Sources/SwiftASB/Public/CodexTurnHandle.swift`
 
-As of SwiftASB `v1.6.0`, package integrations should prefer:
+As of SwiftASB `v1.8.0`, package integrations should prefer:
 
 - `CodexAppServer.start(_:)` with `CodexAppServer.StartupRequest` for normal one-call subprocess startup, compatibility validation, initialization, and typed `CodexAppServerStartupError` failures
 - lower-level `CodexAppServer.start()`, `cliExecutableDiagnostics()`, and `initialize(_:)` only when the package intentionally owns custom diagnostics, compatibility policy, or test setup before initialization
@@ -98,7 +98,9 @@ As of SwiftASB `v1.6.0`, package integrations should prefer:
 - `CodexThread.sendShellCommand(_:)` only when the package intentionally exposes high-impact user-level shell execution and requires the host to enable `shellCommandExecution`
 - `CodexThread.makeAgenda()` and goal helpers when the package intentionally exposes plan and goal state
 - `CodexTurnHandle` for one active turn, including events, steering, interruption, request responses, and completion handoff
+- `CodexTurnItem.Kind.sleep` when the package switches over public turn item kinds or exposes turn-history classifications
 - query descriptors when the package API needs repeatable thread-list, file-discovery, history-window, recent-file, or recent-command intent
+- optional `ASBPresentation`, `ASBAppKit`, and `ASBSwiftUI` products only when the package intentionally exposes reusable presentation or UI components
 - package-owned public types for the user's domain when consumers do not need direct SwiftASB handles
 
 ## Implementation Workflow
@@ -110,7 +112,7 @@ As of SwiftASB `v1.6.0`, package integrations should prefer:
    - public dependency: expose selected SwiftASB handles only when consumers genuinely need them
 4. Add SwiftASB as a dependency only if it is not already present:
    - package URL: `https://github.com/gaelic-ghost/SwiftASB`
-   - minimum version: `1.6.0` when using one-call startup with typed startup errors, app-wide library or inventory, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP installs/status/resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, code-review starts, shell-command execution, plan/goal UI, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
+   - minimum version: `1.8.0` when using current one-call startup, Codex CLI `0.142.x` compatibility, app-wide library or inventory, stable worktree groups, repository/worktree filters, selected-worktree Git status, feature policy, feature-operation events, extension marketplace maintenance, project identity, thread source, filesystem match metadata, MCP installs/status/resource reads, config warnings, extension inventory, workspace, query-descriptor, thread archive/unarchive, code-review starts, shell-command execution, plan/goal UI, sleep turn-item classification, presentation products, or recent-activity guidance; otherwise verify the support window in SwiftASB's README
    - product: `SwiftASB`
 5. Add the dependency to the target that owns Codex behavior, not every target by default.
 6. Decide whether plan/goal state, filesystem/config/extension/MCP/workspace/worktree/selected-Git-status/project-identity/thread-source facts, app-wide inventory, feature-policy choices, review starts, shell commands, or feature-operation events are part of the package API or only implementation detail.
@@ -196,6 +198,7 @@ Use this as a shape, not as a file to paste blindly. Most packages should return
 - Expose feature-operation events only when consumers need audit or status records for SwiftASB-owned mutations. Do not create duplicate package events for routine read-only refreshes.
 - Preserve SwiftASB's file-discovery match metadata if the package exposes fuzzy search results; do not recompute highlight ranges or ranking reasons in a parallel scoring system unless the package has its own product-specific ranking.
 - Use query descriptor types when the package needs to preserve list, file-discovery, history-window, recent-file, or recent-command intent as data.
+- Handle `CodexTurnItem.Kind.sleep` explicitly when switching over `CodexTurnItem.Kind`; do not collapse it into an unknown or failure state.
 - Expose thread-management actions such as goals, naming, metadata updates, compaction, or rollback only when those actions are truly part of the package's public job; otherwise keep them as implementation detail around `CodexThread`.
 - Expose review starts or shell-command execution only when those actions are truly part of the package's public job; shell commands must remain explicit high-impact user-level execution rather than a hidden helper path.
 - Keep cancellation explicit; do not drop a `CodexTurnHandle` silently when the package promises cancellation behavior.
