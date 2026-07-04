@@ -1,7 +1,7 @@
 ---
 name: swift-modernization-cleanup-workflow
 description: Run complete modernization and repair passes over existing Swift code, sequencing formatting, source inventory, file splitting, API cleanup, error handling cleanup, functional pipeline cleanup, concurrency cleanup, tests, docs handoffs, and validation.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

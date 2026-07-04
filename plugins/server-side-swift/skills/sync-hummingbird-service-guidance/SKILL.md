@@ -1,7 +1,7 @@
 ---
 name: sync-hummingbird-service-guidance
 description: Sync repo guidance for an existing Hummingbird server-side Swift repository when the user wants to add, merge, refresh, or align AGENTS.md, hb CLI, Server or Lambda, OpenAPI, swift-configuration, Docker, and SwiftPM workflow guidance. Use for existing Hummingbird repos. Do not use for brand-new service bootstrap or non-Hummingbird Swift packages.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with existing Hummingbird, hb, SwiftPM, OpenAPIHummingbird, hummingbird-lambda, swift-configuration, Docker, and server-side Swift repositories on macOS or Linux.
 metadata:
   owner: gaelic-ghost

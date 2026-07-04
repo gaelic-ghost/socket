@@ -1,7 +1,7 @@
 ---
 name: diagnose-project
 description: Diagnose .NET SDK, restore, build, test, package, target framework, F# compile-order, C# analyzer, and project-reference failures with concrete next checks.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients diagnosing .NET SDK projects in F#, C#, and mixed-language solutions.
 metadata:
   owner: gaelic-ghost

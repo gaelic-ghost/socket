@@ -1,7 +1,7 @@
 ---
 name: swift-format-style-workflow
 description: Align SwiftFormat, SwiftLint, formatter and linter responsibility, checked-in style config, Git hooks, and CI formatting policy for Swift repositories. Use for shared Swift style and formatting before source-organization or modernization passes.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

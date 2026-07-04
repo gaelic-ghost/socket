@@ -1,7 +1,7 @@
 ---
 name: aspnet-core-service-workflow
 description: Plan, build, and validate ASP.NET Core service surfaces for F#, C#, or mixed .NET solutions using explicit project ownership, configuration, endpoints, tests, and dotnet CLI validation.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with ASP.NET Core services on the .NET SDK.
 metadata:
   owner: gaelic-ghost

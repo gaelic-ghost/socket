@@ -1,7 +1,7 @@
 ---
 name: build-appkit-app
 description: Build or refactor an AppKit app feature on top of SwiftASB using explicit application, window, document, thread, and turn ownership with main-actor UI updates and clear runtime diagnostics.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, AppKit, Xcode, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost

@@ -1,7 +1,7 @@
 ---
 name: explain-swiftasb
 description: Explain SwiftASB in user-facing terms, including what it does, what it does not do, adoption tradeoffs, licensing, and when it is or is not the right foundation for a Swift app or package.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost
@@ -89,7 +89,7 @@ Generated `CodexWire...` models are internal scaffolding, not the recommended ap
    - `sendShellCommand(_:)` is high-impact user-level shell execution and must stay an explicit opt-in app feature
    - same-thread overlapping turns are rejected client-side
    - generated wire features are not all public API
-   - users must understand the package license before commercial use
+   - users must understand SwiftASB's package license before adoption
 7. Give a clear fit recommendation.
 
 ## Fit Guidance

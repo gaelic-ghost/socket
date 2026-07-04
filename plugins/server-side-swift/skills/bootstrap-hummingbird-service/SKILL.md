@@ -1,7 +1,7 @@
 ---
 name: bootstrap-hummingbird-service
 description: Bootstrap new Hummingbird server-side Swift services with the official hb CLI, CLI-selected Server or Lambda application shape, Hummingbird swift-configuration support, Fluent ORM and PostgreSQL for long-running services, CLI-generated Docker files, Docker Compose local dependencies, generated AGENTS guidance, and SwiftPM validation. Use when creating a fresh Hummingbird service from scratch or maintaining this skill's bootstrap defaults.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Hummingbird, hb, SwiftPM, Fluent, PostgreSQL, and Docker-backed local development on macOS or Linux.
 metadata:
   owner: gaelic-ghost

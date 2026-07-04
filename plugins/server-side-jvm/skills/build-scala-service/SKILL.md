@@ -1,7 +1,7 @@
 ---
 name: build-scala-service
 description: Implement and maintain idiomatic Scala backend services, including immutable data modeling, algebraic data types, options/eithers, effect or future-based async boundaries, framework routing, module design, tests, and functional service structure.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Scala server-side JVM projects, SBT, Gradle, Maven, and Scala backend frameworks.
 metadata:
   owner: gaelic-ghost

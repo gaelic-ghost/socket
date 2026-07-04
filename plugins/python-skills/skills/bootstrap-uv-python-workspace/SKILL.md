@@ -1,7 +1,7 @@
 ---
 name: bootstrap-uv-python-workspace
 description: Bootstrap new Python projects and multi-package workspaces with uv on macOS using deterministic scripts and consistent defaults. Use when creating a new uv Python project, scaffolding a uv monorepo/workspace, setting up package or service profiles, customizing scaffold defaults through layered YAML profiles, initializing dev tooling (pytest, ruff, mypy), creating README scaffolds, or initializing git with an optional first commit.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv, git, Python project scaffolding workflows, and shell access for the bundled scripts.
 metadata:
   owner: gaelic-ghost

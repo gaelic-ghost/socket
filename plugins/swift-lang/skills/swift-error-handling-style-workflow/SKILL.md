@@ -1,7 +1,7 @@
 ---
 name: swift-error-handling-style-workflow
 description: Design or repair Swift error handling style using throws, typed throws, Result, Optional, AsyncSequence failure types, domain errors, Cocoa bridging, and concise functional recovery paths.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

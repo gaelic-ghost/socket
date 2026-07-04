@@ -1,7 +1,7 @@
 ---
 name: bootstrap-vapor-service
 description: Bootstrap new Vapor server-side Swift services with the official Vapor CLI, Vapor Environment, Fluent ORM, PostgreSQL, CLI-generated Dockerfile and Docker Compose support, generated AGENTS guidance, and SwiftPM validation. Use when creating a fresh Vapor service from scratch or maintaining this skill's bootstrap defaults.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, Vapor Toolbox, SwiftPM, Fluent, PostgreSQL, and Docker-backed local development on macOS or Linux.
 metadata:
   owner: gaelic-ghost

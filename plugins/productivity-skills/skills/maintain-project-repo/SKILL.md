@@ -1,7 +1,7 @@
 ---
 name: maintain-project-repo
 description: Install or refresh the profile-aware local-first maintain-project-repo toolkit, or execute its protected-main release workflow. Use when the user asks to install or refresh repo-owned validate, sync, and release scripts; release or publish a version; bump and tag a release; create the GitHub release; prepare or merge a protected-main release; or complete release cleanup and branch accounting. Do not use for ordinary edits, local Git work, documentation maintenance, or GitHub repository-settings audits.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   semver: 0.2.1
 ---

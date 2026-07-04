@@ -1,7 +1,7 @@
 ---
 name: apple-containerization-workflow
 description: Plan, build, test, and diagnose Apple Containerization and apple/container CLI workflows for server-side Swift services on Apple silicon, keeping Apple's container tooling distinct from generic Docker guidance.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Apple's Containerization package, apple/container CLI, OCI images, SwiftPM, Vapor, Hummingbird, and server-side Swift services on Apple silicon Macs.
 metadata:
   owner: gaelic-ghost

@@ -1,7 +1,7 @@
 ---
 name: docker-workflow
 description: Plan, build, test, and diagnose Docker image and Compose workflows for server-side Swift packages, including multi-stage Dockerfiles, Linux runtime concerns, environment configuration, image validation, and deployment handoffs.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Docker, Dockerfile, Compose, SwiftPM, Vapor, Hummingbird, and server-side Swift services on macOS or Linux.
 metadata:
   owner: gaelic-ghost

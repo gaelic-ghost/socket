@@ -1,7 +1,7 @@
 ---
 name: choose-integration-shape
 description: Choose the right SwiftASB integration shape for a SwiftUI app, AppKit app, command-line tool, helper service, package library, test harness, or mixed Swift project before implementation starts.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftASB v1.8.0 or newer, Swift 6, SwiftPM, SwiftUI, AppKit, and local Codex app-server integrations.
 metadata:
   owner: gaelic-ghost

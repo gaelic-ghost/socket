@@ -1,7 +1,7 @@
 ---
 name: swift-functional-pipelines-workflow
 description: Design or repair Swift data modeling and data pipelines using functional, composable, monadic flows with Optional, Result, throws, async throws, AsyncSequence, map, flatMap, compactMap, filter, reduce, and clear imperative fallbacks when needed. Use swift-error-handling-style-workflow for deeper error carrier and diagnostic decisions.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

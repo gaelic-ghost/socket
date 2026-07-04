@@ -1,7 +1,7 @@
 ---
 name: bootstrap-cargo-project
 description: Bootstrap or guide a reproducible Rust Cargo project with explicit package or workspace shape, cargo new or cargo init usage, edition and MSRV checks, rust-toolchain handling, test layout, and initial validation commands. Use after the Rust project shape is settled or when adding a new Cargo package to an existing repository.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

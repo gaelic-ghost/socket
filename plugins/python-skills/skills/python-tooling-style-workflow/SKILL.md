@@ -1,7 +1,7 @@
 ---
 name: python-tooling-style-workflow
 description: Align Python formatting, linting, type checking, pytest configuration, dependency groups, local tooling, and CI validation around uv without overriding repo-local conventions.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients maintaining Python tooling with uv, Ruff, mypy, pytest, pyproject.toml, and optional CI integration.
 metadata:
   owner: gaelic-ghost

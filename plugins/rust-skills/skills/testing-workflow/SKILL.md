@@ -1,7 +1,7 @@
 ---
 name: testing-workflow
 description: Plan, run, and triage Rust tests with Cargo, including unit tests, integration tests, documentation tests, examples compiled by cargo test, targeted reruns, feature matrices, workspace package selection, and failure explanation. Use when adding tests, running Rust validation, or diagnosing cargo test failures.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

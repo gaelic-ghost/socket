@@ -1,7 +1,7 @@
 ---
 name: cloud-deployment-routing-workflow
 description: Choose the right cloud deployment path before implementation, routing AWS work through the official AWS Agent Toolkit for AWS when appropriate and keeping provider credentials, regions, and mutation boundaries explicit.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with cloud deployments, provider CLIs, provider plugins, MCP servers, and repository-owned deployment configuration.
 metadata:
   owner: gaelic-ghost

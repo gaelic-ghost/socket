@@ -1,7 +1,7 @@
 ---
 name: choose-service-shape
 description: Choose the right server-side JVM project shape before implementation, including Java versus Scala language choice, Gradle/Maven/SBT ownership, framework fit, validation commands, package boundaries, Android handoffs, and documentation updates.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with JVM backend projects, Java, Scala, Gradle, Maven, SBT, and server-side frameworks on macOS or other supported JVM development environments.
 metadata:
   owner: gaelic-ghost

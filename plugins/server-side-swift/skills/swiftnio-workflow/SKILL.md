@@ -1,7 +1,7 @@
 ---
 name: swiftnio-workflow
 description: Plan, implement, test, and diagnose direct SwiftNIO work in server-side Swift packages, including EventLoopGroup ownership, Channel pipelines, ChannelHandlers, ByteBuffer usage, back-pressure, nonblocking I/O, protocol implementations, EmbeddedChannel tests, and handoffs back to Vapor or Hummingbird when a higher-level framework is the better fit.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with SwiftNIO, SwiftPM, Vapor, Hummingbird, protocol servers, protocol clients, and server-side Swift services on macOS or Linux.
 metadata:
   owner: gaelic-ghost

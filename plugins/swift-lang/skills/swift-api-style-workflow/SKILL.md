@@ -1,7 +1,7 @@
 ---
 name: swift-api-style-workflow
 description: Review, design, or repair Swift APIs for Swifty naming, call-site ergonomics, access control, typed result shapes, human-friendly errors, and consistency across sibling symbols. Use swift-error-handling-style-workflow for deeper failure-shape decisions.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 metadata:
   owner: gaelic-ghost
   repo: socket

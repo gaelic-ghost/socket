@@ -1,7 +1,7 @@
 ---
 name: build-java-service
 description: Implement and maintain idiomatic Java backend services, including package structure, records, sealed types, nullability, optionals, exceptions, concurrency, dependency boundaries, API and persistence seams, tests, and human-friendly diagnostics.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Java server-side JVM projects and backend frameworks.
 metadata:
   owner: gaelic-ghost

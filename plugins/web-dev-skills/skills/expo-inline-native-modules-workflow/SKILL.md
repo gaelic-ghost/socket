@@ -1,7 +1,7 @@
 ---
 name: expo-inline-native-modules-workflow
 description: Work at the Expo SDK 56+ inline native module boundary with current Expo docs, live project inspection, TypeScript interface generation, and explicit Apple Dev Skills handoffs.
-license: PolyForm-Noncommercial-1.0.0
+license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients changing Expo apps that use or may use inline Swift or Kotlin modules, expo-type-information, Expo Modules API native views, CNG, development builds, and prebuild validation.
 metadata:
   owner: gaelic-ghost
