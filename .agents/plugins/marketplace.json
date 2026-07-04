@@ -66,6 +66,18 @@
       "category": "Developer Tools"
     },
     {
+      "name": "cloud-inference-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cloud-inference-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "dotnet-skills",
       "source": {
         "source": "local",
@@ -240,10 +252,10 @@
       "category": "Developer Tools"
     },
     {
-      "name": "codex-utilities",
+      "name": "agentdeck",
       "source": {
         "source": "local",
-        "path": "./plugins/codex-utilities"
+        "path": "./plugins/agentdeck"
       },
       "policy": {
         "installation": "AVAILABLE",

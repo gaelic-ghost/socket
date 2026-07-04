@@ -102,7 +102,7 @@ Scope:
   ```
 
 - Track the difference between normal Codex config and Xcode-launched Codex config.
-- Hand off broader agent configuration sync to `codex-utilities` once that plugin exposes a supported bridge/status surface.
+- Hand off broader agent configuration sync to `agentdeck` once that plugin exposes a supported bridge/status surface.
 
 Non-goals:
 
@@ -369,7 +369,7 @@ Observed import behavior:
 
 - Which Socket child plug-ins can be imported from the public Git URL with full runtime behavior, not just recognized metadata?
 - Can one authored skill surface be packaged for both Codex and Xcode, or does Xcode require a separate distribution artifact?
-- Should Xcode-launched Codex config sync remain entirely in `codex-utilities`, with Apple Dev Skills only describing the Xcode side?
+- Should Xcode-launched Codex config sync remain entirely in `agentdeck`, with Apple Dev Skills only describing the Xcode side?
 - Should Socket ship a dedicated Xcode plug-in artifact per child plugin, a generated aggregate Xcode manifest, or only a dry-run/apply adapter for Xcode-launched Codex until Apple's plug-in schema is public?
 - Which Apple Dev Skills workflow should own UIKit guidance if UIKit-specific beta changes keep accumulating?
 - Should beta-support notes live directly in skills, in per-skill references, or in one beta compatibility reference that skills link to?

@@ -194,38 +194,38 @@ function toolUseSummaryFromPayload(payload, config) {
 
 function readConfig() {
   const dataDir =
-    process.env.CODEX_UTILITIES_DATA_DIR ??
-    path.join(os.homedir(), ".codex", "codex-utilities", "hooks");
-  const mode = modeFromEnv(process.env.CODEX_UTILITIES_THREAD_TITLE_MODE);
+    process.env.AGENTDECK_DATA_DIR ??
+    path.join(os.homedir(), ".codex", "agentdeck", "hooks");
+  const mode = modeFromEnv(process.env.AGENTDECK_THREAD_TITLE_MODE);
   const maxPrefixLength = positiveIntegerFromEnv(
-    process.env.CODEX_UTILITIES_THREAD_TITLE_MAX_PREFIX_LENGTH,
+    process.env.AGENTDECK_THREAD_TITLE_MAX_PREFIX_LENGTH,
     48,
   );
   const projectlessRoot =
-    process.env.CODEX_UTILITIES_PROJECTLESS_ROOT ??
+    process.env.AGENTDECK_PROJECTLESS_ROOT ??
     path.join(os.homedir(), "Documents", "Codex");
   const projectlessThreadPrefix = optionalTrimmedStringFromEnv(
-    process.env.CODEX_UTILITIES_PROJECTLESS_THREAD_PREFIX,
+    process.env.AGENTDECK_PROJECTLESS_THREAD_PREFIX,
   );
   const timeoutMs = positiveIntegerFromEnv(
-    process.env.CODEX_UTILITIES_APP_SERVER_TIMEOUT_MS,
+    process.env.AGENTDECK_APP_SERVER_TIMEOUT_MS,
     2500,
   );
   const titlePollAttempts = positiveIntegerFromEnv(
-    process.env.CODEX_UTILITIES_THREAD_TITLE_POLL_ATTEMPTS,
+    process.env.AGENTDECK_THREAD_TITLE_POLL_ATTEMPTS,
     4,
   );
   const titlePollDelayMs = positiveIntegerFromEnv(
-    process.env.CODEX_UTILITIES_THREAD_TITLE_POLL_DELAY_MS,
+    process.env.AGENTDECK_THREAD_TITLE_POLL_DELAY_MS,
     500,
   );
   const minStopCountBeforeRename = positiveIntegerFromEnv(
-    process.env.CODEX_UTILITIES_THREAD_TITLE_MIN_STOP_COUNT,
+    process.env.AGENTDECK_THREAD_TITLE_MIN_STOP_COUNT,
     2,
   );
 
   return {
-    appServerCommand: process.env.CODEX_UTILITIES_APP_SERVER_COMMAND ?? "codex",
+    appServerCommand: process.env.AGENTDECK_APP_SERVER_COMMAND ?? "codex",
     appServerArgs: ["app-server"],
     dataDir,
     decisionLogPath: path.join(dataDir, "thread-title-decisions.jsonl"),
@@ -385,8 +385,8 @@ async function withAppServerClient(config, callback) {
     await client.start();
     await client.request("initialize", {
       clientInfo: {
-        name: "codex_utilities_hook",
-        title: "Codex Utilities Hook",
+        name: "agentdeck_hook",
+        title: "AgentDeck Hook",
         version: config.pluginVersion,
       },
       capabilities: {

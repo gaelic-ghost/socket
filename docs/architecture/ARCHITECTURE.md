@@ -14,7 +14,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `android-dev-skills` (codex-plugin) uses targets: no targets recorded.
 - `apple-dev-skills` (codex-plugin) uses targets: skills:plugins/apple-dev-skills/skills, mcp:plugins/apple-dev-skills/.mcp.json.
 - `cardhop-app` (codex-plugin) uses targets: skills:plugins/cardhop-app/skills, mcp:plugins/cardhop-app/.mcp.json.
-- `codex-utilities` (codex-plugin) uses targets: no targets recorded.
+- `agentdeck` (codex-plugin) uses targets: no targets recorded.
 - `dotnet-skills` (codex-plugin) uses targets: skills:plugins/dotnet-skills/skills.
 - `productivity-skills` (codex-plugin) uses targets: skills:plugins/productivity-skills/skills, mcp:plugins/productivity-skills/.mcp.json.
 - `python-skills` (codex-plugin) uses targets: skills:plugins/python-skills/skills.
@@ -26,7 +26,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `swiftasb-skills` (codex-plugin) uses targets: skills:plugins/swiftasb-skills/skills.
 - `things-app` (codex-plugin) uses targets: skills:plugins/things-app/skills, mcp:plugins/things-app/.mcp.json.
 - `web-dev-skills` (codex-plugin) uses targets: skills:plugins/web-dev-skills/skills.
-- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, cardhop-app, dotnet-skills, productivity-skills, python-skills, server-side-swift, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, codex-utilities.
+- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, cardhop-app, dotnet-skills, productivity-skills, python-skills, server-side-swift, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, agentdeck.
 - `speak-swiftly` (remote-plugin-entry) uses targets: no targets recorded.
 
 <!-- Generated product inventory ends here. -->
@@ -185,7 +185,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/cardhop-app/skills/cardhop-contact-workflow/SKILL.md`.
 - `mcp-config` evidence from `plugins/cardhop-app/.mcp.json`.
 - `codex-plugin-manifest` evidence from `plugins/cardhop-app/.codex-plugin/plugin.json`.
-- `codex-plugin-manifest` evidence from `plugins/codex-utilities/.codex-plugin/plugin.json`.
+- `codex-plugin-manifest` evidence from `plugins/agentdeck/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-csharp-project/SKILL.md`.

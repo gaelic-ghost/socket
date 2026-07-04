@@ -1,0 +1,50 @@
+{
+  "name": "cloud-inference-skills",
+  "version": "8.2.0",
+  "description": "Cloud AI inference workflow skills for routing model serving, training, conversion, and GPU infrastructure work across Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-inference-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugin",
+    "skills",
+    "cloud",
+    "inference",
+    "gpu",
+    "runpod",
+    "hugging-face",
+    "aws",
+    "lambda",
+    "vast-ai",
+    "coreweave",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Cloud Inference Skills",
+    "shortDescription": "Cloud GPU inference and training routing guidance for Codex.",
+    "longDescription": "Guide Codex agents through cloud AI inference, training, model conversion, endpoint deployment, and GPU infrastructure decisions. The first slice favors Runpod, Hugging Face, AWS, Vast.ai, and CoreWeave, bundles Runpod's official MCP server configuration, includes a project-scoped upstream Runpod skill mirror, and routes Hugging Face and AWS work through their first-party Codex plugins and CLIs when those are already the stronger maintained surface.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-inference-skills",
+    "defaultPrompt": [
+      "Choose the right cloud GPU inference or training path for this model and budget.",
+      "Route this Runpod, Hugging Face, AWS, Vast.ai, or CoreWeave inference task through the safest available official tool, MCP server, CLI, or Socket guidance.",
+      "Help me decide between quick managed inference, cheap flexible GPU infrastructure, and providers I already know."
+    ],
+    "brandColor": "#D946EF",
+    "composerIcon": "./assets/cloud-inference-icon.svg",
+    "logo": "./assets/cloud-inference-icon.svg"
+  }
+}

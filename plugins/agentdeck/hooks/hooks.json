@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
-            "statusMessage": "Running Codex Utilities SessionStart hook",
+            "statusMessage": "Running AgentDeck SessionStart hook",
             "timeout": 10
           }
         ]
@@ -19,7 +19,7 @@
           {
             "type": "command",
             "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
-            "statusMessage": "Running Codex Utilities Stop hook",
+            "statusMessage": "Running AgentDeck Stop hook",
             "timeout": 10
           }
         ]
@@ -31,7 +31,7 @@
           {
             "type": "command",
             "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
-            "statusMessage": "Logging Codex Utilities tool-use hook",
+            "statusMessage": "Logging AgentDeck tool-use hook",
             "timeout": 10
           }
         ]

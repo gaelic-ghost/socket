@@ -1,12 +1,12 @@
-# UtilitiesForCodex Agent Configuration Sync Plan
+# AgentDeck Agent Configuration Sync Plan
 
 ## Working Name
 
-`UtilitiesForCodex` is the app and helper home for Codex-connected utilities that need a stable macOS app, local helper, permission surface, or long-lived runtime identity.
+`AgentDeck` is the app and helper home for Codex-connected utilities that need a stable macOS app, local helper, permission surface, or long-lived runtime identity.
 
-The Socket `codex-utilities` plugin is the Codex-facing connection point. The plugin should own the agent-facing docs, skills, MCP shims, hooks, and policy. The app should own the installed macOS runtime, durable local config manager, permission prompts, helper endpoints, and operator-facing UI.
+The Socket `agentdeck` plugin is the Codex-facing connection point. The plugin should own the agent-facing docs, skills, MCP shims, hooks, and policy. The app should own the installed macOS runtime, durable local config manager, permission prompts, helper endpoints, and operator-facing UI.
 
-This plan was originally drafted under the temporary name `Agent Concord`. That name described this specific feature: keep local coding agents in agreement across separate host environments without flattening their differences. The feature should now be treated as one capability inside the broader `UtilitiesForCodex` app.
+This plan was originally drafted under the temporary name `Agent Concord`. That name described this specific feature: keep local coding agents in agreement across separate host environments without flattening their differences. The feature should now be treated as one capability inside the broader `AgentDeck` app.
 
 Name/context notes:
 
@@ -53,7 +53,7 @@ Xcode Claude:
 
 ## Product Thesis
 
-UtilitiesForCodex should include a macOS utility surface for inspecting, diffing, and syncing local agent guidance/config across multiple agent hosts.
+AgentDeck should include a macOS utility surface for inspecting, diffing, and syncing local agent guidance/config across multiple agent hosts.
 
 The app exists because agent hosts are no longer a single dot-directory. A developer can have normal Codex, Codex inside Xcode, Claude inside Xcode, Codex desktop app state, CLI state, plugins, skills, MCP servers, sandbox rules, and per-project guidance. These surfaces drift independently, and raw copy/symlink sync is too risky because bundled agents may lag normal CLI versions and reject newer keys.
 
@@ -228,12 +228,12 @@ Possible future probe:
 
 ## Socket Plugin Relationship
 
-The Socket `codex-utilities` plugin should keep a copy of this plan because it owns the Codex-facing connection point.
+The Socket `agentdeck` plugin should keep a copy of this plan because it owns the Codex-facing connection point.
 
 The split should stay clear:
 
-- `UtilitiesForCodex` owns discovery, diff rendering, backups, writes, local validation, and any macOS permission/helper behavior.
-- `socket/plugins/codex-utilities` owns skill guidance, MCP shims, hook wiring, plugin metadata, and agent policy.
+- `AgentDeck` owns discovery, diff rendering, backups, writes, local validation, and any macOS permission/helper behavior.
+- `socket/plugins/agentdeck` owns skill guidance, MCP shims, hook wiring, plugin metadata, and agent policy.
 - The plugin may expose status and request tools, but it should not directly rewrite agent homes unless that behavior is explicitly routed through the installed app or a reviewed local helper contract.
 
 This mirrors the desktop bridge split already planned for the same app/plugin pair.

@@ -11,7 +11,7 @@
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
 - [Milestone 10: Expo inline native modules workflow](#milestone-10-expo-inline-native-modules-workflow)
-- [Milestone 11: Codex Utilities plugin](#milestone-11-codex-utilities-plugin)
+- [Milestone 11: AgentDeck plugin](#milestone-11-agentdeck-plugin)
 - [Milestone 12: Xcode 27 agentic tooling workflows](#milestone-12-xcode-27-agentic-tooling-workflows)
 - [Milestone 13: Reverse Engineering skills plugin](#milestone-13-reverse-engineering-skills-plugin)
 - [Milestone 14: Core AI and Foundation Models workflow ownership](#milestone-14-core-ai-and-foundation-models-workflow-ownership)
@@ -23,6 +23,7 @@
 - [Milestone 20: Game Dev Skills plugin](#milestone-20-game-dev-skills-plugin)
 - [Milestone 21: Cloud Deployment Skills plugin](#milestone-21-cloud-deployment-skills-plugin)
 - [Milestone 22: Network Protocol Skills plugin](#milestone-22-network-protocol-skills-plugin)
+- [Milestone 23: Cloud Inference Skills plugin](#milestone-23-cloud-inference-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -47,7 +48,7 @@
 - Milestone 8: Server-Side Swift skills plugin - Completed
 - Milestone 9: Rust skills plugin - Completed
 - Milestone 10: Expo inline native modules workflow - Completed
-- Milestone 11: Codex Utilities plugin - In Progress
+- Milestone 11: AgentDeck plugin - In Progress
 - Milestone 12: Xcode 27 agentic tooling workflows - In Progress
 - Milestone 13: Reverse Engineering skills plugin - In Progress
 - Milestone 14: Core AI and Foundation Models workflow ownership - Completed
@@ -59,6 +60,7 @@
 - Milestone 20: Game Dev Skills plugin - Completed
 - Milestone 21: Cloud Deployment Skills plugin - Completed
 - Milestone 22: Network Protocol Skills plugin - Completed
+- Milestone 23: Cloud Inference Skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -150,7 +152,7 @@ Completed
 - [x] Keep `python-skills:uv-pytest-unit-testing` as the release-compatible pytest workflow name for now.
 - [x] Update Python plugin metadata after the first new skill slice lands.
 - [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
@@ -264,7 +266,7 @@ Completed
 
 Decision note: the root marketplace entry is installable now that `web-dev-skills` ships real skill content.
 
-## Milestone 11: Codex Utilities plugin
+## Milestone 11: AgentDeck plugin
 
 ### Status
 
@@ -272,47 +274,47 @@ In Progress
 
 ### Scope
 
-- [x] Add a Socket-hosted `codex-utilities` child plugin for local Codex runtime utilities that do not belong to a language-specific skill pack, app integration, or repository-maintenance plugin.
+- [x] Add a Socket-hosted `agentdeck` child plugin for local Codex runtime utilities that do not belong to a language-specific skill pack, app integration, or repository-maintenance plugin.
 - [x] Keep the first slice capture-only: record real `SessionStart` hook payloads before mutating thread titles.
 - [x] Prefer Codex App Server metadata operations for future thread renaming instead of invoking `codex exec` as a separate agent run.
 - [x] Keep explicit `capture` and `dry-run` modes so the same hook can test title prefixing without changing thread metadata.
 - [x] Enable thread-title mutation by default after a real new-thread test confirmed the captured `session_id` maps to the target thread id and Codex GUI hook settings provide the behavior toggle.
 - [x] Prefix titles on the second `Stop` hook by default so Codex's own generated-title writer has settled before the plugin writes the project prefix.
 - [x] Add a diagnostic `PostToolUse` hook log so title-generation timing can be compared against hook-visible tool activity.
-- [ ] Add a desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` app instead of bundling a macOS app inside the plugin.
-- [ ] Add Codex GUI restart request/cancel/status tools and a narrow skill that delegates waiting and final restart execution to `UtilitiesForCodex`.
-- [ ] Add an agent configuration sync surface that lets `UtilitiesForCodex` discover, diff, and safely render compatible guidance/config for normal Codex, Xcode Codex, and Xcode Claude while `codex-utilities` owns the agent-facing adapter and policy.
+- [ ] Add a desktop bridge MCP and skill surface that talks to the separate `AgentDeck` app instead of bundling a macOS app inside the plugin.
+- [ ] Add Codex GUI restart request/cancel/status tools and a narrow skill that delegates waiting and final restart execution to `AgentDeck`.
+- [ ] Add an agent configuration sync surface that lets `AgentDeck` discover, diff, and safely render compatible guidance/config for normal Codex, Xcode Codex, and Xcode Claude while `agentdeck` owns the agent-facing adapter and policy.
 
 ### Tickets
 
-- [x] Create `plugins/codex-utilities/` with its own `.codex-plugin/plugin.json`, `AGENTS.md`, `hooks/`, `scripts/`, and local design note.
+- [x] Create `plugins/agentdeck/` with its own `.codex-plugin/plugin.json`, `AGENTS.md`, `hooks/`, `scripts/`, and local design note.
 - [x] Add a `SessionStart` hook that captures stdin to a local JSONL runtime log.
 - [x] Add a Node stdlib App Server control-socket client for opt-in `thread/name/set` tests.
-- [x] Wire `codex-utilities` into the root Socket marketplace as a normal local child plugin.
+- [x] Wire `agentdeck` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README so users can see the new installable plugin surface.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 - [x] Run a hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
 - [x] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
-- [x] Record the desktop bridge MCP and skill plan in `plugins/codex-utilities/docs/desktop-bridge-mcp-skill-plan.md`.
-- [ ] Add a bridge-status-only MCP server once `UtilitiesForCodex` exposes a local status endpoint.
+- [x] Record the desktop bridge MCP and skill plan in `plugins/agentdeck/docs/desktop-bridge-mcp-skill-plan.md`.
+- [ ] Add a bridge-status-only MCP server once `AgentDeck` exposes a local status endpoint.
 - [ ] Add a `desktop-bridge` skill after the MCP status surface exists.
 - [x] Extend the desktop bridge MCP and skill plan with Codex GUI restart coordination.
-- [ ] Add a `codex-gui-restart` skill after `UtilitiesForCodex` exposes restart request, cancellation, and status endpoints.
+- [ ] Add a `codex-gui-restart` skill after `AgentDeck` exposes restart request, cancellation, and status endpoints.
 - [ ] Implement `if-idle` restart requests before `when-idle`; keep automatic waiting blocked until the app has a supported thread-status source.
-- [x] Record the UtilitiesForCodex agent configuration sync plan in `plugins/codex-utilities/docs/agent-configuration-sync-plan.md`.
-- [ ] Add a read-only bridge/status tool for agent configuration sync after `UtilitiesForCodex` can report detected target homes, versions, and compatibility-profile status.
+- [x] Record the AgentDeck agent configuration sync plan in `plugins/agentdeck/docs/agent-configuration-sync-plan.md`.
+- [ ] Add a read-only bridge/status tool for agent configuration sync after `AgentDeck` can report detected target homes, versions, and compatibility-profile status.
 - [ ] Add an agent-facing sync skill after the app exposes dry-run previews and backup-backed apply endpoints.
 
 ### Exit Criteria
 
-- [x] The Socket marketplace exposes `codex-utilities` as an installable child plugin.
+- [x] The Socket marketplace exposes `agentdeck` as an installable child plugin.
 - [ ] The first hook captures `SessionStart` payloads without writing captured data into the Socket repository.
 - [ ] Thread-title automation has a confirmed target-thread identity before it calls `thread/name/set`.
 - [x] Opt-in thread-title automation can be tested without invoking `codex exec` or starting a separate agent run.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 - [ ] Desktop bridge MCP and skill surfaces are available without packaging the signed macOS app inside the plugin cache.
 - [ ] Codex GUI restart requests require explicit user intent, report pending/cancelled/blocked/completed status clearly, and never infer thread idleness from process state alone.
-- [ ] Agent configuration sync previews omit unsupported keys by default, preserve target-owned files, and route writes through `UtilitiesForCodex` rather than direct plugin-side filesystem mutation.
+- [ ] Agent configuration sync previews omit unsupported keys by default, preserve target-owned files, and route writes through `AgentDeck` rather than direct plugin-side filesystem mutation.
 
 ## Milestone 12: Xcode 27 agentic tooling workflows
 
@@ -587,7 +589,7 @@ Planned
 - [ ] Add later skills for architecture mapping, adoption-risk decisions, and remediation planning after the first two workflows prove useful.
 - [ ] Wire the plugin into the root marketplace as `NOT_AVAILABLE` while it is a placeholder, then switch it to installable only after real skill content exists.
 - [ ] Update root README and ROADMAP when the plugin becomes installable.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
@@ -701,6 +703,39 @@ Completed
 
 Completed Milestone 22 by adding the `network-protocol-skills` child plugin, shipping five protocol and diagnostics workflows, wiring the Socket marketplace entry, adding missing plugin icon assets, and keeping implementation handoffs delegated to the owning stack plugins.
 
+## Milestone 23: Cloud Inference Skills plugin
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a Socket-hosted `cloud-inference-skills` child plugin for cloud AI inference, model training, model conversion, and GPU infrastructure routing.
+- [x] Prefer Gale's familiar provider lanes when they fit: Runpod for quick GPU Pods, Serverless endpoints, Flash, and agent-managed resources; Hugging Face for model, dataset, conversion, endpoint, Space, and Hub-native workflows; AWS for existing account, IAM, S3, Lambda, SageMaker, Bedrock, ECS, EKS, and Batch surfaces.
+- [x] Include Vast.ai for cheap flexible GPU rentals and CoreWeave for cluster-shaped GPU infrastructure without pretending either is the default for quick experiments.
+- [x] Keep official-provider ownership explicit: bundle Runpod's official MCP config, install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills through `npx skills add runpod/skills`, and hand Hugging Face/AWS work to their first-party plugins and CLIs when those fit.
+
+### Tickets
+
+- [x] Record the detailed plan in [`docs/maintainers/cloud-inference-skills-plugin-plan.md`](./docs/maintainers/cloud-inference-skills-plugin-plan.md).
+- [x] Create `plugins/cloud-inference-skills/` with `.codex-plugin/plugin.json`, `.mcp.json`, `AGENTS.md`, an icon asset, and authored `skills/` source.
+- [x] Add `cloud-inference-skills:cloud-inference-routing-workflow` for provider selection, model/workload triage, credential boundaries, cost boundaries, mutation checks, and validation choices.
+- [x] Bundle Runpod's official `runpod` and `runpod-docs` MCP server configuration without committing API keys.
+- [x] Install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills into the exported plugin `skills/` tree, with `.agents/skills` kept as a symlink discovery mirror.
+- [x] Wire `cloud-inference-skills` into the root Socket marketplace as an installable child plugin.
+- [x] Update root README, CONTRIBUTING, and ROADMAP so users and maintainers understand the new plugin surface.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `cloud-inference-skills` as an installable child plugin.
+- [x] The shipped skill routes cloud inference and GPU work across Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and adjacent providers without absorbing provider-specific setup owned by official plugins and CLIs.
+- [x] Runpod MCP config is available through the plugin, while Runpod's upstream skills are exported through `skills/` and tracked by `skills-lock.json`.
+- [x] Root Socket docs, marketplace wiring, and plugin metadata agree on the exported cloud inference surface.
+
+Completed Milestone 23 by adding the `cloud-inference-skills` child plugin, shipping the provider-routing workflow, bundling Runpod MCP server configuration, installing the upstream Runpod skill mirror, adding the neon cloud GPU icon, wiring the Socket marketplace entry, and documenting first-party Runpod, Hugging Face, and AWS handoffs.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -810,9 +845,9 @@ Completed Milestone 22 by adding the `network-protocol-skills` child plugin, shi
 - Added the first repo-local Socket Steward prototype under `.agents/socket-steward`, giving the superproject a Python and OpenAI Agents SDK maintainer-agent scaffold with offline docs, guidance, and marketplace audits before any write-capable or background-service behavior.
 - Added Socket Steward's first docs-sync planner so the repo-local agent can produce structured read-only documentation alignment work before any guarded write mode exists.
 - Added `docs/agents/` for repo-local agent report artifacts and limited Socket Steward proposal writes to that directory.
-- Planned a `codex-utilities` desktop bridge MCP and skill surface that talks to the separate `UtilitiesForCodex` macOS app over a local transport instead of bundling a signed app in the plugin cache.
-- Planned Codex GUI restart request/cancel/status tools and a narrow skill that keep restart execution in `UtilitiesForCodex` and leave automatic `when-idle` waiting blocked until a supported thread-status source exists.
-- Planned a UtilitiesForCodex agent configuration sync surface so normal Codex, Xcode Codex, and Xcode Claude can be discovered, diffed, and rendered through target-specific compatibility rules while `codex-utilities` remains the Codex-facing adapter.
+- Planned an `agentdeck` desktop bridge MCP and skill surface that talks to the separate `AgentDeck` macOS app over a local transport instead of bundling a signed app in the plugin cache.
+- Planned Codex GUI restart request/cancel/status tools and a narrow skill that keep restart execution in `AgentDeck` and leave automatic `when-idle` waiting blocked until a supported thread-status source exists.
+- Planned an AgentDeck agent configuration sync surface so normal Codex, Xcode Codex, and Xcode Claude can be discovered, diffed, and rendered through target-specific compatibility rules while `agentdeck` remains the Codex-facing adapter.
 - Added serialized Socket Steward prepare/apply commands so maintainers can run audit, docs-sync planning, and proposal refresh in one guarded pass.
 - Extended the roadmap maintainer skill with one-ticket add/update flags and updated automation-design guidance to prefer existing skills, plugins, scripts, and official workflow owners as the source of truth for workflow knowledge.
 - Removed the stale Apple Dev Skills release-time subtree push gate after the standalone Apple Dev Skills repository became a compatibility marketplace pointer to Socket's canonical `plugins/apple-dev-skills` payload.
