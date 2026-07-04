@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Cloud Inference Skills icon</title>
+  <desc id="desc">Neon cloud GPU badge with a circuit core and inference beam.</desc>
+  <defs>
+    <linearGradient id="ring" x1="34" y1="214" x2="222" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="0.48" stop-color="#d946ef"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="128" cy="128" r="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d946ef" stop-opacity="0.45"/>
+      <stop offset="0.52" stop-color="#22d3ee" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="scanlines" width="256" height="8" patternUnits="userSpaceOnUse">
+      <rect width="256" height="1" fill="#ffffff" opacity="0.055"/>
+    </pattern>
+  </defs>
+  <rect width="256" height="256" rx="40" fill="#020617"/>
+  <rect width="256" height="256" rx="40" fill="url(#scanlines)"/>
+  <circle cx="128" cy="128" r="110" fill="url(#glow)"/>
+  <path d="M128 20 210 54 244 128 210 202 128 236 46 202 12 128 46 54Z" fill="none" stroke="url(#ring)" stroke-width="7"/>
+  <path d="M128 39 194 66 221 128 194 190 128 217 62 190 35 128 62 66Z" fill="none" stroke="#38bdf8" stroke-width="2.5" opacity="0.55"/>
+  <g filter="url(#softGlow)" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M79 151h93c16 0 29-11 29-26 0-14-12-25-27-25h-4c-6-20-24-33-46-33-24 0-44 15-50 37-16 1-29 11-29 25 0 13 12 22 34 22Z" fill="#06111f" stroke="#22d3ee" stroke-width="7"/>
+    <path d="M88 143h78c12 0 22-8 22-18 0-9-8-17-20-17h-9c-4-17-18-28-36-28-19 0-35 13-39 31h-8c-11 0-20 7-20 17 0 9 10 15 32 15Z" fill="#0b1020" stroke="#d946ef" stroke-width="3"/>
+    <rect x="103" y="103" width="50" height="50" fill="#020617" stroke="#a78bfa" stroke-width="5"/>
+    <path d="M116 116h24v24h-24Z" fill="none" stroke="#22d3ee" stroke-width="4"/>
+    <path d="M128 83v20M128 153v20M83 128h20M153 128h20M95 95l15 15M161 95l-15 15M95 161l15-15M161 161l-15-15" stroke="#f0abfc" stroke-width="4"/>
+    <path d="M42 196h55l18-23M214 60h-55l-18 23" fill="none" stroke="#22d3ee" stroke-width="4"/>
+    <path d="M54 205h25M177 51h25" stroke="#d946ef" stroke-width="5"/>
+  </g>
+</svg>

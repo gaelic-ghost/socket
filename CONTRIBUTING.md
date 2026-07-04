@@ -137,6 +137,8 @@ The installable local child entries currently point at:
 - `./plugins/android-dev-skills`
 - `./plugins/apple-dev-skills`
 - `./plugins/cardhop-app`
+- `./plugins/cloud-deployment-skills`
+- `./plugins/cloud-inference-skills`
 - `./plugins/codex-utilities`
 - `./plugins/dotnet-skills`
 - `./plugins/game-dev-skills`

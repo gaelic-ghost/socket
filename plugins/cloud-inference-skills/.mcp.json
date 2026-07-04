@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "runpod": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@runpod/mcp-server@latest"
+      ],
+      "note": "Registers Runpod's official API MCP server for Pods, Serverless endpoints, templates, network volumes, and registries. The server requires RUNPOD_API_KEY in the Codex MCP environment; keep the key out of git and confirm account, resource, and cost boundaries before mutation."
+    },
+    "runpod-docs": {
+      "url": "https://docs.runpod.io/mcp",
+      "note": "Registers Runpod's official unauthenticated documentation MCP server for Runpod feature, guide, and code-example lookup."
+    }
+  }
+}

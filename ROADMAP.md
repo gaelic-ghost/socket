@@ -23,6 +23,7 @@
 - [Milestone 20: Game Dev Skills plugin](#milestone-20-game-dev-skills-plugin)
 - [Milestone 21: Cloud Deployment Skills plugin](#milestone-21-cloud-deployment-skills-plugin)
 - [Milestone 22: Network Protocol Skills plugin](#milestone-22-network-protocol-skills-plugin)
+- [Milestone 23: Cloud Inference Skills plugin](#milestone-23-cloud-inference-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -59,6 +60,7 @@
 - Milestone 20: Game Dev Skills plugin - Completed
 - Milestone 21: Cloud Deployment Skills plugin - Completed
 - Milestone 22: Network Protocol Skills plugin - Completed
+- Milestone 23: Cloud Inference Skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -150,7 +152,7 @@ Completed
 - [x] Keep `python-skills:uv-pytest-unit-testing` as the release-compatible pytest workflow name for now.
 - [x] Update Python plugin metadata after the first new skill slice lands.
 - [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
@@ -587,7 +589,7 @@ Planned
 - [ ] Add later skills for architecture mapping, adoption-risk decisions, and remediation planning after the first two workflows prove useful.
 - [ ] Wire the plugin into the root marketplace as `NOT_AVAILABLE` while it is a placeholder, then switch it to installable only after real skill content exists.
 - [ ] Update root README and ROADMAP when the plugin becomes installable.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
@@ -700,6 +702,39 @@ Completed
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported network-protocol skill surface.
 
 Completed Milestone 22 by adding the `network-protocol-skills` child plugin, shipping five protocol and diagnostics workflows, wiring the Socket marketplace entry, adding missing plugin icon assets, and keeping implementation handoffs delegated to the owning stack plugins.
+
+## Milestone 23: Cloud Inference Skills plugin
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a Socket-hosted `cloud-inference-skills` child plugin for cloud AI inference, model training, model conversion, and GPU infrastructure routing.
+- [x] Prefer Gale's familiar provider lanes when they fit: Runpod for quick GPU Pods, Serverless endpoints, Flash, and agent-managed resources; Hugging Face for model, dataset, conversion, endpoint, Space, and Hub-native workflows; AWS for existing account, IAM, S3, Lambda, SageMaker, Bedrock, ECS, EKS, and Batch surfaces.
+- [x] Include Vast.ai for cheap flexible GPU rentals and CoreWeave for cluster-shaped GPU infrastructure without pretending either is the default for quick experiments.
+- [x] Keep official-provider ownership explicit: bundle Runpod's official MCP config, install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills through `npx skills add runpod/skills`, and hand Hugging Face/AWS work to their first-party plugins and CLIs when those fit.
+
+### Tickets
+
+- [x] Record the detailed plan in [`docs/maintainers/cloud-inference-skills-plugin-plan.md`](./docs/maintainers/cloud-inference-skills-plugin-plan.md).
+- [x] Create `plugins/cloud-inference-skills/` with `.codex-plugin/plugin.json`, `.mcp.json`, `AGENTS.md`, an icon asset, and authored `skills/` source.
+- [x] Add `cloud-inference-skills:cloud-inference-routing-workflow` for provider selection, model/workload triage, credential boundaries, cost boundaries, mutation checks, and validation choices.
+- [x] Bundle Runpod's official `runpod` and `runpod-docs` MCP server configuration without committing API keys.
+- [x] Install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills into the plugin's project-scoped `.agents/skills` mirror.
+- [x] Wire `cloud-inference-skills` into the root Socket marketplace as an installable child plugin.
+- [x] Update root README, CONTRIBUTING, and ROADMAP so users and maintainers understand the new plugin surface.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `cloud-inference-skills` as an installable child plugin.
+- [x] The shipped skill routes cloud inference and GPU work across Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and adjacent providers without absorbing provider-specific setup owned by official plugins and CLIs.
+- [x] Runpod MCP config is available through the plugin, while Runpod's upstream skills are present as a project-scoped installed mirror tracked by `skills-lock.json`.
+- [x] Root Socket docs, marketplace wiring, and plugin metadata agree on the exported cloud inference surface.
+
+Completed Milestone 23 by adding the `cloud-inference-skills` child plugin, shipping the provider-routing workflow, bundling Runpod MCP server configuration, installing the upstream Runpod skill mirror, adding the neon cloud GPU icon, wiring the Socket marketplace entry, and documenting first-party Runpod, Hugging Face, and AWS handoffs.
 
 ## Small Tickets
 
