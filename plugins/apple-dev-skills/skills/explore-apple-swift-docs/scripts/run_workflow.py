@@ -91,11 +91,37 @@ def dash_available(probe: dict) -> bool:
     return bool(probe.get("health_ok")) and bool(probe.get("schema_ok"))
 
 
+def source_repo_applicable(query: str | None) -> bool:
+    if not query:
+        return False
+    normalized = query.lower()
+    stripped = normalized.strip()
+    if stripped in {"swift", "swift language", "the swift programming language"}:
+        return True
+    source_backed_terms = {
+        "swift package",
+        "swift package manager",
+        "swiftpm",
+        "package.swift",
+        "packagedescription",
+        "swift-format",
+        "swiftlint",
+        "swift-nio",
+        "swiftnio",
+        "vapor",
+        "hummingbird",
+        "swift-configuration",
+        "swift-async-algorithms",
+    }
+    return any(term in normalized for term in source_backed_terms)
+
+
 def select_source(
     order: list[str],
     preferred_source: str,
     mcp_failure_reason: str | None,
     dash_probe: dict,
+    query: str | None = None,
 ) -> tuple[str | None, list[str]]:
     if preferred_source != "auto":
         preferred = preferred_source
@@ -123,6 +149,8 @@ def select_source(
                 return source, order
             continue
         if source == "source-repo":
+            if not source_repo_applicable(query):
+                continue
             return source, order
         if source == "official-web":
             return source, order
@@ -155,7 +183,13 @@ def explore_mode(args: argparse.Namespace, settings: dict) -> tuple[int, dict]:
     raw_matches = load_matches(args.query, 20)
     matches = shape_matches(raw_matches, include_snippets)
     dash_probe = probe_dash(args.status_file)
-    selected_source, configured_order = select_source(order, preferred_source, args.mcp_failure_reason, dash_probe)
+    selected_source, configured_order = select_source(
+        order,
+        preferred_source,
+        args.mcp_failure_reason,
+        dash_probe,
+        args.query,
+    )
 
     if not selected_source:
         troubleshooting_preference = "xcode-mcp-first"

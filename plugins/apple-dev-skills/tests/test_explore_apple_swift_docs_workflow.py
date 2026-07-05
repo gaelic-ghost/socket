@@ -80,7 +80,7 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(payload["source_used"], "dash")
 
-    def test_explore_falls_back_to_source_repo_before_official_web_when_xcode_and_dash_unavailable(self) -> None:
+    def test_explore_falls_back_to_source_repo_for_open_source_swift_queries(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             env = dict(os.environ)
             env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
@@ -93,7 +93,7 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
                 "--mode",
                 "explore",
                 "--query",
-                "Foundation",
+                "Swift Package Manager",
                 "--mcp-failure-reason",
                 "session-missing",
                 "--status-file",
@@ -103,6 +103,31 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
             )
             self.assertEqual(code, 0)
             self.assertEqual(payload["source_used"], "source-repo")
+            self.assertEqual(payload["path_type"], "fallback")
+
+    def test_explore_skips_source_repo_for_apple_only_queries(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            env = dict(os.environ)
+            env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
+            write_config(
+                tmpdir,
+                "explore-apple-swift-docs",
+                {"defaultSourceOrder": "xcode-mcp-docs,dash,dash-http,source-repo,official-web"},
+            )
+            code, payload = self.run_script(
+                "--mode",
+                "explore",
+                "--query",
+                "UIKit",
+                "--mcp-failure-reason",
+                "session-missing",
+                "--status-file",
+                str(Path(tmpdir) / "missing-status.json"),
+                "--dry-run",
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["source_used"], "official-web")
             self.assertEqual(payload["path_type"], "fallback")
 
     def test_explore_allows_readable_official_web_when_explicitly_preferred(self) -> None:
