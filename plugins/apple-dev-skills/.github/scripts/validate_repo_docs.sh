@@ -210,7 +210,7 @@ done
 echo "Validating Dash docs exploration references..."
 dash_skill_dir="./skills/explore-apple-swift-docs"
 [[ -f "$dash_skill_dir/references/dash_call_library.md" ]] || fail "Missing $dash_skill_dir/references/dash_call_library.md"
-require_contains "$dash_skill_dir/SKILL.md" 'Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, and official web docs last.'
+require_contains "$dash_skill_dir/SKILL.md" 'Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, open source Swift repositories or generated DocC when the relevant project is available there, and official web docs last only when they are actually readable through a capable source.'
 require_contains "$dash_skill_dir/SKILL.md" 'Do not present `scripts/run_workflow.py` as the required first step'
 require_contains "$dash_skill_dir/references/dash_call_library.md" '## Dash MCP Examples'
 require_contains "$dash_skill_dir/references/dash_call_library.md" '## Dash Local HTTP Examples'

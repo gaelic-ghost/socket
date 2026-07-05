@@ -15,7 +15,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
 - Prefer Swift Package Manager as the source of truth for plain Swift packages, libraries, command-line tools, and package-level validation.
-- Use repo-local files, checked-out dependency sources, and Dash MCP or Dash HTTP for installed Swift, SwiftPM, SwiftFormat, SwiftLint, and Swift ecosystem docsets before reaching for web docs. Use official Swift project documentation when Dash/local coverage is missing, stale, or a public latest-release citation is needed.
+- Use repo-local files, checked-out dependency sources, GitHub/source repositories, generated DocC, release notes, and Dash MCP or Dash HTTP for installed Swift, SwiftPM, SwiftFormat, SwiftLint, and Swift ecosystem docsets before reaching for web docs. Use official Swift project documentation when Dash/local/source coverage is missing, stale, or a public latest-release citation is needed. Do not treat generic no-JS web search/open results as proof that JS-rendered Apple Developer docs were read.
 - Keep Swift examples Swifty, ergonomic, compact, and functional when that improves clarity.
 - Prefer explicit inputs and outputs, value types, immutable local bindings, composable transforms, and straight data flow over hidden mutation or broad manager types.
 - Keep data modeling and pipelines monadic where practical: model stages as values flowing through `Optional`, `Result`, `throws`, `async throws`, `AsyncSequence`, or small domain pipeline types. Do not force this style when it hides effects, fights Swift concurrency, or makes the code harder to test.

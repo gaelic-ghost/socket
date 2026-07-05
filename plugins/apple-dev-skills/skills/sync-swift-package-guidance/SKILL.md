@@ -41,7 +41,10 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - stop if the repo boundary is ambiguous because both package and Xcode app markers are present at the same root
 3. Apply the Apple and Swift docs gate before shaping workflow guidance:
    - read the relevant SwiftPM and Swift documentation first
-   - prefer Dash or local Swift docs first, then official Swift or Apple web docs when needed
+   - use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Apple-owned SwiftPM, PackageDescription, SDK, framework, lifecycle, and Xcode behavior
+   - use Dash MCP or Dash HTTP next when installed local Swift, SwiftPM, package, or Apple docsets are a better fit
+   - use official Swift project documentation, GitHub/source repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there
+   - use official Apple web docs only when the page content is actually readable through a capable source; generic no-JS web search/open results, snippets, metadata shells, or bare URLs are not enough
    - state the documented workflow boundary being relied on before proposing repo guidance changes
    - current documented anchors for this workflow include:
      - Swift Package Manager overview: [Swift Package Manager](https://www.swift.org/documentation/package-manager/)

@@ -11,7 +11,7 @@ Use this skill when the question is game performance evidence, not shader design
 
 ## Source Check
 
-Use Xcode-local documentation, Dash Apple API Reference docsets, or official Apple documentation before making profiling-tool claims:
+Use Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, or readable official Apple documentation before making profiling-tool claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read:
 
 - [Analyzing the performance of your Metal app](https://developer.apple.com/documentation/xcode/analyzing-the-performance-of-your-metal-app)
 - [Metal developer workflows](https://developer.apple.com/documentation/xcode/metal-developer-workflows)

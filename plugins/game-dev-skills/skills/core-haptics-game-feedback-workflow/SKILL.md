@@ -11,7 +11,7 @@ Use this skill when game feedback depends on haptics, audio-haptic patterns, or 
 
 ## Source Check
 
-Use Xcode-local documentation, Dash Apple API Reference docsets, or official Apple documentation before making Core Haptics or controller-haptics claims:
+Use Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, or readable official Apple documentation before making Core Haptics or controller-haptics claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read:
 
 - [Core Haptics](https://developer.apple.com/documentation/corehaptics)
 - [Playing Haptics on Game Controllers](https://developer.apple.com/documentation/corehaptics/playing-haptics-on-game-controllers)

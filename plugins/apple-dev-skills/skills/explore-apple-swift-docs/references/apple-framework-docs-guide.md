@@ -6,7 +6,9 @@ Use this guide when the user asks about a concrete Apple API, framework, lifecyc
 
 - Prefer Xcode MCP docs first for Apple-first frameworks and symbols when the docs tool is available.
 - Prefer Dash next when the needed Apple-adjacent docset is already installed and the request benefits from fast local search across symbols or snippets.
-- Prefer official Apple web docs when Xcode MCP docs are unavailable, when Dash coverage is missing or thin, or when the answer needs an authoritative public link.
+- Prefer open source Swift repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there.
+- Prefer official Apple web docs when Xcode MCP docs are unavailable, when Dash coverage is missing or thin, or when the answer needs an authoritative public link, but only if the content is actually readable through the available source.
+- Do not treat generic no-JS web search or no-JS page extraction as a readable source for Apple Developer documentation. Apple Developer pages often require JavaScript-rendered payloads, so a URL or search snippet alone is not enough evidence.
 
 ## Common Apple Framework Families
 
@@ -48,10 +50,11 @@ Why:
 
 - These are strong candidates for quick local symbol search, full-text search, and side-by-side reading with non-Apple docs.
 
-### Official web docs when local coverage is weak
+### Source repositories and official web docs when local coverage is weak
 
-Prefer official Apple web docs directly when:
+Prefer source repositories, generated DocC, release notes, or readable official Apple web docs directly when:
 
+- the relevant Swift package, tool, or standard-library-adjacent surface is open source and the repository or generated docs answer the question
 - the framework is new enough that local Dash coverage is unclear
 - the question depends on the latest release notes or migration guidance
 - the agent needs a citable public URL
@@ -71,7 +74,7 @@ Examples:
 
 Preferred path:
 
-- Xcode MCP docs, then official Apple web docs if needed
+- Xcode MCP docs, then Dash if useful, then readable official Apple web docs if needed
 
 ### Language and standard-library questions
 
@@ -83,7 +86,7 @@ Examples:
 
 Preferred path:
 
-- Xcode MCP docs or Dash `Swift`, then official Swift docs if needed
+- Xcode MCP docs or Dash `Swift`, then official Swift project docs, source, or generated docs if needed
 
 ### Test-framework questions
 
@@ -108,10 +111,11 @@ Examples:
 
 Preferred path:
 
-- Apple Guides and Sample Code in Dash when installed, otherwise official Apple web docs
+- Apple Guides and Sample Code in Dash when installed, otherwise source repositories or readable official Apple web docs
 
 ## Tooling Notes
 
 - If the active Xcode MCP surface exposes `DocumentationSearch`, use it as the first symbol and topic search path before falling back.
 - If Dash is installed but full-text search is disabled for a relevant docset, consider enabling FTS before doing broad text search.
 - Do not assume Dash has first-party coverage for every Apple framework just because Apple docs exist on the web.
+- Do not claim Apple Developer documentation was checked from a generic web-search result when the actual page body was not readable.

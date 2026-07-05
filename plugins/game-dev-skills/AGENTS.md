@@ -11,7 +11,7 @@ This file is the Game Dev Skills child-repo override for work done from `socket`
 
 ## Local Rules
 
-- Keep Apple framework behavior grounded in Xcode-local docs, Dash Apple API Reference docsets, or official Apple Developer documentation before making framework-specific claims.
+- Keep Apple framework behavior grounded in Xcode MCP `DocumentationSearch`, Xcode-local docs, Dash Apple API Reference docsets, or readable official Apple Developer documentation before making framework-specific claims. Do not treat generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs as evidence that Apple docs were read.
 - Use `apple-dev-skills` for general Swift, SwiftUI, AppKit, UIKit, Xcode project integrity, simulator, signing, asset-catalog, DocC, and Apple docs-routing work.
 - Use `swift-lang` for shared Swift language style, API design, concurrency, error handling, and source-organization guidance that is not game-specific.
 - Use `reverse-engineering-skills` when the central input is a compiled game artifact, Unity build output, binary, symbol file, crash log, decompiler output, or disassembler output.
