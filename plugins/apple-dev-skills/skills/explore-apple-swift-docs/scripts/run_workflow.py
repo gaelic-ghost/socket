@@ -24,7 +24,7 @@ DASH_INSTALL_REPO_NAME = {
     "user_contributed": "User Contributed Docsets",
     "cheatsheet": "Cheat Sheets",
 }
-VALID_SOURCES = {"xcode-mcp-docs", "dash", "dash-http", "official-web"}
+VALID_SOURCES = {"xcode-mcp-docs", "dash", "dash-http", "source-repo", "official-web"}
 
 
 def load_effective_config() -> dict:
@@ -40,7 +40,7 @@ def split_csv(raw: str) -> list[str]:
 
 def normalize_source_order(raw: str) -> list[str]:
     normalized = [item for item in split_csv(raw) if item in VALID_SOURCES]
-    return normalized or ["xcode-mcp-docs", "dash", "dash-http", "official-web"]
+    return normalized or ["xcode-mcp-docs", "dash", "dash-http", "source-repo", "official-web"]
 
 
 def run_json_script(script_name: str, args: list[str]) -> dict:
@@ -108,6 +108,8 @@ def select_source(
         elif preferred == "dash-http":
             if dash_available(dash_probe):
                 return preferred, order
+        elif preferred == "source-repo":
+            return preferred, order
         elif preferred == "official-web":
             return preferred, order
 
@@ -120,6 +122,8 @@ def select_source(
             if dash_available(dash_probe):
                 return source, order
             continue
+        if source == "source-repo":
+            return source, order
         if source == "official-web":
             return source, order
     return None, order
@@ -145,7 +149,7 @@ def explore_mode(args: argparse.Namespace, settings: dict) -> tuple[int, dict]:
             "next_step": "Provide --query for docs exploration.",
         }
 
-    order = normalize_source_order(str(settings.get("defaultSourceOrder", "xcode-mcp-docs,dash,dash-http,official-web")))
+    order = normalize_source_order(str(settings.get("defaultSourceOrder", "xcode-mcp-docs,dash,dash-http,source-repo,official-web")))
     preferred_source = args.preferred_source or "auto"
     include_snippets = True
     raw_matches = load_matches(args.query, 20)
@@ -156,9 +160,9 @@ def explore_mode(args: argparse.Namespace, settings: dict) -> tuple[int, dict]:
     if not selected_source:
         troubleshooting_preference = "xcode-mcp-first"
         if troubleshooting_preference == "dash-first":
-            next_step = "No usable Apple or Swift docs source is available. Recover Dash access first, then fall back to official web docs."
+            next_step = "No usable Apple or Swift docs source is available. Recover Dash access first, then fall back through source repositories and readable official web docs."
         else:
-            next_step = "No usable Apple or Swift docs source is available. Recover Xcode MCP docs first, then fall back through Dash and official web docs."
+            next_step = "No usable Apple or Swift docs source is available. Recover Xcode MCP docs first, then fall back through Dash, source repositories, and readable official web docs."
         return 1, {
             "status": "blocked",
             "path_type": "fallback",
@@ -184,8 +188,10 @@ def explore_mode(args: argparse.Namespace, settings: dict) -> tuple[int, dict]:
         )
     elif selected_source == "dash-http":
         next_step = "Use the Dash localhost HTTP API for the Apple or Swift lookup."
+    elif selected_source == "source-repo":
+        next_step = "Use the relevant GitHub/source repository, generated DocC, release notes, or checked-out source for the Apple or Swift lookup."
     else:
-        next_step = "Use official Apple or Swift web docs for the lookup."
+        next_step = "Use readable official Apple or Swift web docs for the lookup; do not rely on no-JS search snippets or bare URLs as evidence."
 
     return 0, {
         "status": "success",
@@ -288,7 +294,7 @@ def dash_generate_mode(args: argparse.Namespace, settings: dict) -> tuple[int, d
         "policy": generation_policy,
         "automation_first": generation_policy == "automate-stable",
         "steps": [
-            "Confirm the missing Apple or Swift docs surface is not already available through Xcode MCP docs or official web docs.",
+            "Confirm the missing Apple or Swift docs surface is not already available through Xcode MCP docs, source repositories, generated docs, or readable official web docs.",
             "Check whether an existing Dash-compatible docset source already exists before generating anything new.",
             "Prefer stable automated generation only when the docs source is durable and repeatable.",
             "Fall back to deterministic manual docset guidance when stable automation is unavailable.",
@@ -313,7 +319,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--docs-kind")
     parser.add_argument(
         "--preferred-source",
-        choices=["auto", "xcode-mcp-docs", "dash", "dash-http", "official-web"],
+        choices=["auto", "xcode-mcp-docs", "dash", "dash-http", "source-repo", "official-web"],
         default="auto",
     )
     parser.add_argument("--docset-request")

@@ -11,7 +11,7 @@ Use this skill when the problem is gameplay logic rather than rendering. Gamepla
 
 ## Source Check
 
-Use Xcode-local documentation, Dash Apple API Reference docsets, or official Apple documentation before making GameplayKit-specific claims:
+Use Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, or readable official Apple documentation before making GameplayKit-specific claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read:
 
 - [GameplayKit](https://developer.apple.com/documentation/gameplaykit)
 - [GameplayKit entities and components](https://developer.apple.com/documentation/gameplaykit#Entities-and-Components)

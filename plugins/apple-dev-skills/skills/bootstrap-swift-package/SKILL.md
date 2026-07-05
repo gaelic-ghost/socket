@@ -76,6 +76,8 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md`
    - keep the generated repo aligned with the simplicity-first, shape-preserving, and anti-ceremony Swift guidance in that snippet
    - keep the generated repo aligned with the checked-in `.swiftformat` plus format-then-verify pre-commit-hook baseline in that snippet
+   - keep the generated Apple and Swift docs-source guidance aligned with the Xcode MCP, Dash, source-repository, and readable-web fallback order in that snippet
+   - verify the generated guidance does not treat generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs as evidence that Apple docs were read
    - keep the generated manifest aligned with the explicit Swift 6 default language-mode declaration `swiftLanguageModes: [.v6]`
    - keep the generated manifest aligned with the default `swift-configuration` dependency, using the `Configuration` product and package traits `.defaults`, `Reloading`, `YAML`, and `CommandLineArguments`
    - treat the generated `// swift-tools-version:` as a starting point that can be lowered to match the real package compatibility target, but never below the current `6.2` floor while trait-enabled dependencies remain in the manifest

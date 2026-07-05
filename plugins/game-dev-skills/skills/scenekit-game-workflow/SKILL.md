@@ -11,7 +11,7 @@ Use this skill for game-specific SceneKit work after SceneKit has been chosen or
 
 ## Source Check
 
-Use Xcode-local documentation, Dash Apple API Reference docsets, or official Apple documentation before making SceneKit-specific claims:
+Use Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, or readable official Apple documentation before making SceneKit-specific claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read:
 
 - [SceneKit](https://developer.apple.com/documentation/scenekit)
 - [SCNScene](https://developer.apple.com/documentation/scenekit/scnscene)

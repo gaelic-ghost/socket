@@ -42,7 +42,10 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - stop if the request is actually a Swift package, library, or tool bootstrap
 3. Apply the Apple docs gate before recommending project structure or implementation guidance:
    - read the relevant Apple documentation first
-   - prefer Dash or local Apple docs first, then official Apple web docs when needed
+   - use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Apple-owned SDK, framework, lifecycle, and Xcode project-creation behavior
+   - use Dash MCP or Dash HTTP next when installed local docsets are a better fit
+   - use open source Swift project repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there
+   - use official Apple web docs only when the page content is actually readable through a capable source; generic no-JS web search/open results, snippets, metadata shells, or bare URLs are not enough
    - state the documented behavior being relied on before design or implementation guidance
    - current documented anchors for this workflow include:
      - Apple's Xcode project-creation guidance: [Creating an Xcode project for an app](https://developer.apple.com/documentation/xcode/creating_an_xcode_project_for_an_app)

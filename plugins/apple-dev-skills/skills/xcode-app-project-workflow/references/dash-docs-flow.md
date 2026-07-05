@@ -3,4 +3,4 @@
 This file is historical context only.
 
 - Apple and Swift docs exploration no longer lives inside this compatibility surface.
-- Use `$explore-apple-swift-docs` for Xcode MCP docs, Dash-compatible docs access, and official web docs fallback.
+- Use `$explore-apple-swift-docs` for Xcode MCP docs, Dash-compatible docs access, source-repository lookup for open source Swift surfaces, and readable official web docs fallback.

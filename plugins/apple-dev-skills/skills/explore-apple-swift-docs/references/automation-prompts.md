@@ -56,13 +56,13 @@ Run docs mode `<MODE>` with:
 Execution order:
 1) Classify the request into one mode: `explore`, `dash-install`, or `dash-generate`.
 2) If no mode is explicit, start with `explore`.
-3) For `explore`, use the documented direct docs path first: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then official web docs.
+3) For `explore`, use the documented direct docs path first: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then source repositories or generated docs when applicable, then readable official web docs.
 4) Use the documented fallback order only if the primary source is unavailable.
 5) Use `scripts/run_workflow.py` only when a structured helper result is useful or when the mode is `dash-install` or `dash-generate`.
 6) When the next action belongs to the next mode, return a `handoff` output instead of mixing workflows.
 
 Behavior:
-- If `<MODE>` is `explore`, prefer `xcode-mcp-docs -> dash-mcp -> dash-http -> official-web`.
+- If `<MODE>` is `explore`, prefer `xcode-mcp-docs -> dash-mcp -> dash-http -> source-repo -> readable-official-web`.
 - If `<MODE>` is `dash-install`, follow `built-in -> user-contributed -> cheatsheet`.
 - If `<MODE>` is `dash-generate`, use stable automation guidance first and manual guidance only as fallback.
 - Write a short report to `<REPORT_PATH>` only when that path is provided.
@@ -98,7 +98,7 @@ Return contract:
 - `<MODE>`: `explore`, `dash-install`, or `dash-generate`
 - `<QUERY>`: Apple or Swift search phrase
 - `<DOCS_KIND>`: `api-reference`, `guide`, `symbol`, or `search`
-- `<PREFERRED_SOURCE>`: `auto`, `xcode-mcp-docs`, `dash`, or `official-web`
+- `<PREFERRED_SOURCE>`: `auto`, `xcode-mcp-docs`, `dash`, `dash-http`, `source-repo`, or `official-web`
 - `<DOCSET_REQUEST>`: Dash follow-up request for install or generation guidance
 - `<MAX_RESULTS>`: Integer limit for `explore`
 - `<SEARCH_SNIPPETS>`: `true` or `false` for `explore`

@@ -8,13 +8,13 @@ Tune the runtime-supported defaults for Apple and Swift docs exploration, source
 
 | Knob | Default | Status | Effect |
 | --- | --- | --- | --- |
-| `defaultSourceOrder` | `xcode-mcp-docs,dash,dash-http,official-web` | `runtime-enforced` | Controls the default docs-source order used by `scripts/run_workflow.py` for `explore` mode. |
+| `defaultSourceOrder` | `xcode-mcp-docs,dash,dash-http,source-repo,official-web` | `runtime-enforced` | Controls the default docs-source order used by `scripts/run_workflow.py` for `explore` mode. |
 
 ## Runtime Behavior
 
 - `scripts/customization_config.py` reads, writes, resets, and reports customization state.
 - `scripts/run_workflow.py` loads the effective merged customization state at runtime.
-- The public `explore` workflow should still use direct Xcode MCP, Dash MCP, and Dash localhost HTTP calls first; `scripts/run_workflow.py` remains a maintainer helper for structured planning and Dash follow-up automation.
+- The public `explore` workflow should still use direct Xcode MCP, Dash MCP, Dash localhost HTTP, source-repository, and generated-docs access first; `scripts/run_workflow.py` remains a maintainer helper for structured planning and Dash follow-up automation.
 - Match count, snippet shaping, Dash install source priority, install approval gating, Dash generation policy, and blocked-state troubleshooting posture now live as workflow defaults rather than ordinary durable user customization.
 - Helper scripts remain implementation details behind `scripts/run_workflow.py`.
 

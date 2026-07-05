@@ -5,7 +5,7 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 ## General Swift Baseline
 
 - For any Swift, Apple-framework, Apple-platform, SwiftUI, SwiftData, Observation, AppKit, UIKit, Foundation-on-Apple, or Xcode-related task, read the relevant Apple documentation first before planning, proposing, or making changes.
-- Use Xcode MCP DocumentationSearch or Xcode-local documentation first for Apple-owned SDK, framework, and lifecycle questions; use Dash MCP or Dash HTTP next when installed local package docs or multi-ecosystem docs are a better fit; then use official Apple documentation when local docs are insufficient.
+- Use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Apple-owned SDK, framework, lifecycle, and Xcode behavior; use Dash MCP or Dash HTTP next when installed local package docs or multi-ecosystem docs are a better fit; use open source Swift project repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there; use official Apple web docs only when the page content is actually readable through a capable source. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read.
 - Before proposing an architecture or implementation, state the documented API behavior, lifecycle rule, or workflow requirement being relied on.
 - Do not rely on memory, habit, or analogy as the primary source when Apple documentation exists.
 - If Apple documentation and the current code disagree, stop and report the conflict before continuing.

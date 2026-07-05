@@ -11,7 +11,7 @@ Use this skill before implementing Apple game work when the correct owner is not
 
 ## Source Check
 
-Use repo-local files, Xcode-local documentation, Dash Apple API Reference docsets, and official Apple documentation before making framework-specific claims. Useful Apple anchors:
+Use repo-local files, Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, and readable official Apple documentation before making framework-specific claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read. Useful Apple anchors:
 
 - [SpriteKit](https://developer.apple.com/documentation/spritekit)
 - [SceneKit](https://developer.apple.com/documentation/scenekit)

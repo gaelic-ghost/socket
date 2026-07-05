@@ -56,7 +56,7 @@ Use this when the request is better answered by conceptual guides, migration doc
 - every current Apple SDK release surface
 - every lifecycle or migration topic that Apple documents on the web
 
-When coverage is unclear, say so and fall back to Xcode MCP docs or official Apple web docs instead of bluffing.
+When coverage is unclear, say so and fall back to Xcode MCP docs, applicable source repositories or generated docs, or readable official Apple web docs instead of bluffing. Do not use generic no-JS web search/open results as proof that Apple Developer docs were read.
 
 ## Maintenance Note
 

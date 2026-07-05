@@ -1,13 +1,13 @@
 ---
 name: explore-apple-swift-docs
-description: Explore Apple and Swift documentation across Xcode MCP docs, Dash, and official web docs, including search, browse, source selection, local-docs fallback, and optional Dash install or generation follow-up. Use when Codex needs Apple or Swift docs help rather than Xcode execution or repo-guidance sync work.
+description: Explore Apple and Swift documentation across Xcode MCP docs, Dash, source repositories, generated docs, and readable official web docs, including search, browse, source selection, local-docs fallback, and optional Dash install or generation follow-up. Use when Codex needs Apple or Swift docs help rather than Xcode execution or repo-guidance sync work.
 ---
 
 # Explore Apple Swift Docs
 
 ## Purpose
 
-Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, and official web docs last. `scripts/run_workflow.py` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
+Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, open source Swift repositories or generated DocC when the relevant project is available there, and official web docs last only when they are actually readable through a capable source. `scripts/run_workflow.py` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
 
 ## When To Use
 
@@ -31,7 +31,8 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
    - `xcode-mcp-docs`: use Xcode MCP docs tools first when they are available and the user has not asked for another source
    - `dash`: use Dash MCP tools directly when local Dash coverage is wanted and the MCP service is available
    - `dash-http`: use the documented Dash localhost HTTP structure directly when Dash MCP is unavailable or incomplete
-   - `official-web`: use official Apple or Swift web docs when the local-docs paths are unavailable or the user explicitly prefers the web source
+   - `source-repo`: use GitHub/source repositories, generated DocC, release notes, or checked-out source when the request is about open source Swift projects, tools, or packages
+   - `official-web`: use official Apple or Swift web docs when the local-docs and source-repo paths are unavailable, the user explicitly prefers the web source, and the page content is actually readable through the available tool
 4. Use `scripts/run_workflow.py` only when a structured non-interactive planning result is useful, or when the request is specifically about `dash-install` or `dash-generate` follow-up behavior.
 5. If the selected mode cannot complete, hand off forward through one clear next step:
    - `explore -> dash-install`
@@ -43,12 +44,12 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 - `mode`: `explore`, `dash-install`, or `dash-generate`
 - `query`: required for `explore`
 - `docs_kind`: optional for `explore`; use `api-reference`, `guide`, `symbol`, or `search` when the user intent is clear
-- `preferred_source`: optional for `explore`; use `auto`, `xcode-mcp-docs`, `dash`, or `official-web`
+- `preferred_source`: optional for `explore`; use `auto`, `xcode-mcp-docs`, `dash`, `dash-http`, `source-repo`, or `official-web`
 - `mcp_failure_reason`: optional for `explore` when Xcode MCP docs were expected but are currently unavailable
 - `docset_request`: required for `dash-install` and `dash-generate`
 - `approval`: required before side-effectful Dash install actions
 - Defaults:
-  - `explore` source order is `xcode-mcp-docs,dash,dash-http,official-web`
+  - `explore` source order is `xcode-mcp-docs,dash,dash-http,source-repo,official-web`
   - Dash install source priority is `built-in,user-contributed,cheatsheet`
   - default search result limit is `20`
   - default search snippets setting is `true`
@@ -76,13 +77,15 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 - Do not run Dash install actions without explicit user approval.
 - Do not invent Apple or Swift doc sources, Dash identifiers, or catalog matches.
 - Do not present `scripts/run_workflow.py` as the required first step for ordinary Apple or Swift docs lookup when direct Xcode MCP or Dash MCP/HTTP access is available.
+- Do not treat generic no-JS web search or no-JS page extraction as a readable source for Apple Developer documentation. Apple Developer pages often require JavaScript-rendered payloads; if the content cannot be read through Xcode MCP, Dash, source repositories, generated docs, or a capable browser/source path, say that plainly instead of claiming the docs were checked.
+- Do not cite an Apple Developer URL as evidence unless the relevant documentation text was actually read through a usable source. A URL alone is only a citation target, not proof that the guidance was verified.
 - Stop with `blocked` when `explore` has no usable docs source after applying the documented fallback order.
 - Stop with `blocked` when `dash-install` or `dash-generate` lacks a concrete docset request.
 - Keep `explore`, `dash-install`, and `dash-generate` in forward order; do not blend them into competing primary workflows.
 
 ## Fallbacks and Handoffs
 
-- `explore` falls back in this order: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then official web docs.
+- `explore` falls back in this order: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then open source Swift repositories or generated docs when applicable, then readable official web docs.
 - Explicit user preference overrides the default source order when that preference is usable.
 - `dash-install` hands off to `dash-generate` when no installable catalog match exists.
 - `dash-generate` falls back from stable automation guidance to deterministic manual guidance.

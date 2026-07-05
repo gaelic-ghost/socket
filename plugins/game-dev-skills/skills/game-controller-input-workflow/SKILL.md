@@ -11,7 +11,7 @@ Use this skill for game input that belongs to the Game Controller framework or t
 
 ## Source Check
 
-Use Xcode-local documentation, Dash Apple API Reference docsets, or official Apple documentation before making Game Controller-specific claims:
+Use Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, or readable official Apple documentation before making Game Controller-specific claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read:
 
 - [Game Controller](https://developer.apple.com/documentation/gamecontroller)
 - [Supporting Game Controllers](https://developer.apple.com/documentation/gamecontroller/supporting-game-controllers)

@@ -11,7 +11,7 @@ Use this skill for game-specific SpriteKit work after SpriteKit has been chosen 
 
 ## Source Check
 
-Use Xcode-local documentation, Dash Apple API Reference docsets, or official Apple documentation before making SpriteKit-specific claims:
+Use Xcode MCP `DocumentationSearch`, Xcode-local documentation, Dash Apple API Reference docsets, or readable official Apple documentation before making SpriteKit-specific claims. Generic no-JS web search/open results, snippets, metadata shells, or bare Apple Developer URLs are not enough evidence that Apple docs were read:
 
 - [SpriteKit](https://developer.apple.com/documentation/spritekit)
 - [SKScene](https://developer.apple.com/documentation/spritekit/skscene)

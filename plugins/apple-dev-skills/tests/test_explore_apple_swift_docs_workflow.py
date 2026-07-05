@@ -60,7 +60,7 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(payload["source_used"], "xcode-mcp-docs")
         self.assertEqual(payload["path_type"], "primary")
-        self.assertEqual(payload["configured_order"], ["xcode-mcp-docs", "dash", "dash-http", "official-web"])
+        self.assertEqual(payload["configured_order"], ["xcode-mcp-docs", "dash", "dash-http", "source-repo", "official-web"])
 
     def test_explore_obeys_preferred_source_override(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -80,14 +80,14 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(payload["source_used"], "dash")
 
-    def test_explore_falls_back_to_official_web_when_xcode_and_dash_unavailable(self) -> None:
+    def test_explore_falls_back_to_source_repo_before_official_web_when_xcode_and_dash_unavailable(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             env = dict(os.environ)
             env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
             write_config(
                 tmpdir,
                 "explore-apple-swift-docs",
-                {"defaultSourceOrder": "xcode-mcp-docs,dash,dash-http,official-web"},
+                {"defaultSourceOrder": "xcode-mcp-docs,dash,dash-http,source-repo,official-web"},
             )
             code, payload = self.run_script(
                 "--mode",
@@ -102,8 +102,22 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
                 env=env,
             )
             self.assertEqual(code, 0)
-            self.assertEqual(payload["source_used"], "official-web")
+            self.assertEqual(payload["source_used"], "source-repo")
             self.assertEqual(payload["path_type"], "fallback")
+
+    def test_explore_allows_readable_official_web_when_explicitly_preferred(self) -> None:
+        code, payload = self.run_script(
+            "--mode",
+            "explore",
+            "--query",
+            "Foundation",
+            "--preferred-source",
+            "official-web",
+            "--dry-run",
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(payload["source_used"], "official-web")
+        self.assertIn("readable official", payload["next_step"])
 
     def test_explore_keeps_snippets_enabled_by_default(self) -> None:
         code, payload = self.run_script("--mode", "explore", "--query", "Swift", "--dry-run")
