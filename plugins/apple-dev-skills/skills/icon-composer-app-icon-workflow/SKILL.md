@@ -62,7 +62,7 @@ Before a live workflow, inspect the Mac and report what is available:
    `/Applications/Xcode-beta.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool`
    `/Applications/Betas/Xcode-beta.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool`
 7. Run `ictool --help` or `ictool --version` when preview export is part of the task.
-8. Record the local Icon Composer app version when behavior matters. On Gale's current stable Xcode, Icon Composer 1.6 reports `short-bundle-version` `1.6` and `bundle-version` `99.1`; the installed Xcode beta reports Icon Composer 2.0 and may expose newer options.
+8. Record the local Icon Composer app version when behavior matters. Stable Icon Composer 1.6 reports `short-bundle-version` `1.6` and `bundle-version` `99.1`; a newer Xcode beta may report Icon Composer 2.0 and expose newer options.
 9. Identify the target app project shape before promising Xcode integration.
 
 Do not assume Icon Composer exists just because Xcode exists. Older Xcode installs, alternate Xcode locations, or standalone Icon Composer installs can change the path.
