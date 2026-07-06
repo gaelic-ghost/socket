@@ -44,6 +44,22 @@ class XcodeToolchainSelectionGuidanceTests(unittest.TestCase):
         )
         self.assertNotIn("/Users/galew/Applications/Betas", text)
 
+    def test_icon_composer_documents_stable_1_6_and_beta_2_0_boundaries(self) -> None:
+        text = self.read("skills/icon-composer-app-icon-workflow/SKILL.md")
+
+        for term in [
+            "Icon Composer 1.6",
+            "bundle-version` `99.1",
+            "Icon Composer 2.0",
+            "Do not mix stable and beta behavior",
+            "--light-angle",
+            "--tint-color",
+            "--tint-strength",
+            "--design-generation",
+        ]:
+            with self.subTest(term=term):
+                self.assertIn(term, text)
+
 
 if __name__ == "__main__":
     unittest.main()

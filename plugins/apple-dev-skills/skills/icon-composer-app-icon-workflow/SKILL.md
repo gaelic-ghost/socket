@@ -39,10 +39,11 @@ State the documented behavior being relied on before recommending a design, expo
 Current documented anchors to verify against the live docs:
 
 - Icon Composer creates layered app icons from one design for iPhone, iPad, Mac, and Apple Watch.
-- The workflow starts in a design tool, exports layers, imports them into Icon Composer, tunes glass properties, previews platforms and appearance modes, saves a `.icon` file, and delivers that file to Xcode.
+- The workflow starts in a design tool, exports layers, imports them into Icon Composer, tunes glass properties, previews platforms and rendering modes, saves a `.icon` file, and delivers that file to Xcode.
 - Icon Composer can export flattened images for marketing and communication needs, but the `.icon` file is the primary app icon production artifact when Xcode supports it.
 - Flat graphics should usually be exported as scalable SVG when possible. Custom gradients, raster images, and non-SVG elements should be exported as PNGs with transparent backgrounds.
 - Complex or illustrative icons may still be better delivered to Xcode as individual images when the artwork does not translate well into the layered Liquid Glass model.
+- Apple's current Icon Composer page names specular highlights, refraction, translucency, shadows, Default, Dark, and Mono rendering-mode annotation. Verify those names against the live page and local app before coaching a user through exact inspector controls.
 
 ## Local Tool Check
 
@@ -61,9 +62,11 @@ Before a live workflow, inspect the Mac and report what is available:
    `/Applications/Xcode-beta.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool`
    `/Applications/Betas/Xcode-beta.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool`
 7. Run `ictool --help` or `ictool --version` when preview export is part of the task.
-8. Identify the target app project shape before promising Xcode integration.
+8. Record the local Icon Composer app version when behavior matters. On Gale's current stable Xcode, Icon Composer 1.6 reports `short-bundle-version` `1.6` and `bundle-version` `99.1`; the installed Xcode beta reports Icon Composer 2.0 and may expose newer options.
+9. Identify the target app project shape before promising Xcode integration.
 
 Do not assume Icon Composer exists just because Xcode exists. Older Xcode installs, alternate Xcode locations, or standalone Icon Composer installs can change the path.
+Do not mix stable and beta behavior. If stable Icon Composer 1.6 and beta Icon Composer 2.0 disagree, say which app bundle was inspected and keep guidance scoped to that version unless the user explicitly asks to compare them.
 
 ## Brief Intake
 
@@ -162,8 +165,8 @@ Use this sequence for real icon work:
 4. Open Icon Composer through Computer Use only when the user wants GUI help.
 5. Import layers and preserve their visual order.
 6. Organize related layers into groups when the live app supports it.
-7. Tune Liquid Glass, color, composition, and appearance-mode settings in the GUI.
-8. Preview the icon across target platforms, appearances, sizes, backgrounds, and grid overlays.
+7. Tune Liquid Glass, color, composition, and rendering-mode settings in the GUI. For Icon Composer 1.6, expect controls around specular highlights, refraction, translucency, shadows, and light behavior; confirm exact labels in the live app before narrating a GUI step.
+8. Preview the icon across target platforms, rendering modes, sizes, backgrounds, and grid overlays.
 9. Save the `.icon` document as the durable app icon artifact.
 10. Export PNG previews through Icon Composer or `ictool` for review artifacts.
 11. Hand off Xcode project integration to the Xcode workflow skills.
@@ -189,13 +192,15 @@ Example shape:
 ```
 
 Discover exact platform and rendition values from current `ictool --help`, Apple docs, or live errors. Do not hard-code assumptions beyond examples.
+For Icon Composer 1.6, stable `ictool --help` documents optional `--light-angle`, `--tint-color`, and `--tint-strength` export arguments. Treat those as render-export controls only; do not imply they are a substitute for inspecting and saving the `.icon` document in Icon Composer.
+For newer beta `ictool` builds, inspect `--help` again before using beta-only flags such as `--design-generation`.
 
 Use preview exports to:
 
 - compare variants
 - attach review artifacts
 - check legibility at multiple sizes
-- validate default, dark, clear, tinted, mono, or other current appearances when supported
+- validate Default, Dark, Mono, tinted, or other current renditions when supported by the inspected `ictool` build
 - preserve a visual record before Xcode integration
 
 ## Xcode Integration Handoff
