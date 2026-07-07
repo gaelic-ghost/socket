@@ -106,7 +106,8 @@
 - Use app-level lifecycle concerns at the `App` boundary, scene lifecycle concerns at the `Scene` boundary, and view-local active or presentation behavior inside views.
 - Use `@Binding` to pass a focused writable piece of parent-owned state into a child view.
 - Use `@Bindable` when working with an observable model that should project bindings to its mutable properties in a view.
-- Prefer `@Query` for view-driven SwiftData fetching that should stay in sync with the model context; use explicit fetches only when the view should not be driven by a live query.
+- When SwiftData and SwiftUI are used together, keep them directly coupled in the Apple-designed data-driven UI path: attach the `ModelContainer` at the app or scene boundary, read and mutate through the SwiftUI environment `modelContext`, let `@Query` drive view collections that should stay live with the model context, and pass SwiftData model objects or narrow bindings through the view tree.
+- Do not insert repositories, stores, service layers, mirrored DTO state, view-model cache layers, or other abstraction layers between SwiftData and SwiftUI. Add a separate boundary only for a real non-SwiftUI concern such as import/export, networking, migration tooling, tests, or server sync, and keep SwiftUI screens driven directly by SwiftData.
 - Prefer environment values for shared context that truly belongs to the surrounding hierarchy, not as a dumping ground for unrelated dependencies.
 - Prefer key-path-based APIs, predicates, and sort descriptors when they keep data access direct and readable.
 - Extract repeated chains of view modifiers into custom view modifiers early when that reduces clutter and clearly matches a view or family of views.

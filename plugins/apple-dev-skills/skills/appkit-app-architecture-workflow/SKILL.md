@@ -5,6 +5,10 @@ description: Guide AppKit app-structure decisions for macOS apps across app dele
 
 # AppKit App Architecture Workflow
 
+## SwiftData And SwiftUI Rule
+
+When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
+
 ## Purpose
 
 Provide a docs-first workflow for AppKit app-structure decisions in macOS apps.
@@ -34,6 +38,9 @@ accessibility workflow, and not the Xcode execution workflow.
 - Use this skill when deciding between `NSSecureCoding`, `NSKeyedArchiver`,
   `Codable`, user defaults, files, Core Data, SwiftData, or another persistence
   surface for AppKit-owned state.
+- Use this skill when a mixed AppKit/SwiftUI app uses SwiftData and the agent
+  must keep SwiftData directly driving SwiftUI-owned screens while AppKit keeps
+  only the AppKit-owned lifetime, controller, restoration, or bridge boundary.
 - Use this skill when using Swift Observation with AppKit controls,
   controllers, delegates, or hosted SwiftUI views.
 - Use this skill when embedding SwiftUI in AppKit through `NSHostingView` or
@@ -108,6 +115,9 @@ accessibility workflow, and not the Xcode execution workflow.
    - persistence or restoration payload
 5. Check the anti-patterns before finalizing guidance:
    - SwiftUI scene structure forced onto AppKit-owned behavior
+   - repositories, stores, service layers, mirrored DTOs, view-model cache
+     layers, or wrapper objects inserted between SwiftData and SwiftUI-owned
+     screens
    - app-wide runtime work hidden in a view controller
    - menu or status-item behavior hidden in a leaf view
    - responder-chain actions replaced by a broad command bus without a real need
@@ -172,6 +182,12 @@ accessibility workflow, and not the Xcode execution workflow.
   responder-chain behavior into SwiftUI scene structure unless the app is truly
   SwiftUI-owned.
 - Do not let both AppKit and SwiftUI own the same mutable model state.
+- When SwiftData backs a SwiftUI-hosted surface, do not place AppKit
+  controllers, repositories, stores, service layers, mirrored state, or
+  view-model cache layers between SwiftData and SwiftUI. AppKit may own the host
+  lifetime or bridge, but SwiftUI should be driven directly by SwiftData through
+  `modelContainer`, environment `modelContext`, `@Query`, model objects, and
+  bindings.
 - Do not recommend `NSKeyedArchiver`, `NSSecureCoding`, Core Data, SwiftData,
   user defaults, or plain files without naming what state is being persisted and
   who reads it next.

@@ -171,3 +171,36 @@ def test_main_writes_json_report_to_output_path(tmp_path: Path) -> None:
     assert exit_code == 0
     assert payload["skill_count"] == 3
     assert payload["reference_count"] == 2
+
+
+def test_swiftui_or_swiftdata_skills_include_direct_swiftdata_rule() -> None:
+    repo_root = Path(__file__).resolve().parents[1]
+    skill_paths = sorted((repo_root / "plugins").glob("*/skills/*/SKILL.md"))
+    swiftui_or_swiftdata_paths = [
+        path
+        for path in skill_paths
+        if "SwiftUI" in path.read_text(encoding="utf-8")
+        or "SwiftData" in path.read_text(encoding="utf-8")
+    ]
+
+    assert swiftui_or_swiftdata_paths
+    missing_rule = [
+        path.relative_to(repo_root).as_posix()
+        for path in swiftui_or_swiftdata_paths
+        if "## SwiftData And SwiftUI Rule" not in path.read_text(encoding="utf-8")
+    ]
+
+    assert missing_rule == []
+
+
+def test_apple_swiftdata_snippets_reject_weak_query_only_guidance() -> None:
+    repo_root = Path(__file__).resolve().parents[1]
+    stale_phrase = "Prefer `@Query` for view-driven SwiftData fetching"
+    apple_skill_files = sorted((repo_root / "plugins" / "apple-dev-skills").glob("**/*.md"))
+    stale_paths = [
+        path.relative_to(repo_root).as_posix()
+        for path in apple_skill_files
+        if stale_phrase in path.read_text(encoding="utf-8")
+    ]
+
+    assert stale_paths == []

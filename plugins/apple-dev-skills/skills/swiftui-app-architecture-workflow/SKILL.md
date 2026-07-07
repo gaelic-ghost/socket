@@ -5,6 +5,10 @@ description: Guide SwiftUI app-structure decisions for Apple apps across `App`, 
 
 # SwiftUI App Architecture Workflow
 
+## SwiftData And SwiftUI Rule
+
+When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
+
 ## Purpose
 
 Provide a docs-first workflow for SwiftUI app-structure decisions in Apple apps. This skill owns ownership-boundary guidance, transport-choice guidance, focused-context guidance, and anti-pattern correction for SwiftUI app composition across scenes, commands, focus, environment, preferences, and reusable view structure.
@@ -16,6 +20,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 - Use this skill when the user wants help structuring a SwiftUI app across `App`, `Scene`, `WindowGroup`, `Window`, `Settings`, or `DocumentGroup`.
 - Use this skill when the user wants help deciding where app-level, scene-level, and view-level responsibilities belong.
 - Use this skill when the user wants help choosing between explicit dependency injection, environment values, focused values, scene-focused values, preference keys, bindings, or local state.
+- Use this skill when a SwiftUI app uses SwiftData and the agent needs to keep SwiftData directly driving SwiftUI through Apple's data-driven UI integration instead of adding repositories, stores, mirrored state, or view-model cache layers.
 - Use this skill when the user wants help with `FocusState`, `focusable`, focus scopes, focus sections, default focus, focused objects, or other focused-context design that changes ownership or data-flow choices.
 - Use this skill when the user wants help with command ownership, command menus, command groups, focused command handling, or desktop-oriented SwiftUI command surfaces.
 - Use this skill when the user wants help cleaning up giant root views, wrapper-heavy architecture, environment abuse, hidden control flow in modifiers, or state scattering in SwiftUI code.
@@ -53,6 +58,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
    - view-tree-level
    - local view
 4. Choose the transport that fits the responsibility:
+   - SwiftData's direct SwiftUI path: `modelContainer` at the app or scene boundary, environment `modelContext`, `@Query`, SwiftData model objects, and narrow bindings
    - explicit initializer injection
    - `Binding`
    - environment value
@@ -64,6 +70,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
    - preference key
    - local state only
 5. Check the anti-patterns before finalizing guidance:
+   - repositories, stores, service layers, mirrored DTOs, view-model cache layers, or wrapper objects inserted between SwiftData and SwiftUI
    - app responsibilities stuffed into a leaf view
    - scene responsibilities stuffed into a global environment object
    - environment used as a dependency dump
@@ -110,6 +117,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 ## Guards and Stop Conditions
 
 - Do not recommend environment values as a default substitute for explicit dependency flow.
+- When SwiftData backs a SwiftUI surface, do not recommend any data-access abstraction between SwiftData and SwiftUI. SwiftData should directly drive SwiftUI through `modelContainer`, environment `modelContext`, `@Query`, model objects, and bindings; separate boundaries are only for non-SwiftUI concerns such as import/export, networking, migration tooling, tests, or server sync.
 - Do not recommend preference keys for ordinary downward or lateral data flow.
 - Do not collapse commands, focus, and scene ownership into a single shared mutable object just because it is easy to wire.
 - Do not present a giant root view or extra wrapper layer as architectural improvement unless it clearly removes a real ownership problem.

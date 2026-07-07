@@ -5,6 +5,10 @@ description: Guide SceneKit game implementation, repair, and maintenance. Use wh
 
 # SceneKit Game Workflow
 
+## SwiftData And SwiftUI Rule
+
+When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
+
 ## Overview
 
 Use this skill for game-specific SceneKit work after SceneKit has been chosen or when maintaining an existing SceneKit project. Keep generic Apple app lifecycle, project-integrity mechanics, and Swift source cleanup with their owner skills.
