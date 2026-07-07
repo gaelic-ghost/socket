@@ -13,6 +13,10 @@ allowed-tools: Read Bash(rg:*) Bash(git:*)
 
 # Explain SwiftASB
 
+## SwiftData And SwiftUI Rule
+
+When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
+
 ## Purpose
 
 Help a user understand whether [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) is the right foundation for their Swift app, tool, or package before implementation starts.

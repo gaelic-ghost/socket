@@ -5,6 +5,10 @@ description: Choose the right Apple platform game-development stack before imple
 
 # Choose Apple Game Stack
 
+## SwiftData And SwiftUI Rule
+
+When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
+
 ## Overview
 
 Use this skill before implementing Apple game work when the correct owner is not obvious. The goal is to choose the smallest game-specific stack that fits the project instead of turning a rendering, input, haptics, or profiling task into a generic Apple app change.

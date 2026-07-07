@@ -55,6 +55,15 @@ sync_one \
   "$ROOT_DIR/skills/bootstrap-xcode-app-project/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/format-swift-sources/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/explore-apple-swift-docs/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/avfaudio-session-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/avaudio-engine-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/avfoundation-media-pipeline-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/coremedia-timing-samplebuffer-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/coreaudio-modernization-repair-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/core-animation-layer-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/apple-typography-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/sf-symbols-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/swiftui-animation-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/safari-extension-control-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/devicecheck-app-attest-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftui-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \

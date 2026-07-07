@@ -5,6 +5,10 @@ description: Organize Swift source trees and oversized Swift files by feature, l
 
 # Structure Swift Sources
 
+## SwiftData And SwiftUI Rule
+
+When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
+
 ## Purpose
 
 Use this skill as the top-level workflow for structural cleanup inside existing Swift repositories. It governs file splitting, file moves, section grouping, plain-language file headers, and TODO or FIXME ledger extraction. `scripts/run_workflow.py` is the runtime wrapper for repo-shape detection, cleanup-kind classification, header-policy loading, split-threshold loading, and clean handoffs to DocC or Xcode execution workflows. It is not the formatter or linter integration authority, and it is not the DocC authoring authority. Use `format-swift-sources` before this skill starts mutating source layout, use `author-swift-docc-docs` when the request becomes symbol-doc or DocC-content work, and run `format-swift-sources` again after this skill finishes.
