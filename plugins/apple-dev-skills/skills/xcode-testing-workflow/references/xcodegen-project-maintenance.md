@@ -18,14 +18,17 @@ Authoritative XcodeGen references:
 ## Test Changes
 
 - Make test target membership, test bundle settings, build configurations, scheme test actions, launch arguments, environment variables, and test-plan references in the XcodeGen spec set when those project-level surfaces are generated.
+- Use top-level `schemes` for generated test behavior once the repo needs explicit test actions, coverage settings, command-line arguments, environment variables, test targets, or test-plan references.
+- Remember that XcodeGen references checked-in `.xctestplan` files by path; it does not create the test-plan file content for you. Create or update the `.xctestplan` through Xcode or a structured JSON-aware edit, then wire the path through the scheme spec.
+- Use target-level `configFiles` for test bundles when test-only build settings, bundle identifiers, compilation conditions, or host-app settings diverge from the app target.
 - Prefer external `.xcconfig` files for nontrivial build settings and wire them from the XcodeGen spec instead of duplicating build settings inline.
-- Keep `.xcconfig` layering explicit, with a small shared base config and per-configuration or per-target configs that include the base and override only what changes.
-- Do not put secrets in committed `.xcconfig` files.
+- Keep `.xcconfig` layering explicit, with a small shared base config, target-level configs for app/test/extension identity, and per-configuration configs that include the narrower target config and override only what changes.
+- Do not put secrets, personal team IDs, local filesystem paths, provisioning profiles, API tokens, or private signing material in committed `.xcconfig` files.
 - Keep `.xctestplan` files versioned as ordinary source files, but wire them into schemes through the spec when the scheme itself is generated.
 - Do not hand-edit generated `.pbxproj` files to add test targets, test files, or test-plan references; fix the spec and regenerate.
 - After changing specs or `.xcconfig` files, run `xcodegen generate` from the spec root, or `xcodegen generate --spec <path>` when the repo uses a non-default spec path.
 - If the spec uses environment variables, `preGenCommand`, or `postGenCommand`, preserve the required environment and call that out in the validation notes.
-- Review the spec diff, `.xcconfig` diff, and generated project diff after regeneration.
+- Review the spec diff, `.xcconfig` diff, and generated project diff after regeneration, especially test target membership, host-app dependencies, test-plan paths, scheme actions, and build-setting churn.
 - Validate with explicit `xcodebuild test`, `xcodebuild -showTestPlans`, or focused test-plan commands for the affected scheme, destination, and configuration.
 
 ## Boundary

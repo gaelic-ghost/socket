@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "skills/bootstrap-xcode-app-project/scripts/run_workflow.py"
+XCODEGEN_TEMPLATE_DIR = ROOT / "templates/xcodegen/swiftui-app"
 
 
 def write_config(tmpdir: str, skill: str, settings: dict) -> None:
@@ -189,15 +190,38 @@ exit 1
             target = Path(payload["resolved_path"])
             self.assertTrue((target / "project.yml").exists())
             project_yml = (target / "project.yml").read_text(encoding="utf-8")
+            self.assertIn("minimumXcodeGenVersion: 2.45.4", project_yml)
+            self.assertIn("projectFormat: xcode16_0", project_yml)
+            self.assertIn("configs:", project_yml)
+            self.assertIn("schemes:", project_yml)
             self.assertIn("configFiles:", project_yml)
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
-            self.assertTrue((target / "Configurations" / "App-Shared.xcconfig").exists())
+            self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
+            self.assertIn("parallelizable: true", project_yml)
+            self.assertTrue((target / "Configurations" / "Shared.xcconfig").exists())
+            self.assertTrue((target / "Configurations" / "App.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App-Debug.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App-Release.xcconfig").exists())
+            self.assertTrue((target / "Configurations" / "Tests.xcconfig").exists())
+            self.assertTrue((target / "Configurations" / "Tests-Debug.xcconfig").exists())
+            self.assertTrue((target / "Configurations" / "Tests-Release.xcconfig").exists())
             self.assertIn(
                 "PRODUCT_BUNDLE_IDENTIFIER = com.example.DemoApp",
-                (target / "Configurations" / "App-Shared.xcconfig").read_text(encoding="utf-8"),
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
+            self.assertIn(
+                "SWIFT_VERSION = 6.0",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                '#include "App.xcconfig"',
+                (target / "Configurations" / "App-Debug.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "PRODUCT_BUNDLE_IDENTIFIER = com.example.DemoApp.tests",
+                (target / "Configurations" / "Tests.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn("xcodegen_template_paths", payload)
             self.assertTrue((target / "AGENTS.md").exists())
             local_environment_path = target / ".codex" / "environments" / "xcode-project.toml"
             self.assertTrue(local_environment_path.exists())
@@ -208,6 +232,8 @@ exit 1
             self.assertIn("xcode-build-run-workflow", agents_text)
             self.assertIn("xcode-testing-workflow", agents_text)
             self.assertIn("XcodeGen plus checked-in `.xcconfig` files", agents_text)
+            self.assertIn("Keep XcodeGen specs readable as project structure", agents_text)
+            self.assertIn("Keep `.xcconfig` layering explicit", agents_text)
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
@@ -224,3 +250,24 @@ exit 1
             )
             self.assertTrue((target / ".github" / "workflows" / "validate-repo-maintenance.yml").exists())
             self.assertEqual(payload["validation_result"], "passed (xcodebuild -list)")
+
+    def test_xcodegen_templates_are_checked_in_as_bootstrap_sources(self) -> None:
+        expected_templates = {
+            "project.yml.tmpl",
+            "Configurations/Shared.xcconfig.tmpl",
+            "Configurations/App.xcconfig.tmpl",
+            "Configurations/App-Debug.xcconfig.tmpl",
+            "Configurations/App-Release.xcconfig.tmpl",
+            "Configurations/Tests.xcconfig.tmpl",
+            "Configurations/Tests-Debug.xcconfig.tmpl",
+            "Configurations/Tests-Release.xcconfig.tmpl",
+        }
+
+        for relative_path in expected_templates:
+            self.assertTrue((XCODEGEN_TEMPLATE_DIR / relative_path).is_file(), relative_path)
+
+        project_template = (XCODEGEN_TEMPLATE_DIR / "project.yml.tmpl").read_text(encoding="utf-8")
+        self.assertIn("minimumXcodeGenVersion: 2.45.4", project_template)
+        self.assertIn("schemes:", project_template)
+        self.assertIn("configFiles:", project_template)
+        self.assertNotIn("/Users/", project_template)

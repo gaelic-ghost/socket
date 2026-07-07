@@ -1,0 +1,55 @@
+name: __APP_NAME__
+options:
+  minimumXcodeGenVersion: 2.45.4
+  projectFormat: xcode16_0
+  defaultConfig: Debug
+  createIntermediateGroups: true
+configs:
+  Debug: debug
+  Release: release
+fileGroups:
+  - Configurations
+targets:
+  __APP_NAME__:
+    type: application
+    platform: __XCODEGEN_PLATFORM__
+    sources:
+      - path: Sources/App
+    info:
+      path: Sources/Support/Info.plist
+      properties:
+        CFBundleDisplayName: __APP_NAME__
+    configFiles:
+      Debug: Configurations/App-Debug.xcconfig
+      Release: Configurations/App-Release.xcconfig
+  __APP_NAME__Tests:
+    type: bundle.unit-test
+    platform: __XCODEGEN_PLATFORM__
+    sources:
+      - path: Tests/__APP_NAME__Tests
+    dependencies:
+      - target: __APP_NAME__
+    configFiles:
+      Debug: Configurations/Tests-Debug.xcconfig
+      Release: Configurations/Tests-Release.xcconfig
+schemes:
+  __APP_NAME__:
+    build:
+      targets:
+        __APP_NAME__: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: false
+      targets:
+        - name: __APP_NAME__Tests
+          parallelizable: true
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    management:
+      shared: true

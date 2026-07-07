@@ -13,6 +13,18 @@ import shutil
 import subprocess
 from pathlib import Path
 
+XCODEGEN_TEMPLATE_DIR = Path(__file__).resolve().parents[3] / "templates" / "xcodegen" / "swiftui-app"
+XCODEGEN_TEMPLATE_OUTPUTS = {
+    "project.yml.tmpl": "project.yml",
+    "Configurations/Shared.xcconfig.tmpl": "Configurations/Shared.xcconfig",
+    "Configurations/App.xcconfig.tmpl": "Configurations/App.xcconfig",
+    "Configurations/App-Debug.xcconfig.tmpl": "Configurations/App-Debug.xcconfig",
+    "Configurations/App-Release.xcconfig.tmpl": "Configurations/App-Release.xcconfig",
+    "Configurations/Tests.xcconfig.tmpl": "Configurations/Tests.xcconfig",
+    "Configurations/Tests-Debug.xcconfig.tmpl": "Configurations/Tests-Debug.xcconfig",
+    "Configurations/Tests-Release.xcconfig.tmpl": "Configurations/Tests-Release.xcconfig",
+}
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -43,6 +55,31 @@ def blocked_payload(path: Path, inputs: dict, next_step: str, *, stderr: str = "
 def write_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
+
+
+def render_template(relative_path: str, replacements: dict[str, str]) -> str:
+    template_path = XCODEGEN_TEMPLATE_DIR / relative_path
+    if not template_path.is_file():
+        raise RuntimeError(f"XcodeGen template is missing: {template_path}")
+    text = template_path.read_text(encoding="utf-8")
+    for placeholder, value in replacements.items():
+        text = text.replace(placeholder, value)
+    return text
+
+
+def install_xcodegen_templates(target_dir: Path, name: str, platform: str, bundle_identifier: str) -> list[str]:
+    xcodegen_platform = "iOS" if platform in {"ios", "ipados"} else "macOS"
+    replacements = {
+        "__APP_NAME__": name,
+        "__BUNDLE_IDENTIFIER__": bundle_identifier,
+        "__XCODEGEN_PLATFORM__": xcodegen_platform,
+    }
+    installed_paths: list[str] = []
+    for template_relative_path, output_relative_path in XCODEGEN_TEMPLATE_OUTPUTS.items():
+        output_path = target_dir / output_relative_path
+        write_text(output_path, render_template(template_relative_path, replacements))
+        installed_paths.append(str(output_path))
+    return installed_paths
 
 
 def install_local_environment(target_dir: Path, scheme_name: str) -> str:
@@ -95,61 +132,6 @@ final class {name}Tests: XCTestCase {{
         XCTAssertTrue(true)
     }}
 }}
-"""
-
-
-def render_project_yml(name: str, platform: str, bundle_identifier: str) -> str:
-    xcodegen_platform = "iOS" if platform in {"ios", "ipados"} else "macOS"
-    return f"""name: {name}
-options:
-  minimumXcodeGenVersion: 2.39.0
-targets:
-  {name}:
-    type: application
-    platform: {xcodegen_platform}
-    sources:
-      - path: Sources/App
-        group: App
-    info:
-      path: Sources/Support/Info.plist
-      properties:
-        CFBundleDisplayName: {name}
-    settings:
-      configFiles:
-        Debug: Configurations/App-Debug.xcconfig
-        Release: Configurations/App-Release.xcconfig
-    scheme:
-      testTargets:
-        - {name}Tests
-  {name}Tests:
-    type: bundle.unit-test
-    platform: {xcodegen_platform}
-    sources:
-      - path: Tests/{name}Tests
-        group: Tests
-    dependencies:
-      - target: {name}
-"""
-
-
-def render_app_shared_xcconfig(bundle_identifier: str) -> str:
-    return f"""// Shared non-secret app build settings.
-PRODUCT_BUNDLE_IDENTIFIER = {bundle_identifier}
-SWIFT_VERSION = 5.0
-"""
-
-
-def render_debug_xcconfig() -> str:
-    return """#include "App-Shared.xcconfig"
-
-SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG $(inherited)
-"""
-
-
-def render_release_xcconfig() -> str:
-    return """#include "App-Shared.xcconfig"
-
-SWIFT_COMPILATION_MODE = wholemodule
 """
 
 
@@ -226,10 +208,26 @@ def main() -> int:
 
     target_dir.mkdir(parents=True, exist_ok=True)
 
-    write_text(target_dir / "project.yml", render_project_yml(args.name, args.platform, args.bundle_identifier))
-    write_text(target_dir / "Configurations/App-Shared.xcconfig", render_app_shared_xcconfig(args.bundle_identifier))
-    write_text(target_dir / "Configurations/App-Debug.xcconfig", render_debug_xcconfig())
-    write_text(target_dir / "Configurations/App-Release.xcconfig", render_release_xcconfig())
+    try:
+        xcodegen_template_paths = install_xcodegen_templates(
+            target_dir,
+            args.name,
+            args.platform,
+            args.bundle_identifier,
+        )
+    except RuntimeError as exc:
+        payload = {
+            "status": "failed",
+            "path_type": "primary",
+            "resolved_path": str(target_dir),
+            "normalized_inputs": normalized_inputs,
+            "validation_result": "failed (xcodegen template install)",
+            "stderr": str(exc),
+            "next_step": "Restore the bootstrap XcodeGen templates and rerun bootstrap-xcode-app-project.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
+
     write_text(target_dir / "Sources/App/App.swift", render_app_file(args.name))
     write_text(target_dir / "Sources/App/ContentView.swift", render_content_view())
     write_text(target_dir / f"Tests/{args.name}Tests/{args.name}Tests.swift", render_test_file(args.name))
@@ -359,6 +357,7 @@ def main() -> int:
         "validation_result": validation_result,
         "generator": "xcodegen",
         "project_file": str(target_dir / f"{args.name}.xcodeproj"),
+        "xcodegen_template_paths": xcodegen_template_paths,
         "local_environment_path": local_environment_path,
         "agents_copied": agents_copied,
         "stdout": proc_install_toolkit.stdout + proc_generate.stdout + validation_stdout,
