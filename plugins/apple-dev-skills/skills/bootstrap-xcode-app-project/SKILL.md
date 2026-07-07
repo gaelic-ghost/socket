@@ -66,10 +66,11 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - use `xcode` only when the user explicitly prefers the standard Xcode project-creation flow
    - treat `ask` as a legacy explicit-blocking value only when the user or customization state supplies it intentionally
 7. Create the project:
-   - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold, `project.yml`, checked-in `.xcconfig` files, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
+   - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold from `templates/xcodegen/swiftui-app/`, including `project.yml`, checked-in `.xcconfig` files, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
-   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, targets, sources, schemes, packages, config files, test plans, and `minimumXcodeGenVersion`
-   - keep nontrivial build settings in external `.xcconfig` files by default and wire them through the XcodeGen spec instead of duplicating settings inline
+   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`
+   - keep the generated `minimumXcodeGenVersion` on the recent validated baseline declared by the templates; when the baseline is raised, update the templates, docs, and tests together
+   - keep nontrivial build settings in external `.xcconfig` files by default, using shared, target-level, and per-configuration layers wired through the XcodeGen spec instead of duplicating settings inline
    - for `xcode`, use a guarded guidance path for now instead of pretending the repo supports full GUI automation already
 8. Validate the scaffold:
    - verify the expected app files exist
@@ -184,6 +185,8 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - `assets/AGENTS.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the new app repo should start with reusable Xcode-project baseline policy content next to the generated `AGENTS.md`.
 - `references/snippets/apple-xcode-project-core.md`
+- `templates/xcodegen/swiftui-app/project.yml.tmpl`
+- `templates/xcodegen/swiftui-app/Configurations/*.xcconfig.tmpl`
 
 ### Script Inventory
 

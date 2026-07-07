@@ -22,9 +22,11 @@
 - Treat the `.xcworkspace` or `.xcodeproj` as the source of truth for app integration, schemes, and build settings.
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
 - For new Xcode app, framework, and workspace repositories, prefer XcodeGen plus checked-in `.xcconfig` files by default unless there is a concrete reason to avoid that generator dependency.
-- If this repo is XcodeGen-backed, treat `project.yml`, `project.yaml`, and any included XcodeGen specs as the source of truth for generated targets, schemes, build settings, build configurations, packages, and file membership.
+- If this repo is XcodeGen-backed, treat `project.yml`, `project.yaml`, and any included XcodeGen specs as the source of truth for generated targets, schemes, build settings, build configurations, Swift packages, test-plan references, and file membership.
 - For XcodeGen-backed projects, edit the spec set and rerun `xcodegen generate` instead of hand-editing generated `.pbxproj` files.
-- Prefer external `.xcconfig` files for nontrivial build settings, wire them from the XcodeGen spec, keep secrets out of committed configs, and review config diffs with the spec and generated project diff.
+- Keep XcodeGen specs readable as project structure: use explicit `configs`, `configFiles`, `targets`, `schemes`, `packages`, `projectReferences`, and templates when they make ownership clearer.
+- Prefer external `.xcconfig` files for nontrivial build settings, wire them from the XcodeGen spec, keep secrets, personal team IDs, local paths, provisioning profiles, and API tokens out of committed configs, and review config diffs with the spec and generated project diff.
+- Keep `.xcconfig` layering explicit: a small shared base, target-level configs for app/test/extension identity, then per-configuration configs for Debug, Release, CI, or deployment variants.
 - After regenerating an XcodeGen project, review the spec diff, `.xcconfig` diff, and generated `.xcodeproj` diff, then validate the affected scheme with explicit `xcodebuild` commands.
 - Prefer Swift Testing for modern unit-style tests, keep XCTest where Apple tooling or dependencies still require it, and use XCUITest with explicit element wait APIs instead of fixed sleeps.
 - Keep `.xctestplan` files versioned when the project depends on repeatable test-plan configurations, and inspect or run them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
