@@ -18,6 +18,9 @@ Authoritative XcodeGen references:
 ## Build And Project-Integrity Changes
 
 - Make target membership, resource membership, build settings, build configurations, schemes, Swift package declarations, project references, and generation options in the XcodeGen spec set.
+- Before running `xcodegen generate`, inspect existing generated `.xcodeproj` or `.pbxproj` diffs. Treat those diffs as intentional user or Xcode GUI changes unless proven otherwise; preserve the intent in the owning tracked source files before regeneration.
+- Promote GUI-created project settings into the right owner: XcodeGen specs for structure and wiring, `.xcconfig` files for build settings, `.entitlements` files for entitlement keys, `Info.plist` for plist keys, scheme specs or `.xcscheme` files for scheme behavior, and `.xctestplan` files for test-plan content.
+- If a `.pbxproj` diff contains settings that would be lost on regeneration and the correct tracked owner is unclear, stop and ask instead of regenerating.
 - Use top-level `configs` and `configFiles` when the whole project has shared configuration behavior, and target-level `configFiles` when app, test, extension, or framework targets need separate setting layers.
 - Keep top-level `schemes` explicit when build, run, archive, profile, analyze, command-line arguments, environment variables, or test-plan behavior matters. Do not rely on generated scheme defaults after the repo has explicit scheme policy.
 - Declare Swift packages in the spec-level `packages` map and link them through target `dependencies`; do not add package references by hand in the generated project.

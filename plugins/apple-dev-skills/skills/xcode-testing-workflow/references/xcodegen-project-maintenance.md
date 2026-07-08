@@ -18,6 +18,9 @@ Authoritative XcodeGen references:
 ## Test Changes
 
 - Make test target membership, test bundle settings, build configurations, scheme test actions, launch arguments, environment variables, and test-plan references in the XcodeGen spec set when those project-level surfaces are generated.
+- Before running `xcodegen generate`, inspect existing generated `.xcodeproj` or `.pbxproj` diffs. Treat those diffs as intentional user or Xcode GUI changes unless proven otherwise; preserve the intent in the owning tracked source files before regeneration.
+- Promote GUI-created test settings into the right owner: XcodeGen specs for target and scheme wiring, `.xcconfig` files for build settings, scheme specs or `.xcscheme` files for scheme behavior, and `.xctestplan` files for test-plan content.
+- If a `.pbxproj` diff contains test settings that would be lost on regeneration and the correct tracked owner is unclear, stop and ask instead of regenerating.
 - Use top-level `schemes` for generated test behavior once the repo needs explicit test actions, coverage settings, command-line arguments, environment variables, test targets, or test-plan references.
 - Remember that XcodeGen references checked-in `.xctestplan` files by path; it does not create the test-plan file content for you. Create or update the `.xctestplan` through Xcode or a structured JSON-aware edit, then wire the path through the scheme spec.
 - Use target-level `configFiles` for test bundles when test-only build settings, bundle identifiers, compilation conditions, or host-app settings diverge from the app target.

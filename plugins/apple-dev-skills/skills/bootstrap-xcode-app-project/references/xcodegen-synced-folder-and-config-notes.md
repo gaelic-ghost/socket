@@ -25,6 +25,8 @@
 - Prefer checked-in `.xcconfig` files for nontrivial build settings, with a shared base, target-level configs, and per-configuration configs.
 - Do not assume Xcode's Build Settings UI writes edited values back into `.xcconfig` files. Treat GUI-edited build settings as generated project overrides until inspected.
 - When a GUI change belongs in tracked config, move the value into the owning `.xcconfig`, regenerate with XcodeGen, and confirm the generated project no longer carries an unintended override.
+- Before running `xcodegen generate`, inspect existing generated project diffs and assume they are intentional user or Xcode GUI changes unless proven otherwise.
+- Promote project-file diffs into their tracked owners before regeneration: XcodeGen spec for project structure and wiring, `.xcconfig` for build settings, `.entitlements` for entitlement keys, `Info.plist` for plist keys, scheme spec or `.xcscheme` for scheme behavior, and `.xctestplan` for test-plan content.
 
 ## Evidence Sources
 

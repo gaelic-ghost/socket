@@ -244,6 +244,8 @@ exit 1
             self.assertIn("Keep `.xcconfig` layering explicit", agents_text)
             self.assertIn("CODE_SIGN_ENTITLEMENTS", agents_text)
             self.assertIn("Build Settings UI", agents_text)
+            self.assertIn("Before running `xcodegen generate`", agents_text)
+            self.assertIn("promote intentional values into the owning tracked source files", agents_text)
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)

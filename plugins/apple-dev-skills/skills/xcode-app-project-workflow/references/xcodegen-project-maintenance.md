@@ -15,6 +15,7 @@ Authoritative XcodeGen references:
 - If the request is primarily about generated test targets, scheme test actions, launch arguments, environment variables, or `.xctestplan` references, route to `xcode-testing-workflow`.
 - If the request asks for new-project defaults, template changes, minimum XcodeGen versions, or baseline `.xcconfig` layout, route to `bootstrap-xcode-app-project`.
 - Treat XcodeGen specs as the owner for targets, resources, schemes, packages, project references, test-plan references, configuration-file wiring, generation options, and generated file membership.
+- Before any regeneration, route existing generated `.xcodeproj` or `.pbxproj` diffs through the narrower build/run or testing workflow so user-made Xcode GUI changes can be promoted into the owning XcodeGen spec, `.xcconfig`, `.entitlements`, `Info.plist`, scheme, or test-plan file first.
 - Treat Xcode 16 `syncedFolder` source roots as the preferred file-membership model for new generated app/test source directories, with broad recursive source paths plus explicit `includes` and `excludes` as the fallback.
 - Treat `.xcconfig` files as the owner for nontrivial build settings, with shared, target-level, and per-configuration layers when a repo uses that layout.
 - Treat external `.entitlements` files as the owner for app, extension, and capability-bearing target entitlements when `CODE_SIGN_ENTITLEMENTS` points at a checked-in plist.
