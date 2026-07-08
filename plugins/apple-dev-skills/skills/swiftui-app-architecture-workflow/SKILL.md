@@ -15,6 +15,12 @@ Provide a docs-first workflow for SwiftUI app-structure decisions in Apple apps.
 
 It is not the Apple-docs router, not the accessibility workflow, and not the Xcode execution workflow.
 
+## SwiftUI View File Rule
+
+Each SwiftUI `View` component must live in its own Swift file named for that view, and that file must carry the view's own Xcode SwiftUI preview. Do not group multiple `View` component types in one file, even when the views are small, related, nested, or currently used only by one parent. Split them into separate files so Xcode previews remain discoverable, isolated, and reliable.
+
+Keep supporting code in explicit paired files instead of bundling extra view types together: use `<ViewName>+Model.swift` for view-local models, `<ViewName>+Modifier.swift` for view-specific modifiers, and other narrowly named support files when needed. A file may contain private helper values or small non-`View` helpers for that one component, but it must not contain another SwiftUI `View` component.
+
 ## When To Use
 
 - Use this skill when the user wants help structuring a SwiftUI app across `App`, `Scene`, `WindowGroup`, `Window`, `Settings`, or `DocumentGroup`.
@@ -78,6 +84,7 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
    - giant root views with unrelated lifecycle, command, and rendering concerns mixed together
    - wrapper-heavy layers added only to look architectural
    - control flow hidden in modifiers that obscure who owns the action
+   - multiple SwiftUI `View` component types grouped into one file, especially when that prevents one file-local Xcode preview per component
 6. Return one recommendation path with:
    - the ownership boundary
    - the chosen transport

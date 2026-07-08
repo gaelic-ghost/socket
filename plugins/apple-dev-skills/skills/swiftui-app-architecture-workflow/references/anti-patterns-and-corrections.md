@@ -23,6 +23,18 @@ Correction:
 - keep app and scene boundaries explicit
 - keep leaf rendering concerns local to smaller composable views
 
+## Grouped SwiftUI View Files
+
+Bad shape:
+
+- multiple SwiftUI `View` component types are grouped into one Swift file because they are small, related, private, or currently used by one parent
+
+Correction:
+
+- split each SwiftUI `View` component into its own `<Name>.swift` file
+- keep that component's Xcode SwiftUI preview in the same file as the component
+- move view-local models, modifiers, and support code into explicit paired files such as `<Name>+Model.swift` and `<Name>+Modifier.swift`
+
 ## Wrapper-Heavy Architecture
 
 Bad shape:

@@ -34,6 +34,9 @@
 
 ## SwiftUI Rule
 
+- Require exactly one SwiftUI `View` component per file. Do not group multiple `View` component types in one Swift file, even when the views are small, private, nested, or part of the same feature.
+- Name each view file after its component, such as `<Name>.swift`, and keep that component's Xcode SwiftUI preview in the same file.
+- When an existing file contains multiple SwiftUI view components, split it into one file per view before adding more behavior.
 - Once any one view has more than `3` chained modifiers, strongly consider extracting a custom `ViewModifier`.
 - Place that modifier in `<Name>+Modifier.swift` when the modifier belongs to one view family.
 

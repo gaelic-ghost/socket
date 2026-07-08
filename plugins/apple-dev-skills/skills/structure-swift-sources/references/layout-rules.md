@@ -13,6 +13,8 @@
 
 - Ensure app-facing source directories such as `Views/`, `Controllers/`, and `Models/`.
 - Keep SwiftUI views in `Views/`.
+- Require one SwiftUI `View` component per file, named `<Name>.swift`, with that component's Xcode SwiftUI preview in the same file.
+- Do not group multiple SwiftUI view components into one file; split related child views into their own files instead.
 - When a view has a paired model type, use `<Name>+Model.swift`.
 - When a view needs extracted modifiers, use `<Name>+Modifier.swift`.
 - Move files into their proper layer directory rather than leaving them flat at the project root.

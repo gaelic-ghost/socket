@@ -59,6 +59,8 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 ## SwiftUI and State Architecture
 
 - Treat SwiftUI views as component UI: keep them small, composable, reusable, and easy to scan from top to bottom.
+- Require one SwiftUI `View` component per file, named for that component, with that component's Xcode SwiftUI preview in the same file.
+- Do not group multiple SwiftUI view components into one Swift file, even when the views are small, private, related, nested, or currently used only by one parent.
 - Prefer straight, top-down data flow with small focused controller classes that own matching state for a view or small view cluster.
 - Do not build monolithic views, monolithic controllers, or broad shared mutable state when a smaller component boundary would be clearer.
 - Keep updates to view-driving state minimal and localized.
