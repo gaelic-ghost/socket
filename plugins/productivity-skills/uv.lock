@@ -228,7 +228,7 @@ wheels = [
 
 [[package]]
 name = "productivity-skills-maintenance"
-version = "8.5.5"
+version = "8.6.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
