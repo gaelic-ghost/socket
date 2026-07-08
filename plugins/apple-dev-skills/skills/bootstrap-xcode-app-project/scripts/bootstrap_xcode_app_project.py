@@ -17,6 +17,9 @@ XCODEGEN_TEMPLATE_DIR = Path(__file__).resolve().parents[3] / "templates" / "xco
 XCODEGEN_TEMPLATE_OUTPUTS = {
     "project.yml.tmpl": "project.yml",
     "Sources/Support/App.entitlements.tmpl": "Sources/Support/App.entitlements",
+    "Sources/Resources/Assets.xcassets/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/Contents.json",
+    "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json",
+    "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json",
     "Configurations/Shared.xcconfig.tmpl": "Configurations/Shared.xcconfig",
     "Configurations/App.xcconfig.tmpl": "Configurations/App.xcconfig",
     "Configurations/App-Debug.xcconfig.tmpl": "Configurations/App-Debug.xcconfig",

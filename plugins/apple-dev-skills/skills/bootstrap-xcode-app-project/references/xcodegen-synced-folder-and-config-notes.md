@@ -9,7 +9,8 @@
 ## Template Shape
 
 - Keep app source files under `Sources/App` and test files under `Tests/<AppName>Tests`.
-- Set `options.defaultSourceDirectoryType: syncedFolder` and mark app/test source roots with `type: syncedFolder` so the intended behavior is visible at the target boundary.
+- Keep resources under `Sources/Resources`, including a default `Assets.xcassets` with `AppIcon` and `AccentColor` placeholders.
+- Set `options.defaultSourceDirectoryType: syncedFolder` and mark app/test/resource roots with `type: syncedFolder` so the intended behavior is visible at the target boundary.
 - Keep support files such as generated `Info.plist` and checked-in entitlements outside the synced source root unless they are intentionally part of that target's buildable folder.
 - Keep `Configurations/` visible as a `fileGroups` entry so `.xcconfig` layers are easy to find in Xcode.
 
@@ -23,8 +24,8 @@
 ## Build Settings
 
 - Prefer checked-in `.xcconfig` files for nontrivial build settings, with a shared base, target-level configs, and per-configuration configs.
-- Keep `SWIFT_VERSION = 6.0`, common Swift concurrency defaults, asset-symbol generation, localization analyzer settings, and user-script sandboxing in the shared config when every generated target should inherit them.
-- Keep app identity, marketing version, build number, entitlement path, app sandbox defaults, and hardened-runtime defaults in the app config.
+- Keep `SWIFT_VERSION = 6.0`, common Swift concurrency defaults, asset-symbol generation, localization analyzer settings, user-script sandboxing, and dead-code stripping in the shared config when every generated target should inherit them.
+- Keep app identity, app icon name, marketing version, build number, entitlement path, app sandbox defaults, and hardened-runtime defaults in the app config.
 - Keep generated `Info.plist` version keys wired to `$(MARKETING_VERSION)` and `$(CURRENT_PROJECT_VERSION)` so version bump scripts can update the config source instead of generated project state.
 - Do not assume Xcode's Build Settings UI writes edited values back into `.xcconfig` files. Treat GUI-edited build settings as generated project overrides until inspected.
 - When a GUI change belongs in tracked config, move the value into the owning `.xcconfig`, regenerate with XcodeGen, and confirm the generated project no longer carries an unintended override.

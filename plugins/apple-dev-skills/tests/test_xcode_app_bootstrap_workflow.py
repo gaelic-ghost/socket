@@ -198,12 +198,20 @@ exit 1
             self.assertIn("configFiles:", project_yml)
             self.assertIn("type: syncedFolder", project_yml)
             self.assertIn("Sources/Support", project_yml)
+            self.assertIn("Sources/Resources", project_yml)
             self.assertIn("CFBundleShortVersionString: $(MARKETING_VERSION)", project_yml)
             self.assertIn("CFBundleVersion: $(CURRENT_PROJECT_VERSION)", project_yml)
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
             self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
             self.assertIn("parallelizable: true", project_yml)
             self.assertTrue((target / "Sources" / "Support" / "App.entitlements").exists())
+            self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
+            self.assertTrue(
+                (target / "Sources" / "Resources" / "Assets.xcassets" / "AppIcon.appiconset" / "Contents.json").exists()
+            )
+            self.assertTrue(
+                (target / "Sources" / "Resources" / "Assets.xcassets" / "AccentColor.colorset" / "Contents.json").exists()
+            )
             self.assertTrue((target / "Configurations" / "Shared.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App-Debug.xcconfig").exists())
@@ -228,6 +236,10 @@ exit 1
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
+                "ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
                 "ENABLE_APP_SANDBOX[sdk=macosx*] = NO",
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
@@ -249,6 +261,14 @@ exit 1
             )
             self.assertIn(
                 "ENABLE_USER_SCRIPT_SANDBOXING = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "DEAD_CODE_STRIPPING = YES",
                 (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
@@ -297,6 +317,9 @@ exit 1
         expected_templates = {
             "project.yml.tmpl",
             "Sources/Support/App.entitlements.tmpl",
+            "Sources/Resources/Assets.xcassets/Contents.json.tmpl",
+            "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json.tmpl",
+            "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json.tmpl",
             "Configurations/Shared.xcconfig.tmpl",
             "Configurations/App.xcconfig.tmpl",
             "Configurations/App-Debug.xcconfig.tmpl",
@@ -313,6 +336,7 @@ exit 1
         self.assertIn("minimumXcodeGenVersion: 2.45.4", project_template)
         self.assertIn("defaultSourceDirectoryType: syncedFolder", project_template)
         self.assertIn("type: syncedFolder", project_template)
+        self.assertIn("Sources/Resources", project_template)
         self.assertIn("CFBundleShortVersionString: $(MARKETING_VERSION)", project_template)
         self.assertIn("CFBundleVersion: $(CURRENT_PROJECT_VERSION)", project_template)
         self.assertIn("schemes:", project_template)
