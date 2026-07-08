@@ -29,6 +29,16 @@ XCODEGEN_TEMPLATE_OUTPUTS = {
     "Configurations/Tests-Release.xcconfig.tmpl": "Configurations/Tests-Release.xcconfig",
 }
 
+STANDARD_TOP_LEVEL_DIRECTORIES = (
+    "Sources",
+    "Tests",
+    "Shared",
+    "Extensions",
+    "Configurations",
+    "Scripts",
+    "Packages",
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -86,6 +96,21 @@ def install_xcodegen_templates(target_dir: Path, name: str, platform: str, bundl
         output_path = target_dir / rendered_output_relative_path
         write_text(output_path, render_template(template_relative_path, replacements))
         installed_paths.append(str(output_path))
+    return installed_paths
+
+
+def install_standard_directories(target_dir: Path) -> list[str]:
+    installed_paths: list[str] = []
+    for relative_path in STANDARD_TOP_LEVEL_DIRECTORIES:
+        directory = target_dir / relative_path
+        directory.mkdir(parents=True, exist_ok=True)
+        installed_paths.append(str(directory))
+
+    for relative_path in ("Shared/.gitkeep", "Extensions/.gitkeep", "Scripts/.gitkeep", "Packages/.gitkeep"):
+        placeholder = target_dir / relative_path
+        write_text(placeholder, "")
+        installed_paths.append(str(placeholder))
+
     return installed_paths
 
 
@@ -214,6 +239,7 @@ def main() -> int:
         return 1
 
     target_dir.mkdir(parents=True, exist_ok=True)
+    standard_directory_paths = install_standard_directories(target_dir)
 
     try:
         xcodegen_template_paths = install_xcodegen_templates(
@@ -365,6 +391,7 @@ def main() -> int:
         "generator": "xcodegen",
         "project_file": str(target_dir / f"{args.name}.xcodeproj"),
         "xcodegen_template_paths": xcodegen_template_paths,
+        "standard_directory_paths": standard_directory_paths,
         "local_environment_path": local_environment_path,
         "agents_copied": agents_copied,
         "stdout": proc_install_toolkit.stdout + proc_generate.stdout + validation_stdout,

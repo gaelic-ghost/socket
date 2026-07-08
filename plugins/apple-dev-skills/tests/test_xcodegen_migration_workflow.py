@@ -138,7 +138,12 @@ struct DemoAppBeta: App {
             self.assertIn("default_source_directory_type", output["project_yml_audit"]["baseline_gaps"])
             self.assertIn("config_files", output["project_yml_audit"]["baseline_gaps"])
             self.assertIn("sources_root", output["project_yml_audit"]["baseline_gaps"])
+            self.assertIn("shared_root", output["project_yml_audit"]["baseline_gaps"])
             self.assertIn("tests_root", output["project_yml_audit"]["baseline_gaps"])
+            self.assertIn("Shared", output["file_audit"]["missing_standard_directories"])
+            self.assertIn("Extensions", output["file_audit"]["missing_standard_directories"])
+            self.assertIn("Scripts", output["file_audit"]["missing_standard_directories"])
+            self.assertIn("Packages", output["file_audit"]["missing_standard_directories"])
             self.assertIn("Sources/App", output["project_yml_audit"]["fragmented_source_entries"])
             self.assertIn("Sources/Resources", output["project_yml_audit"]["fragmented_source_entries"])
             self.assertIn("Tests/DemoAppTests", output["project_yml_audit"]["fragmented_source_entries"])
@@ -146,6 +151,7 @@ struct DemoAppBeta: App {
             self.assertIn("Sources/App/DemoAppBeta.swift", output["file_audit"]["app_entry_points"])
             self.assertTrue(any("current baseline gaps" in phase for phase in output["recommended_phases"]))
             self.assertTrue(any("Collapse fragmented XcodeGen source entries" in phase for phase in output["recommended_phases"]))
+            self.assertTrue(any("Add missing standard top-level Xcode app directories" in phase for phase in output["recommended_phases"]))
             self.assertTrue(any("Collapse multiple app lifecycle entry points" in phase for phase in output["recommended_phases"]))
 
     def test_blocks_when_requested_modernization_has_no_project_yml(self) -> None:

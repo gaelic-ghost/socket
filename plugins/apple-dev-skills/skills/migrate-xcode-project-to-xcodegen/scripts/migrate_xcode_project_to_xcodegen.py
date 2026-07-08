@@ -36,6 +36,16 @@ BASELINE_PROJECT_YML_NEEDLES = {
     "version_build": "CFBundleVersion: $(CURRENT_PROJECT_VERSION)",
 }
 
+STANDARD_TOP_LEVEL_DIRECTORIES = (
+    "Sources",
+    "Tests",
+    "Shared",
+    "Extensions",
+    "Configurations",
+    "Scripts",
+    "Packages",
+)
+
 
 def read_text(path: Path) -> str:
     try:
@@ -113,7 +123,7 @@ def extract_pbxproj_target_names(pbxproj_text: str) -> list[str]:
 
 def extract_fragmented_source_entries(project_yml_text: str) -> list[str]:
     fragments = set()
-    pattern = re.compile(r"^\s*-\s*(?:path:\s*)?(Sources|Tests|Resources)/([^\s#]+)", re.MULTILINE)
+    pattern = re.compile(r"^\s*-\s*(?:path:\s*)?(Sources|Tests|Shared|Resources)/([^\s#]+)", re.MULTILINE)
     for match in pattern.finditer(project_yml_text):
         fragments.add(f"{match.group(1)}/{match.group(2).rstrip(',')}")
     return sorted(fragments)
@@ -163,6 +173,8 @@ def audit_project_yml(project_yml_path: Path | None) -> dict[str, Any]:
     gaps = [name for name, needle in BASELINE_PROJECT_YML_NEEDLES.items() if needle not in text]
     if not has_broad_source_entry(text, "Sources"):
         gaps.append("sources_root")
+    if not has_broad_source_entry(text, "Shared"):
+        gaps.append("shared_root")
     if not has_broad_source_entry(text, "Tests"):
         gaps.append("tests_root")
     fragmented_source_entries = extract_fragmented_source_entries(text)
@@ -187,6 +199,9 @@ def audit_files(repo_root: Path, app_name: str | None) -> dict[str, Any]:
     expected_app_entitlements = (
         f"Sources/Support/{app_name}.entitlements" if app_name else "Sources/Support/<AppName>.entitlements"
     )
+    missing_standard_directories = [
+        relative_path for relative_path in STANDARD_TOP_LEVEL_DIRECTORIES if not (repo_root / relative_path).is_dir()
+    ]
     return {
         "xcconfigs": sorted_relative(xcconfigs, repo_root),
         "entitlements": sorted_relative(entitlements, repo_root),
@@ -194,6 +209,7 @@ def audit_files(repo_root: Path, app_name: str | None) -> dict[str, Any]:
         "asset_catalogs": sorted_relative(asset_catalogs, repo_root),
         "schemes": sorted_relative(schemes, repo_root),
         "test_plans": sorted_relative(test_plans, repo_root),
+        "missing_standard_directories": missing_standard_directories,
         "app_entry_points": find_app_entry_points(repo_root),
         "expected_app_entitlements": expected_app_entitlements,
         "has_app_named_entitlements": (repo_root / expected_app_entitlements).exists() if app_name else False,
@@ -241,7 +257,13 @@ def build_recommendations(
         recommendations.append(
             "Collapse fragmented XcodeGen source entries into broad top-level roots: "
             + ", ".join(project_yml_audit["fragmented_source_entries"])
-            + ". Use one Sources entry for the app target, one Tests entry for the test target, and one entry per separate top-level logical root only."
+            + ". Use one Sources entry for the app target, one Shared entry for shared app/extension code, one Tests entry for the test target, and one Extensions/<ExtensionName> entry per extension target only."
+        )
+    if file_audit["missing_standard_directories"]:
+        recommendations.append(
+            "Add missing standard top-level Xcode app directories: "
+            + ", ".join(file_audit["missing_standard_directories"])
+            + "."
         )
     if len(file_audit["app_entry_points"]) > 1:
         recommendations.append(

@@ -18,9 +18,9 @@ REQUIRED_STRINGS = [
     "sync-xcode-project-guidance",
     "Never edit `.pbxproj` files directly.",
     "treat that diff as critical project state",
-    "scripts/repo-maintenance/validate-all.sh",
-    "scripts/repo-maintenance/sync-shared.sh",
-    "scripts/repo-maintenance/release.sh",
+    "Scripts/repo-maintenance/validate-all.sh",
+    "Scripts/repo-maintenance/sync-shared.sh",
+    "Scripts/repo-maintenance/release.sh",
 ]
 
 

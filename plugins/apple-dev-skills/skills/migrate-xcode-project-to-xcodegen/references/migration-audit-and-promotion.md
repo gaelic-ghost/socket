@@ -22,14 +22,15 @@ This is the `xcode-managed-to-xcodegen` path emitted by the audit script.
    - targets, product types, build configurations, schemes, packages, frameworks, source groups, resources, scripts, entitlements, Info.plist files, asset catalogs, and test plans
 2. Create the external owner files:
    - shared, app, test, Debug, and Release `.xcconfig` layers
+   - standard top-level directories: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`
    - app entitlement plist
    - support Info.plist if the project currently generates one internally
    - resource folder with `Assets.xcassets` when missing
 3. Write `project.yml` from the inventory:
    - prefer `options.defaultSourceDirectoryType: syncedFolder`
    - prefer `type: syncedFolder` for broad top-level roots on Xcode 16 or newer
-   - use exactly one `Sources` entry for the app target and exactly one `Tests` entry for the test target
-   - use one separate top-level `Resources` entry only when the repo really has a separate repo-root resource tree
+   - use exactly one `Sources` entry for the app target, one `Shared` entry for shared app/extension source, and exactly one `Tests` entry for the test target
+   - use one `Extensions/<ExtensionName>` entry per extension target
    - never split ordinary paths such as `Sources/App`, `Sources/Resources`, `Sources/Support`, feature subfolders, or `Tests/<TargetName>Tests` into separate XcodeGen source entries
    - use the same broad recursive paths with explicit includes and excludes only when synced folders are not appropriate
 4. Generate and compare:
@@ -45,7 +46,7 @@ Use this `modernize-xcodegen` path to modernize XcodeGen projects that already h
 2. Move inline or generated-only settings into `.xcconfig` files.
 3. Add missing external entitlements, Info.plist, resource folders, and asset catalog defaults under the broad owning root.
 4. Prefer synced folders for broad app, test, and top-level resource roots when the supported Xcode/XcodeGen versions allow it.
-5. Collapse any ordinary source-root fragmentation back to one `Sources` entry, one `Tests` entry, and at most one entry for each genuinely separate top-level logical root.
+5. Collapse any ordinary source-root fragmentation back to one `Sources` entry, one `Shared` entry, one `Tests` entry, and one `Extensions/<ExtensionName>` entry per extension target.
 6. Regenerate and verify the generated `.pbxproj` diff is expected.
 
 ## Baseline Targets
@@ -55,8 +56,10 @@ The current baseline should include:
 - XcodeGen `minimumXcodeGenVersion` on the current template baseline
 - `options.defaultSourceDirectoryType: syncedFolder`
 - app target source membership declared as one broad `Sources` entry marked with `type: syncedFolder`
+- shared app/extension source membership declared as one broad `Shared` entry marked with `type: syncedFolder`
 - test target source membership declared as one broad `Tests` entry marked with `type: syncedFolder`
 - no ordinary fragmentation into `Sources/App`, `Sources/Resources`, `Sources/Support`, feature subfolders, or `Tests/<TargetName>Tests` source entries
+- standard top-level directories present: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`
 - exactly one app lifecycle entry point per app target
 - shared, app, test, Debug, and Release `.xcconfig` layers
 - `SWIFT_VERSION = 6.0`

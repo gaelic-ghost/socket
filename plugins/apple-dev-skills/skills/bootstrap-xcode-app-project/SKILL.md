@@ -67,24 +67,27 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - treat `ask` as a legacy explicit-blocking value only when the user or customization state supplies it intentionally
 7. Create the project:
    - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold from `templates/xcodegen/swiftui-app/`, including `project.yml`, checked-in `.xcconfig` files, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
+   - create the standard top-level Xcode app layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`
+   - keep app-owned implementation/resources/support under `Sources/`, tests under `Tests/`, reusable app/extension source under `Shared/`, extension target roots under `Extensions/`, `.xcconfig` layers under `Configurations/`, project-local automation under `Scripts/`, and justified local Swift package boundaries under `Packages/`
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
    - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`
    - keep the generated `minimumXcodeGenVersion` on the recent validated baseline declared by the templates; when the baseline is raised, update the templates, docs, and tests together
-   - use exactly one top-level `Sources` entry for the app target and exactly one top-level `Tests` entry for the test target when the generated project format is Xcode 16 or newer; prefer `type: syncedFolder` on those broad roots, and use the same broad roots with explicit `includes` and `excludes` as the fallback when synchronized folders are not appropriate
-   - never split ordinary generated app project paths into separate XcodeGen source entries such as `Sources/App`, `Sources/Resources`, `Sources/Support`, feature subfolders, or `Tests/<AppName>Tests`; use a separate top-level path only for a separate logical root such as repo-root `Resources`
+   - use exactly one top-level `Sources` entry for the app target, exactly one top-level `Shared` entry for shared app/extension source, and exactly one top-level `Tests` entry for the test target when the generated project format is Xcode 16 or newer; prefer `type: syncedFolder` on those broad roots, and use the same broad roots with explicit `includes` and `excludes` as the fallback when synchronized folders are not appropriate
+   - never split ordinary generated app project paths into separate XcodeGen source entries such as `Sources/App`, `Sources/Resources`, `Sources/Support`, feature subfolders, or `Tests/<AppName>Tests`; extension targets may use one `Extensions/<ExtensionName>` entry per extension target
    - create exactly one app lifecycle entry point for the app target; do not create alternate `@main` app types, duplicate `main.swift` files, target-specific app entry files, or parallel app structs for variants; keep platform or configuration differences inside the single entry point with Swift conditional compilation or runtime conditionals
    - keep nontrivial build settings in external `.xcconfig` files by default, using shared, target-level, and per-configuration layers wired through the XcodeGen spec instead of duplicating settings inline
    - install a checked-in external app entitlement plist and wire it through `CODE_SIGN_ENTITLEMENTS` in the app `.xcconfig` so capability changes have a real tracked file owner instead of living only in generated project state
    - for `xcode`, use a guarded guidance path for now instead of pretending the repo supports full GUI automation already
 8. Validate the scaffold:
    - verify the expected app files exist
+   - verify the standard top-level directories exist
    - verify `.swiftformat` exists
    - verify `AGENTS.md` exists when enabled
    - verify `.codex/environments/xcode-project.toml` exists and uses the generated app target name for Codex GUI actions
    - verify generated guidance says tracked `.pbxproj` changes must be reviewed, staged, and committed before push, merge, release, or cleanup
    - verify generated guidance says Xcode Build Settings UI edits may need to be moved from generated project overrides back into the owning `.xcconfig`
-   - verify `scripts/repo-maintenance/hooks/pre-commit.sample` exists
-   - verify `scripts/repo-maintenance/validate-all.sh` and `scripts/repo-maintenance/release.sh` exist
+   - verify `Scripts/repo-maintenance/hooks/pre-commit.sample` exists
+   - verify `Scripts/repo-maintenance/validate-all.sh` and `Scripts/repo-maintenance/release.sh` exist
    - verify branch protection, when enabled, requires the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
    - when a GitHub remote is created or already exists, route repository
      settings audit or mutation through `productivity-skills:maintain-github-repository`
@@ -117,7 +120,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - `copy_agents_md` defaults to `true`
   - Codex GUI local environments are installed from `templates/codex-local-environments/xcode-project.toml` into `.codex/environments/xcode-project.toml`
   - validation runs unless `--skip-validation` is passed
-  - `maintain-project-repo` installs `scripts/repo-maintenance/` on successful mutating runs
+  - `maintain-project-repo` installs `Scripts/repo-maintenance/` on successful mutating runs
 
 ## Outputs
 
@@ -156,7 +159,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful XcodeGen bootstrap, treat `project.yml` as the editable source for generated project structure and regenerate with `xcodegen generate` after project-spec changes.
 - After a successful bootstrap, hand off to `sync-xcode-project-guidance` for repo-guidance alignment when needed, then to `xcode-build-run-workflow` for build, run, diagnostics, mutation, preview, and docs work.
 - After a successful bootstrap, hand off to `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, `.xctestplan`, and test diagnosis work.
-- After a successful bootstrap, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
+- After a successful bootstrap, use `Scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `Scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful bootstrap, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - When the app repository is published to GitHub, use
   `productivity-skills:maintain-github-repository` to audit repository features,

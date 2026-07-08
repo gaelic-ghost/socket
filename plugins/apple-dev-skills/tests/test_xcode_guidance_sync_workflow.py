@@ -85,12 +85,12 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("four or more arguments or parameters", agents_text)
             self.assertIn("Prefer enums, enum cases with associated values", agents_text)
             self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
+            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
+            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validate-all.sh").is_file())
+            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',
-                Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
+                Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
             )
             local_environment_path = Path(tmpdir, ".codex/environments/xcode-project.toml")
             self.assertTrue(local_environment_path.is_file())
@@ -129,11 +129,11 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("four or more arguments or parameters", agents_text)
             self.assertIn("Prefer enums, enum cases with associated values", agents_text)
             self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
+            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
+            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/release.sh").is_file())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',
-                Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
+                Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
             )
 
     def test_sync_preserves_existing_local_environment(self) -> None:
@@ -217,7 +217,7 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
             payload = json.loads(proc.stdout)
             self.assertEqual(payload["status"], "success")
-            self.assertTrue((repo_root / "scripts/repo-maintenance/validate-all.sh").is_file())
+            self.assertTrue((repo_root / "Scripts/repo-maintenance/validate-all.sh").is_file())
 
 
 if __name__ == "__main__":

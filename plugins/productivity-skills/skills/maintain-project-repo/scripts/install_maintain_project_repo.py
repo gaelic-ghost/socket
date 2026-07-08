@@ -17,6 +17,11 @@ PROFILE_CHOICES = {
     "swift-package": "Swift Package Manager repo-maintenance profile for library, tool, and package repos.",
     "xcode-app": "Xcode app repo-maintenance profile for native Apple app repositories.",
 }
+PROFILE_TOOLKIT_ROOTS = {
+    "generic": Path("scripts/repo-maintenance"),
+    "swift-package": Path("scripts/repo-maintenance"),
+    "xcode-app": Path("Scripts/repo-maintenance"),
+}
 PROFILE_OVERLAY_FILES = {
     "swift-package": [
         ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
@@ -57,7 +62,7 @@ MANAGED_TOOLKIT_FILES = [
     ("repo-maintenance/hooks/pre-commit.sample", "scripts/repo-maintenance/hooks/pre-commit.sample"),
 ]
 MANAGED_WORKFLOW_FILE = ".github/workflows/validate-repo-maintenance.yml"
-MANAGED_PROFILE_FILE = Path("scripts/repo-maintenance/config/profile.env")
+DEFAULT_TOOLKIT_ROOT = Path("scripts/repo-maintenance")
 EXECUTABLE_SUFFIXES = {".sh", ".py", ".sample"}
 
 
@@ -75,12 +80,29 @@ def assets_root() -> Path:
     return Path(__file__).resolve().parents[1] / "assets"
 
 
+def toolkit_root(profile: str) -> Path:
+    return PROFILE_TOOLKIT_ROOTS[profile]
+
+
+def profile_file(profile: str) -> Path:
+    return toolkit_root(profile) / "config/profile.env"
+
+
+def profile_target_path(profile: str, target_relative: str) -> Path:
+    target = Path(target_relative)
+    try:
+        suffix = target.relative_to(DEFAULT_TOOLKIT_ROOT)
+    except ValueError:
+        return target
+    return toolkit_root(profile) / suffix
+
+
 def target_pairs(profile: str, skip_github_workflow: bool) -> list[tuple[Path, Path]]:
     root = assets_root()
     pairs: list[tuple[Path, Path]] = []
 
     def add_pair(source_relative: str, target_relative: str) -> None:
-        target = Path(target_relative)
+        target = profile_target_path(profile, target_relative)
         for index, (_, existing_target) in enumerate(pairs):
             if existing_target == target:
                 pairs[index] = (root / source_relative, target)
@@ -113,9 +135,65 @@ def ensure_safe_target(repo_root: Path, relative_target: Path) -> None:
         )
 
 
-def copy_file(source: Path, target: Path) -> None:
+def legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> tuple[Path, Path] | None:
+    if profile != "xcode-app":
+        return None
+
+    legacy_root = repo_root / DEFAULT_TOOLKIT_ROOT
+    desired_root = repo_root / toolkit_root(profile)
+    if not legacy_root.exists():
+        return None
+
+    if desired_root.exists():
+        try:
+            if legacy_root.samefile(desired_root):
+                return None
+        except OSError:
+            pass
+        raise RuntimeError(
+            "The xcode-app profile expects repo-maintenance under "
+            f"{toolkit_root(profile).as_posix()}, but both {DEFAULT_TOOLKIT_ROOT.as_posix()} "
+            f"and {toolkit_root(profile).as_posix()} already exist as separate paths. "
+            "Choose the intentional toolkit root, preserve any repo-specific custom files, "
+            "and rerun maintain-project-repo."
+        )
+
+    if not legacy_root.is_dir():
+        raise RuntimeError(
+            "The xcode-app profile expects repo-maintenance under "
+            f"{toolkit_root(profile).as_posix()}, but the legacy path "
+            f"{DEFAULT_TOOLKIT_ROOT.as_posix()} exists and is not a directory."
+        )
+
+    return legacy_root, desired_root
+
+
+def apply_legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> str | None:
+    migration = legacy_xcode_toolkit_migration(repo_root, profile)
+    if migration is None:
+        return None
+
+    legacy_root, desired_root = migration
+    desired_root.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(legacy_root), str(desired_root))
+    try:
+        legacy_root.parent.rmdir()
+    except OSError:
+        pass
+    return (
+        f"migrated legacy {DEFAULT_TOOLKIT_ROOT.as_posix()} to "
+        f"{toolkit_root(profile).as_posix()} for xcode-app profile"
+    )
+
+
+def copy_file(source: Path, target: Path, profile: str) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(source, target)
+    if profile == "xcode-app":
+        content = source.read_text(encoding="utf-8")
+        content = content.replace("scripts/repo-maintenance", "Scripts/repo-maintenance")
+        target.write_text(content, encoding="utf-8")
+    else:
+        shutil.copyfile(source, target)
     if source.suffix in EXECUTABLE_SUFFIXES:
         target.chmod(0o755)
 
@@ -130,7 +208,7 @@ def render_profile_env(profile: str) -> str:
 
 
 def write_profile_env(repo_root: Path, profile: str) -> None:
-    target = repo_root / MANAGED_PROFILE_FILE
+    target = repo_root / profile_file(profile)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(render_profile_env(profile), encoding="utf-8")
 
@@ -140,7 +218,8 @@ def main() -> int:
     repo_root = Path(args.repo_root).expanduser().resolve()
     actions: list[str] = []
     managed_files = [relative.as_posix() for _, relative in target_pairs(args.profile, args.skip_github_workflow)]
-    managed_files.append(MANAGED_PROFILE_FILE.as_posix())
+    managed_profile_file = profile_file(args.profile)
+    managed_files.append(managed_profile_file.as_posix())
 
     if not repo_root.exists():
         print(
@@ -179,9 +258,10 @@ def main() -> int:
         return 1
 
     try:
+        planned_migration = legacy_xcode_toolkit_migration(repo_root, args.profile)
         for _, relative_target in target_pairs(args.profile, args.skip_github_workflow):
             ensure_safe_target(repo_root, relative_target)
-        ensure_safe_target(repo_root, MANAGED_PROFILE_FILE)
+        ensure_safe_target(repo_root, managed_profile_file)
     except RuntimeError as exc:
         print(
             json.dumps(
@@ -201,17 +281,22 @@ def main() -> int:
         return 1
 
     if args.operation == "report-only" or args.dry_run:
+        if planned_migration is not None:
+            actions.append(
+                f"migrate legacy {DEFAULT_TOOLKIT_ROOT.as_posix()} to "
+                f"{toolkit_root(args.profile).as_posix()} for xcode-app profile"
+            )
         for source, relative_target in target_pairs(args.profile, args.skip_github_workflow):
             target = repo_root / relative_target
             if target.exists():
                 actions.append(f"refresh {relative_target.as_posix()} from {source.relative_to(assets_root()).as_posix()}")
             else:
                 actions.append(f"install {relative_target.as_posix()} from {source.relative_to(assets_root()).as_posix()}")
-        profile_target = repo_root / MANAGED_PROFILE_FILE
+        profile_target = repo_root / managed_profile_file
         if profile_target.exists():
-            actions.append(f"refresh {MANAGED_PROFILE_FILE.as_posix()} for {args.profile} profile")
+            actions.append(f"refresh {managed_profile_file.as_posix()} for {args.profile} profile")
         else:
-            actions.append(f"install {MANAGED_PROFILE_FILE.as_posix()} for {args.profile} profile")
+            actions.append(f"install {managed_profile_file.as_posix()} for {args.profile} profile")
         print(
             json.dumps(
                 {
@@ -230,15 +315,19 @@ def main() -> int:
         )
         return 0
 
+    migration_action = apply_legacy_xcode_toolkit_migration(repo_root, args.profile)
+    if migration_action is not None:
+        actions.append(migration_action)
+
     for source, relative_target in target_pairs(args.profile, args.skip_github_workflow):
         target = repo_root / relative_target
         action = "refreshed" if target.exists() else "installed"
-        copy_file(source, target)
+        copy_file(source, target, args.profile)
         actions.append(f"{action} {relative_target.as_posix()}")
-    profile_target = repo_root / MANAGED_PROFILE_FILE
+    profile_target = repo_root / managed_profile_file
     profile_action = "refreshed" if profile_target.exists() else "installed"
     write_profile_env(repo_root, args.profile)
-    actions.append(f"{profile_action} {MANAGED_PROFILE_FILE.as_posix()} for {args.profile} profile")
+    actions.append(f"{profile_action} {managed_profile_file.as_posix()} for {args.profile} profile")
 
     print(
         json.dumps(
@@ -250,7 +339,7 @@ def main() -> int:
                 "managed_files": managed_files,
                 "actions": actions,
                 "validation_result": "managed files synced",
-                "next_step": "Use scripts/repo-maintenance/validate-all.sh locally and keep CI as a thin wrapper around that command.",
+                "next_step": f"Use {toolkit_root(args.profile).as_posix()}/validate-all.sh locally and keep CI as a thin wrapper around that command.",
             },
             indent=2,
             sort_keys=True,

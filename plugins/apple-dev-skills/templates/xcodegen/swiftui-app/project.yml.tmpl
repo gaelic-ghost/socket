@@ -9,6 +9,9 @@ configs:
   Release: release
 fileGroups:
   - Configurations
+  - Extensions
+  - Packages
+  - Scripts
 targets:
   __APP_NAME__:
     type: application
@@ -16,6 +19,10 @@ targets:
     sources:
       - path: Sources
         type: syncedFolder
+      - path: Shared
+        type: syncedFolder
+        excludes:
+          - "**/.gitkeep"
     info:
       path: Sources/Support/Info.plist
       properties:

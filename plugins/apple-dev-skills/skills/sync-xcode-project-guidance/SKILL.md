@@ -69,15 +69,15 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify the synced file preserves the no-direct-`.pbxproj` rule and the tracked `.pbxproj` stage-and-commit rule
    - verify the synced file preserves the XcodeGen source-of-truth rule for repos that use generated projects
 8. Refresh `maintain-project-repo`:
-   - refresh `scripts/repo-maintenance/`
+   - refresh `Scripts/repo-maintenance/`
    - refresh `.github/workflows/validate-repo-maintenance.yml`
    - preserve repo-specific extra scripts that are not part of the managed file set
 9. Verify the synced maintenance guidance still points at the expected maintainer files:
    - `.swiftformat`
-   - `scripts/repo-maintenance/hooks/pre-commit.sample`
-   - `scripts/repo-maintenance/validate-all.sh`
-   - `scripts/repo-maintenance/sync-shared.sh`
-   - `scripts/repo-maintenance/release.sh`
+   - `Scripts/repo-maintenance/hooks/pre-commit.sample`
+   - `Scripts/repo-maintenance/validate-all.sh`
+   - `Scripts/repo-maintenance/sync-shared.sh`
+   - `Scripts/repo-maintenance/release.sh`
    - protected branches, when configured, require the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
    - when a GitHub remote exists, route repository settings audit or mutation
      through `productivity-skills:maintain-github-repository`
@@ -132,7 +132,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - The only current fallback is a non-mutating dry-run or guided result that explains what the sync would do.
 - After a successful sync, hand off ongoing build, run, diagnostics, preview, and mutation work to `xcode-build-run-workflow`.
 - After a successful sync, hand off ongoing test execution and test diagnosis work to `xcode-testing-workflow`.
-- After a successful sync, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
+- After a successful sync, use `Scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `Scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful sync, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - When a GitHub remote exists, use `productivity-skills:maintain-github-repository`
   to audit repository features, merge modes, security automation, sign-off
@@ -147,7 +147,7 @@ When the user explicitly asks for subagents, `swift-steward`, review-packet plan
 Good `swift-steward` jobs for this skill:
 
 - classify the project shape and flag ambiguous SwiftPM/Xcode boundaries
-- inspect `AGENTS.md`, README, CONTRIBUTING, ROADMAP, Xcode project/workspace markers, `.swiftformat`, `.swiftlint.yml`, and `scripts/repo-maintenance/`
+- inspect `AGENTS.md`, README, CONTRIBUTING, ROADMAP, Xcode project/workspace markers, `.swiftformat`, `.swiftlint.yml`, and `Scripts/repo-maintenance/`
 - compare current repo guidance against this skill's current Xcode baseline
 - return a review packet with proposed patch set, validation handoff, affected files, and blockers
 

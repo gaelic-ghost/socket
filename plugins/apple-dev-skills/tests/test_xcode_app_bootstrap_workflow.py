@@ -198,6 +198,7 @@ exit 1
             self.assertIn("configFiles:", project_yml)
             self.assertIn("type: syncedFolder", project_yml)
             self.assertIn("- path: Sources", project_yml)
+            self.assertIn("- path: Shared", project_yml)
             self.assertIn("- path: Tests", project_yml)
             self.assertNotIn("- path: Sources/App", project_yml)
             self.assertNotIn("- path: Sources/Resources", project_yml)
@@ -208,6 +209,10 @@ exit 1
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
             self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
             self.assertIn("parallelizable: true", project_yml)
+            for top_level_dir in ("Sources", "Tests", "Shared", "Extensions", "Configurations", "Scripts", "Packages"):
+                self.assertTrue((target / top_level_dir).is_dir(), top_level_dir)
+            for placeholder in ("Shared/.gitkeep", "Extensions/.gitkeep", "Scripts/.gitkeep", "Packages/.gitkeep"):
+                self.assertTrue((target / placeholder).exists(), placeholder)
             self.assertTrue((target / "Sources" / "Support" / "DemoApp.entitlements").exists())
             self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
             self.assertTrue(
@@ -284,6 +289,7 @@ exit 1
                 (target / "Configurations" / "Tests.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn("xcodegen_template_paths", payload)
+            self.assertIn("standard_directory_paths", payload)
             self.assertTrue((target / "AGENTS.md").exists())
             local_environment_path = target / ".codex" / "environments" / "xcode-project.toml"
             self.assertTrue(local_environment_path.exists())
@@ -294,6 +300,8 @@ exit 1
             self.assertIn("xcode-build-run-workflow", agents_text)
             self.assertIn("xcode-testing-workflow", agents_text)
             self.assertIn("XcodeGen plus synced source folders", agents_text)
+            self.assertIn("Use the standard top-level Xcode app repository layout", agents_text)
+            self.assertIn("`Shared/` owns reusable source intended to be compiled into the app and extension targets", agents_text)
             self.assertIn("A standard app target gets one `Sources` source entry", agents_text)
             self.assertIn("Every native app target must have exactly one app lifecycle entry point", agents_text)
             self.assertIn("Keep XcodeGen specs readable as project structure", agents_text)
@@ -308,13 +316,13 @@ exit 1
             self.assertIn("treat that diff as critical project state", agents_text)
             self.assertTrue((target / "DemoApp.xcodeproj").exists())
             self.assertTrue((target / ".swiftformat").exists())
-            self.assertTrue((target / "scripts" / "repo-maintenance" / "validate-all.sh").exists())
-            self.assertTrue((target / "scripts" / "repo-maintenance" / "release.sh").exists())
-            self.assertTrue((target / "scripts" / "repo-maintenance" / "hooks" / "pre-commit.sample").exists())
-            self.assertTrue((target / "scripts" / "repo-maintenance" / "config" / "profile.env").exists())
+            self.assertTrue((target / "Scripts" / "repo-maintenance" / "validate-all.sh").exists())
+            self.assertTrue((target / "Scripts" / "repo-maintenance" / "release.sh").exists())
+            self.assertTrue((target / "Scripts" / "repo-maintenance" / "hooks" / "pre-commit.sample").exists())
+            self.assertTrue((target / "Scripts" / "repo-maintenance" / "config" / "profile.env").exists())
             self.assertIn(
                 'REPO_MAINTENANCE_PROFILE="xcode-app"',
-                (target / "scripts" / "repo-maintenance" / "config" / "profile.env").read_text(encoding="utf-8"),
+                (target / "Scripts" / "repo-maintenance" / "config" / "profile.env").read_text(encoding="utf-8"),
             )
             self.assertTrue((target / ".github" / "workflows" / "validate-repo-maintenance.yml").exists())
             self.assertEqual(payload["validation_result"], "passed (xcodebuild -list)")
@@ -343,6 +351,7 @@ exit 1
         self.assertIn("defaultSourceDirectoryType: syncedFolder", project_template)
         self.assertIn("type: syncedFolder", project_template)
         self.assertIn("- path: Sources", project_template)
+        self.assertIn("- path: Shared", project_template)
         self.assertIn("- path: Tests", project_template)
         self.assertNotIn("- path: Sources/App", project_template)
         self.assertNotIn("- path: Sources/Resources", project_template)
