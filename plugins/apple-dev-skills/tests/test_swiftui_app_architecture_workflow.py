@@ -52,6 +52,17 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         self.assertIn("UtilityWindow", scene_text)
         self.assertIn("FocusedValues", scene_text)
 
+    def test_view_components_require_file_local_previews(self) -> None:
+        skill_text = self.read("skills/swiftui-app-architecture-workflow/SKILL.md")
+        anti_patterns_text = self.read(
+            "skills/swiftui-app-architecture-workflow/references/anti-patterns-and-corrections.md"
+        )
+
+        self.assertIn("Each SwiftUI `View` component must live in its own Swift file", skill_text)
+        self.assertIn("view's own Xcode SwiftUI preview", skill_text)
+        self.assertIn("Grouped SwiftUI View Files", anti_patterns_text)
+        self.assertIn("keep that component's Xcode SwiftUI preview in the same file", anti_patterns_text)
+
 
 if __name__ == "__main__":
     unittest.main()

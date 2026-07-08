@@ -109,6 +109,20 @@ class StructureWorkflowTests(unittest.TestCase):
         self.assertEqual(payload["output"]["split_thresholds"]["soft_limit"], 250)
         self.assertEqual(payload["output"]["split_thresholds"]["hard_limit"], 600)
 
+    def test_swiftui_structure_requires_one_view_and_preview_per_file(self) -> None:
+        skill_text = (ROOT / "skills/structure-swift-sources/SKILL.md").read_text(encoding="utf-8")
+        source_rules_text = (ROOT / "skills/structure-swift-sources/references/source-organization-rules.md").read_text(
+            encoding="utf-8"
+        )
+        layout_rules_text = (ROOT / "skills/structure-swift-sources/references/layout-rules.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("require exactly one SwiftUI `View` component per file", skill_text)
+        self.assertIn("keep that component's Xcode SwiftUI preview in the same file", skill_text)
+        self.assertIn("Do not group multiple `View` component types in one Swift file", source_rules_text)
+        self.assertIn("Require one SwiftUI `View` component per file", layout_rules_text)
+
 
 if __name__ == "__main__":
     unittest.main()
