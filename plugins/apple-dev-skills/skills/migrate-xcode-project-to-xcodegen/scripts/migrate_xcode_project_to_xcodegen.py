@@ -31,7 +31,6 @@ BASELINE_PROJECT_YML_NEEDLES = {
     "default_source_directory_type": "defaultSourceDirectoryType: syncedFolder",
     "synced_folder_sources": "type: syncedFolder",
     "config_files": "configFiles:",
-    "resources_root": "Sources/Resources",
     "support_files": "Sources/Support",
     "version_marketing": "CFBundleShortVersionString: $(MARKETING_VERSION)",
     "version_build": "CFBundleVersion: $(CURRENT_PROJECT_VERSION)",
@@ -112,6 +111,36 @@ def extract_pbxproj_target_names(pbxproj_text: str) -> list[str]:
     return sorted(cleaned)
 
 
+def extract_fragmented_source_entries(project_yml_text: str) -> list[str]:
+    fragments = set()
+    pattern = re.compile(r"^\s*-\s*(?:path:\s*)?(Sources|Tests|Resources)/([^\s#]+)", re.MULTILINE)
+    for match in pattern.finditer(project_yml_text):
+        fragments.add(f"{match.group(1)}/{match.group(2).rstrip(',')}")
+    return sorted(fragments)
+
+
+def has_broad_source_entry(project_yml_text: str, root_name: str) -> bool:
+    escaped = re.escape(root_name)
+    pattern = re.compile(rf"^\s*-\s*(?:path:\s*)?{escaped}\s*(?:$|#)", re.MULTILINE)
+    return bool(pattern.search(project_yml_text))
+
+
+def find_app_entry_points(repo_root: Path) -> list[str]:
+    sources_root = repo_root / "Sources"
+    if not sources_root.exists():
+        return []
+
+    entries: set[str] = set()
+    for path in sorted(sources_root.rglob("*.swift"), key=lambda item: str(item)):
+        if path.name == "main.swift":
+            entries.add(rel(path, repo_root))
+            continue
+        text = read_text(path)
+        if re.search(r"^\s*@main\b", text, re.MULTILINE):
+            entries.add(rel(path, repo_root))
+    return sorted(entries)
+
+
 def infer_app_name(discovered: dict[str, Any], target_names: list[str]) -> str | None:
     if target_names:
         app_targets = [name for name in target_names if not name.lower().endswith(("tests", "uitests"))]
@@ -132,10 +161,16 @@ def audit_project_yml(project_yml_path: Path | None) -> dict[str, Any]:
 
     text = read_text(project_yml_path)
     gaps = [name for name, needle in BASELINE_PROJECT_YML_NEEDLES.items() if needle not in text]
+    if not has_broad_source_entry(text, "Sources"):
+        gaps.append("sources_root")
+    if not has_broad_source_entry(text, "Tests"):
+        gaps.append("tests_root")
+    fragmented_source_entries = extract_fragmented_source_entries(text)
     return {
         "present": True,
         "path": str(project_yml_path),
         "baseline_gaps": sorted(gaps),
+        "fragmented_source_entries": fragmented_source_entries,
         "uses_synced_folder": "syncedFolder" in text,
         "uses_config_files": "configFiles:" in text,
         "declares_minimum_xcodegen": "minimumXcodeGenVersion:" in text,
@@ -159,6 +194,7 @@ def audit_files(repo_root: Path, app_name: str | None) -> dict[str, Any]:
         "asset_catalogs": sorted_relative(asset_catalogs, repo_root),
         "schemes": sorted_relative(schemes, repo_root),
         "test_plans": sorted_relative(test_plans, repo_root),
+        "app_entry_points": find_app_entry_points(repo_root),
         "expected_app_entitlements": expected_app_entitlements,
         "has_app_named_entitlements": (repo_root / expected_app_entitlements).exists() if app_name else False,
         "has_default_assets": (repo_root / "Sources/Resources/Assets.xcassets").exists(),
@@ -201,6 +237,18 @@ def build_recommendations(
 
     if project_yml_audit["baseline_gaps"]:
         recommendations.append("Update project.yml for current baseline gaps: " + ", ".join(project_yml_audit["baseline_gaps"]) + ".")
+    if project_yml_audit.get("fragmented_source_entries"):
+        recommendations.append(
+            "Collapse fragmented XcodeGen source entries into broad top-level roots: "
+            + ", ".join(project_yml_audit["fragmented_source_entries"])
+            + ". Use one Sources entry for the app target, one Tests entry for the test target, and one entry per separate top-level logical root only."
+        )
+    if len(file_audit["app_entry_points"]) > 1:
+        recommendations.append(
+            "Collapse multiple app lifecycle entry points into one app target entry point: "
+            + ", ".join(file_audit["app_entry_points"])
+            + ". Use Swift conditionals inside the single entry point for variants."
+        )
     if pbxproj_settings:
         recommendations.append("Promote pbxproj build settings into .xcconfig owners: " + ", ".join(pbxproj_settings) + ".")
     if not file_audit["xcconfigs"]:
