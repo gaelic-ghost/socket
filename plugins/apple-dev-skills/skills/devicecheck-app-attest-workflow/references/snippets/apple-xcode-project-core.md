@@ -59,10 +59,13 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 ## SwiftUI and State Architecture
 
 - Treat SwiftUI views as component UI: keep them small, composable, reusable, and easy to scan from top to bottom.
+- Use a strict Apple-app MVVM shape for Xcode app projects: views own their own view-local state and actions where feasible, view models stay paired with their owning app or view, persistence and transfer shapes live in `Models/`, and app-wide services live under `Sources/Services/`.
 - Require one SwiftUI `View` component per file, named for that component, with that component's Xcode SwiftUI preview in the same file.
 - Do not group multiple SwiftUI view components into one Swift file, even when the views are small, private, related, nested, or currently used only by one parent.
-- SwiftUI view models are always per-view, with no exceptions: the model for `<ViewFileName>.swift` must live in `<ViewFileName>+Model.swift` and must not be shared with any other SwiftUI view.
-- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, or view-cluster models. Split shared state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer.
+- SwiftUI view models are always per-view, with no exceptions: the model for `<ViewFileName>.swift` must live beside the view in `<ViewFileName>+Model.swift` and must not be shared with any other SwiftUI view.
+- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, view-cluster models, or unpaired `ViewModel.swift` files. Split shared state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer.
+- Put app-wide `@Observable` state beside the app entry point: `WhateverNameApp.swift` owns the single app lifecycle entry, and `WhateverNameApp+ViewModel.swift` owns `@Observable final class WhateverNameAppViewModel`.
+- Put UIKit and AppKit view-controller support beside the matching view under `Sources/Views/` as `<ViewName>+Controller.swift`. Do not create or preserve a root `Controllers/` directory for ordinary app structure.
 - Prefer straight, top-down data flow with state owned at the narrowest view, scene, or app boundary that matches the behavior.
 - Do not build monolithic views, monolithic controllers, or broad shared mutable state when a smaller component boundary would be clearer.
 - Keep updates to view-driving state minimal and localized.
@@ -85,6 +88,12 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Use the standard top-level Xcode app repository layout when creating or normalizing native app repos: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.
 - `Sources/` owns the main app target implementation and app-owned resources/support files. `Tests/` owns all test targets. `Shared/` owns reusable source intended to be compiled into the app and extension targets. `Extensions/` owns extension target roots, one folder per extension. `Configurations/` owns `.xcconfig` layers. `Scripts/` owns project-local automation and build helper scripts. `Packages/` owns local Swift packages only when a real package boundary is justified.
 - Keep those top-level roots stable. Do not invent parallel names such as `AppSources`, `TestSources`, `Config`, `BuildScripts`, or `LocalPackages` for ordinary Xcode app repos unless the existing repo already has a deliberate, documented convention.
+- Inside `Sources/`, use this strict app structure by default: `Views/`, `Models/`, and `Services/`. Do not create a root `Controllers/` directory.
+- `Sources/Views/` owns SwiftUI views and UIKit/AppKit view surfaces. Use `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` so shared, macOS-specific, and iOS/iPadOS-specific UI have clear homes.
+- View files are named `<ViewName>.swift`. View-local view models are named `<ViewName>+Model.swift`. UIKit and AppKit controller support files are named `<ViewName>+Controller.swift`. Each paired model or controller file lives beside its matching view in `Sources/Views/` or the appropriate platform/shared subdirectory.
+- `Sources/Models/` owns Core Data persistence models, SwiftData `@Model` types, app datamodels, DTOs, and transfer or persistence shapes that are shared across the app. Service-private request/response shapes may stay inside the owning service folder only when they are not meaningful outside that integration.
+- `Sources/Services/` owns app-wide and boundary-facing services. Use `Consumed/` for external services the app calls, `Internal/` for services owned only by the app, and `Provided/` for services the app exposes to extensions, helpers, plugins, integrations, or other clients.
+- When an app has a single main app-wide service, put it under `Sources/Services/Internal/` as `WhateverNameAppService.swift`.
 - Use `xcodebuild` for Apple platform integration validation, including scheme, destination or SDK, and configuration-specific build or test runs.
 - Keep `xcodebuild` invocations reproducible in automation by passing explicit schemes, destinations or SDKs, and configurations when relevant.
 - For Codex GUI worktree-first Xcode repos, use a portable `.codex/environments/*.toml` local environment file when the repo wants shared app setup or action buttons. Start from `apple-dev-skills/templates/codex-local-environments/xcode-project.toml`, keep paths repo-relative, and prefer `-derivedDataPath ./DerivedData` or another ignored repo-local build directory instead of user-global DerivedData.

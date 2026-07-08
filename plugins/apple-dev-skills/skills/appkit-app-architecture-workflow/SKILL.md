@@ -19,6 +19,12 @@ archiving, AppKit MVC, Observation interop, and mixed AppKit/SwiftUI composition
 It is not the Apple-docs router, not the SwiftUI architecture workflow, not the
 accessibility workflow, and not the Xcode execution workflow.
 
+For Xcode app source layout, keep UIKit/AppKit controller support view-adjacent:
+`Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` own view
+surfaces, and controller support files are named `<ViewName>+Controller.swift`
+beside their matching view. Do not collect ordinary app controller support in a
+root `Controllers/` directory.
+
 ## When To Use
 
 - Use this skill when the user wants help structuring an AppKit or mixed
@@ -118,6 +124,8 @@ accessibility workflow, and not the Xcode execution workflow.
    - repositories, stores, service layers, mirrored DTOs, view-model cache
      layers, or wrapper objects inserted between SwiftData and SwiftUI-owned
      screens
+   - a root `Controllers/` directory used for ordinary view-controller support
+     instead of `<ViewName>+Controller.swift` beside the matching view
    - app-wide runtime work hidden in a view controller
    - menu or status-item behavior hidden in a leaf view
    - responder-chain actions replaced by a broad command bus without a real need

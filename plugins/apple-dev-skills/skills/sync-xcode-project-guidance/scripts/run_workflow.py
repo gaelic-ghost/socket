@@ -35,6 +35,39 @@ def discover_xcode_state(repo_root: Path) -> dict:
     }
 
 
+def audit_xcode_app_structure(repo_root: Path) -> dict:
+    required_directories = [
+        "Sources/Views/Shared",
+        "Sources/Views/macOS",
+        "Sources/Views/iOS",
+        "Sources/Models",
+        "Sources/Services/Consumed",
+        "Sources/Services/Internal",
+        "Sources/Services/Provided",
+    ]
+    findings = [
+        {
+            "code": "missing-directory",
+            "path": relative_path,
+            "message": f"Expected Xcode app structure directory is missing: {relative_path}",
+        }
+        for relative_path in required_directories
+        if not (repo_root / relative_path).is_dir()
+    ]
+    if (repo_root / "Sources" / "Controllers").exists():
+        findings.append(
+            {
+                "code": "legacy-controllers-directory",
+                "path": "Sources/Controllers",
+                "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views as <ViewName>+Controller.swift.",
+            }
+        )
+    return {
+        "status": "passed" if not findings else "needs-attention",
+        "findings": findings,
+    }
+
+
 def blocked_payload(
     repo_root: str,
     detected_state: dict,
@@ -85,6 +118,7 @@ def main() -> int:
 
     repo_root = Path(args.repo_root or ".").expanduser().resolve()
     detected_state = discover_xcode_state(repo_root)
+    structure_audit = audit_xcode_app_structure(repo_root)
     agents_path = repo_root / "AGENTS.md"
     write_mode, copy_missing, append_existing, report_only = normalize_write_mode(settings.get("writeMode", "sync-if-needed"))
     normalized_inputs = {
@@ -187,6 +221,7 @@ def main() -> int:
             "detected_state": detected_state,
             "normalized_inputs": normalized_inputs,
             "validation_result": "skipped (--dry-run)",
+            "structure_audit": structure_audit,
             "actions": actions,
             "next_step": "Run without --dry-run to sync AGENTS.md guidance for this Xcode repo.",
         }
@@ -202,6 +237,7 @@ def main() -> int:
             "detected_state": detected_state,
             "normalized_inputs": normalized_inputs,
             "validation_result": "skipped (writeMode=report-only)",
+            "structure_audit": structure_audit,
             "actions": actions,
             "next_step": "Rerun with a mutating write mode if you want this workflow to create or append AGENTS.md guidance.",
         }

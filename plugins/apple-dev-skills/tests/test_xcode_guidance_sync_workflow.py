@@ -88,6 +88,14 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("Xcode SwiftUI preview in the same file", agents_text)
             self.assertIn("SwiftUI view models are always per-view, with no exceptions", agents_text)
             self.assertIn("<ViewFileName>+Model.swift", agents_text)
+            self.assertIn("Sources/Views/Shared", agents_text)
+            self.assertIn("Sources/Services/Internal", agents_text)
+            self.assertIn("WhateverNameApp+ViewModel.swift", agents_text)
+            self.assertIn("<ViewName>+Controller.swift", agents_text)
+            self.assertEqual(payload["structure_audit"]["status"], "needs-attention")
+            self.assertTrue(
+                any(finding["path"] == "Sources/Views/Shared" for finding in payload["structure_audit"]["findings"])
+            )
             self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validate-all.sh").is_file())
@@ -136,6 +144,10 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("Xcode SwiftUI preview in the same file", agents_text)
             self.assertIn("SwiftUI view models are always per-view, with no exceptions", agents_text)
             self.assertIn("<ViewFileName>+Model.swift", agents_text)
+            self.assertIn("Sources/Views/Shared", agents_text)
+            self.assertIn("Sources/Services/Internal", agents_text)
+            self.assertIn("WhateverNameApp+ViewModel.swift", agents_text)
+            self.assertIn("<ViewName>+Controller.swift", agents_text)
             self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/release.sh").is_file())
@@ -193,6 +205,54 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertEqual(payload["path_type"], "fallback")
             self.assertIn("report that AGENTS.md is missing", payload["actions"][0])
+            self.assertEqual(payload["structure_audit"]["status"], "needs-attention")
+
+    def test_structure_audit_flags_legacy_controllers_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Demo.xcodeproj").mkdir()
+            for relative_path in (
+                "Sources/Views/Shared",
+                "Sources/Views/macOS",
+                "Sources/Views/iOS",
+                "Sources/Models",
+                "Sources/Services/Consumed",
+                "Sources/Services/Internal",
+                "Sources/Services/Provided",
+                "Sources/Controllers",
+            ):
+                (repo_root / relative_path).mkdir(parents=True)
+
+            code, payload = self.run_script("--repo-root", tmpdir, "--dry-run")
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["structure_audit"]["status"], "needs-attention")
+            self.assertTrue(
+                any(
+                    finding["code"] == "legacy-controllers-directory"
+                    for finding in payload["structure_audit"]["findings"]
+                )
+            )
+
+    def test_structure_audit_passes_strict_source_layout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Demo.xcodeproj").mkdir()
+            for relative_path in (
+                "Sources/Views/Shared",
+                "Sources/Views/macOS",
+                "Sources/Views/iOS",
+                "Sources/Models",
+                "Sources/Services/Consumed",
+                "Sources/Services/Internal",
+                "Sources/Services/Provided",
+            ):
+                (repo_root / relative_path).mkdir(parents=True)
+
+            code, payload = self.run_script("--repo-root", tmpdir, "--dry-run")
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["structure_audit"], {"status": "passed", "findings": []})
 
     def test_sync_discovers_socket_cache_sibling_productivity_runner(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

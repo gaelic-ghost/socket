@@ -23,11 +23,18 @@
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
 - Require one SwiftUI `View` component per file, named for that component, with that component's Xcode SwiftUI preview in the same file.
 - Do not group multiple SwiftUI view components into one Swift file, even when the views are small, private, related, nested, or currently used only by one parent.
-- SwiftUI view models are always per-view, with no exceptions: the model for `<ViewFileName>.swift` must live in `<ViewFileName>+Model.swift` and must not be shared with any other SwiftUI view.
-- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, or view-cluster models.
+- SwiftUI view models are always per-view, with no exceptions: the model for `<ViewFileName>.swift` must live beside the view in `<ViewFileName>+Model.swift` and must not be shared with any other SwiftUI view.
+- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, view-cluster models, or unpaired `ViewModel.swift` files.
+- Put app-wide `@Observable` state beside the app entry point: `WhateverNameApp.swift` pairs with `WhateverNameApp+ViewModel.swift`, containing `@Observable final class WhateverNameAppViewModel`.
+- Put UIKit and AppKit view-controller support beside the matching view under `Sources/Views/` as `<ViewName>+Controller.swift`; do not create or preserve a root `Controllers/` directory.
 - Use the standard top-level Xcode app repository layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.
 - `Sources/` owns the main app target implementation and app-owned resources/support files. `Tests/` owns all test targets. `Shared/` owns reusable source intended to be compiled into the app and extension targets. `Extensions/` owns extension target roots, one folder per extension. `Configurations/` owns `.xcconfig` layers. `Scripts/` owns project-local automation and build helper scripts. `Packages/` owns local Swift packages only when a real package boundary is justified.
 - Keep those top-level roots stable; do not invent parallel names such as `AppSources`, `TestSources`, `Config`, `BuildScripts`, or `LocalPackages` for ordinary Xcode app repos.
+- Inside `Sources/`, use strict app structure by default: `Views/`, `Models/`, and `Services/`.
+- `Sources/Views/` owns SwiftUI views and UIKit/AppKit view surfaces. Use `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` for shared, macOS-specific, and iOS/iPadOS-specific UI.
+- `Sources/Models/` owns Core Data persistence models, SwiftData `@Model` types, app datamodels, DTOs, and shared transfer or persistence shapes.
+- `Sources/Services/` owns services by direction: `Consumed/` for external services the app calls, `Internal/` for services owned only by the app, and `Provided/` for services the app exposes to extensions, helpers, plugins, integrations, or other clients.
+- When an app has a single main app-wide service, put it under `Sources/Services/Internal/` as `WhateverNameAppService.swift`.
 - For new Xcode app, framework, and workspace repositories, prefer XcodeGen plus synced source folders, checked-in `.xcconfig` files, and checked-in entitlement files by default unless there is a concrete reason to avoid that generator dependency.
 - If this repo is XcodeGen-backed, treat `project.yml`, `project.yaml`, and any included XcodeGen specs as the source of truth for generated targets, schemes, build settings, build configurations, Swift packages, test-plan references, and file membership.
 - For XcodeGen-backed projects, edit the spec set and rerun `xcodegen generate` instead of hand-editing generated `.pbxproj` files.

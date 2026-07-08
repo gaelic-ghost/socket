@@ -37,11 +37,20 @@
 
 - Require exactly one SwiftUI `View` component per file. Do not group multiple `View` component types in one Swift file, even when the views are small, private, nested, or part of the same feature.
 - Name each view file after its component, such as `<Name>.swift`, and keep that component's Xcode SwiftUI preview in the same file.
-- SwiftUI view models are always per-view, with no exceptions: if `<Name>.swift` has a view model, it must live in `<Name>+Model.swift` and belong only to that one `View` component.
+- SwiftUI view models are always per-view, with no exceptions: if `<Name>.swift` has a view model, it must live beside the view in `<Name>+Model.swift` and belong only to that one `View` component.
 - Do not share one SwiftUI view model across multiple views, view families, screens, flows, or view clusters, and do not collect multiple SwiftUI view models in one shared model file.
 - When an existing file contains multiple SwiftUI view components, split it into one file per view before adding more behavior.
 - Once any one view has more than `3` chained modifiers, strongly consider extracting a custom `ViewModifier`.
 - Place that modifier in `<Name>+Modifier.swift` when the modifier belongs to one view family.
+
+## Xcode App MVVM Rule
+
+- Use strict Apple-app MVVM for Xcode app source layout: views own their own view-local state and actions where feasible, and every view model or controller support file is paired with one owning view or app entry point.
+- Keep `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` as the default UI roots.
+- Place UIKit and AppKit view-controller support beside the matching view as `<Name>+Controller.swift`; do not collect controllers in `Sources/Controllers`.
+- Place app-wide `@Observable` state beside the app entry point as `WhateverNameApp+ViewModel.swift`, containing `@Observable final class WhateverNameAppViewModel`.
+- Put Core Data persistence models, SwiftData `@Model` types, datamodels, DTOs, and app-wide transfer or persistence shapes in `Sources/Models`.
+- Put services in `Sources/Services/Consumed`, `Sources/Services/Internal`, or `Sources/Services/Provided` according to direction. Main app-wide services belong in `Sources/Services/Internal` as `WhateverNameAppService.swift`.
 
 ## Documentation Boundary
 

@@ -39,6 +39,16 @@ STANDARD_TOP_LEVEL_DIRECTORIES = (
     "Packages",
 )
 
+STANDARD_SOURCE_DIRECTORIES = (
+    "Sources/Views/Shared",
+    "Sources/Views/macOS",
+    "Sources/Views/iOS",
+    "Sources/Models",
+    "Sources/Services/Consumed",
+    "Sources/Services/Internal",
+    "Sources/Services/Provided",
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -101,12 +111,22 @@ def install_xcodegen_templates(target_dir: Path, name: str, platform: str, bundl
 
 def install_standard_directories(target_dir: Path) -> list[str]:
     installed_paths: list[str] = []
-    for relative_path in STANDARD_TOP_LEVEL_DIRECTORIES:
+    for relative_path in STANDARD_TOP_LEVEL_DIRECTORIES + STANDARD_SOURCE_DIRECTORIES:
         directory = target_dir / relative_path
         directory.mkdir(parents=True, exist_ok=True)
         installed_paths.append(str(directory))
 
-    for relative_path in ("Shared/.gitkeep", "Extensions/.gitkeep", "Scripts/.gitkeep", "Packages/.gitkeep"):
+    for relative_path in (
+        "Shared/.gitkeep",
+        "Extensions/.gitkeep",
+        "Scripts/.gitkeep",
+        "Packages/.gitkeep",
+        "Sources/Views/macOS/.gitkeep",
+        "Sources/Views/iOS/.gitkeep",
+        "Sources/Models/.gitkeep",
+        "Sources/Services/Consumed/.gitkeep",
+        "Sources/Services/Provided/.gitkeep",
+    ):
         placeholder = target_dir / relative_path
         write_text(placeholder, "")
         installed_paths.append(str(placeholder))
@@ -129,15 +149,48 @@ def install_local_environment(target_dir: Path, scheme_name: str) -> str:
     return str(target_path)
 
 
+def app_entry_type_name(name: str) -> str:
+    return name if name.endswith("App") else f"{name}App"
+
+
 def render_app_file(name: str) -> str:
+    app_type = app_entry_type_name(name)
     return f"""import SwiftUI
 
 @main
-struct {name}: App {{
+struct {app_type}: App {{
+    @State private var viewModel = {app_type}ViewModel(service: {app_type}Service())
+
     var body: some Scene {{
         WindowGroup {{
             ContentView()
+                .environment(viewModel)
         }}
+    }}
+}}
+"""
+
+
+def render_app_view_model(name: str) -> str:
+    app_type = app_entry_type_name(name)
+    return f"""import Observation
+
+@Observable
+final class {app_type}ViewModel {{
+    let service: {app_type}Service
+
+    init(service: {app_type}Service) {{
+        self.service = service
+    }}
+}}
+"""
+
+
+def render_app_service(name: str) -> str:
+    app_type = app_entry_type_name(name)
+    return f"""struct {app_type}Service {{
+    func bootstrapMessage() -> String {{
+        "Hello, world!"
     }}
 }}
 """
@@ -147,10 +200,22 @@ def render_content_view() -> str:
     return """import SwiftUI
 
 struct ContentView: View {
+    @State private var model = ContentViewModel()
+
     var body: some View {
-        Text("Hello, world!")
+        Text(model.title)
             .padding()
     }
+}
+"""
+
+
+def render_content_view_model() -> str:
+    return """import Observation
+
+@Observable
+final class ContentViewModel {
+    var title = "Hello, world!"
 }
 """
 
@@ -261,8 +326,12 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
 
-    write_text(target_dir / "Sources/App/App.swift", render_app_file(args.name))
-    write_text(target_dir / "Sources/App/ContentView.swift", render_content_view())
+    app_type = app_entry_type_name(args.name)
+    write_text(target_dir / f"Sources/{app_type}.swift", render_app_file(args.name))
+    write_text(target_dir / f"Sources/{app_type}+ViewModel.swift", render_app_view_model(args.name))
+    write_text(target_dir / f"Sources/Services/Internal/{app_type}Service.swift", render_app_service(args.name))
+    write_text(target_dir / "Sources/Views/Shared/ContentView.swift", render_content_view())
+    write_text(target_dir / "Sources/Views/Shared/ContentView+Model.swift", render_content_view_model())
     write_text(target_dir / f"Tests/{args.name}Tests/{args.name}Tests.swift", render_test_file(args.name))
     try:
         local_environment_path = install_local_environment(target_dir, args.name)

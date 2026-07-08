@@ -19,9 +19,11 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 
 Each SwiftUI `View` component must live in its own Swift file named for that view, and that file must carry the view's own Xcode SwiftUI preview. Do not group multiple `View` component types in one file, even when the views are small, related, nested, or currently used only by one parent. Split them into separate files so Xcode previews remain discoverable, isolated, and reliable.
 
-SwiftUI view models are always per-view, with no exceptions. If a SwiftUI view has a view model, that model belongs to exactly that `View` component and must live in the matching `<ViewFileName>+Model.swift` file. Do not share a SwiftUI view model across multiple views, view families, screens, flows, or view clusters, and do not place multiple SwiftUI view models in one shared model file.
+SwiftUI view models are always per-view, with no exceptions. If a SwiftUI view has a view model, that model belongs to exactly that `View` component and must live beside the matching view in the matching `<ViewFileName>+Model.swift` file. Do not share a SwiftUI view model across multiple views, view families, screens, flows, or view clusters, and do not place multiple SwiftUI view models in one shared model file.
 
 Keep supporting code in explicit paired files instead of bundling extra view types together: use `<ViewFileName>+Model.swift` for that view's model, `<ViewFileName>+Modifier.swift` for view-specific modifiers, and other narrowly named support files when needed. A file may contain private helper values or small non-`View` helpers for that one component, but it must not contain another SwiftUI `View` component.
+
+For Xcode app projects, use strict Apple-app MVVM source layout: `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` own UI, `Sources/Models` owns persistence and transfer shapes, and `Sources/Services/Consumed`, `Sources/Services/Internal`, and `Sources/Services/Provided` own app services by direction. App-wide `@Observable` state lives beside the app entry point in `<AppName>App+ViewModel.swift`, containing `@Observable final class <AppName>AppViewModel`. UIKit and AppKit view-controller support lives beside the matching view as `<ViewName>+Controller.swift`; do not introduce a root `Controllers/` directory.
 
 ## When To Use
 
@@ -88,6 +90,8 @@ Keep supporting code in explicit paired files instead of bundling extra view typ
    - control flow hidden in modifiers that obscure who owns the action
    - multiple SwiftUI `View` component types grouped into one file, especially when that prevents one file-local Xcode preview per component
    - one SwiftUI view model shared across a view cluster or stored outside the matching `<ViewFileName>+Model.swift` file
+   - a root `Controllers/` directory used for UIKit or AppKit view-controller support instead of `<ViewName>+Controller.swift` beside the matching view
+   - app-wide state hidden in a service, leaf view, or shared environment object instead of an app-entry `<AppName>App+ViewModel.swift`
 6. Return one recommendation path with:
    - the ownership boundary
    - the chosen transport
