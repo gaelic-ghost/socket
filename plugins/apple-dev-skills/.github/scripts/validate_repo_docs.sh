@@ -132,11 +132,12 @@ active_skill_mds=(
   "./skills/structure-swift-sources/SKILL.md"
   "./skills/bootstrap-swift-package/SKILL.md"
   "./skills/bootstrap-xcode-app-project/SKILL.md"
+  "./skills/migrate-xcode-project-to-xcodegen/SKILL.md"
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 29 ]] || fail "Expected exactly 29 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 30 ]] || fail "Expected exactly 30 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -225,6 +226,7 @@ for file in \
   "skills/xcode-testing-workflow/SKILL.md" \
   "skills/xcode-build-run-workflow/SKILL.md" \
   "skills/xcode-coding-intelligence-workflow/SKILL.md" \
+  "skills/migrate-xcode-project-to-xcodegen/SKILL.md" \
   "skills/author-swift-docc-docs/SKILL.md" \
   "skills/avfaudio-session-workflow/SKILL.md" \
   "skills/avaudio-engine-workflow/SKILL.md" \

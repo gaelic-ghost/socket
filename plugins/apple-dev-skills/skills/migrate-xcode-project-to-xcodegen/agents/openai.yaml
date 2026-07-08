@@ -1,0 +1,4 @@
+interface:
+  display_name: "Migrate Xcode Project to XcodeGen"
+  short_description: "Convert or modernize XcodeGen app projects"
+  default_prompt: "Use $migrate-xcode-project-to-xcodegen to plan and validate migrating this Xcode app project to the current XcodeGen baseline."
