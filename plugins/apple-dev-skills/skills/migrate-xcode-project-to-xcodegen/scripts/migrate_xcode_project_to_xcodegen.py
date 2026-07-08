@@ -32,7 +32,7 @@ BASELINE_PROJECT_YML_NEEDLES = {
     "synced_folder_sources": "type: syncedFolder",
     "config_files": "configFiles:",
     "resources_root": "Sources/Resources",
-    "app_entitlements": "Sources/Support/App.entitlements",
+    "support_files": "Sources/Support",
     "version_marketing": "CFBundleShortVersionString: $(MARKETING_VERSION)",
     "version_build": "CFBundleVersion: $(CURRENT_PROJECT_VERSION)",
 }
@@ -112,6 +112,17 @@ def extract_pbxproj_target_names(pbxproj_text: str) -> list[str]:
     return sorted(cleaned)
 
 
+def infer_app_name(discovered: dict[str, Any], target_names: list[str]) -> str | None:
+    if target_names:
+        app_targets = [name for name in target_names if not name.lower().endswith(("tests", "uitests"))]
+        return app_targets[0] if app_targets else target_names[0]
+    if discovered["project"]:
+        return Path(discovered["project"]).stem
+    if discovered["workspace"]:
+        return Path(discovered["workspace"]).stem
+    return None
+
+
 def audit_project_yml(project_yml_path: Path | None) -> dict[str, Any]:
     if not project_yml_path or not project_yml_path.exists():
         return {
@@ -131,13 +142,16 @@ def audit_project_yml(project_yml_path: Path | None) -> dict[str, Any]:
     }
 
 
-def audit_files(repo_root: Path) -> dict[str, Any]:
+def audit_files(repo_root: Path, app_name: str | None) -> dict[str, Any]:
     xcconfigs = sorted(repo_root.rglob("*.xcconfig"), key=lambda item: str(item))
     entitlements = sorted(repo_root.rglob("*.entitlements"), key=lambda item: str(item))
     info_plists = sorted(path for path in repo_root.rglob("Info.plist") if path.is_file())
     asset_catalogs = sorted(repo_root.rglob("*.xcassets"), key=lambda item: str(item))
     schemes = sorted(repo_root.rglob("*.xcscheme"), key=lambda item: str(item))
     test_plans = sorted(repo_root.rglob("*.xctestplan"), key=lambda item: str(item))
+    expected_app_entitlements = (
+        f"Sources/Support/{app_name}.entitlements" if app_name else "Sources/Support/<AppName>.entitlements"
+    )
     return {
         "xcconfigs": sorted_relative(xcconfigs, repo_root),
         "entitlements": sorted_relative(entitlements, repo_root),
@@ -145,7 +159,8 @@ def audit_files(repo_root: Path) -> dict[str, Any]:
         "asset_catalogs": sorted_relative(asset_catalogs, repo_root),
         "schemes": sorted_relative(schemes, repo_root),
         "test_plans": sorted_relative(test_plans, repo_root),
-        "has_default_app_entitlements": (repo_root / "Sources/Support/App.entitlements").exists(),
+        "expected_app_entitlements": expected_app_entitlements,
+        "has_app_named_entitlements": (repo_root / expected_app_entitlements).exists() if app_name else False,
         "has_default_assets": (repo_root / "Sources/Resources/Assets.xcassets").exists(),
     }
 
@@ -190,8 +205,10 @@ def build_recommendations(
         recommendations.append("Promote pbxproj build settings into .xcconfig owners: " + ", ".join(pbxproj_settings) + ".")
     if not file_audit["xcconfigs"]:
         recommendations.append("Add checked-in Configurations/*.xcconfig layers before preserving build settings.")
-    if not file_audit["has_default_app_entitlements"]:
-        recommendations.append("Add Sources/Support/App.entitlements and wire CODE_SIGN_ENTITLEMENTS through the app .xcconfig.")
+    if not file_audit["has_app_named_entitlements"]:
+        recommendations.append(
+            f"Add {file_audit['expected_app_entitlements']} and wire CODE_SIGN_ENTITLEMENTS through the app .xcconfig."
+        )
     if not file_audit["has_default_assets"]:
         recommendations.append("Add Sources/Resources/Assets.xcassets with AppIcon and AccentColor placeholders.")
     return recommendations
@@ -256,8 +273,10 @@ def main() -> int:
     pbxproj_path = repo_root / discovered["pbxproj"] if discovered["pbxproj"] else None
     pbxproj_text = read_text(pbxproj_path) if pbxproj_path else ""
     project_yml_path = repo_root / discovered["project_yml"] if discovered["project_yml"] else None
+    target_names = extract_pbxproj_target_names(pbxproj_text)
+    app_name = infer_app_name(discovered, target_names)
     project_yml_audit = audit_project_yml(project_yml_path)
-    file_audit = audit_files(repo_root)
+    file_audit = audit_files(repo_root, app_name)
     pbxproj_settings = extract_pbxproj_settings(pbxproj_text)
 
     output = {
@@ -270,7 +289,8 @@ def main() -> int:
         "file_audit": file_audit,
         "pbxproj_audit": {
             "present": bool(pbxproj_path),
-            "target_names": extract_pbxproj_target_names(pbxproj_text),
+            "inferred_app_name": app_name,
+            "target_names": target_names,
             "settings_to_promote": pbxproj_settings,
         },
         "recommended_phases": build_recommendations(migration_path or "", project_yml_audit, file_audit, pbxproj_settings),

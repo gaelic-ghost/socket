@@ -16,7 +16,7 @@ from pathlib import Path
 XCODEGEN_TEMPLATE_DIR = Path(__file__).resolve().parents[3] / "templates" / "xcodegen" / "swiftui-app"
 XCODEGEN_TEMPLATE_OUTPUTS = {
     "project.yml.tmpl": "project.yml",
-    "Sources/Support/App.entitlements.tmpl": "Sources/Support/App.entitlements",
+    "Sources/Support/App.entitlements.tmpl": "Sources/Support/__APP_NAME__.entitlements",
     "Sources/Resources/Assets.xcassets/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/Contents.json",
     "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json",
     "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json",
@@ -80,7 +80,10 @@ def install_xcodegen_templates(target_dir: Path, name: str, platform: str, bundl
     }
     installed_paths: list[str] = []
     for template_relative_path, output_relative_path in XCODEGEN_TEMPLATE_OUTPUTS.items():
-        output_path = target_dir / output_relative_path
+        rendered_output_relative_path = output_relative_path
+        for placeholder, value in replacements.items():
+            rendered_output_relative_path = rendered_output_relative_path.replace(placeholder, value)
+        output_path = target_dir / rendered_output_relative_path
         write_text(output_path, render_template(template_relative_path, replacements))
         installed_paths.append(str(output_path))
     return installed_paths

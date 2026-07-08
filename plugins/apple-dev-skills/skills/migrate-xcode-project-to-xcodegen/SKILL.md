@@ -50,7 +50,7 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
 6. Prepare the migration branch:
    - add or update `project.yml`
    - add or update `Configurations/*.xcconfig`
-   - add or update `Sources/Support/App.entitlements`
+   - add or update `Sources/Support/<AppName>.entitlements`
    - add or update `Sources/Support/Info.plist`
    - add or update `Sources/Resources/Assets.xcassets`
    - preserve existing package, framework, source, resource, script phase, scheme, and test-plan state

@@ -74,7 +74,8 @@ class XcodeGenMigrationWorkflowTests(unittest.TestCase):
             self.assertIn("CODE_SIGN_ENTITLEMENTS", output["pbxproj_audit"]["settings_to_promote"])
             self.assertIn("DEAD_CODE_STRIPPING", output["pbxproj_audit"]["settings_to_promote"])
             self.assertTrue(any("Promote pbxproj build settings" in phase for phase in output["recommended_phases"]))
-            self.assertTrue(any("Sources/Support/App.entitlements" in phase for phase in output["recommended_phases"]))
+            self.assertEqual(output["file_audit"]["expected_app_entitlements"], "Sources/Support/DemoApp.entitlements")
+            self.assertTrue(any("Sources/Support/DemoApp.entitlements" in phase for phase in output["recommended_phases"]))
 
     def test_audits_existing_xcodegen_project_for_current_baseline_gaps(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
