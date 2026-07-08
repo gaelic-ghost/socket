@@ -1,6 +1,6 @@
 {
   "name": "swift-lang",
-  "version": "8.4.0",
+  "version": "8.5.0",
   "description": "Shared Swift language skills for API style, error handling, functional pipelines, formatting, source organization, and modernization cleanup.",
   "skills": "./skills/",
   "author": {
