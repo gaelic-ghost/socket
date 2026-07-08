@@ -1,6 +1,6 @@
 {
   "name": "cloud-deployment-skills",
-  "version": "8.5.1",
+  "version": "8.5.2",
   "description": "Codex skills for routing cloud deployment work through official provider plugins, MCP servers, CLIs, and Socket-owned deployment guidance.",
   "author": {
     "name": "Gale",

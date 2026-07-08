@@ -53,6 +53,7 @@ sync_one \
   "$ROOT_DIR/skills/xcode-testing-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/xcode-app-project-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/bootstrap-xcode-app-project/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/migrate-xcode-project-to-xcodegen/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/format-swift-sources/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/explore-apple-swift-docs/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/avfaudio-session-workflow/references/snippets/apple-xcode-project-core.md" \

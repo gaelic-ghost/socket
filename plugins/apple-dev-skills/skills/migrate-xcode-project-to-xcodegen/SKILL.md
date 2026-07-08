@@ -45,7 +45,7 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
    - identify build settings that need `.xcconfig` owners
    - identify entitlements that need checked-in `.entitlements` owners
    - identify Info.plist values that need checked-in plist or build-setting owners
-   - identify resources and asset catalogs that need synced resource roots
+   - identify resources and asset catalogs that must be preserved under the broad app source root or under one separate top-level resource root when the repo actually has that shape
    - identify schemes and test plans that need explicit tracked files
 6. Prepare the migration branch:
    - add or update `project.yml`
@@ -53,6 +53,8 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
    - add or update `Sources/Support/<AppName>.entitlements`
    - add or update `Sources/Support/Info.plist`
    - add or update `Sources/Resources/Assets.xcassets`
+   - keep the app target's XcodeGen source declaration collapsed to one top-level `Sources` entry and the test target's declaration collapsed to one top-level `Tests` entry
+   - preserve exactly one app lifecycle entry point; do not create alternate `@main` app types, duplicate `main.swift` files, target-specific app entry files, or parallel app structs for variants
    - preserve existing package, framework, source, resource, script phase, scheme, and test-plan state
 7. Generate into a temp or reviewed branch state:
    - run `xcodegen generate` only after promoted state is represented in tracked source files

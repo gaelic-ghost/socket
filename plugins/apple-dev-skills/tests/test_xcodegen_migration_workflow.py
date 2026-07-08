@@ -89,7 +89,43 @@ targets:
     type: application
     platform: macOS
     sources:
-      - Sources
+      - path: Sources/App
+        type: syncedFolder
+      - path: Sources/Resources
+        type: syncedFolder
+  DemoAppTests:
+    type: bundle.unit-test
+    sources:
+      - path: Tests/DemoAppTests
+        type: syncedFolder
+""",
+                encoding="utf-8",
+            )
+            app_sources = repo / "Sources" / "App"
+            app_sources.mkdir(parents=True)
+            (app_sources / "DemoApp.swift").write_text(
+                """
+import SwiftUI
+
+@main
+struct DemoApp: App {
+    var body: some Scene {
+        WindowGroup { Text("Demo") }
+    }
+}
+""",
+                encoding="utf-8",
+            )
+            (app_sources / "DemoAppBeta.swift").write_text(
+                """
+import SwiftUI
+
+@main
+struct DemoAppBeta: App {
+    var body: some Scene {
+        WindowGroup { Text("Demo") }
+    }
+}
 """,
                 encoding="utf-8",
             )
@@ -101,8 +137,16 @@ targets:
             self.assertEqual(output["migration_path"], "modernize-xcodegen")
             self.assertIn("default_source_directory_type", output["project_yml_audit"]["baseline_gaps"])
             self.assertIn("config_files", output["project_yml_audit"]["baseline_gaps"])
-            self.assertIn("resources_root", output["project_yml_audit"]["baseline_gaps"])
+            self.assertIn("sources_root", output["project_yml_audit"]["baseline_gaps"])
+            self.assertIn("tests_root", output["project_yml_audit"]["baseline_gaps"])
+            self.assertIn("Sources/App", output["project_yml_audit"]["fragmented_source_entries"])
+            self.assertIn("Sources/Resources", output["project_yml_audit"]["fragmented_source_entries"])
+            self.assertIn("Tests/DemoAppTests", output["project_yml_audit"]["fragmented_source_entries"])
+            self.assertIn("Sources/App/DemoApp.swift", output["file_audit"]["app_entry_points"])
+            self.assertIn("Sources/App/DemoAppBeta.swift", output["file_audit"]["app_entry_points"])
             self.assertTrue(any("current baseline gaps" in phase for phase in output["recommended_phases"]))
+            self.assertTrue(any("Collapse fragmented XcodeGen source entries" in phase for phase in output["recommended_phases"]))
+            self.assertTrue(any("Collapse multiple app lifecycle entry points" in phase for phase in output["recommended_phases"]))
 
     def test_blocks_when_requested_modernization_has_no_project_yml(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
