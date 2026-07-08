@@ -8,7 +8,7 @@ Use this reference after `scripts/run_workflow.py` has produced a project audit.
 - Promote durable settings into checked-in files before regenerating:
   - `project.yml` for project structure, targets, packages, source roots, resource roots, schemes, and test plans
   - `Configurations/*.xcconfig` for build settings
-  - `Sources/Support/App.entitlements` for capabilities and sandbox entitlements
+  - `Sources/Support/<AppName>.entitlements` for capabilities and sandbox entitlements
   - `Sources/Support/Info.plist` for Info.plist values
   - `Sources/Resources/Assets.xcassets` for assets, app icons, accent colors, and generated asset symbols
 - Keep `xcodegen generate` as the last step after promotion, not the first step.

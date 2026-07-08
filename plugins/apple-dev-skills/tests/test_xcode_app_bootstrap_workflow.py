@@ -204,7 +204,7 @@ exit 1
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
             self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
             self.assertIn("parallelizable: true", project_yml)
-            self.assertTrue((target / "Sources" / "Support" / "App.entitlements").exists())
+            self.assertTrue((target / "Sources" / "Support" / "DemoApp.entitlements").exists())
             self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
             self.assertTrue(
                 (target / "Sources" / "Resources" / "Assets.xcassets" / "AppIcon.appiconset" / "Contents.json").exists()
@@ -232,7 +232,7 @@ exit 1
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
-                "CODE_SIGN_ENTITLEMENTS = Sources/Support/App.entitlements",
+                "CODE_SIGN_ENTITLEMENTS = Sources/Support/DemoApp.entitlements",
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
