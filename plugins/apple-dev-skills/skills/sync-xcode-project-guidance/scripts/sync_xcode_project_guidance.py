@@ -21,6 +21,20 @@ REQUIRED_STRINGS = [
     "Scripts/repo-maintenance/validate-all.sh",
     "Scripts/repo-maintenance/sync-shared.sh",
     "Scripts/repo-maintenance/release.sh",
+    "Sources/Views/Shared",
+    "Sources/Services/Internal",
+    "WhateverNameApp+ViewModel.swift",
+    "<ViewName>+Controller.swift",
+]
+
+REQUIRED_XCODE_APP_DIRECTORIES = [
+    "Sources/Views/Shared",
+    "Sources/Views/macOS",
+    "Sources/Views/iOS",
+    "Sources/Models",
+    "Sources/Services/Consumed",
+    "Sources/Services/Internal",
+    "Sources/Services/Provided",
 ]
 
 
@@ -138,11 +152,105 @@ def validate_agents(text: str) -> tuple[bool, list[str]]:
     return not missing, missing
 
 
+def audit_xcode_app_structure(repo_root: Path) -> dict:
+    findings: list[dict[str, str]] = []
+
+    for relative_path in REQUIRED_XCODE_APP_DIRECTORIES:
+        if not (repo_root / relative_path).is_dir():
+            findings.append(
+                {
+                    "code": "missing-directory",
+                    "path": relative_path,
+                    "message": f"Expected Xcode app structure directory is missing: {relative_path}",
+                }
+            )
+
+    controllers_dir = repo_root / "Sources" / "Controllers"
+    if controllers_dir.exists():
+        findings.append(
+            {
+                "code": "legacy-controllers-directory",
+                "path": "Sources/Controllers",
+                "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views as <ViewName>+Controller.swift.",
+            }
+        )
+
+    sources_dir = repo_root / "Sources"
+    if sources_dir.is_dir():
+        for view_model_path in sorted(sources_dir.rglob("*ViewModel.swift")):
+            if view_model_path.name.endswith("+ViewModel.swift"):
+                continue
+            relative_path = view_model_path.relative_to(repo_root).as_posix()
+            findings.append(
+                {
+                    "code": "unpaired-view-model-file",
+                    "path": relative_path,
+                    "message": "View model files should be paired with their owning app or view as <Owner>+ViewModel.swift or <ViewName>+Model.swift.",
+                }
+            )
+
+        for model_path in sorted(sources_dir.rglob("*+Model.swift")):
+            if "Sources/Views/" not in model_path.relative_to(repo_root).as_posix():
+                relative_path = model_path.relative_to(repo_root).as_posix()
+                findings.append(
+                    {
+                        "code": "view-model-outside-views",
+                        "path": relative_path,
+                        "message": "View-local <ViewName>+Model.swift files should live beside their matching view under Sources/Views.",
+                    }
+                )
+
+        for controller_path in sorted(sources_dir.rglob("*+Controller.swift")):
+            if "Sources/Views/" not in controller_path.relative_to(repo_root).as_posix():
+                relative_path = controller_path.relative_to(repo_root).as_posix()
+                findings.append(
+                    {
+                        "code": "controller-outside-views",
+                        "path": relative_path,
+                        "message": "UIKit/AppKit <ViewName>+Controller.swift files should live beside their matching view under Sources/Views.",
+                    }
+                )
+
+        app_files = [
+            path for path in sorted(sources_dir.glob("*App.swift"))
+            if path.is_file() and not path.name.endswith("+ViewModel.swift")
+        ]
+        for app_path in app_files:
+            paired_model = app_path.with_name(f"{app_path.stem}+ViewModel.swift")
+            if not paired_model.is_file():
+                relative_path = paired_model.relative_to(repo_root).as_posix()
+                findings.append(
+                    {
+                        "code": "missing-app-view-model",
+                        "path": relative_path,
+                        "message": "App-wide @Observable state should live beside the app entry point as <AppName>App+ViewModel.swift.",
+                    }
+                )
+
+        internal_services_dir = repo_root / "Sources" / "Services" / "Internal"
+        if app_files and internal_services_dir.is_dir():
+            service_files = sorted(internal_services_dir.glob("*AppService.swift"))
+            if not service_files:
+                findings.append(
+                    {
+                        "code": "missing-internal-app-service",
+                        "path": "Sources/Services/Internal",
+                        "message": "When the app has a main app-wide service, place it under Sources/Services/Internal as <AppName>AppService.swift.",
+                    }
+                )
+
+    return {
+        "status": "passed" if not findings else "needs-attention",
+        "findings": findings,
+    }
+
+
 def main() -> int:
     args = build_parser().parse_args()
     repo_root = Path(args.repo_root).expanduser().resolve()
     agents_path = repo_root / "AGENTS.md"
     detected_state = discover_xcode_state(repo_root)
+    structure_audit = audit_xcode_app_structure(repo_root)
     actions: list[str] = []
 
     if not detected_state["is_xcode_repo"]:
@@ -153,6 +261,7 @@ def main() -> int:
             "agents_path": str(agents_path),
             "detected_state": detected_state,
             "validation_result": None,
+            "structure_audit": structure_audit,
             "actions": actions,
             "stderr": "The repository does not contain an .xcodeproj or .xcworkspace marker.",
             "next_step": "Run this workflow on an existing Xcode app repo.",
@@ -168,6 +277,7 @@ def main() -> int:
             "agents_path": str(agents_path),
             "detected_state": detected_state,
             "validation_result": None,
+            "structure_audit": structure_audit,
             "actions": actions,
             "stderr": "The target AGENTS.md path exists but is not a regular file.",
             "next_step": "Resolve the AGENTS.md path conflict and rerun the workflow.",
@@ -184,6 +294,7 @@ def main() -> int:
                 "agents_path": str(agents_path),
                 "detected_state": detected_state,
                 "validation_result": None,
+                "structure_audit": structure_audit,
                 "actions": actions,
                 "stderr": "AGENTS.md is missing and template copy is disabled.",
                 "next_step": "Enable template copy or create AGENTS.md manually before rerunning.",
@@ -208,6 +319,7 @@ def main() -> int:
                 "agents_path": str(agents_path),
                 "detected_state": detected_state,
                 "validation_result": None,
+                "structure_audit": structure_audit,
                 "actions": actions,
                 "stderr": "AGENTS.md exists but the bounded Xcode guidance section is missing and append behavior is disabled.",
                 "next_step": "Enable append behavior or merge the guidance section manually before rerunning.",
@@ -227,6 +339,7 @@ def main() -> int:
                 "agents_path": str(agents_path),
                 "detected_state": detected_state,
                 "validation_result": "failed",
+                "structure_audit": structure_audit,
                 "actions": actions,
                 "stderr": f"Synced AGENTS.md is missing required guidance: {', '.join(missing)}",
                 "next_step": "Fix the guidance template or section content, then rerun the workflow.",
@@ -245,6 +358,7 @@ def main() -> int:
             "agents_path": str(agents_path),
             "detected_state": detected_state,
             "validation_result": validation_result,
+            "structure_audit": structure_audit,
             "actions": actions,
             "stderr": str(exc),
             "next_step": "Resolve the Codex local environment template or target path issue, then rerun sync-xcode-project-guidance.",
@@ -262,6 +376,7 @@ def main() -> int:
             "agents_path": str(agents_path),
             "detected_state": detected_state,
             "validation_result": validation_result,
+            "structure_audit": structure_audit,
             "actions": actions,
             "stderr": str(exc),
             "next_step": "Install productivity-skills alongside apple-dev-skills, or add the socket marketplace and enable both plugin entries from the Socket catalog, then rerun sync-xcode-project-guidance.",
@@ -291,6 +406,7 @@ def main() -> int:
             "agents_path": str(agents_path),
             "detected_state": detected_state,
             "validation_result": validation_result,
+            "structure_audit": structure_audit,
             "actions": actions,
             "stdout": proc_install_toolkit.stdout,
             "stderr": proc_install_toolkit.stderr,
@@ -307,6 +423,7 @@ def main() -> int:
         "agents_path": str(agents_path),
         "detected_state": detected_state,
         "validation_result": validation_result,
+        "structure_audit": structure_audit,
         "actions": actions,
         "next_step": "Use xcode-build-run-workflow for active Xcode build or run work, use xcode-testing-workflow for test-focused work, and rerun sync-xcode-project-guidance after substantial plugin updates.",
     }

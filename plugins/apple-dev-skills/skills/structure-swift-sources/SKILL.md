@@ -69,9 +69,12 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - when the task is file-header normalization or a full cleanup pass that includes headers, use `scripts/normalize_swift_file_headers.py` to audit or apply the documented header shape
 6. Apply repo-shape rules:
    - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
-   - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Controllers/`, and `Models/`
-   - for SwiftUI views, keep view files in `Views/`, require exactly one SwiftUI `View` component per file, and keep that component's Xcode SwiftUI preview in the same file
+   - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Models/`, and `Services/`, and do not preserve a root `Controllers/` directory
+   - for SwiftUI views, keep view files in `Views/Shared`, `Views/macOS`, or `Views/iOS`, require exactly one SwiftUI `View` component per file, and keep that component's Xcode SwiftUI preview in the same file
    - when splitting grouped SwiftUI views, create one `<Name>.swift` file per view component, require any SwiftUI view model for that component to live in `<Name>+Model.swift`, and place view-specific modifiers in `<Name>+Modifier.swift`
+   - for UIKit and AppKit view-controller support, use `<Name>+Controller.swift` beside the matching view
+   - for app-wide `@Observable` state, use `<AppName>App+ViewModel.swift` beside `<AppName>App.swift`
+   - for services, use `Services/Consumed`, `Services/Internal`, and `Services/Provided`, with the main app-wide service under `Services/Internal` as `<AppName>AppService.swift`
 7. Finish with `format-swift-sources` again so the moved or split files end in a normalized state.
 
 ## Inputs

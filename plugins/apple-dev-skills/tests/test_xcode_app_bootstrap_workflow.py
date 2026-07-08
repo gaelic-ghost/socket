@@ -211,8 +211,24 @@ exit 1
             self.assertIn("parallelizable: true", project_yml)
             for top_level_dir in ("Sources", "Tests", "Shared", "Extensions", "Configurations", "Scripts", "Packages"):
                 self.assertTrue((target / top_level_dir).is_dir(), top_level_dir)
+            for source_dir in (
+                "Sources/Views/Shared",
+                "Sources/Views/macOS",
+                "Sources/Views/iOS",
+                "Sources/Models",
+                "Sources/Services/Consumed",
+                "Sources/Services/Internal",
+                "Sources/Services/Provided",
+            ):
+                self.assertTrue((target / source_dir).is_dir(), source_dir)
             for placeholder in ("Shared/.gitkeep", "Extensions/.gitkeep", "Scripts/.gitkeep", "Packages/.gitkeep"):
                 self.assertTrue((target / placeholder).exists(), placeholder)
+            self.assertTrue((target / "Sources" / "DemoApp.swift").exists())
+            self.assertTrue((target / "Sources" / "DemoApp+ViewModel.swift").exists())
+            self.assertTrue((target / "Sources" / "Views" / "Shared" / "ContentView.swift").exists())
+            self.assertTrue((target / "Sources" / "Views" / "Shared" / "ContentView+Model.swift").exists())
+            self.assertTrue((target / "Sources" / "Services" / "Internal" / "DemoAppService.swift").exists())
+            self.assertFalse((target / "Sources" / "Controllers").exists())
             self.assertTrue((target / "Sources" / "Support" / "DemoApp.entitlements").exists())
             self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
             self.assertTrue(
@@ -302,6 +318,10 @@ exit 1
             self.assertIn("XcodeGen plus synced source folders", agents_text)
             self.assertIn("Use the standard top-level Xcode app repository layout", agents_text)
             self.assertIn("`Shared/` owns reusable source intended to be compiled into the app and extension targets", agents_text)
+            self.assertIn("Sources/Views/Shared", agents_text)
+            self.assertIn("Sources/Services/Internal", agents_text)
+            self.assertIn("WhateverNameApp+ViewModel.swift", agents_text)
+            self.assertIn("<ViewName>+Controller.swift", agents_text)
             self.assertIn("A standard app target gets one `Sources` source entry", agents_text)
             self.assertIn("Every native app target must have exactly one app lifecycle entry point", agents_text)
             self.assertIn("Keep XcodeGen specs readable as project structure", agents_text)

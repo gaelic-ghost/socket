@@ -151,7 +151,7 @@ as the default Socket maintainer automation runtime.
 | `maintain-project-repo` | `codex exec` first; code-owned service for coordinated rollout | It installs managed scripts and CI wrappers. It is deterministic, but the write surface is broad enough that every repo should get a PR. |
 | `maintain-project-roadmap` | App check-only or `codex exec`; code-owned service only for planning sync | Roadmaps reflect human priorities. Automate stale-structure fixes, but keep milestone meaning human-reviewed. |
 | `sync-swift-package-guidance` | `codex exec` for one repo; code-owned service for SwiftPM fleet sync | It classifies repo shape, writes `AGENTS.md`, and refreshes `maintain-project-repo`. It is suitable for PR-based automation after the Socket-cache companion discovery fix. |
-| `sync-xcode-project-guidance` | `codex exec` for one repo; code-owned service for Apple-app fleet sync | It has the same shape as the SwiftPM sync skill but needs more caution around Xcode project state and Apple docs gates. |
+| `sync-xcode-project-guidance` | `codex exec` for one repo; code-owned service for Apple-app fleet sync | It has the same shape as the SwiftPM sync skill, reports strict MVVM Xcode app-structure drift through `structure_audit`, and needs more caution around Xcode project state and Apple docs gates. |
 
 ## Dedicated Skill Recommendation
 
@@ -176,7 +176,7 @@ SDK code generation.
 
 Start with a two-phase system:
 
-1. Use Codex app automations for nightly or weekly inventory reports. These should run check-only audits across a repo list and produce a ranked queue: docs drift, missing maintainer scripts, stale AGENTS guidance, failing issue triage, and Swift/Xcode sync candidates.
+1. Use Codex app automations for nightly or weekly inventory reports. These should run check-only audits across a repo list and produce a ranked queue: docs drift, missing maintainer scripts, stale AGENTS guidance, failing issue triage, Swift/Xcode sync candidates, and strict Xcode app-structure drift reported by `sync-xcode-project-guidance`.
 2. Use `codex exec` jobs for one-repo PR creation. Each job should receive the repo path, the exact skill, the requested run mode, validation command, and PR expectations. It should never batch unrelated repos into one execution.
 
 Move to a code-owned agent service when the queue itself becomes the product.

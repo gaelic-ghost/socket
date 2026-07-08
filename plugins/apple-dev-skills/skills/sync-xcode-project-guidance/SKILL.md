@@ -58,7 +58,13 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 4. Apply the shared Xcode-project policy before making repo-guidance changes:
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
    - preserve its simplicity-first Swift, SwiftUI, Xcode-managed project, XcodeGen-backed project, test-plan, file-membership, tracked `.pbxproj` commit, and Debug/Release guidance
-5. Run `scripts/run_workflow.py` to normalize inputs, detect whether the repo is really Xcode-managed, and shape the sync plan.
+5. Run `scripts/run_workflow.py` to normalize inputs, detect whether the repo is really Xcode-managed, shape the sync plan, and report strict Xcode app structure drift:
+   - missing `Sources/Views/Shared`, `Sources/Views/macOS`, `Sources/Views/iOS`, `Sources/Models`, `Sources/Services/Consumed`, `Sources/Services/Internal`, or `Sources/Services/Provided`
+   - legacy `Sources/Controllers`
+   - unpaired view-model files
+   - `<ViewName>+Model.swift` or `<ViewName>+Controller.swift` files outside `Sources/Views`
+   - missing app-entry `<AppName>App+ViewModel.swift`
+   - missing internal app service when the app declares a strict app entry point
 6. Apply the sync path:
    - if `AGENTS.md` is missing, copy `assets/AGENTS.md`
    - if `AGENTS.md` exists and already contains the managed section, keep the file unchanged
@@ -116,6 +122,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - installed or preserved `.codex/environments/xcode-project.toml`
   - refreshed `maintain-project-repo` paths
   - validation result
+  - strict app-structure audit result and findings
   - one concise next step or handoff
 
 ## Guards and Stop Conditions
