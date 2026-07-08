@@ -35,6 +35,19 @@ Correction:
 - keep that component's Xcode SwiftUI preview in the same file as the component
 - move view-local models, modifiers, and support code into explicit paired files such as `<Name>+Model.swift` and `<Name>+Modifier.swift`
 
+## Shared SwiftUI View Models
+
+Bad shape:
+
+- one SwiftUI view model owns state for multiple views, a view family, a screen flow, or a small view cluster
+- multiple SwiftUI view models are collected in a shared model file instead of living beside their matching view files
+
+Correction:
+
+- make SwiftUI view models per-view only
+- put the model for `<Name>.swift` in `<Name>+Model.swift`
+- split shared view-model state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer
+
 ## Wrapper-Heavy Architecture
 
 Bad shape:

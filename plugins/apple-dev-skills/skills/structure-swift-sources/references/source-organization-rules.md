@@ -14,6 +14,7 @@
   - `<Original>+Persistence.swift`
   - `<Original>+Validation.swift`
   - `<Original>+Modifier.swift`
+- Do not use `<Original>+Models.swift` for SwiftUI view models. SwiftUI view models use the per-view `<ViewFileName>+Model.swift` rule instead.
 - Treat Swift access control as part of the design; confirm the extracted file shape still supports the intended visibility.
 
 ## MARK Rules
@@ -36,6 +37,8 @@
 
 - Require exactly one SwiftUI `View` component per file. Do not group multiple `View` component types in one Swift file, even when the views are small, private, nested, or part of the same feature.
 - Name each view file after its component, such as `<Name>.swift`, and keep that component's Xcode SwiftUI preview in the same file.
+- SwiftUI view models are always per-view, with no exceptions: if `<Name>.swift` has a view model, it must live in `<Name>+Model.swift` and belong only to that one `View` component.
+- Do not share one SwiftUI view model across multiple views, view families, screens, flows, or view clusters, and do not collect multiple SwiftUI view models in one shared model file.
 - When an existing file contains multiple SwiftUI view components, split it into one file per view before adding more behavior.
 - Once any one view has more than `3` chained modifiers, strongly consider extracting a custom `ViewModifier`.
 - Place that modifier in `<Name>+Modifier.swift` when the modifier belongs to one view family.

@@ -71,7 +71,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
    - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Controllers/`, and `Models/`
    - for SwiftUI views, keep view files in `Views/`, require exactly one SwiftUI `View` component per file, and keep that component's Xcode SwiftUI preview in the same file
-   - when splitting grouped SwiftUI views, create one `<Name>.swift` file per view component and pair it with `<Name>+Model.swift` and `<Name>+Modifier.swift` files when those concerns exist
+   - when splitting grouped SwiftUI views, create one `<Name>.swift` file per view component, require any SwiftUI view model for that component to live in `<Name>+Model.swift`, and place view-specific modifiers in `<Name>+Modifier.swift`
 7. Finish with `format-swift-sources` again so the moved or split files end in a normalized state.
 
 ## Inputs

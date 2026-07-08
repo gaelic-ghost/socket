@@ -52,7 +52,9 @@ Use this snippet in repository `AGENTS.md` files when you want cross-project Swi
 ## SwiftUI and State Architecture
 
 - Treat SwiftUI views as component UI: keep them small, composable, reusable, and easy to scan from top to bottom.
-- Prefer straight, top-down data flow with small focused controller classes that own matching state for a view or small view cluster.
+- SwiftUI view models are always per-view, with no exceptions: the model for `<ViewFileName>.swift` must live in `<ViewFileName>+Model.swift` and must not be shared with any other SwiftUI view.
+- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, or view-cluster models. Split shared state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer.
+- Prefer straight, top-down data flow with state owned at the narrowest view, scene, or app boundary that matches the behavior.
 - Do not build monolithic views, monolithic controllers, or broad shared mutable state when a smaller component boundary would be clearer.
 - Keep updates to view-driving state minimal and localized.
 - Prefer durable identity for types that drive SwiftUI state and view updates.

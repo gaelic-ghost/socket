@@ -23,6 +23,8 @@
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
 - Require one SwiftUI `View` component per file, named for that component, with that component's Xcode SwiftUI preview in the same file.
 - Do not group multiple SwiftUI view components into one Swift file, even when the views are small, private, related, nested, or currently used only by one parent.
+- SwiftUI view models are always per-view, with no exceptions: the model for `<ViewFileName>.swift` must live in `<ViewFileName>+Model.swift` and must not be shared with any other SwiftUI view.
+- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, or view-cluster models.
 - Use the standard top-level Xcode app repository layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.
 - `Sources/` owns the main app target implementation and app-owned resources/support files. `Tests/` owns all test targets. `Shared/` owns reusable source intended to be compiled into the app and extension targets. `Extensions/` owns extension target roots, one folder per extension. `Configurations/` owns `.xcconfig` layers. `Scripts/` owns project-local automation and build helper scripts. `Packages/` owns local Swift packages only when a real package boundary is justified.
 - Keep those top-level roots stable; do not invent parallel names such as `AppSources`, `TestSources`, `Config`, `BuildScripts`, or `LocalPackages` for ordinary Xcode app repos.

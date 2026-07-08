@@ -123,6 +123,21 @@ class StructureWorkflowTests(unittest.TestCase):
         self.assertIn("Do not group multiple `View` component types in one Swift file", source_rules_text)
         self.assertIn("Require one SwiftUI `View` component per file", layout_rules_text)
 
+    def test_swiftui_view_model_structure_is_per_view_only(self) -> None:
+        skill_text = (ROOT / "skills/structure-swift-sources/SKILL.md").read_text(encoding="utf-8")
+        source_rules_text = (ROOT / "skills/structure-swift-sources/references/source-organization-rules.md").read_text(
+            encoding="utf-8"
+        )
+        layout_rules_text = (ROOT / "skills/structure-swift-sources/references/layout-rules.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("require any SwiftUI view model for that component to live in `<Name>+Model.swift`", skill_text)
+        self.assertIn("SwiftUI view models are always per-view", source_rules_text)
+        self.assertIn("Do not share one SwiftUI view model", source_rules_text)
+        self.assertIn("must live in `<Name>+Model.swift`", layout_rules_text)
+        self.assertNotIn("When a view has a paired model type", layout_rules_text)
+
 
 if __name__ == "__main__":
     unittest.main()
