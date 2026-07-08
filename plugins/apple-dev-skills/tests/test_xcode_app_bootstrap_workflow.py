@@ -192,12 +192,26 @@ exit 1
             project_yml = (target / "project.yml").read_text(encoding="utf-8")
             self.assertIn("minimumXcodeGenVersion: 2.45.4", project_yml)
             self.assertIn("projectFormat: xcode16_0", project_yml)
+            self.assertIn("defaultSourceDirectoryType: syncedFolder", project_yml)
             self.assertIn("configs:", project_yml)
             self.assertIn("schemes:", project_yml)
             self.assertIn("configFiles:", project_yml)
+            self.assertIn("type: syncedFolder", project_yml)
+            self.assertIn("Sources/Support", project_yml)
+            self.assertIn("Sources/Resources", project_yml)
+            self.assertIn("CFBundleShortVersionString: $(MARKETING_VERSION)", project_yml)
+            self.assertIn("CFBundleVersion: $(CURRENT_PROJECT_VERSION)", project_yml)
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
             self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
             self.assertIn("parallelizable: true", project_yml)
+            self.assertTrue((target / "Sources" / "Support" / "App.entitlements").exists())
+            self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
+            self.assertTrue(
+                (target / "Sources" / "Resources" / "Assets.xcassets" / "AppIcon.appiconset" / "Contents.json").exists()
+            )
+            self.assertTrue(
+                (target / "Sources" / "Resources" / "Assets.xcassets" / "AccentColor.colorset" / "Contents.json").exists()
+            )
             self.assertTrue((target / "Configurations" / "Shared.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App-Debug.xcconfig").exists())
@@ -210,7 +224,51 @@ exit 1
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
+                "MARKETING_VERSION = 0.0.1",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "CURRENT_PROJECT_VERSION = 1",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "CODE_SIGN_ENTITLEMENTS = Sources/Support/App.entitlements",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ENABLE_APP_SANDBOX[sdk=macosx*] = NO",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ENABLE_HARDENED_RUNTIME[sdk=macosx*] = NO",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
                 "SWIFT_VERSION = 6.0",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "SWIFT_APPROACHABLE_CONCURRENCY = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "SWIFT_STRICT_CONCURRENCY = complete",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ENABLE_USER_SCRIPT_SANDBOXING = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "DEAD_CODE_STRIPPING = YES",
                 (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
@@ -231,9 +289,13 @@ exit 1
             agents_text = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("xcode-build-run-workflow", agents_text)
             self.assertIn("xcode-testing-workflow", agents_text)
-            self.assertIn("XcodeGen plus checked-in `.xcconfig` files", agents_text)
+            self.assertIn("XcodeGen plus synced source folders", agents_text)
             self.assertIn("Keep XcodeGen specs readable as project structure", agents_text)
             self.assertIn("Keep `.xcconfig` layering explicit", agents_text)
+            self.assertIn("CODE_SIGN_ENTITLEMENTS", agents_text)
+            self.assertIn("Build Settings UI", agents_text)
+            self.assertIn("Before running `xcodegen generate`", agents_text)
+            self.assertIn("promote intentional values into the owning tracked source files", agents_text)
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
@@ -254,6 +316,10 @@ exit 1
     def test_xcodegen_templates_are_checked_in_as_bootstrap_sources(self) -> None:
         expected_templates = {
             "project.yml.tmpl",
+            "Sources/Support/App.entitlements.tmpl",
+            "Sources/Resources/Assets.xcassets/Contents.json.tmpl",
+            "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json.tmpl",
+            "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json.tmpl",
             "Configurations/Shared.xcconfig.tmpl",
             "Configurations/App.xcconfig.tmpl",
             "Configurations/App-Debug.xcconfig.tmpl",
@@ -268,6 +334,11 @@ exit 1
 
         project_template = (XCODEGEN_TEMPLATE_DIR / "project.yml.tmpl").read_text(encoding="utf-8")
         self.assertIn("minimumXcodeGenVersion: 2.45.4", project_template)
+        self.assertIn("defaultSourceDirectoryType: syncedFolder", project_template)
+        self.assertIn("type: syncedFolder", project_template)
+        self.assertIn("Sources/Resources", project_template)
+        self.assertIn("CFBundleShortVersionString: $(MARKETING_VERSION)", project_template)
+        self.assertIn("CFBundleVersion: $(CURRENT_PROJECT_VERSION)", project_template)
         self.assertIn("schemes:", project_template)
         self.assertIn("configFiles:", project_template)
         self.assertNotIn("/Users/", project_template)

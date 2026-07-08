@@ -18,16 +18,22 @@ Authoritative XcodeGen references:
 ## Build And Project-Integrity Changes
 
 - Make target membership, resource membership, build settings, build configurations, schemes, Swift package declarations, project references, and generation options in the XcodeGen spec set.
+- Before running `xcodegen generate`, inspect existing generated `.xcodeproj` or `.pbxproj` diffs. Treat those diffs as intentional user or Xcode GUI changes unless proven otherwise; preserve the intent in the owning tracked source files before regeneration.
+- Promote GUI-created project settings into the right owner: XcodeGen specs for structure and wiring, `.xcconfig` files for build settings, `.entitlements` files for entitlement keys, `Info.plist` for plist keys, scheme specs or `.xcscheme` files for scheme behavior, and `.xctestplan` files for test-plan content.
+- If a `.pbxproj` diff contains settings that would be lost on regeneration and the correct tracked owner is unclear, stop and ask instead of regenerating.
 - Use top-level `configs` and `configFiles` when the whole project has shared configuration behavior, and target-level `configFiles` when app, test, extension, or framework targets need separate setting layers.
 - Keep top-level `schemes` explicit when build, run, archive, profile, analyze, command-line arguments, environment variables, or test-plan behavior matters. Do not rely on generated scheme defaults after the repo has explicit scheme policy.
 - Declare Swift packages in the spec-level `packages` map and link them through target `dependencies`; do not add package references by hand in the generated project.
 - Use `projectReferences`, `targetTemplates`, and `schemeTemplates` when they remove real repetition across generated modules, not as ceremony for a tiny one-target project.
+- For Xcode 16 or newer project formats, prefer `syncedFolder` source roots for ordinary app, test, resource, and support directories so Xcode and the filesystem stay aligned for file membership. If synchronized folders are not appropriate, use broad recursive source paths with explicit `includes` and `excludes` as the fallback instead of hand-listing every ordinary source file.
 - Prefer external `.xcconfig` files for nontrivial build settings and wire them from the XcodeGen spec instead of duplicating build settings inline.
 - Keep `.xcconfig` layering explicit, with a small shared base config, target-level configs for app/test/extension identity, and per-configuration configs that include the narrower target config and override only what changes.
+- Prefer external `.entitlements` files for app, extension, and other capability-bearing targets. Wire them through `CODE_SIGN_ENTITLEMENTS` in the owning `.xcconfig`; let Xcode capabilities update the entitlement plist when possible, then review and commit the plist diff.
+- Do not assume Xcode's Build Settings UI writes edited values back into `.xcconfig` files. If a GUI edit creates a generated project override, move intentional tracked settings into the owning `.xcconfig` before regenerating.
 - Do not put secrets, personal team IDs, local filesystem paths, provisioning profiles, API tokens, or private signing material in committed `.xcconfig` files.
 - Do not hand-edit generated `.pbxproj` files to work around spec drift; fix the spec and regenerate.
 - For ordinary source edits, inspect the relevant `sources` declarations to decide whether new files are already covered or whether the spec needs an explicit source/resource entry.
-- After changing specs or `.xcconfig` files, run `xcodegen generate` from the spec root, or `xcodegen generate --spec <path>` when the repo uses a non-default spec path.
+- After changing specs, `.xcconfig` files, or entitlement-file wiring, run `xcodegen generate` from the spec root, or `xcodegen generate --spec <path>` when the repo uses a non-default spec path.
 - If the spec uses environment variables, `preGenCommand`, or `postGenCommand`, preserve the required environment and call that out in the validation notes.
 - Review the spec diff, `.xcconfig` diff, and generated project diff after regeneration, especially target membership, package references, signing settings, scheme actions, and build-setting churn.
 - Validate with explicit `xcodebuild` commands for the affected scheme, destination or SDK, and configuration.

@@ -70,7 +70,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
    - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`
    - keep the generated `minimumXcodeGenVersion` on the recent validated baseline declared by the templates; when the baseline is raised, update the templates, docs, and tests together
+   - prefer XcodeGen `syncedFolder` source roots for app and test source directories when the generated project format is Xcode 16 or newer; use broad recursive source paths with explicit `includes` and `excludes` as the fallback when synchronized folders are not appropriate
    - keep nontrivial build settings in external `.xcconfig` files by default, using shared, target-level, and per-configuration layers wired through the XcodeGen spec instead of duplicating settings inline
+   - install a checked-in external app entitlement plist and wire it through `CODE_SIGN_ENTITLEMENTS` in the app `.xcconfig` so capability changes have a real tracked file owner instead of living only in generated project state
    - for `xcode`, use a guarded guidance path for now instead of pretending the repo supports full GUI automation already
 8. Validate the scaffold:
    - verify the expected app files exist
@@ -78,6 +80,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify `AGENTS.md` exists when enabled
    - verify `.codex/environments/xcode-project.toml` exists and uses the generated app target name for Codex GUI actions
    - verify generated guidance says tracked `.pbxproj` changes must be reviewed, staged, and committed before push, merge, release, or cleanup
+   - verify generated guidance says Xcode Build Settings UI edits may need to be moved from generated project overrides back into the owning `.xcconfig`
    - verify `scripts/repo-maintenance/hooks/pre-commit.sample` exists
    - verify `scripts/repo-maintenance/validate-all.sh` and `scripts/repo-maintenance/release.sh` exist
    - verify branch protection, when enabled, requires the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
@@ -173,6 +176,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 ### Workflow References
 
 - `references/project-generators.md`
+- `references/xcodegen-synced-folder-and-config-notes.md`
 - `references/platform-matrix.md`
 
 ### Contract References

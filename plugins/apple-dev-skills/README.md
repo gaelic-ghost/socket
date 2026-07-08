@@ -68,6 +68,7 @@ Use Apple Dev Skills when an agent is helping with:
 - SF Symbols selection, rendering, custom symbols, variable color, symbol effects, and app integration
 - AppKit and mixed AppKit/SwiftUI architecture
 - Xcode build, run, test, and project workflows
+- XcodeGen migration and modernization for existing Xcode app projects
 - Xcode coding intelligence, Xcode-hosted agents, and external-agent MCP setup
 - Icon Composer app icon design, preview, and Xcode handoff
 - Safari extension and SafariServices integration choices
@@ -142,6 +143,7 @@ uv run pytest
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
+- `migrate-xcode-project-to-xcodegen`
 - `safari-extension-control-workflow`
 - `sf-symbols-workflow`
 - `structure-swift-sources`
