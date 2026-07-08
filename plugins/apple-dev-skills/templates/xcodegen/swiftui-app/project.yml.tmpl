@@ -21,6 +21,8 @@ targets:
       path: Sources/Support/Info.plist
       properties:
         CFBundleDisplayName: __APP_NAME__
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
     configFiles:
       Debug: Configurations/App-Debug.xcconfig
       Release: Configurations/App-Release.xcconfig

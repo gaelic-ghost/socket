@@ -198,6 +198,8 @@ exit 1
             self.assertIn("configFiles:", project_yml)
             self.assertIn("type: syncedFolder", project_yml)
             self.assertIn("Sources/Support", project_yml)
+            self.assertIn("CFBundleShortVersionString: $(MARKETING_VERSION)", project_yml)
+            self.assertIn("CFBundleVersion: $(CURRENT_PROJECT_VERSION)", project_yml)
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
             self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
             self.assertIn("parallelizable: true", project_yml)
@@ -214,11 +216,39 @@ exit 1
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
+                "MARKETING_VERSION = 0.0.1",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "CURRENT_PROJECT_VERSION = 1",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
                 "CODE_SIGN_ENTITLEMENTS = Sources/Support/App.entitlements",
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
+                "ENABLE_APP_SANDBOX[sdk=macosx*] = NO",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ENABLE_HARDENED_RUNTIME[sdk=macosx*] = NO",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
                 "SWIFT_VERSION = 6.0",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "SWIFT_APPROACHABLE_CONCURRENCY = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "SWIFT_STRICT_CONCURRENCY = complete",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "ENABLE_USER_SCRIPT_SANDBOXING = YES",
                 (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
@@ -283,6 +313,8 @@ exit 1
         self.assertIn("minimumXcodeGenVersion: 2.45.4", project_template)
         self.assertIn("defaultSourceDirectoryType: syncedFolder", project_template)
         self.assertIn("type: syncedFolder", project_template)
+        self.assertIn("CFBundleShortVersionString: $(MARKETING_VERSION)", project_template)
+        self.assertIn("CFBundleVersion: $(CURRENT_PROJECT_VERSION)", project_template)
         self.assertIn("schemes:", project_template)
         self.assertIn("configFiles:", project_template)
         self.assertNotIn("/Users/", project_template)

@@ -23,6 +23,9 @@
 ## Build Settings
 
 - Prefer checked-in `.xcconfig` files for nontrivial build settings, with a shared base, target-level configs, and per-configuration configs.
+- Keep `SWIFT_VERSION = 6.0`, common Swift concurrency defaults, asset-symbol generation, localization analyzer settings, and user-script sandboxing in the shared config when every generated target should inherit them.
+- Keep app identity, marketing version, build number, entitlement path, app sandbox defaults, and hardened-runtime defaults in the app config.
+- Keep generated `Info.plist` version keys wired to `$(MARKETING_VERSION)` and `$(CURRENT_PROJECT_VERSION)` so version bump scripts can update the config source instead of generated project state.
 - Do not assume Xcode's Build Settings UI writes edited values back into `.xcconfig` files. Treat GUI-edited build settings as generated project overrides until inspected.
 - When a GUI change belongs in tracked config, move the value into the owning `.xcconfig`, regenerate with XcodeGen, and confirm the generated project no longer carries an unintended override.
 - Before running `xcodegen generate`, inspect existing generated project diffs and assume they are intentional user or Xcode GUI changes unless proven otherwise.
