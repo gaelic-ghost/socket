@@ -3,18 +3,20 @@ options:
   minimumXcodeGenVersion: 2.45.4
   projectFormat: xcode16_0
   defaultConfig: Debug
-  createIntermediateGroups: true
+  defaultSourceDirectoryType: syncedFolder
 configs:
   Debug: debug
   Release: release
 fileGroups:
   - Configurations
+  - Sources/Support
 targets:
   __APP_NAME__:
     type: application
     platform: __XCODEGEN_PLATFORM__
     sources:
       - path: Sources/App
+        type: syncedFolder
     info:
       path: Sources/Support/Info.plist
       properties:
@@ -27,6 +29,7 @@ targets:
     platform: __XCODEGEN_PLATFORM__
     sources:
       - path: Tests/__APP_NAME__Tests
+        type: syncedFolder
     dependencies:
       - target: __APP_NAME__
     configFiles:

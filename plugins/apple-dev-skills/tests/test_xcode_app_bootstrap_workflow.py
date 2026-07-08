@@ -192,12 +192,16 @@ exit 1
             project_yml = (target / "project.yml").read_text(encoding="utf-8")
             self.assertIn("minimumXcodeGenVersion: 2.45.4", project_yml)
             self.assertIn("projectFormat: xcode16_0", project_yml)
+            self.assertIn("defaultSourceDirectoryType: syncedFolder", project_yml)
             self.assertIn("configs:", project_yml)
             self.assertIn("schemes:", project_yml)
             self.assertIn("configFiles:", project_yml)
+            self.assertIn("type: syncedFolder", project_yml)
+            self.assertIn("Sources/Support", project_yml)
             self.assertIn("Configurations/App-Debug.xcconfig", project_yml)
             self.assertIn("Configurations/Tests-Debug.xcconfig", project_yml)
             self.assertIn("parallelizable: true", project_yml)
+            self.assertTrue((target / "Sources" / "Support" / "App.entitlements").exists())
             self.assertTrue((target / "Configurations" / "Shared.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App.xcconfig").exists())
             self.assertTrue((target / "Configurations" / "App-Debug.xcconfig").exists())
@@ -207,6 +211,10 @@ exit 1
             self.assertTrue((target / "Configurations" / "Tests-Release.xcconfig").exists())
             self.assertIn(
                 "PRODUCT_BUNDLE_IDENTIFIER = com.example.DemoApp",
+                (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "CODE_SIGN_ENTITLEMENTS = Sources/Support/App.entitlements",
                 (target / "Configurations" / "App.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
@@ -231,9 +239,11 @@ exit 1
             agents_text = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("xcode-build-run-workflow", agents_text)
             self.assertIn("xcode-testing-workflow", agents_text)
-            self.assertIn("XcodeGen plus checked-in `.xcconfig` files", agents_text)
+            self.assertIn("XcodeGen plus synced source folders", agents_text)
             self.assertIn("Keep XcodeGen specs readable as project structure", agents_text)
             self.assertIn("Keep `.xcconfig` layering explicit", agents_text)
+            self.assertIn("CODE_SIGN_ENTITLEMENTS", agents_text)
+            self.assertIn("Build Settings UI", agents_text)
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Never edit `.pbxproj` files directly.", agents_text)
@@ -254,6 +264,7 @@ exit 1
     def test_xcodegen_templates_are_checked_in_as_bootstrap_sources(self) -> None:
         expected_templates = {
             "project.yml.tmpl",
+            "Sources/Support/App.entitlements.tmpl",
             "Configurations/Shared.xcconfig.tmpl",
             "Configurations/App.xcconfig.tmpl",
             "Configurations/App-Debug.xcconfig.tmpl",
@@ -268,6 +279,8 @@ exit 1
 
         project_template = (XCODEGEN_TEMPLATE_DIR / "project.yml.tmpl").read_text(encoding="utf-8")
         self.assertIn("minimumXcodeGenVersion: 2.45.4", project_template)
+        self.assertIn("defaultSourceDirectoryType: syncedFolder", project_template)
+        self.assertIn("type: syncedFolder", project_template)
         self.assertIn("schemes:", project_template)
         self.assertIn("configFiles:", project_template)
         self.assertNotIn("/Users/", project_template)
