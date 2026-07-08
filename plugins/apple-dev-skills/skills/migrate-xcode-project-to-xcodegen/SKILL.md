@@ -50,10 +50,11 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
 6. Prepare the migration branch:
    - add or update `project.yml`
    - add or update `Configurations/*.xcconfig`
+   - add or preserve the standard top-level directories: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`
    - add or update `Sources/Support/<AppName>.entitlements`
    - add or update `Sources/Support/Info.plist`
    - add or update `Sources/Resources/Assets.xcassets`
-   - keep the app target's XcodeGen source declaration collapsed to one top-level `Sources` entry and the test target's declaration collapsed to one top-level `Tests` entry
+   - keep the app target's XcodeGen source declaration collapsed to one top-level `Sources` entry, shared app/extension code collapsed to one top-level `Shared` entry, and the test target's declaration collapsed to one top-level `Tests` entry
    - preserve exactly one app lifecycle entry point; do not create alternate `@main` app types, duplicate `main.swift` files, target-specific app entry files, or parallel app structs for variants
    - preserve existing package, framework, source, resource, script phase, scheme, and test-plan state
 7. Generate into a temp or reviewed branch state:

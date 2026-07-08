@@ -3,7 +3,8 @@
 ## Decision
 
 - For new XcodeGen-backed app scaffolds that use `projectFormat: xcode16_0` or newer, prefer `syncedFolder` roots at the broad top-level directory boundary.
-- Use exactly one top-level `Sources` source entry for the app target and exactly one top-level `Tests` source entry for the test target. If a repo has a separate top-level logical root such as `Resources`, use one top-level `Resources` entry for that root.
+- Use the standard top-level Xcode app repository layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.
+- Use exactly one top-level `Sources` source entry for the app target, exactly one top-level `Shared` source entry for shared app/extension source, and exactly one top-level `Tests` source entry for the test target. Extension targets use one `Extensions/<ExtensionName>` entry per extension target.
 - Use those same broad recursive paths with explicit `includes` and `excludes` as the fallback when synchronized folders do not fit a repo.
 - Avoid subdirectory fragmentation and one YAML entry per ordinary source file. Use narrower source entries only for exceptional compiler flags, build-phase routing, destination filters, target membership, or other file-specific behavior that cannot be represented from the broad root.
 
@@ -11,6 +12,7 @@
 
 - Keep app source, resources, support files, generated `Info.plist`, checked-in entitlements, feature folders, and nested implementation folders under `Sources/` when they belong to the app target.
 - Keep tests under `Tests/` when they belong to the test target.
+- Keep shared app/extension source under `Shared/`, extension target roots under `Extensions/`, project-local automation under `Scripts/`, and justified local Swift packages under `Packages/`.
 - Keep resources under `Sources/Resources`, including a default `Assets.xcassets` with `AppIcon` and `AccentColor` placeholders, but do not add `Sources/Resources` as a separate XcodeGen source entry when `Sources` already owns the target root.
 - Set `options.defaultSourceDirectoryType: syncedFolder` and mark only the broad target roots with `type: syncedFolder` so the intended behavior is visible at the target boundary.
 - Never split `Sources/App`, `Sources/Resources`, `Sources/Support`, feature folders, or `Tests/<AppName>Tests` into separate ordinary XcodeGen source entries.

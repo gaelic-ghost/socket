@@ -10,7 +10,7 @@ metadata:
 
 ## Purpose
 
-Install or refresh the reusable `maintain-project-repo` toolkit inside a general, SwiftPM, or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_maintain_project_repo.py` applies the managed file set, writes `scripts/repo-maintenance/config/profile.env`, and keeps the installed profile explicit.
+Install or refresh the reusable `maintain-project-repo` toolkit inside a general, SwiftPM, or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_maintain_project_repo.py` applies the managed file set, writes the profile marker, and keeps the installed profile explicit.
 
 ## When To Use
 
@@ -42,20 +42,22 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - choose `xcode-app` for native Apple app repos
    - choose `generic` when no stronger Swift or Xcode profile applies
    - stop if the requested path is not a repository root
+   - use `scripts/repo-maintenance/` for `generic` and `swift-package`; use `Scripts/repo-maintenance/` for `xcode-app` so native app repos keep one standard top-level `Scripts/` directory
 3. Explain the architecture boundary before mutating anything:
    - this is a durable building-block change because it creates one repo-owned maintainer surface that bootstrap, sync, validation, CI, and release flows can all share
    - it removes the pain of CI-only helper scripts and scattered release glue
    - the simpler extension path considered first was leaving helper scripts under `.github/scripts/` and adding more workflow-specific wrappers, but that would keep local and CI behavior drifting apart
 4. Run `scripts/run_workflow.py` to normalize the inputs and choose the installer path.
 5. Apply the managed `maintain-project-repo` files:
-   - install or refresh the managed `scripts/repo-maintenance/` files
-   - install or refresh `scripts/repo-maintenance/config/profile.env` for the selected profile
+   - install or refresh the managed repo-maintenance files under the selected profile's toolkit root
+   - install or refresh the selected profile's `config/profile.env`
    - install or refresh the thin workflow wrapper at `.github/workflows/validate-repo-maintenance.yml` unless disabled
+   - for `xcode-app`, migrate an existing legacy `scripts/repo-maintenance/` toolkit root to `Scripts/repo-maintenance/` when the capitalized root is absent; stop if both roots exist separately so the user can preserve intentional custom files before retrying
    - preserve repo-specific scripts or files that are not part of the managed file set
 6. Verify the installed `maintain-project-repo` files:
-   - `scripts/repo-maintenance/validate-all.sh`
-   - `scripts/repo-maintenance/sync-shared.sh`
-   - `scripts/repo-maintenance/release.sh`
+   - `scripts/repo-maintenance/validate-all.sh` for `generic` and `swift-package`, or `Scripts/repo-maintenance/validate-all.sh` for `xcode-app`
+   - `scripts/repo-maintenance/sync-shared.sh` for `generic` and `swift-package`, or `Scripts/repo-maintenance/sync-shared.sh` for `xcode-app`
+   - `scripts/repo-maintenance/release.sh` for `generic` and `swift-package`, or `Scripts/repo-maintenance/release.sh` for `xcode-app`
    - `.github/workflows/validate-repo-maintenance.yml` when workflow installation is enabled
    - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
 7. Hand off GitHub repository settings work:
@@ -64,10 +66,10 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
      sign-off policy, branch protection, and rulesets
    - keep settings alignment separate from release choreography
 8. Hand off follow-on work cleanly:
-   - use `scripts/repo-maintenance/validate-all.sh` for local validation
-   - use `scripts/repo-maintenance/sync-shared.sh` for repo-local shared sync tasks
-   - use `scripts/repo-maintenance/release.sh --mode standard` from a feature branch or worktree when protected `main` owns the final release line
-   - use `scripts/repo-maintenance/release.sh --mode standard --remote-ci-mode defer` when full local validation has run and the repository's GitHub CI or review-bot status contexts are intentionally slow; Codex should create a same-thread heartbeat automation when available, then resume the release in the same thread instead of leaving a shell process open just to poll remote checks
+   - use the selected profile's `validate-all.sh` for local validation
+   - use the selected profile's `sync-shared.sh` for repo-local shared sync tasks
+   - use the selected profile's `release.sh --mode standard` from a feature branch or worktree when protected `main` owns the final release line
+   - use the selected profile's `release.sh --mode standard --remote-ci-mode defer` when full local validation has run and the repository's GitHub CI or review-bot status contexts are intentionally slow; Codex should create a same-thread heartbeat automation when available, then resume the release in the same thread instead of leaving a shell process open just to poll remote checks
    - treat pending review-bot status contexts such as CodeRabbit as a wait state, not as permission to merge; resume on a heartbeat, inspect the bot review and comments, address valid findings, and only merge after the review/comment gate is clear
    - use `scripts/repo-maintenance/release.sh --mode submodule` only when the repo is checked out as a submodule and the parent pointer update remains a separate follow-up
    - treat SemVer tags with prerelease suffixes such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes as GitHub prereleases; the release script passes `--prerelease` for those tags and rejects existing release objects whose prerelease metadata does not match the tag
@@ -116,8 +118,8 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 ## Fallbacks and Handoffs
 
 - `report-only` is the non-mutating fallback path.
-- The installer preserves repo-specific extra files under `scripts/repo-maintenance/`, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
-- The installer keeps the selected `maintain-project-repo` profile explicit via `scripts/repo-maintenance/config/profile.env`.
+- The installer preserves repo-specific extra files under the selected profile's repo-maintenance root, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
+- The installer keeps the selected `maintain-project-repo` profile explicit via the selected profile's `config/profile.env`.
 - Apple profiles install checked-in `.swiftformat` and `.swiftlint.yml` samples so SwiftFormat owns formatting shape while SwiftLint stays focused on complementary safety and clarity checks.
 - The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
 - The generated GitHub Actions wrapper uses Node 24-compatible Actions versions, with `actions/checkout@v6.0.2` as the current validated floor. Newer stable official action versions are allowed and often preferred after checking release notes and running the relevant validation. Apple profiles report the runner-selected Xcode with shell commands instead of using the Node 20-based `maxim-lobanov/setup-xcode@v1` action.
