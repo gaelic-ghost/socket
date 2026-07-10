@@ -87,6 +87,7 @@ def blocked_payload(normalized_inputs: dict, next_step: str, *, stderr: str = ""
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--name")
+    parser.add_argument("--file-prefix")
     parser.add_argument("--destination")
     parser.add_argument("--project-kind")
     parser.add_argument("--platform")
@@ -105,6 +106,7 @@ def main() -> int:
     settings = config["settings"]
 
     name = args.name
+    file_prefix = args.file_prefix
     destination = args.destination or "."
     project_kind = args.project_kind or "app"
     platform_raw = args.platform or str(settings.get("defaultPlatform", "ask"))
@@ -119,6 +121,7 @@ def main() -> int:
 
     normalized_inputs = {
         "name": name,
+        "file_prefix": file_prefix,
         "destination": destination,
         "project_kind": project_kind,
         "platform": platform_raw if platform is None else platform,
@@ -132,6 +135,10 @@ def main() -> int:
 
     if not name:
         print(json.dumps(blocked_payload(normalized_inputs, "Provide --name to create a new Xcode app project."), indent=2, sort_keys=True))
+        return 1
+
+    if not file_prefix:
+        print(json.dumps(blocked_payload(normalized_inputs, "Choose an explicit --file-prefix containing three uppercase letters."), indent=2, sort_keys=True))
         return 1
 
     if project_kind != "app":
@@ -209,6 +216,8 @@ def main() -> int:
         str(helper_path),
         "--name",
         name,
+        "--file-prefix",
+        file_prefix,
         "--destination",
         destination,
         "--platform",

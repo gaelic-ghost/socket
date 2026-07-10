@@ -58,8 +58,8 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
             "skills/swiftui-app-architecture-workflow/references/anti-patterns-and-corrections.md"
         )
 
-        self.assertIn("Each SwiftUI `View` component must live in its own Swift file", skill_text)
-        self.assertIn("view's own Xcode SwiftUI preview", skill_text)
+        self.assertIn("complex enough to edit or preview independently", skill_text)
+        self.assertIn("small private helper views may remain", skill_text)
         self.assertIn("Grouped SwiftUI View Files", anti_patterns_text)
         self.assertIn("keep that component's Xcode SwiftUI preview in the same file", anti_patterns_text)
 
@@ -70,11 +70,11 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         )
         shared_snippet_text = self.read("shared/agents-snippets/apple-xcode-project-core.md")
 
-        self.assertIn("SwiftUI view models are always per-view, with no exceptions", skill_text)
-        self.assertIn("matching `<ViewFileName>+Model.swift` file", skill_text)
+        self.assertIn("GEAWhateverViewModel.swift", skill_text)
+        self.assertIn("Never use `+` filenames", skill_text)
         self.assertIn("Shared SwiftUI View Models", anti_patterns_text)
-        self.assertIn("put the model for `<Name>.swift` in `<Name>+Model.swift`", anti_patterns_text)
-        self.assertIn("SwiftUI view models are always per-view, with no exceptions", shared_snippet_text)
+        self.assertIn("put the view model for `GEAWhateverView.swift`", anti_patterns_text)
+        self.assertIn("GEAWhateverViewModel.swift", shared_snippet_text)
         self.assertNotIn("own matching state for a view or small view cluster", shared_snippet_text)
 
 

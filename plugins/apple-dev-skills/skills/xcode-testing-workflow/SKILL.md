@@ -5,10 +5,6 @@ description: Guide Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mech
 
 # Xcode Testing Workflow
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Use this skill as the primary execution workflow for test-focused work in or around Xcode-managed projects and workspaces. Keep it focused on Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mechanics, `.xctestplan`, destinations, launch arguments, interruption handling, attachments, accessibility-verification follow-through, Instruments profiling, `xctrace` trace capture, filters, retries, diagnostics, and test-specific Debug/Release validation instead of broad build/run or toolchain work. `scripts/run_workflow.py` is the runtime entrypoint for MCP-first test execution, official CLI fallback planning, and the remaining `.pbxproj` warning boundary when mutation enters project-file territory.

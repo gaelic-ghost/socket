@@ -1,0 +1,4 @@
+interface:
+  display_name: "SwiftData Workflow"
+  short_description: "Design and maintain SwiftData persistence"
+  default_prompt: "Use $swiftdata-workflow to design, implement, migrate, test, or integrate SwiftData persistence using current Apple documentation."

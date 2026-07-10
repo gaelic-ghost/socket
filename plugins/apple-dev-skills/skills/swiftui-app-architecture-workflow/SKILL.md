@@ -5,10 +5,6 @@ description: Guide SwiftUI app-structure decisions for Apple apps across `App`, 
 
 # SwiftUI App Architecture Workflow
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Provide a docs-first workflow for SwiftUI app-structure decisions in Apple apps. This skill owns ownership-boundary guidance, transport-choice guidance, focused-context guidance, and anti-pattern correction for SwiftUI app composition across scenes, commands, focus, environment, preferences, and reusable view structure.
@@ -17,20 +13,20 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 
 ## SwiftUI View File Rule
 
-Each SwiftUI `View` component must live in its own Swift file named for that view, and that file must carry the view's own Xcode SwiftUI preview. Do not group multiple `View` component types in one file, even when the views are small, related, nested, or currently used only by one parent. Split them into separate files so Xcode previews remain discoverable, isolated, and reliable.
+Use the project's explicit three-letter prefix for every project-owned view file and declaration. Name a view `GEAWhateverView.swift`, its paired `@Observable final class` view model `GEAWhateverViewModel.swift`, and an extracted custom modifier `GEAWhateverViewModifier.swift`. Never use `+` filenames.
 
-SwiftUI view models are always per-view, with no exceptions. If a SwiftUI view has a view model, that model belongs to exactly that `View` component and must live beside the matching view in the matching `<ViewFileName>+Model.swift` file. Do not share a SwiftUI view model across multiple views, view families, screens, flows, or view clusters, and do not place multiple SwiftUI view models in one shared model file.
+A view component that is complex enough to edit or preview independently must have its own file. Simple private computed view properties and small private helper views may remain in the owning file while they keep that component easy to preview, navigate, and edit. Extract them as soon as they clutter that workflow.
 
-Keep supporting code in explicit paired files instead of bundling extra view types together: use `<ViewFileName>+Model.swift` for that view's model, `<ViewFileName>+Modifier.swift` for view-specific modifiers, and other narrowly named support files when needed. A file may contain private helper values or small non-`View` helpers for that one component, but it must not contain another SwiftUI `View` component.
+Name an extracted child from its complete composition owner: a toggle card inside `GEASettingsSheetView.swift` becomes `GEASettingsSheetToggleCard.swift`. Continue that complete stem for paired support such as `GEASettingsSheetToggleCardViewModel.swift`. This rule also applies outside views, such as `GEAWhateverServiceAdapter.swift`.
 
-For Xcode app projects, use strict Apple-app MVVM source layout: `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` own UI, `Sources/Models` owns persistence and transfer shapes, and `Sources/Services/Consumed`, `Sources/Services/Internal`, and `Sources/Services/Provided` own app services by direction. App-wide `@Observable` state lives beside the app entry point in `<AppName>App+ViewModel.swift`, containing `@Observable final class <AppName>AppViewModel`. UIKit and AppKit view-controller support lives beside the matching view as `<ViewName>+Controller.swift`; do not introduce a root `Controllers/` directory.
+Extract a custom `ViewModifier` when a view accumulates more than eight chained modifiers, or earlier when a coherent chain is reusable or obscures the view body. Keep view models associated with exactly one view and let them source the presentation data that directly drives that view. Runtime/domain values use bare names such as `GEAWhatever`; persistence `Model` naming belongs to `swiftdata-workflow`.
 
 ## When To Use
 
 - Use this skill when the user wants help structuring a SwiftUI app across `App`, `Scene`, `WindowGroup`, `Window`, `Settings`, or `DocumentGroup`.
 - Use this skill when the user wants help deciding where app-level, scene-level, and view-level responsibilities belong.
 - Use this skill when the user wants help choosing between explicit dependency injection, environment values, focused values, scene-focused values, preference keys, bindings, or local state.
-- Use this skill when a SwiftUI app uses SwiftData and the agent needs to keep SwiftData directly driving SwiftUI through Apple's data-driven UI integration instead of adding repositories, stores, mirrored state, or view-model cache layers.
+- Hand SwiftData persistence and integration decisions to `swiftdata-workflow` while retaining ownership of the view composition around that data.
 - Use this skill when the user wants help with `FocusState`, `focusable`, focus scopes, focus sections, default focus, focused objects, or other focused-context design that changes ownership or data-flow choices.
 - Use this skill when the user wants help with command ownership, command menus, command groups, focused command handling, or desktop-oriented SwiftUI command surfaces.
 - Use this skill when the user wants help cleaning up giant root views, wrapper-heavy architecture, environment abuse, hidden control flow in modifiers, or state scattering in SwiftUI code.
@@ -68,7 +64,7 @@ For Xcode app projects, use strict Apple-app MVVM source layout: `Sources/Views/
    - view-tree-level
    - local view
 4. Choose the transport that fits the responsibility:
-   - SwiftData's direct SwiftUI path: `modelContainer` at the app or scene boundary, environment `modelContext`, `@Query`, SwiftData model objects, and narrow bindings
+   - the SwiftData path selected by `swiftdata-workflow`
    - explicit initializer injection
    - `Binding`
    - environment value
@@ -88,10 +84,10 @@ For Xcode app projects, use strict Apple-app MVVM source layout: `Sources/Views/
    - giant root views with unrelated lifecycle, command, and rendering concerns mixed together
    - wrapper-heavy layers added only to look architectural
    - control flow hidden in modifiers that obscure who owns the action
-   - multiple SwiftUI `View` component types grouped into one file, especially when that prevents one file-local Xcode preview per component
-   - one SwiftUI view model shared across a view cluster or stored outside the matching `<ViewFileName>+Model.swift` file
-   - a root `Controllers/` directory used for UIKit or AppKit view-controller support instead of `<ViewName>+Controller.swift` beside the matching view
-   - app-wide state hidden in a service, leaf view, or shared environment object instead of an app-entry `<AppName>App+ViewModel.swift`
+   - independently editable or previewable components buried inside a larger view file
+   - a view model shared across a view cluster or stored outside its matching `GEAWhateverViewModel.swift` file
+   - `+` filenames or child-component names that omit their composition owner
+   - long modifier chains left inline after they obscure the view body
 6. Return one recommendation path with:
    - the ownership boundary
    - the chosen transport
@@ -131,7 +127,7 @@ For Xcode app projects, use strict Apple-app MVVM source layout: `Sources/Views/
 ## Guards and Stop Conditions
 
 - Do not recommend environment values as a default substitute for explicit dependency flow.
-- When SwiftData backs a SwiftUI surface, do not recommend any data-access abstraction between SwiftData and SwiftUI. SwiftData should directly drive SwiftUI through `modelContainer`, environment `modelContext`, `@Query`, model objects, and bindings; separate boundaries are only for non-SwiftUI concerns such as import/export, networking, migration tooling, tests, or server sync.
+- Hand SwiftData-specific architecture to `swiftdata-workflow` instead of duplicating its persistence rules here.
 - Do not recommend preference keys for ordinary downward or lateral data flow.
 - Do not collapse commands, focus, and scene ownership into a single shared mutable object just because it is easy to wire.
 - Do not present a giant root view or extra wrapper layer as architectural improvement unless it clearly removes a real ownership problem.

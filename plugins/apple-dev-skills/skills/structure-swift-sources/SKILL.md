@@ -5,10 +5,6 @@ description: Organize Swift source trees and oversized Swift files by feature, l
 
 # Structure Swift Sources
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Use this skill as the top-level workflow for structural cleanup inside existing Swift repositories. It governs file splitting, file moves, section grouping, plain-language file headers, and TODO or FIXME ledger extraction. `scripts/run_workflow.py` is the runtime wrapper for repo-shape detection, cleanup-kind classification, header-policy loading, split-threshold loading, and clean handoffs to DocC or Xcode execution workflows. It is not the formatter or linter integration authority, and it is not the DocC authoring authority. Use `format-swift-sources` before this skill starts mutating source layout, use `author-swift-docc-docs` when the request becomes symbol-doc or DocC-content work, and run `format-swift-sources` again after this skill finishes.
@@ -55,7 +51,9 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 5. Apply the structure rules:
    - strongly consider splitting a file once it exceeds the configured soft split threshold and clearly holds `2` or more separate concerns
    - always split a file once it exceeds the configured hard split threshold
-   - when the underlying type is still one coherent type, extract grouped concerns into extension files such as `<Original>+Models.swift` or `<Original>+<Concern>.swift`
+   - require one explicit three-letter uppercase prefix for every project-owned Swift source file and primary declaration
+   - never infer a different prefix after project setup; ask the user or agent to choose explicitly from reasonable initials-based suggestions
+   - when a coherent type needs an extracted concern, concatenate the concern after the owning type, such as `GEAWhateverServiceAdapter.swift`; do not use `+` filenames
    - add `// MARK:` groups only when a file is large enough or varied enough that the grouping materially improves navigation, concern ownership, or declaration discovery
    - skip `// MARK:` groups entirely when a short file or an already-obvious declaration run does not present meaningful navigation ambiguity
    - when groups are warranted, use explicit `// MARK: - <Heading>` sections that name a real responsibility boundary instead of restating declaration kinds or symbol names in slightly different words
@@ -71,10 +69,11 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
    - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Models/`, and `Services/`, and do not preserve a root `Controllers/` directory
    - for SwiftUI views, keep view files in `Views/Shared`, `Views/macOS`, or `Views/iOS`, require exactly one SwiftUI `View` component per file, and keep that component's Xcode SwiftUI preview in the same file
-   - when splitting grouped SwiftUI views, create one `<Name>.swift` file per view component, require any SwiftUI view model for that component to live in `<Name>+Model.swift`, and place view-specific modifiers in `<Name>+Modifier.swift`
-   - for UIKit and AppKit view-controller support, use `<Name>+Controller.swift` beside the matching view
-   - for app-wide `@Observable` state, use `<AppName>App+ViewModel.swift` beside `<AppName>App.swift`
-   - for services, use `Services/Consumed`, `Services/Internal`, and `Services/Provided`, with the main app-wide service under `Services/Internal` as `<AppName>AppService.swift`
+   - hand SwiftUI component, view-model, and modifier composition decisions to `swiftui-app-architecture-workflow`
+   - hand SwiftData persistence naming and integration decisions to `swiftdata-workflow`
+   - for services, use `Services/Consumed`, `Services/Internal`, and `Services/Provided`; a service named `GEAWhateverService.swift` manages the runtime/domain value `GEAWhatever.swift`
+   - reserve `Model` for persistence representations; use `Record` and `DTO` only when additional representations are genuinely needed
+   - treat `Package.swift`, externally generated Swift, and vendored third-party Swift as the only default filename-prefix exceptions
 7. Finish with `format-swift-sources` again so the moved or split files end in a normalized state.
 
 ## Inputs

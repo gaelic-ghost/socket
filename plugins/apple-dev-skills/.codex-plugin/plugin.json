@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "8.6.0",
-  "description": "Apple development workflows for Codex, including media and audio repair, XcodeGen migration, Xcode coding intelligence, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit architecture, Icon Composer app icons, Safari extensions, DeviceCheck/App Attest, Swift OpenAPI clients, and DocC authoring guidance.",
+  "description": "Apple development workflows for Codex, including SwiftData, SwiftUI architecture, media and audio repair, XcodeGen migration, Xcode coding intelligence, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck/App Attest, Swift OpenAPI clients, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -71,6 +71,7 @@
       "Design a DeviceCheck or App Attest flow for this Apple app, keeping DCDevice, DCAppAttestService, server challenges, entitlements, rollout, and backend validation handoffs explicit.",
       "Add or diagnose a generated Swift OpenAPI client in this Apple app using OpenAPIURLSession and current Apple docs.",
       "Help me build, test, or debug this Swift or Xcode project using the repo's Apple workflows.",
+      "Design, migrate, test, or integrate SwiftData persistence using the dedicated SwiftData workflow and current Apple documentation.",
       "Write or review DocC symbol comments, articles, extension files, and landing-page structure for this Swift repository.",
       "Sync the Apple project guidance in this repo without hand-editing Xcode project files, using Productivity Skills when repo-maintenance files must be installed or refreshed."
     ],

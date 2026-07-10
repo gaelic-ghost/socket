@@ -22,9 +22,9 @@ REQUIRED_STRINGS = [
     "Scripts/repo-maintenance/sync-shared.sh",
     "Scripts/repo-maintenance/release.sh",
     "Sources/Views/Shared",
-    "Sources/Services/Internal",
-    "WhateverNameApp+ViewModel.swift",
-    "<ViewName>+Controller.swift",
+    "Sources/Services/",
+    "three-letter uppercase prefix",
+    "GEAAppService.swift",
 ]
 
 REQUIRED_XCODE_APP_DIRECTORIES = [
@@ -171,59 +171,65 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
             {
                 "code": "legacy-controllers-directory",
                 "path": "Sources/Controllers",
-                "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views as <ViewName>+Controller.swift.",
+                "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views with a concatenated prefixed name such as GEAWhateverViewController.swift.",
             }
         )
 
     sources_dir = repo_root / "Sources"
     if sources_dir.is_dir():
+        for swift_path in sorted(sources_dir.rglob("*.swift")):
+            if len(swift_path.stem) < 3 or not swift_path.stem[:3].isalpha() or not swift_path.stem[:3].isupper():
+                relative_path = swift_path.relative_to(repo_root).as_posix()
+                findings.append({
+                    "code": "missing-swift-file-prefix",
+                    "path": relative_path,
+                    "message": "Project-owned Swift files must start with the selected three-letter uppercase prefix.",
+                })
+            if "+" in swift_path.name:
+                relative_path = swift_path.relative_to(repo_root).as_posix()
+                findings.append({
+                    "code": "legacy-plus-filename",
+                    "path": relative_path,
+                    "message": "Retire the + filename and concatenate the owner and concern for Xcode-friendly navigation and refactoring.",
+                })
+
         for view_model_path in sorted(sources_dir.rglob("*ViewModel.swift")):
-            if view_model_path.name.endswith("+ViewModel.swift"):
+            if "Sources/Views/" in view_model_path.relative_to(repo_root).as_posix():
                 continue
             relative_path = view_model_path.relative_to(repo_root).as_posix()
             findings.append(
                 {
                     "code": "unpaired-view-model-file",
                     "path": relative_path,
-                    "message": "View model files should be paired with their owning app or view as <Owner>+ViewModel.swift or <ViewName>+Model.swift.",
+                    "message": "View models belong beside their owning view under Sources/Views with a name such as GEAWhateverViewModel.swift.",
                 }
             )
 
-        for model_path in sorted(sources_dir.rglob("*+Model.swift")):
-            if "Sources/Views/" not in model_path.relative_to(repo_root).as_posix():
-                relative_path = model_path.relative_to(repo_root).as_posix()
-                findings.append(
-                    {
-                        "code": "view-model-outside-views",
-                        "path": relative_path,
-                        "message": "View-local <ViewName>+Model.swift files should live beside their matching view under Sources/Views.",
-                    }
-                )
-
-        for controller_path in sorted(sources_dir.rglob("*+Controller.swift")):
+        for controller_path in sorted(sources_dir.rglob("*ViewController.swift")):
             if "Sources/Views/" not in controller_path.relative_to(repo_root).as_posix():
                 relative_path = controller_path.relative_to(repo_root).as_posix()
                 findings.append(
                     {
                         "code": "controller-outside-views",
                         "path": relative_path,
-                        "message": "UIKit/AppKit <ViewName>+Controller.swift files should live beside their matching view under Sources/Views.",
+                        "message": "UIKit/AppKit GEAWhateverViewController.swift files should live beside their matching view under Sources/Views.",
                     }
                 )
 
         app_files = [
             path for path in sorted(sources_dir.glob("*App.swift"))
-            if path.is_file() and not path.name.endswith("+ViewModel.swift")
+            if path.is_file()
         ]
         for app_path in app_files:
-            paired_model = app_path.with_name(f"{app_path.stem}+ViewModel.swift")
-            if not paired_model.is_file():
-                relative_path = paired_model.relative_to(repo_root).as_posix()
+            prefix = app_path.stem[:-3]
+            domain_path = app_path.with_name(f"{prefix}.swift")
+            if not domain_path.is_file():
+                relative_path = domain_path.relative_to(repo_root).as_posix()
                 findings.append(
                     {
-                        "code": "missing-app-view-model",
+                        "code": "missing-app-domain-value",
                         "path": relative_path,
-                        "message": "App-wide @Observable state should live beside the app entry point as <AppName>App+ViewModel.swift.",
+                        "message": "The app lifecycle entry should pair with its bare runtime/domain value, such as GEAApp.swift and GEA.swift.",
                     }
                 )
 
@@ -235,7 +241,7 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
                     {
                         "code": "missing-internal-app-service",
                         "path": "Sources/Services/Internal",
-                        "message": "When the app has a main app-wide service, place it under Sources/Services/Internal as <AppName>AppService.swift.",
+                        "message": "Place the main app service under Sources/Services/Internal with a name such as GEAAppService.swift.",
                     }
                 )
 

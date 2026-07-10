@@ -841,7 +841,7 @@ Completed Milestone 23 by adding the `cloud-inference-skills` child plugin, ship
 
 ## History
 
-- Added repo-wide SwiftData and SwiftUI guidance that requires SwiftData-backed SwiftUI screens to stay directly driven by SwiftData's Apple-integrated data path, with regression coverage for every SwiftUI or SwiftData skill entrypoint and stale snippet wording.
+- Re-contained SwiftData persistence guidance in a dedicated Apple Dev skill and SwiftUI composition in its architecture skill, while introducing the explicit three-letter Swift prefix and Xcode-friendly concatenated filename grammar.
 - Made Socket worktree-first for implementation work while keeping the base `main` checkout as the clean coordination and release-verification surface.
 - Aligned Socket documentation-source routing away from generic documentation aggregators by making Xcode MCP `DocumentationSearch` the Apple SDK default, Dash MCP/HTTP the preferred local-docs path for installed docsets across supported stacks, and canonical upstream docs/source the fallback when Dash/local coverage is missing or stale.
 - Added the first repo-local Socket Steward prototype under `.agents/socket-steward`, giving the superproject a Python and OpenAI Agents SDK maintainer-agent scaffold with offline docs, guidance, and marketplace audits before any write-capable or background-service behavior.

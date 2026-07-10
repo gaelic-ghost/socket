@@ -5,10 +5,6 @@ description: Guide AppKit app-structure decisions for macOS apps across app dele
 
 # AppKit App Architecture Workflow
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Provide a docs-first workflow for AppKit app-structure decisions in macOS apps.
@@ -21,7 +17,7 @@ accessibility workflow, and not the Xcode execution workflow.
 
 For Xcode app source layout, keep UIKit/AppKit controller support view-adjacent:
 `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` own view
-surfaces, and controller support files are named `<ViewName>+Controller.swift`
+surfaces, and controller support files use concatenated prefixed names such as `GEAWhateverViewController.swift`
 beside their matching view. Do not collect ordinary app controller support in a
 root `Controllers/` directory.
 
@@ -125,7 +121,7 @@ root `Controllers/` directory.
      layers, or wrapper objects inserted between SwiftData and SwiftUI-owned
      screens
    - a root `Controllers/` directory used for ordinary view-controller support
-     instead of `<ViewName>+Controller.swift` beside the matching view
+     instead of `GEAWhateverViewController.swift` beside the matching view
    - app-wide runtime work hidden in a view controller
    - menu or status-item behavior hidden in a leaf view
    - responder-chain actions replaced by a broad command bus without a real need

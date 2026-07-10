@@ -1,5 +1,7 @@
 # Project Roadmap
 
+Swift naming and persistence ownership are now standardized: each project explicitly selects a three-letter prefix, project-owned Swift filenames use concatenated Xcode-friendly names without `+`, runtime/domain values use bare names, `Model` is reserved for persistence, and `swiftdata-workflow` owns SwiftData guidance.
+
 ## Table of Contents
 
 - [Vision](#vision)
@@ -783,7 +785,7 @@ Completed Milestone 53 by adding `devicecheck-app-attest-workflow`, focused refe
 - Tightened Xcode project guidance so tracked `.pbxproj` diffs produced by Xcode, XcodeGen, or other project-aware workflows are treated as critical project state that must be reviewed, staged, and committed before push, merge, release, or cleanup.
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.
-- Aligned Xcode app-project guidance around strict Apple-app MVVM source structure: view-local models beside views as `<ViewName>+Model.swift`, UIKit/AppKit controller support beside views as `<ViewName>+Controller.swift`, app-wide `@Observable` state in `<AppName>App+ViewModel.swift`, directional `Services/Consumed`, `Services/Internal`, and `Services/Provided` folders, and no root `Controllers/` directory.
+- Previously aligned Xcode app-project guidance around strict Apple-app MVVM source structure; the later three-letter-prefix migration superseded its paired-file naming with concatenated Xcode-friendly names while retaining directional service folders and no root `Controllers/` directory.
 - Added strict app-structure drift reporting to `sync-xcode-project-guidance` and updated the XcodeGen bootstrap scaffold so new SwiftUI app projects start with `Sources/Views/Shared`, `Sources/Views/macOS`, `Sources/Views/iOS`, `Sources/Models`, and directional `Sources/Services` folders.
 - Registered Xcode's built-in MCP bridge through the Codex plugin manifest so installed `apple-dev-skills` plugins expose the Xcode-owned MCP path without bundling a separate server package.
 - Added an experimental `xcode_lldb` MCP config entry for Xcode 27 beta-era `xcrun lldb-mcp` investigation while keeping the dedicated debugger workflow planned until startup validation succeeds.

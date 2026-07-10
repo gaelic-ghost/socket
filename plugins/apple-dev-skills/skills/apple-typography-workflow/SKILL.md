@@ -5,10 +5,6 @@ description: Guide Apple platform typography decisions and implementation across
 
 # Apple Typography Workflow
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Use this skill to choose, implement, repair, and validate Apple platform typography that respects system font behavior, Dynamic Type, accessibility, platform conventions, and custom-font bundle boundaries.

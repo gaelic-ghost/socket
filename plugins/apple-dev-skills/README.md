@@ -147,6 +147,7 @@ uv run pytest
 - `safari-extension-control-workflow`
 - `sf-symbols-workflow`
 - `structure-swift-sources`
+- `swiftdata-workflow`
 - `swift-openapi-client-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`

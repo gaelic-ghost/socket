@@ -66,10 +66,10 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - create the standard top-level Xcode app layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`
    - keep app-owned implementation/resources/support under `Sources/`, tests under `Tests/`, reusable app/extension source under `Shared/`, extension target roots under `Extensions/`, `.xcconfig` layers under `Configurations/`, project-local automation under `Scripts/`, and justified local Swift package boundaries under `Packages/`
    - inside `Sources/`, create the strict app structure: `Views/Shared`, `Views/macOS`, `Views/iOS`, `Models`, `Services/Consumed`, `Services/Internal`, and `Services/Provided`
-   - create the app entry point as `<AppName>App.swift` unless the supplied app name already ends in `App`, then pair it with `<AppName>App+ViewModel.swift` containing the app-wide `@Observable final class <AppName>AppViewModel`
-   - create SwiftUI views under `Sources/Views/Shared`, with view-local view models beside their view as `<ViewName>+Model.swift`
-   - put the main app-wide service under `Sources/Services/Internal` as `<AppName>AppService.swift`
-   - do not create a root `Controllers/` directory; UIKit and AppKit controller support belongs beside the matching view as `<ViewName>+Controller.swift`
+   - require an explicit `--file-prefix` containing three uppercase letters after offering reasonable initials-based suggestions
+   - create `GEAApp.swift` as the lifecycle entry, `GEA.swift` as the application runtime/domain value, and `GEAAppService.swift` as its main service
+   - create prefixed SwiftUI views and paired view models such as `GEAContentView.swift` and `GEAContentViewModel.swift`
+   - prefix every project-owned Swift file except `Package.swift`, externally generated Swift, and vendored third-party Swift; never generate `+` filenames
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
    - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`
    - keep the generated `minimumXcodeGenVersion` on the recent validated baseline declared by the templates; when the baseline is raised, update the templates, docs, and tests together
