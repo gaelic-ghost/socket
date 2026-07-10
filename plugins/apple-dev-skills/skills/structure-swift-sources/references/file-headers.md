@@ -77,8 +77,8 @@ entries:
       - "FeatureView"
       - "FeatureState"
     see_also:
-      - "FeatureView+Model.swift"
-      - "FeatureView+Modifier.swift"
+      - "GEAFeatureViewModel.swift"
+      - "GEAFeatureViewModifier.swift"
 ```
 
 `key_types` and `see_also` may be omitted when they do not add signal.

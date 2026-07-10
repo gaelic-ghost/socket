@@ -68,7 +68,7 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
             )
             env = dict(os.environ)
             env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
-            code, payload = self.run_script("--name", "DemoApp", "--dry-run", env=env)
+            code, payload = self.run_script("--name", "DemoApp", "--file-prefix", "GEA", "--dry-run", env=env)
             self.assertEqual(code, 0)
             self.assertEqual(payload["normalized_inputs"]["platform"], "macos")
             self.assertEqual(payload["normalized_inputs"]["ui_stack"], "swiftui")
@@ -80,6 +80,8 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
         code, payload = self.run_script(
             "--name",
             "DemoPkg",
+            "--file-prefix",
+            "GEP",
             "--project-kind",
             "package",
             "--platform",
@@ -96,6 +98,8 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
         code, payload = self.run_script(
             "--name",
             "DemoApp",
+            "--file-prefix",
+            "GEA",
             "--project-generator",
             "xcodegen",
             "--dry-run",
@@ -108,6 +112,8 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
         code, payload = self.run_script(
             "--name",
             "DemoApp",
+            "--file-prefix",
+            "GEA",
             "--platform",
             "macos",
             "--project-generator",
@@ -121,6 +127,8 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
         code, payload = self.run_script(
             "--name",
             "DemoApp",
+            "--file-prefix",
+            "GEA",
             "--platform",
             "macos",
             "--project-generator",
@@ -137,6 +145,8 @@ class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
             code, payload = self.run_script(
                 "--name",
                 "DemoApp",
+                "--file-prefix",
+                "GEA",
                 "--destination",
                 tmpdir,
                 "--platform",
@@ -177,6 +187,8 @@ exit 1
             code, payload = self.run_script(
                 "--name",
                 "DemoApp",
+                "--file-prefix",
+                "GEA",
                 "--destination",
                 tmpdir,
                 "--platform",
@@ -223,11 +235,11 @@ exit 1
                 self.assertTrue((target / source_dir).is_dir(), source_dir)
             for placeholder in ("Shared/.gitkeep", "Extensions/.gitkeep", "Scripts/.gitkeep", "Packages/.gitkeep"):
                 self.assertTrue((target / placeholder).exists(), placeholder)
-            self.assertTrue((target / "Sources" / "DemoApp.swift").exists())
-            self.assertTrue((target / "Sources" / "DemoApp+ViewModel.swift").exists())
-            self.assertTrue((target / "Sources" / "Views" / "Shared" / "ContentView.swift").exists())
-            self.assertTrue((target / "Sources" / "Views" / "Shared" / "ContentView+Model.swift").exists())
-            self.assertTrue((target / "Sources" / "Services" / "Internal" / "DemoAppService.swift").exists())
+            self.assertTrue((target / "Sources" / "GEAApp.swift").exists())
+            self.assertTrue((target / "Sources" / "GEA.swift").exists())
+            self.assertTrue((target / "Sources" / "Views" / "Shared" / "GEAContentView.swift").exists())
+            self.assertTrue((target / "Sources" / "Views" / "Shared" / "GEAContentViewModel.swift").exists())
+            self.assertTrue((target / "Sources" / "Services" / "Internal" / "GEAAppService.swift").exists())
             self.assertFalse((target / "Sources" / "Controllers").exists())
             self.assertTrue((target / "Sources" / "Support" / "DemoApp.entitlements").exists())
             self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
@@ -319,9 +331,9 @@ exit 1
             self.assertIn("Use the standard top-level Xcode app repository layout", agents_text)
             self.assertIn("`Shared/` owns reusable source intended to be compiled into the app and extension targets", agents_text)
             self.assertIn("Sources/Views/Shared", agents_text)
-            self.assertIn("Sources/Services/Internal", agents_text)
-            self.assertIn("WhateverNameApp+ViewModel.swift", agents_text)
-            self.assertIn("<ViewName>+Controller.swift", agents_text)
+            self.assertIn("`Internal/` for services owned only by the app", agents_text)
+            self.assertIn("GEAAppService.swift", agents_text)
+            self.assertIn("GEAWhateverViewModel.swift", agents_text)
             self.assertIn("A standard app target gets one `Sources` source entry", agents_text)
             self.assertIn("Every native app target must have exactly one app lifecycle entry point", agents_text)
             self.assertIn("Keep XcodeGen specs readable as project structure", agents_text)

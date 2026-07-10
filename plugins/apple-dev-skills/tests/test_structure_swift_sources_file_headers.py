@@ -30,7 +30,7 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
             root = Path(tmpdir)
             (root / "Sources").mkdir()
             (root / "Sources" / "Compliant.swift").write_text(
-                "/*\nSampleProject\nCompliant.swift\n© Gale Williams 2026\n\nConcern: Entry-point state and setup.\nPurpose: Explains the feature entry point.\nKey Types: FeatureView, FeatureState\nSee Also: FeatureView+Model.swift\n*/\n\nimport Foundation\n",
+                "/*\nSampleProject\nCompliant.swift\n© Gale Williams 2026\n\nConcern: Entry-point state and setup.\nPurpose: Explains the feature entry point.\nKey Types: FeatureView, FeatureState\nSee Also: GEAFeatureViewModel.swift\n*/\n\nimport Foundation\n",
                 encoding="utf-8",
             )
             (root / "Sources" / "Missing.swift").write_text("import Foundation\n", encoding="utf-8")
@@ -102,7 +102,7 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
                         '    purpose: "Defines the new feature entry point."',
                         '    concern: "Feature state and wiring."',
                         '    key_types: "FeatureView, FeatureState"',
-                        '    see_also: "FeatureView+Model.swift, FeatureView+Modifier.swift"',
+                        '    see_also: "GEAFeatureViewModel.swift, GEAFeatureViewModifier.swift"',
                     ]
                 )
                 + "\n",
@@ -119,7 +119,7 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
         self.assertIn("Concern: Feature state and wiring.", rewritten)
         self.assertIn("Purpose: Defines the new feature entry point.", rewritten)
         self.assertIn("Key Types: FeatureView, FeatureState", rewritten)
-        self.assertIn("See Also: FeatureView+Model.swift, FeatureView+Modifier.swift", rewritten)
+        self.assertIn("See Also: GEAFeatureViewModel.swift, GEAFeatureViewModifier.swift", rewritten)
         self.assertNotIn("Old purpose", rewritten)
 
     def test_checked_in_inventory_template_matches_loader_contract(self) -> None:
@@ -132,7 +132,7 @@ class StructureSwiftSourcesFileHeaderTests(unittest.TestCase):
         self.assertEqual(entries[0]["key_types"], ["FeatureView", "FeatureState"])
         self.assertEqual(
             entries[0]["see_also"],
-            ["FeatureView+Model.swift", "FeatureView+Modifier.swift"],
+            ["GEAFeatureViewModel.swift", "GEAFeatureViewModifier.swift"],
         )
 
 

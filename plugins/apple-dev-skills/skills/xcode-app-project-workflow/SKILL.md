@@ -5,10 +5,6 @@ description: Compatibility workflow surface for broad or legacy Xcode execution 
 
 # Xcode App Project Workflow
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Use this skill as a compatibility surface for older references to `xcode-app-project-workflow` while the repo transitions to narrower Xcode execution skills. The real long-term owners are `xcode-build-run-workflow` for build, run, diagnostics, toolchain, and guarded mutation work and `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, and `.xctestplan` work. `scripts/run_workflow.py` is intentionally routing-only now: it infers enough workspace context to choose the real owner and preserves the direct `.pbxproj` warning boundary so older flows continue to work during the migration window.

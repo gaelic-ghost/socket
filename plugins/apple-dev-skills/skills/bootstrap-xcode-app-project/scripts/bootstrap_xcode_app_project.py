@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -53,6 +54,7 @@ STANDARD_SOURCE_DIRECTORIES = (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--name", required=True)
+    parser.add_argument("--file-prefix", required=True)
     parser.add_argument("--destination", required=True)
     parser.add_argument("--platform", required=True)
     parser.add_argument("--ui-stack", required=True)
@@ -149,82 +151,75 @@ def install_local_environment(target_dir: Path, scheme_name: str) -> str:
     return str(target_path)
 
 
-def app_entry_type_name(name: str) -> str:
-    return name if name.endswith("App") else f"{name}App"
-
-
-def render_app_file(name: str) -> str:
-    app_type = app_entry_type_name(name)
+def render_app_file(prefix: str) -> str:
+    app_type = f"{prefix}App"
     return f"""import SwiftUI
 
 @main
 struct {app_type}: App {{
-    @State private var viewModel = {app_type}ViewModel(service: {app_type}Service())
+    @State private var service = {prefix}AppService()
 
     var body: some Scene {{
         WindowGroup {{
-            ContentView()
-                .environment(viewModel)
+            {prefix}ContentView(viewModel: {prefix}ContentViewModel(service: service))
+                .environment(service)
         }}
     }}
 }}
 """
 
 
-def render_app_view_model(name: str) -> str:
-    app_type = app_entry_type_name(name)
+def render_app_domain(prefix: str) -> str:
+    return f"""struct {prefix} {{
+    var title = "Hello, world!"
+}}
+"""
+
+def render_app_service(prefix: str) -> str:
     return f"""import Observation
 
 @Observable
-final class {app_type}ViewModel {{
-    let service: {app_type}Service
+final class {prefix}AppService {{
+    var app = {prefix}()
+}}
+"""
 
-    init(service: {app_type}Service) {{
+
+def render_content_view(prefix: str) -> str:
+    return f"""import SwiftUI
+
+struct {prefix}ContentView: View {{
+    @State var viewModel: {prefix}ContentViewModel
+
+    var body: some View {{
+        Text(viewModel.title)
+            .padding()
+    }}
+}}
+"""
+
+
+def render_content_view_model(prefix: str) -> str:
+    return f"""import Observation
+
+@Observable
+final class {prefix}ContentViewModel {{
+    private let service: {prefix}AppService
+
+    var title: String {{ service.app.title }}
+
+    init(service: {prefix}AppService) {{
         self.service = service
     }}
 }}
 """
 
 
-def render_app_service(name: str) -> str:
-    app_type = app_entry_type_name(name)
-    return f"""struct {app_type}Service {{
-    func bootstrapMessage() -> String {{
-        "Hello, world!"
-    }}
-}}
-"""
-
-
-def render_content_view() -> str:
-    return """import SwiftUI
-
-struct ContentView: View {
-    @State private var model = ContentViewModel()
-
-    var body: some View {
-        Text(model.title)
-            .padding()
-    }
-}
-"""
-
-
-def render_content_view_model() -> str:
-    return """import Observation
-
-@Observable
-final class ContentViewModel {
-    var title = "Hello, world!"
-}
-"""
-
-
-def render_test_file(name: str) -> str:
+def render_test_file(name: str, prefix: str) -> str:
     return f"""import XCTest
 @testable import {name}
 
-final class {name}Tests: XCTestCase {{
+final class {prefix}AppTests: XCTestCase {{
     func testExample() throws {{
         XCTAssertTrue(true)
     }}
@@ -252,6 +247,7 @@ def main() -> int:
     target_dir = (Path(args.destination).expanduser() / args.name).resolve()
     normalized_inputs = {
         "name": args.name,
+        "file_prefix": args.file_prefix,
         "destination": args.destination,
         "platform": args.platform,
         "ui_stack": args.ui_stack,
@@ -278,6 +274,16 @@ def main() -> int:
             normalized_inputs,
             "Switch to --ui-stack swiftui for the current supported mutating implementation or use the guided path.",
             stderr="The first supported mutating implementation only scaffolds SwiftUI app projects.",
+        )
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
+
+    if not re.fullmatch(r"[A-Z]{3}", args.file_prefix):
+        payload = blocked_payload(
+            target_dir,
+            normalized_inputs,
+            "Choose an explicit three-letter uppercase Swift file prefix and rerun the workflow.",
+            stderr="--file-prefix must contain exactly three uppercase ASCII letters.",
         )
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
@@ -326,13 +332,13 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
 
-    app_type = app_entry_type_name(args.name)
-    write_text(target_dir / f"Sources/{app_type}.swift", render_app_file(args.name))
-    write_text(target_dir / f"Sources/{app_type}+ViewModel.swift", render_app_view_model(args.name))
-    write_text(target_dir / f"Sources/Services/Internal/{app_type}Service.swift", render_app_service(args.name))
-    write_text(target_dir / "Sources/Views/Shared/ContentView.swift", render_content_view())
-    write_text(target_dir / "Sources/Views/Shared/ContentView+Model.swift", render_content_view_model())
-    write_text(target_dir / f"Tests/{args.name}Tests/{args.name}Tests.swift", render_test_file(args.name))
+    prefix = args.file_prefix
+    write_text(target_dir / f"Sources/{prefix}App.swift", render_app_file(prefix))
+    write_text(target_dir / f"Sources/{prefix}.swift", render_app_domain(prefix))
+    write_text(target_dir / f"Sources/Services/Internal/{prefix}AppService.swift", render_app_service(prefix))
+    write_text(target_dir / f"Sources/Views/Shared/{prefix}ContentView.swift", render_content_view(prefix))
+    write_text(target_dir / f"Sources/Views/Shared/{prefix}ContentViewModel.swift", render_content_view_model(prefix))
+    write_text(target_dir / f"Tests/{args.name}Tests/{prefix}AppTests.swift", render_test_file(args.name, prefix))
     try:
         local_environment_path = install_local_environment(target_dir, args.name)
     except RuntimeError as exc:

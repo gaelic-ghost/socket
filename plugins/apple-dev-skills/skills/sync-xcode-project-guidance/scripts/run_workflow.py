@@ -59,7 +59,7 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
             {
                 "code": "legacy-controllers-directory",
                 "path": "Sources/Controllers",
-                "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views as <ViewName>+Controller.swift.",
+                "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views with a concatenated prefixed name such as GEAWhateverViewController.swift.",
             }
         )
     return {

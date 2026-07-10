@@ -33,7 +33,7 @@ Correction:
 
 - split each SwiftUI `View` component into its own `<Name>.swift` file
 - keep that component's Xcode SwiftUI preview in the same file as the component
-- move view-local models, modifiers, and support code into explicit paired files such as `<Name>+Model.swift` and `<Name>+Modifier.swift`
+- move view-local models, modifiers, and support code into explicit paired files such as `GEAWhateverViewModel.swift` and `GEAWhateverViewModifier.swift`
 
 ## Shared SwiftUI View Models
 
@@ -45,7 +45,7 @@ Bad shape:
 Correction:
 
 - make SwiftUI view models per-view only
-- put the model for `<Name>.swift` in `<Name>+Model.swift`
+- put the view model for `GEAWhateverView.swift` in `GEAWhateverViewModel.swift`
 - split shared view-model state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer
 
 ## Wrapper-Heavy Architecture

@@ -120,8 +120,8 @@ class StructureWorkflowTests(unittest.TestCase):
 
         self.assertIn("require exactly one SwiftUI `View` component per file", skill_text)
         self.assertIn("keep that component's Xcode SwiftUI preview in the same file", skill_text)
-        self.assertIn("Do not group multiple `View` component types in one Swift file", source_rules_text)
-        self.assertIn("Require one SwiftUI `View` component per file", layout_rules_text)
+        self.assertIn("Hand SwiftUI component", source_rules_text)
+        self.assertIn("swiftui-app-architecture-workflow", layout_rules_text)
 
     def test_swiftui_view_model_structure_is_per_view_only(self) -> None:
         skill_text = (ROOT / "skills/structure-swift-sources/SKILL.md").read_text(encoding="utf-8")
@@ -132,11 +132,10 @@ class StructureWorkflowTests(unittest.TestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("require any SwiftUI view model for that component to live in `<Name>+Model.swift`", skill_text)
-        self.assertIn("SwiftUI view models are always per-view", source_rules_text)
-        self.assertIn("Do not share one SwiftUI view model", source_rules_text)
-        self.assertIn("must live in `<Name>+Model.swift`", layout_rules_text)
-        self.assertNotIn("When a view has a paired model type", layout_rules_text)
+        self.assertIn("do not use `+` filenames", skill_text)
+        self.assertIn("concatenated filename grammar", source_rules_text)
+        self.assertIn("GEASettingsSheetToggleCard.swift", layout_rules_text)
+        self.assertIn("GEAWhateverModel.swift", layout_rules_text)
 
 
 if __name__ == "__main__":
