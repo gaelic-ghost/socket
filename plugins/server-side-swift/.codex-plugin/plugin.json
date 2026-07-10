@@ -1,6 +1,6 @@
 {
   "name": "server-side-swift",
-  "version": "8.6.0",
+  "version": "8.7.0",
   "description": "Codex skills for bootstrapping, syncing, building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Hummingbird, hb, persistence, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
