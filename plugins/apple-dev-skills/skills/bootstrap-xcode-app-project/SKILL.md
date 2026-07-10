@@ -5,10 +5,6 @@ description: Bootstrap a new native Apple app project for macOS, iOS, or iPadOS 
 
 # Bootstrap Xcode App Project
 
-## SwiftData And SwiftUI Rule
-
-When a task combines SwiftData with SwiftUI, keep SwiftData directly coupled to SwiftUI through Apple's data-driven path: `modelContainer`, environment `modelContext`, `@Query`, SwiftData model objects, and bindings. Do not add repositories, stores, service layers, DTO mirrors, view-model caches, wrapper objects, or other abstraction layers between SwiftData and SwiftUI. If this skill is not the right owner for SwiftData-backed SwiftUI work, hand off to `apple-dev-skills:swiftui-app-architecture-workflow` instead of inventing an intermediate data layer.
-
 ## Purpose
 
 Create a new native Apple app repository from nothing to a usable baseline on disk. The first implementation prioritizes a deterministic `XcodeGen` path for SwiftUI app projects and a guarded planning path for the standard Xcode-created-project flow. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/bootstrap_xcode_app_project.py` is the current implementation core for XcodeGen-backed scaffold creation plus `maintain-project-repo` installation with the `xcode-app` profile.
