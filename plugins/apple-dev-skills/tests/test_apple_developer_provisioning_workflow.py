@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import os
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -54,6 +57,33 @@ class AppleDeveloperProvisioningWorkflowTests(unittest.TestCase):
         self.assertIn("./skills/apple-developer-provisioning-workflow/SKILL.md", validator)
         self.assertIn("Expected exactly 32 active skills", validator)
         self.assertIn("Milestone 54: Apple Developer Provisioning and CloudKit Workflow - Completed", roadmap)
+
+    def test_customization_cli_preserves_shared_apply_and_reset_verbs(self) -> None:
+        script = ROOT / "skills/apple-developer-provisioning-workflow/scripts/customization_config.py"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            env = dict(os.environ)
+            env["APPLE_DEV_SKILLS_CONFIG_HOME"] = tmpdir
+            env["UV_CACHE_DIR"] = str(Path(tempfile.gettempdir()) / "apple-dev-skills-uv-cache")
+            override = Path(tmpdir) / "override.yaml"
+            override.write_text(
+                "schemaVersion: 1\nisCustomized: true\nsettings:\n  preferredDiscoveryMode: rest-first\n",
+                encoding="utf-8",
+            )
+
+            apply = subprocess.run([str(script), "apply", "--input", str(override)], env=env, capture_output=True, text=True)
+            self.assertEqual(apply.returncode, 0, apply.stderr)
+            expected = Path(tmpdir) / "apple-developer-provisioning-workflow/customization.yaml"
+            self.assertEqual(Path(apply.stdout.strip()), expected)
+            self.assertTrue(expected.is_file())
+
+            effective = subprocess.run([str(script), "effective"], env=env, capture_output=True, text=True)
+            self.assertEqual(effective.returncode, 0, effective.stderr)
+            self.assertIn("preferredDiscoveryMode: rest-first", effective.stdout)
+
+            reset = subprocess.run([str(script), "reset"], env=env, capture_output=True, text=True)
+            self.assertEqual(reset.returncode, 0, reset.stderr)
+            self.assertEqual(Path(reset.stdout.strip()), expected)
+            self.assertFalse(expected.exists())
 
 
 if __name__ == "__main__":

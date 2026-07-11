@@ -48,6 +48,10 @@ def load(path: Path, *, required: bool) -> dict:
     settings = value.get("settings") or {}
     if not isinstance(settings, dict) or set(settings) - ALLOWED_SETTINGS:
         fail(f"settings in {path} must contain only {sorted(ALLOWED_SETTINGS)}")
+    if "schemaVersion" in value and value["schemaVersion"] != 1:
+        fail(f"schemaVersion in {path} must be 1")
+    if "isCustomized" in value and not isinstance(value["isCustomized"], bool):
+        fail(f"isCustomized in {path} must be boolean")
     return value
 
 
@@ -76,11 +80,30 @@ def write(config: dict) -> None:
     path.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
 
 
+def apply(override_path: Path) -> None:
+    override = load(override_path, required=True)
+    config = effective()
+    config["settings"].update(override.get("settings") or {})
+    config["isCustomized"] = True
+    write(config)
+    print(durable_path())
+
+
+def reset() -> None:
+    path = durable_path()
+    if path.exists():
+        path.unlink()
+    print(path)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Inspect or persist safe workflow preferences.")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("path")
     commands.add_parser("effective")
+    apply_command = commands.add_parser("apply")
+    apply_command.add_argument("--input", required=True, type=Path)
+    commands.add_parser("reset")
     set_command = commands.add_parser("set")
     set_command.add_argument("--discovery-mode", choices=["xcode-local", "rest-first"])
     set_command.add_argument("--cloudkit-adapter", choices=["cktool", "cktool-js"])
@@ -90,6 +113,10 @@ def main() -> None:
         print(durable_path())
     elif args.command == "effective":
         print(yaml.safe_dump(effective(), sort_keys=False), end="")
+    elif args.command == "apply":
+        apply(args.input)
+    elif args.command == "reset":
+        reset()
     else:
         config = effective()
         if args.discovery_mode:
