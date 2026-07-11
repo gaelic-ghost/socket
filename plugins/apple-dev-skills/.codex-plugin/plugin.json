@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "8.7.0",
-  "description": "Apple development workflows for Codex, including SwiftData, SwiftUI architecture, media and audio repair, XcodeGen migration, Xcode coding intelligence, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck/App Attest, Swift OpenAPI clients, and DocC.",
+  "description": "Apple development workflows for Codex, including Apple Developer provisioning and CloudKit automation planning, SwiftData, SwiftUI architecture, media and audio repair, XcodeGen migration, Xcode coding intelligence, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck/App Attest, Swift OpenAPI clients, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -39,6 +39,10 @@
     "app-attest",
     "attestation",
     "fraud-risk",
+    "provisioning",
+    "app-store-connect",
+    "cloudkit",
+    "cktool",
     "openapi",
     "urlsession",
     "ios",
@@ -69,6 +73,7 @@
       "Help me design and preview an Apple app icon using Icon Composer, local Mac artwork tools, ictool exports, and careful Computer Use guidance for the GUI.",
       "Choose the right Safari extension, Safari Web Inspector, SafariServices, messaging, content blocker, or automation fallback path for this Mac app.",
       "Design a DeviceCheck or App Attest flow for this Apple app, keeping DCDevice, DCAppAttestService, server challenges, entitlements, rollout, and backend validation handoffs explicit.",
+      "Plan safe Apple Developer provisioning or CloudKit automation using official App Store Connect REST APIs, Xcode-aware discovery, cktool, or CKTool JS; keep credentials local, show a dry run first, and route portal-only configuration to the Apple Developer Portal.",
       "Add or diagnose a generated Swift OpenAPI client in this Apple app using OpenAPIURLSession and current Apple docs.",
       "Help me build, test, or debug this Swift or Xcode project using the repo's Apple workflows.",
       "Design, migrate, test, or integrate SwiftData persistence using the dedicated SwiftData workflow and current Apple documentation.",

@@ -30,6 +30,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 50: Swift Lang Handoff And Compatibility](#milestone-50-swift-lang-handoff-and-compatibility)
 - [Milestone 52: Apple Design Animation And Symbols Workflow Skills](#milestone-52-apple-design-animation-and-symbols-workflow-skills)
 - [Milestone 53: DeviceCheck and App Attest Workflow](#milestone-53-devicecheck-and-app-attest-workflow)
+- [Milestone 54: Apple Developer Provisioning and CloudKit Workflow](#milestone-54-apple-developer-provisioning-and-cloudkit-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -71,6 +72,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 50: Swift Lang Handoff And Compatibility - In Progress
 - Milestone 52: Apple Design Animation And Symbols Workflow Skills - In Progress
 - Milestone 53: DeviceCheck and App Attest Workflow - Completed
+- Milestone 54: Apple Developer Provisioning and CloudKit Workflow - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -765,6 +767,27 @@ Completed
 - [x] The workflow keeps server verification and API-contract implementation as explicit handoffs instead of hiding backend work inside Apple app guidance.
 
 Completed Milestone 53 by adding `devicecheck-app-attest-workflow`, focused references for DeviceCheck state, App Attest client flow, server validation, and App ID/entitlement validation, plus plugin metadata, README inventory, shared snippet coverage, customization contract files, and targeted tests for routing, docs gates, and handoffs.
+
+## Milestone 54: Apple Developer Provisioning and CloudKit Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a docs-first workflow for the official App Store Connect REST provisioning surface, Xcode-aware discovery, `cktool`, and CKTool JS.
+- [x] Make team-key requirements, individual-key limits, Keychain/local-secret handling, short-lived JWTs, dry runs, and explicit mutation confirmation mandatory.
+- [x] Keep App Groups, CloudKit container registration/assignment, Service IDs, and other undocumented configuration visibly portal-only.
+- [x] Record the future interactive Apple Developer Portal Driver separately from the shipped official-API workflow.
+
+### Exit Criteria
+
+- [x] Apple Dev Skills ships `apple-developer-provisioning-workflow` with official and portal-only paths clearly separated.
+- [x] The skill documents CloudKit management-token setup and safe `cktool` / CKTool JS boundaries without committing secrets.
+- [x] Plugin metadata, README inventory, validator, and focused tests agree on the added skill.
+
+Completed Milestone 54 by shipping `apple-developer-provisioning-workflow` with plan-first App Store Connect provisioning, local Xcode discovery handoffs, Keychain-backed CloudKit guidance, account/key prerequisites, and explicit portal-only fallbacks.
 
 ## Backlog Candidates
 

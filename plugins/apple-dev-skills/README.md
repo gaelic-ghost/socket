@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple, Swift, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -73,6 +73,7 @@ Use Apple Dev Skills when an agent is helping with:
 - Icon Composer app icon design, preview, and Xcode handoff
 - Safari extension and SafariServices integration choices
 - DeviceCheck per-device state and App Attest app-integrity flow planning
+- Safe official App Store Connect provisioning and CloudKit automation planning, with explicit Apple Developer Portal fallbacks
 - Swift OpenAPI client generation and `URLSession` transport integration
 - Swift package bootstrap, build, and testing
 - Apple UI accessibility work
@@ -140,6 +141,7 @@ uv run pytest
 - `core-animation-layer-workflow`
 - `coremedia-timing-samplebuffer-workflow`
 - `devicecheck-app-attest-workflow`
+- `apple-developer-provisioning-workflow`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Developer Provisioning Workflow"
+  short_description: "Plan safe Apple provisioning and CloudKit work"
+  default_prompt: "Use $apple-developer-provisioning-workflow to inspect or plan Apple Developer provisioning or CloudKit work. Start with current Apple docs and read-only discovery, keep App Store Connect team API keys and CloudKit management tokens local, distinguish official REST or cktool/CKTool JS operations from portal-only work, and require an explicit confirmation before mutations. Hand off project edits to $xcode-build-run-workflow and Xcode bridge setup to $xcode-coding-intelligence-workflow."
