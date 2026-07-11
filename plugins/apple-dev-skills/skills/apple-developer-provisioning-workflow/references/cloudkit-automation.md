@@ -2,7 +2,7 @@
 
 ## Existing Container Boundary
 
-`cktool` and CKTool JS automate schema and data workflows for an existing CloudKit container. They do not make Apple Developer Portal registration or app-ID assignment automatable. Confirm the team ID, container ID, development/sandbox or production environment, and intended schema/data operation before invoking either official surface.
+`cktool` and CKTool JS automate schema and data workflows for an existing CloudKit container. They do not make Apple Developer Portal registration or app-ID assignment automatable. Confirm the team ID, container ID, development (Sandbox) or production environment, and intended schema/data operation before invoking either official surface.
 
 ## cktool
 

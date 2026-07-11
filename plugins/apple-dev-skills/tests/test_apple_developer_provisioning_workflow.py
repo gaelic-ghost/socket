@@ -26,10 +26,12 @@ class AppleDeveloperProvisioningWorkflowTests(unittest.TestCase):
         provisioning = self.read("skills/apple-developer-provisioning-workflow/references/app-store-connect-provisioning.md")
 
         self.assertIn("individual API keys cannot use provisioning endpoints", skill)
+        self.assertIn("Enterprise Program accounts use Apple’s separate Enterprise Program API", skill)
         self.assertIn("short-lived JWT", skill)
         self.assertIn("requires an explicit confirmation immediately before every", skill)
         self.assertIn("never place them in the repo", skill)
         self.assertIn("team API key", provisioning)
+        self.assertIn("team API keys are unavailable in that program", provisioning)
 
     def test_cloudkit_paths_remain_local_and_token_safe(self) -> None:
         skill = self.read("skills/apple-developer-provisioning-workflow/SKILL.md")

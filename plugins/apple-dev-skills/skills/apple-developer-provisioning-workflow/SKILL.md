@@ -24,15 +24,15 @@ The workflow never commits a `.p8` key, CloudKit token, JWT, profile payload, or
 ## Single-Path Workflow
 
 1. Establish the account and credential boundary:
-   - confirm an active Apple Developer Program or Enterprise Program membership and the selected team;
-   - for provisioning endpoints, require a **team** App Store Connect API key with the least sufficient role; individual API keys cannot use provisioning endpoints;
+   - confirm the selected team’s program type before choosing an API: this workflow’s App Store Connect path requires Apple Developer Program access; Apple Developer Enterprise Program accounts use Apple’s separate Enterprise Program API and must not be treated as App Store Connect team-key users;
+   - for App Store Connect provisioning endpoints, require a **team** API key with the least sufficient role; individual API keys cannot use provisioning endpoints. The Account Holder must request API access, and an Account Holder or Admin generates the team key;
    - retain the issuer ID, key ID, and downloaded `.p8` private key only in local secret storage such as Keychain or an approved local secret manager; never place them in the repo, project settings, CI logs, shell history, or agent transcript;
    - create a short-lived JWT locally for one invocation and avoid writing it to disk;
    - for CloudKit, separately obtain a CloudKit management token from CloudKit Console and save it through `xcrun cktool save-token --type management` so macOS Keychain owns it.
 2. Discover before mutating:
    - inspect the project’s bundle identifiers, entitlements, signing configuration, and existing profiles through Xcode-local tools or `xcrun mcpbridge` when Xcode is open;
    - list the matching App Store Connect bundle IDs, capabilities, certificates, devices, and profiles with read-only REST requests;
-   - export the current CloudKit schema and identify the team ID, container ID, and sandbox versus production environment before selecting `cktool` or CKTool JS;
+   - export the current CloudKit schema and identify the team ID, container ID, and development (Sandbox) versus production environment before selecting `cktool` or CKTool JS;
    - return a plan with exact proposed requests, affected IDs, expected profile relationships, and portal-only steps.
 3. Classify each requested operation:
    - official REST: registered bundle IDs, supported bundle-ID capabilities, certificates, devices, provisioning profiles, and their documented relationships;
@@ -91,7 +91,7 @@ The workflow never commits a `.p8` key, CloudKit token, JWT, profile payload, or
 - Do not create an App Store app record or upload a build through this provisioning workflow; those remain website/Xcode/Transporter operations as Apple documents.
 - Do not reset a CloudKit schema, apply a production schema, delete a certificate/profile/device, revoke a key, or alter test data without an operation-specific confirmation after the plan is shown.
 - Do not make Xcode project or entitlement edits without routing through `xcode-build-run-workflow`.
-- Stop with `blocked` when the chosen team lacks an eligible team API key, required role, CloudKit management token, a confirmed target/container/environment, or fresh mutation confirmation.
+- Stop with `blocked` when an Enterprise Program account needs its separate API, or the chosen App Store Connect team lacks an eligible team API key, required role, CloudKit management token, a confirmed target/container/environment, or fresh mutation confirmation.
 
 ## Fallbacks and Handoffs
 
