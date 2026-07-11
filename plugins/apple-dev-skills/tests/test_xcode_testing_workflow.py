@@ -145,8 +145,10 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
             self.assertIn("normal Xcode and XCTest parallel execution", text)
             self.assertIn("over 500 million parameters", text)
             self.assertIn("sequentially, one at a time", text)
-            self.assertIn("unload_models", text)
-            self.assertIn("reload_models", text)
+        self.assertIn("unload_models", reference_text)
+        self.assertIn("reload_models", reference_text)
+        self.assertNotIn("unload_models", snippet_text)
+        self.assertNotIn("reload_models", snippet_text)
 
 
 if __name__ == "__main__":
