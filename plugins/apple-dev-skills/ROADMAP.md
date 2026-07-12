@@ -789,6 +789,26 @@ Completed
 
 Completed Milestone 54 by shipping `apple-developer-provisioning-workflow` with plan-first App Store Connect provisioning, local Xcode discovery handoffs, Keychain-backed CloudKit guidance, account/key prerequisites, and explicit portal-only fallbacks.
 
+## Milestone 55: TipKit Workflow - Completed
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a docs-first TipKit workflow for SwiftUI, UIKit, and AppKit.
+- [x] Cover one-time configuration, inline tips, tooltip popovers, actions, styling, eligibility, events, donations, invalidation, persistence, testing controls, and diagnosis.
+- [x] Keep TipKit implementation direct instead of introducing a custom tooltip manager or mirrored state layer.
+
+### Exit Criteria
+
+- [x] Apple Dev Skills ships `tipkit-workflow` as the explicit owner for TipKit implementation and troubleshooting guidance.
+- [x] Xcode documentation is the primary behavioral source, with Dash checked as the configured secondary local source.
+- [x] Plugin metadata, README inventory, validator, roadmap, and focused tests agree on the added skill.
+
+Completed Milestone 55 by shipping `tipkit-workflow` with focused presentation and lifecycle references, SwiftUI/UIKit/AppKit routing, deterministic test guidance, plugin metadata, inventory validation, and targeted tests.
+
 ## Backlog Candidates
 
 - [ ] Record plausible future work that is not yet committed to a milestone.

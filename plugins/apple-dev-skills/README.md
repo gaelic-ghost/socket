@@ -150,6 +150,7 @@ uv run pytest
 - `sf-symbols-workflow`
 - `structure-swift-sources`
 - `swiftdata-workflow`
+- `tipkit-workflow`
 - `swift-openapi-client-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`
