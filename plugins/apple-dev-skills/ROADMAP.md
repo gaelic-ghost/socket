@@ -31,6 +31,14 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 52: Apple Design Animation And Symbols Workflow Skills](#milestone-52-apple-design-animation-and-symbols-workflow-skills)
 - [Milestone 53: DeviceCheck and App Attest Workflow](#milestone-53-devicecheck-and-app-attest-workflow)
 - [Milestone 54: Apple Developer Provisioning and CloudKit Workflow](#milestone-54-apple-developer-provisioning-and-cloudkit-workflow)
+- [Milestone 55: TipKit Workflow](#milestone-55-tipkit-workflow)
+- [Milestone 56: Apple Imaging Foundations](#milestone-56-apple-imaging-foundations)
+- [Milestone 57: Vision and Image Recognition](#milestone-57-vision-and-image-recognition)
+- [Milestone 58: Camera, Depth, and Computational Capture](#milestone-58-camera-depth-and-computational-capture)
+- [Milestone 59: ARKit Spatial, Face, and Body Sensing](#milestone-59-arkit-spatial-face-and-body-sensing)
+- [Milestone 60: Video Codecs and Pixel Processing](#milestone-60-video-codecs-and-pixel-processing)
+- [Milestone 61: Photos Library and Media Selection](#milestone-61-photos-library-and-media-selection)
+- [Milestone 62: Media Expansion Audit and Socket Major Release](#milestone-62-media-expansion-audit-and-socket-major-release)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -80,6 +88,14 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 52: Apple Design Animation And Symbols Workflow Skills - In Progress
 - Milestone 53: DeviceCheck and App Attest Workflow - Completed
 - Milestone 54: Apple Developer Provisioning and CloudKit Workflow - Completed
+- Milestone 55: TipKit Workflow - Completed
+- Milestone 56: Apple Imaging Foundations - Planned
+- Milestone 57: Vision and Image Recognition - Planned
+- Milestone 58: Camera, Depth, and Computational Capture - Planned
+- Milestone 59: ARKit Spatial, Face, and Body Sensing - Planned
+- Milestone 60: Video Codecs and Pixel Processing - Planned
+- Milestone 61: Photos Library and Media Selection - Planned
+- Milestone 62: Media Expansion Audit and Socket Major Release - Planned
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -796,7 +812,7 @@ Completed
 
 Completed Milestone 54 by shipping `apple-developer-provisioning-workflow` with plan-first App Store Connect provisioning, local Xcode discovery handoffs, Keychain-backed CloudKit guidance, account/key prerequisites, and explicit portal-only fallbacks.
 
-## Milestone 55: TipKit Workflow - Completed
+## Milestone 55: TipKit Workflow
 
 ### Status
 
@@ -815,6 +831,320 @@ Completed
 - [x] Plugin metadata, README inventory, validator, roadmap, and focused tests agree on the added skill.
 
 Completed Milestone 55 by shipping `tipkit-workflow` with focused presentation and lifecycle references, SwiftUI/UIKit/AppKit routing, deterministic test guidance, plugin metadata, inventory validation, and targeted tests.
+
+## Milestone 56: Apple Imaging Foundations
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add focused image-processing and image-representation workflows without expanding AVFoundation, AppKit architecture, or Core Animation into catch-all image skills.
+- [ ] Ship `core-image-processing-workflow` as the owner for `CIImage`, `CIContext`, built-in filters, RAW processing, custom kernels, color management, lazy evaluation, render destinations, and Core Image performance diagnostics.
+- [ ] Ship `apple-image-representation-workflow` as the owner for Image I/O, Core Graphics image values, AppKit and UIKit image representations, image metadata, incremental decoding, thumbnails, animation frames, and encoding.
+- [ ] Add a shared Apple image-type ownership contract that preserves framework types and makes orientation, scale, color-space, metadata, alpha, dynamic-range, and auxiliary-image loss explicit at every conversion boundary.
+- [ ] Keep image transformation separate from image interpretation: Core Image changes or renders pixels, while Vision analyzes their contents in Milestone 57.
+
+### Framework Ownership
+
+- [ ] Core Image owns lazy processing graphs, filters, contexts, RAW development, custom kernels, and rendering into `CGImage`, `CVPixelBuffer`, `IOSurface`, or Metal-backed destinations.
+- [ ] Image I/O owns `CGImageSource`, `CGImageDestination`, format detection, incremental loading, thumbnail generation, multi-frame formats, metadata, properties, and auxiliary image data.
+- [ ] Core Graphics owns concrete raster images, drawing, color spaces, bitmap contexts, masks, and low-level image geometry.
+- [ ] AppKit owns `NSImage`, `NSImageRep`, `NSBitmapImageRep`, macOS drawing behavior, resolution-independent representations, and display-oriented image selection.
+- [ ] UIKit owns `UIImage` display conventions on iOS-family platforms; it does not replace Image I/O for controlled decode, encode, or metadata work.
+- [ ] Metal remains a handoff for custom GPU pipelines that exceed Core Image's documented filter and processor boundaries.
+
+### Required Guidance
+
+- [ ] Explain that `CIImage` describes a lazily evaluated image recipe and does not become rendered pixel output until a context renders it.
+- [ ] Prefer reusing deliberately scoped `CIContext` instances; document context expense, caches, command-queue ownership, and the mutable-thread-safety boundary of filters.
+- [ ] Cover image extent, region of interest, tiling, cropping, premultiplication, alpha handling, working/output color spaces, HDR and extended-range data, and render format selection.
+- [ ] Cover downsampling at decode time, incremental sources, orientation metadata, image properties, animated or multi-frame sources, thumbnails, and destination finalization.
+- [ ] Explain `NSImage` representation selection and prevent accidental assumptions that one `NSImage` always contains one fixed bitmap at one scale.
+- [ ] Keep AppKit drawing helpers, Image I/O decoding, Core Image processing, and Core Graphics rendering as explicit cooperating boundaries instead of wrapping them in a generic image manager.
+
+### Documentation Anchors
+
+- [ ] Refresh Xcode documentation for Core Image essentials, `CIImage`, `CIContext`, `CIFilter`, `CIRAWFilter`, custom kernels, render destinations, and color management during implementation.
+- [ ] Refresh Xcode documentation for Image I/O sources, destinations, incremental loading, properties, thumbnails, auxiliary data, and supported image formats during implementation.
+- [ ] Refresh Xcode documentation for `CGImage`, `CGColorSpace`, bitmap contexts, `NSImage`, `NSImageRep`, `NSBitmapImageRep`, `UIImage`, and platform-specific drawing behavior during implementation.
+- [ ] Use Dash only as the configured secondary local source when Xcode documentation is incomplete or when cross-symbol browsing is materially better there.
+
+### Implementation and Review Gate
+
+- [ ] Add both skill directories, `SKILL.md` files, focused references, OpenAI interface metadata, customization contracts, and shared type-ownership guidance.
+- [ ] Review routing and handoffs against AVFoundation, Core Media, AppKit architecture, Core Animation, Xcode execution, and future Vision ownership.
+- [ ] Update the Apple Dev README, plugin metadata, active inventory validation, tests, and this roadmap before considering the milestone complete.
+- [ ] Run the docs validator, targeted tests, full Apple Dev test suite, and root Socket metadata validation serially.
+- [ ] Inspect the complete milestone diff for unsupported API claims, duplicated ownership, vague error guidance, and stale documentation before beginning Milestone 57.
+
+### Exit Criteria
+
+- [ ] Apple Dev Skills provides a direct, docs-first path for image processing, decoding, encoding, metadata, representation, conversion, and macOS image tooling.
+- [ ] Image conversions preserve Apple types until an explicit boundary and identify every material loss of orientation, scale, metadata, color, dynamic range, or auxiliary data.
+- [ ] The new skills compose with the existing media workflows without making AVFoundation or AppKit architecture the owner of unrelated image work.
+
+## Milestone 57: Vision and Image Recognition
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Ship `vision-image-analysis-workflow` for Apple-provided image and video analysis requests, observations, request execution, tracking, segmentation, pose detection, feature prints, and coordinate conversion.
+- [ ] Ship `vision-coreml-recognition-workflow` for custom Core ML-backed classification, object detection, semantic segmentation, model input policy, compute selection, preprocessing, postprocessing, and regression evidence.
+- [ ] Keep Vision's image-analysis lifecycle separate from Core ML's model-execution lifecycle while documenting their intended integration through Vision Core ML requests.
+- [ ] Treat confidence values as model outputs rather than proof of identity, correctness, safety, or authorization.
+
+### Framework Ownership
+
+- [ ] Vision owns image-oriented requests, handlers, observations, tracking, normalized coordinate systems, revisions, crop-and-scale policy, and Core ML image-model integration.
+- [ ] Core ML owns model loading, typed model inputs and outputs, compute-unit selection, prediction execution, model configuration, and model metadata.
+- [ ] Natural-language, sound, and tabular model tasks remain outside this image-focused milestone unless they are required to explain a clear handoff.
+- [ ] Core Image owns pixel preprocessing or presentation effects; it must not become a second recognition framework.
+- [ ] AVFoundation owns live capture and sample delivery; the Vision skills own analysis after a frame reaches the analysis boundary.
+
+### Required Guidance
+
+- [ ] Cover text, barcode, face rectangle and landmark, rectangle, horizon, contour, saliency, trajectory, animal, body, and hand-pose requests where current platform documentation supports them.
+- [ ] Cover person and foreground segmentation, object tracking, feature prints, image similarity, request revisions, request cancellation, sequence handlers, and frame-dropping policy for live streams.
+- [ ] Explain image orientation, normalized Vision coordinates, lower-left versus upper-left origins, crop-and-scale behavior, preview-layer transforms, and bounding-box conversion back to source or display coordinates.
+- [ ] Cover `VNCoreMLModel` or its current documented successor surface, classification versus object detection, semantic segmentation, labels, confidence thresholds, nonmaximum suppression boundaries, and model-specific postprocessing.
+- [ ] Require pinned model provenance, repeatable fixtures, representative-device profiling, and a small regression or evaluation sanity check when model or request logic changes.
+- [ ] Keep face detection, face landmarks, and face tracking distinct from biometric identity and from Face ID authentication.
+
+### Documentation Anchors
+
+- [ ] Refresh Xcode documentation for current Vision Swift and Objective-C request surfaces, request handlers, sequence analysis, observations, coordinate conversion, request revisions, and compute-stage behavior.
+- [ ] Refresh Xcode documentation for Core ML model integration, model configuration, compute units, image constraints, classification, object detection, and semantic segmentation.
+- [ ] Use current sample code where Xcode documentation exposes important lifecycle, concurrency, or coordinate behavior not apparent from symbol reference alone.
+
+### Implementation and Review Gate
+
+- [ ] Add both skill directories, focused references, interface metadata, customization contracts, routing, and explicit camera/Core Image/Core ML handoffs.
+- [ ] Add tests for coordinate-system guidance, confidence semantics, model provenance, live-frame back-pressure, simulator/device claims, and Face ID boundary wording.
+- [ ] Update README, plugin metadata, active inventory, roadmap status, and cross-skill handoffs before completing the milestone.
+- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [ ] Review the milestone as a complete recognition surface before beginning camera and depth work.
+
+### Exit Criteria
+
+- [ ] Apple Dev Skills can route built-in visual analysis and custom model-backed recognition without conflating Vision, Core ML, Core Image, AVFoundation, or biometric authentication.
+- [ ] Coordinate conversion, orientation, frame lifecycle, model confidence, evaluation evidence, and device-performance boundaries are explicit and test-covered.
+
+## Milestone 58: Camera, Depth, and Computational Capture
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Ship `camera-capture-depth-workflow` as the specialist owner for Apple camera discovery, camera configuration, photo and video capture controls, depth delivery, calibration, synchronized outputs, and computational capture features.
+- [ ] Keep `avfoundation-media-pipeline-workflow` as the general owner for capture-session topology, asset pipelines, playback, readers, writers, exports, back-pressure, and lifecycle handoffs.
+- [ ] Strengthen the existing AVFoundation workflow where necessary so ordinary capture remains there and only camera-sensor or depth-specialist requests route into the new skill.
+- [ ] Require capability discovery at runtime rather than assumptions based on product names or camera-count heuristics.
+
+### Required Guidance
+
+- [ ] Cover built-in and virtual capture devices, discovery sessions, device formats, frame rates, multi-camera constraints, session presets, connections, rotation coordination, orientation, and mirroring.
+- [ ] Cover focus, exposure, white balance, zoom, torch, stabilization, low-light behavior, constituent-device switching, and configuration locking with descriptive failure diagnostics.
+- [ ] Cover processed and RAW photo capture, Live Photos, bracketed capture where supported, photo quality prioritization, responsive capture, and deferred photo delivery where supported.
+- [ ] Cover depth and disparity data, `AVDepthData`, `AVCaptureDepthDataOutput`, camera calibration data, intrinsic matrices, filtering, accuracy, quality, and alignment to color imagery.
+- [ ] Cover synchronized video, depth, audio, metadata, and data-output delivery through documented AVFoundation synchronizers and queue boundaries.
+- [ ] Cover portrait-effects mattes, semantic segmentation mattes, spatial photo or video capture, cinematic capture, and other computational features only where current documentation and capability checks support them.
+- [ ] Cover authorization, `Info.plist` purpose strings, interruptions, runtime errors, media-services reset, thermal pressure, bandwidth pressure, dropped data, cancellation, and teardown.
+- [ ] Require physical-device evidence before claiming camera topology, depth quality, calibration, LiDAR, TrueDepth, multi-camera, HDR, or computational capture behavior is verified.
+
+### Documentation Anchors
+
+- [ ] Refresh Xcode documentation for capture setup, device discovery, formats, photo output, video data output, depth data output, output synchronization, calibration, portrait-effects mattes, semantic mattes, rotation, and capture-device controls.
+- [ ] Check current platform and hardware availability for every specialized capture feature while authoring its guidance.
+- [ ] Use Dash as a secondary local source when Xcode search does not expose a complete relationship among capture symbols.
+
+### Implementation and Review Gate
+
+- [ ] Add the specialist skill, references, metadata, customization contract, tests, and shared camera-capability guidance.
+- [ ] Review and update `avfoundation-media-pipeline-workflow`, `avfaudio-session-workflow`, Core Media timing, Vision analysis, and Xcode device-execution handoffs in the same milestone.
+- [ ] Update README, plugin metadata, active inventory, roadmap status, validation expectations, and operator-facing error requirements.
+- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [ ] Perform a capture-boundary review before starting ARKit work so AVFoundation and ARKit do not duplicate ownership.
+
+### Exit Criteria
+
+- [ ] Camera, photo, video, depth, calibration, synchronized output, and computational capture requests route to one clear specialist workflow.
+- [ ] The workflow distinguishes documented capability, simulator limitations, and physically verified device behavior.
+- [ ] General AVFoundation pipeline guidance remains coherent and does not become a competing camera-depth implementation path.
+
+## Milestone 59: ARKit Spatial, Face, and Body Sensing
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Ship `arkit-spatial-sensing-workflow` for world tracking, anchors, planes, ray casting, scene depth, LiDAR reconstruction, meshes, environment understanding, world-map persistence, and spatial diagnostics.
+- [ ] Ship `arkit-face-body-tracking-workflow` for TrueDepth face tracking, face geometry, blend shapes, eye transforms, body tracking, skeleton data, and their rendering or analysis handoffs.
+- [ ] Keep Local Authentication as the owner of Face ID and Touch ID authentication; do not imply that apps can access enrolled biometric templates, reusable Face ID identity data, or the system's authentication model.
+- [ ] Keep ARKit tracking separate from Vision analysis and from AVFoundation sensor capture while documenting when a task crosses those boundaries.
+
+### Required Guidance
+
+- [ ] Cover AR session lifecycle, configuration support checks, tracking state, world alignment, anchors, planes, feature points, ray casting, environment texturing, relocalization, interruption, and reset choices.
+- [ ] Cover scene depth, smoothed scene depth, scene reconstruction, mesh anchors, mesh classification, occlusion, hit testing, spatial measurements, and LiDAR capability checks.
+- [ ] Cover world maps and persistence, reference images and objects, object scanning handoffs, geographic or location anchors where supported, and environment probes.
+- [ ] Cover front-camera TrueDepth requirements, face anchors, geometry, topology, transforms, eye transforms, blend shapes, face-driven animation, and world-plus-face tracking where supported.
+- [ ] Cover body tracking, skeleton definitions, joint transforms, scale estimation, and platform/device limitations.
+- [ ] Route room-scale scanning to RoomPlan, presentation and interaction to RealityKit or SceneKit as appropriate, and advanced rendering to Metal without absorbing those frameworks into generic ARKit wrappers.
+- [ ] Address privacy, stored spatial maps, face data, bystander data, data minimization, user notice, and lifecycle deletion as part of implementation guidance.
+- [ ] Distinguish iOS/iPadOS ARKit behavior from visionOS ARKit authorization, provider, and data-access models where current documentation differs.
+
+### Documentation Anchors
+
+- [ ] Refresh Xcode documentation for AR world tracking, scene depth, scene reconstruction, mesh anchors, ray casting, environment understanding, face tracking, body tracking, and ARKit in visionOS.
+- [ ] Refresh Xcode documentation for Local Authentication before writing any Face ID boundary or authentication handoff.
+- [ ] Check current RoomPlan, RealityKit, and SceneKit documentation only where their handoff behavior affects the ARKit workflow contract.
+
+### Implementation and Review Gate
+
+- [ ] Add both skills, references, metadata, customization contracts, privacy guidance, device-capability rules, and handoffs.
+- [ ] Add tests that reject Face ID/TrueDepth conflation, unsupported simulator claims, generic spatial-manager abstractions, and unqualified device assumptions.
+- [ ] Update README, plugin metadata, active inventory, roadmap status, and handoffs from camera, Vision, accessibility, and Xcode execution workflows.
+- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [ ] Review the complete spatial surface for privacy, framework ownership, platform divergence, and physical-device evidence before beginning codec work.
+
+### Exit Criteria
+
+- [ ] Apple Dev Skills provides distinct, composable guidance for spatial sensing and face/body tracking.
+- [ ] Face ID authentication, TrueDepth face tracking, Vision face analysis, and ordinary camera capture are explicitly different workflows.
+- [ ] LiDAR, depth, reconstruction, world mapping, environment understanding, and platform-specific ARKit behavior are capability-gated and docs-backed.
+
+## Milestone 60: Video Codecs and Pixel Processing
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Ship `video-codec-processing-workflow` as the specialist owner for VideoToolbox compression, decompression, codec-session configuration, hardware capability, pixel-buffer pools, compressed sample output, and low-level video diagnostics.
+- [ ] Keep AVFoundation readers, writers, export sessions, and general transcode pipelines with the existing AVFoundation workflow; use VideoToolbox only when the concrete codec, latency, hardware, or per-frame control requirement justifies it.
+- [ ] Keep Core Media as the owner of sample timing and format descriptions, and Core Video as the owner of pixel-buffer storage, pools, attachments, and buffer interoperability.
+
+### Required Guidance
+
+- [ ] Cover compression and decompression session creation, property configuration, supported-property discovery, encode/decode callbacks, frame submission, delayed frames, completion, flush, invalidation, and teardown.
+- [ ] Cover real-time versus offline policy, bitrate, data-rate limits, keyframes, frame reordering, latency, entropy mode where applicable, multipass boundaries, and encoder availability.
+- [ ] Cover codec format descriptions, parameter sets, compressed `CMSampleBuffer` output, timestamps, dependencies, dropped frames, and handoffs into readers, writers, displays, or networks.
+- [ ] Cover `CVPixelBuffer`, pixel-buffer pools, pixel formats, IOSurface compatibility, row bytes, locking, attachments, Metal texture caches, and zero-copy boundaries without inventing raw-buffer wrappers.
+- [ ] Cover color primaries, transfer functions, YCbCr matrices, clean aperture, pixel aspect ratio, HDR metadata, alpha, and other format attachments that must survive the pipeline.
+- [ ] Require capability probing and runtime evidence before claiming hardware acceleration, a specific codec profile, low latency, HDR, alpha, or device throughput.
+- [ ] Require profiling under representative load and descriptive `OSStatus` diagnostics for low-level failures.
+
+### Documentation Anchors
+
+- [ ] Refresh Xcode documentation for VideoToolbox compression/decompression sessions, properties, encoder lists, supported-property dictionaries, hardware requirements, multipass encoding, and image-transfer behavior.
+- [ ] Refresh Xcode documentation for Core Video pixel buffers, pools, attachments, Metal texture caches, and IOSurface interoperability.
+- [ ] Refresh Core Media documentation for codec format descriptions and compressed sample buffers where the codec workflow crosses timing or sample ownership.
+
+### Implementation and Review Gate
+
+- [ ] Add the specialist skill, references, metadata, customization contract, codec/type ownership rules, and tests.
+- [ ] Review and update AVFoundation transcode, Core Media timing, Core Image rendering, Metal handoff, and Xcode profiling routes.
+- [ ] Update README, plugin metadata, active inventory, roadmap status, and validation contracts before milestone completion.
+- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [ ] Audit the milestone for unnecessary low-level API recommendations and ensure AVFoundation remains the preferred simpler path where it expresses the real requirement.
+
+### Exit Criteria
+
+- [ ] The plugin can guide low-level encode/decode and pixel-buffer work without duplicating AVFoundation or Core Media ownership.
+- [ ] Codec, color, timing, memory, hardware, and error-diagnostic requirements remain inspectable from input through output.
+
+## Milestone 61: Photos Library and Media Selection
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Ship `photos-library-editing-workflow` for PhotoKit authorization, fetches, collections, assets, resource requests, change observation, creation, transactional changes, and nondestructive editing.
+- [ ] Cover system media selection through PhotosUI as a privacy-preserving alternative to broad library access when the app only needs user-selected images or videos.
+- [ ] Keep image decoding and processing with Milestone 56, video pipelines with AVFoundation, and Photos library ownership with PhotoKit.
+
+### Required Guidance
+
+- [ ] Cover read/write, add-only, limited-library, denied, restricted, and not-determined authorization states plus correct purpose-string and user-explanation behavior.
+- [ ] Cover `PhotosPicker` or current PhotosUI picker APIs, transferable loading, selection limits, filters, ordering, cancellation, iCloud-backed transfer, and the boundary where no full-library permission is required.
+- [ ] Cover `PHAsset`, collections, fetch options, fetch results, incremental changes, `PHPhotoLibraryChangeObserver`, caching image management, request identifiers, cancellation, degraded results, and network access.
+- [ ] Cover asset resources, original versus adjusted content, Live Photos, paired video, RAW-plus-JPEG resources, metadata implications, and export boundaries.
+- [ ] Cover creation and change requests, perform-changes transactions, placeholders, albums, save errors, content-editing input/output, adjustment data, and nondestructive editing compatibility.
+- [ ] Avoid mirroring the entire Photos library into app state or inventing a repository layer when fetch results, identifiers, change observation, and picker bindings express the actual requirement.
+- [ ] Require user-visible privacy behavior and runtime evidence for limited-library, iCloud, network, edited-resource, and save paths.
+
+### Documentation Anchors
+
+- [ ] Refresh Xcode documentation for Photos authorization, limited library, fetching, asset resources, image requests, change observation, creation, transactions, and content editing.
+- [ ] Refresh Xcode documentation for PhotosUI pickers and current SwiftUI transfer/loading integration.
+- [ ] Check current macOS, iOS, iPadOS, and visionOS availability before making cross-platform claims.
+
+### Implementation and Review Gate
+
+- [ ] Add the skill, focused references, metadata, customization contract, privacy rules, picker/library routing, and tests.
+- [ ] Review handoffs to image representation, Core Image, AVFoundation, SwiftUI architecture, AppKit architecture, and Xcode privacy configuration.
+- [ ] Update README, plugin metadata, active inventory, roadmap status, and docs before milestone completion.
+- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [ ] Review the entire media expansion after this milestone and record any cross-skill inconsistency before entering the final audit.
+
+### Exit Criteria
+
+- [ ] Apple Dev Skills clearly distinguishes privacy-preserving media selection from PhotoKit library access and editing.
+- [ ] Authorization, iCloud delivery, cancellation, resource identity, transactional saves, and nondestructive editing are explicit and docs-backed.
+
+## Milestone 62: Media Expansion Audit and Socket Major Release
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Audit the complete Apple media family: existing AVFAudio, AVAudioEngine, AVFoundation, Core Media, and Core Audio skills plus all skills added in Milestones 56 through 61.
+- [ ] Verify every skill has one defined owner, one main entry path, explicit handoffs, current Apple documentation anchors, descriptive diagnostics, physical-device evidence boundaries, and no duplicate compatibility path.
+- [ ] Align the Apple Dev README, plugin manifest, marketplace metadata, root Socket docs, root roadmap, active inventory validation, tests, and release notes with the final shipped surface.
+- [ ] Treat this as a major Socket release because the plugin's supported workflow surface and public capability inventory expand substantially, while still documenting whether any individual skill contract is breaking.
+
+### Final Audit
+
+- [ ] Re-run Xcode documentation searches for every framework family and refresh any claims that changed during implementation.
+- [ ] Use Dash as the secondary local documentation source for gaps or cross-symbol verification; record any area where current authoritative documentation remains insufficient.
+- [ ] Audit naming and terminology across `SKILL.md`, references, `agents/openai.yaml`, README, plugin metadata, tests, and roadmap.
+- [ ] Audit framework and type ownership across images, sample buffers, pixel buffers, camera outputs, Vision observations, Core ML models, spatial data, Photos assets, and encoded samples.
+- [ ] Audit privacy and permission guidance for camera, microphone, Photos, Local Authentication, TrueDepth face data, spatial maps, and bystander data.
+- [ ] Audit availability and runtime-evidence language across macOS, iOS, iPadOS, tvOS, watchOS, and visionOS where each framework applies.
+- [ ] Audit every new or modified skill for direct framework-first implementation before any wrapper, manager, coordinator, repository, store, or mirrored state recommendation.
+- [ ] Audit all operator-facing error examples so they identify the framework surface, operation, location, likely cause, and next inspection point.
+- [ ] Account for every milestone branch, commit, worktree, subtree boundary, and local branch before cleanup or release claims.
+
+### Validation and Release Gate
+
+- [ ] Run Apple Dev docs validation, targeted milestone tests, the complete Apple Dev test suite, and root Socket metadata validation serially from the reviewed release candidate.
+- [ ] Run the repository's release-ready checks and resolve every actionable review, CI, metadata, documentation, and packaging finding.
+- [ ] Verify no subtree pull or push is required for `apple-dev-skills` under the current canonical Socket-owned payload policy, and report that accounting explicitly.
+- [ ] Bump all maintained Socket semantic-version surfaces together to the approved next major version with the root release workflow.
+- [ ] Prepare concise release notes covering new skills, framework ownership, privacy/device constraints, breaking changes if any, migration guidance if any, and verification performed.
+- [ ] Merge the reviewed release branch through the repository's protected-main workflow, fast-forward the clean local `main`, tag the reviewed `main`, push the tag, and create the GitHub release.
+- [ ] Run `codex plugin marketplace upgrade socket` only after the major Socket release is published, then verify the installed marketplace and plugin version.
+- [ ] Complete branch accounting and remove only merged, fully preserved branches and worktrees after the release is verified.
+
+### Exit Criteria
+
+- [ ] The Apple Dev plugin ships a coherent, docs-first media, imaging, vision, camera, depth, spatial, codec, and Photos workflow family without catch-all skills or duplicate framework ownership.
+- [ ] All milestone review, documentation, test, metadata, packaging, privacy, and runtime-evidence gates are complete.
+- [ ] The major Socket release is published from reviewed `main`, the marketplace upgrade is verified, and all branches and worktrees are explicitly accounted for.
 
 ## Backlog Candidates
 
