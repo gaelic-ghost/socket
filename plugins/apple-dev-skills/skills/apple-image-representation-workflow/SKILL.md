@@ -29,6 +29,7 @@ Guide image source, destination, representation, and conversion work without fla
 2. Apply the Apple docs gate:
    - read current Image I/O, Core Graphics, AppKit, or UIKit documentation first
    - state the documented behavior relied on
+   - check API, image-format, auxiliary-data, and platform availability before promising a decode, encode, or representation path
    - apply `../../shared/references/apple-image-type-ownership.md`
    - use `references/image-io-decoding-encoding-and-metadata.md` for source and destination work
    - use `references/apple-image-representations-and-bridging.md` for type selection and conversion

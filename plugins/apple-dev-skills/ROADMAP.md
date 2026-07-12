@@ -95,7 +95,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Completed
 - Milestone 60: Video Codecs and Pixel Processing - Completed
 - Milestone 61: Photos Library and Media Selection - Completed
-- Milestone 62: Media Expansion Audit and Socket Major Release - Planned
+- Milestone 62: Media Expansion Audit and Socket Major Release - In Progress
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1120,26 +1120,28 @@ Completed Milestone 61 by shipping `photos-library-editing-workflow` with a pick
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
-- [ ] Audit the complete Apple media family: existing AVFAudio, AVAudioEngine, AVFoundation, Core Media, and Core Audio skills plus all skills added in Milestones 56 through 61.
-- [ ] Verify every skill has one defined owner, one main entry path, explicit handoffs, current Apple documentation anchors, descriptive diagnostics, physical-device evidence boundaries, and no duplicate compatibility path.
-- [ ] Align the Apple Dev README, plugin manifest, marketplace metadata, root Socket docs, root roadmap, active inventory validation, tests, and release notes with the final shipped surface.
-- [ ] Treat this as a major Socket release because the plugin's supported workflow surface and public capability inventory expand substantially, while still documenting whether any individual skill contract is breaking.
+- [x] Audit the complete Apple media family: existing AVFAudio, AVAudioEngine, AVFoundation, Core Media, and Core Audio skills plus all skills added in Milestones 56 through 61.
+- [x] Verify every skill has one defined owner, one main entry path, explicit handoffs, current Apple documentation anchors, descriptive diagnostics, physical-device evidence boundaries, and no duplicate compatibility path.
+- [x] Align the Apple Dev README, plugin manifest, marketplace metadata, root Socket docs, root roadmap, active inventory validation, tests, and release notes with the final shipped surface.
+- [x] Treat this as a major Socket release because the plugin's supported workflow surface and public capability inventory expand substantially, while still documenting whether any individual skill contract is breaking.
 
 ### Final Audit
 
-- [ ] Re-run Xcode documentation searches for every framework family and refresh any claims that changed during implementation.
-- [ ] Use Dash as the secondary local documentation source for gaps or cross-symbol verification; record any area where current authoritative documentation remains insufficient.
-- [ ] Audit naming and terminology across `SKILL.md`, references, `agents/openai.yaml`, README, plugin metadata, tests, and roadmap.
-- [ ] Audit framework and type ownership across images, sample buffers, pixel buffers, camera outputs, Vision observations, Core ML models, spatial data, Photos assets, and encoded samples.
-- [ ] Audit privacy and permission guidance for camera, microphone, Photos, Local Authentication, TrueDepth face data, spatial maps, and bystander data.
-- [ ] Audit availability and runtime-evidence language across macOS, iOS, iPadOS, tvOS, watchOS, and visionOS where each framework applies.
-- [ ] Audit every new or modified skill for direct framework-first implementation before any wrapper, manager, coordinator, repository, store, or mirrored state recommendation.
-- [ ] Audit all operator-facing error examples so they identify the framework surface, operation, location, likely cause, and next inspection point.
+- [x] Re-run Xcode documentation searches for every framework family and refresh any claims that changed during implementation.
+- [x] Use Dash as the secondary local documentation source for gaps or cross-symbol verification; record any area where current authoritative documentation remains insufficient.
+- [x] Audit naming and terminology across `SKILL.md`, references, `agents/openai.yaml`, README, plugin metadata, tests, and roadmap.
+- [x] Audit framework and type ownership across images, sample buffers, pixel buffers, camera outputs, Vision observations, Core ML models, spatial data, Photos assets, and encoded samples.
+- [x] Audit privacy and permission guidance for camera, microphone, Photos, Local Authentication, TrueDepth face data, spatial maps, and bystander data.
+- [x] Audit availability and runtime-evidence language across macOS, iOS, iPadOS, tvOS, watchOS, and visionOS where each framework applies.
+- [x] Audit every new or modified skill for direct framework-first implementation before any wrapper, manager, coordinator, repository, store, or mirrored state recommendation.
+- [x] Audit all operator-facing error examples so they identify the framework surface, operation, location, likely cause, and next inspection point.
 - [ ] Account for every milestone branch, commit, worktree, subtree boundary, and local branch before cleanup or release claims.
+
+The final framework audit refreshed Xcode documentation across Core Image and Image I/O, Vision and Core ML, AVFoundation camera/depth capture, ARKit spatial/face/body tracking, VideoToolbox and Core Video, PhotosUI and PhotoKit, and the existing AVFAudio, AVFoundation, Core Media, and Core Audio family. Xcode supplied current authoritative coverage for every audited family, so no documentation gap required the secondary Dash path and no authoritative area remained insufficient. The audit added a durable cross-skill contract test, corrected image-format and platform-availability gating, refreshed the root and Apple Dev README descriptions, preserved direct framework ownership, and found no duplicate compatibility path or breaking individual skill contract.
 
 ### Validation and Release Gate
 
