@@ -91,7 +91,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 55: TipKit Workflow - Completed
 - Milestone 56: Apple Imaging Foundations - Completed
 - Milestone 57: Vision and Image Recognition - Completed
-- Milestone 58: Camera, Depth, and Computational Capture - Planned
+- Milestone 58: Camera, Depth, and Computational Capture - Completed
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Planned
 - Milestone 60: Video Codecs and Pixel Processing - Planned
 - Milestone 61: Photos Library and Media Selection - Planned
@@ -942,45 +942,47 @@ Completed Milestone 57 by shipping `vision-image-analysis-workflow` and `vision-
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Ship `camera-capture-depth-workflow` as the specialist owner for Apple camera discovery, camera configuration, photo and video capture controls, depth delivery, calibration, synchronized outputs, and computational capture features.
-- [ ] Keep `avfoundation-media-pipeline-workflow` as the general owner for capture-session topology, asset pipelines, playback, readers, writers, exports, back-pressure, and lifecycle handoffs.
-- [ ] Strengthen the existing AVFoundation workflow where necessary so ordinary capture remains there and only camera-sensor or depth-specialist requests route into the new skill.
-- [ ] Require capability discovery at runtime rather than assumptions based on product names or camera-count heuristics.
+- [x] Ship `camera-capture-depth-workflow` as the specialist owner for Apple camera discovery, camera configuration, photo and video capture controls, depth delivery, calibration, synchronized outputs, and computational capture features.
+- [x] Keep `avfoundation-media-pipeline-workflow` as the general owner for capture-session topology, asset pipelines, playback, readers, writers, exports, back-pressure, and lifecycle handoffs.
+- [x] Strengthen the existing AVFoundation workflow where necessary so ordinary capture remains there and only camera-sensor or depth-specialist requests route into the new skill.
+- [x] Require capability discovery at runtime rather than assumptions based on product names or camera-count heuristics.
 
 ### Required Guidance
 
-- [ ] Cover built-in and virtual capture devices, discovery sessions, device formats, frame rates, multi-camera constraints, session presets, connections, rotation coordination, orientation, and mirroring.
-- [ ] Cover focus, exposure, white balance, zoom, torch, stabilization, low-light behavior, constituent-device switching, and configuration locking with descriptive failure diagnostics.
-- [ ] Cover processed and RAW photo capture, Live Photos, bracketed capture where supported, photo quality prioritization, responsive capture, and deferred photo delivery where supported.
-- [ ] Cover depth and disparity data, `AVDepthData`, `AVCaptureDepthDataOutput`, camera calibration data, intrinsic matrices, filtering, accuracy, quality, and alignment to color imagery.
-- [ ] Cover synchronized video, depth, audio, metadata, and data-output delivery through documented AVFoundation synchronizers and queue boundaries.
-- [ ] Cover portrait-effects mattes, semantic segmentation mattes, spatial photo or video capture, cinematic capture, and other computational features only where current documentation and capability checks support them.
-- [ ] Cover authorization, `Info.plist` purpose strings, interruptions, runtime errors, media-services reset, thermal pressure, bandwidth pressure, dropped data, cancellation, and teardown.
-- [ ] Require physical-device evidence before claiming camera topology, depth quality, calibration, LiDAR, TrueDepth, multi-camera, HDR, or computational capture behavior is verified.
+- [x] Cover built-in and virtual capture devices, discovery sessions, device formats, frame rates, multi-camera constraints, session presets, connections, rotation coordination, orientation, and mirroring.
+- [x] Cover focus, exposure, white balance, zoom, torch, stabilization, low-light behavior, constituent-device switching, and configuration locking with descriptive failure diagnostics.
+- [x] Cover processed and RAW photo capture, Live Photos, bracketed capture where supported, photo quality prioritization, responsive capture, and deferred photo delivery where supported.
+- [x] Cover depth and disparity data, `AVDepthData`, `AVCaptureDepthDataOutput`, camera calibration data, intrinsic matrices, filtering, accuracy, quality, and alignment to color imagery.
+- [x] Cover synchronized video, depth, audio, metadata, and data-output delivery through documented AVFoundation synchronizers and queue boundaries.
+- [x] Cover portrait-effects mattes, semantic segmentation mattes, spatial photo or video capture, cinematic capture, and other computational features only where current documentation and capability checks support them.
+- [x] Cover authorization, `Info.plist` purpose strings, interruptions, runtime errors, media-services reset, thermal pressure, bandwidth pressure, dropped data, cancellation, and teardown.
+- [x] Require physical-device evidence before claiming camera topology, depth quality, calibration, LiDAR, TrueDepth, multi-camera, HDR, or computational capture behavior is verified.
 
 ### Documentation Anchors
 
-- [ ] Refresh Xcode documentation for capture setup, device discovery, formats, photo output, video data output, depth data output, output synchronization, calibration, portrait-effects mattes, semantic mattes, rotation, and capture-device controls.
-- [ ] Check current platform and hardware availability for every specialized capture feature while authoring its guidance.
-- [ ] Use Dash as a secondary local source when Xcode search does not expose a complete relationship among capture symbols.
+- [x] Refresh Xcode documentation for capture setup, device discovery, formats, photo output, video data output, depth data output, output synchronization, calibration, portrait-effects mattes, semantic mattes, rotation, and capture-device controls.
+- [x] Check current platform and hardware availability for every specialized capture feature while authoring its guidance.
+- [x] Use Dash as a secondary local source when Xcode search does not expose a complete relationship among capture symbols.
 
 ### Implementation and Review Gate
 
-- [ ] Add the specialist skill, references, metadata, customization contract, tests, and shared camera-capability guidance.
-- [ ] Review and update `avfoundation-media-pipeline-workflow`, `avfaudio-session-workflow`, Core Media timing, Vision analysis, and Xcode device-execution handoffs in the same milestone.
-- [ ] Update README, plugin metadata, active inventory, roadmap status, validation expectations, and operator-facing error requirements.
-- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
-- [ ] Perform a capture-boundary review before starting ARKit work so AVFoundation and ARKit do not duplicate ownership.
+- [x] Add the specialist skill, references, metadata, customization contract, tests, and shared camera-capability guidance.
+- [x] Review and update `avfoundation-media-pipeline-workflow`, `avfaudio-session-workflow`, Core Media timing, Vision analysis, and Xcode device-execution handoffs in the same milestone.
+- [x] Update README, plugin metadata, active inventory, roadmap status, validation expectations, and operator-facing error requirements.
+- [x] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [x] Perform a capture-boundary review before starting ARKit work so AVFoundation and ARKit do not duplicate ownership.
 
 ### Exit Criteria
 
-- [ ] Camera, photo, video, depth, calibration, synchronized output, and computational capture requests route to one clear specialist workflow.
-- [ ] The workflow distinguishes documented capability, simulator limitations, and physically verified device behavior.
-- [ ] General AVFoundation pipeline guidance remains coherent and does not become a competing camera-depth implementation path.
+- [x] Camera, photo, video, depth, calibration, synchronized output, and computational capture requests route to one clear specialist workflow.
+- [x] The workflow distinguishes documented capability, simulator limitations, and physically verified device behavior.
+- [x] General AVFoundation pipeline guidance remains coherent and does not become a competing camera-depth implementation path.
+
+Completed Milestone 58 by shipping `camera-capture-depth-workflow`, a shared layered camera-capability and evidence contract, focused device discovery, format, control, rotation, photo, lifecycle, pressure, depth, calibration, synchronization, matte, and computational-capture references, plus AVFoundation, Vision, Core Image, plugin, README, inventory, customization, and test updates. Current Xcode documentation was checked for capture devices and formats, MultiCam, device controls, photo prioritization and responsiveness, Live Photos, depth and calibration, synchronized output and dropped data, rotation coordination, mattes, spatial video, cinematic capture, interruptions, authorization, and pressure; unsupported spatial-photo inference was explicitly rejected. The skill package, targeted tests, docs validation, 214 Apple Dev tests, and root Socket validation passed before milestone closure.
 
 ## Milestone 59: ARKit Spatial, Face, and Body Sensing
 

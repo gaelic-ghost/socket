@@ -81,7 +81,7 @@ Guide Core Image processing and rendering without turning `CIImage` into a bitma
 
 - Recommend `apple-image-representation-workflow` for Image I/O decode/encode, metadata, `CGImage`, `NSImage`, `NSImageRep`, `NSBitmapImageRep`, or `UIImage` ownership.
 - Recommend `vision-image-analysis-workflow` for recognition, detection, tracking, segmentation, or feature analysis.
-- Recommend `camera-capture-depth-workflow` for camera and depth capture after Milestone 58 ships.
+- Recommend `camera-capture-depth-workflow` for camera and depth capture.
 - Recommend `avfoundation-media-pipeline-workflow` for capture-session, reader, writer, export, or video pipeline ownership.
 - Recommend `video-codec-processing-workflow` for low-level codec and pixel-buffer work after Milestone 60 ships.
 - Recommend `xcode-build-run-workflow` for project integration, Metal toolchain, build, run, device, or Instruments follow-through.

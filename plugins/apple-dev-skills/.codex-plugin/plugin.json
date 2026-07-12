@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "8.10.1",
-  "description": "Apple development workflows for Codex, including Core Image, Image I/O, Vision and Core ML recognition, media and audio repair, provisioning, CloudKit, TipKit, SwiftData, declarative SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
+  "description": "Apple development workflows for Codex, including camera and depth capture, Core Image, Image I/O, Vision and Core ML recognition, media and audio repair, provisioning, CloudKit, TipKit, SwiftData, declarative SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -30,6 +30,9 @@
     "vision",
     "coreml",
     "image-recognition",
+    "camera",
+    "depth",
+    "computational-photography",
     "coding-intelligence",
     "agents",
     "mcp",
@@ -61,7 +64,7 @@
   "interface": {
     "displayName": "Apple Dev Skills",
     "shortDescription": "Apple, Swift, image/media repair, SwiftUI, TipKit, Xcode, AppKit, Safari, security, OpenAPI, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for Core Image processing and rendering, Image I/O decoding and encoding, Apple Vision analysis, custom Core ML image recognition, AppKit/UIKit/Core Graphics image representations, AVFAudio session repair, AVAudioEngine graph repair, AVFoundation media pipelines, Core Media timing, Core Audio modernization, TipKit, XcodeGen migration, Xcode coding intelligence, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "longDescription": "Bundle Apple-platform development skills for AVFoundation camera, photo, depth, calibration and computational capture, Core Image processing, Image I/O, Apple Vision analysis, custom Core ML recognition, AppKit/UIKit/Core Graphics image representations, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -75,6 +78,7 @@
       "Decode, encode, inspect, thumbnail, preserve metadata, or bridge Apple image representations across Image I/O, Core Graphics, AppKit, UIKit, Core Image, and Core Video.",
       "Implement or repair Apple Vision text, barcode, face, pose, segmentation, tracking, feature-print, coordinate, and live-frame analysis using current documentation.",
       "Integrate, evaluate, profile, or repair custom Core ML image classification, object detection, and segmentation through Apple Vision.",
+      "Configure or repair AVFoundation camera discovery, controls, rotation, photo capture, synchronized outputs, depth, calibration, mattes, and computational capture using capability evidence.",
       "Explore the relevant Apple docs first, then explain the right SwiftUI, AppKit, or Xcode path for this repository.",
       "Audit or repair SwiftUI code into self-contained declarative components with local reactive state and no external ViewModel shape.",
       "Choose, customize, color, animate, validate, or integrate SF Symbols using current Apple docs and the local SF Symbols app when needed.",

@@ -65,6 +65,7 @@ Use Apple Dev Skills when an agent is helping with:
 - Image I/O decoding, encoding, metadata, thumbnails, auxiliary data, and AppKit/UIKit/Core Graphics representation bridging
 - Apple Vision text, barcode, face, landmark, pose, segmentation, tracking, feature-print, coordinate, and live-frame analysis
 - Custom Core ML image classification, object detection, semantic segmentation, model provenance, evaluation, and performance integration through Vision
+- AVFoundation camera discovery, controls, rotation, photo capture, depth, calibration, synchronized outputs, mattes, and computational-capture diagnostics
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
 - Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
@@ -141,6 +142,7 @@ uv run pytest
 - `avfoundation-media-pipeline-workflow`
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
+- `camera-capture-depth-workflow`
 - `apple-typography-workflow`
 - `coreaudio-modernization-repair-workflow`
 - `core-image-processing-workflow`

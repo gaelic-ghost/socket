@@ -72,7 +72,7 @@ Guide custom image-model integration through Vision while keeping Core ML model 
 
 - Recommend `vision-image-analysis-workflow` for Apple-provided Vision requests, tracking, feature prints, coordinates, and sequence lifecycle.
 - Recommend `core-image-processing-workflow` for pixel preprocessing or image-to-image rendering and `apple-image-representation-workflow` for decode and orientation ownership.
-- Recommend `avfoundation-media-pipeline-workflow` for capture and frame delivery until the specialist camera workflow ships.
+- Recommend `camera-capture-depth-workflow` for camera selection, controls, depth, and calibrated capture; recommend `avfoundation-media-pipeline-workflow` for general session and frame-delivery ownership.
 - Recommend `xcode-build-run-workflow` for model resources, generated classes, build, run, device profiling, or Instruments.
 - Recommend `xcode-testing-workflow` for fixtures, evaluation harnesses, performance baselines, and regression tests.
 - Recommend `explore-apple-swift-docs` for current Vision or Core ML research.
