@@ -142,6 +142,7 @@ uv run pytest
 - `arkit-face-body-tracking-workflow`
 - `arkit-spatial-sensing-workflow`
 - `appkit-app-architecture-workflow`
+- `app-intents-workflow`
 - `author-swift-docc-docs`
 - `avaudio-engine-workflow`
 - `avfaudio-session-workflow`
@@ -159,6 +160,8 @@ uv run pytest
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
+- `ios-runtime-forensics-workflow`
+- `macos-distribution-workflow`
 - `migrate-xcode-project-to-xcodegen`
 - `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
@@ -176,6 +179,8 @@ uv run pytest
 - `swiftui-animation-workflow`
 - `swiftui-app-architecture-workflow`
 - `swiftui-component-audit-workflow`
+- `swiftui-liquid-glass`
+- `swiftui-performance-audit`
 - `sync-swift-package-guidance`
 - `sync-xcode-project-guidance`
 - `xcode-app-project-workflow`

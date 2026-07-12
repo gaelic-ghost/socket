@@ -24,6 +24,7 @@
 - [Milestone 21: Cloud Deployment Skills plugin](#milestone-21-cloud-deployment-skills-plugin)
 - [Milestone 22: Network Protocol Skills plugin](#milestone-22-network-protocol-skills-plugin)
 - [Milestone 23: Cloud Inference Skills plugin](#milestone-23-cloud-inference-skills-plugin)
+- [Milestone 24: Apple system integration, runtime evidence, and distribution workflows](#milestone-24-apple-system-integration-runtime-evidence-and-distribution-workflows)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -61,6 +62,7 @@
 - Milestone 21: Cloud Deployment Skills plugin - Completed
 - Milestone 22: Network Protocol Skills plugin - Completed
 - Milestone 23: Cloud Inference Skills plugin - Completed
+- Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -735,6 +737,36 @@ Completed
 - [x] Root Socket docs, marketplace wiring, and plugin metadata agree on the exported cloud inference surface.
 
 Completed Milestone 23 by adding the `cloud-inference-skills` child plugin, shipping the provider-routing workflow, bundling Runpod MCP server configuration, installing the upstream Runpod skill mirror, adding the neon cloud GPU icon, wiring the Socket marketplace entry, and documenting first-party Runpod, Hugging Face, and AWS handoffs.
+
+## Milestone 24: Apple system integration, runtime evidence, and distribution workflows
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Expand the existing `apple-dev-skills` payload with five focused workflows where the installed OpenAI-curated Apple skills provide material coverage that Socket does not yet own.
+- [ ] Keep each workflow docs-first, grounded in current Apple documentation and real local/Xcode evidence; use the installed curated skills only as task-shape inspiration, not copied source material.
+- [ ] Preserve existing owners: Xcode build/run and testing retain workspace execution, SwiftUI architecture retains component and scene design, AppKit architecture retains AppKit ownership, and provisioning retains account-side certificate/profile automation.
+- [ ] Keep the first slice guidance-only. Do not bundle a simulator browser server, ETTrace helper, release service, signing credential manager, or app-runtime daemon.
+
+### Tickets
+
+- [ ] Add `apple-dev-skills:app-intents-workflow` for choosing and implementing narrow App Intent, App Entity, App Shortcut, and system-surface integrations. Cover Siri, Shortcuts, Spotlight, widgets, controls, deep-link or in-app handoff, availability, privacy, and validation; hand Xcode target, extension, build, and simulator work to the existing Xcode workflows.
+- [ ] Add `apple-dev-skills:swiftui-liquid-glass` for iOS and macOS Liquid Glass decisions, native API use, modifier ordering, container grouping, interactive affordances, shape consistency, availability checks, and non-glass fallbacks. Keep it separate from general SwiftUI architecture because it owns a version-sensitive visual-system contract rather than component ownership.
+- [ ] Add `apple-dev-skills:swiftui-performance-audit` for code-first diagnosis of invalidation fan-out, unstable identity, heavy body work, layout churn, image cost, and broad animation. Require a clear distinction between suspected code smells and trace-backed evidence, then hand Instruments and `xctrace` capture to `xcode-testing-workflow` or `swift-package-testing-workflow`.
+- [ ] Add `apple-dev-skills:ios-runtime-forensics-workflow` with explicit `performance-trace` and `memory-graph` modes for simulator ETTrace/symbolication and memgraph/leak ownership evidence. Keep it focused on reproducible before/after runtime proof, and route normal simulator build, launch, UI driving, and logs through `xcode-build-run-workflow`.
+- [ ] Add `apple-dev-skills:macos-distribution-workflow` for exported-artifact inspection, signing identities, entitlements, hardened runtime, nested-code signatures, Gatekeeper assessment, notarization readiness/failure classification, stapling, and release-only validation. Keep developer-account provisioning, certificate/profile creation, and Xcode project signing changes with `apple-developer-provisioning-workflow` and `xcode-build-run-workflow`.
+- [ ] Add skill-local references, deterministic validation expectations, handoff contracts, and targeted tests for all five workflows. Update Apple Dev Skills inventory, root documentation, and marketplace metadata only if the exported skill surface changes.
+- [ ] After the five workflows are implemented and validated, explore the installed iOS Simulator browser and SwiftUI hot-reload surface with Gale in a dedicated research pass. Decide together whether it belongs as a Socket workflow, a documented external-tool handoff, or no durable Socket addition; do not bundle or install browser/runtime tooling before that decision.
+
+### Exit Criteria
+
+- [ ] The five workflows have distinct entry conditions, owned decisions, Apple documentation anchors, validation evidence, and clear handoffs without duplicating the existing Xcode, SwiftUI, AppKit, or provisioning skills.
+- [ ] Each runtime or distribution workflow states its evidence boundary: code-level suspicion, simulator trace, memgraph ownership proof, signed artifact inspection, or notarization result.
+- [ ] The new skills pass their targeted tests, the Apple Dev Skills validation suite, shared-snippet checks, repository-doc validation, and root Socket metadata validation.
+- [ ] The simulator-browser and hot-reload investigation remains an explicit post-implementation conversation with Gale rather than an assumed dependency or unreviewed bundled runtime.
 
 ## Small Tickets
 

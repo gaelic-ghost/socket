@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS Distribution Workflow"
+  short_description: "Diagnose signed artifacts, Gatekeeper, and notarization"
+  default_prompt: "Use $macos-distribution-workflow to inspect a macOS distribution artifact and classify signing, entitlement, Gatekeeper, or notarization readiness without conflating it with local Debug builds."

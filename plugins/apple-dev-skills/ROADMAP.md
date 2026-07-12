@@ -39,6 +39,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 60: Video Codecs and Pixel Processing](#milestone-60-video-codecs-and-pixel-processing)
 - [Milestone 61: Photos Library and Media Selection](#milestone-61-photos-library-and-media-selection)
 - [Milestone 62: Media Expansion Audit and Socket Major Release](#milestone-62-media-expansion-audit-and-socket-major-release)
+- [Milestone 63: System Integration, Runtime Evidence, and Distribution](#milestone-63-system-integration-runtime-evidence-and-distribution)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -96,6 +97,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 60: Video Codecs and Pixel Processing - Completed
 - Milestone 61: Photos Library and Media Selection - Completed
 - Milestone 62: Media Expansion Audit and Socket Major Release - Completed
+- Milestone 63: System Integration, Runtime Evidence, and Distribution - In Progress
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1161,6 +1163,31 @@ The final framework audit refreshed Xcode documentation across Core Image and Im
 - [x] The major Socket release is published from reviewed `main`, the marketplace upgrade is verified, and all branches and worktrees are explicitly accounted for.
 
 Completed Milestone 62 by auditing the complete Apple media family, resolving the post-merge Photos limited-library album-authorization review in PR 123, aligning 29 maintained version targets at `9.0.0`, and publishing Socket v9.0.0 from reviewed `main` commit `77a347499f88c7a10ac8018229e0a6f9a3f4fe6f`. The final candidate passed the Apple Dev docs validator, 232 Apple Dev tests, 81 Socket tests with one intentional skip, root marketplace validation, the `release-ready` gate, a temporary-marketplace smoke test, and a zero-open-alert Dependabot check. No subtree pull or push was required because Apple Dev Skills is the canonical Socket-owned payload. The `socket` marketplace was upgraded after publication and `apple-dev-skills@socket` was verified installed and enabled at `9.0.0`. The merged release branches were removed; the unrelated local `plugin/apple-developer-portal` branch remains intentionally preserved with its separate unmerged provisioning-review commit.
+
+## Milestone 63: System Integration, Runtime Evidence, and Distribution
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Add focused workflows for App Intents, Liquid Glass, SwiftUI performance auditing, iOS Simulator runtime evidence, and macOS distribution artifacts.
+- [x] Keep system integration, code-level suspicion, runtime proof, and artifact trust as separate owned decisions with explicit Xcode, SwiftUI, AppKit, and provisioning handoffs.
+
+### Tickets
+
+- [x] Add `app-intents-workflow` for App Intents, entities, shortcuts, system surfaces, and validation boundaries.
+- [x] Add `swiftui-liquid-glass` for native iOS/macOS glass composition, availability, and fallback review.
+- [x] Add `swiftui-performance-audit` for code-first findings and trace-backed evidence handoff.
+- [x] Add `ios-runtime-forensics-workflow` for reproducible Simulator performance-trace and memory-graph evidence.
+- [x] Add `macos-distribution-workflow` for signing, entitlements, Gatekeeper, notarization, and stapling artifact inspection.
+- [ ] Complete full-suite validation, review, and release delivery after the first implementation pass.
+
+### Exit Criteria
+
+- [ ] All five workflows, metadata, inventory, tests, and root Socket documentation validate together.
+- [ ] Each workflow relies on current Apple documentation and names an honest evidence boundary.
 
 ## Backlog Candidates
 

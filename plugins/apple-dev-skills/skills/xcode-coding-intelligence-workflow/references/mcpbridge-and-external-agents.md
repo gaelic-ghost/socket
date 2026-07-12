@@ -19,7 +19,7 @@ The exact client command can differ by agent, but the Xcode side is the same bri
 `mcpbridge` can auto-detect a running Xcode process. Its help describes this fallback order:
 
 1. Use the only running Xcode process when exactly one exists.
-2. If multiple Xcode processes exist, use `xcode-select` to determine which Xcode is selected.
+2. If multiple Xcode processes exist, use the Command Line Tools choice in the already-open Xcode app's Settings > Locations as the selection source, then verify the result with `xcode-select -p`.
 3. If no Xcode process exists, exit with an error.
 
 When multiple Xcode windows or versions make auto-detection ambiguous, set `MCP_XCODE_PID` intentionally:
@@ -59,7 +59,7 @@ Before expecting Xcode tools to work through an external agent:
 - The requested tool permission must be allowed by Xcode and by the external client.
 - Plug-in import probes should use a harmless fixture or a trusted Git URL first, and should stop before importing additional plug-ins unless the user asked to mutate Xcode state.
 
-Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. Use the Xcode CLI toolchain Gale selected through `xcode-select` for command-line checks; do not override it with `DEVELOPER_DIR`. Ask first before changing `xcode-select`, and ask first before the rare `DEVELOPER_DIR` exception when it is genuinely the only viable path.
+Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. To change the CLI toolchain, use Settings > Locations > Command Line Tools in that app and let macOS obtain Touch ID or administrator approval; verify the result with `xcode-select -p`; do not override it with `DEVELOPER_DIR`.
 
 ## Failure Language
 
