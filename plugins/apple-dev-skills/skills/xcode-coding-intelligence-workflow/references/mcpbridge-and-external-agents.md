@@ -59,7 +59,7 @@ Before expecting Xcode tools to work through an external agent:
 - The requested tool permission must be allowed by Xcode and by the external client.
 - Plug-in import probes should use a harmless fixture or a trusted Git URL first, and should stop before importing additional plug-ins unless the user asked to mutate Xcode state.
 
-Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. For Gale's Xcode beta work, check system-wide beta candidates such as `/Applications/Xcode-beta.app` and `/Applications/Betas/Xcode-beta.app`, and use matching command-scoped `DEVELOPER_DIR` values for command-line checks. Use stable `/Applications/Xcode.app` when the task targets stable Xcode. Ask first only when opening Xcode would be disruptive, would require signing in, would alter global developer-directory selection, or conflicts with a user-stated constraint.
+Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. Use the Xcode CLI toolchain Gale selected through `xcode-select` for command-line checks; do not override it with `DEVELOPER_DIR`. Ask first before changing `xcode-select`, and ask first before the rare `DEVELOPER_DIR` exception when it is genuinely the only viable path.
 
 ## Failure Language
 

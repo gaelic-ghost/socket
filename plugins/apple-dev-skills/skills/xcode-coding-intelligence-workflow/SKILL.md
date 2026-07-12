@@ -51,9 +51,9 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 4. Plan setup:
    - verify the target Xcode version and whether the relevant behavior is stable, beta, or local-only
    - check whether the intended Xcode app is running and open it when needed for project context, MCP bridge connection, agent settings, or UI/plugin inspection
-   - for Gale's Xcode beta checks, prefer command-scoped `DEVELOPER_DIR` using system-wide beta candidates such as `/Applications/Xcode-beta.app/Contents/Developer` or `/Applications/Betas/Xcode-beta.app/Contents/Developer`
+   - use the Xcode CLI toolchain Gale selected through `xcode-select`; do not override it with `DEVELOPER_DIR`
    - open the intended beta app when the beta UI or live bridge state is required
-   - change global `xcode-select` only when the user explicitly asks for that system-wide default CLI tools switch, and record the previous `xcode-select -p` value before switching
+   - change `xcode-select` only when Gale explicitly asks to switch CLI toolchains; record the previous `xcode-select -p`, verify the requested selection, and restore only when Gale asked for a temporary switch
    - verify the project is open in Xcode before expecting Xcode MCP tools to work
    - verify external-agent access is enabled before configuring an external MCP client
    - use `xcrun mcpbridge` as the Xcode-provided STDIO bridge for external MCP clients
@@ -117,6 +117,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 - Do not claim ACP setup, Xcode plug-in package shape, or Xcode plug-in import behavior unless current Apple docs or live Xcode inspection verify that exact surface.
 - Do not collapse Xcode-hosted agents and external MCP clients into one vague "agent"; name which process owns the UI, config, context, permissions, and execution.
 - Do not mutate normal Codex config, Xcode-launched agent config, shell rc files, keychains, or provider credentials without explicit user intent.
+- Do not set `DEVELOPER_DIR` unless it is genuinely the only viable path and Gale has explicitly approved that exception after hearing why `xcode-select` cannot serve the task.
 - Do not store provider API keys in repo files or app binaries.
 - Stop with `blocked` when no relevant Apple documentation or local Xcode evidence can be found for a requested setup claim.
 - If Xcode is not running and the requested setup depends on a live Xcode session, open the intended stable or beta Xcode app and continue verification. Stop with `blocked` only when Xcode cannot be opened, the required project or workspace cannot be opened or identified, external-agent access is disabled and cannot be inspected, or the user has forbidden launching the app.
