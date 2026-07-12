@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Codec Processing Workflow"
+  short_description: "Encode, decode, and diagnose Apple video codecs"
+  default_prompt: "Use $video-codec-processing-workflow to implement, repair, or diagnose VideoToolbox compression and decompression, Core Video pixel buffers, Core Media compressed samples, hardware capability, color, HDR, and codec performance."

@@ -95,6 +95,7 @@ It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, an
 ## Fallbacks and Handoffs
 
 - Recommend `avfoundation-media-pipeline-workflow` for capture, asset, reader, writer, export, and player ownership.
+- Recommend `video-codec-processing-workflow` for VideoToolbox sessions, codec properties, hardware policy, pixel-buffer pools, and encode/decode callbacks while keeping timing and format-description repair here.
 - Recommend `avaudio-engine-workflow` for engine rendering and audio-processing graphs.
 - Recommend `avfaudio-session-workflow` for route, interruption, permission, or app audio policy.
 - Recommend `xcode-build-run-workflow` for runtime probes, device capture, and app execution.

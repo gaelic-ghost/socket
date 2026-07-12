@@ -68,6 +68,7 @@ sync_one \
   "$ROOT_DIR/skills/camera-capture-depth-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/arkit-spatial-sensing-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/arkit-face-body-tracking-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/video-codec-processing-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/core-animation-layer-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/apple-typography-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/sf-symbols-workflow/references/snippets/apple-xcode-project-core.md" \

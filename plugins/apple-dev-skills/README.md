@@ -68,6 +68,7 @@ Use Apple Dev Skills when an agent is helping with:
 - AVFoundation camera discovery, controls, rotation, photo capture, depth, calibration, synchronized outputs, mattes, and computational-capture diagnostics
 - ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, relocalization, and visionOS provider guidance
 - ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale estimation, privacy, and authentication boundaries
+- VideoToolbox compression/decompression, Core Video pixel buffers and pools, Core Media compressed samples, hardware capability, color/HDR, and codec diagnostics
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
 - Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
@@ -165,6 +166,7 @@ uv run pytest
 - `tipkit-workflow`
 - `vision-coreml-recognition-workflow`
 - `vision-image-analysis-workflow`
+- `video-codec-processing-workflow`
 - `swift-openapi-client-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`

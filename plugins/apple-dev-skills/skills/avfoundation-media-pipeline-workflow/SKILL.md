@@ -95,6 +95,7 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 - Recommend `avfaudio-session-workflow` for app audio intent, microphone permission, interruptions, routes, or capture-session audio-session interaction.
 - Recommend `camera-capture-depth-workflow` for camera devices, controls, photo features, depth, calibration, synchronized outputs, and capability diagnostics.
 - Recommend `coremedia-timing-samplebuffer-workflow` for `CMTime`, format descriptions, sample-buffer attachments, dropped buffers, or synchronization.
+- Recommend `video-codec-processing-workflow` for low-level VideoToolbox compression/decompression, codec properties, hardware policy, pixel-buffer pools, and per-frame callbacks.
 - Recommend `avaudio-engine-workflow` for engine graph, tap, or audio processing work.
 - Recommend `xcode-build-run-workflow` for build, run, target, entitlement, `Info.plist`, or device follow-through.
 - Recommend `xcode-testing-workflow` for repeatable media tests, fixtures, or runtime verification planning.

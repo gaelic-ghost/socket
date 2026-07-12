@@ -93,7 +93,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 57: Vision and Image Recognition - Completed
 - Milestone 58: Camera, Depth, and Computational Capture - Completed
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Completed
-- Milestone 60: Video Codecs and Pixel Processing - Planned
+- Milestone 60: Video Codecs and Pixel Processing - Completed
 - Milestone 61: Photos Library and Media Selection - Planned
 - Milestone 62: Media Expansion Audit and Socket Major Release - Planned
 
@@ -1034,42 +1034,44 @@ Completed Milestone 59 by shipping `arkit-spatial-sensing-workflow` and `arkit-f
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Ship `video-codec-processing-workflow` as the specialist owner for VideoToolbox compression, decompression, codec-session configuration, hardware capability, pixel-buffer pools, compressed sample output, and low-level video diagnostics.
-- [ ] Keep AVFoundation readers, writers, export sessions, and general transcode pipelines with the existing AVFoundation workflow; use VideoToolbox only when the concrete codec, latency, hardware, or per-frame control requirement justifies it.
-- [ ] Keep Core Media as the owner of sample timing and format descriptions, and Core Video as the owner of pixel-buffer storage, pools, attachments, and buffer interoperability.
+- [x] Ship `video-codec-processing-workflow` as the specialist owner for VideoToolbox compression, decompression, codec-session configuration, hardware capability, pixel-buffer pools, compressed sample output, and low-level video diagnostics.
+- [x] Keep AVFoundation readers, writers, export sessions, and general transcode pipelines with the existing AVFoundation workflow; use VideoToolbox only when the concrete codec, latency, hardware, or per-frame control requirement justifies it.
+- [x] Keep Core Media as the owner of sample timing and format descriptions, and Core Video as the owner of pixel-buffer storage, pools, attachments, and buffer interoperability.
 
 ### Required Guidance
 
-- [ ] Cover compression and decompression session creation, property configuration, supported-property discovery, encode/decode callbacks, frame submission, delayed frames, completion, flush, invalidation, and teardown.
-- [ ] Cover real-time versus offline policy, bitrate, data-rate limits, keyframes, frame reordering, latency, entropy mode where applicable, multipass boundaries, and encoder availability.
-- [ ] Cover codec format descriptions, parameter sets, compressed `CMSampleBuffer` output, timestamps, dependencies, dropped frames, and handoffs into readers, writers, displays, or networks.
-- [ ] Cover `CVPixelBuffer`, pixel-buffer pools, pixel formats, IOSurface compatibility, row bytes, locking, attachments, Metal texture caches, and zero-copy boundaries without inventing raw-buffer wrappers.
-- [ ] Cover color primaries, transfer functions, YCbCr matrices, clean aperture, pixel aspect ratio, HDR metadata, alpha, and other format attachments that must survive the pipeline.
-- [ ] Require capability probing and runtime evidence before claiming hardware acceleration, a specific codec profile, low latency, HDR, alpha, or device throughput.
-- [ ] Require profiling under representative load and descriptive `OSStatus` diagnostics for low-level failures.
+- [x] Cover compression and decompression session creation, property configuration, supported-property discovery, encode/decode callbacks, frame submission, delayed frames, completion, flush, invalidation, and teardown.
+- [x] Cover real-time versus offline policy, bitrate, data-rate limits, keyframes, frame reordering, latency, entropy mode where applicable, multipass boundaries, and encoder availability.
+- [x] Cover codec format descriptions, parameter sets, compressed `CMSampleBuffer` output, timestamps, dependencies, dropped frames, and handoffs into readers, writers, displays, or networks.
+- [x] Cover `CVPixelBuffer`, pixel-buffer pools, pixel formats, IOSurface compatibility, row bytes, locking, attachments, Metal texture caches, and zero-copy boundaries without inventing raw-buffer wrappers.
+- [x] Cover color primaries, transfer functions, YCbCr matrices, clean aperture, pixel aspect ratio, HDR metadata, alpha, and other format attachments that must survive the pipeline.
+- [x] Require capability probing and runtime evidence before claiming hardware acceleration, a specific codec profile, low latency, HDR, alpha, or device throughput.
+- [x] Require profiling under representative load and descriptive `OSStatus` diagnostics for low-level failures.
 
 ### Documentation Anchors
 
-- [ ] Refresh Xcode documentation for VideoToolbox compression/decompression sessions, properties, encoder lists, supported-property dictionaries, hardware requirements, multipass encoding, and image-transfer behavior.
-- [ ] Refresh Xcode documentation for Core Video pixel buffers, pools, attachments, Metal texture caches, and IOSurface interoperability.
-- [ ] Refresh Core Media documentation for codec format descriptions and compressed sample buffers where the codec workflow crosses timing or sample ownership.
+- [x] Refresh Xcode documentation for VideoToolbox compression/decompression sessions, properties, encoder lists, supported-property dictionaries, hardware requirements, multipass encoding, and image-transfer behavior.
+- [x] Refresh Xcode documentation for Core Video pixel buffers, pools, attachments, Metal texture caches, and IOSurface interoperability.
+- [x] Refresh Core Media documentation for codec format descriptions and compressed sample buffers where the codec workflow crosses timing or sample ownership.
 
 ### Implementation and Review Gate
 
-- [ ] Add the specialist skill, references, metadata, customization contract, codec/type ownership rules, and tests.
-- [ ] Review and update AVFoundation transcode, Core Media timing, Core Image rendering, Metal handoff, and Xcode profiling routes.
-- [ ] Update README, plugin metadata, active inventory, roadmap status, and validation contracts before milestone completion.
-- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
-- [ ] Audit the milestone for unnecessary low-level API recommendations and ensure AVFoundation remains the preferred simpler path where it expresses the real requirement.
+- [x] Add the specialist skill, references, metadata, customization contract, codec/type ownership rules, and tests.
+- [x] Review and update AVFoundation transcode, Core Media timing, Core Image rendering, Metal handoff, and Xcode profiling routes.
+- [x] Update README, plugin metadata, active inventory, roadmap status, and validation contracts before milestone completion.
+- [x] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [x] Audit the milestone for unnecessary low-level API recommendations and ensure AVFoundation remains the preferred simpler path where it expresses the real requirement.
 
 ### Exit Criteria
 
-- [ ] The plugin can guide low-level encode/decode and pixel-buffer work without duplicating AVFoundation or Core Media ownership.
-- [ ] Codec, color, timing, memory, hardware, and error-diagnostic requirements remain inspectable from input through output.
+- [x] The plugin can guide low-level encode/decode and pixel-buffer work without duplicating AVFoundation or Core Media ownership.
+- [x] Codec, color, timing, memory, hardware, and error-diagnostic requirements remain inspectable from input through output.
+
+Completed Milestone 60 by shipping `video-codec-processing-workflow`, extending the shared Apple media-type contract for Core Video and VideoToolbox, adding focused compression/decompression lifecycle, pixel-buffer/Metal/color/HDR, compressed-sample/diagnostic/performance references, and aligning AVFoundation, Core Media, Core Image, plugin, README, inventory, customization, and tests. Current Xcode documentation was checked for compression/decompression sessions, supported properties, hardware encoder/decoder evidence, delayed frames, multipass storage, pixel buffers and pools, IOSurface and Metal texture caches, compressed format descriptions and parameter sets, and color/signal attachments. The skill package, targeted tests, docs validation, 224 Apple Dev tests, and root Socket validation passed before milestone closure.
 
 ## Milestone 61: Photos Library and Media Selection
 
