@@ -34,6 +34,10 @@ class Milestone24SystemUIWorkflowTests(unittest.TestCase):
             self.assertIn(term, skill + references)
         self.assertIn("Do not substitute custom blur stacks", skill)
         self.assertIn("oldest supported OS fallback", skill)
+        availability = self.read("skills/swiftui-liquid-glass/references/os26-os27-beta-availability.md")
+        self.assertIn("core custom Liquid Glass surface remains the OS 26 baseline", availability)
+        self.assertIn("ToolbarItemVisibilityPriority", availability)
+        self.assertIn("ToolbarOverflowMenu", availability)
         self.assertIn("$swiftui-liquid-glass", prompt)
         self.assertIn('SKILL_NAME = "swiftui-liquid-glass"', customization)
 

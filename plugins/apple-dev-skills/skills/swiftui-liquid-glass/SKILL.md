@@ -25,7 +25,8 @@ Use the platform's native glass system deliberately rather than reproducing it w
 6. Use `GlassEffectContainer` only for genuinely related nearby glass elements. Keep shapes, spacing, and tint roles consistent; use interactive glass only for actual controls.
 7. Use `glassEffectID` and a namespace only when the hierarchy changes and a morphing relationship makes the transition clearer. Do not introduce glass IDs as decorative animation noise.
 8. Gate version-sensitive APIs and provide an intentional non-glass fallback that preserves hierarchy, affordance, contrast, and touch/keyboard access.
-9. Validate in Light and Dark appearance, compact and regular windows where relevant, reduced-motion and accessibility settings, keyboard/pointer interaction, and the oldest supported OS fallback.
+9. Read `references/os26-os27-beta-availability.md` before treating an OS 27 beta toolbar feature as a Liquid Glass API change. Core custom-glass APIs remain the OS 26 baseline; OS 27 beta toolbar composition features need their own availability gates and visual validation.
+10. Validate in Light and Dark appearance, compact and regular windows where relevant, reduced-motion and accessibility settings, keyboard/pointer interaction, the oldest supported OS fallback, and OS 27 beta toolbar overflow/visibility behavior when used.
 
 ## Inputs
 
