@@ -95,7 +95,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Completed
 - Milestone 60: Video Codecs and Pixel Processing - Completed
 - Milestone 61: Photos Library and Media Selection - Completed
-- Milestone 62: Media Expansion Audit and Socket Major Release - In Progress
+- Milestone 62: Media Expansion Audit and Socket Major Release - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1120,7 +1120,7 @@ Completed Milestone 61 by shipping `photos-library-editing-workflow` with a pick
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
@@ -1139,26 +1139,28 @@ In Progress
 - [x] Audit availability and runtime-evidence language across macOS, iOS, iPadOS, tvOS, watchOS, and visionOS where each framework applies.
 - [x] Audit every new or modified skill for direct framework-first implementation before any wrapper, manager, coordinator, repository, store, or mirrored state recommendation.
 - [x] Audit all operator-facing error examples so they identify the framework surface, operation, location, likely cause, and next inspection point.
-- [ ] Account for every milestone branch, commit, worktree, subtree boundary, and local branch before cleanup or release claims.
+- [x] Account for every milestone branch, commit, worktree, subtree boundary, and local branch before cleanup or release claims.
 
 The final framework audit refreshed Xcode documentation across Core Image and Image I/O, Vision and Core ML, AVFoundation camera/depth capture, ARKit spatial/face/body tracking, VideoToolbox and Core Video, PhotosUI and PhotoKit, and the existing AVFAudio, AVFoundation, Core Media, and Core Audio family. Xcode supplied current authoritative coverage for every audited family, so no documentation gap required the secondary Dash path and no authoritative area remained insufficient. The audit added a durable cross-skill contract test, corrected image-format and platform-availability gating, refreshed the root and Apple Dev README descriptions, preserved direct framework ownership, and found no duplicate compatibility path or breaking individual skill contract.
 
 ### Validation and Release Gate
 
-- [ ] Run Apple Dev docs validation, targeted milestone tests, the complete Apple Dev test suite, and root Socket metadata validation serially from the reviewed release candidate.
-- [ ] Run the repository's release-ready checks and resolve every actionable review, CI, metadata, documentation, and packaging finding.
-- [ ] Verify no subtree pull or push is required for `apple-dev-skills` under the current canonical Socket-owned payload policy, and report that accounting explicitly.
-- [ ] Bump all maintained Socket semantic-version surfaces together to the approved next major version with the root release workflow.
-- [ ] Prepare concise release notes covering new skills, framework ownership, privacy/device constraints, breaking changes if any, migration guidance if any, and verification performed.
-- [ ] Merge the reviewed release branch through the repository's protected-main workflow, fast-forward the clean local `main`, tag the reviewed `main`, push the tag, and create the GitHub release.
-- [ ] Run `codex plugin marketplace upgrade socket` only after the major Socket release is published, then verify the installed marketplace and plugin version.
-- [ ] Complete branch accounting and remove only merged, fully preserved branches and worktrees after the release is verified.
+- [x] Run Apple Dev docs validation, targeted milestone tests, the complete Apple Dev test suite, and root Socket metadata validation serially from the reviewed release candidate.
+- [x] Run the repository's release-ready checks and resolve every actionable review, CI, metadata, documentation, and packaging finding.
+- [x] Verify no subtree pull or push is required for `apple-dev-skills` under the current canonical Socket-owned payload policy, and report that accounting explicitly.
+- [x] Bump all maintained Socket semantic-version surfaces together to the approved next major version with the root release workflow.
+- [x] Prepare concise release notes covering new skills, framework ownership, privacy/device constraints, breaking changes if any, migration guidance if any, and verification performed.
+- [x] Merge the reviewed release branch through the repository's protected-main workflow, fast-forward the clean local `main`, tag the reviewed `main`, push the tag, and create the GitHub release.
+- [x] Run `codex plugin marketplace upgrade socket` only after the major Socket release is published, then verify the installed marketplace and plugin version.
+- [x] Complete branch accounting and remove only merged, fully preserved branches and worktrees after the release is verified.
 
 ### Exit Criteria
 
-- [ ] The Apple Dev plugin ships a coherent, docs-first media, imaging, vision, camera, depth, spatial, codec, and Photos workflow family without catch-all skills or duplicate framework ownership.
-- [ ] All milestone review, documentation, test, metadata, packaging, privacy, and runtime-evidence gates are complete.
-- [ ] The major Socket release is published from reviewed `main`, the marketplace upgrade is verified, and all branches and worktrees are explicitly accounted for.
+- [x] The Apple Dev plugin ships a coherent, docs-first media, imaging, vision, camera, depth, spatial, codec, and Photos workflow family without catch-all skills or duplicate framework ownership.
+- [x] All milestone review, documentation, test, metadata, packaging, privacy, and runtime-evidence gates are complete.
+- [x] The major Socket release is published from reviewed `main`, the marketplace upgrade is verified, and all branches and worktrees are explicitly accounted for.
+
+Completed Milestone 62 by auditing the complete Apple media family, resolving the post-merge Photos limited-library album-authorization review in PR 123, aligning 29 maintained version targets at `9.0.0`, and publishing Socket v9.0.0 from reviewed `main` commit `77a347499f88c7a10ac8018229e0a6f9a3f4fe6f`. The final candidate passed the Apple Dev docs validator, 232 Apple Dev tests, 81 Socket tests with one intentional skip, root marketplace validation, the `release-ready` gate, a temporary-marketplace smoke test, and a zero-open-alert Dependabot check. No subtree pull or push was required because Apple Dev Skills is the canonical Socket-owned payload. The `socket` marketplace was upgraded after publication and `apple-dev-skills@socket` was verified installed and enabled at `9.0.0`. The merged release branches were removed; the unrelated local `plugin/apple-developer-portal` branch remains intentionally preserved with its separate unmerged provisioning-review commit.
 
 ## Backlog Candidates
 
