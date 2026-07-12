@@ -9,6 +9,10 @@ description: Audit and repair SwiftUI code toward self-contained declarative com
 
 Audit or repair a SwiftUI feature without importing AppKit, UIKit, or generic imperative architecture into a declarative view tree. SwiftUI components stand on their own: they render from explicit values and framework state, own local presentation state, and express user intent through narrow actions.
 
+## SwiftData And SwiftUI Rule
+
+Keep SwiftData directly integrated with SwiftUI through `modelContainer`, environment `modelContext`, `@Query`, model objects, and narrow bindings. Do not insert repositories, stores, service mirrors, DTO mirrors, ViewModel caches, or other abstraction layers between SwiftData and SwiftUI. Hand persistence-specific decisions to `swiftdata-workflow`.
+
 ## When To Use
 
 - Use for a SwiftUI architecture review, component audit, repair, or refactor.
