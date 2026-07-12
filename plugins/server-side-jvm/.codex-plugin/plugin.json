@@ -1,6 +1,6 @@
 {
   "name": "server-side-jvm",
-  "version": "8.10.1",
+  "version": "9.0.0",
   "description": "Codex skills for choosing, building, testing, and maintaining server-side JVM backend projects with Java and Scala as equal first-party languages and future Clojure support planned.",
   "author": {
     "name": "Gale",

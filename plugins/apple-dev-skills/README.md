@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -61,6 +61,15 @@ Use Apple Dev Skills when an agent is helping with:
 - AVFoundation capture, playback, async asset loading, reader, writer, and export workflows
 - Core Media timing, sample-buffer, format-description, and synchronization diagnostics
 - Core Audio and Audio Toolbox modernization or legacy repair
+- Core Image filter graphs, RAW development, color management, HDR rendering, custom kernels, and performance repair
+- Image I/O decoding, encoding, metadata, thumbnails, auxiliary data, and AppKit/UIKit/Core Graphics representation bridging
+- Apple Vision text, barcode, face, landmark, pose, segmentation, tracking, feature-print, coordinate, and live-frame analysis
+- Custom Core ML image classification, object detection, semantic segmentation, model provenance, evaluation, and performance integration through Vision
+- AVFoundation camera discovery, controls, rotation, photo capture, depth, calibration, synchronized outputs, mattes, and computational-capture diagnostics
+- ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, relocalization, and visionOS provider guidance
+- ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale estimation, privacy, and authentication boundaries
+- VideoToolbox compression/decompression, Core Video pixel buffers and pools, Core Media compressed samples, hardware capability, color/HDR, and codec diagnostics
+- Privacy-preserving PhotosUI selection and PhotoKit authorization, assets, resources, iCloud delivery, changes, creation, albums, and nondestructive editing
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
 - Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
@@ -129,6 +138,9 @@ uv run pytest
 ## Active Skills
 
 - `apple-ui-accessibility-workflow`
+- `apple-image-representation-workflow`
+- `arkit-face-body-tracking-workflow`
+- `arkit-spatial-sensing-workflow`
 - `appkit-app-architecture-workflow`
 - `author-swift-docc-docs`
 - `avaudio-engine-workflow`
@@ -136,8 +148,10 @@ uv run pytest
 - `avfoundation-media-pipeline-workflow`
 - `bootstrap-swift-package`
 - `bootstrap-xcode-app-project`
+- `camera-capture-depth-workflow`
 - `apple-typography-workflow`
 - `coreaudio-modernization-repair-workflow`
+- `core-image-processing-workflow`
 - `core-animation-layer-workflow`
 - `coremedia-timing-samplebuffer-workflow`
 - `devicecheck-app-attest-workflow`
@@ -146,11 +160,15 @@ uv run pytest
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
 - `migrate-xcode-project-to-xcodegen`
+- `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
 - `sf-symbols-workflow`
 - `structure-swift-sources`
 - `swiftdata-workflow`
 - `tipkit-workflow`
+- `vision-coreml-recognition-workflow`
+- `vision-image-analysis-workflow`
+- `video-codec-processing-workflow`
 - `swift-openapi-client-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`

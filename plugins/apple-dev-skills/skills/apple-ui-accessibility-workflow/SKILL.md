@@ -100,6 +100,7 @@ It is not the Apple-docs router, not the SwiftUI app-structure workflow, and not
 - Recommend `explore-apple-swift-docs` when the real need is broader Apple or Swift docs lookup.
 - Recommend `xcode-testing-workflow` when the next honest step is runtime UI verification, XCUITest mechanics, simulator or device flow, XCUI interruption handling, screenshots, or `.xctestplan` orchestration.
 - Recommend `swiftui-app-architecture-workflow` when the next honest step is app, scene, command, focus, environment, or dependency-flow architecture rather than accessibility semantics.
+- Recommend `arkit-spatial-sensing-workflow` or `arkit-face-body-tracking-workflow` for ARKit sensing while keeping labels, alternatives, motion, audio/haptic cues, and nonvisual interaction with this accessibility workflow.
 
 ## Customization
 

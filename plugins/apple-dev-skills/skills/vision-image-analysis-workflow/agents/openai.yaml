@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vision Image Analysis Workflow"
+  short_description: "Analyze images and video with Apple Vision"
+  default_prompt: "Use $vision-image-analysis-workflow to implement, repair, or diagnose Apple Vision detection, recognition, tracking, segmentation, pose, feature-print, and coordinate workflows."

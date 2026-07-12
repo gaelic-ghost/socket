@@ -1,0 +1,4 @@
+interface:
+  display_name: "Photos Library and Editing Workflow"
+  short_description: "Select, fetch, save, and edit Apple Photos assets"
+  default_prompt: "Use $photos-library-editing-workflow to implement, repair, or diagnose PhotosUI media selection and PhotoKit authorization, assets, resources, changes, iCloud delivery, creation, collections, and nondestructive editing."

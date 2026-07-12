@@ -1,0 +1,4 @@
+interface:
+  display_name: "ARKit Spatial Sensing Workflow"
+  short_description: "Build and diagnose ARKit spatial sensing"
+  default_prompt: "Use $arkit-spatial-sensing-workflow to implement, repair, or diagnose ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, anchors, and visionOS providers."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Camera Capture and Depth Workflow"
+  short_description: "Configure Apple cameras, depth, and photo capture"
+  default_prompt: "Use $camera-capture-depth-workflow to implement, repair, or diagnose Apple camera discovery, controls, photo capture, synchronized outputs, depth, calibration, mattes, and computational capture."

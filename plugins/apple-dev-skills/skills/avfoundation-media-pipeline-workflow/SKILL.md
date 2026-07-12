@@ -15,6 +15,7 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 - Use this skill when existing code blocks the main thread, uses deprecated AVAsset synchronous properties, misuses `loadValuesAsynchronously(forKeys:)`, appends sample buffers without back-pressure, confuses capture authorization with microphone permission, or mixes capture, UI, writer, and player ownership in one object.
 - Recommend `avfaudio-session-workflow` when the primary problem is app audio intent, routes, interruptions, or microphone permission.
 - Recommend `coremedia-timing-samplebuffer-workflow` when the primary issue is sample-buffer timestamps, format descriptions, timebases, clocks, or synchronization.
+- Recommend `camera-capture-depth-workflow` when the primary issue is camera discovery, device controls, formats, rotation, photo capture, depth, calibration, synchronized camera outputs, or computational capture.
 
 ## Single-Path Workflow
 
@@ -92,7 +93,10 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 ## Fallbacks and Handoffs
 
 - Recommend `avfaudio-session-workflow` for app audio intent, microphone permission, interruptions, routes, or capture-session audio-session interaction.
+- Recommend `camera-capture-depth-workflow` for camera devices, controls, photo features, depth, calibration, synchronized outputs, and capability diagnostics.
 - Recommend `coremedia-timing-samplebuffer-workflow` for `CMTime`, format descriptions, sample-buffer attachments, dropped buffers, or synchronization.
+- Recommend `video-codec-processing-workflow` for low-level VideoToolbox compression/decompression, codec properties, hardware policy, pixel-buffer pools, and per-frame callbacks.
+- Recommend `photos-library-editing-workflow` for PhotosUI selection, PhotoKit asset/resource requests, library saves, and content editing.
 - Recommend `avaudio-engine-workflow` for engine graph, tap, or audio processing work.
 - Recommend `xcode-build-run-workflow` for build, run, target, entitlement, `Info.plist`, or device follow-through.
 - Recommend `xcode-testing-workflow` for repeatable media tests, fixtures, or runtime verification planning.

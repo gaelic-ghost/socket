@@ -207,6 +207,8 @@ root `Controllers/` directory.
 
 ## Fallbacks and Handoffs
 
+- Recommend `photos-library-editing-workflow` for PhotosUI/AppKit picker selection and PhotoKit authorization, assets, requests, changes, saving, and editing while keeping AppKit window/controller ownership here.
+
 - Prefer explicit scope and repo shape when the user provides them.
 - Fall back to request-text inference when repo shape and app shape are unclear.
 - Recommend `explore-apple-swift-docs` when the real need is broader Apple or
