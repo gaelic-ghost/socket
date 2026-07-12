@@ -63,6 +63,8 @@ Use Apple Dev Skills when an agent is helping with:
 - Core Audio and Audio Toolbox modernization or legacy repair
 - Core Image filter graphs, RAW development, color management, HDR rendering, custom kernels, and performance repair
 - Image I/O decoding, encoding, metadata, thumbnails, auxiliary data, and AppKit/UIKit/Core Graphics representation bridging
+- Apple Vision text, barcode, face, landmark, pose, segmentation, tracking, feature-print, coordinate, and live-frame analysis
+- Custom Core ML image classification, object detection, semantic segmentation, model provenance, evaluation, and performance integration through Vision
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
 - Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
@@ -155,6 +157,8 @@ uv run pytest
 - `structure-swift-sources`
 - `swiftdata-workflow`
 - `tipkit-workflow`
+- `vision-coreml-recognition-workflow`
+- `vision-image-analysis-workflow`
 - `swift-openapi-client-workflow`
 - `swift-package-build-run-workflow`
 - `swift-package-testing-workflow`

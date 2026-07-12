@@ -55,7 +55,7 @@ class AppleDeveloperProvisioningWorkflowTests(unittest.TestCase):
         self.assertIn("apple-developer-provisioning-workflow", readme)
         self.assertIn("Apple Developer provisioning", plugin)
         self.assertIn("./skills/apple-developer-provisioning-workflow/SKILL.md", validator)
-        self.assertIn("Expected exactly 36 active skills", validator)
+        self.assertIn("Expected exactly 38 active skills", validator)
         self.assertIn("Milestone 54: Apple Developer Provisioning and CloudKit Workflow - Completed", roadmap)
 
     def test_customization_cli_preserves_shared_apply_and_reset_verbs(self) -> None:

@@ -90,7 +90,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 54: Apple Developer Provisioning and CloudKit Workflow - Completed
 - Milestone 55: TipKit Workflow - Completed
 - Milestone 56: Apple Imaging Foundations - Completed
-- Milestone 57: Vision and Image Recognition - Planned
+- Milestone 57: Vision and Image Recognition - Completed
 - Milestone 58: Camera, Depth, and Computational Capture - Planned
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Planned
 - Milestone 60: Video Codecs and Pixel Processing - Planned
@@ -891,50 +891,52 @@ Completed Milestone 56 by shipping `core-image-processing-workflow` and `apple-i
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Ship `vision-image-analysis-workflow` for Apple-provided image and video analysis requests, observations, request execution, tracking, segmentation, pose detection, feature prints, and coordinate conversion.
-- [ ] Ship `vision-coreml-recognition-workflow` for custom Core ML-backed classification, object detection, semantic segmentation, model input policy, compute selection, preprocessing, postprocessing, and regression evidence.
-- [ ] Keep Vision's image-analysis lifecycle separate from Core ML's model-execution lifecycle while documenting their intended integration through Vision Core ML requests.
-- [ ] Treat confidence values as model outputs rather than proof of identity, correctness, safety, or authorization.
+- [x] Ship `vision-image-analysis-workflow` for Apple-provided image and video analysis requests, observations, request execution, tracking, segmentation, pose detection, feature prints, and coordinate conversion.
+- [x] Ship `vision-coreml-recognition-workflow` for custom Core ML-backed classification, object detection, semantic segmentation, model input policy, compute selection, preprocessing, postprocessing, and regression evidence.
+- [x] Keep Vision's image-analysis lifecycle separate from Core ML's model-execution lifecycle while documenting their intended integration through Vision Core ML requests.
+- [x] Treat confidence values as model outputs rather than proof of identity, correctness, safety, or authorization.
 
 ### Framework Ownership
 
-- [ ] Vision owns image-oriented requests, handlers, observations, tracking, normalized coordinate systems, revisions, crop-and-scale policy, and Core ML image-model integration.
-- [ ] Core ML owns model loading, typed model inputs and outputs, compute-unit selection, prediction execution, model configuration, and model metadata.
-- [ ] Natural-language, sound, and tabular model tasks remain outside this image-focused milestone unless they are required to explain a clear handoff.
-- [ ] Core Image owns pixel preprocessing or presentation effects; it must not become a second recognition framework.
-- [ ] AVFoundation owns live capture and sample delivery; the Vision skills own analysis after a frame reaches the analysis boundary.
+- [x] Vision owns image-oriented requests, handlers, observations, tracking, normalized coordinate systems, revisions, crop-and-scale policy, and Core ML image-model integration.
+- [x] Core ML owns model loading, typed model inputs and outputs, compute-unit selection, prediction execution, model configuration, and model metadata.
+- [x] Natural-language, sound, and tabular model tasks remain outside this image-focused milestone unless they are required to explain a clear handoff.
+- [x] Core Image owns pixel preprocessing or presentation effects; it must not become a second recognition framework.
+- [x] AVFoundation owns live capture and sample delivery; the Vision skills own analysis after a frame reaches the analysis boundary.
 
 ### Required Guidance
 
-- [ ] Cover text, barcode, face rectangle and landmark, rectangle, horizon, contour, saliency, trajectory, animal, body, and hand-pose requests where current platform documentation supports them.
-- [ ] Cover person and foreground segmentation, object tracking, feature prints, image similarity, request revisions, request cancellation, sequence handlers, and frame-dropping policy for live streams.
-- [ ] Explain image orientation, normalized Vision coordinates, lower-left versus upper-left origins, crop-and-scale behavior, preview-layer transforms, and bounding-box conversion back to source or display coordinates.
-- [ ] Cover `VNCoreMLModel` or its current documented successor surface, classification versus object detection, semantic segmentation, labels, confidence thresholds, nonmaximum suppression boundaries, and model-specific postprocessing.
-- [ ] Require pinned model provenance, repeatable fixtures, representative-device profiling, and a small regression or evaluation sanity check when model or request logic changes.
-- [ ] Keep face detection, face landmarks, and face tracking distinct from biometric identity and from Face ID authentication.
+- [x] Cover text, barcode, face rectangle and landmark, rectangle, horizon, contour, saliency, trajectory, animal, body, and hand-pose requests where current platform documentation supports them.
+- [x] Cover person and foreground segmentation, object tracking, feature prints, image similarity, request revisions, request cancellation, sequence handlers, and frame-dropping policy for live streams.
+- [x] Explain image orientation, normalized Vision coordinates, lower-left versus upper-left origins, crop-and-scale behavior, preview-layer transforms, and bounding-box conversion back to source or display coordinates.
+- [x] Cover `VNCoreMLModel` or its current documented successor surface, classification versus object detection, semantic segmentation, labels, confidence thresholds, nonmaximum suppression boundaries, and model-specific postprocessing.
+- [x] Require pinned model provenance, repeatable fixtures, representative-device profiling, and a small regression or evaluation sanity check when model or request logic changes.
+- [x] Keep face detection, face landmarks, and face tracking distinct from biometric identity and from Face ID authentication.
 
 ### Documentation Anchors
 
-- [ ] Refresh Xcode documentation for current Vision Swift and Objective-C request surfaces, request handlers, sequence analysis, observations, coordinate conversion, request revisions, and compute-stage behavior.
-- [ ] Refresh Xcode documentation for Core ML model integration, model configuration, compute units, image constraints, classification, object detection, and semantic segmentation.
-- [ ] Use current sample code where Xcode documentation exposes important lifecycle, concurrency, or coordinate behavior not apparent from symbol reference alone.
+- [x] Refresh Xcode documentation for current Vision Swift and Objective-C request surfaces, request handlers, sequence analysis, observations, coordinate conversion, request revisions, and compute-stage behavior.
+- [x] Refresh Xcode documentation for Core ML model integration, model configuration, compute units, image constraints, classification, object detection, and semantic segmentation.
+- [x] Use current sample code where Xcode documentation exposes important lifecycle, concurrency, or coordinate behavior not apparent from symbol reference alone.
 
 ### Implementation and Review Gate
 
-- [ ] Add both skill directories, focused references, interface metadata, customization contracts, routing, and explicit camera/Core Image/Core ML handoffs.
-- [ ] Add tests for coordinate-system guidance, confidence semantics, model provenance, live-frame back-pressure, simulator/device claims, and Face ID boundary wording.
-- [ ] Update README, plugin metadata, active inventory, roadmap status, and cross-skill handoffs before completing the milestone.
-- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
-- [ ] Review the milestone as a complete recognition surface before beginning camera and depth work.
+- [x] Add both skill directories, focused references, interface metadata, customization contracts, routing, and explicit camera/Core Image/Core ML handoffs.
+- [x] Add tests for coordinate-system guidance, confidence semantics, model provenance, live-frame back-pressure, simulator/device claims, and Face ID boundary wording.
+- [x] Update README, plugin metadata, active inventory, roadmap status, and cross-skill handoffs before completing the milestone.
+- [x] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [x] Review the milestone as a complete recognition surface before beginning camera and depth work.
 
 ### Exit Criteria
 
-- [ ] Apple Dev Skills can route built-in visual analysis and custom model-backed recognition without conflating Vision, Core ML, Core Image, AVFoundation, or biometric authentication.
-- [ ] Coordinate conversion, orientation, frame lifecycle, model confidence, evaluation evidence, and device-performance boundaries are explicit and test-covered.
+- [x] Apple Dev Skills can route built-in visual analysis and custom model-backed recognition without conflating Vision, Core ML, Core Image, AVFoundation, or biometric authentication.
+- [x] Coordinate conversion, orientation, frame lifecycle, model confidence, evaluation evidence, and device-performance boundaries are explicit and test-covered.
+
+Completed Milestone 57 by shipping `vision-image-analysis-workflow` and `vision-coreml-recognition-workflow`, a shared Vision coordinate, confidence, identity, and live-frame contract, focused built-in request, sequence, coordinate, custom Core ML integration, model provenance, evaluation, performance, and diagnostic references, plus plugin, README, inventory, customization, and cross-skill handoff updates. Current Xcode documentation was checked for the modern Swift Vision request surface, the original `VN*` API, image locations, request families, Vision/Core ML integration, model configuration, compute units, and image constraints; both skill packages, targeted tests, docs validation, 210 Apple Dev tests, and root Socket validation passed before milestone closure.
 
 ## Milestone 58: Camera, Depth, and Computational Capture
 

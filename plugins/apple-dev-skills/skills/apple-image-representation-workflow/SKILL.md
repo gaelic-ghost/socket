@@ -73,7 +73,7 @@ Guide image source, destination, representation, and conversion work without fla
 ## Fallbacks and Handoffs
 
 - Recommend `core-image-processing-workflow` for filters, RAW development, compositing, color processing, custom kernels, or rendering.
-- Recommend `vision-image-analysis-workflow` for recognition and analysis after Milestone 57 ships.
+- Recommend `vision-image-analysis-workflow` for recognition and analysis.
 - Recommend `appkit-app-architecture-workflow` for broader macOS view, controller, window, or application ownership.
 - Recommend `avfoundation-media-pipeline-workflow` for assets, capture, video, readers, writers, or export.
 - Recommend `photos-library-editing-workflow` for PhotoKit and PhotosUI ownership after Milestone 61 ships.

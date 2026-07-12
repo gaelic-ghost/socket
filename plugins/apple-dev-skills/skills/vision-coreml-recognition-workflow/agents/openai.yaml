@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vision Core ML Recognition Workflow"
+  short_description: "Integrate Core ML image recognition with Vision"
+  default_prompt: "Use $vision-coreml-recognition-workflow to integrate, repair, evaluate, or diagnose custom Core ML image classification, object detection, or segmentation through Apple Vision."

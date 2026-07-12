@@ -120,6 +120,8 @@ active_skill_mds=(
   "./skills/coreaudio-modernization-repair-workflow/SKILL.md"
   "./skills/core-image-processing-workflow/SKILL.md"
   "./skills/apple-image-representation-workflow/SKILL.md"
+  "./skills/vision-image-analysis-workflow/SKILL.md"
+  "./skills/vision-coreml-recognition-workflow/SKILL.md"
   "./skills/core-animation-layer-workflow/SKILL.md"
   "./skills/apple-typography-workflow/SKILL.md"
   "./skills/sf-symbols-workflow/SKILL.md"
@@ -143,7 +145,7 @@ active_skill_mds=(
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 36 ]] || fail "Expected exactly 36 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 38 ]] || fail "Expected exactly 38 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
