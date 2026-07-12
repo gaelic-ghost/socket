@@ -76,7 +76,8 @@ Guide AVFoundation camera, photo, depth, and computational-capture work while ke
 - Recommend `avfaudio-session-workflow` for microphone permission, audio category, route, interruption, and shared capture-session audio policy.
 - Recommend `vision-image-analysis-workflow` or `vision-coreml-recognition-workflow` after typed frames reach the analysis boundary.
 - Recommend `core-image-processing-workflow` for image effects, mattes, compositing, color, or rendering after capture.
-- Recommend `arkit-spatial-sensing-workflow` for LiDAR scene reconstruction, world tracking, anchors, and environment mapping after Milestone 59 ships.
+- Recommend `arkit-spatial-sensing-workflow` for LiDAR scene reconstruction, world tracking, anchors, and environment mapping.
+- Recommend `arkit-face-body-tracking-workflow` for TrueDepth face geometry and AR body tracking.
 - Recommend `xcode-build-run-workflow` for privacy strings, entitlements, build, run, physical-device capture, logging, or Instruments.
 - Recommend `xcode-testing-workflow` for fixtures, capability probes, deterministic transforms, and device test plans.
 - Recommend `explore-apple-swift-docs` for current capture documentation.

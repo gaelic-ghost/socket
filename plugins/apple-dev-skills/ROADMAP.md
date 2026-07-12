@@ -92,7 +92,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 56: Apple Imaging Foundations - Completed
 - Milestone 57: Vision and Image Recognition - Completed
 - Milestone 58: Camera, Depth, and Computational Capture - Completed
-- Milestone 59: ARKit Spatial, Face, and Body Sensing - Planned
+- Milestone 59: ARKit Spatial, Face, and Body Sensing - Completed
 - Milestone 60: Video Codecs and Pixel Processing - Planned
 - Milestone 61: Photos Library and Media Selection - Planned
 - Milestone 62: Media Expansion Audit and Socket Major Release - Planned
@@ -988,45 +988,47 @@ Completed Milestone 58 by shipping `camera-capture-depth-workflow`, a shared lay
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Ship `arkit-spatial-sensing-workflow` for world tracking, anchors, planes, ray casting, scene depth, LiDAR reconstruction, meshes, environment understanding, world-map persistence, and spatial diagnostics.
-- [ ] Ship `arkit-face-body-tracking-workflow` for TrueDepth face tracking, face geometry, blend shapes, eye transforms, body tracking, skeleton data, and their rendering or analysis handoffs.
-- [ ] Keep Local Authentication as the owner of Face ID and Touch ID authentication; do not imply that apps can access enrolled biometric templates, reusable Face ID identity data, or the system's authentication model.
-- [ ] Keep ARKit tracking separate from Vision analysis and from AVFoundation sensor capture while documenting when a task crosses those boundaries.
+- [x] Ship `arkit-spatial-sensing-workflow` for world tracking, anchors, planes, ray casting, scene depth, LiDAR reconstruction, meshes, environment understanding, world-map persistence, and spatial diagnostics.
+- [x] Ship `arkit-face-body-tracking-workflow` for TrueDepth face tracking, face geometry, blend shapes, eye transforms, body tracking, skeleton data, and their rendering or analysis handoffs.
+- [x] Keep Local Authentication as the owner of Face ID and Touch ID authentication; do not imply that apps can access enrolled biometric templates, reusable Face ID identity data, or the system's authentication model.
+- [x] Keep ARKit tracking separate from Vision analysis and from AVFoundation sensor capture while documenting when a task crosses those boundaries.
 
 ### Required Guidance
 
-- [ ] Cover AR session lifecycle, configuration support checks, tracking state, world alignment, anchors, planes, feature points, ray casting, environment texturing, relocalization, interruption, and reset choices.
-- [ ] Cover scene depth, smoothed scene depth, scene reconstruction, mesh anchors, mesh classification, occlusion, hit testing, spatial measurements, and LiDAR capability checks.
-- [ ] Cover world maps and persistence, reference images and objects, object scanning handoffs, geographic or location anchors where supported, and environment probes.
-- [ ] Cover front-camera TrueDepth requirements, face anchors, geometry, topology, transforms, eye transforms, blend shapes, face-driven animation, and world-plus-face tracking where supported.
-- [ ] Cover body tracking, skeleton definitions, joint transforms, scale estimation, and platform/device limitations.
-- [ ] Route room-scale scanning to RoomPlan, presentation and interaction to RealityKit or SceneKit as appropriate, and advanced rendering to Metal without absorbing those frameworks into generic ARKit wrappers.
-- [ ] Address privacy, stored spatial maps, face data, bystander data, data minimization, user notice, and lifecycle deletion as part of implementation guidance.
-- [ ] Distinguish iOS/iPadOS ARKit behavior from visionOS ARKit authorization, provider, and data-access models where current documentation differs.
+- [x] Cover AR session lifecycle, configuration support checks, tracking state, world alignment, anchors, planes, feature points, ray casting, environment texturing, relocalization, interruption, and reset choices.
+- [x] Cover scene depth, smoothed scene depth, scene reconstruction, mesh anchors, mesh classification, occlusion, hit testing, spatial measurements, and LiDAR capability checks.
+- [x] Cover world maps and persistence, reference images and objects, object scanning handoffs, geographic or location anchors where supported, and environment probes.
+- [x] Cover front-camera TrueDepth requirements, face anchors, geometry, topology, transforms, eye transforms, blend shapes, face-driven animation, and world-plus-face tracking where supported.
+- [x] Cover body tracking, skeleton definitions, joint transforms, scale estimation, and platform/device limitations.
+- [x] Route room-scale scanning to RoomPlan, presentation and interaction to RealityKit or SceneKit as appropriate, and advanced rendering to Metal without absorbing those frameworks into generic ARKit wrappers.
+- [x] Address privacy, stored spatial maps, face data, bystander data, data minimization, user notice, and lifecycle deletion as part of implementation guidance.
+- [x] Distinguish iOS/iPadOS ARKit behavior from visionOS ARKit authorization, provider, and data-access models where current documentation differs.
 
 ### Documentation Anchors
 
-- [ ] Refresh Xcode documentation for AR world tracking, scene depth, scene reconstruction, mesh anchors, ray casting, environment understanding, face tracking, body tracking, and ARKit in visionOS.
-- [ ] Refresh Xcode documentation for Local Authentication before writing any Face ID boundary or authentication handoff.
-- [ ] Check current RoomPlan, RealityKit, and SceneKit documentation only where their handoff behavior affects the ARKit workflow contract.
+- [x] Refresh Xcode documentation for AR world tracking, scene depth, scene reconstruction, mesh anchors, ray casting, environment understanding, face tracking, body tracking, and ARKit in visionOS.
+- [x] Refresh Xcode documentation for Local Authentication before writing any Face ID boundary or authentication handoff.
+- [x] Check current RoomPlan, RealityKit, and SceneKit documentation only where their handoff behavior affects the ARKit workflow contract.
 
 ### Implementation and Review Gate
 
-- [ ] Add both skills, references, metadata, customization contracts, privacy guidance, device-capability rules, and handoffs.
-- [ ] Add tests that reject Face ID/TrueDepth conflation, unsupported simulator claims, generic spatial-manager abstractions, and unqualified device assumptions.
-- [ ] Update README, plugin metadata, active inventory, roadmap status, and handoffs from camera, Vision, accessibility, and Xcode execution workflows.
-- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
-- [ ] Review the complete spatial surface for privacy, framework ownership, platform divergence, and physical-device evidence before beginning codec work.
+- [x] Add both skills, references, metadata, customization contracts, privacy guidance, device-capability rules, and handoffs.
+- [x] Add tests that reject Face ID/TrueDepth conflation, unsupported simulator claims, generic spatial-manager abstractions, and unqualified device assumptions.
+- [x] Update README, plugin metadata, active inventory, roadmap status, and handoffs from camera, Vision, accessibility, and Xcode execution workflows.
+- [x] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [x] Review the complete spatial surface for privacy, framework ownership, platform divergence, and physical-device evidence before beginning codec work.
 
 ### Exit Criteria
 
-- [ ] Apple Dev Skills provides distinct, composable guidance for spatial sensing and face/body tracking.
-- [ ] Face ID authentication, TrueDepth face tracking, Vision face analysis, and ordinary camera capture are explicitly different workflows.
-- [ ] LiDAR, depth, reconstruction, world mapping, environment understanding, and platform-specific ARKit behavior are capability-gated and docs-backed.
+- [x] Apple Dev Skills provides distinct, composable guidance for spatial sensing and face/body tracking.
+- [x] Face ID authentication, TrueDepth face tracking, Vision face analysis, and ordinary camera capture are explicitly different workflows.
+- [x] LiDAR, depth, reconstruction, world mapping, environment understanding, and platform-specific ARKit behavior are capability-gated and docs-backed.
+
+Completed Milestone 59 by shipping `arkit-spatial-sensing-workflow` and `arkit-face-body-tracking-workflow`, a shared spatial-data and privacy contract, focused world/depth/mesh/map, visionOS provider/rendering, face/authentication, body/skeleton/scale, privacy, diagnostics, and physical-device validation references, plus camera, Vision, accessibility, plugin, README, inventory, customization, and test updates. Current Xcode documentation was checked for world tracking, planes, frame semantics, scene depth, reconstruction, meshes/classification, maps, reference objects, face anchors and world-plus-face support, body skeletons and scale, visionOS authorization/providers, Local Authentication, RoomPlan, RealityKit, and SceneKit handoffs. Both skill packages, targeted tests, docs validation, 219 Apple Dev tests, and root Socket validation passed before milestone closure.
 
 ## Milestone 60: Video Codecs and Pixel Processing
 

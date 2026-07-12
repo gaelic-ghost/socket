@@ -66,8 +66,8 @@ class CustomizationConsolidationReviewTests(unittest.TestCase):
         knob_count = _count_template_knobs()
         runtime_enforced, policy_only = _count_statuses()
 
-        self.assertEqual(template_count, 39)
-        self.assertEqual(script_count, 39)
+        self.assertEqual(template_count, 41)
+        self.assertEqual(script_count, 41)
         self.assertEqual(knob_count, 21)
         self.assertEqual(runtime_enforced, 20)
         self.assertEqual(policy_only, 1)

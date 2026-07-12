@@ -52,7 +52,7 @@ class TipKitWorkflowTests(unittest.TestCase):
         self.assertIn("tipkit-workflow", readme)
         self.assertIn("TipKit", plugin)
         self.assertIn("./skills/tipkit-workflow/SKILL.md", validator)
-        self.assertIn("Expected exactly 39 active skills", validator)
+        self.assertIn("Expected exactly 41 active skills", validator)
         self.assertIn("Milestone 55: TipKit Workflow", roadmap)
 
 

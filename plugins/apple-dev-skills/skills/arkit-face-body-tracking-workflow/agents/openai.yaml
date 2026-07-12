@@ -1,0 +1,4 @@
+interface:
+  display_name: "ARKit Face and Body Tracking Workflow"
+  short_description: "Track faces and bodies with Apple ARKit"
+  default_prompt: "Use $arkit-face-body-tracking-workflow to implement, repair, or diagnose ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale, privacy, and framework handoffs."

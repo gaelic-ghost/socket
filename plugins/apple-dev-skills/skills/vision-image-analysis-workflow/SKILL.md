@@ -76,7 +76,7 @@ Guide Apple-provided image and video analysis while keeping Vision request owner
 - Recommend `vision-coreml-recognition-workflow` for custom Core ML image models.
 - Recommend `core-image-processing-workflow` and `apple-image-representation-workflow` for processing, decode, metadata, orientation normalization, or representation ownership.
 - Recommend `camera-capture-depth-workflow` for camera selection, controls, depth, and calibrated capture; recommend `avfoundation-media-pipeline-workflow` for general session and frame-delivery ownership.
-- Recommend `arkit-face-body-tracking-workflow` for TrueDepth face geometry or AR body tracking after Milestone 59 ships.
+- Recommend `arkit-face-body-tracking-workflow` for TrueDepth face geometry or AR body tracking.
 - Recommend `xcode-build-run-workflow` for app integration, physical-device execution, signing, permissions, or profiling.
 - Recommend `xcode-testing-workflow` for fixtures, coordinate tests, sequence regressions, and performance baselines.
 - Recommend `explore-apple-swift-docs` for documentation research.
