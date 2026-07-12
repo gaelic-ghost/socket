@@ -37,6 +37,17 @@ class Milestone24SystemUIWorkflowTests(unittest.TestCase):
         self.assertIn("$swiftui-liquid-glass", prompt)
         self.assertIn('SKILL_NAME = "swiftui-liquid-glass"', customization)
 
+    def test_runtime_and_distribution_workflows_preserve_evidence_boundaries(self) -> None:
+        performance = self.read("skills/swiftui-performance-audit/SKILL.md")
+        forensics = self.read("skills/ios-runtime-forensics-workflow/SKILL.md")
+        distribution = self.read("skills/macos-distribution-workflow/SKILL.md")
+
+        self.assertIn("code-level suspicion or trace-backed evidence", performance)
+        self.assertIn("performance-trace", forensics)
+        self.assertIn("memory-graph", forensics)
+        self.assertIn("codesign --verify --deep --strict", self.read("skills/macos-distribution-workflow/references/artifact-inspection-and-classification.md"))
+        self.assertIn("Do not call notarization necessary for a normal local Debug run", distribution)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS Runtime Forensics"
+  short_description: "Capture focused Simulator performance and memory evidence"
+  default_prompt: "Use $ios-runtime-forensics-workflow to plan or interpret reproducible iOS Simulator ETTrace or memgraph evidence without confusing it with ordinary build and launch work."

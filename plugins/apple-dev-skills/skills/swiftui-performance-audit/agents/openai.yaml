@@ -1,0 +1,4 @@
+interface:
+  display_name: "SwiftUI Performance Audit"
+  short_description: "Separate SwiftUI code smells from trace-backed evidence"
+  default_prompt: "Use $swiftui-performance-audit to diagnose a SwiftUI performance symptom from code first, then define the smallest valid Instruments or xctrace follow-up."

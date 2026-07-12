@@ -160,6 +160,8 @@ uv run pytest
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
+- `ios-runtime-forensics-workflow`
+- `macos-distribution-workflow`
 - `migrate-xcode-project-to-xcodegen`
 - `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
@@ -178,6 +180,7 @@ uv run pytest
 - `swiftui-app-architecture-workflow`
 - `swiftui-component-audit-workflow`
 - `swiftui-liquid-glass`
+- `swiftui-performance-audit`
 - `sync-swift-package-guidance`
 - `sync-xcode-project-guidance`
 - `xcode-app-project-workflow`
