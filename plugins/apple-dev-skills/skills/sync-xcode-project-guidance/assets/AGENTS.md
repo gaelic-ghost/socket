@@ -22,7 +22,7 @@
 - Treat the `.xcworkspace` or `.xcodeproj` as the source of truth for app integration, schemes, and build settings.
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
 - Choose and record one explicit three-letter uppercase prefix for project-owned Swift files and declarations. Exempt only `Package.swift`, externally generated Swift, and vendored third-party Swift.
-- Never use `+` filenames. Name views `GEAWhateverView.swift`, paired view models `GEAWhateverViewModel.swift`, and extracted modifiers `GEAWhateverViewModifier.swift`.
+- Never use `+` filenames. Name views `GEAWhateverView.swift` and extracted modifiers `GEAWhateverViewModifier.swift`; do not use external ViewModels as a SwiftUI shape.
 - Give independently editable or previewable components their own files; small private helpers may remain while they do not clutter focused editing.
 - Prefix child components with their complete composition owner, such as `GEASettingsSheetToggleCard.swift`.
 - Use `GEAApp.swift` for the lifecycle entry, `GEA.swift` for the runtime/domain value, and `GEAAppService.swift` for its main service.

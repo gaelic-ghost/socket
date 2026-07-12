@@ -63,19 +63,19 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         self.assertIn("Grouped SwiftUI View Files", anti_patterns_text)
         self.assertIn("keep that component's Xcode SwiftUI preview in the same file", anti_patterns_text)
 
-    def test_swiftui_view_models_are_per_view_only(self) -> None:
+    def test_swiftui_components_do_not_use_external_view_models(self) -> None:
         skill_text = self.read("skills/swiftui-app-architecture-workflow/SKILL.md")
         anti_patterns_text = self.read(
             "skills/swiftui-app-architecture-workflow/references/anti-patterns-and-corrections.md"
         )
         shared_snippet_text = self.read("shared/agents-snippets/apple-xcode-project-core.md")
 
-        self.assertIn("GEAWhateverViewModel.swift", skill_text)
+        self.assertIn("Do not make an external ViewModel", skill_text)
         self.assertIn("Never use `+` filenames", skill_text)
-        self.assertIn("Shared SwiftUI View Models", anti_patterns_text)
-        self.assertIn("put the view model for `GEAWhateverView.swift`", anti_patterns_text)
-        self.assertIn("GEAWhateverViewModel.swift", shared_snippet_text)
-        self.assertNotIn("own matching state for a view or small view cluster", shared_snippet_text)
+        self.assertIn("External SwiftUI View Models And Collaborators", anti_patterns_text)
+        self.assertIn("memberwise initializer", anti_patterns_text)
+        self.assertIn("self-contained, reactive, flexible, reusable", shared_snippet_text)
+        self.assertIn("Do not inject external ViewModels", shared_snippet_text)
 
 
 if __name__ == "__main__":

@@ -58,14 +58,16 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 
 ## SwiftUI and State Architecture
 
-- Treat SwiftUI views as component UI: keep them small, composable, reusable, and easy to scan from top to bottom.
+- Treat SwiftUI as declarative component UI, closer to React, F# Fabulous, and Elm than to imperative AppKit or UIKit code. Keep views self-contained, reactive, flexible, reusable, and easy to scan from top to bottom.
+- Give each independently reusable view a declarative interface of plain values, narrow bindings, and action closures. Do not inject external ViewModels, stores, coordinators, managers, services, or other collaborating objects from one reusable view into another.
 - Choose and record one explicit three-letter uppercase prefix for every app or package. Prefix project-owned Swift files and primary declarations; exempt only `Package.swift`, externally generated Swift, and vendored third-party Swift.
 - Never use `+` in project-owned Swift filenames. Concatenate the owner and concern so Xcode navigation, rename, and refactoring keep one consistent grammar.
-- Name views `GEAWhateverView.swift`, paired `@Observable final class` view models `GEAWhateverViewModel.swift`, and extracted modifiers `GEAWhateverViewModifier.swift`.
+- Name views `GEAWhateverView.swift` and extracted modifiers `GEAWhateverViewModifier.swift`. Do not introduce ViewModel files as a SwiftUI default.
 - Give independently editable or previewable view components their own files. Small private computed view properties or helper views may remain while they do not clutter focused editing or previews.
 - Prefix extracted child components with their complete composition owner, such as `GEASettingsSheetToggleCard.swift`.
 - Extract a custom `ViewModifier` after more than eight chained modifiers, or earlier when a coherent chain is reusable or obscures the view body.
 - Prefer straight, top-down data flow with state owned at the narrowest view, scene, or app boundary that matches the behavior.
+- Prefer `@State`, derived values, bindings, and small private helpers for component-local presentation state. When a component genuinely needs an observable state type, create and own it locally with `@State`; do not pass it to a separately reusable view.
 - Do not build monolithic views, monolithic controllers, or broad shared mutable state when a smaller component boundary would be clearer.
 - Keep updates to view-driving state minimal and localized.
 - Prefer durable identity for types that drive SwiftUI state and view updates.
@@ -75,7 +77,10 @@ Use this snippet in repository `AGENTS.md` files when you want baseline standard
 - Use `@Binding` to pass a focused writable piece of parent-owned state into a child view.
 - Use `@Bindable` when working with an observable model that should project bindings to its mutable properties in a view.
 - Use the dedicated SwiftData workflow for persistence architecture and its direct SwiftUI integration path.
-- Prefer environment values for shared context that truly belongs to the surrounding hierarchy, not as a dumping ground for unrelated dependencies.
+- Prefer existing SwiftUI environment values and actions before inventing an equivalent router or service. Use environment values for shared context that truly belongs to the surrounding hierarchy, not as a dumping ground for unrelated dependencies.
+- Add custom environment values or actions when a capability is dynamic across the hierarchy or shared by many independent components. Keep actions local to the owning component when only that component and its private child views use them.
+- Use preference keys only to publish descendant-derived information upward to an ancestor, never as a general state bus.
+- Prefer Swift's synthesized memberwise initializer for view properties. Do not write an explicit initializer unless it has real behavior beyond assigning those properties.
 - Prefer key-path-based APIs, predicates, and sort descriptors when they keep data access direct and readable.
 - Extract repeated chains of view modifiers into custom view modifiers early when that reduces clutter and clearly matches a view or family of views.
 

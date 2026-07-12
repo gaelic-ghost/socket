@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
-  "version": "8.9.0",
-  "description": "Apple development workflows for Codex, including Apple Developer provisioning and CloudKit automation planning, TipKit, SwiftData, SwiftUI architecture, media and audio repair, XcodeGen migration, Xcode coding intelligence, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck/App Attest, Swift OpenAPI clients, and DocC.",
+  "version": "8.10.0",
+  "description": "Apple development workflows for Codex, including Apple Developer provisioning and CloudKit automation planning, TipKit, SwiftData, declarative SwiftUI architecture and component repair, media and audio repair, XcodeGen migration, Xcode coding intelligence, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck/App Attest, Swift OpenAPI clients, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -54,7 +54,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple, Swift, TipKit, media/audio repair, Xcode/XcodeGen, SwiftUI, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck, App Attest, OpenAPI client, and DocC workflows for Codex.",
+    "shortDescription": "Apple, Swift, declarative SwiftUI repair, TipKit, media/audio repair, Xcode/XcodeGen, Core Animation, typography, SF Symbols, AppKit, Safari, DeviceCheck, App Attest, OpenAPI client, and DocC workflows for Codex.",
     "longDescription": "Bundle Apple-platform development skills for TipKit inline tips and tooltip popovers, AVFAudio session repair, AVAudioEngine graph repair, AVFoundation media pipelines, Core Media timing and sample-buffer diagnostics, Core Audio modernization, strict Apple media type and framework selection, XcodeGen migration and modernization audits, Xcode coding intelligence setup, Xcode-hosted agents, external-agent MCP access through xcrun mcpbridge, Swift, SwiftUI animation and architecture, Core Animation layer-backed rendering and animation, Apple typography and Dynamic Type, SF Symbols selection and custom-symbol workflows, AppKit architecture, Icon Composer app icon production, Safari extension, Safari Web Inspector, SafariServices integration, DeviceCheck device-state and App Attest app-integrity planning, generated Swift OpenAPI clients with URLSession transport, Xcode, SwiftPM, DocC authoring and review, testing, formatting, and repository guidance work across iOS, macOS, and related Apple tooling. Most workflows work standalone; bootstrap and guidance-sync workflows that install or refresh repo-maintenance files require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
@@ -66,6 +66,7 @@
     "defaultPrompt": [
       "Repair or modernize Apple media and audio code across AVFAudio sessions, AVAudioEngine graphs, AVFoundation pipelines, Core Media timing, and legacy Core Audio surfaces.",
       "Explore the relevant Apple docs first, then explain the right SwiftUI, AppKit, or Xcode path for this repository.",
+      "Audit or repair SwiftUI code into self-contained declarative components with local reactive state and no external ViewModel shape.",
       "Choose, customize, color, animate, validate, or integrate SF Symbols using current Apple docs and the local SF Symbols app when needed.",
       "Design, implement, repair, or validate SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior.",
       "Decide when Core Animation is justified, then repair CALayer trees, CAAnimation timing, transactions, model/presentation behavior, and layer-backed framework bridges.",

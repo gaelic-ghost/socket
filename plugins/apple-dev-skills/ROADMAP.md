@@ -49,6 +49,13 @@ Swift naming and persistence ownership are now standardized: each project explic
 
 ## Milestone Progress
 
+### Declarative SwiftUI Component Alignment
+
+- [x] Make self-contained, reactive, flexible, reusable declarative `View` components the required SwiftUI shape.
+- [x] Remove external ViewModels as a recommended SwiftUI architecture and require view-local observable state to be owned with `@State`.
+- [x] Add `swiftui-component-audit-workflow` for repeatable audits and repairs of collaborator injection, imperative coordination, state duplication, environment misuse, and unnecessary initializers.
+- [x] Align SwiftUI guidance around direct SwiftData integration, existing and custom environment actions, preferences, focus, commands, bindings, and memberwise initializers.
+
 - Milestone 21: Swift Cleanup Automation Exploration - Planned
 - Milestone 24: MCP App UI for Configuration and Customization - Planned
 - Milestone 25: macOS Menu Bar Extra for Skill Controls - Planned
@@ -350,7 +357,7 @@ Completed
 - [x] Define the skill boundary so it owns SwiftUI application UI architecture and composition guidance without replacing the lower-level Apple docs routing skill or the broader accessibility workflow.
 - [x] Gather the core Apple documentation references for `App`, scenes, scene types, commands, command groups, focused values, scene-focused values, environment values, preferences, window and document structure, and view composition.
 - [x] Cover practical SwiftUI app-structure topics including commands, command menus, command groups, scenes, scene identity, scene focus values, focused values, environment propagation, preference keys, and reusable component and view patterns.
-- [x] Teach when to use `Environment`, when to prefer explicit dependency injection, when preferences are the right upward data-flow tool, and when neither should be used.
+- [x] Teach when to use `Environment`, values/bindings/actions, custom environment actions, and preferences as the right upward data-flow tool, and when neither should be used.
 - [x] Cover anti-patterns directly, including stuffing everything into environment objects, building giant root views, inventing wrapper layers instead of small composable views, overusing preference keys, hiding control flow in modifiers, and pushing app-level command logic into unrelated leaf views.
 - [x] Include guidance for desktop-centric SwiftUI surfaces such as menu commands, focused command handling, window or scene coordination, and top-level app structure where macOS-style SwiftUI differs from simpler iOS-only examples.
 - [x] Add tests and maintainer docs once the workflow shape is stable.

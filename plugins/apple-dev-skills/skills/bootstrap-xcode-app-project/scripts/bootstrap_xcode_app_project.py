@@ -161,7 +161,7 @@ struct {app_type}: App {{
 
     var body: some Scene {{
         WindowGroup {{
-            {prefix}ContentView(viewModel: {prefix}ContentViewModel(service: service))
+            {prefix}ContentView()
                 .environment(service)
         }}
     }}
@@ -189,27 +189,11 @@ def render_content_view(prefix: str) -> str:
     return f"""import SwiftUI
 
 struct {prefix}ContentView: View {{
-    @State var viewModel: {prefix}ContentViewModel
+    @Environment({prefix}AppService.self) private var service
 
     var body: some View {{
-        Text(viewModel.title)
+        Text(service.app.title)
             .padding()
-    }}
-}}
-"""
-
-
-def render_content_view_model(prefix: str) -> str:
-    return f"""import Observation
-
-@Observable
-final class {prefix}ContentViewModel {{
-    private let service: {prefix}AppService
-
-    var title: String {{ service.app.title }}
-
-    init(service: {prefix}AppService) {{
-        self.service = service
     }}
 }}
 """
@@ -337,7 +321,6 @@ def main() -> int:
     write_text(target_dir / f"Sources/{prefix}.swift", render_app_domain(prefix))
     write_text(target_dir / f"Sources/Services/Internal/{prefix}AppService.swift", render_app_service(prefix))
     write_text(target_dir / f"Sources/Views/Shared/{prefix}ContentView.swift", render_content_view(prefix))
-    write_text(target_dir / f"Sources/Views/Shared/{prefix}ContentViewModel.swift", render_content_view_model(prefix))
     write_text(target_dir / f"Tests/{args.name}Tests/{prefix}AppTests.swift", render_test_file(args.name, prefix))
     try:
         local_environment_path = install_local_environment(target_dir, args.name)

@@ -33,20 +33,45 @@ Correction:
 
 - split each SwiftUI `View` component into its own `<Name>.swift` file
 - keep that component's Xcode SwiftUI preview in the same file as the component
-- move view-local models, modifiers, and support code into explicit paired files such as `GEAWhateverViewModel.swift` and `GEAWhateverViewModifier.swift`
+- keep component-local state inside the component or extract only a genuinely reusable modifier such as `GEAWhateverViewModifier.swift`
 
-## Shared SwiftUI View Models
+## External SwiftUI View Models And Collaborators
 
 Bad shape:
 
-- one SwiftUI view model owns state for multiple views, a view family, a screen flow, or a small view cluster
-- multiple SwiftUI view models are collected in a shared model file instead of living beside their matching view files
+- a reusable view receives a ViewModel, store, coordinator, manager, service, or observable object from another view
+- a parent creates a view-specific object only to pass it through the component tree
+- a component writes an explicit initializer that only repeats its stored-property assignments
 
 Correction:
 
-- make SwiftUI view models per-view only
-- put the view model for `GEAWhateverView.swift` in `GEAWhateverViewModel.swift`
-- split shared view-model state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer
+- make reusable views self-contained declarative components with value, binding, and action inputs
+- own complex local presentation state inside the component with `@State` and a view-local `@Observable` type only when direct state is no longer readable
+- use the memberwise initializer unless a real transformation, validation, or invariant requires explicit initialization
+- use environment, focus, preferences, commands, SwiftData model objects, or a non-SwiftUI boundary only when each matches its actual framework or ownership boundary
+
+### Bad And Good Component Interfaces
+
+Bad:
+
+```swift
+struct GEAItemRow: View {
+    let viewModel: GEAItemRowViewModel
+    let coordinator: GEAItemCoordinator
+}
+```
+
+Good:
+
+```swift
+struct GEAItemRow: View {
+    let title: String
+    let isComplete: Bool
+    let onToggle: () -> Void
+}
+```
+
+Private implementation views may accept the enclosing component's local values, bindings, and actions. That is ordinary composition, not cross-component dependency injection.
 
 ## Wrapper-Heavy Architecture
 

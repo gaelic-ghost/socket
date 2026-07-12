@@ -14,8 +14,10 @@
 
 ## Practical Rules
 
-- Prefer explicit initializer injection when the dependency is narrow and the ownership chain is clear.
+- Prefer plain values, narrow bindings, and action closures for a reusable view's explicit interface; do not inject a collaborating object merely because the ownership chain is short.
 - Prefer environment only when many descendants share the same contextual dependency and the surrounding hierarchy is the honest owner.
+- Prefer existing SwiftUI environment actions such as `dismiss`, `openWindow`, and `openSettings` before creating an equivalent application router or action object.
+- Add a custom environment value or action when a capability must be dynamic across the hierarchy or is honestly shared by many independent components. Keep a custom action local to one component when only that component and its private child views need it.
 - Prefer a preference key only when the information is discovered in a descendant and must travel upward.
 - Prefer focused values rather than environment when the state is about active scene or focused-subtree context for commands.
 - Treat native environment actions like `dismiss`, `dismissWindow`, `openWindow`, and `openSettings` as presentation requests, not as general state transport.
@@ -28,14 +30,14 @@ Use environment for:
 
 - a theme policy, style policy, or other shared context that honestly belongs to the surrounding scene or app hierarchy
 
-Use explicit injection for:
+Use explicit values, bindings, and action closures for:
 
-- an editor session, detail model, or narrow dependency that only a few descendants need
+- a title, selection, draft binding, or intent that only a few descendants need
 
 Why:
 
 - shared contextual scope is what environment is for
-- narrow ownership gets harder to explain once it is pushed into environment just for convenience
+- narrow ownership gets harder to explain once it becomes an injected collaborator or is pushed into environment just for convenience
 
 ### Example: Child Layout Reporting
 
@@ -80,6 +82,21 @@ Why:
 
 - `openWindow`, `dismissWindow`, `dismiss`, and `openSettings` are documented system actions exposed through environment because presentation is contextual
 - that does not imply your own business objects should also be pushed into environment just because they are convenient to reach
+
+### Example: Custom Actions Have A Deliberate Scope
+
+Use a local closure when:
+
+- one component owns an action and only its private implementation views call it
+
+Use a custom environment action when:
+
+- many independent components need the same action, or the action changes by app, scene, or subtree
+
+Why:
+
+- a local closure keeps a one-component behavior visible and easy to preview
+- a custom environment action makes a real hierarchy-wide capability explicit without passing a service or coordinator through reusable components
 
 ### Example: Inspector Visibility Belongs To The Owning Scene Or Detail Surface
 
