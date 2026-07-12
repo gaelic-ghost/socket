@@ -11,7 +11,7 @@ class XcodeToolchainSelectionGuidanceTests(unittest.TestCase):
     def read(self, relative_path: str) -> str:
         return (ROOT / relative_path).read_text(encoding="utf-8")
 
-    def test_xcode_workflows_document_global_and_command_scoped_toolchain_selection(self) -> None:
+    def test_xcode_workflows_require_xcode_select_and_permission_for_exceptions(self) -> None:
         references = [
             "skills/xcode-build-run-workflow/references/toolchain-management.md",
             "skills/xcode-testing-workflow/references/toolchain-management.md",
@@ -22,14 +22,16 @@ class XcodeToolchainSelectionGuidanceTests(unittest.TestCase):
             with self.subTest(reference=reference):
                 text = self.read(reference)
 
-                self.assertIn("DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer", text)
-                self.assertIn("DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer", text)
-                self.assertIn("DEVELOPER_DIR=/Applications/Betas/Xcode-beta.app/Contents/Developer", text)
+                self.assertIn("currently selected by `xcode-select`", text)
+                self.assertIn("Do not override it per command", text)
+                self.assertIn("Never set `DEVELOPER_DIR` by default", text)
+                self.assertIn("obtain Gale's explicit permission", text)
+                self.assertNotIn("DEVELOPER_DIR=", text)
                 self.assertIn("sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer", text)
                 self.assertIn("sudo xcode-select --switch /Applications/Xcode-beta.app/Contents/Developer", text)
                 self.assertIn("sudo xcode-select --switch /Applications/Betas/Xcode-beta.app/Contents/Developer", text)
                 self.assertIn("record the current value first with `xcode-select -p`", text)
-                self.assertIn("restore the previous path", text)
+                self.assertIn("restore a previous path only when the user asked for a temporary switch", text)
                 self.assertIn("Do not use `xcode-select --install` as an Xcode app switch", text)
 
     def test_icon_composer_checks_system_wide_beta_paths(self) -> None:

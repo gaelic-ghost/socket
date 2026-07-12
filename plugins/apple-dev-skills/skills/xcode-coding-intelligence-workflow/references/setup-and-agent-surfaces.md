@@ -34,7 +34,7 @@ Treat these as beta-era Xcode 27 claims until the installed Xcode and current Ap
 
 Local beta tool check on 2026-06-22 verified Xcode 27.0 beta build 27A5194q at the then-installed beta app path. The local check verified `xcodebuild -version`, `xcrun --find mcpbridge`, and `xcrun mcpbridge --help`; it did not verify Xcode UI settings, project-session permissions, or agent execution inside a running Xcode session.
 
-When a claim depends on live Xcode UI, an open project, MCP connection state, agent settings, or plug-in import behavior, open the intended Xcode app and inspect the live state. For Gale's Xcode beta work, check system-wide beta candidates such as `/Applications/Xcode-beta.app` and `/Applications/Betas/Xcode-beta.app`; for stable work, use `/Applications/Xcode.app`. Use command-scoped `DEVELOPER_DIR` for matching command-line checks instead of changing global `xcode-select` unless Gale asks for a global switch.
+When a claim depends on live Xcode UI, an open project, MCP connection state, agent settings, or plug-in import behavior, open the intended Xcode app and inspect the live state. For command-line checks, use the Xcode toolchain Gale selected through `xcode-select`; do not override it with `DEVELOPER_DIR`. If Gale asks to change CLI toolchains, use `xcode-select --switch`, verify the selected path and tool versions, and preserve the selection Gale requested.
 
 ## Surface Classification
 

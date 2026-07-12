@@ -40,15 +40,17 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
         setup_text = self.read("skills/xcode-coding-intelligence-workflow/references/setup-and-agent-surfaces.md")
         evidence_text = self.read("skills/xcode-coding-intelligence-workflow/references/source-evidence.md")
 
-        for text in (skill_text, bridge_text, setup_text):
-            self.assertIn("/Applications/Xcode-beta.app", text)
-            self.assertIn("/Applications/Betas/Xcode-beta.app", text)
-            self.assertIn("command-scoped `DEVELOPER_DIR`", text)
+        for text in (bridge_text, setup_text):
+            self.assertIn("do not override it with `DEVELOPER_DIR`", text)
             self.assertNotIn("/Users/galew/Applications/Betas", text)
+
+        self.assertIn("use the Xcode CLI toolchain Gale selected through `xcode-select`", skill_text)
+        self.assertIn("Do not set `DEVELOPER_DIR` unless", skill_text)
 
         self.assertIn("Current path note", evidence_text)
         self.assertIn("Observed beta Xcode version: Xcode 27.0, build 27A5209h.", evidence_text)
         self.assertIn("historical evidence, not current guidance", evidence_text)
+        self.assertIn("Historical evidence only", evidence_text)
 
     def test_external_agent_reference_documents_mcpbridge_preconditions(self) -> None:
         bridge_text = self.read("skills/xcode-coding-intelligence-workflow/references/mcpbridge-and-external-agents.md")

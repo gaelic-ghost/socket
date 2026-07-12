@@ -1,5 +1,7 @@
 # Source Evidence
 
+> Historical evidence only: commands in this file record past probes. They are not current execution guidance. Current work must use the toolchain selected by `xcode-select`; do not reuse historical `DEVELOPER_DIR` commands unless Gale has explicitly approved the documented exception.
+
 This reference records the first practical source set for the Xcode 27 coding-intelligence workflow.
 
 Current path note: Gale now keeps Xcode betas in system-wide `/Applications` locations, including `/Applications/Xcode-beta.app` and sometimes `/Applications/Betas/Xcode-beta.app`. Older evidence below keeps the then-installed user-local path as historical evidence, not current guidance.
