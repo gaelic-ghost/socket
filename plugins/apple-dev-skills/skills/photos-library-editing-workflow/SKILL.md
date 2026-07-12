@@ -36,6 +36,7 @@ Guide PhotosUI selection and PhotoKit library work while requesting the narrowes
    - use `.addOnly` when the app only saves into Photos
    - use `.readWrite` only for fetch, limited-library, organization, observation, or edit requirements
    - handle `.notDetermined`, `.restricted`, `.denied`, `.authorized`, and `.limited` distinctly
+   - require `.authorized`, not merely `.limited`, before fetching, creating, or modifying user albums and provide a picker, selected-assets, or settings fallback when full-library organization is unavailable
 4. Preserve typed identity and lifecycle:
    - keep `PhotosPickerItem`, `PHPickerResult`, `PHAsset`, `PHAssetCollection`, `PHFetchResult`, `PHAssetResource`, request IDs, placeholders, and adjustment data typed
    - attach asynchronous results to the current selection, asset local identifier, request ID, fetch result, or edit generation
@@ -62,6 +63,7 @@ Guide PhotosUI selection and PhotoKit library work while requesting the narrowes
 
 - Do not request PhotoKit read/write authorization when a system picker or add-only access fulfills the feature.
 - Do not treat `.limited` as fully authorized or as denial; operate on the visible library and provide the documented management path when appropriate.
+- Do not promise album browsing or organization under `.limited`; require full `.authorized` read/write access before fetching, creating, renaming, deleting, or changing user albums.
 - Do not mirror the entire library into app-owned state or introduce a Photos repository when `PHFetchResult`, local identifiers, change details, and picker bindings express the requirement.
 - Do not assume a picker item, asset, or resource is local; model iCloud/network delivery, progress, cancellation, and failure explicitly.
 - Do not treat degraded or opportunistic image callbacks as final, and do not let stale request callbacks overwrite a newer selection.

@@ -30,6 +30,7 @@ class PhotosLibraryEditingWorkflowTests(unittest.TestCase):
             ".limited",
             ".authorized",
             "narrowest access",
+            "full-library album",
         ):
             self.assertIn(term, skill + selection)
 
@@ -73,6 +74,7 @@ class PhotosLibraryEditingWorkflowTests(unittest.TestCase):
             "nondestructive",
             "transaction",
             "adjustment-version",
+            "authorizationStatus(for: .readWrite) == .authorized",
         ):
             self.assertIn(term, skill + editing)
 

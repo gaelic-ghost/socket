@@ -4,6 +4,8 @@
 
 Perform library mutations inside `PHPhotoLibrary.performChanges` or its documented async equivalent. Create assets with `PHAssetCreationRequest` and explicit resource types/options. Create or modify albums with `PHAssetCollectionChangeRequest`. Use placeholders only inside the change transaction, retain local identifiers when needed, and fetch the committed object after successful completion.
 
+Gate user-album fetch, creation, rename, deletion, membership, and ordering work on `PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized`. Do not treat `.limited` as sufficient album access. When the status is `.limited`, preserve selected-asset behavior and provide an explicit broader-access or non-album fallback before entering a collection transaction.
+
 Do not update application success state before the transaction completes. Report the operation, access level, resource/collection intent, error, likely cause, and next probe. Handle partial input preparation outside the transaction so the change block stays deterministic and does not perform arbitrary network or long-running work.
 
 ## Nondestructive Editing
