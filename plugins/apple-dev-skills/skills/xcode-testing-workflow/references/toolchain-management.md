@@ -17,11 +17,7 @@
 ## Official Xcode and CLT actions
 
 - Use the developer directory currently selected by `xcode-select` for every Xcode CLI command. Do not override it per command.
-- Change the active developer directory only when the user explicitly asks to change the CLI toolchain:
-  - record the current value first with `xcode-select -p`
-  - switch to stable Xcode with `sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer`
-  - switch to a beta Xcode with `sudo xcode-select --switch /Applications/Xcode-beta.app/Contents/Developer` or `sudo xcode-select --switch /Applications/Betas/Xcode-beta.app/Contents/Developer`
-  - verify with `xcode-select -p`, `xcodebuild -version`, and `xcrun --find swift`
+- Change the active developer directory through the already-open Xcode app, or open the intended app first: choose Xcode > Settings > Locations, select the intended app from Command Line Tools, accept the macOS Touch ID or administrator prompt, then verify with `xcode-select -p`, `xcodebuild -version`, and `xcrun --find swift`.
   - leave the selected path at the user-requested value; restore a previous path only when the user asked for a temporary switch
 - Reset default command line tools path:
   - `sudo xcode-select --reset`
@@ -32,7 +28,7 @@
 
 - Prefer explicit output of versions and selected developer dir before diagnosing build/test failures.
 - Keep fallback commands deterministic and project-local.
-- Treat `xcode-select` as the only default toolchain selector. It controls tools discovered through `xcrun`, `xcodebuild`, and BSD development commands such as `cc` and `make`.
+- Treat Xcode's Settings > Locations > Command Line Tools dropdown as the default toolchain selector; use `xcode-select -p` only to verify the result for `xcrun`, `xcodebuild`, and related commands.
 - Never set `DEVELOPER_DIR` by default. Use it only if it is genuinely the sole way to accomplish a task, explain why `xcode-select` cannot work, and obtain Gale's explicit permission first.
 - Treat `/Applications/Xcode.app` as the usual stable Xcode path. For beta Xcode installs on Gale's MacBook, check system-wide candidates such as `/Applications/Xcode-beta.app` and `/Applications/Betas/Xcode-beta.app` instead of the older user-local `~/Applications/Betas` location.
 - Do not use `xcode-select --install` as an Xcode app switch; it opens the interactive Command Line Tools installer.

@@ -51,9 +51,9 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 4. Plan setup:
    - verify the target Xcode version and whether the relevant behavior is stable, beta, or local-only
    - check whether the intended Xcode app is running and open it when needed for project context, MCP bridge connection, agent settings, or UI/plugin inspection
-   - use the Xcode CLI toolchain Gale selected through `xcode-select`; do not override it with `DEVELOPER_DIR`
+   - use the Xcode CLI toolchain Gale selected through `xcode-select`; when a switch is needed, use the already-open Xcode app or open the intended app, then change Settings > Locations > Command Line Tools and let macOS obtain Touch ID or administrator approval; verify afterward with `xcode-select -p` and do not override with `DEVELOPER_DIR`
    - open the intended beta app when the beta UI or live bridge state is required
-   - change `xcode-select` only when Gale explicitly asks to switch CLI toolchains; record the previous `xcode-select -p`, verify the requested selection, and restore only when Gale asked for a temporary switch
+   - do not invoke terminal `xcode-select --switch` as the default path; preserve the GUI-selected toolchain and restore only when Gale asked for a temporary switch
    - verify the project is open in Xcode before expecting Xcode MCP tools to work
    - verify external-agent access is enabled before configuring an external MCP client
    - use `xcrun mcpbridge` as the Xcode-provided STDIO bridge for external MCP clients
