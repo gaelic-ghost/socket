@@ -30,15 +30,15 @@
 
 ## SwiftUI Rule
 
-- Hand SwiftUI component, view-model, and modifier organization to `swiftui-app-architecture-workflow`; this skill enforces only the shared prefix and concatenated filename grammar.
+- Hand SwiftUI component, feature-service, and modifier organization to `swiftui-app-architecture-workflow`; this skill enforces only the shared prefix and concatenated filename grammar.
 
-## Xcode App MVVM Rule
+## Xcode App Feature Services Rule
 
-- Use strict Apple-app MVVM for Xcode app source layout: views own their own view-local state and actions where feasible, and every view model or controller support file is paired with one owning view or app entry point.
+- Use direct concrete feature services for Xcode app source layout: views own their view-local presentation state and actions where feasible, while a service owns one capability or cohesive related group and reaches its real boundary directly.
 - Keep `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` as the default UI roots.
 - Place UIKit and AppKit view-controller support beside the matching view with a concatenated name such as `GEAWhateverViewController.swift`; do not collect controllers in `Sources/Controllers`.
 - Put Core Data persistence models, SwiftData `@Model` types, datamodels, DTOs, and app-wide transfer or persistence shapes in `Sources/Models`.
-- Put services in `Sources/Services/Consumed`, `Sources/Services/Internal`, or `Sources/Services/Provided` according to direction. `GEAWhateverService.swift` manages `GEAWhatever.swift`; `GEAAppService.swift` may manage `GEA.swift`.
+- Put services in `Sources/Services/Consumed`, `Sources/Services/Internal`, or `Sources/Services/Provided` according to direction. `GEAWhateverService.swift` directly provides its named capability. Do not add `GEAAppService.swift` as a service container or create protocol and adapter layers without a demonstrated alternate implementation or isolated test boundary.
 
 ## Documentation Boundary
 

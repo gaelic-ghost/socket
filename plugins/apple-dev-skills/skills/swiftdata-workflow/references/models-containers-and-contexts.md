@@ -5,4 +5,4 @@
 - Define relationships, delete behavior, uniqueness, defaults, and optionality deliberately from documented SwiftData behavior.
 - Place `ModelContainer` ownership at the app or scene boundary that owns the persistent lifetime.
 - Keep each `ModelContext` on its intended actor and make cross-context or background work explicit.
-- Let `GEAAppService` manage `GEA` when the app needs a main runtime/domain value; `GEAApp.swift` remains the lifecycle-entry naming exception.
+- Keep `GEAApp.swift` as the lifecycle-entry naming exception. Do not create `GEAAppService` as a runtime/domain wrapper; add a direct concrete service only for a real app capability.

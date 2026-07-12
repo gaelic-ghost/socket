@@ -62,6 +62,14 @@ class ExploreAppleSwiftDocsWorkflowTests(unittest.TestCase):
         self.assertEqual(payload["path_type"], "primary")
         self.assertEqual(payload["configured_order"], ["xcode-mcp-docs", "dash", "dash-http", "source-repo", "official-web"])
 
+    def test_docs_guidance_names_the_two_local_mcp_sources_before_online_fallbacks(self) -> None:
+        skill = (ROOT / "skills/explore-apple-swift-docs/SKILL.md").read_text(encoding="utf-8")
+        guide = (ROOT / "skills/explore-apple-swift-docs/references/apple-framework-docs-guide.md").read_text(encoding="utf-8")
+
+        self.assertIn("Xcode MCP `DocumentationSearch` first, Dash.app MCP second", skill)
+        self.assertIn("Dash.app MCP", guide)
+        self.assertIn("GitHub, and online docs only after those local MCP paths", guide)
+
     def test_explore_obeys_preferred_source_override(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             status_file = Path(tmpdir) / "dash-status.json"

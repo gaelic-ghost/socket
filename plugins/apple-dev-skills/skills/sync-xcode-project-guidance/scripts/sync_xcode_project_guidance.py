@@ -24,7 +24,6 @@ REQUIRED_STRINGS = [
     "Sources/Views/Shared",
     "Sources/Services/",
     "three-letter uppercase prefix",
-    "GEAAppService.swift",
 ]
 
 REQUIRED_XCODE_APP_DIRECTORIES = [
@@ -32,9 +31,6 @@ REQUIRED_XCODE_APP_DIRECTORIES = [
     "Sources/Views/macOS",
     "Sources/Views/iOS",
     "Sources/Models",
-    "Sources/Services/Consumed",
-    "Sources/Services/Internal",
-    "Sources/Services/Provided",
 ]
 
 
@@ -194,14 +190,12 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
                 })
 
         for view_model_path in sorted(sources_dir.rglob("*ViewModel.swift")):
-            if "Sources/Views/" in view_model_path.relative_to(repo_root).as_posix():
-                continue
             relative_path = view_model_path.relative_to(repo_root).as_posix()
             findings.append(
                 {
-                    "code": "unpaired-view-model-file",
+                    "code": "legacy-swiftui-view-model-file",
                     "path": relative_path,
-                    "message": "View models belong beside their owning view under Sources/Views with a name such as GEAWhateverViewModel.swift.",
+                    "message": "Do not use an external SwiftUI ViewModel file as a component shape. Keep presentation state in the owning view or move a real app capability into a direct concrete feature service.",
                 }
             )
 
@@ -230,18 +224,6 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
                         "code": "missing-app-domain-value",
                         "path": relative_path,
                         "message": "The app lifecycle entry should pair with its bare runtime/domain value, such as GEAApp.swift and GEA.swift.",
-                    }
-                )
-
-        internal_services_dir = repo_root / "Sources" / "Services" / "Internal"
-        if app_files and internal_services_dir.is_dir():
-            service_files = sorted(internal_services_dir.glob("*AppService.swift"))
-            if not service_files:
-                findings.append(
-                    {
-                        "code": "missing-internal-app-service",
-                        "path": "Sources/Services/Internal",
-                        "message": "Place the main app service under Sources/Services/Internal with a name such as GEAAppService.swift.",
                     }
                 )
 

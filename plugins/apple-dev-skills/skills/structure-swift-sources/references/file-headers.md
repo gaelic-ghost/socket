@@ -77,7 +77,7 @@ entries:
       - "FeatureView"
       - "FeatureState"
     see_also:
-      - "GEAFeatureViewModel.swift"
+      - "GEAFeatureService.swift"
       - "GEAFeatureViewModifier.swift"
 ```
 

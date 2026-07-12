@@ -3,7 +3,8 @@
 ## Environment Boundary
 
 - Use environment values for shared contextual scope that genuinely belongs to the surrounding hierarchy.
-- Do not treat environment as a generic dependency container for unrelated services or view models.
+- Put a direct concrete feature service in environment only when independent descendants need to invoke it or observe its state directly. Keep it private to the owning feature root when that is the only consumer.
+- Do not treat environment as a generic dependency container for unrelated services or view models, and never use an umbrella app-service container as a shortcut.
 - Apple documents `Scene.environment(_:_:)` as affecting that scene and its descendant views only, which makes scene-local environment shaping a real structural tool.
 
 ## Preference Boundary
@@ -16,6 +17,7 @@
 
 - Prefer plain values, narrow bindings, and action closures for a reusable view's explicit interface; do not inject a collaborating object merely because the ownership chain is short.
 - Prefer environment only when many descendants share the same contextual dependency and the surrounding hierarchy is the honest owner.
+- A feature service owns one capability or cohesive related group of operations and calls its real framework, persistence, network, or system boundary directly. Keep it concrete unless a demonstrated alternate implementation requires a protocol.
 - Prefer existing SwiftUI environment actions such as `dismiss`, `openWindow`, and `openSettings` before creating an equivalent application router or action object.
 - Add a custom environment value or action when a capability must be dynamic across the hierarchy or is honestly shared by many independent components. Keep a custom action local to one component when only that component and its private child views need it.
 - Prefer a preference key only when the information is discovered in a descendant and must travel upward.
@@ -38,6 +40,21 @@ Why:
 
 - shared contextual scope is what environment is for
 - narrow ownership gets harder to explain once it becomes an injected collaborator or is pushed into environment just for convenience
+
+### Example: Feature Service Versus App-Service Wrapper
+
+Use a direct `GEADownloadService` when:
+
+- downloads are one feature capability, the service owns their observable state and operations, and multiple download views need direct access
+
+Do not create `GEAAppService` when:
+
+- it would only hold `GEADownloadService`, `GEAImportService`, and `GEASettingsService` and forward calls among them
+
+Why:
+
+- the direct service has one explainable capability and a real lifecycle owner
+- the wrapper adds indirection without owning a capability, state model, or framework boundary
 
 ### Example: Child Layout Reporting
 

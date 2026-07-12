@@ -27,8 +27,8 @@
 - Use concatenated ownership names such as `GEASettingsSheetToggleCard.swift` and `GEAWhateverServiceAdapter.swift`.
 - Use `GEAWhatever.swift` for the runtime/domain value, `GEAWhateverModel.swift` for persistence, and `GEAWhateverRecord.swift` or `GEAWhateverDTO.swift` only for genuinely additional representations.
 - `Models/` owns Core Data persistence models, SwiftData `@Model` types, app datamodels, DTOs, and shared transfer or persistence shapes.
-- `Services/` owns app-wide and boundary-facing services with `Consumed/`, `Internal/`, and `Provided/` subdirectories.
-- Put the main app-wide service under `Services/Internal/` as `GEAAppService.swift`; it may manage `GEA.swift` as the application runtime/domain value while `GEAApp.swift` remains the lifecycle-entry special case.
+- `Services/` owns direct concrete feature and boundary services with `Consumed/`, `Internal/`, and `Provided/` subdirectories. The folders describe ownership and direction, not a reason to create a wrapper layer.
+- Name a service after the capability it directly provides, such as `GEAImportService.swift`. Do not create an umbrella `GEAAppService.swift`; `GEAApp.swift` is the lifecycle-entry special case.
 - Move files into their proper layer directory rather than leaving them flat at the project root.
 
 ## Shared Rule

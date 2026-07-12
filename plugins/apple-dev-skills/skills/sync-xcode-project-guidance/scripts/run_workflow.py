@@ -41,9 +41,6 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
         "Sources/Views/macOS",
         "Sources/Views/iOS",
         "Sources/Models",
-        "Sources/Services/Consumed",
-        "Sources/Services/Internal",
-        "Sources/Services/Provided",
     ]
     findings = [
         {

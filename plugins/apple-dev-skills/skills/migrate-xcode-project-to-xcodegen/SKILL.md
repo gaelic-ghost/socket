@@ -30,9 +30,9 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
    - optional `dry_run`
 2. Apply the Apple docs gate before proposing migration changes:
    - read the relevant Apple documentation first
-   - use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Xcode project, build setting, asset catalog, signing, entitlement, and scheme behavior
-   - use Dash MCP or Dash HTTP next when installed local docsets are a better fit
-   - use XcodeGen's official docs or source repository for XcodeGen-specific behavior such as synced folders, source entries, configs, schemes, packages, and generated project output
+   - use Xcode MCP `DocumentationSearch` first for Xcode project, build setting, asset catalog, signing, entitlement, and scheme behavior
+   - use the Dash.app MCP second when its installed docsets cover the question; use Dash HTTP only when that MCP is unavailable or incomplete
+   - use XcodeGen's official docs or source repository for XcodeGen-specific behavior such as synced folders, source entries, configs, schemes, packages, and generated project output only after those local MCP paths
    - state the documented behavior being relied on before proposing edits
    - if no relevant Apple or XcodeGen docs can be found, say that explicitly before proceeding
 3. Run `scripts/run_workflow.py` from this skill to inventory the current repo and choose the migration path.

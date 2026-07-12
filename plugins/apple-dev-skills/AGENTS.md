@@ -14,7 +14,7 @@ This file is the Apple Dev Skills child-repo override for work done from `socket
 ## Apple Rules
 
 - For Swift, Apple framework, Apple platform, SwiftUI, SwiftData, Observation, AppKit, UIKit, Foundation-on-Apple, or Xcode-related guidance, require reading the relevant Apple documentation before proposing implementation changes.
-- Use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Apple-owned SDK, framework, lifecycle, and Xcode behavior. Use Dash MCP or Dash HTTP next when installed local docsets are a better fit. Use open source Swift project repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there.
+- For Apple, Swift, and Xcode documentation, use Xcode MCP `DocumentationSearch` first, then the Dash.app MCP when its installed docsets cover the question. Use Dash localhost HTTP only when the Dash.app MCP is unavailable or incomplete; consult checked-out source, generated DocC, GitHub/source repositories, release notes, and readable online documentation only after those local MCP paths.
 - Treat Apple Developer web pages as citation targets or last-resort readable sources, not as a generic search fallback. The no-JS web search/open surface often cannot read the actual Apple Developer documentation payload, so it is not sufficient evidence by itself.
 - State the documented Apple behavior being relied on before design or code changes are proposed.
 - If Apple docs and current code disagree, stop and surface that conflict.

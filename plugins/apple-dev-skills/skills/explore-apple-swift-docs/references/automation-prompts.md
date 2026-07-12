@@ -17,7 +17,7 @@ Provide one consistent automation contract for Apple and Swift docs exploration 
 
 ## Constraints
 
-- Use Xcode MCP docs first when they are available and the user has not asked for another source.
+- Use Xcode MCP `DocumentationSearch` first when it is available and the user has not asked for another source, then the Dash.app MCP before GitHub, source repositories, or online documentation.
 - Prefer direct Dash MCP calls before Dash localhost HTTP when Xcode MCP docs are unavailable or the user explicitly prefers Dash.
 - Treat Dash localhost HTTP as the direct machine-readable fallback when Dash MCP is unavailable or incomplete.
 - Do not perform Dash install actions inside an `explore` automation run.

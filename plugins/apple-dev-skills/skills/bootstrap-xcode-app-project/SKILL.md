@@ -42,10 +42,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - stop if the request is actually a Swift package, library, or tool bootstrap
 3. Apply the Apple docs gate before recommending project structure or implementation guidance:
    - read the relevant Apple documentation first
-   - use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Apple-owned SDK, framework, lifecycle, and Xcode project-creation behavior
-   - use Dash MCP or Dash HTTP next when installed local docsets are a better fit
-   - use open source Swift project repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there
-   - use official Apple web docs only when the page content is actually readable through a capable source; generic no-JS web search/open results, snippets, metadata shells, or bare URLs are not enough
+   - use Xcode MCP `DocumentationSearch` first for Apple-owned SDK, framework, lifecycle, and Xcode project-creation behavior
+   - use the Dash.app MCP second when its installed docsets cover the question; use Dash HTTP only when that MCP is unavailable or incomplete
+   - use checked-out source, generated DocC, GitHub/source repositories, release notes, and readable online documentation only after those local MCP paths; generic no-JS web search/open results, snippets, metadata shells, or bare URLs are not enough
    - state the documented behavior being relied on before design or implementation guidance
    - current documented anchors for this workflow include:
      - Apple's Xcode project-creation guidance: [Creating an Xcode project for an app](https://developer.apple.com/documentation/xcode/creating_an_xcode_project_for_an_app)
@@ -67,8 +66,8 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - keep app-owned implementation/resources/support under `Sources/`, tests under `Tests/`, reusable app/extension source under `Shared/`, extension target roots under `Extensions/`, `.xcconfig` layers under `Configurations/`, project-local automation under `Scripts/`, and justified local Swift package boundaries under `Packages/`
    - inside `Sources/`, create the strict app structure: `Views/Shared`, `Views/macOS`, `Views/iOS`, `Models`, `Services/Consumed`, `Services/Internal`, and `Services/Provided`
    - require an explicit `--file-prefix` containing three uppercase letters after offering reasonable initials-based suggestions
-   - create `GEAApp.swift` as the lifecycle entry, `GEA.swift` as the application runtime/domain value, and `GEAAppService.swift` as its main service
-   - create prefixed, self-contained SwiftUI views such as `GEAContentView.swift`, using component-local `@State` and `@Observable` state only when direct state is not sufficient
+   - create `GEAApp.swift` as the lifecycle entry and `GEA.swift` as the application runtime/domain value; do not generate an umbrella `GEAAppService.swift`
+   - create prefixed, self-contained SwiftUI views such as `GEAContentView.swift`, using component-local `@State` and `@Observable` state only when direct state is not sufficient; add a concrete feature service only when the new app has a real capability that needs one
    - prefix every project-owned Swift file except `Package.swift`, externally generated Swift, and vendored third-party Swift; never generate `+` filenames
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
    - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`
@@ -83,7 +82,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify the expected app files exist
    - verify the standard top-level directories exist
    - verify the strict app source directories exist under `Sources/Views`, `Sources/Models`, and `Sources/Services`
-   - verify the app entry point, app view model, shared content view, shared content view model, and internal app service use the strict naming contract
+   - verify the app entry point, runtime/domain value, and shared content view use the strict naming contract without a generated ViewModel or umbrella app service
    - verify `.swiftformat` exists
    - verify `AGENTS.md` exists when enabled
    - verify `.codex/environments/xcode-project.toml` exists and uses the generated app target name for Codex GUI actions
