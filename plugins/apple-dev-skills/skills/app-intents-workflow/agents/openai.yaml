@@ -1,0 +1,4 @@
+interface:
+  display_name: "App Intents Workflow"
+  short_description: "Expose focused actions and content to Apple system surfaces"
+  default_prompt: "Use $app-intents-workflow to design, implement, validate, or troubleshoot a focused App Intent, App Entity, App Shortcut, or system-surface integration using current Apple documentation."

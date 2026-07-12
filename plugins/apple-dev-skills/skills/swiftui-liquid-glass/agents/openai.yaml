@@ -1,0 +1,4 @@
+interface:
+  display_name: "SwiftUI Liquid Glass"
+  short_description: "Build and review native glass interfaces across Apple platforms"
+  default_prompt: "Use $swiftui-liquid-glass to design, implement, review, or validate native SwiftUI Liquid Glass while preserving availability fallbacks and accessibility."
