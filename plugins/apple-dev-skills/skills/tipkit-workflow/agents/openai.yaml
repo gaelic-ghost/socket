@@ -1,0 +1,4 @@
+interface:
+  display_name: "TipKit Workflow"
+  short_description: "Add and troubleshoot Apple TipKit guidance"
+  default_prompt: "Use $tipkit-workflow to add, configure, display, test, or troubleshoot Apple TipKit tips and popovers using current Apple documentation."
