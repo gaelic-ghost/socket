@@ -69,6 +69,7 @@ Use Apple Dev Skills when an agent is helping with:
 - ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, relocalization, and visionOS provider guidance
 - ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale estimation, privacy, and authentication boundaries
 - VideoToolbox compression/decompression, Core Video pixel buffers and pools, Core Media compressed samples, hardware capability, color/HDR, and codec diagnostics
+- Privacy-preserving PhotosUI selection and PhotoKit authorization, assets, resources, iCloud delivery, changes, creation, albums, and nondestructive editing
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
 - Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
@@ -159,6 +160,7 @@ uv run pytest
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
 - `migrate-xcode-project-to-xcodegen`
+- `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
 - `sf-symbols-workflow`
 - `structure-swift-sources`

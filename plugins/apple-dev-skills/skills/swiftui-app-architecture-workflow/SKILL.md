@@ -141,6 +141,8 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
 
 ## Fallbacks and Handoffs
 
+- Recommend `photos-library-editing-workflow` for direct `PhotosPicker` bindings, picker item loading, PhotoKit authorization, assets, requests, changes, and editing rather than introducing a Photos view model or repository.
+
 - Prefer explicit scope and platform context when the user provides them.
 - Fall back to request-text inference when repo shape and platform shape are unclear.
 - Recommend `explore-apple-swift-docs` when the real need is broader Apple or Swift docs lookup.

@@ -84,6 +84,7 @@ Guide Core Image processing and rendering without turning `CIImage` into a bitma
 - Recommend `camera-capture-depth-workflow` for camera and depth capture.
 - Recommend `avfoundation-media-pipeline-workflow` for capture-session, reader, writer, export, or video pipeline ownership.
 - Recommend `video-codec-processing-workflow` for low-level codec and pixel-buffer work.
+- Recommend `photos-library-editing-workflow` for PhotosUI selection, PhotoKit assets/resources, library changes, and nondestructive editing.
 - Recommend `xcode-build-run-workflow` for project integration, Metal toolchain, build, run, device, or Instruments follow-through.
 - Recommend `xcode-testing-workflow` for fixtures, image comparisons, performance baselines, or regression tests.
 - Recommend `explore-apple-swift-docs` when documentation lookup is the real need.

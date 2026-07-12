@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "8.10.1",
-  "description": "Apple development workflows for Codex, including VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
+  "description": "Apple development workflows for Codex, including PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -42,6 +42,9 @@
     "corevideo",
     "video-codec",
     "hdr",
+    "photokit",
+    "photosui",
+    "photos-picker",
     "coding-intelligence",
     "agents",
     "mcp",
@@ -73,7 +76,7 @@
   "interface": {
     "displayName": "Apple Dev Skills",
     "shortDescription": "Apple, Swift, image/media repair, SwiftUI, TipKit, Xcode, AppKit, Safari, security, OpenAPI, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for VideoToolbox codecs, Core Video pixel buffers, compressed samples, color and HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "longDescription": "Bundle Apple-platform development skills for PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -91,6 +94,7 @@
       "Implement or repair ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, relocalization, and visionOS provider lifecycles.",
       "Implement or repair ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale, privacy, and Face ID boundaries.",
       "Implement or repair VideoToolbox compression and decompression, Core Video pixel buffers and Metal interop, compressed samples, hardware capability, color, HDR, and codec performance.",
+      "Implement or repair PhotosUI media selection and PhotoKit authorization, assets, resources, iCloud requests, library changes, saves, albums, and nondestructive editing.",
       "Explore the relevant Apple docs first, then explain the right SwiftUI, AppKit, or Xcode path for this repository.",
       "Audit or repair SwiftUI code into self-contained declarative components with local reactive state and no external ViewModel shape.",
       "Choose, customize, color, animate, validate, or integrate SF Symbols using current Apple docs and the local SF Symbols app when needed.",

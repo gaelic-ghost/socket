@@ -94,7 +94,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 58: Camera, Depth, and Computational Capture - Completed
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Completed
 - Milestone 60: Video Codecs and Pixel Processing - Completed
-- Milestone 61: Photos Library and Media Selection - Planned
+- Milestone 61: Photos Library and Media Selection - Completed
 - Milestone 62: Media Expansion Audit and Socket Major Release - Planned
 
 ## Milestone 21: Swift Cleanup Automation Exploration
@@ -1077,42 +1077,44 @@ Completed Milestone 60 by shipping `video-codec-processing-workflow`, extending 
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Ship `photos-library-editing-workflow` for PhotoKit authorization, fetches, collections, assets, resource requests, change observation, creation, transactional changes, and nondestructive editing.
-- [ ] Cover system media selection through PhotosUI as a privacy-preserving alternative to broad library access when the app only needs user-selected images or videos.
-- [ ] Keep image decoding and processing with Milestone 56, video pipelines with AVFoundation, and Photos library ownership with PhotoKit.
+- [x] Ship `photos-library-editing-workflow` for PhotoKit authorization, fetches, collections, assets, resource requests, change observation, creation, transactional changes, and nondestructive editing.
+- [x] Cover system media selection through PhotosUI as a privacy-preserving alternative to broad library access when the app only needs user-selected images or videos.
+- [x] Keep image decoding and processing with Milestone 56, video pipelines with AVFoundation, and Photos library ownership with PhotoKit.
 
 ### Required Guidance
 
-- [ ] Cover read/write, add-only, limited-library, denied, restricted, and not-determined authorization states plus correct purpose-string and user-explanation behavior.
-- [ ] Cover `PhotosPicker` or current PhotosUI picker APIs, transferable loading, selection limits, filters, ordering, cancellation, iCloud-backed transfer, and the boundary where no full-library permission is required.
-- [ ] Cover `PHAsset`, collections, fetch options, fetch results, incremental changes, `PHPhotoLibraryChangeObserver`, caching image management, request identifiers, cancellation, degraded results, and network access.
-- [ ] Cover asset resources, original versus adjusted content, Live Photos, paired video, RAW-plus-JPEG resources, metadata implications, and export boundaries.
-- [ ] Cover creation and change requests, perform-changes transactions, placeholders, albums, save errors, content-editing input/output, adjustment data, and nondestructive editing compatibility.
-- [ ] Avoid mirroring the entire Photos library into app state or inventing a repository layer when fetch results, identifiers, change observation, and picker bindings express the actual requirement.
-- [ ] Require user-visible privacy behavior and runtime evidence for limited-library, iCloud, network, edited-resource, and save paths.
+- [x] Cover read/write, add-only, limited-library, denied, restricted, and not-determined authorization states plus correct purpose-string and user-explanation behavior.
+- [x] Cover `PhotosPicker` or current PhotosUI picker APIs, transferable loading, selection limits, filters, ordering, cancellation, iCloud-backed transfer, and the boundary where no full-library permission is required.
+- [x] Cover `PHAsset`, collections, fetch options, fetch results, incremental changes, `PHPhotoLibraryChangeObserver`, caching image management, request identifiers, cancellation, degraded results, and network access.
+- [x] Cover asset resources, original versus adjusted content, Live Photos, paired video, RAW-plus-JPEG resources, metadata implications, and export boundaries.
+- [x] Cover creation and change requests, perform-changes transactions, placeholders, albums, save errors, content-editing input/output, adjustment data, and nondestructive editing compatibility.
+- [x] Avoid mirroring the entire Photos library into app state or inventing a repository layer when fetch results, identifiers, change observation, and picker bindings express the actual requirement.
+- [x] Require user-visible privacy behavior and runtime evidence for limited-library, iCloud, network, edited-resource, and save paths.
 
 ### Documentation Anchors
 
-- [ ] Refresh Xcode documentation for Photos authorization, limited library, fetching, asset resources, image requests, change observation, creation, transactions, and content editing.
-- [ ] Refresh Xcode documentation for PhotosUI pickers and current SwiftUI transfer/loading integration.
-- [ ] Check current macOS, iOS, iPadOS, and visionOS availability before making cross-platform claims.
+- [x] Refresh Xcode documentation for Photos authorization, limited library, fetching, asset resources, image requests, change observation, creation, transactions, and content editing.
+- [x] Refresh Xcode documentation for PhotosUI pickers and current SwiftUI transfer/loading integration.
+- [x] Check current macOS, iOS, iPadOS, and visionOS availability before making cross-platform claims.
 
 ### Implementation and Review Gate
 
-- [ ] Add the skill, focused references, metadata, customization contract, privacy rules, picker/library routing, and tests.
-- [ ] Review handoffs to image representation, Core Image, AVFoundation, SwiftUI architecture, AppKit architecture, and Xcode privacy configuration.
-- [ ] Update README, plugin metadata, active inventory, roadmap status, and docs before milestone completion.
-- [ ] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
-- [ ] Review the entire media expansion after this milestone and record any cross-skill inconsistency before entering the final audit.
+- [x] Add the skill, focused references, metadata, customization contract, privacy rules, picker/library routing, and tests.
+- [x] Review handoffs to image representation, Core Image, AVFoundation, SwiftUI architecture, AppKit architecture, and Xcode privacy configuration.
+- [x] Update README, plugin metadata, active inventory, roadmap status, and docs before milestone completion.
+- [x] Run targeted tests, docs validation, the full Apple Dev suite, and root Socket validation serially.
+- [x] Review the entire media expansion after this milestone and record any cross-skill inconsistency before entering the final audit.
 
 ### Exit Criteria
 
-- [ ] Apple Dev Skills clearly distinguishes privacy-preserving media selection from PhotoKit library access and editing.
-- [ ] Authorization, iCloud delivery, cancellation, resource identity, transactional saves, and nondestructive editing are explicit and docs-backed.
+- [x] Apple Dev Skills clearly distinguishes privacy-preserving media selection from PhotoKit library access and editing.
+- [x] Authorization, iCloud delivery, cancellation, resource identity, transactional saves, and nondestructive editing are explicit and docs-backed.
+
+Completed Milestone 61 by shipping `photos-library-editing-workflow` with a picker-first access decision, explicit PhotoKit authorization and limited-library behavior, typed asset/fetch/resource/request/change lifecycles, iCloud delivery and cancellation, transactional creation and album changes, and nondestructive content-editing contracts. Current Xcode documentation was checked for Photos authorization levels and statuses, PhotosUI picker configuration and transferable loading, PhotoKit assets and fetch changes, image and caching requests, asset resources, creation placeholders, collection changes, and content-editing input/output plus adjustment data. Cross-skill review kept image representation, Core Image, AVFoundation, VideoToolbox, SwiftUI, and AppKit ownership explicit with no duplicate Photos repository path. The skill package, 60 targeted tests, docs validation, 228 Apple Dev tests, and root Socket validation passed before milestone closure.
 
 ## Milestone 62: Media Expansion Audit and Socket Major Release
 

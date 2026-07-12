@@ -76,7 +76,7 @@ Guide image source, destination, representation, and conversion work without fla
 - Recommend `vision-image-analysis-workflow` for recognition and analysis.
 - Recommend `appkit-app-architecture-workflow` for broader macOS view, controller, window, or application ownership.
 - Recommend `avfoundation-media-pipeline-workflow` for assets, capture, video, readers, writers, or export.
-- Recommend `photos-library-editing-workflow` for PhotoKit and PhotosUI ownership after Milestone 61 ships.
+- Recommend `photos-library-editing-workflow` for PhotoKit and PhotosUI ownership.
 - Recommend `xcode-build-run-workflow` for target resources, build, run, device, or profiling follow-through.
 - Recommend `xcode-testing-workflow` for image fixtures, metadata round trips, comparison tests, or performance baselines.
 - Recommend `explore-apple-swift-docs` when documentation lookup is the real need.
