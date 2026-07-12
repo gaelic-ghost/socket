@@ -157,11 +157,13 @@ uv run pytest
 - `coremedia-timing-samplebuffer-workflow`
 - `devicecheck-app-attest-workflow`
 - `apple-developer-provisioning-workflow`
+- `apple-runtime-telemetry-workflow`
 - `explore-apple-swift-docs`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
 - `ios-runtime-forensics-workflow`
 - `macos-distribution-workflow`
+- `macos-window-management-workflow`
 - `migrate-xcode-project-to-xcodegen`
 - `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
@@ -186,6 +188,8 @@ uv run pytest
 - `xcode-app-project-workflow`
 - `xcode-build-run-workflow`
 - `xcode-coding-intelligence-workflow`
+- `xcode-debugger-mcp-workflow`
+- `xcode-device-hub-workflow`
 - `xcode-testing-workflow`
 
 ## Release Notes

@@ -138,6 +138,29 @@ Observed artifacts after import:
 - Xcode registered imported plug-ins in `~/Library/Developer/Xcode/CodingAssistant/AgentPlugins/PluginsManifest.json`.
 - Xcode copied plug-in payloads into `~/Library/Developer/Xcode/CodingAssistant/AgentPlugins/<plugin>/`.
 - Xcode generated a normalized `plugin.json` with fields such as `id`, `importedAt`, `importSource`, `skills`, and `mcpServers`.
+
+## Checked 2026-07-12
+
+### Xcode 27 Beta 3 Tool Surface
+
+The command-line tools remained selected through Xcode Settings > Locations rather than a command-scoped developer-directory override:
+
+```text
+xcode-select -p
+/Applications/Xcode-beta.app/Contents/Developer
+
+xcodebuild -version
+Xcode 27.0
+Build version 27A5218g
+```
+
+Observed current behavior:
+
+- `xcrun mcpbridge --help` succeeds and documents the normal STDIO Xcode MCP bridge, `run-agent`, `MCP_XCODE_PID`, `MCP_XCODE_SESSION_ID`, and `run-agent skills export`.
+- `xcrun --find lldb-mcp` resolves the beta executable, but `xcrun lldb-mcp --help` fails before startup because dyld cannot resolve `@rpath/lib_CompilerSwiftIDEUtils.dylib`.
+- A non-mutating fallback-library-path probe did not change that failure. Do not modify Xcode, copy libraries, create symlinks, or publish an environment-variable workaround; use Xcode's active debugger session until a later toolchain starts `lldb-mcp` normally.
+
+The Device Hub and Xcode debugger workflow references own the detailed behavior and handoffs from this probe.
 - Xcode copied imported plug-ins into `~/Library/Developer/Xcode/CodingAssistant/codex/plugins/cache`.
 - Xcode enabled imported plug-ins in `~/Library/Developer/Xcode/CodingAssistant/codex/config.toml`.
 - Xcode copied imported plug-ins into `~/Library/Developer/Xcode/CodingAssistant/gemini/.gemini/extensions`.

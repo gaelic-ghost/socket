@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Device Hub"
+  short_description: "Inspect and validate simulated or physical devices in Xcode"
+  default_prompt: "Use $xcode-device-hub-workflow to inspect the right Device Hub target, capture evidence, and hand off build, test, debugger, or diagnostics work clearly."

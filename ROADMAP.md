@@ -286,6 +286,7 @@ In Progress
 - [ ] Add a desktop bridge MCP and skill surface that talks to the separate `AgentDeck` app instead of bundling a macOS app inside the plugin.
 - [ ] Add Codex GUI restart request/cancel/status tools and a narrow skill that delegates waiting and final restart execution to `AgentDeck`.
 - [ ] Add an agent configuration sync surface that lets `AgentDeck` discover, diff, and safely render compatible guidance/config for normal Codex, Xcode Codex, and Xcode Claude while `agentdeck` owns the agent-facing adapter and policy.
+- [x] Record the Simulator browser and SwiftUI preview-host investigation plan, keeping `AgentDeck` as the prospective installed runtime and `agentdeck` as the Codex-facing adapter.
 
 ### Tickets
 
@@ -306,6 +307,11 @@ In Progress
 - [x] Record the AgentDeck agent configuration sync plan in `plugins/agentdeck/docs/agent-configuration-sync-plan.md`.
 - [ ] Add a read-only bridge/status tool for agent configuration sync after `AgentDeck` can report detected target homes, versions, and compatibility-profile status.
 - [ ] Add an agent-facing sync skill after the app exposes dry-run previews and backup-backed apply endpoints.
+- [x] Record the Device Hub-backed Simulator browser and Swift Package preview-host plan in `plugins/agentdeck/docs/simulator-browser-preview-host-plan.md`.
+- [ ] Verify, through a small local prototype, whether `AgentDeck` can use Xcode Device Hub as the operator-facing device selector while a local-only bridge captures and drives the selected normal iOS Simulator.
+- [ ] Add a read-only Simulator mirror only after the prototype proves reliable frame capture, device identity, cleanup, and local-only transport behavior.
+- [ ] Add guarded simulator input forwarding only after the read-only mirror and Device Hub handoff are proven.
+- [ ] Evaluate a disposable Swift Package preview host with dynamic reload only after the mirror exists; keep Xcode Canvas and ordinary app-run workflows as first-class alternatives.
 
 ### Exit Criteria
 
@@ -317,6 +323,8 @@ In Progress
 - [ ] Desktop bridge MCP and skill surfaces are available without packaging the signed macOS app inside the plugin cache.
 - [ ] Codex GUI restart requests require explicit user intent, report pending/cancelled/blocked/completed status clearly, and never infer thread idleness from process state alone.
 - [ ] Agent configuration sync previews omit unsupported keys by default, preserve target-owned files, and route writes through `AgentDeck` rather than direct plugin-side filesystem mutation.
+- [ ] Any Simulator browser uses the selected standard CoreSimulator device, stays local by default, and has explicit teardown and device-ownership diagnostics.
+- [ ] Any preview hot-reload host is disposable, Swift-Package-scoped, does not edit the user's project, and proves reload without relaunching the host process.
 
 ## Milestone 12: Xcode 27 agentic tooling workflows
 
@@ -335,10 +343,12 @@ In Progress
 
 - [x] Add `apple-dev-skills:xcode-coding-intelligence-workflow` for Xcode Intelligence setup, Xcode-hosted agents, chat providers, ACP agent entries, Xcode-only config homes, command/tool permissions, and external-agent access through `xcrun mcpbridge`.
 - [ ] Add `apple-dev-skills:xcode-agent-localization-workflow` for agent-assisted string catalog, translation, glossary, XLIFF, and human-review workflows.
-- [ ] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
+- [x] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
+- [x] Add `apple-dev-skills:macos-window-management-workflow` for native SwiftUI/AppKit window scenes, chrome, drag regions, placement, resize/zoom, restoration, and validation.
+- [x] Add `apple-dev-skills:apple-runtime-telemetry-workflow` for focused unified logging, privacy-aware `Logger` use, `OSSignposter`, and runtime-evidence handoffs.
 - [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.
 - [ ] Investigate the Xcode MCP surface against the current Xcode 27 beta, including `mcpbridge` command help, tool names, permission gates, session behavior, and differences from the last checked surface. Live beta `run-agent --dry-run codex` behavior was verified on 2026-06-23; a direct beta-scoped `codex skills export` attempt failed, and tool names, permission gates, project-session behavior, and runtime plug-in execution still need follow-up.
-- [ ] Add a dedicated Xcode 27 beta LLDB MCP workflow skill after `xcrun lldb-mcp` startup is validated. Xcode 27 Beta 2 exposes `lldb-mcp`, and Apple Dev Skills now carries an experimental `xcode_lldb` MCP config entry, but local `--help` invocation failed on 2026-06-26 with a missing `lib_CompilerSwiftIDEUtils.dylib` rpath load.
+- [x] Add `apple-dev-skills:xcode-debugger-mcp-workflow` for active Xcode-session LLDB work and explicit Xcode 27 beta standalone `lldb-mcp` capability checks. Beta 3 (`27A5218g`) still fails before startup with the unresolved `lib_CompilerSwiftIDEUtils.dylib` rpath dependency, so the workflow keeps standalone server use blocked and routes normal work through Xcode's active debugger session.
 - [ ] Add `apple-dev-skills:xcode-agent-plugin-workflow` now that the live Xcode 27 beta plug-in import paths are verified through installed Codex state, local folder import, and public Git URL import.
 - [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
 - [x] Document Xcode command-line toolchain selection for stable and beta Xcode installs, including command-scoped `DEVELOPER_DIR`, explicit global `xcode-select --switch`, restore steps, and current system-wide beta app paths.

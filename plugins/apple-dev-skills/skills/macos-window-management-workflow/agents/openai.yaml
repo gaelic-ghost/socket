@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS Window Management"
+  short_description: "Build native macOS window and restoration behavior"
+  default_prompt: "Use $macos-window-management-workflow to choose the right macOS window scene and validate its chrome, drag, placement, and restoration behavior."
