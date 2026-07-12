@@ -46,7 +46,7 @@ class XcodeDeviceWindowTelemetryDebuggerWorkflowTests(unittest.TestCase):
         evidence = self.read("skills/xcode-debugger-mcp-workflow/references/beta3-capability-evidence.md")
         contract = self.read("skills/xcode-debugger-mcp-workflow/references/active-session-debugging-contract.md")
 
-        for term in ("Xcode 27.0 Beta 3", "27A5218g", "lib_CompilerSwiftIDEUtils.dylib", "InvokeDebuggerCommand", "active debugging session"):
+        for term in ("Xcode 27.0 Beta 3", "27A5218g", "lib_CompilerSwiftIDEUtils.dylib", "InvokeDebuggerCommand", "active debugging session", "mcpbridge", "lldb_command", "does not document a way to select"):
             self.assertIn(term, skill + evidence + contract)
         self.assertIn("Do not work around this", skill)
         self.assertIn("xcode-build-run-workflow", skill)

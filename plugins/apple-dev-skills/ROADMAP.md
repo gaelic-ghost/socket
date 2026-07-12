@@ -718,25 +718,25 @@ Planned
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Add a dedicated Xcode 27 beta-era LLDB MCP workflow skill for debugger setup, target/session selection, breakpoint and expression workflows, crash investigation, and handoffs back to build/test skills.
-- [ ] Keep the workflow docs-first and beta-gated until `xcrun lldb-mcp` startup, help output, tool inventory, and MCP client behavior are validated against an installed Xcode 27 beta.
-- [ ] Keep Xcode-owned debugger integration separate from third-party debugger MCP servers and from normal `xcrun mcpbridge` project/build tools.
+- [x] Add a dedicated Xcode 27 beta-era LLDB MCP workflow skill for debugger setup, target/session selection, breakpoint and expression workflows, crash investigation, and handoffs back to build/test skills.
+- [x] Keep the workflow docs-first and beta-gated while recording the Beta 3 startup boundary and the direct Xcode active-session fallback.
+- [x] Keep Xcode-owned debugger integration separate from standalone LLDB MCP and third-party debugger MCP servers, while documenting `xcrun mcpbridge` as the owner of Xcode project, build, and active-session debugging tools.
 
 ### Tickets
 
 - [x] Add an experimental `xcode_lldb` MCP config entry that resolves through the selected Xcode toolchain with `xcrun lldb-mcp`.
-- [ ] Capture `xcrun lldb-mcp --help`, startup behavior, and tool inventory from Xcode 27 Beta 2 or a later beta before claiming the config is stable.
-- [ ] Document the observed Beta 2 rpath failure and the exact toolchain environment that fixes it, if Apple does not resolve the direct-launch issue in a later beta.
-- [ ] Add the workflow skill, metadata, README inventory entry, and targeted tests after the launch and tool-surface evidence exists.
+- [x] Capture `xcrun lldb-mcp --help` startup behavior from Xcode 27 Beta 3, including its unresolved dynamic-library failure before MCP startup.
+- [x] Document the Xcode 27 Beta 3 rpath failure as a local observation without publishing an unsupported environment workaround or claiming it is universal.
+- [x] Add the workflow skill, metadata, README inventory entry, and targeted tests with a clear distinction between Xcode active-session tools and standalone LLDB MCP.
 
 ### Exit Criteria
 
-- [ ] Apple Dev Skills exposes a debugger workflow that can safely decide when to use LLDB MCP, normal Xcode UI debugging, `lldb`, `lldb-dap`, or existing build/test handoffs.
-- [ ] The plugin MCP config, README, skill guidance, and tests agree on whether `xcode_lldb` is experimental or stable.
+- [x] Apple Dev Skills exposes a debugger workflow that can safely decide when to use standalone LLDB MCP, Xcode active-session debugging, `lldb`, `lldb-dap`, or existing build/test handoffs.
+- [x] The plugin MCP config, README, skill guidance, and tests agree that `xcode_lldb` is declared but experimental, and that Beta 3 does not start it.
 
 ## Milestone 52: Apple Design Animation And Symbols Workflow Skills
 
