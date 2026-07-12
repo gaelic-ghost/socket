@@ -286,6 +286,7 @@ In Progress
 - [ ] Add a desktop bridge MCP and skill surface that talks to the separate `AgentDeck` app instead of bundling a macOS app inside the plugin.
 - [ ] Add Codex GUI restart request/cancel/status tools and a narrow skill that delegates waiting and final restart execution to `AgentDeck`.
 - [ ] Add an agent configuration sync surface that lets `AgentDeck` discover, diff, and safely render compatible guidance/config for normal Codex, Xcode Codex, and Xcode Claude while `agentdeck` owns the agent-facing adapter and policy.
+- [x] Record the Simulator browser and SwiftUI preview-host investigation plan, keeping `AgentDeck` as the prospective installed runtime and `agentdeck` as the Codex-facing adapter.
 
 ### Tickets
 
@@ -306,6 +307,11 @@ In Progress
 - [x] Record the AgentDeck agent configuration sync plan in `plugins/agentdeck/docs/agent-configuration-sync-plan.md`.
 - [ ] Add a read-only bridge/status tool for agent configuration sync after `AgentDeck` can report detected target homes, versions, and compatibility-profile status.
 - [ ] Add an agent-facing sync skill after the app exposes dry-run previews and backup-backed apply endpoints.
+- [x] Record the Device Hub-backed Simulator browser and Swift Package preview-host plan in `plugins/agentdeck/docs/simulator-browser-preview-host-plan.md`.
+- [ ] Verify, through a small local prototype, whether `AgentDeck` can use Xcode Device Hub as the operator-facing device selector while a local-only bridge captures and drives the selected normal iOS Simulator.
+- [ ] Add a read-only Simulator mirror only after the prototype proves reliable frame capture, device identity, cleanup, and local-only transport behavior.
+- [ ] Add guarded simulator input forwarding only after the read-only mirror and Device Hub handoff are proven.
+- [ ] Evaluate a disposable Swift Package preview host with dynamic reload only after the mirror exists; keep Xcode Canvas and ordinary app-run workflows as first-class alternatives.
 
 ### Exit Criteria
 
@@ -317,6 +323,8 @@ In Progress
 - [ ] Desktop bridge MCP and skill surfaces are available without packaging the signed macOS app inside the plugin cache.
 - [ ] Codex GUI restart requests require explicit user intent, report pending/cancelled/blocked/completed status clearly, and never infer thread idleness from process state alone.
 - [ ] Agent configuration sync previews omit unsupported keys by default, preserve target-owned files, and route writes through `AgentDeck` rather than direct plugin-side filesystem mutation.
+- [ ] Any Simulator browser uses the selected standard CoreSimulator device, stays local by default, and has explicit teardown and device-ownership diagnostics.
+- [ ] Any preview hot-reload host is disposable, Swift-Package-scoped, does not edit the user's project, and proves reload without relaunching the host process.
 
 ## Milestone 12: Xcode 27 agentic tooling workflows
 

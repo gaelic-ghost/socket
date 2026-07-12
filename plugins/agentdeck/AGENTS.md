@@ -31,6 +31,7 @@ Use this file for durable guidance inside the AgentDeck Socket plugin.
 - Do not bundle a `.app` inside `agentdeck`; the plugin should detect and talk to the installed app through a local transport.
 - Codex GUI restart coordination should follow the same split: the installed app owns pending restart requests, waiting, cancellation, status, and final quit/reopen execution; this plugin owns the MCP request/cancel/status tools and the agent-facing skill policy.
 - Do not implement `when-idle` by polling Codex process state alone. Treat automatic waiting as blocked until `AgentDeck` has a supported GUI thread-status source outside the current assistant turn.
+- Keep the Simulator browser and Swift Package preview-host plan in `docs/simulator-browser-preview-host-plan.md`. Treat Device Hub, the Simulator app, and Xcode Canvas as first-class native alternatives; any AgentDeck bridge must use an explicit normal CoreSimulator device, stay local by default, and keep its browser and hot-reload capabilities opt-in.
 
 ## Runtime Data
 
