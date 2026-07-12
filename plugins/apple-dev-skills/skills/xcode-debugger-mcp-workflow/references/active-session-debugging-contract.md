@@ -1,6 +1,8 @@
 # Active-Session Debugging Contract
 
-The Xcode MCP surface available to this session exposes `InvokeDebuggerCommand`. It sends an LLDB command to Xcode's active debugging session, returns whether a session is active, preserves the same debugger state visible in Xcode, and reports output plus a process identifier when Xcode provides one.
+The Xcode MCP surface available to this session exposes `InvokeDebuggerCommand`. It sends an LLDB command to Xcode's active debugging session, returns whether a session is active, preserves the same debugger state visible in Xcode, and reports output plus a process identifier when Xcode provides one. It is reached through Xcode's `mcpbridge` connection, not the standalone `lldb-mcp` bridge.
+
+Xcode 27 beta tool inventories can vary by Xcode process, selected session, and beta build. Discover the current Xcode MCP tools before assuming this exact command is available.
 
 Use the smallest safe command for the question:
 

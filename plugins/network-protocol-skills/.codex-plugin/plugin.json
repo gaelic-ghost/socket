@@ -1,6 +1,6 @@
 {
   "name": "network-protocol-skills",
-  "version": "9.2.0",
+  "version": "9.2.1",
   "description": "Codex skills for choosing, planning, implementing, and diagnosing modern application transports and real-time networking protocols, including QUIC, HTTP/3, WebRTC, Media over QUIC, WebTransport-adjacent handoffs, protocol maturity checks, and stack-specific implementation routing.",
   "author": {
     "name": "Gale",
