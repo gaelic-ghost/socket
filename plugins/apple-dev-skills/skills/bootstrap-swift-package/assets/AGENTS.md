@@ -100,8 +100,8 @@
 - Treat SwiftUI views as component UI: keep them small, composable, reusable, and easy to scan from top to bottom.
 - Require one SwiftUI `View` component per file, named for that component, with that component's Xcode SwiftUI preview in the same file.
 - Do not group multiple SwiftUI view components into one Swift file, even when the views are small, private, related, nested, or currently used only by one parent.
-- SwiftUI view models are per-view and use concatenated prefixed names such as `GEAWhateverViewModel.swift`; never use `+` filenames.
-- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, or view-cluster models. Split shared state into explicit inputs, bindings, environment values, focused values, SwiftData model objects, or a non-SwiftUI boundary when that boundary is genuinely outside the view layer.
+- SwiftUI reusable views are self-contained declarative components. Use values, bindings, and actions as their interface; never use `+` filenames.
+- Do not create external SwiftUI ViewModel files, grouped view-model files, or view-cluster models. Own complex local observable state inside its component with `@State`; use environment values, focused values, SwiftData model objects, preferences, or a non-SwiftUI boundary only when each is the honest owner.
 - Prefer straight, top-down data flow with state owned at the narrowest view, scene, or app boundary that matches the behavior.
 - Do not build monolithic views, monolithic controllers, or broad shared mutable state when a smaller component boundary would be clearer.
 - Keep updates to view-driving state minimal and localized.

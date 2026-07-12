@@ -65,10 +65,12 @@ sync_one \
   "$ROOT_DIR/skills/apple-typography-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/sf-symbols-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftui-animation-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/tipkit-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/safari-extension-control-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/devicecheck-app-attest-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/apple-developer-provisioning-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftui-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/swiftui-component-audit-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftdata-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/appkit-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/sync-xcode-project-guidance/references/snippets/apple-xcode-project-core.md" \

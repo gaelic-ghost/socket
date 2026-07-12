@@ -13,19 +13,21 @@ It is not the Apple-docs router, not the accessibility workflow, and not the Xco
 
 ## SwiftUI View File Rule
 
-Use the project's explicit three-letter prefix for every project-owned view file and declaration. Name a view `GEAWhateverView.swift`, its paired `@Observable final class` view model `GEAWhateverViewModel.swift`, and an extracted custom modifier `GEAWhateverViewModifier.swift`. Never use `+` filenames.
+SwiftUI is declarative component UI, closer to React, F# Fabulous, and Elm than to imperative AppKit or UIKit code. Each independently reusable `View` must stand on its own: render from its inputs and framework-managed state, own its local presentation state, and expose intent through narrow actions. Do not make an external ViewModel, store, coordinator, manager, service, or observable object part of a reusable view's public API.
+
+Use the project's explicit three-letter prefix for every project-owned view file and declaration. Name a view `GEAWhateverView.swift` and an extracted custom modifier `GEAWhateverViewModifier.swift`. Never use `+` filenames. Prefer the memberwise initializer Swift synthesizes for a view's stored value, binding, and action properties; do not write an explicit initializer unless it adds real behavior that a memberwise initializer cannot express.
 
 A view component that is complex enough to edit or preview independently must have its own file. Simple private computed view properties and small private helper views may remain in the owning file while they keep that component easy to preview, navigate, and edit. Extract them as soon as they clutter that workflow.
 
-Name an extracted child from its complete composition owner: a toggle card inside `GEASettingsSheetView.swift` becomes `GEASettingsSheetToggleCard.swift`. Continue that complete stem for paired support such as `GEASettingsSheetToggleCardViewModel.swift`. This rule also applies outside views, such as `GEAWhateverServiceAdapter.swift`.
+Name an extracted child from its complete composition owner: a toggle card inside `GEASettingsSheetView.swift` becomes `GEASettingsSheetToggleCard.swift`. This rule also applies outside views, such as `GEAWhateverServiceAdapter.swift`.
 
-Extract a custom `ViewModifier` when a view accumulates more than eight chained modifiers, or earlier when a coherent chain is reusable or obscures the view body. Keep view models associated with exactly one view and let them source the presentation data that directly drives that view. Runtime/domain values use bare names such as `GEAWhatever`; persistence `Model` naming belongs to `swiftdata-workflow`.
+Extract a custom `ViewModifier` when a view accumulates more than eight chained modifiers, or earlier when a coherent chain is reusable or obscures the view body. Use view-local `@Observable` state only when plain `@State`, derived values, bindings, and small local helpers no longer keep the component readable; create and own that state inside the component with `@State`, never as an external ViewModel dependency. Runtime/domain values use bare names such as `GEAWhatever`; persistence `Model` naming belongs to `swiftdata-workflow`.
 
 ## When To Use
 
 - Use this skill when the user wants help structuring a SwiftUI app across `App`, `Scene`, `WindowGroup`, `Window`, `Settings`, or `DocumentGroup`.
 - Use this skill when the user wants help deciding where app-level, scene-level, and view-level responsibilities belong.
-- Use this skill when the user wants help choosing between explicit dependency injection, environment values, focused values, scene-focused values, preference keys, bindings, or local state.
+- Use this skill when the user wants help choosing between explicit values, bindings, actions, environment values, focused values, scene-focused values, preference keys, or local state.
 - Hand SwiftData persistence and integration decisions to `swiftdata-workflow` while retaining ownership of the view composition around that data.
 - Use this skill when the user wants help with `FocusState`, `focusable`, focus scopes, focus sections, default focus, focused objects, or other focused-context design that changes ownership or data-flow choices.
 - Use this skill when the user wants help with command ownership, command menus, command groups, focused command handling, or desktop-oriented SwiftUI command surfaces.
@@ -65,7 +67,7 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
    - local view
 4. Choose the transport that fits the responsibility:
    - the SwiftData path selected by `swiftdata-workflow`
-   - explicit initializer injection
+   - explicit values, bindings, and action closures
    - `Binding`
    - environment value
    - `FocusState`
@@ -85,7 +87,8 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
    - wrapper-heavy layers added only to look architectural
    - control flow hidden in modifiers that obscure who owns the action
    - independently editable or previewable components buried inside a larger view file
-   - a view model shared across a view cluster or stored outside its matching `GEAWhateverViewModel.swift` file
+   - external ViewModels, stores, coordinators, managers, services, or observable objects injected into reusable views
+   - explicit initializers that duplicate a sufficient memberwise initializer
    - `+` filenames or child-component names that omit their composition owner
    - long modifier chains left inline after they obscure the view body
 6. Return one recommendation path with:
@@ -126,7 +129,9 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
 
 ## Guards and Stop Conditions
 
-- Do not recommend environment values as a default substitute for explicit dependency flow.
+- Do not recommend external ViewModels as a SwiftUI shape or pass collaborating objects between reusable views.
+- Do not recommend environment values as a default substitute for local values, bindings, and actions.
+- Prefer existing SwiftUI environment actions before inventing equivalent custom routing or command layers. Add a custom environment value or action only when it is genuinely shared by multiple independent components or must vary dynamically across the hierarchy.
 - Hand SwiftData-specific architecture to `swiftdata-workflow` instead of duplicating its persistence rules here.
 - Do not recommend preference keys for ordinary downward or lateral data flow.
 - Do not collapse commands, focus, and scene ownership into a single shared mutable object just because it is easy to wire.

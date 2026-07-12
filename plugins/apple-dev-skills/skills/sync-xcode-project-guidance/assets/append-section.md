@@ -22,8 +22,8 @@
 - Choose and record one explicit three-letter uppercase prefix for project-owned Swift files and declarations; exempt only `Package.swift`, externally generated Swift, and vendored third-party Swift.
 - Require one SwiftUI `View` component per file, named for that component, with that component's Xcode SwiftUI preview in the same file.
 - Do not group multiple SwiftUI view components into one Swift file, even when the views are small, private, related, nested, or currently used only by one parent.
-- SwiftUI view models are per-view and use concatenated prefixed names such as `GEAWhateverViewModel.swift`; never use `+` filenames.
-- Do not create shared SwiftUI view-model files, grouped SwiftUI view-model files, view-cluster models, or unpaired `ViewModel.swift` files.
+- SwiftUI reusable views are self-contained declarative components. Use values, bindings, and actions as their interface; never use `+` filenames.
+- Do not create external SwiftUI ViewModel files, grouped view-model files, view-cluster models, or pass collaborators between reusable views. Own complex local observable state inside its component with `@State`.
 - Use `GEAApp.swift` for the lifecycle entry, `GEA.swift` for the application runtime/domain value, and `GEAAppService.swift` for its main service.
 - Put UIKit and AppKit view-controller support beside the matching view with a concatenated prefixed name such as `GEAWhateverViewController.swift`.
 - Use the standard top-level Xcode app repository layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.

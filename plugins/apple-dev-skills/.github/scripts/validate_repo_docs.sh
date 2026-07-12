@@ -127,6 +127,7 @@ active_skill_mds=(
   "./skills/apple-developer-provisioning-workflow/SKILL.md"
   "./skills/appkit-app-architecture-workflow/SKILL.md"
   "./skills/swiftui-app-architecture-workflow/SKILL.md"
+  "./skills/swiftui-component-audit-workflow/SKILL.md"
   "./skills/swiftdata-workflow/SKILL.md"
   "./skills/tipkit-workflow/SKILL.md"
   "./skills/apple-ui-accessibility-workflow/SKILL.md"
@@ -140,7 +141,7 @@ active_skill_mds=(
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 33 ]] || fail "Expected exactly 33 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 34 ]] || fail "Expected exactly 34 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"

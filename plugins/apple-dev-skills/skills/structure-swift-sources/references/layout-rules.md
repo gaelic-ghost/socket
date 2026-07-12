@@ -23,7 +23,7 @@
 - Do not create or preserve a root `Controllers/` directory for ordinary app structure.
 - `Sources/Views/` must contain `Shared/`, `macOS/`, and `iOS/` subdirectories.
 - Keep SwiftUI views and UIKit/AppKit view surfaces in `Views/` or the appropriate platform/shared subdirectory.
-- Follow `swiftui-app-architecture-workflow` for component extraction and paired `View`, `ViewModel`, and `ViewModifier` filenames.
+- Follow `swiftui-app-architecture-workflow` for declarative component extraction, `View` and `ViewModifier` filenames, and view-local state ownership.
 - Use concatenated ownership names such as `GEASettingsSheetToggleCard.swift` and `GEAWhateverServiceAdapter.swift`.
 - Use `GEAWhatever.swift` for the runtime/domain value, `GEAWhateverModel.swift` for persistence, and `GEAWhateverRecord.swift` or `GEAWhateverDTO.swift` only for genuinely additional representations.
 - `Models/` owns Core Data persistence models, SwiftData `@Model` types, app datamodels, DTOs, and shared transfer or persistence shapes.

@@ -10,9 +10,10 @@
 
 ## Choose The Transport Second
 
-- Use explicit initializer injection when the dependency chain is short and readable.
+- Use plain values, `Binding`, and action closures for a reusable component's explicit interface. This is declarative composition, not dependency injection.
 - Use `Binding` when a child needs a focused writable projection of parent-owned state.
-- Use environment values for shared contextual scope, not for arbitrary service dumping.
+- Use existing environment values and actions for the framework behavior they already own. Add a custom environment value or action when many independent components share a genuinely app- or scene-wide capability, or when that capability must vary dynamically by hierarchy.
+- Keep a custom action local to the component that owns it, or to its enclosing component when only private child views use it.
 - Use focused values or scene-focused values for command and active-scene context.
 - Use preference keys for child-to-ancestor publication, not as a hidden state channel.
 - Use native environment presentation actions for opening or dismissing windows and settings, rather than inventing a parallel router when the scene model already names the target.
@@ -22,6 +23,8 @@
 - If explicit flow is still clear, use it before introducing a broader implicit channel.
 - If the broader channel hides ownership, it is probably the wrong tool.
 - If the mechanism makes it harder to explain who owns the data and who changes it next, step back and choose a simpler one.
+- Do not pass a ViewModel, store, service, coordinator, manager, or other collaborating object from one reusable view into another. Make the component's values and intent explicit instead.
+- Prefer Swift's synthesized memberwise initializer. An explicit initializer must earn its existence by doing more than assigning stored properties.
 
 ## Split View Decision Rules
 

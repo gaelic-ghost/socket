@@ -68,7 +68,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - inside `Sources/`, create the strict app structure: `Views/Shared`, `Views/macOS`, `Views/iOS`, `Models`, `Services/Consumed`, `Services/Internal`, and `Services/Provided`
    - require an explicit `--file-prefix` containing three uppercase letters after offering reasonable initials-based suggestions
    - create `GEAApp.swift` as the lifecycle entry, `GEA.swift` as the application runtime/domain value, and `GEAAppService.swift` as its main service
-   - create prefixed SwiftUI views and paired view models such as `GEAContentView.swift` and `GEAContentViewModel.swift`
+   - create prefixed, self-contained SwiftUI views such as `GEAContentView.swift`, using component-local `@State` and `@Observable` state only when direct state is not sufficient
    - prefix every project-owned Swift file except `Package.swift`, externally generated Swift, and vendored third-party Swift; never generate `+` filenames
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
    - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`

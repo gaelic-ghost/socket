@@ -23,6 +23,8 @@ Help a SwiftUI app use [SwiftASB](https://github.com/gaelic-ghost/SwiftASB) to s
 
 The real job is to connect SwiftUI views to SwiftASB's Swift-native handles and observable companions. SwiftUI owns view lifetime and rendering. SwiftASB owns the local Codex app-server process, app-wide library and inventory companions, thread agenda companions, stable worktree groups, repository/worktree filters, selected-worktree Git status, project identity and thread-source facts, app-server-owned worktree snapshots, app-server-routed filesystem/config/extension/MCP reads, workspace permission facts, feature policy, feature-operation events, plan-mode turn starts, goal helpers, review and shell-command entry points, thread, agenda, and turn handles, typed events, request responses, diagnostics, and recent-history companions.
 
+Keep the shown workspace model at the app or scene ownership boundary; it is not a reusable-view dependency. Reusable SwiftUI panels receive the specific values, bindings, and action closures they need. Prefer existing or deliberately custom environment values/actions for genuine hierarchy-wide capabilities, and do not reintroduce a ViewModel, store, coordinator, or service injection layer below that boundary.
+
 ## Required Documentation Gate
 
 Before implementing or proposing SwiftUI structure, read the relevant Apple documentation through Apple Dev Skills or official Apple docs.

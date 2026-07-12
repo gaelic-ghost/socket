@@ -157,6 +157,7 @@ uv run pytest
 - `swift-package-workflow`
 - `swiftui-animation-workflow`
 - `swiftui-app-architecture-workflow`
+- `swiftui-component-audit-workflow`
 - `sync-swift-package-guidance`
 - `sync-xcode-project-guidance`
 - `xcode-app-project-workflow`
