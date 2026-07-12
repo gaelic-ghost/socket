@@ -53,3 +53,29 @@ struct GEAItemList: View {
 ```
 
 Use existing environment actions such as `dismiss`, `openWindow`, and `openSettings` before inventing equivalents. Add a custom environment value/action only for a real hierarchy-wide capability; otherwise keep the action local.
+
+## Good: Direct Observable Feature Service
+
+```swift
+@Observable
+final class GEADownloadService {
+    private(set) var activeDownloads: [GEADownload] = []
+
+    func start(_ request: GEADownloadRequest) async throws {
+        // Call the download boundary directly and update feature state.
+    }
+}
+
+struct GEADownloadScene: Scene {
+    @State private var downloads = GEADownloadService()
+
+    var body: some Scene {
+        WindowGroup {
+            GEADownloadFeatureView()
+                .environment(downloads)
+        }
+    }
+}
+```
+
+The service owns downloads, not every app capability. A reusable row below `GEADownloadFeatureView` still receives only row values and action closures.

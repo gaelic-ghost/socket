@@ -21,6 +21,8 @@ class SwiftUIComponentAuditWorkflowTests(unittest.TestCase):
         self.assertIn("@Query", skill_text)
         self.assertIn("GEAItemRowViewModel", examples_text)
         self.assertIn("onToggle", examples_text)
+        self.assertIn("GEADownloadService", examples_text)
+        self.assertIn("umbrella app service", skill_text)
 
 
 if __name__ == "__main__":

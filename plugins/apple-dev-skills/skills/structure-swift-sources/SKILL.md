@@ -69,9 +69,9 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
    - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
    - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Models/`, and `Services/`, and do not preserve a root `Controllers/` directory
    - for SwiftUI views, keep view files in `Views/Shared`, `Views/macOS`, or `Views/iOS`, require exactly one SwiftUI `View` component per file, and keep that component's Xcode SwiftUI preview in the same file
-   - hand SwiftUI component, view-model, and modifier composition decisions to `swiftui-app-architecture-workflow`
+   - hand SwiftUI component, feature-service, and modifier composition decisions to `swiftui-app-architecture-workflow`
    - hand SwiftData persistence naming and integration decisions to `swiftdata-workflow`
-   - for services, use `Services/Consumed`, `Services/Internal`, and `Services/Provided`; a service named `GEAWhateverService.swift` manages the runtime/domain value `GEAWhatever.swift`
+   - for services, use `Services/Consumed`, `Services/Internal`, and `Services/Provided`; name each direct concrete capability such as `GEAWhateverService.swift` without introducing an umbrella `GEAAppService.swift`
    - reserve `Model` for persistence representations; use `Record` and `DTO` only when additional representations are genuinely needed
    - treat `Package.swift`, externally generated Swift, and vendored third-party Swift as the only default filename-prefix exceptions
 7. Finish with `format-swift-sources` again so the moved or split files end in a normalized state.

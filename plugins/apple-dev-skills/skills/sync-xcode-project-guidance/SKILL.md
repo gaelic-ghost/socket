@@ -40,10 +40,9 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - stop if the request is really new-project bootstrap or SwiftPM-only guidance sync
 3. Apply the Apple docs gate before shaping workflow guidance:
    - read the relevant Apple documentation first
-   - use Xcode MCP `DocumentationSearch` or Xcode-local documentation first for Apple-owned SDK, framework, lifecycle, and Xcode project behavior
-   - use Dash MCP or Dash HTTP next when installed local docsets are a better fit
-   - use open source Swift project repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there
-   - use official Apple web docs only when the page content is actually readable through a capable source; generic no-JS web search/open results, snippets, metadata shells, or bare URLs are not enough
+   - use Xcode MCP `DocumentationSearch` first for Apple-owned SDK, framework, lifecycle, and Xcode project behavior
+   - use the Dash.app MCP second when its installed docsets cover the question; use Dash HTTP only when that MCP is unavailable or incomplete
+   - use checked-out source, generated DocC, GitHub/source repositories, release notes, and readable online documentation only after those local MCP paths; generic no-JS web search/open results, snippets, metadata shells, or bare URLs are not enough
    - state the documented workflow boundary being relied on before proposing repo guidance changes
    - current documented anchors for this workflow include:
      - Apple's Xcode project-creation guidance: [Creating an Xcode project for an app](https://developer.apple.com/documentation/xcode/creating_an_xcode_project_for_an_app)
@@ -55,12 +54,12 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
    - preserve its simplicity-first Swift, SwiftUI, Xcode-managed project, XcodeGen-backed project, test-plan, file-membership, tracked `.pbxproj` commit, and Debug/Release guidance
 5. Run `scripts/run_workflow.py` to normalize inputs, detect whether the repo is really Xcode-managed, shape the sync plan, and report strict Xcode app structure drift:
-   - missing `Sources/Views/Shared`, `Sources/Views/macOS`, `Sources/Views/iOS`, `Sources/Models`, `Sources/Services/Consumed`, `Sources/Services/Internal`, or `Sources/Services/Provided`
+   - missing `Sources/Views/Shared`, `Sources/Views/macOS`, `Sources/Views/iOS`, or `Sources/Models`
    - legacy `Sources/Controllers`
-   - unpaired view-model files
+   - legacy external SwiftUI ViewModel files
    - project-owned Swift files missing the selected three-letter prefix
    - any project-owned `+` filename
-   - missing internal app service when the app declares a strict app entry point
+   - umbrella app-service containers and forwarding service layers when actual source evidence shows them
 6. Apply the sync path:
    - if `AGENTS.md` is missing, copy `assets/AGENTS.md`
    - if `AGENTS.md` exists and already contains the managed section, keep the file unchanged

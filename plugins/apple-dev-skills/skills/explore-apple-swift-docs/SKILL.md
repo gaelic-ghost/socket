@@ -7,7 +7,7 @@ description: Explore Apple and Swift documentation across Xcode MCP docs, Dash, 
 
 ## Purpose
 
-Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP docs first, Dash MCP second, Dash localhost HTTP third, open source Swift repositories or generated DocC when the relevant project is available there, and official web docs last only when they are actually readable through a capable source. `scripts/run_workflow.py` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
+Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP `DocumentationSearch` first, Dash.app MCP second, Dash localhost HTTP only when the Dash.app MCP is unavailable or incomplete, then checked-out source, generated DocC, GitHub/source repositories, or release notes, and finally readable online documentation. `scripts/run_workflow.py` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
 
 ## When To Use
 
@@ -28,8 +28,8 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
    - `dash-generate`
 2. If no mode is explicit, start at `explore`.
 3. For `explore`, use the documented direct docs path instead of routing ordinary lookups through a wrapper script:
-   - `xcode-mcp-docs`: use Xcode MCP docs tools first when they are available and the user has not asked for another source
-   - `dash`: use Dash MCP tools directly when local Dash coverage is wanted and the MCP service is available
+   - `xcode-mcp-docs`: use Xcode MCP `DocumentationSearch` first when it is available and the user has not asked for another source
+   - `dash`: use the Dash.app MCP directly after Xcode MCP when its installed docsets cover the question
    - `dash-http`: use the documented Dash localhost HTTP structure directly when Dash MCP is unavailable or incomplete
    - `source-repo`: use GitHub/source repositories, generated DocC, release notes, or checked-out source when the request is about open source Swift projects, tools, or packages
    - `official-web`: use official Apple or Swift web docs when the local-docs and source-repo paths are unavailable, the user explicitly prefers the web source, and the page content is actually readable through the available tool
@@ -85,7 +85,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 
 ## Fallbacks and Handoffs
 
-- `explore` falls back in this order: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then open source Swift repositories or generated docs when applicable, then readable official web docs.
+- `explore` falls back in this order: Xcode MCP `DocumentationSearch`, then Dash.app MCP, then Dash localhost HTTP only when its MCP is unavailable or incomplete, then checked-out source, generated DocC, GitHub/source repositories, or release notes, then readable online documentation.
 - Explicit user preference overrides the default source order when that preference is usable.
 - `dash-install` hands off to `dash-generate` when no installable catalog match exists.
 - `dash-generate` falls back from stable automation guidance to deterministic manual guidance.

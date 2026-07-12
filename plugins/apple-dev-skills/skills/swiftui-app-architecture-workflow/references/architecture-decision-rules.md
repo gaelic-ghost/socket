@@ -13,6 +13,7 @@
 - Use plain values, `Binding`, and action closures for a reusable component's explicit interface. This is declarative composition, not dependency injection.
 - Use `Binding` when a child needs a focused writable projection of parent-owned state.
 - Use existing environment values and actions for the framework behavior they already own. Add a custom environment value or action when many independent components share a genuinely app- or scene-wide capability, or when that capability must vary dynamically by hierarchy.
+- Use a direct concrete feature service when a capability needs operations or observable state beyond local presentation state. Create it at the app or scene boundary that owns its lifecycle; install it in environment only when independent descendants need to invoke it or observe it directly.
 - Keep a custom action local to the component that owns it, or to its enclosing component when only private child views use it.
 - Use focused values or scene-focused values for command and active-scene context.
 - Use preference keys for child-to-ancestor publication, not as a hidden state channel.
@@ -24,6 +25,7 @@
 - If the broader channel hides ownership, it is probably the wrong tool.
 - If the mechanism makes it harder to explain who owns the data and who changes it next, step back and choose a simpler one.
 - Do not pass a ViewModel, store, service, coordinator, manager, or other collaborating object from one reusable view into another. Make the component's values and intent explicit instead.
+- Do not create an `AppService`, service facade, repository stack, or protocol-and-adapter chain merely to forward work between the UI and the real capability boundary. A surviving service must directly provide one capability or cohesive group of related operations.
 - Prefer Swift's synthesized memberwise initializer. An explicit initializer must earn its existence by doing more than assigning stored properties.
 
 ## Split View Decision Rules

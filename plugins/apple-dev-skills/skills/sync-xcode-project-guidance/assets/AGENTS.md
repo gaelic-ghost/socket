@@ -12,7 +12,7 @@
 - Do not run the standard release workflow from `main`; when a protected-main release is explicitly requested, let it validate, bump versions, tag, push the branch and tag, open the release PR, watch CI, address valid PR comments or record out-of-scope concerns in `ROADMAP.md`, merge to protected `main`, fast-forward local `main`, and clean up stale branches.
 - Treat `Scripts/repo-maintenance/config/profile.env` as the installed `maintain-project-repo` profile marker, and keep it on the `xcode-app` profile for native Apple app repos.
 - Read relevant Apple documentation before proposing or making Xcode, SwiftUI, lifecycle, architecture, or build-configuration changes.
-- Prefer Xcode MCP DocumentationSearch or local Apple docs first for Apple-owned SDK, framework, and lifecycle questions; use Dash MCP or Dash HTTP next when installed local package docs or multi-ecosystem docs are a better fit; then use official Apple docs when local docs are insufficient.
+- For Apple, Swift, and Xcode documentation, use Xcode MCP DocumentationSearch first, then the Dash.app MCP when its installed docsets cover the question. Use Dash HTTP only when the Dash.app MCP is unavailable or incomplete; consult GitHub/source repositories and readable online docs only after those local MCP paths.
 - Prefer the simplest correct Swift that is easiest to read and reason about.
 - Prefer synthesized and framework-provided behavior over extra wrappers and boilerplate.
 - For public Swift APIs, treat streamlined, compact, ergonomic call sites as the only acceptable default; prefer optional parameters with explicit default values over additional methods or overloads when the difference is optional behavior on the same operation.
@@ -25,15 +25,15 @@
 - Never use `+` filenames. Name views `GEAWhateverView.swift` and extracted modifiers `GEAWhateverViewModifier.swift`; do not use external ViewModels as a SwiftUI shape.
 - Give independently editable or previewable components their own files; small private helpers may remain while they do not clutter focused editing.
 - Prefix child components with their complete composition owner, such as `GEASettingsSheetToggleCard.swift`.
-- Use `GEAApp.swift` for the lifecycle entry, `GEA.swift` for the runtime/domain value, and `GEAAppService.swift` for its main service.
+- Use `GEAApp.swift` for the lifecycle entry and `GEA.swift` for the runtime/domain value. Do not create an umbrella `GEAAppService.swift`; add a concrete service only when a feature has a real capability to own.
 - Use the standard top-level Xcode app repository layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.
 - `Sources/` owns the main app target implementation and app-owned resources/support files. `Tests/` owns all test targets. `Shared/` owns reusable source intended to be compiled into the app and extension targets. `Extensions/` owns extension target roots, one folder per extension. `Configurations/` owns `.xcconfig` layers. `Scripts/` owns project-local automation and build helper scripts. `Packages/` owns local Swift packages only when a real package boundary is justified.
 - Keep those top-level roots stable; do not invent parallel names such as `AppSources`, `TestSources`, `Config`, `BuildScripts`, or `LocalPackages` for ordinary Xcode app repos.
 - Inside `Sources/`, use strict app structure by default: `Views/`, `Models/`, and `Services/`.
 - `Sources/Views/` owns SwiftUI views and UIKit/AppKit view surfaces. Use `Sources/Views/Shared`, `Sources/Views/macOS`, and `Sources/Views/iOS` for shared, macOS-specific, and iOS/iPadOS-specific UI.
 - `Sources/Models/` owns Core Data persistence models, SwiftData `@Model` types, app datamodels, DTOs, and shared transfer or persistence shapes.
-- `Sources/Services/` owns services by direction: `Consumed/` for external services the app calls, `Internal/` for services owned only by the app, and `Provided/` for services the app exposes to extensions, helpers, plugins, integrations, or other clients.
-- Name services `GEAWhateverService.swift`; they manage the matching runtime/domain value `GEAWhatever`.
+- `Sources/Services/` owns direct concrete feature and boundary services by direction: `Consumed/` for external capabilities the app calls, `Internal/` for app-owned feature services, and `Provided/` for services the app exposes to extensions, helpers, plugins, integrations, or other clients. These folders do not justify wrapper layers or an app-wide service container.
+- Name a service after the capability it directly provides, such as `GEAImportService.swift`. Put it in SwiftUI environment only when independent descendants need direct access or observable state; reusable leaf views still take values, bindings, and action closures.
 - For new Xcode app, framework, and workspace repositories, prefer XcodeGen plus synced source folders, checked-in `.xcconfig` files, and checked-in entitlement files by default unless there is a concrete reason to avoid that generator dependency.
 - If this repo is XcodeGen-backed, treat `project.yml`, `project.yaml`, and any included XcodeGen specs as the source of truth for generated targets, schemes, build settings, build configurations, Swift packages, test-plan references, and file membership.
 - For XcodeGen-backed projects, edit the spec set and rerun `xcodegen generate` instead of hand-editing generated `.pbxproj` files.

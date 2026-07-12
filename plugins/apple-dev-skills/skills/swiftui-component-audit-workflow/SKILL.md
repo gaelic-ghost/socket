@@ -7,7 +7,7 @@ description: Audit and repair SwiftUI code toward self-contained declarative com
 
 ## Purpose
 
-Audit or repair a SwiftUI feature without importing AppKit, UIKit, or generic imperative architecture into a declarative view tree. SwiftUI components stand on their own: they render from explicit values and framework state, own local presentation state, and express user intent through narrow actions.
+Audit or repair a SwiftUI feature without importing AppKit, UIKit, or generic imperative architecture into a declarative view tree. SwiftUI components stand on their own: they render from explicit values and framework state, own local presentation state, and express user intent through narrow actions. A feature service, when needed, is a direct concrete owner of one capability rather than a wrapper stack.
 
 ## SwiftData And SwiftUI Rule
 
@@ -33,16 +33,20 @@ Keep SwiftData directly integrated with SwiftUI through `modelContainer`, enviro
    - active command context: focus or focused value
    - direct persistence state: `ModelContainer`, `modelContext`, `@Query`, model object, or narrow binding
    - non-SwiftUI boundary: networking, import/export, migration, testing, or server sync
+   - direct concrete feature service: one capability or cohesive related group with a named app or scene lifecycle owner
 4. Report a finding for every reusable view that accepts an external ViewModel, store, coordinator, manager, service, or observable collaborator.
-5. Repair from the narrowest honest mechanism outward:
+5. Report a finding for every umbrella app service, forwarding service facade, repository/protocol/adapter chain, or service that has no direct capability boundary.
+6. Repair from the narrowest honest mechanism outward:
    - replace collaborators with values, bindings, and actions
    - move local presentation state into the owning view
    - use an existing environment action before adding a custom action
    - add a custom environment value or action only for a dynamic or broadly reused hierarchy capability
    - use preferences only for descendant-to-ancestor publication
    - restore direct SwiftData integration when persistence is being mirrored
-6. Remove explicit initializers that only duplicate the synthesized memberwise initializer.
-7. Re-audit the changed component boundaries and hand off for build, preview, or tests.
+   - collapse forwarding layers into the concrete feature service that owns the real capability
+   - install that service in environment only when independent descendants need direct invocation or observation
+7. Remove explicit initializers that only duplicate the synthesized memberwise initializer.
+8. Re-audit the changed component boundaries and hand off for build, preview, or tests.
 
 ## Inputs
 
@@ -67,6 +71,7 @@ Keep SwiftData directly integrated with SwiftUI through `modelContainer`, enviro
 - Do not pass collaborating objects between reusable views.
 - Do not replace a documented SwiftUI environment action with an application router or coordinator.
 - Do not add a custom environment action when a local action is sufficient; do add one when a dynamic or broadly shared hierarchy capability honestly needs it.
+- Do not retain an AppService, repository, protocol, adapter, or wrapper layer that only forwards to another service. Keep the direct concrete feature service, and use a protocol only for a demonstrated alternate implementation or isolated test boundary.
 - Do not use preference keys as a general state bus.
 - Do not insert repositories, stores, DTO mirrors, service mirrors, or view-model caches between SwiftData and SwiftUI.
 - Prefer memberwise initializers; an explicit initializer needs real behavior beyond stored-property assignment.

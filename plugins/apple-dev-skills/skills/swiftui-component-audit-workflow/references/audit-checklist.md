@@ -12,3 +12,5 @@ For every view, verify:
 - SwiftData flows directly through `modelContainer`, `modelContext`, `@Query`, model objects, and narrow bindings.
 - Its initializer is synthesized unless explicit initialization has a real invariant or transformation.
 - It contains no imperative router, coordinator, controller, or cache that duplicates SwiftUI ownership.
+- Every feature service provides one direct capability or cohesive related group, has a named lifecycle owner, and reaches its real boundary without an umbrella-service or forwarding chain.
+- A service is in environment only when independent descendants need direct invocation or observable state; reusable leaf views still expose values, bindings, and actions.

@@ -4,7 +4,7 @@ Use this guide when the user asks about a concrete Apple API, framework, lifecyc
 
 ## Default Rule
 
-- Prefer Xcode MCP docs first for Apple-first frameworks and symbols when the docs tool is available.
+- Prefer Xcode MCP `DocumentationSearch` first for Apple-first frameworks and symbols when the tool is available, then the Dash.app MCP when its installed docsets cover the question. Consult source repositories, GitHub, and online docs only after those local MCP paths.
 - Prefer Dash next when the needed Apple-adjacent docset is already installed and the request benefits from fast local search across symbols or snippets.
 - Prefer open source Swift repositories, generated DocC, or release notes when the relevant Swift package or tool is open source and available there.
 - Prefer official Apple web docs when Xcode MCP docs are unavailable, when Dash coverage is missing or thin, or when the answer needs an authoritative public link, but only if the content is actually readable through the available source.
@@ -12,7 +12,7 @@ Use this guide when the user asks about a concrete Apple API, framework, lifecyc
 
 ## Common Apple Framework Families
 
-### Xcode MCP docs first
+### Xcode MCP DocumentationSearch first
 
 Use Xcode MCP docs as the primary path for these Apple framework and platform families:
 
@@ -99,7 +99,7 @@ Examples:
 
 Preferred path:
 
-- Xcode MCP docs first, with Dash `XCTest` as a local supplement when installed
+- Xcode MCP `DocumentationSearch` first, then the Dash.app MCP `XCTest` docset when installed; consult source repositories or online documentation only after those local MCP paths
 
 ### Samples, guides, and migration help
 

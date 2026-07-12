@@ -84,6 +84,19 @@ Correction:
 - prefer direct SwiftUI structure until a concrete ownership or lifecycle problem demands a layer
 - make every extra type justify a real boundary
 
+## Umbrella Service And Forwarding Chains
+
+Bad shape:
+
+- an `AppService`, coordinator, repository, or protocol facade only stores other services and forwards calls between them
+- a feature request travels through a view model, wrapper, protocol, adapter, repository, and service before it reaches its actual framework or system boundary
+
+Correction:
+
+- keep the concrete feature service that directly provides the capability
+- create it at its owning app or scene boundary and install it in environment only when independent descendants need direct use or observation
+- remove forwarding layers and protocols that do not represent a demonstrated alternate implementation or isolated test boundary
+
 ## Preference Keys As A State Bus
 
 Bad shape:

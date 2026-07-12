@@ -76,6 +76,9 @@ class SwiftUIAppArchitectureWorkflowTests(unittest.TestCase):
         self.assertIn("memberwise initializer", anti_patterns_text)
         self.assertIn("self-contained, reactive, flexible, reusable", shared_snippet_text)
         self.assertIn("Do not inject external ViewModels", shared_snippet_text)
+        self.assertIn("direct, concrete feature services", shared_snippet_text)
+        self.assertIn("Umbrella Service And Forwarding Chains", anti_patterns_text)
+        self.assertIn("direct concrete feature service", skill_text)
 
 
 if __name__ == "__main__":

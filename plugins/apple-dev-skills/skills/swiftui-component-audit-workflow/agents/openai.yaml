@@ -1,4 +1,4 @@
 interface:
   display_name: "SwiftUI Component Audit Workflow"
   short_description: "Audit and repair declarative SwiftUI components"
-  default_prompt: "Use $swiftui-component-audit-workflow to audit or repair this SwiftUI feature toward self-contained declarative components, view-local reactive state, value/binding/action interfaces, direct SwiftData integration, deliberate environment actions, and no external ViewModel shape. Start with current Apple documentation."
+  default_prompt: "Use $swiftui-component-audit-workflow to audit or repair this SwiftUI feature toward self-contained declarative components, view-local reactive state, value/binding/action interfaces, direct SwiftData integration, deliberate environment actions, direct concrete feature services, and no external ViewModel or AppService wrapper shape. Start with current Apple documentation."

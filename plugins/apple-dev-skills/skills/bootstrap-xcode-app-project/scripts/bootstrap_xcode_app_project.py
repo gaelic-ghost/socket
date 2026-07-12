@@ -157,12 +157,9 @@ def render_app_file(prefix: str) -> str:
 
 @main
 struct {app_type}: App {{
-    @State private var service = {prefix}AppService()
-
     var body: some Scene {{
         WindowGroup {{
             {prefix}ContentView()
-                .environment(service)
         }}
     }}
 }}
@@ -175,24 +172,14 @@ def render_app_domain(prefix: str) -> str:
 }}
 """
 
-def render_app_service(prefix: str) -> str:
-    return f"""import Observation
-
-@Observable
-final class {prefix}AppService {{
-    var app = {prefix}()
-}}
-"""
-
-
 def render_content_view(prefix: str) -> str:
     return f"""import SwiftUI
 
 struct {prefix}ContentView: View {{
-    @Environment({prefix}AppService.self) private var service
+    private let app = {prefix}()
 
     var body: some View {{
-        Text(service.app.title)
+        Text(app.title)
             .padding()
     }}
 }}
@@ -319,7 +306,6 @@ def main() -> int:
     prefix = args.file_prefix
     write_text(target_dir / f"Sources/{prefix}App.swift", render_app_file(prefix))
     write_text(target_dir / f"Sources/{prefix}.swift", render_app_domain(prefix))
-    write_text(target_dir / f"Sources/Services/Internal/{prefix}AppService.swift", render_app_service(prefix))
     write_text(target_dir / f"Sources/Views/Shared/{prefix}ContentView.swift", render_content_view(prefix))
     write_text(target_dir / f"Tests/{args.name}Tests/{prefix}AppTests.swift", render_test_file(args.name, prefix))
     try:

@@ -7,7 +7,7 @@ description: Guide SwiftUI app-structure decisions for Apple apps across `App`, 
 
 ## Purpose
 
-Provide a docs-first workflow for SwiftUI app-structure decisions in Apple apps. This skill owns ownership-boundary guidance, transport-choice guidance, focused-context guidance, and anti-pattern correction for SwiftUI app composition across scenes, commands, focus, environment, preferences, and reusable view structure.
+Provide a docs-first workflow for SwiftUI app-structure decisions in Apple apps. This skill owns ownership-boundary guidance, direct concrete feature-service guidance, transport-choice guidance, focused-context guidance, and anti-pattern correction for SwiftUI app composition across scenes, commands, focus, environment, preferences, and reusable view structure.
 
 It is not the Apple-docs router, not the accessibility workflow, and not the Xcode execution workflow.
 
@@ -28,6 +28,7 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
 - Use this skill when the user wants help structuring a SwiftUI app across `App`, `Scene`, `WindowGroup`, `Window`, `Settings`, or `DocumentGroup`.
 - Use this skill when the user wants help deciding where app-level, scene-level, and view-level responsibilities belong.
 - Use this skill when the user wants help choosing between explicit values, bindings, actions, environment values, focused values, scene-focused values, preference keys, or local state.
+- Use this skill when the user wants to decide whether a feature needs a direct concrete service, where that service belongs, or whether it honestly belongs in SwiftUI environment.
 - Hand SwiftData persistence and integration decisions to `swiftdata-workflow` while retaining ownership of the view composition around that data.
 - Use this skill when the user wants help with `FocusState`, `focusable`, focus scopes, focus sections, default focus, focused objects, or other focused-context design that changes ownership or data-flow choices.
 - Use this skill when the user wants help with command ownership, command menus, command groups, focused command handling, or desktop-oriented SwiftUI command surfaces.
@@ -77,11 +78,14 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
    - focused scene object
    - preference key
    - local state only
+   - a direct concrete feature service, created at the owning app or scene boundary and installed in environment only when independent descendants need to invoke it or observe it directly
 5. Check the anti-patterns before finalizing guidance:
    - repositories, stores, service layers, mirrored DTOs, view-model cache layers, or wrapper objects inserted between SwiftData and SwiftUI
    - app responsibilities stuffed into a leaf view
    - scene responsibilities stuffed into a global environment object
    - environment used as a dependency dump
+   - an umbrella `AppService`, a service facade that only forwards to other services, or a repository/protocol/adapter stack inserted between a feature and its real boundary
+   - a service installed into environment even though one feature root can own it directly
    - preference keys used as a general state bus
    - giant root views with unrelated lifecycle, command, and rendering concerns mixed together
    - wrapper-heavy layers added only to look architectural
@@ -131,6 +135,9 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
 
 - Do not recommend external ViewModels as a SwiftUI shape or pass collaborating objects between reusable views.
 - Do not recommend environment values as a default substitute for local values, bindings, and actions.
+- Prefer a direct concrete feature service when a capability needs state or operations beyond a view's local concern. The service must own one capability or cohesive related group, call its real boundary directly, and have a named lifecycle owner.
+- Put a service in environment only when independent descendants need direct invocation or observable state. Do not install an umbrella app-service container into environment.
+- Keep services concrete by default. A protocol, adapter, repository, or wrapper must solve a demonstrated alternate implementation or test boundary; it is not default architecture.
 - Prefer existing SwiftUI environment actions before inventing equivalent custom routing or command layers. Add a custom environment value or action only when it is genuinely shared by multiple independent components or must vary dynamically across the hierarchy.
 - Hand SwiftData-specific architecture to `swiftdata-workflow` instead of duplicating its persistence rules here.
 - Do not recommend preference keys for ordinary downward or lateral data flow.

@@ -23,7 +23,7 @@ Use for SwiftData schemas, containers, contexts, queries, relationships, migrati
    - `references/migrations-testing-and-boundaries.md`
 4. Use the project's explicit three-letter prefix. Name runtime/domain values `GEAWhatever.swift`, SwiftData `@Model` persistence types `GEAWhateverModel.swift`, and additional `Record` or `DTO` representations only when a real boundary requires them.
 5. Keep SwiftData directly integrated with SwiftUI through `modelContainer`, environment `modelContext`, `@Query`, model objects, and narrow bindings. Do not insert repositories, stores, service mirrors, DTO mirrors, or view-model caches between SwiftData and SwiftUI.
-6. Add a separate boundary only for a non-SwiftUI concern such as networking, import/export, migration tooling, server sync, or isolated tests.
+6. Add a separate direct concrete service only for a non-SwiftUI concern such as networking, import/export, migration tooling, server sync, or isolated tests. That service owns its real boundary directly; it does not become a repository, persistence mirror, or wrapper between SwiftData and SwiftUI.
 7. Hand view ownership and view-model composition to `swiftui-app-architecture-workflow`, filename and directory cleanup to `structure-swift-sources`, execution to `xcode-build-run-workflow`, and tests to `xcode-testing-workflow`.
 
 ## Inputs
