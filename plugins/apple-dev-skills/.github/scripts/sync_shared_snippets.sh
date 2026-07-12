@@ -61,6 +61,8 @@ sync_one \
   "$ROOT_DIR/skills/avfoundation-media-pipeline-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/coremedia-timing-samplebuffer-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/coreaudio-modernization-repair-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/core-image-processing-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/apple-image-representation-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/core-animation-layer-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/apple-typography-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/sf-symbols-workflow/references/snippets/apple-xcode-project-core.md" \

@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple, Swift, Core Image, Image I/O, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -61,6 +61,8 @@ Use Apple Dev Skills when an agent is helping with:
 - AVFoundation capture, playback, async asset loading, reader, writer, and export workflows
 - Core Media timing, sample-buffer, format-description, and synchronization diagnostics
 - Core Audio and Audio Toolbox modernization or legacy repair
+- Core Image filter graphs, RAW development, color management, HDR rendering, custom kernels, and performance repair
+- Image I/O decoding, encoding, metadata, thumbnails, auxiliary data, and AppKit/UIKit/Core Graphics representation bridging
 - Swift and SwiftUI implementation
 - SwiftUI animation, transitions, symbol effects, phase/keyframe motion, and reduce-motion behavior
 - Core Animation layer-backed rendering, `CALayer` ownership, `CAAnimation` timing, and model/presentation repair
@@ -129,6 +131,7 @@ uv run pytest
 ## Active Skills
 
 - `apple-ui-accessibility-workflow`
+- `apple-image-representation-workflow`
 - `appkit-app-architecture-workflow`
 - `author-swift-docc-docs`
 - `avaudio-engine-workflow`
@@ -138,6 +141,7 @@ uv run pytest
 - `bootstrap-xcode-app-project`
 - `apple-typography-workflow`
 - `coreaudio-modernization-repair-workflow`
+- `core-image-processing-workflow`
 - `core-animation-layer-workflow`
 - `coremedia-timing-samplebuffer-workflow`
 - `devicecheck-app-attest-workflow`

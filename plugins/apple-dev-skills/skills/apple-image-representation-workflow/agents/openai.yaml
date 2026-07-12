@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Image Representation Workflow"
+  short_description: "Decode, encode, and bridge Apple image types"
+  default_prompt: "Use $apple-image-representation-workflow to decode, encode, inspect, convert, draw, or diagnose Apple image representations using current Apple documentation."

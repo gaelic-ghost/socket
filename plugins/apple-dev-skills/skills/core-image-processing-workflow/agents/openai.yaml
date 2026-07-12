@@ -1,0 +1,4 @@
+interface:
+  display_name: "Core Image Processing Workflow"
+  short_description: "Process and diagnose images with Core Image"
+  default_prompt: "Use $core-image-processing-workflow to design, implement, repair, or diagnose a Core Image processing and rendering pipeline using current Apple documentation."

@@ -89,7 +89,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 53: DeviceCheck and App Attest Workflow - Completed
 - Milestone 54: Apple Developer Provisioning and CloudKit Workflow - Completed
 - Milestone 55: TipKit Workflow - Completed
-- Milestone 56: Apple Imaging Foundations - Planned
+- Milestone 56: Apple Imaging Foundations - Completed
 - Milestone 57: Vision and Image Recognition - Planned
 - Milestone 58: Camera, Depth, and Computational Capture - Planned
 - Milestone 59: ARKit Spatial, Face, and Body Sensing - Planned
@@ -836,54 +836,56 @@ Completed Milestone 55 by shipping `tipkit-workflow` with focused presentation a
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Add focused image-processing and image-representation workflows without expanding AVFoundation, AppKit architecture, or Core Animation into catch-all image skills.
-- [ ] Ship `core-image-processing-workflow` as the owner for `CIImage`, `CIContext`, built-in filters, RAW processing, custom kernels, color management, lazy evaluation, render destinations, and Core Image performance diagnostics.
-- [ ] Ship `apple-image-representation-workflow` as the owner for Image I/O, Core Graphics image values, AppKit and UIKit image representations, image metadata, incremental decoding, thumbnails, animation frames, and encoding.
-- [ ] Add a shared Apple image-type ownership contract that preserves framework types and makes orientation, scale, color-space, metadata, alpha, dynamic-range, and auxiliary-image loss explicit at every conversion boundary.
-- [ ] Keep image transformation separate from image interpretation: Core Image changes or renders pixels, while Vision analyzes their contents in Milestone 57.
+- [x] Add focused image-processing and image-representation workflows without expanding AVFoundation, AppKit architecture, or Core Animation into catch-all image skills.
+- [x] Ship `core-image-processing-workflow` as the owner for `CIImage`, `CIContext`, built-in filters, RAW processing, custom kernels, color management, lazy evaluation, render destinations, and Core Image performance diagnostics.
+- [x] Ship `apple-image-representation-workflow` as the owner for Image I/O, Core Graphics image values, AppKit and UIKit image representations, image metadata, incremental decoding, thumbnails, animation frames, and encoding.
+- [x] Add a shared Apple image-type ownership contract that preserves framework types and makes orientation, scale, color-space, metadata, alpha, dynamic-range, and auxiliary-image loss explicit at every conversion boundary.
+- [x] Keep image transformation separate from image interpretation: Core Image changes or renders pixels, while Vision analyzes their contents in Milestone 57.
 
 ### Framework Ownership
 
-- [ ] Core Image owns lazy processing graphs, filters, contexts, RAW development, custom kernels, and rendering into `CGImage`, `CVPixelBuffer`, `IOSurface`, or Metal-backed destinations.
-- [ ] Image I/O owns `CGImageSource`, `CGImageDestination`, format detection, incremental loading, thumbnail generation, multi-frame formats, metadata, properties, and auxiliary image data.
-- [ ] Core Graphics owns concrete raster images, drawing, color spaces, bitmap contexts, masks, and low-level image geometry.
-- [ ] AppKit owns `NSImage`, `NSImageRep`, `NSBitmapImageRep`, macOS drawing behavior, resolution-independent representations, and display-oriented image selection.
-- [ ] UIKit owns `UIImage` display conventions on iOS-family platforms; it does not replace Image I/O for controlled decode, encode, or metadata work.
-- [ ] Metal remains a handoff for custom GPU pipelines that exceed Core Image's documented filter and processor boundaries.
+- [x] Core Image owns lazy processing graphs, filters, contexts, RAW development, custom kernels, and rendering into `CGImage`, `CVPixelBuffer`, `IOSurface`, or Metal-backed destinations.
+- [x] Image I/O owns `CGImageSource`, `CGImageDestination`, format detection, incremental loading, thumbnail generation, multi-frame formats, metadata, properties, and auxiliary image data.
+- [x] Core Graphics owns concrete raster images, drawing, color spaces, bitmap contexts, masks, and low-level image geometry.
+- [x] AppKit owns `NSImage`, `NSImageRep`, `NSBitmapImageRep`, macOS drawing behavior, resolution-independent representations, and display-oriented image selection.
+- [x] UIKit owns `UIImage` display conventions on iOS-family platforms; it does not replace Image I/O for controlled decode, encode, or metadata work.
+- [x] Metal remains a handoff for custom GPU pipelines that exceed Core Image's documented filter and processor boundaries.
 
 ### Required Guidance
 
-- [ ] Explain that `CIImage` describes a lazily evaluated image recipe and does not become rendered pixel output until a context renders it.
-- [ ] Prefer reusing deliberately scoped `CIContext` instances; document context expense, caches, command-queue ownership, and the mutable-thread-safety boundary of filters.
-- [ ] Cover image extent, region of interest, tiling, cropping, premultiplication, alpha handling, working/output color spaces, HDR and extended-range data, and render format selection.
-- [ ] Cover downsampling at decode time, incremental sources, orientation metadata, image properties, animated or multi-frame sources, thumbnails, and destination finalization.
-- [ ] Explain `NSImage` representation selection and prevent accidental assumptions that one `NSImage` always contains one fixed bitmap at one scale.
-- [ ] Keep AppKit drawing helpers, Image I/O decoding, Core Image processing, and Core Graphics rendering as explicit cooperating boundaries instead of wrapping them in a generic image manager.
+- [x] Explain that `CIImage` describes a lazily evaluated image recipe and does not become rendered pixel output until a context renders it.
+- [x] Prefer reusing deliberately scoped `CIContext` instances; document context expense, caches, command-queue ownership, and the mutable-thread-safety boundary of filters.
+- [x] Cover image extent, region of interest, tiling, cropping, premultiplication, alpha handling, working/output color spaces, HDR and extended-range data, and render format selection.
+- [x] Cover downsampling at decode time, incremental sources, orientation metadata, image properties, animated or multi-frame sources, thumbnails, and destination finalization.
+- [x] Explain `NSImage` representation selection and prevent accidental assumptions that one `NSImage` always contains one fixed bitmap at one scale.
+- [x] Keep AppKit drawing helpers, Image I/O decoding, Core Image processing, and Core Graphics rendering as explicit cooperating boundaries instead of wrapping them in a generic image manager.
 
 ### Documentation Anchors
 
-- [ ] Refresh Xcode documentation for Core Image essentials, `CIImage`, `CIContext`, `CIFilter`, `CIRAWFilter`, custom kernels, render destinations, and color management during implementation.
-- [ ] Refresh Xcode documentation for Image I/O sources, destinations, incremental loading, properties, thumbnails, auxiliary data, and supported image formats during implementation.
-- [ ] Refresh Xcode documentation for `CGImage`, `CGColorSpace`, bitmap contexts, `NSImage`, `NSImageRep`, `NSBitmapImageRep`, `UIImage`, and platform-specific drawing behavior during implementation.
-- [ ] Use Dash only as the configured secondary local source when Xcode documentation is incomplete or when cross-symbol browsing is materially better there.
+- [x] Refresh Xcode documentation for Core Image essentials, `CIImage`, `CIContext`, `CIFilter`, `CIRAWFilter`, custom kernels, render destinations, and color management during implementation.
+- [x] Refresh Xcode documentation for Image I/O sources, destinations, incremental loading, properties, thumbnails, auxiliary data, and supported image formats during implementation.
+- [x] Refresh Xcode documentation for `CGImage`, `CGColorSpace`, bitmap contexts, `NSImage`, `NSImageRep`, `NSBitmapImageRep`, `UIImage`, and platform-specific drawing behavior during implementation.
+- [x] Use Dash only as the configured secondary local source when Xcode documentation is incomplete or when cross-symbol browsing is materially better there.
 
 ### Implementation and Review Gate
 
-- [ ] Add both skill directories, `SKILL.md` files, focused references, OpenAI interface metadata, customization contracts, and shared type-ownership guidance.
-- [ ] Review routing and handoffs against AVFoundation, Core Media, AppKit architecture, Core Animation, Xcode execution, and future Vision ownership.
-- [ ] Update the Apple Dev README, plugin metadata, active inventory validation, tests, and this roadmap before considering the milestone complete.
-- [ ] Run the docs validator, targeted tests, full Apple Dev test suite, and root Socket metadata validation serially.
-- [ ] Inspect the complete milestone diff for unsupported API claims, duplicated ownership, vague error guidance, and stale documentation before beginning Milestone 57.
+- [x] Add both skill directories, `SKILL.md` files, focused references, OpenAI interface metadata, customization contracts, and shared type-ownership guidance.
+- [x] Review routing and handoffs against AVFoundation, Core Media, AppKit architecture, Core Animation, Xcode execution, and future Vision ownership.
+- [x] Update the Apple Dev README, plugin metadata, active inventory validation, tests, and this roadmap before considering the milestone complete.
+- [x] Run the docs validator, targeted tests, full Apple Dev test suite, and root Socket metadata validation serially.
+- [x] Inspect the complete milestone diff for unsupported API claims, duplicated ownership, vague error guidance, and stale documentation before beginning Milestone 57.
 
 ### Exit Criteria
 
-- [ ] Apple Dev Skills provides a direct, docs-first path for image processing, decoding, encoding, metadata, representation, conversion, and macOS image tooling.
-- [ ] Image conversions preserve Apple types until an explicit boundary and identify every material loss of orientation, scale, metadata, color, dynamic range, or auxiliary data.
-- [ ] The new skills compose with the existing media workflows without making AVFoundation or AppKit architecture the owner of unrelated image work.
+- [x] Apple Dev Skills provides a direct, docs-first path for image processing, decoding, encoding, metadata, representation, conversion, and macOS image tooling.
+- [x] Image conversions preserve Apple types until an explicit boundary and identify every material loss of orientation, scale, metadata, color, dynamic range, or auxiliary data.
+- [x] The new skills compose with the existing media workflows without making AVFoundation or AppKit architecture the owner of unrelated image work.
+
+Completed Milestone 56 by shipping `core-image-processing-workflow` and `apple-image-representation-workflow`, a shared Apple image-type ownership and conversion-loss contract, focused processing, rendering, Image I/O, metadata, AppKit/UIKit bridging, and diagnostic references, plugin and README integration, synchronized Xcode guidance, customization contracts, and targeted inventory and behavior tests. Current Xcode documentation was checked for Core Image, Image I/O, Core Graphics, AppKit, and UIKit; both skill packages, the docs validator, 206 Apple Dev tests, and root Socket metadata validation passed before milestone closure.
 
 ## Milestone 57: Vision and Image Recognition
 
