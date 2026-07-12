@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Runtime Telemetry"
+  short_description: "Add focused unified logs and signposts with safe privacy"
+  default_prompt: "Use $apple-runtime-telemetry-workflow to add the smallest privacy-aware Logger or OSSignposter evidence needed to diagnose this Apple app behavior."

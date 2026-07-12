@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Debugger MCP"
+  short_description: "Use Xcode LLDB sessions and verify lldb-mcp availability"
+  default_prompt: "Use $xcode-debugger-mcp-workflow to gather a focused LLDB evidence packet from Xcode’s active debugging session and report whether standalone lldb-mcp is usable."
