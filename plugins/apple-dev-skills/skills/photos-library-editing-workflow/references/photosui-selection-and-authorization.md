@@ -17,7 +17,9 @@ Handle every `PHAuthorizationStatus`:
 - `.notDetermined`: explain the feature at the moment of need, then request once.
 - `.restricted`: explain that system policy prevents access.
 - `.denied`: preserve nonlibrary app behavior and offer the documented settings route when useful.
-- `.limited`: operate only on visible assets and use the documented limited-library management UI when user intent requires it.
+- `.limited`: operate only on visible assets, do not fetch or organize user albums, and use the documented limited-library management UI when user intent requires it.
 - `.authorized`: use only the access needed by the feature.
+
+Treat `.readWrite` as the requested access level and `.authorized` as the status required for full-library album browsing and organization. A `.limited` result is intentionally narrower: keep picker and selected-asset behavior available, explain why an album feature needs broader access, and offer the documented settings or limited-library management route rather than attempting album fetches or change requests that require the full library.
 
 Provide the correct usage description for each requested access level. Authorization is not permission to copy unrelated metadata, upload media, or retain selected content indefinitely.
