@@ -49,7 +49,9 @@ class Milestone24SystemUIWorkflowTests(unittest.TestCase):
         self.assertIn("code-level suspicion or trace-backed evidence", performance)
         self.assertIn("performance-trace", forensics)
         self.assertIn("memory-graph", forensics)
-        self.assertIn("codesign --verify --deep --strict", self.read("skills/macos-distribution-workflow/references/artifact-inspection-and-classification.md"))
+        distribution_reference = self.read("skills/macos-distribution-workflow/references/artifact-inspection-and-classification.md")
+        self.assertIn("codesign --verify --deep --strict --verbose=2 <artifact>", distribution_reference)
+        self.assertIn("spctl -a -vv <artifact>", distribution_reference)
         self.assertIn("Do not call notarization necessary for a normal local Debug run", distribution)
 
 
