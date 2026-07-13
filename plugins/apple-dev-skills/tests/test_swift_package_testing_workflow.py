@@ -98,6 +98,15 @@ class SwiftPackageTestingWorkflowTests(unittest.TestCase):
             self.assertIn("unload_models", text)
             self.assertIn("reload_models", text)
 
+    def test_skill_documents_swiftpm_coverage_collection_and_discovery(self) -> None:
+        skill_text = (ROOT / "skills/swift-package-testing-workflow/SKILL.md").read_text(encoding="utf-8")
+        coverage_text = (ROOT / "skills/swift-package-testing-workflow/references/code-coverage.md").read_text(encoding="utf-8")
+
+        self.assertIn("references/code-coverage.md", skill_text)
+        self.assertIn("swift test --enable-code-coverage", coverage_text)
+        self.assertIn("swift test --show-codecov-path", coverage_text)
+        self.assertIn("separate report-location query", coverage_text)
+
 
 if __name__ == "__main__":
     unittest.main()

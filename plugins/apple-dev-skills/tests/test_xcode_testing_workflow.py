@@ -150,6 +150,17 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
         self.assertNotIn("unload_models", snippet_text)
         self.assertNotIn("reload_models", snippet_text)
 
+    def test_skill_documents_xcode_coverage_and_mcp_boundary(self) -> None:
+        skill_text = (ROOT / "skills/xcode-testing-workflow/SKILL.md").read_text(encoding="utf-8")
+        coverage_text = (ROOT / "skills/xcode-testing-workflow/references/code-coverage.md").read_text(encoding="utf-8")
+        mcp_text = (ROOT / "skills/xcode-testing-workflow/references/mcp-tool-matrix.md").read_text(encoding="utf-8")
+
+        self.assertIn("references/code-coverage.md", skill_text)
+        for term in ("-enableCodeCoverage YES", "-resultBundlePath", "xccov view --report --json", "does not document a coverage-report MCP tool"):
+            self.assertIn(term, coverage_text)
+        self.assertIn("Xcode 27 Beta Additions", mcp_text)
+        self.assertIn("does not document a code-coverage MCP tool", mcp_text)
+
 
 if __name__ == "__main__":
     unittest.main()

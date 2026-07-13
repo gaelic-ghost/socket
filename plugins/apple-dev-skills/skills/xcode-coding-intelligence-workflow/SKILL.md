@@ -36,6 +36,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
    - external-agent access through `xcrun mcpbridge`
    - command, tool, approval, or permission policy
    - Xcode-only agent configuration home
+   - Xcode 27 MCP capability discovery for run state, debugger, schemes, destinations, project settings, runtime insights, simulators, previews, or localization
    - plan-mode, artifacts, diff-review, preview, build, or test handoff
    - beta documentation or installed-Xcode capability check
 2. Apply the Apple docs gate before making setup or behavior claims:
@@ -60,6 +61,8 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
    - use `xcrun mcpbridge run-agent <agent-name>` only when intentionally launching a coding agent with Xcode-provided configuration
    - use Xcode Settings > Intelligence > Plug-ins for official plug-in import checks
    - use `MCP_XCODE_PID` when multiple Xcode processes make auto-detection ambiguous
+   - discover the live Xcode MCP tool inventory before naming a beta-era tool; Apple documents capability groups but does not make a stable tool-name contract part of this skill
+   - use `xcodebuild` and `xccov` for code coverage unless a live Xcode MCP session exposes and documents an equivalent coverage contract
    - keep normal Codex config separate from Xcode-launched Codex config
 5. Plan command and tool permissions:
    - identify which agent is allowed to read files, modify source, edit project settings, build, run tests, render previews, inspect devices, or search documentation

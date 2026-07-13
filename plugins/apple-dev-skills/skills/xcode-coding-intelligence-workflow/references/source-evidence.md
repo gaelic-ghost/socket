@@ -160,6 +160,12 @@ Observed current behavior:
 - `xcrun --find lldb-mcp` resolves the beta executable, but `xcrun lldb-mcp --help` fails before startup because dyld cannot resolve `@rpath/lib_CompilerSwiftIDEUtils.dylib`.
 - A non-mutating fallback-library-path probe did not change that failure. Do not modify Xcode, copy libraries, create symlinks, or publish an environment-variable workaround; use Xcode's active debugger session until a later toolchain starts `lldb-mcp` normally.
 
+### Documented Xcode 27 MCP Additions
+
+Apple's Xcode 27 beta release notes describe MCP capability additions for manipulating active run state, interacting with and reading the debugger console, listing and switching schemes and run destinations, inspecting and modifying build settings/compiler flags/entitlements/Info.plist keys, runtime health insights, simulator boot/install/launch/touch/screenshot actions, preview variants, and String Catalog workflows.
+
+The release notes do not document a dedicated MCP code-coverage reporting tool. Keep code coverage on the `xcodebuild` plus `xccov` path unless a live Xcode session exposes a documented coverage contract.
+
 The Device Hub and Xcode debugger workflow references own the detailed behavior and handoffs from this probe.
 - Xcode copied imported plug-ins into `~/Library/Developer/Xcode/CodingAssistant/codex/plugins/cache`.
 - Xcode enabled imported plug-ins in `~/Library/Developer/Xcode/CodingAssistant/codex/config.toml`.

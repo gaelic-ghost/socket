@@ -7,6 +7,8 @@
   - `xcodebuild -workspace <ws.xcworkspace> -scheme <scheme> build`
 - Xcode tests:
   - `xcodebuild test -project <proj.xcodeproj> -scheme <scheme> -destination '<dest>'`
+  - Coverage: `xcodebuild test -project <proj.xcodeproj> -scheme <scheme> -destination '<dest>' -enableCodeCoverage YES -resultBundlePath <artifacts>/<run>.xcresult`
+  - Coverage report: `xcrun xccov view --report --json <artifacts>/<run>.xcresult`
 
 ## Runtime and tooling
 
@@ -30,6 +32,8 @@
   - `swift build`
 - Test:
   - `swift test`
+  - Coverage: `swift test --enable-code-coverage`
+  - Coverage report location: `swift test --show-codecov-path`
 - Run executable target:
   - `swift run <target>`
 - Package commands:

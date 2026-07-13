@@ -1,6 +1,6 @@
 {
   "name": "cloud-inference-skills",
-  "version": "9.2.1",
+  "version": "9.3.0",
   "description": "Cloud AI inference workflow skills for routing model serving, training, conversion, and GPU infrastructure work across Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers.",
   "author": {
     "name": "Gale",
