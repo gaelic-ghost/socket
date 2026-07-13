@@ -173,6 +173,7 @@ uv run pytest
 - `structure-swift-sources`
 - `swiftdata-workflow`
 - `tipkit-workflow`
+- `tips-helpviewer-workflow`
 - `vision-coreml-recognition-workflow`
 - `vision-image-analysis-workflow`
 - `video-codec-processing-workflow`

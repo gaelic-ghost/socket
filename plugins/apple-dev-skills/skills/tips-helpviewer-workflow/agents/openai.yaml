@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tips and HelpViewer"
+  short_description: "Find local Apple app user guides"
+  default_prompt: "Use $tips-helpviewer-workflow to find the local guide for an installed Apple app."
