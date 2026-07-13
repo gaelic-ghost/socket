@@ -46,6 +46,8 @@
       "Prepare this MainStage concert for rehearsal with explicit audio, MIDI, patch, and live-performance safety checks.",
       "Prepare or export this GarageBand project while preserving recordings, tracks, and source media."
     ],
-    "brandColor": "#C18CFF"
+    "brandColor": "#C18CFF",
+    "composerIcon": "./assets/creator-studio-icon.png",
+    "logo": "./assets/creator-studio-icon.png"
   }
 }
