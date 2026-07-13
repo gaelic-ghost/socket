@@ -212,6 +212,19 @@ Decision checkpoint: create `mac-image-workflows` only when at least two indepen
 - Forward-test each skill through a disposable fixture task with a fresh agent context after its initial draft. Do not pass the intended solution or hidden fixture result to the tester.
 - Treat visual/manual app verification as an explicit evidence type. Record the app version, the operation, the output artifact, and any limitation rather than asserting that a UI flow is stable across all releases.
 
+## Live Application Evidence
+
+On 2026-07-13, the initial workflows were exercised against the installed Mac applications with no pre-existing user project, library, session, or concert opened.
+
+| App | Installed version | Disposable fixture evidence | Result and boundary |
+| --- | --- | --- | --- |
+| Compressor Creator Studio | 5.3 | Submitted a self-created one-second H.264/AAC MOV through the built-in `HD 720p` preset to an untracked temporary fixture directory. | Completed successfully. The distinct output MOV was present, reported H.264/AAC streams, 320x180 video, and a 1.0-second duration. |
+| GarageBand | 10.4.14 | After initial content installation completed, created an empty `Untitled.band` project with one default software-instrument track. | Project opened with recording disabled and no regions. No recording, export, save-as, share, device, or existing-project action was taken. |
+| Logic Pro Creator Studio | 12.3 | Created an empty `Untitled.logicx` project with one default software-instrument track. | Project opened with record enable and transport recording disabled and no regions. No bounce, export, save-as, routing, device, or existing-project action was taken. |
+| MainStage Creator Studio | 4.3 | Created the Quick Start Keyboard `Untitled Concert` fixture. | The template requested a separate optional 1.85 GB sound-pack download; it was declined. No MIDI/audio routing, mappings, patch selection, playback, recording, or concert save occurred. |
+
+This is a limited manual-forward-test, not a claim of full cross-version automation. The Compressor artifact verifies the full source-to-delivery contract for a controlled fixture. GarageBand, Logic Pro, and MainStage verify safe entry, template/project creation, and visible default state; their record, bounce/export, routing, and live-performance gates remain confirmation-required workflow paths.
+
 ## Open Questions
 
 - What initial visual identity should the plugin use: consistent with Apple Dev Skills, or a distinct creative-suite mark?
