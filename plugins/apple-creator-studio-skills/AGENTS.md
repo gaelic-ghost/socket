@@ -4,9 +4,9 @@ This file is the Apple Creator Studio Skills child-repo override for work done f
 
 ## Scope
 
-- `apple-creator-studio-skills` owns human-facing and Computer Use-aware operation of Apple Creator Studio applications.
+- `apple-creator-studio-skills` owns human-facing and Computer Use-aware operation of Apple Creator Studio applications plus the GarageBand companion workflow.
 - Root `skills/` is the authored workflow surface.
-- The first shipped skills own Compressor delivery jobs, Logic Pro production sessions, and MainStage concert preparation.
+- The shipped skills own Compressor delivery jobs, Logic Pro production sessions, MainStage concert preparation, and GarageBand project workflows.
 - This is a guidance plugin, not an unattended app-control daemon, media-processing runtime, or bundled copy of Apple Help.
 
 ## Boundaries

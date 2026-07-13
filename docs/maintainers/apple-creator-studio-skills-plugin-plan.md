@@ -4,7 +4,7 @@ This plan records the durable shape for a Socket-hosted `apple-creator-studio-sk
 
 ## Recommendation
 
-Create a separate `apple-creator-studio-skills` child plugin for the initial slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`.
+Create a separate `apple-creator-studio-skills` child plugin for the initial slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`, with `garageband-workflow` as its companion-app extension.
 
 This is a durable building-block change. It gives creative-app operation a clear install, documentation, validation, and ownership boundary without turning `apple-dev-skills` into a catch-all for both media-code implementation and professional-app operation.
 
@@ -119,6 +119,12 @@ Guide concert/set/patch structure, audio and MIDI device configuration, channel-
 
 Implement with a real device and rehearsal fixture, but keep all live-performance mutations behind visible user checkpoints. Apple’s support resource provides the [MainStage User Guide and release notes](https://support.apple.com/en-us/docs/software/134085).
 
+### Companion-App Extension
+
+#### `garageband-workflow`
+
+Own beginner-friendly project setup, capture, arrangement, Apple Loops, automation, soundtrack work, safe export, and explicit GarageBand-to-Logic Pro handoffs. Keep it outside Creator Studio subscription claims.
+
 ### Follow-Up Creator Studio Skills
 
 #### `final-cut-pro-workflow`
@@ -138,10 +144,6 @@ Start after the Final Cut and Compressor handoff contracts are proven. [Motion U
 Own document/layer preservation, nondestructive editing decisions, color/profile-aware output, export variants, asset naming, and handoffs to Final Cut Pro, Motion, and other creative-app surfaces.
 
 Start after confirming Mac/iPad feature boundaries and durable source-versus-delivery conventions.
-
-#### `garageband-workflow`
-
-Own beginner-friendly capture, songwriting, basic mix, and safe project/export handoffs into Logic Pro. Keep it out of Creator Studio subscription claims.
 
 ## Future Mac Image Workflows Plugin Candidate
 
@@ -200,7 +202,7 @@ Decision checkpoint: create `mac-image-workflows` only when at least two indepen
 
 - Add Final Cut Pro and Motion together when their cross-app project/template/export flow has a tested fixture.
 - Add Pixelmator Pro only after Mac/iPad scope and source-layer preservation are proven.
-- Add GarageBand only after Logic handoff behavior is concretely validated.
+- Keep GarageBand handoff behavior under the same fixture gate as the rest of the plugin and do not claim full project parity with Logic Pro without an observed handoff.
 
 ## Validation Strategy
 

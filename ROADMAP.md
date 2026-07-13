@@ -790,28 +790,28 @@ Planned
 
 ### Scope
 
-- [ ] Add a dedicated `apple-creator-studio-skills` child plugin for safe, human-readable, Computer Use-aware workflows in Apple’s creative applications. Keep it separate from `apple-dev-skills`, which owns Apple framework, Swift, Xcode, and media-code work.
-- [ ] Treat this as a durable guidance plugin, not an app-control daemon or macro runner. Do not bundle undocumented automation, a media-processing runtime, machine-local app paths, a local service, or copied Apple help content.
+- [x] Add a dedicated `apple-creator-studio-skills` child plugin for safe, human-readable, Computer Use-aware workflows in Apple’s creative applications. Keep it separate from `apple-dev-skills`, which owns Apple framework, Swift, Xcode, and media-code work.
+- [x] Treat this as a durable guidance plugin, not an app-control daemon or macro runner. Do not bundle undocumented automation, a media-processing runtime, machine-local app paths, a local service, or copied Apple help content.
 - [ ] Ship Creator Studio coverage in focused skills: Final Cut Pro, Motion, Compressor, Logic Pro, MainStage, and Pixelmator Pro. Treat GarageBand as a companion skill because it is not currently a Creator Studio subscription app.
 - [ ] Keep Acorn and RetroBatch outside this plugin. Evaluate a future independent `mac-image-workflows` plugin only after their common operator workflows, ownership boundaries, and validation fixtures are concrete.
 
 ### Tickets
 
-- [ ] Use [`docs/maintainers/apple-creator-studio-skills-plugin-plan.md`](./docs/maintainers/apple-creator-studio-skills-plugin-plan.md) as the implementation source of truth.
+- [x] Use [`docs/maintainers/apple-creator-studio-skills-plugin-plan.md`](./docs/maintainers/apple-creator-studio-skills-plugin-plan.md) as the implementation source of truth.
 - [x] Implement the first Creator Studio slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`, with official-help research, Computer Use safety checkpoints, reusable fixture contracts, and focused skill validation.
 - [x] Decide that the three validated initial-slice skills justify the child plugin and marketplace entry.
 - [ ] Implement Final Cut Pro and Motion only after Compressor handoff/relink/export contracts are proven in a real fixture project.
-- [ ] Require MainStage’s initial implementation to include explicit live-performance safety, audio/MIDI device preflight, and no-surprise-change controls.
+- [x] Require MainStage’s initial implementation to include explicit live-performance safety, audio/MIDI device preflight, and no-surprise-change controls.
 - [ ] Implement Pixelmator Pro after Mac/iPad scope, source-layer preservation, and cross-app image handoff requirements are tested.
-- [ ] Consider GarageBand after Logic Pro’s project/import/export handoffs are stable; do not imply GarageBand is included in Apple Creator Studio.
+- [x] Add `garageband-workflow` as a companion workflow after Logic Pro. Keep its project/import/export handoffs explicit and do not imply GarageBand is included in Apple Creator Studio.
 - [ ] Publish `mac-image-workflows` only if Acorn and RetroBatch share enough durable asset-preparation contracts to earn a common owner without absorbing Pixelmator Pro or generic image-code workflows.
 - [ ] Investigate a `tips-app-workflow` skill after the first Creator Studio skills ship. Verify whether macOS Tips exposes current, task-specific content for Creator Studio and other Apple apps through an accessible, stable Computer Use surface; compare it against in-app Help and official user guides, preserve Tips as an optional discovery aid rather than an authoritative documentation source, and do not add a plugin or skill until a real fixture proves its value.
-- [ ] Update root README, marketplace metadata, active-skill inventory tests, plugin metadata, and validation only when a real installable plugin surface ships.
+- [x] Update root README, marketplace metadata, plugin metadata, and validation now that the installable plugin surface has shipped. Add active-skill inventory tests only when a Socket-level inventory assertion becomes necessary.
 
 ### Exit Criteria
 
-- [ ] Every shipped skill has one concrete operator domain, authoritative Apple or vendor documentation anchors, a readable human path, and a Computer Use execution contract.
-- [ ] Every write or destructive UI action has a visible confirmation, output path, source-preservation rule, and post-action verification requirement.
+- [x] Every shipped skill has one concrete operator domain, authoritative Apple or vendor documentation anchors, a readable human path, and a Computer Use execution contract.
+- [x] Every write or destructive UI action has a visible confirmation, output path, source-preservation rule, and post-action verification requirement.
 - [ ] Compressor, Logic Pro, and MainStage have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
 - [ ] The plugin neither duplicates Apple Dev Skills framework guidance nor makes unsafe claims about unattended creative-app automation.
 
