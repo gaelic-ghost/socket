@@ -43,6 +43,10 @@ This is a local Beta 3 packaging observation. Public Xcode release notes announc
 - Do not replace Xcode's normal debugger session with an unverified third-party MCP server.
 - Do not assume standalone `lldb-mcp` reaches the debugger that Xcode already owns; its public contract describes LLDB MCP discovery or a separately launched `lldb` process.
 
+## Physical-device debugging
+
+For a physical-device failure, keep the XCUITest or run result as the primary failure record. Confirm the paired device identity, app build, OS version, and triggering action through `xcode-device-hub-workflow`, then use the active Xcode debugger session for one focused breakpoint, backtrace, frame inspection, or bounded LLDB command. Preserve only the minimum device-specific diagnostics or screen evidence needed to explain the failure, and do not alter pairing, Developer Mode, app data, or device settings unless the user explicitly requests that state change.
+
 ## References
 
 - `references/beta3-capability-evidence.md`

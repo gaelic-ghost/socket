@@ -44,6 +44,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
    - `references/code-coverage.md` for Xcode coverage collection, `.xcresult` artifacts, `xccov` reporting, comparison, and the Xcode 27 MCP boundary
    - `references/xctestplan-configurations-and-matrix.md` for `.xctestplan`, launch-argument matrices, named configurations, and Debug/Release test coverage
    - `references/xcuitest-and-xcuiautomation.md` for UI automation mechanics, waits, interruption handling, activities, and attachments
+   - `references/ios-ui-automation-destinations.md` for iOS simulator-versus-physical-device XCUITest decisions, destination evidence, and physical-device debugging handoffs
    - `references/ui-accessibility-verification.md` for accessibility-specific runtime verification expectations and coordination with `apple-ui-accessibility-workflow`
    - `references/instruments-performance-profiling.md` for Instruments, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Points of Interest, and signpost-aligned trace evidence
    - `references/testing-plans-file-membership-and-configurations.md` for the condensed cross-cutting summary and file-membership reminder
@@ -123,6 +124,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - `references/code-coverage.md`
 - `references/xctestplan-configurations-and-matrix.md`
 - `references/xcuitest-and-xcuiautomation.md`
+- `references/ios-ui-automation-destinations.md`
 - `references/ui-accessibility-verification.md`
 - `references/instruments-performance-profiling.md`
 - `references/testing-plans-file-membership-and-configurations.md`

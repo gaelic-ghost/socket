@@ -110,10 +110,26 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
 
         self.assertIn("xctestplan-configurations-and-matrix.md", skill_text)
         self.assertIn("xcuitest-and-xcuiautomation.md", skill_text)
+        self.assertIn("ios-ui-automation-destinations.md", skill_text)
         self.assertIn("ui-accessibility-verification.md", skill_text)
         self.assertIn("-only-test-configuration", plan_text)
         self.assertIn("waitForExistence(timeout:)", ui_text)
         self.assertIn("apple-ui-accessibility-workflow", accessibility_text)
+
+    def test_skill_documents_ios_simulator_and_physical_device_boundaries(self) -> None:
+        destination_text = (
+            ROOT / "skills/xcode-testing-workflow/references/ios-ui-automation-destinations.md"
+        ).read_text(encoding="utf-8")
+
+        for term in (
+            "Simulator-first coverage",
+            "Physical-device coverage",
+            "`.xcresult`",
+            "xcode-device-hub-workflow",
+            "xcode-debugger-mcp-workflow",
+            "hardware performance",
+        ):
+            self.assertIn(term, destination_text)
 
     def test_skill_documents_xcodegen_test_project_maintenance(self) -> None:
         skill_text = (ROOT / "skills/xcode-testing-workflow/SKILL.md").read_text(encoding="utf-8")

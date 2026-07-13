@@ -344,6 +344,7 @@ In Progress
 - [x] Add `apple-dev-skills:xcode-coding-intelligence-workflow` for Xcode Intelligence setup, Xcode-hosted agents, chat providers, ACP agent entries, Xcode-only config homes, command/tool permissions, and external-agent access through `xcrun mcpbridge`.
 - [ ] Add `apple-dev-skills:xcode-agent-localization-workflow` for agent-assisted string catalog, translation, glossary, XLIFF, and human-review workflows.
 - [x] Add `apple-dev-skills:xcode-device-hub-workflow` for simulated and physical device inspection, interaction, screenshots, videos, pairing, environment configuration, and diagnostics handoffs.
+- [x] Extend `xcode-testing-workflow`, `xcode-device-hub-workflow`, and `xcode-debugger-mcp-workflow` with iOS XCUITest simulator-versus-physical-device decisions, destination evidence, bounded `devicectl` support, and physical-device debugging handoffs.
 - [x] Add `apple-dev-skills:macos-window-management-workflow` for native SwiftUI/AppKit window scenes, chrome, drag regions, placement, resize/zoom, restoration, and validation.
 - [x] Add `apple-dev-skills:apple-runtime-telemetry-workflow` for focused unified logging, privacy-aware `Logger` use, `OSSignposter`, and runtime-evidence handoffs.
 - [ ] Add `apple-dev-skills:apple-beta-docs-triage-workflow` for new Apple beta drops, current-docs checks, availability gates, SDK requirements, and skill-routing decisions.

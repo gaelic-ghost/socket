@@ -577,6 +577,7 @@ Completed
 - [x] Keep Swift Testing, XCTest, XCUITest, and `.xctestplan` execution with `xcode-testing-workflow`.
 - [x] Mark Xcode 27 beta claims with the date checked and separate them from local Xcode 26.5 `mcpbridge` evidence.
 - [x] Add shared Xcode and SwiftPM code-coverage guidance, and keep coverage reporting on documented CLI tools unless a live Xcode MCP session exposes an equivalent contract.
+- [x] Add iOS XCUITest simulator-versus-physical-device destination guidance, preserve `.xcresult` as the automation authority, and connect physical-device failures to Device Hub, bounded `devicectl`, and active-Xcode debugger evidence.
 
 ### Tickets
 
