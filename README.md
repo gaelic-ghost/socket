@@ -84,6 +84,7 @@ Currently available from the catalog:
 
 - `agent-portability-skills`
 - `android-dev-skills`
+- `apple-creator-studio-skills`
 - `apple-dev-skills`
 - `cardhop-app`
 - `cloud-deployment-skills`
@@ -112,6 +113,7 @@ Current Socket catalog shape:
 
 - `agent-portability-skills`: maintainer skills plus a source-bundled guidance-sync custom-agent definition for Socket-owned agent skill portability, Codex plugin surfaces, and host adapter guidance
 - `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
+- `apple-creator-studio-skills`: source-preserving Compressor delivery, Logic Pro production, and MainStage concert workflows with local Help Viewer discovery, explicit Computer Use safeguards, and artifact or rehearsal verification
 - `apple-dev-skills`: Apple, Swift, Core Image and Image I/O, Vision and Core ML recognition, AVFoundation camera and depth capture, ARKit spatial sensing, VideoToolbox and Core Video codecs, PhotosUI and PhotoKit, AVFAudio, Core Media, Core Audio, SwiftUI, AppKit, Xcode, Safari, OpenAPI, and DocC workflows, plus the source-bundled `swift-steward` custom-agent definition with its own roadmap
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, and AWS handoff to the official AWS Agent Toolkit rather than duplicated AWS MCP, CLI, or SAM setup

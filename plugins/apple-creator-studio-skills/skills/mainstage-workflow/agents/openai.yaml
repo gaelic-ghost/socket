@@ -1,0 +1,4 @@
+interface:
+  display_name: "MainStage Workflow"
+  short_description: "Safe MainStage concert workflows"
+  default_prompt: "Use $mainstage-workflow to prepare this MainStage concert safely."

@@ -4,7 +4,7 @@ This plan records the durable shape for a Socket-hosted `apple-creator-studio-sk
 
 ## Recommendation
 
-Create a separate `apple-creator-studio-skills` child plugin once its first two workflows are implemented and validated. Start with `compressor-workflow`, then `logic-pro-workflow`.
+Create a separate `apple-creator-studio-skills` child plugin for the initial slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`.
 
 This is a durable building-block change. It gives creative-app operation a clear install, documentation, validation, and ownership boundary without turning `apple-dev-skills` into a catch-all for both media-code implementation and professional-app operation.
 
@@ -69,7 +69,7 @@ Never rely on a machine-local path in shipped documentation or plugin metadata. 
 
 ## Skill Inventory
 
-### First Release
+### Initial Slice
 
 #### `compressor-workflow`
 
@@ -113,6 +113,12 @@ Not owned:
 
 Primary source: [Logic Pro User Guide for Mac](https://support.apple.com/en-gb/guide/logicpro/welcome/mac).
 
+#### `mainstage-workflow`
+
+Guide concert/set/patch structure, audio and MIDI device configuration, channel-strip and plug-in routing, mappings, rehearsal checks, backup copies, and explicit live-performance confirmation gates.
+
+Implement with a real device and rehearsal fixture, but keep all live-performance mutations behind visible user checkpoints. Apple’s support resource provides the [MainStage User Guide and release notes](https://support.apple.com/en-us/docs/software/134085).
+
 ### Follow-Up Creator Studio Skills
 
 #### `final-cut-pro-workflow`
@@ -126,12 +132,6 @@ Start only after Compressor proves the export and output-verification contract. 
 Own Motion project setup, behaviors/keyframes, generators, titles, effects, template publication for Final Cut Pro, parameter exposure, render/export, and source-project preservation.
 
 Start after the Final Cut and Compressor handoff contracts are proven. [Motion User Guide](https://support.apple.com/guide/motion/welcome/mac)
-
-#### `mainstage-workflow`
-
-Own concert/set/patch structure, audio and MIDI device configuration, channel-strip and plug-in routing, mappings, rehearsal checks, backup copies, and explicit live-performance confirmation gates.
-
-Start only with a real device and rehearsal fixture. Apple’s support resource provides the [MainStage User Guide and release notes](https://support.apple.com/en-us/docs/software/134085).
 
 #### `pixelmator-pro-workflow`
 
@@ -182,17 +182,23 @@ Decision checkpoint: create `mac-image-workflows` only when at least two indepen
 - Require explicit confirmation before recording, replacing takes, changing audio devices, freezing/flattening, destructive editing, or bouncing over an existing file.
 - Validate with a disposable Logic project: inspect configuration, make a non-destructive edit, create a defined output, and verify it opens/plays as expected.
 
-### Slice 3: Plugin Packaging And Release Readiness
+### Slice 3: `mainstage-workflow`
+
+- Write a compact `SKILL.md` for concert/set/patch structure, audio/MIDI device preflight, channel strips, mappings, rehearsal, backup, and live-performance confirmation gates.
+- Add references for device/routing state, concert backup, patch-change safety, rehearsal checklist, and recovery from missing device or plug-in conditions.
+- Require explicit confirmation before changing selected patches, audio/MIDI routing, mappings, concert files, playback, or recording on a live-performance surface.
+- Validate with a disposable rehearsal concert and real available audio/MIDI evidence; do not alter an active performance configuration during validation.
+
+### Slice 4: Plugin Packaging And Release Readiness
 
 - Add child `AGENTS.md`, `.codex-plugin/plugin.json`, authored `skills/`, and only required test/validation files.
-- Add the root marketplace entry only after Compressor and Logic are real, validated skill folders.
+- Add the root marketplace entry only after Compressor, Logic Pro, and MainStage are real, validated skill folders.
 - Update root README, roadmap, active-skill inventory, plugin metadata, and tests in the same pass.
 - Run child validation, root metadata validation, and focused fixture checks serially.
 
-### Slice 4: Follow-Up Apps
+### Slice 5: Follow-Up Apps
 
 - Add Final Cut Pro and Motion together when their cross-app project/template/export flow has a tested fixture.
-- Add MainStage in a separate pass with actual interface/controller/rehearsal evidence.
 - Add Pixelmator Pro only after Mac/iPad scope and source-layer preservation are proven.
 - Add GarageBand only after Logic handoff behavior is concretely validated.
 

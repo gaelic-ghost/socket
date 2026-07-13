@@ -1,0 +1,4 @@
+interface:
+  display_name: "Logic Pro Workflow"
+  short_description: "Safe Logic production workflows"
+  default_prompt: "Use $logic-pro-workflow to prepare and verify this Logic Pro session."

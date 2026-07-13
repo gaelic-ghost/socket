@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compressor Workflow"
+  short_description: "Safe Compressor delivery workflows"
+  default_prompt: "Use $compressor-workflow to prepare and verify this Compressor export."

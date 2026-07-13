@@ -771,6 +771,7 @@ Planned
 - [ ] Add `apple-dev-skills:swiftui-performance-audit` for code-first diagnosis of invalidation fan-out, unstable identity, heavy body work, layout churn, image cost, and broad animation. Require a clear distinction between suspected code smells and trace-backed evidence, then hand Instruments and `xctrace` capture to `xcode-testing-workflow` or `swift-package-testing-workflow`.
 - [ ] Add `apple-dev-skills:ios-runtime-forensics-workflow` with explicit `performance-trace` and `memory-graph` modes for simulator ETTrace/symbolication and memgraph/leak ownership evidence. Keep it focused on reproducible before/after runtime proof, and route normal simulator build, launch, UI driving, and logs through `xcode-build-run-workflow`.
 - [ ] Add `apple-dev-skills:macos-distribution-workflow` for exported-artifact inspection, signing identities, entitlements, hardened runtime, nested-code signatures, Gatekeeper assessment, notarization readiness/failure classification, stapling, and release-only validation. Keep developer-account provisioning, certificate/profile creation, and Xcode project signing changes with `apple-developer-provisioning-workflow` and `xcode-build-run-workflow`.
+- [ ] Add `apple-dev-skills:tips-helpviewer-workflow` for consistent local discovery of user guides for installed Apple apps. Use the `com.apple.helpviewer` Tips catalog as the primary UI target rather than the empty `com.apple.tips` shell observed on this Mac; route exact app/version help searches through the catalog, verify the opened guide matches the installed app, and keep official in-app Help, Xcode-local docs, Dash, and vendor documentation as the authoritative sources when the catalog is unavailable or incomplete.
 - [ ] Add skill-local references, deterministic validation expectations, handoff contracts, and targeted tests for all five workflows. Update Apple Dev Skills inventory, root documentation, and marketplace metadata only if the exported skill surface changes.
 - [ ] After the five workflows are implemented and validated, explore the installed iOS Simulator browser and SwiftUI hot-reload surface with Gale in a dedicated research pass. Decide together whether it belongs as a Socket workflow, a documented external-tool handoff, or no durable Socket addition; do not bundle or install browser/runtime tooling before that decision.
 
@@ -797,10 +798,10 @@ Planned
 ### Tickets
 
 - [ ] Use [`docs/maintainers/apple-creator-studio-skills-plugin-plan.md`](./docs/maintainers/apple-creator-studio-skills-plugin-plan.md) as the implementation source of truth.
-- [ ] Implement `compressor-workflow` first, then `logic-pro-workflow`, with official-help research, Computer Use safety checkpoints, reusable fixture contracts, and focused skill validation.
-- [ ] Decide whether the first two validated skills justify creating the child plugin and adding its marketplace entry, or whether the plan needs revision before an installable surface exists.
+- [x] Implement the first Creator Studio slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`, with official-help research, Computer Use safety checkpoints, reusable fixture contracts, and focused skill validation.
+- [x] Decide that the three validated initial-slice skills justify the child plugin and marketplace entry.
 - [ ] Implement Final Cut Pro and Motion only after Compressor handoff/relink/export contracts are proven in a real fixture project.
-- [ ] Implement MainStage only with explicit live-performance safety, audio/MIDI device preflight, and no-surprise-change controls.
+- [ ] Require MainStage’s initial implementation to include explicit live-performance safety, audio/MIDI device preflight, and no-surprise-change controls.
 - [ ] Implement Pixelmator Pro after Mac/iPad scope, source-layer preservation, and cross-app image handoff requirements are tested.
 - [ ] Consider GarageBand after Logic Pro’s project/import/export handoffs are stable; do not imply GarageBand is included in Apple Creator Studio.
 - [ ] Publish `mac-image-workflows` only if Acorn and RetroBatch share enough durable asset-preparation contracts to earn a common owner without absorbing Pixelmator Pro or generic image-code workflows.
@@ -811,7 +812,7 @@ Planned
 
 - [ ] Every shipped skill has one concrete operator domain, authoritative Apple or vendor documentation anchors, a readable human path, and a Computer Use execution contract.
 - [ ] Every write or destructive UI action has a visible confirmation, output path, source-preservation rule, and post-action verification requirement.
-- [ ] Compressor and Logic Pro have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
+- [ ] Compressor, Logic Pro, and MainStage have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
 - [ ] The plugin neither duplicates Apple Dev Skills framework guidance nor makes unsafe claims about unattended creative-app automation.
 
 ## Small Tickets

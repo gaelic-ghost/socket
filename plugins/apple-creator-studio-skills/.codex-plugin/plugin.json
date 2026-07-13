@@ -1,0 +1,45 @@
+{
+  "name": "apple-creator-studio-skills",
+  "version": "9.4.1",
+  "description": "Human-facing and Computer Use-aware Apple Creator Studio workflows for Compressor delivery, Logic Pro production, and MainStage concert preparation.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/apple-creator-studio-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "Apache-2.0",
+  "keywords": [
+    "apple",
+    "creator-studio",
+    "compressor",
+    "logic-pro",
+    "mainstage",
+    "audio",
+    "video",
+    "creative-workflows",
+    "computer-use",
+    "codex",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Apple Creator Studio Skills",
+    "shortDescription": "Safe creative-app workflows for Codex.",
+    "longDescription": "Guide people and Codex agents through source-preserving Apple Creator Studio workflows for Compressor delivery jobs, Logic Pro production sessions, and MainStage concert preparation. Each workflow combines local app Help discovery, explicit Computer Use safeguards, artifact verification, and handoffs to Apple framework skills when code work is the real task.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/apple-creator-studio-skills",
+    "defaultPrompt": [
+      "Prepare a Compressor batch and verify its exported delivery artifacts without overwriting source media.",
+      "Set up or repair this Logic Pro session, then bounce a defined master or stem delivery safely.",
+      "Prepare this MainStage concert for rehearsal with explicit audio, MIDI, patch, and live-performance safety checks."
+    ],
+    "brandColor": "#C18CFF"
+  }
+}
