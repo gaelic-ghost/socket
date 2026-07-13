@@ -1,13 +1,13 @@
 ---
 name: swift-package-testing-workflow
-description: Guide Swift Testing, XCTest holdouts, xctestplan handoff conditions, async test design, semantic accessibility-test boundaries, test-fixture organization, and package test-diagnosis work in existing Swift Package Manager repositories. Use when Package.swift is the source of truth and the task is primarily about testing rather than package build or run work.
+description: Guide Swift Testing, XCTest holdouts, code coverage, xctestplan handoff conditions, async test design, semantic accessibility-test boundaries, test-fixture organization, and package test-diagnosis work in existing Swift Package Manager repositories. Use when Package.swift is the source of truth and the task is primarily about testing rather than package build or run work.
 ---
 
 # Swift Package Testing Workflow
 
 ## Purpose
 
-Use this skill as the primary execution workflow for test-focused work in existing Swift Package Manager repositories. Keep it focused on Swift Testing, XCTest holdouts, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, performance-sensitive package workload profiling, filters, retries, fixtures, and package-level test diagnosis instead of broad manifest and build/run work. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, test-surface command planning, and clean handoff to the build/run or Xcode-oriented surfaces when the request drifts.
+Use this skill as the primary execution workflow for test-focused work in existing Swift Package Manager repositories. Keep it focused on Swift Testing, XCTest holdouts, code coverage, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, performance-sensitive package workload profiling, filters, retries, fixtures, and package-level test diagnosis instead of broad manifest and build/run work. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, test-surface command planning, and clean handoff to the build/run or Xcode-oriented surfaces when the request drifts.
 
 ## When To Use
 
@@ -47,10 +47,11 @@ Use this skill as the primary execution workflow for test-focused work in existi
    - preserve its explicit `swiftLanguageModes: [.v6]` package-manifest default and prefer that spelling over the legacy `swiftLanguageVersions` alias on current manifest surfaces
    - preserve its package-appropriate logging, telemetry, structured-concurrency, and Swift Testing guidance
 4. Run `scripts/run_workflow.py` to resolve repo shape, confirm the request stays on the testing surface, and plan the package-testing command path.
-5. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, accessibility-related semantic tests, fixtures, async test discipline, or test-related Debug/Release validation.
-6. Use `references/performance-sensitive-testing-and-profiling.md` when the request touches package-first instrumentation, `OSSignposter`, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Audio, MLX, local AI, streaming, or other performance-sensitive Apple silicon workloads.
-7. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-testing-workflow`.
-8. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
+5. Use `references/code-coverage.md` when the request needs SwiftPM collection, exported-JSON discovery, coverage reporting, comparison, or an explicit coverage-gate boundary.
+6. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, accessibility-related semantic tests, fixtures, async test discipline, or test-related Debug/Release validation.
+7. Use `references/performance-sensitive-testing-and-profiling.md` when the request touches package-first instrumentation, `OSSignposter`, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Audio, MLX, local AI, streaming, or other performance-sensitive Apple silicon workloads.
+8. If the repo root is ambiguous because Xcode-managed markers are present at the same root, use `references/xcode-handoff-conditions.md` and hand off cleanly to `xcode-testing-workflow`.
+9. Report which parts were agent-executed, the docs relied on, the repo-shape result, and any required next step or handoff.
 
 ## Inputs
 
@@ -122,6 +123,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 
 - `references/workflow-policy.md`
 - `references/repo-shape-detection.md`
+- `references/code-coverage.md`
 - `references/package-resources-testing-and-builds.md`
 - `references/performance-sensitive-testing-and-profiling.md`
 - `references/xcode-handoff-conditions.md`

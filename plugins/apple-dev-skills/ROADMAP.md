@@ -576,6 +576,7 @@ Completed
 - [x] Keep build, run, preview, file-membership, and project-integrity execution with `xcode-build-run-workflow`.
 - [x] Keep Swift Testing, XCTest, XCUITest, and `.xctestplan` execution with `xcode-testing-workflow`.
 - [x] Mark Xcode 27 beta claims with the date checked and separate them from local Xcode 26.5 `mcpbridge` evidence.
+- [x] Add shared Xcode and SwiftPM code-coverage guidance, and keep coverage reporting on documented CLI tools unless a live Xcode MCP session exposes an equivalent contract.
 
 ### Tickets
 
@@ -590,7 +591,7 @@ Completed
 - [x] Existing Xcode execution skills keep execution ownership while linking to the setup workflow only where needed.
 - [x] Beta-specific claims are dated, source-linked, and separated from stable or local-tool evidence.
 
-Completed Milestone 47 by shipping `xcode-coding-intelligence-workflow`, updating the active skill inventory and plugin metadata, adding routing notes from build/test execution skills, and covering the new setup and permission boundary with targeted tests.
+Completed Milestone 47 by shipping `xcode-coding-intelligence-workflow`, updating the active skill inventory and plugin metadata, adding routing notes from build/test execution skills, documenting Xcode 27 MCP capability additions without inventing beta tool names, adding shared Xcode and SwiftPM coverage guidance, and covering the setup, coverage, and permission boundaries with targeted tests.
 
 ## Milestone 48: Core AI and Foundation Models Workflow Planning
 

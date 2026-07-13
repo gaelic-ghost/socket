@@ -81,6 +81,14 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
         self.assertIn("Reviewable Artifacts", permissions_text)
         self.assertIn("Do not store provider API keys", permissions_text)
 
+    def test_xcode27_mcp_additions_stay_capability_based(self) -> None:
+        skill_text = self.read("skills/xcode-coding-intelligence-workflow/SKILL.md")
+        evidence_text = self.read("skills/xcode-coding-intelligence-workflow/references/source-evidence.md")
+
+        self.assertIn("discover the live Xcode MCP tool inventory", skill_text)
+        self.assertIn("Documented Xcode 27 MCP Additions", evidence_text)
+        self.assertIn("do not document a dedicated MCP code-coverage reporting tool", evidence_text)
+
 
 if __name__ == "__main__":
     unittest.main()
