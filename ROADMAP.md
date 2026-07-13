@@ -792,7 +792,7 @@ Planned
 
 - [x] Add a dedicated `apple-creator-studio-skills` child plugin for safe, human-readable, Computer Use-aware workflows in Apple’s creative applications. Keep it separate from `apple-dev-skills`, which owns Apple framework, Swift, Xcode, and media-code work.
 - [x] Treat this as a durable guidance plugin, not an app-control daemon or macro runner. Do not bundle undocumented automation, a media-processing runtime, machine-local app paths, a local service, or copied Apple help content.
-- [ ] Ship Creator Studio coverage in focused skills: Final Cut Pro, Motion, Compressor, Logic Pro, MainStage, and Pixelmator Pro. Treat GarageBand as a companion skill because it is not currently a Creator Studio subscription app.
+- [ ] Ship Creator Studio coverage in focused skills: Final Cut Pro, Motion, Compressor, Logic Pro, MainStage, and Pixelmator Pro. Treat GarageBand as a companion skill because it is not currently a Creator Studio subscription app. Final Cut Pro and Motion are complete; Pixelmator Pro remains.
 - [ ] Keep Acorn and RetroBatch outside this plugin. Evaluate a future independent `mac-image-workflows` plugin only after their common operator workflows, ownership boundaries, and validation fixtures are concrete.
 
 ### Tickets
@@ -800,7 +800,7 @@ Planned
 - [x] Use [`docs/maintainers/apple-creator-studio-skills-plugin-plan.md`](./docs/maintainers/apple-creator-studio-skills-plugin-plan.md) as the implementation source of truth.
 - [x] Implement the first Creator Studio slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`, with official-help research, Computer Use safety checkpoints, reusable fixture contracts, and focused skill validation.
 - [x] Decide that the three validated initial-slice skills justify the child plugin and marketplace entry.
-- [ ] Implement Final Cut Pro and Motion only after Compressor handoff/relink/export contracts are proven in a real fixture project.
+- [x] Implement Final Cut Pro and Motion after Compressor handoff/relink/export contracts were proven in controlled disposable fixtures. Keep library, source-project, template-publication, and delivery confirmation boundaries explicit.
 - [x] Require MainStage’s initial implementation to include explicit live-performance safety, audio/MIDI device preflight, and no-surprise-change controls.
 - [ ] Implement Pixelmator Pro after Mac/iPad scope, source-layer preservation, and cross-app image handoff requirements are tested.
 - [x] Add `garageband-workflow` as a companion workflow after Logic Pro. Keep its project/import/export handoffs explicit and do not imply GarageBand is included in Apple Creator Studio.
@@ -812,7 +812,7 @@ Planned
 
 - [x] Every shipped skill has one concrete operator domain, authoritative Apple or vendor documentation anchors, a readable human path, and a Computer Use execution contract.
 - [x] Every write or destructive UI action has a visible confirmation, output path, source-preservation rule, and post-action verification requirement.
-- [ ] Compressor, Logic Pro, and MainStage have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
+- [x] Compressor, Logic Pro, and MainStage have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
 - [ ] The plugin neither duplicates Apple Dev Skills framework guidance nor makes unsafe claims about unattended creative-app automation.
 
 ## Small Tickets

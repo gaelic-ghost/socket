@@ -1,0 +1,4 @@
+interface:
+  display_name: "Motion Workflow"
+  short_description: "Safe Motion project and template workflows"
+  default_prompt: "Use $motion-workflow to prepare this Motion project or Final Cut template safely."

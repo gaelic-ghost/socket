@@ -4,7 +4,7 @@ This plan records the durable shape for a Socket-hosted `apple-creator-studio-sk
 
 ## Recommendation
 
-Create a separate `apple-creator-studio-skills` child plugin for the initial slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`, with `garageband-workflow` as its companion-app extension.
+Create a separate `apple-creator-studio-skills` child plugin for the initial slice: `compressor-workflow`, `logic-pro-workflow`, and `mainstage-workflow`, with `garageband-workflow` as its companion-app extension. The second slice adds `final-cut-pro-workflow` and `motion-workflow` after controlled Compressor delivery fixtures proved the cross-app output boundary.
 
 This is a durable building-block change. It gives creative-app operation a clear install, documentation, validation, and ownership boundary without turning `apple-dev-skills` into a catch-all for both media-code implementation and professional-app operation.
 
@@ -125,19 +125,19 @@ Implement with a real device and rehearsal fixture, but keep all live-performanc
 
 Own beginner-friendly project setup, capture, arrangement, Apple Loops, automation, soundtrack work, safe export, and explicit GarageBand-to-Logic Pro handoffs. Keep it outside Creator Studio subscription claims.
 
-### Follow-Up Creator Studio Skills
+### Implemented Second Slice
 
 #### `final-cut-pro-workflow`
 
 Own Final Cut library safety, import and media organization, proxy/optimized media decisions, edit structures, captions, roles, titles/effects handoffs, color/export decisions, sharing, and relink/recovery guidance.
 
-Start only after Compressor proves the export and output-verification contract. [Final Cut Pro User Guide for Mac](https://support.apple.com/guide/final-cut-pro/welcome-ver92663661d/mac)
+Implemented after Compressor proved the export and output-verification contract. [Final Cut Pro User Guide for Mac](https://support.apple.com/guide/final-cut-pro/welcome-ver92663661d/mac)
 
 #### `motion-workflow`
 
 Own Motion project setup, behaviors/keyframes, generators, titles, effects, template publication for Final Cut Pro, parameter exposure, render/export, and source-project preservation.
 
-Start after the Final Cut and Compressor handoff contracts are proven. [Motion User Guide](https://support.apple.com/guide/motion/welcome/mac)
+Implemented after the Final Cut and Compressor handoff contracts were proven. [Motion User Guide](https://support.apple.com/guide/motion/welcome/mac)
 
 #### `pixelmator-pro-workflow`
 
@@ -200,7 +200,6 @@ Decision checkpoint: create `mac-image-workflows` only when at least two indepen
 
 ### Slice 5: Follow-Up Apps
 
-- Add Final Cut Pro and Motion together when their cross-app project/template/export flow has a tested fixture.
 - Add Pixelmator Pro only after Mac/iPad scope and source-layer preservation are proven.
 - Keep GarageBand handoff behavior under the same fixture gate as the rest of the plugin and do not claim full project parity with Logic Pro without an observed handoff.
 
