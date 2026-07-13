@@ -286,7 +286,7 @@ wheels = [
 
 [[package]]
 name = "socket-maintenance"
-version = "9.4.1"
+version = "9.5.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
