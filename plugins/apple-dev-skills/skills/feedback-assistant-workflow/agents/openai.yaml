@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feedback Assistant"
+  short_description: "Prepare Apple bug and crash reports"
+  default_prompt: "Use $feedback-assistant-workflow to prepare a privacy-reviewed Apple Feedback Assistant report."

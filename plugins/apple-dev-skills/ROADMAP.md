@@ -41,6 +41,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 62: Media Expansion Audit and Socket Major Release](#milestone-62-media-expansion-audit-and-socket-major-release)
 - [Milestone 63: System Integration, Runtime Evidence, and Distribution](#milestone-63-system-integration-runtime-evidence-and-distribution)
 - [Milestone 64: Xcode String Catalog Localization Workflow](#milestone-64-xcode-string-catalog-localization-workflow)
+- [Milestone 65: Feedback Assistant Workflow](#milestone-65-feedback-assistant-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -100,6 +101,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 62: Media Expansion Audit and Socket Major Release - Completed
 - Milestone 63: System Integration, Runtime Evidence, and Distribution - In Progress
 - Milestone 64: Xcode String Catalog Localization Workflow - Completed
+- Milestone 65: Feedback Assistant Workflow - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1213,6 +1215,24 @@ Completed
 - [x] Targeted tests prove the catalog-first, human-review, and beta-boundary contracts.
 
 Completed Milestone 64 by shipping `xcode-localization-workflow` as the durable owner of String Catalog localization. The workflow makes stable source extraction, catalog organization, translator context, plural/device variants, XLIFF review, and locale-aware validation the core path, defaults new XcodeGen app projects to `Sources/Resources/Localizable.xcstrings`, audits that baseline in existing projects, and treats Xcode 27 agent translation only as an explicitly bounded optional enhancement.
+
+## Milestone 65: Feedback Assistant Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add `feedback-assistant-workflow` for Apple bug, crash, enhancement, documentation, and Foundation Models feedback preparation.
+- [x] Make the macOS app, web, report-ID, team-mailbox, attachment-review, and just-in-time submission boundaries explicit.
+- [x] Document the public Foundation Models feedback-attachment API without claiming a general Feedback Assistant submission API.
+
+### Exit Criteria
+
+- [x] The repository ships a privacy-reviewed, app-grounded workflow that prepares one actionable Feedback Assistant report at a time and requires user confirmation before transmission.
+
+Completed Milestone 65 by shipping `feedback-assistant-workflow` with Apple-aligned report and diagnostic guidance, a live signed-in macOS app fixture, strict attachment and submission gates, and `LanguageModelSession.logFeedbackAttachment` guidance for Foundation Models session feedback.
 
 ## Backlog Candidates
 

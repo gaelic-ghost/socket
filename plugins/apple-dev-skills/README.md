@@ -161,6 +161,7 @@ uv run pytest
 - `apple-developer-provisioning-workflow`
 - `apple-runtime-telemetry-workflow`
 - `explore-apple-swift-docs`
+- `feedback-assistant-workflow`
 - `format-swift-sources`
 - `icon-composer-app-icon-workflow`
 - `ios-runtime-forensics-workflow`
