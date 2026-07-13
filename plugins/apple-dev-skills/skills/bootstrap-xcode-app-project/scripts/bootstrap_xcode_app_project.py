@@ -18,6 +18,7 @@ XCODEGEN_TEMPLATE_DIR = Path(__file__).resolve().parents[3] / "templates" / "xco
 XCODEGEN_TEMPLATE_OUTPUTS = {
     "project.yml.tmpl": "project.yml",
     "Sources/Support/App.entitlements.tmpl": "Sources/Support/__APP_NAME__.entitlements",
+    "Sources/Resources/Localizable.xcstrings.tmpl": "Sources/Resources/Localizable.xcstrings",
     "Sources/Resources/Assets.xcassets/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/Contents.json",
     "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json",
     "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json.tmpl": "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json",
@@ -435,6 +436,7 @@ def main() -> int:
         "generator": "xcodegen",
         "project_file": str(target_dir / f"{args.name}.xcodeproj"),
         "xcodegen_template_paths": xcodegen_template_paths,
+        "string_catalog_path": str(target_dir / "Sources/Resources/Localizable.xcstrings"),
         "standard_directory_paths": standard_directory_paths,
         "local_environment_path": local_environment_path,
         "agents_copied": agents_copied,

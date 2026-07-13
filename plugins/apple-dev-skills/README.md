@@ -80,6 +80,7 @@ Use Apple Dev Skills when an agent is helping with:
 - XcodeGen migration and modernization for existing Xcode app projects
 - Xcode coding intelligence, Xcode-hosted agents, and external-agent MCP setup
 - Xcode String Catalog localization, translator context, plural/device variants, XLIFF handoff, and locale-aware validation
+- New Xcode app bootstrap with a default `Sources/Resources/Localizable.xcstrings` catalog, plus guidance-sync audits that require project-aware catalog membership
 - Icon Composer app icon design, preview, and Xcode handoff
 - Safari extension and SafariServices integration choices
 - DeviceCheck per-device state and App Attest app-integrity flow planning

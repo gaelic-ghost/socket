@@ -1203,6 +1203,7 @@ Completed
 
 - [x] Add a durable, catalog-first Xcode localization workflow instead of limiting guidance to Xcode 27 agent translation.
 - [x] Cover String Catalog setup, build-backed extraction, localizable SwiftUI and Foundation APIs, resource bundles, comments, tables, generated symbols, plurals, device variants, XLIFF, and locale-aware validation.
+- [x] Make `Sources/Resources/Localizable.xcstrings` the default catalog in the supported XcodeGen app bootstrap and require existing-project guidance sync to audit its presence and route membership changes through Xcode or XcodeGen.
 - [x] Keep Xcode 27 agent translation optional, beta-scoped, provenance-aware, and dependent on fluent human review.
 
 ### Exit Criteria
@@ -1211,7 +1212,7 @@ Completed
 - [x] Plugin metadata, active-skill inventory, roadmap, and docs validation recognize the new skill.
 - [x] Targeted tests prove the catalog-first, human-review, and beta-boundary contracts.
 
-Completed Milestone 64 by shipping `xcode-localization-workflow` as the durable owner of String Catalog localization. The workflow makes stable source extraction, catalog organization, translator context, plural/device variants, XLIFF review, and locale-aware validation the core path, and treats Xcode 27 agent translation only as an explicitly bounded optional enhancement.
+Completed Milestone 64 by shipping `xcode-localization-workflow` as the durable owner of String Catalog localization. The workflow makes stable source extraction, catalog organization, translator context, plural/device variants, XLIFF review, and locale-aware validation the core path, defaults new XcodeGen app projects to `Sources/Resources/Localizable.xcstrings`, audits that baseline in existing projects, and treats Xcode 27 agent translation only as an explicitly bounded optional enhancement.
 
 ## Backlog Candidates
 

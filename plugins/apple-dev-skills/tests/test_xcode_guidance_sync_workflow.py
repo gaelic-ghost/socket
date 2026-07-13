@@ -72,6 +72,8 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("semantic side and `xcode-testing-workflow` for runtime verification", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
+            self.assertIn("Localizable.xcstrings", agents_text)
+            self.assertIn("xcode-localization-workflow", agents_text)
             self.assertIn("If this repo is XcodeGen-backed", agents_text)
             self.assertIn("rerun `xcodegen generate`", agents_text)
             self.assertIn("normal Xcode and XCTest parallel execution", agents_text)
@@ -131,6 +133,8 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn(".xctestplan", agents_text)
             self.assertIn("semantic side and `xcode-testing-workflow` for runtime verification", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
+            self.assertIn("Localizable.xcstrings", agents_text)
+            self.assertIn("xcode-localization-workflow", agents_text)
             self.assertIn("If this repo is XcodeGen-backed", agents_text)
             self.assertIn("rerun `xcodegen generate`", agents_text)
             self.assertIn("treat that diff as critical project state", agents_text)
@@ -230,6 +234,32 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
                 )
             )
 
+    def test_structure_audit_flags_missing_default_string_catalog(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Demo.xcodeproj").mkdir()
+            for relative_path in (
+                "Sources/Views/Shared",
+                "Sources/Views/macOS",
+                "Sources/Views/iOS",
+                "Sources/Models",
+                "Sources/Services/Consumed",
+                "Sources/Services/Internal",
+                "Sources/Services/Provided",
+            ):
+                (repo_root / relative_path).mkdir(parents=True)
+
+            code, payload = self.run_script("--repo-root", tmpdir, "--dry-run")
+
+            self.assertEqual(code, 0)
+            self.assertTrue(
+                any(
+                    finding["code"] == "missing-default-string-catalog"
+                    and finding["path"] == "Sources/Resources/Localizable.xcstrings"
+                    for finding in payload["structure_audit"]["findings"]
+                )
+            )
+
     def test_structure_audit_passes_strict_source_layout(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_root = Path(tmpdir)
@@ -244,6 +274,10 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
                 "Sources/Services/Provided",
             ):
                 (repo_root / relative_path).mkdir(parents=True)
+
+            catalog_path = repo_root / "Sources/Resources/Localizable.xcstrings"
+            catalog_path.parent.mkdir(parents=True)
+            catalog_path.write_text('{"sourceLanguage":"en","strings":{},"version":"1.0"}\n', encoding="utf-8")
 
             code, payload = self.run_script("--repo-root", tmpdir, "--dry-run")
 
