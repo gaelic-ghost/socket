@@ -804,6 +804,7 @@ Planned
 - [ ] Implement Pixelmator Pro after Mac/iPad scope, source-layer preservation, and cross-app image handoff requirements are tested.
 - [ ] Consider GarageBand after Logic Pro’s project/import/export handoffs are stable; do not imply GarageBand is included in Apple Creator Studio.
 - [ ] Publish `mac-image-workflows` only if Acorn and RetroBatch share enough durable asset-preparation contracts to earn a common owner without absorbing Pixelmator Pro or generic image-code workflows.
+- [ ] Investigate a `tips-app-workflow` skill after the first Creator Studio skills ship. Verify whether macOS Tips exposes current, task-specific content for Creator Studio and other Apple apps through an accessible, stable Computer Use surface; compare it against in-app Help and official user guides, preserve Tips as an optional discovery aid rather than an authoritative documentation source, and do not add a plugin or skill until a real fixture proves its value.
 - [ ] Update root README, marketplace metadata, active-skill inventory tests, plugin metadata, and validation only when a real installable plugin surface ships.
 
 ### Exit Criteria
