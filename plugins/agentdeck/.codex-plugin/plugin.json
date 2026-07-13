@@ -1,6 +1,6 @@
 {
   "name": "agentdeck",
-  "version": "9.3.0",
+  "version": "9.3.1",
   "description": "Local Codex runtime utilities for thread, hook, and app-server workflows.",
   "author": {
     "name": "Gale",

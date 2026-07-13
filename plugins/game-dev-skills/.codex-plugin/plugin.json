@@ -1,6 +1,6 @@
 {
   "name": "game-dev-skills",
-  "version": "9.3.0",
+  "version": "9.3.1",
   "description": "Apple platform game development workflow skills for SpriteKit, SceneKit, GameplayKit, controller input, haptics, profiling, and game-stack routing.",
   "author": {
     "name": "Gale",
