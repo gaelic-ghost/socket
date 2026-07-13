@@ -24,6 +24,7 @@ REQUIRED_STRINGS = [
     "Sources/Views/Shared",
     "Sources/Services/",
     "three-letter uppercase prefix",
+    "Localizable.xcstrings",
 ]
 
 REQUIRED_XCODE_APP_DIRECTORIES = [
@@ -32,6 +33,8 @@ REQUIRED_XCODE_APP_DIRECTORIES = [
     "Sources/Views/iOS",
     "Sources/Models",
 ]
+
+DEFAULT_STRING_CATALOG = "Sources/Resources/Localizable.xcstrings"
 
 
 def version_sort_key(path: Path) -> tuple[int, ...]:
@@ -160,6 +163,15 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
                     "message": f"Expected Xcode app structure directory is missing: {relative_path}",
                 }
             )
+
+    if not (repo_root / DEFAULT_STRING_CATALOG).is_file():
+        findings.append(
+            {
+                "code": "missing-default-string-catalog",
+                "path": DEFAULT_STRING_CATALOG,
+                "message": "Add the default String Catalog through Xcode or the owning XcodeGen spec, verify target membership and resource inclusion, then build so Xcode can populate it.",
+            }
+        )
 
     controllers_dir = repo_root / "Sources" / "Controllers"
     if controllers_dir.exists():

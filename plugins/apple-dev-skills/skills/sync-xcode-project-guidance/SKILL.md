@@ -53,6 +53,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 4. Apply the shared Xcode-project policy before making repo-guidance changes:
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
    - preserve its simplicity-first Swift, SwiftUI, Xcode-managed project, XcodeGen-backed project, test-plan, file-membership, tracked `.pbxproj` commit, and Debug/Release guidance
+   - require one default `Localizable.xcstrings` String Catalog per app target; use `Sources/Resources/Localizable.xcstrings` for the standard XcodeGen layout and record another target-owned location explicitly when a project has a justified different resource root
 5. Run `scripts/run_workflow.py` to normalize inputs, detect whether the repo is really Xcode-managed, shape the sync plan, and report strict Xcode app structure drift:
    - missing `Sources/Views/Shared`, `Sources/Views/macOS`, `Sources/Views/iOS`, or `Sources/Models`
    - legacy `Sources/Controllers`
@@ -60,6 +61,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - project-owned Swift files missing the selected three-letter prefix
    - any project-owned `+` filename
    - umbrella app-service containers and forwarding service layers when actual source evidence shows them
+   - a missing default String Catalog; report the exact catalog path and hand target membership or XcodeGen regeneration to `xcode-build-run-workflow` instead of hand-editing `.pbxproj`
 6. Apply the sync path:
    - if `AGENTS.md` is missing, copy `assets/AGENTS.md`
    - if `AGENTS.md` exists and already contains the managed section, keep the file unchanged
@@ -69,6 +71,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify the synced file mentions `xcode-build-run-workflow` and `xcode-testing-workflow`
    - verify the synced file preserves the no-direct-`.pbxproj` rule and the tracked `.pbxproj` stage-and-commit rule
    - verify the synced file preserves the XcodeGen source-of-truth rule for repos that use generated projects
+   - verify the sync audit records whether the default String Catalog exists; a guidance sync does not claim a file is in an Xcode target until project-aware Xcode or XcodeGen evidence confirms membership
 8. Refresh `maintain-project-repo`:
    - refresh `Scripts/repo-maintenance/`
    - refresh `.github/workflows/validate-repo-maintenance.yml`
@@ -118,6 +121,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - refreshed `maintain-project-repo` paths
   - validation result
   - strict app-structure audit result and findings
+  - default String Catalog audit result and required project-aware follow-up
   - one concise next step or handoff
 
 ## Guards and Stop Conditions
@@ -134,6 +138,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - The only current fallback is a non-mutating dry-run or guided result that explains what the sync would do.
 - After a successful sync, hand off ongoing build, run, diagnostics, preview, and mutation work to `xcode-build-run-workflow`.
 - After a successful sync, hand off ongoing test execution and test diagnosis work to `xcode-testing-workflow`.
+- After a successful sync that reports a missing catalog, hand off to `xcode-build-run-workflow` to add `Localizable.xcstrings` through Xcode or the owning XcodeGen spec, confirm target membership, and build to populate it.
 - After a successful sync, use `Scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `Scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful sync, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - When a GitHub remote exists, use `productivity-skills:maintain-github-repository`

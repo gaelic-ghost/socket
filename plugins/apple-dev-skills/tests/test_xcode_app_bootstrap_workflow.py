@@ -243,6 +243,13 @@ exit 1
             self.assertFalse((target / "Sources" / "Controllers").exists())
             self.assertTrue((target / "Sources" / "Support" / "DemoApp.entitlements").exists())
             self.assertTrue((target / "Sources" / "Resources" / "Assets.xcassets" / "Contents.json").exists())
+            catalog_path = target / "Sources" / "Resources" / "Localizable.xcstrings"
+            self.assertTrue(catalog_path.is_file())
+            self.assertEqual(
+                json.loads(catalog_path.read_text(encoding="utf-8")),
+                {"sourceLanguage": "en", "strings": {}, "version": "1.0"},
+            )
+            self.assertEqual(payload["string_catalog_path"], str(catalog_path))
             self.assertTrue(
                 (target / "Sources" / "Resources" / "Assets.xcassets" / "AppIcon.appiconset" / "Contents.json").exists()
             )
@@ -364,6 +371,7 @@ exit 1
             "project.yml.tmpl",
             "Sources/Support/App.entitlements.tmpl",
             "Sources/Resources/Assets.xcassets/Contents.json.tmpl",
+            "Sources/Resources/Localizable.xcstrings.tmpl",
             "Sources/Resources/Assets.xcassets/AppIcon.appiconset/Contents.json.tmpl",
             "Sources/Resources/Assets.xcassets/AccentColor.colorset/Contents.json.tmpl",
             "Configurations/Shared.xcconfig.tmpl",

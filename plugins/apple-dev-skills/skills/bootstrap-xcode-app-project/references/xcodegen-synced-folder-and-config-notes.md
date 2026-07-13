@@ -39,6 +39,12 @@
 - Keep generated `Info.plist` version keys wired to `$(MARKETING_VERSION)` and `$(CURRENT_PROJECT_VERSION)` so version bump scripts can update the config source instead of generated project state.
 - Do not assume Xcode's Build Settings UI writes edited values back into `.xcconfig` files. Treat GUI-edited build settings as generated project overrides until inspected.
 - When a GUI change belongs in tracked config, move the value into the owning `.xcconfig`, regenerate with XcodeGen, and confirm the generated project no longer carries an unintended override.
+
+## Default String Catalog
+
+- Every generated app includes `Sources/Resources/Localizable.xcstrings` with English as its source language and no pre-seeded product strings.
+- The app target's broad synchronized `Sources` root owns the catalog as a resource. Do not add a separate `Sources/Resources` source entry just for localization.
+- Build after adding localizable source text so Xcode extracts entries into the catalog. Use `xcode-localization-workflow` for tables, comments, plurals, translations, XLIFF, and locale validation.
 - Before running `xcodegen generate`, inspect existing generated project diffs and assume they are intentional user or Xcode GUI changes unless proven otherwise.
 - Promote project-file diffs into their tracked owners before regeneration: XcodeGen spec for project structure and wiring, `.xcconfig` for build settings, `.entitlements` for entitlement keys, `Info.plist` for plist keys, scheme spec or `.xcscheme` for scheme behavior, and `.xctestplan` for test-plan content.
 

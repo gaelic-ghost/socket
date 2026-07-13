@@ -63,6 +63,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 7. Create the project:
    - for `xcodegen`, let `scripts/bootstrap_xcode_app_project.py` generate the repo scaffold from `templates/xcodegen/swiftui-app/`, including `project.yml`, checked-in `.xcconfig` files, source files, tests, and `AGENTS.md`, then run `xcodegen generate`
    - create the standard top-level Xcode app layout: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`
+   - create `Sources/Resources/Localizable.xcstrings` for every app target by default; the generated XcodeGen app target owns the broad synced `Sources` root, so the catalog is a tracked project resource without a separate source entry
    - keep app-owned implementation/resources/support under `Sources/`, tests under `Tests/`, reusable app/extension source under `Shared/`, extension target roots under `Extensions/`, `.xcconfig` layers under `Configurations/`, project-local automation under `Scripts/`, and justified local Swift package boundaries under `Packages/`
    - inside `Sources/`, create the strict app structure: `Views/Shared`, `Views/macOS`, `Views/iOS`, `Models`, `Services/Consumed`, `Services/Internal`, and `Services/Provided`
    - require an explicit `--file-prefix` containing three uppercase letters after offering reasonable initials-based suggestions
@@ -84,6 +85,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify the strict app source directories exist under `Sources/Views`, `Sources/Models`, and `Sources/Services`
    - verify the app entry point, runtime/domain value, and shared content view use the strict naming contract without a generated ViewModel or umbrella app service
    - verify `.swiftformat` exists
+   - verify `Sources/Resources/Localizable.xcstrings` exists and that the generated target's broad `Sources` root includes it as a resource
    - verify `AGENTS.md` exists when enabled
    - verify `.codex/environments/xcode-project.toml` exists and uses the generated app target name for Codex GUI actions
    - verify generated guidance says tracked `.pbxproj` changes must be reviewed, staged, and committed before push, merge, release, or cleanup
@@ -139,6 +141,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   - resolved bundle identifier
   - generator path
   - installed `.codex/environments/xcode-project.toml`
+  - installed default String Catalog path
   - installed `maintain-project-repo` paths
   - validation result
   - one concise next step or handoff

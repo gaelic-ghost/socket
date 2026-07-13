@@ -59,6 +59,15 @@ def audit_xcode_app_structure(repo_root: Path) -> dict:
                 "message": "Move UIKit/AppKit controller files beside their matching view under Sources/Views with a concatenated prefixed name such as GEAWhateverViewController.swift.",
             }
         )
+    default_catalog = repo_root / "Sources" / "Resources" / "Localizable.xcstrings"
+    if not default_catalog.is_file():
+        findings.append(
+            {
+                "code": "missing-default-string-catalog",
+                "path": "Sources/Resources/Localizable.xcstrings",
+                "message": "Add the default String Catalog through Xcode or the owning XcodeGen spec, verify target membership and resource inclusion, then build so Xcode can populate it.",
+            }
+        )
     return {
         "status": "passed" if not findings else "needs-attention",
         "findings": findings,
