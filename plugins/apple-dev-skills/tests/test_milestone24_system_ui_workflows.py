@@ -68,6 +68,21 @@ class Milestone24SystemUIWorkflowTests(unittest.TestCase):
         self.assertIn("explore-apple-swift-docs", reference)
         self.assertIn("$tips-helpviewer-workflow", prompt)
 
+    def test_feedback_assistant_workflow_keeps_submission_and_api_boundaries_explicit(self) -> None:
+        skill = self.read("skills/feedback-assistant-workflow/SKILL.md")
+        app_reference = self.read("skills/feedback-assistant-workflow/references/live-app-and-api-boundaries.md")
+        foundation_reference = self.read("skills/feedback-assistant-workflow/references/foundation-models-feedback-attachments.md")
+        prompt = self.read("skills/feedback-assistant-workflow/agents/openai.yaml")
+        customization = self.read("skills/feedback-assistant-workflow/scripts/customization_config.py")
+
+        for term in ("com.apple.appleseed.FeedbackAssistant", "one issue", "attachment manifest", "Immediately before submission"):
+            self.assertIn(term, skill)
+        self.assertIn("No Apple-documented general API", app_reference)
+        self.assertIn("LanguageModelSession.logFeedbackAttachment", foundation_reference)
+        self.assertIn("does not create or submit", foundation_reference)
+        self.assertIn("$feedback-assistant-workflow", prompt)
+        self.assertIn('SKILL_NAME = "feedback-assistant-workflow"', customization)
+
 
 if __name__ == "__main__":
     unittest.main()
