@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "9.5.0",
-  "description": "Apple development workflows for Codex, including App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
+  "description": "Apple development workflows for Codex, including App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, local Tips/HelpViewer guide discovery, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -69,6 +69,9 @@
     "gatekeeper",
     "tipkit",
     "tooltips",
+    "tips",
+    "helpviewer",
+    "user-guides",
     "animation",
     "core-animation",
     "typography",

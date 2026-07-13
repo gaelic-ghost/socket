@@ -54,6 +54,20 @@ class Milestone24SystemUIWorkflowTests(unittest.TestCase):
         self.assertIn("spctl -a -vv <artifact>", distribution_reference)
         self.assertIn("Do not call notarization necessary for a normal local Debug run", distribution)
 
+    def test_tips_helpviewer_workflow_requires_a_local_match_and_owner_aware_fallback(self) -> None:
+        skill = self.read("skills/tips-helpviewer-workflow/SKILL.md")
+        reference = self.read("skills/tips-helpviewer-workflow/references/catalog-and-fallback-contract.md")
+        prompt = self.read("skills/tips-helpviewer-workflow/agents/openai.yaml")
+
+        self.assertIn("com.apple.helpviewer", skill)
+        self.assertIn("com.apple.tips", skill)
+        self.assertIn("installed-version capture", skill)
+        self.assertIn("local-helpviewer", skill)
+        self.assertIn("Do not modify app settings", skill)
+        self.assertIn("Compressor export movie", reference)
+        self.assertIn("explore-apple-swift-docs", reference)
+        self.assertIn("$tips-helpviewer-workflow", prompt)
+
 
 if __name__ == "__main__":
     unittest.main()
