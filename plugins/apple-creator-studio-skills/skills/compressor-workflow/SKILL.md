@@ -33,6 +33,6 @@ Open Compressor Help or search the local Tips/Help Viewer catalog for `Compresso
 ## Handoffs
 
 - `logic-pro-workflow` for music/stem preparation before final delivery.
-- Future Final Cut Pro or Motion workflows for editing and template authoring; Compressor owns the transcode/delivery step.
+- `final-cut-pro-workflow` for editing, sharing, and source-master preparation; `motion-workflow` for composition and template authoring. Compressor owns the transcode/delivery step.
 - `apple-dev-skills:video-codec-processing-workflow` or `avfoundation-media-pipeline-workflow` for code-level media processing.
 - A verified `ffmpeg` workflow when a CLI artifact contract is explicitly required.

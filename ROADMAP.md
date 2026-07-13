@@ -813,7 +813,7 @@ Planned
 - [x] Every shipped skill has one concrete operator domain, authoritative Apple or vendor documentation anchors, a readable human path, and a Computer Use execution contract.
 - [x] Every write or destructive UI action has a visible confirmation, output path, source-preservation rule, and post-action verification requirement.
 - [x] Compressor, Logic Pro, and MainStage have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
-- [ ] The plugin neither duplicates Apple Dev Skills framework guidance nor makes unsafe claims about unattended creative-app automation.
+- [x] The plugin neither duplicates Apple Dev Skills framework guidance nor makes unsafe claims about unattended creative-app automation.
 
 ## Small Tickets
 
