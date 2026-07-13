@@ -224,6 +224,16 @@ On 2026-07-13, the initial workflows were exercised against the installed Mac ap
 
 This is a limited manual-forward-test, not a claim of full cross-version automation. The Compressor artifact verifies the full source-to-delivery contract for a controlled fixture. GarageBand, Logic Pro, and MainStage verify safe entry, template/project creation, and visible default state; their record, bounce/export, routing, and live-performance gates remain confirmation-required workflow paths.
 
+On 2026-07-13, the second slice was forward-tested entirely inside the same untracked temporary fixture directory.
+
+| App | Installed version | Controlled fixture evidence | Result and boundary |
+| --- | --- | --- | --- |
+| Motion Creator Studio | 6.3 | Created a blank one-second 1920x1080, 29.97 fps standard-gamut composition and rendered it as a distinct ProRes MOV. | Rendered output existed and reported ProRes video, 1920x1080 dimensions, 29.97 fps, and 1.001-second duration. No source media was linked, replaced, published, or saved as a reusable Final Cut Pro template. |
+| Final Cut Pro Creator Studio | 12.3 | Created a temporary library and project, copied the Motion-rendered fixture into the library, appended the one-second clip, and shared a distinct ProRes MOV. | The shared output existed and reported ProRes video, 1920x1080 dimensions, 29.97 fps, and 1.001-second duration. No existing library, event, project, media, role, caption, or delivery was opened or modified. |
+| Compressor Creator Studio | 5.3 | Submitted the temporary Final Cut Pro share to the built-in `HD 720p` preset with a distinct output name in the same temporary directory. | Completed successfully. The delivery output reported H.264 video, 1280x720 dimensions, 29.97 fps, and 1.001-second duration. |
+
+The observed chain is Motion render -> Final Cut Pro import and project share -> Compressor delivery. It validates source-preserving entry, explicit output naming, temporary destinations, and artifact inspection; it does not establish template publishing, captions/roles, managed-media repair, or production color/audio-delivery behavior as automated-safe paths.
+
 ## Open Questions
 
 - What initial visual identity should the plugin use: consistent with Apple Dev Skills, or a distinct creative-suite mark?
