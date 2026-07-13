@@ -1,0 +1,4 @@
+interface:
+  display_name: "Final Cut Pro Workflow"
+  short_description: "Safe Final Cut Pro editing workflows"
+  default_prompt: "Use $final-cut-pro-workflow to prepare this Final Cut Pro library safely."

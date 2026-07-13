@@ -1,0 +1,4 @@
+interface:
+  display_name: "GarageBand Workflow"
+  short_description: "Safe GarageBand project workflows"
+  default_prompt: "Use $garageband-workflow to prepare and export this GarageBand project safely."
