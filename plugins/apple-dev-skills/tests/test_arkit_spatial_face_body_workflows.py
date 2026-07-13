@@ -109,7 +109,7 @@ class ARKitSpatialFaceBodyWorkflowTests(unittest.TestCase):
             )
         self.assertIn("ARKit", plugin)
         self.assertIn("LiDAR", plugin)
-        self.assertIn("Expected exactly 48 active skills", validator)
+        self.assertIn("Expected exactly 49 active skills", validator)
         self.assertIn("arkit-spatial-sensing-workflow", self.read("skills/camera-capture-depth-workflow/SKILL.md"))
         self.assertIn("arkit-face-body-tracking-workflow", self.read("skills/vision-image-analysis-workflow/SKILL.md"))
         self.assertIn("arkit-spatial-sensing-workflow", self.read("skills/apple-ui-accessibility-workflow/SKILL.md"))

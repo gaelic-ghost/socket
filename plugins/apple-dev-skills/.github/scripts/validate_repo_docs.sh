@@ -154,8 +154,9 @@ active_skill_mds=(
   "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
+  "./skills/xcode-localization-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 48 ]] || fail "Expected exactly 48 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 49 ]] || fail "Expected exactly 49 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Xcode Localization Workflow"
+  short_description: "Localize Apple apps with String Catalogs"
+  default_prompt: "Use $xcode-localization-workflow to plan or implement Xcode String Catalog localization, source extraction, translator context, plural or device variants, XLIFF review, and locale-aware validation."

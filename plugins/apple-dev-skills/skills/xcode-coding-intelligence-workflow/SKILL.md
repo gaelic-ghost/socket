@@ -72,6 +72,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 6. Hand off execution:
    - build, run, preview, file membership, and project-integrity work goes to `xcode-build-run-workflow`
    - Swift Testing, XCTest, XCUITest, and `.xctestplan` work goes to `xcode-testing-workflow`
+   - durable String Catalog implementation, translation review, and locale validation go to `xcode-localization-workflow`
    - docs lookup goes to `explore-apple-swift-docs`
    - repo guidance sync goes to `sync-xcode-project-guidance`
 7. Report:

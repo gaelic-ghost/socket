@@ -79,6 +79,7 @@ Use Apple Dev Skills when an agent is helping with:
 - Xcode build, run, test, and project workflows
 - XcodeGen migration and modernization for existing Xcode app projects
 - Xcode coding intelligence, Xcode-hosted agents, and external-agent MCP setup
+- Xcode String Catalog localization, translator context, plural/device variants, XLIFF handoff, and locale-aware validation
 - Icon Composer app icon design, preview, and Xcode handoff
 - Safari extension and SafariServices integration choices
 - DeviceCheck per-device state and App Attest app-integrity flow planning
@@ -190,6 +191,7 @@ uv run pytest
 - `xcode-coding-intelligence-workflow`
 - `xcode-debugger-mcp-workflow`
 - `xcode-device-hub-workflow`
+- `xcode-localization-workflow`
 - `xcode-testing-workflow`
 
 ## Release Notes
