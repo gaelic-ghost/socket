@@ -40,6 +40,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 61: Photos Library and Media Selection](#milestone-61-photos-library-and-media-selection)
 - [Milestone 62: Media Expansion Audit and Socket Major Release](#milestone-62-media-expansion-audit-and-socket-major-release)
 - [Milestone 63: System Integration, Runtime Evidence, and Distribution](#milestone-63-system-integration-runtime-evidence-and-distribution)
+- [Milestone 64: Xcode String Catalog Localization Workflow](#milestone-64-xcode-string-catalog-localization-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -98,6 +99,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 61: Photos Library and Media Selection - Completed
 - Milestone 62: Media Expansion Audit and Socket Major Release - Completed
 - Milestone 63: System Integration, Runtime Evidence, and Distribution - In Progress
+- Milestone 64: Xcode String Catalog Localization Workflow - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1190,6 +1192,26 @@ In Progress
 
 - [ ] All five workflows, metadata, inventory, tests, and root Socket documentation validate together.
 - [ ] Each workflow relies on current Apple documentation and names an honest evidence boundary.
+
+## Milestone 64: Xcode String Catalog Localization Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add a durable, catalog-first Xcode localization workflow instead of limiting guidance to Xcode 27 agent translation.
+- [x] Cover String Catalog setup, build-backed extraction, localizable SwiftUI and Foundation APIs, resource bundles, comments, tables, generated symbols, plurals, device variants, XLIFF, and locale-aware validation.
+- [x] Keep Xcode 27 agent translation optional, beta-scoped, provenance-aware, and dependent on fluent human review.
+
+### Exit Criteria
+
+- [x] The repository ships `xcode-localization-workflow` with implementation and validation guidance that applies without Xcode agents.
+- [x] Plugin metadata, active-skill inventory, roadmap, and docs validation recognize the new skill.
+- [x] Targeted tests prove the catalog-first, human-review, and beta-boundary contracts.
+
+Completed Milestone 64 by shipping `xcode-localization-workflow` as the durable owner of String Catalog localization. The workflow makes stable source extraction, catalog organization, translator context, plural/device variants, XLIFF review, and locale-aware validation the core path, and treats Xcode 27 agent translation only as an explicitly bounded optional enhancement.
 
 ## Backlog Candidates
 

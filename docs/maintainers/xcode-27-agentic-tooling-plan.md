@@ -133,17 +133,18 @@ Non-goals:
 - Do not add a second packaging layer to Socket until a concrete Xcode import shape is verified.
 - Do not make a beta-only distribution promise before local install testing works.
 
-### 3. `xcode-agent-localization-workflow`
+### 3. `xcode-localization-workflow`
 
 Job:
 
-- Guide Xcode agent-assisted localization work from preparation through review.
+- Guide durable Xcode String Catalog localization from preparation through review, with agent-assisted translation as an optional Xcode 27 beta-era path.
 
 Scope:
 
-- Add languages with Xcode-hosted agents.
+- Add and organize catalogs, languages, and regions through Xcode's stable localization surfaces.
 - Update string catalogs by building the project where Xcode requires it.
-- Use `String(localized:)` and platform-localizable APIs when strings are missed.
+- Use `Text`, `String(localized:)`, `AttributedString(localized:)`, `LocalizedStringResource`, and owning resource bundles when strings are missed or cross module boundaries.
+- Cover source comments, glossary terms, non-translatable strings, tone, region, audience, plurals, device variants, generated symbols, and locale-aware formatting before translation.
 - Preserve or create project translation guidance such as `TRANSLATION.md`.
 - Track glossary terms, non-translatable strings, tone, region, and audience.
 - Explain that Xcode marks generated translations as machine translated in string catalogs and XLIFF exports.
@@ -302,7 +303,7 @@ uv run pytest
 
 ### Slice 3: Localization And Device Hub
 
-- Add `xcode-agent-localization-workflow`.
+- Add `xcode-localization-workflow` as a stable catalog-first workflow with optional agent-assisted translation.
 - Add `xcode-device-hub-workflow`.
 - Update plugin metadata and Apple Dev Skills roadmap.
 - Add handoff notes from build/test/UI skills.

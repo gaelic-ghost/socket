@@ -46,6 +46,9 @@
     "photosui",
     "photos-picker",
     "coding-intelligence",
+    "localization",
+    "string-catalog",
+    "xliff",
     "agents",
     "mcp",
     "lldb",
@@ -91,7 +94,7 @@
   "interface": {
     "displayName": "Apple Dev Skills",
     "shortDescription": "Apple, Swift, image/media repair, SwiftUI, TipKit, Xcode, AppKit, Safari, security, OpenAPI, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "longDescription": "Bundle Apple-platform development skills for PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence and String Catalog localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -117,6 +120,7 @@
       "Decide when Core Animation is justified, then repair CALayer trees, CAAnimation timing, transactions, model/presentation behavior, and layer-backed framework bridges.",
       "Choose Apple system typography, Dynamic Type, San Francisco or New York system designs, custom font integration, and font licensing boundaries.",
       "Set up Xcode coding intelligence, Xcode-hosted agents, external-agent MCP access through xcrun mcpbridge, and command/tool permission boundaries.",
+      "Plan or implement Xcode String Catalog localization with source extraction, translator context, plural and device variants, XLIFF review, and locale-aware UI validation.",
       "Use Xcode Device Hub to inspect simulated or physical devices, vary a simulator environment, capture evidence, and hand off diagnostics safely.",
       "Debug a running Apple app through Xcode's active LLDB session and verify whether the selected Xcode toolchain can start standalone lldb-mcp.",
       "Design and validate native macOS window scenes, chrome, drag regions, placement, restoration, and utility-window behavior.",
