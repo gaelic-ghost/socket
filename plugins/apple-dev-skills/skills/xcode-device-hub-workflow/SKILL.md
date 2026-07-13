@@ -7,7 +7,7 @@ description: Manage and validate simulated and physical Apple devices through Xc
 
 ## Purpose
 
-Use Device Hub as Xcode's native surface for simulated and physical device work. It owns device selection, interaction, environment inspection, pairing, captures, and diagnostics; it does not replace project build/run, test, debugger, provisioning, or browser-mirror ownership.
+Use Device Hub as Xcode's native surface for simulated and physical device work. It owns device selection, interaction, environment inspection, pairing, captures, and diagnostics; it does not replace project build/run, test, debugger, provisioning, or browser-mirror ownership. Use `xcrun devicectl` as its scriptable companion only for a bounded device-management or diagnostic need, never as a substitute for an XCUITest result.
 
 ## When To Use
 
@@ -26,7 +26,7 @@ Use Device Hub as Xcode's native surface for simulated and physical device work.
 5. For a physical device, inspect pairing and Developer Mode state before attempting a run. Pairing, trust prompts, Developer Mode, unpairing, and configuration changes require explicit user intent at the point of mutation.
 6. Run or interact with the app through its owning build/run workflow. Device Hub interaction is proof of the same target device state, not a separate app runtime.
 7. Capture a screenshot or video only after the requested state is visible. Record the device identity, app state, and destination path; Device Hub screenshots are full device resolution and may contain sensitive content.
-8. Download diagnostics only when they are relevant to the reported failure, then hand the artifact to the debugger, runtime-forensics, or test workflow. State the artifact's source and avoid copying private device data into logs or commits.
+8. Download diagnostics only when they are relevant to the reported failure, then hand the artifact to the debugger, runtime-forensics, or test workflow. State the artifact's source and avoid copying private device data into logs or commits. For a repeatable script or CI need, inspect the selected toolchain's `xcrun devicectl --help` contract first and preserve the same device identifier in the resulting evidence.
 9. Stop the app or device session through its owner. Do not erase, remove, unpair, or reset a device as routine cleanup.
 
 ## Outputs
@@ -43,6 +43,7 @@ Use Device Hub as Xcode's native surface for simulated and physical device work.
 - Do not pair, unpair, enable Developer Mode, remove a simulator, erase data, or change a physical-device setting without the user's explicit action request.
 - Do not expose a Device Hub screen or capture over a LAN, tunnel, or external browser surface. That is a separate AgentDeck runtime decision.
 - Do not call a loaded Device Hub window proof that an app build, launch, or test passed; verify the requested frame, log, test result, or diagnostic instead.
+- Do not treat `devicectl` installation, launch, screen interaction, or a Device Hub capture as proof that an XCUITest passed. Keep the test result and `.xcresult` as the automation authority.
 
 ## References
 

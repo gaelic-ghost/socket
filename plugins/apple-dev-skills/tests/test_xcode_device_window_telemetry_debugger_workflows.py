@@ -20,6 +20,7 @@ class XcodeDeviceWindowTelemetryDebuggerWorkflowTests(unittest.TestCase):
             self.assertIn(term, skill + evidence)
         self.assertIn("future AgentDeck runtime", skill)
         self.assertIn("Do not erase, remove, unpair, or reset", skill)
+        self.assertIn("xcrun devicectl", skill)
         self.assertIn("$xcode-device-hub-workflow", prompt)
 
     def test_window_workflow_keeps_native_chrome_and_restoration_contracts(self) -> None:
@@ -50,6 +51,7 @@ class XcodeDeviceWindowTelemetryDebuggerWorkflowTests(unittest.TestCase):
             self.assertIn(term, skill + evidence + contract)
         self.assertIn("Do not work around this", skill)
         self.assertIn("xcode-build-run-workflow", skill)
+        self.assertIn("Physical-device debugging", skill)
 
 
 if __name__ == "__main__":

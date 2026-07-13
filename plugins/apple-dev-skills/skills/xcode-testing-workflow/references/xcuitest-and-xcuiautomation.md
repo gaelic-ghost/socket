@@ -22,6 +22,11 @@
 - Keep launch arguments and environment variables explicit when UI state, feature flags, locale, accessibility matrices, or deterministic fixtures depend on them.
 - Prefer `.xctestplan` when those launch settings are part of a repeatable verification matrix instead of a one-off local run.
 
+## iOS destinations
+
+- Use `ios-ui-automation-destinations.md` to decide whether a simulator result is sufficient or a physical-device XCUITest run is required.
+- Keep shared UI-test code destination-neutral. Make the destination and its evidence explicit in the test invocation or test-plan result instead of branching the test for simulator versus hardware.
+
 ## Review questions
 
 - What makes this UI test stable?
