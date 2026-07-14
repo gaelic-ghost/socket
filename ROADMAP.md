@@ -851,6 +851,7 @@ Completed
 - [x] Validate every authored skill and the root marketplace metadata before release.
 - [x] Add Phase 2.5 workflows for iMessage collaboration, communication notifications and NSE processing, Push to Talk, VoIP/SIP calling, and default communication-app roles with an app-owned macOS client boundary.
 - [x] Export the complete Messaging Collaboration skill inventory through the Hermes skill tap and validate its generated grouping.
+- [x] Record Phase 3 readiness evidence for iMessage collaboration, Push-to-Talk with a Hummingbird/APNs Lambda backend, iOS/iPadOS default messaging, and Discord user-app/webhook/bot reference consumers before adding shared runtime helpers.
 
 ### Exit Criteria
 
