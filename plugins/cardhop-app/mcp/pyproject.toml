@@ -1,6 +1,6 @@
 [project]
 name = "cardhop-app-mcp"
-version = "9.13.0"
+version = "9.14.0"
 requires-python = ">=3.13"
 dependencies = [
     "fastmcp>=3.0.2",
