@@ -26,6 +26,7 @@
 - [Milestone 23: Cloud Inference Skills plugin](#milestone-23-cloud-inference-skills-plugin)
 - [Milestone 24: Apple system integration, runtime evidence, and distribution workflows](#milestone-24-apple-system-integration-runtime-evidence-and-distribution-workflows)
 - [Milestone 25: Apple Creator Studio operator workflows](#milestone-25-apple-creator-studio-operator-workflows)
+- [Milestone 26: Messaging collaboration skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -65,6 +66,7 @@
 - Milestone 23: Cloud Inference Skills plugin - Completed
 - Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Planned
 - Milestone 25: Apple Creator Studio operator workflows - Planned
+- Milestone 26: Messaging collaboration skills plugin - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -814,6 +816,33 @@ Planned
 - [x] Every write or destructive UI action has a visible confirmation, output path, source-preservation rule, and post-action verification requirement.
 - [x] Compressor, Logic Pro, and MainStage have been forward-tested against disposable, version-recorded fixtures before broader app coverage ships.
 - [x] The plugin neither duplicates Apple Dev Skills framework guidance nor makes unsafe claims about unattended creative-app automation.
+
+## Milestone 26: Messaging Collaboration Skills plugin
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add `messaging-collaboration-skills` as an installable Socket child plugin for supported chat, calling, business messaging, and collaboration integration workflows.
+- [x] Keep the initial release companion guidance only: no universal SDK, webhook daemon, credential store, bundled MCP server, or Mac Phone/Messages automation bridge.
+- [x] Record the durable platform-boundary and phased implementation plan in [`docs/maintainers/messaging-collaboration-skills-plugin-plan.md`](./docs/maintainers/messaging-collaboration-skills-plugin-plan.md).
+
+### Tickets
+
+- [x] Add Phase 1 foundation skills for platform selection, webhook/event lifecycle, conversation state and human handoff, and Apple communication routing.
+- [x] Add Phase 2 workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, and Google Meet.
+- [x] Make Apple calling, iMessage, Shared with You collaboration, and Mac Phone/Messages MCP evaluation boundaries explicit without claiming undocumented automation support.
+- [x] Add the child manifest, icon, local guidance, root marketplace entry, README inventory, and Roadmap status together.
+- [x] Validate every authored skill and the root marketplace metadata before release.
+
+### Exit Criteria
+
+- [x] The Socket marketplace exposes `messaging-collaboration-skills` as an installable child plugin.
+- [x] Agents can route a request to a supported platform workflow before implementation and identify unsupported or policy-gated paths plainly.
+- [x] Apple VoIP, Messages-extension, Shared with You, and Mac operator surfaces have distinct supported-boundary guidance.
+- [x] The root documentation, marketplace, plan, and validation agree on the shipped inventory.
 
 ## Small Tickets
 

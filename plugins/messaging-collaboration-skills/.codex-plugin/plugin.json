@@ -1,0 +1,28 @@
+{
+  "name": "messaging-collaboration-skills",
+  "version": "9.8.0",
+  "description": "Codex workflows for chat apps, bots, business messaging, meeting collaboration, iMessage collaboration, and Apple VoIP calling.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Messaging Collaboration Skills",
+    "shortDescription": "Build supported chat, calling, and collaboration integrations.",
+    "longDescription": "Guide Codex through supported chat-app, bot, business-messaging, meeting-collaboration, iMessage-collaboration, and Apple VoIP integrations. Start with the platform and policy boundary, then hand implementation to the owning Socket stack workflow without inventing a universal messaging SDK.",
+    "developerName": "gaelic-ghost",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Choose the correct chat, calling, or collaboration platform integration before implementation.",
+      "Plan a secure, idempotent webhook and event lifecycle for this messaging app.",
+      "Build a Discord, Telegram, Slack, Teams, WhatsApp Business, or SMS/MMS/RCS integration with the platform-specific policy boundary explicit.",
+      "Choose the right Apple path for a VoIP calling app, iMessage extension, Shared with You collaboration feature, or Mac operator workflow."
+    ],
+    "brandColor": "#D946EF",
+    "composerIcon": "./assets/messaging-collaboration-icon.svg",
+    "logo": "./assets/messaging-collaboration-icon.svg"
+  }
+}

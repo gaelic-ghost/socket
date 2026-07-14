@@ -286,6 +286,18 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Developer Tools"
+    },
+    {
+      "name": "messaging-collaboration-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/messaging-collaboration-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     }
   ]
 }
