@@ -1,6 +1,6 @@
 {
   "name": "cardhop-app",
-  "version": "9.11.0",
+  "version": "9.12.0",
   "description": "Cardhop.app workflow guidance plus a bundled local MCP server for contact capture and updates on macOS.",
   "author": {
     "name": "Gale",
