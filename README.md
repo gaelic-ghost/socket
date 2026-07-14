@@ -104,6 +104,7 @@ Currently available from the catalog:
 - `cardhop-app`
 - `cloud-deployment-skills`
 - `cloud-inference-skills`
+- `cybersecurity-skills`
 - `messaging-collaboration-skills`
 - `agentdeck`
 - `dotnet-skills`
@@ -134,6 +135,7 @@ Current Socket catalog shape:
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, and AWS handoff to the official AWS Agent Toolkit rather than duplicated AWS MCP, CLI, or SAM setup
 - `cloud-inference-skills`: cloud AI inference, training, model conversion, and GPU infrastructure routing for Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers, with bundled Runpod MCP server configuration, upstream Runpod skill mirrors, and first-party Hugging Face/AWS handoffs
+- `cybersecurity-skills`: suspicious-content triage, evidence preservation, malware analysis, isolation, agentic security-tool controls, macOS investigation and defense, vulnerability validation, authorized web/API and network testing, incident response, threat hunting, detection content, and clear non-specialist advice
 - `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage collaboration, Communication Notifications, Push to Talk, VoIP/SIP, documented iOS/iPadOS default communication roles, and app-owned macOS client workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
 - `agentdeck`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cybersecurity skills icon">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="44%" r="70%">
+      <stop offset="0" stop-color="#10283a"/>
+      <stop offset="1" stop-color="#020617"/>
+    </radialGradient>
+    <pattern id="scan" width="512" height="18" patternUnits="userSpaceOnUse">
+      <path d="M0 9h512" stroke="#22d3ee" stroke-opacity=".09" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="84" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="84" fill="url(#scan)"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="#a78bfa" stroke-width="12"/>
+  <g filter="url(#glow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M256 118l116 42v86c0 76-48 128-116 154-68-26-116-78-116-154v-86z" fill="#07111f" stroke="#22d3ee" stroke-width="14"/>
+    <circle cx="246" cy="242" r="54" stroke="#f472b6" stroke-width="14"/>
+    <path d="M286 282l58 58M220 242l20 20 38-46" stroke="#c084fc" stroke-width="14"/>
+  </g>
+</svg>

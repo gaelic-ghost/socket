@@ -51,6 +51,12 @@ the roadmap tracks that migration. New or materially changed skills must either
 join the generated tap with grouping metadata or document why their workflow is
 not portable to Hermes.
 
+The complete `cybersecurity-skills` inventory is portable guidance and is
+exported under the `Cybersecurity Skills` grouping. Its Codex manifest and icon
+remain host-specific packaging metadata. The initial plugin ships no MCP server,
+hook, app, custom agent, or native Hermes runtime surface, so no `mcp_servers`
+translation or Python Hermes plugin is required.
+
 ## Maintainer Workflow
 
 1. Classify each changed surface before editing: portable skill, translated MCP,

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contain Security Incident"
+  short_description: "Interrupt active harm with verified, reversible controls"
+  default_prompt: "Use $contain-security-incident to choose, apply, and verify proportionate containment."

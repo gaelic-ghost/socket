@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect macOS Persistence"
+  short_description: "Correlate Mac startup registrations and loaded state"
+  default_prompt: "Use $inspect-macos-persistence to inventory this Mac persistence without deleting evidence."

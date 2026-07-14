@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harden macOS"
+  short_description: "Improve Mac defenses without sacrificing recovery"
+  default_prompt: "Use $harden-macos to prioritize and verify practical defenses for this Mac."

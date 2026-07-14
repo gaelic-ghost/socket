@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Artifact Reputation"
+  short_description: "Check provenance and reputation with privacy controls"
+  default_prompt: "Use $check-artifact-reputation to check this artifact without treating reputation as a verdict."

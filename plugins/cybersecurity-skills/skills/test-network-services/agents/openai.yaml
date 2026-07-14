@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Network Services"
+  short_description: "Validate authorized service exposure in bounded levels"
+  default_prompt: "Use $test-network-services to inventory and validate these authorized network services safely."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Assess Exposure And Impact"
+  short_description: "Prioritize vulnerabilities from real exposure and consequence"
+  default_prompt: "Use $assess-exposure-and-impact to prioritize this finding from actual deployed risk."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Preserve Security Evidence"
+  short_description: "Preserve artifacts, volatile state, and provenance"
+  default_prompt: "Use $preserve-security-evidence to create a reproducible evidence record before anything changes."

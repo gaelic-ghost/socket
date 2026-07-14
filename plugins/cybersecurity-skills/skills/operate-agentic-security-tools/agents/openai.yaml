@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate Agentic Security Tools"
+  short_description: "Constrain agent permissions, targets, evidence, and cleanup"
+  default_prompt: "Use $operate-agentic-security-tools to constrain this agent-driven security tool run."

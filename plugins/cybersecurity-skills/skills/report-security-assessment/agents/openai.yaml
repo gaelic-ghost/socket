@@ -1,0 +1,4 @@
+interface:
+  display_name: "Report Security Assessment"
+  short_description: "Write reproducible findings and clear remediation plans"
+  default_prompt: "Use $report-security-assessment to turn this validated evidence into a clear security report."

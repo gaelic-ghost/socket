@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-07-14T17:46:43.650198+00:00",
+  "detectedAt": "2026-07-14T19:14:11.979386+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -360,6 +360,130 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/analyze-suspicious-script-or-document/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/assess-and-explain-threat/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/assess-exposure-and-impact/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/assess-macos-threat/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/author-detection-content/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/author-yara-x-rules/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/check-artifact-reputation/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/contain-and-recover-macos/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/contain-security-incident/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/harden-macos/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/hunt-security-indicators/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/inspect-macos-persistence/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/inspect-macos-runtime-activity/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/map-malware-behavior/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/route-security-work/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/scope-authorized-security-test/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/select-analysis-isolation/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/test-network-services/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/test-web-and-api-security/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/triage-security-incident/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/triage-suspicious-content/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/triage-vulnerability-report/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/use-objective-see-tools/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/cybersecurity-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
     },
     {
@@ -452,7 +576,15 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/communication-notifications-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/default-communication-app-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -461,6 +593,14 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/imessage-app-and-collaboration-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/push-to-talk-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -477,6 +617,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -1050,6 +1194,20 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/cybersecurity-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "cybersecurity-skills",
+      "path": "plugins/cybersecurity-skills",
+      "targets": [
+        "skills:plugins/cybersecurity-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/dotnet-skills/.codex-plugin/plugin.json"
         }
       ],
@@ -1290,7 +1448,8 @@
         "reverse-engineering-skills",
         "agentdeck",
         "game-dev-skills",
-        "messaging-collaboration-skills"
+        "messaging-collaboration-skills",
+        "cybersecurity-skills"
       ]
     },
     {
@@ -2284,6 +2443,366 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/analyze-suspicious-script-or-document/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/analyze-suspicious-script-or-document"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/assess-and-explain-threat/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/assess-and-explain-threat"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/assess-exposure-and-impact/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/assess-exposure-and-impact"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/assess-macos-threat/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/assess-macos-threat"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/author-detection-content/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/author-detection-content"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/author-yara-x-rules/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/author-yara-x-rules"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/check-artifact-reputation/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/check-artifact-reputation"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/contain-and-recover-macos/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/contain-and-recover-macos"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/contain-security-incident/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/contain-security-incident"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/harden-macos/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/harden-macos"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/hunt-security-indicators/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/hunt-security-indicators"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/inspect-macos-persistence/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/inspect-macos-persistence"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/inspect-macos-runtime-activity/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/inspect-macos-runtime-activity"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/map-malware-behavior/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/map-malware-behavior"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/operate-agentic-security-tools"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/perform-dynamic-malware-analysis"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/perform-static-malware-analysis"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/preserve-security-evidence"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/recover-security-incident"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/report-security-assessment"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/route-security-work/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/route-security-work"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/scope-authorized-security-test/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/scope-authorized-security-test"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/select-analysis-isolation/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/select-analysis-isolation"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/test-network-services/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/test-network-services"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/test-web-and-api-security/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/test-web-and-api-security"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/triage-security-incident/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/triage-security-incident"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/triage-suspicious-content/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/triage-suspicious-content"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/triage-vulnerability-report/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/triage-vulnerability-report"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/use-objective-see-tools/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/use-objective-see-tools"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/validate-vulnerability"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
         }
       ],
@@ -2536,6 +3055,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/communication-notifications-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/communication-notifications-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
         }
       ],
@@ -2543,6 +3074,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:messaging-collaboration-skills/conversation-state-human-handoff"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/default-communication-app-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/default-communication-app-workflow"
     },
     {
       "evidence": [
@@ -2567,6 +3110,30 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:messaging-collaboration-skills/google-meet-collaboration-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/imessage-app-and-collaboration-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/imessage-app-and-collaboration-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/push-to-talk-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/push-to-talk-workflow"
     },
     {
       "evidence": [
@@ -2615,6 +3182,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:messaging-collaboration-skills/telegram-bot-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/voip-sip-calling-workflow"
     },
     {
       "evidence": [
@@ -4367,6 +4946,30 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/messaging-collaboration-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:cybersecurity-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/cybersecurity-skills"
     }
   ],
   "schemaVersion": 1,
@@ -5349,6 +5952,366 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/analyze-suspicious-script-or-document/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/analyze-suspicious-script-or-document",
+      "path": "plugins/cybersecurity-skills/skills/analyze-suspicious-script-or-document/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/assess-and-explain-threat/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/assess-and-explain-threat",
+      "path": "plugins/cybersecurity-skills/skills/assess-and-explain-threat/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/assess-exposure-and-impact/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/assess-exposure-and-impact",
+      "path": "plugins/cybersecurity-skills/skills/assess-exposure-and-impact/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/assess-macos-threat/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/assess-macos-threat",
+      "path": "plugins/cybersecurity-skills/skills/assess-macos-threat/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/author-detection-content/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/author-detection-content",
+      "path": "plugins/cybersecurity-skills/skills/author-detection-content/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/author-yara-x-rules/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/author-yara-x-rules",
+      "path": "plugins/cybersecurity-skills/skills/author-yara-x-rules/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/check-artifact-reputation/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/check-artifact-reputation",
+      "path": "plugins/cybersecurity-skills/skills/check-artifact-reputation/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/contain-and-recover-macos/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/contain-and-recover-macos",
+      "path": "plugins/cybersecurity-skills/skills/contain-and-recover-macos/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/contain-security-incident/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/contain-security-incident",
+      "path": "plugins/cybersecurity-skills/skills/contain-security-incident/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/harden-macos/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/harden-macos",
+      "path": "plugins/cybersecurity-skills/skills/harden-macos/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/hunt-security-indicators/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/hunt-security-indicators",
+      "path": "plugins/cybersecurity-skills/skills/hunt-security-indicators/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/inspect-macos-persistence/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/inspect-macos-persistence",
+      "path": "plugins/cybersecurity-skills/skills/inspect-macos-persistence/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/inspect-macos-runtime-activity/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/inspect-macos-runtime-activity",
+      "path": "plugins/cybersecurity-skills/skills/inspect-macos-runtime-activity/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/map-malware-behavior/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/map-malware-behavior",
+      "path": "plugins/cybersecurity-skills/skills/map-malware-behavior/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/operate-agentic-security-tools",
+      "path": "plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/perform-dynamic-malware-analysis",
+      "path": "plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/perform-static-malware-analysis",
+      "path": "plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/preserve-security-evidence",
+      "path": "plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/recover-security-incident",
+      "path": "plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/report-security-assessment",
+      "path": "plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/route-security-work/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/route-security-work",
+      "path": "plugins/cybersecurity-skills/skills/route-security-work/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/scope-authorized-security-test/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/scope-authorized-security-test",
+      "path": "plugins/cybersecurity-skills/skills/scope-authorized-security-test/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/select-analysis-isolation/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/select-analysis-isolation",
+      "path": "plugins/cybersecurity-skills/skills/select-analysis-isolation/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/test-network-services/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/test-network-services",
+      "path": "plugins/cybersecurity-skills/skills/test-network-services/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/test-web-and-api-security/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/test-web-and-api-security",
+      "path": "plugins/cybersecurity-skills/skills/test-web-and-api-security/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/triage-security-incident/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/triage-security-incident",
+      "path": "plugins/cybersecurity-skills/skills/triage-security-incident/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/triage-suspicious-content/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/triage-suspicious-content",
+      "path": "plugins/cybersecurity-skills/skills/triage-suspicious-content/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/triage-vulnerability-report/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/triage-vulnerability-report",
+      "path": "plugins/cybersecurity-skills/skills/triage-vulnerability-report/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/use-objective-see-tools/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/use-objective-see-tools",
+      "path": "plugins/cybersecurity-skills/skills/use-objective-see-tools/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/validate-vulnerability",
+      "path": "plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md"
         }
       ],
@@ -5601,12 +6564,36 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/communication-notifications-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/communication-notifications-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/communication-notifications-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:messaging-collaboration-skills/conversation-state-human-handoff",
       "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/default-communication-app-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/default-communication-app-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/default-communication-app-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -5631,6 +6618,30 @@
       "kind": "codex-skill",
       "name": "skill:messaging-collaboration-skills/google-meet-collaboration-workflow",
       "path": "plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/imessage-app-and-collaboration-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/imessage-app-and-collaboration-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/imessage-app-and-collaboration-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/push-to-talk-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/push-to-talk-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/push-to-talk-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -5679,6 +6690,18 @@
       "kind": "codex-skill",
       "name": "skill:messaging-collaboration-skills/telegram-bot-workflow",
       "path": "plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/voip-sip-calling-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md"
     },
     {
       "dependencies": [],

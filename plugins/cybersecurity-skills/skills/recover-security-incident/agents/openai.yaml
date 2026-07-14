@@ -1,0 +1,4 @@
+interface:
+  display_name: "Recover Security Incident"
+  short_description: "Eradicate compromise and verify staged recovery"
+  default_prompt: "Use $recover-security-incident to restore trusted service and verify the original path is closed."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Triage Suspicious Content"
+  short_description: "Classify sketchy content without activating it"
+  default_prompt: "Use $triage-suspicious-content to identify this suspicious content and choose a safe next step."

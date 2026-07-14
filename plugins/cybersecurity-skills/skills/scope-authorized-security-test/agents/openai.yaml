@@ -1,0 +1,4 @@
+interface:
+  display_name: "Scope Authorized Security Test"
+  short_description: "Define targets, permission, techniques, and stop conditions"
+  default_prompt: "Use $scope-authorized-security-test to establish a complete authorized test scope."
