@@ -1,0 +1,174 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+
+EXACT_NO_FINDINGS = "No findings."
+README_SNIPPETS = [
+    "Installable maintainer skills for skills-export and plugin-export repositories.",
+    "does not document a richer repo-private scoping model",
+    "codex plugin marketplace add gaelic-ghost/socket",
+    "codex plugin marketplace upgrade socket",
+    "`agent-portability-skills` entry points at `./plugins/agent-portability-skills`",
+    "Git-backed marketplace sources",
+    "dev dependencies in `pyproject.toml`",
+    "`pytest`, `ruff`, and `mypy`",
+    "`\"skills\": \"./skills/\"`",
+    "Only `plugin.json` belongs in `.codex-plugin/`",
+    "refresh the official OpenAI docs",
+]
+AGENTS_SNIPPETS = [
+    "canonical authored and exported surface",
+    'manifest points to bundled skills with `"skills": "./skills/"`',
+    "`hooks/`",
+    "Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories",
+    "Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly",
+    "Default user-facing install and update guidance to Git-backed marketplace sources",
+    "`skills/install-plugin-to-socket`",
+    "`skills/validate-plugin-install-surfaces`",
+    "check the current OpenAI Codex docs",
+]
+AUDIT_SNIPPETS = [
+    "This repository ships root `.codex-plugin` packaging and does not track a nested staged plugin directory for itself.",
+    'Its plugin manifest must declare `"skills": "./skills/"`',
+    "user installs normally come through the Git-backed `socket` marketplace",
+    "This repository does not ship `install-plugin-to-socket`.",
+    "This repository does not ship `validate-plugin-install-surfaces`.",
+]
+INSTALL_SURFACES_SNIPPETS = [
+    "only `plugin.json` belongs in `.codex-plugin/`",
+    'plugin manifests point to bundled skill folders with a root-relative `"skills": "./skills/"` field',
+    "Tracked marketplace source",
+    "Preferred User Install And Update Path",
+    "codex plugin marketplace add gaelic-ghost/socket",
+    "codex plugin marketplace upgrade socket",
+    "Documented plugin path: `~/.codex/config.toml`",
+    "project-scoped `.codex/config.toml`, label it as a general Codex config capability",
+    "first route through the Codex harness surfaces that are already available in the current session",
+    "install the plugin through Codex's plugin directory for future sessions",
+]
+GITIGNORE_SNIPPETS: list[str] = []
+
+@dataclass
+class Finding:
+    path: str
+    issue_id: str
+    message: str
+
+
+def infer_plugin_name(repo_root: Path, explicit: str | None) -> str:
+    return explicit or repo_root.name
+
+
+def _check_file_contains(repo_root: Path, path: Path, snippets: list[str], issue_prefix: str) -> list[Finding]:
+    findings: list[Finding] = []
+    if not path.exists():
+        findings.append(Finding(str(path.relative_to(repo_root)), "missing-path", "Expected repo guidance file is missing."))
+        return findings
+    text = path.read_text(encoding="utf-8")
+    for snippet in snippets:
+        if snippet not in text:
+            findings.append(Finding(str(path.relative_to(repo_root)), f"{issue_prefix}-missing-snippet", f"Expected to mention: {snippet}"))
+    return findings
+
+
+def _check_symlink(repo_root: Path, path: Path, target: str) -> list[Finding]:
+    rel = str(path.relative_to(repo_root))
+    if not path.exists() and not path.is_symlink():
+        return [Finding(rel, "missing-symlink", f"Expected symlink to {target}.")]
+    if not path.is_symlink():
+        return [Finding(rel, "not-symlink", f"Expected POSIX symlink to {target}.")]
+    actual = os.readlink(path)
+    if actual != target:
+        return [Finding(rel, "wrong-symlink-target", f"Expected {target}, found {actual}.")]
+    return []
+
+
+def audit_repo(repo_root: Path, plugin_name: str) -> list[Finding]:
+    findings: list[Finding] = []
+    readme = repo_root / "README.md"
+    if readme.exists():
+        findings.extend(_check_file_contains(repo_root, readme, README_SNIPPETS, "readme"))
+    findings.extend(_check_file_contains(repo_root, repo_root / "AGENTS.md", AGENTS_SNIPPETS, "agents"))
+    findings.extend(_check_file_contains(repo_root, repo_root / ".gitignore", GITIGNORE_SNIPPETS, "gitignore"))
+    reality_audit = repo_root / "docs" / "maintainers" / "reality-audit.md"
+    if reality_audit.exists():
+        findings.extend(_check_file_contains(repo_root, reality_audit, AUDIT_SNIPPETS, "reality-audit"))
+    install_surfaces = repo_root / "docs" / "maintainers" / "codex-plugin-install-surfaces.md"
+    if install_surfaces.exists():
+        findings.extend(_check_file_contains(repo_root, install_surfaces, INSTALL_SURFACES_SNIPPETS, "install-surfaces"))
+    findings.extend(_check_symlink(repo_root, repo_root / ".agents" / "skills", "../skills"))
+    manifest_path = repo_root / ".codex-plugin" / "plugin.json"
+    if not manifest_path.exists():
+        findings.append(
+            Finding(
+                ".codex-plugin/plugin.json",
+                "missing-plugin-manifest",
+                "Expected source-repo plugin packaging at `.codex-plugin/plugin.json`.",
+            )
+        )
+    else:
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            findings.append(
+                Finding(
+                    ".codex-plugin/plugin.json",
+                    "invalid-plugin-manifest",
+                    f"Expected valid JSON plugin manifest: {exc.msg}.",
+                )
+            )
+        else:
+            if manifest.get("skills") != "./skills/":
+                findings.append(
+                    Finding(
+                        ".codex-plugin/plugin.json",
+                        "missing-skills-component",
+                        'Expected plugin manifest to declare bundled skills with `"skills": "./skills/"`.',
+                    )
+                )
+    if (repo_root / "plugins").exists():
+        findings.append(Finding("plugins", "forbidden-path", "Nested staged plugin directories are forbidden for this repo model."))
+    return findings
+
+
+def build_report(repo_root: Path, plugin_name: str, run_mode: str, findings: list[Finding], errors: list[str]) -> dict[str, object]:
+    return {"run_context": {"repo_root": str(repo_root), "plugin_name": plugin_name, "run_mode": run_mode}, "findings": [asdict(item) for item in findings], "errors": errors}
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo-root", required=True)
+    parser.add_argument("--run-mode", choices=("check-only", "apply"), required=True)
+    parser.add_argument("--plugin-name")
+    parser.add_argument("--print-md", action="store_true")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    repo_root = Path(args.repo_root).resolve()
+    if not repo_root.exists() or not repo_root.is_dir():
+        print("Repository root does not exist or is not a directory.", file=sys.stderr)
+        return 1
+    plugin_name = infer_plugin_name(repo_root, args.plugin_name)
+    findings = audit_repo(repo_root, plugin_name)
+    report = build_report(repo_root, plugin_name, args.run_mode, findings, [])
+    if args.print_md and not findings:
+        print(EXACT_NO_FINDINGS)
+    else:
+        print(json.dumps(report, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

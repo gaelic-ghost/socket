@@ -80,6 +80,15 @@ After a version bump lands on `main`, run the executable pre-tag gate:
 scripts/release.sh release-ready X.Y.Z
 ```
 
+`release-ready` verifies version, clean-main, tag, and subtree accounting. When
+the release touches the Hermes skill tap, run its explicit content validator
+alongside the root marketplace validator before this gate:
+
+```bash
+uv run scripts/validate_socket_metadata.py
+uv run scripts/validate_hermes_compatibility.py
+```
+
 Then capture evidence from that exact commit and generate the release-note
 draft:
 
@@ -134,6 +143,7 @@ Before tagging `socket`:
 
 - confirm the subtree policy table above was followed
 - run `uv run scripts/validate_socket_metadata.py`
+- when the release touches the Hermes skill tap, also run `uv run scripts/validate_hermes_compatibility.py`
 - confirm local `main` is fast-forwarded to `origin/main`
 - run `scripts/release.sh release-ready X.Y.Z`
 - run `scripts/release.sh release-evidence`
