@@ -1,7 +1,7 @@
 {
   "name": "messaging-collaboration-skills",
   "version": "9.10.0",
-  "description": "Codex workflows for chat apps, bots, business messaging, meeting collaboration, iMessage collaboration, and Apple VoIP calling.",
+  "description": "Codex workflows for chat apps, bots, collaboration, iMessage, Apple notifications and Push to Talk, VoIP, and default communication-app planning.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -11,7 +11,7 @@
   "interface": {
     "displayName": "Messaging Collaboration Skills",
     "shortDescription": "Build supported chat, calling, and collaboration integrations.",
-    "longDescription": "Guide Codex through supported chat-app, bot, business-messaging, meeting-collaboration, iMessage-collaboration, and Apple VoIP integrations. Start with the platform and policy boundary, then hand implementation to the owning Socket stack workflow without inventing a universal messaging SDK.",
+    "longDescription": "Guide Codex through supported chat-app, bot, business-messaging, meeting-collaboration, iMessage, Apple notification and Push to Talk, VoIP/SIP, and default communication-app integrations. Start with the documented platform contract and app-owned responsibilities, then hand implementation to the owning Socket stack workflow without inventing a universal messaging SDK.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -22,7 +22,7 @@
       "Choose the correct chat, calling, or collaboration platform integration before implementation.",
       "Plan a secure, idempotent webhook and event lifecycle for this messaging app.",
       "Build a Discord, Telegram, Slack, Teams, WhatsApp Business, or SMS/MMS/RCS integration with the platform-specific policy boundary explicit.",
-      "Choose the right Apple path for a VoIP calling app, iMessage extension, Shared with You collaboration feature, or Mac operator workflow."
+      "Choose the right Apple path for an iMessage collaboration feature, Communication Notification or Notification Service Extension, Push to Talk channel, VoIP/SIP calling app, documented iOS/iPadOS default role, or app-owned macOS client."
     ],
     "brandColor": "#D946EF",
     "composerIcon": "./assets/messaging-collaboration-icon.svg",

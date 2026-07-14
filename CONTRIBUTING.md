@@ -94,17 +94,20 @@ You can verify that baseline with:
 uv run scripts/validate_socket_metadata.py
 ```
 
-When a change touches the checked-in Hermes skill tap, regenerate and validate
-that compatibility surface as part of the same pass:
+Every new or materially changed Socket plugin, skill, or MCP declaration needs
+an explicit Hermes compatibility outcome in the same pass. When that outcome
+changes the checked-in Hermes skill tap, regenerate and validate it:
 
 ```bash
 uv run scripts/export_hermes_skills.py
 uv run scripts/validate_hermes_compatibility.py
 ```
 
-The export is generated from `plugins/agent-portability-skills/skills/`; do not
-edit root `skills/` by hand. See the [Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md)
-for the supported surface and MCP translation rules.
+Do not edit root `skills/` by hand. The current generated export is maintained
+from the sources declared by the export script; see the
+[Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md) for
+the required skill-export decision, MCP translation rules, and native-plugin
+boundary.
 
 When a change adds or changes any `plugins/**/.mcp.json` declaration, update
 the matching checked-in fragment under

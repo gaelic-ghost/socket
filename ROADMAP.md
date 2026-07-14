@@ -72,7 +72,7 @@
 
 ### Status
 
-Completed
+In progress
 
 ### Scope
 
@@ -528,10 +528,12 @@ In progress
 - [x] Add a checked-in Hermes Agent skill tap at root `skills/`, generated from the canonical `agent-portability-skills` source and grouped with `skills.sh.json`.
 - [x] Add `agent-portability-skills:hermes-agent-compatibility` with explicit skill, Codex bundle, MCP, and native Python plugin boundaries.
 - [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `uv run scripts/validate_hermes_compatibility.py`.
+- [x] Make an explicit Codex-and-Hermes compatibility classification mandatory for every new or materially changed Socket plugin, skill, and MCP declaration. Require portable-skill export decisions, validated MCP translations, and a real native-plugin design or host-specific boundary for runtime surfaces.
 
 ### Tickets
 
 - [ ] Add a root portability inventory command that reports every `SKILL.md`, `.codex-plugin/plugin.json`, `.mcp.json`, hook, app config, and custom-agent definition with host-specific compatibility notes.
+- [ ] Replace the historical curated Hermes skill export with a complete, declarative Socket skill inventory. Keep the migration reviewable by grouping portable skills, recording intentional no-export decisions, and validating the inventory without claiming that Codex plugin manifests are Hermes plugins.
 - [ ] Add `agent-portability-skills:audit-agent-surface-portability`.
 - [ ] Add `agent-portability-skills:design-agent-host-adapter`.
 - [ ] Add `agent-portability-skills:maintain-codex-plugin-surface`.
@@ -838,6 +840,7 @@ Completed
 - [x] Add `messaging-collaboration-skills` as an installable Socket child plugin for supported chat, calling, business messaging, and collaboration integration workflows.
 - [x] Keep the initial release companion guidance only: no universal SDK, webhook daemon, credential store, bundled MCP server, or Mac Phone/Messages automation bridge.
 - [x] Record the durable platform-boundary and phased implementation plan in [`docs/maintainers/messaging-collaboration-skills-plugin-plan.md`](./docs/maintainers/messaging-collaboration-skills-plugin-plan.md).
+- [x] Add Phase 2.5 Apple Communication Systems planning before executable reference work.
 
 ### Tickets
 
@@ -846,6 +849,8 @@ Completed
 - [x] Make Apple calling, iMessage, Shared with You collaboration, and Mac Phone/Messages MCP evaluation boundaries explicit without claiming undocumented automation support.
 - [x] Add the child manifest, icon, local guidance, root marketplace entry, README inventory, and Roadmap status together.
 - [x] Validate every authored skill and the root marketplace metadata before release.
+- [x] Add Phase 2.5 workflows for iMessage collaboration, communication notifications and NSE processing, Push to Talk, VoIP/SIP calling, and default communication-app roles with an app-owned macOS client boundary.
+- [x] Export the complete Messaging Collaboration skill inventory through the Hermes skill tap and validate its generated grouping.
 
 ### Exit Criteria
 
@@ -853,6 +858,7 @@ Completed
 - [x] Agents can route a request to a supported platform workflow before implementation and identify unsupported or policy-gated paths plainly.
 - [x] Apple VoIP, Messages-extension, Shared with You, and Mac operator surfaces have distinct supported-boundary guidance.
 - [x] The root documentation, marketplace, plan, and validation agree on the shipped inventory.
+- [x] Apple requests route to an explicit system contract or app-owned responsibility without claiming undocumented macOS default messaging/calling, Apple Messages access, or Phone automation.
 
 ## Small Tickets
 

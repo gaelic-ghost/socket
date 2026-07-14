@@ -1,15 +1,16 @@
 # Hermes Agent Compatibility
 
-Socket's Hermes compatibility is a durable, narrow export layer: a curated
-GitHub skill tap for portable maintainer workflows. It is not a second Socket
-plugin bundle and does not make Codex-only runtime surfaces portable.
+Socket's Hermes compatibility is a durable, explicit compatibility baseline.
+Every new or materially changed Socket plugin, skill, and MCP declaration must
+record and validate its Hermes outcome in the same change. This does not turn
+Socket into a second plugin bundle: Codex-only runtime surfaces remain
+host-specific unless a concrete native Hermes implementation is designed.
 
 ## Compatibility Matrix
 
 | Socket surface | Hermes surface | Status |
 | --- | --- | --- |
-| Root `skills/` export | GitHub skill tap | Supported |
-| Other Socket skills | Future curated export or local source | Not automatically exported |
+| Portable `SKILL.md` | GitHub skill tap export or documented no-export decision | Required per changed skill |
 | `.codex-plugin/plugin.json` | None | Not compatible by design |
 | Socket `.mcp.json` | Checked-in `mcp_servers` translation fragments | Configuration required |
 | Hooks, apps, and custom agents | Host-specific extension decision | Not automatically compatible |
@@ -38,19 +39,29 @@ Custom GitHub taps are community sources and Hermes security-scans skills at
 install time. Review a finding before using `--force`; Hermes does not let that
 flag override a dangerous verdict.
 
-The source of truth is `plugins/agent-portability-skills/skills/`. Root
-`skills/` is a checked-in generated export because the GitHub tap API needs real
-child directories; a symlink mirror would not provide that portable discovery
-surface. Root [`skills.sh.json`](../../skills.sh.json) supplies Skills Hub
-grouping labels.
+The currently exported skills are listed in `skills.sh.json`. Their canonical
+sources remain in their owning child plugins; root `skills/` is a checked-in
+generated export because the GitHub tap API needs real child directories, not a
+symlink mirror. Root [`skills.sh.json`](../../skills.sh.json) supplies Skills
+Hub grouping labels. The historical Socket inventory is not yet fully exported;
+the roadmap tracks that migration. New or materially changed skills must either
+join the generated tap with grouping metadata or document why their workflow is
+not portable to Hermes.
 
 ## Maintainer Workflow
 
-1. Edit the canonical skill under `plugins/agent-portability-skills/skills/`.
-2. Use a lowercase hyphenated directory and matching frontmatter `name`.
-3. Provide a trigger-oriented `description`; add `metadata.hermes.category` and
-   `metadata.hermes.tags` only when discovery benefits.
-4. Add the exact name to [`skills.sh.json`](../../skills.sh.json).
+1. Classify each changed surface before editing: portable skill, translated MCP,
+   native Hermes-plugin candidate, or Codex-only by design.
+2. For each portable skill, edit the canonical child-plugin source, use a
+   lowercase hyphenated directory and matching frontmatter `name`, provide a
+   trigger-oriented `description`, and add it to the Hermes export inventory and
+   [`skills.sh.json`](../../skills.sh.json). Add `metadata.hermes.category` and
+   `metadata.hermes.tags` when discovery benefits.
+3. For each changed `.mcp.json`, update its matching checked-in translation and
+   `hermes-mcp/index.yaml` entry. A Codex manifest alone never satisfies this
+   requirement.
+4. For a runtime-only surface, record either its concrete native Hermes plugin
+   design or the reason it remains host-specific; do not add a packaging shim.
 5. Regenerate and validate:
 
    ```bash
@@ -69,7 +80,7 @@ characters.
 ## MCP Translation
 
 Socket `.mcp.json` files are Codex declarations, not portable Hermes config.
-Every declared Socket MCP configuration is translated under
+Every declared Socket MCP configuration, including each new or changed one, is translated under
 [`hermes-mcp/`](./hermes-mcp/), with the complete inventory and setup status in
 [`hermes-mcp/index.yaml`](./hermes-mcp/index.yaml). Copy the chosen fragment's
 `mcp_servers` mapping into the operator's private `~/.hermes/config.yaml` and
@@ -136,7 +147,8 @@ required configuration and test shape before any implementation begins.
 
 This release validates the repository shape and generated tap without mutating a
 user's Hermes home. It does not claim that every Socket child plugin, MCP server,
-hook, app, or custom agent runs in Hermes.
+hook, app, or custom agent runs in Hermes; the required outcome is an explicit,
+validated compatibility classification, not a fictional universal runtime.
 
 - `Hermes skill tap supported`: the skill is in root `skills/` and passes the
   Hermes validator.

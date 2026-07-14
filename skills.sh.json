@@ -8,6 +8,27 @@
         "hermes-agent-compatibility",
         "sync-skills-repo-guidance"
       ]
+    },
+    {
+      "title": "Messaging Collaboration Skills",
+      "skills": [
+        "apple-communication-workflow",
+        "choose-platform-integration",
+        "communication-notifications-workflow",
+        "conversation-state-human-handoff",
+        "default-communication-app-workflow",
+        "discord-app-workflow",
+        "google-meet-collaboration-workflow",
+        "imessage-app-and-collaboration-workflow",
+        "push-to-talk-workflow",
+        "slack-app-workflow",
+        "sms-mms-rcs-workflow",
+        "teams-agent-workflow",
+        "telegram-bot-workflow",
+        "voip-sip-calling-workflow",
+        "webhook-and-event-lifecycle",
+        "whatsapp-business-workflow"
+      ]
     }
   ]
 }

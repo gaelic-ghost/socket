@@ -12,25 +12,53 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_ROOT = REPO_ROOT / "plugins" / "agent-portability-skills" / "skills"
+MESSAGING_SOURCE_ROOT = REPO_ROOT / "plugins" / "messaging-collaboration-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 EXPORTED_SKILLS = (
     "bootstrap-skills-plugin-repo",
     "hermes-agent-compatibility",
     "sync-skills-repo-guidance",
+    "apple-communication-workflow",
+    "choose-platform-integration",
+    "communication-notifications-workflow",
+    "conversation-state-human-handoff",
+    "default-communication-app-workflow",
+    "discord-app-workflow",
+    "google-meet-collaboration-workflow",
+    "imessage-app-and-collaboration-workflow",
+    "push-to-talk-workflow",
+    "slack-app-workflow",
+    "sms-mms-rcs-workflow",
+    "teams-agent-workflow",
+    "telegram-bot-workflow",
+    "voip-sip-calling-workflow",
+    "webhook-and-event-lifecycle",
+    "whatsapp-business-workflow",
 )
+AGENT_PORTABILITY_SKILLS = frozenset(EXPORTED_SKILLS[:3])
 
 
 class ExportError(RuntimeError):
     """Raised when the Hermes skill export cannot be created or verified."""
 
 
+def source_paths(source_root: Path | None = None) -> dict[str, Path]:
+    if source_root is not None:
+        return {skill_name: source_root / skill_name for skill_name in EXPORTED_SKILLS}
+    return {
+        skill_name: (SOURCE_ROOT if skill_name in AGENT_PORTABILITY_SKILLS else MESSAGING_SOURCE_ROOT)
+        / skill_name
+        for skill_name in EXPORTED_SKILLS
+    }
+
+
 def validate_sources(source_root: Path | None = None) -> None:
-    source_root = SOURCE_ROOT if source_root is None else source_root
+    sources = source_paths(source_root)
     for skill_name in EXPORTED_SKILLS:
-        skill_path = source_root / skill_name / "SKILL.md"
+        skill_path = sources[skill_name] / "SKILL.md"
         if not skill_path.is_file():
             raise ExportError(
-                f"Hermes export source is missing {skill_name}/SKILL.md under {source_root}."
+                f"Hermes export source is missing {skill_name}/SKILL.md at {sources[skill_name]}."
             )
 
 
@@ -38,14 +66,14 @@ def write_export(
     source_root: Path | None = None,
     export_root: Path | None = None,
 ) -> None:
-    source_root = SOURCE_ROOT if source_root is None else source_root
     export_root = EXPORT_ROOT if export_root is None else export_root
     validate_sources(source_root)
+    sources = source_paths(source_root)
     with tempfile.TemporaryDirectory(prefix="socket-hermes-skills.", dir=export_root.parent) as temp_dir:
         staged_root = Path(temp_dir) / "skills"
         staged_root.mkdir()
         for skill_name in EXPORTED_SKILLS:
-            shutil.copytree(source_root / skill_name, staged_root / skill_name)
+            shutil.copytree(sources[skill_name], staged_root / skill_name)
         if export_root.exists():
             shutil.rmtree(export_root)
         staged_root.replace(export_root)
@@ -55,16 +83,15 @@ def has_exact_export(
     source_root: Path | None = None,
     export_root: Path | None = None,
 ) -> bool:
-    source_root = SOURCE_ROOT if source_root is None else source_root
     export_root = EXPORT_ROOT if export_root is None else export_root
     if not export_root.is_dir():
         return False
-    source_names = {path.name for path in source_root.iterdir() if path.name in EXPORTED_SKILLS}
+    sources = source_paths(source_root)
     export_names = {path.name for path in export_root.iterdir()}
-    if source_names != set(EXPORTED_SKILLS) or export_names != set(EXPORTED_SKILLS):
+    if set(sources) != set(EXPORTED_SKILLS) or export_names != set(EXPORTED_SKILLS):
         return False
     for skill_name in EXPORTED_SKILLS:
-        comparison = filecmp.dircmp(source_root / skill_name, export_root / skill_name)
+        comparison = filecmp.dircmp(sources[skill_name], export_root / skill_name)
         if comparison.left_only or comparison.right_only or comparison.funny_files:
             return False
         for _, mismatches, errors in _walk_comparison(comparison):
