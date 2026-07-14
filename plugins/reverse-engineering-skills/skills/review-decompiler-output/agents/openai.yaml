@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Decompiler Output"
+  short_description: "Review pseudocode without overstating certainty."
+  default_prompt: "Use $review-decompiler-output to assess this generated pseudocode and separate evidence from inference."

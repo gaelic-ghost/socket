@@ -390,7 +390,7 @@ In Progress
 - [x] Update root README and planning docs so users understand the shipped first skill surface.
 - [x] Add `reverse-engineering:triage-artifact`.
 - [x] Add `reverse-engineering:evidence-notes-workflow`.
-- [ ] Add shared `select-analysis-path`, `review-decompiler-output`, `preserve-binary-artifacts`, and `compare-binary-versions` workflows.
+- [x] Add shared `select-analysis-path`, `review-decompiler-output`, `preserve-binary-artifacts`, and `compare-binary-versions` workflows.
 - [ ] Add the stable Apple static-analysis foundation: artifact and Mach-O inspection, Swift and Objective-C runtime recovery, symbols and crash correlation, signing and containment auditing, and Apple Silicon `arm64e` analysis.
 - [ ] Add thin `use-cutter-and-rizin`, `use-malimite`, `use-ghidra`, and `use-hopper` adapters after hands-on calibration; keep domain facts and evidence rules in shared skills.
 - [ ] Add version-sensitive dyld-cache, Apple dynamic-analysis, kernel/boot/firmware, and security-research reporting workflows with exact-build and live-source gates.

@@ -26,7 +26,7 @@
   "interface": {
     "displayName": "Reverse Engineering Skills",
     "shortDescription": "Binary inspection and decompilation workflow skills.",
-    "longDescription": "Guidance for reverse engineering workflows across artifact triage, reproducible analysis notes, Unity, .NET assemblies, IL2CPP artifacts, Apple binaries, symbols, crash logs, decompiled output, and disassembler output.",
+    "longDescription": "Guidance for reverse engineering workflows across artifact triage, analysis-path selection, preservation, exact-build comparison, reproducible evidence, Unity, .NET assemblies, IL2CPP artifacts, Apple binaries, symbols, crash logs, decompiled output, and disassembler output.",
     "defaultPrompt": "Use Reverse Engineering Skills when the task centers on compiled artifacts, decompiled output, disassembly, symbols, crash logs, or binary metadata. Start by identifying the artifact shape, preserving original inputs, choosing the least confusing inspection path, and recording which tool produced each observation.",
     "developerName": "Gale",
     "category": "Developer Tools",

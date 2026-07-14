@@ -254,11 +254,11 @@ Cover managed Unity assemblies, IL2CPP layout and metadata, player data, resourc
 
 ### Phase 1: Shared Foundation Expansion
 
-- [ ] Add `select-analysis-path`.
-- [ ] Add `review-decompiler-output`.
-- [ ] Add `preserve-binary-artifacts`.
-- [ ] Add `compare-binary-versions`.
-- [ ] Define reusable artifact, environment, tool-context, symbol-map, and version-diff note shapes as references rather than duplicating templates across skills.
+- [x] Add `select-analysis-path`.
+- [x] Add `review-decompiler-output`.
+- [x] Add `preserve-binary-artifacts`.
+- [x] Add `compare-binary-versions`.
+- [x] Define reusable artifact, environment, tool-context, symbol-map, and version-diff note shapes as references rather than duplicating templates across skills.
 
 ### Phase 2: Apple Static Analysis Foundation
 

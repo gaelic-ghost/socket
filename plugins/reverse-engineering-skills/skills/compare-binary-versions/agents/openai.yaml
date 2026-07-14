@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compare Binary Versions"
+  short_description: "Compare exact binary builds reproducibly."
+  default_prompt: "Use $compare-binary-versions to compare these exact builds and record supported differences."

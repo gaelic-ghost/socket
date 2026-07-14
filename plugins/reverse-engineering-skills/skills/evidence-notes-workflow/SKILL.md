@@ -86,6 +86,8 @@ Use this compact template unless the user or repo already has a preferred format
 - Suggested owner skill:
 ```
 
+Read [references/analysis-records.md](references/analysis-records.md) when the session needs reusable artifact, environment, tool-context, transformation, symbol-map, signature-report, Mach-O-map, or version-diff records. Load only the shapes needed for the current workflow.
+
 ## Writing Rules
 
 - Prefer short notes that can be extended over elaborate reports that go stale.
