@@ -93,6 +93,9 @@ Phase 2.5 exit criteria: each Apple communication lane names its documented syst
 
 Only after repeated implementation evidence, assess narrow helpers for webhook verification fixtures, event replay tests, or platform-local samples. Do not create a shared service unless its ownership, credentials, state, and failure behavior are proven common across at least two live consumers.
 
+The current proof targets and agent-integration boundaries are maintained in the
+[Phase 3 readiness plan](./messaging-collaboration-phase-3-readiness-plan.md).
+
 ### Phase 4: MCP Evaluation And Operator Workflows
 
 Evaluate external messaging MCP products by source, supported API, data access, authorization model, auditability, and runtime proof. A bundled MCP server remains out of scope until a concrete, maintainable operator need is approved.
