@@ -379,7 +379,8 @@ In Progress
 - [x] Keep the plugin as a guidance surface rather than a bundled runtime: do not add decompilers, disassemblers, debugger integrations, sample binaries, MCP servers, or machine-local tool state until a later plan explicitly calls for that scope.
 - [x] Keep the skill surface technical: artifact triage, tool selection, copied working files, observed output, inferred behavior, and reproducible evidence notes.
 - [x] Add first-slice skills for artifact triage and evidence notes before platform-specific decompilation workflows.
-- [ ] Add platform and tool workflows after Gale has tried representative artifacts in Cutter, Ghidra, Malimite, Hopper, and adjacent tools.
+- [x] Expand the plugin as composable shared-analysis, domain, and thin tool-adapter skills rather than one Apple or tool catch-all.
+- [x] Add platform and tool workflows with explicit capability-discovery and calibration gates for Cutter/Rizin, Malimite, Ghidra, Hopper, and adjacent tools.
 
 ### Tickets
 
@@ -389,8 +390,12 @@ In Progress
 - [x] Update root README and planning docs so users understand the shipped first skill surface.
 - [x] Add `reverse-engineering:triage-artifact`.
 - [x] Add `reverse-engineering:evidence-notes-workflow`.
-- [ ] Add `reverse-engineering:tool-selection-workflow` after the first hands-on tool comparison.
-- [ ] Add .NET, Unity, Apple binary, and decompiler-output review workflows after the first two common workflows land.
+- [x] Add shared `select-analysis-path`, `review-decompiler-output`, `preserve-binary-artifacts`, and `compare-binary-versions` workflows.
+- [x] Add the stable Apple static-analysis foundation: artifact and Mach-O inspection, Swift and Objective-C runtime recovery, symbols and crash correlation, signing and containment auditing, and Apple Silicon `arm64e` analysis.
+- [x] Add thin `use-cutter-and-rizin`, `use-malimite`, `use-ghidra`, and `use-hopper` adapters; keep domain facts and evidence rules in shared skills.
+- [x] Forward-test the tool adapters against representative Mach-O, non-Apple, Apple app-package, and project artifacts, including unavailable or unusable local tool paths, before release.
+- [x] Add version-sensitive dyld-cache, Apple dynamic-analysis, kernel/boot/firmware, and security-research reporting workflows with exact-build and live-source gates.
+- [x] Add .NET and Unity artifact workflows without delaying the Apple-focused sequence.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
@@ -398,7 +403,8 @@ In Progress
 
 - [x] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
 - [x] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
-- [ ] Unity, .NET, Apple binary, and tool-selection workflows each have a clear owner skill or an explicit reason to stay backlog-only.
+- [x] Shared analysis, Apple domain, tool-adapter, Unity, and .NET workflows each have a clear owner skill or an explicit reason to stay backlog-only.
+- [x] Stable Apple guidance remains usable without beta facts, while beta and hardware-sensitive claims require exact build, hardware, tool, and source evidence.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 14: Core AI and Foundation Models workflow ownership

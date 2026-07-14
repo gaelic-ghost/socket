@@ -1,10 +1,14 @@
 {
-  "detectedAt": "2026-06-23T18:54:40.293182+00:00",
+  "detectedAt": "2026-07-14T17:46:43.650198+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
       "kind": "skill-manifest",
       "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/hermes-agent-compatibility/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -16,7 +20,67 @@
     },
     {
       "kind": "codex-plugin-manifest",
+      "path": "plugins/agentdeck/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/android-dev-skills/skills/build-kotlin-android/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/android-dev-skills/skills/choose-project-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/android-dev-skills/skills/gradle-agp-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/android-dev-skills/skills/java-android-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/android-dev-skills/skills/release-readiness-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/android-dev-skills/skills/testing-lint-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
       "path": "plugins/android-dev-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-creator-studio-skills/skills/compressor-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-creator-studio-skills/skills/final-cut-pro-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-creator-studio-skills/skills/garageband-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-creator-studio-skills/skills/logic-pro-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-creator-studio-skills/skills/mainstage-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-creator-studio-skills/skills/motion-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/apple-creator-studio-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/app-intents-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -24,11 +88,47 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/apple-developer-provisioning-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/apple-image-representation-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/apple-runtime-telemetry-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/apple-typography-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/arkit-face-body-tracking-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/arkit-spatial-sensing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/avaudio-engine-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/avfaudio-session-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/avfoundation-media-pipeline-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -40,7 +140,35 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/core-image-processing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/coreaudio-modernization-repair-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/coremedia-timing-samplebuffer-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/devicecheck-app-attest-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/feedback-assistant-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -52,7 +180,31 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/ios-runtime-forensics-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/sf-symbols-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -76,7 +228,27 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swiftdata-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swiftui-animation-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swiftui-liquid-glass/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -85,6 +257,26 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -97,6 +289,18 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-debugger-mcp-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-device-hub-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/xcode-localization-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -123,8 +327,36 @@
       "path": "plugins/cardhop-app/.codex-plugin/plugin.json"
     },
     {
+      "kind": "skill-manifest",
+      "path": "plugins/cloud-deployment-skills/skills/cloud-deployment-routing-workflow/SKILL.md"
+    },
+    {
       "kind": "codex-plugin-manifest",
-      "path": "plugins/agentdeck/.codex-plugin/plugin.json"
+      "path": "plugins/cloud-deployment-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cloud-inference-skills/skills/cloud-inference-routing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cloud-inference-skills/skills/companion-clis/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cloud-inference-skills/skills/flash/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cloud-inference-skills/skills/runpodctl/SKILL.md"
+    },
+    {
+      "kind": "mcp-config",
+      "path": "plugins/cloud-inference-skills/.mcp.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/cloud-inference-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -177,6 +409,110 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/dotnet-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/choose-apple-game-stack/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/core-haptics-game-feedback-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/game-controller-input-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/scenekit-game-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/spritekit-game-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/xcode-game-profiling-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/game-dev-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/apple-communication-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/choose-platform-integration/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/discord-app-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/slack-app-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/sms-mms-rcs-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/teams-agent-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/messaging-collaboration-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/network-protocol-skills/skills/http3-quic-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/network-protocol-skills/skills/network-protocol-diagnostics/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/network-protocol-skills/skills/realtime-media-over-quic-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/network-protocol-skills/skills/webrtc-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/network-protocol-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -300,11 +636,87 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/analyze-apple-silicon-arm64e/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/audit-apple-signing-and-containment/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/compare-binary-versions/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-apple-artifact/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-dotnet-assemblies/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-dyld-shared-cache/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-unity-artifacts/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/perform-apple-dynamic-analysis/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/preserve-binary-artifacts/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/recover-apple-runtime-metadata/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/report-apple-security-research/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/research-apple-kernel-boot-and-firmware/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/select-analysis-path/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/use-cutter-and-rizin/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/use-ghidra/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/use-hopper/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/use-malimite/SKILL.md"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -416,11 +828,11 @@
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+      "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
+      "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -433,6 +845,34 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/spotify/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-error-handling-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-format-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-functional-pipelines-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-modernization-cleanup-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/swift-lang/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -511,13 +951,41 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/agentdeck/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "agentdeck",
+      "path": "plugins/agentdeck",
+      "targets": []
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/android-dev-skills/.codex-plugin/plugin.json"
         }
       ],
       "kind": "codex-plugin",
       "name": "android-dev-skills",
       "path": "plugins/android-dev-skills",
-      "targets": []
+      "targets": [
+        "skills:plugins/android-dev-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/apple-creator-studio-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "apple-creator-studio-skills",
+      "path": "plugins/apple-creator-studio-skills",
+      "targets": [
+        "skills:plugins/apple-creator-studio-skills/skills"
+      ]
     },
     {
       "evidence": [
@@ -553,13 +1021,30 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
-          "path": "plugins/agentdeck/.codex-plugin/plugin.json"
+          "path": "plugins/cloud-deployment-skills/.codex-plugin/plugin.json"
         }
       ],
       "kind": "codex-plugin",
-      "name": "agentdeck",
-      "path": "plugins/agentdeck",
-      "targets": []
+      "name": "cloud-deployment-skills",
+      "path": "plugins/cloud-deployment-skills",
+      "targets": [
+        "skills:plugins/cloud-deployment-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/cloud-inference-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "cloud-inference-skills",
+      "path": "plugins/cloud-inference-skills",
+      "targets": [
+        "skills:plugins/cloud-inference-skills/skills",
+        "mcp:plugins/cloud-inference-skills/.mcp.json"
+      ]
     },
     {
       "evidence": [
@@ -573,6 +1058,48 @@
       "path": "plugins/dotnet-skills",
       "targets": [
         "skills:plugins/dotnet-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/game-dev-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "game-dev-skills",
+      "path": "plugins/game-dev-skills",
+      "targets": [
+        "skills:plugins/game-dev-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/messaging-collaboration-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "messaging-collaboration-skills",
+      "path": "plugins/messaging-collaboration-skills",
+      "targets": [
+        "skills:plugins/messaging-collaboration-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/network-protocol-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "network-protocol-skills",
+      "path": "plugins/network-protocol-skills",
+      "targets": [
+        "skills:plugins/network-protocol-skills/skills"
       ]
     },
     {
@@ -676,6 +1203,20 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/swift-lang/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "swift-lang",
+      "path": "plugins/swift-lang",
+      "targets": [
+        "skills:plugins/swift-lang/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/swiftasb-skills/.codex-plugin/plugin.json"
         }
       ],
@@ -729,11 +1270,16 @@
         "agent-portability-skills",
         "android-dev-skills",
         "apple-dev-skills",
+        "apple-creator-studio-skills",
         "cardhop-app",
+        "cloud-deployment-skills",
+        "cloud-inference-skills",
         "dotnet-skills",
         "productivity-skills",
         "python-skills",
+        "network-protocol-skills",
         "server-side-swift",
+        "swift-lang",
         "server-side-jvm",
         "rust-skills",
         "speak-swiftly",
@@ -742,7 +1288,9 @@
         "spotify",
         "web-dev-skills",
         "reverse-engineering-skills",
-        "agentdeck"
+        "agentdeck",
+        "game-dev-skills",
+        "messaging-collaboration-skills"
       ]
     },
     {
@@ -776,6 +1324,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/hermes-agent-compatibility/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/hermes-agent-compatibility"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
         }
       ],
@@ -783,6 +1343,162 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:agent-portability-skills/sync-skills-repo-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/android-dev-skills/skills/build-kotlin-android/SKILL.md"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:android-dev-skills/build-kotlin-android"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/android-dev-skills/skills/choose-project-shape/SKILL.md"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:android-dev-skills/choose-project-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/android-dev-skills/skills/gradle-agp-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:android-dev-skills/gradle-agp-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/android-dev-skills/skills/java-android-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:android-dev-skills/java-android-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/android-dev-skills/skills/release-readiness-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:android-dev-skills/release-readiness-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/android-dev-skills/skills/testing-lint-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:android-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:android-dev-skills/testing-lint-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-creator-studio-skills/skills/compressor-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-creator-studio-skills/compressor-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-creator-studio-skills/skills/final-cut-pro-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-creator-studio-skills/final-cut-pro-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-creator-studio-skills/skills/garageband-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-creator-studio-skills/garageband-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-creator-studio-skills/skills/logic-pro-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-creator-studio-skills/logic-pro-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-creator-studio-skills/skills/mainstage-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-creator-studio-skills/mainstage-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-creator-studio-skills/skills/motion-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-creator-studio-skills/motion-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/app-intents-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/app-intents-workflow"
     },
     {
       "evidence": [
@@ -800,6 +1516,54 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/apple-developer-provisioning-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/apple-developer-provisioning-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/apple-image-representation-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/apple-image-representation-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/apple-runtime-telemetry-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/apple-runtime-telemetry-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/apple-typography-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/apple-typography-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
         }
       ],
@@ -812,6 +1576,30 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/arkit-face-body-tracking-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/arkit-face-body-tracking-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/arkit-spatial-sensing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/arkit-spatial-sensing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
         }
       ],
@@ -819,6 +1607,42 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/author-swift-docc-docs"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/avaudio-engine-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/avaudio-engine-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/avfaudio-session-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/avfaudio-session-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/avfoundation-media-pipeline-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/avfoundation-media-pipeline-workflow"
     },
     {
       "evidence": [
@@ -848,6 +1672,78 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/camera-capture-depth-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/core-animation-layer-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/core-image-processing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/core-image-processing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/coreaudio-modernization-repair-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/coreaudio-modernization-repair-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/coremedia-timing-samplebuffer-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/coremedia-timing-samplebuffer-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/devicecheck-app-attest-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/devicecheck-app-attest-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
         }
       ],
@@ -855,6 +1751,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/explore-apple-swift-docs"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/feedback-assistant-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/feedback-assistant-workflow"
     },
     {
       "evidence": [
@@ -884,6 +1792,66 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/ios-runtime-forensics-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/ios-runtime-forensics-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/macos-distribution-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/macos-window-management-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/migrate-xcode-project-to-xcodegen"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/photos-library-editing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
         }
       ],
@@ -891,6 +1859,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/safari-extension-control-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/sf-symbols-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/sf-symbols-workflow"
     },
     {
       "evidence": [
@@ -956,6 +1936,30 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swiftdata-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swiftdata-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swiftui-animation-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swiftui-animation-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
         }
       ],
@@ -963,6 +1967,42 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/swiftui-app-architecture-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swiftui-component-audit-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swiftui-liquid-glass/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swiftui-liquid-glass"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swiftui-performance-audit"
     },
     {
       "evidence": [
@@ -987,6 +2027,66 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/sync-xcode-project-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/tipkit-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/tips-helpviewer-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/video-codec-processing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/vision-coreml-recognition-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/vision-image-analysis-workflow"
     },
     {
       "evidence": [
@@ -1023,6 +2123,42 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/xcode-coding-intelligence-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-debugger-mcp-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-debugger-mcp-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-device-hub-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-device-hub-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/xcode-localization-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/xcode-localization-workflow"
     },
     {
       "evidence": [
@@ -1071,6 +2207,78 @@
       "kind": "exposes",
       "label": "plugin declares MCP servers",
       "to": "target:mcp:plugins/cardhop-app/.mcp.json"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cloud-deployment-skills/skills/cloud-deployment-routing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:cloud-deployment-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cloud-deployment-skills/cloud-deployment-routing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cloud-inference-skills/skills/cloud-inference-routing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:cloud-inference-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cloud-inference-skills/cloud-inference-routing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cloud-inference-skills/skills/companion-clis/SKILL.md"
+        }
+      ],
+      "from": "product:cloud-inference-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cloud-inference-skills/companion-clis"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cloud-inference-skills/skills/flash/SKILL.md"
+        }
+      ],
+      "from": "product:cloud-inference-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cloud-inference-skills/flash"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cloud-inference-skills/skills/runpodctl/SKILL.md"
+        }
+      ],
+      "from": "product:cloud-inference-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cloud-inference-skills/runpodctl"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/cloud-inference-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "from": "product:cloud-inference-skills",
+      "kind": "exposes",
+      "label": "plugin declares MCP servers",
+      "to": "target:mcp:plugins/cloud-inference-skills/.mcp.json"
     },
     {
       "evidence": [
@@ -1215,6 +2423,282 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:dotnet-skills/upgrade-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/choose-apple-game-stack/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/choose-apple-game-stack"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/core-haptics-game-feedback-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/core-haptics-game-feedback-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/game-controller-input-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/game-controller-input-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/gameplaykit-simulation-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/scenekit-game-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/scenekit-game-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/spritekit-game-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/spritekit-game-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/xcode-game-profiling-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/xcode-game-profiling-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/apple-communication-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/apple-communication-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/choose-platform-integration/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/choose-platform-integration"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/conversation-state-human-handoff"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/discord-app-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/discord-app-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/google-meet-collaboration-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/slack-app-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/slack-app-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/sms-mms-rcs-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/sms-mms-rcs-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/teams-agent-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/teams-agent-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/telegram-bot-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/webhook-and-event-lifecycle"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:messaging-collaboration-skills/whatsapp-business-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md"
+        }
+      ],
+      "from": "product:network-protocol-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:network-protocol-skills/choose-network-transport"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/network-protocol-skills/skills/http3-quic-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:network-protocol-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:network-protocol-skills/http3-quic-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/network-protocol-skills/skills/network-protocol-diagnostics/SKILL.md"
+        }
+      ],
+      "from": "product:network-protocol-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:network-protocol-skills/network-protocol-diagnostics"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/network-protocol-skills/skills/realtime-media-over-quic-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:network-protocol-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:network-protocol-skills/realtime-media-over-quic-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/network-protocol-skills/skills/webrtc-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:network-protocol-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:network-protocol-skills/webrtc-workflow"
     },
     {
       "evidence": [
@@ -1556,6 +3040,54 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/analyze-apple-silicon-arm64e/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/analyze-apple-silicon-arm64e"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/audit-apple-signing-and-containment/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/audit-apple-signing-and-containment"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/compare-binary-versions/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/compare-binary-versions"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/correlate-apple-symbols-and-crashes"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
         }
       ],
@@ -1568,6 +3100,138 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-apple-artifact/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/inspect-apple-artifact"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-dotnet-assemblies/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/inspect-dotnet-assemblies"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-dyld-shared-cache/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/inspect-dyld-shared-cache"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-unity-artifacts/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/inspect-unity-artifacts"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/perform-apple-dynamic-analysis/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/perform-apple-dynamic-analysis"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/preserve-binary-artifacts/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/preserve-binary-artifacts"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/recover-apple-runtime-metadata/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/recover-apple-runtime-metadata"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/report-apple-security-research/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/report-apple-security-research"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/research-apple-kernel-boot-and-firmware/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/research-apple-kernel-boot-and-firmware"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/review-decompiler-output"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/select-analysis-path/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/select-analysis-path"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
         }
       ],
@@ -1575,6 +3239,54 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:reverse-engineering-skills/triage-artifact"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/use-cutter-and-rizin/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/use-cutter-and-rizin"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/use-ghidra/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/use-ghidra"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/use-hopper/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/use-hopper"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/use-malimite/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/use-malimite"
     },
     {
       "evidence": [
@@ -1868,18 +3580,6 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
-        }
-      ],
-      "from": "product:server-side-swift",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:server-side-swift/sync-hummingbird-service-guidance"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
           "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
         }
       ],
@@ -1892,6 +3592,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/sync-hummingbird-service-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
         }
       ],
@@ -1899,6 +3611,78 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:server-side-swift/vapor-server-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-api-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-error-handling-style-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-error-handling-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-format-style-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-format-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-functional-pipelines-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-functional-pipelines-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-modernization-cleanup-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-modernization-cleanup-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-source-organization-workflow"
     },
     {
       "evidence": [
@@ -2102,6 +3886,30 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
+      "to": "product:apple-creator-studio-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:apple-creator-studio-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/apple-creator-studio-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
       "to": "product:cardhop-app"
     },
     {
@@ -2115,6 +3923,54 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/cardhop-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:cloud-deployment-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:cloud-deployment-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/cloud-deployment-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:cloud-inference-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:cloud-inference-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/cloud-inference-skills"
     },
     {
       "evidence": [
@@ -2198,6 +4054,30 @@
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
+      "to": "product:network-protocol-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:network-protocol-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/network-protocol-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
       "to": "product:server-side-swift"
     },
     {
@@ -2211,6 +4091,30 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/server-side-swift"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:swift-lang"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/swift-lang"
     },
     {
       "evidence": [
@@ -2415,6 +4319,54 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/agentdeck"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:game-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/game-dev-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:messaging-collaboration-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:messaging-collaboration-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/messaging-collaboration-skills"
     }
   ],
   "schemaVersion": 1,
@@ -2437,12 +4389,180 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/hermes-agent-compatibility/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/hermes-agent-compatibility",
+      "path": "plugins/agent-portability-skills/skills/hermes-agent-compatibility/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:agent-portability-skills/sync-skills-repo-guidance",
       "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/android-dev-skills/skills/build-kotlin-android/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:android-dev-skills/build-kotlin-android",
+      "path": "plugins/android-dev-skills/skills/build-kotlin-android/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/android-dev-skills/skills/choose-project-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:android-dev-skills/choose-project-shape",
+      "path": "plugins/android-dev-skills/skills/choose-project-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/android-dev-skills/skills/gradle-agp-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:android-dev-skills/gradle-agp-workflow",
+      "path": "plugins/android-dev-skills/skills/gradle-agp-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/android-dev-skills/skills/java-android-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:android-dev-skills/java-android-workflow",
+      "path": "plugins/android-dev-skills/skills/java-android-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/android-dev-skills/skills/release-readiness-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:android-dev-skills/release-readiness-workflow",
+      "path": "plugins/android-dev-skills/skills/release-readiness-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/android-dev-skills/skills/testing-lint-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:android-dev-skills/testing-lint-workflow",
+      "path": "plugins/android-dev-skills/skills/testing-lint-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-creator-studio-skills/skills/compressor-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-creator-studio-skills/compressor-workflow",
+      "path": "plugins/apple-creator-studio-skills/skills/compressor-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-creator-studio-skills/skills/final-cut-pro-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-creator-studio-skills/final-cut-pro-workflow",
+      "path": "plugins/apple-creator-studio-skills/skills/final-cut-pro-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-creator-studio-skills/skills/garageband-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-creator-studio-skills/garageband-workflow",
+      "path": "plugins/apple-creator-studio-skills/skills/garageband-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-creator-studio-skills/skills/logic-pro-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-creator-studio-skills/logic-pro-workflow",
+      "path": "plugins/apple-creator-studio-skills/skills/logic-pro-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-creator-studio-skills/skills/mainstage-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-creator-studio-skills/mainstage-workflow",
+      "path": "plugins/apple-creator-studio-skills/skills/mainstage-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-creator-studio-skills/skills/motion-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-creator-studio-skills/motion-workflow",
+      "path": "plugins/apple-creator-studio-skills/skills/motion-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/app-intents-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/app-intents-workflow",
+      "path": "plugins/apple-dev-skills/skills/app-intents-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2461,6 +4581,54 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/apple-developer-provisioning-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/apple-developer-provisioning-workflow",
+      "path": "plugins/apple-dev-skills/skills/apple-developer-provisioning-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/apple-image-representation-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/apple-image-representation-workflow",
+      "path": "plugins/apple-dev-skills/skills/apple-image-representation-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/apple-runtime-telemetry-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/apple-runtime-telemetry-workflow",
+      "path": "plugins/apple-dev-skills/skills/apple-runtime-telemetry-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/apple-typography-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/apple-typography-workflow",
+      "path": "plugins/apple-dev-skills/skills/apple-typography-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/apple-ui-accessibility-workflow/SKILL.md"
         }
       ],
@@ -2473,12 +4641,72 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/arkit-face-body-tracking-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/arkit-face-body-tracking-workflow",
+      "path": "plugins/apple-dev-skills/skills/arkit-face-body-tracking-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/arkit-spatial-sensing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/arkit-spatial-sensing-workflow",
+      "path": "plugins/apple-dev-skills/skills/arkit-spatial-sensing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/author-swift-docc-docs",
       "path": "plugins/apple-dev-skills/skills/author-swift-docc-docs/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/avaudio-engine-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/avaudio-engine-workflow",
+      "path": "plugins/apple-dev-skills/skills/avaudio-engine-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/avfaudio-session-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/avfaudio-session-workflow",
+      "path": "plugins/apple-dev-skills/skills/avfaudio-session-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/avfoundation-media-pipeline-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/avfoundation-media-pipeline-workflow",
+      "path": "plugins/apple-dev-skills/skills/avfoundation-media-pipeline-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2509,12 +4737,96 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/camera-capture-depth-workflow",
+      "path": "plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/core-animation-layer-workflow",
+      "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/core-image-processing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/core-image-processing-workflow",
+      "path": "plugins/apple-dev-skills/skills/core-image-processing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/coreaudio-modernization-repair-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/coreaudio-modernization-repair-workflow",
+      "path": "plugins/apple-dev-skills/skills/coreaudio-modernization-repair-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/coremedia-timing-samplebuffer-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/coremedia-timing-samplebuffer-workflow",
+      "path": "plugins/apple-dev-skills/skills/coremedia-timing-samplebuffer-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/devicecheck-app-attest-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/devicecheck-app-attest-workflow",
+      "path": "plugins/apple-dev-skills/skills/devicecheck-app-attest-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/explore-apple-swift-docs",
       "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/feedback-assistant-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/feedback-assistant-workflow",
+      "path": "plugins/apple-dev-skills/skills/feedback-assistant-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2545,12 +4857,84 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/ios-runtime-forensics-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/ios-runtime-forensics-workflow",
+      "path": "plugins/apple-dev-skills/skills/ios-runtime-forensics-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/macos-distribution-workflow",
+      "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/macos-window-management-workflow",
+      "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/migrate-xcode-project-to-xcodegen",
+      "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/photos-library-editing-workflow",
+      "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/safari-extension-control-workflow",
       "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/sf-symbols-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/sf-symbols-workflow",
+      "path": "plugins/apple-dev-skills/skills/sf-symbols-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2617,12 +5001,72 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swiftdata-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swiftdata-workflow",
+      "path": "plugins/apple-dev-skills/skills/swiftdata-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swiftui-animation-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swiftui-animation-workflow",
+      "path": "plugins/apple-dev-skills/skills/swiftui-animation-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/swiftui-app-architecture-workflow",
       "path": "plugins/apple-dev-skills/skills/swiftui-app-architecture-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swiftui-component-audit-workflow",
+      "path": "plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swiftui-liquid-glass/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swiftui-liquid-glass",
+      "path": "plugins/apple-dev-skills/skills/swiftui-liquid-glass/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swiftui-performance-audit",
+      "path": "plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2647,6 +5091,66 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/sync-xcode-project-guidance",
       "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/tipkit-workflow",
+      "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/tips-helpviewer-workflow",
+      "path": "plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/video-codec-processing-workflow",
+      "path": "plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/vision-coreml-recognition-workflow",
+      "path": "plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/vision-image-analysis-workflow",
+      "path": "plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2683,6 +5187,42 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/xcode-coding-intelligence-workflow",
       "path": "plugins/apple-dev-skills/skills/xcode-coding-intelligence-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-debugger-mcp-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-debugger-mcp-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-debugger-mcp-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-device-hub-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-device-hub-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-device-hub-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/xcode-localization-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/xcode-localization-workflow",
+      "path": "plugins/apple-dev-skills/skills/xcode-localization-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -2731,6 +5271,78 @@
       "kind": "mcp-config",
       "name": "mcp:plugins/cardhop-app/.mcp.json",
       "path": "plugins/cardhop-app/.mcp.json"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cloud-deployment-skills/skills/cloud-deployment-routing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cloud-deployment-skills/cloud-deployment-routing-workflow",
+      "path": "plugins/cloud-deployment-skills/skills/cloud-deployment-routing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cloud-inference-skills/skills/cloud-inference-routing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cloud-inference-skills/cloud-inference-routing-workflow",
+      "path": "plugins/cloud-inference-skills/skills/cloud-inference-routing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cloud-inference-skills/skills/companion-clis/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cloud-inference-skills/companion-clis",
+      "path": "plugins/cloud-inference-skills/skills/companion-clis/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cloud-inference-skills/skills/flash/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cloud-inference-skills/flash",
+      "path": "plugins/cloud-inference-skills/skills/flash/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cloud-inference-skills/skills/runpodctl/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cloud-inference-skills/runpodctl",
+      "path": "plugins/cloud-inference-skills/skills/runpodctl/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "mcp-config",
+          "path": "plugins/cloud-inference-skills/.mcp.json"
+        }
+      ],
+      "kind": "mcp-config",
+      "name": "mcp:plugins/cloud-inference-skills/.mcp.json",
+      "path": "plugins/cloud-inference-skills/.mcp.json"
     },
     {
       "dependencies": [],
@@ -2875,6 +5487,282 @@
       "kind": "codex-skill",
       "name": "skill:dotnet-skills/upgrade-workflow",
       "path": "plugins/dotnet-skills/skills/upgrade-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/choose-apple-game-stack/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/choose-apple-game-stack",
+      "path": "plugins/game-dev-skills/skills/choose-apple-game-stack/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/core-haptics-game-feedback-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/core-haptics-game-feedback-workflow",
+      "path": "plugins/game-dev-skills/skills/core-haptics-game-feedback-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/game-controller-input-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/game-controller-input-workflow",
+      "path": "plugins/game-dev-skills/skills/game-controller-input-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/gameplaykit-simulation-workflow",
+      "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/scenekit-game-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/scenekit-game-workflow",
+      "path": "plugins/game-dev-skills/skills/scenekit-game-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/spritekit-game-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/spritekit-game-workflow",
+      "path": "plugins/game-dev-skills/skills/spritekit-game-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/xcode-game-profiling-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/xcode-game-profiling-workflow",
+      "path": "plugins/game-dev-skills/skills/xcode-game-profiling-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/apple-communication-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/apple-communication-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/apple-communication-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/choose-platform-integration/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/choose-platform-integration",
+      "path": "plugins/messaging-collaboration-skills/skills/choose-platform-integration/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/conversation-state-human-handoff",
+      "path": "plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/discord-app-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/discord-app-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/discord-app-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/google-meet-collaboration-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/slack-app-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/slack-app-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/slack-app-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/sms-mms-rcs-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/sms-mms-rcs-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/sms-mms-rcs-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/teams-agent-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/teams-agent-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/teams-agent-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/telegram-bot-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/webhook-and-event-lifecycle",
+      "path": "plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:messaging-collaboration-skills/whatsapp-business-workflow",
+      "path": "plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:network-protocol-skills/choose-network-transport",
+      "path": "plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/network-protocol-skills/skills/http3-quic-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:network-protocol-skills/http3-quic-workflow",
+      "path": "plugins/network-protocol-skills/skills/http3-quic-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/network-protocol-skills/skills/network-protocol-diagnostics/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:network-protocol-skills/network-protocol-diagnostics",
+      "path": "plugins/network-protocol-skills/skills/network-protocol-diagnostics/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/network-protocol-skills/skills/realtime-media-over-quic-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:network-protocol-skills/realtime-media-over-quic-workflow",
+      "path": "plugins/network-protocol-skills/skills/realtime-media-over-quic-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/network-protocol-skills/skills/webrtc-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:network-protocol-skills/webrtc-workflow",
+      "path": "plugins/network-protocol-skills/skills/webrtc-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -3217,6 +6105,54 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/analyze-apple-silicon-arm64e/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/analyze-apple-silicon-arm64e",
+      "path": "plugins/reverse-engineering-skills/skills/analyze-apple-silicon-arm64e/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/audit-apple-signing-and-containment/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/audit-apple-signing-and-containment",
+      "path": "plugins/reverse-engineering-skills/skills/audit-apple-signing-and-containment/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/compare-binary-versions/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/compare-binary-versions",
+      "path": "plugins/reverse-engineering-skills/skills/compare-binary-versions/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/correlate-apple-symbols-and-crashes",
+      "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/reverse-engineering-skills/skills/evidence-notes-workflow/SKILL.md"
         }
       ],
@@ -3229,12 +6165,192 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-apple-artifact/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/inspect-apple-artifact",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-apple-artifact/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-dotnet-assemblies/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/inspect-dotnet-assemblies",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-dotnet-assemblies/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-dyld-shared-cache/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/inspect-dyld-shared-cache",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-dyld-shared-cache/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/inspect-unity-artifacts/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/inspect-unity-artifacts",
+      "path": "plugins/reverse-engineering-skills/skills/inspect-unity-artifacts/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/perform-apple-dynamic-analysis/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/perform-apple-dynamic-analysis",
+      "path": "plugins/reverse-engineering-skills/skills/perform-apple-dynamic-analysis/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/preserve-binary-artifacts/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/preserve-binary-artifacts",
+      "path": "plugins/reverse-engineering-skills/skills/preserve-binary-artifacts/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/recover-apple-runtime-metadata/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/recover-apple-runtime-metadata",
+      "path": "plugins/reverse-engineering-skills/skills/recover-apple-runtime-metadata/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/report-apple-security-research/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/report-apple-security-research",
+      "path": "plugins/reverse-engineering-skills/skills/report-apple-security-research/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/research-apple-kernel-boot-and-firmware/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/research-apple-kernel-boot-and-firmware",
+      "path": "plugins/reverse-engineering-skills/skills/research-apple-kernel-boot-and-firmware/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/review-decompiler-output",
+      "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/select-analysis-path/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/select-analysis-path",
+      "path": "plugins/reverse-engineering-skills/skills/select-analysis-path/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:reverse-engineering-skills/triage-artifact",
       "path": "plugins/reverse-engineering-skills/skills/triage-artifact/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/use-cutter-and-rizin/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/use-cutter-and-rizin",
+      "path": "plugins/reverse-engineering-skills/skills/use-cutter-and-rizin/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/use-ghidra/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/use-ghidra",
+      "path": "plugins/reverse-engineering-skills/skills/use-ghidra/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/use-hopper/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/use-hopper",
+      "path": "plugins/reverse-engineering-skills/skills/use-hopper/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/use-malimite/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/use-malimite",
+      "path": "plugins/reverse-engineering-skills/skills/use-malimite/SKILL.md"
     },
     {
       "dependencies": [],
@@ -3529,18 +6645,6 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:server-side-swift/sync-hummingbird-service-guidance",
-      "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
           "path": "plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md"
         }
       ],
@@ -3553,12 +6657,96 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/sync-hummingbird-service-guidance",
+      "path": "plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:server-side-swift/vapor-server-workflow",
       "path": "plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-api-style-workflow",
+      "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-error-handling-style-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-error-handling-style-workflow",
+      "path": "plugins/swift-lang/skills/swift-error-handling-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-format-style-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-format-style-workflow",
+      "path": "plugins/swift-lang/skills/swift-format-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-functional-pipelines-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-functional-pipelines-workflow",
+      "path": "plugins/swift-lang/skills/swift-functional-pipelines-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-modernization-cleanup-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-modernization-cleanup-workflow",
+      "path": "plugins/swift-lang/skills/swift-modernization-cleanup-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-source-organization-workflow",
+      "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
     },
     {
       "dependencies": [],

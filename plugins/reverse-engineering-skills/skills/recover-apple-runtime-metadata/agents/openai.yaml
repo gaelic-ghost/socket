@@ -1,0 +1,4 @@
+interface:
+  display_name: "Recover Apple Runtime Metadata"
+  short_description: "Recover Swift and Objective-C runtime structure."
+  default_prompt: "Use $recover-apple-runtime-metadata to recover supported Swift and Objective-C structure from this artifact."

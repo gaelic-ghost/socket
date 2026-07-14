@@ -1,0 +1,4 @@
+interface:
+  display_name: "Report Apple Security Research"
+  short_description: "Write reproducible Apple security findings."
+  default_prompt: "Use $report-apple-security-research to turn this evidence into a precise build-specific research report."

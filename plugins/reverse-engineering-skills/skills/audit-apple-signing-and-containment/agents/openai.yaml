@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Apple Signing and Containment"
+  short_description: "Audit Apple signatures and security boundaries."
+  default_prompt: "Use $audit-apple-signing-and-containment to inspect this artifact signing state, entitlements, and containment boundaries."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Select Analysis Path"
+  short_description: "Choose the right binary analysis workflow."
+  default_prompt: "Use $select-analysis-path to choose the smallest useful workflow for this artifact and research question."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect Unity Artifacts"
+  short_description: "Inspect managed and IL2CPP Unity build artifacts."
+  default_prompt: "Use $inspect-unity-artifacts to classify this Unity build and choose managed or IL2CPP analysis."

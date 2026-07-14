@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Cutter and Rizin"
+  short_description: "Analyze binaries with Cutter and Rizin."
+  default_prompt: "Use $use-cutter-and-rizin to inspect this binary interactively and preserve repeatable Rizin evidence."

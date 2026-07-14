@@ -1,4 +1,4 @@
 interface:
   display_name: "Evidence Notes Workflow"
   short_description: "Write reproducible analysis notes."
-  default_prompt: "Use this skill to organize reverse-engineering session notes around artifacts, copied working files, commands, tool versions, observations, inferences, open questions, and follow-up checks."
+  default_prompt: "Use $evidence-notes-workflow to organize this reverse-engineering session into reproducible evidence and follow-up notes."

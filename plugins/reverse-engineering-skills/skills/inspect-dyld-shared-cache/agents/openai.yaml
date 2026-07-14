@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect dyld Shared Cache"
+  short_description: "Inspect and compare Apple dyld shared caches."
+  default_prompt: "Use $inspect-dyld-shared-cache to map this cache and preserve build-correct image addresses."

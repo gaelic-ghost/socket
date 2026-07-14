@@ -1,0 +1,4 @@
+interface:
+  display_name: "Preserve Binary Artifacts"
+  short_description: "Preserve binary research artifacts reproducibly."
+  default_prompt: "Use $preserve-binary-artifacts to inventory and preserve these artifacts without changing the originals."
