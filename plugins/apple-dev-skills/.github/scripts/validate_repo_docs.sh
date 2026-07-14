@@ -132,6 +132,9 @@ active_skill_mds=(
   "./skills/sf-symbols-workflow/SKILL.md"
   "./skills/swiftui-animation-workflow/SKILL.md"
   "./skills/safari-extension-control-workflow/SKILL.md"
+  "./skills/app-extension-architecture-workflow/SKILL.md"
+  "./skills/mailkit-workflow/SKILL.md"
+  "./skills/file-provider-and-finder-sync-workflow/SKILL.md"
   "./skills/devicecheck-app-attest-workflow/SKILL.md"
   "./skills/apple-developer-provisioning-workflow/SKILL.md"
   "./skills/appkit-app-architecture-workflow/SKILL.md"
@@ -157,7 +160,7 @@ active_skill_mds=(
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
   "./skills/xcode-localization-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 50 ]] || fail "Expected exactly 50 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 53 ]] || fail "Expected exactly 53 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -258,6 +261,9 @@ for file in \
   "skills/sf-symbols-workflow/SKILL.md" \
   "skills/swiftui-animation-workflow/SKILL.md" \
   "skills/safari-extension-control-workflow/SKILL.md" \
+  "skills/app-extension-architecture-workflow/SKILL.md" \
+  "skills/mailkit-workflow/SKILL.md" \
+  "skills/file-provider-and-finder-sync-workflow/SKILL.md" \
   "skills/devicecheck-app-attest-workflow/SKILL.md" \
   "skills/appkit-app-architecture-workflow/SKILL.md" \
   "skills/swiftui-app-architecture-workflow/SKILL.md" \

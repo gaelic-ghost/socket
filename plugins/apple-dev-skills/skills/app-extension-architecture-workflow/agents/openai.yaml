@@ -1,0 +1,4 @@
+interface:
+  display_name: "App Extension Architecture Workflow"
+  short_description: "Plan Apple extension points, targets, isolation, and handoffs"
+  default_prompt: "Use $app-extension-architecture-workflow to choose and structure an Apple app extension across extension point, host, target, separate process lifecycle, activation, entitlements, app groups, shared containers, data flow, privacy, signing, distribution, and validation. State the documented Apple behavior being relied on, keep product-specific MailKit, File Provider, Finder Sync, Safari, Messages/iMessage, communication-notification, VoIP, and Push to Talk behavior in their owning workflows, then hand off to $xcode-build-run-workflow, $xcode-testing-workflow, $macos-distribution-workflow, or $explore-apple-swift-docs as appropriate."

@@ -29,6 +29,14 @@
         "webhook-and-event-lifecycle",
         "whatsapp-business-workflow"
       ]
+    },
+    {
+      "title": "Apple Dev Skills",
+      "skills": [
+        "app-extension-architecture-workflow",
+        "mailkit-workflow",
+        "file-provider-and-finder-sync-workflow"
+      ]
     }
   ]
 }

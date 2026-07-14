@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "9.11.0",
-  "description": "Apple development workflows for Codex, including App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, local Tips/HelpViewer guide discovery, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
+  "description": "Apple development workflows for Codex, including app extensions, MailKit, File Provider, Finder Sync, App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, local Tips/HelpViewer guide discovery, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -60,6 +60,10 @@
     "swiftui",
     "app-intents",
     "app-shortcuts",
+    "app-extension",
+    "mailkit",
+    "file-provider",
+    "finder-sync",
     "liquid-glass",
     "swiftui-performance",
     "instruments",
@@ -96,8 +100,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple, Swift, image/media repair, SwiftUI, TipKit, Xcode, AppKit, Safari, security, OpenAPI, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence and String Catalog localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "shortDescription": "Apple extension, MailKit, File Provider, Swift, image/media repair, SwiftUI, TipKit, Xcode, AppKit, Safari, security, OpenAPI, and DocC workflows for Codex.",
+    "longDescription": "Bundle Apple-platform development skills for app extension architecture, MailKit, File Provider and Finder Sync, PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence and String Catalog localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -114,6 +118,9 @@
       "Configure or repair AVFoundation camera discovery, controls, rotation, photo capture, synchronized outputs, depth, calibration, mattes, and computational capture using capability evidence.",
       "Implement or repair ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, relocalization, and visionOS provider lifecycles.",
       "Implement or repair ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale, privacy, and Face ID boundaries.",
+      "Choose an Apple app extension point and design its target, isolated process, activation, entitlements, app-group data flow, privacy, signing, distribution, and validation boundaries.",
+      "Build or validate a macOS MailKit extension for content blocking, message actions, compose sessions, or message security without exposing private mail data.",
+      "Choose File Provider for remote storage synchronization or Finder Sync for bounded Finder badges, menus, and monitored-folder visibility without treating Finder Sync as a sync engine.",
       "Implement or repair VideoToolbox compression and decompression, Core Video pixel buffers and Metal interop, compressed samples, hardware capability, color, HDR, and codec performance.",
       "Implement or repair PhotosUI media selection and PhotoKit authorization, assets, resources, iCloud requests, library changes, saves, albums, and nondestructive editing.",
       "Explore the relevant Apple docs first, then explain the right SwiftUI, AppKit, or Xcode path for this repository.",

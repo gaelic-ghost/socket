@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple app extensions, MailKit, File Provider, Finder Sync, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -68,6 +68,9 @@ Use Apple Dev Skills when an agent is helping with:
 - AVFoundation camera discovery, controls, rotation, photo capture, depth, calibration, synchronized outputs, mattes, and computational-capture diagnostics
 - ARKit world tracking, planes, ray casting, scene depth, LiDAR reconstruction, meshes, maps, relocalization, and visionOS provider guidance
 - ARKit TrueDepth face geometry, blend shapes, eye transforms, body anchors, skeletons, scale estimation, privacy, and authentication boundaries
+- Apple app-extension point selection, target ownership, process isolation, activation, entitlements, app groups/shared containers, privacy, signing, distribution, and validation handoffs
+- macOS MailKit content blocking, message actions, compose sessions, message security, privacy, capability declarations, and handler validation
+- Modern File Provider remote-storage synchronization, plus bounded Finder Sync badges, menus, selected-item context, and monitored-folder visibility
 - VideoToolbox compression/decompression, Core Video pixel buffers and pools, Core Media compressed samples, hardware capability, color/HDR, and codec diagnostics
 - Privacy-preserving PhotosUI selection and PhotoKit authorization, assets, resources, iCloud delivery, changes, creation, albums, and nondestructive editing
 - Swift and SwiftUI implementation
@@ -144,6 +147,7 @@ uv run pytest
 - `arkit-face-body-tracking-workflow`
 - `arkit-spatial-sensing-workflow`
 - `appkit-app-architecture-workflow`
+- `app-extension-architecture-workflow`
 - `app-intents-workflow`
 - `author-swift-docc-docs`
 - `avaudio-engine-workflow`
@@ -163,10 +167,12 @@ uv run pytest
 - `explore-apple-swift-docs`
 - `feedback-assistant-workflow`
 - `format-swift-sources`
+- `file-provider-and-finder-sync-workflow`
 - `icon-composer-app-icon-workflow`
 - `ios-runtime-forensics-workflow`
 - `macos-distribution-workflow`
 - `macos-window-management-workflow`
+- `mailkit-workflow`
 - `migrate-xcode-project-to-xcodegen`
 - `photos-library-editing-workflow`
 - `safari-extension-control-workflow`

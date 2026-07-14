@@ -76,6 +76,9 @@ sync_one \
   "$ROOT_DIR/skills/swiftui-animation-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/tipkit-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/safari-extension-control-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/app-extension-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/mailkit-workflow/references/snippets/apple-xcode-project-core.md" \
+  "$ROOT_DIR/skills/file-provider-and-finder-sync-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/devicecheck-app-attest-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/apple-developer-provisioning-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftui-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \

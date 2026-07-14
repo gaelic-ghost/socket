@@ -13,6 +13,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_ROOT = REPO_ROOT / "plugins" / "agent-portability-skills" / "skills"
 MESSAGING_SOURCE_ROOT = REPO_ROOT / "plugins" / "messaging-collaboration-skills" / "skills"
+APPLE_SOURCE_ROOT = REPO_ROOT / "plugins" / "apple-dev-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 EXPORTED_SKILLS = (
     "bootstrap-skills-plugin-repo",
@@ -34,8 +35,12 @@ EXPORTED_SKILLS = (
     "voip-sip-calling-workflow",
     "webhook-and-event-lifecycle",
     "whatsapp-business-workflow",
+    "app-extension-architecture-workflow",
+    "mailkit-workflow",
+    "file-provider-and-finder-sync-workflow",
 )
 AGENT_PORTABILITY_SKILLS = frozenset(EXPORTED_SKILLS[:3])
+MESSAGING_SKILLS = frozenset(EXPORTED_SKILLS[3:19])
 
 
 class ExportError(RuntimeError):
@@ -46,8 +51,13 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
     if source_root is not None:
         return {skill_name: source_root / skill_name for skill_name in EXPORTED_SKILLS}
     return {
-        skill_name: (SOURCE_ROOT if skill_name in AGENT_PORTABILITY_SKILLS else MESSAGING_SOURCE_ROOT)
-        / skill_name
+        skill_name: (
+            SOURCE_ROOT
+            if skill_name in AGENT_PORTABILITY_SKILLS
+            else MESSAGING_SOURCE_ROOT
+            if skill_name in MESSAGING_SKILLS
+            else APPLE_SOURCE_ROOT
+        ) / skill_name
         for skill_name in EXPORTED_SKILLS
     }
 

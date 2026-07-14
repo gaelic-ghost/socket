@@ -42,6 +42,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 63: System Integration, Runtime Evidence, and Distribution](#milestone-63-system-integration-runtime-evidence-and-distribution)
 - [Milestone 64: Xcode String Catalog Localization Workflow](#milestone-64-xcode-string-catalog-localization-workflow)
 - [Milestone 65: Feedback Assistant Workflow](#milestone-65-feedback-assistant-workflow)
+- [Milestone 66: App Extension, MailKit, and File Provider Workflows](#milestone-66-app-extension-mailkit-and-file-provider-workflows)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -102,6 +103,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 63: System Integration, Runtime Evidence, and Distribution - In Progress
 - Milestone 64: Xcode String Catalog Localization Workflow - Completed
 - Milestone 65: Feedback Assistant Workflow - Completed
+- Milestone 66: App Extension, MailKit, and File Provider Workflows - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1233,6 +1235,34 @@ Completed
 - [x] The repository ships a privacy-reviewed, app-grounded workflow that prepares one actionable Feedback Assistant report at a time and requires user confirmation before transmission.
 
 Completed Milestone 65 by shipping `feedback-assistant-workflow` with Apple-aligned report and diagnostic guidance, a live signed-in macOS app fixture, strict attachment and submission gates, and `LanguageModelSession.logFeedbackAttachment` guidance for Foundation Models session feedback.
+
+## Milestone 66: App Extension, MailKit, and File Provider Workflows
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add reusable app-extension architecture guidance for extension points, target ownership, separate-process lifecycle, activation, entitlements, App Groups/shared containers, data flow, privacy, testing, signing, distribution, and handoffs.
+- [x] Add a focused macOS MailKit workflow for content blockers, message actions, compose sessions, message security, capability declarations, and privacy-safe validation.
+- [x] Add a focused File Provider/Finder Sync workflow that selects File Provider for remote storage synchronization and strictly limits Finder Sync to monitored-folder badges, menus, and visibility.
+- [x] Preserve Messaging Collaboration ownership for Messages/iMessage collaboration, communication-notification policy, VoIP, and Push to Talk.
+
+### Tickets
+
+- [x] Use [`app-extension-workflows-plan.md`](./docs/maintainers/app-extension-workflows-plan.md) as the durable ownership and delivery record.
+- [x] Add the three skills with Apple documentation anchors, interface metadata, customization contracts, shared Xcode project references, and explicit Xcode/testing/distribution handoffs.
+- [x] Update Apple Dev Skills metadata, active inventory, README, AGENTS guidance, docs validator, customization review, and targeted tests.
+- [x] Export the portable instruction-only skills to the root Hermes tap and validate the generated inventory without representing the Codex plugin bundle as a Hermes plugin.
+
+### Exit Criteria
+
+- [x] App-extension mechanics, MailKit, and File Provider/Finder Sync each have a focused owner with no generic catch-all extension layer.
+- [x] Finder Sync never claims remote synchronization ownership, and MailKit guidance preserves user privacy and explicit message-security behavior.
+- [x] Apple Dev docs, metadata, tests, root Socket metadata, and Hermes compatibility validation agree on the shipped surface.
+
+Completed Milestone 66 by shipping `app-extension-architecture-workflow`, `mailkit-workflow`, and `file-provider-and-finder-sync-workflow` with Apple-docs-first boundaries, explicit Messaging Collaboration handoffs, and a validated Hermes skill-tap export.
 
 ## Backlog Candidates
 

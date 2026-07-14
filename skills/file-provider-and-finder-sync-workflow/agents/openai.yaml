@@ -1,0 +1,4 @@
+interface:
+  display_name: "File Provider and Finder Sync Workflow"
+  short_description: "Choose File Provider sync or bounded Finder Sync UI"
+  default_prompt: "Use $file-provider-and-finder-sync-workflow to choose modern File Provider for remote storage synchronization or Finder Sync for limited monitored-folder badges, menus, and visibility. State the documented Apple behavior being relied on, keep Finder Sync explicitly out of sync-engine ownership, define identity, change, conflict, retry, privacy, and validation boundaries, then hand off architecture to $app-extension-architecture-workflow, execution to $xcode-build-run-workflow, tests to $xcode-testing-workflow, or current docs to $explore-apple-swift-docs."

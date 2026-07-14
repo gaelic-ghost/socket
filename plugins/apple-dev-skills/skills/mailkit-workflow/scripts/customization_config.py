@@ -1,0 +1,1 @@
+../../safari-extension-control-workflow/scripts/customization_config.py
