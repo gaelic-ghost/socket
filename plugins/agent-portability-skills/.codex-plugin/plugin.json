@@ -1,6 +1,6 @@
 {
   "name": "agent-portability-skills",
-  "version": "9.9.1",
+  "version": "9.10.0",
   "description": "Maintainer skills for Socket-owned agent skill portability, Codex plugin surfaces, and host adapter guidance.",
   "author": {
     "name": "Gale",
