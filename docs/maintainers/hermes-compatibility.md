@@ -31,6 +31,10 @@ Socket tap. The curated set is:
 - `app-extension-architecture-workflow`
 - `mailkit-workflow`
 - `file-provider-and-finder-sync-workflow`
+- `connect-hopper-mcp`
+- `script-hopper-analysis`
+- `use-ghidra`
+- `use-hopper`
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
@@ -56,6 +60,11 @@ exported under the `Cybersecurity Skills` grouping. Its Codex manifest and icon
 remain host-specific packaging metadata. The initial plugin ships no MCP server,
 hook, app, custom agent, or native Hermes runtime surface, so no `mcp_servers`
 translation or Python Hermes plugin is required.
+
+The exported Hopper and Ghidra workflows are portable guidance. Hopper's GUI,
+Python SDK, and `HopperMCPServer` remain operator-local runtime surfaces. The
+Hopper MCP profile is therefore private user configuration, not a Socket
+`.mcp.json` declaration or a native Hermes plugin.
 
 ## Maintainer Workflow
 
@@ -125,6 +134,11 @@ never in Socket. The translations do not add filtering where no direct
 safety/namespace reason exists. Configure required secrets through the explicit
 `env` mapping or Hermes process environment, then reload MCP configuration with
 `/reload-mcp` and test the enabled server before use.
+
+An external local server such as Hopper does not join this translation inventory
+unless Socket begins distributing a portable launcher. Its operator profile
+belongs in private Codex and Hermes configuration and must use the installed
+server command plus a deliberately small tool allowlist.
 
 | Socket declaration | Checked-in Hermes translation | Status |
 | --- | --- | --- |

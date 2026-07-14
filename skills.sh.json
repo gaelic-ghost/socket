@@ -72,6 +72,15 @@
         "use-objective-see-tools",
         "validate-vulnerability"
       ]
+    },
+    {
+      "title": "Reverse Engineering Skills",
+      "skills": [
+        "connect-hopper-mcp",
+        "script-hopper-analysis",
+        "use-ghidra",
+        "use-hopper"
+      ]
     }
   ]
 }

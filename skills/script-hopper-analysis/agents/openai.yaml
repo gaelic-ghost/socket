@@ -1,0 +1,4 @@
+interface:
+  display_name: "Script Hopper Analysis"
+  short_description: "Automate reproducible Hopper document analysis."
+  default_prompt: "Use $script-hopper-analysis to create a narrow, reproducible Hopper Python analysis for this task."

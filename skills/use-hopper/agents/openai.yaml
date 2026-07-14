@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Hopper"
+  short_description: "Analyze binaries with Hopper on macOS."
+  default_prompt: "Use $use-hopper to inspect this binary in Hopper and preserve the analysis evidence."
