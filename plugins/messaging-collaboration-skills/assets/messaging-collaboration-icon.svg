@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Messaging collaboration skills">
+  <rect width="256" height="256" rx="48" fill="#090612"/>
+  <path d="M46 57h114l36 36v67H98l-38 31v-31H46z" fill="none" stroke="#E879F9" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M80 104h82M80 132h54" stroke="#67E8F9" stroke-width="12" stroke-linecap="round"/>
+  <path d="M174 173v-17c0-14 11-25 25-25s25 11 25 25v17c0 12-10 22-22 22h-6c-12 0-22-10-22-22Z" fill="none" stroke="#A78BFA" stroke-width="10"/>
+</svg>
