@@ -71,6 +71,7 @@ def make_repo(tmp_path: Path) -> Path:
 def configure_paths(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(export_hermes_skills, "SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "MESSAGING_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
+    monkeypatch.setattr(export_hermes_skills, "APPLE_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "EXPORT_ROOT", repo_root / "skills")
     monkeypatch.setattr(validate_hermes_compatibility, "REPO_ROOT", repo_root)
     monkeypatch.setattr(validate_hermes_compatibility, "EXPORT_ROOT", repo_root / "skills")

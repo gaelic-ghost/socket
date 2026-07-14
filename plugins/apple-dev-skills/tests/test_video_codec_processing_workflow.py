@@ -92,7 +92,7 @@ class VideoCodecProcessingWorkflowTests(unittest.TestCase):
         )
         self.assertIn("VideoToolbox", plugin)
         self.assertIn("Core Video", plugin)
-        self.assertIn("Expected exactly 50 active skills", validator)
+        self.assertIn("Expected exactly 53 active skills", validator)
         self.assertIn(name, self.read("skills/avfoundation-media-pipeline-workflow/SKILL.md"))
         self.assertIn(name, self.read("skills/coremedia-timing-samplebuffer-workflow/SKILL.md"))
 

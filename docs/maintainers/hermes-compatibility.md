@@ -28,6 +28,9 @@ Socket tap. The curated set is:
 - `bootstrap-skills-plugin-repo`
 - `hermes-agent-compatibility`
 - `sync-skills-repo-guidance`
+- `app-extension-architecture-workflow`
+- `mailkit-workflow`
+- `file-provider-and-finder-sync-workflow`
 
 ```bash
 hermes skills tap add gaelic-ghost/socket

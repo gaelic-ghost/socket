@@ -1,0 +1,4 @@
+interface:
+  display_name: "MailKit Workflow"
+  short_description: "Build privacy-conscious macOS MailKit extensions"
+  default_prompt: "Use $mailkit-workflow to design or validate a macOS MailKit extension for content blocking, message actions, compose sessions, or message security. Start from the documented MailKit handler contract, declare only needed capabilities, protect message and key material, then hand off target/signing work to $xcode-build-run-workflow, tests to $xcode-testing-workflow, distribution to $macos-distribution-workflow, or general extension mechanics to $app-extension-architecture-workflow."
