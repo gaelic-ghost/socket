@@ -14,6 +14,7 @@ Turn generated output into bounded findings. Preserve which tool produced each n
 1. Record the input context.
    - Identify the artifact hash, architecture or managed runtime, selected image, base address, tool and version, analysis settings, and function or address range.
    - Note whether symbols, debug information, signatures, runtime metadata, or prior analyst names were loaded.
+   - If no actual generated view and no tool, version, and load context are available, stop with `no generated output reviewed` and request those inputs. Do not emit an empty review or infer source-level behavior from capability discovery alone.
 
 2. Classify every important name.
    - Original exported or debug symbol.

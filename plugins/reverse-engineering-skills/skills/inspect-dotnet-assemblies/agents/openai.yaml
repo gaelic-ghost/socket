@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect .NET Assemblies"
+  short_description: "Inspect managed assemblies and decompiler evidence."
+  default_prompt: "Use $inspect-dotnet-assemblies to map this managed assembly and review its generated code evidence."

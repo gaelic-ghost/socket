@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Apple Kernel Boot and Firmware"
+  short_description: "Research Apple kernel, boot, and firmware artifacts."
+  default_prompt: "Use $research-apple-kernel-boot-and-firmware to inventory and correlate these exact-build Apple system artifacts."

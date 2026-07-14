@@ -31,10 +31,12 @@ dwarfdump --uuid <binary-or-dsym>
 otool -l <binary>
 otool -L <binary>
 nm -m <binary>
-codesign -dvvv --entitlements :- <bundle-or-binary>
+codesign -dvvv --entitlements - <bundle-or-binary>
 ```
 
 On iOS-family bundles, adjust the bundle-relative executable path rather than assuming the macOS `Contents/` layout. Prefer `vtool`, `dyld_info`, or LLVM object tools when their output more directly answers build-version, fixup, export, or disassembly questions.
+
+For universal binaries, query `codesign` once per recorded architecture with `--arch <slice>` when collecting CDHashes or slice-specific CodeDirectory facts. If an Apple command-line tool has no working version flag, record its resolved toolchain path together with the macOS and Xcode build instead of inventing a version.
 
 ## Address Terms
 

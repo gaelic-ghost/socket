@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Ghidra"
+  short_description: "Analyze compiled artifacts with Ghidra."
+  default_prompt: "Use $use-ghidra to create a reproducible Ghidra analysis project for this artifact."

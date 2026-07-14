@@ -144,9 +144,9 @@ This skill covers:
 - follow-up validation tasks
 - concise handoff summaries for another agent or future session
 
-## Proposed Skill Inventory
+## Expanded Skill Inventory
 
-The next skills are grouped by responsibility. Names are verb-led where practical so their trigger and primary action remain clear.
+The shipped expansion skills are grouped by responsibility. Names are verb-led where practical so their trigger and primary action remain clear.
 
 ### Shared Analysis Skills
 
@@ -270,16 +270,17 @@ Cover managed Unity assemblies, IL2CPP layout and metadata, player data, resourc
 
 ### Phase 3: Tool Workflows And Hands-On Calibration
 
-- [ ] Add `use-cutter-and-rizin` after testing a Mach-O and one non-Apple artifact through both the GUI and CLI paths.
-- [ ] Add `use-malimite` after testing an IPA or application bundle and recording its actual install, import, resource, Swift, Objective-C, export, and failure surfaces.
-- [ ] Add `use-ghidra` and `use-hopper` after representative project comparisons.
-- [ ] Add `inspect-dyld-shared-cache` and `perform-apple-dynamic-analysis` after the shared address and environment manifests are proven in the static workflows.
+- [x] Add `use-cutter-and-rizin` with separate interactive GUI and repeatable CLI paths.
+- [x] Add `use-malimite` with package preflight, privacy, project-state, and failure-routing guidance.
+- [x] Add `use-ghidra` and `use-hopper` as thin tool adapters.
+- [x] Add `inspect-dyld-shared-cache` and `perform-apple-dynamic-analysis` on the shared address and environment records.
+- [x] Forward-test the adapters against a universal Mach-O, managed Unity assemblies, an Apple app package, and the installed Cutter, Rizin, Malimite, Ghidra, and Hopper capability states; preserve blocked imports and unusable CLI surfaces as results instead of inventing analysis evidence.
 
 ### Phase 4: Advanced Apple And Cross-Platform Domains
 
-- [ ] Add `research-apple-kernel-boot-and-firmware` only with exact-build KDK, kernel, restore, and source-correlation rules in place.
-- [ ] Add `report-apple-security-research` with live Apple program-source checks.
-- [ ] Add .NET and Unity workflows without delaying the Apple-focused sequence.
+- [x] Add `research-apple-kernel-boot-and-firmware` with exact-build KDK, kernel, restore, and source-correlation rules.
+- [x] Add `report-apple-security-research` with live Apple program-source checks.
+- [x] Add .NET and Unity artifact workflows without delaying the Apple-focused sequence.
 
 ## Skill Authoring And Validation
 

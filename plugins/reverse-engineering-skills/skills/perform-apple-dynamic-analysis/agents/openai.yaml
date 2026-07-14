@@ -1,0 +1,4 @@
+interface:
+  display_name: "Perform Apple Dynamic Analysis"
+  short_description: "Plan reproducible Apple runtime analysis."
+  default_prompt: "Use $perform-apple-dynamic-analysis to plan and record a bounded runtime analysis of this Apple artifact."

@@ -21,6 +21,7 @@ Preserve the acquired object, its context, and every later transformation as sep
 
 3. Create stable identifiers.
    - Record cryptographic hashes for files and a deterministic member inventory for containers when practical.
+   - Define the inventory method: normalized relative path, member type, byte size, and content hash sorted by bytewise relative path is the portable baseline. Record any included metadata such as mode, timestamp, extended attributes, or symlink target separately so another pass can reproduce the same comparison.
    - Record platform identifiers such as Mach-O UUIDs, PE timestamps, PDB identities, managed assembly identities, bundle identifiers, firmware manifest identities, or code-signing hashes when relevant.
 
 4. Separate storage layers.

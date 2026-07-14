@@ -14,12 +14,14 @@
 ## Narrow Inspection Commands
 
 ```bash
-codesign -dvvv --entitlements :- <bundle-or-binary>
+codesign -dvvv --entitlements - <bundle-or-binary>
 codesign --verify --deep --strict --verbose=4 <bundle>
 codesign -dr - <bundle-or-binary>
 security cms -D -i <embedded.mobileprovision>
 spctl --assess --type execute --verbose=4 <bundle>
 ```
+
+For a universal binary, run the display operation with `--arch <slice>` for every recorded architecture when comparing CDHashes or other slice-specific CodeDirectory fields. Treat an `spctl` execution error or internal assessment failure as unresolved assessment evidence, not as rejection, missing notarization, or untrusted code.
 
 Avoid `--deep` when signing. During verification, record that recursive verification can summarize nested failures without replacing a deliberate nested-code inventory.
 

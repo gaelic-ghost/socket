@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Malimite"
+  short_description: "Explore Apple app packages with Malimite."
+  default_prompt: "Use $use-malimite to explore this supported Apple app package and record generated evidence carefully."
