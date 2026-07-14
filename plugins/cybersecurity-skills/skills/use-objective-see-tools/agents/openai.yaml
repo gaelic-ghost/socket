@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Objective-See Tools"
+  short_description: "Use Objective-See apps as focused evidence adapters"
+  default_prompt: "Use $use-objective-see-tools to choose a focused Objective-See tool for this Mac investigation."

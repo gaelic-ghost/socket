@@ -1,0 +1,4 @@
+interface:
+  display_name: "Assess macOS Threat"
+  short_description: "Assess Mac threats across distinct security layers"
+  default_prompt: "Use $assess-macos-threat to assess this Mac concern without weakening platform protections."
