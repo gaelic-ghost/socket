@@ -1,0 +1,4 @@
+interface:
+  display_name: "Author Detection Content"
+  short_description: "Build telemetry-backed detections with regression fixtures"
+  default_prompt: "Use $author-detection-content to turn this validated behavior into tested detection logic."

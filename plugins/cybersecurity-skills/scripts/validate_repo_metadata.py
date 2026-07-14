@@ -24,6 +24,40 @@ PLUGIN_MANIFEST = REPO_ROOT / ".codex-plugin" / "plugin.json"
 SKILL_NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 MARKDOWN_LINK = re.compile(r"\[[^]]*]\(([^)]+)\)")
 MACHINE_LOCAL_MARKERS = ("/Users/", "~/", "../")
+EXPECTED_SKILLS = frozenset(
+    {
+        "analyze-suspicious-script-or-document",
+        "assess-and-explain-threat",
+        "assess-exposure-and-impact",
+        "assess-macos-threat",
+        "author-detection-content",
+        "author-yara-x-rules",
+        "check-artifact-reputation",
+        "contain-and-recover-macos",
+        "contain-security-incident",
+        "harden-macos",
+        "hunt-security-indicators",
+        "inspect-macos-persistence",
+        "inspect-macos-runtime-activity",
+        "map-malware-behavior",
+        "operate-agentic-security-tools",
+        "perform-dynamic-malware-analysis",
+        "perform-static-malware-analysis",
+        "preserve-security-evidence",
+        "recover-security-incident",
+        "report-security-assessment",
+        "route-security-work",
+        "scope-authorized-security-test",
+        "select-analysis-isolation",
+        "test-network-services",
+        "test-web-and-api-security",
+        "triage-security-incident",
+        "triage-suspicious-content",
+        "triage-vulnerability-report",
+        "use-objective-see-tools",
+        "validate-vulnerability",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -160,6 +194,16 @@ def main() -> int:
     skill_dirs = sorted(path for path in SKILLS_ROOT.iterdir() if path.is_dir()) if SKILLS_ROOT.is_dir() else []
     if not skill_dirs:
         findings.append(Finding("skills", "must contain at least one exported skill directory"))
+    actual_skills = {path.name for path in skill_dirs}
+    if actual_skills != EXPECTED_SKILLS:
+        missing = sorted(EXPECTED_SKILLS - actual_skills)
+        unexpected = sorted(actual_skills - EXPECTED_SKILLS)
+        details = []
+        if missing:
+            details.append(f"missing: {', '.join(missing)}")
+        if unexpected:
+            details.append(f"unexpected: {', '.join(unexpected)}")
+        findings.append(Finding("skills", f"inventory differs from the expected 30-skill surface ({'; '.join(details)})"))
     for skill_dir in skill_dirs:
         findings.extend(validate_skill(skill_dir))
     if findings:

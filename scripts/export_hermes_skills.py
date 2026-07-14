@@ -14,11 +14,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_ROOT = REPO_ROOT / "plugins" / "agent-portability-skills" / "skills"
 MESSAGING_SOURCE_ROOT = REPO_ROOT / "plugins" / "messaging-collaboration-skills" / "skills"
 APPLE_SOURCE_ROOT = REPO_ROOT / "plugins" / "apple-dev-skills" / "skills"
+CYBERSECURITY_SOURCE_ROOT = REPO_ROOT / "plugins" / "cybersecurity-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
-EXPORTED_SKILLS = (
+AGENT_PORTABILITY_SKILLS = (
     "bootstrap-skills-plugin-repo",
     "hermes-agent-compatibility",
     "sync-skills-repo-guidance",
+)
+MESSAGING_SKILLS = (
     "apple-communication-workflow",
     "choose-platform-integration",
     "communication-notifications-workflow",
@@ -35,12 +38,47 @@ EXPORTED_SKILLS = (
     "voip-sip-calling-workflow",
     "webhook-and-event-lifecycle",
     "whatsapp-business-workflow",
+)
+APPLE_SKILLS = (
     "app-extension-architecture-workflow",
     "mailkit-workflow",
     "file-provider-and-finder-sync-workflow",
 )
-AGENT_PORTABILITY_SKILLS = frozenset(EXPORTED_SKILLS[:3])
-MESSAGING_SKILLS = frozenset(EXPORTED_SKILLS[3:19])
+CYBERSECURITY_SKILLS = (
+    "analyze-suspicious-script-or-document",
+    "assess-and-explain-threat",
+    "assess-exposure-and-impact",
+    "assess-macos-threat",
+    "author-detection-content",
+    "author-yara-x-rules",
+    "check-artifact-reputation",
+    "contain-and-recover-macos",
+    "contain-security-incident",
+    "harden-macos",
+    "hunt-security-indicators",
+    "inspect-macos-persistence",
+    "inspect-macos-runtime-activity",
+    "map-malware-behavior",
+    "operate-agentic-security-tools",
+    "perform-dynamic-malware-analysis",
+    "perform-static-malware-analysis",
+    "preserve-security-evidence",
+    "recover-security-incident",
+    "report-security-assessment",
+    "route-security-work",
+    "scope-authorized-security-test",
+    "select-analysis-isolation",
+    "test-network-services",
+    "test-web-and-api-security",
+    "triage-security-incident",
+    "triage-suspicious-content",
+    "triage-vulnerability-report",
+    "use-objective-see-tools",
+    "validate-vulnerability",
+)
+EXPORTED_SKILLS = (
+    AGENT_PORTABILITY_SKILLS + MESSAGING_SKILLS + APPLE_SKILLS + CYBERSECURITY_SKILLS
+)
 
 
 class ExportError(RuntimeError):
@@ -50,16 +88,13 @@ class ExportError(RuntimeError):
 def source_paths(source_root: Path | None = None) -> dict[str, Path]:
     if source_root is not None:
         return {skill_name: source_root / skill_name for skill_name in EXPORTED_SKILLS}
-    return {
-        skill_name: (
-            SOURCE_ROOT
-            if skill_name in AGENT_PORTABILITY_SKILLS
-            else MESSAGING_SOURCE_ROOT
-            if skill_name in MESSAGING_SKILLS
-            else APPLE_SOURCE_ROOT
-        ) / skill_name
-        for skill_name in EXPORTED_SKILLS
+    roots = {
+        **{skill_name: SOURCE_ROOT for skill_name in AGENT_PORTABILITY_SKILLS},
+        **{skill_name: MESSAGING_SOURCE_ROOT for skill_name in MESSAGING_SKILLS},
+        **{skill_name: APPLE_SOURCE_ROOT for skill_name in APPLE_SKILLS},
+        **{skill_name: CYBERSECURITY_SOURCE_ROOT for skill_name in CYBERSECURITY_SKILLS},
     }
+    return {skill_name: roots[skill_name] / skill_name for skill_name in EXPORTED_SKILLS}
 
 
 def validate_sources(source_root: Path | None = None) -> None:

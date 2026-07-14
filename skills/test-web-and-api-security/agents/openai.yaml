@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Web And API Security"
+  short_description: "Run scoped, role-aware web and API security tests"
+  default_prompt: "Use $test-web-and-api-security to test this authorized web or API surface methodically."

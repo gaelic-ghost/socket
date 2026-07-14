@@ -1,0 +1,4 @@
+interface:
+  display_name: "Author YARA-X Rules"
+  short_description: "Build evidence-backed YARA-X rules with regression tests"
+  default_prompt: "Use $author-yara-x-rules to create and test a narrow detection rule from this evidence."

@@ -18,6 +18,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `cardhop-app` (codex-plugin) uses targets: skills:plugins/cardhop-app/skills, mcp:plugins/cardhop-app/.mcp.json.
 - `cloud-deployment-skills` (codex-plugin) uses targets: skills:plugins/cloud-deployment-skills/skills.
 - `cloud-inference-skills` (codex-plugin) uses targets: skills:plugins/cloud-inference-skills/skills, mcp:plugins/cloud-inference-skills/.mcp.json.
+- `cybersecurity-skills` (codex-plugin) uses targets: skills:plugins/cybersecurity-skills/skills.
 - `dotnet-skills` (codex-plugin) uses targets: skills:plugins/dotnet-skills/skills.
 - `game-dev-skills` (codex-plugin) uses targets: skills:plugins/game-dev-skills/skills.
 - `messaging-collaboration-skills` (codex-plugin) uses targets: skills:plugins/messaging-collaboration-skills/skills.
@@ -33,7 +34,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `swiftasb-skills` (codex-plugin) uses targets: skills:plugins/swiftasb-skills/skills.
 - `things-app` (codex-plugin) uses targets: skills:plugins/things-app/skills, mcp:plugins/things-app/.mcp.json.
 - `web-dev-skills` (codex-plugin) uses targets: skills:plugins/web-dev-skills/skills.
-- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, apple-creator-studio-skills, cardhop-app, cloud-deployment-skills, cloud-inference-skills, dotnet-skills, productivity-skills, python-skills, network-protocol-skills, server-side-swift, swift-lang, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, agentdeck, game-dev-skills, messaging-collaboration-skills.
+- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, apple-creator-studio-skills, cardhop-app, cloud-deployment-skills, cloud-inference-skills, dotnet-skills, productivity-skills, python-skills, network-protocol-skills, server-side-swift, swift-lang, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, agentdeck, game-dev-skills, messaging-collaboration-skills, cybersecurity-skills.
 - `speak-swiftly` (remote-plugin-entry) uses targets: no targets recorded.
 
 <!-- Generated product inventory ends here. -->
@@ -123,6 +124,36 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:cloud-inference-skills/flash` (codex-skill) at `plugins/cloud-inference-skills/skills/flash/SKILL.md` depends on: no declared dependencies.
 - `skill:cloud-inference-skills/runpodctl` (codex-skill) at `plugins/cloud-inference-skills/skills/runpodctl/SKILL.md` depends on: no declared dependencies.
 - `mcp:plugins/cloud-inference-skills/.mcp.json` (mcp-config) at `plugins/cloud-inference-skills/.mcp.json` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/analyze-suspicious-script-or-document` (codex-skill) at `plugins/cybersecurity-skills/skills/analyze-suspicious-script-or-document/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/assess-and-explain-threat` (codex-skill) at `plugins/cybersecurity-skills/skills/assess-and-explain-threat/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/assess-exposure-and-impact` (codex-skill) at `plugins/cybersecurity-skills/skills/assess-exposure-and-impact/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/assess-macos-threat` (codex-skill) at `plugins/cybersecurity-skills/skills/assess-macos-threat/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/author-detection-content` (codex-skill) at `plugins/cybersecurity-skills/skills/author-detection-content/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/author-yara-x-rules` (codex-skill) at `plugins/cybersecurity-skills/skills/author-yara-x-rules/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/check-artifact-reputation` (codex-skill) at `plugins/cybersecurity-skills/skills/check-artifact-reputation/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/contain-and-recover-macos` (codex-skill) at `plugins/cybersecurity-skills/skills/contain-and-recover-macos/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/contain-security-incident` (codex-skill) at `plugins/cybersecurity-skills/skills/contain-security-incident/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/harden-macos` (codex-skill) at `plugins/cybersecurity-skills/skills/harden-macos/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/hunt-security-indicators` (codex-skill) at `plugins/cybersecurity-skills/skills/hunt-security-indicators/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/inspect-macos-persistence` (codex-skill) at `plugins/cybersecurity-skills/skills/inspect-macos-persistence/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/inspect-macos-runtime-activity` (codex-skill) at `plugins/cybersecurity-skills/skills/inspect-macos-runtime-activity/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/map-malware-behavior` (codex-skill) at `plugins/cybersecurity-skills/skills/map-malware-behavior/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/operate-agentic-security-tools` (codex-skill) at `plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/perform-dynamic-malware-analysis` (codex-skill) at `plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/perform-static-malware-analysis` (codex-skill) at `plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/preserve-security-evidence` (codex-skill) at `plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/recover-security-incident` (codex-skill) at `plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/report-security-assessment` (codex-skill) at `plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/route-security-work` (codex-skill) at `plugins/cybersecurity-skills/skills/route-security-work/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/scope-authorized-security-test` (codex-skill) at `plugins/cybersecurity-skills/skills/scope-authorized-security-test/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/select-analysis-isolation` (codex-skill) at `plugins/cybersecurity-skills/skills/select-analysis-isolation/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/test-network-services` (codex-skill) at `plugins/cybersecurity-skills/skills/test-network-services/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/test-web-and-api-security` (codex-skill) at `plugins/cybersecurity-skills/skills/test-web-and-api-security/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/triage-security-incident` (codex-skill) at `plugins/cybersecurity-skills/skills/triage-security-incident/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/triage-suspicious-content` (codex-skill) at `plugins/cybersecurity-skills/skills/triage-suspicious-content/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/triage-vulnerability-report` (codex-skill) at `plugins/cybersecurity-skills/skills/triage-vulnerability-report/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/use-objective-see-tools` (codex-skill) at `plugins/cybersecurity-skills/skills/use-objective-see-tools/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/validate-vulnerability` (codex-skill) at `plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/aspnet-core-service-workflow` (codex-skill) at `plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/bootstrap-solution` (codex-skill) at `plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/build-csharp-project` (codex-skill) at `plugins/dotnet-skills/skills/build-csharp-project/SKILL.md` depends on: no declared dependencies.
@@ -144,13 +175,18 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:game-dev-skills/xcode-game-profiling-workflow` (codex-skill) at `plugins/game-dev-skills/skills/xcode-game-profiling-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/apple-communication-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/apple-communication-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/choose-platform-integration` (codex-skill) at `plugins/messaging-collaboration-skills/skills/choose-platform-integration/SKILL.md` depends on: no declared dependencies.
+- `skill:messaging-collaboration-skills/communication-notifications-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/communication-notifications-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/conversation-state-human-handoff` (codex-skill) at `plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md` depends on: no declared dependencies.
+- `skill:messaging-collaboration-skills/default-communication-app-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/default-communication-app-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/discord-app-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/discord-app-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/google-meet-collaboration-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:messaging-collaboration-skills/imessage-app-and-collaboration-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/imessage-app-and-collaboration-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:messaging-collaboration-skills/push-to-talk-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/push-to-talk-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/slack-app-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/slack-app-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/sms-mms-rcs-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/sms-mms-rcs-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/teams-agent-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/teams-agent-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/telegram-bot-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:messaging-collaboration-skills/voip-sip-calling-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/webhook-and-event-lifecycle` (codex-skill) at `plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/whatsapp-business-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:network-protocol-skills/choose-network-transport` (codex-skill) at `plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md` depends on: no declared dependencies.
@@ -354,6 +390,37 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/cloud-inference-skills/skills/runpodctl/SKILL.md`.
 - `mcp-config` evidence from `plugins/cloud-inference-skills/.mcp.json`.
 - `codex-plugin-manifest` evidence from `plugins/cloud-inference-skills/.codex-plugin/plugin.json`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/analyze-suspicious-script-or-document/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/assess-and-explain-threat/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/assess-exposure-and-impact/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/assess-macos-threat/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/author-detection-content/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/author-yara-x-rules/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/check-artifact-reputation/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/contain-and-recover-macos/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/contain-security-incident/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/harden-macos/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/hunt-security-indicators/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/inspect-macos-persistence/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/inspect-macos-runtime-activity/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/map-malware-behavior/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/route-security-work/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/scope-authorized-security-test/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/select-analysis-isolation/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/test-network-services/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/test-web-and-api-security/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/triage-security-incident/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/triage-suspicious-content/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/triage-vulnerability-report/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/use-objective-see-tools/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md`.
+- `codex-plugin-manifest` evidence from `plugins/cybersecurity-skills/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-csharp-project/SKILL.md`.
@@ -377,13 +444,18 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `codex-plugin-manifest` evidence from `plugins/game-dev-skills/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/apple-communication-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/choose-platform-integration/SKILL.md`.
+- `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/communication-notifications-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/conversation-state-human-handoff/SKILL.md`.
+- `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/default-communication-app-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/discord-app-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/google-meet-collaboration-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/imessage-app-and-collaboration-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/push-to-talk-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/slack-app-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/sms-mms-rcs-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/teams-agent-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/telegram-bot-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/messaging-collaboration-skills/.codex-plugin/plugin.json`.

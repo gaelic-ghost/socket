@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hunt Security Indicators"
+  short_description: "Search scoped telemetry with explicit coverage and context"
+  default_prompt: "Use $hunt-security-indicators to search for these indicators and report the real coverage."

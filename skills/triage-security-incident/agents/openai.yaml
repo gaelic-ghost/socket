@@ -1,0 +1,4 @@
+interface:
+  display_name: "Triage Security Incident"
+  short_description: "Establish incident scope, urgency, evidence, and owners"
+  default_prompt: "Use $triage-security-incident to establish this incident and the safest immediate response."

@@ -37,6 +37,41 @@
         "mailkit-workflow",
         "file-provider-and-finder-sync-workflow"
       ]
+    },
+    {
+      "title": "Cybersecurity Skills",
+      "skills": [
+        "analyze-suspicious-script-or-document",
+        "assess-and-explain-threat",
+        "assess-exposure-and-impact",
+        "assess-macos-threat",
+        "author-detection-content",
+        "author-yara-x-rules",
+        "check-artifact-reputation",
+        "contain-and-recover-macos",
+        "contain-security-incident",
+        "harden-macos",
+        "hunt-security-indicators",
+        "inspect-macos-persistence",
+        "inspect-macos-runtime-activity",
+        "map-malware-behavior",
+        "operate-agentic-security-tools",
+        "perform-dynamic-malware-analysis",
+        "perform-static-malware-analysis",
+        "preserve-security-evidence",
+        "recover-security-incident",
+        "report-security-assessment",
+        "route-security-work",
+        "scope-authorized-security-test",
+        "select-analysis-isolation",
+        "test-network-services",
+        "test-web-and-api-security",
+        "triage-security-incident",
+        "triage-suspicious-content",
+        "triage-vulnerability-report",
+        "use-objective-see-tools",
+        "validate-vulnerability"
+      ]
     }
   ]
 }

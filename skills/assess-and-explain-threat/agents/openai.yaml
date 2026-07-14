@@ -1,0 +1,4 @@
+interface:
+  display_name: "Assess And Explain Threat"
+  short_description: "Calibrate threat confidence and explain practical risk"
+  default_prompt: "Use $assess-and-explain-threat to turn this evidence into a clear, proportionate security assessment."

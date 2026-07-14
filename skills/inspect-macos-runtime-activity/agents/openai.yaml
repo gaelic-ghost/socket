@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect macOS Runtime Activity"
+  short_description: "Correlate Mac process, file, network, and log evidence"
+  default_prompt: "Use $inspect-macos-runtime-activity to build a focused timeline of this suspicious Mac activity."

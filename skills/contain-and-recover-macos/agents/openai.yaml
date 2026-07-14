@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contain And Recover macOS"
+  short_description: "Contain Mac threats and verify trustworthy recovery"
+  default_prompt: "Use $contain-and-recover-macos to choose proportionate containment and verify recovery."

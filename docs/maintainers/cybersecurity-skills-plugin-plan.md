@@ -254,6 +254,6 @@ Recheck these sources during implementation; the list was verified on 2026-07-14
 
 ## Release Decision
 
-Implement Phases 0 through 3 as the first installable release so the plugin delivers the complete suspicious-content-to-macOS-defense path that motivated it. Include the Phase 4 scope, validation, exposure, and reporting foundations in that release if they validate cleanly; keep broad web/API and network test adapters out rather than rushing unsafe automation.
+The first installable release implements all five planned phases. It delivers the complete suspicious-content-to-macOS-defense path, authorized vulnerability-validation and bounded web/API and network-testing guidance, incident response, hunting, and reusable detection-content workflows on the same evidence, confidence, isolation, scope, and reporting records.
 
-Treat the first installable `cybersecurity-skills` release as a Socket minor version. Phases 4 and 5 may land in later minor releases after fixture-driven validation. Any privileged runtime, bundled scanner, MCP server, remote sandbox integration, or autonomous active-testing surface requires a separate explicit architecture and release decision.
+Treat the first installable `cybersecurity-skills` release as a Socket minor version. Any privileged runtime, bundled scanner, MCP server, remote sandbox integration, or autonomous active-testing surface requires a separate explicit architecture and release decision.
