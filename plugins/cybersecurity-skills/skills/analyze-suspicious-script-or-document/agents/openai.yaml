@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Suspicious Script Or Document"
+  short_description: "Decode active scripts and documents without execution"
+  default_prompt: "Use $analyze-suspicious-script-or-document to recover this active-content chain safely."
