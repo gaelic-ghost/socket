@@ -1,0 +1,7 @@
+# Export SOCKET_THINGS_MCP_DIR before starting Hermes; THINGS_AUTH_TOKEN enables update operations.
+mcp_servers:
+  things-app:
+    command: sh
+    args: ["-lc", "cd \"$SOCKET_THINGS_MCP_DIR\" && exec uv run python app/server.py"]
+    env:
+      THINGS_AUTH_TOKEN: "${THINGS_AUTH_TOKEN}"

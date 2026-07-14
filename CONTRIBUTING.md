@@ -106,6 +106,13 @@ The export is generated from `plugins/agent-portability-skills/skills/`; do not
 edit root `skills/` by hand. See the [Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md)
 for the supported surface and MCP translation rules.
 
+When a change adds or changes any `plugins/**/.mcp.json` declaration, update
+the matching checked-in fragment under
+[`docs/maintainers/hermes-mcp/`](./docs/maintainers/hermes-mcp/) and its
+inventory entry in `index.yaml`. The Hermes validator requires every declared
+Socket MCP configuration to be accounted for and rejects committed
+machine-local paths or undocumented environment placeholders.
+
 ### Xcode Workspace
 
 The root [`Socket.xcworkspace`](./Socket.xcworkspace) is a browse-only workspace for maintainers who want to use Xcode's file navigator and Markdown editor, especially Xcode 27 beta's WYSIWYG Markdown surface. It references root docs, the marketplace file, `docs/`, `plugins/`, and `scripts/`, but it intentionally has no schemes, targets, package products, or root build settings.

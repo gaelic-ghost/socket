@@ -1,0 +1,3 @@
+mcp_servers:
+  dice:
+    url: https://mcp.dice.com/mcp

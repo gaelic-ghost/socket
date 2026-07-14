@@ -11,7 +11,7 @@ plugin bundle and does not make Codex-only runtime surfaces portable.
 | Root `skills/` export | GitHub skill tap | Supported |
 | Other Socket skills | Future curated export or local source | Not automatically exported |
 | `.codex-plugin/plugin.json` | None | Not compatible by design |
-| Socket `.mcp.json` | `mcp_servers` in Hermes config | Manual adapter path |
+| Socket `.mcp.json` | Checked-in `mcp_servers` translation fragments | Configuration required |
 | Hooks, apps, and custom agents | Host-specific extension decision | Not automatically compatible |
 | Runtime tools, hooks, commands, or namespaced skills | Python Hermes plugin | Separate implementation |
 
@@ -62,13 +62,22 @@ grouping labels.
 
 The focused validator fails for malformed frontmatter, wrong names, missing
 descriptions, stale generated content, grouping drift, machine-local metadata
-paths, or invalid maintained MCP examples. It warns, without blocking, when a
-description exceeds 240 characters.
+paths, invalid maintained MCP examples, or an unaccounted Socket MCP
+declaration. It warns, without blocking, when a description exceeds 240
+characters.
 
 ## MCP Translation
 
 Socket `.mcp.json` files are Codex declarations, not portable Hermes config.
-Translate the chosen server into the operator's private `~/.hermes/config.yaml`:
+Every declared Socket MCP configuration is translated under
+[`hermes-mcp/`](./hermes-mcp/), with the complete inventory and setup status in
+[`hermes-mcp/index.yaml`](./hermes-mcp/index.yaml). Copy the chosen fragment's
+`mcp_servers` mapping into the operator's private `~/.hermes/config.yaml` and
+complete any listed setup first. The checked-in fragments never require a
+machine-local path: local Cardhop and Things servers instead use documented
+environment variables that the operator sets before starting Hermes.
+
+Hermes config has this shape:
 
 ```yaml
 mcp_servers:
@@ -89,17 +98,21 @@ mcp_servers:
       resources: true
 ```
 
-The checked-in [example YAML](./hermes-mcp-examples.yaml) is syntax-validated.
-Replace placeholders in private configuration, never in Socket. Use a narrow
-tool allowlist for mutation-capable servers, configure required secrets through
-the explicit `env` mapping, and run `hermes mcp test <name>` before use.
+The checked-in [example YAML](./hermes-mcp-examples.yaml) demonstrates optional
+filtering fields, while the per-plugin fragments preserve each Socket server's
+actual name and transport. Replace placeholders in private configuration,
+never in Socket. The translations do not add filtering where no direct
+safety/namespace reason exists. Configure required secrets through the explicit
+`env` mapping or Hermes process environment, then reload MCP configuration with
+`/reload-mcp` and test the enabled server before use.
 
-| Socket declaration | Hermes translation decision |
-| --- | --- |
-| Apple Dev Skills Xcode bridges | Add a stdio `command: "xcrun"` entry with matching bridge arguments only on a Mac with the required Xcode capability. |
-| Cardhop and Things local servers | Use the package's actual server directory and `uv run python app/server.py`; do not infer a path from the Codex declaration. |
-| Cloud Inference Runpod server | Translate the stdio command or remote docs URL separately; provide `RUNPOD_API_KEY` only when required. |
-| Productivity Dice server | Use an HTTP `url` entry; do not assume an API secret for public search. |
+| Socket declaration | Checked-in Hermes translation | Status |
+| --- | --- | --- |
+| Apple Dev Skills Xcode bridges | [`apple-dev-skills.yaml`](./hermes-mcp/apple-dev-skills.yaml) | Manual Xcode setup required |
+| Cardhop local server | [`cardhop-app.yaml`](./hermes-mcp/cardhop-app.yaml) | Local server-directory setup required |
+| Cloud Inference Runpod API and docs servers | [`cloud-inference-skills.yaml`](./hermes-mcp/cloud-inference-skills.yaml) | Ready; API server needs `RUNPOD_API_KEY` |
+| Productivity Dice server | [`productivity-skills.yaml`](./hermes-mcp/productivity-skills.yaml) | Ready; basic public search needs no credential |
+| Things local server | [`things-app.yaml`](./hermes-mcp/things-app.yaml) | Local server-directory setup required; updates need `THINGS_AUTH_TOKEN` |
 
 ## When a Native Hermes Plugin Is Required
 
@@ -112,6 +125,12 @@ and `register(ctx)` entry point, and may call `ctx.register_tool`,
 Do not add a generic Socket bridge or boilerplate plugin merely to mirror Codex
 packaging. Instruction workflows remain skills; external tool servers remain
 MCP. A native plugin is a separate implementation and distribution decision.
+
+The concrete, prioritized future work is in the
+[Hermes native Python plugin adapter plan](./hermes-plugin-adapters.md). It
+classifies each candidate as a tool, hook, slash command, CLI command, bundled
+read-only skill, platform/backend provider, or no adapter, and names the
+required configuration and test shape before any implementation begins.
 
 ## Verification and Limits
 

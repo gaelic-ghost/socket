@@ -53,6 +53,18 @@ def make_repo(tmp_path: Path) -> Path:
         tmp_path / "docs" / "maintainers" / "hermes-mcp-examples.yaml",
         "mcp_servers:\n  example:\n    command: tool\n",
     )
+    write(
+        tmp_path / "plugins" / "example-skills" / ".mcp.json",
+        '{"mcpServers": {"example": {"command": "tool"}}}',
+    )
+    write(
+        tmp_path / "docs" / "maintainers" / "hermes-mcp" / "index.yaml",
+        "translations:\n  example-skills:\n    source: plugins/example-skills/.mcp.json\n    translation: docs/maintainers/hermes-mcp/example-skills.yaml\n    status: ready\n    required_environment: []\n    setup: Ready for use.\n",
+    )
+    write(
+        tmp_path / "docs" / "maintainers" / "hermes-mcp" / "example-skills.yaml",
+        "mcp_servers:\n  example:\n    command: tool\n",
+    )
     return tmp_path
 
 
@@ -63,6 +75,7 @@ def configure_paths(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(validate_hermes_compatibility, "EXPORT_ROOT", repo_root / "skills")
     monkeypatch.setattr(validate_hermes_compatibility, "GROUPINGS_PATH", repo_root / "skills.sh.json")
     monkeypatch.setattr(validate_hermes_compatibility, "MCP_EXAMPLES_PATH", repo_root / "docs" / "maintainers" / "hermes-mcp-examples.yaml")
+    monkeypatch.setattr(validate_hermes_compatibility, "MCP_TRANSLATIONS_INDEX_PATH", repo_root / "docs" / "maintainers" / "hermes-mcp" / "index.yaml")
 
 
 def test_main_accepts_exact_export_and_valid_metadata(
@@ -121,3 +134,26 @@ def test_export_check_detects_missing_skill(tmp_path: Path) -> None:
     shutil.rmtree(export_root / "sync-skills-repo-guidance")
 
     assert not export_hermes_skills.has_exact_export(source_root, export_root)
+
+
+def test_mcp_translation_rejects_missing_socket_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    repo_root = make_repo(tmp_path)
+    configure_paths(repo_root, monkeypatch)
+    (repo_root / "plugins" / "example-skills" / ".mcp.json").unlink()
+
+    with pytest.raises(validate_hermes_compatibility.ValidationError, match="no declared Socket .mcp.json source"):
+        validate_hermes_compatibility.validate_mcp_translations()
+
+
+def test_mcp_translation_rejects_undocumented_environment_placeholder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo_root = make_repo(tmp_path)
+    configure_paths(repo_root, monkeypatch)
+    write(
+        repo_root / "docs" / "maintainers" / "hermes-mcp" / "example-skills.yaml",
+        "mcp_servers:\n  example:\n    command: tool\n    env:\n      API_KEY: ${API_KEY}\n",
+    )
+
+    with pytest.raises(validate_hermes_compatibility.ValidationError, match="undocumented environment placeholders"):
+        validate_hermes_compatibility.validate_mcp_translations()
