@@ -232,7 +232,15 @@ Own project creation, import and language selection, analyzers, data types, symb
 
 #### `reverse-engineering:use-hopper`
 
-Own Hopper document setup, loaders, disassembly, decompiler views, Objective-C and Swift presentation, procedures and types, LLDB integration, scripting, patch state, and exported evidence. Route general Apple binary facts back to the Apple domain skills.
+Own Hopper document setup, loaders, disassembly, decompiler views, Objective-C and Swift presentation, procedures and types, LLDB integration, patch state, and exported evidence. Route direct SDK automation to `script-hopper-analysis`, Hopper MCP connection and data-flow decisions to `connect-hopper-mcp`, and general Apple binary facts back to the Apple domain skills.
+
+#### `reverse-engineering:script-hopper-analysis`
+
+Own the installed Hopper Python SDK and extension automation boundary: runtime calibration, document checkpoints, narrow read-only queries, deliberate applied edits, structured exports, and reproducible script evidence. It must not own the interactive document workflow or invent an MCP transport.
+
+#### `reverse-engineering:connect-hopper-mcp`
+
+Own the operator-local Hopper MCP profile, safe discovery and navigation allowlist, approval and data-disclosure decision, tool calibration, and explicit mutation escalation. Socket does not package Hopper or a portable launcher, so this is guidance plus private client configuration rather than a checked-in Socket MCP declaration.
 
 ### Non-Apple Domain Skills
 
@@ -273,6 +281,7 @@ Cover managed Unity assemblies, IL2CPP layout and metadata, player data, resourc
 - [x] Add `use-cutter-and-rizin` with separate interactive GUI and repeatable CLI paths.
 - [x] Add `use-malimite` with package preflight, privacy, project-state, and failure-routing guidance.
 - [x] Add `use-ghidra` and `use-hopper` as thin tool adapters.
+- [x] Expand direct Ghidra guidance for CodeBrowser, headless analysis, and PyGhidra; split Hopper's interactive document, Python SDK, and local MCP boundaries into composable skills with an explicit Hermes tap export.
 - [x] Add `inspect-dyld-shared-cache` and `perform-apple-dynamic-analysis` on the shared address and environment records.
 - [x] Forward-test the adapters against a universal Mach-O, managed Unity assemblies, an Apple app package, and the installed Cutter, Rizin, Malimite, Ghidra, and Hopper capability states; preserve blocked imports and unusable CLI surfaces as results instead of inventing analysis evidence.
 

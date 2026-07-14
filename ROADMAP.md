@@ -966,7 +966,7 @@ Completed
 - [ ] Decide whether future server-side Swift skills should cover SwiftNIO, deployment, authentication, app sync, or additional database workflows as separate skills.
 - [ ] Cover server-side JVM package/runtime handoffs, persistence, observability, CI, and upgrades after the first project-shape, build-tooling, implementation, and testing slice.
 - [ ] Cover reverse-engineering workflows for .NET assemblies, Unity managed and IL2CPP artifacts, Apple binaries, symbols, crash logs, and decompiler or disassembler output review.
-- [ ] Add tool-specific reverse-engineering guidance for Cutter, Ghidra, Malimite, Hopper, and adjacent tools after hands-on workflow preferences are clearer.
+- [x] Expand hands-on reverse-engineering guidance for direct Ghidra projects, Ghidra headless and PyGhidra work, Hopper interactive documents, Hopper Python SDK automation, and Hopper's operator-local MCP profile with a Hermes-compatible skill-tap export.
 - [ ] Finish Things guidance and maintenance modernization for the mixed Things skill plus bundled MCP server repo.
 - [ ] Keep root README and AGENTS guidance clear about whether Things changes belong in `skills/`, `mcp/`, or plugin metadata.
 - [ ] Expand Things repo-root maintainer tooling once more than one root skill needs Python-backed verification.

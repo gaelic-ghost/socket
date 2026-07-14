@@ -99,7 +99,7 @@ def validate_skill(skill_dir: Path) -> list[Finding]:
     frontmatter, body, parse_findings = parse_frontmatter(skill_path)
     findings.extend(parse_findings)
     if frontmatter is not None:
-        unexpected_fields = sorted(set(frontmatter) - {"name", "description"})
+        unexpected_fields = sorted(set(frontmatter) - {"name", "description", "metadata"})
         if unexpected_fields:
             findings.append(
                 Finding(
@@ -122,6 +122,22 @@ def validate_skill(skill_dir: Path) -> list[Finding]:
             findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "frontmatter description must be non-empty"))
         elif len(description) > 1024:
             findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "frontmatter description exceeds 1024 characters"))
+        metadata = frontmatter.get("metadata")
+        if metadata is not None:
+            if not isinstance(metadata, dict):
+                findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "metadata must be a mapping"))
+            else:
+                hermes_metadata = metadata.get("hermes")
+                if hermes_metadata is not None:
+                    if not isinstance(hermes_metadata, dict):
+                        findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "metadata.hermes must be a mapping"))
+                    else:
+                        category = hermes_metadata.get("category")
+                        tags = hermes_metadata.get("tags")
+                        if not isinstance(category, str) or not category.strip():
+                            findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "metadata.hermes.category must be a non-empty string"))
+                        if not isinstance(tags, list) or not tags or not all(isinstance(tag, str) and tag.strip() for tag in tags):
+                            findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "metadata.hermes.tags must be a non-empty string list"))
 
     if "TODO" in body:
         findings.append(Finding(str(skill_path.relative_to(REPO_ROOT)), "contains unresolved TODO scaffold text"))

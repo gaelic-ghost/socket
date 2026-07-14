@@ -1,0 +1,4 @@
+interface:
+  display_name: "Connect Hopper MCP"
+  short_description: "Connect Hopper MCP with safe tool controls."
+  default_prompt: "Use $connect-hopper-mcp to configure and preflight a safe local Hopper MCP connection."
