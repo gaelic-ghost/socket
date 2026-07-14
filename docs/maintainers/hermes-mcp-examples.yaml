@@ -1,0 +1,18 @@
+# Translate a Socket .mcp.json server into this Hermes config shape manually.
+# Keep secrets in the operator's private configuration rather than this repository.
+mcp_servers:
+  socket_example_stdio:
+    command: "uv"
+    args: ["run", "python", "app/server.py"]
+    env:
+      EXAMPLE_API_KEY: "set-this-in-your-private-config"
+    tools:
+      include: [read_status]
+      prompts: false
+      resources: false
+  socket_example_http:
+    url: "https://example.invalid/mcp"
+    tools:
+      include: [read_docs]
+      prompts: false
+      resources: true

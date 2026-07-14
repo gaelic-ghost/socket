@@ -507,19 +507,21 @@ In Progress
 
 ### Status
 
-Planned
+In progress
 
 ### Scope
 
 - [x] Record the first source-linked platform comparison in [`docs/maintainers/agent-portability-options.md`](./docs/maintainers/agent-portability-options.md).
 - [x] Focus the first implementation pass on locally installed Xcode 27 beta and OpenCode CLI/Desktop, with Zed deferred until the first source-of-truth and export decisions are proven.
 - [x] Record the detailed Xcode install-support plan in [`docs/maintainers/xcode-plugin-install-support-plan.md`](./docs/maintainers/xcode-plugin-install-support-plan.md).
-- [ ] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
+- [x] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
 - [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
 - [x] Rename `agent-plugin-skills` to `agent-portability-skills` so the child plugin name matches the cross-host compatibility role.
 - [ ] Keep Socket Steward tied into this milestone as the repo-local audit, plan, and proposal engine, while `agent-portability-skills` owns reusable agent-facing portability workflows.
 - [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
-- [ ] Keep Hermes Agent support research-blocked until an official documentation or source repository is identified.
+- [x] Add a checked-in Hermes Agent skill tap at root `skills/`, generated from the canonical `agent-portability-skills` source and grouped with `skills.sh.json`.
+- [x] Add `agent-portability-skills:hermes-agent-compatibility` with explicit skill, Codex bundle, MCP, and native Python plugin boundaries.
+- [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `uv run scripts/validate_hermes_compatibility.py`.
 
 ### Tickets
 
@@ -527,6 +529,7 @@ Planned
 - [ ] Add `agent-portability-skills:audit-agent-surface-portability`.
 - [ ] Add `agent-portability-skills:design-agent-host-adapter`.
 - [ ] Add `agent-portability-skills:maintain-codex-plugin-surface`.
+- [x] Document Hermes MCP `mcp_servers` translations and the rule for when a separate `plugin.yaml` / `register(ctx)` implementation is actually required.
 - [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.

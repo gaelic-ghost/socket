@@ -51,6 +51,20 @@ codex plugin marketplace upgrade socket
 
 Newly added plugins can be installed from the same plugin directory inside Codex.
 
+### Hermes Agent
+
+Socket also publishes a small, explicit Hermes skill tap for its portable
+maintainer workflows:
+
+```bash
+hermes skills tap add gaelic-ghost/socket
+hermes skills install gaelic-ghost/socket/hermes-agent-compatibility
+```
+
+This tap exports skills only. Socket's Codex plugin bundles and MCP declarations
+remain host-specific; see the [Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md)
+when you need an MCP translation or a native Hermes plugin.
+
 ### Xcode 27 Beta
 
 For Xcode 27 beta, add Socket through Xcode's official Plug-ins UI:

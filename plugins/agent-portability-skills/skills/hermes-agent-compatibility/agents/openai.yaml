@@ -1,0 +1,2 @@
+interface:
+  default_prompt: "Use $hermes-agent-compatibility to classify a Socket surface as a portable skill, Codex-only bundle, Hermes MCP configuration, native Hermes Python plugin, or intentionally unsupported. Keep Codex manifests separate from Hermes plugin.yaml/register(ctx) behavior, refresh official Hermes docs before claims that can drift, and validate the checked-in Socket skills tap after changing an exported skill."
