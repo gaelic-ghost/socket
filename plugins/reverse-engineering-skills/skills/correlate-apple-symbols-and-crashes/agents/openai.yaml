@@ -1,0 +1,4 @@
+interface:
+  display_name: "Correlate Apple Symbols and Crashes"
+  short_description: "Match Apple binaries, symbols, and crashes."
+  default_prompt: "Use $correlate-apple-symbols-and-crashes to match this crash evidence to the correct binary and symbols."

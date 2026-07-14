@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect Apple Artifact"
+  short_description: "Inspect Apple bundles and Mach-O artifacts."
+  default_prompt: "Use $inspect-apple-artifact to identify and map this Apple bundle or Mach-O artifact."

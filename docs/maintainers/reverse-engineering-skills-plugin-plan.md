@@ -262,11 +262,11 @@ Cover managed Unity assemblies, IL2CPP layout and metadata, player data, resourc
 
 ### Phase 2: Apple Static Analysis Foundation
 
-- [ ] Add `inspect-apple-artifact` first because all later Apple workflows depend on stable artifact identity and address mapping.
-- [ ] Add `recover-apple-runtime-metadata`.
-- [ ] Add `correlate-apple-symbols-and-crashes`.
-- [ ] Add `audit-apple-signing-and-containment`.
-- [ ] Add `analyze-apple-silicon-arm64e`.
+- [x] Add `inspect-apple-artifact` first because all later Apple workflows depend on stable artifact identity and address mapping.
+- [x] Add `recover-apple-runtime-metadata`.
+- [x] Add `correlate-apple-symbols-and-crashes`.
+- [x] Add `audit-apple-signing-and-containment`.
+- [x] Add `analyze-apple-silicon-arm64e`.
 
 ### Phase 3: Tool Workflows And Hands-On Calibration
 

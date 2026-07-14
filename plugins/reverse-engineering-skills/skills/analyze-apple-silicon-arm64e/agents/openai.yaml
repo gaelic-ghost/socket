@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Apple Silicon arm64e"
+  short_description: "Analyze AArch64, arm64e, and Apple mitigations."
+  default_prompt: "Use $analyze-apple-silicon-arm64e to interpret this Apple Silicon or arm64e binary evidence."
