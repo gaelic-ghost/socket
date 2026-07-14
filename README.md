@@ -53,17 +53,18 @@ Newly added plugins can be installed from the same plugin directory inside Codex
 
 ### Hermes Agent
 
-Socket also publishes a small, explicit Hermes skill tap for its portable
-maintainer workflows:
+Socket publishes an explicit Hermes compatibility surface for portable skills
+and translated MCP configuration:
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
 hermes skills install gaelic-ghost/socket/hermes-agent-compatibility
 ```
 
-This tap exports skills only. Socket's Codex plugin bundles and MCP declarations
-remain host-specific; see the [Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md)
-when you need an MCP translation or a native Hermes plugin.
+Codex plugin bundles remain host-specific. See the
+[Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md) for
+the available skill tap, MCP translations, and the cases that need a native
+Hermes plugin.
 
 ### Xcode 27 Beta
 
@@ -133,7 +134,7 @@ Current Socket catalog shape:
 - `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, and AWS handoff to the official AWS Agent Toolkit rather than duplicated AWS MCP, CLI, or SAM setup
 - `cloud-inference-skills`: cloud AI inference, training, model conversion, and GPU infrastructure routing for Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers, with bundled Runpod MCP server configuration, upstream Runpod skill mirrors, and first-party Hugging Face/AWS handoffs
-- `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage-collaboration, and Apple VoIP decision and implementation workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
+- `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage collaboration, Communication Notifications, Push to Talk, VoIP/SIP, documented iOS/iPadOS default communication roles, and app-owned macOS client workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
 - `agentdeck`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `game-dev-skills`: Apple platform game development workflows for SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode game profiling, game-stack routing, and device-aware validation handoffs
