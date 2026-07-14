@@ -1,0 +1,4 @@
+interface:
+  display_name: "Route Security Work"
+  short_description: "Choose the safest cybersecurity workflow and owner"
+  default_prompt: "Use $route-security-work to route this security concern before running tools."

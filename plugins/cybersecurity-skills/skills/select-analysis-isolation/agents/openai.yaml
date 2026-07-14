@@ -1,0 +1,4 @@
+interface:
+  display_name: "Select Analysis Isolation"
+  short_description: "Choose safe container, VM, sandbox, or device isolation"
+  default_prompt: "Use $select-analysis-isolation to choose and verify a safe environment for this untrusted workload."

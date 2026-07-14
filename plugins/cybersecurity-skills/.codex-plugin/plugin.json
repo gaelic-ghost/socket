@@ -1,0 +1,48 @@
+{
+  "name": "cybersecurity-skills",
+  "version": "9.11.0",
+  "description": "Defensive cybersecurity, suspicious-content, malware-analysis, macOS, vulnerability, pentest, and incident-response workflows.",
+  "skills": "./skills/",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cybersecurity-skills",
+  "repository": "https://github.com/gaelic-ghost/socket",
+  "license": "Apache-2.0",
+  "keywords": [
+    "cybersecurity",
+    "malware-analysis",
+    "macos-security",
+    "incident-response",
+    "vulnerability-research",
+    "penetration-testing",
+    "threat-hunting",
+    "yara-x",
+    "defense",
+    "codex",
+    "plugin",
+    "skills"
+  ],
+  "interface": {
+    "displayName": "Cybersecurity Skills",
+    "shortDescription": "Defensive analysis and authorized security testing workflows.",
+    "longDescription": "Guide agents from an ambiguous suspicious artifact, host behavior, vulnerability report, or incident to preserved evidence, appropriate isolation, validated findings, proportionate containment, and an understandable defensive explanation. Includes malware analysis, macOS defense, authorized testing, incident response, hunting, and detection content with explicit handoffs to specialist Socket plugins.",
+    "defaultPrompt": [
+      "Help me safely determine whether this suspicious artifact is dangerous.",
+      "Investigate this Mac without destroying evidence or weakening protections.",
+      "Validate this vulnerability within an explicitly authorized test scope."
+    ],
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cybersecurity-skills",
+    "brandColor": "#22D3EE",
+    "composerIcon": "./assets/cybersecurity-icon.svg",
+    "logo": "./assets/cybersecurity-icon.svg"
+  }
+}

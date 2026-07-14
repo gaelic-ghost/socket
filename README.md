@@ -153,6 +153,7 @@ Current Socket catalog shape:
 
 Placeholder directories for future plugins (not available for install):
 
+- `cybersecurity-skills`
 - `spotify`
 
 ## Development
