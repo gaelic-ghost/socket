@@ -1,0 +1,5 @@
+# Export SOCKET_CARDHOP_MCP_DIR before starting Hermes; it must name the local mcp directory.
+mcp_servers:
+  cardhop_app_socket:
+    command: sh
+    args: ["-lc", "cd \"$SOCKET_CARDHOP_MCP_DIR\" && exec uv run python app/server.py"]

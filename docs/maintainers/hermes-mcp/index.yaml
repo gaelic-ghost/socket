@@ -1,0 +1,38 @@
+# Inventory of every Socket MCP declaration and its checked-in Hermes translation.
+# Each `translation` path is a standalone mcp_servers fragment that an operator can
+# merge into ~/.hermes/config.yaml after completing the documented setup.
+translations:
+  apple-dev-skills:
+    source: plugins/apple-dev-skills/.mcp.json
+    translation: docs/maintainers/hermes-mcp/apple-dev-skills.yaml
+    status: manual_setup_required
+    required_environment: []
+    setup: Xcode must be installed and its MCP capability enabled before either bridge can start.
+  cardhop-app:
+    source: plugins/cardhop-app/.mcp.json
+    translation: docs/maintainers/hermes-mcp/cardhop-app.yaml
+    status: manual_setup_required
+    required_environment:
+      - SOCKET_CARDHOP_MCP_DIR
+    setup: Point SOCKET_CARDHOP_MCP_DIR at a local Cardhop MCP checkout with its uv environment synced.
+  cloud-inference-skills:
+    source: plugins/cloud-inference-skills/.mcp.json
+    translation: docs/maintainers/hermes-mcp/cloud-inference-skills.yaml
+    status: ready
+    required_environment:
+      - RUNPOD_API_KEY
+    setup: Set RUNPOD_API_KEY only when enabling the mutation-capable Runpod API server; the docs server needs no secret.
+  productivity-skills:
+    source: plugins/productivity-skills/.mcp.json
+    translation: docs/maintainers/hermes-mcp/productivity-skills.yaml
+    status: ready
+    required_environment: []
+    setup: The public Dice search endpoint requires no credential for basic search.
+  things-app:
+    source: plugins/things-app/.mcp.json
+    translation: docs/maintainers/hermes-mcp/things-app.yaml
+    status: manual_setup_required
+    required_environment:
+      - SOCKET_THINGS_MCP_DIR
+      - THINGS_AUTH_TOKEN
+    setup: Point SOCKET_THINGS_MCP_DIR at a local Things MCP checkout; THINGS_AUTH_TOKEN is required only for Things update operations.

@@ -529,7 +529,8 @@ In progress
 - [ ] Add `agent-portability-skills:audit-agent-surface-portability`.
 - [ ] Add `agent-portability-skills:design-agent-host-adapter`.
 - [ ] Add `agent-portability-skills:maintain-codex-plugin-surface`.
-- [x] Document Hermes MCP `mcp_servers` translations and the rule for when a separate `plugin.yaml` / `register(ctx)` implementation is actually required.
+- [x] Translate every declared Socket `.mcp.json` into checked-in, validated Hermes `mcp_servers` fragments with an explicit setup/status inventory.
+- [x] Document the prioritized native Hermes Python adapter plan, including per-plugin adapter shape, configuration boundary, and validation strategy without adding speculative bridge code.
 - [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
