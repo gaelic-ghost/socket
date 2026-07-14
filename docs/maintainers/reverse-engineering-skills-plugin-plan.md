@@ -234,7 +234,7 @@ Own project creation, import and language selection, analyzers, data types, symb
 
 Own Hopper document setup, loaders, disassembly, decompiler views, Objective-C and Swift presentation, procedures and types, LLDB integration, scripting, patch state, and exported evidence. Route general Apple binary facts back to the Apple domain skills.
 
-### Existing Non-Apple Domain Candidates
+### Non-Apple Domain Skills
 
 #### `reverse-engineering:inspect-dotnet-assemblies`
 
@@ -304,9 +304,9 @@ The July 14, 2026 Malimite research pass confirmed the spelling `Malimite` and f
 
 - [x] The Socket marketplace exposes `reverse-engineering-skills` as an installable child plugin after real skill content lands.
 - [x] The first skills can help an agent triage artifacts and write reproducible analysis notes before platform-specific decompilation work starts.
-- [ ] Shared routing, review, preservation, and version-comparison skills compose with domain and tool skills without duplicated evidence rules.
-- [ ] Cutter/Rizin, Malimite, Ghidra, and Hopper each have a tested adapter workflow or a documented reason to remain backlog-only.
-- [ ] Stable Apple app-binary, runtime, symbol, signing, and Apple Silicon workflows are usable without depending on beta-only facts.
-- [ ] Beta, dyld-cache, dynamic-analysis, kernel, boot, and firmware workflows require exact-build context and live source checks.
-- [ ] Unity and .NET workflows each have a clear owner skill or an explicit reason to stay backlog-only.
+- [x] Shared routing, review, preservation, and version-comparison skills compose with domain and tool skills without duplicated evidence rules.
+- [x] Cutter/Rizin, Malimite, Ghidra, and Hopper each have a tested adapter workflow or a documented unavailable or unusable capability result.
+- [x] Stable Apple app-binary, runtime, symbol, signing, and Apple Silicon workflows are usable without depending on beta-only facts.
+- [x] Beta, dyld-cache, dynamic-analysis, kernel, boot, and firmware workflows require exact-build context and live source checks.
+- [x] Unity and .NET workflows each have a clear owner skill or an explicit reason to stay backlog-only.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the current install surface.

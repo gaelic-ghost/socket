@@ -28,11 +28,15 @@ MACHINE_LOCAL_MARKERS = ("/Users/", "~/", "../")
 
 @dataclass(frozen=True)
 class Finding:
+    """Describe one actionable metadata validation failure."""
+
     path: str
     message: str
 
 
 def parse_yaml(path: Path) -> object:
+    """Parse a YAML file without turning expected input failures into exceptions."""
+
     try:
         return yaml.safe_load(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
@@ -42,6 +46,8 @@ def parse_yaml(path: Path) -> object:
 
 
 def parse_frontmatter(path: Path) -> tuple[dict[str, object] | None, str, list[Finding]]:
+    """Split and validate one skill entry point's YAML frontmatter."""
+
     text = path.read_text(encoding="utf-8")
     findings: list[Finding] = []
     if not text.startswith("---\n"):
@@ -61,6 +67,8 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, object] | None, str, list[F
 
 
 def validate_links(path: Path, body: str) -> list[Finding]:
+    """Check that relative Markdown links remain inside the plugin and resolve."""
+
     findings: list[Finding] = []
     for target in MARKDOWN_LINK.findall(body):
         if target.startswith(("https://", "http://", "#", "mailto:")):
@@ -80,6 +88,8 @@ def validate_links(path: Path, body: str) -> list[Finding]:
 
 
 def validate_skill(skill_dir: Path) -> list[Finding]:
+    """Validate one authored skill folder and its OpenAI interface metadata."""
+
     findings: list[Finding] = []
     relative_dir = str(skill_dir.relative_to(REPO_ROOT))
     skill_path = skill_dir / "SKILL.md"
@@ -152,20 +162,26 @@ def validate_skill(skill_dir: Path) -> list[Finding]:
 
 
 def validate_manifest() -> list[Finding]:
+    """Validate that plugin metadata exports the authored skills directory."""
+
     try:
         manifest = json.loads(PLUGIN_MANIFEST.read_text(encoding="utf-8"))
     except FileNotFoundError:
         return [Finding(str(PLUGIN_MANIFEST.relative_to(REPO_ROOT)), "is missing")]
     except json.JSONDecodeError as error:
         return [Finding(str(PLUGIN_MANIFEST.relative_to(REPO_ROOT)), f"contains invalid JSON: {error}")]
+    if not isinstance(manifest, dict):
+        return [Finding(str(PLUGIN_MANIFEST.relative_to(REPO_ROOT)), "manifest must be a JSON object")]
     if manifest.get("skills") != "./skills/":
         return [Finding(str(PLUGIN_MANIFEST.relative_to(REPO_ROOT)), "must export the authored ./skills/ directory")]
     return []
 
 
 def main() -> int:
+    """Run every plugin-local validation and return a shell-compatible status."""
+
     findings = validate_manifest()
-    skill_dirs = sorted(path for path in SKILLS_ROOT.iterdir() if path.is_dir())
+    skill_dirs = sorted(path for path in SKILLS_ROOT.iterdir() if path.is_dir()) if SKILLS_ROOT.is_dir() else []
     if not skill_dirs:
         findings.append(Finding("skills", "must contain at least one exported skill directory"))
     for skill_dir in skill_dirs:
