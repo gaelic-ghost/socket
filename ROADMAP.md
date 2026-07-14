@@ -27,6 +27,7 @@
 - [Milestone 24: Apple system integration, runtime evidence, and distribution workflows](#milestone-24-apple-system-integration-runtime-evidence-and-distribution-workflows)
 - [Milestone 25: Apple Creator Studio operator workflows](#milestone-25-apple-creator-studio-operator-workflows)
 - [Milestone 26: Messaging collaboration skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
+- [Milestone 27: Cybersecurity skills plugin](#milestone-27-cybersecurity-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -67,6 +68,7 @@
 - Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Planned
 - Milestone 25: Apple Creator Studio operator workflows - Planned
 - Milestone 26: Messaging collaboration skills plugin - Completed
+- Milestone 27: Cybersecurity skills plugin - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -860,6 +862,42 @@ Completed
 - [x] Apple VoIP, Messages-extension, Shared with You, and Mac operator surfaces have distinct supported-boundary guidance.
 - [x] The root documentation, marketplace, plan, and validation agree on the shipped inventory.
 - [x] Apple requests route to an explicit system contract or app-owned responsibility without claiming undocumented macOS default messaging/calling, Apple Messages access, or Phone automation.
+
+## Milestone 27: Cybersecurity skills plugin
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Add a dedicated Socket-hosted `cybersecurity-skills` child plugin for suspicious-content triage, malware analysis, safe isolation, macOS defense, vulnerability validation, authorized security testing, incident response, detection content, and understandable defensive advice.
+- [ ] Keep the first release guidance-only: no bundled scanners, malware or exploit samples, privileged helper, daemon, hook, MCP server, VM/container image, remote-sandbox credential, or autonomous active-testing runtime.
+- [ ] Keep `reverse-engineering-skills` focused on compiled artifacts and binary internals; use explicit handoffs instead of absorbing reverse engineering into the new plugin.
+- [ ] Route repository-wide and diff-based source scanning to Codex Security when it is available rather than duplicating its scan pipeline.
+- [ ] Make the suspicious-content-to-macOS-defense path the first installable release, with vulnerability and incident-response expansion built on the same evidence, confidence, isolation, and reporting records.
+
+### Tickets
+
+- [x] Record the architecture, ownership, safety, source, validation, and phased implementation plan in [`docs/maintainers/cybersecurity-skills-plugin-plan.md`](./docs/maintainers/cybersecurity-skills-plugin-plan.md).
+- [ ] Create `plugins/cybersecurity-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, authored `skills/`, assets, and focused child validation.
+- [ ] Add the root marketplace entry as unavailable while the plugin is a placeholder; switch it to installable only after a usable skill slice exists.
+- [ ] Add shared routing, evidence preservation, confidence/explanation, isolation selection, and agentic-security-tool workflows.
+- [ ] Add suspicious-content triage, privacy-aware reputation, static/dynamic malware analysis, suspicious script/document, YARA-X, and behavior-mapping workflows.
+- [ ] Add macOS threat assessment, persistence, runtime activity, Objective-See adapter, containment/recovery, and hardening workflows.
+- [ ] Add authorized-test scoping, vulnerability triage/validation/exposure, web/API and network testing, and security-assessment reporting in fixture-validated slices.
+- [ ] Add incident triage, containment, recovery, threat hunting, and detection-content workflows after the first defensive analysis release is stable.
+- [ ] Forward-test benign lookalikes, malicious simulations, isolation failures, macOS VM workflows, scanner false positives, reachable/unreachable vulnerabilities, and non-specialist advice.
+- [ ] Export portable skills through the Hermes tap and validate each host-specific or future MCP/runtime decision explicitly.
+- [ ] Update root README inventory text, marketplace metadata, architecture metadata, and validation when the plugin becomes installable.
+
+### Exit Criteria
+
+- [ ] An agent can move from an ambiguous suspicious artifact or activity report to preserved evidence, an appropriate isolation boundary, a confidence-calibrated assessment, and clear immediate advice.
+- [ ] macOS workflows distinguish signing, notarization, quarantine, XProtect, Gatekeeper, TCC, SIP, process/file/network behavior, persistence, containment, and verified recovery.
+- [ ] Vulnerability and authorized-testing workflows require explicit scope and validate exploitability and exposure rather than treating scanner output, CVSS, or an exploit template as proof.
+- [ ] Deep binary work, repository source scanning, Apple implementation, and stack-specific fixes have explicit owner handoffs with no duplicate catch-all workflows.
+- [ ] Root documentation, marketplace wiring, Codex/Hermes compatibility, plugin metadata, and validation agree on the shipped skill inventory.
 
 ## Small Tickets
 
