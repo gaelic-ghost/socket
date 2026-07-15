@@ -1,7 +1,7 @@
 {
   "name": "game-dev-skills",
-  "version": "9.14.0",
-  "description": "Apple platform game development workflow skills for SpriteKit, SceneKit, GameplayKit, controller input, haptics, profiling, and game-stack routing.",
+  "version": "9.15.0",
+  "description": "Apple platform game development workflow skills for native Metal rendering, Game Porting Toolkit routing, MetalFX, GPU asset streaming, neural rendering, frameworks, input, haptics, and profiling.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -20,6 +20,13 @@
     "core-haptics",
     "realitykit",
     "metal",
+    "metal-4",
+    "metalfx",
+    "game-porting-toolkit",
+    "gptk",
+    "metal-shader-converter",
+    "asset-streaming",
+    "neural-rendering",
     "instruments",
     "xctrace",
     "profiling",
@@ -32,7 +39,7 @@
   "interface": {
     "displayName": "Game Dev Skills",
     "shortDescription": "Apple game development workflow skills for Codex.",
-    "longDescription": "Guide Codex agents through Apple platform game development decisions and implementation work across SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics game feedback, Xcode game profiling, RealityKit and Metal routing, assets, and device-aware validation.",
+    "longDescription": "Guide Codex agents through Apple platform game development decisions and implementation work across native Metal and Metal 4 renderers, Game Porting Toolkit version routing, MetalFX, GPU asset streaming, experimental neural rendering, SpriteKit, SceneKit, GameplayKit, Game Controller input, Core Haptics feedback, Xcode profiling, assets, and device-aware validation.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -42,6 +49,9 @@
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/game-dev-skills",
     "defaultPrompt": [
       "Choose the right Apple game stack before we start implementing.",
+      "Design, repair, or validate this native Apple Metal renderer with an explicit Metal 3 or Metal 4 capability path.",
+      "Choose GPTK 3 or GPTK 4 for this Windows game evaluation or Apple-platform port.",
+      "Integrate MetalFX, GPU asset streaming, or an experimental neural rendering pass with a measured fallback.",
       "Build or repair this SpriteKit scene, game loop, physics, or resource flow.",
       "Build or repair this SceneKit scene, node graph, camera, lighting, or asset flow.",
       "Design or repair this GameplayKit entity, component, state-machine, pathfinding, or agent system.",

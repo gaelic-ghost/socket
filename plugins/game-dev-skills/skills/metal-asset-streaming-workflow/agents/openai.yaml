@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metal Asset Streaming"
+  short_description: "GPU asset residency and streaming guidance."
+  default_prompt: "Use $metal-asset-streaming-workflow to diagnose or design Metal asset streaming and residency."

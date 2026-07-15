@@ -71,7 +71,9 @@ Choose validation based on the claim being made:
 
 - Use `gameplaykit-simulation-workflow` when game rules, entity-component modeling, state machines, agents, pathfinding, randomization, or simulation update order own the problem.
 - Use `xcode-game-profiling-workflow` when frame pacing, stutter, CPU/GPU overlap, memory pressure, thermal state, trace capture, or profiling evidence owns the problem.
-- Keep Metal rendering and shader architecture as a future handoff when the work requires shader code, render-pass architecture, command encoding, resource layout, GPU counters, or Metal debugger workflow beyond profiling triage.
+- Use `metal-game-rendering-workflow` when the work requires native Metal renderer ownership, shader/pipeline work, render-pass architecture, command encoding, resource layout, or a Metal 3/Metal 4 capability boundary.
+- Use `game-porting-toolkit-workflow` for a Windows executable, Direct3D, Vulkan, DXIL, Metal Shader Converter, or GPTK version choice.
+- Use `metalfx-game-rendering-workflow` for temporal upscaling, frame interpolation, or denoising; use `metal-asset-streaming-workflow` for GPU asset residency or sparse streaming; use `metal-neural-rendering-workflow` for an experimental learned rendering pass.
 
 ## Output Shape
 

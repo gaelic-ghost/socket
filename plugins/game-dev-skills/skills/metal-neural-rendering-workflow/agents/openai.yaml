@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metal Neural Rendering"
+  short_description: "Experimental Metal neural rendering guidance."
+  default_prompt: "Use $metal-neural-rendering-workflow to evaluate a neural rendering pass with an explicit fallback."

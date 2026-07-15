@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metal Game Rendering"
+  short_description: "Native Metal renderer architecture guidance."
+  default_prompt: "Use $metal-game-rendering-workflow to design, repair, or validate this native Apple Metal renderer."
