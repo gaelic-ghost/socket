@@ -57,7 +57,8 @@ Apple describes the Game Performance template as a way to profile frame time by 
 - `gameplaykit-simulation-workflow` when component systems, state machines, agents, pathfinding, or randomization are on the hot path.
 - `apple-dev-skills:xcode-testing-workflow` for Instruments, `xctrace`, XCTest, UI test, or trace interpretation mechanics.
 - `apple-dev-skills:xcode-build-run-workflow` for schemes, build configurations, run destinations, and project settings.
-- Future `metal-game-rendering-workflow` when the fix requires shader code, render-pass architecture, Metal resource layout, command encoding, GPU counters, or Metal debugger workflow beyond profiling triage.
+- `metal-game-rendering-workflow` when the fix requires shader code, render-pass architecture, Metal resource layout, command encoding, GPU counters, or Metal debugger workflow beyond profiling triage.
+- `game-porting-toolkit-workflow` when the trace belongs to a GPTK evaluation or a Direct3D/Vulkan port. On macOS 27/Xcode 27 beta, let Apple’s upstream GPTK 4 skills own `gpucapture` and `gpudebug` rather than recreating their workflow here.
 
 ## Output Shape
 

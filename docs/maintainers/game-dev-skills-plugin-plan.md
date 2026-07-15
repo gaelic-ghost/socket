@@ -27,6 +27,12 @@ The child plugin owns its Codex-facing guidance surface:
 
 The root Socket marketplace lists `game-dev-skills` as installable now that first-slice skill content exists. If the plugin ever loses its exported skill content, switch the marketplace entry back to `NOT_AVAILABLE` in the same pass.
 
+## Codex And Hermes Decision
+
+The Metal and GPTK workflows added in this slice are intentionally Codex-only. Their contracts depend on Codex plugin discovery, Xcode MCP `DocumentationSearch`, Dash MCP, and—when chosen—Apple's separate Codex-facing GPTK 4 plugin. They do not define a Socket `.mcp.json`, hook, custom agent, or runtime extension, and Socket must not imply that its Codex plugin manifest is a Hermes plugin.
+
+Do not add these skills to the root Hermes tap until a Hermes-native Apple documentation and tool-routing contract is designed and verified. The absence of a tap export is deliberate, not an incomplete generated export.
+
 ## Boundaries With Existing Plugins
 
 - Use `game-dev-skills` for game-specific authoring, input, haptics, rendering-stack choice, frame pacing, game-loop shape, gameplay architecture, and game profiling handoffs.
@@ -82,10 +88,28 @@ Guide Core Haptics and game-controller haptic feedback design, capability checks
 
 Guide Apple game profiling across frame pacing, stutter, CPU/GPU overlap, Game Performance and Game Memory templates, Metal Performance HUD routing, `xctrace`, trace evidence, and handoffs to rendering or shader work.
 
+### `game-dev-skills:metal-game-rendering-workflow`
+
+Guide native Metal 3 and Metal 4 renderer architecture across presentation, frame contracts, command/resource lifetime, render passes, pipeline state, capability fallbacks, GPU capture, and hardware-aware validation. It owns native renderer work, not D3D or Vulkan porting.
+
+### `game-dev-skills:game-porting-toolkit-workflow`
+
+Route a Windows-game evaluation or source port between GPTK 3 and GPTK 4. It keeps GPTK 3 focused on stable evaluation and shader conversion, then loads Apple’s upstream GPTK 4 skills for Metal 4 source-port milestones rather than copying that corpus into Socket.
+
+### `game-dev-skills:metalfx-game-rendering-workflow`
+
+Guide native MetalFX spatial or temporal scaling, frame interpolation, and temporal denoising through availability checks, input/history contracts, dynamic-resolution changes, presentation ownership, and visual/performance validation.
+
+### `game-dev-skills:metal-asset-streaming-workflow`
+
+Guide GPU-facing texture and mesh loading, budgets, residency, heaps, sparse resources, fast resource loading, upload synchronization, eviction, and memory/hitch evidence.
+
+### `game-dev-skills:metal-neural-rendering-workflow`
+
+Guide carefully gated experimental renderer integration across MetalFX, Metal 4 machine-learning passes, tensor operations, and Metal Performance Primitives while preserving a conventional fallback and reproducible evidence.
+
 ## Proposed Follow-Up Skill Inventory
 
-- `game-dev-skills:metal-game-rendering-workflow`
-- `game-dev-skills:game-asset-pipeline-workflow`
 - `game-dev-skills:gamekit-game-center-workflow`
 - `game-dev-skills:unity-authoring-workflow`
 
@@ -102,5 +126,4 @@ Guide Apple game profiling across frame pacing, stutter, CPU/GPU overlap, Game P
 
 ## Open Questions
 
-- What concrete scope should `metal-game-rendering-workflow` own beyond profiling triage: shader code, render-pass architecture, command encoding, resource layout, Metal debugger workflow, GPU counters, or all of those?
 - Should Unity authoring live in this plugin, or should a later engine-specific plugin own Unity once the authoring scope is concrete?

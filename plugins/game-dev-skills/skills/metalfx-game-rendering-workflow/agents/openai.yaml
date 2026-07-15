@@ -1,0 +1,4 @@
+interface:
+  display_name: "MetalFX Game Rendering"
+  short_description: "MetalFX quality and presentation workflow."
+  default_prompt: "Use $metalfx-game-rendering-workflow to integrate and validate MetalFX in this Apple game renderer."

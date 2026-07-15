@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game Porting Toolkit"
+  short_description: "Choose and guide GPTK 3 or GPTK 4 work."
+  default_prompt: "Use $game-porting-toolkit-workflow to choose GPTK 3 or 4 and plan this Apple game port."

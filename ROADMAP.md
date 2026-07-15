@@ -926,7 +926,9 @@ Completed
 
 ## Backlog Candidates
 
-- [ ] Add `game-dev-skills:metal-game-rendering-workflow` for a later shader and Metal rendering architecture slice. Scope it after concrete use cases decide whether it owns shader code, render-pass architecture, command encoding, resource layout, Metal debugger workflow, GPU counters, or all of those.
+- [x] Add `game-dev-skills:metal-game-rendering-workflow` for native Metal 3 and Metal 4 renderer architecture; keep D3D/Vulkan porting in GPTK routing, MetalFX in its own workflow, and profiling evidence in `xcode-game-profiling-workflow`.
+- [x] Add `game-dev-skills:game-porting-toolkit-workflow` to choose stable GPTK 3 evaluation/shader-conversion work or beta-sensitive GPTK 4 source-port work, then load Apple’s upstream GPTK 4 skills instead of duplicating their corpus.
+- [x] Add `game-dev-skills:metalfx-game-rendering-workflow`, `metal-asset-streaming-workflow`, and `metal-neural-rendering-workflow` for native MetalFX integration, GPU asset residency/streaming, and carefully gated experimental neural rendering.
 - [x] Add the first repo-local Socket Steward prototype as a Python `uv` project under `.agents/socket-steward`, using deterministic read-only audits plus an optional OpenAI Agents SDK `ask` path before any write, LaunchAgent, or app behavior.
 - [x] Expand Socket Steward with a docs-sync planning command that emits structured recommended edits for README, CONTRIBUTING, AGENTS, ROADMAP, marketplace metadata, and child plugin guidance without applying them.
 - [x] Add `docs/agents/` as the repo-local report surface and let Socket Steward write reviewable docs-sync proposal reports there without applying the proposed documentation edits.
