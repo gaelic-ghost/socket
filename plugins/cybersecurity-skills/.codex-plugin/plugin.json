@@ -1,6 +1,6 @@
 {
   "name": "cybersecurity-skills",
-  "version": "9.15.0",
+  "version": "9.16.0",
   "description": "Defensive cybersecurity, suspicious-content, malware-analysis, macOS, vulnerability, pentest, and incident-response workflows.",
   "skills": "./skills/",
   "author": {
