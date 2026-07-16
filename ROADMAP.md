@@ -551,7 +551,7 @@ In progress
 - [ ] Runtime-validate representative Xcode imports before claiming hooks, MCP servers, app config, or custom-agent behavior works inside Xcode.
 - [x] Record Zed Codex external-agent compatibility evidence. Local testing on 2026-06-26 showed Zed's bundled `codex-acp` session running with `__CFBundleIdentifier=dev.zed.Zed`, inherited `HOME=/Users/galew`, no explicit `CODEX_HOME`, Socket plugins at `7.2.1`, and the normal Codex MCP list available.
 - [ ] Evaluate Zed Agent native adapters separately from Codex-in-Zed, including Zed skills roots, Zed MCP configuration, and any export or install path that should stay distinct from Codex plugin marketplace guidance.
-- [ ] Evaluate Claude Code adapters for `.claude/skills`, `.claude/agents`, project settings, MCP settings, and plugin policy after the Xcode and OpenCode first pass.
+- [x] Add a Claude Code marketplace, Cowork skills-first compatibility boundary, explicit per-plugin inventory, local-MCP adapters, and validation after the first Socket portability audit and adapter-design skills land.
 - [ ] Add temporary-home smoke tests for any adapter that becomes write-capable.
 
 ### Exit Criteria

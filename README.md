@@ -66,6 +66,22 @@ Codex plugin bundles remain host-specific. See the
 the available skill tap, MCP translations, and the cases that need a native
 Hermes plugin.
 
+### Claude Code and Cowork
+
+Socket also publishes a Claude marketplace. In Claude Code, add it with:
+
+```bash
+claude plugin marketplace add gaelic-ghost/socket
+```
+
+Then install the individual Socket plugins you want. Cowork users can add the
+same GitHub marketplace from **Customize → Plugins**. Socket skills work in
+both hosts; local Mac integrations such as Xcode, Cardhop, and Things are
+Claude Code-only. Speak Swiftly remains unavailable in this catalog until its
+standalone payload has a Claude-native hook boundary. See the
+[Claude compatibility guide](./docs/maintainers/claude-compatibility.md) for
+the full support boundary and update flow.
+
 ### Xcode 27 Beta
 
 For Xcode 27 beta, add Socket through Xcode's official Plug-ins UI:

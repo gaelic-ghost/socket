@@ -175,7 +175,6 @@ def test_main_writes_json_report_to_output_path(tmp_path: Path) -> None:
 
 def test_swiftui_or_swiftdata_skills_include_direct_swiftdata_rule() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    skill_paths = sorted((repo_root / "plugins").glob("*/skills/*/SKILL.md"))
     swiftui_or_swiftdata_paths = [
         repo_root / "plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md",
         repo_root / "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md",

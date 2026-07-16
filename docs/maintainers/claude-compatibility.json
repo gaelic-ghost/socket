@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "catalog": "socket",
+  "entries": {
+    "agent-portability-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "agentdeck": { "claudeCode": "not_supported", "cowork": "not_supported", "note": "Codex thread-title hooks have no Claude equivalent." },
+    "android-dev-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "apple-creator-studio-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "apple-dev-skills": { "claudeCode": "local_mcp", "cowork": "skills_only", "note": "Xcode bridge requires the local Mac and Xcode." },
+    "cardhop-app": { "claudeCode": "local_mcp", "cowork": "skills_only", "note": "Cardhop server runs on the local Mac." },
+    "cloud-deployment-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "cloud-inference-skills": { "claudeCode": "remote_mcp", "cowork": "remote_mcp", "note": "Runpod endpoints are public remote MCP services; authentication remains operator-managed." },
+    "cybersecurity-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "dotnet-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "game-dev-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "messaging-collaboration-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "network-protocol-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "productivity-skills": { "claudeCode": "remote_mcp", "cowork": "remote_mcp", "note": "Dice is a public remote MCP server." },
+    "python-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "reverse-engineering-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "rust-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "server-side-jvm": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "server-side-swift": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "speak-swiftly": { "claudeCode": "not_supported", "cowork": "not_supported", "note": "The standalone payload auto-loads a Codex-only hook with a hard-coded Codex cache path; add a Claude-native payload there before exposing it here." },
+    "spotify": { "claudeCode": "not_supported", "cowork": "not_supported", "note": "Socket placeholder without a usable skill payload." },
+    "swift-lang": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "swiftasb-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Skill guidance is portable; live Codex app-server probes remain Codex-specific." },
+    "things-app": { "claudeCode": "local_mcp", "cowork": "skills_only", "note": "Things server runs on the local Mac." },
+    "web-dev-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." }
+  }
+}

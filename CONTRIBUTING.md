@@ -109,6 +109,19 @@ from the sources declared by the export script; see the
 the required skill-export decision, MCP translation rules, and native-plugin
 boundary.
 
+Every new or materially changed Socket marketplace plugin also needs a checked
+Claude Code and Cowork classification. Keep the Claude marketplace and
+[`docs/maintainers/claude-compatibility.json`](./docs/maintainers/claude-compatibility.json)
+aligned, then run:
+
+```bash
+uv run scripts/validate_claude_compatibility.py
+```
+
+Use the [Claude compatibility guide](./docs/maintainers/claude-compatibility.md)
+for the skills-first Cowork boundary, local-MCP adapter rules, and selective
+subagent policy.
+
 When a change adds or changes any `plugins/**/.mcp.json` declaration, update
 the matching checked-in fragment under
 [`docs/maintainers/hermes-mcp/`](./docs/maintainers/hermes-mcp/) and its
@@ -223,6 +236,7 @@ Root baseline validation:
 uv sync --dev
 uv run mypy
 uv run scripts/validate_socket_metadata.py
+uv run scripts/validate_claude_compatibility.py
 ```
 
 When the change intentionally bumps released version numbers across the superproject, inventory or update the maintained manifest surfaces with:

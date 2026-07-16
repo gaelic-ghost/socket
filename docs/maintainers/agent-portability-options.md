@@ -14,6 +14,17 @@ Treat plugins as host-specific package adapters.
 
 Codex, Claude Code, OpenCode, Xcode, and Zed each expose different plugin or extension concepts. Socket should not redefine its root as a generic plugin bundle until a concrete target needs that shape. Keep the current root as a Codex marketplace catalog, then add per-host export or install support as deliberate adapter outputs.
 
+### Implemented Claude Adapter
+
+Claude Code and Cowork now have a deliberate Socket adapter rather than a
+future evaluation placeholder. The root
+[`/.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json)
+reuses Socket's existing plugin roots with Claude marketplace metadata, while
+[`claude-compatibility.md`](./claude-compatibility.md) records the complete
+per-plugin boundary. Claude Code supports the full classified catalog; Cowork
+uses the same skills but only public remote MCP servers. Local Mac MCP servers
+remain Claude Code-only.
+
 Use `agent-portability-skills` as the reusable skill layer for these decisions. Socket Steward remains the repo-local audit, plan, and proposal engine under `.agents/socket-steward/`; Agent Portability Skills should own the agent-facing workflows that decide what is portable, what is Codex-specific, and what needs a host adapter.
 
 ## Near-Term Focus
@@ -91,9 +102,9 @@ Sources:
 - [Xcode 27 agentic tooling skill plan](./xcode-27-agentic-tooling-plan.md)
 - [Xcode plug-in install support plan](./xcode-plugin-install-support-plan.md)
 
-### Claude Code
+### Claude Code and Cowork
 
-Claude Code has a richer configuration hierarchy than most targets in this pass. Current documentation describes managed, user, project, and local scopes. It also documents separate locations for settings, subagents, MCP servers, plugins, and `CLAUDE.md` context.
+Claude Code has a richer configuration hierarchy than most targets in this pass. Current documentation describes managed, user, project, and local scopes. It also documents separate locations for settings, subagents, MCP servers, plugins, and `CLAUDE.md` context. Socket now ships the validated marketplace adapter described in [Claude compatibility](./claude-compatibility.md).
 
 Important current paths and surfaces:
 
@@ -109,16 +120,18 @@ Important current paths and surfaces:
 
 Practical Socket implication:
 
-- Skills can likely be exported with little transformation when names and frontmatter stay within common constraints.
-- Codex `agents/openai.yaml` custom agents are not portable as-is; Claude Code needs `.claude/agents/` definitions.
-- Codex marketplace metadata does not become a Claude Code marketplace automatically. A Claude adapter needs its own settings, marketplace, or plugin registration path.
-- The Claude Code policy model is worth supporting explicitly because it can restrict customization to plugin-provided or managed surfaces.
+- The checked-in `.claude-plugin/marketplace.json` exposes every non-excluded Socket plugin root with `strict: false`, preserving a single authored skill payload.
+- Codex `agents/openai.yaml` custom agents are not portable as-is; Claude `agents/*.md` definitions are a selective future addition only when a role has a genuine delegated job.
+- Cowork consumes the same skill bundles, but only public remote MCP servers are usable there. Local Mac services remain Claude Code-only.
+- The Claude Code policy model remains relevant because it can restrict customization to plugin-provided or managed surfaces.
 
 Sources:
 
 - [Claude Code settings](https://code.claude.com/docs/en/settings)
 - [Claude Code MCP](https://code.claude.com/docs/en/mcp)
 - [Claude Code subagents](https://code.claude.com/docs/en/sub-agents)
+- [Claude Code plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
+- [Cowork plugins](https://claude.com/docs/cowork/guide/plugins)
 
 ### OpenCode
 

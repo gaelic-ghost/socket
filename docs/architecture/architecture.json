@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-07-14T19:14:11.979386+00:00",
+  "detectedAt": "2026-07-16T22:38:25.224646+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -77,6 +77,10 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/apple-creator-studio-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/app-extension-architecture-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -172,6 +176,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/file-provider-and-finder-sync-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
     },
     {
@@ -189,6 +197,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/mailkit-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -548,7 +560,27 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/game-porting-toolkit-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/metal-asset-streaming-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/metal-game-rendering-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/metal-neural-rendering-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/game-dev-skills/skills/metalfx-game-rendering-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -792,6 +824,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/connect-hopper-mcp/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
     },
     {
@@ -837,6 +873,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/script-hopper-analysis/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -1651,6 +1691,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/app-extension-architecture-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/app-extension-architecture-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/app-intents-workflow/SKILL.md"
         }
       ],
@@ -1927,6 +1979,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/file-provider-and-finder-sync-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/file-provider-and-finder-sync-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
         }
       ],
@@ -1982,6 +2046,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/macos-window-management-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/mailkit-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/mailkit-workflow"
     },
     {
       "evidence": [
@@ -2983,6 +3059,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/game-porting-toolkit-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/game-porting-toolkit-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
         }
       ],
@@ -2990,6 +3078,54 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:game-dev-skills/gameplaykit-simulation-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/metal-asset-streaming-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/metal-asset-streaming-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/metal-game-rendering-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/metal-game-rendering-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/metal-neural-rendering-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/metal-neural-rendering-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/game-dev-skills/skills/metalfx-game-rendering-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:game-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:game-dev-skills/metalfx-game-rendering-workflow"
     },
     {
       "evidence": [
@@ -3655,6 +3791,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/connect-hopper-mcp/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/connect-hopper-mcp"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
         }
       ],
@@ -3794,6 +3942,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:reverse-engineering-skills/review-decompiler-output"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/script-hopper-analysis/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/script-hopper-analysis"
     },
     {
       "evidence": [
@@ -5160,6 +5320,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/app-extension-architecture-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/app-extension-architecture-workflow",
+      "path": "plugins/apple-dev-skills/skills/app-extension-architecture-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/app-intents-workflow/SKILL.md"
         }
       ],
@@ -5436,6 +5608,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/file-provider-and-finder-sync-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/file-provider-and-finder-sync-workflow",
+      "path": "plugins/apple-dev-skills/skills/file-provider-and-finder-sync-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md"
         }
       ],
@@ -5490,6 +5674,18 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/macos-window-management-workflow",
       "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/mailkit-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/mailkit-workflow",
+      "path": "plugins/apple-dev-skills/skills/mailkit-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -6492,12 +6688,72 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/game-porting-toolkit-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/game-porting-toolkit-workflow",
+      "path": "plugins/game-dev-skills/skills/game-porting-toolkit-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:game-dev-skills/gameplaykit-simulation-workflow",
       "path": "plugins/game-dev-skills/skills/gameplaykit-simulation-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/metal-asset-streaming-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/metal-asset-streaming-workflow",
+      "path": "plugins/game-dev-skills/skills/metal-asset-streaming-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/metal-game-rendering-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/metal-game-rendering-workflow",
+      "path": "plugins/game-dev-skills/skills/metal-game-rendering-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/metal-neural-rendering-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/metal-neural-rendering-workflow",
+      "path": "plugins/game-dev-skills/skills/metal-neural-rendering-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/game-dev-skills/skills/metalfx-game-rendering-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:game-dev-skills/metalfx-game-rendering-workflow",
+      "path": "plugins/game-dev-skills/skills/metalfx-game-rendering-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -7164,6 +7420,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/connect-hopper-mcp/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/connect-hopper-mcp",
+      "path": "plugins/reverse-engineering-skills/skills/connect-hopper-mcp/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/reverse-engineering-skills/skills/correlate-apple-symbols-and-crashes/SKILL.md"
         }
       ],
@@ -7302,6 +7570,18 @@
       "kind": "codex-skill",
       "name": "skill:reverse-engineering-skills/review-decompiler-output",
       "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/script-hopper-analysis/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/script-hopper-analysis",
+      "path": "plugins/reverse-engineering-skills/skills/script-hopper-analysis/SKILL.md"
     },
     {
       "dependencies": [],

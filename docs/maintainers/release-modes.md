@@ -87,6 +87,7 @@ alongside the root marketplace validator before this gate:
 ```bash
 uv run scripts/validate_socket_metadata.py
 uv run scripts/validate_hermes_compatibility.py
+uv run scripts/validate_claude_compatibility.py
 ```
 
 Then capture evidence from that exact commit and generate the release-note
@@ -143,6 +144,7 @@ Before tagging `socket`:
 
 - confirm the subtree policy table above was followed
 - run `uv run scripts/validate_socket_metadata.py`
+- when the release touches the Claude marketplace, Claude inventory, or Claude MCP adapters, also run `uv run scripts/validate_claude_compatibility.py`
 - when the release touches the Hermes skill tap, also run `uv run scripts/validate_hermes_compatibility.py`
 - confirm local `main` is fast-forwarded to `origin/main`
 - run `scripts/release.sh release-ready X.Y.Z`
