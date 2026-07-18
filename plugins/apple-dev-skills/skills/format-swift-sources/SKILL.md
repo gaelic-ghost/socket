@@ -28,6 +28,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Recommend `bootstrap-swift-package` when the user is creating a brand new Swift package and style tooling is only one part of that scaffold.
 - Recommend `bootstrap-xcode-app-project` when the user is creating a brand new native Apple app project and style tooling is only one part of that scaffold.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the task shifts from style-tooling integration to ordinary SwiftPM package execution.
+- Recommend `swift-package-extension-workflow` when the task shifts from formatter-specific setup to general plugin capability, permissions, generated outputs, dual-toolchain behavior, or Xcode handoff policy.
 - Recommend `xcode-build-run-workflow` when the task shifts from style-tooling integration to active Xcode execution, diagnostics, or mutation work in an existing project.
 - Recommend `xcode-testing-workflow` when the task shifts from style-tooling integration to active Xcode test work.
 - Recommend `structure-swift-sources` when the task shifts from formatter or linter setup into file splitting, file moves, declaration grouping, or TODO/FIXME ledger cleanup.
@@ -108,6 +109,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - For shared repos, prefer the Git pre-commit path over build-phase-only enforcement when the goal is to keep commits formatted before review and CI.
 - For combined cleanup work, use this skill before `structure-swift-sources` to establish the formatting baseline, and run it again after that skill finishes so the post-split or post-move tree is normalized.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the task becomes ordinary SwiftPM package execution work.
+- Recommend `swift-package-extension-workflow` when formatter or linter plugin work needs general SwiftPM extension policy or Swiftly/Xcode comparison.
 - Recommend `xcode-build-run-workflow` when the task becomes Xcode execution or diagnostics work.
 - Recommend `xcode-testing-workflow` when the task becomes Xcode test work.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-app-project` when the user really needs a full project scaffold instead of isolated style-tooling setup.

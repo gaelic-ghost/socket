@@ -41,7 +41,7 @@ def infer_operation_type_from_request(request: str | None) -> str | None:
 
     checks: list[tuple[str, tuple[str, ...]]] = [
         ("run", (" run", "launch", "execute", "start")),
-        ("plugin", ("plugin", "plugins")),
+        ("plugin", ("plugin", "plugins", "macro", "macros", "trait", "traits", "generated source", "codegen")),
         ("toolchain-management", ("toolchain", "swift version", "xcrun", "xcodebuild", "metal toolchain", "sdk")),
         ("manifest-dependencies", ("package.swift", "manifest", "dependency", "dependencies", "add package", "add target", "resolve", "update package", "package resource", "bundle.module", "metallib", "resource.")),
         ("package-inspection", ("describe", "dump-package", "show dependencies", "inspect package", "inspect the package", "package graph")),
@@ -51,6 +51,8 @@ def infer_operation_type_from_request(request: str | None) -> str | None:
     ]
 
     padded = f" {text} "
+    if any(needle in padded for needle in (" plugin", " macro", " trait", " generated source", " codegen")):
+        return "plugin"
     if any(needle in padded for needle in (" test", " tests", "testing", "xctest", "swift testing", "xctestplan", "spec")):
         return "test"
     for operation_type, needles in checks:
@@ -290,6 +292,21 @@ def main() -> int:
                 "repo_shape": discover_repo_shape(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Use swift-package-testing-workflow because this request is primarily about package tests.",
+            },
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
+    if operation_type == "plugin":
+        payload = {
+            "status": "handoff",
+            "path_type": "fallback",
+            "output": {
+                "operation_type": operation_type,
+                "operation_type_source": "explicit" if args.operation_type else "inferred",
+                "repo_shape": discover_repo_shape(args.repo_root),
+                "planned_commands": [],
+                "next_step": "Use swift-package-extension-workflow because this request is primarily about a package plugin, macro, trait, generated source, or plugin permission.",
             },
         }
         print(json.dumps(payload, indent=2, sort_keys=True))

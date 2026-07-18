@@ -42,6 +42,14 @@ class SwiftPackageBuildRunWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "handoff")
             self.assertIn("swift-package-testing-workflow", payload["output"]["next_step"])
 
+    def test_handoffs_package_extensions_to_extension_skill(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.2\n", encoding="utf-8")
+            code, payload = self.run_script("--request", "inspect the package traits", "--repo-root", tmpdir)
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "handoff")
+            self.assertIn("swift-package-extension-workflow", payload["output"]["next_step"])
+
     def test_handoffs_mixed_root_without_opt_in(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")

@@ -77,6 +77,11 @@ compiler, SourceKit service, language server, MCP declaration, hook, or native
 Hermes runtime. Hermes skill-tap support therefore preserves their real
 instruction contract without presenting the Codex plugin manifest as portable.
 
+The exported Swift package extension workflow is likewise portable guidance.
+It resolves operator-installed Swiftly and Xcode tools and plans SwiftPM plugin,
+macro, trait, generated-source, and permission work without bundling a compiler,
+plugin runtime, MCP server, or native Hermes extension.
+
 ## Maintainer Workflow
 
 1. Classify each changed surface before editing: portable skill, translated MCP,

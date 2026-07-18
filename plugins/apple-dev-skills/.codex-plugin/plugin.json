@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
   "version": "9.17.0",
-  "description": "Apple development workflows for Codex, including app extensions, MailKit, File Provider, Finder Sync, App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, local Tips/HelpViewer guide discovery, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
+  "description": "Apple development workflows for Codex, including SwiftPM plugins, macros, traits, app extensions, MailKit, File Provider, Finder Sync, App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -15,6 +15,10 @@
     "skills",
     "apple",
     "swift",
+    "swiftpm",
+    "package-plugins",
+    "macros",
+    "package-traits",
     "xcode",
     "xcodegen",
     "migration",
@@ -100,7 +104,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple extension, MailKit, File Provider, Swift, image/media repair, SwiftUI, TipKit, Xcode, AppKit, Safari, security, OpenAPI, and DocC workflows for Codex.",
+    "shortDescription": "Apple extension, SwiftPM, Swift, image/media, SwiftUI, Xcode, AppKit, security, OpenAPI, and DocC workflows for Codex.",
     "longDescription": "Bundle Apple-platform development skills for app extension architecture, MailKit, File Provider and Finder Sync, PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence and String Catalog localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
@@ -142,6 +146,7 @@
       "Plan safe Apple Developer provisioning or CloudKit automation using official App Store Connect REST APIs, Xcode-aware discovery, cktool, or CKTool JS; keep credentials local, show a dry run first, and route portal-only configuration to the Apple Developer Portal.",
       "Add or diagnose a generated Swift OpenAPI client in this Apple app using OpenAPIURLSession and current Apple docs.",
       "Help me build, test, or debug this Swift or Xcode project using the repo's Apple workflows.",
+      "Design or diagnose a SwiftPM build tool plugin, command plugin, macro target, package trait matrix, generated-source flow, or plugin permission across Swiftly and Xcode toolchains.",
       "Design, migrate, test, or integrate SwiftData persistence using the dedicated SwiftData workflow and current Apple documentation.",
       "Add, configure, present, test, or troubleshoot TipKit inline tips and tooltip popovers using current Apple documentation.",
       "Write or review DocC symbol comments, articles, extension files, and landing-page structure for this Swift repository.",

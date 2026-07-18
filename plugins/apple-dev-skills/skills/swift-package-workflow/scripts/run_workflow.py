@@ -42,7 +42,7 @@ def infer_operation_type_from_request(request: str | None) -> str | None:
     checks: list[tuple[str, tuple[str, ...]]] = [
         ("test", (" test", " tests", "testing", "xctest", "swift testing", "xctestplan", "spec")),
         ("run", (" run", "launch", "execute", "start")),
-        ("plugin", ("plugin", "plugins")),
+        ("plugin", ("plugin", "plugins", "macro", "macros", "trait", "traits", "generated source", "codegen")),
         ("toolchain-management", ("toolchain", "swift version", "xcrun", "xcodebuild", "metal toolchain", "sdk")),
         ("manifest-dependencies", ("package.swift", "manifest", "dependency", "dependencies", "add package", "add target", "resolve", "update package", "package resource", "bundle.module", "metallib", "resource.")),
         ("package-inspection", ("describe", "dump-package", "show dependencies", "inspect package", "inspect the package", "package graph")),
@@ -189,6 +189,8 @@ def specialized_handoff(operation_type: str, repo_shape: dict, request: str | No
 def recommended_skill(operation_type: str) -> str:
     if operation_type == "test":
         return "swift-package-testing-workflow"
+    if operation_type == "plugin":
+        return "swift-package-extension-workflow"
     return "swift-package-build-run-workflow"
 
 
@@ -199,7 +201,9 @@ def routing_summary(operation_type: str, repo_shape: dict, request: str | None) 
         if repo_shape["xctestplans"]:
             return "Package testing request with existing .xctestplan context; prefer the narrower testing skill so it can decide whether plain swift test or Xcode-native test-plan handling is the better fit."
         return "Package testing request; prefer the narrower testing skill so Swift Testing, XCTest holdouts, fixtures, and flake diagnosis stay in one place."
-    if operation_type in {"build", "run", "manifest-dependencies", "plugin", "toolchain-management", "mutation"}:
+    if operation_type == "plugin":
+        return "Package extension request; prefer the extension skill so plugins, macros, traits, generated source, permissions, and dual-toolchain evidence stay in one owner."
+    if operation_type in {"build", "run", "manifest-dependencies", "toolchain-management", "mutation"}:
         if resource_focused and repo_shape["xcode_markers"]:
             return "Package resource request with nearby Xcode markers; prefer the narrower build-run skill so it can either stay on SwiftPM or escalate cleanly into Xcode-managed bundle integration."
         if resource_focused:

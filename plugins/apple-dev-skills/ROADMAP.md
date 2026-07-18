@@ -79,7 +79,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 38: DocC Workflow - Completed
 - Milestone 39: Swift Package Index Workflow - Planned
 - Milestone 40: SwiftUI UI Architecture Workflow - Completed
-- Milestone 41: Swift Package Extension Workflow - Planned
+- Milestone 41: Swift Package Extension Workflow - Completed
 - Milestone 42: Safari Extension And Control Workflow - Completed
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
@@ -399,54 +399,56 @@ Completed Milestone 40 by shipping `swiftui-app-architecture-workflow`, groundin
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Add a dedicated SwiftPM package-extension workflow for package plugins, Xcode-capable package plugins, Swift macros, package traits, generated source, plugin permissions, and trait-aware build or test planning.
-- [ ] Keep this workflow package-first while giving agents clear handoff rules for Xcode-managed execution, Xcode project plugin context, generated build products, macro expansion inspection, and package-trait matrices.
-- [ ] Treat this as a durable building-block change: it keeps `swift-package-build-run-workflow` from becoming a broad catch-all again and gives package-extension work one explicit owner.
-- [ ] Keep the active Swift support window focused on the latest stable minor and previous stable minor. Current minimum implementation floor: Swift `6.2`.
+- [x] Add a dedicated SwiftPM package-extension workflow for package plugins, Xcode-capable package plugins, Swift macros, package traits, generated source, plugin permissions, and trait-aware build or test planning.
+- [x] Keep this workflow package-first while giving agents clear handoff rules for Xcode-managed execution, Xcode project plugin context, generated build products, macro expansion inspection, and package-trait matrices.
+- [x] Treat this as a durable building-block change: it keeps `swift-package-build-run-workflow` from becoming a broad catch-all again and gives package-extension work one explicit owner.
+- [x] Keep the active Swift support window focused on the latest stable minor and previous stable minor. Current minimum implementation floor: Swift `6.2`.
 
 ### Design Direction
 
-- [ ] Ship the skill as `swift-package-extension-workflow`.
-- [ ] Keep `swift-package-build-run-workflow` focused on ordinary manifest, dependency, resource, build, and run work, and route plugin, macro, trait, and generated-source questions into the new skill.
-- [ ] Keep `swift-package-testing-workflow` focused on tests, fixtures, `.xctestplan`, profiling evidence, and test diagnosis, but teach it to hand off trait-matrix or macro/plugin test-shape work when the package-extension concern is primary.
-- [ ] Keep `swift-package-workflow` as a compatibility router, not a second detailed implementation surface.
-- [ ] Keep tool-specific formatter or linter plugin details in `format-swift-sources`, while linking back to the general package-extension workflow for plugin policy, permissions, generated files, and Xcode handoffs.
+- [x] Ship the skill as `swift-package-extension-workflow`.
+- [x] Keep `swift-package-build-run-workflow` focused on ordinary manifest, dependency, resource, build, and run work, and route plugin, macro, trait, and generated-source questions into the new skill.
+- [x] Keep `swift-package-testing-workflow` focused on tests, fixtures, `.xctestplan`, profiling evidence, and test diagnosis, but teach it to hand off trait-matrix or macro/plugin test-shape work when the package-extension concern is primary.
+- [x] Keep `swift-package-workflow` as a compatibility router, not a second detailed implementation surface.
+- [x] Keep tool-specific formatter or linter plugin details in `format-swift-sources`, while linking back to the general package-extension workflow for plugin policy, permissions, generated files, and Xcode handoffs.
 
 ### Planned Reference Structure
 
-- [ ] `package-plugins-build-command-and-xcode.md`: distinguish build tool plugins, command plugins, Xcode-capable command plugins, plugin products, target plugin usage, and when Xcode-managed context matters.
-- [ ] `plugin-permissions-sandbox-and-outputs.md`: document write permissions, network permissions, sandbox behavior, generated outputs, cache/output directories, CI repeatability, and user-facing permission reasons.
-- [ ] `swift-macros-package-shape.md`: document macro package shape, compiler-plugin dependencies, macro target boundaries, expansion inspection, diagnostics, and tests.
-- [ ] `package-traits-feature-flags.md`: document trait design, default traits, explicit consumer choices, optional dependencies, `swift package show-traits`, `--traits`, `--enable-all-traits`, and `--disable-default-traits`.
-- [ ] `generated-source-and-build-products.md`: document what should be generated at build time, what should be checked in, and when a plugin is more ceremony than value.
-- [ ] `xcode-handoff-conditions.md`: document when package extension work should move to `xcode-build-run-workflow`, including Xcode project plugin context, app-hosted execution, generated file membership, and scheme/destination-sensitive behavior.
-- [ ] `cli-command-matrix.md`: include command plugin listing and execution, trait commands and flags, macro-related build/test checks, and Xcode-aware fallback commands.
+- [x] `package-plugins-build-command-and-xcode.md`: distinguish build tool plugins, command plugins, Xcode-capable command plugins, plugin products, target plugin usage, and when Xcode-managed context matters.
+- [x] `plugin-permissions-sandbox-and-outputs.md`: document write permissions, network permissions, sandbox behavior, generated outputs, cache/output directories, CI repeatability, and user-facing permission reasons.
+- [x] `swift-macros-package-shape.md`: document macro package shape, compiler-plugin dependencies, macro target boundaries, expansion inspection, diagnostics, and tests.
+- [x] `package-traits-feature-flags.md`: document trait design, default traits, explicit consumer choices, optional dependencies, `swift package show-traits`, `--traits`, `--enable-all-traits`, and `--disable-default-traits`.
+- [x] `generated-source-and-build-products.md`: document what should be generated at build time, what should be checked in, and when a plugin is more ceremony than value.
+- [x] `xcode-handoff-conditions.md`: document when package extension work should move to `xcode-build-run-workflow`, including Xcode project plugin context, app-hosted execution, generated file membership, and scheme/destination-sensitive behavior.
+- [x] `cli-command-matrix.md`: include command plugin listing and execution, trait commands and flags, macro-related build/test checks, and Xcode-aware fallback commands.
 
 ### Implementation Slices
 
-- [ ] Slice 1: add the new skill skeleton, workflow references, docs anchors, and initial runtime router contract.
-- [ ] Slice 2: update existing SwiftPM skills to route plugin, macro, trait, and generated-source work into `swift-package-extension-workflow`.
-- [ ] Slice 3: update shared Swift package snippets, bootstrap guidance, and sync assets with the current Swift `6.2` floor, the latest stable Swift toolchain window, and trait-aware package guidance.
-- [ ] Slice 4: add tests for skill metadata, routing, reference presence, command planning, support-window enforcement, and guidance-sync preservation.
-- [ ] Slice 5: run the docs validator, pytest suite, and any focused bootstrap dry-run checks needed before release.
+- [x] Slice 1: add the new skill skeleton, workflow references, docs anchors, and initial runtime router contract.
+- [x] Slice 2: update existing SwiftPM skills to route plugin, macro, trait, and generated-source work into `swift-package-extension-workflow`.
+- [x] Slice 3: update shared Swift package snippets, bootstrap guidance, and sync assets with the current Swift `6.2` floor, the latest stable Swift toolchain window, and trait-aware package guidance.
+- [x] Slice 4: add tests for skill metadata, routing, reference presence, command planning, support-window enforcement, and guidance-sync preservation.
+- [x] Slice 5: run the docs validator, pytest suite, and any focused bootstrap dry-run checks needed before release.
 
 ### Docs Anchors To Gather
 
-- [ ] Swift Package Manager package plugin APIs, including build tool plugins, command plugins, plugin products, target plugin usage, permissions, and Xcode project plugin contexts. Start from the Swift Package Manager [PackageDescription API](https://docs.swift.org/package-manager/PackageDescription/index.html), Apple [`PackageDescription`](https://developer.apple.com/documentation/packagedescription), and Swift Evolution [SE-0303](https://forums.swift.org/t/se-0303-package-manager-extensible-build-tools/45106).
-- [ ] Swift macros language and package-shape documentation, including compiler-plugin dependencies and expansion/diagnostic behavior. Start from Apple [Applying Macros](https://developer.apple.com/documentation/swift/applying-macros) and Swift Evolution [SE-0394](https://forums.swift.org/t/accepted-se-0394-package-manager-support-for-custom-macros/64589).
-- [ ] Swift Package Manager package traits documentation and evolution context, especially defaults, explicit trait selection, disabled defaults, optional dependencies, and command-line flags. Start from `swift package --help`, `swift package show-traits --help`, and Swift Evolution [SE-0450](https://forums.swift.org/t/accepted-with-modifications-se-0450-package-traits/76705).
-- [ ] Xcode documentation for package plugins that run from Xcode or need Xcode-managed project context. Start from Apple PackageDescription plugin surfaces and verify active Xcode behavior with local Xcode documentation or Xcode itself before claiming project-plugin behavior.
+- [x] Swift Package Manager package plugin APIs, including build tool plugins, command plugins, plugin products, target plugin usage, permissions, and Xcode project plugin contexts. Start from the Swift Package Manager [PackageDescription API](https://docs.swift.org/package-manager/PackageDescription/index.html), Apple [`PackageDescription`](https://developer.apple.com/documentation/packagedescription), and Swift Evolution [SE-0303](https://forums.swift.org/t/se-0303-package-manager-extensible-build-tools/45106).
+- [x] Swift macros language and package-shape documentation, including compiler-plugin dependencies and expansion/diagnostic behavior. Start from Apple [Applying Macros](https://developer.apple.com/documentation/swift/applying-macros) and Swift Evolution [SE-0394](https://forums.swift.org/t/accepted-se-0394-package-manager-support-for-custom-macros/64589).
+- [x] Swift Package Manager package traits documentation and evolution context, especially defaults, explicit trait selection, disabled defaults, optional dependencies, and command-line flags. Start from `swift package --help`, `swift package show-traits --help`, and Swift Evolution [SE-0450](https://forums.swift.org/t/accepted-with-modifications-se-0450-package-traits/76705).
+- [x] Xcode documentation for package plugins that run from Xcode or need Xcode-managed project context. Start from Apple PackageDescription plugin surfaces and verify active Xcode behavior with local Xcode documentation or Xcode itself before claiming project-plugin behavior.
 
 ### Exit Criteria
 
-- [ ] The repository ships `swift-package-extension-workflow` as the explicit owner for SwiftPM package plugins, macros, traits, generated source, and Xcode-capable package plugin guidance.
-- [ ] Existing Swift package skills route extension work to the new skill without duplicating its policy.
-- [ ] Bootstrap and guidance-sync outputs encode the Swift `6.2` floor and allow newer stable Swift toolchains after validation.
-- [ ] The skill is covered by repo validation and targeted tests.
+- [x] The repository ships `swift-package-extension-workflow` as the explicit owner for SwiftPM package plugins, macros, traits, generated source, and Xcode-capable package plugin guidance.
+- [x] Existing Swift package skills route extension work to the new skill without duplicating its policy.
+- [x] Bootstrap and guidance-sync outputs encode the Swift `6.2` floor and allow newer stable Swift toolchains after validation.
+- [x] The skill is covered by repo validation and targeted tests.
+
+Completed Milestone 41 by shipping `swift-package-extension-workflow`, separating package-extension ownership from ordinary build/run and testing workflows, adding a dual Swiftly/Xcode command matrix, and preserving the Swift 6.2 floor with current-toolchain validation.
 
 ## Milestone 42: Safari Extension And Control Workflow
 

@@ -9,8 +9,9 @@
 ## Repository Expectations
 
 - Use Swift Package Manager (SPM) as the source of truth for package structure and dependencies.
-- Use `swift-package-build-run-workflow` for manifest, dependency, plugin, resource, Metal-distribution, build, and run work when `Package.swift` is the source of truth.
+- Use `swift-package-build-run-workflow` for ordinary manifest, dependency, resource, Metal-distribution, build, and run work when `Package.swift` is the source of truth.
 - Use `swift-package-testing-workflow` for Swift Testing, XCTest holdouts, `.xctestplan`, fixtures, and package test diagnosis.
+- Use `swift-package-extension-workflow` for package plugins, Swift macros, package traits, generated source, plugin permissions, and Swiftly-versus-Xcode toolchain comparison.
 - Use `sync-swift-package-guidance` if this repo's package-specific `AGENTS.md` guidance later drifts and needs to be refreshed or merged forward.
 - Re-run `sync-swift-package-guidance` after substantial package-workflow or plugin updates so local guidance stays aligned.
 - Use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/sync-shared.sh` for repo-local sync steps.

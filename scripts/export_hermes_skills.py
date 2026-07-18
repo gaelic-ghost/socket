@@ -45,6 +45,7 @@ APPLE_SKILLS = (
     "app-extension-architecture-workflow",
     "mailkit-workflow",
     "file-provider-and-finder-sync-workflow",
+    "swift-package-extension-workflow",
 )
 CYBERSECURITY_SKILLS = (
     "analyze-suspicious-script-or-document",

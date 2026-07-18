@@ -95,7 +95,7 @@ class PhotosLibraryEditingWorkflowTests(unittest.TestCase):
         )
         self.assertIn("PhotosUI", plugin)
         self.assertIn("PhotoKit", plugin)
-        self.assertIn("Expected exactly 53 active skills", validator)
+        self.assertIn("Expected exactly 54 active skills", validator)
         self.assertIn(name, self.read("skills/apple-image-representation-workflow/SKILL.md"))
         self.assertIn(name, self.read("skills/core-image-processing-workflow/SKILL.md"))
         self.assertIn(name, self.read("skills/avfoundation-media-pipeline-workflow/SKILL.md"))
