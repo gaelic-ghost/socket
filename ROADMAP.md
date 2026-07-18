@@ -28,6 +28,7 @@
 - [Milestone 25: Apple Creator Studio operator workflows](#milestone-25-apple-creator-studio-operator-workflows)
 - [Milestone 26: Messaging collaboration skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
 - [Milestone 27: Cybersecurity skills plugin](#milestone-27-cybersecurity-skills-plugin)
+- [Milestone 28: Swift language tooling expansion](#milestone-28-swift-language-tooling-expansion)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -69,6 +70,7 @@
 - Milestone 25: Apple Creator Studio operator workflows - Planned
 - Milestone 26: Messaging collaboration skills plugin - Completed
 - Milestone 27: Cybersecurity skills plugin - Planned
+- Milestone 28: Swift language tooling expansion - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -898,6 +900,42 @@ Completed
 - [x] Vulnerability and authorized-testing workflows require explicit scope and validate exploitability and exposure rather than treating scanner output, CVSS, or an exploit template as proof.
 - [x] Deep binary work, repository source scanning, Apple implementation, and stack-specific fixes have explicit owner handoffs with no duplicate catch-all workflows.
 - [x] Root documentation, marketplace wiring, Codex/Hermes compatibility, plugin metadata, and validation agree on the shipped skill inventory.
+
+## Milestone 28: Swift language tooling expansion
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Expand `swift-lang` with a first wave that routes and operates source-accurate syntax, compiler inspection, semantic and index queries, and SourceKit-LSP diagnosis without collapsing their data models or stability contracts.
+- [x] Treat Swiftly and Xcode as the two first-class Swift toolchain owners across the new workflows, including explicit resolution, selected-owner evidence, `swiftly use xcode` handling, and mixed-toolchain guards.
+- [x] Keep the expansion as portable instruction skills without bundling a compiler, SourceKit service, language server, MCP server, or native host plugin.
+- [ ] Add the second-wave API-surface workflow after the first-wave routing and fixtures establish a stable base.
+
+### First Wave
+
+- [x] Add `swift-lang:choose-swift-language-tooling` for information-model, project-model, and toolchain routing.
+- [x] Add `swift-lang:swift-syntax-tooling-workflow` for SwiftParser, SwiftSyntax, builders, visitors, rewriters, diagnostics, and macro implementation trees.
+- [x] Add `swift-lang:swift-compiler-inspection-workflow` for `swift`, `swiftc`, swift-driver, guarded `swift-frontend`, diagnostics, AST, SIL, IR, dependency, module, and interface inspection.
+- [x] Add `swift-lang:swift-semantic-indexing-workflow` for SourceKit, SourceKitten, compiler index stores, IndexStoreDB, positions, compiler arguments, and freshness decisions.
+- [x] Add `swift-lang:sourcekit-lsp-workflow` for SwiftPM, compilation database, build server, protocol lifecycle, generated source, indexing, logging, and diagnostic-bundle workflows.
+- [x] Export all five portable skills through the Hermes skill tap and preserve the existing Claude Code and Cowork instruction-only classification.
+
+### Second Wave
+
+- [ ] Add `swift-lang:swift-api-surface-analysis-workflow` for module interfaces, symbol graphs, `swift-api-digester`, API and ABI baselines, release comparisons, and documentation inputs.
+- [ ] Establish fixtures across Swiftly-selected Swift.org toolchains and Xcode-selected Apple toolchains before declaring persisted compiler output stable enough for automation.
+- [ ] Route DocC authoring to Apple Dev while retaining language-level symbol-graph and public-API analysis in `swift-lang`.
+- [ ] Update Swift Lang metadata, Hermes export, Claude marketplace description, and root documentation when the second-wave skill ships.
+
+### Exit Criteria
+
+- [x] An agent selects syntax, compiler, semantics, index, or LSP by required information rather than tool name alone.
+- [x] Every first-wave workflow reports whether Swiftly or Xcode owns each selected binary and refuses mixed-toolchain proof.
+- [x] Codex, Claude, Cowork, and Hermes compatibility surfaces agree on the portable first-wave skill inventory.
+- [ ] The second-wave workflow can compare public API and ABI artifacts with explicit version and toolchain evidence.
 
 ## Small Tickets
 

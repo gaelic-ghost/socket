@@ -81,6 +81,16 @@
         "use-ghidra",
         "use-hopper"
       ]
+    },
+    {
+      "title": "Swift Language Skills",
+      "skills": [
+        "choose-swift-language-tooling",
+        "sourcekit-lsp-workflow",
+        "swift-compiler-inspection-workflow",
+        "swift-semantic-indexing-workflow",
+        "swift-syntax-tooling-workflow"
+      ]
     }
   ]
 }

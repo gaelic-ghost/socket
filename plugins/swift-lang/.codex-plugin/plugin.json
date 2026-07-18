@@ -1,6 +1,6 @@
 {
   "name": "swift-lang",
-  "version": "9.16.0",
+  "version": "9.17.0",
   "description": "Shared Swift language and tooling skills for API style, errors, functional pipelines, formatting, source organization, SwiftSyntax, compiler inspection, SourceKit, indexing, SourceKit-LSP, and modernization.",
   "skills": "./skills/",
   "author": {
