@@ -1,7 +1,7 @@
 {
   "name": "swift-lang",
   "version": "9.16.0",
-  "description": "Shared Swift language skills for API style, error handling, functional pipelines, formatting, source organization, and modernization cleanup.",
+  "description": "Shared Swift language and tooling skills for API style, errors, functional pipelines, formatting, source organization, SwiftSyntax, compiler inspection, SourceKit, indexing, SourceKit-LSP, and modernization.",
   "skills": "./skills/",
   "author": {
     "name": "Gale",
@@ -20,6 +20,15 @@
     "swift-format",
     "swiftlint",
     "swiftformat",
+    "swiftsyntax",
+    "sourcekit",
+    "sourcekit-lsp",
+    "sourcekitten",
+    "indexstoredb",
+    "swiftc",
+    "swift-driver",
+    "swiftly",
+    "xcode-toolchain",
     "functional-programming",
     "error-handling",
     "typed-throws",
@@ -30,8 +39,8 @@
   ],
   "interface": {
     "displayName": "Swift Lang",
-    "shortDescription": "Shared Swift language, style, error handling, formatting, organization, functional pipeline, and cleanup workflows for Codex.",
-    "longDescription": "Guide Codex agents through shared Swift language work across Apple apps, server-side services, packages, command-line tools, and libraries. The plugin owns Swifty API design, call-site ergonomics, error handling style, functional data modeling, monadic pipeline style, SwiftFormat and SwiftLint policy, source organization, file splitting, and modernization cleanup passes while handing Apple-platform and server-framework execution to their specialist plugins.",
+    "shortDescription": "Shared Swift language, style, compiler, syntax, semantic indexing, LSP, and cleanup workflows for Codex.",
+    "longDescription": "Guide Codex agents through shared Swift language and tooling work across Apple apps, server-side services, packages, command-line tools, and libraries. The plugin owns Swifty API design, error handling, functional pipelines, formatting, source organization, SwiftSyntax transformations, compiler inspection, SourceKit semantics, project indexing, SourceKit-LSP diagnosis, Swiftly-versus-Xcode toolchain selection, and modernization while handing Apple-platform and server-framework execution to specialist plugins.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -45,7 +54,9 @@
       "Refactor this Swift data flow into a clear functional pipeline with map, flatMap, compactMap, filter, reduce, Optional, Result, throws, async throws, or AsyncSequence where appropriate.",
       "Set up or repair SwiftFormat and SwiftLint policy for this Swift repository.",
       "Split and reorganize these Swift source files by concern while preserving access control and validation.",
-      "Modernize and clean up this existing Swift implementation with a complete formatting, API, pipeline, source organization, concurrency, testability, and validation pass."
+      "Modernize and clean up this existing Swift implementation with a complete formatting, API, pipeline, source organization, concurrency, testability, and validation pass.",
+      "Choose the correct SwiftSyntax, compiler, SourceKit, index, or SourceKit-LSP surface for this tooling task and distinguish Swiftly from Xcode toolchain ownership.",
+      "Build or diagnose this Swift language tool using source-accurate syntax, compiler artifacts, semantic queries, project indexes, or LSP as appropriate."
     ],
     "brandColor": "#F05138",
     "composerIcon": "./assets/swift-lang-icon.svg",

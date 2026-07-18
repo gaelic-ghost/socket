@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Swift Language Tooling"
+  short_description: "Route Swift tooling by information model"
+  default_prompt: "Use $choose-swift-language-tooling to choose the correct Swift syntax, compiler, semantic, index, or LSP tooling path."

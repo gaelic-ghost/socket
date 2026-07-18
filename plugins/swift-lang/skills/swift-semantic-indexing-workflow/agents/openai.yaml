@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Semantic Indexing Workflow"
+  short_description: "Query Swift semantics and project indexes"
+  default_prompt: "Use $swift-semantic-indexing-workflow to query Swift types, symbols, occurrences, documentation, or project-wide relationships."
