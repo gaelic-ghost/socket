@@ -35,6 +35,11 @@ Socket tap. The curated set is:
 - `script-hopper-analysis`
 - `use-ghidra`
 - `use-hopper`
+- `choose-swift-language-tooling`
+- `sourcekit-lsp-workflow`
+- `swift-compiler-inspection-workflow`
+- `swift-semantic-indexing-workflow`
+- `swift-syntax-tooling-workflow`
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
@@ -65,6 +70,17 @@ The exported Hopper and Ghidra workflows are portable guidance. Hopper's GUI,
 Python SDK, and `HopperMCPServer` remain operator-local runtime surfaces. The
 Hopper MCP profile is therefore private user configuration, not a Socket
 `.mcp.json` declaration or a native Hermes plugin.
+
+The exported Swift language-tooling workflows are portable guidance. They
+resolve and invoke operator-installed Swiftly or Xcode tools but bundle no
+compiler, SourceKit service, language server, MCP declaration, hook, or native
+Hermes runtime. Hermes skill-tap support therefore preserves their real
+instruction contract without presenting the Codex plugin manifest as portable.
+
+The exported Swift package extension workflow is likewise portable guidance.
+It resolves operator-installed Swiftly and Xcode tools and plans SwiftPM plugin,
+macro, trait, generated-source, and permission work without bundling a compiler,
+plugin runtime, MCP server, or native Hermes extension.
 
 ## Maintainer Workflow
 

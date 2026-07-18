@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Package Extensions"
+  short_description: "Build SwiftPM plugins, macros, and traits"
+  default_prompt: "Use $swift-package-extension-workflow to plan and validate this Swift package extension."

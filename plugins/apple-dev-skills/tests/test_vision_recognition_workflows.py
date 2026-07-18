@@ -89,7 +89,7 @@ class VisionRecognitionWorkflowTests(unittest.TestCase):
             )
         self.assertIn("Apple Vision", plugin)
         self.assertIn("Core ML", plugin)
-        self.assertIn("Expected exactly 53 active skills", validator)
+        self.assertIn("Expected exactly 54 active skills", validator)
 
 
 if __name__ == "__main__":

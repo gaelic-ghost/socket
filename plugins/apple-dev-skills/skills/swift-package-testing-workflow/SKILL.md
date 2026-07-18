@@ -16,11 +16,12 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Use this skill for package-level `.xctestplan` execution when the package surface needs Xcode test-plan follow-through.
 - Use this skill when the request is about test selection, filtering, retries, failures, flaky tests, or test-only Debug/Release validation.
 - Use this skill when the request is about package-first performance-sensitive testing, signpost placement, Release workload harnesses, or profiling-ready package test design for Audio, Metal, MLX, local AI, streaming, or other Apple silicon-sensitive workloads.
-- Do not use this skill for broad manifest edits, dependency work, package resources, plugin flows, or ordinary build and run work.
+- Do not use this skill for broad manifest edits, dependency work, package resources, package-extension design, or ordinary build and run work.
 - Do not use this skill for brand-new package bootstrap from nothing.
 - Do not use this skill for repo-guidance alignment in an existing package repo.
 - Do not use this skill as the default path for Xcode workspace, scheme, preview, simulator, or navigator-driven work.
-- Recommend `swift-package-build-run-workflow` when the request is primarily about package build/run, manifest, dependency, plugin, resource, or Metal-distribution work.
+- Recommend `swift-package-build-run-workflow` when the request is primarily about ordinary package build/run, manifest, dependency, resource, or Metal-distribution work.
+- Recommend `swift-package-extension-workflow` when trait matrices, macro/plugin test shape, or generated-source validation is the primary concern.
 - Recommend `bootstrap-swift-package` when the package repo does not exist yet.
 - Recommend `sync-swift-package-guidance` when the repo guidance needs to be added, refreshed, or merged.
 - Recommend `xcode-testing-workflow` when test work depends on active Xcode workspace state, navigator diagnostics, simulator or device flows, XCUITest, runtime accessibility verification, or Xcode-native test plans and test execution.
@@ -86,7 +87,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 
 - Stop with `blocked` when the repo root cannot be resolved.
 - Stop with `blocked` when the repo does not contain `Package.swift`.
-- Stop with `handoff` when the request is really package build/run, manifest, dependency, plugin, resource, or Metal-distribution work.
+- Stop with `handoff` when the request is really ordinary package build/run, manifest, dependency, resource, or Metal-distribution work.
 - Stop with `handoff` when the repo root is mixed and Xcode-managed behavior is the safer default.
 - Stop with `handoff` when the requested work crosses into Xcode project membership, scheme, preview, simulator, or other Xcode-managed concerns.
 - Stop with `blocked` when no safe package-testing command path exists for the requested operation.
@@ -96,6 +97,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - SwiftPM and ordinary filesystem edits inside package-managed scope are the default execution surface for this skill.
 - The only current fallback is a non-mutating planned command result when the user asked for guidance rather than immediate execution.
 - Hand off to `swift-package-build-run-workflow` when the request becomes primarily about package build/run, manifest, dependencies, plugins, package resources, or Metal-distribution work.
+- Hand off to `swift-package-extension-workflow` when test planning is primarily shaped by package traits, macro expansion, plugin execution, or generated output.
 - Hand off to `xcode-testing-workflow` when package test work depends on:
   - active Xcode workspace or scheme state
   - previews, snippet execution, simulator, or device flows

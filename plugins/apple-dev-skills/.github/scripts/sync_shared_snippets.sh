@@ -90,6 +90,7 @@ sync_one \
 
 sync_one \
   "$ROOT_DIR/shared/agents-snippets/apple-swift-package-core.md" \
+  "$ROOT_DIR/skills/swift-package-extension-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-build-run-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-testing-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-workflow/references/snippets/apple-swift-package-core.md" \

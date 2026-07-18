@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple app extensions, MailKit, File Provider, Finder Sync, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple app extensions, MailKit, File Provider, Finder Sync, SwiftPM plugins/macros/traits, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -89,7 +89,7 @@ Use Apple Dev Skills when an agent is helping with:
 - DeviceCheck per-device state and App Attest app-integrity flow planning
 - Safe official App Store Connect provisioning and CloudKit automation planning, with explicit Apple Developer Portal fallbacks
 - Swift OpenAPI client generation and `URLSession` transport integration
-- Swift package bootstrap, build, and testing
+- Swift package bootstrap, ordinary build/run and testing, plus package plugins, macros, traits, generated source, permissions, and Swiftly/Xcode toolchain comparison
 - Apple UI accessibility work
 - DocC comments, articles, and documentation catalogs
 - Swift source formatting and file organization, with shared language cleanup routed to `swift-lang` when installed through Socket
@@ -186,6 +186,7 @@ uv run pytest
 - `video-codec-processing-workflow`
 - `swift-openapi-client-workflow`
 - `swift-package-build-run-workflow`
+- `swift-package-extension-workflow`
 - `swift-package-testing-workflow`
 - `swift-package-workflow`
 - `swiftui-animation-workflow`

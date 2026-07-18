@@ -43,6 +43,8 @@ def infer_operation_type_from_request(request: str | None) -> str | None:
     ]
 
     padded = f" {text} "
+    if any(needle in padded for needle in (" plugin", " macro", " trait", " generated source", " codegen")):
+        return "extension"
     if any(
         needle in padded
         for needle in (
@@ -225,6 +227,21 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
 
+    if operation_type == "extension":
+        payload = {
+            "status": "handoff",
+            "path_type": "fallback",
+            "output": {
+                "operation_type": operation_type,
+                "operation_type_source": "explicit" if args.operation_type else "inferred",
+                "repo_shape": discover_repo_shape(args.repo_root),
+                "planned_commands": [],
+                "next_step": "Use swift-package-extension-workflow because traits, macros, plugins, or generated-source behavior is shaping this test request.",
+            },
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 0
+
     if operation_type == "build":
         payload = {
             "status": "handoff",
@@ -234,7 +251,7 @@ def main() -> int:
                 "operation_type_source": "explicit" if args.operation_type else "inferred",
                 "repo_shape": discover_repo_shape(args.repo_root),
                 "planned_commands": [],
-                "next_step": "Use swift-package-build-run-workflow because this request is primarily about package build, run, manifest, dependency, plugin, resource, or Metal-distribution work.",
+                "next_step": "Use swift-package-build-run-workflow because this request is primarily about ordinary package build, run, manifest, dependency, resource, or Metal-distribution work.",
             },
         }
         print(json.dumps(payload, indent=2, sort_keys=True))

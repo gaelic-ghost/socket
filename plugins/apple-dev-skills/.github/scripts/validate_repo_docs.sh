@@ -111,6 +111,7 @@ active_skill_mds=(
   "./skills/xcode-testing-workflow/SKILL.md"
   "./skills/swift-package-build-run-workflow/SKILL.md"
   "./skills/swift-package-testing-workflow/SKILL.md"
+  "./skills/swift-package-extension-workflow/SKILL.md"
   "./skills/swift-package-workflow/SKILL.md"
   "./skills/author-swift-docc-docs/SKILL.md"
   "./skills/avfaudio-session-workflow/SKILL.md"
@@ -160,7 +161,7 @@ active_skill_mds=(
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
   "./skills/xcode-localization-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 53 ]] || fail "Expected exactly 53 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 54 ]] || fail "Expected exactly 54 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -205,7 +206,7 @@ for skill_md in "${active_skill_mds[@]}"; do
   fi
 
   case "$skill_dir" in
-    ./skills/bootstrap-swift-package|./skills/sync-swift-package-guidance|./skills/swift-package-workflow|./skills/swift-package-build-run-workflow|./skills/swift-package-testing-workflow)
+    ./skills/bootstrap-swift-package|./skills/sync-swift-package-guidance|./skills/swift-package-workflow|./skills/swift-package-build-run-workflow|./skills/swift-package-testing-workflow|./skills/swift-package-extension-workflow)
       local_snippet="$skill_dir/references/snippets/apple-swift-package-core.md"
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'
@@ -245,6 +246,7 @@ for file in \
   "skills/swift-package-workflow/SKILL.md" \
   "skills/swift-package-testing-workflow/SKILL.md" \
   "skills/swift-package-build-run-workflow/SKILL.md" \
+  "skills/swift-package-extension-workflow/SKILL.md" \
   "skills/xcode-app-project-workflow/SKILL.md" \
   "skills/xcode-testing-workflow/SKILL.md" \
   "skills/xcode-build-run-workflow/SKILL.md" \
@@ -303,6 +305,7 @@ package_agents_assets=(
 for agents_asset in "${package_agents_assets[@]}"; do
   require_contains "$agents_asset" 'Use `swift-package-build-run-workflow`'
   require_contains "$agents_asset" 'Use `swift-package-testing-workflow`'
+  require_contains "$agents_asset" 'Use `swift-package-extension-workflow`'
   require_contains "$agents_asset" 'scripts/repo-maintenance/config/profile.env'
   require_contains "$agents_asset" '.swiftformat'
   require_contains "$agents_asset" 'scripts/repo-maintenance/hooks/pre-commit.sample'

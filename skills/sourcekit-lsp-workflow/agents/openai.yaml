@@ -1,0 +1,4 @@
+interface:
+  display_name: "SourceKit-LSP Workflow"
+  short_description: "Configure and diagnose Swift language services"
+  default_prompt: "Use $sourcekit-lsp-workflow to configure or diagnose SourceKit-LSP, build-system integration, indexing, or editor protocol behavior."

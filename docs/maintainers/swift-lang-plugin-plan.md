@@ -185,3 +185,31 @@ Later release:
 - Apple Dev and Server-Side Swift guidance can route shared Swift cleanup work
   to `swift-lang` while preserving standalone Apple-only behavior for the first
   release.
+
+## Language Tooling Expansion
+
+Treat the language-tooling expansion as a durable building-block change inside
+`swift-lang`. It removes the need to improvise syntax, compiler, semantic,
+index, and LSP decisions inside the broad modernization workflow while keeping
+Apple SDK, Xcode execution, package extension, and server framework ownership
+in their specialist plugins.
+
+First wave:
+
+- `choose-swift-language-tooling` routes by information model and project shape.
+- `swift-syntax-tooling-workflow` owns source-accurate parsing and transformation.
+- `swift-compiler-inspection-workflow` owns driver, compiler phase, and emitted-artifact inspection.
+- `swift-semantic-indexing-workflow` owns SourceKit, SourceKitten, compiler index store, and IndexStoreDB decisions.
+- `sourcekit-lsp-workflow` owns language-server integration and diagnosis.
+- Every workflow treats Swiftly and Xcode as separate first-class toolchain
+  owners, records both resolvers on macOS, and forbids mixed-toolchain evidence.
+
+Second wave:
+
+- Add `swift-api-surface-analysis-workflow` for module interfaces, symbol
+  graphs, API digester baselines, API-versus-ABI compatibility, release
+  comparisons, and documentation inputs after concrete fixtures establish the
+  stable output and versioning contract.
+
+Keep both waves as portable instruction skills. Export them through the Hermes
+skill tap; do not add a compiler wrapper, MCP server, or native host plugin.

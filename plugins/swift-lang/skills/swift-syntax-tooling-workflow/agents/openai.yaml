@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Syntax Tooling Workflow"
+  short_description: "Parse and transform source with SwiftSyntax"
+  default_prompt: "Use $swift-syntax-tooling-workflow to inspect or transform Swift source while preserving source fidelity."

@@ -16,6 +16,7 @@ MESSAGING_SOURCE_ROOT = REPO_ROOT / "plugins" / "messaging-collaboration-skills"
 APPLE_SOURCE_ROOT = REPO_ROOT / "plugins" / "apple-dev-skills" / "skills"
 CYBERSECURITY_SOURCE_ROOT = REPO_ROOT / "plugins" / "cybersecurity-skills" / "skills"
 REVERSE_ENGINEERING_SOURCE_ROOT = REPO_ROOT / "plugins" / "reverse-engineering-skills" / "skills"
+SWIFT_LANG_SOURCE_ROOT = REPO_ROOT / "plugins" / "swift-lang" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 AGENT_PORTABILITY_SKILLS = (
     "bootstrap-skills-plugin-repo",
@@ -44,6 +45,7 @@ APPLE_SKILLS = (
     "app-extension-architecture-workflow",
     "mailkit-workflow",
     "file-provider-and-finder-sync-workflow",
+    "swift-package-extension-workflow",
 )
 CYBERSECURITY_SKILLS = (
     "analyze-suspicious-script-or-document",
@@ -83,12 +85,20 @@ REVERSE_ENGINEERING_SKILLS = (
     "use-ghidra",
     "use-hopper",
 )
+SWIFT_LANG_SKILLS = (
+    "choose-swift-language-tooling",
+    "sourcekit-lsp-workflow",
+    "swift-compiler-inspection-workflow",
+    "swift-semantic-indexing-workflow",
+    "swift-syntax-tooling-workflow",
+)
 EXPORTED_SKILLS = (
     AGENT_PORTABILITY_SKILLS
     + MESSAGING_SKILLS
     + APPLE_SKILLS
     + CYBERSECURITY_SKILLS
     + REVERSE_ENGINEERING_SKILLS
+    + SWIFT_LANG_SKILLS
 )
 
 
@@ -105,6 +115,7 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
         **{skill_name: APPLE_SOURCE_ROOT for skill_name in APPLE_SKILLS},
         **{skill_name: CYBERSECURITY_SOURCE_ROOT for skill_name in CYBERSECURITY_SKILLS},
         **{skill_name: REVERSE_ENGINEERING_SOURCE_ROOT for skill_name in REVERSE_ENGINEERING_SKILLS},
+        **{skill_name: SWIFT_LANG_SOURCE_ROOT for skill_name in SWIFT_LANG_SKILLS},
     }
     return {skill_name: roots[skill_name] / skill_name for skill_name in EXPORTED_SKILLS}
 

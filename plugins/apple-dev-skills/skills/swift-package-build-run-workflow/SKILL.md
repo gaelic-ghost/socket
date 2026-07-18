@@ -1,18 +1,19 @@
 ---
 name: swift-package-build-run-workflow
-description: Guide build, run, manifest, dependency, plugin, resource, Metal-packaging, and Release-versus-Debug work in existing Swift Package Manager repositories. Use when Package.swift is the source of truth and the task is package build or run work rather than package testing.
+description: Guide ordinary build, run, manifest, dependency, resource, Metal-packaging, and Release-versus-Debug work in existing Swift Package Manager repositories. Use when Package.swift is the source of truth and the task is package build or run work rather than testing or package extensions.
 ---
 
 # Swift Package Build Run Workflow
 
 ## Purpose
 
-Use this skill as the primary execution workflow for non-testing work in existing Swift Package Manager repositories. Keep it focused on manifest and dependency changes, package resources, plugins, builds, runs, Release-versus-Debug validation, and SwiftPM-first package collaboration. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, package-first command planning, and Xcode handoff decisions when Apple-managed behavior starts to matter.
+Use this skill as the primary execution workflow for ordinary non-testing work in existing Swift Package Manager repositories. Keep it focused on manifest and dependency changes, package resources, builds, runs, Release-versus-Debug validation, and SwiftPM-first package collaboration. `scripts/run_workflow.py` is the runtime entrypoint for repo-shape checks, package-first command planning, and Xcode handoff decisions when Apple-managed behavior starts to matter.
 
 ## When To Use
 
 - Use this skill for ordinary build and run work inside an existing Swift package repo.
-- Use this skill for manifest, target, product, dependency, plugin, and package-resource work driven by `Package.swift`.
+- Use this skill for ordinary manifest, target, product, dependency, and package-resource work driven by `Package.swift`.
+- Recommend `swift-package-extension-workflow` for package plugins, macros, traits, generated source, or plugin permissions.
 - Use this skill for package resources, `Bundle.module`, `.process(...)`, `.copy(...)`, `.embedInCode(...)`, and package-local fixture layout decisions.
 - Use this skill for Metal library packaging, distribution, and the SwiftPM side of Metal-related package work before Xcode-managed Apple toolchain behavior becomes the real concern.
 - Use this skill for Debug-versus-Release validation, build artifacts, and tagged-release package expectations.
@@ -35,7 +36,7 @@ Use this skill as the primary execution workflow for non-testing work in existin
    - manifest or dependency changes
    - build
    - run
-   - plugin
+   - package extension handoff
    - toolchain management
    - mutation
 2. Apply the Apple and Swift docs gate before any design, architecture, implementation, or refactor guidance:
@@ -95,7 +96,7 @@ Use this skill as the primary execution workflow for non-testing work in existin
 
 - Stop with `blocked` when the repo root cannot be resolved.
 - Stop with `blocked` when the repo does not contain `Package.swift`.
-- Stop with `handoff` when the request is really package-testing work.
+- Stop with `handoff` when the request is really package-testing or package-extension work.
 - Stop with `handoff` when the repo root is mixed and Xcode-managed behavior is the safer default.
 - Stop with `handoff` when the requested work crosses into Xcode project membership, scheme, preview, simulator, or other Xcode-managed concerns.
 - Stop with `blocked` when no safe SwiftPM-first command path exists for the requested operation.
@@ -106,6 +107,7 @@ Use this skill as the primary execution workflow for non-testing work in existin
 - SwiftPM and ordinary filesystem edits are the default execution surface for this skill.
 - The only current fallback is a non-mutating planned command result when the user asked for guidance rather than immediate execution.
 - Hand off to `swift-package-testing-workflow` when the request becomes primarily about tests, test plans, or test diagnosis.
+- Hand off to `swift-package-extension-workflow` when the request becomes primarily about plugins, macros, traits, generated source, or plugin permissions.
 - Hand off to `xcode-build-run-workflow` when package build or distribution work depends on:
   - active Xcode workspace or scheme state
   - previews, snippet execution, simulator, or device flows

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Swift Compiler Inspection Workflow"
+  short_description: "Inspect Swift compilation and compiler artifacts"
+  default_prompt: "Use $swift-compiler-inspection-workflow to inspect Swift compiler jobs, diagnostics, AST, SIL, IR, or module artifacts."

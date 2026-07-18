@@ -1,13 +1,13 @@
 ---
 name: swift-package-workflow
-description: Compatibility workflow surface for broad or legacy Swift Package Manager execution requests. Use when older references still point at swift-package-workflow and route the request into swift-package-build-run-workflow or swift-package-testing-workflow while preserving SwiftPM-first mixed-root handoff behavior.
+description: Compatibility workflow surface for broad or legacy Swift Package Manager requests. Use when older references still point at swift-package-workflow and route into build/run, testing, or package-extension workflows while preserving SwiftPM-first mixed-root handoffs.
 ---
 
 # Swift Package Workflow
 
 ## Purpose
 
-Use this skill as a compatibility surface for older references to `swift-package-workflow` while the repo transitions to narrower package execution skills. The real long-term owners are `swift-package-build-run-workflow` for build/run and manifest work and `swift-package-testing-workflow` for testing work. `scripts/run_workflow.py` now stays intentionally thin: it performs repo-shape checks, preserves mixed-root and Xcode handoff boundaries, and returns routing context rather than trying to keep a second full execution-planning surface alive.
+Use this skill as a compatibility surface for older references to `swift-package-workflow` while the repo transitions to narrower package skills. The long-term owners are `swift-package-build-run-workflow` for ordinary build/run and manifest work, `swift-package-testing-workflow` for testing work, and `swift-package-extension-workflow` for plugins, macros, traits, and generated source. `scripts/run_workflow.py` stays intentionally thin: it performs repo-shape checks, preserves mixed-root and Xcode handoff boundaries, and returns routing context rather than trying to keep a second full execution-planning surface alive.
 
 ## When To Use
 
@@ -17,8 +17,9 @@ Use this skill as a compatibility surface for older references to `swift-package
 - Do not use this skill for brand-new package bootstrap from nothing.
 - Do not use this skill for repo-guidance alignment in an existing package repo.
 - Do not use this skill as the default path for Xcode workspace, scheme, preview, simulator, or navigator-driven work.
-- Recommend `swift-package-build-run-workflow` when the request is primarily about manifest, dependencies, plugins, package resources, Metal distribution, build, or run work.
+- Recommend `swift-package-build-run-workflow` when the request is primarily about ordinary manifest, dependencies, package resources, Metal distribution, build, or run work.
 - Recommend `swift-package-testing-workflow` when the request is primarily about Swift Testing, XCTest, `.xctestplan`, fixtures, flake diagnosis, or package test execution.
+- Recommend `swift-package-extension-workflow` when the request is primarily about package plugins, macros, traits, generated sources, or plugin permissions.
 - Recommend `bootstrap-swift-package` when the package repo does not exist yet.
 - Recommend `sync-swift-package-guidance` when the repo guidance needs to be added, refreshed, or merged.
 - Recommend `xcode-build-run-workflow` when the task depends on active Xcode workspace state, scheme-aware execution, previews, navigator diagnostics, simulator or device flows, or guarded mutation inside Xcode-managed scope.
@@ -88,7 +89,7 @@ Use this skill as a compatibility surface for older references to `swift-package
 
 - Stop with `blocked` when the repo root cannot be resolved.
 - Stop with `blocked` when the repo does not contain `Package.swift`.
-- Stop with `handoff` when the request should move into `swift-package-build-run-workflow`, `swift-package-testing-workflow`, `xcode-build-run-workflow`, or `xcode-testing-workflow`.
+- Stop with `handoff` when the request should move into `swift-package-build-run-workflow`, `swift-package-testing-workflow`, `swift-package-extension-workflow`, `xcode-build-run-workflow`, or `xcode-testing-workflow`.
 - Stop with `handoff` when the requested work crosses into Xcode project membership, scheme, preview, simulator, or other Xcode-managed concerns.
 - Stop with `blocked` when no safe SwiftPM-first command path exists for the requested operation.
 
@@ -99,6 +100,7 @@ Use this skill as a compatibility surface for older references to `swift-package
 - The only current compatibility payload here is routing context, inferred repo shape, and one concise next step.
 - Hand off to `swift-package-build-run-workflow` when the request is primarily about package build/run, manifest, dependency, plugin, resource, or Metal-distribution work.
 - Hand off to `swift-package-testing-workflow` when the request is primarily about tests, test plans, fixtures, or package test diagnosis.
+- Hand off to `swift-package-extension-workflow` when the request is primarily about plugins, macros, traits, generated source, or plugin permissions.
 - Hand off to `xcode-build-run-workflow` when package work depends on:
   - active Xcode workspace or scheme state
   - previews, snippet execution, simulator, or device flows

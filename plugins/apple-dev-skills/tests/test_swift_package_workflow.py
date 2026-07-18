@@ -82,6 +82,15 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["output"]["recommended_skill"], "swift-package-testing-workflow")
             self.assertIn("testing skill", payload["output"]["routing_summary"])
 
+    def test_routes_package_extensions_to_extension_skill(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.2\n", encoding="utf-8")
+            code, payload = self.run_script("--request", "add a command plugin", "--repo-root", tmpdir)
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "handoff")
+            self.assertEqual(payload["output"]["recommended_skill"], "swift-package-extension-workflow")
+            self.assertIn("extension skill", payload["output"]["routing_summary"])
+
     def test_resource_request_exposes_inferred_context(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             package_root = Path(tmpdir, "WorkspaceRoot", "Packages", "DemoPkg")

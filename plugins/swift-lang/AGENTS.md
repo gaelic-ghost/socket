@@ -7,7 +7,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 - `swift-lang` is a monorepo-owned Socket child and the canonical source of truth for shared Swift language workflow skills.
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
-- Treat `swift-lang` as the shared language layer for Swift API style, error handling, formatting, source organization, modernization cleanup, and functional data-flow guidance.
+- Treat `swift-lang` as the shared language layer for Swift API style, error handling, formatting, source organization, modernization cleanup, functional data-flow guidance, SwiftSyntax, compiler inspection, SourceKit semantics and indexing, and SourceKit-LSP workflows.
 - Treat `apple-dev-skills` as the Apple-platform specialist layer. Do not put Xcode project mutation, SwiftUI, AppKit, UIKit, AVFoundation, AVFAudio, Core Media, Core Audio, DocC, Safari, SPI, signing, simulator, or device execution guidance here unless it is only a handoff.
 - Treat `server-side-swift` as the server-side specialist layer. Do not put Vapor, Hummingbird, SwiftNIO service hosting, persistence, Docker, Fly.io, observability, auth, or deployment guidance here unless it is only a handoff.
 
@@ -15,6 +15,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
 - Prefer Swift Package Manager as the source of truth for plain Swift packages, libraries, command-line tools, and package-level validation.
+- Treat Swiftly and Xcode as separate first-class toolchain owners. Resolve both before language-tooling work on macOS, choose the owner that matches the actual build, and do not mix a compiler, SourceKit service, SDK, plugin, module, or generated artifact across those toolchains.
 - Use repo-local files, checked-out dependency sources, GitHub/source repositories, generated DocC, release notes, and Dash MCP or Dash HTTP for installed Swift, SwiftPM, SwiftFormat, SwiftLint, and Swift ecosystem docsets before reaching for web docs. Use official Swift project documentation when Dash/local/source coverage is missing, stale, or a public latest-release citation is needed. Do not treat generic no-JS web search/open results as proof that JS-rendered Apple Developer docs were read.
 - Keep Swift examples Swifty, ergonomic, compact, and functional when that improves clarity.
 - Prefer explicit inputs and outputs, value types, immutable local bindings, composable transforms, and straight data flow over hidden mutation or broad manager types.
