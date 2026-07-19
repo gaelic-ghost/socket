@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Hermes Agent Extensions"
+  short_description: "Choose and build Hermes extension surfaces"
+  default_prompt: "Use $build-hermes-agent-extensions to choose the narrowest Hermes extension surface and implement it against the current developer guide."

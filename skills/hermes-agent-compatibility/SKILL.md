@@ -1,7 +1,6 @@
 ---
 name: hermes-agent-compatibility
-description: Maintain a clear Socket-to-Hermes compatibility boundary across skills, Codex plugins, MCP configuration, and native Hermes plugins. Use when exporting Socket skills to Hermes or deciding whether an adapter is needed.
-version: 1.0.0
+description: Audit Socket-to-Hermes compatibility across Agent Skills, Codex plugins, MCP, hooks, apps, agents, and Hermes extension systems. Use for skill exports, config translations, and Hermes adapter decisions.
 metadata:
   hermes:
     category: agent-portability
@@ -21,8 +20,13 @@ surface that preserves its real behavior.
 | `SKILL.md` workflow | GitHub skill tap or direct GitHub skill install | Export when the workflow is portable instructions plus existing tools. |
 | Codex plugin bundle | None | Do not present `.codex-plugin/plugin.json` as a Hermes plugin. Keep it as Codex packaging only. |
 | `.mcp.json` server declaration | `mcp_servers` entry in `~/.hermes/config.yaml` | Translate the transport and required environment, then validate the server in Hermes. |
-| Hook, app, or custom-agent surface | Host-specific decision | Document the limit or build a real Hermes extension only if a concrete behavior needs it. |
-| Runtime integration with tools, hooks, commands, or bundled skills | Python Hermes plugin | Use `plugin.yaml` plus `register(ctx)` only when instruction-only or MCP configuration cannot express the behavior. |
+| Codex lifecycle hook | Python plugin hook, gateway hook, or shell hook | Select the Hermes event system by runtime owner; do not mechanically translate the Codex event file. |
+| Codex app or connector | MCP, API integration, or standalone plugin | Rebuild against the actual external-service contract; `.app.json` has no Hermes meaning. |
+| Codex custom agent | Hermes delegation, profile, or profile distribution | Redesign the role, state, tools, and isolation; do not translate `agents/openai.yaml` presentation metadata. |
+| Runtime tools, hooks, commands, or bundled skills | General Python Hermes plugin | Use `plugin.yaml` plus `register(ctx)` only when instruction-only or MCP configuration cannot express the behavior. |
+| Messaging channel | Platform adapter | Use the specialized gateway platform plugin surface. |
+| Inference, memory, context, secrets, media, search, or browser backend | Specialized Hermes plugin/provider | Use the subsystem-specific interface, not a general plugin wrapper. |
+| Native desktop or web dashboard UI | Desktop or dashboard SDK | These are separate Hermes UI extension systems and do not reuse the Python plugin API. |
 
 ## Maintain the Skill Tap
 
@@ -69,14 +73,24 @@ out of Socket files and use a narrow `tools.include` list when the server has
 mutation-capable tools. Validate with `hermes mcp test <name>` before asking an
 agent to depend on the server.
 
-## Decide Whether a Hermes Plugin Is Needed
+## Decide Which Hermes Extension Is Needed
 
-Use a real Python Hermes plugin only when the integration needs a registered
-tool, hook, slash command, CLI command, or namespaced bundled skill that cannot
-be represented as a standalone skill or external MCP server. A plugin lives in
-Hermes's plugin install surface, declares `plugin.yaml`, and exposes behavior
-from `register(ctx)` such as `ctx.register_tool`, `ctx.register_hook`, or
-`ctx.register_skill`.
+Route broad Hermes use through `choose-hermes-agent-workflow`. Use
+`build-hermes-agent-extensions` when a Socket feature needs implementation
+beyond a portable skill or MCP translation.
+
+Use a general Python Hermes plugin only when the integration needs a registered
+tool, plugin hook, slash command, CLI command, or namespaced bundled skill that
+cannot be represented as a standalone skill, configuration surface, or external
+MCP server. A plugin lives in Hermes's plugin install surface, declares
+`plugin.yaml`, and exposes behavior from `register(ctx)`.
+
+Use the specialized platform/provider interfaces for messaging channels, model
+providers, memory, context engines, secret sources, image/video generation, web
+search, or browser sessions. Use the desktop and dashboard SDKs only for their
+respective UI hosts. Hermes calls all of these “plugins” in some contexts, but
+they have different discovery, registration, lifecycle, and distribution
+contracts.
 
 Do not add a generic Socket-to-Hermes bridge, copy Codex manifests into a Hermes
 plugin, or create an adapter template without a concrete package that needs
@@ -92,11 +106,13 @@ State each outcome as one of:
 - `Hermes MCP configuration required`: a Socket server declaration has a
   documented `mcp_servers` translation but no automatic installation.
 - `Native Hermes plugin required`: the requested runtime behavior needs a
-  separate Python plugin and is not supplied by the Socket Codex bundle.
+  separate general or specialized Hermes plugin and is not supplied by the
+  Socket Codex bundle.
 - `Not compatible by design`: the surface is Codex-specific and has no Hermes
   equivalent.
 
-Link claims that depend on Hermes behavior to its official skills, MCP, or
-plugin documentation. Keep the compatibility matrix and examples in Socket's
+Link claims that depend on Hermes behavior to the current official skills, MCP,
+plugin, provider, platform, desktop, dashboard, or programmatic-integration
+documentation. Keep the compatibility matrix and examples in Socket's
 maintainer documentation rather than duplicating full upstream documentation in
 this skill.

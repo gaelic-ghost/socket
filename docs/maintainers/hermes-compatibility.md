@@ -1,5 +1,8 @@
 # Hermes Agent Compatibility
 
+Date checked: 2026-07-19 against Hermes Agent 0.17.0 and the current official
+user and developer guides.
+
 Socket's Hermes compatibility is a durable, explicit compatibility baseline.
 Every new or materially changed Socket plugin, skill, and MCP declaration must
 record and validate its Hermes outcome in the same change. This does not turn
@@ -26,8 +29,13 @@ Hermes discovers the root `skills/` directory by default after a user adds the
 Socket tap. The curated set is:
 
 - `bootstrap-skills-plugin-repo`
+- `build-hermes-agent-extensions`
+- `choose-hermes-agent-workflow`
 - `hermes-agent-compatibility`
+- `operate-hermes-agent`
+- `operate-hermes-agent-gateway`
 - `sync-skills-repo-guidance`
+- `use-nous-research-services`
 - `app-extension-architecture-workflow`
 - `diagnose-apple-entitlements`
 - `mailkit-workflow`
@@ -67,6 +75,11 @@ hermes skills install gaelic-ghost/socket/hermes-agent-compatibility
 Custom GitHub taps are community sources and Hermes security-scans skills at
 install time. Review a finding before using `--force`; Hermes does not let that
 flag override a dangerous verdict.
+
+The expanded Hermes set deliberately separates five jobs: workflow routing,
+day-to-day operation, extension development, messaging/API gateway operation,
+and Nous-hosted services. The compatibility skill remains responsible only for
+Socket-to-Hermes classification and export decisions.
 
 The currently exported skills are listed in `skills.sh.json`. Their canonical
 sources remain in their owning child plugins; root `skills/` is a checked-in
@@ -191,11 +204,18 @@ server command plus a deliberately small tool allowlist.
 
 ## When a Native Hermes Plugin Is Required
 
-Write a dedicated Python Hermes plugin only when a concrete Socket feature needs
-runtime registration: a tool handler, lifecycle hook, slash command, CLI
-command, or namespaced skill bundle. A real plugin has its own `plugin.yaml`
-and `register(ctx)` entry point, and may call `ctx.register_tool`,
-`ctx.register_hook`, `ctx.register_command`, or `ctx.register_skill`.
+Write a dedicated general Python Hermes plugin only when a concrete Socket
+feature needs runtime registration: a tool handler, plugin lifecycle hook,
+slash command, CLI command, or namespaced skill bundle. A real plugin has its
+own `plugin.yaml` and `register(ctx)` entry point.
+
+Hermes now documents multiple specialized extension systems in addition to the
+general plugin API: messaging platform adapters, model providers, memory
+providers, context engines, secret sources, image and video providers, web
+search providers, browser providers, desktop plugins, and dashboard plugins.
+Config-driven TTS, STT, MCP, and shell hooks plus drop-in gateway hooks are
+separate again. Select the subsystem that owns the behavior; do not hide these
+contracts behind one generic Socket bridge.
 
 Do not add a generic Socket bridge or boilerplate plugin merely to mirror Codex
 packaging. Instruction workflows remain skills; external tool servers remain
@@ -232,6 +252,15 @@ validated compatibility classification, not a fictional universal runtime.
 - [Hermes MCP Config Reference](https://hermes-agent.nousresearch.com/docs/reference/mcp-config-reference)
   defines `mcp_servers` transport, environment, filtering, and timeout fields.
 - [Hermes Plugins](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
-  defines `plugin.yaml`, `register(ctx)`, and Python runtime extensions.
+  defines plugin discovery, general and specialized plugin categories, and
+  Python runtime extensions.
+- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+  maps general plugins, provider plugins, platform adapters, config-driven
+  extensions, desktop/dashboard plugins, and programmatic integration choices.
+- [Hermes Programmatic Integration](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration)
+  distinguishes ACP, TUI gateway JSON-RPC, and the OpenAI-compatible API server.
+- [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal)
+  distinguishes Portal inference, managed Tool Gateway routes, Nous Chat, and
+  subscription-backed services.
 - [Agent Skills](https://agentskills.io/) is the shared progressive-disclosure
   skill format that keeps Socket's exported `SKILL.md` workflows portable.

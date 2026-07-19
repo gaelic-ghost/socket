@@ -5,7 +5,7 @@ This file is the Agent Portability Skills child-repo override for work done from
 ## Scope
 
 - `agent-portability-skills` is the canonical home for maintainer skills that help Socket keep agent skills, Codex plugin surfaces, MCP declarations, hooks, custom agents, and host-specific adapter guidance portable without pretending every host uses the same package model.
-- The current shipped skills still start from skills-export and plugin-export repositories; future skills should extend that foundation into explicit Socket child-plugin portability, Zed Agent, Xcode plug-in, OpenCode, Claude Code, and MCP compatibility work.
+- The shipped skills cover skills-export and plugin-export repositories, Socket-to-Hermes compatibility, Hermes operator and extension-development workflows, Hermes messaging gateways, and Nous Research services. Future skills should extend that foundation into explicit Socket child-plugin portability, Zed Agent, Xcode plug-in, OpenCode, Claude Code, and MCP compatibility work.
 - Root [`skills/`](./skills/) is the canonical authored and exported surface.
 - Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) as plugin packaging metadata only.
 - Use the Socket root maintainer docs for shared marketplace, release, and contribution workflow. Keep child maintainer notes only when they describe `agent-portability-skills`-specific behavior.

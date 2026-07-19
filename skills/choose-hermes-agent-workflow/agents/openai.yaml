@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Hermes Agent Workflow"
+  short_description: "Route Hermes Agent use and development work"
+  default_prompt: "Use $choose-hermes-agent-workflow to select the right Hermes Agent operator, extension, gateway, Nous services, or compatibility workflow."

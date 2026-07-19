@@ -19,6 +19,8 @@
     "portability",
     "mcp",
     "hooks",
+    "hermes",
+    "nous",
     "zed",
     "xcode",
     "claude-code"
@@ -27,7 +29,7 @@
   "interface": {
     "displayName": "Agent Portability Skills",
     "shortDescription": "Maintainer skills for agent skill and plugin portability.",
-    "longDescription": "Installable maintainer skills for Socket-owned agent skill portability, Codex plugin surfaces, MCP and hook boundaries, and future host adapter guidance across tools such as Zed, Xcode, OpenCode, and Claude Code.",
+    "longDescription": "Installable workflows for Hermes Agent operation and extension development, Nous Portal and gateway services, Socket-owned agent skill portability, Codex plugin surfaces, MCP and hook boundaries, and host adapter guidance across tools such as Zed, Xcode, OpenCode, and Claude Code.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

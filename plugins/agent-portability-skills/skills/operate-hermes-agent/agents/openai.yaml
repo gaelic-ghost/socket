@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate Hermes Agent"
+  short_description: "Set up and operate Hermes Agent safely"
+  default_prompt: "Use $operate-hermes-agent to set up, configure, run, secure, and troubleshoot this Hermes Agent installation."
