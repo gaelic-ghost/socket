@@ -1,6 +1,6 @@
 # Setup And Agent Surfaces
 
-Last checked against Apple developer pages and WWDC26 transcripts on 2026-06-22.
+Last checked against Apple developer pages and Xcode release notes on 2026-07-19.
 
 ## Source Anchors
 
@@ -10,12 +10,21 @@ Last checked against Apple developer pages and WWDC26 transcripts on 2026-06-22.
 - Meet agentic coding in Xcode: https://developer.apple.com/videos/play/tech-talks/111428/
 - Setting up coding intelligence: https://developer.apple.com/documentation/Xcode/setting-up-coding-intelligence
 - Giving external agents access to Xcode: https://developer.apple.com/documentation/Xcode/giving-external-agents-access-to-xcode
+- Xcode 26.6 release notes: https://developer.apple.com/documentation/xcode-release-notes/xcode-26_6-release-notes
 
 ## Stable Surface To Preserve
 
 Xcode is the owner of the coding-assistant UI, model/provider settings, project context, artifact review surfaces, and Xcode tool permissions when an agent is launched inside Xcode.
 
 External agents are different. They run outside Xcode and connect to Xcode through the Xcode-provided Model Context Protocol bridge. Do not describe this as the agent being "inside Xcode" unless Xcode itself launched it.
+
+ACP-hosted agents are a third explicit path. Xcode is the ACP client and owns
+the conversation UI, project context, and Xcode-side permissions while the
+launched agent executable owns its runtime, authentication, model, native
+configuration, and supported ACP capabilities. Apple documents adding an ACP
+agent in Coding Intelligence settings, and Xcode 26.6 release notes record ACP
+support. Keep the agent's generic launch/handshake diagnosis in Agent
+Portability Skills.
 
 ## Xcode 27 Beta Surface
 
@@ -41,11 +50,12 @@ When a claim depends on live Xcode UI, an open project, MCP connection state, ag
 Use this split before giving setup advice:
 
 - `xcode-hosted`: Xcode starts the agent or chat provider and owns the assistant UI, artifacts, project context, and permissions.
+- `acp-hosted`: Xcode launches an ACP agent and renders it in Xcode; validate the agent executable and ACP behavior separately from Xcode's permissions and tools.
 - `external-mcp`: another client starts the agent and connects to Xcode through `xcrun mcpbridge`.
 - `plugin-import`: Xcode Settings > Intelligence > Plug-ins imports plug-ins, skills, hooks, and MCP servers from installed agent state, a local folder, or a remote Git URL; keep authored Socket skills as the source of truth unless an import or adaptation is explicitly requested.
 - `chat-provider`: Xcode uses a model provider for code chat or coding tools, but no autonomous agent permission is implied until Xcode documents that path.
 - `plugin`: Xcode plug-in packaging or import behavior. The import path is verified in Xcode 27 beta, but runtime behavior for hooks, MCP commands, and non-skill components still needs targeted validation.
-- `acp`: agent protocol setup. Do not claim Apple-documented ACP setup unless current Apple docs or local Xcode inspection show it.
+- `acp`: shared editor-agent protocol implementation. Xcode owns its client setup; Agent Portability Skills owns generic ACP operation and development.
 
 ## Handoff Rule
 
@@ -54,3 +64,5 @@ Setup and permissions stay in this skill. Execution belongs elsewhere:
 - build, run, preview, file membership, and project mutation: `xcode-build-run-workflow`
 - Swift Testing, XCTest, XCUITest, and `.xctestplan`: `xcode-testing-workflow`
 - Apple documentation lookup: `explore-apple-swift-docs`
+- existing ACP launch or handshake diagnosis: `agent-portability-skills:operate-acp-agent-integration`
+- ACP server implementation: `agent-portability-skills:build-acp-agent`

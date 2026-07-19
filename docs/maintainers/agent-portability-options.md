@@ -29,8 +29,8 @@ Use `agent-portability-skills` as the reusable skill layer for these decisions. 
 
 ## Near-Term Focus
 
-Keep Xcode 27 beta, Claude, Hermes, and Codex as active compatibility targets;
-retain OpenCode and Zed as skills-first follow-up surfaces.
+Keep Xcode, Claude, Hermes, Codex, ACP, and Zed as active compatibility targets;
+retain OpenCode as a skills-first follow-up surface.
 
 Current locally installed evidence:
 
@@ -38,13 +38,15 @@ Current locally installed evidence:
 - Xcode 27 beta live bridge: verified on 2026-06-23 with the beta app open and selected through `MCP_XCODE_PID`; `run-agent --dry-run codex` resolved the beta-scoped Codex runtime and Xcode-specific `CODEX_HOME`. A direct `codex skills export` attempt through that runtime failed in this beta with `unrecognized subcommand 'export'`, so do not rely on that as an install or export path.
 - Xcode 27 beta plug-in import: verified on 2026-06-23 through the Xcode Beta Settings UI. `Import from Codex`, `Add from file`, and `Add from URL` all recognized agentic plug-in payloads; `Add from URL` accepted `https://github.com/gaelic-ghost/socket.git` and enumerated Socket child plug-ins before import.
 - Active command-line Xcode: `/Applications/Xcode.app/Contents/Developer`, currently Xcode 26.6 build 17F113 through the default `xcodebuild -version`.
-- Hermes CLI: 0.17.0 (2026.6.19), checked on 2026-07-19.
+- Hermes CLI: local 0.17.0 (2026.6.19); published PyPI 0.18.2. `hermes update --check` reports an update available, while the local checkout has one carried commit and is one commit ahead/behind `origin/main`.
+- Hermes ACP: `hermes acp --check` passes locally. The source repository ships a 0.18.2 registry manifest, but the live canonical ACP Registry does not currently contain `hermes-agent`.
+- Zed: 1.8.2 build 20260624.160235, checked from the installed app bundle on 2026-07-19.
 - Claude Code CLI: 2.1.211, checked on 2026-07-19.
 - Codex CLI: 0.144.6, checked on 2026-07-19.
 - OpenCode CLI: `/opt/homebrew/bin/opencode`, verified as 1.17.9.
 - OpenCode Desktop: `/Applications/OpenCode.app`, present locally.
 
-Treat Zed as two separate surfaces. Zed's Codex external agent can use normal Codex state, so Socket needs no separate install path for Codex-in-Zed. Zed's first-party Agent remains a native skills and MCP target that should be evaluated separately from Codex plugin marketplace guidance.
+Treat Zed as three separate surfaces: Zed Agent, ACP External Agents, and Terminal Threads. Zed's Codex external agent can use normal Codex state, while Zed Agent has its own skills, instructions, profiles, permissions, and MCP configuration.
 
 Treat AgentUtils as the future home for complex local orchestration.
 
@@ -200,6 +202,12 @@ Practical Socket implication:
 - Zed is a strong target for `.agents/skills` output with no remote registry promise.
 - Skill descriptions need to stay concise because Zed enforces a catalog budget.
 - Socket should not assume Zed external agents consume Zed Skills. A Claude or Codex session inside Zed needs that external agent's own config path.
+- Use `operate-zed-agent` to choose between Zed Agent, an ACP External Agent,
+  and a Terminal Thread.
+- Check the canonical ACP Registry before recommending registry installation.
+  Hermes is not currently published there despite its source manifest and
+  documentation; use the official `hermes` plus `args: ["acp"]` custom-agent
+  path after `hermes acp --check` until the registry feed changes.
 
 Sources:
 
@@ -207,6 +215,36 @@ Sources:
 - [Zed Agent Panel](https://zed.dev/docs/ai/agent-panel)
 - [Zed MCP](https://zed.dev/docs/ai/mcp)
 - [Zed External Agents](https://zed.dev/docs/ai/external-agents)
+
+### Agent Client Protocol
+
+ACP is the shared editor-to-agent boundary for Zed, Xcode, and other clients.
+The editor/client owns the conversation and review UI; the launched agent owns
+its runtime, provider authentication, model, native skills, and persistent
+state. ACP can carry client-provided MCP server configuration, but ACP and MCP
+remain separate protocols and security boundaries.
+
+Socket now routes this work through:
+
+- `choose-agent-integration-protocol` for ACP versus MCP, terminal, native host,
+  Hermes TUI gateway, or HTTP API selection.
+- `operate-acp-agent-integration` for registry discovery, launch commands,
+  authentication, capability negotiation, sessions, permissions, and logs.
+- `build-acp-agent` for protocol implementation, testing, package publication,
+  and canonical registry submission.
+- `operate-zed-agent` and
+  `apple-dev-skills:xcode-coding-intelligence-workflow` for client-owned setup.
+
+The current stable ACP wire version is 1. Clients and agents negotiate it and
+optional capabilities during initialization; SDK or schema-package versions do
+not determine wire compatibility by themselves.
+
+Sources:
+
+- [ACP architecture](https://agentclientprotocol.com/get-started/architecture)
+- [ACP initialization](https://agentclientprotocol.com/protocol/v1/initialization)
+- [ACP Registry](https://agentclientprotocol.com/get-started/registry)
+- [Xcode coding intelligence setup](https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence)
 
 ### Hermes Agent
 
@@ -232,7 +270,7 @@ Practical Socket implication:
 Sources:
 
 - [Hermes Agent documentation](https://hermes-agent.nousresearch.com/docs/)
-- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
 - [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal)
 - [Hermes compatibility guide](./hermes-compatibility.md)
 
@@ -266,7 +304,7 @@ Sources:
 
 - Add a root portability report command that inventories every `SKILL.md`, plugin manifest, MCP config, hook, app config, and custom-agent definition.
 - Validate common skill-name and description constraints for Codex and OpenCode first.
-- Include Zed constraints in the report as informational follow-up, but do not let Zed-specific choices drive the first implementation.
+- Include Zed's flat roots, trusted-worktree rule, catalog budget, and native-versus-external boundary in the report.
 - Report host-specific blockers instead of mutating files.
 
 ### Slice 2: OpenCode Skills-Only Export
@@ -315,7 +353,7 @@ Sources:
 - Should Socket's source of truth stay as per-child `skills/`, or should a root export index own cross-host skill publishing?
 - Should project-local `.agents/skills` output be a generated mirror, symlink tree, or documented install command?
 - Which CLI surfaces are installed locally and stable enough for smoke tests?
-- What is the official Hermes Agent documentation or source repository?
+- When will the official Hermes 0.18.2 `uvx` manifest be accepted into the canonical ACP Registry?
 - Which Socket child plug-ins can be imported from the public Git URL without path, dependency, auth, hook, or MCP execution issues?
 
 ## Decision Gate

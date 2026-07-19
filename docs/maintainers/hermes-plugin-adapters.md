@@ -1,7 +1,7 @@
 # Hermes Native Python Plugin Adapter Plan
 
-Date checked: 2026-07-19 against Hermes Agent 0.17.0 and the current plugin
-developer guide.
+Date checked: 2026-07-19 against published Hermes Agent 0.18.2 and the current
+live machine-readable plugin and programmatic-integration documentation.
 
 This is a prioritized implementation plan, not an adapter implementation.
 Socket keeps its portable workflows as skills and its external tools as MCP
@@ -52,7 +52,7 @@ behavior.
 - [Hermes Plugins](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
   defines `plugin.yaml`, `register(ctx)`, the general plugin extension points,
   discovery locations, and opt-in enablement.
-- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
   is the current extension-surface router for general, specialized,
   config-driven, desktop, dashboard, and programmatic integrations.
 - [Hermes MCP Config Reference](https://hermes-agent.nousresearch.com/docs/reference/mcp-config-reference)

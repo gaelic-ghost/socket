@@ -61,8 +61,21 @@ Observed `mcpbridge` behavior:
 
 ## Unverified Or Research-Only
 
-- ACP-specific Xcode setup: no current Apple page found in this pass that made ACP the documented Xcode setup surface. Mention ACP only as unresolved or when live Xcode documentation proves it.
+- Hermes-in-Xcode runtime behavior remains unverified locally. Apple documents
+  ACP agent setup, but each agent still needs executable, authentication,
+  capability, permission, and session validation in Xcode.
 - Xcode 27 beta external-agent permission toggles, project-session behavior, and live agent execution were not verified here.
+
+## Checked 2026-07-19
+
+- Apple Setting up coding intelligence now documents Add an Agent for agents
+  that support ACP.
+- Xcode 26.6 release notes state that Xcode adds Agent Client Protocol support.
+- Xcode 27 beta release notes also state ACP support and include ACP-agent
+  plug-in fixes.
+- Generic ACP operation and implementation are shared host concerns owned by
+  Agent Portability Skills; this Apple skill retains Xcode client setup,
+  permissions, project context, and Xcode tool behavior.
 
 ## Checked 2026-06-23
 

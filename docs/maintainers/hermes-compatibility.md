@@ -1,7 +1,9 @@
 # Hermes Agent Compatibility
 
-Date checked: 2026-07-19 against Hermes Agent 0.17.0 and the current official
-user and developer guides.
+Date checked: 2026-07-19 against published Hermes Agent 0.18.2, the live
+machine-readable official docs, and local Hermes Agent 0.17.0. The local
+checkout reports an update available and retains one carried commit, so this
+documentation pass did not mutate that install.
 
 Socket's Hermes compatibility is a durable, explicit compatibility baseline.
 Every new or materially changed Socket plugin, skill, and MCP declaration must
@@ -29,11 +31,15 @@ Hermes discovers the root `skills/` directory by default after a user adds the
 Socket tap. The curated set is:
 
 - `bootstrap-skills-plugin-repo`
+- `build-acp-agent`
 - `build-hermes-agent-extensions`
+- `choose-agent-integration-protocol`
 - `choose-hermes-agent-workflow`
 - `hermes-agent-compatibility`
+- `operate-acp-agent-integration`
 - `operate-hermes-agent`
 - `operate-hermes-agent-gateway`
+- `operate-zed-agent`
 - `sync-skills-repo-guidance`
 - `use-nous-research-services`
 - `app-extension-architecture-workflow`
@@ -71,6 +77,13 @@ hermes skills tap add gaelic-ghost/socket
 hermes skills search portability
 hermes skills install gaelic-ghost/socket/hermes-agent-compatibility
 ```
+
+The ACP workflows keep source support, package publication, canonical registry
+publication, and client runtime proof as separate states. Hermes 0.18.2 ships
+an official `acp_registry/agent.json` and PyPI ACP extra, but the live canonical
+ACP Registry did not contain `hermes-agent` on 2026-07-19. Until an official
+entry is accepted and published, Zed users should validate `hermes acp --check`
+and use Zed's custom-agent command rather than an unrelated launcher.
 
 Custom GitHub taps are community sources and Hermes security-scans skills at
 install time. Review a finding before using `--force`; Hermes does not let that
@@ -254,11 +267,17 @@ validated compatibility classification, not a fictional universal runtime.
 - [Hermes Plugins](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
   defines plugin discovery, general and specialized plugin categories, and
   Python runtime extensions.
-- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
   maps general plugins, provider plugins, platform adapters, config-driven
   extensions, desktop/dashboard plugins, and programmatic integration choices.
 - [Hermes Programmatic Integration](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration)
   distinguishes ACP, TUI gateway JSON-RPC, and the OpenAI-compatible API server.
+- [Hermes ACP Editor Integration](https://hermes-agent.nousresearch.com/docs/user-guide/features/acp/)
+  documents the ACP toolset, shared Hermes state, health checks, sessions, and
+  editor launch paths.
+- [ACP Registry](https://agentclientprotocol.com/get-started/registry)
+  is the publication source of truth; a source-owned manifest alone is not a
+  published registry entry.
 - [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal)
   distinguishes Portal inference, managed Tool Gateway routes, Nous Chat, and
   subscription-backed services.

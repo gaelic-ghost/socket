@@ -6,7 +6,7 @@ later note says otherwise.
 
 This plan records the first Socket pass for supporting Xcode 27 beta-era coding intelligence inside the existing `apple-dev-skills` plugin.
 
-The goal is to add practical Apple and Xcode workflows without creating a separate beta plugin yet. Keep ACP-specific exploration outside this plan except where Xcode itself exposes ACP agent setup as part of its Intelligence settings.
+The goal is to add practical Apple and Xcode workflows without creating a separate beta plugin yet. Keep generic ACP operation and development in Agent Portability Skills while this plan owns Xcode's documented ACP client setup, permissions, and tools.
 
 ## Current Recommendation
 
@@ -57,7 +57,11 @@ Live beta probe checked on 2026-06-23:
 
 Live-app setup note: do not treat "Xcode is not running" as a final blocker for Xcode Intelligence, MCP, or plug-in inspection work. Open the intended stable or beta Xcode app, select the intended process with `MCP_XCODE_PID` when needed, and retry the check before reporting a blocker.
 
-Refresh note: no current Apple page found in this pass made ACP the documented Xcode setup surface. Keep ACP claims unresolved unless live Xcode documentation proves them.
+Refresh note, 2026-07-19: Apple now documents Add an Agent for ACP-compatible
+agents in Setting up coding intelligence, and Xcode 26.6 release notes state
+that Xcode adds ACP support. Keep each individual agent's runtime behavior
+unverified until its executable, authentication, capabilities, sessions, and
+Xcode-side permissions are exercised.
 
 Important current Xcode 27 signals:
 
