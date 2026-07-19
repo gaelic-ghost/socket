@@ -24,6 +24,7 @@ Read [references/macos-runtime-evidence.md](references/macos-runtime-evidence.md
 5. Inspect focused logs/events.
    - Query relevant unified logs and existing Endpoint Security/XProtect/Gatekeeper evidence for the narrow time window.
    - Record Full Disk Access, root, Endpoint Security entitlement, or other permissions required and what absence hides.
+   - Treat missing collection permission or unavailable event types as a telemetry gap, not evidence that the behavior did not occur. Route app-facing permission implementation to `macos-privacy-permissions-workflow` and exact private-control interpretation to `research-macos-security-control`.
 6. Build a timeline.
    - Separate user action, launch, child processes, file changes, prompts, network, persistence, detection, and termination.
 7. Assess behavior and gaps.

@@ -84,6 +84,7 @@ This skill owns that decision, File Provider synchronization mechanics, and Find
 
 ## Fallbacks and Handoffs
 
+- Recommend `macos-sandbox-file-access-workflow` when the real requirement is local user-selected files, security-scoped bookmarks, App Groups, or persistent sandbox access rather than a File Provider domain or Finder UI.
 - Recommend `app-extension-architecture-workflow` for extension targets, process isolation, entitlements, App Groups, and shared containers.
 - Recommend `swift-openapi-client-workflow` for generated Apple client transport integration.
 - Recommend `xcode-build-run-workflow` for target configuration, capabilities, signing, embedding, install, and run work.

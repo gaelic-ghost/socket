@@ -76,7 +76,7 @@
 - Milestone 28: Swift language tooling expansion - In Progress
 - Milestone 29: Model Lab skills plugin - Planned
 - Milestone 30: macOS virtualization and container skills expansion - Completed
-- Milestone 31: macOS platform security skills expansion - Planned
+- Milestone 31: macOS platform security skills expansion - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -1039,32 +1039,34 @@ Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a di
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
 - [x] Record the source baseline, ownership, control-layer model, evidence record, skill contracts, fixtures, compatibility, validation, and implementation slices in [`docs/maintainers/macos-platform-security-skills-plan.md`](./docs/maintainers/macos-platform-security-skills-plan.md).
-- [ ] Add three Apple Dev workflows for privacy permissions, sandboxed file access, and entitlement diagnosis without creating a duplicate macOS security plugin.
-- [ ] Add one Reverse Engineering workflow for exact-build public/private macOS security-control research and technical notes.
-- [ ] Align existing Cybersecurity macOS workflows around explicit developer, research, threat-assessment, and isolation handoffs without moving defensive ownership.
-- [ ] Keep the first implementation instruction-only: no TCC database mutation, permission grant service, privileged helper, daemon, endpoint agent, MCP server, protection bypass, or live-host prompt automation.
+- [x] Add three Apple Dev workflows for privacy permissions, sandboxed file access, and entitlement diagnosis without creating a duplicate macOS security plugin.
+- [x] Add one Reverse Engineering workflow for exact-build public/private macOS security-control research and technical notes.
+- [x] Align existing Cybersecurity macOS workflows around explicit developer, research, threat-assessment, and isolation handoffs without moving defensive ownership.
+- [x] Keep the first implementation instruction-only: no TCC database mutation, permission grant service, privileged helper, daemon, endpoint agent, MCP server, protection bypass, or live-host prompt automation.
 
 ### Planned Slices
 
-- [ ] Slice 1: ship `apple-dev-skills:macos-privacy-permissions-workflow` with responsible-code attribution, public API, prompt/settings, reset-only, PPPC, and disposable-fixture contracts.
-- [ ] Slice 2: ship `apple-dev-skills:macos-sandbox-file-access-workflow` and `apple-dev-skills:diagnose-apple-entitlements`, then align provisioning, distribution, extension, File Provider, and Xcode handoffs.
-- [ ] Slice 3: ship `reverse-engineering-skills:research-macos-security-control`, connect exact-build research and technical notes to existing artifact/signing/dynamic-analysis workflows, and align Cybersecurity handoffs.
-- [ ] Slice 4: forward-test the complete scenario matrix, remediate trigger and handoff gaps, update discovery metadata and user-facing inventory, export portable skills through Hermes, record Claude/Cowork compatibility, and run full affected validation.
-- [ ] Reconsider a standalone `macos-security-skills` plugin or shared read-only diagnostic collector only after repeated implementation use satisfies the explicit gate in the maintainer plan.
+- [x] Slice 1: ship `apple-dev-skills:macos-privacy-permissions-workflow` with responsible-code attribution, public API, prompt/settings, reset-only, PPPC, and disposable-fixture contracts.
+- [x] Slice 2: ship `apple-dev-skills:macos-sandbox-file-access-workflow` and `apple-dev-skills:diagnose-apple-entitlements`, then align provisioning, distribution, extension, File Provider, and Xcode handoffs.
+- [x] Slice 3: ship `reverse-engineering-skills:research-macos-security-control`, connect exact-build research and technical notes to existing artifact/signing/dynamic-analysis workflows, and align Cybersecurity handoffs.
+- [x] Slice 4: forward-test the complete scenario matrix, remediate trigger and handoff gaps, update discovery metadata and user-facing inventory, export portable skills through Hermes, record Claude/Cowork compatibility, and run full affected validation.
+- [x] Reconsider a standalone `macos-security-skills` plugin or shared read-only diagnostic collector only after repeated implementation use satisfies the explicit gate in the maintainer plan; retain the focused existing owners for this release.
 
 ### Exit Criteria
 
-- [ ] Agents identify the responsible executable and controlling security layer before suggesting a permission, entitlement, signing, distribution, malware, or system-policy change.
-- [ ] Public application guidance never treats private TCC symbols, direct database access, `tccutil reset`, an entitlement, or administrator privileges as a supported permission grant.
-- [ ] File-access guidance preserves the complete security-scoped bookmark lifecycle and distinguishes App Sandbox, TCC, POSIX/ACL, Data Vault, and SIP failures.
-- [ ] Entitlement guidance compares requested behavior, tracked source, account/profile authorization, final signed code, and runtime authorization for every affected target.
-- [ ] Private-control research records exact builds and clearly separates public contract, private implementation evidence, runtime observation, inference, and transformed artifacts.
-- [ ] Apple Dev, Reverse Engineering, Cybersecurity, Socket, Hermes, and Claude/Cowork discovery and validation surfaces agree on the shipped owner boundaries.
+- [x] Agents identify the responsible executable and controlling security layer before suggesting a permission, entitlement, signing, distribution, malware, or system-policy change.
+- [x] Public application guidance never treats private TCC symbols, direct database access, `tccutil reset`, an entitlement, or administrator privileges as a supported permission grant.
+- [x] File-access guidance preserves the complete security-scoped bookmark lifecycle and distinguishes App Sandbox, TCC, POSIX/ACL, Data Vault, and SIP failures.
+- [x] Entitlement guidance compares requested behavior, tracked source, account/profile authorization, final signed code, and runtime authorization for every affected target.
+- [x] Private-control research records exact builds and clearly separates public contract, private implementation evidence, runtime observation, inference, and transformed artifacts.
+- [x] Apple Dev, Reverse Engineering, Cybersecurity, Socket, Hermes, and Claude/Cowork discovery and validation surfaces agree on the shipped owner boundaries.
+
+Completed Milestone 31 by shipping four focused, instruction-only macOS platform-security workflows across Apple Dev and Reverse Engineering Skills, aligning defensive Cybersecurity handoffs, preserving visible prompt and protection-state approval gates, exporting the portable skill set through Hermes, and recording Claude Code/Cowork compatibility without introducing a permission manager, privileged service, or duplicate plugin.
 
 ## Small Tickets
 

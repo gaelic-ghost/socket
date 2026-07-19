@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS Sandbox File Access"
+  short_description: "Design durable sandboxed file access"
+  default_prompt: "Use $macos-sandbox-file-access-workflow to design the narrowest durable file-access path."

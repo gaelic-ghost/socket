@@ -1,7 +1,7 @@
 {
   "name": "reverse-engineering-skills",
   "version": "9.20.0",
-  "description": "Workflow skills for reverse engineering, decompilation, disassembly, symbol, and artifact-analysis tasks.",
+  "description": "Workflow skills for reverse engineering, decompilation, disassembly, symbols, artifact analysis, and exact-build macOS security-control research.",
   "skills": "./skills/",
   "author": {
     "name": "Gale",
@@ -21,6 +21,10 @@
     "objective-c",
     "mach-o",
     "apple-silicon",
+    "macos-security",
+    "tcc",
+    "gatekeeper",
+    "xprotect",
     "rizin",
     "cutter",
     "malimite",
@@ -33,8 +37,8 @@
   "interface": {
     "displayName": "Reverse Engineering Skills",
     "shortDescription": "Binary inspection and decompilation workflow skills.",
-    "longDescription": "Guidance for reverse engineering workflows across artifact triage, preservation, exact-build comparison, reproducible evidence, Apple Mach-O, Swift and Objective-C runtime metadata, symbols, signing, Apple Silicon, dyld caches, dynamic analysis, kernel and firmware research, Cutter and Rizin, Malimite, Ghidra, Hopper, Unity, .NET assemblies, IL2CPP artifacts, and generated decompiler output.",
-    "defaultPrompt": "Use Reverse Engineering Skills when the task centers on compiled artifacts, decompiled output, disassembly, symbols, crash logs, or binary metadata. Start by identifying the artifact shape, preserving original inputs, choosing the least confusing inspection path, and recording which tool produced each observation.",
+    "longDescription": "Guidance for reverse engineering workflows across artifact triage, preservation, exact-build comparison, reproducible evidence, macOS TCC, sandbox, entitlement, Gatekeeper, XProtect and system-policy research, Apple Mach-O, Swift and Objective-C runtime metadata, symbols, signing, Apple Silicon, dyld caches, dynamic analysis, kernel and firmware research, Cutter and Rizin, Malimite, Ghidra, Hopper, Unity, .NET assemblies, IL2CPP artifacts, and generated decompiler output.",
+    "defaultPrompt": "Use Reverse Engineering Skills when the task centers on compiled artifacts, decompiled output, disassembly, symbols, crash logs, binary metadata, or exact-build macOS security-control internals. Preserve original inputs, identify exact artifacts and builds, distinguish public contracts from private evidence and runtime observations, and record which tool produced each claim.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

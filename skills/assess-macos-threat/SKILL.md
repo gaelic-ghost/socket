@@ -28,8 +28,11 @@ Read [references/macos-security-layers.md](references/macos-security-layers.md) 
    - Separate a blocked attempt from successful execution and successful execution from compromise.
 6. Assess and advise.
    - State classification/confidence, immediate isolation needs, evidence gaps, and the smallest next workflow.
+   - Route ordinary application permission implementation to `macos-privacy-permissions-workflow`; route private symbols, control internals, or exact-build Gatekeeper/XProtect/TCC questions to `research-macos-security-control`.
    - Do not generalize guest-observed behavior to a physical Mac when hardware, Secure Enclave, recoveryOS, kernel/system-extension, device, or anti-VM behavior remains unresolved.
 
 ## Output
 
 Return host/event identity, platform-layer evidence, artifact identity, observed behavior, assessment/confidence, immediate advice, and focused next checks.
+
+Do not interpret an XProtect or Gatekeeper event alone as proof that malware executed or that the host is compromised. Preserve the event type, exact OS/security-data state, actor/artifact identity, and observed behavior.

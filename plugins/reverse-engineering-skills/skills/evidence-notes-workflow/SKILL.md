@@ -41,6 +41,7 @@ Use this skill when reverse-engineering work needs a durable notes file, handoff
    - Summarize the most useful confirmed findings.
    - List blocked or uncertain areas.
    - Name the next artifact, tool, command, or owner skill to use.
+   - Use `research-macos-security-control` when the handoff must turn exact-build macOS public/private control evidence into a bounded technical note.
 
 ## Notes Template
 

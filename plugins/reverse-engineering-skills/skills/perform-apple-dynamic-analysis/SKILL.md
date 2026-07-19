@@ -41,6 +41,7 @@ Read [references/apple-dynamic-analysis.md](references/apple-dynamic-analysis.md
    - Preserve environment-specific limitations.
 
 8. Hand ordinary Xcode debugging, test authoring, app fixes, or Instruments development profiling to `apple-dev-skills` after the artifact-analysis question is resolved.
+   - Hand a bounded runtime observation about TCC, App Sandbox, entitlements, Gatekeeper, XProtect, SIP, or another macOS policy control to `research-macos-security-control` so it remains tied to the exact build and public/private evidence hierarchy.
 
 ## Guardrails
 

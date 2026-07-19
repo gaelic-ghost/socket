@@ -146,6 +146,9 @@ uv run pytest
 
 ## Active Skills
 
+- `macos-privacy-permissions-workflow`
+- `macos-sandbox-file-access-workflow`
+- `diagnose-apple-entitlements`
 - `choose-macos-virtualization-shape`
 - `virtualization-framework-workflow`
 - `linux-development-vm-workflow`

@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-07-19T17:41:35.923846+00:00",
+  "detectedAt": "2026-07-19T19:27:23.828783+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -172,6 +172,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/diagnose-apple-entitlements/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
     },
     {
@@ -208,6 +212,14 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/macos-privacy-permissions-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/macos-sandbox-file-access-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
     },
     {
@@ -225,6 +237,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/safari-mcp-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -949,6 +965,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/reverse-engineering-skills/skills/research-apple-kernel-boot-and-firmware/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/reverse-engineering-skills/skills/research-macos-security-control/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -2082,6 +2102,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/diagnose-apple-entitlements/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/diagnose-apple-entitlements"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
         }
       ],
@@ -2190,6 +2222,30 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/macos-privacy-permissions-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/macos-privacy-permissions-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/macos-sandbox-file-access-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/macos-sandbox-file-access-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
         }
       ],
@@ -2245,6 +2301,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/safari-extension-control-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/safari-mcp-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/safari-mcp-workflow"
     },
     {
       "evidence": [
@@ -4278,6 +4346,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/reverse-engineering-skills/skills/research-macos-security-control/SKILL.md"
+        }
+      ],
+      "from": "product:reverse-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:reverse-engineering-skills/research-macos-security-control"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/reverse-engineering-skills/skills/review-decompiler-output/SKILL.md"
         }
       ],
@@ -6023,6 +6103,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/diagnose-apple-entitlements/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/diagnose-apple-entitlements",
+      "path": "plugins/apple-dev-skills/skills/diagnose-apple-entitlements/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/explore-apple-swift-docs/SKILL.md"
         }
       ],
@@ -6131,6 +6223,30 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/macos-privacy-permissions-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/macos-privacy-permissions-workflow",
+      "path": "plugins/apple-dev-skills/skills/macos-privacy-permissions-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/macos-sandbox-file-access-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/macos-sandbox-file-access-workflow",
+      "path": "plugins/apple-dev-skills/skills/macos-sandbox-file-access-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md"
         }
       ],
@@ -6185,6 +6301,18 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/safari-extension-control-workflow",
       "path": "plugins/apple-dev-skills/skills/safari-extension-control-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/safari-mcp-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/safari-mcp-workflow",
+      "path": "plugins/apple-dev-skills/skills/safari-mcp-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -8213,6 +8341,18 @@
       "kind": "codex-skill",
       "name": "skill:reverse-engineering-skills/research-apple-kernel-boot-and-firmware",
       "path": "plugins/reverse-engineering-skills/skills/research-apple-kernel-boot-and-firmware/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/reverse-engineering-skills/skills/research-macos-security-control/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:reverse-engineering-skills/research-macos-security-control",
+      "path": "plugins/reverse-engineering-skills/skills/research-macos-security-control/SKILL.md"
     },
     {
       "dependencies": [],

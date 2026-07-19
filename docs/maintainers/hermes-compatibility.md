@@ -29,9 +29,13 @@ Socket tap. The curated set is:
 - `hermes-agent-compatibility`
 - `sync-skills-repo-guidance`
 - `app-extension-architecture-workflow`
+- `diagnose-apple-entitlements`
 - `mailkit-workflow`
 - `file-provider-and-finder-sync-workflow`
+- `macos-privacy-permissions-workflow`
+- `macos-sandbox-file-access-workflow`
 - `connect-hopper-mcp`
+- `research-macos-security-control`
 - `script-hopper-analysis`
 - `use-ghidra`
 - `use-hopper`
@@ -100,6 +104,8 @@ The exported Swift package extension workflow is likewise portable guidance.
 It resolves operator-installed Swiftly and Xcode tools and plans SwiftPM plugin,
 macro, trait, generated-source, and permission work without bundling a compiler,
 plugin runtime, MCP server, or native Hermes extension.
+
+The exported macOS platform-security workflows are portable instruction contracts. Public app permission, sandbox file-access, and entitlement diagnosis remain in Apple Dev Skills; exact-build private-control research remains in Reverse Engineering Skills; defensive host investigation remains in Cybersecurity Skills. Hermes does not receive a TCC database tool, permission grant service, privileged helper, protection bypass, or native runtime plugin from this work.
 
 ## Maintainer Workflow
 

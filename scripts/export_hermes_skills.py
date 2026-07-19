@@ -49,10 +49,13 @@ MESSAGING_SKILLS = (
 )
 APPLE_SKILLS = (
     "app-extension-architecture-workflow",
+    "diagnose-apple-entitlements",
     "choose-macos-virtualization-shape",
     "virtualization-framework-workflow",
     "linux-development-vm-workflow",
     "macos-development-vm-workflow",
+    "macos-privacy-permissions-workflow",
+    "macos-sandbox-file-access-workflow",
     "mailkit-workflow",
     "file-provider-and-finder-sync-workflow",
     "safari-mcp-workflow",
@@ -96,6 +99,7 @@ SERVER_SIDE_SWIFT_SKILLS = (
 )
 REVERSE_ENGINEERING_SKILLS = (
     "connect-hopper-mcp",
+    "research-macos-security-control",
     "script-hopper-analysis",
     "use-ghidra",
     "use-hopper",
