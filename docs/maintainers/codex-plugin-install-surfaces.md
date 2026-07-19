@@ -2,6 +2,9 @@
 
 Use this document when maintainers need the short Socket-level map of Codex plugin install surfaces.
 
+Date checked: 2026-07-19 against Codex CLI 0.144.6 and the current official
+Codex plugin documentation.
+
 ## Core Model
 
 Codex plugin wiring has five separate jobs:

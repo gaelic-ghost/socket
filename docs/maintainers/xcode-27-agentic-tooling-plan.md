@@ -1,5 +1,9 @@
 # Xcode 27 Agentic Tooling Skill Plan
 
+Current bundle check: 2026-07-19, Xcode 27.0 beta build 27A5218g. Live import
+and bridge behavior in this document was last exercised on 2026-06-23 unless a
+later note says otherwise.
+
 This plan records the first Socket pass for supporting Xcode 27 beta-era coding intelligence inside the existing `apple-dev-skills` plugin.
 
 The goal is to add practical Apple and Xcode workflows without creating a separate beta plugin yet. Keep ACP-specific exploration outside this plan except where Xcode itself exposes ACP agent setup as part of its Intelligence settings.
@@ -291,7 +295,7 @@ uv run scripts/validate_socket_metadata.py
 
 Completed on 2026-06-22 with the first practical setup and permission workflow. Xcode 27 claims are dated beta-era claims, and local `mcpbridge` behavior is recorded separately from Xcode 27 behavior because this authoring machine had Xcode 26.5 installed.
 
-Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app now has confirmed `run-agent --dry-run codex` evidence when selected through `DEVELOPER_DIR` plus `MCP_XCODE_PID`. A direct `codex skills export` attempt through Xcode's beta-scoped Codex runtime failed, so Xcode plug-in support should use the official Plug-ins UI import paths instead of bridge-based skill export.
+Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app produced confirmed `run-agent --dry-run codex` evidence through the then-used beta toolchain selection plus `MCP_XCODE_PID`. A direct `codex skills export` attempt through Xcode's beta-scoped Codex runtime failed, so Xcode plug-in support should use the official Plug-ins UI import paths instead of bridge-based skill export. This is historical evidence, not current command guidance; current workflows select Apple command-line toolchains through `xcode-select` rather than injecting `DEVELOPER_DIR`.
 
 Validation:
 
@@ -365,6 +369,7 @@ Observed import behavior:
 - Treat local MCP plugins as requiring path, dependency, authentication, and permission handling before they can be full-fidelity Xcode plug-ins.
 - Treat hooks as recognized by import but execution-unverified until a follow-up probe confirms behavior.
 - Treat Codex apps and OpenAI custom-agent metadata as non-portable until Xcode exposes matching component contracts.
+- The read-only source assessment is now implemented by `uv run scripts/audit_xcode_plugin_compatibility.py`; use its `likely`, `partial`, `blocked`, and `unknown` queue before choosing live import targets.
 
 ## Open Questions
 
