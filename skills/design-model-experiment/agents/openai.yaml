@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Model Experiment"
+  short_description: "Define a reproducible model experiment before spending compute."
+  default_prompt: "Design a reproducible model experiment with hypotheses, controls, budgets, provenance, and stop conditions."

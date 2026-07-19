@@ -174,6 +174,7 @@ The installable local child entries currently point at:
 - `./plugins/cardhop-app`
 - `./plugins/cloud-deployment-skills`
 - `./plugins/cloud-inference-skills`
+- `./plugins/model-lab-skills`
 - `./plugins/agentdeck`
 - `./plugins/dotnet-skills`
 - `./plugins/game-dev-skills`

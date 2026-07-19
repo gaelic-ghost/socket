@@ -498,10 +498,10 @@ implemented skill needs their deterministic behavior.
 - [x] Record the Apple open-source AI toolkit and research-code classification
   policy.
 - [x] Run root metadata validation for the documentation-only planning pass.
-- [ ] Scaffold `plugins/model-lab-skills/` on an implementation branch.
-- [ ] Add the first skill slice and targeted validation.
-- [ ] Add Socket marketplace metadata only after real skill content exists.
-- [ ] Add Hermes, Claude Code, and Cowork compatibility surfaces.
+- [x] Scaffold `plugins/model-lab-skills/` on an implementation branch.
+- [x] Add the first skill slice and targeted validation.
+- [x] Add Socket marketplace metadata only after real skill content exists.
+- [x] Add Hermes, Claude Code, and Cowork compatibility surfaces.
 - [ ] Run root metadata validation.
 
 ## Exit Criteria

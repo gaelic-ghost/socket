@@ -943,48 +943,48 @@ In Progress
 
 ### Status
 
-Planned
+Implemented; release pending
 
 ### Scope
 
 - [x] Record the detailed plugin, ownership, skill-slice, Apple-runtime, tooling, compatibility, and validation plan in [`docs/maintainers/model-lab-skills-plugin-plan.md`](./docs/maintainers/model-lab-skills-plugin-plan.md).
-- [ ] Add a Socket-hosted `model-lab-skills` child plugin for reproducible language-model experiments, dataset preparation, fine-tuning, model evaluation, checkpoint comparison, representation research, behavior modification, refusal ablation, authorized jailbreak evaluation, and runtime comparison.
-- [ ] Keep model behavior and experiment design separate from GPU/provider operations, agent-harness evaluation, host portability, app implementation, and real-system security testing.
-- [ ] Treat the experiment manifest as the durable primitive connecting immutable model source, dataset provenance, recipe or intervention, checkpoint, evaluation suite, runtime evidence, and artifact decision.
-- [ ] Include a first-class Apple model-runtime lane that compares Foundation Models, Core AI, Core ML, direct MLX, ExecuTorch Core ML, and the experimental ExecuTorch MLX delegate without duplicating Apple-owned Core AI skills.
+- [x] Add a Socket-hosted `model-lab-skills` child plugin for reproducible language-model experiments, dataset preparation, fine-tuning, model evaluation, checkpoint comparison, representation research, behavior modification, refusal ablation, authorized jailbreak evaluation, and runtime comparison.
+- [x] Keep model behavior and experiment design separate from GPU/provider operations, agent-harness evaluation, host portability, app implementation, and real-system security testing.
+- [x] Treat the experiment manifest as the durable primitive connecting immutable model source, dataset provenance, recipe or intervention, checkpoint, evaluation suite, runtime evidence, and artifact decision.
+- [x] Include a first-class Apple model-runtime lane that compares Foundation Models, Core AI, Core ML, direct MLX, ExecuTorch Core ML, and the experimental ExecuTorch MLX delegate without duplicating Apple-owned Core AI skills.
 
 ### First Slice
 
-- [ ] Create `plugins/model-lab-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, an icon asset, authored `skills/` source, and no speculative MCP server.
-- [ ] Add `model-lab-skills:choose-model-lab-workflow` for routing training, fine-tuning, evaluation, interpretability, steering, ablation, quantization, merging, runtime benchmarking, Apple on-device research, and harness work.
-- [ ] Add `model-lab-skills:design-model-experiment` with an experiment-manifest asset and explicit controls, seeds, data splits, metrics, stop conditions, cost, and artifact-retention boundaries.
-- [ ] Add `model-lab-skills:prepare-language-model-dataset` for supervised, preference, reward-model, synthetic, adversarial, and evaluation dataset shapes with provenance, deduplication, contamination, and split checks.
-- [ ] Add `model-lab-skills:fine-tune-language-model` for full fine-tuning, LoRA, QLoRA, checkpointing, resumption, overfitting checks, held-out evaluation, and provider/Python handoffs.
-- [ ] Add `model-lab-skills:evaluate-language-model` for task, behavior, refusal, over-refusal, jailbreak-resilience, calibration, memorization, regression, and runtime measures with deterministic-first grading.
-- [ ] Add `model-lab-skills:compare-model-checkpoints` for normalized paired comparisons across base, control, intermediate, and candidate checkpoints.
-- [ ] Add `model-lab-skills:choose-apple-model-runtime` for current-source comparison and routing across Apple's system model, Core AI, Core ML, MLX, and ExecuTorch paths.
+- [x] Create `plugins/model-lab-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, an icon asset, authored `skills/` source, and no speculative MCP server.
+- [x] Add `model-lab-skills:choose-model-lab-workflow` for routing training, fine-tuning, evaluation, interpretability, steering, ablation, quantization, merging, runtime benchmarking, Apple on-device research, and harness work.
+- [x] Add `model-lab-skills:design-model-experiment` with an experiment-manifest asset and explicit controls, seeds, data splits, metrics, stop conditions, cost, and artifact-retention boundaries.
+- [x] Add `model-lab-skills:prepare-language-model-dataset` for supervised, preference, reward-model, synthetic, adversarial, and evaluation dataset shapes with provenance, deduplication, contamination, and split checks.
+- [x] Add `model-lab-skills:fine-tune-language-model` for full fine-tuning, LoRA, QLoRA, checkpointing, resumption, overfitting checks, held-out evaluation, and provider/Python handoffs.
+- [x] Add `model-lab-skills:evaluate-language-model` for task, behavior, refusal, over-refusal, jailbreak-resilience, calibration, memorization, regression, and runtime measures with deterministic-first grading.
+- [x] Add `model-lab-skills:compare-model-checkpoints` for normalized paired comparisons across base, control, intermediate, and candidate checkpoints.
+- [x] Add `model-lab-skills:choose-apple-model-runtime` for current-source comparison and routing across Apple's system model, Core AI, Core ML, MLX, and ExecuTorch paths.
 
 ### Follow-On Slices
 
-- [ ] Add `research-model-representations`, `steer-language-model-behavior`, and `ablate-refusal-representations` with falsifiable hypotheses, exact intervention records, controls, and ordinary-capability regression checks.
-- [ ] Add `evaluate-jailbreak-resilience` for owned open-weight models and authorized endpoints, with explicit target, attack corpus, model/template/sampler identity, success rubric, and Cybersecurity handoff for real-system impact.
-- [ ] Add `evaluate-tool-calling-model` with separate model-protocol and agent-harness failure reporting.
-- [ ] Add `benchmark-model-runtime` after at least two real comparison tasks establish the required load-time, time-to-first-token, throughput, memory, accelerator, thermal, power, artifact-size, and output-parity evidence.
-- [ ] Decide from real tasks whether pretraining or continued pretraining, preference optimization, distillation, adapter merging, artifact quantization, synthetic-data generation, multimodal evaluation, packaging, and agent-harness research each deserve separate skills.
+- [x] Add `research-model-representations`, `steer-language-model-behavior`, and `ablate-refusal-representations` with falsifiable hypotheses, exact intervention records, controls, and ordinary-capability regression checks.
+- [x] Add `evaluate-jailbreak-resilience` for owned open-weight models and authorized endpoints, with explicit target, attack corpus, model/template/sampler identity, success rubric, and Cybersecurity handoff for real-system impact.
+- [x] Add `evaluate-tool-calling-model` with separate model-protocol and agent-harness failure reporting.
+- [x] Add `benchmark-model-runtime` with load-time, time-to-first-token, throughput, memory, accelerator, thermal, energy, artifact-size, and output-parity evidence requirements.
+- [x] Defer separate pretraining, preference optimization, distillation, adapter merging, artifact quantization, synthetic-data, multimodal, packaging, and agent-harness research skills until real tasks demonstrate a stable standalone contract.
 
 ### Apple Open-Source AI Gates
 
-- [ ] Prefer Apple-owned `coreai-models` skills for Core AI export, model authoring, and compression implementation; keep Socket's Apple skill focused on cross-runtime choice and evidence.
-- [ ] Track `coreai-torch`, `coreai-optimization`, `coreai-models`, Core ML Tools, Foundation Models utilities, the Python Foundation Models SDK, MLX, MLX Swift, MLX LM, and both ExecuTorch Apple backends through current official source.
-- [ ] Classify Apple's growing `ml-*` repositories as reusable tools, benchmarks/datasets, paper-specific reproduction code, model releases, samples, or exploratory prototypes before recommending them.
-- [ ] Keep the ExecuTorch MLX delegate evidence-gated while upstream marks it experimental; verify exact commit or release, operator coverage, fallback, build requirements, parity, and performance for each recommendation.
+- [x] Prefer Apple-owned `coreai-models` skills for Core AI export, model authoring, and compression implementation; keep Socket's Apple skill focused on cross-runtime choice and evidence.
+- [x] Track `coreai-torch`, `coreai-optimization`, `coreai-models`, Core ML Tools, Foundation Models utilities, the Python Foundation Models SDK, MLX, MLX Swift, MLX LM, and both ExecuTorch Apple backends through current official source.
+- [x] Classify Apple's growing `ml-*` repositories as reusable tools, benchmarks/datasets, paper-specific reproduction code, model releases, samples, or exploratory prototypes before recommending them.
+- [x] Keep the ExecuTorch MLX delegate evidence-gated while upstream marks it experimental; verify exact commit or release, operator coverage, fallback, build requirements, parity, and performance for each recommendation.
 
 ### Compatibility And Validation
 
-- [ ] Export portable skills through the Hermes tap and validate the generated inventory.
-- [ ] Classify Claude Code and Cowork compatibility in the same implementation pass.
+- [x] Export portable skills through the Hermes tap and validate the generated inventory.
+- [x] Classify Claude Code and Cowork compatibility in the same implementation pass.
 - [ ] Forward-test the training, evaluation, Apple runtime, ablation, and jailbreak workflows against isolated representative tasks before treating their contracts as stable.
-- [ ] Wire `model-lab-skills` into the Socket marketplace only after useful skill content exists, then update root README, contributor docs, plugin metadata, and root validation together.
+- [x] Wire `model-lab-skills` into the Socket marketplace only after useful skill content exists, then update root README, contributor docs, plugin metadata, and root validation together.
 
 ### Exit Criteria
 

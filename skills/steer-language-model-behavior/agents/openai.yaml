@@ -1,0 +1,4 @@
+interface:
+  display_name: "Steer Language Model Behavior"
+  short_description: "Implement and evaluate controlled model behavior steering."
+  default_prompt: "Choose, implement, and evaluate a model steering intervention without conflating behavior change with understanding."

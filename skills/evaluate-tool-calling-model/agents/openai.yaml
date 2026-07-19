@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Tool-Calling Model"
+  short_description: "Evaluate tool selection, arguments, execution, and recovery."
+  default_prompt: "Evaluate a tool-calling model or harness across selection, schema, execution, recovery, and side-effect controls."

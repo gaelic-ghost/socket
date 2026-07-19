@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Language Model"
+  short_description: "Build repeatable capability, behavior, and safety evaluations."
+  default_prompt: "Design and run a repeatable language-model evaluation with scoped metrics and regression evidence."

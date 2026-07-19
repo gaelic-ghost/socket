@@ -1,0 +1,46 @@
+schema_version: 1
+experiment:
+  id: replace-with-stable-id
+  title: Replace with a concise title
+  hypothesis: Replace with a falsifiable statement
+  decision: Replace with the decision this run informs
+  owner: replace-with-owner
+provenance:
+  code_revision: replace-with-commit
+  model:
+    id: replace-with-model-id
+    revision: replace-with-model-revision
+    license: replace-with-license
+  tokenizer:
+    id: replace-with-tokenizer-id
+    revision: replace-with-tokenizer-revision
+  dataset:
+    id: replace-with-dataset-id
+    revision: replace-with-dataset-revision
+  environment:
+    lockfile: replace-with-lockfile
+    hardware: replace-with-hardware
+method:
+  controlled_variable: replace-with-one-primary-variable
+  baseline: replace-with-baseline
+  treatment: replace-with-treatment
+  seed: 42
+  generation_parameters: {}
+evaluation:
+  primary_metrics:
+    - replace-with-primary-metric
+  guardrail_metrics:
+    - replace-with-guardrail-metric
+  failure_thresholds:
+    replace-with-metric: replace-with-threshold
+budget:
+  smoke_run: replace-with-limit
+  full_run: replace-with-limit
+  maximum_cost_usd: 0
+  stop_conditions:
+    - replace-with-stop-condition
+artifacts:
+  raw_results: artifacts/raw
+  derived_results: artifacts/derived
+  report: artifacts/report.md
+  sensitive_data: false

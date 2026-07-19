@@ -40,6 +40,19 @@ Socket tap. The curated set is:
 - `swift-compiler-inspection-workflow`
 - `swift-semantic-indexing-workflow`
 - `swift-syntax-tooling-workflow`
+- `choose-model-lab-workflow`
+- `design-model-experiment`
+- `prepare-language-model-dataset`
+- `fine-tune-language-model`
+- `evaluate-language-model`
+- `compare-model-checkpoints`
+- `choose-apple-model-runtime`
+- `research-model-representations`
+- `steer-language-model-behavior`
+- `ablate-refusal-representations`
+- `evaluate-jailbreak-resilience`
+- `evaluate-tool-calling-model`
+- `benchmark-model-runtime`
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
@@ -65,6 +78,12 @@ exported under the `Cybersecurity Skills` grouping. Its Codex manifest and icon
 remain host-specific packaging metadata. The initial plugin ships no MCP server,
 hook, app, custom agent, or native Hermes runtime surface, so no `mcp_servers`
 translation or Python Hermes plugin is required.
+
+The complete `model-lab-skills` inventory is portable guidance and is exported
+under the `Model Lab Skills` grouping. Its deterministic Python helpers operate
+on caller-supplied local manifests, JSONL results, and model artifacts; they do
+not require a host API, MCP server, hook, app, custom agent, or native Hermes
+plugin.
 
 The exported Hopper and Ghidra workflows are portable guidance. Hopper's GUI,
 Python SDK, and `HopperMCPServer` remain operator-local runtime surfaces. The

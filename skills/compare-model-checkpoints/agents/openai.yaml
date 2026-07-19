@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compare Model Checkpoints"
+  short_description: "Compare model checkpoints without hiding tradeoffs."
+  default_prompt: "Compare model checkpoints across quality, behavior, provenance, size, and runtime evidence."

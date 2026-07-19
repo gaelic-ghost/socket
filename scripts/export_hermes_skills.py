@@ -12,11 +12,16 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_ROOT = REPO_ROOT / "plugins" / "agent-portability-skills" / "skills"
-MESSAGING_SOURCE_ROOT = REPO_ROOT / "plugins" / "messaging-collaboration-skills" / "skills"
+MESSAGING_SOURCE_ROOT = (
+    REPO_ROOT / "plugins" / "messaging-collaboration-skills" / "skills"
+)
 APPLE_SOURCE_ROOT = REPO_ROOT / "plugins" / "apple-dev-skills" / "skills"
 CYBERSECURITY_SOURCE_ROOT = REPO_ROOT / "plugins" / "cybersecurity-skills" / "skills"
-REVERSE_ENGINEERING_SOURCE_ROOT = REPO_ROOT / "plugins" / "reverse-engineering-skills" / "skills"
+REVERSE_ENGINEERING_SOURCE_ROOT = (
+    REPO_ROOT / "plugins" / "reverse-engineering-skills" / "skills"
+)
 SWIFT_LANG_SOURCE_ROOT = REPO_ROOT / "plugins" / "swift-lang" / "skills"
+MODEL_LAB_SOURCE_ROOT = REPO_ROOT / "plugins" / "model-lab-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 AGENT_PORTABILITY_SKILLS = (
     "bootstrap-skills-plugin-repo",
@@ -92,6 +97,21 @@ SWIFT_LANG_SKILLS = (
     "swift-semantic-indexing-workflow",
     "swift-syntax-tooling-workflow",
 )
+MODEL_LAB_SKILLS = (
+    "choose-model-lab-workflow",
+    "design-model-experiment",
+    "prepare-language-model-dataset",
+    "fine-tune-language-model",
+    "evaluate-language-model",
+    "compare-model-checkpoints",
+    "choose-apple-model-runtime",
+    "research-model-representations",
+    "steer-language-model-behavior",
+    "ablate-refusal-representations",
+    "evaluate-jailbreak-resilience",
+    "evaluate-tool-calling-model",
+    "benchmark-model-runtime",
+)
 EXPORTED_SKILLS = (
     AGENT_PORTABILITY_SKILLS
     + MESSAGING_SKILLS
@@ -99,6 +119,7 @@ EXPORTED_SKILLS = (
     + CYBERSECURITY_SKILLS
     + REVERSE_ENGINEERING_SKILLS
     + SWIFT_LANG_SKILLS
+    + MODEL_LAB_SKILLS
 )
 
 
@@ -113,11 +134,19 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
         **{skill_name: SOURCE_ROOT for skill_name in AGENT_PORTABILITY_SKILLS},
         **{skill_name: MESSAGING_SOURCE_ROOT for skill_name in MESSAGING_SKILLS},
         **{skill_name: APPLE_SOURCE_ROOT for skill_name in APPLE_SKILLS},
-        **{skill_name: CYBERSECURITY_SOURCE_ROOT for skill_name in CYBERSECURITY_SKILLS},
-        **{skill_name: REVERSE_ENGINEERING_SOURCE_ROOT for skill_name in REVERSE_ENGINEERING_SKILLS},
+        **{
+            skill_name: CYBERSECURITY_SOURCE_ROOT for skill_name in CYBERSECURITY_SKILLS
+        },
+        **{
+            skill_name: REVERSE_ENGINEERING_SOURCE_ROOT
+            for skill_name in REVERSE_ENGINEERING_SKILLS
+        },
         **{skill_name: SWIFT_LANG_SOURCE_ROOT for skill_name in SWIFT_LANG_SKILLS},
+        **{skill_name: MODEL_LAB_SOURCE_ROOT for skill_name in MODEL_LAB_SKILLS},
     }
-    return {skill_name: roots[skill_name] / skill_name for skill_name in EXPORTED_SKILLS}
+    return {
+        skill_name: roots[skill_name] / skill_name for skill_name in EXPORTED_SKILLS
+    }
 
 
 def validate_sources(source_root: Path | None = None) -> None:
@@ -137,7 +166,9 @@ def write_export(
     export_root = EXPORT_ROOT if export_root is None else export_root
     validate_sources(source_root)
     sources = source_paths(source_root)
-    with tempfile.TemporaryDirectory(prefix="socket-hermes-skills.", dir=export_root.parent) as temp_dir:
+    with tempfile.TemporaryDirectory(
+        prefix="socket-hermes-skills.", dir=export_root.parent
+    ) as temp_dir:
         staged_root = Path(temp_dir) / "skills"
         staged_root.mkdir()
         for skill_name in EXPORTED_SKILLS:
@@ -168,7 +199,9 @@ def has_exact_export(
     return True
 
 
-def _walk_comparison(comparison: filecmp.dircmp) -> list[tuple[list[str], list[str], list[str]]]:
+def _walk_comparison(
+    comparison: filecmp.dircmp,
+) -> list[tuple[list[str], list[str], list[str]]]:
     results = [(comparison.left_only, comparison.diff_files, comparison.funny_files)]
     for child in comparison.subdirs.values():
         results.extend(_walk_comparison(child))

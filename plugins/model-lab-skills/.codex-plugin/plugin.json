@@ -1,0 +1,26 @@
+{
+  "name": "model-lab-skills",
+  "version": "9.17.0",
+  "description": "Reproducible model training, evaluation, intervention, and runtime research workflows.",
+  "author": {
+    "name": "Gale"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Model Lab Skills",
+    "shortDescription": "Train, inspect, evaluate, and deploy language models.",
+    "longDescription": "Plan reproducible model experiments, prepare datasets, fine-tune and compare checkpoints, research representations and steering, evaluate jailbreak and tool-use behavior, and choose or benchmark Apple model runtimes.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Design a reproducible language-model experiment before spending compute.",
+      "Compare these model checkpoints without hiding behavioral or runtime regressions.",
+      "Choose the right Core AI, Core ML, MLX, ExecuTorch, or Foundation Models path."
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/model-lab-skills",
+    "brandColor": "#B56CFF",
+    "composerIcon": "./assets/model-lab.svg",
+    "logo": "./assets/model-lab.svg"
+  }
+}

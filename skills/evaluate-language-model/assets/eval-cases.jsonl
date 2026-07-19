@@ -1,0 +1,1 @@
+{"id":"example-001","input":{"messages":[{"role":"user","content":"Replace with an evaluation prompt."}]},"expected":{"behavior":"Replace with an observable criterion."},"tags":["smoke"],"grader":{"type":"manual","rubric":"Replace with a bounded scoring rubric."}}

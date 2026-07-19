@@ -14,6 +14,7 @@
     "dotnet-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
     "game-dev-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
     "messaging-collaboration-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
+    "model-lab-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Portable instruction workflows with local deterministic Python helpers; no host-specific runtime surface." },
     "network-protocol-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
     "productivity-skills": { "claudeCode": "remote_mcp", "cowork": "remote_mcp", "note": "Dice is a public remote MCP server." },
     "python-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },

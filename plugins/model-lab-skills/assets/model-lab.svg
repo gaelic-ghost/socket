@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Model Lab</title>
+  <desc id="desc">A neon neural flask inside a circular research badge.</desc>
+  <defs>
+    <linearGradient id="neon" x1="32" y1="32" x2="224" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DF9FF"/>
+      <stop offset=".5" stop-color="#B56CFF"/>
+      <stop offset="1" stop-color="#FF4FD8"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="48" fill="#070811"/>
+  <circle cx="128" cy="128" r="94" fill="none" stroke="#272044" stroke-width="8"/>
+  <path d="M98 62h60M112 62v49l-42 68c-7 12 1 27 15 27h86c14 0 22-15 15-27l-42-68V62" fill="none" stroke="url(#neon)" stroke-width="10" stroke-linecap="square" stroke-linejoin="bevel"/>
+  <path d="M91 168h74" stroke="#FF4FD8" stroke-width="8"/>
+  <circle cx="108" cy="145" r="8" fill="#7DF9FF"/>
+  <circle cx="145" cy="132" r="8" fill="#B56CFF"/>
+  <path d="M108 145l37-13 20 36-57-23Z" fill="none" stroke="url(#neon)" stroke-width="4"/>
+</svg>

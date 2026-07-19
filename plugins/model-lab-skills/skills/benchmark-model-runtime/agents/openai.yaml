@@ -1,0 +1,4 @@
+interface:
+  display_name: "Benchmark Model Runtime"
+  short_description: "Benchmark model runtimes fairly across deployment targets."
+  default_prompt: "Benchmark model runtimes using controlled artifacts, workloads, thermal state, memory, latency, and energy evidence."
