@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prepare Language Model Dataset"
+  short_description: "Prepare auditable training and evaluation datasets."
+  default_prompt: "Prepare and document a language-model dataset with splits, provenance, quality checks, and leakage controls."

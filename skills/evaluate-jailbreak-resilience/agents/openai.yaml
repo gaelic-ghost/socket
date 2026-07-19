@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Jailbreak Resilience"
+  short_description: "Evaluate authorized jailbreak and prompt-injection resilience."
+  default_prompt: "Build an authorized jailbreak-resilience evaluation with bounded targets, metrics, and disclosure-safe evidence."

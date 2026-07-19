@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ablate Refusal Representations"
+  short_description: "Research refusal-direction ablation with explicit controls."
+  default_prompt: "Design and evaluate refusal-representation ablation as controlled model-internals research."

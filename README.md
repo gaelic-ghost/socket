@@ -122,6 +122,7 @@ Currently available from the catalog:
 - `cloud-inference-skills`
 - `cybersecurity-skills`
 - `messaging-collaboration-skills`
+- `model-lab-skills`
 - `agentdeck`
 - `dotnet-skills`
 - `game-dev-skills`
@@ -153,6 +154,7 @@ Current Socket catalog shape:
 - `cloud-inference-skills`: cloud AI inference, training, model conversion, and GPU infrastructure routing for Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers, with bundled Runpod MCP server configuration, upstream Runpod skill mirrors, and first-party Hugging Face/AWS handoffs
 - `cybersecurity-skills`: suspicious-content triage, evidence preservation, malware analysis, isolation, agentic security-tool controls, macOS investigation and defense, vulnerability validation, authorized web/API and network testing, incident response, threat hunting, detection content, and clear non-specialist advice
 - `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage collaboration, Communication Notifications, Push to Talk, VoIP/SIP, documented iOS/iPadOS default communication roles, and app-owned macOS client workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
+- `model-lab-skills`: reproducible language-model experiment design, dataset preparation, fine-tuning, evaluation, checkpoint comparison, representation and steering research, refusal ablation, authorized jailbreak and tool-calling evaluation, runtime benchmarking, and current-source routing across Core AI, Core ML, MLX, ExecuTorch, and Foundation Models
 - `agentdeck`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
 - `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, test, package, diagnostics, ASP.NET Core, interop, CI, upgrade, and tooling guidance
 - `game-dev-skills`: Apple platform game development workflows for native Metal and Metal 4 renderers, GPTK 3/4 routing, MetalFX, GPU asset streaming, experimental neural rendering, SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode profiling, game-stack routing, and device-aware validation handoffs

@@ -28,6 +28,10 @@ All other catalog entries are portable skill workflows in both hosts. The
 complete, machine-checked classification is in
 [`claude-compatibility.json`](./claude-compatibility.json).
 
+`model-lab-skills` is skills-only in Cowork and fully supported in Claude Code.
+Its optional Python helpers read and write operator-selected local artifacts;
+the plugin declares no MCP server or host-specific runtime extension.
+
 `agentdeck` is intentionally absent from the Claude marketplace: its title
 hook is a Codex runtime integration, not an instruction workflow. `spotify`
 is also absent because it remains a Socket placeholder. `speak-swiftly` is

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Model Representations"
+  short_description: "Design causal representation and activation research."
+  default_prompt: "Design a reproducible language-model representation study with causal controls and interpretable evidence."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fine-Tune Language Model"
+  short_description: "Plan and run reproducible adapter or full fine-tuning."
+  default_prompt: "Choose and execute a reproducible language-model fine-tuning workflow with explicit resource and validation gates."

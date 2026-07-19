@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Model Lab Workflow"
+  short_description: "Route model training, research, evaluation, and runtime tasks."
+  default_prompt: "Choose the appropriate Model Lab workflow and explain the evidence boundary."

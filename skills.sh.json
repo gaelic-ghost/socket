@@ -92,6 +92,24 @@
         "swift-semantic-indexing-workflow",
         "swift-syntax-tooling-workflow"
       ]
+    },
+    {
+      "title": "Model Lab Skills",
+      "skills": [
+        "choose-model-lab-workflow",
+        "design-model-experiment",
+        "prepare-language-model-dataset",
+        "fine-tune-language-model",
+        "evaluate-language-model",
+        "compare-model-checkpoints",
+        "choose-apple-model-runtime",
+        "research-model-representations",
+        "steer-language-model-behavior",
+        "ablate-refusal-representations",
+        "evaluate-jailbreak-resilience",
+        "evaluate-tool-calling-model",
+        "benchmark-model-runtime"
+      ]
     }
   ]
 }
