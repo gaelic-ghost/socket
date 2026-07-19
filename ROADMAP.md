@@ -74,7 +74,7 @@
 - Milestone 27: Cybersecurity skills plugin - Planned
 - Milestone 28: Swift language tooling expansion - In Progress
 - Milestone 29: Model Lab skills plugin - Planned
-- Milestone 30: macOS virtualization and container skills expansion - In Progress
+- Milestone 30: macOS virtualization and container skills expansion - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -1001,7 +1001,7 @@ Implemented; release pending
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
@@ -1029,6 +1029,8 @@ In Progress
 - [x] macOS security-control claims use a macOS guest or physical Mac when Linux cannot reproduce the behavior, and remaining hardware or anti-VM gaps are explicit.
 - [x] Security labs default ambient host authority to absent, preserve intended evidence through a narrow export, and verify revert or teardown after execution.
 - [x] Socket's skill metadata, portability exports, compatibility records, documentation, and validation agree on the shipped virtualization inventory.
+
+Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a disposable Cybersecurity lab-preparation workflow, Apple `container` 1.x and `container machine` guidance, guest-versus-host evidence rules, Hermes exports, Claude and Cowork compatibility metadata, architecture inventory updates, and ten scenario-level forward tests. The rebased `9.19.0` release candidate preserves the concurrent Model Lab inventory and passed 268 Apple Dev tests, 126 Socket tests with one intentional skip, Apple and Cybersecurity child validators, Socket marketplace validation, Hermes parity, Claude/Cowork validation, and the architecture consistency check.
 
 ## Small Tickets
 

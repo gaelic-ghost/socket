@@ -1,6 +1,6 @@
 {
   "name": "apple-dev-skills",
-  "version": "9.18.0",
+  "version": "9.19.0",
   "description": "Apple development workflows for Codex, including macOS and Linux virtualization, SwiftPM, Xcode, app extensions, imaging, media, Vision/Core ML, spatial sensing, camera, provisioning, SwiftData, SwiftUI, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
