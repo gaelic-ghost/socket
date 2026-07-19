@@ -1244,7 +1244,7 @@ wheels = [
 
 [[package]]
 name = "things-mcp"
-version = "9.17.0"
+version = "9.18.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastmcp" },

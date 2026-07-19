@@ -4,7 +4,7 @@ requires-python = ">=3.10"
 
 [[package]]
 name = "apple-dev-skills-maintainer"
-version = "9.17.0"
+version = "9.18.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
