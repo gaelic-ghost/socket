@@ -13,6 +13,7 @@ SKILL_SCRIPTS = {
     "xcode-build-run-workflow": ROOT / "skills/xcode-build-run-workflow/scripts/customization_config.py",
     "xcode-testing-workflow": ROOT / "skills/xcode-testing-workflow/scripts/customization_config.py",
     "author-swift-docc-docs": ROOT / "skills/author-swift-docc-docs/scripts/customization_config.py",
+    "safari-mcp-workflow": ROOT / "skills/safari-mcp-workflow/scripts/customization_config.py",
     "appkit-app-architecture-workflow": ROOT
     / "skills/appkit-app-architecture-workflow/scripts/customization_config.py",
     "swiftui-app-architecture-workflow": ROOT / "skills/swiftui-app-architecture-workflow/scripts/customization_config.py",

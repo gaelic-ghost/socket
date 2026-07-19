@@ -1,0 +1,4 @@
+interface:
+  display_name: "Safari MCP Workflow"
+  short_description: "Inspect and validate live web behavior in Safari"
+  default_prompt: "Use $safari-mcp-workflow to preflight Safari Technology Preview, connect its local Safari MCP server, inspect a scoped web page, gather DOM console network and screenshot evidence, perform only authorized interactions, and report the Safari-specific validation result with clear handoffs."

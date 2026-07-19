@@ -15,6 +15,7 @@ SKILL_MODULES = {
     "xcode-testing-workflow": ROOT / "skills/xcode-testing-workflow/scripts/customization_config.py",
     "author-swift-docc-docs": ROOT / "skills/author-swift-docc-docs/scripts/customization_config.py",
     "safari-extension-control-workflow": ROOT / "skills/safari-extension-control-workflow/scripts/customization_config.py",
+    "safari-mcp-workflow": ROOT / "skills/safari-mcp-workflow/scripts/customization_config.py",
     "appkit-app-architecture-workflow": ROOT
     / "skills/appkit-app-architecture-workflow/scripts/customization_config.py",
     "swiftui-app-architecture-workflow": ROOT / "skills/swiftui-app-architecture-workflow/scripts/customization_config.py",

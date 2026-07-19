@@ -133,6 +133,7 @@ active_skill_mds=(
   "./skills/sf-symbols-workflow/SKILL.md"
   "./skills/swiftui-animation-workflow/SKILL.md"
   "./skills/safari-extension-control-workflow/SKILL.md"
+  "./skills/safari-mcp-workflow/SKILL.md"
   "./skills/app-extension-architecture-workflow/SKILL.md"
   "./skills/mailkit-workflow/SKILL.md"
   "./skills/file-provider-and-finder-sync-workflow/SKILL.md"
@@ -165,7 +166,7 @@ active_skill_mds=(
   "./skills/linux-development-vm-workflow/SKILL.md"
   "./skills/macos-development-vm-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 58 ]] || fail "Expected exactly 58 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 59 ]] || fail "Expected exactly 59 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -215,7 +216,7 @@ for skill_md in "${active_skill_mds[@]}"; do
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'
       ;;
-    ./skills/structure-swift-sources|./skills/author-swift-docc-docs)
+    ./skills/structure-swift-sources|./skills/author-swift-docc-docs|./skills/safari-mcp-workflow)
       local_snippet=""
       shared_snippet=""
       snippet_ref=""
@@ -267,6 +268,7 @@ for file in \
   "skills/sf-symbols-workflow/SKILL.md" \
   "skills/swiftui-animation-workflow/SKILL.md" \
   "skills/safari-extension-control-workflow/SKILL.md" \
+  "skills/safari-mcp-workflow/SKILL.md" \
   "skills/app-extension-architecture-workflow/SKILL.md" \
   "skills/mailkit-workflow/SKILL.md" \
   "skills/file-provider-and-finder-sync-workflow/SKILL.md" \
