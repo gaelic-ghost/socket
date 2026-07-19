@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Agent Integration Protocol"
+  short_description: "Choose ACP, MCP, native, terminal, or API paths"
+  default_prompt: "Use $choose-agent-integration-protocol to select the correct integration path for this agent and host."

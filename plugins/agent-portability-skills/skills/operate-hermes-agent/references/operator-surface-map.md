@@ -20,6 +20,8 @@ Always resolve the active profile before interpreting a path under the Hermes ho
 - `hermes tools`: toolsets and per-tool providers.
 - `hermes skills`: local skills, hub skills, taps, bundles, and updates.
 - `hermes status`: broad runtime state.
+- `hermes update --check`: read-only update availability check; inspect carried local commits before applying an update.
+- `hermes acp --check`: non-interactive ACP adapter health check.
 - `hermes portal info`: Nous auth and routing only.
 - `hermes dashboard`: local management UI.
 - `hermes gateway`: messaging and API service process.

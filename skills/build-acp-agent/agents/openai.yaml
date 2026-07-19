@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build ACP Agent"
+  short_description: "Implement and package a compatible ACP agent"
+  default_prompt: "Use $build-acp-agent to design and validate this ACP server implementation."

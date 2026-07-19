@@ -20,7 +20,9 @@ Use this map when a request spans multiple Hermes products or extension systems.
 - Secret resolution: secret-source plugin.
 - Native desktop UI: Desktop Plugin SDK.
 - Web dashboard UI: dashboard extension SDK.
-- External host: ACP, TUI gateway JSON-RPC, or Hermes API server.
+- Editor or compatible ACP client: `operate-acp-agent-integration` with `hermes acp`.
+- Generic ACP implementation: `build-acp-agent`.
+- Custom non-ACP host: TUI gateway JSON-RPC or Hermes API server.
 - Socket-to-Hermes packaging decision: `hermes-agent-compatibility`.
 
 ## Similar Names That Are Not Equivalent
@@ -30,6 +32,7 @@ Use this map when a request spans multiple Hermes products or extension systems.
 | Hermes messaging gateway | Long-running message/API process |
 | Nous Tool Gateway | Nous-hosted tool providers |
 | TUI gateway | Host-to-Hermes JSON-RPC protocol |
+| ACP | Editor/client-to-agent protocol; Hermes is the launched agent/server |
 | Hermes Python plugin | Runtime registration through `plugin.yaml` and Python |
 | Hermes desktop plugin | Native desktop UI extension |
 | Hermes dashboard plugin | Web dashboard extension |
@@ -43,6 +46,8 @@ Use this map when a request spans multiple Hermes products or extension systems.
 - [Hermes documentation](https://hermes-agent.nousresearch.com/docs/)
 - [Hermes features overview](https://hermes-agent.nousresearch.com/docs/user-guide/features/overview/)
 - [Hermes architecture](https://hermes-agent.nousresearch.com/docs/developer-guide/architecture)
-- [Hermes plugin guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- [Hermes plugin guide](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
 - [Hermes programmatic integration](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration)
+- [Hermes ACP editor integration](https://hermes-agent.nousresearch.com/docs/user-guide/features/acp/)
+- [ACP protocol](https://agentclientprotocol.com/)
 - [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal)

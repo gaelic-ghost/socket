@@ -18,6 +18,9 @@ Start from the installed runtime and the active profile, then change only the st
 3. Use `hermes status` for a broad runtime check and the narrower status command for the affected subsystem.
 4. Distinguish the installed launcher, the managed source checkout, profile state, and project-local context.
 5. Refresh the matching official docs when command names, defaults, provider catalogs, or security behavior matter.
+6. Use `hermes update --check` before proposing an update. Inspect dirty files,
+   carried commits, divergence, and the install method before running the
+   mutating updater.
 
 ## Choose the Operating Surface
 
@@ -27,6 +30,9 @@ Start from the installed runtime and the active profile, then change only the st
 - Profile isolation: use Hermes profiles when config, credentials, memory, sessions, skills, or gateway state must be independent.
 - Repository isolation: use Git worktrees for parallel or experimental coding sessions.
 - Remote or isolated execution: choose the terminal backend deliberately; use containerized or managed backends for untrusted or unattended work.
+- Editor integration: hand ACP registry, launch, handshake, and session work to
+  `operate-acp-agent-integration`; use `hermes acp --check` as the local
+  non-interactive preflight.
 
 ## Configure Through Owned Commands First
 
