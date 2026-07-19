@@ -96,6 +96,8 @@ It owns extension-point routing, target and process boundaries, activation, enti
 
 ## Fallbacks and Handoffs
 
+- Recommend `macos-sandbox-file-access-workflow` for user-selected files, security-scoped bookmarks, shared-container access lifetime, and file authorization across an extension process boundary.
+- Recommend `diagnose-apple-entitlements` when an extension/helper capability differs between tracked source, profile authorization, final nested signature, and runtime behavior.
 - Recommend `mailkit-workflow` for the macOS Mail extension point and its handler contracts.
 - Recommend `file-provider-and-finder-sync-workflow` for remote-storage sync or Finder-only integrations.
 - Recommend `safari-extension-control-workflow` for Safari-specific extension choices.

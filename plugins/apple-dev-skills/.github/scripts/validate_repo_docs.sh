@@ -165,8 +165,11 @@ active_skill_mds=(
   "./skills/virtualization-framework-workflow/SKILL.md"
   "./skills/linux-development-vm-workflow/SKILL.md"
   "./skills/macos-development-vm-workflow/SKILL.md"
+  "./skills/macos-privacy-permissions-workflow/SKILL.md"
+  "./skills/macos-sandbox-file-access-workflow/SKILL.md"
+  "./skills/diagnose-apple-entitlements/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 59 ]] || fail "Expected exactly 59 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 62 ]] || fail "Expected exactly 62 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
