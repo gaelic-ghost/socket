@@ -1,0 +1,4 @@
+interface:
+  display_name: "Linux Development VM Workflow"
+  short_description: "Prepare persistent Linux development guests"
+  default_prompt: "Use $linux-development-vm-workflow to choose, prepare, validate, and reset this Linux development guest."

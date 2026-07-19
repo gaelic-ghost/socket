@@ -48,6 +48,7 @@
     "flyctl",
     "containerization",
     "apple-container",
+    "container-machine",
     "oci",
     "swiftpm"
   ],
@@ -55,7 +56,7 @@
   "interface": {
     "displayName": "Server-Side Swift",
     "shortDescription": "Server-side Swift bootstrap, guidance sync, Vapor, Hummingbird, persistence, OpenAPI, RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first bootstrap and guidance-sync workflows for Vapor and Hummingbird, SwiftPM-first execution, current Vapor, Vapor 5 alpha adoption posture, Hummingbird hb CLI usage, hb Server and Lambda shape preservation, Vapor Environment, Hummingbird swift-configuration support, Fluent ORM, PostgreSQL, CLI-generated Dockerfile and Compose defaults, generated service AGENTS guidance, Swift OpenAPI, OpenAPIHummingbird, hummingbird-lambda, Docker, Apple Containerization, Fly.io, SwiftNIO, Swift Logging, Swift Metrics, Swift Distributed Tracing, authentication, authorization, and app-sync documentation, local run commands, app structure, routing, middleware, request contexts, Fluent models, database migrations, query design, OpenAPI generation and transport wiring, RPC-fit decisions, Dockerfile and Compose workflows, Apple's container CLI and Containerization APIs, fly.toml deployment configuration, Fly secrets, health checks, observability signals, auth boundaries, sync contracts, environment configuration, tests, and deployment handoffs.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first Vapor and Hummingbird workflows, SwiftPM, Fluent and PostgreSQL, Docker and Compose, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, authentication, app sync, Fly.io, Apple's container 1.x CLI, persistent container machine Linux environments, and exact-version Containerization Swift APIs. Keep portable OCI authoring separate from Apple-local runtime behavior and persistent Linux-machine lifecycle.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -86,6 +87,7 @@
       "Prepare this Vapor or Hummingbird service for Fly.io deployment with Dockerfile, fly.toml, secrets, health checks, and validation.",
       "Diagnose why this Swift service fails to deploy or pass health checks on Fly.io.",
       "Plan an Apple Containerization workflow for running this Swift service locally on Apple silicon.",
+      "Choose and operate an Apple container 1.x application container or persistent container machine with explicit version, home sharing, resources, services, and nested-virtualization checks.",
       "Compare Docker and Apple's container CLI for this server-side Swift development workflow.",
       "Inspect this Vapor app and explain its routes, configuration, and run commands.",
       "Assess whether this Vapor 4 app is ready for a Vapor 5 alpha spike without treating alpha APIs as stable.",

@@ -1,6 +1,6 @@
 # apple-dev-skills
 
-Apple app extensions, MailKit, File Provider, Finder Sync, SwiftPM plugins/macros/traits, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI animation and architecture, Core Animation, Apple typography, SF Symbols, AppKit, Apple Developer provisioning, CloudKit, Icon Composer app icons, Safari, DeviceCheck, App Attest, Xcode, Swift OpenAPI client, DocC, and `Dash.app` workflows for Codex.
+Apple macOS and Linux virtualization, app extensions, MailKit, File Provider, Finder Sync, SwiftPM plugins/macros/traits, Swift, image and video processing, Vision and Core ML recognition, camera and depth capture, ARKit spatial sensing, Photos, audio and media pipelines, SwiftUI, AppKit, provisioning, Xcode, OpenAPI, DocC, and `Dash.app` workflows for Codex.
 
 ![Codex plugin directory filtered to the Socket marketplace, showing Apple Dev Skills listed alongside companion plugins below a Productivity Skills suggestion.](./docs/media/codex-plugin-directory-socket-apple-dev-skills.png)
 
@@ -55,6 +55,10 @@ codex plugin marketplace upgrade socket
 
 Use Apple Dev Skills when an agent is helping with:
 
+- Choosing among host execution, OCI containers, Apple container machines, full Linux or macOS VMs, remote environments, and physical Macs
+- Building and diagnosing custom macOS or Linux VM hosts with Apple's Virtualization framework
+- Preparing persistent Linux development guests with explicit services, resources, integration, validation, and reset boundaries
+- Preparing clean macOS development guests for OS-version, installer, signing, privacy, security-control, and update validation
 - Strict Apple media type and framework selection across AVFoundation, AVFAudio, Core Media, Core Audio, and Audio Toolbox work
 - AVFAudio session, route, interruption, permission, and app-audio policy repair
 - AVAudioEngine graph, format, rendering, tap, and real-time callback repair
@@ -142,6 +146,10 @@ uv run pytest
 
 ## Active Skills
 
+- `choose-macos-virtualization-shape`
+- `virtualization-framework-workflow`
+- `linux-development-vm-workflow`
+- `macos-development-vm-workflow`
 - `apple-ui-accessibility-workflow`
 - `apple-image-representation-workflow`
 - `arkit-face-body-tracking-workflow`

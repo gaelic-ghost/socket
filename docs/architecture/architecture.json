@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-07-16T22:38:25.224646+00:00",
+  "detectedAt": "2026-07-19T17:29:53.157746+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -148,6 +148,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
     },
     {
@@ -192,6 +196,14 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/linux-development-vm-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/macos-development-vm-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
     },
     {
@@ -229,6 +241,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/swift-package-extension-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -281,6 +297,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -437,6 +457,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/cybersecurity-skills/skills/prepare-isolated-analysis-lab/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -1032,7 +1056,19 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-compiler-inspection-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -1052,7 +1088,15 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-semantic-indexing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/swift-lang/skills/swift-syntax-tooling-workflow/SKILL.md"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -1895,6 +1939,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/choose-macos-virtualization-shape"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
         }
       ],
@@ -2027,6 +2083,30 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/linux-development-vm-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/linux-development-vm-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/macos-development-vm-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/macos-development-vm-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
         }
       ],
@@ -2142,6 +2222,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/swift-package-build-run-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/swift-package-extension-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/swift-package-extension-workflow"
     },
     {
       "evidence": [
@@ -2298,6 +2390,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/video-codec-processing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/virtualization-framework-workflow"
     },
     {
       "evidence": [
@@ -2718,6 +2822,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:cybersecurity-skills/perform-static-malware-analysis"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/cybersecurity-skills/skills/prepare-isolated-analysis-lab/SKILL.md"
+        }
+      ],
+      "from": "product:cybersecurity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cybersecurity-skills/prepare-isolated-analysis-lab"
     },
     {
       "evidence": [
@@ -4355,6 +4471,30 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/choose-swift-language-tooling"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/sourcekit-lsp-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
         }
       ],
@@ -4362,6 +4502,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:swift-lang/swift-api-style-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-compiler-inspection-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-compiler-inspection-workflow"
     },
     {
       "evidence": [
@@ -4415,6 +4567,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-semantic-indexing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-semantic-indexing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
         }
       ],
@@ -4422,6 +4586,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:swift-lang/swift-source-organization-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/swift-lang/skills/swift-syntax-tooling-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:swift-lang",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:swift-lang/swift-syntax-tooling-workflow"
     },
     {
       "evidence": [
@@ -5524,6 +5700,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/choose-macos-virtualization-shape",
+      "path": "plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md"
         }
       ],
@@ -5656,6 +5844,30 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/linux-development-vm-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/linux-development-vm-workflow",
+      "path": "plugins/apple-dev-skills/skills/linux-development-vm-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/macos-development-vm-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/macos-development-vm-workflow",
+      "path": "plugins/apple-dev-skills/skills/macos-development-vm-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md"
         }
       ],
@@ -5770,6 +5982,18 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/swift-package-build-run-workflow",
       "path": "plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/swift-package-extension-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/swift-package-extension-workflow",
+      "path": "plugins/apple-dev-skills/skills/swift-package-extension-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -5926,6 +6150,18 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/video-codec-processing-workflow",
       "path": "plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/virtualization-framework-workflow",
+      "path": "plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -6346,6 +6582,18 @@
       "kind": "codex-skill",
       "name": "skill:cybersecurity-skills/perform-static-malware-analysis",
       "path": "plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/cybersecurity-skills/skills/prepare-isolated-analysis-lab/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cybersecurity-skills/prepare-isolated-analysis-lab",
+      "path": "plugins/cybersecurity-skills/skills/prepare-isolated-analysis-lab/SKILL.md"
     },
     {
       "dependencies": [],
@@ -7984,12 +8232,48 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/choose-swift-language-tooling",
+      "path": "plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/sourcekit-lsp-workflow",
+      "path": "plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:swift-lang/swift-api-style-workflow",
       "path": "plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-compiler-inspection-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-compiler-inspection-workflow",
+      "path": "plugins/swift-lang/skills/swift-compiler-inspection-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -8044,12 +8328,36 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-semantic-indexing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-semantic-indexing-workflow",
+      "path": "plugins/swift-lang/skills/swift-semantic-indexing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:swift-lang/swift-source-organization-workflow",
       "path": "plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/swift-lang/skills/swift-syntax-tooling-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:swift-lang/swift-syntax-tooling-workflow",
+      "path": "plugins/swift-lang/skills/swift-syntax-tooling-workflow/SKILL.md"
     },
     {
       "dependencies": [],

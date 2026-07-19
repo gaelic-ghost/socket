@@ -75,6 +75,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/bootstrap-swift-package` (codex-skill) at `plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/bootstrap-xcode-app-project` (codex-skill) at `plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/camera-capture-depth-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/choose-macos-virtualization-shape` (codex-skill) at `plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/core-animation-layer-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/core-image-processing-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/core-image-processing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/coreaudio-modernization-repair-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/coreaudio-modernization-repair-workflow/SKILL.md` depends on: no declared dependencies.
@@ -86,6 +87,8 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/format-swift-sources` (codex-skill) at `plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/icon-composer-app-icon-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/icon-composer-app-icon-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/ios-runtime-forensics-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/ios-runtime-forensics-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/linux-development-vm-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/linux-development-vm-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/macos-development-vm-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/macos-development-vm-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/macos-distribution-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/macos-window-management-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/mailkit-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/mailkit-workflow/SKILL.md` depends on: no declared dependencies.
@@ -96,6 +99,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/structure-swift-sources` (codex-skill) at `plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swift-openapi-client-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swift-openapi-client-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swift-package-build-run-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/swift-package-extension-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swift-package-extension-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swift-package-testing-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swift-package-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swiftdata-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swiftdata-workflow/SKILL.md` depends on: no declared dependencies.
@@ -109,6 +113,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/tipkit-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/tips-helpviewer-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/video-codec-processing-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/virtualization-framework-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/vision-coreml-recognition-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/vision-image-analysis-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/xcode-app-project-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md` depends on: no declared dependencies.
@@ -144,6 +149,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:cybersecurity-skills/operate-agentic-security-tools` (codex-skill) at `plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md` depends on: no declared dependencies.
 - `skill:cybersecurity-skills/perform-dynamic-malware-analysis` (codex-skill) at `plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md` depends on: no declared dependencies.
 - `skill:cybersecurity-skills/perform-static-malware-analysis` (codex-skill) at `plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md` depends on: no declared dependencies.
+- `skill:cybersecurity-skills/prepare-isolated-analysis-lab` (codex-skill) at `plugins/cybersecurity-skills/skills/prepare-isolated-analysis-lab/SKILL.md` depends on: no declared dependencies.
 - `skill:cybersecurity-skills/preserve-security-evidence` (codex-skill) at `plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md` depends on: no declared dependencies.
 - `skill:cybersecurity-skills/recover-security-incident` (codex-skill) at `plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md` depends on: no declared dependencies.
 - `skill:cybersecurity-skills/report-security-assessment` (codex-skill) at `plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md` depends on: no declared dependencies.
@@ -280,12 +286,17 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:server-side-swift/swiftnio-workflow` (codex-skill) at `plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/sync-hummingbird-service-guidance` (codex-skill) at `plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/vapor-server-workflow` (codex-skill) at `plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:swift-lang/choose-swift-language-tooling` (codex-skill) at `plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md` depends on: no declared dependencies.
+- `skill:swift-lang/sourcekit-lsp-workflow` (codex-skill) at `plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-api-style-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:swift-lang/swift-compiler-inspection-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-compiler-inspection-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-error-handling-style-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-error-handling-style-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-format-style-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-format-style-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-functional-pipelines-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-functional-pipelines-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-modernization-cleanup-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-modernization-cleanup-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:swift-lang/swift-semantic-indexing-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-semantic-indexing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-source-organization-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:swift-lang/swift-syntax-tooling-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-syntax-tooling-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swiftasb-skills/build-appkit-app` (codex-skill) at `plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md` depends on: no declared dependencies.
 - `skill:swiftasb-skills/build-swift-package` (codex-skill) at `plugins/swiftasb-skills/skills/build-swift-package/SKILL.md` depends on: no declared dependencies.
 - `skill:swiftasb-skills/build-swiftui-app` (codex-skill) at `plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md` depends on: no declared dependencies.
@@ -347,6 +358,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/core-image-processing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/coreaudio-modernization-repair-workflow/SKILL.md`.
@@ -358,6 +370,8 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/format-swift-sources/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/icon-composer-app-icon-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/ios-runtime-forensics-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/linux-development-vm-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/macos-development-vm-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/macos-distribution-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/macos-window-management-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/mailkit-workflow/SKILL.md`.
@@ -368,6 +382,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/structure-swift-sources/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swift-openapi-client-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swift-package-build-run-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swift-package-extension-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swiftdata-workflow/SKILL.md`.
@@ -381,6 +396,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md`.
@@ -420,6 +436,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/operate-agentic-security-tools/SKILL.md`.
 - `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/perform-dynamic-malware-analysis/SKILL.md`.
 - `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/perform-static-malware-analysis/SKILL.md`.
+- `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/prepare-isolated-analysis-lab/SKILL.md`.
 - `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/preserve-security-evidence/SKILL.md`.
 - `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/recover-security-incident/SKILL.md`.
 - `skill-manifest` evidence from `plugins/cybersecurity-skills/skills/report-security-assessment/SKILL.md`.
@@ -568,12 +585,17 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/server-side-swift/.codex-plugin/plugin.json`.
 - `codex-plugin-manifest` evidence from `plugins/spotify/.codex-plugin/plugin.json`.
+- `skill-manifest` evidence from `plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md`.
+- `skill-manifest` evidence from `plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/swift-lang/skills/swift-compiler-inspection-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/swift-error-handling-style-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/swift-format-style-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/swift-functional-pipelines-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/swift-modernization-cleanup-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/swift-lang/skills/swift-semantic-indexing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/swift-source-organization-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/swift-lang/skills/swift-syntax-tooling-workflow/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/swift-lang/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/swiftasb-skills/skills/build-appkit-app/SKILL.md`.
 - `skill-manifest` evidence from `plugins/swiftasb-skills/skills/build-swift-package/SKILL.md`.

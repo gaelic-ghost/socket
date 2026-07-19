@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS Development VM Workflow"
+  short_description: "Prepare clean macOS development guests"
+  default_prompt: "Use $macos-development-vm-workflow to prepare, validate, checkpoint, and reset this macOS development guest."

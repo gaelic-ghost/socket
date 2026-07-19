@@ -1,0 +1,4 @@
+interface:
+  display_name: "Virtualization Framework Workflow"
+  short_description: "Build and diagnose Apple virtual machines"
+  default_prompt: "Use $virtualization-framework-workflow to design or diagnose this Virtualization framework host."

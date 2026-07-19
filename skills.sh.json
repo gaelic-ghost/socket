@@ -34,6 +34,10 @@
       "title": "Apple Dev Skills",
       "skills": [
         "app-extension-architecture-workflow",
+        "choose-macos-virtualization-shape",
+        "virtualization-framework-workflow",
+        "linux-development-vm-workflow",
+        "macos-development-vm-workflow",
         "mailkit-workflow",
         "file-provider-and-finder-sync-workflow",
         "swift-package-extension-workflow"
@@ -60,6 +64,7 @@
         "perform-dynamic-malware-analysis",
         "perform-static-malware-analysis",
         "preserve-security-evidence",
+        "prepare-isolated-analysis-lab",
         "recover-security-incident",
         "report-security-assessment",
         "route-security-work",
@@ -72,6 +77,12 @@
         "triage-vulnerability-report",
         "use-objective-see-tools",
         "validate-vulnerability"
+      ]
+    },
+    {
+      "title": "Server-Side Swift Skills",
+      "skills": [
+        "apple-containerization-workflow"
       ]
     },
     {

@@ -44,6 +44,25 @@ def test_isolation_rejects_linux_container_for_macos_payload() -> None:
     )
 
 
+def test_prepared_lab_removes_ambient_authority_and_verifies_teardown() -> None:
+    assert_contract(
+        "prepare-isolated-analysis-lab",
+        "default host folders/home sharing, clipboard, drag/drop, sockets, ssh agent",
+        "narrow evidence path",
+        "run a preflight without executing the target",
+        "confirm no workload or integration remains active",
+    )
+
+
+def test_dynamic_analysis_requires_prepared_lab_and_virtualization_limits() -> None:
+    assert_contract(
+        "perform-dynamic-malware-analysis",
+        "preflighted by `prepare-isolated-analysis-lab`",
+        "require the prepared-lab record",
+        "virtualization artifacts or anti-vm behavior",
+    )
+
+
 def test_authorized_testing_has_scope_and_stop_conditions() -> None:
     assert_contract(
         "scope-authorized-security-test",
@@ -71,6 +90,21 @@ def test_macos_assessment_separates_platform_controls() -> None:
         "xprotect",
         "tcc",
         "sip",
+    )
+
+
+def test_macos_guest_evidence_retains_virtualization_limits() -> None:
+    assert_contract(
+        "assess-macos-threat",
+        "physical host, a macos guest, or a reproduction guest",
+        "secure enclave",
+        "anti-vm",
+    )
+    assert_contract(
+        "inspect-macos-runtime-activity",
+        "physical-host, affected-host, or macos-guest evidence",
+        "virtualization artifacts",
+        "physical-mac proof",
     )
 
 

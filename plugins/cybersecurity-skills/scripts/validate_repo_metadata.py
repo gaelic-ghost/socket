@@ -44,6 +44,7 @@ EXPECTED_SKILLS = frozenset(
         "perform-dynamic-malware-analysis",
         "perform-static-malware-analysis",
         "preserve-security-evidence",
+        "prepare-isolated-analysis-lab",
         "recover-security-incident",
         "report-security-assessment",
         "route-security-work",
@@ -203,7 +204,7 @@ def main() -> int:
             details.append(f"missing: {', '.join(missing)}")
         if unexpected:
             details.append(f"unexpected: {', '.join(unexpected)}")
-        findings.append(Finding("skills", f"inventory differs from the expected 30-skill surface ({'; '.join(details)})"))
+        findings.append(Finding("skills", f"inventory differs from the expected 31-skill surface ({'; '.join(details)})"))
     for skill_dir in skill_dirs:
         findings.extend(validate_skill(skill_dir))
     if findings:

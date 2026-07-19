@@ -73,6 +73,7 @@ def configure_paths(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(export_hermes_skills, "MESSAGING_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "APPLE_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "CYBERSECURITY_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
+    monkeypatch.setattr(export_hermes_skills, "SERVER_SIDE_SWIFT_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "REVERSE_ENGINEERING_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "SWIFT_LANG_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "MODEL_LAB_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
