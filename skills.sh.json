@@ -5,8 +5,13 @@
       "title": "Agent Portability Skills",
       "skills": [
         "bootstrap-skills-plugin-repo",
+        "build-hermes-agent-extensions",
+        "choose-hermes-agent-workflow",
         "hermes-agent-compatibility",
-        "sync-skills-repo-guidance"
+        "operate-hermes-agent",
+        "operate-hermes-agent-gateway",
+        "sync-skills-repo-guidance",
+        "use-nous-research-services"
       ]
     },
     {

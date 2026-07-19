@@ -1,5 +1,8 @@
 # Hermes Native Python Plugin Adapter Plan
 
+Date checked: 2026-07-19 against Hermes Agent 0.17.0 and the current plugin
+developer guide.
+
 This is a prioritized implementation plan, not an adapter implementation.
 Socket keeps its portable workflows as skills and its external tools as MCP
 servers. A native Hermes Python plugin is warranted only when a real runtime
@@ -7,11 +10,14 @@ behavior cannot be represented by either surface. In particular,
 `.codex-plugin/plugin.json` remains a Codex distribution bundle; it is not a
 Hermes `plugin.yaml` equivalent.
 
-Future adapters should be independently installable Hermes plugins with a
-small `plugin.yaml`, an `__init__.py` that calls `register(ctx)`, and focused
-schema/handler tests. Do not introduce a generic Socket-to-Hermes bridge: it
-would duplicate three intentionally different host models without serving a
-current concrete behavior.
+Future general adapters should be independently installable Hermes plugins with
+a small `plugin.yaml`, an `__init__.py` that calls `register(ctx)`, and focused
+schema/handler tests. If the behavior belongs to a specialized Hermes extension
+system—platform, model, memory, context, secret, media, search, browser,
+desktop, or dashboard—use that subsystem's registration and packaging model
+instead. Do not introduce a generic Socket-to-Hermes bridge: it would duplicate
+intentionally different host models without serving a current concrete
+behavior.
 
 ## Priority Order
 
@@ -27,8 +33,10 @@ current concrete behavior.
 ## Delivery Rules For A Future Adapter
 
 1. State the missing user behavior and why the existing skill or MCP fragment cannot provide it.
-2. Choose one Hermes extension point: tool, hook, slash command, CLI command,
-   bundled read-only skill, platform/backend provider, or none. Do not combine
+2. Choose one Hermes extension point: portable skill, MCP, general plugin tool,
+   plugin hook, slash command, CLI command, bundled read-only skill, gateway
+   platform, model/memory/context/secret/media/search/browser provider, desktop
+   plugin, dashboard plugin, config-driven extension, or none. Do not combine
    them speculatively.
 3. Keep configuration in documented environment variables or private Hermes
    configuration; never commit local checkout paths, tokens, or app secrets.
@@ -44,6 +52,9 @@ current concrete behavior.
 - [Hermes Plugins](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
   defines `plugin.yaml`, `register(ctx)`, the general plugin extension points,
   discovery locations, and opt-in enablement.
+- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+  is the current extension-surface router for general, specialized,
+  config-driven, desktop, dashboard, and programmatic integrations.
 - [Hermes MCP Config Reference](https://hermes-agent.nousresearch.com/docs/reference/mcp-config-reference)
   defines the configuration surface that remains preferable for external MCP
   servers.

@@ -31,8 +31,13 @@ CLOUD_DEPLOYMENT_SOURCE_ROOT = REPO_ROOT / "plugins" / "cloud-deployment-skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 AGENT_PORTABILITY_SKILLS = (
     "bootstrap-skills-plugin-repo",
+    "build-hermes-agent-extensions",
+    "choose-hermes-agent-workflow",
     "hermes-agent-compatibility",
+    "operate-hermes-agent",
+    "operate-hermes-agent-gateway",
     "sync-skills-repo-guidance",
+    "use-nous-research-services",
 )
 MESSAGING_SKILLS = (
     "apple-communication-workflow",

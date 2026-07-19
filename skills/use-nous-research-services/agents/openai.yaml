@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Nous Research Services"
+  short_description: "Use Portal, Tool Gateway, and cloud services"
+  default_prompt: "Use $use-nous-research-services to choose and configure Nous Portal, Tool Gateway, subscription proxy, Nous Chat, or Hermes cloud services."
