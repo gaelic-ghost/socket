@@ -22,6 +22,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `dotnet-skills` (codex-plugin) uses targets: skills:plugins/dotnet-skills/skills.
 - `game-dev-skills` (codex-plugin) uses targets: skills:plugins/game-dev-skills/skills.
 - `messaging-collaboration-skills` (codex-plugin) uses targets: skills:plugins/messaging-collaboration-skills/skills.
+- `model-lab-skills` (codex-plugin) uses targets: skills:plugins/model-lab-skills/skills.
 - `network-protocol-skills` (codex-plugin) uses targets: skills:plugins/network-protocol-skills/skills.
 - `productivity-skills` (codex-plugin) uses targets: skills:plugins/productivity-skills/skills, mcp:plugins/productivity-skills/.mcp.json.
 - `python-skills` (codex-plugin) uses targets: skills:plugins/python-skills/skills.
@@ -34,7 +35,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `swiftasb-skills` (codex-plugin) uses targets: skills:plugins/swiftasb-skills/skills.
 - `things-app` (codex-plugin) uses targets: skills:plugins/things-app/skills, mcp:plugins/things-app/.mcp.json.
 - `web-dev-skills` (codex-plugin) uses targets: skills:plugins/web-dev-skills/skills.
-- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, apple-creator-studio-skills, cardhop-app, cloud-deployment-skills, cloud-inference-skills, dotnet-skills, productivity-skills, python-skills, network-protocol-skills, server-side-swift, swift-lang, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, agentdeck, game-dev-skills, messaging-collaboration-skills, cybersecurity-skills.
+- `socket` (codex-plugin-marketplace) uses targets: agent-portability-skills, android-dev-skills, apple-dev-skills, apple-creator-studio-skills, cardhop-app, cloud-deployment-skills, cloud-inference-skills, dotnet-skills, productivity-skills, python-skills, network-protocol-skills, server-side-swift, swift-lang, server-side-jvm, rust-skills, speak-swiftly, swiftasb-skills, things-app, spotify, web-dev-skills, reverse-engineering-skills, agentdeck, game-dev-skills, messaging-collaboration-skills, cybersecurity-skills, model-lab-skills.
 - `speak-swiftly` (remote-plugin-entry) uses targets: no targets recorded.
 
 <!-- Generated product inventory ends here. -->
@@ -203,6 +204,19 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:messaging-collaboration-skills/voip-sip-calling-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/voip-sip-calling-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/webhook-and-event-lifecycle` (codex-skill) at `plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md` depends on: no declared dependencies.
 - `skill:messaging-collaboration-skills/whatsapp-business-workflow` (codex-skill) at `plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/ablate-refusal-representations` (codex-skill) at `plugins/model-lab-skills/skills/ablate-refusal-representations/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/benchmark-model-runtime` (codex-skill) at `plugins/model-lab-skills/skills/benchmark-model-runtime/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/choose-apple-model-runtime` (codex-skill) at `plugins/model-lab-skills/skills/choose-apple-model-runtime/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/choose-model-lab-workflow` (codex-skill) at `plugins/model-lab-skills/skills/choose-model-lab-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/compare-model-checkpoints` (codex-skill) at `plugins/model-lab-skills/skills/compare-model-checkpoints/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/design-model-experiment` (codex-skill) at `plugins/model-lab-skills/skills/design-model-experiment/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/evaluate-jailbreak-resilience` (codex-skill) at `plugins/model-lab-skills/skills/evaluate-jailbreak-resilience/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/evaluate-language-model` (codex-skill) at `plugins/model-lab-skills/skills/evaluate-language-model/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/evaluate-tool-calling-model` (codex-skill) at `plugins/model-lab-skills/skills/evaluate-tool-calling-model/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/fine-tune-language-model` (codex-skill) at `plugins/model-lab-skills/skills/fine-tune-language-model/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/prepare-language-model-dataset` (codex-skill) at `plugins/model-lab-skills/skills/prepare-language-model-dataset/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/research-model-representations` (codex-skill) at `plugins/model-lab-skills/skills/research-model-representations/SKILL.md` depends on: no declared dependencies.
+- `skill:model-lab-skills/steer-language-model-behavior` (codex-skill) at `plugins/model-lab-skills/skills/steer-language-model-behavior/SKILL.md` depends on: no declared dependencies.
 - `skill:network-protocol-skills/choose-network-transport` (codex-skill) at `plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md` depends on: no declared dependencies.
 - `skill:network-protocol-skills/http3-quic-workflow` (codex-skill) at `plugins/network-protocol-skills/skills/http3-quic-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:network-protocol-skills/network-protocol-diagnostics` (codex-skill) at `plugins/network-protocol-skills/skills/network-protocol-diagnostics/SKILL.md` depends on: no declared dependencies.
@@ -494,6 +508,20 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/webhook-and-event-lifecycle/SKILL.md`.
 - `skill-manifest` evidence from `plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/messaging-collaboration-skills/.codex-plugin/plugin.json`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/ablate-refusal-representations/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/benchmark-model-runtime/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/choose-apple-model-runtime/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/choose-model-lab-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/compare-model-checkpoints/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/design-model-experiment/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/evaluate-jailbreak-resilience/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/evaluate-language-model/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/evaluate-tool-calling-model/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/fine-tune-language-model/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/prepare-language-model-dataset/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/research-model-representations/SKILL.md`.
+- `skill-manifest` evidence from `plugins/model-lab-skills/skills/steer-language-model-behavior/SKILL.md`.
+- `codex-plugin-manifest` evidence from `plugins/model-lab-skills/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md`.
 - `skill-manifest` evidence from `plugins/network-protocol-skills/skills/http3-quic-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/network-protocol-skills/skills/network-protocol-diagnostics/SKILL.md`.

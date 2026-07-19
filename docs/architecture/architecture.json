@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-07-19T17:29:53.157746+00:00",
+  "detectedAt": "2026-07-19T17:41:35.923846+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -692,6 +692,62 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/ablate-refusal-representations/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/benchmark-model-runtime/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/choose-apple-model-runtime/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/choose-model-lab-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/compare-model-checkpoints/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/design-model-experiment/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/evaluate-jailbreak-resilience/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/evaluate-language-model/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/evaluate-tool-calling-model/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/fine-tune-language-model/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/prepare-language-model-dataset/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/research-model-representations/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/model-lab-skills/skills/steer-language-model-behavior/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/model-lab-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md"
     },
     {
@@ -1334,6 +1390,20 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/model-lab-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "model-lab-skills",
+      "path": "plugins/model-lab-skills",
+      "targets": [
+        "skills:plugins/model-lab-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/network-protocol-skills/.codex-plugin/plugin.json"
         }
       ],
@@ -1533,7 +1603,8 @@
         "agentdeck",
         "game-dev-skills",
         "messaging-collaboration-skills",
-        "cybersecurity-skills"
+        "cybersecurity-skills",
+        "model-lab-skills"
       ]
     },
     {
@@ -3475,6 +3546,162 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/ablate-refusal-representations/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/ablate-refusal-representations"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/benchmark-model-runtime/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/benchmark-model-runtime"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/choose-apple-model-runtime/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/choose-apple-model-runtime"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/choose-model-lab-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/choose-model-lab-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/compare-model-checkpoints/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/compare-model-checkpoints"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/design-model-experiment/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/design-model-experiment"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/evaluate-jailbreak-resilience/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/evaluate-jailbreak-resilience"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/evaluate-language-model/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/evaluate-language-model"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/evaluate-tool-calling-model/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/evaluate-tool-calling-model"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/fine-tune-language-model/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/fine-tune-language-model"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/prepare-language-model-dataset/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/prepare-language-model-dataset"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/research-model-representations/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/research-model-representations"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/model-lab-skills/skills/steer-language-model-behavior/SKILL.md"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:model-lab-skills/steer-language-model-behavior"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/network-protocol-skills/skills/choose-network-transport/SKILL.md"
         }
       ],
@@ -5306,6 +5533,30 @@
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/cybersecurity-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:model-lab-skills"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
+      "from": "product:model-lab-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/model-lab-skills"
     }
   ],
   "schemaVersion": 1,
@@ -7230,6 +7481,162 @@
       "kind": "codex-skill",
       "name": "skill:messaging-collaboration-skills/whatsapp-business-workflow",
       "path": "plugins/messaging-collaboration-skills/skills/whatsapp-business-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/ablate-refusal-representations/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/ablate-refusal-representations",
+      "path": "plugins/model-lab-skills/skills/ablate-refusal-representations/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/benchmark-model-runtime/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/benchmark-model-runtime",
+      "path": "plugins/model-lab-skills/skills/benchmark-model-runtime/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/choose-apple-model-runtime/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/choose-apple-model-runtime",
+      "path": "plugins/model-lab-skills/skills/choose-apple-model-runtime/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/choose-model-lab-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/choose-model-lab-workflow",
+      "path": "plugins/model-lab-skills/skills/choose-model-lab-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/compare-model-checkpoints/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/compare-model-checkpoints",
+      "path": "plugins/model-lab-skills/skills/compare-model-checkpoints/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/design-model-experiment/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/design-model-experiment",
+      "path": "plugins/model-lab-skills/skills/design-model-experiment/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/evaluate-jailbreak-resilience/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/evaluate-jailbreak-resilience",
+      "path": "plugins/model-lab-skills/skills/evaluate-jailbreak-resilience/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/evaluate-language-model/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/evaluate-language-model",
+      "path": "plugins/model-lab-skills/skills/evaluate-language-model/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/evaluate-tool-calling-model/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/evaluate-tool-calling-model",
+      "path": "plugins/model-lab-skills/skills/evaluate-tool-calling-model/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/fine-tune-language-model/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/fine-tune-language-model",
+      "path": "plugins/model-lab-skills/skills/fine-tune-language-model/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/prepare-language-model-dataset/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/prepare-language-model-dataset",
+      "path": "plugins/model-lab-skills/skills/prepare-language-model-dataset/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/research-model-representations/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/research-model-representations",
+      "path": "plugins/model-lab-skills/skills/research-model-representations/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/model-lab-skills/skills/steer-language-model-behavior/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:model-lab-skills/steer-language-model-behavior",
+      "path": "plugins/model-lab-skills/skills/steer-language-model-behavior/SKILL.md"
     },
     {
       "dependencies": [],
