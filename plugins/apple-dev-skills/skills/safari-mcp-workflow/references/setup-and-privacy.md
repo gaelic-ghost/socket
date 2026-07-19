@@ -4,7 +4,7 @@
 
 Safari MCP is introduced in Safari Technology Preview 247. Confirm the installed preview version and that the driver is available before relying on a live session.
 
-Enable Safari Settings > Advanced > Show features for web developers, then Safari Settings > Developer > Enable remote automation and external agents.
+Enable Safari Settings > Advanced > Show features for web developers, then Safari Settings > Developer > Enable remote automation and external agents. Some Safari Technology Preview builds label the final control **Allow remote automation**; `safaridriver` reports that exact label when the permission is missing.
 
 With the user's explicit approval, Codex can register the local server:
 

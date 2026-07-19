@@ -34,6 +34,7 @@ class SafariMCPWorkflowTests(unittest.TestCase):
         customization = self.text("skills/safari-mcp-workflow/scripts/customization_config.py")
         self.assertIn("codex mcp add safari-mcp-stp", setup)
         self.assertIn("explicit approval", setup)
+        self.assertIn("Allow remote automation", setup)
         self.assertIn("AutoFill", setup)
         self.assertIn("$safari-mcp-workflow", prompt)
         self.assertIn('SKILL_NAME = "safari-mcp-workflow"', customization)
