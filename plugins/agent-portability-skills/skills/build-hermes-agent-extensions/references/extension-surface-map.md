@@ -22,7 +22,7 @@
 | Shell lifecycle actions | Shell hook | `hooks:` configuration |
 | Native Hermes Desktop UI | Desktop Plugin SDK | `$HERMES_HOME/desktop-plugins/` |
 | Hermes web dashboard UI | Dashboard extension | dashboard `manifest.json` and SDK |
-| IDE integration | ACP | ACP adapter/protocol |
+| IDE integration | ACP | `operate-acp-agent-integration` or `build-acp-agent` |
 | Custom rich host | TUI gateway JSON-RPC | `tui_gateway` protocol |
 | Generic HTTP client | API server | OpenAI-compatible HTTP API |
 | Built-in core behavior | Upstream contribution | Hermes source and contributor guide |
@@ -48,13 +48,14 @@ Runtime provider resolution is shared by CLI, gateway, cron, ACP, and auxiliary 
 
 ## Authoritative Sources
 
-- [Build a Hermes plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
+- [Build a Hermes plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
 - [Plugins overview](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
 - [Creating skills](https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills)
 - [Adding tools](https://hermes-agent.nousresearch.com/docs/developer-guide/adding-tools)
 - [Adding providers](https://hermes-agent.nousresearch.com/docs/developer-guide/adding-providers)
 - [Adding a platform adapter](https://hermes-agent.nousresearch.com/docs/developer-guide/adding-platform-adapters)
 - [Programmatic integration](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration)
+- [ACP editor integration](https://hermes-agent.nousresearch.com/docs/user-guide/features/acp/)
 - [Desktop Plugin SDK](https://hermes-agent.nousresearch.com/docs/developer-guide/desktop-plugin-sdk)
 - [Architecture](https://hermes-agent.nousresearch.com/docs/developer-guide/architecture)
 - [Agent loop](https://hermes-agent.nousresearch.com/docs/developer-guide/agent-loop)

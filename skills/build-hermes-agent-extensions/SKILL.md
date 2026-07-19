@@ -20,8 +20,9 @@ Choose the owned extension surface before creating files. Hermes uses several un
 5. Use configuration for TTS commands, STT commands, shell hooks, MCP, and other explicitly config-driven surfaces.
 6. Use gateway hook directories for gateway event handlers.
 7. Use the desktop SDK or dashboard SDK only for their respective UI host; they do not share the Python plugin API.
-8. Use ACP, TUI gateway JSON-RPC, or the OpenAI-compatible API server for external programs that drive the agent.
-9. Modify Hermes core only when the feature belongs upstream and the official contributor guide selects that path.
+8. Use ACP when an editor or compatible client drives the agent; hand generic ACP implementation to `build-acp-agent` and existing client setup to `operate-acp-agent-integration`.
+9. Use TUI gateway JSON-RPC or the OpenAI-compatible API server for custom programs that drive the agent without an ACP client.
+10. Modify Hermes core only when the feature belongs upstream and the official contributor guide selects that path.
 
 Read [references/extension-surface-map.md](references/extension-surface-map.md) before implementing any surface beyond a skill or MCP declaration.
 
