@@ -71,7 +71,7 @@ class DeviceCheckAppAttestWorkflowTests(unittest.TestCase):
         self.assertIn("DeviceCheck", plugin)
         self.assertIn("App Attest", plugin)
         self.assertIn("./skills/devicecheck-app-attest-workflow/SKILL.md", validator)
-        self.assertIn("Expected exactly 58 active skills", validator)
+        self.assertIn("Expected exactly 59 active skills", validator)
         self.assertIn("Milestone 53: DeviceCheck and App Attest Workflow - Completed", roadmap)
 
 

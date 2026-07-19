@@ -44,6 +44,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 65: Feedback Assistant Workflow](#milestone-65-feedback-assistant-workflow)
 - [Milestone 66: App Extension, MailKit, and File Provider Workflows](#milestone-66-app-extension-mailkit-and-file-provider-workflows)
 - [Milestone 67: macOS and Linux Virtualization Workflows](#milestone-67-macos-and-linux-virtualization-workflows)
+- [Milestone 68: Safari MCP Browser Validation Workflow](#milestone-68-safari-mcp-browser-validation-workflow)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -82,6 +83,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 40: SwiftUI UI Architecture Workflow - Completed
 - Milestone 41: Swift Package Extension Workflow - Completed
 - Milestone 42: Safari Extension And Control Workflow - Completed
+- Milestone 68: Safari MCP Browser Validation Workflow - Completed
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
 - Milestone 45: Icon Composer App Icon Workflow - Completed
@@ -1293,6 +1295,31 @@ Completed Milestone 67 with four focused Apple virtualization workflows, owner-s
 ## Backlog Candidates
 
 - [ ] Record plausible future work that is not yet committed to a milestone.
+
+## Milestone 68: Safari MCP Browser Validation Workflow
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add `safari-mcp-workflow` as the owner for scoped Safari Technology Preview browser-runtime evidence through WebKit's local Safari MCP server.
+- [x] Keep live browser inspection separate from `safari-extension-control-workflow`, which owns Safari extension and native-control architecture.
+- [x] Require explicit target, interaction, and privacy boundaries; do not treat a screenshot as sufficient behavioral proof.
+
+### Tickets
+
+- [x] Add the skill, interface metadata, setup/privacy and evidence references, policy-only customization contract, and focused tests.
+- [x] Add the skill to Apple Dev Skills inventory and plugin discovery metadata.
+- [x] Export the portable guidance through Socket's Hermes tap and grouping.
+- [x] Validate the documented STP 247 driver locally before release; treat live browser actions as a separate opt-in session configuration.
+
+### Exit Criteria
+
+- [x] Agents can preflight, scope, inspect, interact with, and report Safari MCP sessions without claiming extension architecture, broad Safari control, or cross-browser certification.
+- [x] The skill documents data capture, authentication, and irreversible-action limits before live inspection.
+- [x] Apple Dev Skills and Socket validators cover the authored and Hermes-exported surfaces.
 
 ## History
 

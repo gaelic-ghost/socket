@@ -95,7 +95,7 @@ class ImagingFoundationWorkflowTests(unittest.TestCase):
 
         self.assertIn("Core Image", plugin)
         self.assertIn("Image I/O", plugin)
-        self.assertIn("Expected exactly 58 active skills", validator)
+        self.assertIn("Expected exactly 59 active skills", validator)
 
 
 if __name__ == "__main__":

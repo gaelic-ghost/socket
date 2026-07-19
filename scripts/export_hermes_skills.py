@@ -55,6 +55,7 @@ APPLE_SKILLS = (
     "macos-development-vm-workflow",
     "mailkit-workflow",
     "file-provider-and-finder-sync-workflow",
+    "safari-mcp-workflow",
     "swift-package-extension-workflow",
 )
 CYBERSECURITY_SKILLS = (

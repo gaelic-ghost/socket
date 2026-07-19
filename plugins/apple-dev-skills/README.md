@@ -184,6 +184,7 @@ uv run pytest
 - `migrate-xcode-project-to-xcodegen`
 - `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
+- `safari-mcp-workflow`
 - `sf-symbols-workflow`
 - `structure-swift-sources`
 - `swiftdata-workflow`

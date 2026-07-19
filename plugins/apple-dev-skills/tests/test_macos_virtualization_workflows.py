@@ -75,5 +75,5 @@ def test_inventory_metadata_and_customization_contracts_include_all_four() -> No
         assert (ROOT / "skills" / skill / "agents" / "openai.yaml").is_file()
         assert (ROOT / "skills" / skill / "references" / "customization.template.yaml").is_file()
         assert (ROOT / "skills" / skill / "scripts" / "customization_config.py").is_file()
-    assert "Expected exactly 58 active skills" in validator
+    assert "Expected exactly 59 active skills" in validator
     assert "virtualization-framework" in manifest
