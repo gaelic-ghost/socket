@@ -40,6 +40,7 @@ Read [references/isolation-matrix.md](references/isolation-matrix.md) before sel
 7. Hand an approved execution boundary to `prepare-isolated-analysis-lab`.
    - Use `apple-dev-skills:choose-macos-virtualization-shape` when the development boundary is still undecided.
    - Use `apple-dev-skills:virtualization-framework-workflow` when a custom macOS or Linux VM host must be implemented or diagnosed.
+   - Use `reverse-engineering-skills:research-macos-security-control` when the lab must preserve an exact-build public/private control comparison and technical-note contract.
    - Treat a SIP-enabled macOS VM as the stable high-fidelity path for SIP-sensitive behavior; local sandbox, TCC, and failure injection are explicitly lower-fidelity approximations.
 
 ## Stop Conditions

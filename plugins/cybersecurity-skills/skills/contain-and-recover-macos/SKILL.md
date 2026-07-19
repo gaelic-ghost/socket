@@ -24,6 +24,7 @@ Read [references/macos-response-ladder.md](references/macos-response-ladder.md) 
    - Never edit launchd's internal state directly.
 5. Eradicate the verified mechanism.
    - Remove or quarantine confirmed artifacts, registrations, extensions, profiles, helpers, rules, and downloaded stages; preserve hashes and paths.
+   - Do not reset, disable, or weaken TCC, Gatekeeper, XProtect, SIP, App Sandbox, or another protection merely to make a suspicious artifact run or simplify removal.
 6. Respond to identity exposure.
    - Rotate affected credentials/tokens from a trusted device, revoke sessions/keys, review MFA and recovery methods, and notify owners/providers as warranted.
 7. Recover.
