@@ -366,7 +366,7 @@ In Progress
 - [x] Add `apple-dev-skills:xcode-debugger-mcp-workflow` for active Xcode-session LLDB work and explicit Xcode 27 beta standalone `lldb-mcp` capability checks. Beta 3 (`27A5218g`) still fails before startup with the unresolved `lib_CompilerSwiftIDEUtils.dylib` rpath dependency, so the workflow keeps standalone server use blocked and routes normal work through Xcode's active debugger session.
 - [ ] Add `apple-dev-skills:xcode-agent-plugin-workflow` now that the live Xcode 27 beta plug-in import paths are verified through installed Codex state, local folder import, and public Git URL import.
 - [x] Refresh `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permissions route to the new coding-intelligence skill while build/test execution stays owned by the existing skills.
-- [x] Document Xcode command-line toolchain selection for stable and beta Xcode installs, including command-scoped `DEVELOPER_DIR`, explicit global `xcode-select --switch`, restore steps, and current system-wide beta app paths.
+- [x] Document Xcode command-line toolchain selection for stable and beta installs using bundle metadata for read-only audits and intentional `xcode-select` switch, verification, and restore steps for beta CLI execution; do not inject `DEVELOPER_DIR` overrides.
 - [ ] Refresh SwiftUI guidance for Xcode 27 APIs such as `ContentBuilder`, `@State` macro behavior, reorderable containers, generalized swipe actions, toolbar overflow, URL-backed documents, AsyncImage request/session APIs, and gesture input kinds.
 - [ ] Refresh AppKit, UIKit, and Icon Composer guidance for the Xcode 27 beta changes recorded in the plan.
 
@@ -537,6 +537,7 @@ In progress
 - [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
 - [x] Add a checked-in Hermes Agent skill tap at root `skills/`, generated from the canonical `agent-portability-skills` source and grouped with `skills.sh.json`.
 - [x] Add `agent-portability-skills:hermes-agent-compatibility` with explicit skill, Codex bundle, MCP, and native Python plugin boundaries.
+- [x] Add the modular Hermes workflow family: `choose-hermes-agent-workflow`, `operate-hermes-agent`, `build-hermes-agent-extensions`, `operate-hermes-agent-gateway`, and `use-nous-research-services`.
 - [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `uv run scripts/validate_hermes_compatibility.py`.
 - [x] Make an explicit Codex-and-Hermes compatibility classification mandatory for every new or materially changed Socket plugin, skill, and MCP declaration. Require portable-skill export decisions, validated MCP translations, and a real native-plugin design or host-specific boundary for runtime surfaces.
 
@@ -552,8 +553,8 @@ In progress
 - [ ] Add common skill constraint checks for Codex and OpenCode first, then include Zed as an informational follow-up target.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
-- [ ] Evaluate Xcode 27 beta adapters using command-scoped `DEVELOPER_DIR` for the intended system-wide beta app, including Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23.
-- [ ] Add a Socket-to-Xcode install support assessment that classifies each child plugin across Xcode-launched Codex, Xcode internal plug-ins, and external agents using Xcode MCP.
+- [ ] Evaluate Xcode 27 beta adapters using the intended selected Xcode toolchain, Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23; the installed beta bundle is build 27A5218g as of 2026-07-19.
+- [x] Add a read-only Socket-to-Xcode source assessment that classifies each child plugin across Xcode-launched Codex, Xcode internal plug-ins, and external agents using Xcode MCP without writing Xcode state.
 - [ ] Add disposable Xcode import fixture generation for skill-only, skill-plus-MCP, and hook-recognition probes.
 - [ ] Capture a public Socket Git URL import matrix from Xcode Beta before claiming user-facing Xcode install support.
 - [ ] Runtime-validate representative Xcode imports before claiming hooks, MCP servers, app config, or custom-agent behavior works inside Xcode.

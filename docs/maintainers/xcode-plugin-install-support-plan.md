@@ -2,7 +2,9 @@
 
 This plan turns the Xcode 27 beta import evidence into a practical Socket implementation path.
 
-Date checked: 2026-06-23.
+Date checked: 2026-07-19. The installed beta bundle is Xcode 27.0 build
+27A5218g; the import/runtime observations below remain the dated 2026-06-23
+probe unless a later line says otherwise.
 
 ## Goal
 
@@ -44,7 +46,7 @@ Local probe results:
 ## Non-Goals
 
 - Do not build a separate custom Xcode installer before the official UI path is exhausted.
-- Do not change `xcode-select` globally unless the task explicitly requires a system-wide default command-line tools switch. Prefer command-scoped `DEVELOPER_DIR` for beta checks.
+- Do not change `xcode-select` unless the task explicitly requires the beta command-line toolchain. For bundle/build-number audits, inspect bundle metadata. For beta CLI execution, record the previous selection, switch intentionally with `xcode-select`, verify, run the normal Apple CLI, and restore the previous selection. Do not inject `DEVELOPER_DIR` overrides.
 - Do not rewrite Socket as an aggregate non-Codex plugin bundle.
 - Do not claim hook execution, MCP server execution, app config, or custom-agent behavior works in Xcode until runtime probes verify those surfaces.
 - Do not treat Xcode-generated files as Socket source of truth.
@@ -103,9 +105,15 @@ Important distinction:
 
 ## Implementation Slices
 
-### Slice 1: Xcode Support Inventory
+### Slice 1: Xcode Support Inventory — Implemented
 
-Add a dry-run inventory command that reads the Socket source tree and classifies each child plug-in.
+The read-only inventory command now reads the Socket source tree and classifies
+each child plug-in:
+
+```bash
+uv run scripts/audit_xcode_plugin_compatibility.py
+uv run scripts/audit_xcode_plugin_compatibility.py --format json
+```
 
 Inputs:
 
@@ -129,6 +137,18 @@ Output for each child plug-in:
 - Xcode-launched Codex status: `likely`, `partial`, `blocked`, or `unknown`
 - external-agent status: `likely`, `partial`, `blocked`, or `unknown`
 - reason strings written in maintainer-readable language
+
+The 2026-07-19 source audit classifies 16 skill-only child plug-ins as
+structurally `likely` for all three targets. The runtime-proof queue contains
+the MCP-backed plug-ins, plug-ins with Codex custom-agent metadata, the
+Codex-only `agentdeck` hook, and the external Git-backed `speak-swiftly`
+payload. `spotify` remains blocked because it is unavailable and has no usable
+payload.
+
+`agents/openai.yaml` files are counted separately as Codex presentation
+metadata; they are not reported as Xcode subagents. Actual Socket custom agents
+under `.codex/agents/` remain `partial` until Xcode documents or demonstrates a
+matching import contract.
 
 Validation:
 
@@ -286,13 +306,7 @@ Before claiming Xcode install support beyond research:
 
 ## First Follow-Up Task
 
-Build Slice 1 first.
-
-The first deliverable should be a read-only command and report that answers:
-
-- What does Socket contain?
-- What can Xcode probably import?
-- What needs runtime proof?
-- Which plug-ins should be validated first?
-
-Do not add an apply mode until the report makes the install surface boring and reviewable.
+Run Slice 3 against the current Xcode 27 beta UI and compare Xcode's public-URL
+enumeration with the deterministic source report. Do not import every plug-in or
+add an apply mode. Capture component summaries first, then choose one skill-only
+plugin and one MCP-backed plugin for the runtime checks in Slice 4.

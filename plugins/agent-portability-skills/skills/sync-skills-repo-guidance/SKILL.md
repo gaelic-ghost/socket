@@ -83,6 +83,7 @@ When auditing target skills, treat subagent guidance as useful only when it is e
 - use `subagent` and `subagent workflow` rather than vague older `multi-agent` language
 - say current Codex releases enable subagent workflows by default, but Codex only spawns subagents when there is an explicit trigger: the user asks for subagents or parallel agent work, or a narrower skill/plugin workflow instructs the agent to ask first and the user grants explicit permission
 - mention built-in `default`, `worker`, and `explorer` agents only when agent configuration matters; avoid turning custom `.codex/agents/` setup into default skill boilerplate
+- use `gpt-5.6-terra` as the current soft default only for explicitly pinned, bounded read-heavy roles; prefer `gpt-5.6` for harder reasoning or leave the model unpinned when Codex should choose
 - prefer subagents for read-heavy discovery, docs pulling, tests, triage, log analysis, and summarization
 - ask workers for concise findings, evidence, links, or file references instead of raw intermediate output
 - keep write-heavy apply work in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes
