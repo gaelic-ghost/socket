@@ -89,6 +89,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 
 ## Fallbacks and Handoffs
 
+- Recommend `diagnose-apple-entitlements` before editing when the failure may originate in account/profile authorization, final nested-code signing, export transformation, privacy consent, or runtime policy rather than the tracked Xcode target.
 - Official CLI execution is the only fallback path when the primary agent-side MCP path cannot complete.
 - Use `references/mcp-failure-handoff.md` for the canonical fallback and handoff payload.
 - Use `references/allowlist-guidance.md` when a safe official CLI fallback is blocked by local rules.

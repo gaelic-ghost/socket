@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose Apple Entitlements"
+  short_description: "Trace entitlement state from source to runtime"
+  default_prompt: "Use $diagnose-apple-entitlements to trace this capability failure from source through runtime."

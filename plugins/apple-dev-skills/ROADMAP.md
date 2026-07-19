@@ -45,6 +45,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 66: App Extension, MailKit, and File Provider Workflows](#milestone-66-app-extension-mailkit-and-file-provider-workflows)
 - [Milestone 67: macOS and Linux Virtualization Workflows](#milestone-67-macos-and-linux-virtualization-workflows)
 - [Milestone 68: Safari MCP Browser Validation Workflow](#milestone-68-safari-mcp-browser-validation-workflow)
+- [Milestone 69: macOS Privacy, File Access, and Entitlement Workflows](#milestone-69-macos-privacy-file-access-and-entitlement-workflows)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -107,6 +108,9 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 64: Xcode String Catalog Localization Workflow - Completed
 - Milestone 65: Feedback Assistant Workflow - Completed
 - Milestone 66: App Extension, MailKit, and File Provider Workflows - Completed
+- Milestone 67: macOS and Linux Virtualization Workflows - Completed
+- Milestone 68: Safari MCP Browser Validation Workflow - Completed
+- Milestone 69: macOS Privacy, File Access, and Entitlement Workflows - Completed
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1320,6 +1324,42 @@ Completed
 - [x] Agents can preflight, scope, inspect, interact with, and report Safari MCP sessions without claiming extension architecture, broad Safari control, or cross-browser certification.
 - [x] The skill documents data capture, authentication, and irreversible-action limits before live inspection.
 - [x] Apple Dev Skills and Socket validators cover the authored and Hermes-exported surfaces.
+
+## Milestone 69: macOS Privacy, File Access, and Entitlement Workflows
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Use the cross-plugin [`macOS Platform Security Skills Plan`](../../docs/maintainers/macos-platform-security-skills-plan.md) as the implementation source of truth.
+- [x] Add `macos-privacy-permissions-workflow` for TCC-related application behavior, responsible-code attribution, public authorization APIs, usage descriptions, prompt/settings lifecycle, supported reset boundaries, and managed PPPC handoffs.
+- [x] Add `macos-sandbox-file-access-workflow` for containers, user-selected resources, security-scoped bookmarks, App Groups, helpers, standard locations, and layered filesystem denial diagnosis.
+- [x] Add `diagnose-apple-entitlements` for the five-state comparison across desired behavior, tracked project source, account/profile authorization, signed executables, and runtime authorization.
+- [x] Preserve provisioning, Xcode execution, distribution, app-extension, File Provider/Finder Sync, virtualization, Reverse Engineering, and Cybersecurity owners through explicit handoffs.
+- [x] Keep the initial skills portable and instruction-only, with no permission manager, TCC database access, privileged runtime, or live-host prompt automation.
+
+### Tickets
+
+- [x] Scaffold each skill with generated `agents/openai.yaml` metadata only when its implementation slice begins; do not leave placeholder skill directories.
+- [x] Build the privacy permission-class matrix from current Apple documentation and local SDK declarations, including Developer Tools through Execution Policy.
+- [x] Document responsible applications, command-line launchers, helpers, XPC services, stable code identity, and changed-signature failure cases.
+- [x] Document the balanced bookmark lifecycle, stale recreation, read-only scope, relaunch, revocation, helper, and layered-denial contracts.
+- [x] Document public, restricted, private, development, environment, sandbox, and Hardened Runtime entitlement categories without inventing availability or approval.
+- [x] Add targeted tests and disposable macOS guest fixtures for the complete scenario set in the maintainer plan.
+- [x] Align Apple Dev skill metadata, public README inventory, plugin prompts and keywords, shared Xcode guidance, Hermes exports, and Claude/Cowork compatibility only as the new skill surface ships.
+- [x] Run targeted tests between slices and the full Apple Dev plus root Socket validation before the integrated implementation is considered complete.
+
+### Exit Criteria
+
+- [x] An agent chooses a documented permission API or settings path from the operation and responsible executable rather than treating every Privacy & Security row as the same TCC request.
+- [x] An agent can preserve user-selected file access across relaunches without retaining access indefinitely or recommending Full Disk Access by default.
+- [x] An agent can localize an entitlement failure to tracked project source, account/profile authorization, final signed nested code, or runtime policy and consent.
+- [x] Visible permission prompts and System Settings mutations remain explicit, separately approved validation rather than unattended test behavior on the active Mac.
+- [x] Apple Dev metadata, tests, docs, portable exports, and root Socket validation agree on the three new workflow owners.
+
+Completed Milestone 69 by shipping privacy-permission, sandbox file-access, and five-state entitlement workflows with current public API and local SDK evidence, explicit responsible-code and nested-target diagnosis, complete bookmark lifetime guidance, disposable-fixture contracts, repository metadata, portable exports, and cross-plugin handoffs. The implementation remains instruction-only and requires separate approval for visible permission or System Settings actions.
 
 ## History
 

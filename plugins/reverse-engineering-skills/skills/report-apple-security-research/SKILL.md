@@ -11,6 +11,8 @@ Write the technical evidence first and keep disclosure or program submission as 
 
 Read [references/apple-security-reporting.md](references/apple-security-reporting.md) for the evidence checklist, version language, privacy checks, and live Apple sources.
 
+Use `research-macos-security-control` first when the finding depends on exact-build TCC, sandbox, entitlement, Gatekeeper, XProtect, SIP, or system-policy implementation evidence that has not yet been separated from the supported public contract.
+
 ## Workflow
 
 1. Define the finding.

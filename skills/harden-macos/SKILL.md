@@ -19,6 +19,7 @@ Read [references/macos-hardening-review.md](references/macos-hardening-review.md
    - Verify OS, rapid/security data updates, browsers, extensions, apps, and package managers from authoritative channels.
 3. Preserve platform protections.
    - Verify Gatekeeper/XProtect automatic protection, SIP, TCC/privacy access, code-signing expectations, and sandbox/container use where applicable.
+   - Keep this defensive posture review separate from developer prompt/request implementation; route ordinary app permission design to `macos-privacy-permissions-workflow`.
 4. Protect data and recovery.
    - Review FileVault/recovery ownership, screen lock, backup availability and restore testing, account separation, and secure disposal/export practices.
 5. Reduce exposed services and persistence.

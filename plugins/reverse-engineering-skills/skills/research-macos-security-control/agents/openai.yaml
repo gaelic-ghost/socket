@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research macOS Security Control"
+  short_description: "Research one macOS control on an exact build"
+  default_prompt: "Use $research-macos-security-control to produce an exact-build technical note for this security control."

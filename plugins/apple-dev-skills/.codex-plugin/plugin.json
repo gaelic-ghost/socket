@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
-  "version": "9.20.0",
-  "description": "Apple development workflows for Codex, including macOS and Linux virtualization, SwiftPM, Xcode, app extensions, imaging, media, Vision/Core ML, spatial sensing, camera, provisioning, SwiftData, SwiftUI, AppKit, Safari, security, OpenAPI, and DocC.",
+  "version": "9.21.0",
+  "description": "Apple development workflows for Codex, including macOS privacy permissions, sandbox file access, entitlement diagnosis, virtualization, SwiftPM, Xcode, app extensions, media, provisioning, SwiftUI, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -102,6 +102,11 @@
     "urlsession",
     "ios",
     "macos",
+    "privacy",
+    "tcc",
+    "app-sandbox",
+    "security-scoped-bookmarks",
+    "entitlements",
     "virtualization",
     "virtual-machine",
     "linux-vm",
@@ -113,7 +118,7 @@
   "interface": {
     "displayName": "Apple Dev Skills",
     "shortDescription": "Apple Swift, Xcode, virtualization, UI, media, security, and documentation workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for macOS-hosted boundary selection, custom Virtualization framework hosts, persistent Linux development guests, clean macOS development guests, app extensions, Photos, video, spatial sensing, camera, imaging, Vision and Core ML, audio and media, XcodeGen migration, coding intelligence, localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Safari, security, provisioning, Swift OpenAPI, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the Socket marketplace that installs both.",
+    "longDescription": "Bundle Apple-platform development skills for macOS privacy permissions, sandboxed and persistent file access, entitlement diagnosis, macOS-hosted boundary selection, custom Virtualization framework hosts, persistent Linux development guests, clean macOS development guests, app extensions, Photos, video, spatial sensing, camera, imaging, Vision and Core ML, audio and media, XcodeGen migration, coding intelligence, localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Safari, security, provisioning, Swift OpenAPI, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the Socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -122,6 +127,9 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/apple-dev-skills",
     "defaultPrompt": [
+      "Diagnose a macOS privacy permission failure from the protected operation and responsible executable, using the documented public status or request path without treating reset, entitlements, or administrator access as a grant.",
+      "Persist access to a user-selected macOS file or directory across relaunches with the narrowest sandbox entitlement and a complete balanced security-scoped bookmark lifecycle.",
+      "Trace an Apple entitlement from desired behavior through tracked project source, developer-account and profile authorization, final signed main and nested code, and runtime policy or consent.",
       "Choose whether this macOS-hosted task belongs on the host, in an OCI container, an Apple container machine, a full Linux or macOS VM, or a physical Mac.",
       "Design or diagnose a custom macOS or Linux VM host with Apple's Virtualization framework, explicit devices, lifecycle, validation, and save or restore boundaries.",
       "Prepare and validate a persistent Linux development guest with explicit distro, services, resources, host integrations, nested-virtualization gates, and reset strategy.",

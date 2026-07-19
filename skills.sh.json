@@ -34,10 +34,13 @@
       "title": "Apple Dev Skills",
       "skills": [
         "app-extension-architecture-workflow",
+        "diagnose-apple-entitlements",
         "choose-macos-virtualization-shape",
         "virtualization-framework-workflow",
         "linux-development-vm-workflow",
         "macos-development-vm-workflow",
+        "macos-privacy-permissions-workflow",
+        "macos-sandbox-file-access-workflow",
         "mailkit-workflow",
         "file-provider-and-finder-sync-workflow",
         "safari-mcp-workflow",
@@ -90,6 +93,7 @@
       "title": "Reverse Engineering Skills",
       "skills": [
         "connect-hopper-mcp",
+        "research-macos-security-control",
         "script-hopper-analysis",
         "use-ghidra",
         "use-hopper"

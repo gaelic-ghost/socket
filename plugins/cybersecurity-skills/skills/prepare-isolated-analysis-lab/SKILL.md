@@ -52,6 +52,7 @@ Return the approved isolation decision, selected profile, trusted-base identity,
 
 - Use `perform-dynamic-malware-analysis` for controlled execution and observation.
 - Use Reverse Engineering skills for exported binaries, disassembly, decompilation, and symbols.
+- Use `reverse-engineering-skills:research-macos-security-control` for exact-build TCC, sandbox, entitlement, Gatekeeper, XProtect, SIP, or system-policy research that needs public/private evidence separation.
 - Use `apple-dev-skills:virtualization-framework-workflow` for custom VM implementation defects.
 - Use `apple-dev-skills:macos-development-vm-workflow` or `linux-development-vm-workflow` for benign guest provisioning and lifecycle mechanics.
 - Return to `select-analysis-isolation` when the chosen boundary fails fidelity or containment preflight.

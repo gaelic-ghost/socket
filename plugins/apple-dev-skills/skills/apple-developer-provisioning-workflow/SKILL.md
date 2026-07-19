@@ -95,6 +95,7 @@ The workflow never commits a `.p8` key, CloudKit token, JWT, profile payload, or
 
 ## Fallbacks and Handoffs
 
+- Recommend `diagnose-apple-entitlements` when the desired capability, tracked source, account/profile authorization, final signed entitlement, or runtime result disagree; return here only for the account-side correction it identifies.
 - Recommend `xcode-build-run-workflow` for entitlement, signing, target, build, profile-install, simulator, or device validation work.
 - Recommend `xcode-coding-intelligence-workflow` for Xcode-hosted inspection or external access through `xcrun mcpbridge`; it owns the running-Xcode and permissions boundary.
 - Recommend `explore-apple-swift-docs` for current App Store Connect, Xcode, CloudKit, or entitlement documentation lookup.

@@ -47,6 +47,7 @@ Treat a signed exported artifact as the source of truth for macOS distribution d
 
 ## Fallbacks and Handoffs
 
+- Recommend `diagnose-apple-entitlements` when source, profile, main or nested signed entitlements, and runtime authorization need a five-state comparison before choosing a repair owner.
 - Recommend `apple-developer-provisioning-workflow` for documented account-side certificates, profiles, and identifier/capability state.
 - Recommend `xcode-build-run-workflow` for entitlement/project-signing changes, archive/export, and build validation.
 - Recommend `explore-apple-swift-docs` for current signing, notarization, or distribution policy.

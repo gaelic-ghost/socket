@@ -62,7 +62,7 @@ class AppExtensionWorkflowTests(unittest.TestCase):
             self.assertIn(f"`{skill}`", readme)
         self.assertIn("mailkit", manifest)
         self.assertIn("file-provider", manifest)
-        self.assertIn("Expected exactly 59 active skills", validator)
+        self.assertIn("Expected exactly 62 active skills", validator)
 
 
 if __name__ == "__main__":

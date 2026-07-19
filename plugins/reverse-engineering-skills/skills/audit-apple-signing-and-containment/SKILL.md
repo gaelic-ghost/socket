@@ -41,6 +41,7 @@ Read [references/apple-signing-and-containment.md](references/apple-signing-and-
    - Treat the transformed copy as a new behavioral artifact and never attribute its result to the original signature.
 
 8. Route ordinary app signing, provisioning, notarization, or distribution work to `apple-dev-skills` after the artifact audit is complete.
+   - Route private entitlement enforcement, TCC/sandbox attribution, Gatekeeper/XProtect internals, or other exact-build control questions to `research-macos-security-control` with this signature record.
 
 ## Guardrails
 

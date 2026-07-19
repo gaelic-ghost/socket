@@ -1,0 +1,4 @@
+interface:
+  display_name: "macOS Privacy Permissions"
+  short_description: "Diagnose macOS privacy permission behavior"
+  default_prompt: "Use $macos-privacy-permissions-workflow to diagnose this macOS permission failure."

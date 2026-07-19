@@ -32,6 +32,8 @@ complete, machine-checked classification is in
 Its optional Python helpers read and write operator-selected local artifacts;
 the plugin declares no MCP server or host-specific runtime extension.
 
+The macOS platform-security workflows remain instruction-portable in Claude Code and Cowork. Apple Dev Skills owns supported app permission, sandbox file-access, and entitlement diagnosis; Reverse Engineering Skills owns exact-build private-control research; Cybersecurity Skills owns defensive host investigation. Visible permission prompts, System Settings changes, local artifact inspection, VM execution, and protection-state changes still require the corresponding approved local environment and are not supplied by the Claude marketplace adapter.
+
 `agentdeck` is intentionally absent from the Claude marketplace: its title
 hook is a Codex runtime integration, not an instruction workflow. `spotify`
 is also absent because it remains a Socket placeholder. `speak-swiftly` is
