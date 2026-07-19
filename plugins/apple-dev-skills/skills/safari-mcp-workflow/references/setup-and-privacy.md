@@ -17,7 +17,7 @@ Registration changes the user's MCP configuration. Do not perform it as an impli
 
 ## Tool Scope
 
-Safari MCP provides tab navigation, page content, JavaScript evaluation, console messages, network request inspection, screenshots, viewport and media emulation, dialogs, and DOM interactions. Start with read-only tools; use interaction tools only inside the agreed scope.
+Safari MCP provides tab navigation, page content, JavaScript evaluation, console messages, network request inspection, screenshots, viewport and media emulation, dialogs, and DOM interactions. `get_page_content` returns a semantic text tree whose `uid` values are the precise targets for `page_interactions`; each interaction must state its purpose. `evaluate_javascript` takes an `expression`, and `close_tab` takes the handle returned by `create_tab` or `list_tabs`. Start with read-only tools; use interaction tools only inside the agreed scope.
 
 ## Data Boundary
 
