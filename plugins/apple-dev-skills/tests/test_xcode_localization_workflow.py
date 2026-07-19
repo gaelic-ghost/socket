@@ -53,7 +53,7 @@ class XcodeLocalizationWorkflowTests(unittest.TestCase):
             self.assertIn("xcode-localization-workflow", text)
         self.assertIn("String Catalog localization", manifest)
         self.assertIn('"string-catalog"', manifest)
-        self.assertIn("Expected exactly 54 active skills", validator)
+        self.assertIn("Expected exactly 58 active skills", validator)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose macOS Virtualization Shape"
+  short_description: "Choose the right macOS-hosted compute boundary"
+  default_prompt: "Use $choose-macos-virtualization-shape to choose a host, container, VM, or physical Mac boundary for this task."

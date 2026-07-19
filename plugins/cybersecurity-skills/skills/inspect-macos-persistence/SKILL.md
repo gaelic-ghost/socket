@@ -14,6 +14,7 @@ Read [references/macos-persistence-surfaces.md](references/macos-persistence-sur
 ## Workflow
 
 1. Record host/build, user domains, event timeline, and the suspected executable or label.
+   - Record whether the system is a physical Mac or macOS guest, plus the guest's restore image/build, VM tool/framework, integrations, baseline/reset state, and known virtualization artifacts.
 2. Inventory user-visible registrations.
    - Review Login Items and background-item state, profiles, extensions, browser add-ons, and app-managed helpers.
 3. Inventory launch services.
@@ -25,6 +26,7 @@ Read [references/macos-persistence-surfaces.md](references/macos-persistence-sur
    - Identify parent installer/app, creation/change time, signature/notarization, executable hash, running process ancestry, files, network, and logs.
 6. Classify each item.
    - Expected, suspicious, confirmed malicious, disabled/orphaned, or unresolved; explain evidence and impact.
+   - Keep guest-observed persistence distinct from physical-host proof when anti-VM, hardware, recoveryOS, kernel/system-extension, or device behavior may differ.
 7. Preserve before containment.
    - Record files and service state before using official `launchctl bootout` or app/uninstaller paths in the containment workflow.
 

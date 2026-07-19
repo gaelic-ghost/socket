@@ -43,6 +43,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Milestone 64: Xcode String Catalog Localization Workflow](#milestone-64-xcode-string-catalog-localization-workflow)
 - [Milestone 65: Feedback Assistant Workflow](#milestone-65-feedback-assistant-workflow)
 - [Milestone 66: App Extension, MailKit, and File Provider Workflows](#milestone-66-app-extension-mailkit-and-file-provider-workflows)
+- [Milestone 67: macOS and Linux Virtualization Workflows](#milestone-67-macos-and-linux-virtualization-workflows)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
 
@@ -1265,6 +1266,29 @@ Completed
 - [x] Apple Dev docs, metadata, tests, root Socket metadata, and Hermes compatibility validation agree on the shipped surface.
 
 Completed Milestone 66 by shipping `app-extension-architecture-workflow`, `mailkit-workflow`, and `file-provider-and-finder-sync-workflow` with Apple-docs-first boundaries, explicit Messaging Collaboration handoffs, and a validated Hermes skill-tap export.
+
+## Milestone 67: macOS and Linux Virtualization Workflows
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Add `choose-macos-virtualization-shape` for one evidence-backed host, container, persistent Linux machine, full VM, remote, or physical-Mac decision.
+- [x] Add `virtualization-framework-workflow` for guest-specific configuration, entitlement, devices, lifecycle, validation, and honest save/restore boundaries.
+- [x] Add separate `linux-development-vm-workflow` and `macos-development-vm-workflow` owners for their different boot, identity, artifact, integration, and fidelity contracts.
+- [x] Keep security-lab policy in Cybersecurity and Apple `container` command ownership in Server-Side Swift through explicit handoffs.
+- [x] Add metadata, tests, customization contracts, shared Xcode guidance, and Hermes exports without adding a VM runtime, image, kernel, helper, or service.
+- [x] Complete full validation, review, and finding remediation for the Socket minor release candidate.
+
+### Exit Criteria
+
+- [x] The Apple workflows choose and operate virtualization boundaries by required behavior rather than installed product preference.
+- [x] macOS and Linux guests retain distinct platform, boot, identity, device, lifecycle, and evidence models.
+- [x] All Apple Dev, root Socket, and portability gates pass from the reviewed release candidate.
+
+Completed Milestone 67 with four focused Apple virtualization workflows, owner-specific references, portable exports, metadata, and scenario contracts. The final reviewed candidate keeps guest implementation, guest operation, container commands, and security-lab policy in separate owners and is prepared for the Socket `9.19.0` minor release.
 
 ## Backlog Candidates
 

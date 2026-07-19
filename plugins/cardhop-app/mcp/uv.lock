@@ -141,7 +141,7 @@ wheels = [
 
 [[package]]
 name = "cardhop-app-mcp"
-version = "9.18.0"
+version = "9.19.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastmcp" },

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prepare Isolated Analysis Lab"
+  short_description: "Prepare and verify disposable analysis labs"
+  default_prompt: "Use $prepare-isolated-analysis-lab to turn this approved isolation choice into a verified disposable lab and teardown contract."

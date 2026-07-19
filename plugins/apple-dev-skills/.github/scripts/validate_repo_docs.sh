@@ -160,8 +160,12 @@ active_skill_mds=(
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
   "./skills/xcode-localization-workflow/SKILL.md"
+  "./skills/choose-macos-virtualization-shape/SKILL.md"
+  "./skills/virtualization-framework-workflow/SKILL.md"
+  "./skills/linux-development-vm-workflow/SKILL.md"
+  "./skills/macos-development-vm-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 54 ]] || fail "Expected exactly 54 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 58 ]] || fail "Expected exactly 58 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"

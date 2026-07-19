@@ -1,7 +1,7 @@
 {
   "name": "apple-dev-skills",
-  "version": "9.18.0",
-  "description": "Apple development workflows for Codex, including SwiftPM plugins, macros, traits, app extensions, MailKit, File Provider, Finder Sync, App Intents, Liquid Glass, PhotosUI/PhotoKit, VideoToolbox codecs, ARKit spatial/face/body sensing, camera/depth capture, Core Image, Image I/O, Vision/Core ML recognition, media/audio repair, provisioning, CloudKit, TipKit, SwiftData, SwiftUI, XcodeGen, Core Animation, AppKit, Safari, security, OpenAPI, and DocC.",
+  "version": "9.19.0",
+  "description": "Apple development workflows for Codex, including macOS and Linux virtualization, SwiftPM, Xcode, app extensions, imaging, media, Vision/Core ML, spatial sensing, camera, provisioning, SwiftData, SwiftUI, AppKit, Safari, security, OpenAPI, and DocC.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -98,14 +98,19 @@
     "openapi",
     "urlsession",
     "ios",
-    "macos"
+    "macos",
+    "virtualization",
+    "virtual-machine",
+    "linux-vm",
+    "macos-vm",
+    "virtualization-framework"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Apple Dev Skills",
-    "shortDescription": "Apple extension, SwiftPM, Swift, image/media, SwiftUI, Xcode, AppKit, security, OpenAPI, and DocC workflows for Codex.",
-    "longDescription": "Bundle Apple-platform development skills for app extension architecture, MailKit, File Provider and Finder Sync, PhotosUI selection and PhotoKit libraries/editing, VideoToolbox codecs, Core Video buffers, compressed samples, color/HDR, ARKit spatial/face/body sensing, world tracking, scene depth, LiDAR meshes and visionOS providers, AVFoundation camera/photo/depth/computational capture, Core Image, Image I/O, Apple Vision, custom Core ML recognition, AppKit/UIKit/Core Graphics images, AVFAudio, AVAudioEngine, AVFoundation media pipelines, Core Media, Core Audio, TipKit, XcodeGen migration, Xcode coding intelligence and String Catalog localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Icon Composer, Safari, DeviceCheck and App Attest, Swift OpenAPI clients, Xcode, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the socket marketplace that installs both.",
+    "shortDescription": "Apple Swift, Xcode, virtualization, UI, media, security, and documentation workflows for Codex.",
+    "longDescription": "Bundle Apple-platform development skills for macOS-hosted boundary selection, custom Virtualization framework hosts, persistent Linux development guests, clean macOS development guests, app extensions, Photos, video, spatial sensing, camera, imaging, Vision and Core ML, audio and media, XcodeGen migration, coding intelligence, localization, Swift, SwiftUI, Core Animation, Apple typography, SF Symbols, AppKit, Safari, security, provisioning, Swift OpenAPI, SwiftPM, DocC, testing, formatting, and repository guidance. Most workflows work standalone; bootstrap and guidance-sync workflows require the companion Productivity Skills plugin, or the Socket marketplace that installs both.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [
@@ -114,6 +119,10 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/apple-dev-skills",
     "defaultPrompt": [
+      "Choose whether this macOS-hosted task belongs on the host, in an OCI container, an Apple container machine, a full Linux or macOS VM, or a physical Mac.",
+      "Design or diagnose a custom macOS or Linux VM host with Apple's Virtualization framework, explicit devices, lifecycle, validation, and save or restore boundaries.",
+      "Prepare and validate a persistent Linux development guest with explicit distro, services, resources, host integrations, nested-virtualization gates, and reset strategy.",
+      "Prepare a clean macOS development guest from a compatible restore image with explicit identity, artifact lifecycle, checkpoints, integrations, and physical-Mac fidelity gaps.",
       "Repair or modernize Apple media and audio code across AVFAudio sessions, AVAudioEngine graphs, AVFoundation pipelines, Core Media timing, and legacy Core Audio surfaces.",
       "Build or repair Core Image processing, RAW, color, HDR, filter, custom-kernel, and rendering pipelines using current Apple documentation.",
       "Decode, encode, inspect, thumbnail, preserve metadata, or bridge Apple image representations across Image I/O, Core Graphics, AppKit, UIKit, Core Image, and Core Video.",

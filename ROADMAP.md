@@ -30,6 +30,7 @@
 - [Milestone 27: Cybersecurity skills plugin](#milestone-27-cybersecurity-skills-plugin)
 - [Milestone 28: Swift language tooling expansion](#milestone-28-swift-language-tooling-expansion)
 - [Milestone 29: Model Lab skills plugin](#milestone-29-model-lab-skills-plugin)
+- [Milestone 30: macOS virtualization and container skills expansion](#milestone-30-macos-virtualization-and-container-skills-expansion)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -73,6 +74,7 @@
 - Milestone 27: Cybersecurity skills plugin - Planned
 - Milestone 28: Swift language tooling expansion - In Progress
 - Milestone 29: Model Lab skills plugin - Planned
+- Milestone 30: macOS virtualization and container skills expansion - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -994,6 +996,41 @@ Implemented; release pending
 - [x] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
 - [x] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
 - [x] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
+
+## Milestone 30: macOS virtualization and container skills expansion
+
+### Status
+
+Completed
+
+### Scope
+
+- [x] Record the cross-plugin architecture, ownership, source baseline, phased skills, security boundaries, validation, and forward-test plan in [`docs/maintainers/macos-virtualization-and-container-skills-plan.md`](./docs/maintainers/macos-virtualization-and-container-skills-plan.md).
+- [x] Add Apple Dev selection and Virtualization framework foundations that distinguish host execution, OCI containers, persistent Linux machines, full Linux VMs, full macOS VMs, and physical Macs.
+- [x] Expand the Apple Containerization workflow for the `container` 1.x CLI, persistent `container machine` environments, TOML configuration, structured-output changes, and exact-version 0.x Containerization package APIs.
+- [x] Add separate Linux and macOS development-VM workflows instead of flattening their boot, identity, device, lifecycle, and fidelity contracts.
+- [x] Add a Cybersecurity lab-preparation workflow that turns an isolation decision into verified mount, clipboard, credential, device, network, baseline, evidence-export, revert, and teardown controls.
+- [x] Keep the expansion guidance-only: no VM images, restore images, kernels, malware samples, privileged helpers, daemons, guest agents, MCP servers, remote credentials, or automatic third-party tool installation.
+
+### Planned Slices
+
+- [x] Phase 1: add `apple-dev-skills:choose-macos-virtualization-shape` and `apple-dev-skills:virtualization-framework-workflow`, then align Cybersecurity isolation handoffs.
+- [x] Phase 2: update `server-side-swift:apple-containerization-workflow` for `container` 1.x and add `apple-dev-skills:linux-development-vm-workflow`.
+- [x] Phase 3: add `apple-dev-skills:macos-development-vm-workflow` with restore-image, VM-bundle, identity, clean-baseline, and reset guidance.
+- [x] Phase 4: add `cybersecurity-skills:prepare-isolated-analysis-lab` and align dynamic-analysis and macOS-investigation workflows around its lab record.
+- [x] Forward-test the ten planned stable guidance paths through scenario contract tests before adding any tool-specific adapter skill; treat Lima, Colima, Tart, UTM, VMware Fusion, Parallels Desktop, OrbStack, and similar products as discovered adapters until repeated tasks justify a dedicated surface.
+- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh root architecture metadata and user-facing inventory text, and run affected child plus root validation with each shipped phase.
+
+### Exit Criteria
+
+- [x] An agent selects a development or research boundary by required fidelity, persistence, portability, host integration, and threat model instead of choosing a familiar tool name first.
+- [x] Apple `container`, `container machine`, full Linux VMs, and full macOS VMs have distinct owners and lifecycle contracts.
+- [x] A custom Virtualization framework host validates guest configuration, entitlements, devices, lifecycle, and save/restore compatibility without calling saved state a full snapshot system.
+- [x] macOS security-control claims use a macOS guest or physical Mac when Linux cannot reproduce the behavior, and remaining hardware or anti-VM gaps are explicit.
+- [x] Security labs default ambient host authority to absent, preserve intended evidence through a narrow export, and verify revert or teardown after execution.
+- [x] Socket's skill metadata, portability exports, compatibility records, documentation, and validation agree on the shipped virtualization inventory.
+
+Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a disposable Cybersecurity lab-preparation workflow, Apple `container` 1.x and `container machine` guidance, guest-versus-host evidence rules, Hermes exports, Claude and Cowork compatibility metadata, architecture inventory updates, and ten scenario-level forward tests. The rebased `9.19.0` release candidate preserves the concurrent Model Lab inventory and passed 268 Apple Dev tests, 126 Socket tests with one intentional skip, Apple and Cybersecurity child validators, Socket marketplace validation, Hermes parity, Claude/Cowork validation, and the architecture consistency check.
 
 ## Small Tickets
 

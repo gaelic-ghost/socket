@@ -15,6 +15,7 @@ Read [references/macos-security-layers.md](references/macos-security-layers.md) 
 
 1. Identify the Mac and event.
    - Record model/chip, exact macOS build, update state, user/session, time/timezone, managed-device context, and what the person observed.
+   - Record whether evidence comes from the affected physical host, a macOS guest, or a reproduction guest. For guest evidence, include the VM framework/tool, virtual hardware, restore image, integrations, baseline/reset state, and anti-VM or hardware fidelity limits.
 2. Preserve the triggering evidence.
    - Record alert text/screenshots, file path/source/hash, quarantine metadata, process identity, prompts, downloads, and relevant logs before cleanup.
 3. Inspect artifact identity.
@@ -27,6 +28,7 @@ Read [references/macos-security-layers.md](references/macos-security-layers.md) 
    - Separate a blocked attempt from successful execution and successful execution from compromise.
 6. Assess and advise.
    - State classification/confidence, immediate isolation needs, evidence gaps, and the smallest next workflow.
+   - Do not generalize guest-observed behavior to a physical Mac when hardware, Secure Enclave, recoveryOS, kernel/system-extension, device, or anti-VM behavior remains unresolved.
 
 ## Output
 

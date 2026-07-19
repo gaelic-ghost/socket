@@ -14,6 +14,7 @@ Read [references/macos-runtime-evidence.md](references/macos-runtime-evidence.md
 ## Workflow
 
 1. Fix host/build, user/session, time window, process/artifact identity, and reported symptom.
+   - Label every observation as physical-host, affected-host, or macOS-guest evidence. For a guest, record VM tool/framework, virtual hardware, restore-image/build, shares/devices/network, baseline/reset state, and virtualization artifacts that may alter behavior.
 2. Capture current process context.
    - Record PID, executable path/hash/signature, user, parent/ancestry, arguments, environment when authorized, start time, code state, and deleted/replaced executable clues.
 3. Correlate files and registrations.
@@ -27,6 +28,7 @@ Read [references/macos-runtime-evidence.md](references/macos-runtime-evidence.md
    - Separate user action, launch, child processes, file changes, prompts, network, persistence, detection, and termination.
 7. Assess behavior and gaps.
    - Route binary internals, dynamic reproduction, containment, or hunting as needed.
+   - State anti-VM, hardware, Secure Enclave, recoveryOS, kernel/system-extension, and device-access limitations before treating guest evidence as physical-Mac proof.
 
 ## Output
 

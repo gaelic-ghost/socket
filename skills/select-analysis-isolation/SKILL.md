@@ -37,6 +37,11 @@ Read [references/isolation-matrix.md](references/isolation-matrix.md) before sel
 6. Verify teardown.
    - Stop the workload, export intended evidence, revert or destroy disposable state, revoke temporary credentials, and confirm no host share or forwarded port remains.
 
+7. Hand an approved execution boundary to `prepare-isolated-analysis-lab`.
+   - Use `apple-dev-skills:choose-macos-virtualization-shape` when the development boundary is still undecided.
+   - Use `apple-dev-skills:virtualization-framework-workflow` when a custom macOS or Linux VM host must be implemented or diagnosed.
+   - Treat a SIP-enabled macOS VM as the stable high-fidelity path for SIP-sensitive behavior; local sandbox, TCC, and failure injection are explicitly lower-fidelity approximations.
+
 ## Stop Conditions
 
-Stop before execution when the environment cannot reproduce the target platform, the isolation controls cannot be verified, or the task requires host secrets or privileges beyond the approved analysis plan.
+Stop before execution when the environment cannot reproduce the target platform, the isolation controls cannot be verified, or the task requires host secrets or privileges beyond the approved analysis plan. Selection alone does not authorize execution; require the prepared-lab record first.

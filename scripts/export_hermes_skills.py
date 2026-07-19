@@ -20,6 +20,7 @@ CYBERSECURITY_SOURCE_ROOT = REPO_ROOT / "plugins" / "cybersecurity-skills" / "sk
 REVERSE_ENGINEERING_SOURCE_ROOT = (
     REPO_ROOT / "plugins" / "reverse-engineering-skills" / "skills"
 )
+SERVER_SIDE_SWIFT_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-swift" / "skills"
 SWIFT_LANG_SOURCE_ROOT = REPO_ROOT / "plugins" / "swift-lang" / "skills"
 MODEL_LAB_SOURCE_ROOT = REPO_ROOT / "plugins" / "model-lab-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
@@ -48,6 +49,10 @@ MESSAGING_SKILLS = (
 )
 APPLE_SKILLS = (
     "app-extension-architecture-workflow",
+    "choose-macos-virtualization-shape",
+    "virtualization-framework-workflow",
+    "linux-development-vm-workflow",
+    "macos-development-vm-workflow",
     "mailkit-workflow",
     "file-provider-and-finder-sync-workflow",
     "swift-package-extension-workflow",
@@ -71,6 +76,7 @@ CYBERSECURITY_SKILLS = (
     "perform-dynamic-malware-analysis",
     "perform-static-malware-analysis",
     "preserve-security-evidence",
+    "prepare-isolated-analysis-lab",
     "recover-security-incident",
     "report-security-assessment",
     "route-security-work",
@@ -83,6 +89,9 @@ CYBERSECURITY_SKILLS = (
     "triage-vulnerability-report",
     "use-objective-see-tools",
     "validate-vulnerability",
+)
+SERVER_SIDE_SWIFT_SKILLS = (
+    "apple-containerization-workflow",
 )
 REVERSE_ENGINEERING_SKILLS = (
     "connect-hopper-mcp",
@@ -117,6 +126,7 @@ EXPORTED_SKILLS = (
     + MESSAGING_SKILLS
     + APPLE_SKILLS
     + CYBERSECURITY_SKILLS
+    + SERVER_SIDE_SWIFT_SKILLS
     + REVERSE_ENGINEERING_SKILLS
     + SWIFT_LANG_SKILLS
     + MODEL_LAB_SKILLS
@@ -136,6 +146,10 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
         **{skill_name: APPLE_SOURCE_ROOT for skill_name in APPLE_SKILLS},
         **{
             skill_name: CYBERSECURITY_SOURCE_ROOT for skill_name in CYBERSECURITY_SKILLS
+        },
+        **{
+            skill_name: SERVER_SIDE_SWIFT_SOURCE_ROOT
+            for skill_name in SERVER_SIDE_SWIFT_SKILLS
         },
         **{
             skill_name: REVERSE_ENGINEERING_SOURCE_ROOT
