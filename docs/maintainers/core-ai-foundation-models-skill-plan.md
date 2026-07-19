@@ -1,19 +1,29 @@
 # Core AI and Foundation Models Skill Plan
 
-This plan records the first Socket pass for Apple's Core AI, Foundation Models, and adjacent Apple Intelligence workflow coverage.
+This plan records Socket's ownership decision for Apple's Core AI, Foundation
+Models, and adjacent Apple Intelligence workflow coverage. It is coordinated
+with the broader [`model-lab-skills` plugin
+plan](./model-lab-skills-plugin-plan.md).
 
 ## Current Recommendation
 
-Do not add a broad "Apple AI" catch-all skill yet.
+Do not add a broad "Apple AI" catch-all skill or separate `coreai-skills`,
+`mlx-skills`, and `coreml-skills` plugins in the first implementation pass.
 
-Split the work into two candidate tracks:
+Use three explicit tracks:
 
 - App-facing Apple Intelligence and Foundation Models workflows may belong in `apple-dev-skills` when the request is about Swift app integration, model/session choice, tool use, evaluations, Private Cloud Compute boundaries, App Intents, or Xcode validation.
-- Model-runtime, conversion, optimization, and artifact-debugging workflows probably need a future dedicated Socket plugin, or a handoff to Apple-owned `coreai-models` skills, because Core AI model export and optimization are larger than ordinary Apple app workflow guidance.
+- Cross-runtime model research, reproducible comparisons, and the choice among
+  Core AI, Core ML, direct MLX, ExecuTorch Core ML, and ExecuTorch MLX belong in
+  the planned `model-lab-skills` plugin.
+- Core AI export, authoring, compression, and runtime implementation details
+  should hand off to Apple-owned `coreai-models` skills rather than being
+  copied into Socket.
 
 ## Source Evidence
 
-Official and Apple-owned sources checked on 2026-06-22:
+Official and Apple-owned sources checked initially on 2026-06-22 and refreshed
+on 2026-07-19:
 
 - [Apple Intelligence](https://developer.apple.com/apple-intelligence/)
 - [What's new in Apple Intelligence](https://developer.apple.com/apple-intelligence/whats-new/)
@@ -26,13 +36,35 @@ Official and Apple-owned sources checked on 2026-06-22:
 - [apple/coreai-models](https://github.com/apple/coreai-models)
 - [apple/coreai-torch](https://github.com/apple/coreai-torch)
 - [apple/coreai-optimization](https://github.com/apple/coreai-optimization)
+- [apple/coremltools](https://github.com/apple/coremltools)
+- [apple/foundation-models-utilities](https://github.com/apple/foundation-models-utilities)
+- [apple/python-apple-fm-sdk](https://github.com/apple/python-apple-fm-sdk)
+- [MLX](https://github.com/ml-explore/mlx)
+- [MLX Swift](https://github.com/ml-explore/mlx-swift)
+- [MLX LM](https://github.com/ml-explore/mlx-lm)
+- [ExecuTorch MLX delegate](https://github.com/pytorch/executorch/tree/main/backends/mlx)
+- [ExecuTorch Core ML backend](https://docs.pytorch.org/executorch/stable/ios-coreml.html)
 
 Observed source status:
 
 - Apple Intelligence and Core AI landing pages are public Apple developer pages.
 - Foundation Models API documentation exists as Apple Developer Documentation, but the page body is JavaScript-rendered in this environment.
 - WWDC26 transcripts are readable and useful for beta-era Foundation Models details.
-- `apple/coreai-models`, `apple/coreai-torch`, and `apple/coreai-optimization` are public Apple-owned GitHub repositories.
+- `apple/coreai-models`, `apple/coreai-torch`, `apple/coreai-optimization`,
+  `apple/coremltools`, `apple/foundation-models-utilities`, and
+  `apple/python-apple-fm-sdk` are public Apple-owned GitHub repositories.
+- `apple/coreai-models` now ships `working-with-coreai`, `model-authoring`, and
+  `model-compression-exploration` agent skills. Its current README describes
+  `.aimodel` export recipes, Python primitives, Swift runtime utilities, and
+  macOS/iOS 27 plus Xcode 27 runtime requirements.
+- `coreai-torch` lowers `torch.export.ExportedProgram` graphs into Core AI IR
+  and exposes composite operations, custom lowerings, submodule
+  externalization, and inline Metal kernels.
+- `coreai-optimization` provides Core AI-targeted quantization, palettization,
+  and pruning experiments through `coreai-opt`.
+- The ExecuTorch MLX delegate is maintained under `pytorch/executorch`, not the
+  Apple GitHub organization. Its current upstream README marks it experimental
+  and under active development.
 - GitHub repository searches for official Apple `Music Intelligence` and `Media Analyzer` developer/source surfaces did not find a verified Apple-owned match in this pass. Keep those as open investigation items.
 
 ## First Ownership Split
@@ -48,21 +80,24 @@ Apple Dev Skills can own app-facing guidance for:
 - Xcode build, run, test, Instruments, and preview handoffs for AI features
 - App Intents, Visual Intelligence, Image Playground, and Siri integration when the work is Apple app integration rather than model authoring
 
-### Dedicated Core AI Plugin Candidate
+### Model Lab Skills
 
-A future dedicated Core AI or model-runtime plugin should own:
+The planned `model-lab-skills` plugin should own:
 
-- Core AI `.aimodel` artifact integration beyond ordinary app wiring
-- PyTorch model export through `coreai-torch`
-- model compression and optimization through `coreai-opt`
-- Core AI Debugger and model graph inspection
-- model catalog, tokenizer, and resource-folder handling from `apple/coreai-models`
-- model-authoring constraints, op coverage, custom Metal kernels, quantization, palettization, pruning, and performance investigation
-- coordination with future `mlx-skills` and `coreml-skills`
+- choosing among Core AI, Core ML, direct MLX, ExecuTorch Core ML, experimental
+  ExecuTorch MLX, Foundation Models, and hosted or local chat-completions models
+- reproducible conversion, optimization, quantization, runtime, memory,
+  quality, and output-parity comparisons
+- model-level experiment and artifact provenance
+- handoffs to Apple-owned implementation skills and Apple Dev Skills
 
 ### Handoff To Apple-Owned Skills
 
-Apple's `coreai-models` repository already advertises coding-agent skills for Core AI workflows. Before Socket duplicates that work, inspect whether those skills satisfy the request or should be installed/used as the source of truth.
+Apple's `coreai-models` repository ships coding-agent skills for Core AI
+workflows. Use those skills as the implementation source of truth for Core AI
+export, authoring, and compression. Socket should own the cross-runtime choice
+and evidence contract, not a copied version of Apple's rapidly changing
+implementation guidance.
 
 ## Stable, Beta, And Exploratory Boundaries
 
@@ -70,15 +105,30 @@ Apple's `coreai-models` repository already advertises coding-agent skills for Co
 - Beta: WWDC26 Foundation Models and Xcode 27 claims must carry the date checked and target SDK/Xcode version.
 - Exploratory/open-source: Apple GitHub projects can anchor source-level planning, but package behavior should be verified from each repository's README, tags, docs, and tests before Socket ships workflow claims.
 
-## Open Questions
+## Resolved Questions
 
-- Should Apple Dev Skills ship an app-facing `foundation-models-app-workflow`, or should that wait until the Xcode 27 and Foundation Models beta APIs settle?
-- Should Socket add a dedicated `coreai-skills` child plugin, or rely on Apple-owned `coreai-models` skills for model export, authoring, compression, and runtime details?
-- How should future `mlx-skills` and `coreml-skills` divide model conversion, on-device inference, app integration, and performance validation?
-- Are Music Intelligence and Media Analyzer public Apple developer surfaces, internal names, or future docs that are not yet available?
+- Apple Dev Skills remains the app-facing Foundation Models and Swift/Xcode
+  integration owner.
+- Model Lab Skills will own cross-runtime model experiments and Apple runtime
+  selection.
+- Apple-owned `coreai-models` skills will own fast-moving Core AI export,
+  authoring, and compression implementation details.
+- Separate `mlx-skills`, `coreml-skills`, and `coreai-skills` plugins are
+  deferred unless real tasks prove the combined ownership model insufficient.
+
+## Open Investigations
+
+- Are Music Intelligence and Media Analyzer public Apple developer surfaces,
+  internal names, or future docs that are not yet available?
+- Which Foundation Models and Core AI APIs remain beta-only at each future
+  Xcode and SDK refresh?
+- When does the experimental ExecuTorch MLX delegate become stable enough for
+  a default recommendation rather than an evidence-gated comparison option?
 
 ## Decision Checkpoints
 
-- If a task requires model export, compression, custom kernels, Core AI Debugger, or model artifact validation, pause before pushing it into Apple Dev Skills.
+- If a task requires model export, compression, custom kernels, Core AI
+  Debugger, or model artifact validation, route through Model Lab Skills and
+  Apple-owned Core AI skills rather than pushing it into Apple Dev Skills.
 - If a task is app-facing and mostly about Swift integration, Foundation Models sessions, App Intents, Xcode validation, or privacy boundaries, Apple Dev Skills is the likely owner.
 - If official Apple docs cannot be found for a named surface, mark the claim unresolved instead of creating workflow guidance around it.

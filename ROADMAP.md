@@ -29,6 +29,7 @@
 - [Milestone 26: Messaging collaboration skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
 - [Milestone 27: Cybersecurity skills plugin](#milestone-27-cybersecurity-skills-plugin)
 - [Milestone 28: Swift language tooling expansion](#milestone-28-swift-language-tooling-expansion)
+- [Milestone 29: Model Lab skills plugin](#milestone-29-model-lab-skills-plugin)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -71,6 +72,7 @@
 - Milestone 26: Messaging collaboration skills plugin - Completed
 - Milestone 27: Cybersecurity skills plugin - Planned
 - Milestone 28: Swift language tooling expansion - In Progress
+- Milestone 29: Model Lab skills plugin - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -419,22 +421,22 @@ Completed
 
 ### Scope
 
-- [ ] Record the ownership split for Apple's app-facing Foundation Models workflows, Core AI model runtime and conversion workflows, and adjacent MLX/Core ML guidance before adding another installable child plugin or Apple Dev Skills surface.
-- [ ] Keep stable Apple developer pages, beta WWDC26 Foundation Models claims, and Apple-owned open-source Core AI repositories separated by status and date checked.
-- [ ] Decide whether Core AI work should be handled by Apple Dev Skills, a future Socket `coreai-skills` child plugin, a future `mlx-skills` or `coreml-skills` plugin, or a handoff to Apple-owned `coreai-models` skills.
+- [x] Record the ownership split for Apple's app-facing Foundation Models workflows, Core AI model runtime and conversion workflows, and adjacent MLX/Core ML guidance before adding another installable child plugin or Apple Dev Skills surface.
+- [x] Keep stable Apple developer pages, beta WWDC26 Foundation Models claims, and Apple-owned open-source Core AI repositories separated by status and date checked.
+- [x] Decide that Apple Dev Skills owns app integration, the planned `model-lab-skills` plugin owns cross-runtime research and comparison, and Apple-owned `coreai-models` skills own rapidly changing Core AI implementation details.
 
 ### Tickets
 
 - [x] Record the first source-linked plan in [`docs/maintainers/core-ai-foundation-models-skill-plan.md`](./docs/maintainers/core-ai-foundation-models-skill-plan.md).
-- [ ] Design the first app-facing Foundation Models workflow only after the boundary between Apple Intelligence app integration and model-runtime work is clear.
-- [ ] Evaluate Apple-owned Core AI GitHub repos before deciding whether Socket should duplicate, wrap, or simply hand off to their skill surfaces.
+- [x] Establish the app-facing Foundation Models boundary without prematurely adding another Apple Dev skill: keep Swift/Xcode app integration in Apple Dev Skills and model/harness experiments in Model Lab Skills.
+- [x] Evaluate Apple-owned Core AI GitHub repos and choose a handoff to the `coreai-models` skills instead of duplicating their export, authoring, and compression guidance.
 - [ ] Keep Music Intelligence and Media Analyzer as explicit open investigations until official Apple developer docs or source references are verified.
-- [ ] Revisit the existing `mlx-skills` and `coreml-skills` backlog candidates once the Core AI ownership plan has enough evidence.
+- [x] Revisit the existing `mlx-skills` and `coreml-skills` backlog candidates and absorb their first useful decisions into the planned `model-lab-skills:choose-apple-model-runtime` workflow.
 
 ### Exit Criteria
 
-- [ ] Socket has a clear skill/plugin ownership decision for Foundation Models, Private Cloud Compute, Core AI, MLX, Core ML, and adjacent Apple Intelligence surfaces.
-- [ ] Any shipped skill distinguishes stable, beta, and exploratory/open-source claims and links to official Apple docs or Apple-owned source.
+- [x] Socket has a clear skill/plugin ownership decision for Foundation Models, Private Cloud Compute, Core AI, MLX, Core ML, and adjacent Apple Intelligence surfaces.
+- [x] The planning contract requires shipped skills to distinguish stable, beta, experimental, and exploratory/open-source claims and link to official Apple docs or source.
 
 ## Milestone 15: Android Dev Skills plugin
 
@@ -937,6 +939,62 @@ In Progress
 - [x] Codex, Claude, Cowork, and Hermes compatibility surfaces agree on the portable first-wave skill inventory.
 - [ ] The second-wave workflow can compare public API and ABI artifacts with explicit version and toolchain evidence.
 
+## Milestone 29: Model Lab skills plugin
+
+### Status
+
+Planned
+
+### Scope
+
+- [x] Record the detailed plugin, ownership, skill-slice, Apple-runtime, tooling, compatibility, and validation plan in [`docs/maintainers/model-lab-skills-plugin-plan.md`](./docs/maintainers/model-lab-skills-plugin-plan.md).
+- [ ] Add a Socket-hosted `model-lab-skills` child plugin for reproducible language-model experiments, dataset preparation, fine-tuning, model evaluation, checkpoint comparison, representation research, behavior modification, refusal ablation, authorized jailbreak evaluation, and runtime comparison.
+- [ ] Keep model behavior and experiment design separate from GPU/provider operations, agent-harness evaluation, host portability, app implementation, and real-system security testing.
+- [ ] Treat the experiment manifest as the durable primitive connecting immutable model source, dataset provenance, recipe or intervention, checkpoint, evaluation suite, runtime evidence, and artifact decision.
+- [ ] Include a first-class Apple model-runtime lane that compares Foundation Models, Core AI, Core ML, direct MLX, ExecuTorch Core ML, and the experimental ExecuTorch MLX delegate without duplicating Apple-owned Core AI skills.
+
+### First Slice
+
+- [ ] Create `plugins/model-lab-skills/` with `.codex-plugin/plugin.json`, `AGENTS.md`, an icon asset, authored `skills/` source, and no speculative MCP server.
+- [ ] Add `model-lab-skills:choose-model-lab-workflow` for routing training, fine-tuning, evaluation, interpretability, steering, ablation, quantization, merging, runtime benchmarking, Apple on-device research, and harness work.
+- [ ] Add `model-lab-skills:design-model-experiment` with an experiment-manifest asset and explicit controls, seeds, data splits, metrics, stop conditions, cost, and artifact-retention boundaries.
+- [ ] Add `model-lab-skills:prepare-language-model-dataset` for supervised, preference, reward-model, synthetic, adversarial, and evaluation dataset shapes with provenance, deduplication, contamination, and split checks.
+- [ ] Add `model-lab-skills:fine-tune-language-model` for full fine-tuning, LoRA, QLoRA, checkpointing, resumption, overfitting checks, held-out evaluation, and provider/Python handoffs.
+- [ ] Add `model-lab-skills:evaluate-language-model` for task, behavior, refusal, over-refusal, jailbreak-resilience, calibration, memorization, regression, and runtime measures with deterministic-first grading.
+- [ ] Add `model-lab-skills:compare-model-checkpoints` for normalized paired comparisons across base, control, intermediate, and candidate checkpoints.
+- [ ] Add `model-lab-skills:choose-apple-model-runtime` for current-source comparison and routing across Apple's system model, Core AI, Core ML, MLX, and ExecuTorch paths.
+
+### Follow-On Slices
+
+- [ ] Add `research-model-representations`, `steer-language-model-behavior`, and `ablate-refusal-representations` with falsifiable hypotheses, exact intervention records, controls, and ordinary-capability regression checks.
+- [ ] Add `evaluate-jailbreak-resilience` for owned open-weight models and authorized endpoints, with explicit target, attack corpus, model/template/sampler identity, success rubric, and Cybersecurity handoff for real-system impact.
+- [ ] Add `evaluate-tool-calling-model` with separate model-protocol and agent-harness failure reporting.
+- [ ] Add `benchmark-model-runtime` after at least two real comparison tasks establish the required load-time, time-to-first-token, throughput, memory, accelerator, thermal, power, artifact-size, and output-parity evidence.
+- [ ] Decide from real tasks whether pretraining or continued pretraining, preference optimization, distillation, adapter merging, artifact quantization, synthetic-data generation, multimodal evaluation, packaging, and agent-harness research each deserve separate skills.
+
+### Apple Open-Source AI Gates
+
+- [ ] Prefer Apple-owned `coreai-models` skills for Core AI export, model authoring, and compression implementation; keep Socket's Apple skill focused on cross-runtime choice and evidence.
+- [ ] Track `coreai-torch`, `coreai-optimization`, `coreai-models`, Core ML Tools, Foundation Models utilities, the Python Foundation Models SDK, MLX, MLX Swift, MLX LM, and both ExecuTorch Apple backends through current official source.
+- [ ] Classify Apple's growing `ml-*` repositories as reusable tools, benchmarks/datasets, paper-specific reproduction code, model releases, samples, or exploratory prototypes before recommending them.
+- [ ] Keep the ExecuTorch MLX delegate evidence-gated while upstream marks it experimental; verify exact commit or release, operator coverage, fallback, build requirements, parity, and performance for each recommendation.
+
+### Compatibility And Validation
+
+- [ ] Export portable skills through the Hermes tap and validate the generated inventory.
+- [ ] Classify Claude Code and Cowork compatibility in the same implementation pass.
+- [ ] Forward-test the training, evaluation, Apple runtime, ablation, and jailbreak workflows against isolated representative tasks before treating their contracts as stable.
+- [ ] Wire `model-lab-skills` into the Socket marketplace only after useful skill content exists, then update root README, contributor docs, plugin metadata, and root validation together.
+
+### Exit Criteria
+
+- [ ] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
+- [ ] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
+- [ ] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
+- [ ] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
+- [ ] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
+- [ ] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -1034,8 +1092,7 @@ In Progress
 - [ ] Keep placeholder or write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward`, `spotify`, or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
 - [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It covers Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
-- [ ] Add an `mlx-skills` guidance plugin for Apple Silicon MLX project work. It should cover project-shape discovery, Python and Swift integration choices, model conversion or loading workflows, local performance validation, reproducibility notes, and clear boundaries with broader Python, Apple, and AI automation skills.
-- [ ] Add a `coreml-skills` guidance plugin for Core ML model integration and maintenance. It should cover model packaging, conversion handoffs, Swift and Apple-platform app integration, on-device validation, performance and memory checks, release readiness, and boundaries with `apple-dev-skills` so generic Xcode or SwiftUI work stays owned there.
+- [x] Replace the separate `mlx-skills` and `coreml-skills` plugin candidates with the coordinated `model-lab-skills:choose-apple-model-runtime` plan. Keep app integration in Apple Dev Skills and revisit a narrower plugin only if repeated work proves the combined boundary insufficient.
 - [x] Expand Apple Dev Skills with dedicated SwiftUI animation, Core Animation, SF Symbols, and Apple typography workflows. Shipped `sf-symbols-workflow`, `swiftui-animation-workflow`, `core-animation-layer-workflow`, and `apple-typography-workflow` from [`docs/maintainers/apple-design-animation-skills-plan.md`](./docs/maintainers/apple-design-animation-skills-plan.md), keeping the skills under `plugins/apple-dev-skills`, using Xcode-local docs, Dash, official Apple docs, and local Apple developer apps as evidence, and avoiding absorption into the existing SwiftUI architecture skill.
 - [x] Add an `apple-dev-skills:appkit-app-architecture-workflow` skill so AppKit has a first-party architecture decision surface parallel to SwiftUI. It covers menu bar apps, status items, responder-chain menus, window and view-controller ownership, app and window restoration, AppKit MVC, object archiving and persistence choices, Observation with AppKit, and mixed AppKit/SwiftUI composition without steering agents inordinately toward either framework. Started from [`docs/agents/appkit-skills-coverage-plan.md`](./docs/agents/appkit-skills-coverage-plan.md).
 - [x] Complete Phase 2 of the Apple Dev Skills Socket migration. Treat `plugins/apple-dev-skills` as monorepo-owned source, remove Apple Dev Skills from subtree release gates, update Socket docs and duplicate-install guidance, add the compatibility marketplace smoke test, run full Socket validation, and publish the Socket release that makes the ownership change durable.
