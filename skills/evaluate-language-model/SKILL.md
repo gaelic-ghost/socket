@@ -1,6 +1,6 @@
 ---
 name: evaluate-language-model
-description: Design and run repeatable language-model capability, quality, behavior, regression, or safety evaluations. Use when creating eval cases, choosing deterministic or model-graded metrics, running a benchmark, comparing a treatment with a baseline, or deciding whether a checkpoint is acceptable.
+description: Design repeatable language-model capability, quality, behavior, regression, or safety evaluations. Use when creating cases and graders, comparing a treatment with a baseline, or deciding whether a checkpoint passes.
 ---
 
 # Evaluate Language Model
@@ -17,9 +17,15 @@ State the population, task, model artifact, prompt/template, decoding settings, 
 4. For model judges, pin the judge model/revision, rubric, prompt, sampling settings, and parser. Calibrate against human-labeled examples and test order/position effects.
 5. Record refusals, invalid outputs, timeouts, and grader failures as outcomes; do not silently drop them.
 6. Run baseline and treatment on the same cases and settings.
-7. Preserve per-case results, then aggregate by meaningful slices as well as globally.
+7. Preserve per-case results, require identical case IDs for decision comparisons, then aggregate by meaningful slices as well as globally. Use partial comparisons only as explicitly labeled diagnostics.
 8. Quantify uncertainty with repeated runs, confidence intervals, or paired tests appropriate to the metric.
 9. Inspect regressions and disagreements before accepting the aggregate result.
+
+## Choose The Harness
+
+- Use [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) for supported standardized, mostly model-in/model-out academic benchmarks such as MMLU; pin the task and harness revisions.
+- Use [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) when the evaluation needs sandboxed code/tools, multi-step state, agent behavior, explicit scorers, or stronger execution isolation.
+- Use a small project-native runner when neither framework adds useful capability. Preserve the same case, grader, provenance, and raw-result contract.
 
 ## Evidence Classes
 

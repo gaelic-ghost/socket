@@ -1,6 +1,6 @@
 ---
 name: compare-model-checkpoints
-description: Compare base, intermediate, adapter, merged, quantized, converted, or intervention-derived model checkpoints. Use when selecting a model artifact, investigating a regression, verifying that packaging preserved behavior, or balancing quality, safety, size, latency, memory, and provenance.
+description: Compare base, adapter, merged, quantized, converted, or intervention-derived checkpoints. Use when selecting an artifact, investigating regression, verifying packaging, or balancing quality, safety, size, and runtime.
 ---
 
 # Compare Model Checkpoints
@@ -11,7 +11,7 @@ Identify the exact model and tokenizer revisions, chat template, adapter/merge s
 
 ## Workflow
 
-1. Snapshot each artifact's provenance with `scripts/snapshot_model_provenance.py`.
+1. Preserve every source artifact as immutable, snapshot its provenance with `scripts/snapshot_model_provenance.py`, and write the snapshot outside the artifact directory.
 2. Verify that every comparison artifact can be loaded and produces output on the same smoke cases.
 3. Use `evaluate-language-model` for paired quality and behavior evidence.
 4. Use `benchmark-model-runtime` when deployment properties affect the decision.

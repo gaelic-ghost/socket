@@ -1,6 +1,6 @@
 ---
 name: fine-tune-language-model
-description: Plan and execute supervised fine-tuning, LoRA, QLoRA, or full-parameter language-model training with reproducible provenance and evaluation gates. Use when adapting a checkpoint to new behavior, style, domain, schema, or task and when choosing adapter rank, precision, optimizer, schedule, checkpointing, or resume behavior.
+description: Plan supervised fine-tuning, LoRA, QLoRA, or full-parameter training with reproducible evaluation gates. Use when adapting a checkpoint or choosing precision, adapters, optimization, checkpointing, or resume behavior.
 ---
 
 # Fine-Tune Language Model
@@ -17,7 +17,7 @@ description: Plan and execute supervised fine-tuning, LoRA, QLoRA, or full-param
 1. Invoke `design-model-experiment`; pin the base checkpoint and tokenizer revisions.
 2. Invoke `prepare-language-model-dataset`; freeze train, validation, and untouched test splits.
 3. Confirm model/license terms and artifact-publication scope once before training.
-4. Record framework and package versions, precision, quantization, optimizer, learning-rate schedule, effective batch size, sequence length, packing, seed, and chat template.
+4. Record framework and package versions, precision, quantization, optimizer, learning-rate schedule, effective batch size, sequence length, packing, seed, and chat template. For adapters, also record rank, alpha/scaling, dropout, target modules, modules to save, bias handling, initialization, and whether the artifact will remain separate or be merged.
 5. Run one batch forward/backward and a short overfit test on a tiny sample. Diagnose loss, masking, labels, and gradient flow before scaling.
 6. Save configuration, logs, checkpoints, and adapter metadata together. Test resume from a checkpoint before relying on it.
 7. Monitor training and validation signals without choosing the final model solely by training loss.

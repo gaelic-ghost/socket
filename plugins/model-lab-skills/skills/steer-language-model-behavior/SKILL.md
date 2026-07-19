@@ -1,6 +1,6 @@
 ---
 name: steer-language-model-behavior
-description: Implement and evaluate controlled activation steering, representation engineering, logit modification, or weight-space behavior interventions. Use when changing a model behavior without ordinary fine-tuning, sweeping intervention strength or layer placement, transferring a steering direction, or comparing inference-time and persistent interventions.
+description: Implement and evaluate activation steering, representation engineering, logit changes, or weight-space interventions. Use when changing model behavior without ordinary fine-tuning or sweeping layer, strength, and persistence choices.
 ---
 
 # Steer Language Model Behavior
@@ -20,8 +20,9 @@ description: Implement and evaluate controlled activation steering, representati
 4. Sweep a bounded strength range including zero and negative controls.
 5. Compare with prompt-only, random-direction, and norm-matched controls.
 6. Measure target success, capability regressions, fluency, calibration, diversity, and off-target behavioral changes.
-7. Re-run the exact packaged or merged artifact if the intervention becomes persistent.
-8. Report the smallest effective intervention and the operating range where the claim holds.
+7. For persistent changes, preserve the base checkpoint as immutable, write a new artifact, record both checksums and the transformation, and never edit weights in place.
+8. Re-run the exact packaged or merged artifact if the intervention becomes persistent.
+9. Report the smallest effective intervention and the operating range where the claim holds.
 
 ## Interpretation
 

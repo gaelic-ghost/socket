@@ -1,6 +1,6 @@
 ---
 name: prepare-language-model-dataset
-description: Prepare and document language-model training, preference, calibration, red-team, or evaluation datasets. Use when collecting, filtering, normalizing, deduplicating, templating, splitting, sampling, or auditing examples and when leakage, provenance, consent, licensing, or sensitive-data handling affects the result.
+description: Prepare language-model training, preference, red-team, or evaluation datasets. Use when collecting, filtering, deduplicating, templating, splitting, or auditing examples for provenance, leakage, consent, or sensitive data.
 ---
 
 # Prepare Language Model Dataset
@@ -8,6 +8,12 @@ description: Prepare and document language-model training, preference, calibrati
 ## Workflow
 
 1. Define the dataset's task, unit of observation, schema, and intended use.
+   - SFT: ordered messages or prompt/response with explicit loss-mask semantics.
+   - Preference optimization: prompt/context plus `chosen` and `rejected` responses from the same comparison unit.
+   - Reward modeling: response or response pair plus label, score, ranking provenance, and annotator agreement.
+   - Synthetic data: generator model/revision, prompt, sampling settings, filters, and parent-record lineage.
+   - Adversarial/red-team data: target policy, attack family, authorization, severity, and safe retention boundary.
+   - Evaluation fixtures: stable case ID, inputs, expected behavior, grader, tags, and strict separation from training.
 2. Record every source, revision, retrieval date, license, consent basis, and transformation.
 3. Validate parseability and required fields before semantic filtering.
 4. Normalize text and chat templates without erasing distinctions the task needs.

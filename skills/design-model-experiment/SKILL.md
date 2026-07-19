@@ -1,6 +1,6 @@
 ---
 name: design-model-experiment
-description: Design a reproducible model experiment with a falsifiable hypothesis, controlled variables, baselines, datasets, metrics, compute budget, provenance, artifacts, and stop conditions. Use before training, steering, ablation, evaluation, conversion, or runtime work where results must support a decision.
+description: Design a reproducible model experiment with hypotheses, controls, baselines, metrics, budgets, provenance, artifacts, and stop conditions. Use before model work whose results must support a decision.
 ---
 
 # Design Model Experiment

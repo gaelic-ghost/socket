@@ -1,6 +1,6 @@
 ---
 name: evaluate-tool-calling-model
-description: Evaluate a model or harness across tool selection, argument generation, schema conformance, execution, observation use, multi-step planning, recovery, refusal, and side-effect control. Use when comparing tool-capable checkpoints, prompts, parsers, agent loops, function schemas, or runtime harnesses.
+description: Evaluate tool selection, arguments, schemas, execution, observation use, recovery, and side effects. Use when comparing tool-capable checkpoints, prompts, parsers, agent loops, function schemas, or harnesses.
 ---
 
 # Evaluate Tool-Calling Model
@@ -14,11 +14,12 @@ Evaluate these stages separately: whether a tool is needed, which tool is select
 1. Inventory tools, schemas, side effects, auth requirements, error modes, and name/description ambiguities.
 2. Build cases for correct calls, no-call answers, ambiguous choices, parallel calls, dependent calls, invalid arguments, tool errors, empty results, malicious tool output, authorization denial, and recovery.
 3. Use deterministic fake tools with recorded inputs and outputs for the core suite.
-4. Pin model, prompt, schema serialization, parser, retry policy, maximum steps, and harness revision.
-5. Score selection, arguments, ordering, execution result, recovery, final answer, latency, token use, and side effects independently.
-6. Detect invalid JSON, hallucinated tools, repeated calls, ignored errors, premature answers, and non-termination explicitly.
-7. Run live integration cases only after the fake-tool suite passes and only inside approved side-effect boundaries.
-8. Attribute failures to model, prompt, schema, parser, executor, or orchestration rather than collapsing everything into model accuracy.
+4. Enforce authorization in the executor independently of model output. The model cannot grant itself a capability; intercept denied and irreversible calls before execution and record attempted versus executed side effects separately.
+5. Pin model, prompt, schema serialization, parser, retry policy, maximum steps, and harness revision.
+6. Score selection, arguments, ordering, execution result, recovery, final answer, latency, token use, attempted side effects, and executed side effects independently.
+7. Detect invalid JSON, hallucinated tools, repeated calls, ignored errors, premature answers, and non-termination explicitly.
+8. Run live integration cases only after the fake-tool suite passes and only inside approved side-effect boundaries.
+9. Attribute failures to model, prompt, schema, parser, executor, or orchestration rather than collapsing everything into model accuracy.
 
 ## Ownership Boundary
 

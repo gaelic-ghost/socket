@@ -1,6 +1,6 @@
 ---
 name: evaluate-jailbreak-resilience
-description: Evaluate authorized language-model jailbreak and prompt-injection resilience with reproducible attack families, target policies, adaptive budgets, graders, and side-effect boundaries. Use for model checkpoints, local harnesses, or explicitly authorized systems when measuring attack success, refusal behavior, instruction hierarchy, or regression after a defense.
+description: Evaluate authorized jailbreak and prompt-injection resilience with reproducible attacks, budgets, graders, and side-effect boundaries. Use for controlled checkpoints, local harnesses, or explicitly authorized systems.
 ---
 
 # Evaluate Jailbreak Resilience

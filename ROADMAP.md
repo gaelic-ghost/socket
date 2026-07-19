@@ -983,17 +983,17 @@ Implemented; release pending
 
 - [x] Export portable skills through the Hermes tap and validate the generated inventory.
 - [x] Classify Claude Code and Cowork compatibility in the same implementation pass.
-- [ ] Forward-test the training, evaluation, Apple runtime, ablation, and jailbreak workflows against isolated representative tasks before treating their contracts as stable.
+- [x] Forward-test the training, evaluation, Apple runtime, ablation, and jailbreak workflows against isolated representative tasks before treating their contracts as stable.
 - [x] Wire `model-lab-skills` into the Socket marketplace only after useful skill content exists, then update root README, contributor docs, plugin metadata, and root validation together.
 
 ### Exit Criteria
 
-- [ ] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
-- [ ] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
-- [ ] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
-- [ ] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
-- [ ] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
-- [ ] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
+- [x] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
+- [x] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
+- [x] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
+- [x] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
+- [x] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
+- [x] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
 
 ## Small Tickets
 

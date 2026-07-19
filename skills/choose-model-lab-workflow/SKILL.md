@@ -1,6 +1,6 @@
 ---
 name: choose-model-lab-workflow
-description: Route requests involving language-model training, datasets, checkpoint comparison, representation research, steering, refusal ablation, jailbreak evaluation, tool calling, Apple runtimes, or performance benchmarking. Use before implementation when the requested outcome spans multiple model-development disciplines or the correct Socket plugin is unclear.
+description: Route language-model training, data, evaluation, checkpoint, representation, steering, ablation, jailbreak, tool-calling, Apple-runtime, and benchmark requests. Use when the primary workflow or Socket owner is unclear.
 ---
 
 # Choose Model Lab Workflow
@@ -25,6 +25,10 @@ Select one primary workflow, name any supporting workflows, and make the evidenc
 | Measure jailbreak or prompt-injection robustness | `evaluate-jailbreak-resilience` |
 | Measure tool selection, arguments, execution, or recovery | `evaluate-tool-calling-model` |
 | Compare latency, memory, energy, throughput, or artifact size | `benchmark-model-runtime` |
+| Run preference optimization such as DPO/ORPO | Keep the experiment and eval here; use the supported TRL workflow through `fine-tune-language-model` until a stable standalone skill is earned |
+| Pretrain or continue pretraining a foundation model | Do not collapse it into fine-tuning; define the distributed/corpus contract and treat `train-language-model` as a deferred skill candidate |
+| Merge adapters or quantize/package an artifact | Use `compare-model-checkpoints` around the exact transformation; use the project-native tool and evaluate the deployable output |
+| Evaluate an agent skill, plugin, or host harness rather than a model protocol | Hand off to `productivity-skills` and `agent-portability-skills` |
 
 ## Respect Ownership Boundaries
 

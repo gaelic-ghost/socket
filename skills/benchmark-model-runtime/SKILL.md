@@ -1,6 +1,6 @@
 ---
 name: benchmark-model-runtime
-description: Benchmark language-model and multimodal runtime artifacts across latency, throughput, memory, energy, load time, artifact size, and stability. Use when comparing Core AI, Core ML, MLX, ExecuTorch, PyTorch, quantization levels, devices, packaging formats, or runtime configurations.
+description: Benchmark model runtimes across latency, throughput, memory, energy, load time, size, and stability. Use when comparing Core AI, Core ML, MLX, ExecuTorch, PyTorch, quantization, devices, or packaging.
 ---
 
 # Benchmark Model Runtime

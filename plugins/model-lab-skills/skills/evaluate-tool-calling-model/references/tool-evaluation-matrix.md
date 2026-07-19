@@ -12,3 +12,5 @@ Include at least one case for each cell that applies:
 | Final answer | grounded synthesis | conflicting observation | prompt injection in observation |
 
 Report exact-match schema validity separately from semantic argument correctness. A syntactically valid destructive call is not a success. Measure unnecessary-call rate and no-call correctness so tool eagerness does not masquerade as capability.
+
+The executor, not the model, owns capabilities. Use a dry-run recorder or approval gate before irreversible operations, and report attempted calls separately from calls the executor actually allowed.

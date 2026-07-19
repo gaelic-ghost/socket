@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import sys
+import tomllib
 from pathlib import Path
 from types import ModuleType
 
+import pytest
 import yaml
 
 
@@ -107,7 +110,55 @@ def test_experiment_manifest_template_is_valid() -> None:
             / "experiment-manifest.yaml"
         ).read_text(encoding="utf-8")
     )
+    errors = module.validate(template)
+    assert errors
+    assert any("template placeholder" in error for error in errors)
+    template["experiment"].update(
+        id="exp-001",
+        title="Adapter comparison",
+        hypothesis="The adapter improves the held-out score.",
+        decision="Choose whether to deploy the adapter.",
+        owner="model-team",
+    )
+    template["provenance"]["code_revision"] = "abc123"
+    template["provenance"]["model"].update(
+        id="model", revision="rev", license="license"
+    )
+    template["provenance"]["tokenizer"].update(id="tokenizer", revision="rev")
+    template["provenance"]["dataset"].update(id="dataset", revision="rev")
+    template["provenance"]["environment"].update(lockfile="uv.lock", hardware="M4 Pro")
+    template["method"].update(
+        controlled_variable="adapter", baseline="base", treatment="adapter"
+    )
+    template["evaluation"]["primary_metrics"] = ["accuracy"]
+    template["evaluation"]["guardrail_metrics"] = ["regression"]
+    template["evaluation"]["failure_thresholds"] = {"accuracy": 0.5}
+    template["budget"]["smoke_run"] = "10 cases"
+    template["budget"]["full_run"] = "100 cases"
+    template["budget"]["stop_conditions"] = ["cost exceeds budget"]
+    template["artifacts"].update(
+        raw_results="raw", derived_results="derived", report="report.md"
+    )
     assert module.validate(template) == []
+    template["budget"]["maximum_cost_usd"] = "free"
+    assert (
+        "`budget.maximum_cost_usd` must be a finite non-negative number."
+        in module.validate(template)
+    )
+    template["budget"]["maximum_cost_usd"] = 0
+    template["evaluation"]["primary_metrics"] = ["replace-with-primary-metric"]
+    assert any(
+        "evaluation.primary_metrics" in error and "placeholder" in error
+        for error in module.validate(template)
+    )
+    template["evaluation"]["primary_metrics"] = ["accuracy"]
+    template["evaluation"]["failure_thresholds"] = {
+        "replace-with-metric": "replace-with-threshold"
+    }
+    assert any(
+        "evaluation.failure_thresholds" in error and "placeholder" in error
+        for error in module.validate(template)
+    )
 
 
 def test_eval_comparison_reports_paired_regressions(tmp_path: Path) -> None:
@@ -127,6 +178,36 @@ def test_eval_comparison_reports_paired_regressions(tmp_path: Path) -> None:
     treatment = module.load_results(treatment_path)
     assert set(baseline) == {"a", "b"}
     assert treatment["b"]["score"] == 0.0
+    assert module.paired_ids(baseline, treatment, allow_partial=False) == ["a", "b"]
+    comparison = module.build_comparison(baseline, treatment)
+    assert comparison["mean_paired_delta"] == -0.25
+    assert comparison["improved"] == 1
+    assert comparison["regressed"] == 1
+    assert comparison["partial_comparison"] is False
+
+
+def test_eval_comparison_rejects_missing_or_overwritten_inputs(tmp_path: Path) -> None:
+    module = load_module(
+        "model_lab_eval_comparison_guards",
+        SKILLS_ROOT / "evaluate-language-model" / "scripts" / "compare_eval_runs.py",
+    )
+    with pytest.raises(ValueError, match="identical case ids"):
+        module.paired_ids({"a": {"score": 1}}, {"b": {"score": 1}}, False)
+    baseline = tmp_path / "baseline.jsonl"
+    treatment = tmp_path / "treatment.jsonl"
+    with pytest.raises(ValueError, match="overwrite an input"):
+        module.validate_output_path(baseline, baseline, treatment)
+    baseline.write_text("baseline", encoding="utf-8")
+    hard_link = tmp_path / "hard-link.jsonl"
+    os.link(baseline, hard_link)
+    with pytest.raises(ValueError, match="overwrite an input"):
+        module.validate_output_path(hard_link, baseline, treatment)
+    with pytest.raises(ValueError, match="could not write output"):
+        module.write_output(tmp_path / "missing" / "output.json", "{}")
+    invalid = tmp_path / "invalid.jsonl"
+    invalid.write_text('{"id":"a","score":NaN}\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="finite numeric"):
+        module.load_results(invalid)
 
 
 def test_provenance_snapshot_uses_sorted_relative_paths(tmp_path: Path) -> None:
@@ -141,12 +222,24 @@ def test_provenance_snapshot_uses_sorted_relative_paths(tmp_path: Path) -> None:
     second = tmp_path / "a.bin"
     first.write_bytes(b"z")
     second.write_bytes(b"a")
-    entries = [
-        {"path": path.name, "sha256": module.digest(path)}
-        for path in sorted((first, second))
-    ]
+    snapshot = module.build_snapshot(tmp_path, "model", "revision")
+    entries = snapshot["files"]
     assert [entry["path"] for entry in entries] == ["a.bin", "z.bin"]
     assert all(len(entry["sha256"]) == 64 for entry in entries)
+    assert snapshot["file_count"] == 2
+    with pytest.raises(ValueError, match="outside the model artifact directory"):
+        module.validate_output_path(tmp_path, tmp_path / "snapshot.json")
+    with pytest.raises(ValueError, match="overwrite the model artifact"):
+        module.validate_output_path(first, first)
+    external_link = tmp_path.parent / f"{tmp_path.name}-model-hard-link"
+    os.link(first, external_link)
+    try:
+        with pytest.raises(ValueError, match="hard-link alias"):
+            module.validate_output_path(tmp_path, external_link)
+    finally:
+        external_link.unlink()
+    with pytest.raises(ValueError, match="could not write output"):
+        module.write_output(tmp_path / "missing" / "snapshot.json", "{}")
 
 
 def test_plugin_manifest_matches_socket_version() -> None:
@@ -155,6 +248,6 @@ def test_plugin_manifest_matches_socket_version() -> None:
             ROOT / "plugins" / "model-lab-skills" / ".codex-plugin" / "plugin.json"
         ).read_text(encoding="utf-8")
     )
-    root_project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert plugin["version"] == "9.17.0"
-    assert 'version = "9.17.0"' in root_project
+    with (ROOT / "pyproject.toml").open("rb") as stream:
+        root_project = tomllib.load(stream)
+    assert plugin["version"] == root_project["project"]["version"]
