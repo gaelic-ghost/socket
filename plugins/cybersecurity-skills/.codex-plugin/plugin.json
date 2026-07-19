@@ -1,6 +1,6 @@
 {
   "name": "cybersecurity-skills",
-  "version": "9.20.0",
+  "version": "9.21.0",
   "description": "Defensive cybersecurity, isolated Linux and macOS analysis labs, suspicious-content and malware analysis, macOS defense, vulnerability testing, pentesting, and incident response workflows.",
   "skills": "./skills/",
   "author": {

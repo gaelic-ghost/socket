@@ -8,7 +8,7 @@ resolution-markers = [
 
 [[package]]
 name = "agent-portability-skills-maintenance"
-version = "9.20.0"
+version = "9.21.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
