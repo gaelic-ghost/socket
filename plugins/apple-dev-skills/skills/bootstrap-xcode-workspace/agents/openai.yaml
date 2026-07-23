@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bootstrap Xcode Workspace"
+  short_description: "Bootstrap modular Apple app workspaces"
+  default_prompt: "Use $bootstrap-xcode-workspace to create an Apps and Packages Apple workspace."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sync Xcode Workspace Guidance"
+  short_description: "Align modular Apple workspace guidance"
+  default_prompt: "Use $sync-xcode-workspace-guidance to align an existing Apps and Packages workspace."
