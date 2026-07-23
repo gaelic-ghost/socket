@@ -23,6 +23,8 @@ REVERSE_ENGINEERING_SOURCE_ROOT = (
 SERVER_SIDE_SWIFT_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-swift" / "skills"
 SWIFT_LANG_SOURCE_ROOT = REPO_ROOT / "plugins" / "swift-lang" / "skills"
 MODEL_LAB_SOURCE_ROOT = REPO_ROOT / "plugins" / "model-lab-skills" / "skills"
+DOTNET_SOURCE_ROOT = REPO_ROOT / "plugins" / "dotnet-skills" / "skills"
+CLOUD_DEPLOYMENT_SOURCE_ROOT = REPO_ROOT / "plugins" / "cloud-deployment-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 AGENT_PORTABILITY_SKILLS = (
     "bootstrap-skills-plugin-repo",
@@ -126,6 +128,13 @@ MODEL_LAB_SKILLS = (
     "evaluate-tool-calling-model",
     "benchmark-model-runtime",
 )
+DOTNET_SKILLS = (
+    "choose-fsharp-web-framework",
+    "build-giraffe-web-app",
+    "build-falco-web-app",
+    "build-oxpecker-web-app",
+)
+CLOUD_DEPLOYMENT_SKILLS = ("cloud-deployment-routing-workflow",)
 EXPORTED_SKILLS = (
     AGENT_PORTABILITY_SKILLS
     + MESSAGING_SKILLS
@@ -135,6 +144,8 @@ EXPORTED_SKILLS = (
     + REVERSE_ENGINEERING_SKILLS
     + SWIFT_LANG_SKILLS
     + MODEL_LAB_SKILLS
+    + DOTNET_SKILLS
+    + CLOUD_DEPLOYMENT_SKILLS
 )
 
 
@@ -162,6 +173,11 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
         },
         **{skill_name: SWIFT_LANG_SOURCE_ROOT for skill_name in SWIFT_LANG_SKILLS},
         **{skill_name: MODEL_LAB_SOURCE_ROOT for skill_name in MODEL_LAB_SKILLS},
+        **{skill_name: DOTNET_SOURCE_ROOT for skill_name in DOTNET_SKILLS},
+        **{
+            skill_name: CLOUD_DEPLOYMENT_SOURCE_ROOT
+            for skill_name in CLOUD_DEPLOYMENT_SKILLS
+        },
     }
     return {
         skill_name: roots[skill_name] / skill_name for skill_name in EXPORTED_SKILLS

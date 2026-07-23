@@ -10,6 +10,7 @@ The first practical use case is AWS. AWS now publishes the official [`aws/agent-
 
 - `cloud-deployment-skills` owns provider selection, official-tool routing, credential and mutation boundary checks, and cross-provider deployment handoffs.
 - AWS owns the AWS Agent Toolkit, AWS MCP Server configuration, and AWS skill content.
+- Microsoft owns Azure Skills, Azure MCP and Foundry MCP configuration, and Azure provider workflows.
 - Stack plugins keep framework-specific deployment details, such as Server-Side Swift Fly.io deploy workflows.
 
 ## First Slice
@@ -25,7 +26,8 @@ The first practical use case is AWS. AWS now publishes the official [`aws/agent-
 - Add Cloudflare deployment routing if Socket needs guidance beyond existing Cloudflare docs and tooling.
 - Add Vercel deployment routing if web project handoffs need a first-party Socket decision layer.
 - Add Fly.io provider-neutral routing only if the existing Server-Side Swift workflow is too narrow for non-Swift projects.
-- Add Terraform, Pulumi, CDK, Azure, or GCP slices only after concrete project use proves that official provider docs or plugins are not enough.
+- Use the official Microsoft Azure Skills plugin for Azure. Add a Socket Azure slice only after a concrete project proves that the official provider plugin cannot cover a provider-neutral routing or repository-boundary need.
+- Add Terraform, Pulumi, CDK, or GCP slices only after concrete project use proves that official provider docs or plugins are not enough.
 
 ## Validation
 

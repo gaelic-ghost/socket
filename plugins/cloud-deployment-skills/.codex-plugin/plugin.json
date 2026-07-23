@@ -1,6 +1,6 @@
 {
   "name": "cloud-deployment-skills",
-  "version": "9.21.0",
+  "version": "9.22.0",
   "description": "Codex skills for routing cloud deployment work through official provider plugins, MCP servers, CLIs, and Socket-owned deployment guidance.",
   "author": {
     "name": "Gale",
@@ -18,6 +18,8 @@
     "deployment",
     "aws",
     "agent-toolkit",
+    "azure",
+    "azure-mcp",
     "mcp",
     "cloudflare",
     "vercel",
@@ -27,7 +29,7 @@
   "interface": {
     "displayName": "Cloud Deployment Skills",
     "shortDescription": "Cloud provider and deployment routing guidance for Codex.",
-    "longDescription": "Guide Codex agents through cloud deployment routing, official provider plugin selection, credential and mutation safety checks, and provider handoffs. The first slice delegates AWS work to the official AWS Agent Toolkit for AWS and keeps Socket focused on thin cross-provider deployment decisions instead of duplicating AWS MCP, AWS CLI, or AWS SAM setup.",
+    "longDescription": "Guide Codex agents through cloud deployment routing, official provider plugin selection, credential and mutation safety checks, and provider handoffs. Socket delegates AWS work to the official AWS Agent Toolkit and Azure work to Microsoft's Azure Skills plugin, keeping Socket focused on thin cross-provider decisions instead of duplicating provider MCP, CLI, or deployment workflows.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -36,7 +38,7 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-deployment-skills",
     "defaultPrompt": [
-      "Choose the right cloud deployment path and route AWS work through the official AWS Agent Toolkit when appropriate.",
+      "Choose the right cloud deployment path and route AWS or Azure work through the applicable official provider plugin when appropriate.",
       "Decide whether this deployment should use an official provider plugin, provider CLI, MCP server, framework-owned deploy workflow, or a Socket-owned provider skill."
     ],
     "brandColor": "#22D3EE",

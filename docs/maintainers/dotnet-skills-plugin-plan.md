@@ -292,6 +292,31 @@ The second slice broadens the plugin from core project/test guidance into packag
 - [x] `dotnet:tooling-style-workflow`.
 - [ ] install testing with a temporary `CODEX_HOME`.
 
+## Third Implementation Slice: F# Web Frameworks
+
+This slice makes the existing ASP.NET Core service workflow actionable for the
+F# frameworks that have distinct handler and routing contracts. It is a durable
+building-block change: it removes the current ambiguity between generic ASP.NET
+Core guidance and framework-specific F# code, while keeping cloud operations in
+Microsoft's official Azure Skills plugin.
+
+- [x] `dotnet:choose-fsharp-web-framework` selects Minimal APIs, Giraffe,
+  Falco, Oxpecker, or Saturn from the application's actual HTTP and ownership
+  needs.
+- [x] `dotnet:build-giraffe-web-app` covers composable `HttpHandler` work.
+- [x] `dotnet:build-falco-web-app` covers functional routes, response helpers,
+  and ASP.NET Core integration.
+- [x] `dotnet:build-oxpecker-web-app` covers endpoint routing,
+  `EndpointHandler`, and `EndpointMiddleware` contracts.
+- [x] Keep Saturn, SAFE Stack, Fable, Bolero, and WebSharper as explicit
+  selection or handoff boundaries until a concrete project requires deeper
+  framework-specific workflows.
+- [x] Export the new portable instructions through the Hermes tap; do not claim
+  that the Codex plugin manifest itself is a Hermes plugin.
+- [x] Route Azure infrastructure, diagnostics, and deployment work to the
+  official Microsoft Azure Skills plugin rather than adding an Azure MCP server
+  or duplicated IaC workflow to `dotnet-skills`.
+
 ## Deferred Scope
 
 After the first two slices prove useful, consider deeper specialized workflows. These are useful but should not block the current installable plugin:
@@ -304,6 +329,10 @@ After the first two slices prove useful, consider deeper specialized workflows. 
 - NuGet publishing automation
 - custom project template generation
 - bundled MCP servers or app connectors
+
+The F# web-framework slice intentionally does not add a new runtime plugin,
+framework template feed, browser-client framework implementation, or Azure
+adapter. Those would broaden the architecture beyond the shared guidance need.
 
 ## Open Decisions Before Implementation
 

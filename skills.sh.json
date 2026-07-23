@@ -90,6 +90,21 @@
       ]
     },
     {
+      "title": ".NET Skills",
+      "skills": [
+        "choose-fsharp-web-framework",
+        "build-giraffe-web-app",
+        "build-falco-web-app",
+        "build-oxpecker-web-app"
+      ]
+    },
+    {
+      "title": "Cloud Deployment Skills",
+      "skills": [
+        "cloud-deployment-routing-workflow"
+      ]
+    },
+    {
       "title": "Reverse Engineering Skills",
       "skills": [
         "connect-hopper-mcp",
