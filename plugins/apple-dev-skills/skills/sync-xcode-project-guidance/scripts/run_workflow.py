@@ -31,6 +31,7 @@ def discover_xcode_state(repo_root: Path) -> dict:
         "workspace": workspaces[0] if workspaces else None,
         "project": projects[0] if projects else None,
         "is_xcode_repo": bool(workspaces or projects),
+        "is_workspace_shape": bool(workspaces) and (repo_root / "Apps").is_dir() and (repo_root / "Packages").is_dir(),
         "is_swift_package_only": (repo_root / "Package.swift").exists() and not bool(workspaces or projects),
     }
 
@@ -175,6 +176,21 @@ def main() -> int:
                     detected_state,
                     "Use sync-swift-package-guidance when it exists, or use the Swift package guidance path instead.",
                     stderr="This repository looks like a Swift package without Xcode-managed app markers.",
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 1
+
+    if detected_state["is_workspace_shape"]:
+        print(
+            json.dumps(
+                blocked_payload(
+                    str(repo_root),
+                    detected_state,
+                    "Use sync-xcode-workspace-guidance for the workspace root, then rerun this skill for an individual app project under Apps/.",
+                    stderr="This root is an Apps/Packages Xcode workspace, not one app-project guidance surface.",
                 ),
                 indent=2,
                 sort_keys=True,

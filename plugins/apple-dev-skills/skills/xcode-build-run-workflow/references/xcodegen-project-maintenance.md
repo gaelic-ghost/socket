@@ -9,6 +9,8 @@ Authoritative XcodeGen references:
 - [XcodeGen Project Spec documentation](https://yonaskolb.github.io/XcodeGen/Docs/ProjectSpec.html)
 - [XcodeGen repository](https://github.com/yonaskolb/XcodeGen)
 
+Current validated baseline: XcodeGen `2.46.0`.
+
 ## Detection
 
 - Look for `project.yml`, `project.yaml`, or repo docs that name an XcodeGen spec path.
@@ -25,6 +27,10 @@ Authoritative XcodeGen references:
 - Keep top-level `schemes` explicit when build, run, archive, profile, analyze, command-line arguments, environment variables, or test-plan behavior matters. Do not rely on generated scheme defaults after the repo has explicit scheme policy.
 - Declare Swift packages in the spec-level `packages` map and link them through target `dependencies`; do not add package references by hand in the generated project.
 - Use `projectReferences`, `targetTemplates`, and `schemeTemplates` when they remove real repetition across generated modules, not as ceremony for a tiny one-target project.
+- Treat XcodeGen as per-project generation. In an Apps/Packages workspace, each app project declares its own local Swift packages; a workspace makes projects convenient to open together but does not replace target dependency wiring.
+- Set `schemePathPrefix: "../"` when a generated project lives in an `.xcworkspace` and scheme file paths must resolve from the workspace. Retain XcodeGen's default standalone prefix otherwise.
+- Use a local Swift package product for shared Core code. Use a `projectReferences` target dependency only for a real dependency on another `.xcodeproj` target.
+- Use `defaultSourceDirectoryType: syncedFolder` for broad ordinary roots in Xcode 16+ project formats. Use `explicitFolders` only when a child must be a bundle-style folder reference.
 - Preserve the standard top-level Xcode app layout when adding or moving generated targets: `Sources/`, `Tests/`, `Shared/`, `Extensions/`, `Configurations/`, `Scripts/`, and `Packages/`.
 - For Xcode 16 or newer project formats, prefer `syncedFolder` roots at the broad top-level directory boundary so Xcode and the filesystem stay aligned for file membership.
 - Do not fragment ordinary XcodeGen source roots by subdirectory. A standard app target gets one `Sources` source entry that includes all app source, resource, support, generated plist, entitlement, and nested feature folders, plus one `Shared` source entry when shared app/extension code exists. A standard test target gets one `Tests` source entry that includes all test subdirectories. Extension targets use one `Extensions/<ExtensionName>` source entry per extension target.

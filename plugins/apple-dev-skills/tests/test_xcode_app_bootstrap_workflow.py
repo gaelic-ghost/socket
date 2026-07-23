@@ -202,7 +202,7 @@ exit 1
             target = Path(payload["resolved_path"])
             self.assertTrue((target / "project.yml").exists())
             project_yml = (target / "project.yml").read_text(encoding="utf-8")
-            self.assertIn("minimumXcodeGenVersion: 2.45.4", project_yml)
+            self.assertIn("minimumXcodeGenVersion: 2.46.0", project_yml)
             self.assertIn("projectFormat: xcode16_0", project_yml)
             self.assertIn("defaultSourceDirectoryType: syncedFolder", project_yml)
             self.assertIn("configs:", project_yml)
@@ -387,7 +387,7 @@ exit 1
             self.assertTrue((XCODEGEN_TEMPLATE_DIR / relative_path).is_file(), relative_path)
 
         project_template = (XCODEGEN_TEMPLATE_DIR / "project.yml.tmpl").read_text(encoding="utf-8")
-        self.assertIn("minimumXcodeGenVersion: 2.45.4", project_template)
+        self.assertIn("minimumXcodeGenVersion: 2.46.0", project_template)
         self.assertIn("defaultSourceDirectoryType: syncedFolder", project_template)
         self.assertIn("type: syncedFolder", project_template)
         self.assertIn("- path: Sources", project_template)

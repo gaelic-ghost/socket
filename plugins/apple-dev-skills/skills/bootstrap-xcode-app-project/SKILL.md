@@ -15,11 +15,12 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 
 ## When To Use
 
-- Use this skill when the user wants to start, begin, create, or bootstrap a new macOS, iOS, or iPadOS app project on macOS.
+- Use this skill when the user wants to start, begin, create, or bootstrap one new macOS, iOS, or iPadOS app project on macOS.
 - Use this skill when the user explicitly asks for a new Xcode app, a native Apple app, or a new SwiftUI app repository.
 - Use this skill when the user wants a reproducible app-project generator flow and prefers `XcodeGen`.
 - Use this skill when a brand-new app repo should also get baseline repo guidance such as `AGENTS.md`.
 - Do not use this skill for ordinary collaboration inside an existing Xcode project.
+- Do not use this skill to bootstrap an Apps/Packages workspace with more than one app project; use `bootstrap-xcode-workspace` first and let it route each child app here.
 - Do not use this skill for plain Swift packages, libraries, or tools that are not native Apple apps.
 - Recommend `bootstrap-swift-package` when the user wants a regular SwiftPM package instead of a native Apple app.
 - Recommend `xcode-build-run-workflow` when the project already exists and the task is execution, diagnostics, docs lookup, mutation, build, run, or preview work inside that existing project.
@@ -71,7 +72,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - create prefixed, self-contained SwiftUI views such as `GEAContentView.swift`, using component-local `@State` and `@Observable` state only when direct state is not sufficient; add a concrete feature service only when the new app has a real capability that needs one
    - prefix every project-owned Swift file except `Package.swift`, externally generated Swift, and vendored third-party Swift; never generate `+` filenames
    - install `.codex/environments/xcode-project.toml` from `templates/codex-local-environments/xcode-project.toml` and replace the scheme placeholder with the generated app target name
-   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`
+   - keep the generated `project.yml` aligned with the current XcodeGen project spec concepts: project `options`, `configs`, `configFiles`, targets, sources, schemes, packages, project references, test-plan references, and `minimumXcodeGenVersion`; when this app is opened from a workspace, set `options.schemePathPrefix: "../"` in the owning spec
    - keep the generated `minimumXcodeGenVersion` on the recent validated baseline declared by the templates; when the baseline is raised, update the templates, docs, and tests together
    - use exactly one top-level `Sources` entry for the app target, exactly one top-level `Shared` entry for shared app/extension source, and exactly one top-level `Tests` entry for the test target when the generated project format is Xcode 16 or newer; prefer `type: syncedFolder` on those broad roots, and use the same broad roots with explicit `includes` and `excludes` as the fallback when synchronized folders are not appropriate
    - never split ordinary generated app project paths into separate XcodeGen source entries such as `Sources/App`, `Sources/Resources`, `Sources/Support`, feature subfolders, or `Tests/<AppName>Tests`; extension targets may use one `Extensions/<ExtensionName>` entry per extension target

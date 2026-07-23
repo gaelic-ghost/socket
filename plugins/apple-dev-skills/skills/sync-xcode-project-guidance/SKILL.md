@@ -1,6 +1,6 @@
 ---
 name: sync-xcode-project-guidance
-description: Sync repo guidance for an existing native Apple app repository managed through Xcode when the user wants to add, merge, refresh, or align AGENTS.md and project workflow guidance. Use for existing macOS, iOS, or iPadOS app repos with an .xcodeproj or .xcworkspace. Do not use for brand-new app bootstrap or plain Swift packages.
+description: Sync repo guidance for one existing native Apple app project managed through Xcode when the user wants to add, merge, refresh, or align AGENTS.md and project workflow guidance. Use for an existing app root with an .xcodeproj; use sync-xcode-workspace-guidance for an Apps/Packages workspace root. Do not use for brand-new app bootstrap or plain Swift packages.
 ---
 
 # Sync Xcode Project Guidance
@@ -16,11 +16,12 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 ## When To Use
 
 - Use this skill when an existing macOS, iOS, or iPadOS app repo needs `AGENTS.md` added, refreshed, or merged with the current Xcode workflow baseline.
-- Use this skill when the repository already has an `.xcodeproj` or `.xcworkspace` and the user wants project guidance, onboarding rules, or workflow policy brought up to date.
+- Use this skill when one app repository already has an `.xcodeproj` and the user wants project guidance, onboarding rules, or workflow policy brought up to date.
 - Use this skill when the user wants the repo guidance for the current narrower Xcode execution skills to be made explicit in the repo itself.
 - Do not use this skill for new-project creation from nothing.
 - Do not use this skill for ordinary build, test, run, diagnostics, docs lookup, or mutation work inside an existing Xcode project.
 - Do not use this skill for plain Swift packages, libraries, or tools that are not native Apple apps.
+- Do not use this skill for a root that has `.xcworkspace`, `Apps/`, and `Packages/`; recommend `sync-xcode-workspace-guidance`.
 - Recommend `bootstrap-xcode-app-project` when the repo does not exist yet.
 - Recommend `xcode-build-run-workflow` when the task is active Xcode execution, diagnostics, docs lookup, previews, file-membership follow-through, or mutation work inside an existing Xcode project.
 - Recommend `xcode-testing-workflow` when the task is primarily about Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis inside an existing Xcode project.
@@ -36,7 +37,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - optional `skip_validation`
    - optional `dry_run`
 2. Classify the request as existing Xcode app-repo guidance sync before continuing:
-   - continue only when the repo already contains an `.xcodeproj` or `.xcworkspace`
+   - continue only when the repo already contains an `.xcodeproj`
    - stop if the request is really new-project bootstrap or SwiftPM-only guidance sync
 3. Apply the Apple docs gate before shaping workflow guidance:
    - read the relevant Apple documentation first
@@ -146,6 +147,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
   policy, and branch protection without changing visibility implicitly.
 - Recommend `bootstrap-xcode-app-project` when the repository still needs to be created from scratch.
 - Recommend `sync-swift-package-guidance` when the repo is a plain Swift package rather than an Xcode app project.
+- Recommend `sync-xcode-workspace-guidance` when the root is a modular Apps/Packages workspace.
 
 ## Codex Subagent Fit
 
