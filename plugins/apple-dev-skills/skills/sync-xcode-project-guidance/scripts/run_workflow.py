@@ -25,14 +25,14 @@ def load_effective_config() -> dict:
 
 
 def discover_xcode_state(repo_root: Path) -> dict:
-    workspaces = sorted(str(path) for path in repo_root.rglob("*.xcworkspace"))
+    workspaces = sorted(str(path) for path in repo_root.glob("*.xcworkspace"))
     projects = sorted(str(path) for path in repo_root.rglob("*.xcodeproj"))
     return {
         "workspace": workspaces[0] if workspaces else None,
         "project": projects[0] if projects else None,
-        "is_xcode_repo": bool(workspaces or projects),
+        "is_xcode_repo": bool(projects),
         "is_workspace_shape": bool(workspaces) and (repo_root / "Apps").is_dir() and (repo_root / "Packages").is_dir(),
-        "is_swift_package_only": (repo_root / "Package.swift").exists() and not bool(workspaces or projects),
+        "is_swift_package_only": (repo_root / "Package.swift").exists() and not bool(projects),
     }
 
 
@@ -205,7 +205,7 @@ def main() -> int:
                     str(repo_root),
                     detected_state,
                     "Use bootstrap-xcode-app-project for new app creation, or rerun this skill on an existing Xcode app repo.",
-                    stderr="The repository does not contain an .xcodeproj or .xcworkspace marker.",
+                    stderr="The repository does not contain an .xcodeproj marker.",
                 ),
                 indent=2,
                 sort_keys=True,

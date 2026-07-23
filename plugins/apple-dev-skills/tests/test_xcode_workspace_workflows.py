@@ -61,6 +61,22 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "blocked")
             self.assertIn("watchOS requires", payload["stderr"])
 
+    def test_bootstrap_rejects_path_like_workspace_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(BOOTSTRAP, "--name", "../escape", "--destination", tmpdir)
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertIn("without path separators", payload["stderr"])
+
+    def test_bootstrap_rejects_existing_file_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Product").write_text("occupied", encoding="utf-8")
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir)
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertIn("already contains files", payload["stderr"])
+
     def test_sync_writes_bounded_workspace_guidance(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

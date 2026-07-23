@@ -39,13 +39,14 @@ The runtime reports:
 
 - workspace and app-project paths;
 - package paths containing `Package.swift`;
-- `project.yml` paths and local package declarations;
+- `project.yml` paths;
 - optional service roots;
-- topology classification and actionable drift findings;
-- the exact root `AGENTS.md` action taken or planned.
+- missing workspace, app-project, package, or marker-directory findings;
+- the root `AGENTS.md` action taken or planned.
 
-It does not change workspace membership, app target dependencies, package
-manifests, generated projects, or service code.
+It does not parse XcodeGen package declarations, classify topology, or change
+workspace membership, app target dependencies, package manifests, generated
+projects, or service code.
 
 ## Guards And Handoffs
 

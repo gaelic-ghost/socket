@@ -19,7 +19,7 @@
 - When a public function, initializer, or method reaches four or more arguments or parameters, strongly prefer a named typed `struct` request, options, or configuration value so call sites stay readable and future additions do not multiply overloads.
 - Prefer enums, enum cases with associated values, and narrow typed values over strings, booleans, sentinel values, or parallel parameters whenever the domain has a closed or meaningful set of choices.
 - Keep data flow straight and dependency direction unidirectional.
-- Treat this app project's `.xcodeproj` as the source of truth for app integration, schemes, and build settings. Use `sync-xcode-workspace-guidance` for an Apps/Packages workspace root.
+- For a hand-managed project, treat this app project's `.xcodeproj` as the source of truth for app integration, schemes, and build settings. For an XcodeGen project, treat `project.yml`, `project.yaml`, and included specs as authoritative and regenerate rather than editing generated project state. Use `sync-xcode-workspace-guidance` for an Apps/Packages workspace root.
 - Prefer Xcode-aware tooling or `xcodebuild` over ad hoc filesystem assumptions when project structure or target membership is involved.
 - Choose and record one explicit three-letter uppercase prefix for project-owned Swift files and declarations. Exempt only `Package.swift`, externally generated Swift, and vendored third-party Swift.
 - Never use `+` filenames. Name views `GEAWhateverView.swift` and extracted modifiers `GEAWhateverViewModifier.swift`; do not use external ViewModels as a SwiftUI shape.

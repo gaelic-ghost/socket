@@ -18,6 +18,13 @@ creating files. XcodeGen generates each app project; create the `.xcworkspace`
 and add the generated projects through Xcode's documented workspace flow rather
 than hand-writing workspace data.
 
+## Compatibility
+
+This is portable skill guidance and a local Python runner; it has no Codex-only
+plugin hooks, MCP declarations, or custom-agent dependency. The Hermes tap
+export decision is therefore **no export required**: Hermes can consume the
+same authored `SKILL.md` directly, and no translation artifact is needed.
+
 ## Required Shape
 
 ```text

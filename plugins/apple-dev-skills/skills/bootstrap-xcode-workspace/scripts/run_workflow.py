@@ -15,6 +15,11 @@ SUPPORTED_PLATFORMS = {"ios", "macos", "tvos", "watchos", "visionos"}
 SUPPORTED_SERVICES = {"none", "hummingbird", "vapor", "fsharp-azure"}
 
 
+def is_valid_workspace_name(value: str) -> bool:
+    """Return whether value is one safe directory and workspace-name component."""
+    return bool(value) and value not in {".", ".."} and not Path(value).is_absolute() and len(Path(value).parts) == 1
+
+
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument("--name", required=True)
@@ -29,7 +34,16 @@ def parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = parser().parse_args()
     platforms = [value.strip().lower() for value in args.platforms.split(",") if value.strip()]
-    root = (Path(args.destination).expanduser() / args.name).resolve()
+    destination = Path(args.destination).expanduser().resolve()
+    if not is_valid_workspace_name(args.name):
+        print(json.dumps({
+            "status": "blocked",
+            "path_type": "fallback",
+            "stderr": "--name must be one non-empty directory name without path separators, '.' or '..'.",
+            "actions": [],
+        }, indent=2, sort_keys=True))
+        return 1
+    root = destination / args.name
     payload = {
         "status": "success",
         "path_type": "fallback",
@@ -53,7 +67,7 @@ def main() -> int:
         payload.update(status="blocked", stderr="watchOS requires a separate target/project; remove it from multiplatform-target platforms.")
     elif args.service not in SUPPORTED_SERVICES:
         payload.update(status="blocked", stderr="Choose service none, hummingbird, vapor, or fsharp-azure.")
-    elif root.exists() and any(root.iterdir()):
+    elif root.exists() and (not root.is_dir() or any(root.iterdir())):
         payload.update(status="blocked", stderr="The workspace root already contains files; choose an empty destination or use sync-xcode-workspace-guidance.")
     else:
         payload["actions"] = [

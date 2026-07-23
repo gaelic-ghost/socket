@@ -36,12 +36,16 @@ def main() -> int:
     findings = []
     if not root.is_dir():
         findings.append("The requested workspace root is not a directory.")
-    if not state["workspaces"]:
-        findings.append("Expected one root .xcworkspace before workspace guidance can be synced.")
+    if len(state["workspaces"]) != 1:
+        findings.append("Expected exactly one root .xcworkspace before workspace guidance can be synced.")
     if not (root / "Apps").is_dir():
         findings.append("Expected an Apps/ directory for app projects.")
     if not (root / "Packages").is_dir():
         findings.append("Expected a Packages/ directory for local Swift packages.")
+    elif not state["packages"]:
+        findings.append("Expected at least one Package.swift under Packages/.")
+    if (root / "Apps").is_dir() and not state["app_projects"]:
+        findings.append("Expected at least one .xcodeproj under Apps/.")
     status = "success" if not findings else "blocked"
     payload = {
         "status": status,
@@ -68,6 +72,7 @@ def main() -> int:
                     handle.write("\n" + section)
         else:
             payload["actions"].append("preserve existing root workspace guidance")
+    status = payload["status"]
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0 if status == "success" else 1
 
