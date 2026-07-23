@@ -1,6 +1,6 @@
 {
   "name": "reverse-engineering-skills",
-  "version": "9.23.0",
+  "version": "9.24.0",
   "description": "Workflow skills for reverse engineering, decompilation, disassembly, symbols, artifact analysis, and exact-build macOS security-control research.",
   "skills": "./skills/",
   "author": {
