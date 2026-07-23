@@ -7,7 +7,8 @@ general SwiftUI, AVFoundation, or model-runtime skills into tvOS catch-alls.
 
 ## Status
 
-Planned for the next Socket minor release.
+Implemented on the `docs/tvos-skills-plan` release branch for Socket 9.23.0;
+the protected-main publication steps remain pending.
 
 ## Decision
 

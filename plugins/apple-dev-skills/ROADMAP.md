@@ -86,7 +86,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 41: Swift Package Extension Workflow - Completed
 - Milestone 42: Safari Extension And Control Workflow - Completed
 - Milestone 68: Safari MCP Browser Validation Workflow - Completed
-- Milestone 70: tvOS App Experience and Media Playback Workflows - In Progress
+- Milestone 70: tvOS App Experience and Media Playback Workflows - Release candidate
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
 - Milestone 45: Icon Composer App Icon Workflow - Completed
@@ -144,7 +144,7 @@ Planned
 
 ### Status
 
-In Progress
+Release candidate
 
 ### Scope
 
@@ -1371,19 +1371,19 @@ In Progress
 
 ### Scope
 
-- [ ] Use the Socket-owned [`tvOS Skills Plan`](../../docs/maintainers/tvos-skills-plan.md) as the implementation source of truth.
-- [ ] Add `tvos-app-experience-workflow` for remote-first layout, SwiftUI focus behavior, UIKit focus escape hatches, Large Text, accessibility, capability gates, and TVMLKit migration decisions.
-- [ ] Add `tvos-media-playback-workflow` for AVKit-first playback, custom-player escalation, `MPRemoteCommandCenter`, Now Playing, transport-command ownership, and validation planning.
-- [ ] Keep TVMLKit migration-only, and keep Core AI/Foundation Models as an explicit unavailable-on-tvos handoff until Apple supplies a direct platform contract.
-- [ ] Preserve existing SwiftUI architecture, UI accessibility, AVFoundation/media timing, Xcode, and Model Lab owners through focused handoffs.
-- [ ] Add references, generated agent metadata, targeted contract tests, inventory/discovery updates, Hermes export, and Claude/Cowork compatibility alignment.
+- [x] Use the Socket-owned [`tvOS Skills Plan`](../../docs/maintainers/tvos-skills-plan.md) as the implementation source of truth.
+- [x] Add `tvos-app-experience-workflow` for remote-first layout, SwiftUI focus behavior, UIKit focus escape hatches, Large Text, accessibility, capability gates, and TVMLKit migration decisions.
+- [x] Add `tvos-media-playback-workflow` for AVKit-first playback, custom-player escalation, `MPRemoteCommandCenter`, Now Playing, transport-command ownership, and validation planning.
+- [x] Keep TVMLKit migration-only, and keep Core AI/Foundation Models as an explicit unavailable-on-tvos handoff until Apple supplies a direct platform contract.
+- [x] Preserve existing SwiftUI architecture, UI accessibility, AVFoundation/media timing, Xcode, and Model Lab owners through focused handoffs.
+- [x] Add references, generated agent metadata, targeted contract tests, inventory/discovery updates, Hermes export, and Claude/Cowork compatibility alignment.
 
 ### Exit Criteria
 
-- [ ] Both workflows are docs-first, narrow, portable guidance surfaces with clear beta/stable evidence and no runtime helper or service.
-- [ ] The app workflow treats focus as user-controlled, indirect interaction and accounts for Dynamic Type on tvOS 27.
-- [ ] The media workflow starts from the system player and requires an explicit remote-command validation matrix for custom playback.
-- [ ] Child and root validation, portability, compatibility, metadata, documentation, release evidence, and branch accounting are complete for the Socket minor release.
+- [x] Both workflows are docs-first, narrow, portable guidance surfaces with clear beta/stable evidence and no runtime helper or service.
+- [x] The app workflow treats focus as user-controlled, indirect interaction and accounts for Dynamic Type on tvOS 27.
+- [x] The media workflow starts from the system player and requires an explicit remote-command validation matrix for custom playback.
+- [x] Child and root validation, portability, compatibility, metadata, and documentation are ready for the Socket minor release; release evidence and branch accounting occur from reviewed `main`.
 
 ## History
 
