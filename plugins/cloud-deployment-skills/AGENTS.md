@@ -15,7 +15,9 @@ This file is the Cloud Deployment Skills child-repo override for work done from 
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
 - Prefer official provider plugins, MCP servers, CLIs, and docs before adding Socket-authored setup guidance.
 - For AWS work, route Codex users to the official `aws/agent-toolkit-for-aws` marketplace and its `aws-core` plugin before considering Socket-owned AWS guidance.
+- For Azure work, route Codex users to the official `microsoft/azure-skills` marketplace and its `azure` plugin before considering Socket-owned Azure guidance.
 - Do not bundle AWS MCP configuration, AWS CLI setup instructions, AWS SAM setup instructions, or copied AWS Agent Toolkit skills in this plugin while the official AWS plugin owns that surface.
+- Do not bundle Azure MCP configuration, Azure CLI or Azure Developer CLI setup instructions, or copied Azure Skills content while the official Microsoft plugin owns that surface.
 - Treat provider credentials, account configuration, API mutation, billing, and production deployment as high-impact operations. Verify the target account, region, profile, project, and intended mutation before taking action.
 - Keep provider-specific skills small and explicit. Add a new provider workflow only when it removes real routing ambiguity or covers a provider that does not already offer a first-party agent plugin.
 - Do not commit machine-local credentials, profiles, `.env` files, cloud state, generated deployment artifacts, or local cache paths.

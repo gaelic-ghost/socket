@@ -1,7 +1,7 @@
 {
   "name": "dotnet-skills",
   "version": "9.21.0",
-  "description": "Codex skills for choosing, bootstrapping, building, testing, packaging, diagnosing, and maintaining .NET projects with F# and C# as equal first-party languages.",
+  "description": "Codex skills for choosing, bootstrapping, building, testing, packaging, diagnosing, and maintaining .NET projects, including F# web applications, with F# and C# as equal first-party languages.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -16,13 +16,17 @@
     "skills",
     "dotnet",
     "fsharp",
+    "giraffe",
+    "falco",
+    "oxpecker",
+    "aspnet-core",
     "csharp"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": ".NET Skills",
     "shortDescription": ".NET, F#, and C# workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through choosing .NET project shapes, bootstrapping reproducible solutions, building idiomatic F# and C# projects, running tests, validating packages, diagnosing failures, designing ASP.NET Core services, maintaining mixed-language boundaries, and aligning CI, upgrades, and tooling through the .NET CLI.",
+    "longDescription": "Guide Codex agents through choosing .NET project shapes, bootstrapping reproducible solutions, building idiomatic F# and C# projects, choosing and maintaining F# ASP.NET Core applications with Giraffe, Falco, or Oxpecker, running tests, validating packages, diagnosing failures, maintaining mixed-language boundaries, and aligning CI, upgrades, and tooling through the .NET CLI.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -39,6 +43,8 @@
       "Validate this .NET package surface without publishing it.",
       "Diagnose why this .NET restore, build, test, or pack command failed.",
       "Design the F# and C# boundary in this mixed .NET solution.",
+      "Choose the right F# web framework before building this ASP.NET Core application.",
+      "Build this Giraffe, Falco, or Oxpecker app idiomatically and test its endpoint contract.",
       "Align this .NET repo's CI, upgrade, formatting, and analyzer workflow."
     ],
     "brandColor": "#512BD4",

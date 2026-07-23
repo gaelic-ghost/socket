@@ -130,6 +130,8 @@ Completed
 - [x] Update `plugins/dotnet-skills/.codex-plugin/plugin.json` so plugin metadata includes F# and avoids C#-only wording.
 - [x] Add first-slice skills for project-shape choice, solution bootstrap, F# project implementation, C# project implementation, and test workflow.
 - [x] Add second-slice skills for package workflow, diagnostics, ASP.NET Core services, F#/C# interop, CI, upgrades, and tooling/style alignment.
+- [x] Add F# web-framework selection plus focused Giraffe, Falco, and Oxpecker workflows; keep Saturn and browser-client frameworks as explicit selection boundaries until a project needs deeper coverage.
+- [x] Route F# web application Azure work through Microsoft's official Azure Skills plugin rather than duplicating Azure MCP, Azure CLI, Azure Developer CLI, or deployment guidance in Socket.
 - [x] Switch the root marketplace entry for `dotnet-skills` from placeholder to installable only after real skill content exists.
 - [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
@@ -140,6 +142,7 @@ Completed
 - [x] The new skills can help an agent choose a `.NET` project shape before implementation.
 - [x] The new skills guide F# and C# implementation without making either language a secondary path.
 - [x] The testing guidance uses `dotnet test` as the stable command surface while respecting repo-local test framework choices.
+- [x] The F# web guidance distinguishes Giraffe, Falco, and Oxpecker contracts while preserving ordinary ASP.NET Core and F# domain boundaries.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 7: Python skills plugin expansion
@@ -686,6 +689,7 @@ Completed
 
 - [x] Add a thin Socket-hosted `cloud-deployment-skills` child plugin for cloud provider routing, official provider plugin selection, credential and mutation boundary checks, and cross-provider deployment handoffs.
 - [x] Delegate AWS MCP configuration, AWS CLI setup, AWS SAM setup, and curated AWS skill content to the official [`aws/agent-toolkit-for-aws`](https://github.com/aws/agent-toolkit-for-aws) marketplace and its `aws-core` plugin.
+- [x] Delegate Azure MCP, Foundry MCP, Azure CLI and Azure Developer CLI workflows, and Azure provider guidance to Microsoft's official [`microsoft/azure-skills`](https://github.com/microsoft/azure-skills) marketplace and its `azure` plugin.
 - [x] Keep framework-specific deployment implementation in the owning stack plugins, such as Server-Side Swift Fly.io deployment guidance.
 - [x] Keep the first Socket slice guidance-only: do not bundle AWS MCP config, copied AWS skills, credential setup scripts, provider templates, or local cloud state.
 
@@ -696,12 +700,14 @@ Completed
 - [x] Add `cloud-deployment-skills:cloud-deployment-routing-workflow` for provider routing, AWS Agent Toolkit handoff, mutation boundaries, and validation choices.
 - [x] Wire `cloud-deployment-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface and the AWS delegation decision.
+- [x] Update root README and maintainer guidance so users understand the Azure Skills delegation decision and F# web-framework handoff.
 - [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 
 - [x] The Socket marketplace exposes `cloud-deployment-skills` as an installable child plugin.
 - [x] AWS work routes to the official AWS Agent Toolkit for AWS by default instead of duplicated Socket-owned AWS MCP, AWS CLI, or AWS SAM setup guidance.
+- [x] Azure work routes to Microsoft's official Azure Skills plugin by default instead of duplicated Socket-owned Azure MCP, CLI, or Azure Developer CLI setup guidance.
 - [x] The plugin boundary is clear enough for future provider slices without absorbing framework-specific deployment workflows.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported cloud-deployment skill surface.
 
