@@ -1,6 +1,6 @@
 ---
 name: cloud-deployment-routing-workflow
-description: Choose the right cloud deployment path before implementation, routing AWS work through the official AWS Agent Toolkit and Azure work through Microsoft's Azure Skills plugin when appropriate while keeping credentials, regions, and mutation boundaries explicit.
+description: Choose a cloud deployment path before implementation. Route AWS work to the official AWS Agent Toolkit and Azure work to Microsoft's Azure Skills plugin while keeping credentials, regions, and mutation boundaries explicit.
 license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with cloud deployments, provider CLIs, provider plugins, MCP servers, and repository-owned deployment configuration.
 metadata:
