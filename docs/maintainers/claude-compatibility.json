@@ -6,7 +6,7 @@
     "agentdeck": { "claudeCode": "not_supported", "cowork": "not_supported", "note": "Codex thread-title hooks have no Claude equivalent." },
     "android-dev-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
     "apple-creator-studio-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
-    "apple-dev-skills": { "claudeCode": "local_mcp", "cowork": "skills_only", "note": "Privacy, sandbox file-access, entitlement, and virtualization guidance is portable; Xcode bridges, visible permission actions, and VM execution require an approved local Mac context." },
+    "apple-dev-skills": { "claudeCode": "local_mcp", "cowork": "skills_only", "note": "Privacy, sandbox file-access, entitlement, virtualization, and tvOS app/playback guidance are portable; Xcode bridges, visible permission actions, and VM execution require an approved local Mac context." },
     "cardhop-app": { "claudeCode": "local_mcp", "cowork": "skills_only", "note": "Cardhop server runs on the local Mac." },
     "cloud-deployment-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
     "cloud-inference-skills": { "claudeCode": "remote_mcp", "cowork": "remote_mcp", "note": "Runpod endpoints are public remote MCP services; authentication remains operator-managed." },

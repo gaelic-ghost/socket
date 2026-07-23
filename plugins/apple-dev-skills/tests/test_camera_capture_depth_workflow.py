@@ -93,7 +93,7 @@ class CameraCaptureDepthWorkflowTests(unittest.TestCase):
         )
         self.assertIn("camera", plugin.lower())
         self.assertIn("depth", plugin.lower())
-        self.assertIn("Expected exactly 62 active skills", validator)
+        self.assertIn("Expected exactly 64 active skills", validator)
         self.assertIn(skill, self.read("skills/avfoundation-media-pipeline-workflow/SKILL.md"))
         self.assertIn(skill, self.read("skills/vision-image-analysis-workflow/SKILL.md"))
 

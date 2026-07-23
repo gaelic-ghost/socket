@@ -28,6 +28,11 @@ All other catalog entries are portable skill workflows in both hosts. The
 complete, machine-checked classification is in
 [`claude-compatibility.json`](./claude-compatibility.json).
 
+The tvOS app-experience and media-playback workflows are instruction-only
+additions to `apple-dev-skills`: they remain usable as skills in Cowork, while
+current Apple documentation lookup and any Xcode execution stay within the
+approved local-Mac boundary for Claude Code.
+
 `model-lab-skills` is skills-only in Cowork and fully supported in Claude Code.
 Its optional Python helpers read and write operator-selected local artifacts;
 the plugin declares no MCP server or host-specific runtime extension.

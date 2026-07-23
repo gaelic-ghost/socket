@@ -1,0 +1,4 @@
+interface:
+  display_name: "tvOS Media Playback Workflow"
+  short_description: "Choose AVKit playback and own remote commands"
+  default_prompt: "Use $tvos-media-playback-workflow to decide between AVKit's system player and a custom tvOS player, keep MPRemoteCommandCenter and Now Playing state under one owner, plan remote validation, and hand general media pipelines to $avfoundation-media-pipeline-workflow."

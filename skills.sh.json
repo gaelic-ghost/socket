@@ -44,7 +44,9 @@
         "mailkit-workflow",
         "file-provider-and-finder-sync-workflow",
         "safari-mcp-workflow",
-        "swift-package-extension-workflow"
+        "swift-package-extension-workflow",
+        "tvos-app-experience-workflow",
+        "tvos-media-playback-workflow"
       ]
     },
     {

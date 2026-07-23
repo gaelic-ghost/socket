@@ -192,6 +192,8 @@ uv run pytest
 - `structure-swift-sources`
 - `swiftdata-workflow`
 - `tipkit-workflow`
+- `tvos-app-experience-workflow`
+- `tvos-media-playback-workflow`
 - `tips-helpviewer-workflow`
 - `vision-coreml-recognition-workflow`
 - `vision-image-analysis-workflow`

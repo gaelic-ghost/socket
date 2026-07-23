@@ -1,0 +1,4 @@
+interface:
+  display_name: "tvOS App Experience Workflow"
+  short_description: "Plan remote-first tvOS focus and Large Text UX"
+  default_prompt: "Use $tvos-app-experience-workflow to make a docs-first tvOS decision about SwiftUI-first remote interaction, focus layout, UIKit focus escape hatches, Large Text, capability gates, or TVMLKit migration. Keep directional focus under user control, beta claims version-qualified, and hand playback to $tvos-media-playback-workflow."
