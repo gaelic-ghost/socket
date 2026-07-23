@@ -64,6 +64,8 @@ APPLE_SKILLS = (
     "swift-package-extension-workflow",
     "tvos-app-experience-workflow",
     "tvos-media-playback-workflow",
+    "bootstrap-xcode-workspace",
+    "sync-xcode-workspace-guidance",
 )
 CYBERSECURITY_SKILLS = (
     "analyze-suspicious-script-or-document",

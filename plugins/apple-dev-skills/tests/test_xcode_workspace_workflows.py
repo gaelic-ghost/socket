@@ -44,6 +44,15 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["normalized_inputs"]["platforms"], ["ios", "macos"])
             self.assertIn("create the .xcworkspace through Xcode", " ".join(payload["actions"]))
 
+    def test_bootstrap_creates_marker_directories_outside_dry_run(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir)
+            self.assertEqual(code, 0)
+            root = Path(payload["workspace_root"])
+            self.assertTrue((root / "Apps").is_dir())
+            self.assertTrue((root / "Packages").is_dir())
+            self.assertFalse((root / "Services").exists())
+
     def test_bootstrap_rejects_watchos_multiplatform_target(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, payload = run_script(
