@@ -86,7 +86,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 41: Swift Package Extension Workflow - Completed
 - Milestone 42: Safari Extension And Control Workflow - Completed
 - Milestone 68: Safari MCP Browser Validation Workflow - Completed
-- Milestone 70: tvOS App Experience and Media Playback Workflows - Planned
+- Milestone 70: tvOS App Experience and Media Playback Workflows - In Progress
 - Milestone 43: Client Auth, Keychain, and App Sync Workflow - Planned
 - Milestone 44: Swift OpenAPI Client Workflow - Completed
 - Milestone 45: Icon Composer App Icon Workflow - Completed
@@ -118,7 +118,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 
 ### Status
 
-In Progress
+Planned
 
 ### Scope
 
@@ -144,7 +144,7 @@ In Progress
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 
@@ -1367,7 +1367,7 @@ Completed Milestone 69 by shipping privacy-permission, sandbox file-access, and 
 
 ### Status
 
-Planned
+In Progress
 
 ### Scope
 

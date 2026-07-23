@@ -62,6 +62,8 @@ APPLE_SKILLS = (
     "file-provider-and-finder-sync-workflow",
     "safari-mcp-workflow",
     "swift-package-extension-workflow",
+    "tvos-app-experience-workflow",
+    "tvos-media-playback-workflow",
 )
 CYBERSECURITY_SKILLS = (
     "analyze-suspicious-script-or-document",

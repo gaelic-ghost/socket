@@ -111,7 +111,12 @@
     "virtual-machine",
     "linux-vm",
     "macos-vm",
-    "virtualization-framework"
+    "virtualization-framework",
+    "tvos",
+    "apple-tv",
+    "focus-engine",
+    "remote-control",
+    "tvmlkit"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
@@ -135,6 +140,8 @@
       "Prepare and validate a persistent Linux development guest with explicit distro, services, resources, host integrations, nested-virtualization gates, and reset strategy.",
       "Prepare a clean macOS development guest from a compatible restore image with explicit identity, artifact lifecycle, checkpoints, integrations, and physical-Mac fidelity gaps.",
       "Repair or modernize Apple media and audio code across AVFAudio sessions, AVAudioEngine graphs, AVFoundation pipelines, Core Media timing, and legacy Core Audio surfaces.",
+      "Design a remote-first tvOS experience with SwiftUI focus behavior, Large Text, hardware capability gates, and a TVMLKit migration path.",
+      "Choose AVKit's tvOS system player before custom controls, then keep remote commands, Now Playing state, and playback validation under one explicit owner.",
       "Build or repair Core Image processing, RAW, color, HDR, filter, custom-kernel, and rendering pipelines using current Apple documentation.",
       "Decode, encode, inspect, thumbnail, preserve metadata, or bridge Apple image representations across Image I/O, Core Graphics, AppKit, UIKit, Core Image, and Core Video.",
       "Implement or repair Apple Vision text, barcode, face, pose, segmentation, tracking, feature-print, coordinate, and live-frame analysis using current documentation.",
