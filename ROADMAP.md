@@ -32,6 +32,7 @@
 - [Milestone 29: Model Lab skills plugin](#milestone-29-model-lab-skills-plugin)
 - [Milestone 30: macOS virtualization and container skills expansion](#milestone-30-macos-virtualization-and-container-skills-expansion)
 - [Milestone 31: macOS platform security skills expansion](#milestone-31-macos-platform-security-skills-expansion)
+- [Milestone 32: tvOS app experience and media playback workflows](#milestone-32-tvos-app-experience-and-media-playback-workflows)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -77,6 +78,7 @@
 - Milestone 29: Model Lab skills plugin - Planned
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
+- Milestone 32: tvOS app experience and media playback workflows - Planned
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -1073,6 +1075,28 @@ Completed
 - [x] Apple Dev, Reverse Engineering, Cybersecurity, Socket, Hermes, and Claude/Cowork discovery and validation surfaces agree on the shipped owner boundaries.
 
 Completed Milestone 31 by shipping four focused, instruction-only macOS platform-security workflows across Apple Dev and Reverse Engineering Skills, aligning defensive Cybersecurity handoffs, preserving visible prompt and protection-state approval gates, exporting the portable skill set through Hermes, and recording Claude Code/Cowork compatibility without introducing a permission manager, privileged service, or duplicate plugin.
+
+## Milestone 32: tvOS app experience and media playback workflows
+
+### Status
+
+Planned
+
+### Scope
+
+- [ ] Use [`docs/maintainers/tvos-skills-plan.md`](./docs/maintainers/tvos-skills-plan.md) as the source of truth for the focused Apple Dev Skills expansion.
+- [ ] Add `tvos-app-experience-workflow` for remote-first SwiftUI/UIKit design, focus-system decisions, Large Text, platform gates, and TVMLKit migration routing.
+- [ ] Add `tvos-media-playback-workflow` for AVKit system-player preference, custom-player escalation, remote commands, Now Playing state, and tvOS media validation.
+- [ ] Preserve SwiftUI architecture, general accessibility, general AVFoundation, Core Media timing, AVFAudio, Xcode execution/testing, Model Lab runtime selection, and Apple-owned Core AI implementation ownership through clear handoffs.
+- [ ] Keep tvOS 27 claims beta-qualified and recheck them at release candidate/GM; do not claim direct Core AI or Foundation Models inference support for tvOS without an official platform contract.
+- [ ] Deliver the two backward-compatible skills in the next Socket minor release, with Apple Dev metadata, portability exports, compatibility records, child/root validation, release evidence, and branch accounting.
+
+### Exit Criteria
+
+- [ ] The two workflows have distinct triggers, documented Apple behavior, stable/beta evidence labels, platform restrictions, and no duplicate general-framework ownership.
+- [ ] The app-experience workflow keeps focus user-controlled, SwiftUI-first, and accessible at larger text sizes while reserving UIKit focus APIs for concrete geometry failures.
+- [ ] The media workflow leads with AVKit’s system player and makes custom remote-command responsibility explicit.
+- [ ] Apple Dev Skills, Socket metadata, Hermes exports, Claude/Cowork compatibility records, tests, and documentation agree on the new skill inventory before the minor release.
 
 ## Small Tickets
 
