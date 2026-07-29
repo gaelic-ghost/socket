@@ -42,9 +42,14 @@ jobs:
           manifest=.release/release-manifest.json
           tag=$(jq -r '.releaseTag // empty' "$manifest")
           kind=$(jq -r '.releaseKind // empty' "$manifest")
+          commit=$(jq -r '.commit // empty' "$manifest")
           image=$(jq -r '.image // empty' "$manifest")
           if [[ "$tag" != "$RELEASE_TAG" ]]; then
             echo "Release manifest tag '$tag' does not match published release '$RELEASE_TAG'." >&2
+            exit 1
+          fi
+          if [[ ! "$commit" =~ ^[0-9a-f]{40}$ || "$commit" != "$(git rev-parse HEAD)" ]]; then
+            echo "Release manifest commit '$commit' does not match the checked-out release tag commit '$(git rev-parse HEAD)'." >&2
             exit 1
           fi
           if [[ "$kind" != stable && "$kind" != prerelease ]]; then
@@ -59,8 +64,8 @@ jobs:
             echo "Prerelease manifest cannot deploy from a normal GitHub release event." >&2
             exit 1
           fi
-          if [[ ! "$image" =~ @sha256:[0-9a-f]{64}$ ]]; then
-            echo "Release manifest image must be an exact OCI sha256 digest reference; got '$image'." >&2
+          if [[ ! "$image" =~ ^([^/@[:space:]]+\.[^/@[:space:]]+|localhost|[^/@[:space:]]+:[0-9]+)/[^@[:space:]]+@sha256:[0-9a-f]{64}$ ]]; then
+            echo "Release manifest image must include a registry, repository, and exact OCI sha256 digest; got '$image'." >&2
             exit 1
           fi
           echo "image=$image" >> "$GITHUB_OUTPUT"

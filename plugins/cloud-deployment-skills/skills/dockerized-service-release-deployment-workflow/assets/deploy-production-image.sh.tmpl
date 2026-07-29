@@ -4,8 +4,8 @@ set -euo pipefail
 deploy_environment=${1:?"Expected the deployment environment, such as test or production."}
 image_ref=${2:?"Expected an exact OCI image reference such as registry.example/service@sha256:<64 hex characters>."}
 
-if [[ ! "$image_ref" =~ @sha256:[0-9a-f]{64}$ ]]; then
-  echo "Refusing deployment because '$image_ref' is not an immutable OCI sha256 digest reference." >&2
+if [[ ! "$image_ref" =~ ^([^/@[:space:]]+\.[^/@[:space:]]+|localhost|[^/@[:space:]]+:[0-9]+)/[^@[:space:]]+@sha256:[0-9a-f]{64}$ ]]; then
+  echo "Refusing deployment because '$image_ref' does not include a registry, repository, and immutable OCI sha256 digest." >&2
   exit 1
 fi
 

@@ -2,7 +2,7 @@
 name: dockerized-service-release-deployment-workflow
 description: "Create a Dockerized-service release contract with clean GitHub Actions builds, main-anchored tags, immutable digest manifests, published-release deployments, production approval, health checks, and exact-digest rollback."
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients working with Docker or OCI images, GitHub Actions, GitHub Releases, container registries, and provider-specific deployment adapters.
+compatibility: Designed for Codex and portable to Hermes as instruction-only guidance for Docker or OCI images, GitHub Actions, GitHub Releases, container registries, and provider-specific deployment adapters. It bundles no provider credential, cloud adapter, or native Hermes runtime.
 metadata:
   owner: gaelic-ghost
   repo: socket
@@ -51,6 +51,10 @@ Inspect the repository's Dockerfile, CI workflows, release process, registry set
 
 Translate those sources into the actual project choices: registry, tag policy, environment policy, provider identity, health URL, and rollback command.
 
+## Hermes Compatibility
+
+This is portable instruction-only guidance and is exported through Socket's Hermes skill tap. It does not install a GitHub App, configure registry credentials, provision a cloud account, or bundle a deployment adapter for Hermes or Codex.
+
 ## Required Decisions Before Editing
 
 Confirm these decisions. Stop rather than silently choosing a production target:
@@ -59,7 +63,8 @@ Confirm these decisions. Stop rather than silently choosing a production target:
 - supported target platform or platforms
 - tag pattern and the protected integration branch, normally `main`
 - repository validation command and image smoke-test command
-- GitHub App or fine-scoped PAT stored as `RELEASE_PUBLISH_TOKEN` for automated release publication
+- GitHub App with only the repository `contents: write` permission; store its client ID as `RELEASE_PUBLISH_APP_CLIENT_ID` and private key as `RELEASE_PUBLISH_APP_PRIVATE_KEY`
+- registry-specific `OCI_REGISTRY_USERNAME` repository variable and `OCI_REGISTRY_PASSWORD` secret, unless the adopting repository deliberately narrows the template to GHCR
 - GitHub `production` environment reviewers, permitted stable tags, and bypass policy
 - whether a `test` environment exists; when it does, enable `ENABLE_PRERELEASE_DEPLOYMENTS=true` as a repository variable and configure its test-tag policy
 - cloud account, project, region, workload, and OIDC trust policy for the deployment adapter
@@ -87,9 +92,9 @@ The shell templates fail closed until a project replaces their placeholders. Do 
 5. Run the repository validation from that clean checkout.
 6. Build and push the image once. Capture the registry output digest, then run the container smoke test against that exact published digest. Publish provenance and SBOM attestations where the chosen registry supports them.
 7. Accept only `vMAJOR.MINOR.PATCH` stable tags or the recognized prerelease forms `-alpha`, `-beta`, `-rc`, and `-test`, each with an optional dot/hyphen suffix. Reject all other tag forms before publishing.
-8. Create `release-manifest.json` from the tag, resolved commit, release kind, immutable image reference, workflow run URL, and attestations. Publish it as a normal GitHub Release for a stable tag, or a GitHub prerelease for a recognized prerelease tag, using `RELEASE_PUBLISH_TOKEN`.
+8. Create `release-manifest.json` from the tag, resolved commit, release kind, immutable image reference, workflow run URL, and attestations. Mint a short-lived GitHub App installation token in the job, then publish a normal GitHub Release for a stable tag or a GitHub prerelease for a recognized prerelease tag.
 
-The automated publisher needs a GitHub App installation token or fine-scoped PAT because a release created with the workflow's `GITHUB_TOKEN` does not trigger the release-published deployment workflow. Keep that token limited to this repository's release publication path.
+The automated publisher needs a GitHub App installation token because a release created with the workflow's `GITHUB_TOKEN` does not trigger the release-published deployment workflow. Configure the App with only the required repository access and mint its token during the job rather than storing a reusable PAT.
 
 The deployment workflow must listen only for `release: [published]`. It must not deploy directly on a tag push, a push to `main`, or a pull request.
 
@@ -105,7 +110,7 @@ The deployment workflow must listen only for `release: [published]`. It must not
 
 ## Security and Supply-Chain Rules
 
-- Scope workflow permissions minimally. The release workflow normally needs `contents: write` and `packages: write`; its separate `RELEASE_PUBLISH_TOKEN` must have only the release-publication authority required by the repository. The deploy workflow should have read-only contents plus `id-token: write` only when the provider adapter uses OIDC.
+- Scope workflow permissions minimally. The release workflow needs `contents: read` and `packages: write`; its short-lived GitHub App token has only the separate `contents: write` authority needed to publish the release. The deploy workflow should have read-only contents plus `id-token: write` only when the provider adapter uses OIDC.
 - Keep registry write access in the release workflow. Production deployment should normally need only pull/read access plus provider authorization.
 - Do not place secrets in Docker build arguments, image layers, caches, release manifests, logs, or committed environment files.
 - Treat restored CI caches as untrusted input; do not cache secrets or make a release depend on an unrebuildable cache.
