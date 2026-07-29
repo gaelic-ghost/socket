@@ -196,7 +196,7 @@ Evidence:
 - `plugins/python-skills/skills/python-package-workflow/SKILL.md`
 - `plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md`
 - `plugins/python-skills/skills/python-upgrade-workflow/SKILL.md`
-- `plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md`
+- `plugins/python-skills/skills/python-testing-workflow/SKILL.md`
 
 ### rust-skills: rust-validation-triager
 

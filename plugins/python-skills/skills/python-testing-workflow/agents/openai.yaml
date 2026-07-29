@@ -1,0 +1,8 @@
+interface:
+  display_name: "Python Testing Workflow"
+  short_description: "Set up, run, and diagnose pytest through uv."
+  brand_color: "#B45309"
+  default_prompt: "Use $python-testing-workflow to inspect the Python test shape, choose unit, integration, client, or artifact coverage, keep workspace targeting explicit, run pytest through uv, and explain the first meaningful failure."
+
+policy:
+  allow_implicit_invocation: true

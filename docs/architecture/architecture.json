@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-07-19T19:27:23.828783+00:00",
+  "detectedAt": "2026-07-29T13:33:08.747267+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -141,6 +141,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -304,11 +308,23 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/apple-dev-skills/skills/tvos-media-playback-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -548,7 +564,27 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/build-dotnet-agent-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/build-falco-web-app/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/build-giraffe-web-app/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/build-oxpecker-web-app/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/dotnet-skills/skills/choose-fsharp-web-framework/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -800,6 +836,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
     },
     {
@@ -868,6 +908,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/build-python-agent-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
     },
     {
@@ -877,6 +921,14 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/diagnose-python-project/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/fastapi-service-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/fastmcp-service-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -892,15 +944,15 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/python-skills/skills/python-testing-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
       "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -1045,6 +1097,10 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/server-side-jvm/skills/build-java-service/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/server-side-jvm/skills/build-jvm-agent-service/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -2018,6 +2074,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/bootstrap-xcode-workspace"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md"
         }
       ],
@@ -2498,6 +2566,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/sync-xcode-workspace-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
         }
       ],
@@ -2517,6 +2597,30 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/tips-helpviewer-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/tvos-app-experience-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/apple-dev-skills/skills/tvos-media-playback-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:apple-dev-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:apple-dev-skills/tvos-media-playback-workflow"
     },
     {
       "evidence": [
@@ -3170,6 +3274,30 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/build-dotnet-agent-service/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/build-dotnet-agent-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/build-falco-web-app/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/build-falco-web-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
         }
       ],
@@ -3177,6 +3305,42 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:dotnet-skills/build-fsharp-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/build-giraffe-web-app/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/build-giraffe-web-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/build-oxpecker-web-app/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/build-oxpecker-web-app"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/dotnet-skills/skills/choose-fsharp-web-framework/SKILL.md"
+        }
+      ],
+      "from": "product:dotnet-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:dotnet-skills/choose-fsharp-web-framework"
     },
     {
       "evidence": [
@@ -3866,6 +4030,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:productivity-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:productivity-skills/design-n8n-agent-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
         }
       ],
@@ -4058,6 +4234,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/build-python-agent-service/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/build-python-agent-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
         }
       ],
@@ -4089,6 +4277,30 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:python-skills/diagnose-python-project"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/fastapi-service-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/fastapi-service-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/fastmcp-service-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/fastmcp-service-workflow"
     },
     {
       "evidence": [
@@ -4130,6 +4342,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/python-skills/skills/python-testing-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:python-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:python-skills/python-testing-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
         }
       ],
@@ -4149,18 +4373,6 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:python-skills/python-upgrade-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
-        }
-      ],
-      "from": "product:python-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:python-skills/uv-pytest-unit-testing"
     },
     {
       "evidence": [
@@ -4557,6 +4769,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:server-side-jvm/build-java-service"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/server-side-jvm/skills/build-jvm-agent-service/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-jvm",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-jvm/build-jvm-agent-service"
     },
     {
       "evidence": [
@@ -6019,6 +6243,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/bootstrap-xcode-workspace",
+      "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md"
         }
       ],
@@ -6499,6 +6735,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/sync-xcode-workspace-guidance",
+      "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
         }
       ],
@@ -6517,6 +6765,30 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/tips-helpviewer-workflow",
       "path": "plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/tvos-app-experience-workflow",
+      "path": "plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/apple-dev-skills/skills/tvos-media-playback-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:apple-dev-skills/tvos-media-playback-workflow",
+      "path": "plugins/apple-dev-skills/skills/tvos-media-playback-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -7171,12 +7443,72 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/build-dotnet-agent-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/build-dotnet-agent-service",
+      "path": "plugins/dotnet-skills/skills/build-dotnet-agent-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/build-falco-web-app/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/build-falco-web-app",
+      "path": "plugins/dotnet-skills/skills/build-falco-web-app/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:dotnet-skills/build-fsharp-project",
       "path": "plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/build-giraffe-web-app/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/build-giraffe-web-app",
+      "path": "plugins/dotnet-skills/skills/build-giraffe-web-app/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/build-oxpecker-web-app/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/build-oxpecker-web-app",
+      "path": "plugins/dotnet-skills/skills/build-oxpecker-web-app/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/dotnet-skills/skills/choose-fsharp-web-framework/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:dotnet-skills/choose-fsharp-web-framework",
+      "path": "plugins/dotnet-skills/skills/choose-fsharp-web-framework/SKILL.md"
     },
     {
       "dependencies": [],
@@ -7867,6 +8199,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:productivity-skills/design-n8n-agent-workflow",
+      "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
         }
       ],
@@ -8059,6 +8403,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/build-python-agent-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/build-python-agent-service",
+      "path": "plugins/python-skills/skills/build-python-agent-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/python-skills/skills/build-python-project/SKILL.md"
         }
       ],
@@ -8089,6 +8445,30 @@
       "kind": "codex-skill",
       "name": "skill:python-skills/diagnose-python-project",
       "path": "plugins/python-skills/skills/diagnose-python-project/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/fastapi-service-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/fastapi-service-workflow",
+      "path": "plugins/python-skills/skills/fastapi-service-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/fastmcp-service-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/fastmcp-service-workflow",
+      "path": "plugins/python-skills/skills/fastmcp-service-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -8131,6 +8511,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/python-skills/skills/python-testing-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:python-skills/python-testing-workflow",
+      "path": "plugins/python-skills/skills/python-testing-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md"
         }
       ],
@@ -8149,18 +8541,6 @@
       "kind": "codex-skill",
       "name": "skill:python-skills/python-upgrade-workflow",
       "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:python-skills/uv-pytest-unit-testing",
-      "path": "plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md"
     },
     {
       "dependencies": [],
@@ -8557,6 +8937,18 @@
       "kind": "codex-skill",
       "name": "skill:server-side-jvm/build-java-service",
       "path": "plugins/server-side-jvm/skills/build-java-service/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-jvm/skills/build-jvm-agent-service/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-jvm/build-jvm-agent-service",
+      "path": "plugins/server-side-jvm/skills/build-jvm-agent-service/SKILL.md"
     },
     {
       "dependencies": [],

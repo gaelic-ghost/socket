@@ -2,7 +2,7 @@
 name: integrate-fastapi-fastmcp
 description: Integrate FastAPI and FastMCP applications in existing or evolving uv-managed Python projects. Use when adding a FastMCP server to an existing FastAPI app, folding an existing FastMCP server into a FastAPI project, serving both REST and MCP interfaces from one codebase, or graduating an auto-generated FastAPI-to-FastMCP server into a curated FastMCP application.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv-managed Python projects, FastAPI and FastMCP application code, shell access for uv commands, and access to the fastmcp_docs MCP server for current framework guidance.
+compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv-managed Python projects, FastAPI and FastMCP application code, and shell access for uv commands. Use a host-provided FastMCP documentation tool when available; otherwise use the official FastMCP documentation.
 metadata:
   owner: gaelic-ghost
   repo: python-skills
@@ -152,3 +152,7 @@ When a combined FastAPI/FastMCP setup starts demanding separate service members,
 - `references/integration-patterns.md`
 - `references/official-docs.md`
 
+Use a host-provided `fastmcp_docs` MCP server only when the host already has
+one configured. This plugin does not package that server; otherwise use the
+official FastMCP documentation and verify the installed FastMCP version before
+adopting version-sensitive integration code.

@@ -112,7 +112,10 @@
     {
       "title": "Python Skills",
       "skills": [
-        "build-python-agent-service"
+        "build-python-agent-service",
+        "fastapi-service-workflow",
+        "fastmcp-service-workflow",
+        "python-testing-workflow"
       ]
     },
     {

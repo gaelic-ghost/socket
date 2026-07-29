@@ -1,6 +1,6 @@
 # Customization Guide
 
-Use this reference when you need to change the defaults shipped by `uv-pytest-unit-testing`.
+Use this reference when you need to change the defaults shipped by `python-testing-workflow`.
 
 ## High-Impact Knobs
 

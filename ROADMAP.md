@@ -170,10 +170,10 @@ Completed
 - [x] Add `python-skills:python-tooling-style-workflow`.
 - [x] Add `python-skills:python-ci-workflow`.
 - [x] Add `python-skills:python-upgrade-workflow`.
-- [x] Keep `python-skills:uv-pytest-unit-testing` as the release-compatible pytest workflow name for now.
+- [x] Replace `python-skills:uv-pytest-unit-testing` with the broader `python-skills:python-testing-workflow` without a duplicate compatibility surface.
 - [x] Update Python plugin metadata after the first new skill slice lands.
 - [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [ ] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
 
 ### Exit Criteria
 

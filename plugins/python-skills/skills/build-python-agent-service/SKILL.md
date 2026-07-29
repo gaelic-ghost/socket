@@ -7,7 +7,7 @@ metadata:
   owner: gaelic-ghost
   repo: python-skills
   category: python-agent-service
-allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(uv:*) Bash(python:*)
+allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(uv:*)
 ---
 
 # Build Python Agent Service

@@ -74,7 +74,7 @@ Translate any documentation rule into the concrete repository decision it change
 5. Choose the next skill:
    - scaffold: `bootstrap-uv-python-workspace`, `bootstrap-python-service`, or `bootstrap-python-mcp-service`
    - implementation: `build-python-project`
-   - test work: `uv-pytest-unit-testing`
+   - test work: `python-testing-workflow`
    - FastAPI/FastMCP integration: `integrate-fastapi-fastmcp`
    - local-first agent service: `build-python-agent-service`
    - diagnosis: `diagnose-python-project`

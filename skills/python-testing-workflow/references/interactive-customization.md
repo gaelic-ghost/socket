@@ -27,8 +27,8 @@ Run script keys:
 
 1. CLI flags
 2. `--config` file
-3. Repo profile: `.codex/profiles/uv-pytest-unit-testing/customization.yaml`
-4. Global profile: `~/.config/gaelic-ghost/python-skills/uv-pytest-unit-testing/customization.yaml`
+3. Repo profile: `.codex/profiles/python-testing-workflow/customization.yaml`
+4. Global profile: `~/.config/gaelic-ghost/python-skills/python-testing-workflow/customization.yaml`
 5. Script defaults
 
 ## Reset and Cleanup

@@ -74,7 +74,7 @@ When a skill relies on documentation, translate the relevant rule into practical
 
 ## Current Skill Inventory
 
-The shipped inventory has thirteen skills. The original expansion plan below
+The shipped inventory has fifteen skills. The original expansion plan below
 predates the later local-first agent-service addition, so this list is the
 current source of truth for the audit rather than the older twelve-skill
 summary in generated architecture metadata.
@@ -112,11 +112,29 @@ result contracts, evaluation fixtures, and the draft-to-approved-write
 promotion boundary. It is intentionally not a generic FastAPI/FastMCP service
 maintenance skill, a local-model benchmark, or a multi-agent framework survey.
 
-### `python-skills:uv-pytest-unit-testing`
+### `python-skills:fastapi-service-workflow`
 
-Keep this for now as the tested pytest setup and execution surface.
+Own ongoing FastAPI service work: route and dependency composition, typed
+settings, lifespan, async and integration testing, OpenAPI review, and
+deployment-readiness handoff. Keep package, CI, tooling, and FastMCP concerns
+with their existing owners.
 
-Consider renaming or replacing it with `python-testing-workflow` only in a cleanup slice that broadens the skill to cover test selection, failure explanation, coverage, async tests, integration tests, and CI parity. Do not keep both names as long-term duplicates.
+### `python-skills:fastmcp-service-workflow`
+
+Own ongoing FastMCP server work: curated tools, resources, and prompts;
+transport and lifespan behavior; authorization; client tests; generated-surface
+review; and version-aware upgrade diagnostics. It is not a bundled FastMCP
+documentation server or a generic deployment workflow.
+
+### `python-skills:python-testing-workflow`
+
+This replaces the earlier `uv-pytest-unit-testing` skill as the tested pytest
+setup and execution surface.
+
+It owns test selection, fixtures, parametrization, async tests, integration
+boundaries, coverage when requested, workspace targeting, failure triage, and
+local-to-CI parity. The former name has no compatibility shim or duplicate
+surface.
 
 ## Proposed Skill Inventory
 
@@ -260,9 +278,9 @@ The second slice should cover repeated project operations that become more valua
 
 - [x] Add `python-skills:python-ci-workflow`.
 - [x] Add `python-skills:python-upgrade-workflow`.
-- [x] Decide whether to broaden `uv-pytest-unit-testing` into `python-testing-workflow`; keep `uv-pytest-unit-testing` for this release so existing prompts and routing remain compatible.
-- [ ] Decide whether ongoing FastAPI service maintenance needs a dedicated `fastapi-service-workflow`.
-- [ ] Decide whether ongoing FastMCP server maintenance needs a dedicated `fastmcp-service-workflow`.
+- [x] Replace `uv-pytest-unit-testing` with `python-testing-workflow` in one cleanup pass, retaining the tested scripts under the replacement skill.
+- [x] Add `fastapi-service-workflow` for ongoing FastAPI service maintenance.
+- [x] Add `fastmcp-service-workflow` for ongoing FastMCP server maintenance.
 - [x] Add install testing with a temporary `CODEX_HOME` if the exported skill surface or plugin metadata changes enough to need plugin-install verification.
 
 ## Deferred Scope
@@ -282,15 +300,20 @@ After the first two slices prove useful, consider deeper specialized workflows:
 
 ### Testing Skill Name
 
-Decision for now: keep `uv-pytest-unit-testing`.
+Decision: replace the narrow unit-testing name with
+`python-testing-workflow`.
 
-A future cleanup can rename or replace it with `python-testing-workflow` when the scope grows beyond unit-test setup and `uv`-targeted pytest execution. If that cleanup happens, remove the old duplicate skill path in the same pass unless Gale explicitly approves a compatibility period.
+The replacement covers the broader testing workflow and retains the useful
+setup and package-targeting scripts. The old directory, profile paths, routing,
+and discovery surface were removed in the same pass.
 
 ### Service Workflow Timing
 
-Decision for the first slice: defer ongoing FastAPI and FastMCP service workflows.
+Decision: add separate FastAPI and FastMCP service-maintenance workflows.
 
-The existing bootstrap and integration skills already cover new service creation and combined FastAPI/FastMCP architecture. Add service-maintenance workflows only after the general `build-python-project` and `diagnose-python-project` skills prove where specialized service guidance should branch.
+The bootstrap and integration skills remain focused on new service creation and
+combined architecture. The dedicated maintenance workflows own existing service
+behavior without absorbing package, CI, testing, tooling, or upgrade work.
 
 ### Script Depth
 
@@ -330,28 +353,28 @@ three copies of the same policy.
 
 Complete these in one small maintenance slice before adding a new workflow:
 
-- [ ] Correct the maintainer inventory to include
+- [x] Correct the maintainer inventory to include
   `build-python-agent-service`, then refresh the root architecture model in a
   dedicated cross-plugin architecture pass. Do not hand-edit only the Python
   entries: the current architecture audit reports stale targets in other
   plugins too.
-- [ ] Remove the packaged dependency claim for `fastmcp_docs`, or add a
+- [x] Remove the packaged dependency claim for `fastmcp_docs`, or add a
   deliberately approved bundled MCP declaration plus its required Hermes
   translation. The current plugin has two skills that require that server in
   their metadata, but it does not ship the corresponding `.mcp.json` source.
   The preferred narrow repair is to say “use `fastmcp_docs` when the host has
   configured it; otherwise use the official FastMCP documentation,” and make
   that dependency optional in the skill metadata.
-- [ ] Update `python-ci-workflow` to distinguish local development checks from
+- [x] Update `python-ci-workflow` to distinguish local development checks from
   reproducible locked CI. For a repository that commits `uv.lock`, the default
   CI example should use `uv sync --locked --all-extras --dev` only when those
   extras and development groups are part of the tested contract; it should not
   imply that every project needs all extras.
-- [ ] Add a concrete isolated wheel and sdist smoke-check recipe to
+- [x] Add a concrete isolated wheel and sdist smoke-check recipe to
   `python-package-workflow`, while keeping publication explicitly outside the
   workflow. The current prose asks for a temporary consumer but leaves the
   most important artifact-install proof underspecified.
-- [ ] Make all agent-service Python execution examples `uv`-based and remove
+- [x] Make all agent-service Python execution examples `uv`-based and remove
   the unused unrestricted `Bash(python:*)` tool allowance from
   `build-python-agent-service` unless a tested workflow truly needs it.
 
@@ -419,16 +442,16 @@ folded into the general implementation skill:
 
 ### Definition Of Done For The Follow-Up
 
-- [ ] Every shipped Python skill appears in the child plan, plugin discovery
+- [x] Every shipped Python skill appears in the child plan, plugin discovery
   metadata, portable export decision, and regenerated architecture inventory.
-- [ ] Each declared MCP dependency is packaged and translated, explicitly
+- [x] Each declared MCP dependency is packaged and translated, explicitly
   host-provided, or removed.
-- [ ] Bootstrap policies have one shared source while each entry point keeps a
+- [x] Bootstrap policies have one shared source while each entry point keeps a
   narrow, distinct purpose.
-- [ ] CI guidance demonstrates both fast local iteration and locked,
+- [x] CI guidance demonstrates both fast local iteration and locked,
   reproducible verification without overgeneralizing either command.
-- [ ] FastAPI and FastMCP maintenance each have a clear owning workflow.
-- [ ] The renamed testing workflow replaces, rather than shadows, the current
+- [x] FastAPI and FastMCP maintenance each have a clear owning workflow.
+- [x] The renamed testing workflow replaces, rather than shadows, the current
   unit-testing skill.
 
 ## Definition Of Done

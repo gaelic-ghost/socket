@@ -16,6 +16,10 @@ allowed-tools: Bash(uv:*) Bash(git:*) Read
 
 Create production-oriented FastAPI starter layouts using one direct shell entrypoint backed by the shared `bootstrap-uv-python-workspace` scaffolding scripts.
 
+Read [`shared/bootstrap-contract.md`](../../shared/bootstrap-contract.md)
+before changing shared scaffold policy. It owns the shared command,
+configuration, validation, cleanup, and handoff rules.
+
 ## When To Use
 
 - Use this skill for new FastAPI service scaffolds.
@@ -34,15 +38,8 @@ Create production-oriented FastAPI starter layouts using one direct shell entryp
    scripts/init_python_service.sh --name <name> --mode <project|workspace>
    ```
 3. Let the script delegate to the shared `bootstrap-uv-python-workspace` scaffolding layer.
-4. Accept the built-in validation path:
-   - `uv run pytest`
-   - `uv run ruff check .`
-   - `uv run mypy .`
-5. Confirm the generated project includes:
-   - a committed `.env` for safe defaults
-   - an ignored `.env.local` for machine-local or secret overrides
-   - typed configuration via `pydantic-settings`
-6. Return the generated path plus the exact next-step run and check commands emitted by the script.
+4. Apply the shared bootstrap contract for validation and configuration.
+5. Return the generated path plus the exact next-step run and check commands emitted by the script.
 
 ## Commands
 
@@ -102,17 +99,12 @@ scripts/init_python_service.sh --name my-service --initial-commit
 
 - mode: `project`
 - Python version: `3.13`
-- quality tooling: `pytest`, `ruff`, `mypy`
-- config baseline: committed `.env`, ignored `.env.local`, and `pydantic-settings`
 - workspace default members: `core-lib,api-service`
 - workspace default profiles: first member `package`, remaining members `service`
 
 ## Guardrails
 
-- Refuse non-empty target directories unless `--force` is set.
-- Require `uv` and `git` unless git initialization was explicitly disabled.
-- Fail when workspace-only options are used in project mode.
-- Fail when `--initial-commit` is combined with `--no-git-init`.
+- Apply the shared bootstrap-contract guardrails.
 
 ## FastAPI Guidance
 
@@ -126,14 +118,13 @@ uv run fastapi dev app/main.py
 uv run fastapi run app/main.py
 ```
 
-Generated FastAPI scaffolds should use `pydantic-settings` with `.env` plus `.env.local`, following the documented FastAPI settings pattern with cached settings loading.
+Generated FastAPI scaffolds should use the shared configuration policy and the
+documented FastAPI settings pattern with cached settings loading.
 
 ## Fallbacks and Handoffs
 
 - The preferred path is always `scripts/init_python_service.sh`.
-- Use `bootstrap-uv-python-workspace` directly only when FastAPI-specific behavior is not wanted.
-- Recommend `bootstrap-python-mcp-service` instead when the user wants a FastMCP server rather than an HTTP API service.
-- Recommend `integrate-fastapi-fastmcp` when the user wants an existing or planned FastAPI project to host, generate, or coexist with a FastMCP surface.
+- Use the shared bootstrap-contract handoff matrix.
 
 ## Automation Suitability
 
@@ -227,6 +218,7 @@ Return STATUS, generated path, exact command transcript, and minimal remediation
 
 ## References
 
+- `../../shared/bootstrap-contract.md`
 - `references/conventions.md`
 - `references/customization.md`
 - `references/interactive-customization.md`

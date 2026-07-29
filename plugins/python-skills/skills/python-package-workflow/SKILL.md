@@ -88,7 +88,19 @@ Do not assume every workspace member should publish. Services, examples, interna
 
 ## Local Smoke Checks
 
-When package behavior is public or packaging changed materially, create a temporary consumer outside the package tree and install the built artifact there.
+When package behavior is public or packaging changed materially, create a
+temporary consumer outside the package tree and install the built artifact
+there. Verify both the wheel and sdist when the project publishes both:
+
+```bash
+uv run --isolated --no-project --with dist/*.whl tests/smoke_test.py
+uv run --isolated --no-project --with dist/*.tar.gz tests/smoke_test.py
+```
+
+Keep `tests/smoke_test.py` deliberately small: import the public package, run
+one representative public API or CLI command, and fail if required package data
+is missing. Use a disposable directory instead when the repository does not
+ship a smoke-test script.
 
 Keep the smoke check small:
 

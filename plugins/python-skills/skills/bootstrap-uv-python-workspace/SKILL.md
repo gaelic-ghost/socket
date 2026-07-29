@@ -17,6 +17,10 @@ allowed-tools: Bash(uv:*) Bash(git:*) Read
 Create repeatable `uv`-based scaffolds for both single projects and workspaces.
 Use this skill as the shared scaffolding basis for other Python bootstrap skills that need consistent `uv` project and workspace defaults.
 
+Read [`shared/bootstrap-contract.md`](../../shared/bootstrap-contract.md)
+before changing defaults or validating generated output. It owns shared command,
+configuration, validation, cleanup, and handoff policy.
+
 ## When To Use
 
 - Use this skill for generic `uv` project or workspace creation.
@@ -32,15 +36,8 @@ Use this skill as the shared scaffolding basis for other Python bootstrap skills
    - `package`
    - `service`
 3. Run the selected script with explicit `--name` and optional `--path`, `--python`, `--force`, `--initial-commit`, and `--no-git-init`.
-4. Accept the built-in validation path:
-   - `uv run pytest`
-   - `uv run ruff check .`
-   - `uv run mypy .`
-5. Confirm the generated output includes:
-   - a committed `.env` for safe defaults
-   - an ignored `.env.local` for machine-local or secret overrides
-   - typed configuration via `pydantic-settings`
-6. Return the generated path plus the exact next-step commands emitted by the script.
+4. Apply the shared bootstrap contract for validation and configuration.
+5. Return the generated path plus the exact next-step commands emitted by the script.
 
 ## Commands
 
@@ -73,8 +70,6 @@ scripts/init_uv_python_project.sh --name my-service --profile service --initial-
 ## Defaults
 
 - Python version: `3.13` (override with `--python`).
-- Quality tooling: `pytest`, `ruff`, `mypy`.
-- Config baseline: committed `.env`, ignored `.env.local`, and `pydantic-settings`.
 - Git initialization: enabled by default (disable via `--no-git-init`).
 - Workspace defaults:
 - Members: `core-lib,api-service`
@@ -97,16 +92,12 @@ scripts/init_uv_python_project.sh --name my-service --profile service --initial-
 ## Guardrails
 
 - Refuse non-empty target directories unless `--force` is set.
-- Refuse to overwrite an existing `pyproject.toml`.
-- Require `uv` and `git` when git initialization is enabled.
-- Exit non-zero with actionable error text for invalid arguments or missing prerequisites.
+- Apply the shared bootstrap-contract guardrails.
 
 ## Fallbacks and Handoffs
 
 - Preferred paths are `scripts/init_uv_python_project.sh` and `scripts/init_uv_python_workspace.sh`.
-- Recommend `bootstrap-python-service` when the user wants FastAPI-first scaffolding.
-- Recommend `bootstrap-python-mcp-service` when the user wants FastMCP-first scaffolding.
-- Recommend `integrate-fastapi-fastmcp` when the user already has one surface and needs integration guidance for the other inside the same `uv` project or workspace.
+- Use the shared bootstrap-contract handoff matrix.
 
 ## Automation Suitability
 
@@ -199,6 +190,7 @@ Return STATUS, exact commands, and concise results only. If failures occur, prov
 
 ## References
 
+- `../../shared/bootstrap-contract.md`
 - `references/uv-command-recipes.md`
 - `references/customization.md`
 

@@ -1,0 +1,7 @@
+# python-testing-workflow bootstrap config profile
+# Use with: scripts/bootstrap_pytest_uv.sh --config <this-file>
+
+workspace_root: "."
+package: ""
+with_cov: false
+dry_run: false

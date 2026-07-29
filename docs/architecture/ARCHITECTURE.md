@@ -75,6 +75,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/avfoundation-media-pipeline-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/avfoundation-media-pipeline-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/bootstrap-swift-package` (codex-skill) at `plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/bootstrap-xcode-app-project` (codex-skill) at `plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/bootstrap-xcode-workspace` (codex-skill) at `plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/camera-capture-depth-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/choose-macos-virtualization-shape` (codex-skill) at `plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/core-animation-layer-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md` depends on: no declared dependencies.
@@ -115,8 +116,11 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/swiftui-performance-audit` (codex-skill) at `plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/sync-swift-package-guidance` (codex-skill) at `plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/sync-xcode-project-guidance` (codex-skill) at `plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/sync-xcode-workspace-guidance` (codex-skill) at `plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/tipkit-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/tips-helpviewer-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/tvos-app-experience-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:apple-dev-skills/tvos-media-playback-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tvos-media-playback-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/video-codec-processing-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/virtualization-framework-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/vision-coreml-recognition-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md` depends on: no declared dependencies.
@@ -171,7 +175,12 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:dotnet-skills/aspnet-core-service-workflow` (codex-skill) at `plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/bootstrap-solution` (codex-skill) at `plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/build-csharp-project` (codex-skill) at `plugins/dotnet-skills/skills/build-csharp-project/SKILL.md` depends on: no declared dependencies.
+- `skill:dotnet-skills/build-dotnet-agent-service` (codex-skill) at `plugins/dotnet-skills/skills/build-dotnet-agent-service/SKILL.md` depends on: no declared dependencies.
+- `skill:dotnet-skills/build-falco-web-app` (codex-skill) at `plugins/dotnet-skills/skills/build-falco-web-app/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/build-fsharp-project` (codex-skill) at `plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md` depends on: no declared dependencies.
+- `skill:dotnet-skills/build-giraffe-web-app` (codex-skill) at `plugins/dotnet-skills/skills/build-giraffe-web-app/SKILL.md` depends on: no declared dependencies.
+- `skill:dotnet-skills/build-oxpecker-web-app` (codex-skill) at `plugins/dotnet-skills/skills/build-oxpecker-web-app/SKILL.md` depends on: no declared dependencies.
+- `skill:dotnet-skills/choose-fsharp-web-framework` (codex-skill) at `plugins/dotnet-skills/skills/choose-fsharp-web-framework/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/choose-project-shape` (codex-skill) at `plugins/dotnet-skills/skills/choose-project-shape/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/ci-workflow` (codex-skill) at `plugins/dotnet-skills/skills/ci-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:dotnet-skills/diagnose-project` (codex-skill) at `plugins/dotnet-skills/skills/diagnose-project/SKILL.md` depends on: no declared dependencies.
@@ -229,6 +238,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:productivity-skills/codex-gui-worktree-workflow` (codex-skill) at `plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:productivity-skills/design-agent-automation-workflow` (codex-skill) at `plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:productivity-skills/design-agent-eval-workflow` (codex-skill) at `plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:productivity-skills/design-n8n-agent-workflow` (codex-skill) at `plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:productivity-skills/dice-job-search-workflow` (codex-skill) at `plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:productivity-skills/explain-code-slice` (codex-skill) at `plugins/productivity-skills/skills/explain-code-slice/SKILL.md` depends on: no declared dependencies.
 - `skill:productivity-skills/maintain-github-repository` (codex-skill) at `plugins/productivity-skills/skills/maintain-github-repository/SKILL.md` depends on: no declared dependencies.
@@ -245,15 +255,18 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:python-skills/bootstrap-python-mcp-service` (codex-skill) at `plugins/python-skills/skills/bootstrap-python-mcp-service/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/bootstrap-python-service` (codex-skill) at `plugins/python-skills/skills/bootstrap-python-service/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/bootstrap-uv-python-workspace` (codex-skill) at `plugins/python-skills/skills/bootstrap-uv-python-workspace/SKILL.md` depends on: no declared dependencies.
+- `skill:python-skills/build-python-agent-service` (codex-skill) at `plugins/python-skills/skills/build-python-agent-service/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/build-python-project` (codex-skill) at `plugins/python-skills/skills/build-python-project/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/choose-python-project-shape` (codex-skill) at `plugins/python-skills/skills/choose-python-project-shape/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/diagnose-python-project` (codex-skill) at `plugins/python-skills/skills/diagnose-python-project/SKILL.md` depends on: no declared dependencies.
+- `skill:python-skills/fastapi-service-workflow` (codex-skill) at `plugins/python-skills/skills/fastapi-service-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:python-skills/fastmcp-service-workflow` (codex-skill) at `plugins/python-skills/skills/fastmcp-service-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/integrate-fastapi-fastmcp` (codex-skill) at `plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/python-ci-workflow` (codex-skill) at `plugins/python-skills/skills/python-ci-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/python-package-workflow` (codex-skill) at `plugins/python-skills/skills/python-package-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:python-skills/python-testing-workflow` (codex-skill) at `plugins/python-skills/skills/python-testing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/python-tooling-style-workflow` (codex-skill) at `plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:python-skills/python-upgrade-workflow` (codex-skill) at `plugins/python-skills/skills/python-upgrade-workflow/SKILL.md` depends on: no declared dependencies.
-- `skill:python-skills/uv-pytest-unit-testing` (codex-skill) at `plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md` depends on: no declared dependencies.
 - `skill:reverse-engineering-skills/analyze-apple-silicon-arm64e` (codex-skill) at `plugins/reverse-engineering-skills/skills/analyze-apple-silicon-arm64e/SKILL.md` depends on: no declared dependencies.
 - `skill:reverse-engineering-skills/audit-apple-signing-and-containment` (codex-skill) at `plugins/reverse-engineering-skills/skills/audit-apple-signing-and-containment/SKILL.md` depends on: no declared dependencies.
 - `skill:reverse-engineering-skills/compare-binary-versions` (codex-skill) at `plugins/reverse-engineering-skills/skills/compare-binary-versions/SKILL.md` depends on: no declared dependencies.
@@ -287,6 +300,7 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:rust-skills/testing-workflow` (codex-skill) at `plugins/rust-skills/skills/testing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:rust-skills/tooling-style-workflow` (codex-skill) at `plugins/rust-skills/skills/tooling-style-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-jvm/build-java-service` (codex-skill) at `plugins/server-side-jvm/skills/build-java-service/SKILL.md` depends on: no declared dependencies.
+- `skill:server-side-jvm/build-jvm-agent-service` (codex-skill) at `plugins/server-side-jvm/skills/build-jvm-agent-service/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-jvm/build-scala-service` (codex-skill) at `plugins/server-side-jvm/skills/build-scala-service/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-jvm/build-tooling-workflow` (codex-skill) at `plugins/server-side-jvm/skills/build-tooling-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-jvm/choose-service-shape` (codex-skill) at `plugins/server-side-jvm/skills/choose-service-shape/SKILL.md` depends on: no declared dependencies.
@@ -376,6 +390,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/avfoundation-media-pipeline-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/camera-capture-depth-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/choose-macos-virtualization-shape/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/core-animation-layer-workflow/SKILL.md`.
@@ -416,8 +431,11 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tvos-media-playback-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/video-codec-processing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/virtualization-framework-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/vision-coreml-recognition-workflow/SKILL.md`.
@@ -477,7 +495,12 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/aspnet-core-service-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/bootstrap-solution/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-csharp-project/SKILL.md`.
+- `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-dotnet-agent-service/SKILL.md`.
+- `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-falco-web-app/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-fsharp-project/SKILL.md`.
+- `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-giraffe-web-app/SKILL.md`.
+- `skill-manifest` evidence from `plugins/dotnet-skills/skills/build-oxpecker-web-app/SKILL.md`.
+- `skill-manifest` evidence from `plugins/dotnet-skills/skills/choose-fsharp-web-framework/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/choose-project-shape/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/ci-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/dotnet-skills/skills/diagnose-project/SKILL.md`.
@@ -540,6 +563,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/productivity-skills/skills/explain-code-slice/SKILL.md`.
 - `skill-manifest` evidence from `plugins/productivity-skills/skills/maintain-github-repository/SKILL.md`.
@@ -557,15 +581,18 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/python-skills/skills/bootstrap-python-mcp-service/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/bootstrap-python-service/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/bootstrap-uv-python-workspace/SKILL.md`.
+- `skill-manifest` evidence from `plugins/python-skills/skills/build-python-agent-service/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/build-python-project/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/choose-python-project-shape/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/diagnose-python-project/SKILL.md`.
+- `skill-manifest` evidence from `plugins/python-skills/skills/fastapi-service-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/python-skills/skills/fastmcp-service-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/integrate-fastapi-fastmcp/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/python-ci-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/python-package-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/python-skills/skills/python-testing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/python-tooling-style-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/python-skills/skills/python-upgrade-workflow/SKILL.md`.
-- `skill-manifest` evidence from `plugins/python-skills/skills/uv-pytest-unit-testing/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/python-skills/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/reverse-engineering-skills/skills/analyze-apple-silicon-arm64e/SKILL.md`.
 - `skill-manifest` evidence from `plugins/reverse-engineering-skills/skills/audit-apple-signing-and-containment/SKILL.md`.
@@ -602,6 +629,7 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/rust-skills/skills/tooling-style-workflow/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/rust-skills/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/server-side-jvm/skills/build-java-service/SKILL.md`.
+- `skill-manifest` evidence from `plugins/server-side-jvm/skills/build-jvm-agent-service/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-jvm/skills/build-scala-service/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-jvm/skills/build-tooling-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-jvm/skills/choose-service-shape/SKILL.md`.
