@@ -39,6 +39,21 @@ def make_repo(tmp_path: Path) -> Path:
         )
     export_root = tmp_path / "skills"
     export_hermes_skills.write_export(source_root, export_root)
+    for skill_name in export_hermes_skills.PRODUCTIVITY_SKILLS:
+        write(
+            tmp_path / "plugins" / "productivity-skills" / "skills" / skill_name / "SKILL.md",
+            f"---\nname: {skill_name}\ndescription: Test skill {skill_name}.\n---\n",
+        )
+    for skill_name in export_hermes_skills.PYTHON_SKILLS:
+        write(
+            tmp_path / "plugins" / "python-skills" / "skills" / skill_name / "SKILL.md",
+            f"---\nname: {skill_name}\ndescription: Test skill {skill_name}.\n---\n",
+        )
+    for skill_name in export_hermes_skills.JVM_SKILLS:
+        write(
+            tmp_path / "plugins" / "server-side-jvm" / "skills" / skill_name / "SKILL.md",
+            f"---\nname: {skill_name}\ndescription: Test skill {skill_name}.\n---\n",
+        )
     write(
         tmp_path / "skills.sh.json",
         json.dumps(
@@ -78,6 +93,9 @@ def configure_paths(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(export_hermes_skills, "SWIFT_LANG_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "MODEL_LAB_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "DOTNET_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
+    monkeypatch.setattr(export_hermes_skills, "PRODUCTIVITY_SOURCE_ROOT", repo_root / "plugins" / "productivity-skills" / "skills")
+    monkeypatch.setattr(export_hermes_skills, "PYTHON_SOURCE_ROOT", repo_root / "plugins" / "python-skills" / "skills")
+    monkeypatch.setattr(export_hermes_skills, "JVM_SOURCE_ROOT", repo_root / "plugins" / "server-side-jvm" / "skills")
     monkeypatch.setattr(export_hermes_skills, "CLOUD_DEPLOYMENT_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "EXPORT_ROOT", repo_root / "skills")
     monkeypatch.setattr(validate_hermes_compatibility, "REPO_ROOT", repo_root)

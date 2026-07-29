@@ -24,6 +24,9 @@ SERVER_SIDE_SWIFT_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-swift" / "s
 SWIFT_LANG_SOURCE_ROOT = REPO_ROOT / "plugins" / "swift-lang" / "skills"
 MODEL_LAB_SOURCE_ROOT = REPO_ROOT / "plugins" / "model-lab-skills" / "skills"
 DOTNET_SOURCE_ROOT = REPO_ROOT / "plugins" / "dotnet-skills" / "skills"
+PRODUCTIVITY_SOURCE_ROOT = REPO_ROOT / "plugins" / "productivity-skills" / "skills"
+PYTHON_SOURCE_ROOT = REPO_ROOT / "plugins" / "python-skills" / "skills"
+JVM_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-jvm" / "skills"
 CLOUD_DEPLOYMENT_SOURCE_ROOT = REPO_ROOT / "plugins" / "cloud-deployment-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 AGENT_PORTABILITY_SKILLS = (
@@ -137,7 +140,11 @@ DOTNET_SKILLS = (
     "build-giraffe-web-app",
     "build-falco-web-app",
     "build-oxpecker-web-app",
+    "build-dotnet-agent-service",
 )
+PRODUCTIVITY_SKILLS = ("design-n8n-agent-workflow",)
+PYTHON_SKILLS = ("build-python-agent-service",)
+JVM_SKILLS = ("build-jvm-agent-service",)
 CLOUD_DEPLOYMENT_SKILLS = ("cloud-deployment-routing-workflow",)
 EXPORTED_SKILLS = (
     AGENT_PORTABILITY_SKILLS
@@ -149,6 +156,9 @@ EXPORTED_SKILLS = (
     + SWIFT_LANG_SKILLS
     + MODEL_LAB_SKILLS
     + DOTNET_SKILLS
+    + PRODUCTIVITY_SKILLS
+    + PYTHON_SKILLS
+    + JVM_SKILLS
     + CLOUD_DEPLOYMENT_SKILLS
 )
 
@@ -178,6 +188,9 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
         **{skill_name: SWIFT_LANG_SOURCE_ROOT for skill_name in SWIFT_LANG_SKILLS},
         **{skill_name: MODEL_LAB_SOURCE_ROOT for skill_name in MODEL_LAB_SKILLS},
         **{skill_name: DOTNET_SOURCE_ROOT for skill_name in DOTNET_SKILLS},
+        **{skill_name: PRODUCTIVITY_SOURCE_ROOT for skill_name in PRODUCTIVITY_SKILLS},
+        **{skill_name: PYTHON_SOURCE_ROOT for skill_name in PYTHON_SKILLS},
+        **{skill_name: JVM_SOURCE_ROOT for skill_name in JVM_SKILLS},
         **{
             skill_name: CLOUD_DEPLOYMENT_SOURCE_ROOT
             for skill_name in CLOUD_DEPLOYMENT_SKILLS

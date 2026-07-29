@@ -99,7 +99,26 @@
         "choose-fsharp-web-framework",
         "build-giraffe-web-app",
         "build-falco-web-app",
-        "build-oxpecker-web-app"
+        "build-oxpecker-web-app",
+        "build-dotnet-agent-service"
+      ]
+    },
+    {
+      "title": "Productivity Skills",
+      "skills": [
+        "design-n8n-agent-workflow"
+      ]
+    },
+    {
+      "title": "Python Skills",
+      "skills": [
+        "build-python-agent-service"
+      ]
+    },
+    {
+      "title": "Server-Side JVM Skills",
+      "skills": [
+        "build-jvm-agent-service"
       ]
     },
     {

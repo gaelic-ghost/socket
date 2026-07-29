@@ -46,6 +46,8 @@ def test_skill_body_preserves_planning_not_runtime_boundary() -> None:
     assert "Prefer safe full automation" in body
     assert "Use human review only for the exact" in body
     assert "Return a concise plan with these sections" in body
+    assert "local-agent-frameworks.md" in body
+    assert "capability check" in body
 
 
 def test_openai_interface_metadata_matches_skill() -> None:
@@ -87,6 +89,42 @@ def test_framework_reference_covers_all_selection_surfaces() -> None:
         assert official_link in reference
 
 
+def test_local_framework_reference_keeps_local_inference_separate() -> None:
+    reference = read(SKILL_ROOT / "references" / "local-agent-frameworks.md")
+
+    for required in [
+        "Inference Server Is Not The Agent Framework",
+        "OpenAI Agents SDK",
+        "LangChain and LangGraph",
+        "LlamaIndex",
+        "n8n",
+        "Google Agent Development Kit (ADK)",
+        "Pydantic AI",
+        "AutoGen",
+        "CrewAI",
+        "Semantic Kernel",
+        "Ollama",
+        "LM Studio",
+        "tool calling",
+        "structured output",
+        "read-only",
+        "auto-with-escalation",
+    ]:
+        assert required in reference
+
+    for official_link in [
+        "https://developers.openai.com/api/docs/guides/agents",
+        "https://docs.langchain.com/oss/python/langgraph/overview",
+        "https://docs.llamaindex.ai/en/latest/understanding/agent/structured_output/",
+        "https://n8n.io/integrations/ollama/",
+        "https://adk.dev/",
+        "https://pydantic.dev/docs/ai/models/ollama/",
+        "https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html",
+        "https://learn.microsoft.com/en-us/semantic-kernel/overview/",
+    ]:
+        assert official_link in reference
+
+
 def test_plan_template_has_required_output_sections() -> None:
     template = read(SKILL_ROOT / "references" / "automation-plan-template.md")
 
@@ -100,3 +138,18 @@ def test_plan_template_has_required_output_sections() -> None:
         "## Sources",
     ]:
         assert heading in template
+
+
+def test_n8n_workflow_skill_keeps_visual_automation_deterministic() -> None:
+    skill = (SKILL_ROOT.parent / "design-n8n-agent-workflow" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+
+    for required in [
+        "deterministic",
+        "idempotency",
+        "draft-only",
+        "auto-with-escalation",
+        "capability gate",
+    ]:
+        assert required in skill

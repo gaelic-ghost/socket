@@ -3,6 +3,13 @@
 This note audits the `productivity-skills` maintenance skills and the
 `apple-dev-skills` sync skills for cross-repository automation.
 
+For a full local-first agent-framework planning pass, use
+[`design-agent-automation-workflow`](../../plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md)
+and its [local framework reference](../../plugins/productivity-skills/skills/design-agent-automation-workflow/references/local-agent-frameworks.md).
+This note keeps the Socket-maintainer automation decision; the skill owns
+framework comparison, inference-server separation, canonical labs, and
+implementation handoff.
+
 The practical split is:
 
 - Use Codex app automations for scheduled reporting, check-only audits, and

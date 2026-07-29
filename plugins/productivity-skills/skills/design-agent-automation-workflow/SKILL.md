@@ -52,9 +52,14 @@ produce a scaffold another stack-owned skill or implementation pass can use.
    - Swift or Apple-platform implementation belongs in Apple/Swift-owned skills
    - Hermes-specific work belongs in Hermes docs or a Hermes-owned skill if one
      exists later
-6. Produce a scaffold with the chosen surface, guardrails, validation plan,
+6. When the request compares agent frameworks or local-first agent development,
+   use `references/local-agent-frameworks.md` to separate the orchestration
+   framework from the inference server, model capability, document/RAG, and
+   integration choices. Keep the recommendation tied to a concrete workflow;
+   do not recommend a framework merely because it is popular.
+7. Produce a scaffold with the chosen surface, guardrails, validation plan,
    output contract, and next implementation handoff.
-7. Link official docs for every framework or runtime named in the
+8. Link official docs for every framework or runtime named in the
    recommendation.
 
 ## Decision Rules
@@ -89,6 +94,10 @@ produce a scaffold another stack-owned skill or implementation pass can use.
 - Prefer no automation yet only when the goal, validation, owner, write scope,
   or rollback/escalation boundary is still unclear after trying to narrow the
   workflow.
+- Treat a framework's advertised local-model integration as an adapter
+  capability, not proof that every local model can safely use tools, structured
+  output, long context, or multi-step planning. Plan an explicit model
+  capability check before granting write-capable tools.
 
 ## Output Contract
 
@@ -132,4 +141,5 @@ prompt, issue body, project note, or implementation brief.
 
 - `agents/openai.yaml`
 - `references/framework-selection.md`
+- `references/local-agent-frameworks.md`
 - `references/automation-plan-template.md`
