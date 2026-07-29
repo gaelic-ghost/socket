@@ -1,6 +1,6 @@
 ---
 name: build-python-agent-service
-description: Build or extend a local-first Python agent service with uv, typed tools, explicit model capability checks, durable state only when required, read-only-first execution, evaluation fixtures, and safe promotion gates. Use for OpenAI Agents SDK, LangGraph, LlamaIndex, Pydantic AI, Google ADK Python, AutoGen, or CrewAI implementations.
+description: Build a local-first Python agent service with typed tools, exact model capability checks, evaluation fixtures, and safe promotion gates. Use for OpenAI Agents SDK, LangGraph, LlamaIndex, Pydantic AI, Google ADK Python, AutoGen, or CrewAI.
 license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients building uv-managed Python agent services on macOS with local or remote model endpoints, typed tool contracts, and explicit validation.
 metadata:
