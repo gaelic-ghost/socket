@@ -4,9 +4,10 @@ set -euo pipefail
 
 WORKSPACE_ROOT="$(pwd)"
 PACKAGE_NAME=""
-TEST_PATH=""
+WITH_COV=0
+DRY_RUN=0
 
-SKILL_NAME="uv-pytest-unit-testing"
+SKILL_NAME="python-testing-workflow"
 SCRIPT_DIR="${0:A:h}"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 GLOBAL_PROFILE="$HOME/.config/gaelic-ghost/python-skills/$SKILL_NAME/customization.yaml"
@@ -19,17 +20,17 @@ DELETE_REPO_PROFILE=0
 
 usage() {
   cat <<'USAGE'
-Usage: run_pytest_uv.sh [--workspace-root PATH] [--package NAME] [--path TEST_PATH] [--config PATH] [-- <pytest args>]
+Usage: bootstrap_pytest_uv.sh [--workspace-root PATH] [--package NAME] [--with-cov] [--dry-run] [--config PATH]
 
 Options:
   --workspace-root PATH      Repository root containing pyproject.toml (default: cwd)
-  --package NAME             Workspace member package name for package-scoped run
-  --path TEST_PATH           Optional test path selector (e.g., tests/unit)
+  --package NAME             Workspace member package name for package-scoped install
+  --with-cov                 Also install pytest-cov and add coverage defaults when creating config
+  --dry-run                  Print planned commands and file changes without mutating files
   --config PATH              Explicit YAML config path
   --bypassing-all-profiles   Ignore global and repo profile files for this run
   --bypassing-repo-profile   Ignore repo-local profile file for this run
   --deleting-repo-profile    Delete repo-local profile file before execution
-  --                         Pass remaining args directly to pytest
   -h, --help                 Show this help
 USAGE
 }
@@ -63,6 +64,16 @@ strip_quotes() {
   printf '%s' "$value"
 }
 
+bool_to_int() {
+  local value
+  value="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  case "$value" in
+    1|true|yes|on) printf '1\n' ;;
+    0|false|no|off) printf '0\n' ;;
+    *) fail "invalid boolean value '$1'" ;;
+  esac
+}
+
 apply_config_value() {
   local key="$1"
   local value="$2"
@@ -70,7 +81,8 @@ apply_config_value() {
   case "$key" in
     workspace_root) WORKSPACE_ROOT="$value" ;;
     package) PACKAGE_NAME="$value" ;;
-    path) TEST_PATH="$value" ;;
+    with_cov) WITH_COV="$(bool_to_int "$value")" ;;
+    dry_run) DRY_RUN="$(bool_to_int "$value")" ;;
     *) fail "unknown config key '$key'" ;;
   esac
 }
@@ -104,15 +116,50 @@ load_config_file() {
   done < "$path"
 }
 
+run_cmd() {
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] $*"
+  else
+    "$@"
+  fi
+}
+
+append_pytest_config_if_missing() {
+  local pyproject_path="$1"
+  local addopts_value="-ra"
+
+  if [[ "$WITH_COV" -eq 1 ]]; then
+    addopts_value="-ra --cov --cov-report=term-missing"
+  fi
+
+  if rg -n "^\[tool\.pytest\.ini_options\]" "$pyproject_path" >/dev/null 2>&1; then
+    echo "info: [tool.pytest.ini_options] already exists in $pyproject_path; leaving config unchanged"
+    return 0
+  fi
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "[dry-run] append baseline [tool.pytest.ini_options] to $pyproject_path"
+    return 0
+  fi
+
+  cat >>"$pyproject_path" <<EOF_CFG
+
+[tool.pytest.ini_options]
+addopts = "$addopts_value"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+EOF_CFG
+
+  echo "info: added [tool.pytest.ini_options] to $pyproject_path"
+}
+
 ORIGINAL_ARGS=("$@")
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --workspace-root|--package|--path|--config)
-      [[ $# -ge 2 ]] || fail "$1 requires a value"
-      if [[ "$1" == "--config" ]]; then
-        CONFIG_PATH="$2"
-      fi
+    --config)
+      CONFIG_PATH="${2:-}"
+      [[ -n "$CONFIG_PATH" ]] || fail "--config requires a value"
       shift 2
       ;;
     --bypassing-all-profiles)
@@ -127,8 +174,12 @@ while [[ $# -gt 0 ]]; do
       DELETE_REPO_PROFILE=1
       shift
       ;;
-    --)
-      break
+    --workspace-root|--package)
+      [[ $# -ge 2 ]] || fail "$1 requires a value"
+      shift 2
+      ;;
+    --with-cov|--dry-run)
+      shift
       ;;
     -h|--help)
       usage
@@ -157,7 +208,6 @@ if [[ -n "$CONFIG_PATH" ]]; then
   load_config_file "$CONFIG_PATH" 1
 fi
 
-EXTRA_ARGS=()
 set -- "${ORIGINAL_ARGS[@]}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -169,20 +219,19 @@ while [[ $# -gt 0 ]]; do
       PACKAGE_NAME="$2"
       shift 2
       ;;
-    --path)
-      TEST_PATH="$2"
-      shift 2
+    --with-cov)
+      WITH_COV=1
+      shift
+      ;;
+    --dry-run)
+      DRY_RUN=1
+      shift
       ;;
     --config)
       shift 2
       ;;
     --bypassing-all-profiles|--bypassing-repo-profile|--deleting-repo-profile)
       shift
-      ;;
-    --)
-      shift
-      EXTRA_ARGS=("$@")
-      break
       ;;
     -h|--help)
       usage
@@ -197,32 +246,34 @@ while [[ $# -gt 0 ]]; do
 done
 
 require_cmd uv
+require_cmd rg
 
 if [[ ! -d "$WORKSPACE_ROOT" ]]; then
   echo "error: workspace root does not exist: $WORKSPACE_ROOT" >&2
   exit 1
 fi
 
-if [[ ! -f "$WORKSPACE_ROOT/pyproject.toml" ]]; then
-  echo "error: missing pyproject.toml at $WORKSPACE_ROOT/pyproject.toml" >&2
+PYPROJECT_PATH="$WORKSPACE_ROOT/pyproject.toml"
+if [[ ! -f "$PYPROJECT_PATH" ]]; then
+  echo "error: missing pyproject.toml at $PYPROJECT_PATH" >&2
   exit 1
 fi
 
 cd "$WORKSPACE_ROOT"
 
-CMD=(uv run)
+typeset -a deps
+if [[ "$WITH_COV" -eq 1 ]]; then
+  deps=(pytest pytest-cov)
+else
+  deps=(pytest)
+fi
+
 if [[ -n "$PACKAGE_NAME" ]]; then
-  CMD+=(--package "$PACKAGE_NAME")
-fi
-CMD+=(pytest)
-
-if [[ -n "$TEST_PATH" ]]; then
-  CMD+=("$TEST_PATH")
+  run_cmd uv add --package "$PACKAGE_NAME" --dev "${deps[@]}"
+else
+  run_cmd uv add --dev "${deps[@]}"
 fi
 
-if [[ "${#EXTRA_ARGS[@]}" -gt 0 ]]; then
-  CMD+=("${EXTRA_ARGS[@]}")
-fi
+append_pytest_config_if_missing "$PYPROJECT_PATH"
 
-echo "info: running: ${CMD[*]}"
-"${CMD[@]}"
+echo "info: bootstrap complete"

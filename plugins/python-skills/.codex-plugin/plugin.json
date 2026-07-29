@@ -1,7 +1,7 @@
 {
   "name": "python-skills",
   "version": "9.25.0",
-  "description": "Bundled Python-focused Codex skills for uv bootstrapping, project implementation, diagnostics, packaging, tooling, CI, upgrades, FastAPI, FastMCP, and pytest workflows.",
+  "description": "Bundled Python-focused Codex skills for uv bootstrapping, project implementation, diagnostics, packaging, tooling, CI, upgrades, FastAPI service maintenance, FastMCP service maintenance, and testing workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -29,7 +29,7 @@
   "interface": {
     "displayName": "Python Skills",
     "shortDescription": "Python project, uv, FastAPI, FastMCP, pytest, package, tooling, CI, and upgrade workflows for Codex.",
-    "longDescription": "Bundle reusable Codex skills for choosing Python project shapes, building uv-managed Python projects, diagnosing Python failures, validating package surfaces, aligning tooling, maintaining CI, planning upgrades, bootstrapping FastAPI and FastMCP services, integrating FastAPI/FastMCP apps, and setting up pytest workflows.",
+    "longDescription": "Bundle reusable Codex skills for choosing Python project shapes, building uv-managed Python projects, diagnosing Python failures, validating package surfaces, aligning tooling, maintaining CI, planning upgrades, bootstrapping and maintaining FastAPI and FastMCP services, integrating FastAPI/FastMCP apps, and testing Python projects.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -46,7 +46,9 @@
       "Align this Python repo's uv, Ruff, mypy, pytest, dependency-group, and validation workflow.",
       "Align this Python repo's CI with local uv validation commands.",
       "Plan this Python dependency, framework, lockfile, or tooling upgrade with staged validation.",
-      "Set up pytest defaults for this uv workspace and show the right package-targeted test commands.",
+      "Set up, run, or diagnose pytest for this uv workspace with explicit package targeting.",
+      "Maintain this FastAPI service's routes, typed settings, lifespan, OpenAPI contract, and tests.",
+      "Maintain this FastMCP server's curated tools, resources, prompts, transport, authorization, and client tests.",
       "Add a FastMCP surface to an existing FastAPI project and choose the right combined-app pattern."
     ],
     "brandColor": "#0F766E",

@@ -143,7 +143,12 @@ DOTNET_SKILLS = (
     "build-dotnet-agent-service",
 )
 PRODUCTIVITY_SKILLS = ("design-n8n-agent-workflow",)
-PYTHON_SKILLS = ("build-python-agent-service",)
+PYTHON_SKILLS = (
+    "build-python-agent-service",
+    "fastapi-service-workflow",
+    "fastmcp-service-workflow",
+    "python-testing-workflow",
+)
 JVM_SKILLS = ("build-jvm-agent-service",)
 CLOUD_DEPLOYMENT_SKILLS = ("cloud-deployment-routing-workflow",)
 EXPORTED_SKILLS = (

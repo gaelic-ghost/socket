@@ -1,6 +1,10 @@
 # FastMCP Docs Lookup Patterns
 
-Use these search prompts with the `fastmcp_docs` MCP server for current implementation details.
+Use these search prompts with a host-provided `fastmcp_docs` MCP server when
+one is available. The Python Skills plugin does not package that server. When
+it is unavailable, search the official [FastMCP documentation](https://gofastmcp.com/getting-started/welcome)
+instead, then compare the result against the installed FastMCP version before
+using syntax-sensitive examples.
 
 ## General bootstrapping
 

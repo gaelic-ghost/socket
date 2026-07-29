@@ -74,6 +74,11 @@ When a skill relies on documentation, translate the relevant rule into practical
 
 ## Current Skill Inventory
 
+The shipped inventory has fifteen skills. The original expansion plan below
+predates the later local-first agent-service addition, so this list is the
+current source of truth for the audit rather than the older twelve-skill
+summary in generated architecture metadata.
+
 ### `python-skills:bootstrap-uv-python-workspace`
 
 Keep this as the shared `uv` scaffolding basis.
@@ -98,11 +103,38 @@ Keep this as the existing integration bridge.
 
 It should continue to cover mounted FastMCP apps, FastAPI-derived MCP surfaces, combined app shapes, lifespan boundaries, and promotion from generated MCP surfaces to curated MCP tools and resources.
 
-### `python-skills:uv-pytest-unit-testing`
+### `python-skills:build-python-agent-service`
 
-Keep this for now as the tested pytest setup and execution surface.
+Keep this as the local-first Python agent-service implementation workflow.
 
-Consider renaming or replacing it with `python-testing-workflow` only in a cleanup slice that broadens the skill to cover test selection, failure explanation, coverage, async tests, integration tests, and CI parity. Do not keep both names as long-term duplicates.
+It owns framework selection, exact-model capability gates, typed tool and
+result contracts, evaluation fixtures, and the draft-to-approved-write
+promotion boundary. It is intentionally not a generic FastAPI/FastMCP service
+maintenance skill, a local-model benchmark, or a multi-agent framework survey.
+
+### `python-skills:fastapi-service-workflow`
+
+Own ongoing FastAPI service work: route and dependency composition, typed
+settings, lifespan, async and integration testing, OpenAPI review, and
+deployment-readiness handoff. Keep package, CI, tooling, and FastMCP concerns
+with their existing owners.
+
+### `python-skills:fastmcp-service-workflow`
+
+Own ongoing FastMCP server work: curated tools, resources, and prompts;
+transport and lifespan behavior; authorization; client tests; generated-surface
+review; and version-aware upgrade diagnostics. It is not a bundled FastMCP
+documentation server or a generic deployment workflow.
+
+### `python-skills:python-testing-workflow`
+
+This replaces the earlier `uv-pytest-unit-testing` skill as the tested pytest
+setup and execution surface.
+
+It owns test selection, fixtures, parametrization, async tests, integration
+boundaries, coverage when requested, workspace targeting, failure triage, and
+local-to-CI parity. The former name has no compatibility shim or duplicate
+surface.
 
 ## Proposed Skill Inventory
 
@@ -246,9 +278,9 @@ The second slice should cover repeated project operations that become more valua
 
 - [x] Add `python-skills:python-ci-workflow`.
 - [x] Add `python-skills:python-upgrade-workflow`.
-- [x] Decide whether to broaden `uv-pytest-unit-testing` into `python-testing-workflow`; keep `uv-pytest-unit-testing` for this release so existing prompts and routing remain compatible.
-- [ ] Decide whether ongoing FastAPI service maintenance needs a dedicated `fastapi-service-workflow`.
-- [ ] Decide whether ongoing FastMCP server maintenance needs a dedicated `fastmcp-service-workflow`.
+- [x] Replace `uv-pytest-unit-testing` with `python-testing-workflow` in one cleanup pass, retaining the tested scripts under the replacement skill.
+- [x] Add `fastapi-service-workflow` for ongoing FastAPI service maintenance.
+- [x] Add `fastmcp-service-workflow` for ongoing FastMCP server maintenance.
 - [x] Add install testing with a temporary `CODEX_HOME` if the exported skill surface or plugin metadata changes enough to need plugin-install verification.
 
 ## Deferred Scope
@@ -268,15 +300,20 @@ After the first two slices prove useful, consider deeper specialized workflows:
 
 ### Testing Skill Name
 
-Decision for now: keep `uv-pytest-unit-testing`.
+Decision: replace the narrow unit-testing name with
+`python-testing-workflow`.
 
-A future cleanup can rename or replace it with `python-testing-workflow` when the scope grows beyond unit-test setup and `uv`-targeted pytest execution. If that cleanup happens, remove the old duplicate skill path in the same pass unless Gale explicitly approves a compatibility period.
+The replacement covers the broader testing workflow and retains the useful
+setup and package-targeting scripts. The old directory, profile paths, routing,
+and discovery surface were removed in the same pass.
 
 ### Service Workflow Timing
 
-Decision for the first slice: defer ongoing FastAPI and FastMCP service workflows.
+Decision: add separate FastAPI and FastMCP service-maintenance workflows.
 
-The existing bootstrap and integration skills already cover new service creation and combined FastAPI/FastMCP architecture. Add service-maintenance workflows only after the general `build-python-project` and `diagnose-python-project` skills prove where specialized service guidance should branch.
+The bootstrap and integration skills remain focused on new service creation and
+combined architecture. The dedicated maintenance workflows own existing service
+behavior without absorbing package, CI, testing, tooling, or upgrade work.
 
 ### Script Depth
 
@@ -289,6 +326,133 @@ The existing bootstrap and pytest skills already own deterministic shell entrypo
 Decision for this expansion: treat the full first implementation slice as a likely Socket minor release candidate.
 
 The validator repair alone is a maintenance fix. Adding the new skill inventory is user-facing plugin capability and should likely publish as a minor release when the branch is ready.
+
+## Follow-Up Audit: 2026-07-29
+
+### Audit Result
+
+The plugin has a coherent general Python path now: choose a shape, bootstrap
+it, build it, diagnose failures, test it, align tooling, validate packaging,
+maintain CI, and plan upgrades. The next pass should be a focused cleanup and
+service-maintenance expansion, not another broad scaffold expansion.
+
+The existing bootstrap skills remain distinct user-facing entry points:
+
+- `bootstrap-uv-python-workspace` owns generic package or service scaffolds.
+- `bootstrap-python-service` owns FastAPI-first scaffolds.
+- `bootstrap-python-mcp-service` owns FastMCP-first scaffolds.
+
+Do not merge or rename those three installed skill names. They express three
+different starting intents and already share their actual scaffold mechanics.
+Instead, consolidate their repeated prose, validation vocabulary, configuration
+policy, and handoff matrix through shared references or a small common
+bootstrap-contract asset. That preserves clear discovery without maintaining
+three copies of the same policy.
+
+### Immediate Contract Repairs
+
+Complete these in one small maintenance slice before adding a new workflow:
+
+- [x] Correct the maintainer inventory to include
+  `build-python-agent-service`, then refresh the root architecture model in a
+  dedicated cross-plugin architecture pass. Do not hand-edit only the Python
+  entries: the current architecture audit reports stale targets in other
+  plugins too.
+- [x] Remove the packaged dependency claim for `fastmcp_docs`, or add a
+  deliberately approved bundled MCP declaration plus its required Hermes
+  translation. The current plugin has two skills that require that server in
+  their metadata, but it does not ship the corresponding `.mcp.json` source.
+  The preferred narrow repair is to say “use `fastmcp_docs` when the host has
+  configured it; otherwise use the official FastMCP documentation,” and make
+  that dependency optional in the skill metadata.
+- [x] Update `python-ci-workflow` to distinguish local development checks from
+  reproducible locked CI. For a repository that commits `uv.lock`, the default
+  CI example should use `uv sync --locked --all-extras --dev` only when those
+  extras and development groups are part of the tested contract; it should not
+  imply that every project needs all extras.
+- [x] Add a concrete isolated wheel and sdist smoke-check recipe to
+  `python-package-workflow`, while keeping publication explicitly outside the
+  workflow. The current prose asks for a temporary consumer but leaves the
+  most important artifact-install proof underspecified.
+- [x] Make all agent-service Python execution examples `uv`-based and remove
+  the unused unrestricted `Bash(python:*)` tool allowance from
+  `build-python-agent-service` unless a tested workflow truly needs it.
+
+### Consolidation Slice
+
+Create one shared bootstrap contract reference used by all three bootstrap
+skills. It should own only the common policy:
+
+- `uv` command and dependency-group vocabulary;
+- safe configuration defaults, secret boundaries, and typed settings;
+- `pytest`, Ruff, mypy, and optional formatting-check command selection;
+- project versus workspace decision and handoff rules;
+- generated-artifact, git-initialization, and temporary-scaffold cleanup
+  boundaries.
+
+Each existing skill should retain only its special behavior: generic profile
+selection, FastAPI overlay, or FastMCP overlay and API-mapping review. This is
+a durable documentation building block, not a runtime abstraction or another
+scaffold layer.
+
+### Next New Workflows
+
+Prioritize these two workflows after the contract repairs. They answer the two
+open decisions from the original expansion plan and cover real work that the
+current bootstrap and integration skills intentionally stop before.
+
+1. `fastapi-service-workflow`
+   - Own existing-service route composition, typed settings and dependency
+     overrides, lifespan, async and integration testing, OpenAPI boundary
+     review, deployment-readiness handoff, and service-specific diagnostics.
+   - Hand package, CI, general tooling, and FastMCP work back to their current
+     owners instead of duplicating them.
+2. `fastmcp-service-workflow`
+   - Own existing-server transport and lifespan behavior, tool/resource/prompt
+     curation, authorization and input boundaries, client integration tests,
+     generated-surface review, and upgrade diagnostics.
+   - Pin implementation decisions to the installed FastMCP version and its
+     release documentation; the public FastMCP docs track `main` and can
+     describe unreleased behavior.
+
+### Testing Workflow Decision
+
+Replace `uv-pytest-unit-testing` with `python-testing-workflow` in one
+deliberate cleanup release. The new skill should cover test selection,
+fixtures, parametrization, async tests, integration boundaries, coverage when
+requested, workspace-member targeting, failure triage, and local-to-CI parity.
+Remove the old skill in that same pass and update every routing, prompt,
+Hermes-export, architecture, and compatibility surface. Do not keep two
+overlapping testing skills or add a compatibility shim unless Gale explicitly
+approves a temporary migration window.
+
+### Deliberately Deferred Expansions
+
+These are useful only after evidence of repeated demand; they should not be
+folded into the general implementation skill:
+
+- a CLI workflow for Typer or Click;
+- a data and notebook workflow, preferably including reproducibility and
+  environment/kernel boundaries;
+- a Django workflow;
+- a background-job and task-queue workflow;
+- a persistence workflow for SQLAlchemy and migration ownership;
+- publishing automation, which remains an explicit release decision rather
+  than a normal package-validation feature.
+
+### Definition Of Done For The Follow-Up
+
+- [x] Every shipped Python skill appears in the child plan, plugin discovery
+  metadata, portable export decision, and regenerated architecture inventory.
+- [x] Each declared MCP dependency is packaged and translated, explicitly
+  host-provided, or removed.
+- [x] Bootstrap policies have one shared source while each entry point keeps a
+  narrow, distinct purpose.
+- [x] CI guidance demonstrates both fast local iteration and locked,
+  reproducible verification without overgeneralizing either command.
+- [x] FastAPI and FastMCP maintenance each have a clear owning workflow.
+- [x] The renamed testing workflow replaces, rather than shadows, the current
+  unit-testing skill.
 
 ## Definition Of Done
 

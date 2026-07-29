@@ -2,7 +2,7 @@
 name: bootstrap-python-mcp-service
 description: Bootstrap Python MCP server projects and workspaces on macOS using uv and FastMCP with consistent defaults. Use when creating a new MCP server from scratch, scaffolding a single uv MCP project, scaffolding a uv workspace with package/service members, customizing scaffold defaults through layered YAML profiles, initializing pytest+ruff+mypy defaults, creating README.md, initializing git, running initial validation checks, or starting from OpenAPI/FastAPI with MCP mapping guidance.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv, git, FastMCP-oriented Python workflows, and access to the fastmcp_docs MCP server for live framework guidance.
+compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv, git, and FastMCP-oriented Python workflows. Use a host-provided FastMCP documentation tool when available; otherwise use the official FastMCP documentation.
 metadata:
   owner: gaelic-ghost
   repo: python-skills
@@ -15,6 +15,10 @@ allowed-tools: Bash(uv:*) Bash(git:*) Read
 ## Purpose
 
 Create FastMCP starter layouts using one direct shell entrypoint backed by the shared `bootstrap-uv-python-workspace` scaffolding scripts plus deterministic MCP overlay logic.
+
+Read [`shared/bootstrap-contract.md`](../../shared/bootstrap-contract.md)
+before changing shared scaffold policy. It owns shared command, configuration,
+validation, cleanup, and handoff rules.
 
 ## When To Use
 
@@ -34,16 +38,9 @@ Create FastMCP starter layouts using one direct shell entrypoint backed by the s
    scripts/init_fastmcp_service.sh --name <name> --mode <project|workspace>
    ```
 3. Let the script delegate to the shared `bootstrap-uv-python-workspace` scaffolding layer, then apply the FastMCP overlay.
-4. Accept the built-in validation path:
-   - `uv run pytest`
-   - `uv run ruff check .`
-   - `uv run mypy .`
-5. Confirm the generated project includes:
-   - a committed `.env` for safe defaults
-   - an ignored `.env.local` for machine-local or secret overrides
-   - typed configuration via `pydantic-settings`
-6. If the task starts from an existing API, optionally generate a mapping report with `uv run scripts/assess_api_for_mcp.py ...`.
-7. Return the generated path plus the exact next-step commands emitted by the script.
+4. Apply the shared bootstrap contract for validation and configuration.
+5. If the task starts from an existing API, optionally generate a mapping report with `uv run scripts/assess_api_for_mcp.py ...`.
+6. Return the generated path plus the exact next-step commands emitted by the script.
 
 ## Commands
 
@@ -110,8 +107,6 @@ uv run scripts/assess_api_for_mcp.py --fastapi app.main:app --out ./mcp_mapping_
 
 - mode: `project`
 - Python version: `3.13`
-- quality tooling: `pytest`, `ruff`, `mypy`
-- config baseline: committed `.env`, ignored `.env.local`, and `pydantic-settings`
 - workspace default members: `core-lib,api-service`
 - workspace default profiles: first member `package`, remaining members `service`
 
@@ -137,9 +132,12 @@ When starting from OpenAPI or FastAPI, bootstrap first, then map endpoints to MC
 3. Recommend RouteMaps/Transforms only when they improve usability.
 4. Keep bootstrap deterministic; defer heavy custom mapping unless requested.
 
-## FastMCP Docs Lookup
+## FastMCP Documentation Lookup
 
-Use the `fastmcp_docs` MCP server for up-to-date framework details.
+Use a host-provided `fastmcp_docs` MCP server when it is available. This plugin
+does not package that server. Otherwise, use the official
+[FastMCP documentation](https://gofastmcp.com/getting-started/welcome) and
+confirm the installed FastMCP version before copying syntax-sensitive examples.
 
 Suggested queries:
 
@@ -151,18 +149,13 @@ Suggested queries:
 
 ## Guardrails
 
-- Refuse non-empty target directories unless `--force` is set.
+- Apply the shared bootstrap-contract guardrails.
 - Require at least one service profile member in workspace mode.
-- Require `uv` and `git` unless git initialization was explicitly disabled.
-- Fail when workspace-only options are used in project mode.
-- Fail when `--initial-commit` is combined with `--no-git-init`.
 
 ## Fallbacks and Handoffs
 
 - The preferred path is always `scripts/init_fastmcp_service.sh`.
-- Use `bootstrap-python-service` when the user wants FastAPI-only output.
-- Use `bootstrap-uv-python-workspace` directly only when FastMCP-specific behavior is not wanted.
-- Recommend `integrate-fastapi-fastmcp` when the user needs to fold this FastMCP output into an existing FastAPI app, mount an MCP server into FastAPI, or promote generated FastAPI-derived MCP output into a curated combined architecture.
+- Use the shared bootstrap-contract handoff matrix.
 
 ## Automation Suitability
 
@@ -253,6 +246,7 @@ Run only commands needed for this flow, then return STATUS, exact command transc
 
 ## References
 
+- `../../shared/bootstrap-contract.md`
 - `references/mcp-mapping-guidelines.md`
 - `references/fastmcp-docs-lookup.md`
 - `references/customization.md`

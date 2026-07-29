@@ -1,0 +1,6 @@
+# python-testing-workflow run config profile
+# Use with: scripts/run_pytest_uv.sh --config <this-file>
+
+workspace_root: "."
+package: ""
+path: ""

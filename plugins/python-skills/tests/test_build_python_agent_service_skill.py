@@ -34,3 +34,10 @@ def test_agent_service_interface_mentions_exact_model_and_approval() -> None:
     assert interface["display_name"] == "Build Python Agent Service"
     assert "exact model" in interface["default_prompt"]
     assert "approval gate" in interface["default_prompt"]
+
+
+def test_agent_service_uses_uv_without_unrestricted_python_tool_access() -> None:
+    skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+
+    assert "Bash(python:*)" not in skill
+    assert "Bash(uv:*)" in skill

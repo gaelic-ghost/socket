@@ -7,7 +7,7 @@ PACKAGE_NAME=""
 WITH_COV=0
 DRY_RUN=0
 
-SKILL_NAME="uv-pytest-unit-testing"
+SKILL_NAME="python-testing-workflow"
 SCRIPT_DIR="${0:A:h}"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 GLOBAL_PROFILE="$HOME/.config/gaelic-ghost/python-skills/$SKILL_NAME/customization.yaml"

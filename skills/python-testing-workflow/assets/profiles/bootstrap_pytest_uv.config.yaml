@@ -1,4 +1,4 @@
-# uv-pytest-unit-testing bootstrap config profile
+# python-testing-workflow bootstrap config profile
 # Use with: scripts/bootstrap_pytest_uv.sh --config <this-file>
 
 workspace_root: "."

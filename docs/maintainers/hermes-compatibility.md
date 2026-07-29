@@ -57,6 +57,10 @@ Socket tap. The curated set is:
 - `evaluate-jailbreak-resilience`
 - `evaluate-tool-calling-model`
 - `benchmark-model-runtime`
+- `build-python-agent-service`
+- `fastapi-service-workflow`
+- `fastmcp-service-workflow`
+- `python-testing-workflow`
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
@@ -111,6 +115,11 @@ framework package, MCP server, hook, or native Hermes extension. The cloud
 deployment routing workflow is also portable guidance: it routes Azure work to
 Microsoft's official Azure Skills plugin but does not claim that Azure MCP is
 automatically installed or configured in Hermes.
+
+The exported Python workflows are portable guidance. They guide `uv`-managed
+agent services, FastAPI services, FastMCP services, and tests while relying on
+operator-installed Python tooling and project dependencies. They package no
+MCP server, credentials, hook, app, or native Hermes runtime surface.
 
 The exported macOS platform-security workflows are portable instruction contracts. Public app permission, sandbox file-access, and entitlement diagnosis remain in Apple Dev Skills; exact-build private-control research remains in Reverse Engineering Skills; defensive host investigation remains in Cybersecurity Skills. Hermes does not receive a TCC database tool, permission grant service, privileged helper, protection bypass, or native runtime plugin from this work.
 

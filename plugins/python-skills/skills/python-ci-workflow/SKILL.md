@@ -64,9 +64,9 @@ Use repo-local files, checked-out dependency sources, Dash MCP or Dash HTTP for 
    - one OS unless filesystem, process, path, native dependency, or user-facing CLI behavior requires cross-platform checks
 6. Keep local and CI commands aligned.
 
-## Baseline Command Order
+## Local And CI Command Boundaries
 
-Prefer a simple shape:
+For local development, prefer the narrowest useful shape:
 
 ```bash
 uv sync --dev
@@ -87,6 +87,21 @@ Add package validation only for package surfaces:
 uv build
 ```
 
+For reproducible CI in a repository that commits `uv.lock`, use a locked sync.
+Include all extras only when the job intentionally validates every extra:
+
+```bash
+# Typical locked CI job
+uv sync --locked --dev
+
+# Use only when every optional feature is part of this job's contract
+uv sync --locked --all-extras --dev
+```
+
+Do not copy `--all-extras` into application CI by default. A service with no
+published extras should validate its actual runtime and development dependency
+groups instead.
+
 For workspaces, target package-specific jobs explicitly when the repo does not need a full workspace sweep:
 
 ```bash
@@ -102,7 +117,8 @@ Use the repo's existing workflow style first.
 For new GitHub Actions workflows:
 
 - install `uv` through the official setup action or documented installer path
-- use `uv sync --dev` unless the repo documents a narrower sync command
+- use `uv sync --locked --dev` when the repository commits `uv.lock`; add
+  `--all-extras` only when the job intentionally validates all extras
 - cache only when it measurably helps and the cache key includes lockfile state
 - keep package build or publish steps separate from normal validation
 - avoid CI secrets unless a workflow truly needs private package sources or publishing
