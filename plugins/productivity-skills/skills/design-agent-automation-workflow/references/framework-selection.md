@@ -13,6 +13,7 @@ automation surface.
 - LangGraph: <https://docs.langchain.com/oss/python/langgraph/overview>
 - Hermes Agent: <https://hermes-agent.nousresearch.com/docs>
 - Hermes Agent Hugging Face integration: <https://huggingface.co/docs/inference-providers/main/en/integrations/hermes-agent>
+- Local-first framework planning: [local-agent-frameworks.md](./local-agent-frameworks.md)
 
 ## Selection Matrix
 
@@ -27,6 +28,23 @@ automation surface.
 | Full-auto execution | The workflow has bounded inputs, explicit write scope, deterministic or reviewable validation, durable failure reporting, bounded retries, and rollback, no-op, or draft behavior. | The workflow has unbounded external side effects, unclear success criteria, or no reliable stop condition. |
 | Auto-with-escalation | Most of the workflow is safe, but one exact decision still needs user review when a named trigger fires. | The whole workflow is still underspecified, or escalation would happen on nearly every run. |
 | No automation yet | The outcome, validation, owner, approval gate, or rollback path is unclear after narrowing the workflow. | The user already has a bounded repeatable task with known checks and a safe first run. |
+
+## Framework Choice Is A Separate Decision
+
+After choosing whether the work needs a code-owned agent service or durable
+graph, choose the framework only from the requirements that remain:
+
+| Requirement that drives the choice | Start with | Do not infer |
+| --- | --- | --- |
+| Typed Python tools, dependency injection, and validated outputs | Pydantic AI or the OpenAI Agents SDK | That a typed schema makes a weak local model reliable at tool selection. |
+| Persisted state transitions, pause/resume, and explicit routing | LangGraph | That LangChain itself is required for a retrieval-heavy product. |
+| Document ingestion, retrieval, indexes, and RAG as the product core | LlamaIndex | That a vector database or multi-agent team is required for every document task. |
+| Visual, trigger-driven integration between external services | n8n | That a visual workflow needs autonomous planning or durable agent memory. |
+| Google, Gemini, A2A, MCP, or a multi-language implementation boundary | Google ADK | That ADK requires a Google-hosted model; its documented model adapters include local options. |
+| Conversational multi-agent research or an existing Microsoft agent surface | AutoGen or Semantic Kernel | That role-playing several agents improves a workflow with one clear deterministic path. |
+
+Use `local-agent-frameworks.md` for the maintained framework inventory,
+local-inference boundary, canonical labs, and implementation handoffs.
 
 For read-heavy custom Codex subagent roles, prefer a role-local model choice over
 a global policy. `gpt-5.4-mini` is a good soft default for bounded exploration

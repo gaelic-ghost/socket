@@ -29,6 +29,9 @@ Why this surface:
 
 - Trigger:
 - Automation target:
+- Framework and why it fits this workflow:
+- Inference server and model:
+- Required model capabilities (tool calling, structured output, vision, context):
 - State that must persist:
 - Read scope:
 - Write scope:
