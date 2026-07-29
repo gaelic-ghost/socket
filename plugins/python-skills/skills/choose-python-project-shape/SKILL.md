@@ -52,6 +52,7 @@ Translate any documentation rule into the concrete repository decision it change
    - FastAPI service
    - FastMCP server
    - combined FastAPI and FastMCP app
+   - local-first Python agent service
    - test or tooling setup
    - package maintenance
    - CI maintenance
@@ -75,6 +76,7 @@ Translate any documentation rule into the concrete repository decision it change
    - implementation: `build-python-project`
    - test work: `uv-pytest-unit-testing`
    - FastAPI/FastMCP integration: `integrate-fastapi-fastmcp`
+   - local-first agent service: `build-python-agent-service`
    - diagnosis: `diagnose-python-project`
    - package validation: `python-package-workflow`
    - tooling alignment: `python-tooling-style-workflow`
