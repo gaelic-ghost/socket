@@ -11,7 +11,7 @@ Create a new native Apple app repository from nothing to a usable baseline on di
 
 ## Companion Plugin Requirement
 
-This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills`, or add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket` and then install or enable both `apple-dev-skills` and `productivity-skills` from the Socket catalog.
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`repository-skills`](https://github.com/gaelic-ghost/repository-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `repository-skills` alongside `apple-dev-skills`, or add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket` and then install or enable both `apple-dev-skills` and `repository-skills` from the Socket catalog.
 
 ## When To Use
 
@@ -95,7 +95,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - verify `Scripts/repo-maintenance/validate-all.sh` and `Scripts/repo-maintenance/release.sh` exist
    - verify branch protection, when enabled, requires the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
    - when a GitHub remote is created or already exists, route repository
-     settings audit or mutation through `productivity-skills:maintain-github-repository`
+     settings audit or mutation through `repository-skills:maintain-github-repository`
      instead of embedding a separate Xcode-specific baseline
    - if validation is enabled, verify project generation and basic project introspection succeeded
 9. Hand off existing-project work cleanly:
@@ -168,7 +168,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful bootstrap, use `Scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `Scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful bootstrap, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - When the app repository is published to GitHub, use
-  `productivity-skills:maintain-github-repository` to audit repository features,
+  `repository-skills:maintain-github-repository` to audit repository features,
   merge modes, security automation, sign-off policy, and branch protection.
 - Recommend `bootstrap-swift-package` directly when the task is really package bootstrap.
 - Recommend `sync-xcode-project-guidance` when the repo already exists and only needs repo-guidance or documentation alignment.

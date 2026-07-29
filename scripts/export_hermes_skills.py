@@ -24,7 +24,7 @@ SERVER_SIDE_SWIFT_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-swift" / "s
 SWIFT_LANG_SOURCE_ROOT = REPO_ROOT / "plugins" / "swift-lang" / "skills"
 MODEL_LAB_SOURCE_ROOT = REPO_ROOT / "plugins" / "model-lab-skills" / "skills"
 DOTNET_SOURCE_ROOT = REPO_ROOT / "plugins" / "dotnet-skills" / "skills"
-PRODUCTIVITY_SOURCE_ROOT = REPO_ROOT / "plugins" / "productivity-skills" / "skills"
+AGENT_ENGINEERING_SOURCE_ROOT = REPO_ROOT / "plugins" / "agent-engineering-skills" / "skills"
 PYTHON_SOURCE_ROOT = REPO_ROOT / "plugins" / "python-skills" / "skills"
 JVM_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-jvm" / "skills"
 CLOUD_DEPLOYMENT_SOURCE_ROOT = REPO_ROOT / "plugins" / "cloud-deployment-skills" / "skills"
@@ -142,7 +142,7 @@ DOTNET_SKILLS = (
     "build-oxpecker-web-app",
     "build-dotnet-agent-service",
 )
-PRODUCTIVITY_SKILLS = ("design-n8n-agent-workflow",)
+AGENT_ENGINEERING_SKILLS = ("design-n8n-agent-workflow",)
 PYTHON_SKILLS = (
     "build-python-agent-service",
     "fastapi-service-workflow",
@@ -164,7 +164,7 @@ EXPORTED_SKILLS = (
     + SWIFT_LANG_SKILLS
     + MODEL_LAB_SKILLS
     + DOTNET_SKILLS
-    + PRODUCTIVITY_SKILLS
+    + AGENT_ENGINEERING_SKILLS
     + PYTHON_SKILLS
     + JVM_SKILLS
     + CLOUD_DEPLOYMENT_SKILLS
@@ -196,7 +196,10 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
         **{skill_name: SWIFT_LANG_SOURCE_ROOT for skill_name in SWIFT_LANG_SKILLS},
         **{skill_name: MODEL_LAB_SOURCE_ROOT for skill_name in MODEL_LAB_SKILLS},
         **{skill_name: DOTNET_SOURCE_ROOT for skill_name in DOTNET_SKILLS},
-        **{skill_name: PRODUCTIVITY_SOURCE_ROOT for skill_name in PRODUCTIVITY_SKILLS},
+        **{
+            skill_name: AGENT_ENGINEERING_SOURCE_ROOT
+            for skill_name in AGENT_ENGINEERING_SKILLS
+        },
         **{skill_name: PYTHON_SOURCE_ROOT for skill_name in PYTHON_SKILLS},
         **{skill_name: JVM_SOURCE_ROOT for skill_name in JVM_SKILLS},
         **{

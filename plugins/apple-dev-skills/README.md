@@ -43,7 +43,7 @@ The easiest way to install Apple Dev Skills with its companion workflows is thro
 codex plugin marketplace add gaelic-ghost/socket
 ```
 
-Restart Codex, open the plugin directory, choose `Socket`, and install or enable `apple-dev-skills`. Install `productivity-skills` from the same marketplace too if you want the Apple bootstrap and guidance-sync workflows.
+Restart Codex, open the plugin directory, choose `Socket`, and install or enable `apple-dev-skills`. Install `repository-skills` from the same marketplace too if you want the Apple bootstrap and guidance-sync workflows.
 
 When the Socket marketplace changes, refresh it:
 
@@ -100,9 +100,9 @@ Use Apple Dev Skills when an agent is helping with:
 - Apple docs lookup before design or code changes
 - Apple-specific repo guidance setup or refresh
 
-Most Apple Dev Skills workflows are useful as a standalone plugin. Bootstrap and guidance-sync workflows also need `productivity-skills`, because that companion plugin owns the reusable repo-maintenance workflow that Apple Dev Skills applies to Swift packages and Xcode apps.
+Most Apple Dev Skills workflows are useful as a standalone plugin. Bootstrap and guidance-sync workflows also need `repository-skills`, because that companion plugin owns the reusable repo-maintenance workflow that Apple Dev Skills applies to Swift packages and Xcode apps.
 
-Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work, and use Apple Dev Skills when Apple-specific behavior should shape the workflow.
+Treat `repository-skills` as the default baseline layer for general repo-doc and maintenance work, and use Apple Dev Skills when Apple-specific behavior should shape the workflow.
 
 The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale's plugin superproject and marketplace catalog.
 

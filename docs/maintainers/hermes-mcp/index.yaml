@@ -22,9 +22,9 @@ translations:
     required_environment:
       - RUNPOD_API_KEY
     setup: Set RUNPOD_API_KEY only when enabling the mutation-capable Runpod API server; the docs server needs no secret.
-  productivity-skills:
-    source: plugins/productivity-skills/.mcp.json
-    translation: docs/maintainers/hermes-mcp/productivity-skills.yaml
+  professional-skills:
+    source: plugins/professional-skills/.mcp.json
+    translation: docs/maintainers/hermes-mcp/professional-skills.yaml
     status: ready
     required_environment: []
     setup: The public Dice search endpoint requires no credential for basic search.

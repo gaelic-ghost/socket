@@ -1,0 +1,20 @@
+{
+  "name": "agent-engineering-skills",
+  "version": "9.27.0",
+  "description": "Agent-system design, orchestration, scheduling, external-agent, and evaluation workflow skills.",
+  "author": {"name": "Gale", "email": "mail@galewilliams.com", "url": "https://github.com/gaelic-ghost"},
+  "homepage": "https://github.com/gaelic-ghost/agent-engineering-skills",
+  "repository": "https://github.com/gaelic-ghost/agent-engineering-skills",
+  "license": "Apache-2.0",
+  "keywords": ["codex", "skills", "agents", "orchestration", "automation", "evaluation", "scheduling"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Engineering Skills",
+    "shortDescription": "Build and operate local or hosted agent systems.",
+    "longDescription": "Agent-system design, coordinator and worker orchestration, external-agent handoffs, scheduling, worktree and thread coordination, and evaluation workflows.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/gaelic-ghost/agent-engineering-skills"
+  }
+}

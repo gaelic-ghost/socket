@@ -21,7 +21,7 @@ It does not belong in:
 
 - `apple-dev-skills`, because the MCP/skill is for using the desktop, not building Apple apps.
 - `swiftasb-skills`, because the initial runtime should not make SwiftASB own the macOS trust boundary.
-- `productivity-skills`, because this is a concrete local utility, not general automation-design guidance.
+- `agent-engineering-skills`, because this is a concrete local utility, not general automation-design guidance.
 - A standalone plugin payload, because Socket should expose the Codex-facing adapter and keep the installed app separate.
 
 ## Planned MCP Surface

@@ -36,7 +36,7 @@ worth the extra surface.
 
 ## Relationship To Existing Plugins
 
-`productivity-skills` already owns ongoing project maintenance workflows such as
+`documentation-skills` and `repository-skills` already own ongoing project-maintenance workflows such as
 README, contributing, roadmap, accessibility, repo maintenance, GitHub settings,
 automation design, and eval design.
 
@@ -137,7 +137,7 @@ score without explaining which files, commands, or observations justify it.
 ## Open Questions
 
 - Should the long-term home be a new child plugin or a focused expansion of
-  `productivity-skills`?
+  `codebase-understanding-skills`?
 - Should grading output be a Markdown report only, or should it also support a
   small JSON shape for future Socket Steward ingestion?
 - Should "slop risk" remain internal wording, or should there be a user-facing

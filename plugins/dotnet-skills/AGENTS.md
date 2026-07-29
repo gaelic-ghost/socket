@@ -7,7 +7,7 @@ This file is the .NET Skills child-repo override for work done from `socket`. Fo
 - `dotnet-skills` is a monorepo-owned Socket child and the canonical source of truth for shipped .NET workflow skills.
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
-- Treat `productivity-skills` as the default baseline maintainer layer for general repo-doc and maintenance work; use this repo when .NET, F#, C#, SDK, CLI, project, package, or test behavior should materially change the workflow.
+- Treat `repository-skills` and `documentation-skills` as the default baseline maintainer layers for general repo-doc and maintenance work; use this repo when .NET, F#, C#, SDK, CLI, project, package, or test behavior should materially change the workflow.
 
 ## Local Rules
 

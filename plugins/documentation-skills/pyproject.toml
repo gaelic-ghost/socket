@@ -1,0 +1,26 @@
+[project]
+name = "documentation-skills-maintenance"
+version = "9.27.0"
+description = "Maintainer-only Python tooling baseline for documentation-skills."
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.0",
+  "mypy>=1.19.0",
+  "PyYAML>=6.0.0",
+  "types-PyYAML>=6.0.12.20250915",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "skills/maintain-project-agents/tests",
+  "skills/maintain-project-accessibility/tests",
+  "skills/maintain-project-api/tests",
+  "skills/maintain-project-architecture/tests",
+  "skills/maintain-project-readme/tests",
+  "skills/maintain-project-contributing/tests",
+  "skills/maintain-project-docs/tests",
+  "skills/maintain-project-roadmap/tests",
+]

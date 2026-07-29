@@ -40,7 +40,7 @@ Use `Developer Tools` as the marketplace category. Keep the authored plugin name
 | Ordinary Apple app development, signing, Xcode, Endpoint Security API implementation, or Virtualization framework implementation | `apple-dev-skills` | Own the security investigation or lab requirement, then hand implementation to Apple development workflows. |
 | Protocol implementation or ordinary network-stack engineering | `network-protocol-skills` | Own security test scope and observed behavior; hand protocol construction or repair to the protocol owner. |
 | Language- or stack-specific remediation | Owning Socket stack plugin | Preserve the finding and acceptance criteria, then hand the implementation to the relevant language or framework workflow. |
-| GitHub repository settings and project security documents | `productivity-skills` | Provide the security requirement or finding; use the repository-maintenance owners for settings and policy-file changes. |
+| GitHub repository settings and project security documents | `repository-skills` and `documentation-skills` | Provide the security requirement or finding; use the repository-maintenance owners for settings and policy-file changes. |
 
 Do not copy Codex Security's repository scan phases into this plugin. The new plugin should remain useful when Codex Security is unavailable, but its fallback is bounded manual validation of a supplied concern, not a second full repository scanner.
 

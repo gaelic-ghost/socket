@@ -20,7 +20,7 @@ This skill owns repo-local guidance alignment for existing Hummingbird services:
 
 ## Companion Plugin Requirement
 
-When a repository also needs shared maintenance scripts, GitHub Actions, branch-protection guidance, or release helpers refreshed, compose this skill with the companion `productivity-skills:maintain-project-repo` workflow using the closest server-side Swift or Swift package profile exposed in the current session. If the companion skill is not exposed, tell the user to add the Socket marketplace with `codex plugin marketplace add gaelic-ghost/socket` so future sessions expose both plugins.
+When a repository also needs shared maintenance scripts, GitHub Actions, branch-protection guidance, or release helpers refreshed, compose this skill with the companion `repository-skills:maintain-project-repo` workflow using the closest server-side Swift or Swift package profile exposed in the current session. If the companion skill is not exposed, tell the user to add the Socket marketplace with `codex plugin marketplace add gaelic-ghost/socket` so future sessions expose both plugins.
 
 ## When To Use
 

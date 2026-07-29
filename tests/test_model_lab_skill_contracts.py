@@ -61,7 +61,7 @@ def test_routing_preserves_neighbor_plugin_ownership() -> None:
         "cloud-inference-skills",
         "python-skills",
         "apple-dev-skills",
-        "productivity-skills",
+        "agent-engineering-skills",
         "cybersecurity-skills",
     ):
         assert owner in contents

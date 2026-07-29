@@ -1,0 +1,24 @@
+{
+  "name": "professional-skills",
+  "version": "9.27.0",
+  "description": "Professional workflow skills for job search, career materials, and external professional services.",
+  "author": {"name": "Gale", "email": "mail@galewilliams.com", "url": "https://github.com/gaelic-ghost"},
+  "homepage": "https://github.com/gaelic-ghost/professional-skills",
+  "repository": "https://github.com/gaelic-ghost/professional-skills",
+  "license": "Apache-2.0",
+  "keywords": ["codex", "skills", "professional", "career", "jobs", "dice", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Professional Skills",
+    "shortDescription": "Career and job-search workflows for Codex.",
+    "longDescription": "Professional workflows for career research, job search, and external professional services with explicit privacy and application-state boundaries.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/gaelic-ghost/professional-skills",
+    "brandColor": "#14B8A6",
+    "composerIcon": "./assets/productivity-skills-icon.svg",
+    "logo": "./assets/productivity-skills-icon.svg"
+  }
+}

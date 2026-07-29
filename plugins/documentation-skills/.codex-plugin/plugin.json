@@ -1,0 +1,20 @@
+{
+  "name": "documentation-skills",
+  "version": "9.27.0",
+  "description": "Documentation maintenance skills for README, contributor, agent, API, accessibility, architecture, and roadmap surfaces.",
+  "author": {"name": "Gale", "email": "mail@galewilliams.com", "url": "https://github.com/gaelic-ghost"},
+  "homepage": "https://github.com/gaelic-ghost/documentation-skills",
+  "repository": "https://github.com/gaelic-ghost/documentation-skills",
+  "license": "Apache-2.0",
+  "keywords": ["codex", "skills", "documentation", "readme", "agents", "roadmap", "accessibility"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Documentation Skills",
+    "shortDescription": "Focused documentation maintenance workflows for Codex.",
+    "longDescription": "Focused maintenance workflows for README, CONTRIBUTING, AGENTS, API, accessibility, architecture, roadmap, and cross-document responsibility boundaries.",
+    "developerName": "Gale",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/gaelic-ghost/documentation-skills"
+  }
+}

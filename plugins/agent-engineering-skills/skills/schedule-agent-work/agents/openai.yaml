@@ -1,0 +1,4 @@
+interface:
+  display_name: "Schedule Agent Work"
+  short_description: "Choose safe recurring or durable agent work."
+  default_prompt: "Use $schedule-agent-work to choose a schedule or durable task surface and define delivery, retry, and escalation."

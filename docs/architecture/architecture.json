@@ -824,75 +824,91 @@
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+      "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+      "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+      "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+      "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+      "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+      "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
+      "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+      "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+      "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
     },
     {
       "kind": "mcp-config",
-      "path": "plugins/productivity-skills/.mcp.json"
+      "path": "plugins/professional-skills/.mcp.json"
     },
     {
       "kind": "codex-plugin-manifest",
-      "path": "plugins/productivity-skills/.codex-plugin/plugin.json"
+      "path": "plugins/agent-engineering-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/codebase-understanding-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/documentation-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/professional-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/repository-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -1491,19 +1507,39 @@
       ]
     },
     {
-      "evidence": [
-        {
-          "kind": "codex-plugin-manifest",
-          "path": "plugins/productivity-skills/.codex-plugin/plugin.json"
-        }
-      ],
+      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/agent-engineering-skills/.codex-plugin/plugin.json" }],
       "kind": "codex-plugin",
-      "name": "productivity-skills",
-      "path": "plugins/productivity-skills",
-      "targets": [
-        "skills:plugins/productivity-skills/skills",
-        "mcp:plugins/productivity-skills/.mcp.json"
-      ]
+      "name": "agent-engineering-skills",
+      "path": "plugins/agent-engineering-skills",
+      "targets": ["skills:plugins/agent-engineering-skills/skills"]
+    },
+    {
+      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/codebase-understanding-skills/.codex-plugin/plugin.json" }],
+      "kind": "codex-plugin",
+      "name": "codebase-understanding-skills",
+      "path": "plugins/codebase-understanding-skills",
+      "targets": ["skills:plugins/codebase-understanding-skills/skills"]
+    },
+    {
+      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/documentation-skills/.codex-plugin/plugin.json" }],
+      "kind": "codex-plugin",
+      "name": "documentation-skills",
+      "path": "plugins/documentation-skills",
+      "targets": ["skills:plugins/documentation-skills/skills"]
+    },
+    {
+      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/professional-skills/.codex-plugin/plugin.json" }],
+      "kind": "codex-plugin",
+      "name": "professional-skills",
+      "path": "plugins/professional-skills",
+      "targets": ["skills:plugins/professional-skills/skills", "mcp:plugins/professional-skills/.mcp.json"]
+    },
+    {
+      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/repository-skills/.codex-plugin/plugin.json" }],
+      "kind": "codex-plugin",
+      "name": "repository-skills",
+      "path": "plugins/repository-skills",
+      "targets": ["skills:plugins/repository-skills/skills"]
     },
     {
       "evidence": [
@@ -1663,7 +1699,11 @@
         "cloud-deployment-skills",
         "cloud-inference-skills",
         "dotnet-skills",
-        "productivity-skills",
+        "agent-engineering-skills",
+        "codebase-understanding-skills",
+        "documentation-skills",
+        "professional-skills",
+        "repository-skills",
         "python-skills",
         "network-protocol-skills",
         "server-side-swift",
@@ -3994,205 +4034,205 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+          "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:repository-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/codex-gui-worktree-workflow"
+      "to": "target:skill:repository-skills/codex-gui-worktree-workflow"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+          "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:agent-engineering-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/design-agent-automation-workflow"
+      "to": "target:skill:agent-engineering-skills/design-agent-automation-workflow"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+          "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:agent-engineering-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/design-agent-eval-workflow"
+      "to": "target:skill:agent-engineering-skills/design-agent-eval-workflow"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+          "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:agent-engineering-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/design-n8n-agent-workflow"
+      "to": "target:skill:agent-engineering-skills/design-n8n-agent-workflow"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+          "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:professional-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/dice-job-search-workflow"
+      "to": "target:skill:professional-skills/dice-job-search-workflow"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+          "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:codebase-understanding-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/explain-code-slice"
+      "to": "target:skill:codebase-understanding-skills/explain-code-slice"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
+          "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:repository-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-github-repository"
+      "to": "target:skill:repository-skills/maintain-github-repository"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-accessibility"
+      "to": "target:skill:documentation-skills/maintain-project-accessibility"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-agents"
+      "to": "target:skill:documentation-skills/maintain-project-agents"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-api"
+      "to": "target:skill:documentation-skills/maintain-project-api"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-architecture"
+      "to": "target:skill:documentation-skills/maintain-project-architecture"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-contributing"
+      "to": "target:skill:documentation-skills/maintain-project-contributing"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-docs"
+      "to": "target:skill:documentation-skills/maintain-project-docs"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-readme"
+      "to": "target:skill:documentation-skills/maintain-project-readme"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+          "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:repository-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-repo"
+      "to": "target:skill:repository-skills/maintain-project-repo"
     },
     {
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:documentation-skills",
       "kind": "exposes",
       "label": "plugin exposes skill",
-      "to": "target:skill:productivity-skills/maintain-project-roadmap"
+      "to": "target:skill:documentation-skills/maintain-project-roadmap"
     },
     {
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
-          "path": "plugins/productivity-skills/.codex-plugin/plugin.json"
+          "path": "plugins/professional-skills/.codex-plugin/plugin.json"
         }
       ],
-      "from": "product:productivity-skills",
+      "from": "product:professional-skills",
       "kind": "exposes",
       "label": "plugin declares MCP servers",
-      "to": "target:mcp:plugins/productivity-skills/.mcp.json"
+      "to": "target:mcp:plugins/professional-skills/.mcp.json"
     },
     {
       "evidence": [
@@ -5443,28 +5483,74 @@
       "to": "path:./plugins/dotnet-skills"
     },
     {
-      "evidence": [
-        {
-          "kind": "plugin-marketplace",
-          "path": ".agents/plugins/marketplace.json"
-        }
-      ],
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
-      "to": "product:productivity-skills"
+      "to": "product:agent-engineering-skills"
     },
     {
-      "evidence": [
-        {
-          "kind": "plugin-marketplace",
-          "path": ".agents/plugins/marketplace.json"
-        }
-      ],
-      "from": "product:productivity-skills",
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:agent-engineering-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
-      "to": "path:./plugins/productivity-skills"
+      "to": "path:./plugins/agent-engineering-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:codebase-understanding-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:codebase-understanding-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/codebase-understanding-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:documentation-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:documentation-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/documentation-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:professional-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:professional-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/professional-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:socket",
+      "kind": "exposes",
+      "label": "marketplace exposes plugin entry",
+      "to": "product:repository-skills"
+    },
+    {
+      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "from": "product:repository-skills",
+      "kind": "owns",
+      "label": "marketplace entry points at local plugin root",
+      "to": "path:./plugins/repository-skills"
     },
     {
       "evidence": [
@@ -8163,204 +8249,204 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+          "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/codex-gui-worktree-workflow",
-      "path": "plugins/productivity-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+      "name": "skill:repository-skills/codex-gui-worktree-workflow",
+      "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+          "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/design-agent-automation-workflow",
-      "path": "plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md"
+      "name": "skill:agent-engineering-skills/design-agent-automation-workflow",
+      "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+          "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/design-agent-eval-workflow",
-      "path": "plugins/productivity-skills/skills/design-agent-eval-workflow/SKILL.md"
+      "name": "skill:agent-engineering-skills/design-agent-eval-workflow",
+      "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+          "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/design-n8n-agent-workflow",
-      "path": "plugins/productivity-skills/skills/design-n8n-agent-workflow/SKILL.md"
+      "name": "skill:agent-engineering-skills/design-n8n-agent-workflow",
+      "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+          "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/dice-job-search-workflow",
-      "path": "plugins/productivity-skills/skills/dice-job-search-workflow/SKILL.md"
+      "name": "skill:professional-skills/dice-job-search-workflow",
+      "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+          "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/explain-code-slice",
-      "path": "plugins/productivity-skills/skills/explain-code-slice/SKILL.md"
+      "name": "skill:codebase-understanding-skills/explain-code-slice",
+      "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
+          "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-github-repository",
-      "path": "plugins/productivity-skills/skills/maintain-github-repository/SKILL.md"
+      "name": "skill:repository-skills/maintain-github-repository",
+      "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-accessibility",
-      "path": "plugins/productivity-skills/skills/maintain-project-accessibility/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-accessibility",
+      "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-agents",
-      "path": "plugins/productivity-skills/skills/maintain-project-agents/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-agents",
+      "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-api",
-      "path": "plugins/productivity-skills/skills/maintain-project-api/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-api",
+      "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-architecture",
-      "path": "plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-architecture",
+      "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-contributing",
-      "path": "plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-contributing",
+      "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-docs",
-      "path": "plugins/productivity-skills/skills/maintain-project-docs/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-docs",
+      "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-readme",
-      "path": "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-readme",
+      "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+          "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-repo",
-      "path": "plugins/productivity-skills/skills/maintain-project-repo/SKILL.md"
+      "name": "skill:repository-skills/maintain-project-repo",
+      "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+          "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
         }
       ],
       "kind": "codex-skill",
-      "name": "skill:productivity-skills/maintain-project-roadmap",
-      "path": "plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md"
+      "name": "skill:documentation-skills/maintain-project-roadmap",
+      "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
     },
     {
       "dependencies": [],
       "evidence": [
         {
           "kind": "mcp-config",
-          "path": "plugins/productivity-skills/.mcp.json"
+          "path": "plugins/professional-skills/.mcp.json"
         }
       ],
       "kind": "mcp-config",
-      "name": "mcp:plugins/productivity-skills/.mcp.json",
-      "path": "plugins/productivity-skills/.mcp.json"
+      "name": "mcp:plugins/professional-skills/.mcp.json",
+      "path": "plugins/professional-skills/.mcp.json"
     },
     {
       "dependencies": [],

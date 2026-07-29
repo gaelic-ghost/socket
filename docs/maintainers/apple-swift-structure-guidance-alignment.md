@@ -78,7 +78,7 @@ sync runtime emits a `structure_audit` payload for downstream repos:
 - missing internal app service files when a strict app entry exists
 
 The sync skill still owns downstream repo guidance alignment. Socket Steward and
-`productivity-skills:maintain-project-docs` own umbrella Socket docs audits and
+`documentation-skills:maintain-project-docs` own umbrella Socket docs audits and
 proposal reports; they should point at this sync skill when Apple app repo
 guidance drift is the concrete finding.
 

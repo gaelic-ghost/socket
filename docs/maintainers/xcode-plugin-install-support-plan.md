@@ -189,7 +189,7 @@ Suggested first targets:
 
 - `apple-dev-skills`: skill and hook-recognition path
 - `things-app` or `cardhop-app`: skill plus local MCP path
-- `productivity-skills`: broader skill pack with MCP
+- `repository-skills`: broader repository-maintenance skill pack
 - one skill-only language pack
 
 For each selected plug-in, validate:

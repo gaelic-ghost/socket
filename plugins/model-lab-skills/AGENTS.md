@@ -6,7 +6,7 @@
 - Route cloud provider selection, endpoint deployment, GPU procurement, and teardown to `cloud-inference-skills`.
 - Route Python project structure and package maintenance to `python-skills`.
 - Route app-facing Swift, Xcode, Core ML integration, and Apple UI work to `apple-dev-skills`.
-- Route agent-skill and prompt-package evaluation to `productivity-skills`, and host portability to `agent-portability-skills`.
+- Route agent-skill and prompt-package evaluation to `agent-engineering-skills`, and host portability to `agent-portability-skills`.
 - Route authorized security testing of a real deployed system to `cybersecurity-skills`; keep model-only robustness experiments here.
 
 ## Evidence Rules

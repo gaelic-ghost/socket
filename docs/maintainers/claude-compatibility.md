@@ -22,7 +22,7 @@ disabled in Cowork:
 | `cardhop-app` | Local Cardhop MCP server | Skills only |
 | `things-app` | Local Things MCP server | Skills only |
 | `cloud-inference-skills` | Runpod remote MCP servers | Remote MCP supported |
-| `productivity-skills` | Dice remote MCP server | Remote MCP supported |
+| `professional-skills` | Dice remote MCP server | Remote MCP supported |
 
 All other catalog entries are portable skill workflows in both hosts. The
 complete, machine-checked classification is in

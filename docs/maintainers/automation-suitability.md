@@ -1,11 +1,12 @@
 # Automation Suitability
 
-This note audits the `productivity-skills` maintenance skills and the
-`apple-dev-skills` sync skills for cross-repository automation.
+This note audits the Agent Engineering, Documentation, and Repository Skills
+maintenance workflows and the `apple-dev-skills` sync skills for
+cross-repository automation.
 
 For a full local-first agent-framework planning pass, use
-[`design-agent-automation-workflow`](../../plugins/productivity-skills/skills/design-agent-automation-workflow/SKILL.md)
-and its [local framework reference](../../plugins/productivity-skills/skills/design-agent-automation-workflow/references/local-agent-frameworks.md).
+[`design-agent-automation-workflow`](../../plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md)
+and its [local framework reference](../../plugins/agent-engineering-skills/skills/design-agent-automation-workflow/references/local-agent-frameworks.md).
 This note keeps the Socket-maintainer automation decision; the skill owns
 framework comparison, inference-server separation, canonical labs, and
 implementation handoff.
@@ -162,7 +163,7 @@ as the default Socket maintainer automation runtime.
 
 ## Dedicated Skill Recommendation
 
-Use `productivity-skills:design-agent-automation-workflow` when agent or
+Use `agent-engineering-skills:design-agent-automation-workflow` when agent or
 automation planning work needs a reusable decision pass across repositories.
 The skill is a planning and scaffolding surface, not a runtime framework:
 
@@ -173,7 +174,7 @@ The skill is a planning and scaffolding surface, not a runtime framework:
 - produce a prompt template, framework checklist, and safety gates
 - link to current official docs for every framework it mentions
 
-This belongs in `productivity-skills` because the decision is broadly useful
+This belongs in `agent-engineering-skills` because the decision is broadly useful
 and framework-neutral. If the skill later grows framework-specific
 implementation steps, delegate those slices to `python-skills`, `web-dev-skills`,
 or another stack-owned plugin rather than making the productivity skill own

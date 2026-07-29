@@ -11,7 +11,7 @@ Bring an existing Swift package repository up to the expected guidance baseline 
 
 ## Companion Plugin Requirement
 
-This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating guidance-sync path refreshes repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. Before giving filesystem-level fallback instructions, first check the skills exposed in the current Codex session and use the harness-discovered `productivity-skills:maintain-project-repo` workflow when it is available. If the companion skill is not exposed, tell the user to add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket`, then install the relevant plugins from Codex's plugin directory so future sessions expose both `apple-dev-skills` and `productivity-skills`.
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating guidance-sync path refreshes repo-maintenance files through the companion [`repository-skills`](https://github.com/gaelic-ghost/repository-skills) plugin. Before giving filesystem-level fallback instructions, first check the skills exposed in the current Codex session and use the harness-discovered `repository-skills:maintain-project-repo` workflow when it is available. If the companion skill is not exposed, tell the user to add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket`, then install the relevant plugins from Codex's plugin directory so future sessions expose both `apple-dev-skills` and `repository-skills`.
 
 ## When To Use
 
@@ -79,7 +79,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `scripts/repo-maintenance/release.sh`
    - protected branches, when configured, require the GitHub Actions check context `validate` rather than `Validate Repo Maintenance / validate`
    - when a GitHub remote exists, route repository settings audit or mutation
-     through `productivity-skills:maintain-github-repository`
+     through `repository-skills:maintain-github-repository`
 10. Hand off ongoing package work cleanly:
    - prefer `swift-package-build-run-workflow` or `swift-package-testing-workflow` for ordinary package work after guidance sync
    - recommend `xcode-build-run-workflow` or `xcode-testing-workflow` only when package work needs Xcode-managed SDK, toolchain, or test behavior
@@ -132,7 +132,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful sync, use `swift-package-build-run-workflow` or `swift-package-testing-workflow` for ordinary package work by default.
 - After a successful sync, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful sync, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
-- When a GitHub remote exists, use `productivity-skills:maintain-github-repository`
+- When a GitHub remote exists, use `repository-skills:maintain-github-repository`
   to audit repository features, merge modes, security automation, sign-off
   policy, and branch protection without changing visibility implicitly.
 - Recommend `xcode-build-run-workflow` when package work needs Xcode-managed SDK or toolchain behavior.
