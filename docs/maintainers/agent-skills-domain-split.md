@@ -211,7 +211,9 @@ Treat this as a move-and-adapt migration, not a rewrite. Preserve authored
 skills, references, scripts, tests, custom-agent definitions, manifests, and
 documentation whenever their responsibility is unchanged.
 
-- Use `git mv` for tracked files and directories when the target owner changes.
+- Use a normal filesystem or editor move for files and directories when the
+  target owner changes; verify the resulting diff preserves the intended
+  rename/move rather than treating Git staging syntax as the migration method.
 - Use focused patches to update names, links, ownership wording, imports,
   manifests, tests, and validation paths after each move.
 - Keep a file-by-file migration map before moving a plugin surface so no skill,
