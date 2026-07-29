@@ -205,6 +205,28 @@ those properties.
    - Test isolated marketplace installs for every new and renamed plugin.
    - Account for subtree implications and all non-main branches before cleanup.
 
+## Migration Mechanics
+
+Treat this as a move-and-adapt migration, not a rewrite. Preserve authored
+skills, references, scripts, tests, custom-agent definitions, manifests, and
+documentation whenever their responsibility is unchanged.
+
+- Use `git mv` for tracked files and directories when the target owner changes.
+- Use focused patches to update names, links, ownership wording, imports,
+  manifests, tests, and validation paths after each move.
+- Keep a file-by-file migration map before moving a plugin surface so no skill,
+  role, reference, script, test, asset, or packaging entry is silently dropped.
+- Compare each moved surface against its pre-move content. A move should produce
+  a small, reviewable diff; unrelated rewrites need their own explicit reason
+  and review scope.
+- Preserve behavior and validation first. Improve wording, structure, or
+  implementation only where the new owner boundary actually requires it or a
+  separately approved cleanup is already in scope.
+- Do not recreate files from memory or copy large replacement blocks when a
+  move plus narrow patch preserves the source of truth.
+- Run targeted validation after each migration slice and inspect the rename,
+  deletion, and modification summary before moving to the next slice.
+
 ## Non-Goals
 
 - Do not add a generic runtime wrapper, queue, scheduler, or host bridge merely
