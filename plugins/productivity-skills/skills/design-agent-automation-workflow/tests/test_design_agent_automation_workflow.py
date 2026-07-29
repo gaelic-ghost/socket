@@ -138,3 +138,18 @@ def test_plan_template_has_required_output_sections() -> None:
         "## Sources",
     ]:
         assert heading in template
+
+
+def test_n8n_workflow_skill_keeps_visual_automation_deterministic() -> None:
+    skill = (SKILL_ROOT.parent / "design-n8n-agent-workflow" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+
+    for required in [
+        "deterministic",
+        "idempotency",
+        "draft-only",
+        "auto-with-escalation",
+        "capability gate",
+    ]:
+        assert required in skill

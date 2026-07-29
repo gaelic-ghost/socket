@@ -1161,6 +1161,7 @@ Planned
 - [ ] Add `productivity-skills:maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `productivity-skills:maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
 - [x] Forward-test `productivity-skills:design-agent-automation-workflow` against a local-first macOS agent-framework planning request. Record the framework inventory, inference-server/model-capability boundary, canonical labs, and stack-owned implementation handoffs before adding deterministic scaffolding scripts.
+- [x] Implement the resulting local-first agent-framework guidance across Productivity Skills, Python Skills, Model Lab Skills, Server-Side JVM, and .NET Skills. Keep framework selection separate from local inference, require exact model/server capability gates, and retain draft-before-write escalation boundaries.
 - [ ] Forward-test `productivity-skills:design-agent-eval-workflow` against real agent, automation, and eval planning requests before adding deterministic scaffolding scripts.
 - [ ] Add lightweight Productivity validation tooling for `SKILL.md`, frontmatter, and `agents/openai.yaml` alignment.
 - [ ] Add Productivity validation checks for README layout and active skill inventory consistency.

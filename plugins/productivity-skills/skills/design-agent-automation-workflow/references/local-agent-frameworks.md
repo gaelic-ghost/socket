@@ -105,6 +105,8 @@ routing, transformations, retries, and delivery deterministic.
   default durable multi-agent runtime.
 - Sources: <https://n8n.io/integrations/ollama/> and
   <https://docs.n8n.io/hosting/>
+- Handoff: `productivity-skills:design-n8n-agent-workflow` for the concrete
+  n8n node, credential, idempotency, draft, and approval design.
 
 ### Google Agent Development Kit (ADK)
 
@@ -120,7 +122,8 @@ application.
 - Graduate only after: adapter compatibility testing, session/memory retention
   decisions, and an action-confirmation boundary.
 - Handoff: the application language owner; Java/Kotlin work belongs in the JVM
-  lane, TypeScript in the web lane, and Python in the Python lane.
+  lane through `server-side-jvm:build-jvm-agent-service`, TypeScript in the web
+  lane, and Python in the Python lane.
 - Sources: <https://adk.dev/>
 
 ### Pydantic AI
@@ -148,7 +151,7 @@ default merely because they advertise multi-agent support.
 | --- | --- | --- | --- |
 | AutoGen | The project specifically explores conversational multi-agent patterns or already uses Microsoft’s agent ecosystem. | A deterministic pipeline or one clear agent/tool loop solves the job. | <https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html> |
 | CrewAI | The requested product genuinely needs role-oriented teams with clear, independently testable responsibilities. | “Researcher/writer/reviewer” is only a prompt-role costume around one linear job. | <https://docs.crewai.com/> |
-| Semantic Kernel | The app is already C#/.NET-oriented or needs its plugin/function model in that ecosystem. | Adding .NET only to obtain an agent wrapper. | <https://learn.microsoft.com/en-us/semantic-kernel/overview/> |
+| Semantic Kernel | The app is already C#/.NET-oriented or needs its plugin/function model in that ecosystem; hand implementation to `dotnet-skills:build-dotnet-agent-service`. | Adding .NET only to obtain an agent wrapper. | <https://learn.microsoft.com/en-us/semantic-kernel/overview/> |
 | Hermes Agent | The user intentionally targets the Hermes runtime’s own skills, memory, automations, messaging, and provider model. | A framework-neutral app or normal Socket-maintenance workflow. | <https://hermes-agent.nousresearch.com/docs> |
 
 Keep a watch list rather than a permanent guide for fast-moving choices such as
