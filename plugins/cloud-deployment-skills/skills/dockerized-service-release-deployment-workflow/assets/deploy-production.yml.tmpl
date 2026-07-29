@@ -1,4 +1,4 @@
-name: Deploy published release to production
+name: Deploy published release
 
 on:
   release:
@@ -10,9 +10,11 @@ permissions:
 
 jobs:
   deploy:
-    if: startsWith(github.event.release.tag_name, 'v')
+    if: github.event.release.prerelease == false || vars.ENABLE_PRERELEASE_DEPLOYMENTS == 'true'
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ github.event.release.prerelease && 'test' || 'production' }}
+    env:
+      DEPLOY_ENVIRONMENT: ${{ github.event.release.prerelease && 'test' || 'production' }}
     steps:
       - name: Check out the release tag for deployment adapters
         uses: actions/checkout@v6.0.2
@@ -39,9 +41,22 @@ jobs:
           set -euo pipefail
           manifest=.release/release-manifest.json
           tag=$(jq -r '.releaseTag // empty' "$manifest")
+          kind=$(jq -r '.releaseKind // empty' "$manifest")
           image=$(jq -r '.image // empty' "$manifest")
           if [[ "$tag" != "$RELEASE_TAG" ]]; then
             echo "Release manifest tag '$tag' does not match published release '$RELEASE_TAG'." >&2
+            exit 1
+          fi
+          if [[ "$kind" != stable && "$kind" != prerelease ]]; then
+            echo "Release manifest kind '$kind' is not stable or prerelease." >&2
+            exit 1
+          fi
+          if [[ "$kind" == stable && "${{ github.event.release.prerelease }}" != false ]]; then
+            echo "Stable release manifest cannot deploy from a GitHub prerelease event." >&2
+            exit 1
+          fi
+          if [[ "$kind" == prerelease && "${{ github.event.release.prerelease }}" != true ]]; then
+            echo "Prerelease manifest cannot deploy from a normal GitHub release event." >&2
             exit 1
           fi
           if [[ ! "$image" =~ @sha256:[0-9a-f]{64}$ ]]; then
@@ -56,8 +71,8 @@ jobs:
 
       - name: Deploy exactly the published image digest
         shell: bash
-        run: ./scripts/deploy-production-image.sh '${{ steps.manifest.outputs.image }}'
+        run: ./scripts/deploy-production-image.sh "$DEPLOY_ENVIRONMENT" '${{ steps.manifest.outputs.image }}'
 
       - name: Verify the deployed release health
         shell: bash
-        run: ./scripts/verify-production-health.sh '${{ steps.manifest.outputs.image }}'
+        run: ./scripts/verify-production-health.sh "$DEPLOY_ENVIRONMENT" '${{ steps.manifest.outputs.image }}'

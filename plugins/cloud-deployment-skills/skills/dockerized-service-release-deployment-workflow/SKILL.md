@@ -22,9 +22,9 @@ The default contract is:
 2. A clean GitHub Actions checkout of a version tag validates the release commit and builds the published OCI image.
 3. The tag must resolve to a commit reachable from `origin/main`.
 4. The registry digest, tag, commit, image reference, build run, and provenance/SBOM choices are written into a release manifest.
-5. The workflow creates a draft GitHub Release with that manifest attached.
-6. Publishing the GitHub Release is the production deployment trigger.
-7. The deployment job is gated by the protected `production` GitHub environment and invokes a provider-specific adapter with `image@sha256:...`.
+5. The workflow publishes a GitHub Release with that manifest attached: normal SemVer tags become normal releases, and recognized prerelease tags become GitHub prereleases.
+6. Publishing the GitHub Release triggers deployment: normal releases target protected `production`; enabled prereleases target `test`.
+7. The deployment job invokes a provider-specific adapter with `image@sha256:...` only after the selected environment permits it.
 8. The adapter verifies service health and records the prior manifest/digest so rollback deploys a previous exact digest rather than rebuilding source.
 
 This is a durable building-block change: it removes the ambiguity between a developer build, a CI artifact, and a deployed artifact. A project can later change registries or providers without weakening the tag-to-digest deployment contract.
@@ -59,8 +59,9 @@ Confirm these decisions. Stop rather than silently choosing a production target:
 - supported target platform or platforms
 - tag pattern and the protected integration branch, normally `main`
 - repository validation command and image smoke-test command
-- GitHub Release draft/publish ownership
-- GitHub `production` environment reviewers, permitted tags, and bypass policy
+- GitHub App or fine-scoped PAT stored as `RELEASE_PUBLISH_TOKEN` for automated release publication
+- GitHub `production` environment reviewers, permitted stable tags, and bypass policy
+- whether a `test` environment exists; when it does, enable `ENABLE_PRERELEASE_DEPLOYMENTS=true` as a repository variable and configure its test-tag policy
 - cloud account, project, region, workload, and OIDC trust policy for the deployment adapter
 - health endpoint, expected response, timeout, and failure diagnostics
 - source of the prior successful release manifest for rollback
@@ -69,8 +70,8 @@ Confirm these decisions. Stop rather than silently choosing a production target:
 
 Copy these template assets into the target repository and replace every `{{...}}` placeholder before enabling them:
 
-- [`release-container.yml.tmpl`](./assets/release-container.yml.tmpl): tag-anchored validation, immutable image publication, manifest creation, and draft release creation.
-- [`deploy-production.yml.tmpl`](./assets/deploy-production.yml.tmpl): a GitHub Release `published` trigger, protected production environment, manifest download, exact-digest adapter call, health verification, and failure guidance.
+- [`release-container.yml.tmpl`](./assets/release-container.yml.tmpl): tag-anchored validation, immutable image publication, manifest creation, and automated normal-release or prerelease publication.
+- [`deploy-production.yml.tmpl`](./assets/deploy-production.yml.tmpl): a GitHub Release `published` trigger, protected production or enabled test environment selection, manifest download, exact-digest adapter call, health verification, and failure guidance.
 - [`release-manifest.json.tmpl`](./assets/release-manifest.json.tmpl): the release-record schema.
 - [`deploy-production-image.sh.tmpl`](./assets/deploy-production-image.sh.tmpl): a deliberately blocked provider-adapter seam.
 - [`verify-production-health.sh.tmpl`](./assets/verify-production-health.sh.tmpl): a deliberately blocked health-check seam.
@@ -85,8 +86,10 @@ The shell templates fail closed until a project replaces their placeholders. Do 
 4. The tag workflow checks out the tag in a clean hosted runner, fetches `origin/main`, and rejects a tag commit that is not reachable from it.
 5. Run the repository validation from that clean checkout.
 6. Build and push the image once. Capture the registry output digest, then run the container smoke test against that exact published digest. Publish provenance and SBOM attestations where the chosen registry supports them.
-7. Create `release-manifest.json` from the tag, resolved commit, immutable image reference, workflow run URL, and attestations. Attach it to a **draft** GitHub Release.
-8. Review the draft release and publish it through the GitHub UI or an explicitly approved GitHub App/PAT release publisher. Draft-first release creation means all manifest assets exist before an immutable-release policy locks the release. A release created with the first workflow's `GITHUB_TOKEN` does not trigger another workflow, which is why the template creates a draft and requires a later publish action.
+7. Accept only `vMAJOR.MINOR.PATCH` stable tags or the recognized prerelease forms `-alpha`, `-beta`, `-rc`, and `-test`, each with an optional dot/hyphen suffix. Reject all other tag forms before publishing.
+8. Create `release-manifest.json` from the tag, resolved commit, release kind, immutable image reference, workflow run URL, and attestations. Publish it as a normal GitHub Release for a stable tag, or a GitHub prerelease for a recognized prerelease tag, using `RELEASE_PUBLISH_TOKEN`.
+
+The automated publisher needs a GitHub App installation token or fine-scoped PAT because a release created with the workflow's `GITHUB_TOKEN` does not trigger the release-published deployment workflow. Keep that token limited to this repository's release publication path.
 
 The deployment workflow must listen only for `release: [published]`. It must not deploy directly on a tag push, a push to `main`, or a pull request.
 
@@ -94,7 +97,7 @@ The deployment workflow must listen only for `release: [published]`. It must not
 
 1. The release-published workflow downloads `release-manifest.json` from the exact release event.
 2. It validates that the manifest tag matches the release event and that `image` is a fully qualified `name@sha256:digest` reference.
-3. The job enters the GitHub `production` environment. Configure required reviewers, tag restrictions, and no-administrator-bypass where the repository plan supports them.
+3. A stable release enters the GitHub `production` environment. Configure required reviewers, stable-tag restrictions, and no-administrator-bypass where the repository plan supports them. A recognized prerelease enters `test` only when the repository has explicitly set `ENABLE_PRERELEASE_DEPLOYMENTS=true`; otherwise it publishes without deployment.
 4. Authenticate to the provider using short-lived OIDC credentials when supported. Do not put long-lived cloud credentials in repository secrets merely to run this workflow.
 5. Pass only the exact digest reference to the provider deployment adapter. The adapter must not run `docker build`, clone source, or reinterpret a mutable tag.
 6. Run the repository-defined health check against the deployed release. On failure, preserve deployment logs and stop; do not silently roll forward or rebuild.
@@ -102,7 +105,7 @@ The deployment workflow must listen only for `release: [published]`. It must not
 
 ## Security and Supply-Chain Rules
 
-- Scope workflow permissions minimally. The release workflow normally needs `contents: write`, `packages: write`, and `attestations: write`; the deploy workflow should have read-only contents plus `id-token: write` only when the provider adapter uses OIDC.
+- Scope workflow permissions minimally. The release workflow normally needs `contents: write` and `packages: write`; its separate `RELEASE_PUBLISH_TOKEN` must have only the release-publication authority required by the repository. The deploy workflow should have read-only contents plus `id-token: write` only when the provider adapter uses OIDC.
 - Keep registry write access in the release workflow. Production deployment should normally need only pull/read access plus provider authorization.
 - Do not place secrets in Docker build arguments, image layers, caches, release manifests, logs, or committed environment files.
 - Treat restored CI caches as untrusted input; do not cache secrets or make a release depend on an unrebuildable cache.
@@ -115,9 +118,9 @@ Before enabling the workflow:
 
 1. Validate YAML and shell syntax after template substitution.
 2. Run the repository test suite and a local image smoke test for fast feedback.
-3. Use a non-production tag or staging environment to prove that the Actions runner produces the manifest, registry digest, and digest-based smoke-test evidence.
-4. Inspect the manifest against the registry and release tag before publishing the GitHub Release.
-5. Confirm the `production` environment pauses for approval and that the deployment adapter receives `image@sha256:...`, not a tag.
+3. Use a recognized prerelease tag in a repository with `test` enabled to prove that the Actions runner publishes a GitHub prerelease, produces the manifest and registry digest, and deploys its exact digest to `test`.
+4. Inspect the manifest against the registry and release tag after automated publication.
+5. Confirm a stable tag creates a normal GitHub Release, pauses at `production` approval, and passes `image@sha256:...`, not a tag, to the deployment adapter.
 6. Exercise the health-check failure path and a rollback drill using a known prior release digest before treating the workflow as release-ready.
 
 ## Guardrails
@@ -125,7 +128,8 @@ Before enabling the workflow:
 - Do not deploy or modify a cloud account while creating this reusable guidance or template set.
 - Do not use a worktree, developer laptop, or production host to build the image that a release deploys.
 - Do not publish a GitHub Release from a tag that is not anchored to the protected integration branch.
-- Do not use a GitHub Release `created` event as the deployment trigger; draft releases need a later explicit publish action.
+- Do not publish a release with the workflow `GITHUB_TOKEN` when it must trigger another workflow; use the dedicated release-publisher token.
+- Do not deploy an unrecognized, draft, deleted, edited, or merely-created release. Stable releases deploy only to `production`; prereleases deploy only to enabled `test`.
 - Do not deploy from `latest`, a branch name, a short SHA tag, or any other mutable image identifier.
 - Do not substitute an SSH host copy, `docker compose build`, or remote source checkout for the provider deployment adapter.
 - Do not claim rollback readiness until a prior release manifest and exact-digest adapter path have both been verified.

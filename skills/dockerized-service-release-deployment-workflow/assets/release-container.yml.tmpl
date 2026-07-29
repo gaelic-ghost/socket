@@ -28,6 +28,21 @@ jobs:
             exit 1
           fi
 
+      - name: Classify the release tag
+        id: release_kind
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=$GITHUB_REF_NAME
+          if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "kind=stable" >> "$GITHUB_OUTPUT"
+          elif [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta|rc|test)([.-][0-9A-Za-z]+)*$ ]]; then
+            echo "kind=prerelease" >> "$GITHUB_OUTPUT"
+          else
+            echo "Release tag '$tag' is not stable SemVer or a recognized alpha, beta, rc, or test prerelease. Refusing publication." >&2
+            exit 1
+          fi
+
       - name: Run repository validation
         shell: bash
         run: {{REPOSITORY_VALIDATION_COMMAND}}
@@ -74,6 +89,7 @@ jobs:
           fi
           jq -n \
             --arg tag "$GITHUB_REF_NAME" \
+            --arg release_kind "${{ steps.release_kind.outputs.kind }}" \
             --arg commit "$GITHUB_SHA" \
             --arg image "{{OCI_REGISTRY}}/{{IMAGE_NAME}}@$IMAGE_DIGEST" \
             --arg image_tag "{{OCI_REGISTRY}}/{{IMAGE_NAME}}:$GITHUB_REF_NAME" \
@@ -83,17 +99,22 @@ jobs:
             --arg platforms "{{OCI_PLATFORMS}}" \
             --arg provenance "BuildKit provenance: mode=max" \
             --arg sbom "BuildKit SBOM: enabled" \
-            '{schemaVersion: 1, releaseTag: $tag, commit: $commit, image: $image, imageTag: $image_tag, platforms: ($platforms | split(",")), sourceRepository: $source, buildRun: $build_run, provenance: $provenance, sbom: $sbom, healthCheck: $healthcheck}' \
+            '{schemaVersion: 1, releaseTag: $tag, releaseKind: $release_kind, commit: $commit, image: $image, imageTag: $image_tag, platforms: ($platforms | split(",")), sourceRepository: $source, buildRun: $build_run, provenance: $provenance, sbom: $sbom, healthCheck: $healthcheck}' \
             > release-manifest.json
 
-      - name: Create a draft GitHub Release with the manifest
+      - name: Publish the GitHub Release with the manifest
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.RELEASE_PUBLISH_TOKEN }}
+          RELEASE_KIND: ${{ steps.release_kind.outputs.kind }}
         run: |
           set -euo pipefail
-          gh release create "$GITHUB_REF_NAME" release-manifest.json \
-            --draft \
-            --target "$GITHUB_SHA" \
-            --title "$GITHUB_REF_NAME" \
-            --notes "Release image and exact deployment digest are recorded in release-manifest.json. Publish this release to request the production deployment."
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo "RELEASE_PUBLISH_TOKEN is required to publish a release that triggers the deployment workflow. Configure a GitHub App installation token or fine-scoped PAT before tagging." >&2
+            exit 1
+          fi
+          args=("$GITHUB_REF_NAME" release-manifest.json --target "$GITHUB_SHA" --title "$GITHUB_REF_NAME" --generate-notes)
+          if [[ "$RELEASE_KIND" == prerelease ]]; then
+            args+=(--prerelease)
+          fi
+          gh release create "${args[@]}"
