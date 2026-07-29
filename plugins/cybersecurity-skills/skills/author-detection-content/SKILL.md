@@ -1,6 +1,6 @@
 ---
 name: author-detection-content
-description: Turn validated security behavior into tested detection content. Use for Sigma, osquery, YARA-X routing, endpoint queries, SIEM rules, cloud or application detections, correlation logic, alert enrichment, or regression fixtures when telemetry prerequisites, provenance, expected matches, benign negatives, false-positive controls, performance, severity, response, deployment, and maintenance ownership must be explicit.
+description: Turn validated security behavior into tested detection content. Use for Sigma, osquery, YARA-X, endpoint or SIEM queries, cloud detections, correlation, alert enrichment, and fixtures with explicit telemetry and false-positive controls.
 ---
 
 # Author Detection Content

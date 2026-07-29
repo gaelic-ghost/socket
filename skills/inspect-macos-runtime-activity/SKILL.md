@@ -1,6 +1,6 @@
 ---
 name: inspect-macos-runtime-activity
-description: Correlate suspicious macOS process, file, network, permission, and log activity. Use for unexpected processes, child execution, downloads, open files, DNS/connections, privacy prompts, XProtect or Gatekeeper events, file mutations, injected or deleted executables, and Endpoint Security or eslogger evidence when exact permissions and telemetry gaps must remain visible.
+description: Correlate suspicious macOS process, file, network, permission, and log activity. Use for unexpected processes, downloads, open files, DNS, privacy prompts, alerts, file mutations, injected executables, and Endpoint Security evidence.
 ---
 
 # Inspect macOS Runtime Activity

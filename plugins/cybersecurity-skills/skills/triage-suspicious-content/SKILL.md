@@ -1,6 +1,6 @@
 ---
 name: triage-suspicious-content
-description: Safely classify suspicious files, archives, installers, packages, scripts, documents, configuration profiles, browser extensions, URLs, QR codes, messages, and nested payloads before execution. Use when someone receives or discovers sketchy content and needs to know what it is, what active behavior it may contain, and the smallest safe next analysis step.
+description: Safely classify suspicious files, archives, installers, packages, scripts, documents, profiles, browser extensions, URLs, QR codes, messages, and nested payloads before execution. Use when someone needs the smallest safe next analysis step.
 ---
 
 # Triage Suspicious Content

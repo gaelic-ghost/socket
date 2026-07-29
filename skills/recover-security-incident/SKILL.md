@@ -1,6 +1,6 @@
 ---
 name: recover-security-incident
-description: Eradicate verified compromise mechanisms, restore trusted service, and monitor after a cybersecurity incident. Use when affected hosts, identities, applications, cloud resources, network controls, or data need rebuild/restore, patching, secret rotation, configuration repair, validation, staged return to service, temporary-control removal, lessons learned, and residual-risk ownership.
+description: Recover from an incident by eradicating compromise and restoring service. Use when hosts, identities, applications, cloud resources, network controls, or data need rebuild, patching, rotation, repair, validation, and return to service.
 ---
 
 # Recover Security Incident

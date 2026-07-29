@@ -1,6 +1,6 @@
 ---
 name: analyze-suspicious-script-or-document
-description: Decode and analyze suspicious scripts and active documents without triggering them. Use for shell, AppleScript, JavaScript, Python, PowerShell, shortcuts, Office files, PDFs, configuration profiles, encoded commands, macros, embedded objects, external templates, staged downloads, or mixed document-to-script payload chains.
+description: Decode and analyze suspicious scripts and active documents without triggering them. Use for shell, AppleScript, JavaScript, Python, PowerShell, shortcuts, Office files, PDFs, profiles, macros, embedded objects, and staged payloads.
 ---
 
 # Analyze Suspicious Script Or Document

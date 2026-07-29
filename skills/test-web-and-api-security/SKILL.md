@@ -1,6 +1,6 @@
 ---
 name: test-web-and-api-security
-description: Test an explicitly authorized web application or API using current OWASP guidance and bounded manual or automated checks. Use for authentication, authorization, session, input, browser, API schema, business logic, file handling, server-side request, configuration, transport, error, and data-exposure tests when accounts, roles, target, rate, evidence, and stop conditions are defined.
+description: Test an authorized web application or API using OWASP guidance. Use for authentication, authorization, sessions, input, schemas, business logic, file handling, server-side requests, configuration, transport, errors, and data exposure.
 ---
 
 # Test Web And API Security

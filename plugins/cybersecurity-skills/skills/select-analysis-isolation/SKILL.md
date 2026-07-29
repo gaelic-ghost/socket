@@ -1,6 +1,6 @@
 ---
 name: select-analysis-isolation
-description: Select and configure an isolation boundary before inspecting or executing untrusted content. Use when choosing among local read-only analysis, a disposable container, Linux VM, macOS VM, remote sandbox, or spare physical device and deciding network, mount, clipboard, credential, device, snapshot, evidence-export, and teardown controls.
+description: Select isolation before inspecting or executing untrusted content. Use for local analysis, a container, Linux or macOS VM, remote sandbox, or spare device with defined network, mounts, credentials, snapshots, evidence export, and teardown.
 ---
 
 # Select Analysis Isolation

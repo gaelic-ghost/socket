@@ -1,6 +1,6 @@
 ---
 name: triage-security-incident
-description: Triage a suspected cybersecurity incident across endpoints, identities, applications, services, cloud resources, networks, or data. Use when an alert, report, compromise indicator, service disruption, unauthorized access, malware event, credential concern, or data exposure needs an incident owner, affected scope, urgency, evidence plan, immediate harm-reduction decision, and communication path.
+description: Triage a suspected incident across endpoints, identities, applications, cloud resources, networks, or data. Use when an alert, compromise, disruption, unauthorized access, malware, credential concern, or exposure needs scope and ownership.
 ---
 
 # Triage Security Incident

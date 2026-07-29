@@ -1,6 +1,6 @@
 ---
 name: inspect-macos-persistence
-description: Inspect macOS persistence and recurring execution without deleting evidence. Use for suspicious login items, background items, launch agents or daemons, system or network extensions, configuration profiles, shell startup files, scheduled tasks, browser extensions, helper tools, app registrations, or startup behavior that may survive logout, reboot, or application exit.
+description: Inspect macOS persistence and recurring execution without deleting evidence. Use for login items, launch agents or daemons, extensions, profiles, shell startup files, scheduled tasks, browser extensions, helpers, and startup behavior.
 ---
 
 # Inspect macOS Persistence

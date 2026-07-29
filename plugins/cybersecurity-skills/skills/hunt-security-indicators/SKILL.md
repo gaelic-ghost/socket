@@ -1,6 +1,6 @@
 ---
 name: hunt-security-indicators
-description: Hunt scoped systems and telemetry for supplied security indicators or behaviors. Use for hashes, paths, domains, addresses, certificates, accounts, processes, commands, persistence, ATT&CK behaviors, cloud or application events, or incident expansion when data sources, time window, query logic, coverage, false positives, privacy, and follow-up validation must be explicit.
+description: Hunt scoped systems and telemetry for supplied indicators or behaviors. Use for hashes, paths, domains, addresses, accounts, processes, persistence, ATT&CK behaviors, cloud events, or incident expansion with explicit scope and validation.
 ---
 
 # Hunt Security Indicators

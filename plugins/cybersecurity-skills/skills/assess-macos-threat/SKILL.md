@@ -1,6 +1,6 @@
 ---
 name: assess-macos-threat
-description: Assess a suspected macOS security threat using exact host, artifact, and platform evidence. Use for suspicious apps, packages, processes, prompts, downloads, profiles, extensions, XProtect or Gatekeeper alerts, account behavior, persistence, privacy access, or unexpected network activity when signing, notarization, quarantine, TCC, SIP, and observed behavior must remain distinct.
+description: Assess a suspected macOS threat using exact host and artifact evidence. Use for suspicious apps, processes, downloads, profiles, extensions, alerts, persistence, privacy, or network activity while keeping protections distinct.
 ---
 
 # Assess macOS Threat

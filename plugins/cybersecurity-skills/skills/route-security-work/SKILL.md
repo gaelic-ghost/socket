@@ -1,6 +1,6 @@
 ---
 name: route-security-work
-description: Route an ambiguous cybersecurity request before tools run. Use for suspicious files, links, messages, host behavior, malware questions, vulnerability reports, authorized pentests, security incidents, threat hunting, detection work, or security advice when the correct workflow and specialist owner are not yet clear.
+description: Route an ambiguous cybersecurity request before tools run. Use for suspicious files, links, messages, host behavior, malware, vulnerability reports, authorized pentests, incidents, threat hunting, detection work, or security advice.
 ---
 
 # Route Security Work

@@ -1,6 +1,6 @@
 ---
 name: bootstrap-skills-plugin-repo
-description: Bootstrap or align a source-first Agent Skills repository with root `skills/`, repo-local discovery mirrors, maintainer docs, and clear Codex plugin-boundary wording. Use when creating a new skills repo or structurally aligning an existing one. Do not use this for narrow README-only, roadmap-only, or host-adapter design work.
+description: Bootstrap or align a source-first Agent Skills repository with root `skills/`, discovery mirrors, maintainer docs, and explicit Codex plugin boundaries. Use for new skills repos or structural alignment, not narrow docs or host-adapter work.
 metadata:
   hermes:
     category: agent-portability

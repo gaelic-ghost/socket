@@ -1,6 +1,6 @@
 ---
 name: contain-security-incident
-description: Contain an active or credible cybersecurity incident across hosts, identities, applications, services, cloud resources, networks, or data. Use when ongoing access, execution, exfiltration, fraud, destruction, lateral movement, unsafe service behavior, or repeated compromise must be interrupted with authorized, reversible actions while evidence, business impact, dependencies, communication, and rollback are tracked.
+description: Contain an active or credible incident across hosts, identities, applications, cloud resources, networks, or data. Use when access, execution, exfiltration, fraud, destruction, or repeated compromise needs authorized interruption.
 ---
 
 # Contain Security Incident

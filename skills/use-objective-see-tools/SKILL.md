@@ -1,6 +1,6 @@
 ---
 name: use-objective-see-tools
-description: Use installed Objective-See macOS security tools as thin evidence adapters. Use for KnockKnock persistence inventory, BlockBlock persistence alerts, LuLu network decisions, ProcessMonitor or FileMonitor activity, WhatsYourSign signature inspection, TaskExplorer process review, or related Objective-See tools while exact version, permissions, user actions, tool limits, and owning investigation workflow remain explicit.
+description: Use installed Objective-See macOS security tools as evidence adapters. Use for KnockKnock, BlockBlock, LuLu, ProcessMonitor, FileMonitor, WhatsYourSign, TaskExplorer, or related tools with explicit permissions, limits, and ownership.
 ---
 
 # Use Objective-See Tools

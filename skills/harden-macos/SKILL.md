@@ -1,6 +1,6 @@
 ---
 name: harden-macos
-description: Review and improve macOS defensive posture after a threat assessment, incident, or general security request. Use for updates, XProtect/Gatekeeper posture, FileVault, firewall and sharing, remote access, accounts, login/background items, profiles/extensions, browser safety, privacy permissions, backups, credential habits, and monitoring while preserving usability and managed-device policy.
+description: Review and improve macOS defensive posture. Use for updates, XProtect and Gatekeeper, FileVault, firewall, remote access, accounts, background items, privacy, backups, credentials, and monitoring after a security assessment or incident.
 ---
 
 # Harden macOS
