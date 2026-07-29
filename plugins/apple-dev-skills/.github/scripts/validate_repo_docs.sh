@@ -38,7 +38,7 @@ echo "Validating local discovery mirrors..."
 [[ ! -e "plugins/apple-dev-skills" ]] || fail "Did not expect a nested plugins/apple-dev-skills tree."
 
 echo "Validating root README contract..."
-require_contains "README.md" 'Treat `productivity-skills` as the default baseline layer for general repo-doc and maintenance work'
+require_contains "README.md" 'Treat `repository-skills` as the default baseline layer for general repo-doc and maintenance work'
 require_contains "README.md" 'This repository is the canonical source of truth for Gale'"'"'s Apple, Swift, and Xcode workflow skills.'
 require_contains "README.md" 'Most Apple Dev Skills workflows are useful as a standalone plugin.'
 require_contains "README.md" 'The [`socket`](https://github.com/gaelic-ghost/socket) repository is Gale'"'"'s plugin superproject and marketplace catalog.'
@@ -59,7 +59,7 @@ require_contains "CONTRIBUTING.md" 'uv run pytest'
 
 echo "Validating AGENTS contract..."
 require_contains "AGENTS.md" 'This repository is the canonical home for Gale'"'"'s Apple, Swift, and Xcode workflow skills.'
-require_contains "AGENTS.md" 'Treat `productivity-skills` as the default baseline maintainer layer'
+require_contains "AGENTS.md" 'Treat `repository-skills` as the default baseline maintainer layer'
 require_contains "AGENTS.md" 'Preserve standalone-install guidance for public users who install only `apple-dev-skills`'
 require_contains "AGENTS.md" 'Root `skills/` is the canonical authored and exported surface.'
 require_contains "AGENTS.md" 'Keep shared reusable assets in [`shared/`](./shared/) and maintainer tests in [`tests/`](./tests/).'
@@ -73,8 +73,8 @@ require_contains "$audit_doc" "## Source-of-Truth Order"
 require_contains "$audit_doc" "## Audit Procedure"
 require_contains "$audit_doc" "## Local Discovery Smoke Test Flow"
 require_contains "$audit_doc" "## Reporting Shape"
-require_contains "$audit_doc" '`productivity-skills` owns the reusable `maintain-project-repo` toolkit contract'
-require_contains "$audit_doc" 'standalone `apple-dev-skills` installs from installs that also include the `productivity-skills` companion plugin'
+require_contains "$audit_doc" '`repository-skills` owns the reusable `maintain-project-repo` toolkit contract'
+require_contains "$audit_doc" 'standalone `apple-dev-skills` installs from installs that also include the `repository-skills` companion plugin'
 require_contains "$audit_doc" 'this repository owns only the Apple-specific profile selection and Xcode MCP registration contract'
 require_contains "$audit_doc" 'Historical milestone planning decisions that no longer need standalone docs should live in `ROADMAP.md`'
 require_not_contains "$audit_doc" 'plugins/apple-dev-skills/'
@@ -95,7 +95,7 @@ require_contains "$execution_split_doc" "## Guidance Preservation Contract"
 require_contains "$execution_split_doc" "## AGENTS Expansion Strategy"
 require_contains "$execution_split_doc" "## Repo-Maintenance Direction"
 require_contains "$execution_split_doc" "## Implementation Plan"
-require_contains "$execution_split_doc" '`productivity-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface'
+require_contains "$execution_split_doc" '`repository-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface'
 require_contains "$execution_split_doc" 'Users who install only `apple-dev-skills` still get the Apple-only workflows'
 require_contains "ROADMAP.md" "Completed Milestones 22 and 23"
 require_contains "ROADMAP.md" 'See `docs/maintainers/customization-consolidation-review.md`.'
@@ -303,10 +303,10 @@ do
   require_contains "$skill_dir/SKILL.md" 'Companion Plugin Requirement'
   require_contains "$skill_dir/SKILL.md" 'https://github.com/gaelic-ghost/socket'
 done
-require_contains "./skills/bootstrap-swift-package/scripts/bootstrap_swift_package.sh" 'productivity-skills/skills/maintain-project-repo/scripts/run_workflow.py'
-require_contains "./skills/bootstrap-xcode-app-project/scripts/bootstrap_xcode_app_project.py" 'productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
-require_contains "./skills/sync-swift-package-guidance/scripts/sync_swift_package_guidance.py" 'productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
-require_contains "./skills/sync-xcode-project-guidance/scripts/sync_xcode_project_guidance.py" 'productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
+require_contains "./skills/bootstrap-swift-package/scripts/bootstrap_swift_package.sh" 'repository-skills/skills/maintain-project-repo/scripts/run_workflow.py'
+require_contains "./skills/bootstrap-xcode-app-project/scripts/bootstrap_xcode_app_project.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
+require_contains "./skills/sync-swift-package-guidance/scripts/sync_swift_package_guidance.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
+require_contains "./skills/sync-xcode-project-guidance/scripts/sync_xcode_project_guidance.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
 
 echo "Validating preserved guidance in AGENTS assets..."
 package_agents_assets=(

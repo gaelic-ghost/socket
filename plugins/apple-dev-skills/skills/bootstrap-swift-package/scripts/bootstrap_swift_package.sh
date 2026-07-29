@@ -75,8 +75,8 @@ swift_minor_version=""
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 agents_template="$script_dir/../assets/AGENTS.md"
 local_environment_template="$script_dir/../../../templates/codex-local-environments/swift-package.toml"
-maintain_project_repo_runner="$script_dir/../../../../productivity-skills/skills/maintain-project-repo/scripts/run_workflow.py"
-maintain_project_repo_missing_message="Validation failed: bootstrap-swift-package needs productivity-skills/maintain-project-repo to install repo-maintenance files, but the runner was missing at $maintain_project_repo_runner. Install productivity-skills alongside apple-dev-skills, or add the socket marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and enable both apple-dev-skills and productivity-skills from the Socket catalog, then rerun this workflow."
+maintain_project_repo_runner="$script_dir/../../../../repository-skills/skills/maintain-project-repo/scripts/run_workflow.py"
+maintain_project_repo_missing_message="Validation failed: bootstrap-swift-package needs repository-skills/maintain-project-repo to install repo-maintenance files, but the runner was missing at $maintain_project_repo_runner. Install repository-skills alongside apple-dev-skills, or add the socket marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and enable both apple-dev-skills and repository-skills from the Socket catalog, then rerun this workflow."
 
 is_ignorable_directory_entry() {
   local entry_name="$1"

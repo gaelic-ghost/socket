@@ -39,9 +39,9 @@ def make_repo(tmp_path: Path) -> Path:
         )
     export_root = tmp_path / "skills"
     export_hermes_skills.write_export(source_root, export_root)
-    for skill_name in export_hermes_skills.PRODUCTIVITY_SKILLS:
+    for skill_name in export_hermes_skills.AGENT_ENGINEERING_SKILLS:
         write(
-            tmp_path / "plugins" / "productivity-skills" / "skills" / skill_name / "SKILL.md",
+            tmp_path / "plugins" / "agent-engineering-skills" / "skills" / skill_name / "SKILL.md",
             f"---\nname: {skill_name}\ndescription: Test skill {skill_name}.\n---\n",
         )
     for skill_name in export_hermes_skills.PYTHON_SKILLS:
@@ -93,7 +93,7 @@ def configure_paths(repo_root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(export_hermes_skills, "SWIFT_LANG_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "MODEL_LAB_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "DOTNET_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")
-    monkeypatch.setattr(export_hermes_skills, "PRODUCTIVITY_SOURCE_ROOT", repo_root / "plugins" / "productivity-skills" / "skills")
+    monkeypatch.setattr(export_hermes_skills, "AGENT_ENGINEERING_SOURCE_ROOT", repo_root / "plugins" / "agent-engineering-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "PYTHON_SOURCE_ROOT", repo_root / "plugins" / "python-skills" / "skills")
     monkeypatch.setattr(export_hermes_skills, "JVM_SOURCE_ROOT", repo_root / "plugins" / "server-side-jvm" / "skills")
     monkeypatch.setattr(export_hermes_skills, "CLOUD_DEPLOYMENT_SOURCE_ROOT", repo_root / "plugins" / "agent-portability-skills" / "skills")

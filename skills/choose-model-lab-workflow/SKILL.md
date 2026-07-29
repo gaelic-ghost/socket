@@ -28,14 +28,14 @@ Select one primary workflow, name any supporting workflows, and make the evidenc
 | Run preference optimization such as DPO/ORPO | Keep the experiment and eval here; use the supported TRL workflow through `fine-tune-language-model` until a stable standalone skill is earned |
 | Pretrain or continue pretraining a foundation model | Do not collapse it into fine-tuning; define the distributed/corpus contract and treat `train-language-model` as a deferred skill candidate |
 | Merge adapters or quantize/package an artifact | Use `compare-model-checkpoints` around the exact transformation; use the project-native tool and evaluate the deployable output |
-| Evaluate an agent skill, plugin, or host harness rather than a model protocol | Hand off to `productivity-skills` and `agent-portability-skills` |
+| Evaluate an agent skill, plugin, or host harness rather than a model protocol | Hand off to `agent-engineering-skills` and `agent-portability-skills` |
 
 ## Respect Ownership Boundaries
 
 - Use `cloud-inference-skills` for provider, GPU, endpoint, cost, and teardown decisions.
 - Use `python-skills` for Python packaging and environment repair.
 - Use `apple-dev-skills` for Swift/Xcode application integration after the runtime has been chosen.
-- Use `productivity-skills` for evaluating agent skills, prompts, or plugin packages rather than model checkpoints.
+- Use `agent-engineering-skills` for evaluating agent skills, prompts, or plugin packages rather than model checkpoints.
 - Use `cybersecurity-skills` when an authorized evaluation targets a deployed system instead of a model artifact.
 
 ## Return A Routing Contract

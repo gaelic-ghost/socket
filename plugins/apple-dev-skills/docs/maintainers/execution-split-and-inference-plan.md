@@ -89,7 +89,7 @@ Keep execution-only mechanics out of `AGENTS.md` when they are too tied to tool 
 
 ## Repo-Maintenance Direction
 
-The repo should treat `productivity-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface, with Apple workflows selecting the Swift- and Xcode-aware profiles. `apple-dev-skills` owns Apple repo classification and guidance; it does not own a second toolkit implementation.
+The repo should treat `repository-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface, with Apple workflows selecting the Swift- and Xcode-aware profiles. `apple-dev-skills` owns Apple repo classification and guidance; it does not own a second toolkit implementation.
 
 Planned profile shape:
 
@@ -98,7 +98,7 @@ Planned profile shape:
 - `xcode-app`
 - optional later `swift-mixed-root`
 
-The `socket` marketplace lists `productivity-skills` and `apple-dev-skills` together, so users can add one catalog and then install or enable both plugin entries from the Socket marketplace instead of wiring each plugin marketplace one by one. Users who install only `apple-dev-skills` still get the Apple-only workflows, but mutating bootstrap and guidance-sync workflows must explain that repo-maintenance install or refresh requires the `productivity-skills` companion plugin.
+The `socket` marketplace lists `repository-skills` and `apple-dev-skills` together, so users can add one catalog and then install or enable both plugin entries from the Socket marketplace instead of wiring each plugin marketplace one by one. Users who install only `apple-dev-skills` still get the Apple-only workflows, but mutating bootstrap and guidance-sync workflows must explain that repo-maintenance install or refresh requires the `repository-skills` companion plugin.
 
 Current Apple-side integration status:
 
@@ -136,7 +136,7 @@ Current status:
 
 ### Phase 4: Toolkit consolidation
 
-- Keep Swift and Xcode-oriented repo-maintenance profile support canonical in `productivity-skills/maintain-project-repo`.
+- Keep Swift and Xcode-oriented repo-maintenance profile support canonical in `repository-skills/maintain-project-repo`.
 - Keep Apple-specific plugin work focused on stack guidance, repo classification, and profile selection.
 
 ## First Implementation Slice

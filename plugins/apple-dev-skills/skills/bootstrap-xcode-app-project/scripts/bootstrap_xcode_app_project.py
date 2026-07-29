@@ -201,14 +201,14 @@ final class {prefix}AppTests: XCTestCase {{
 
 def maintain_project_repo_runner() -> Path:
     plugins_root = Path(__file__).resolve().parents[4]
-    runner = plugins_root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
+    runner = plugins_root / "repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
     if not runner.is_file():
         raise RuntimeError(
-            "bootstrap-xcode-app-project needs productivity-skills/maintain-project-repo "
+            "bootstrap-xcode-app-project needs repository-skills/maintain-project-repo "
             f"to install repo-maintenance files, but the runner was missing at {runner}. "
-            "Install productivity-skills alongside apple-dev-skills, or add the socket "
+            "Install repository-skills alongside apple-dev-skills, or add the socket "
             "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
-            "enable both apple-dev-skills and productivity-skills from the Socket catalog, "
+            "enable both apple-dev-skills and repository-skills from the Socket catalog, "
             "then rerun this workflow."
         )
     return runner
@@ -341,7 +341,7 @@ def main() -> int:
             "normalized_inputs": normalized_inputs,
             "validation_result": "failed (maintain-project-repo install)",
             "stderr": str(exc),
-            "next_step": "Install productivity-skills alongside apple-dev-skills, or add the socket marketplace and enable both plugin entries from the Socket catalog, then rerun bootstrap-xcode-app-project.",
+            "next_step": "Install repository-skills alongside apple-dev-skills, or add the socket marketplace and enable both plugin entries from the Socket catalog, then rerun bootstrap-xcode-app-project.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1

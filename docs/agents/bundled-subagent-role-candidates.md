@@ -22,8 +22,8 @@ workflow knowledge.
 
 Strong candidates:
 
-1. `productivity-skills`: `repo-docs-auditor` (implemented)
-2. `productivity-skills`: `code-slice-tracer` (implemented)
+1. `documentation-skills`: `repo-docs-auditor` (implemented)
+2. `codebase-understanding-skills`: `code-slice-tracer` (implemented)
 3. `agent-portability-skills`: `skills-repo-guidance-sync` (implemented)
 4. `things-app`: `things-route-auditor`
 5. `cardhop-app`: `cardhop-contact-auditor`
@@ -42,13 +42,13 @@ custom-agent files automatically:
 
 - `apple-dev-skills/.codex/agents/swift-steward.toml`
 - `server-side-swift/.codex/agents/server-swift-steward.toml`
-- `productivity-skills/.codex/agents/repo-docs-auditor.toml`
-- `productivity-skills/.codex/agents/code-slice-tracer.toml`
+- `documentation-skills/.codex/agents/repo-docs-auditor.toml`
+- `codebase-understanding-skills/.codex/agents/code-slice-tracer.toml`
 - `agent-portability-skills/.codex/agents/skills-repo-guidance-sync.toml`
 
 ## Strong Candidates
 
-### productivity-skills: repo-docs-auditor
+### documentation-skills: repo-docs-auditor
 
 Good fit because `maintain-project-docs` already coordinates README,
 CONTRIBUTING, AGENTS, ACCESSIBILITY, and ROADMAP sweeps while checking for
@@ -67,13 +67,13 @@ file-specific writes so owner skills preserve each document's voice and schema.
 
 Evidence:
 
-- `plugins/productivity-skills/skills/maintain-project-docs/SKILL.md`
-- `plugins/productivity-skills/skills/maintain-project-readme/SKILL.md`
-- `plugins/productivity-skills/skills/maintain-project-contributing/SKILL.md`
-- `plugins/productivity-skills/skills/maintain-project-agents/SKILL.md`
-- `plugins/productivity-skills/skills/maintain-project-roadmap/SKILL.md`
+- `plugins/documentation-skills/skills/maintain-project-docs/SKILL.md`
+- `plugins/documentation-skills/skills/maintain-project-readme/SKILL.md`
+- `plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md`
+- `plugins/documentation-skills/skills/maintain-project-agents/SKILL.md`
+- `plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md`
 
-### productivity-skills: code-slice-tracer
+### codebase-understanding-skills: code-slice-tracer
 
 Good fit because `explain-code-slice` is a bounded read-only walkthrough skill
 and already allows subagent fan-out for large traces.
@@ -91,8 +91,8 @@ trace findings. The main thread owns the final explanation and any persistent
 
 Evidence:
 
-- `plugins/productivity-skills/skills/explain-code-slice/SKILL.md`
-- `plugins/productivity-skills/skills/maintain-project-architecture/SKILL.md`
+- `plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md`
+- `plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md`
 
 ### agent-portability-skills: skills-repo-guidance-sync
 
@@ -249,13 +249,13 @@ Evidence:
 
 ## Maybe Later
 
-### productivity-skills: roadmap-triage-worker
+### documentation-skills: roadmap-triage-worker
 
 Useful for collecting TODO/FIXME comments, GitHub issue evidence, release-note
 drift, and backlog candidates. Keep it separate from source-comment rewrites and
 only let the main thread apply a single explicit checklist item at a time.
 
-### productivity-skills: automation-plan-designer
+### agent-engineering-skills: automation-plan-designer
 
 Useful for plan-only analysis across Codex app automations, `codex exec`, Codex
 subagents, Agents SDK services, LangGraph, evals, and escalation gates. Keep it

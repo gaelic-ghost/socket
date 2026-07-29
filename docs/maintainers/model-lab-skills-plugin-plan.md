@@ -47,7 +47,7 @@ shows that agent-safe discovery or mutation materially improves through MCP.
 | --- | --- |
 | Model experiment design, dataset shape, training recipe, intervention, model evaluation, checkpoint comparison, and model artifact decision | `model-lab-skills` |
 | Provider choice, GPU infrastructure, account and credential boundaries, cost, endpoint lifecycle, storage, and teardown | `cloud-inference-skills` |
-| Agent, skill, prompt, and automation evaluation design | `productivity-skills:design-agent-eval-workflow` |
+| Agent, skill, prompt, and automation evaluation design | `agent-engineering-skills:design-agent-eval-workflow` |
 | Codex, Claude, Hermes, Xcode, Zed, and other host capability or packaging compatibility | `agent-portability-skills` |
 | Authorized security testing whose model or agent can reach real tools, systems, accounts, or sensitive data | `cybersecurity-skills` |
 | Python project structure, environment management, packaging, tests, lint, and CI | `python-skills` |
@@ -66,7 +66,7 @@ Keep these terms separate:
   persistence, and host-specific behavior around one or more models.
 
 `model-lab-skills` should own model-harness selection and model-level evidence.
-`productivity-skills` should own general agent-eval design.
+`agent-engineering-skills` should own general agent-eval design.
 `agent-portability-skills` should own host and packaging comparisons. A
 tool-using agent evaluation should compose those owners rather than invent a
 second model-evaluation path.

@@ -162,7 +162,7 @@ If the repo still wants less duplication after the surface shrinks, the approved
 
 ## Post-Extraction Note
 
-The Apple plugin now treats `productivity-skills/maintain-project-repo` as the shipped local contract for reusable repo-maintenance behavior.
+The Apple plugin now treats `repository-skills/maintain-project-repo` as the shipped local contract for reusable repo-maintenance behavior.
 
 - `apple-dev-skills` no longer owns a second bundled toolkit source
 - Apple bootstrap and guidance-sync skills stay responsible for Apple repo classification, `AGENTS.md` guidance, and choosing the `swift-package` or `xcode-app` `maintain-project-repo` profile

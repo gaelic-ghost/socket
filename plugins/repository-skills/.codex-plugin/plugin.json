@@ -1,0 +1,20 @@
+{
+  "name": "repository-skills",
+  "version": "9.27.0",
+  "description": "Repository operations, GitHub settings, worktree, validation, and release workflow skills.",
+  "author": {"name": "Gale", "email": "mail@galewilliams.com", "url": "https://github.com/gaelic-ghost"},
+  "homepage": "https://github.com/gaelic-ghost/repository-skills",
+  "repository": "https://github.com/gaelic-ghost/repository-skills",
+  "license": "Apache-2.0",
+  "keywords": ["codex", "skills", "repository", "github", "worktree", "release"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Repository Skills",
+    "shortDescription": "Repository operations and release workflows for Codex.",
+    "longDescription": "Repository operations, GitHub settings, Codex GUI worktrees, validation, release preparation, and branch-accounting workflow guidance.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/gaelic-ghost/repository-skills"
+  }
+}

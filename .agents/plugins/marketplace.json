@@ -102,16 +102,64 @@
       "category": "Developer Tools"
     },
     {
-      "name": "productivity-skills",
+      "name": "agent-engineering-skills",
       "source": {
         "source": "local",
-        "path": "./plugins/productivity-skills"
+        "path": "./plugins/agent-engineering-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "codebase-understanding-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codebase-understanding-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "documentation-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/documentation-skills"
       },
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
+    },
+    {
+      "name": "professional-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/professional-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "repository-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/repository-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
     },
     {
       "name": "python-skills",

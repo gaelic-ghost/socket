@@ -290,14 +290,14 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             apple_skill = cache_root / "apple-dev-skills" / "6.5.1" / "skills" / "sync-xcode-project-guidance"
             productivity_skill = (
                 cache_root
-                / "productivity-skills"
+                / "repository-skills"
                 / "6.5.1"
                 / "skills"
                 / "maintain-project-repo"
             )
             shutil.copytree(ROOT / "skills/sync-xcode-project-guidance", apple_skill)
             shutil.copytree(ROOT / "templates", cache_root / "apple-dev-skills" / "6.5.1" / "templates")
-            shutil.copytree(ROOT.parent / "productivity-skills/skills/maintain-project-repo", productivity_skill)
+            shutil.copytree(ROOT.parent / "repository-skills/skills/maintain-project-repo", productivity_skill)
 
             repo_root = Path(tmpdir) / "Repo"
             repo_root.mkdir()

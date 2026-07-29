@@ -11,7 +11,7 @@ Create a new Swift package repository with one top-level entry point, a simplici
 
 ## Companion Plugin Requirement
 
-This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`productivity-skills`](https://github.com/gaelic-ghost/productivity-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `productivity-skills` alongside `apple-dev-skills`, or add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket` and then install or enable both `apple-dev-skills` and `productivity-skills` from the Socket catalog.
+This skill can be discovered from a standalone `apple-dev-skills` install, but its mutating bootstrap path installs repo-maintenance files through the companion [`repository-skills`](https://github.com/gaelic-ghost/repository-skills) plugin. If the companion `maintain-project-repo` runner is missing, tell the user to install `repository-skills` alongside `apple-dev-skills`, or add the [`socket`](https://github.com/gaelic-ghost/socket) marketplace with `codex plugin marketplace add gaelic-ghost/socket` and then install or enable both `apple-dev-skills` and `repository-skills` from the Socket catalog.
 
 ## When To Use
 
@@ -70,7 +70,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - `swift build` and `swift test` unless `--skip-validation` was requested
    - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
    - when a GitHub remote is created or already exists, route repository
-     settings audit or mutation through `productivity-skills:maintain-github-repository`
+     settings audit or mutation through `repository-skills:maintain-github-repository`
      instead of embedding a separate Apple-specific baseline
 7. Ensure the generated guidance encodes the shared Swift policy:
    - apply the detailed local policy in `references/snippets/apple-swift-package-core.md`
@@ -156,7 +156,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - After a successful scaffold, use `scripts/repo-maintenance/validate-all.sh` for local maintainer validation and `scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z` from a feature branch or worktree for protected-main releases.
 - After a successful scaffold, configure protected branches to require `validate` for the managed repo-maintenance workflow; GitHub exposes that job check context directly rather than the workflow title plus job string.
 - When the new package is published to GitHub, use
-  `productivity-skills:maintain-github-repository` to audit repository features,
+  `repository-skills:maintain-github-repository` to audit repository features,
   merge modes, security automation, sign-off policy, and branch protection.
 - After a successful scaffold, hand off later repo-guidance alignment work to `sync-swift-package-guidance`.
 - For ordinary package work, prefer `swift build` and `swift test`.

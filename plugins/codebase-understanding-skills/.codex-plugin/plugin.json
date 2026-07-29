@@ -1,0 +1,20 @@
+{
+  "name": "codebase-understanding-skills",
+  "version": "9.27.0",
+  "description": "Code-path exploration, call-site tracing, and evidence-based codebase explanation skills.",
+  "author": {"name": "Gale", "email": "mail@galewilliams.com", "url": "https://github.com/gaelic-ghost"},
+  "homepage": "https://github.com/gaelic-ghost/codebase-understanding-skills",
+  "repository": "https://github.com/gaelic-ghost/codebase-understanding-skills",
+  "license": "Apache-2.0",
+  "keywords": ["codex", "skills", "codebase", "tracing", "architecture", "explanation"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codebase Understanding Skills",
+    "shortDescription": "Trace and explain real code paths with evidence.",
+    "longDescription": "Code-path exploration, call-site tracing, branch and data-flow analysis, and evidence-based codebase explanations.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/gaelic-ghost/codebase-understanding-skills"
+  }
+}

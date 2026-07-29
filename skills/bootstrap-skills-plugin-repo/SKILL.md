@@ -72,7 +72,7 @@ If you mention project-scoped `.codex/config.toml`, describe it as a general Cod
 ## GitHub Repository Settings
 
 When the bootstrapped repository has a GitHub remote, use
-`productivity-skills:maintain-github-repository` to audit or apply the current
+`repository-skills:maintain-github-repository` to audit or apply the current
 recommended GitHub repository settings. Keep local structure bootstrap separate
 from server-side settings mutation, keep visibility changes approval-gated, and
 preserve any documented maintainer direct-push workflow.

@@ -69,8 +69,9 @@ repositories:
 - return review packets with proposed patch sets, validation handoff, and
   blockers
 
-`productivity-skills` remains the owner for general repo-document maintenance
-and `maintain-project-repo` installation or refresh behavior. The steward role
+`documentation-skills` remains the owner for general repo-document maintenance,
+and `repository-skills` owns `maintain-project-repo` installation or refresh
+behavior. The steward role
 should delegate to those skills instead of duplicating their apply-mode logic.
 
 ## Trigger Policy

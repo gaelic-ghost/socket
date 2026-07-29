@@ -1,6 +1,6 @@
 # Release Modes
 
-This document names the release modes used by `socket` so maintainer work follows the same local-first shape as `productivity-skills:maintain-project-repo` while still respecting `socket`'s mixed monorepo and subtree responsibilities.
+This document names the release modes used by `socket` so maintainer work follows the same local-first shape as `repository-skills:maintain-project-repo` while still respecting `socket`'s mixed monorepo and subtree responsibilities.
 
 ## Mode Summary
 

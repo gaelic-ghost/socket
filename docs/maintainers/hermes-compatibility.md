@@ -204,7 +204,7 @@ server command plus a deliberately small tool allowlist.
 | Apple Dev Skills Xcode bridges | [`apple-dev-skills.yaml`](./hermes-mcp/apple-dev-skills.yaml) | Manual Xcode setup required |
 | Cardhop local server | [`cardhop-app.yaml`](./hermes-mcp/cardhop-app.yaml) | Local server-directory setup required |
 | Cloud Inference Runpod API and docs servers | [`cloud-inference-skills.yaml`](./hermes-mcp/cloud-inference-skills.yaml) | Ready; API server needs `RUNPOD_API_KEY` |
-| Productivity Dice server | [`productivity-skills.yaml`](./hermes-mcp/productivity-skills.yaml) | Ready; basic public search needs no credential |
+| Professional Dice server | [`professional-skills.yaml`](./hermes-mcp/professional-skills.yaml) | Ready; basic public search needs no credential |
 | Things local server | [`things-app.yaml`](./hermes-mcp/things-app.yaml) | Local server-directory setup required; updates need `THINGS_AUTH_TOKEN` |
 
 ## When a Native Hermes Plugin Is Required

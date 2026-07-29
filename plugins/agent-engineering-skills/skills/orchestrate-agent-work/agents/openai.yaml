@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrate Agent Work"
+  short_description: "Launch and close bounded worker tasks."
+  default_prompt: "Use $orchestrate-agent-work to coordinate these workers with a launch envelope, report-back contract, and explicit closure."

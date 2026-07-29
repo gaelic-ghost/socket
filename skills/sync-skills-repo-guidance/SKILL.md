@@ -37,7 +37,7 @@ Default user-facing install and update guidance to the official Git-backed marke
 
 Keep marketplace sources, marketplace catalogs, plugin payload directories, installed cache paths, and config-state distinct instead of collapsing them into one vague "plugin install" concept. Do not reproduce the full install-surface map unless the target repo truly needs a maintainer reference; link to the OpenAI docs for the full current details.
 
-When a workflow depends on a companion skill or plugin, first route through the Codex harness surfaces that are already available in the current session. Name the current-session skill to use, such as `productivity-skills:maintain-project-repo`, before giving install advice. If the companion skill is missing from the session, tell the user to add or update the marketplace and install the plugin through Codex's plugin directory for future sessions; do not imply that editing `config.toml`, copying payload folders, or searching an arbitrary checkout is the standard way to make a skill callable from Codex.
+When a workflow depends on a companion skill or plugin, first route through the Codex harness surfaces that are already available in the current session. Name the current-session skill to use, such as `repository-skills:maintain-project-repo`, before giving install advice. If the companion skill is missing from the session, tell the user to add or update the marketplace and install the plugin through Codex's plugin directory for future sessions; do not imply that editing `config.toml`, copying payload folders, or searching an arbitrary checkout is the standard way to make a skill callable from Codex.
 
 For `socket`, prefer:
 
@@ -100,7 +100,7 @@ Flag hooks guidance that uses deprecated `features.codex_hooks` wording instead 
 
 When the target repository has a GitHub remote, include repository settings in
 the sync audit and route the canonical baseline through
-`productivity-skills:maintain-github-repository`. Report drift in repository
+`repository-skills:maintain-github-repository`. Report drift in repository
 features, merge modes, Dependabot and security settings, private vulnerability
 reporting, web commit sign-off, and branch protection.
 

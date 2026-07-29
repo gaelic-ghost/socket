@@ -121,8 +121,8 @@ def maintain_project_repo_runner() -> Path:
             candidate_paths.append(resolved)
 
     for root in script_path.parents:
-        add_candidate(root / "productivity-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py")
-        versioned_plugin_root = root / "productivity-skills"
+        add_candidate(root / "repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py")
+        versioned_plugin_root = root / "repository-skills"
         if versioned_plugin_root.is_dir():
             for version_dir in sorted(versioned_plugin_root.iterdir(), key=version_sort_key, reverse=True):
                 add_candidate(
@@ -138,13 +138,13 @@ def maintain_project_repo_runner() -> Path:
     if not searched:
         searched = "- no candidate paths were generated"
     raise RuntimeError(
-        "sync-swift-package-guidance needs productivity-skills/maintain-project-repo "
+        "sync-swift-package-guidance needs repository-skills/maintain-project-repo "
         f"to refresh repo-maintenance files, but no runner was found. First expected path: {expected}. "
         "Searched candidate paths:\n"
         f"{searched}\n"
-        "Install productivity-skills alongside apple-dev-skills, or add the socket "
+        "Install repository-skills alongside apple-dev-skills, or add the socket "
         "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
-        "enable both apple-dev-skills and productivity-skills from the Socket catalog, "
+        "enable both apple-dev-skills and repository-skills from the Socket catalog, "
         "then rerun this workflow."
     )
 
@@ -295,7 +295,7 @@ def main() -> int:
             "validation_result": validation_result,
             "actions": actions,
             "stderr": str(exc),
-            "next_step": "Install productivity-skills alongside apple-dev-skills, or add the socket marketplace and enable both plugin entries from the Socket catalog, then rerun sync-swift-package-guidance.",
+            "next_step": "Install repository-skills alongside apple-dev-skills, or add the socket marketplace and enable both plugin entries from the Socket catalog, then rerun sync-swift-package-guidance.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1

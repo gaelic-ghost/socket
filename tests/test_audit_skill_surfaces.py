@@ -45,7 +45,7 @@ def make_repo(tmp_path: Path) -> Path:
         ),
     )
     write(
-        tmp_path / "plugins" / "productivity-skills" / "skills" / "maintain-project-readme" / "SKILL.md",
+        tmp_path / "plugins" / "documentation-skills" / "skills" / "maintain-project-readme" / "SKILL.md",
         "\n".join(
             [
                 "# Maintain README",
@@ -91,7 +91,7 @@ def test_build_report_counts_skill_surfaces_and_hotspots(tmp_path: Path) -> None
     assert report.skill_lines_by_plugin["swiftasb-skills"] == 8
     assert [surface.relative_path for surface in report.largest_skills] == [
         "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md",
-        "plugins/productivity-skills/skills/maintain-project-readme/SKILL.md",
+        "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md",
     ]
     assert len(report.duplicate_references) == 1
     assert len(report.duplicate_references[0].paths) == 2
