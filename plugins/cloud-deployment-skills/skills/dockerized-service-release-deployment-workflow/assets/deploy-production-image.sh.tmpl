@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+deploy_environment=${1:?"Expected the deployment environment, such as test or production."}
+image_ref=${2:?"Expected an exact OCI image reference such as registry.example/service@sha256:<64 hex characters>."}
+
+if [[ ! "$image_ref" =~ ^([^/@[:space:]]+\.[^/@[:space:]]+|localhost|[^/@[:space:]]+:[0-9]+)/[^@[:space:]]+@sha256:[0-9a-f]{64}$ ]]; then
+  echo "Refusing deployment because '$image_ref' does not include a registry, repository, and immutable OCI sha256 digest." >&2
+  exit 1
+fi
+
+echo "The $deploy_environment deployment adapter template has not been configured for this provider. Replace this file with the provider-owned exact-digest deployment command; do not clone source, run docker build, or deploy a mutable image tag." >&2
+exit 1

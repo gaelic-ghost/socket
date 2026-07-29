@@ -8,6 +8,7 @@ This file is the Cloud Deployment Skills child-repo override for work done from 
 - Root [`skills/`](./skills/) is the authored workflow surface.
 - The repo root is the Codex plugin root through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json).
 - Keep this plugin focused on provider selection, official-tool routing, deployment readiness, and cross-provider handoffs.
+- Own the provider-neutral release contract for Dockerized backend and cloud services: clean GitHub Actions builds, main-anchored tags, immutable image digests, release manifests, release-published deployment triggers, production approval, exact-digest deployment, health verification, and rollback handoff.
 - Keep framework-specific application implementation in the owning stack plugins such as `server-side-swift`, `web-dev-skills`, `python-skills`, `dotnet-skills`, `rust-skills`, and `server-side-jvm`.
 
 ## Local Rules
@@ -22,3 +23,4 @@ This file is the Cloud Deployment Skills child-repo override for work done from 
 - Keep provider-specific skills small and explicit. Add a new provider workflow only when it removes real routing ambiguity or covers a provider that does not already offer a first-party agent plugin.
 - Do not commit machine-local credentials, profiles, `.env` files, cloud state, generated deployment artifacts, or local cache paths.
 - Use repo-local files, checked-out provider config, provider CLIs, and official provider documentation before making claims about current deployment behavior.
+- Keep project worktrees development-only. Release artifacts must come from clean GitHub Actions checkouts; deployment adapters must deploy the manifest digest and must never rebuild source on a host.

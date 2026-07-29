@@ -150,7 +150,10 @@ PYTHON_SKILLS = (
     "python-testing-workflow",
 )
 JVM_SKILLS = ("build-jvm-agent-service",)
-CLOUD_DEPLOYMENT_SKILLS = ("cloud-deployment-routing-workflow",)
+CLOUD_DEPLOYMENT_SKILLS = (
+    "cloud-deployment-routing-workflow",
+    "dockerized-service-release-deployment-workflow",
+)
 EXPORTED_SKILLS = (
     AGENT_PORTABILITY_SKILLS
     + MESSAGING_SKILLS

@@ -1,7 +1,7 @@
 {
   "name": "cloud-deployment-skills",
-  "version": "9.26.1",
-  "description": "Codex skills for routing cloud deployment work through official provider plugins, MCP servers, CLIs, and Socket-owned deployment guidance.",
+  "version": "9.27.0",
+  "description": "Codex skills for routing cloud deployment work through official provider plugins, MCP servers, CLIs, and a reusable Dockerized-service release and deployment contract.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -23,13 +23,18 @@
     "mcp",
     "cloudflare",
     "vercel",
-    "fly.io"
+    "fly.io",
+    "docker",
+    "oci",
+    "github-actions",
+    "github-releases",
+    "supply-chain-security"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Cloud Deployment Skills",
     "shortDescription": "Cloud provider and deployment routing guidance for Codex.",
-    "longDescription": "Guide Codex agents through cloud deployment routing, official provider plugin selection, credential and mutation safety checks, and provider handoffs. Socket delegates AWS work to the official AWS Agent Toolkit and Azure work to Microsoft's Azure Skills plugin, keeping Socket focused on thin cross-provider decisions instead of duplicating provider MCP, CLI, or deployment workflows.",
+    "longDescription": "Guide Codex agents through cloud deployment routing, official provider plugin selection, credential and mutation safety checks, and a reusable Dockerized-service release contract: clean GitHub Actions builds, main-anchored tags, immutable image digests, release manifests, release-published production deployment, approval, health checks, and exact-digest rollback. Socket delegates AWS work to the official AWS Agent Toolkit and Azure work to Microsoft's Azure Skills plugin, keeping Socket focused on thin cross-provider decisions instead of duplicating provider MCP, CLI, or deployment workflows.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -39,7 +44,8 @@
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-deployment-skills",
     "defaultPrompt": [
       "Choose the right cloud deployment path and route AWS or Azure work through the applicable official provider plugin when appropriate.",
-      "Decide whether this deployment should use an official provider plugin, provider CLI, MCP server, framework-owned deploy workflow, or a Socket-owned provider skill."
+      "Decide whether this deployment should use an official provider plugin, provider CLI, MCP server, framework-owned deploy workflow, or a Socket-owned provider skill.",
+      "Set up or audit a Dockerized backend release path that builds in clean GitHub Actions, deploys only a published release manifest digest after production approval, verifies health, and rolls back by exact digest."
     ],
     "brandColor": "#22D3EE",
     "composerIcon": "./assets/cloud-deployment-icon.svg",

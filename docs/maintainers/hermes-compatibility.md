@@ -112,9 +112,11 @@ plugin runtime, MCP server, or native Hermes extension.
 The exported F# web-framework workflows are portable instruction contracts. They
 use the operator's .NET SDK and project dependencies but bundle no runtime,
 framework package, MCP server, hook, or native Hermes extension. The cloud
-deployment routing workflow is also portable guidance: it routes Azure work to
-Microsoft's official Azure Skills plugin but does not claim that Azure MCP is
-automatically installed or configured in Hermes.
+deployment routing workflow and Dockerized-service release/deployment workflow
+are also portable guidance: they route Azure work to Microsoft's official Azure
+Skills plugin and define a clean-CI, exact-digest release contract, but do not
+claim that Azure MCP, provider credentials, or production deployment adapters
+are automatically installed or configured in Hermes.
 
 The exported Python workflows are portable guidance. They guide `uv`-managed
 agent services, FastAPI services, FastMCP services, and tests while relying on

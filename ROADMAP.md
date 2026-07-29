@@ -713,7 +713,7 @@ Completed
 - [x] The plugin boundary is clear enough for future provider slices without absorbing framework-specific deployment workflows.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the exported cloud-deployment skill surface.
 
-Completed Milestone 21 by adding the `cloud-deployment-skills` child plugin, shipping the provider-routing workflow, wiring the Socket marketplace entry, documenting the AWS Agent Toolkit delegation, and keeping future provider expansion scoped to small official-tool routing slices.
+Completed Milestone 21 by adding the `cloud-deployment-skills` child plugin, shipping the provider-routing workflow, wiring the Socket marketplace entry, documenting the AWS Agent Toolkit delegation, and keeping future provider expansion scoped to small official-tool routing slices. The plugin now also ships a provider-neutral Dockerized-service release/deployment contract and templates: clean GitHub Actions artifact builds, main-anchored tags, immutable digest manifests, release-published production deployment triggers, environment approval, exact-digest health checks, and rollback handoffs without host-side rebuilds.
 
 ## Milestone 22: Network Protocol Skills plugin
 

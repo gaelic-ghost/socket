@@ -1,0 +1,84 @@
+name: Deploy published release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    if: github.event.release.prerelease == false || vars.ENABLE_PRERELEASE_DEPLOYMENTS == 'true'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.release.prerelease && 'test' || 'production' }}
+    env:
+      DEPLOY_ENVIRONMENT: ${{ github.event.release.prerelease && 'test' || 'production' }}
+    steps:
+      - name: Check out the release tag for deployment adapters
+        uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - name: Download the published release manifest
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          gh release download "$RELEASE_TAG" --pattern release-manifest.json --dir .release
+          test -s .release/release-manifest.json
+
+      - name: Validate the release manifest and extract the exact image digest
+        id: manifest
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          manifest=.release/release-manifest.json
+          tag=$(jq -r '.releaseTag // empty' "$manifest")
+          kind=$(jq -r '.releaseKind // empty' "$manifest")
+          commit=$(jq -r '.commit // empty' "$manifest")
+          image=$(jq -r '.image // empty' "$manifest")
+          if [[ "$tag" != "$RELEASE_TAG" ]]; then
+            echo "Release manifest tag '$tag' does not match published release '$RELEASE_TAG'." >&2
+            exit 1
+          fi
+          if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ && "$kind" == stable && "${{ github.event.release.prerelease }}" == false ]]; then
+            :
+          elif [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta|rc|test)([.-][0-9A-Za-z]+)*$ && "$kind" == prerelease && "${{ github.event.release.prerelease }}" == true ]]; then
+            :
+          else
+            echo "Release tag '$tag', manifest kind '$kind', and GitHub prerelease state do not form an allowed stable or recognized prerelease release." >&2
+            exit 1
+          fi
+          if [[ ! "$commit" =~ ^[0-9a-f]{40}$ || "$commit" != "$(git rev-parse HEAD)" ]]; then
+            echo "Release manifest commit '$commit' does not match the checked-out release tag commit '$(git rev-parse HEAD)'." >&2
+            exit 1
+          fi
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$commit" origin/main; then
+            echo "Release manifest commit '$commit' is not reachable from origin/main; refusing to grant deployment credentials to an unreviewed tag." >&2
+            exit 1
+          fi
+          if [[ ! "$image" =~ ^([^/@[:space:]]+\.[^/@[:space:]]+|localhost|[^/@[:space:]]+:[0-9]+)/[^@[:space:]]+@sha256:[0-9a-f]{64}$ ]]; then
+            echo "Release manifest image must include a registry, repository, and exact OCI sha256 digest; got '$image'." >&2
+            exit 1
+          fi
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+
+      - name: Authenticate to the cloud provider with OIDC
+        shell: bash
+        run: {{PROVIDER_OIDC_LOGIN_COMMAND}}
+
+      - name: Deploy exactly the published image digest
+        shell: bash
+        run: ./scripts/deploy-production-image.sh "$DEPLOY_ENVIRONMENT" '${{ steps.manifest.outputs.image }}'
+
+      - name: Verify the deployed release health
+        shell: bash
+        run: ./scripts/verify-production-health.sh "$DEPLOY_ENVIRONMENT" '${{ steps.manifest.outputs.image }}'
