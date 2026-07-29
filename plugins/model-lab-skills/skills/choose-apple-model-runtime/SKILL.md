@@ -8,8 +8,8 @@ description: Compare and select Core AI, Core ML, MLX, MLX Swift, MLX LM, ExecuT
 ## Route By Artifact And Constraint
 
 | Need | Start with |
-| Host a downloaded model locally for an API client, agent framework, or dev tool | LM Studio local server; choose native `/api/v1` model-management APIs or OpenAI-compatible `/v1` inference APIs deliberately |
 | --- | --- |
+| Host a downloaded model locally for an API client, agent framework, or dev tool | LM Studio local server; choose native `/api/v1` model-management APIs or OpenAI-compatible `/v1` inference APIs deliberately |
 | Author `.aimodel` packages with editable Python primitives and Swift runtime utilities | Choose Core AI, then hand off to the `coreai-models` `working-with-coreai` and `model-authoring` skills |
 | Lower `torch.export.ExportedProgram` into Core AI IR | `coreai-torch` |
 | Quantize, palettize, or prune Core AI models | Choose Core AI, then hand off to Apple's `model-compression-exploration` skill and `coreai-optimization` |
