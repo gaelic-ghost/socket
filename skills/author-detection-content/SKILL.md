@@ -23,7 +23,7 @@ Read [references/detection-quality.md](references/detection-quality.md) before c
 4. Author content.
    - Include title/ID, description, status, author/date, references, log source, logic/query, fields, false positives, level/severity, tags, and test notes as the target format permits.
 5. Test fixtures.
-   - Include validated positive events, benign near-misses, missing/renamed fields, ordering/time-window cases, duplicate events, volume/performance, and known platform variants.
+   - Include validated positive events, benign negatives and near-misses, missing/renamed fields, ordering/time-window cases, duplicate events, volume/performance, and known platform variants.
 6. Tune and validate response.
    - Improve logic before adding exclusions; verify enrichment and runbook lead an analyst to decisive evidence.
 7. Deploy and maintain.

@@ -22,7 +22,7 @@ Read [references/macos-security-layers.md](references/macos-security-layers.md) 
    - Record real type, bundle/package metadata, signer, Team ID, signature verification, notarization assessment, entitlements, modifications, and source channel.
    - Route binary internals to Reverse Engineering Skills.
 4. Inspect platform evidence.
-   - Check Gatekeeper/quarantine context, XProtect detections or remediation evidence, TCC/privacy grants, profiles, login/background items, system extensions, and relevant system policy without disabling protections.
+   - Check Gatekeeper/quarantine context, XProtect detections or remediation evidence, TCC/privacy grants, SIP state, profiles, login/background items, system extensions, and relevant system policy without disabling protections.
 5. Correlate behavior.
    - Route process/file/network evidence to runtime inspection and startup/registration clues to persistence inspection.
    - Separate a blocked attempt from successful execution and successful execution from compromise.
