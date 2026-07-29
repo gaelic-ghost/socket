@@ -1,6 +1,6 @@
 ---
 name: assess-and-explain-threat
-description: Assess whether suspicious evidence indicates a real threat and explain the result in practical language. Use when a person needs a confidence-calibrated conclusion, immediate protective actions, remaining uncertainty, impact, or understandable advice after artifact, endpoint, vulnerability, identity, or incident evidence has been collected.
+description: Assess whether suspicious evidence indicates a real threat and explain it plainly. Use for confidence, protective actions, uncertainty, impact, and advice after artifact, endpoint, identity, or incident evidence.
 ---
 
 # Assess And Explain Threat

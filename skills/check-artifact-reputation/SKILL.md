@@ -1,6 +1,6 @@
 ---
 name: check-artifact-reputation
-description: Check local and external reputation for a suspicious artifact, signer, hash, URL, domain, certificate, package, or vendor. Use when provenance and threat-intelligence context could inform triage, while sample-upload privacy, stale intelligence, hash-only misses, false positives, and reputation-versus-behavior limits must remain explicit.
+description: Check reputation for a suspicious artifact, signer, hash, URL, domain, certificate, package, or vendor. Use when threat intelligence informs triage while privacy, stale data, false positives, and behavior limits stay explicit.
 ---
 
 # Check Artifact Reputation

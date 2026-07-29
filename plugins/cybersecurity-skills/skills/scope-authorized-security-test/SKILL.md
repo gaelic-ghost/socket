@@ -1,6 +1,6 @@
 ---
 name: scope-authorized-security-test
-description: Define and verify authorization, targets, rules of engagement, data handling, safety controls, and stop conditions before active security testing. Use for penetration tests, vulnerability scans, exploit validation, web/API tests, network probing, red-team-like exercises, bug bounty work, or agent-driven testing where ownership and allowed techniques must be explicit.
+description: Define authorization, targets, rules, safety controls, and stop conditions before active security testing. Use for penetration tests, scans, exploit validation, web or API tests, network probing, bug bounty, or agent-driven testing.
 ---
 
 # Scope Authorized Security Test

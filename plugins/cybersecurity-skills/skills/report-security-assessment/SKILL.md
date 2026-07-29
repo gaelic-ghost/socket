@@ -1,6 +1,6 @@
 ---
 name: report-security-assessment
-description: Write a reproducible security assessment or penetration-test report from validated evidence. Use when technical findings, negative results, scope, methodology, limitations, exposure, impact, confidence, remediation, retest criteria, evidence handling, and a plain-language executive explanation must be assembled without overstating scanner output or untested coverage.
+description: Write a security assessment or penetration-test report from evidence. Use when findings, scope, methodology, limitations, impact, remediation, retest criteria, and an executive explanation need calibrated reporting.
 ---
 
 # Report Security Assessment

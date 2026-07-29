@@ -1,6 +1,6 @@
 ---
 name: sync-skills-repo-guidance
-description: Audit guidance across AGENTS.md, optional README.md, maintainer docs, and discovery mirrors in an existing Agent Skills or Codex plugin repository. Use when a skills repo may have stale guidance, missing discovery mirrors, outdated OpenAI Codex policy, or unclear boundaries between portable skills and host-specific plugin surfaces. Defer narrow README-only, roadmap-only, or host-adapter design requests to the specialized maintainer skills.
+description: Audit Agent Skills or Codex plugin guidance and discovery mirrors. Use for stale policy, missing mirrors, or unclear portable-skill and host-plugin boundaries; defer narrow docs work.
 metadata:
   hermes:
     category: agent-portability

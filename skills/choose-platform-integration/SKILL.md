@@ -1,6 +1,6 @@
 ---
 name: choose-platform-integration
-description: Choose a supported chat, calling, business-messaging, or collaboration integration shape before implementation. Use for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, iMessage collaboration, and Apple VoIP requests.
+description: Choose a supported chat, calling, business-messaging, or collaboration integration before implementation. Use for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, iMessage collaboration, and Apple VoIP.
 ---
 
 # Choose Platform Integration

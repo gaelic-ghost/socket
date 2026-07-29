@@ -1,6 +1,6 @@
 ---
 name: test-network-services
-description: Inventory and test explicitly authorized network services with bounded discovery and protocol-aware validation. Use for approved hosts, address ranges, ports, TLS, banners, service versions, authentication, exposure, segmentation, configuration, packet evidence, or narrowly reviewed vulnerability checks when rate, source, third-party boundaries, and stop conditions are explicit.
+description: Test authorized network services with bounded discovery and protocol-aware validation. Use for hosts, ranges, ports, TLS, banners, versions, authentication, exposure, segmentation, configuration, packet evidence, or vulnerability checks.
 ---
 
 # Test Network Services

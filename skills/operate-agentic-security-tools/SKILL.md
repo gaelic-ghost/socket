@@ -1,6 +1,6 @@
 ---
 name: operate-agentic-security-tools
-description: Operate security tools through an AI agent with explicit authority and evidence boundaries. Use when an agent may invoke local CLIs, GUI apps, browser automation, MCP servers, remote scanners, sandboxes, vulnerability tools, packet tools, or containment actions and permissions, mounts, network, secrets, approvals, logging, output, and cleanup must be constrained.
+description: Operate security tools through an AI agent with explicit authority boundaries. Use when an agent may invoke CLIs, GUI apps, browser automation, MCP servers, scanners, sandboxes, or containment actions with constrained approvals and logging.
 ---
 
 # Operate Agentic Security Tools

@@ -1,6 +1,6 @@
 ---
 name: assess-exposure-and-impact
-description: Prioritize a validated or plausible vulnerability using actual asset exposure and impact. Use when affected versions, deployment reachability, attacker prerequisites, privileges, sensitive data, exploit maturity, CISA KEV status, vendor guidance, mitigations, detection, business criticality, CVSS, and remediation urgency must be combined without relying on a severity score alone.
+description: Prioritize a vulnerability using actual asset exposure and impact. Use when versions, reachability, prerequisites, privileges, data, exploit maturity, mitigations, detection, business criticality, and urgency matter beyond CVSS.
 ---
 
 # Assess Exposure And Impact

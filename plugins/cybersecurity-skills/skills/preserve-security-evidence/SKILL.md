@@ -1,6 +1,6 @@
 ---
 name: preserve-security-evidence
-description: Preserve and document security evidence before analysis, containment, or remediation changes it. Use for suspicious artifacts, volatile host state, vulnerability validation, incident records, logs, screenshots, commands, hashes, timelines, transformations, and analyst handoffs that need reproducible provenance without claiming legal-forensics certification.
+description: Preserve security evidence before analysis, containment, or remediation changes it. Use for artifacts, volatile host state, vulnerability validation, records, logs, screenshots, commands, hashes, timelines, and reproducible handoffs.
 ---
 
 # Preserve Security Evidence

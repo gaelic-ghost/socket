@@ -1,6 +1,6 @@
 ---
 name: author-yara-x-rules
-description: Author, test, tune, and document YARA-X detection rules from validated artifact evidence. Use when malware, suspicious files, scripts, documents, or binary features need local pattern detection with stable discriminators, metadata, positive and negative fixtures, performance checks, false-positive review, rule provenance, and regression testing.
+description: Author, test, tune, and document YARA-X rules from validated artifact evidence. Use when suspicious files, scripts, documents, or binary features need local detection with stable patterns, fixtures, performance checks, and regression tests.
 ---
 
 # Author YARA-X Rules

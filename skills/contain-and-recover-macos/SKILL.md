@@ -1,6 +1,6 @@
 ---
 name: contain-and-recover-macos
-description: Contain a suspected or confirmed macOS threat and verify recovery. Use when a Mac may need network isolation, process or service containment, account and credential response, persistence removal, artifact quarantine, backup/restore, erase/reinstall, monitoring, or return-to-service decisions while evidence loss, user impact, and platform protections remain explicit.
+description: Contain a macOS threat and verify recovery. Use for isolation, process or service containment, credential response, persistence removal, quarantine, restore, erase/reinstall, monitoring, and return-to-service decisions.
 ---
 
 # Contain And Recover macOS
