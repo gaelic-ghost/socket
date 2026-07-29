@@ -8,6 +8,7 @@ description: Compare and select Core AI, Core ML, MLX, MLX Swift, MLX LM, ExecuT
 ## Route By Artifact And Constraint
 
 | Need | Start with |
+| Host a downloaded model locally for an API client, agent framework, or dev tool | LM Studio local server; choose native `/api/v1` model-management APIs or OpenAI-compatible `/v1` inference APIs deliberately |
 | --- | --- |
 | Author `.aimodel` packages with editable Python primitives and Swift runtime utilities | Choose Core AI, then hand off to the `coreai-models` `working-with-coreai` and `model-authoring` skills |
 | Lower `torch.export.ExportedProgram` into Core AI IR | `coreai-torch` |
@@ -21,7 +22,7 @@ description: Compare and select Core AI, Core ML, MLX, MLX Swift, MLX LM, ExecuT
 
 ## Decision Workflow
 
-1. Identify the source artifact: PyTorch module/export, safetensors checkpoint, Core ML package, Core AI package, ExecuTorch program, or system model.
+1. Decide whether the need is a local inference server for a client or an app-packaged runtime/artifact. Use LM Studio for the former; identify the source artifact for the latter.
 2. Identify the deployment API: Python research, Swift app, ExecuTorch C++/mobile, or Foundation Models.
 3. Consult the dated maturity and availability matrix in `references/apple-model-tooling.md`, then confirm OS, Xcode, SDK, device, architecture, operator, dynamic-shape, state/cache, and precision requirements against the current official source.
 4. Select the shortest supported conversion path. Do not round-trip through formats merely because converters exist.
@@ -36,6 +37,7 @@ description: Compare and select Core AI, Core ML, MLX, MLX Swift, MLX LM, ExecuT
 - MLX is a general Apple-silicon array framework; MLX LM and MLX Swift are distinct higher-level/use-language surfaces.
 - ExecuTorch's MLX delegate is marked experimental and under active development upstream. Treat support as revision-specific and compare it separately with the Core ML backend.
 - Foundation Models uses Apple's system model and availability contract; it is not a route for packaging arbitrary user-supplied weights.
+- LM Studio is a local model server and control plane, not a Core AI, Core ML, MLX, or Foundation Models artifact/runtime. Its endpoint compatibility does not prove model tool use or structured-output behavior.
 - Apple research repositories vary from reusable frameworks to benchmark or paper-reproduction code. Classify the repository before recommending it as infrastructure.
 
 ## References

@@ -69,6 +69,12 @@ def test_routing_preserves_neighbor_plugin_ownership() -> None:
 
 def test_apple_runtime_covers_current_source_lanes() -> None:
     contents = skill_text("choose-apple-model-runtime")
+    reference = (
+        SKILLS_ROOT
+        / "choose-apple-model-runtime"
+        / "references"
+        / "apple-model-tooling.md"
+    ).read_text(encoding="utf-8").lower()
     for term in (
         "coreai-models",
         "coreai-torch",
@@ -79,8 +85,19 @@ def test_apple_runtime_covers_current_source_lanes() -> None:
         "executorch core ml",
         "experimental mlx",
         "foundation models",
+        "lm studio",
+        "local model server",
+        "openai-compatible",
     ):
         assert term in contents
+    for term in (
+        "structured output",
+        "loopback-only",
+        "macos/ios 27+",
+        "http://localhost:1234/v1",
+        "native `/api/v1`",
+    ):
+        assert term in reference
 
 
 def test_adversarial_workflows_keep_authorization_and_regression_controls() -> None:
