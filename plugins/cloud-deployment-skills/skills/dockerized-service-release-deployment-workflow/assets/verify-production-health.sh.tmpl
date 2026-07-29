@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+image_ref=${1:?"Expected the exact OCI image digest deployed by the release workflow."}
+
+if [[ ! "$image_ref" =~ @sha256:[0-9a-f]{64}$ ]]; then
+  echo "Refusing health verification because '$image_ref' is not an immutable OCI sha256 digest reference." >&2
+  exit 1
+fi
+
+echo "The health-check template has not been configured. Replace it with a bounded check of the documented production readiness endpoint, expected response, timeout, and diagnostic-log location." >&2
+exit 1

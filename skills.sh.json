@@ -127,7 +127,8 @@
     {
       "title": "Cloud Deployment Skills",
       "skills": [
-        "cloud-deployment-routing-workflow"
+        "cloud-deployment-routing-workflow",
+        "dockerized-service-release-deployment-workflow"
       ]
     },
     {

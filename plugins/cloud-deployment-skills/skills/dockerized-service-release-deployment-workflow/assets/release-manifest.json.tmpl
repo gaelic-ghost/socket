@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "releaseTag": "{{RELEASE_TAG}}",
+  "commit": "{{FULL_GIT_COMMIT_SHA}}",
+  "image": "{{REGISTRY}}/{{IMAGE_NAME}}@{{IMAGE_DIGEST}}",
+  "imageTag": "{{REGISTRY}}/{{IMAGE_NAME}}:{{RELEASE_TAG}}",
+  "platforms": ["{{OCI_PLATFORM}}"],
+  "sourceRepository": "{{GITHUB_REPOSITORY_URL}}",
+  "buildRun": "{{GITHUB_ACTIONS_RUN_URL}}",
+  "provenance": "{{PROVENANCE_REFERENCE_OR_POLICY}}",
+  "sbom": "{{SBOM_REFERENCE_OR_POLICY}}",
+  "healthCheck": "{{DOCUMENTED_HEALTHCHECK_NAME}}"
+}

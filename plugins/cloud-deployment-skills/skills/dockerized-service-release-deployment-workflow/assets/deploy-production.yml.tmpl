@@ -1,0 +1,63 @@
+name: Deploy published release to production
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    if: startsWith(github.event.release.tag_name, 'v')
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Check out the release tag for deployment adapters
+        uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 1
+
+      - name: Download the published release manifest
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          gh release download "$RELEASE_TAG" --pattern release-manifest.json --dir .release
+          test -s .release/release-manifest.json
+
+      - name: Validate the release manifest and extract the exact image digest
+        id: manifest
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          manifest=.release/release-manifest.json
+          tag=$(jq -r '.releaseTag // empty' "$manifest")
+          image=$(jq -r '.image // empty' "$manifest")
+          if [[ "$tag" != "$RELEASE_TAG" ]]; then
+            echo "Release manifest tag '$tag' does not match published release '$RELEASE_TAG'." >&2
+            exit 1
+          fi
+          if [[ ! "$image" =~ @sha256:[0-9a-f]{64}$ ]]; then
+            echo "Release manifest image must be an exact OCI sha256 digest reference; got '$image'." >&2
+            exit 1
+          fi
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+
+      - name: Authenticate to the cloud provider with OIDC
+        shell: bash
+        run: {{PROVIDER_OIDC_LOGIN_COMMAND}}
+
+      - name: Deploy exactly the published image digest
+        shell: bash
+        run: ./scripts/deploy-production-image.sh '${{ steps.manifest.outputs.image }}'
+
+      - name: Verify the deployed release health
+        shell: bash
+        run: ./scripts/verify-production-health.sh '${{ steps.manifest.outputs.image }}'

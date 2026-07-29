@@ -44,6 +44,8 @@ Use Vapor, Hummingbird, SwiftPM, or Linux distribution documentation when the co
 
 Use Fly.io documentation and `fly-io-deployment-workflow` when Docker image work is being prepared for Fly-specific `fly.toml`, `fly launch`, `fly deploy`, Fly secrets, Fly process groups, Fly health checks, or Fly Postgres attachment.
 
+Use `cloud-deployment-skills:dockerized-service-release-deployment-workflow` when a production image needs a reusable GitHub Actions release path, immutable digest manifest, GitHub Release deployment trigger, production approval, exact-digest deploy, health verification, or rollback contract. This skill remains the owner of the Dockerfile and image-runtime shape.
+
 ## Planning Workflow
 
 1. Inspect project shape:
