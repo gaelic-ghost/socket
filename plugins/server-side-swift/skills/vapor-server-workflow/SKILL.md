@@ -23,6 +23,7 @@ The practical decision is what the HTTP service exposes, which target owns the V
 - Use `bootstrap-vapor-service` when creating a new Vapor service with the Vapor Toolbox.
 - Use this skill when evaluating or migrating toward Vapor 5 alpha, but keep alpha work explicitly experimental until Vapor publishes a stable Vapor 5 release and migration path.
 - Use this skill when modifying Vapor routes, route groups, controllers, middleware, app configuration, commands, migrations, or local server behavior.
+- Use `leaf-rendered-web-workflow` when the Vapor work is primarily a Leaf-rendered website, HTML email, page context, layout, partial component, custom tag, rendered HTML, public asset, or template-cache concern.
 - Use this skill when diagnosing `vapor new`, `swift build`, `swift test`, `swift run`, `swift run App serve`, migration, or local HTTP failures in a Vapor project.
 - Use this skill when deciding whether an existing Swift package should become a Vapor service or stay a library consumed by one.
 - Do not use this skill for generic Swift package work that has no Vapor-specific behavior. Hand that work to a SwiftPM package workflow when available.
@@ -31,7 +32,7 @@ The practical decision is what the HTTP service exposes, which target owns the V
 
 ## Source Check
 
-Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Vapor DocC first, then official Vapor documentation when Dash/local coverage is missing or stale:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Vapor DocC first, then official Vapor documentation when Dash/local coverage is missing or stale. For Leaf-rendered work, consult the installed Leaf DocC archive and use `leaf-rendered-web-workflow` before expanding this general service workflow:
 
 - [Vapor installation](https://docs.vapor.codes/install/macos/)
 - [Vapor Hello, world](https://docs.vapor.codes/getting-started/hello-world/)
@@ -40,6 +41,8 @@ Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTT
 - [Vapor environment](https://docs.vapor.codes/basics/environment/)
 - [Vapor Fluent migrations](https://docs.vapor.codes/fluent/migration/)
 - [Vapor Fly deployment](https://docs.vapor.codes/deploy/fly/)
+- [Leaf overview](https://docs.vapor.codes/leaf/overview/)
+- [Leaf custom tags](https://docs.vapor.codes/leaf/custom-tags/)
 - [Vapor GitHub organization](https://github.com/vapor)
 - [Vapor repository](https://github.com/vapor/vapor)
 - [Vapor 5 Alpha 1 release](https://github.com/vapor/vapor/releases/tag/5.0.0-alpha.1)
@@ -65,6 +68,7 @@ For Vapor 5, treat GitHub releases and tagged source as the authoritative alpha 
    - webhook receiver
    - internal service
    - background command plus HTTP health surface
+   - hand Leaf-rendered website or HTML email behavior to `leaf-rendered-web-workflow` when templates, contexts, composition, escaping, accessibility, assets, or rendered HTML are the primary concern
 3. Confirm the documented command path before running or recommending commands.
 4. Keep SwiftPM as the default execution surface after creation:
    - hand fresh service creation to `bootstrap-vapor-service`
@@ -147,6 +151,7 @@ For typical Vapor 4 projects:
 - Controllers are useful when a route group has enough behavior to deserve a named owner.
 - Models and migrations should stay paired closely enough that schema changes are easy to audit.
 - Domain transformations that can be tested without a running HTTP server should live outside route closures.
+- Leaf page contexts, layouts, partial components, custom tags, escaping, accessibility, public assets, and rendering tests belong to `leaf-rendered-web-workflow`; keep this workflow focused on the Vapor service boundary that invokes them.
 
 Do not introduce a service, repository, coordinator, or manager unless it removes a concrete duplication, testability problem, or dependency boundary issue in the current service.
 

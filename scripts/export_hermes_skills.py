@@ -105,6 +105,7 @@ CYBERSECURITY_SKILLS = (
 )
 SERVER_SIDE_SWIFT_SKILLS = (
     "apple-containerization-workflow",
+    "leaf-rendered-web-workflow",
 )
 REVERSE_ENGINEERING_SKILLS = (
     "connect-hopper-mcp",

@@ -31,7 +31,7 @@ The practical decision is not whether Vapor should use the CLI, Fluent, PostgreS
 
 ## Source Check
 
-Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Vapor DocC first, then official Vapor documentation when Dash/local coverage is missing or stale:
+Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTTP for installed Vapor DocC first, then official Vapor documentation when Dash/local coverage is missing or stale. When the generated service includes Leaf, consult installed Leaf DocC and `leaf-rendered-web-workflow` for template structure, page contexts, escaping, accessibility, assets, and rendering tests:
 
 - [Vapor installation](https://docs.vapor.codes/install/macos/)
 - [Vapor Hello, world](https://docs.vapor.codes/getting-started/hello-world/)
@@ -39,6 +39,7 @@ Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTT
 - [Vapor Fluent overview](https://docs.vapor.codes/fluent/overview/)
 - [Vapor Fluent migrations](https://docs.vapor.codes/fluent/migration/)
 - [Vapor Docker deploys](https://docs.vapor.codes/deploy/docker/)
+- [Leaf overview](https://docs.vapor.codes/leaf/overview/)
 - [Vapor GitHub organization](https://github.com/vapor)
 
 Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavior when Vapor docs do not own the rule being used.
@@ -69,6 +70,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - `Sources/App/configure.swift`
    - `Sources/App/routes.swift`
    - generated model, migration, and test shape when present
+   - generated `Resources/Views` and `Public` runtime resources when Leaf is selected
 6. Use Vapor `Environment` for runtime behavior:
    - keep environment-specific branching on `app.environment`
    - use `Environment.get` or `Environment.process` for process settings
@@ -85,6 +87,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - copy `assets/AGENTS.md` into the new repository root
    - update placeholders for project name, database name, and validation commands
    - keep the generated guidance local to the new service because this plugin's own `AGENTS.md` is not visible inside ordinary service repositories
+   - when Leaf is selected, keep the generated guidance's Leaf rendering boundary and handoff to `leaf-rendered-web-workflow`
 9. Install Codex GUI local environment guidance when desired:
    - copy `templates/codex-local-environments/vapor.toml` into `.codex/environments/vapor.toml`
    - adjust the executable name only when the app target is not `App`
@@ -156,6 +159,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
   ```
 - If `vapor` is unavailable and cannot be installed, stop with a non-mutating fallback plan. Do not silently switch to a manual SwiftPM scaffold.
 - After successful bootstrap, use `vapor-server-workflow` for routes, controllers, middleware, commands, app configuration, and Vapor tests.
+- After successful bootstrap, use `leaf-rendered-web-workflow` for Leaf page contexts, layouts, partial components, custom tags, escaping, accessibility, public assets, HTML email templates, and rendering-focused tests.
 - Use `persistence-workflow` for models, migrations, query design, transactions, and database-backed tests after the initial baseline exists.
 - Use `docker-workflow` for production Dockerfiles, multi-stage images, image validation, registries, or container deployment.
 - Use `fly-io-deployment-workflow` for Fly.io apps, Fly Postgres, secrets, health checks, and deploy validation.
