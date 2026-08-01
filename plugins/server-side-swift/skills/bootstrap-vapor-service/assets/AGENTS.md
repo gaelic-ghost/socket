@@ -20,6 +20,16 @@ Use this file for durable repo-local guidance before changing this Vapor service
 - `Dockerfile` owns the generated service image baseline.
 - `.codex/environments/vapor.toml`, when present, uses the actual app executable target name.
 
+## Leaf-Rendered Web Surfaces
+
+When this service includes Leaf, treat `Resources/Views` and `Public` as runtime inputs. Keep the request-to-page flow explicit: route or controller work prepares a typed `Encodable` page context, then Leaf renders the HTML response. Do not pass database models, requests, `[String: Any]`, or a global bag directly to templates.
+
+- Preserve the existing layout, page, and partial-template convention. For a new simple site, use one base layout and small partials with clear inputs rather than a generic component framework.
+- Keep data loading, authorization, URL generation, formatting, and meaningful business decisions in Swift. Use Leaf to render prepared presentation data.
+- Keep ordinary escaped Leaf output as the default. `#unsafeHTML` and unescaped custom tags require a documented trusted or sanitized source; never pass user-controlled content through them.
+- Treat templates, public assets, fonts, and images as production image/runtime resources. Do not put uploads, secrets, or private source artifacts under `Public`.
+- Test rendered success, empty, validation-error, authorization, layout, and hostile-input escaping states at the smallest useful level. Static template inspection is not browser or assistive-technology proof.
+
 ## Commands
 
 Use the repo's documented commands first. If no narrower command exists, prefer:
@@ -61,5 +71,6 @@ swift run App serve
 ## Handoffs
 
 - Use `server-side-swift:vapor-server-workflow` for routes, controllers, middleware, commands, app configuration, and Vapor tests.
+- Use `server-side-swift:leaf-rendered-web-workflow` for Leaf page contexts, layouts, partial components, custom tags, escaping, accessibility, public assets, HTML email templates, and rendering-focused tests.
 - Use `server-side-swift:persistence-workflow` for models, migrations, query design, transactions, and database-backed tests.
 - Use `server-side-swift:docker-workflow` for production Dockerfiles, image builds, registries, and container runtime validation.
