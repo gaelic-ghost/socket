@@ -49,6 +49,7 @@
 - Do not assume Xcode's Build Settings UI writes edited values back into `.xcconfig` files. If a GUI edit creates a generated project override, move intentional tracked settings into the owning `.xcconfig` before regenerating.
 - Prefer Swift Testing for modern unit-style tests, keep XCTest where Apple tooling or dependencies still require it, and use XCUITest with explicit element wait APIs instead of fixed sleeps.
 - Keep `.xctestplan` files versioned when the project depends on repeatable test-plan configurations, and inspect or run them explicitly with `xcodebuild -showTestPlans` and `xcodebuild -testPlan ...`.
+- For macOS prompt-heavy UI tests, record the launcher, responsible executable, target app or helper, protected operation, and test-plan configuration before changing permissions. Keep ordinary tests on a test-owned Debug product and test-specific storage; do not use `open`, `NSWorkspace`, or a wrapper script to restore an installed app as routine test cleanup. Put a real installed-app or protected-operation scenario behind an opt-in `.xctestplan` configuration.
 - Prefer a checked-in repo-root `.swiftformat` file as the Swift formatting source of truth.
 - Prefer a pre-commit hook such as `Scripts/repo-maintenance/hooks/pre-commit.sample` that formats staged Swift sources and then verifies them with `swiftformat --lint` before commit.
 - Treat SwiftLint as an optional complementary signal layer for clarity, safety, and maintainability after SwiftFormat owns formatting shape.
