@@ -1,6 +1,6 @@
 ---
 name: leaf-rendered-web-workflow
-description: Plan, implement, test, and diagnose Leaf-rendered Vapor websites and HTML email templates, including typed page contexts, layouts, partial components, custom tags, escaping, accessibility, public assets, template caching, and rendering-focused validation.
+description: Plan, implement, test, and diagnose Leaf-rendered Vapor sites and HTML email with typed contexts, layouts, partials, custom tags, escaping, accessibility, assets, caching, and rendering tests.
 license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, Leaf, LeafKit, SwiftPM, server-rendered HTML, and HTML email on macOS or Linux.
 metadata:
