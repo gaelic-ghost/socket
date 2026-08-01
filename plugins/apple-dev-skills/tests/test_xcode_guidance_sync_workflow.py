@@ -57,6 +57,7 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertEqual(payload["path_type"], "fallback")
             self.assertIn("create AGENTS.md from assets/AGENTS.md", payload["actions"])
+            self.assertIn("create .gitignore with standard Xcode output rules", payload["actions"])
 
     def test_sync_creates_agents_template(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -70,6 +71,8 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("apple-ui-accessibility-workflow", agents_text)
             self.assertIn("sync-xcode-project-guidance", agents_text)
             self.assertIn(".xctestplan", agents_text)
+            self.assertIn("macOS prompt-heavy UI tests", agents_text)
+            self.assertIn("do not use `open`, `NSWorkspace`, or a wrapper script to restore an installed app", agents_text)
             self.assertIn("semantic side and `xcode-testing-workflow` for runtime verification", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Localizable.xcstrings", agents_text)
@@ -97,6 +100,11 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
                 any(finding["path"] == "Sources/Views/Shared" for finding in payload["structure_audit"]["findings"])
             )
             self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
+            self.assertEqual(
+                Path(tmpdir, ".gitignore").read_text(encoding="utf-8"),
+                "Build/\nDerivedData/\nxcuserdata/\n*.xcuserstate\n",
+            )
+            self.assertIn("created .gitignore with standard Xcode output rules", payload["actions"])
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/hooks/pre-commit.sample").is_file())
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validate-all.sh").is_file())
             self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").is_file())
@@ -131,6 +139,8 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
             self.assertIn("## Apple / Xcode Project Workflow", agents_text)
             self.assertIn("apple-ui-accessibility-workflow", agents_text)
             self.assertIn(".xctestplan", agents_text)
+            self.assertIn("macOS prompt-heavy UI tests", agents_text)
+            self.assertIn("do not use `open`, `NSWorkspace`, or a wrapper script to restore an installed app", agents_text)
             self.assertIn("semantic side and `xcode-testing-workflow` for runtime verification", agents_text)
             self.assertIn("project membership, target membership, build phases, and resource inclusion", agents_text)
             self.assertIn("Localizable.xcstrings", agents_text)
@@ -173,6 +183,26 @@ class XcodeGuidanceSyncWorkflowTests(unittest.TestCase):
                 "preserved existing .codex/environments/xcode-project.toml because it differs from the template",
                 payload["actions"],
             )
+
+    def test_sync_appends_only_missing_xcode_gitignore_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            (repo_root / "Demo.xcodeproj").mkdir()
+            gitignore_path = repo_root / ".gitignore"
+            gitignore_path.write_text(
+                "# Keep user rules in this order.\nCustomOutput/\nDerivedData/\n",
+                encoding="utf-8",
+            )
+
+            code, payload = self.run_script("--repo-root", tmpdir)
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(
+                gitignore_path.read_text(encoding="utf-8"),
+                "# Keep user rules in this order.\nCustomOutput/\nDerivedData/\n\nBuild/\nxcuserdata/\n*.xcuserstate\n",
+            )
+            self.assertIn("appended missing standard Xcode output rules to .gitignore", payload["actions"])
 
     def test_write_mode_can_disable_append_behavior(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

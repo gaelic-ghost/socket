@@ -107,14 +107,25 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
         accessibility_text = (
             ROOT / "skills/xcode-testing-workflow/references/ui-accessibility-verification.md"
         ).read_text(encoding="utf-8")
+        permission_text = (
+            ROOT / "skills/xcode-testing-workflow/references/macos-ui-test-permission-ownership.md"
+        ).read_text(encoding="utf-8")
 
         self.assertIn("xctestplan-configurations-and-matrix.md", skill_text)
         self.assertIn("xcuitest-and-xcuiautomation.md", skill_text)
         self.assertIn("ios-ui-automation-destinations.md", skill_text)
         self.assertIn("ui-accessibility-verification.md", skill_text)
+        self.assertIn("macos-ui-test-permission-ownership.md", skill_text)
         self.assertIn("-only-test-configuration", plan_text)
         self.assertIn("waitForExistence(timeout:)", ui_text)
         self.assertIn("apple-ui-accessibility-workflow", accessibility_text)
+        for term in (
+            "responsible executable",
+            "do not use `open`, `nsworkspace`, or a wrapper script to restore a separately installed app",
+            "opt-in prompt-heavy",
+            "macos-privacy-permissions-workflow",
+        ):
+            self.assertIn(term, permission_text.lower())
 
     def test_skill_documents_ios_simulator_and_physical_device_boundaries(self) -> None:
         destination_text = (

@@ -201,6 +201,12 @@ exit 1
             self.assertEqual(payload["status"], "success")
             target = Path(payload["resolved_path"])
             self.assertTrue((target / "project.yml").exists())
+            gitignore_path = target / ".gitignore"
+            self.assertEqual(
+                gitignore_path.read_text(encoding="utf-8"),
+                "Build/\nDerivedData/\nxcuserdata/\n*.xcuserstate\n",
+            )
+            self.assertEqual(payload["gitignore_path"], str(gitignore_path))
             project_yml = (target / "project.yml").read_text(encoding="utf-8")
             self.assertIn("minimumXcodeGenVersion: 2.46.0", project_yml)
             self.assertIn("projectFormat: xcode16_0", project_yml)

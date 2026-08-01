@@ -36,6 +36,13 @@ REQUIRED_XCODE_APP_DIRECTORIES = [
 
 DEFAULT_STRING_CATALOG = "Sources/Resources/Localizable.xcstrings"
 
+XCODE_IGNORED_OUTPUTS = (
+    "Build/",
+    "DerivedData/",
+    "xcuserdata/",
+    "*.xcuserstate",
+)
+
 
 def version_sort_key(path: Path) -> tuple[int, ...]:
     parts = []
@@ -69,6 +76,36 @@ def build_parser() -> argparse.ArgumentParser:
 
 def read_asset(name: str) -> str:
     return (Path(__file__).resolve().parents[1] / "assets" / name).read_text(encoding="utf-8").rstrip() + "\n"
+
+
+def missing_xcode_gitignore_entries(gitignore_path: Path) -> tuple[str, ...]:
+    if gitignore_path.exists() and not gitignore_path.is_file():
+        raise RuntimeError(f"The .gitignore path exists but is not a regular file: {gitignore_path}")
+    if not gitignore_path.exists():
+        return XCODE_IGNORED_OUTPUTS
+
+    existing_entries = {
+        line.strip()
+        for line in gitignore_path.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    return tuple(entry for entry in XCODE_IGNORED_OUTPUTS if entry not in existing_entries)
+
+
+def sync_xcode_gitignore(gitignore_path: Path) -> str:
+    missing_entries = missing_xcode_gitignore_entries(gitignore_path)
+    if not missing_entries:
+        return "left existing .gitignore Xcode output rules unchanged"
+    if not gitignore_path.exists():
+        gitignore_path.write_text("\n".join(missing_entries) + "\n", encoding="utf-8")
+        return "created .gitignore with standard Xcode output rules"
+
+    current = gitignore_path.read_text(encoding="utf-8")
+    separator = "" if not current or current.endswith("\n") else "\n"
+    if current.strip():
+        separator += "\n"
+    gitignore_path.write_text(current + separator + "\n".join(missing_entries) + "\n", encoding="utf-8")
+    return "appended missing standard Xcode output rules to .gitignore"
 
 
 def local_environment_scheme_name(detected_state: dict, workspace_path: str | None) -> str:
@@ -249,6 +286,7 @@ def main() -> int:
     args = build_parser().parse_args()
     repo_root = Path(args.repo_root).expanduser().resolve()
     agents_path = repo_root / "AGENTS.md"
+    gitignore_path = repo_root / ".gitignore"
     detected_state = discover_xcode_state(repo_root)
     structure_audit = audit_xcode_app_structure(repo_root)
     actions: list[str] = []
@@ -281,6 +319,24 @@ def main() -> int:
             "actions": actions,
             "stderr": "The target AGENTS.md path exists but is not a regular file.",
             "next_step": "Resolve the AGENTS.md path conflict and rerun the workflow.",
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
+        return 1
+
+    try:
+        missing_xcode_gitignore_entries(gitignore_path)
+    except RuntimeError as exc:
+        payload = {
+            "status": "blocked",
+            "path_type": "primary",
+            "repo_root": str(repo_root),
+            "agents_path": str(agents_path),
+            "detected_state": detected_state,
+            "validation_result": None,
+            "structure_audit": structure_audit,
+            "actions": actions,
+            "stderr": str(exc),
+            "next_step": "Resolve the .gitignore path conflict and rerun sync-xcode-project-guidance.",
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
@@ -365,6 +421,8 @@ def main() -> int:
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 1
+
+    actions.append(sync_xcode_gitignore(gitignore_path))
 
     try:
         runner = maintain_project_repo_runner()

@@ -46,6 +46,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
    - `references/xcuitest-and-xcuiautomation.md` for UI automation mechanics, waits, interruption handling, activities, and attachments
    - `references/ios-ui-automation-destinations.md` for iOS simulator-versus-physical-device XCUITest decisions, destination evidence, and physical-device debugging handoffs
    - `references/ui-accessibility-verification.md` for accessibility-specific runtime verification expectations and coordination with `apple-ui-accessibility-workflow`
+   - `references/macos-ui-test-permission-ownership.md` for macOS prompt attribution, test-host ownership, app launch/restore boundaries, and opt-in prompt-heavy test plans
    - `references/instruments-performance-profiling.md` for Instruments, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Points of Interest, and signpost-aligned trace evidence
    - `references/testing-plans-file-membership-and-configurations.md` for the condensed cross-cutting summary and file-membership reminder
 6. Use `references/xcodegen-project-maintenance.md` when the repo is XcodeGen-backed and the task touches generated test targets, scheme test actions, test-plan references, launch arguments, environment variables, or test bundle membership.
@@ -126,6 +127,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - `references/xcuitest-and-xcuiautomation.md`
 - `references/ios-ui-automation-destinations.md`
 - `references/ui-accessibility-verification.md`
+- `references/macos-ui-test-permission-ownership.md`
 - `references/instruments-performance-profiling.md`
 - `references/testing-plans-file-membership-and-configurations.md`
 - `references/xcodegen-project-maintenance.md`

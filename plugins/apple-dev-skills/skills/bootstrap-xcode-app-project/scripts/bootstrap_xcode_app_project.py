@@ -51,6 +51,13 @@ STANDARD_SOURCE_DIRECTORIES = (
     "Sources/Services/Provided",
 )
 
+XCODE_IGNORED_OUTPUTS = (
+    "Build/",
+    "DerivedData/",
+    "xcuserdata/",
+    "*.xcuserstate",
+)
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -135,6 +142,12 @@ def install_standard_directories(target_dir: Path) -> list[str]:
         installed_paths.append(str(placeholder))
 
     return installed_paths
+
+
+def install_default_gitignore(target_dir: Path) -> str:
+    gitignore_path = target_dir / ".gitignore"
+    write_text(gitignore_path, "\n".join(XCODE_IGNORED_OUTPUTS) + "\n")
+    return str(gitignore_path)
 
 
 def install_local_environment(target_dir: Path, scheme_name: str) -> str:
@@ -283,6 +296,7 @@ def main() -> int:
 
     target_dir.mkdir(parents=True, exist_ok=True)
     standard_directory_paths = install_standard_directories(target_dir)
+    gitignore_path = install_default_gitignore(target_dir)
 
     try:
         xcodegen_template_paths = install_xcodegen_templates(
@@ -438,6 +452,7 @@ def main() -> int:
         "xcodegen_template_paths": xcodegen_template_paths,
         "string_catalog_path": str(target_dir / "Sources/Resources/Localizable.xcstrings"),
         "standard_directory_paths": standard_directory_paths,
+        "gitignore_path": gitignore_path,
         "local_environment_path": local_environment_path,
         "agents_copied": agents_copied,
         "stdout": proc_install_toolkit.stdout + proc_generate.stdout + validation_stdout,

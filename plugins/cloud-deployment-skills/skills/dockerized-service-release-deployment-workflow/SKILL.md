@@ -51,6 +51,14 @@ Inspect the repository's Dockerfile, CI workflows, release process, registry set
 
 Translate those sources into the actual project choices: registry, tag policy, environment policy, provider identity, health URL, and rollback command.
 
+## Build Ownership Preflight
+
+Before starting an image build, record the deployment target's architecture, operating system, available memory, disk capacity, container runtime, and any provider constraints. Select the OCI platform from that evidence. For example, an Apple-silicon developer machine targeting an x86-64 Linux host builds `linux/amd64`; do not let the developer machine's architecture choose the release artifact by accident.
+
+Build release images in a clean CI checkout by default. A developer machine may run a bounded local image check when the user requested it and the target platform is already known, but a production host must only pull or load a finished immutable image and run it. Do not clone application source, resolve dependencies, compile Swift, or run `docker build` on a small production VPS unless the user explicitly directs that exceptional path.
+
+One build owns its Docker client session until it exits. Preserve the original progress-producing shell or durable log stream; do not replace it with blind polling. While that build is active, do not run Docker status, image-inspection, build-history, Buildx, Compose, or second-build commands unless the runtime explicitly documents concurrent client access as safe. If an orchestration wrapper returns before its child exits, inspect the real process rather than trusting the wrapper result, report that the build is still active, and wait before starting another package-manager or container command.
+
 ## Hermes Compatibility
 
 This is portable instruction-only guidance and is exported through Socket's Hermes skill tap. It does not install a GitHub App, configure registry credentials, provision a cloud account, or bundle a deployment adapter for Hermes or Codex.
@@ -132,6 +140,8 @@ Before enabling the workflow:
 
 - Do not deploy or modify a cloud account while creating this reusable guidance or template set.
 - Do not use a worktree, developer laptop, or production host to build the image that a release deploys.
+- Do not start an image build before recording the target platform and host-resource constraints; stop and correct an architecture mismatch, insufficient capacity, or interrupted owning session before a deployment mutation.
+- Do not probe Docker concurrently with an active build, start a second build after an early-returning wrapper, or substitute a new shell session for the original progress-producing build owner.
 - Do not publish a GitHub Release from a tag that is not anchored to the protected integration branch.
 - Do not publish a release with the workflow `GITHUB_TOKEN` when it must trigger another workflow; use the dedicated release-publisher token.
 - Do not deploy an unrecognized, draft, deleted, edited, or merely-created release. Stable releases deploy only to `production`; prereleases deploy only to enabled `test`.

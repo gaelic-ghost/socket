@@ -44,6 +44,8 @@ swift run App migrate
 swift run App serve
 ```
 
+Before starting a SwiftPM, Docker, Compose, or package-manager command, confirm that any earlier child build process has exited; a wrapper returning is not proof that its spawned build finished. If requested Compose validation needs an installed Docker-compatible runtime that is stopped, announce and start that existing runtime rather than installing a replacement or treating its stopped state as a permission boundary. Keep one build session as the Docker client owner until it exits; do not run Docker probes or a second build concurrently.
+
 ## Configuration And Secrets
 
 - Use `app.environment` for environment-specific app setup.

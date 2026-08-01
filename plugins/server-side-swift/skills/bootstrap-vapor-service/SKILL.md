@@ -57,7 +57,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - `swift`
    - `git`
    - `vapor`
-   - Docker-compatible runtime only when Compose validation is requested
+   - Docker-compatible runtime only when Compose validation is requested; if the requested validation needs an installed runtime that is stopped, announce and start that existing runtime rather than treating it as a permission boundary
 3. Create the service with the official CLI:
    ```bash
    vapor new <name>
@@ -99,6 +99,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - optional `docker compose up -d postgres`
    - optional `swift run App migrate` after confirming the generated database config and migration list
    - optional `swift run App serve` only when runtime startup validation is requested
+   - before each additional SwiftPM, Docker, Compose, or package-manager command, confirm that the prior child process has exited; an early-returning wrapper is not proof that its build has finished
 11. Return the created path, exact commands, environment source, database defaults, validation results, and next handoff.
 
 ## Defaults
