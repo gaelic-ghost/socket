@@ -7,7 +7,7 @@ description: Sync repo guidance for one existing native Apple app project manage
 
 ## Purpose
 
-Bring an existing Xcode app repository up to the expected guidance baseline without overloading the main Xcode execution skill. This skill owns repo-guidance alignment for existing Apple app repos, including deterministic `AGENTS.md` creation or bounded section append behavior, and runs `maintain-project-repo` with the `xcode-app` profile alongside that guidance. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/sync_xcode_project_guidance.py` applies the current sync behavior.
+Bring an existing Xcode app repository up to the expected guidance baseline without overloading the main Xcode execution skill. This skill owns repo-guidance alignment for existing Apple app repos, including deterministic `AGENTS.md` creation or bounded section append behavior, migration-safe `.gitignore` output rules, and `maintain-project-repo` refresh with the `xcode-app` profile. It creates a missing `.gitignore` with `Build/`, `DerivedData/`, `xcuserdata/`, and `*.xcuserstate`, or appends only missing entries while preserving existing comments, ordering, and user-owned rules. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/sync_xcode_project_guidance.py` applies the current sync behavior.
 
 ## Companion Plugin Requirement
 
@@ -67,6 +67,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - if `AGENTS.md` is missing, copy `assets/AGENTS.md`
    - if `AGENTS.md` exists and already contains the managed section, keep the file unchanged
    - if `AGENTS.md` exists but lacks the managed section, append `assets/append-section.md` as a bounded section
+   - if `.gitignore` is missing, create it with the four standard Xcode output rules; if it already exists, append only missing rules without rewriting existing content
 7. Validate the synced repo guidance:
    - verify `AGENTS.md` exists
    - verify the synced file mentions `xcode-build-run-workflow` and `xcode-testing-workflow`

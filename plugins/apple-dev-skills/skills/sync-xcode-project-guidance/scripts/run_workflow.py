@@ -234,6 +234,14 @@ def main() -> int:
     else:
         actions.append("install .codex/environments/xcode-project.toml from template")
 
+    gitignore_path = repo_root / ".gitignore"
+    if gitignore_path.exists() and gitignore_path.is_file():
+        actions.append("inspect .gitignore and append only missing standard Xcode output rules")
+    elif gitignore_path.exists():
+        actions.append("report that .gitignore exists but is not a regular file")
+    else:
+        actions.append("create .gitignore with standard Xcode output rules")
+
     if args.dry_run:
         payload = {
             "status": "success",
