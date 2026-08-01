@@ -62,7 +62,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - `swift`
    - `git`
    - `hb`
-   - Docker-compatible runtime only when Compose validation is requested
+   - Docker-compatible runtime only when Compose validation is requested; if the requested validation needs an installed runtime that is stopped, announce and start that existing runtime rather than treating it as a permission boundary
 3. Create the service with the official CLI:
    ```bash
    hb init <name>
@@ -107,6 +107,7 @@ Use SwiftPM and Swift.org documentation for package, toolchain, and Linux behavi
    - optional `docker compose up -d postgres`
    - optional migration command only after the app's migration command is known and safe
    - optional `swift run <executable>` or `hb watch` only when runtime startup validation is requested
+   - before each additional SwiftPM, Docker, Compose, or package-manager command, confirm that the prior child process has exited; an early-returning wrapper is not proof that its build has finished
 12. Return the created path, exact commands, selected CLI answers, config source, generated package shape, database defaults when present, validation results, and next handoff.
 
 ## Defaults

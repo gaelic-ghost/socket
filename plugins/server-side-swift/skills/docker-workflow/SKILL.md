@@ -73,6 +73,14 @@ Use `cloud-deployment-skills:dockerized-service-release-deployment-workflow` whe
 7. Check runtime safety before treating an image as production-ready.
 8. Validate the image with the narrowest useful build, test, run, or HTTP check.
 
+## Runtime And Build-Session Policy
+
+Before a Docker or Compose command, inspect the configured Docker-compatible runtime and the deployment target platform. When the requested local workflow requires an installed runtime that is stopped, start that existing runtime as a normal implementation step after announcing the resource-intensive action; do not misclassify its stopped state as a permission boundary or silently install a replacement runtime.
+
+Treat the actual child build process as the source of truth. A wrapper, editor task, or orchestration command returning does not prove its spawned SwiftPM, Docker, Compose, or package-manager process has exited. Before another build, test, package, or package-manager command, confirm the prior child process is finished. If it remains active, report the owning command and wait; do not start a duplicate invocation against the same `.build` directory or Docker runtime.
+
+While Docker is building an image, preserve the original progress-producing session. Do not issue Docker status, image-inspection, Buildx, Compose, or second-build commands concurrently unless the runtime explicitly documents that client access as safe. If the progress session is lost, first determine whether the process is still alive without using Docker; do not begin another build.
+
 ## Dockerfile Shape
 
 For production server-side Swift images:
