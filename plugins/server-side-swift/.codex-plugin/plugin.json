@@ -1,7 +1,7 @@
 {
   "name": "server-side-swift",
   "version": "9.28.0",
-  "description": "Codex skills for bootstrapping, syncing, building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Hummingbird, hb, persistence, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
+  "description": "Codex skills for bootstrapping, syncing, building, running, containerizing, deploying, and maintaining server-side Swift services, including Vapor, Leaf-rendered web and HTML email, Hummingbird, hb, persistence, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, Fly.io, and SwiftPM-first workflows.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -20,6 +20,11 @@
     "vapor",
     "vapor-cli",
     "vapor-5",
+    "leaf",
+    "leafkit",
+    "server-rendered-html",
+    "html-email",
+    "accessibility",
     "hummingbird",
     "hb",
     "hb-cli",
@@ -55,8 +60,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Server-Side Swift",
-    "shortDescription": "Server-side Swift bootstrap, guidance sync, Vapor, Hummingbird, persistence, OpenAPI, RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
-    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first Vapor and Hummingbird workflows, SwiftPM, Fluent and PostgreSQL, Docker and Compose, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, authentication, app sync, Fly.io, Apple's container 1.x CLI, persistent container machine Linux environments, and exact-version Containerization Swift APIs. Keep portable OCI authoring separate from Apple-local runtime behavior and persistent Linux-machine lifecycle.",
+    "shortDescription": "Server-side Swift bootstrap, guidance sync, Vapor, Leaf-rendered web, Hummingbird, persistence, OpenAPI, RPC, SwiftNIO, observability, auth, app sync, Docker, Apple Containerization, and Fly.io workflow guidance for Codex.",
+    "longDescription": "Guide Codex agents through server-side Swift projects with CLI-first Vapor and Hummingbird workflows, Leaf-rendered websites and HTML email, SwiftPM, Fluent and PostgreSQL, Docker and Compose, Swift OpenAPI, RPC-fit decisions, SwiftNIO, observability, authentication, app sync, Fly.io, Apple's container 1.x CLI, persistent container machine Linux environments, and exact-version Containerization Swift APIs. Keep portable OCI authoring separate from Apple-local runtime behavior and persistent Linux-machine lifecycle.",
     "developerName": "gaelic-ghost",
     "category": "Developer Tools",
     "capabilities": [
@@ -68,6 +73,8 @@
       "Bootstrap a Hummingbird service with hb, Server or Lambda shape selection, Hummingbird swift-configuration support, Fluent, PostgreSQL, CLI-generated Docker files, Compose, and generated AGENTS guidance.",
       "Sync an existing Hummingbird repo's AGENTS guidance, hb CLI assumptions, Codex local environment file, Server or Lambda shape, OpenAPI transport notes, and SwiftPM commands.",
       "Bootstrap a Vapor service with vapor new, Vapor Environment, Fluent, PostgreSQL, CLI-generated Dockerfile and Compose support, and generated AGENTS guidance.",
+      "Plan a Leaf-rendered Vapor website with typed page contexts, layouts, partial components, escaping, accessibility, public assets, and rendering-focused tests.",
+      "Diagnose a Leaf rendering, layout, custom-tag, escaping, template-cache, public-asset, or rendered-HTML test failure in this Vapor service.",
       "Create a Vapor service plan using current Vapor CLI, Vapor 5 alpha posture, and SwiftPM workflows.",
       "Create a Hummingbird service plan using the official hb CLI, current Server or Lambda prompts, current Hummingbird docs, and SwiftPM workflows.",
       "Choose a Vapor-aligned package from the Vapor or Vapor Community ecosystem for this service need.",
