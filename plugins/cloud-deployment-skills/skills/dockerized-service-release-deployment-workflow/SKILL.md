@@ -57,7 +57,7 @@ Before starting an image build, record the deployment target's architecture, ope
 
 Build release images in a clean CI checkout by default. A developer machine may run a bounded local image check when the user requested it and the target platform is already known, but a production host must only pull or load a finished immutable image and run it. Do not clone application source, resolve dependencies, compile Swift, or run `docker build` on a small production VPS unless the user explicitly directs that exceptional path.
 
-One build owns its Docker client session until it exits. Preserve the original progress-producing shell or durable log stream; do not replace it with blind polling. While that build is active, do not run Docker status, image-inspection, build-history, Buildx, Compose, or second-build commands unless the runtime explicitly documents concurrent client access as safe. If an orchestration wrapper returns before its child exits, inspect the real process rather than trusting the wrapper result, report that the build is still active, and wait before starting another package-manager or container command.
+One build owns its Docker client session until it exits. Preserve the original progress-producing shell or durable log stream; do not replace it with blind polling. When an agent must return for a build, GitHub Action, deployment approval, or health gate, it records the immutable identity (tag, digest, run, environment, and target), schedules exactly one host-native continuation no sooner than five minutes later, and performs one fresh inspection on wakeup. Codex uses heartbeat; Hermes uses a continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`. Do not leave a shell waiting or create a one-to-four-minute polling loop. While that build is active, do not run Docker status, image-inspection, build-history, Buildx, Compose, or second-build commands unless the runtime explicitly documents concurrent client access as safe. If an orchestration wrapper returns before its child exits, inspect the real process rather than trusting the wrapper result, report that the build is still active, and wait before starting another package-manager or container command.
 
 ## Hermes Compatibility
 
@@ -115,6 +115,7 @@ The deployment workflow must listen only for `release: [published]`. It must not
 5. Pass only the exact digest reference to the provider deployment adapter. The adapter must not run `docker build`, clone source, or reinterpret a mutable tag.
 6. Run the repository-defined health check against the deployed release. On failure, preserve deployment logs and stop; do not silently roll forward or rebuild.
 7. Roll back by selecting the prior successful GitHub Release manifest and rerunning the same exact-digest deployment path after the required production approval. Do not rebuild an old commit on a host.
+8. For an asynchronous provider rollout, record the release tag, immutable digest, environment, deployment/run URL, and health target; schedule one host-native continuation no sooner than five minutes later, inspect those identities on wakeup, and only then decide whether to advance, diagnose, or roll back.
 
 ## Security and Supply-Chain Rules
 

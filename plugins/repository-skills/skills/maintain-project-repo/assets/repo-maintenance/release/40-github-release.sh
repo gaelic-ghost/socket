@@ -31,5 +31,5 @@ prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"
 # shellcheck disable=SC2086
 gh release create "$RELEASE_TAG" --verify-tag --generate-notes $prerelease_flag
 log "Created GitHub release $RELEASE_TAG."
-wait_for_github_release "$RELEASE_TAG"
+github_release_is_visible "$RELEASE_TAG" || die "GitHub release $RELEASE_TAG is not readable in this immediate re-read. Do not poll; schedule a host-native continuation for at least five minutes, then re-run the release step."
 verify_github_release_prerelease_metadata "$RELEASE_TAG"
