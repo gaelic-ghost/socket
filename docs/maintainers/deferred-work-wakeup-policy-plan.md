@@ -96,22 +96,150 @@ listed separately and must be regenerated, never hand-edited.
 - Historical roadmap entries retain their historical wording. A new current
   ticket records this plan instead of rewriting release history.
 
+## Proposed Release Automation Shape
+
+### What Changes for Maintainers
+
+The release tooling stays highly automated, but it stops pretending that one
+shell process should remain alive for the whole lifecycle. A maintainer starts
+the release once. The script advances through every immediately provable step,
+then returns a precise continuation packet when GitHub or a deployment platform
+owns the next result. The host schedules the next inspection and the same
+release command safely advances again.
+
+This is a durable building-block change. It unlocks unattended-but-gated
+protected-main releases, review-bot handling, release-published deployments,
+and reliable restart/retry behavior without leaving an agent or terminal idle.
+It removes duplicated release choreography in host prompts and eliminates the
+current confused ownership between `release.sh` and a host scheduler.
+
+The simpler extension path was retaining one large release script and replacing
+only `gh pr checks --watch`. That would still combine local mutation, remote
+observation, sleep loops, and resume instructions in one opaque process; a
+failed or restarted session would remain difficult to reason about.
+
+### Responsibilities
+
+| Surface | Owns | Must not own |
+| --- | --- | --- |
+| `release.sh` | Deterministic preflight, validation, version bump, Git mutations, PR/release inspection, safe state transitions, and emitting continuation packets. | Sleeping, `gh --watch`, indefinite polling, or scheduling host work. |
+| Codex heartbeat / Hermes cron job | Waiting until the chosen next check, then invoking an explicit re-inspection or advance prompt in the correct repository context. | Inventing release state, bypassing approval gates, or assuming a prior shell remains alive. |
+| Git and GitHub | Authoritative branch, commit, PR, check, review, merge, tag, and release state. | Storing machine-local secret values or inferred local-validation results. |
+| Deployment workflow / provider adapter | Deploying an exact approved artifact and reporting provider-specific rollout/health state. | Rebuilding source, mutating Git release state, or making a production approval decision. |
+
+No database, daemon, or generic queue is proposed. The continuation packet is
+transport, not a second source of truth. On every invocation, the script reads
+Git and GitHub again and treats a changed branch tip, PR, tag, or release as a
+new fact that must be validated or surfaced.
+
+### Commands and State Transitions
+
+Replace the current monolithic `standard` path with three idempotent modes:
+
+| Command | Performs | Stops and emits a packet when |
+| --- | --- | --- |
+| `release.sh prepare --mode standard --version vX.Y.Z` | Validates locally, creates or recognizes the version-bump commit, pushes the branch, creates/finds the PR, and reads one initial PR/check snapshot. | The PR/check/review gate is not conclusively clear. |
+| `release.sh inspect --mode standard --version vX.Y.Z` | Reads only: branch tip, PR, check, review/comment, merge, tag, and GitHub Release state. | It always returns a normalized state and never waits or mutates. This is the default scheduled-wakeup action. |
+| `release.sh advance --mode standard --version vX.Y.Z` | Re-reads state, verifies the expected branch/PR/tag identity, then performs every safe immediately-ready next step: merge, fast-forward, tag, push tag, create/verify Release, and branch accounting. | A remote gate is pending, a read-after-write result is not immediately visible, state differs from the packet, or an approval/review condition is not satisfied. |
+
+`advance` is intentionally resumable, not blindly transactional. Re-running it
+after an interruption must recognize an existing version-bump commit, PR,
+merge, tag, or release only when it points at the expected commit. A branch tip
+that changed after `prepare` invalidates that prepare result and sends the
+release back to the local-validation gate rather than merging new code on the
+strength of stale checks.
+
+An explicit human-only `--remote-ci-mode full` may remain as a convenience for
+a terminal user who deliberately wants live `gh` output. It is not the default
+agent path and is never selected by guidance. The agent default becomes this
+prepare/inspect/advance path; it does not call a blocking watcher.
+
+### Continuation Packet
+
+When a command reaches an external gate, it writes one human-readable summary
+and one machine-readable JSON object. The packet contains no credentials and
+is sufficient for a fresh Hermes cron session or a later Codex heartbeat:
+
+```json
+{
+  "schema": "repo-maintenance-continuation/v1",
+  "operation": "standard-release",
+  "repository": "owner/repository",
+  "release_tag": "vX.Y.Z",
+  "branch": "release/vX.Y.Z",
+  "head_commit": "full-commit-sha",
+  "pr_number": 123,
+  "phase": "awaiting-pr-checks",
+  "blocked_gate": "github-checks-and-review",
+  "observed_at": "RFC-3339 timestamp",
+  "not_before": "RFC-3339 timestamp",
+  "resume_command": "scripts/repo-maintenance/release.sh inspect --mode standard --version vX.Y.Z",
+  "advance_command": "scripts/repo-maintenance/release.sh advance --mode standard --version vX.Y.Z"
+}
+```
+
+The host adapter schedules a one-shot wakeup after `not_before`. Its prompt
+must include the packet, tell the agent to run `inspect` first, and permit
+`advance` only if the packet's repository, tag, branch, commit, and gate still
+match current source-of-truth state. If still pending, it schedules exactly one
+replacement wakeup; if failed or changed, it reports the discrepancy and does
+not continue automatically.
+
+### Lifecycle
+
+1. `prepare` validates the release candidate and publishes the release branch
+   and PR. It emits `awaiting-pr-checks` instead of watching CI.
+2. The host schedules the continuation. The wakeup runs `inspect` and either
+   reports a failed/changed gate, reschedules one follow-up, or calls `advance`.
+3. `advance` verifies CI, review comments, and review-bot contexts before
+   merging. It never treats a pending bot as approval.
+4. After merge, `advance` fast-forwards the local base, creates/pushes the tag,
+   and creates/verifies the GitHub Release. A remote object that is not yet
+   visible produces another packet, not a sleep loop.
+5. Release completion remains distinct from deployment completion. A
+   release-published deployment workflow receives the immutable artifact and
+   creates its own provider/health continuation packet. It does not make the
+   Git release script wait for a server rollout.
+6. Final branch accounting and cleanup occur only after the GitHub Release
+   state is confirmed. A pending deployment is reported separately, never
+   misrepresented as a failed or completed release.
+
+### Failure and Recovery Rules
+
+- A failed check, requested changes, new review comment, or changed branch tip
+  stops advancement and names the exact next human or agent action.
+- A scheduler failure never authorizes a fallback polling loop. The current
+  state and continuation packet are reported for a user-directed retry.
+- A duplicate wakeup is harmless: `inspect` is read-only and `advance` verifies
+  identities before every mutation.
+- A restart on a different host does not reuse machine-local shell state. It
+  can only continue after resolving the repository and proving the packet still
+  matches Git/GitHub state.
+- Deployment adapters retain their own approval and rollback rules. The release
+  executor only proves the release artifact is published and hands off its
+  exact immutable reference.
+
 ## Implementation Sequence
 
 1. Add the universal root rule and the `schedule-agent-work` host matrix. Define
-   the continuation packet fields and the bounded-probe exception once.
-2. Change `maintain-project-repo` documentation, prompts, release-mode
-   reference, defaults, and script output together. Decide explicitly whether
-   human-operated `full` remains supported; agents must not select it.
-3. Update all six Apple generated-guidance sources and their tests so a newly
+   the continuation packet fields, scheduler adapter contract, and bounded-probe
+   exception once.
+2. Refactor `maintain-project-repo` from its monolithic release path into
+   idempotent `prepare`, `inspect`, and `advance` commands. Keep Git/GitHub as
+   the source of truth; do not add a database or background daemon.
+3. Change `maintain-project-repo` documentation, prompts, release-mode
+   reference, defaults, script output, and focused tests together. Preserve
+   `full` only as an explicit human-only choice if maintainers still want it;
+   agents must not select it.
+4. Update all six Apple generated-guidance sources and their tests so a newly
    bootstrapped or synchronized repository inherits the same release policy.
-4. Add deployment-specific checkpoints in the Dockerized-service and Fly.io
+5. Add deployment-specific checkpoints in the Dockerized-service and Fly.io
    workflows. Preserve their existing production approval, exact-digest,
-   ownership, and health-check gates.
-5. Resolve the Runpod Flash upstream-mirror boundary: inspect its upstream
+   ownership, health-check, rollback, and separate deployment-completion gates.
+6. Resolve the Runpod Flash upstream-mirror boundary: inspect its upstream
    source and refresh policy, then make the smallest maintainable change rather
    than editing the checked-in mirror directly.
-6. Regenerate Hermes exports, run root and child validation, and use a focused
+7. Regenerate Hermes exports, run root and child validation, and use a focused
    fixture to verify the Codex heartbeat and Hermes cron continuation prompts
    contain the same target, state, resume command, and closed gate.
 
@@ -125,8 +253,13 @@ listed separately and must be regenerated, never hand-edited.
   `attach_to_session=true`, a self-contained prompt, and gateway/tool
   availability verification.
 - The release script returns a machine-readable continuation packet in deferred
-  mode and cannot accidentally merge, tag, or release while the named remote
-  gate is pending.
+  mode, supports idempotent `prepare`, read-only `inspect`, and guarded
+  `advance` actions, and cannot accidentally merge, tag, or release while the
+  named remote gate is pending.
+- A changed branch tip invalidates its prior local-validation result; a duplicate
+  continuation cannot produce duplicate merges, tags, or releases.
+- Release publication and provider deployment remain separate state machines
+  with separate completion claims.
 - Script-level read-after-write visibility checks are clearly bounded and do
   not masquerade as a long-running CI or deployment monitor.
 - Docker and Fly deployment instructions preserve existing ownership and safety
