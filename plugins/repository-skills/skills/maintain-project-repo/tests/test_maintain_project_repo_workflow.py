@@ -186,6 +186,10 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("minimum_delay_minutes", release_script)
         self.assertIn("reuse a live matching host-native continuation", release_script)
         self.assertIn("inspect_pr_gate", release_script)
+        self.assertIn("--json name,bucket", release_script)
+        self.assertIn("REPO_MAINTENANCE_MIN_REQUIRED_CHECKS", release_script)
+        self.assertIn("gh pr checks exits 8 while pending", release_script)
+        self.assertIn('not-started|awaiting-branch-visibility', release_script)
         self.assertIn("remote_branch_is_visible", release_script)
         self.assertIn("remote_tag_is_visible", release_script)
         self.assertIn("github_release_is_visible", release_script)
@@ -254,6 +258,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn("REPO_MAINTENANCE_RELEASE_OPERATION=prepare", release_env)
+        self.assertIn("REPO_MAINTENANCE_MIN_REQUIRED_CHECKS=1", release_env)
         self.assertIn("host-native continuation", release_env)
         self.assertIn("five", release_env)
         self.assertIn("Never add a shell poll loop", release_env)
@@ -273,6 +278,15 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
                 self.assertIn("matching", text)
                 self.assertIn("pending and healthy", text)
                 self.assertIn("do not delete/recreate", text)
+
+    def test_continuation_plan_matches_emitted_packet_schema(self) -> None:
+        plan = (ROOT.parents[1] / "docs/maintainers/deferred-work-wakeup-policy-plan.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"minimum_delay_minutes": 5', plan)
+        self.assertIn('"pr_number": "123"', plan)
+        self.assertNotIn('"not_before"', plan)
+        self.assertNotIn('"observed_at"', plan)
 
     def test_branch_accounting_guidance_is_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")

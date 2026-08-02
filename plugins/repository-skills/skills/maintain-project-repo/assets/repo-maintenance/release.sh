@@ -245,17 +245,38 @@ EOF
 
 inspect_pr_gate() {
   pr_number="$1"
-  CHECK_STATE="$(gh pr checks "$pr_number" --json name,state,workflow --jq 'map(.name + ":" + .state) | join(", ")' 2>/dev/null || printf 'unreadable')"
-  check_count="$(gh pr checks "$pr_number" --json state --jq 'length' 2>/dev/null || printf '0')"
-  pending_count="$(gh pr checks "$pr_number" --json state --jq '[.[].state | select(. == "PENDING" or . == "QUEUED" or . == "IN_PROGRESS" or . == "WAITING")] | length' 2>/dev/null || printf '1')"
-  failing_count="$(gh pr checks "$pr_number" --json state --jq '[.[].state | select(. == "FAILURE" or . == "ERROR" or . == "CANCELLED" or . == "TIMED_OUT" or . == "ACTION_REQUIRED")] | length' 2>/dev/null || printf '1')"
+  minimum_check_count="${REPO_MAINTENANCE_MIN_REQUIRED_CHECKS:-1}"
+  case "$minimum_check_count" in
+    ''|*[!0-9]*) die "REPO_MAINTENANCE_MIN_REQUIRED_CHECKS must be a non-negative integer; received $minimum_check_count." ;;
+  esac
+  if CHECK_STATE="$(gh pr checks "$pr_number" --json name,bucket --jq 'map(.name + ":" + .bucket) | join(",")' 2>/dev/null)"; then
+    check_readable="true"
+  elif [ -n "${CHECK_STATE:-}" ]; then
+    # gh pr checks exits 8 while pending even when it returned valid JSON output.
+    check_readable="true"
+  else
+    CHECK_STATE="unreadable"
+    check_readable="false"
+  fi
+  if CHECK_BUCKETS="$(gh pr checks "$pr_number" --json bucket --jq 'map(.bucket) | join(",")' 2>/dev/null)"; then
+    :
+  elif [ -z "${CHECK_BUCKETS:-}" ]; then
+    check_readable="false"
+  fi
+  if check_count="$(gh pr checks "$pr_number" --json bucket --jq 'length' 2>/dev/null)"; then
+    :
+  elif [ -z "${check_count:-}" ]; then
+    check_readable="false"
+  fi
   REVIEW_DECISION="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""' 2>/dev/null || printf 'UNREADABLE')"
   COMMENT_COUNT="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)' 2>/dev/null || printf '1')"
-  if [ "$check_count" = "0" ] || [ "$REVIEW_DECISION" = "UNREADABLE" ]; then
+  if [ "$check_readable" != "true" ] || [ "$REVIEW_DECISION" = "UNREADABLE" ]; then
     GATE_PHASE="awaiting-github-state"
-  elif [ "$failing_count" != "0" ]; then
+  elif [ "$check_count" -lt "$minimum_check_count" ]; then
+    GATE_PHASE="awaiting-github-state"
+  elif case ",$CHECK_BUCKETS," in *,fail,*|*,cancel,*) true ;; *) false ;; esac; then
     GATE_PHASE="failed-checks"
-  elif [ "$pending_count" != "0" ]; then
+  elif case ",$CHECK_BUCKETS," in *,pending,*) true ;; *) false ;; esac; then
     GATE_PHASE="awaiting-pr-checks"
   elif [ "$REVIEW_DECISION" = "CHANGES_REQUESTED" ]; then
     GATE_PHASE="changes-requested"
@@ -269,9 +290,15 @@ emit_continuation_packet() {
   pr_number="$1"
   branch_name="$2"
   phase="$3"
+  resume_operation="inspect"
+  case "$phase" in
+    not-started|awaiting-branch-visibility)
+      resume_operation="prepare"
+      ;;
+  esac
   repo_name="$(gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null || printf 'unknown')"
   head_sha="$(git -C "$REPO_ROOT" rev-parse HEAD)"
-  printf '%s\n' "{\"schema\":\"repo-maintenance-continuation/v1\",\"operation\":\"standard-release\",\"repository\":\"$repo_name\",\"release_tag\":\"$RELEASE_TAG\",\"branch\":\"$branch_name\",\"head_commit\":\"$head_sha\",\"pr_number\":\"$pr_number\",\"phase\":\"$phase\",\"minimum_delay_minutes\":5,\"resume_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation inspect\",\"advance_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation advance\"}"
+  printf '%s\n' "{\"schema\":\"repo-maintenance-continuation/v1\",\"operation\":\"standard-release\",\"repository\":\"$repo_name\",\"release_tag\":\"$RELEASE_TAG\",\"branch\":\"$branch_name\",\"head_commit\":\"$head_sha\",\"pr_number\":\"$pr_number\",\"phase\":\"$phase\",\"minimum_delay_minutes\":5,\"resume_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation $resume_operation\",\"advance_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation advance\"}"
   log "Before scheduling, reuse a live matching host-native continuation while this gate is pending and healthy; do not delete/recreate it after an unchanged snapshot. Create or update one only after it fires or becomes stale, no sooner than five minutes. On wakeup run inspect first; run advance only if this branch, commit, PR, and tag still match."
 }
 
@@ -386,16 +413,26 @@ run_standard_release() {
   ensure_gh_cli
   ensure_semver_tag
   ensure_operation
-  branch_name="$(ensure_branch_release_context)"
-  ensure_clean_worktree
 
   if [ "$REPO_MAINTENANCE_RELEASE_OPERATION" = "inspect" ]; then
+    branch_name="$(current_branch)"
+    if [ -z "$branch_name" ]; then
+      log "Release inspection state: not-started; no named branch is checked out."
+      return 0
+    fi
     pr_number="$(gh pr list --head "$branch_name" --base "$base_branch" --json number --jq '.[0].number // empty' --limit 1)"
-    [ -n "$pr_number" ] || die "No release PR exists for branch $branch_name into $base_branch. Run --operation prepare first."
+    if [ -z "$pr_number" ]; then
+      emit_continuation_packet "pending" "$branch_name" "not-started"
+      log "Release inspection state: not-started; no release PR exists for branch $branch_name."
+      return 0
+    fi
     inspect_pr_gate "$pr_number"
     emit_continuation_packet "$pr_number" "$branch_name" "$GATE_PHASE"
     return 0
   fi
+
+  branch_name="$(ensure_branch_release_context)"
+  ensure_clean_worktree
 
   if [ "$REPO_MAINTENANCE_RELEASE_OPERATION" = "prepare" ] && [ "$skip_validate" != "true" ]; then
     sh "$SELF_DIR/validate-all.sh"

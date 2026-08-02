@@ -10,7 +10,7 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 
 - run `--operation prepare` for local validation, the version bump, branch push, PR creation, one remote snapshot, and a continuation packet
 - require committed changes and a clean worktree
-- run the repo-specific version bump hook at `scripts/repo-maintenance/version-bump.sh`
+- run the repo-specific version bump hook at the selected profile root: `scripts/repo-maintenance/version-bump.sh` for generic/SwiftPM profiles or `Scripts/repo-maintenance/version-bump.sh` for the xcode-app profile
 - commit the version bump as `release: bump versions for vX.Y.Z`
 - push the branch
 - perform one immediate branch-visibility re-read; if it is not visible, emit a continuation packet instead of polling
@@ -53,9 +53,9 @@ Use this mode when the current repository is checked out as a git submodule insi
 - require an actual superproject relationship
 - create the release tag locally
 - push the branch and tag in the submodule repository
-- perform one immediate branch and tag visibility re-read; if either is absent, stop with a continuation instruction rather than polling
+- perform one immediate branch and tag visibility re-read; if either is absent, create or reuse the matching host-native continuation no sooner than five minutes later, then inspect before another release action rather than polling
 - create the GitHub release when `gh` is available, passing `--prerelease` for SemVer prerelease tags such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes
-- perform one immediate GitHub release re-read after creation; if it is absent, stop with a continuation instruction rather than polling
+- perform one immediate GitHub release re-read after creation; if it is absent, create or reuse the matching host-native continuation no sooner than five minutes later, then inspect before another release action rather than polling
 - verify the GitHub release object's prerelease metadata matches the release tag before calling release publication complete
 - verify the submodule branch and tag are visible on the intended remote before calling that work preserved or released
 - leave the parent-repo pointer update as a separate explicit follow-up step

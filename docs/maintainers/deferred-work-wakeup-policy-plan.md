@@ -191,20 +191,18 @@ is sufficient for a fresh Hermes cron session or a later Codex heartbeat:
   "release_tag": "vX.Y.Z",
   "branch": "release/vX.Y.Z",
   "head_commit": "full-commit-sha",
-  "pr_number": 123,
+  "pr_number": "123",
   "phase": "awaiting-pr-checks",
-  "blocked_gate": "github-checks-and-review",
-  "observed_at": "RFC-3339 timestamp",
-  "not_before": "RFC-3339 timestamp at least five minutes after observed_at",
-  "resume_command": "scripts/repo-maintenance/release.sh inspect --mode standard --version vX.Y.Z",
-  "advance_command": "scripts/repo-maintenance/release.sh advance --mode standard --version vX.Y.Z"
+  "minimum_delay_minutes": 5,
+  "resume_command": "scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --operation inspect",
+  "advance_command": "scripts/repo-maintenance/release.sh --mode standard --version vX.Y.Z --operation advance"
 }
 ```
 
-The script must set `not_before` to no earlier than five minutes after
-`observed_at`; the host adapter must reject or correct a packet that violates
-that floor. The host adapter schedules a one-shot wakeup after `not_before`. Its prompt
-must include the packet, tell the agent to run `inspect` first, and permit
+`minimum_delay_minutes` is the script's sole delay field; it must be at least
+five. The host adapter schedules no sooner than that floor. Its prompt must
+include the packet, tell the agent to run `inspect` first (or `prepare` for a
+pre-PR `not-started` or `awaiting-branch-visibility` packet), and permit
 `advance` only if the packet's repository, tag, branch, commit, and gate still
 match current source-of-truth state. If still pending and the same continuation
 is live, it retains that scheduler item rather than replacing it. It creates or
@@ -279,9 +277,9 @@ or changed, it reports the discrepancy and does not continue automatically.
 - Hermes instructions always use one-shot `cronjob` plus `deliver="origin"`,
   `attach_to_session=true`, a self-contained prompt, and gateway/tool
   availability verification.
-- Every agent-created heartbeat, continuation packet, or scheduled re-check
-  has `not_before >= observed_at + five minutes`; focused tests reject shorter
-  values and repeated short-delay reschedules.
+- Every continuation packet emits `minimum_delay_minutes >= 5`, and every
+  agent-created heartbeat or scheduled re-check honors that floor; focused
+  tests reject shorter values and repeated short-delay reschedules.
 - The release script returns a machine-readable continuation packet in deferred
   mode, supports idempotent `prepare`, read-only `inspect`, and guarded
   `advance` actions, and cannot accidentally merge, tag, or release while the
