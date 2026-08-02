@@ -39,13 +39,25 @@ or multi-minute checks become deferred work. A wakeup must capture the target,
 the observed state, the next check time, the continuation command or query,
 and the gate that remains closed.
 
+### Minimum Continuation Interval
+
+Every agent-created heartbeat, continuation, or scheduled re-check must be at
+least **five minutes** after its observation time. This is a minimum, not a
+recommended cadence: agents must never schedule a one-, two-, or four-minute
+heartbeat/cron job to emulate polling. They may choose a longer delay when the
+provider, CI queue, approval window, or prior state makes that more honest.
+
+The only shorter operation is the command-local, one-time bounded re-read
+defined above. It completes the current mutation attempt; it is not scheduled,
+is not repeated, and must not grow into a polling loop.
+
 ## Host Contract
 
 | Host | Required continuation surface | Required setup/check | Continuation rule |
 | --- | --- | --- | --- |
-| Codex desktop / ChatGPT app | A current-thread `heartbeat` created through the host automation surface. | Confirm that the active host exposes the heartbeat automation tool. | Use a one-shot same-thread heartbeat; its prompt re-reads the exact PR, run, release, deployment, or process state and continues only when the named gate is clear. |
-| Hermes Agent | `cronjob(action="create", ...)` with a one-shot relative schedule, `deliver="origin"`, and `attach_to_session=true`. | Confirm the `cronjob` tool is enabled and `hermes cron status` reports an active gateway before claiming the wakeup is scheduled. | The cron execution is a fresh agent run, so its prompt must be self-contained. `attach_to_session=true` makes the delivered result continuable in the origin conversation; it does not revive a suspended shell or silently authorize the remaining release steps. |
-| Other hosts | That host's documented future-wakeup or scheduled-task tool. | Verify its availability before use. | If the host has no approved continuation mechanism, report that limitation and return control rather than emulating a long wait with `sleep`, a background loop, or an idle shell. |
+| Codex desktop / ChatGPT app | A current-thread `heartbeat` created through the host automation surface. | Confirm that the active host exposes the heartbeat automation tool. | Use a one-shot same-thread heartbeat scheduled at least five minutes ahead; its prompt re-reads the exact PR, run, release, deployment, or process state and continues only when the named gate is clear. |
+| Hermes Agent | `cronjob(action="create", ...)` with a one-shot relative schedule of five minutes or longer, `deliver="origin"`, and `attach_to_session=true`. | Confirm the `cronjob` tool is enabled and `hermes cron status` reports an active gateway before claiming the wakeup is scheduled. | The cron execution is a fresh agent run, so its prompt must be self-contained. `attach_to_session=true` makes the delivered result continuable in the origin conversation; it does not revive a suspended shell or silently authorize the remaining release steps. |
+| Other hosts | That host's documented future-wakeup or scheduled-task tool. | Verify its availability before use. | Schedule it at least five minutes ahead. If the host has no approved continuation mechanism, report that limitation and return control rather than emulating a long wait with `sleep`, a background loop, or an idle shell. |
 
 Hermes evidence: its official [Scheduled Tasks (Cron)](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron)
 documentation identifies `cronjob` as the agent-facing scheduler, describes
@@ -172,13 +184,15 @@ is sufficient for a fresh Hermes cron session or a later Codex heartbeat:
   "phase": "awaiting-pr-checks",
   "blocked_gate": "github-checks-and-review",
   "observed_at": "RFC-3339 timestamp",
-  "not_before": "RFC-3339 timestamp",
+  "not_before": "RFC-3339 timestamp at least five minutes after observed_at",
   "resume_command": "scripts/repo-maintenance/release.sh inspect --mode standard --version vX.Y.Z",
   "advance_command": "scripts/repo-maintenance/release.sh advance --mode standard --version vX.Y.Z"
 }
 ```
 
-The host adapter schedules a one-shot wakeup after `not_before`. Its prompt
+The script must set `not_before` to no earlier than five minutes after
+`observed_at`; the host adapter must reject or correct a packet that violates
+that floor. The host adapter schedules a one-shot wakeup after `not_before`. Its prompt
 must include the packet, tell the agent to run `inspect` first, and permit
 `advance` only if the packet's repository, tag, branch, commit, and gate still
 match current source-of-truth state. If still pending, it schedules exactly one
@@ -190,7 +204,8 @@ not continue automatically.
 1. `prepare` validates the release candidate and publishes the release branch
    and PR. It emits `awaiting-pr-checks` instead of watching CI.
 2. The host schedules the continuation. The wakeup runs `inspect` and either
-   reports a failed/changed gate, reschedules one follow-up, or calls `advance`.
+   reports a failed/changed gate, schedules one follow-up no sooner than five
+   minutes later, or calls `advance`.
 3. `advance` verifies CI, review comments, and review-bot contexts before
    merging. It never treats a pending bot as approval.
 4. After merge, `advance` fast-forwards the local base, creates/pushes the tag,
@@ -222,8 +237,8 @@ not continue automatically.
 ## Implementation Sequence
 
 1. Add the universal root rule and the `schedule-agent-work` host matrix. Define
-   the continuation packet fields, scheduler adapter contract, and bounded-probe
-   exception once.
+   the continuation packet fields, five-minute minimum interval, scheduler
+   adapter contract, and bounded-probe exception once.
 2. Refactor `maintain-project-repo` from its monolithic release path into
    idempotent `prepare`, `inspect`, and `advance` commands. Keep Git/GitHub as
    the source of truth; do not add a database or background daemon.
@@ -252,6 +267,9 @@ not continue automatically.
 - Hermes instructions always use one-shot `cronjob` plus `deliver="origin"`,
   `attach_to_session=true`, a self-contained prompt, and gateway/tool
   availability verification.
+- Every agent-created heartbeat, continuation packet, or scheduled re-check
+  has `not_before >= observed_at + five minutes`; focused tests reject shorter
+  values and repeated short-delay reschedules.
 - The release script returns a machine-readable continuation packet in deferred
   mode, supports idempotent `prepare`, read-only `inspect`, and guarded
   `advance` actions, and cannot accidentally merge, tag, or release while the
