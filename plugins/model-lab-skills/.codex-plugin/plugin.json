@@ -1,6 +1,6 @@
 {
   "name": "model-lab-skills",
-  "version": "9.29.1",
+  "version": "9.30.0",
   "description": "Reproducible model training, evaluation, intervention, and runtime research workflows.",
   "author": {
     "name": "Gale"

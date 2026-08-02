@@ -1,6 +1,6 @@
 {
   "name": "python-skills",
-  "version": "9.29.1",
+  "version": "9.30.0",
   "description": "Bundled Python-focused Codex skills for uv bootstrapping, project implementation, diagnostics, packaging, tooling, CI, upgrades, FastAPI service maintenance, FastMCP service maintenance, and testing workflows.",
   "author": {
     "name": "Gale",
