@@ -179,35 +179,32 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         )
         self.assertIn("Standard release mode must run from a release branch or worktree", release_script)
         self.assertIn("version-bump.sh", release_script)
-        self.assertIn("wait_for_initial_pr_checks", release_script)
-        self.assertIn("ensure_remote_ci_mode", release_script)
-        self.assertIn("defer_remote_ci_if_requested", release_script)
-        self.assertIn("--remote-ci-mode full|defer", release_script)
+        self.assertIn("ensure_operation", release_script)
+        self.assertIn("--operation prepare|inspect|advance", release_script)
         self.assertIn("Version bump commit for $RELEASE_TAG is already at HEAD", release_script)
-        self.assertIn("Codex should create a same-thread heartbeat automation", release_script)
-        self.assertIn("review-bot status contexts such as CodeRabbit", release_script)
-        self.assertIn("wait_for_remote_branch", release_script)
-        self.assertIn("wait_for_remote_tag", release_script)
-        self.assertIn("wait_for_pr_review_state", release_script)
-        self.assertIn("wait_for_github_release", release_script)
-        self.assertIn("REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS", release_script)
-        self.assertIn("REPO_MAINTENANCE_REMOTE_CI_MODE", release_script)
+        self.assertIn("emit_continuation_packet", release_script)
+        self.assertIn("minimum_delay_minutes", release_script)
+        self.assertIn("reuse a live matching host-native continuation", release_script)
+        self.assertIn("inspect_pr_gate", release_script)
+        self.assertIn("--json name,bucket", release_script)
+        self.assertIn("REPO_MAINTENANCE_MIN_REQUIRED_CHECKS", release_script)
+        self.assertIn("gh pr checks exits 8 while pending", release_script)
+        self.assertIn('not-started|awaiting-branch-visibility', release_script)
+        self.assertIn("remote_branch_is_visible", release_script)
+        self.assertIn("remote_tag_is_visible", release_script)
+        self.assertIn("github_release_is_visible", release_script)
         self.assertIn("push_release_branch", release_script)
         self.assertIn("push_release_tag", release_script)
         self.assertIn('rev-list -n 1 "$RELEASE_TAG"', release_script)
-        self.assertIn('gh pr checks "$pr_number" --watch', release_script)
+        self.assertNotIn('gh pr checks "$pr_number" --watch', release_script)
+        self.assertNotIn('sleep "$poll_seconds"', release_script)
         self.assertIn('select(.state == "COMMENTED")', release_script)
         self.assertIn("valid concerns in code, or add out-of-scope concerns to ROADMAP.md", release_script)
         self.assertIn('gh pr merge "$pr_number" --merge --delete-branch', release_script)
         self.assertIn('pull --ff-only origin "$base_branch"', release_script)
-        self.assertIn("Last observed state:", release_script)
         self.assertNotIn("release tag `$RELEASE_TAG` was created locally before this PR", release_script)
         standard_flow = release_script[release_script.index("run_standard_release()") :]
-        self.assertLess(
-            standard_flow.index("wait_for_initial_pr_checks \"$pr_number\""),
-            standard_flow.index("defer_remote_ci_if_requested \"$pr_number\""),
-        )
-        self.assertLess(standard_flow.index("watch_ci \"$pr_number\""), standard_flow.index("create_release_tag"))
+        self.assertLess(standard_flow.index("inspect_pr_gate \"$pr_number\""), standard_flow.index("create_release_tag"))
         self.assertLess(standard_flow.index("check_pr_comments \"$pr_number\""), standard_flow.index("create_release_tag"))
         self.assertLess(standard_flow.index("fast_forward_base_branch"), standard_flow.index("create_release_tag"))
 
@@ -215,26 +212,22 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         common_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/common.sh").read_text(
             encoding="utf-8"
         )
-        self.assertIn("wait_for_remote_branch", common_script)
-        self.assertIn("wait_for_remote_tag", common_script)
-        self.assertIn("wait_for_github_release", common_script)
-        self.assertIn("REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS", common_script)
-        self.assertIn("REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS", common_script)
-        self.assertIn("REPO_MAINTENANCE_REMOTE_BRANCH_TIMEOUT_SECONDS", common_script)
-        self.assertIn("REPO_MAINTENANCE_REMOTE_TAG_TIMEOUT_SECONDS", common_script)
-        self.assertIn("REPO_MAINTENANCE_GH_RELEASE_TIMEOUT_SECONDS", common_script)
-        self.assertIn("positive_integer_or_default", common_script)
+        self.assertIn("remote_branch_is_visible", common_script)
+        self.assertIn("remote_tag_is_visible", common_script)
+        self.assertIn("github_release_is_visible", common_script)
+        self.assertNotIn("github_wait_timeout", common_script)
+        self.assertNotIn("sleep", common_script)
 
         push_step = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release/30-push-release.sh").read_text(
             encoding="utf-8"
         )
-        self.assertIn('wait_for_remote_branch "$branch_name"', push_step)
-        self.assertIn('wait_for_remote_tag "$RELEASE_TAG"', push_step)
+        self.assertIn('remote_branch_is_visible "$branch_name"', push_step)
+        self.assertIn('remote_tag_is_visible "$RELEASE_TAG"', push_step)
 
         release_step = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release/40-github-release.sh").read_text(
             encoding="utf-8"
         )
-        self.assertIn('wait_for_github_release "$RELEASE_TAG"', release_step)
+        self.assertIn('github_release_is_visible "$RELEASE_TAG"', release_step)
 
     def test_release_helpers_preserve_prerelease_github_metadata(self) -> None:
         common_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/common.sh").read_text(
@@ -260,15 +253,40 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
                 self.assertIn("gh release create \"$RELEASE_TAG\" --verify-tag --generate-notes $prerelease_flag", release_text)
                 self.assertIn('verify_github_release_prerelease_metadata "$RELEASE_TAG"', release_text)
 
-    def test_release_env_documents_github_wait_defaults(self) -> None:
+    def test_release_env_documents_scheduled_continuation_default(self) -> None:
         release_env = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/config/release.env").read_text(
             encoding="utf-8"
         )
-        self.assertIn("REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS=120", release_env)
-        self.assertIn("REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS=5", release_env)
-        self.assertIn("REPO_MAINTENANCE_REMOTE_CI_MODE=full", release_env)
-        self.assertIn("transient indexing gaps", release_env)
-        self.assertIn("native thread Timer/Wakeup or heartbeat automation", release_env)
+        self.assertIn("REPO_MAINTENANCE_RELEASE_OPERATION=prepare", release_env)
+        self.assertIn("REPO_MAINTENANCE_MIN_REQUIRED_CHECKS=1", release_env)
+        self.assertIn("host-native continuation", release_env)
+        self.assertIn("five", release_env)
+        self.assertIn("Never add a shell poll loop", release_env)
+        self.assertIn("do not delete/recreate it after an unchanged snapshot", release_env)
+
+    def test_release_guidance_reuses_healthy_pending_continuations(self) -> None:
+        skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
+        release_modes = (ROOT / "skills/maintain-project-repo/references/release-modes.md").read_text(
+            encoding="utf-8"
+        )
+        prompts = (ROOT / "skills/maintain-project-repo/references/automation-prompts.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in (skill_text, release_modes, prompts):
+            with self.subTest(surface=text[:32]):
+                self.assertIn("matching", text)
+                self.assertIn("pending and healthy", text)
+                self.assertIn("do not delete/recreate", text)
+
+    def test_continuation_plan_matches_emitted_packet_schema(self) -> None:
+        plan = (ROOT.parents[1] / "docs/maintainers/deferred-work-wakeup-policy-plan.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"minimum_delay_minutes": 5', plan)
+        self.assertIn('"pr_number": "123"', plan)
+        self.assertNotIn('"not_before"', plan)
+        self.assertNotIn('"observed_at"', plan)
 
     def test_branch_accounting_guidance_is_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")

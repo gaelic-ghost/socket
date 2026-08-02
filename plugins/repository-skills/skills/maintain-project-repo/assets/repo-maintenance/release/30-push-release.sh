@@ -13,7 +13,7 @@ if [ "${REPO_MAINTENANCE_DRY_RUN:-false}" = "true" ]; then
 fi
 
 git -C "$REPO_ROOT" push -u origin "$branch_name"
-wait_for_remote_branch "$branch_name"
+remote_branch_is_visible "$branch_name" || die "Remote branch origin/$branch_name is not visible in this immediate re-read. Do not poll; schedule a host-native continuation for at least five minutes, then re-run the release step."
 git -C "$REPO_ROOT" push origin "$RELEASE_TAG"
-wait_for_remote_tag "$RELEASE_TAG"
+remote_tag_is_visible "$RELEASE_TAG" || die "Remote tag $RELEASE_TAG is not visible in this immediate re-read. Do not poll; schedule a host-native continuation for at least five minutes, then re-run the release step."
 log "Pushed branch $branch_name and tag $RELEASE_TAG."

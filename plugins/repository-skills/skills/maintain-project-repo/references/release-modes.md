@@ -8,27 +8,25 @@ Use this mode for an ordinary standalone repository whose release line is a prot
 
 Run it from a feature branch or worktree. Do not run standard release mode from `main`; the script treats `main` as the protected integration branch that receives the release through a pull request.
 
-- run local validation first
+- run `--operation prepare` for local validation, the version bump, branch push, PR creation, one remote snapshot, and a continuation packet
 - require committed changes and a clean worktree
-- run the repo-specific version bump hook at `scripts/repo-maintenance/version-bump.sh`
+- run the repo-specific version bump hook at the selected profile root: `scripts/repo-maintenance/version-bump.sh` for generic/SwiftPM profiles or `Scripts/repo-maintenance/version-bump.sh` for the xcode-app profile
 - commit the version bump as `release: bump versions for vX.Y.Z`
 - push the branch
-- wait for the pushed branch to become visible on the remote before creating or updating the PR
+- perform one immediate branch-visibility re-read; if it is not visible, emit a continuation packet instead of polling
 - open or update a pull request against `main`
-- wait for GitHub to report initial PR checks before treating missing checks as a failure
-- watch CI by default, or pause after initial check discovery when `--remote-ci-mode defer` is selected for a repository with intentionally heavy remote CI
-- stop with a clear message if CI is not green so the maintainer can fix the branch, push, and rerun the same script
-- wait for PR review/comment state to be readable before making the review-comment gate decision
-- check PR review state, comments, and review-bot status contexts after CI is green
-- wait or defer with a same-thread Codex heartbeat while review-bot status contexts such as CodeRabbit are still pending
+- use `--operation inspect` for one PR/check/review snapshot; it emits a continuation packet for unknown or pending remote state
+- create one host-native continuation no sooner than five minutes later, then reuse that same matching scheduler item while the gate stays pending and healthy; do not delete/recreate it after an unchanged snapshot. Codex uses heartbeat, Hermes uses an updated continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`
+- on wakeup run `inspect` first, then use `--operation advance` only if the packet's branch, commit, PR, and tag identities still match
+- stop with a clear message if CI fails, changes are requested, or unresolved comments remain
 - stop on requested changes or comments so the maintainer can address valid concerns, add out-of-scope concerns to `ROADMAP.md`, resolve the threads, push, and rerun the same script
 - merge the PR with a merge commit once CI is green and the comment pass is clear
 - fast-forward local `main` from `origin/main`
 - create the annotated release tag locally from the reviewed local `main`
 - push the tag
-- wait for the pushed tag to become visible on the remote before creating the GitHub release
+- perform one immediate tag-visibility re-read; if it is not visible, emit a continuation packet instead of polling
 - create the GitHub release unless skipped, passing `--prerelease` for SemVer prerelease tags such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes
-- wait for the GitHub release object to become readable after creation
+- perform one immediate GitHub-release re-read; if it is not readable, emit a continuation packet instead of polling
 - verify the GitHub release object's prerelease metadata matches the release tag before calling release publication complete
 - verify `git log origin/main..main` or the repository's equivalent base/remote comparison is empty before claiming the local base branch is synchronized
 - enumerate every local branch still not contained by `main` and account for each branch as already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete
@@ -39,14 +37,12 @@ Treat branch accounting as a hard completion gate, not optional cleanup. Use `gi
 Example:
 
 ```bash
-bash scripts/repo-maintenance/release.sh --mode standard --version v1.2.0
+bash scripts/repo-maintenance/release.sh --mode standard --version v1.2.0 --operation prepare
 ```
 
 When a release intentionally has no repo version surfaces, pass `--skip-version-bump`. When the PR comment pass has already been handled and only historical comments remain visible through GitHub, rerun with `--review-comments-addressed`.
 
-By default, standard release mode uses `--remote-ci-mode full`, which blocks in the script while `gh pr checks --watch` waits for GitHub CI and status contexts. For repositories where full local validation has already run and GitHub CI or review bots normally take more than a couple minutes, use `--remote-ci-mode defer` during the first release pass. The script still runs local validation, pushes the release branch, opens or updates the PR, and waits until GitHub reports initial checks; then it pauses with a continuation command instead of polling the whole remote gate. Codex should create a same-thread heartbeat automation when the current Codex surface exposes it, then wake in the same thread, inspect the PR/check/review state, wait for review-bot contexts such as CodeRabbit to finish, and rerun the same release command without `--remote-ci-mode defer` to finish the CI gate, review-comment gate, merge, tag, GitHub release, branch accounting, and cleanup.
-
-GitHub visibility waits default to `REPO_MAINTENANCE_GH_WAIT_TIMEOUT_SECONDS=120` and `REPO_MAINTENANCE_GH_WAIT_POLL_SECONDS=5`. More specific overrides such as `REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_PR_REVIEW_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_REMOTE_BRANCH_TIMEOUT_SECONDS`, `REPO_MAINTENANCE_REMOTE_TAG_TIMEOUT_SECONDS`, and `REPO_MAINTENANCE_GH_RELEASE_TIMEOUT_SECONDS` can narrow individual gates without editing the script. Timeout failures should name the delayed surface and the last observed state so maintainers can tell indexing lag apart from real CI, review, branch, tag, or release failures.
+Remote waiting is never a release-script operation. `prepare`, `inspect`, and `advance` each take one bounded snapshot and either make an immediate safe transition or emit a continuation packet. Agents create one host-native wakeup no sooner than five minutes later, reuse that same matching scheduler item while the gate remains pending and healthy, and pause/delete it only on resolution, failure, cancellation, or identity drift. Create/update a replacement only after the prior item fires or becomes stale. Resume with `inspect`, and use `advance` only after packet identities match. Do not use shell `sleep`, `gh pr checks --watch`, timer loops, or one-to-four-minute rechecks.
 
 ## `submodule`
 
@@ -57,9 +53,9 @@ Use this mode when the current repository is checked out as a git submodule insi
 - require an actual superproject relationship
 - create the release tag locally
 - push the branch and tag in the submodule repository
-- wait for the pushed branch and tag to become visible on the remote
+- perform one immediate branch and tag visibility re-read; if either is absent, create or reuse the matching host-native continuation no sooner than five minutes later, then inspect before another release action rather than polling
 - create the GitHub release when `gh` is available, passing `--prerelease` for SemVer prerelease tags such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes
-- wait for the GitHub release object to become readable after creation
+- perform one immediate GitHub release re-read after creation; if it is absent, create or reuse the matching host-native continuation no sooner than five minutes later, then inspect before another release action rather than polling
 - verify the GitHub release object's prerelease metadata matches the release tag before calling release publication complete
 - verify the submodule branch and tag are visible on the intended remote before calling that work preserved or released
 - leave the parent-repo pointer update as a separate explicit follow-up step

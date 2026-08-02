@@ -17,7 +17,7 @@ base_branch="${REPO_MAINTENANCE_RELEASE_BRANCH:-main}"
 review_comments_addressed="false"
 skip_branch_cleanup="false"
 dry_run="false"
-remote_ci_mode="${REPO_MAINTENANCE_REMOTE_CI_MODE:-full}"
+operation="${REPO_MAINTENANCE_RELEASE_OPERATION:-prepare}"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -49,8 +49,8 @@ while [ "$#" -gt 0 ]; do
       review_comments_addressed="true"
       shift
       ;;
-    --remote-ci-mode)
-      remote_ci_mode="${2:-}"
+    --operation)
+      operation="${2:-}"
       shift 2
       ;;
     --skip-branch-cleanup)
@@ -64,7 +64,7 @@ while [ "$#" -gt 0 ]; do
     -h|--help)
       cat <<'USAGE'
 Usage:
-  release.sh --mode standard --version <vX.Y.Z> [--base-branch main] [--skip-validate] [--skip-version-bump] [--skip-gh-release] [--review-comments-addressed] [--remote-ci-mode full|defer] [--skip-branch-cleanup] [--dry-run]
+  release.sh --mode standard --version <vX.Y.Z> --operation prepare|inspect|advance [--base-branch main] [--skip-validate] [--skip-version-bump] [--skip-gh-release] [--review-comments-addressed] [--skip-branch-cleanup] [--dry-run]
   release.sh --mode submodule --version <vX.Y.Z> [--skip-validate] [--skip-gh-release] [--dry-run]
 USAGE
       exit 0
@@ -81,7 +81,7 @@ export REPO_MAINTENANCE_RELEASE_MODE="$mode"
 export RELEASE_TAG="$release_tag"
 export REPO_MAINTENANCE_SKIP_GH_RELEASE="$skip_gh_release"
 export REPO_MAINTENANCE_DRY_RUN="$dry_run"
-export REPO_MAINTENANCE_REMOTE_CI_MODE="$remote_ci_mode"
+export REPO_MAINTENANCE_RELEASE_OPERATION="$operation"
 
 ensure_clean_worktree() {
   status_output="$(git -C "$REPO_ROOT" status --porcelain)"
@@ -89,7 +89,7 @@ ensure_clean_worktree() {
 }
 
 ensure_gh_cli() {
-  command -v gh >/dev/null 2>&1 || die "Standard release mode requires the GitHub CLI gh so it can create the pull request, watch CI, inspect review comments, merge, and publish the release."
+  command -v gh >/dev/null 2>&1 || die "Standard release mode requires the GitHub CLI gh so it can inspect and advance the pull request, merge, and publish the release."
 }
 
 ensure_semver_tag() {
@@ -102,12 +102,12 @@ ensure_semver_tag() {
   esac
 }
 
-ensure_remote_ci_mode() {
-  case "$REPO_MAINTENANCE_REMOTE_CI_MODE" in
-    full|defer)
+ensure_operation() {
+  case "$REPO_MAINTENANCE_RELEASE_OPERATION" in
+    prepare|inspect|advance)
       ;;
     *)
-      die "Remote CI mode must be either full or defer. Use full to watch GitHub checks in this script, or defer to pause after initial check discovery and continue from a Codex wakeup."
+      die "Release operation must be prepare, inspect, or advance. Long-running remote checks must be resumed by a host-native scheduled continuation, never watched from this script."
       ;;
   esac
 }
@@ -186,7 +186,7 @@ push_release_branch() {
 
   git -C "$REPO_ROOT" push -u origin "$branch_name"
   log "Pushed branch $branch_name."
-  wait_for_remote_branch "$branch_name"
+  remote_branch_is_visible "$branch_name" || return 1
 }
 
 push_release_tag() {
@@ -197,7 +197,7 @@ push_release_tag() {
 
   git -C "$REPO_ROOT" push origin "$RELEASE_TAG"
   log "Pushed tag $RELEASE_TAG."
-  wait_for_remote_tag "$RELEASE_TAG"
+  remote_tag_is_visible "$RELEASE_TAG" || return 1
 }
 
 create_or_update_pr() {
@@ -220,9 +220,9 @@ create_or_update_pr() {
 - keeps protected \`$base_branch\` updates behind pull request review and CI
 - release tag \`$RELEASE_TAG\` will be created after CI and the review-comment gate pass, so failed or still-discussed release candidates do not get tagged
 
-## Review Loop
+## Continuation Gate
 
-Before merge and tagging, \`scripts/repo-maintenance/release.sh\` watches CI and stops on review comments unless the maintainer has already addressed or resolved them and reruns with \`--review-comments-addressed\`.
+Before merge and tagging, use \`release.sh --operation inspect\` after CI and review contexts have had time to settle. Agents schedule a host-native continuation at least five minutes later; this script never watches or polls remote state.
 EOF
 
   pr_number="$(gh pr list --head "$branch_name" --base "$base_branch" --json number --jq '.[0].number // empty' --limit 1)"
@@ -243,100 +243,63 @@ EOF
   PR_NUMBER="$pr_number"
 }
 
-watch_ci() {
+inspect_pr_gate() {
   pr_number="$1"
-
-  if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would watch CI for PR #$pr_number."
-    return 0
+  minimum_check_count="${REPO_MAINTENANCE_MIN_REQUIRED_CHECKS:-1}"
+  case "$minimum_check_count" in
+    ''|*[!0-9]*) die "REPO_MAINTENANCE_MIN_REQUIRED_CHECKS must be a non-negative integer; received $minimum_check_count." ;;
+  esac
+  if CHECK_STATE="$(gh pr checks "$pr_number" --json name,bucket --jq 'map(.name + ":" + .bucket) | join(",")' 2>/dev/null)"; then
+    check_readable="true"
+  elif [ -n "${CHECK_STATE:-}" ]; then
+    # gh pr checks exits 8 while pending even when it returned valid JSON output.
+    check_readable="true"
+  else
+    CHECK_STATE="unreadable"
+    check_readable="false"
   fi
-
-  log "Watching CI for PR #$pr_number."
-  if ! gh pr checks "$pr_number" --watch; then
-    die "CI is not green for PR #$pr_number. Fix the failing checks, push the branch, and rerun release.sh so it can watch CI again."
+  if CHECK_BUCKETS="$(gh pr checks "$pr_number" --json bucket --jq 'map(.bucket) | join(",")' 2>/dev/null)"; then
+    :
+  elif [ -z "${CHECK_BUCKETS:-}" ]; then
+    check_readable="false"
   fi
-  log "CI is green for PR #$pr_number."
+  if check_count="$(gh pr checks "$pr_number" --json bucket --jq 'length' 2>/dev/null)"; then
+    :
+  elif [ -z "${check_count:-}" ]; then
+    check_readable="false"
+  fi
+  REVIEW_DECISION="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""' 2>/dev/null || printf 'UNREADABLE')"
+  COMMENT_COUNT="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)' 2>/dev/null || printf '1')"
+  if [ "$check_readable" != "true" ] || [ "$REVIEW_DECISION" = "UNREADABLE" ]; then
+    GATE_PHASE="awaiting-github-state"
+  elif [ "$check_count" -lt "$minimum_check_count" ]; then
+    GATE_PHASE="awaiting-github-state"
+  elif case ",$CHECK_BUCKETS," in *,fail,*|*,cancel,*) true ;; *) false ;; esac; then
+    GATE_PHASE="failed-checks"
+  elif case ",$CHECK_BUCKETS," in *,pending,*) true ;; *) false ;; esac; then
+    GATE_PHASE="awaiting-pr-checks"
+  elif [ "$REVIEW_DECISION" = "CHANGES_REQUESTED" ]; then
+    GATE_PHASE="changes-requested"
+  else
+    GATE_PHASE="ready-to-advance"
+  fi
+  log "PR #$pr_number snapshot: phase=$GATE_PHASE; checks=${CHECK_STATE:-none}; review=${REVIEW_DECISION:-none}; comments=$COMMENT_COUNT."
 }
 
-defer_remote_ci_if_requested() {
+emit_continuation_packet() {
   pr_number="$1"
   branch_name="$2"
-
-  [ "$REPO_MAINTENANCE_REMOTE_CI_MODE" = "defer" ] || return 1
-
-  if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would defer remote CI after PR #$pr_number reports initial checks."
-    return 0
-  fi
-
-  pr_url="$(gh pr view "$pr_number" --json url --jq '.url')"
-  log "Remote CI mode is defer, so release.sh is pausing after local validation, branch push, PR creation, and initial check discovery."
-  log "Release is not complete yet. Let GitHub finish CI for PR #$pr_number, then continue from branch $branch_name with:"
-  log "  bash scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG"
-  log "Codex should create a same-thread heartbeat automation for this wait when available, then resume by checking $pr_url and rerunning the command above instead of leaving a shell script open to poll GitHub."
-  log "The heartbeat should also wait for review-bot status contexts such as CodeRabbit to finish before merging; pending review contexts are not a clean merge signal."
-  return 0
-}
-
-wait_for_initial_pr_checks() {
-  pr_number="$1"
-  timeout_seconds="$(github_wait_timeout "${REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS:-}")"
-  poll_seconds="$(github_wait_poll_seconds "${REPO_MAINTENANCE_INITIAL_CHECK_POLL_SECONDS:-}")"
-  elapsed_seconds="0"
-  last_state="no check data returned yet"
-
-  log "Waiting up to ${timeout_seconds}s for GitHub to report initial checks on PR #$pr_number."
-
-  while :; do
-    last_state="$(gh pr checks "$pr_number" --json name,state,workflow --jq 'map(.name + ":" + .state) | join(", ")' 2>/dev/null || printf 'no checks reported')"
-    check_count="$(gh pr checks "$pr_number" --json name,state,workflow --jq 'length' 2>/dev/null || printf '0')"
-    case "$check_count" in
-      ''|*[!0-9]*)
-        check_count="0"
-        ;;
-    esac
-
-    if [ "$check_count" -gt 0 ]; then
-      log "Found $check_count initial check(s) for PR #$pr_number."
-      return 0
-    fi
-
-    if [ "$elapsed_seconds" -ge "$timeout_seconds" ]; then
-      die "No checks were reported for PR #$pr_number after ${timeout_seconds}s. Last observed state: $last_state. Confirm the GitHub Actions workflow triggers for the release branch, Actions is enabled, and the branch push succeeded before rerunning release.sh."
-    fi
-
-    sleep "$poll_seconds"
-    elapsed_seconds=$((elapsed_seconds + poll_seconds))
-  done
-}
-
-wait_for_pr_review_state() {
-  pr_number="$1"
-  timeout_seconds="$(github_wait_timeout "${REPO_MAINTENANCE_PR_REVIEW_TIMEOUT_SECONDS:-}")"
-  poll_seconds="$(github_wait_poll_seconds "${REPO_MAINTENANCE_PR_REVIEW_POLL_SECONDS:-}")"
-  elapsed_seconds="0"
-  last_state="PR review/comment state has not been read yet"
-
-  log "Waiting up to ${timeout_seconds}s for GitHub review/comment state on PR #$pr_number."
-
-  while :; do
-    last_state="$(gh pr view "$pr_number" --json reviewDecision,comments,reviews --jq '"reviewDecision=" + (.reviewDecision // "") + ", comments=" + ((.comments | length) | tostring) + ", reviews=" + ((.reviews | length) | tostring)' 2>/dev/null || printf 'GitHub did not return PR review/comment state')"
-    case "$last_state" in
-      "GitHub did not return PR review/comment state")
-        ;;
-      *)
-        log "GitHub review/comment state is readable for PR #$pr_number: $last_state."
-        return 0
-        ;;
-    esac
-
-    if [ "$elapsed_seconds" -ge "$timeout_seconds" ]; then
-      die "GitHub review/comment state for PR #$pr_number was not readable after ${timeout_seconds}s. Last observed state: $last_state. Confirm the PR exists and GitHub is returning review data before rerunning release.sh."
-    fi
-
-    sleep "$poll_seconds"
-    elapsed_seconds=$((elapsed_seconds + poll_seconds))
-  done
+  phase="$3"
+  resume_operation="inspect"
+  case "$phase" in
+    not-started|awaiting-branch-visibility)
+      resume_operation="prepare"
+      ;;
+  esac
+  repo_name="$(gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null || printf 'unknown')"
+  head_sha="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+  printf '%s\n' "{\"schema\":\"repo-maintenance-continuation/v1\",\"operation\":\"standard-release\",\"repository\":\"$repo_name\",\"release_tag\":\"$RELEASE_TAG\",\"branch\":\"$branch_name\",\"head_commit\":\"$head_sha\",\"pr_number\":\"$pr_number\",\"phase\":\"$phase\",\"minimum_delay_minutes\":5,\"resume_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation $resume_operation\",\"advance_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation advance\"}"
+  log "Before scheduling, reuse a live matching host-native continuation while this gate is pending and healthy; do not delete/recreate it after an unchanged snapshot. Create or update one only after it fires or becomes stale, no sooner than five minutes. On wakeup run inspect first; run advance only if this branch, commit, PR, and tag still match."
 }
 
 check_pr_comments() {
@@ -347,10 +310,8 @@ check_pr_comments() {
     return 0
   fi
 
-  wait_for_pr_review_state "$pr_number"
-
-  review_decision="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""')"
-  comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)')"
+  review_decision="$REVIEW_DECISION"
+  comment_count="$COMMENT_COUNT"
 
   if [ "$review_decision" = "CHANGES_REQUESTED" ]; then
     gh pr view "$pr_number" --comments
@@ -414,7 +375,10 @@ create_github_release() {
   # shellcheck disable=SC2086
   gh release create "$RELEASE_TAG" --verify-tag --generate-notes $prerelease_flag
   log "Created GitHub release $RELEASE_TAG."
-  wait_for_github_release "$RELEASE_TAG"
+  if ! github_release_is_visible "$RELEASE_TAG"; then
+    warn "GitHub release $RELEASE_TAG is not readable in this immediate re-read. Schedule a continuation for at least five minutes rather than polling."
+    return 1
+  fi
   verify_github_release_prerelease_metadata "$RELEASE_TAG"
 }
 
@@ -448,31 +412,71 @@ run_standard_release() {
   ensure_git_repo
   ensure_gh_cli
   ensure_semver_tag
-  ensure_remote_ci_mode
+  ensure_operation
+
+  if [ "$REPO_MAINTENANCE_RELEASE_OPERATION" = "inspect" ]; then
+    branch_name="$(current_branch)"
+    if [ -z "$branch_name" ]; then
+      log "Release inspection state: not-started; no named branch is checked out."
+      return 0
+    fi
+    pr_number="$(gh pr list --head "$branch_name" --base "$base_branch" --json number --jq '.[0].number // empty' --limit 1)"
+    if [ -z "$pr_number" ]; then
+      emit_continuation_packet "pending" "$branch_name" "not-started"
+      log "Release inspection state: not-started; no release PR exists for branch $branch_name."
+      return 0
+    fi
+    inspect_pr_gate "$pr_number"
+    emit_continuation_packet "$pr_number" "$branch_name" "$GATE_PHASE"
+    return 0
+  fi
+
   branch_name="$(ensure_branch_release_context)"
   ensure_clean_worktree
 
-  if [ "$skip_validate" != "true" ]; then
+  if [ "$REPO_MAINTENANCE_RELEASE_OPERATION" = "prepare" ] && [ "$skip_validate" != "true" ]; then
     sh "$SELF_DIR/validate-all.sh"
   fi
 
-  run_version_bump
-  ensure_clean_worktree
-  push_release_branch "$branch_name"
-  create_or_update_pr "$branch_name"
-  pr_number="$PR_NUMBER"
-  wait_for_initial_pr_checks "$pr_number"
-  if defer_remote_ci_if_requested "$pr_number" "$branch_name"; then
-    log "Standard release flow paused before remote CI watch for $RELEASE_TAG."
+  if [ "$REPO_MAINTENANCE_RELEASE_OPERATION" = "prepare" ]; then
+    run_version_bump
+    ensure_clean_worktree
+    if ! push_release_branch "$branch_name"; then
+      emit_continuation_packet "pending" "$branch_name" "awaiting-branch-visibility"
+      return 0
+    fi
+    create_or_update_pr "$branch_name"
+    pr_number="$PR_NUMBER"
+    inspect_pr_gate "$pr_number"
+    emit_continuation_packet "$pr_number" "$branch_name" "$GATE_PHASE"
+    log "Standard release preparation completed for $RELEASE_TAG."
     return 0
   fi
-  watch_ci "$pr_number"
+
+  pr_number="$(gh pr list --head "$branch_name" --base "$base_branch" --json number --jq '.[0].number // empty' --limit 1)"
+  [ -n "$pr_number" ] || die "No release PR exists for branch $branch_name into $base_branch. Run --operation prepare first."
+  inspect_pr_gate "$pr_number"
+  case "$GATE_PHASE" in
+    awaiting-github-state|awaiting-pr-checks)
+      emit_continuation_packet "$pr_number" "$branch_name" "$GATE_PHASE"
+      return 0
+      ;;
+    failed-checks|changes-requested)
+      die "Release PR #$pr_number is in $GATE_PHASE. Resolve the remote gate, push any correction, then use --operation inspect after a scheduled continuation."
+      ;;
+  esac
   check_pr_comments "$pr_number"
   merge_pr "$pr_number"
   fast_forward_base_branch
   create_release_tag
-  push_release_tag
-  create_github_release
+  if ! push_release_tag; then
+    emit_continuation_packet "$pr_number" "$branch_name" "awaiting-tag-visibility"
+    return 0
+  fi
+  if ! create_github_release; then
+    emit_continuation_packet "$pr_number" "$branch_name" "awaiting-github-release-visibility"
+    return 0
+  fi
   cleanup_merged_branches "$branch_name"
   log "Standard release flow completed successfully for $RELEASE_TAG."
 }
