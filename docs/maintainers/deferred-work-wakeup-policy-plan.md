@@ -2,8 +2,8 @@
 
 ## Status
 
-Planned. This document is an audit and implementation plan only; it does not
-change any released skill, release script, CI workflow, or deployment adapter.
+Implemented in Socket v9.30.0. This document preserves the audit, design, and
+acceptance record for the released policy and resumable release workflow.
 
 ## Decision
 
