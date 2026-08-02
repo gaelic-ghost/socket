@@ -1162,6 +1162,7 @@ Planned
 - [ ] Add `documentation-skills:maintain-project-security` for canonical `SECURITY.md` maintenance.
 - [ ] Add `documentation-skills:maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `agent-engineering-skills:maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
+- [ ] Implement the cross-host deferred-work wakeup policy in [`docs/maintainers/deferred-work-wakeup-policy-plan.md`](./docs/maintainers/deferred-work-wakeup-policy-plan.md): Codex same-thread heartbeats, Hermes continuable one-shot `cronjob` jobs, non-blocking agent release/CI/deployment waits, bounded script visibility checks, generated guidance alignment, and upstream Runpod Flash handling.
 - [x] Forward-test `agent-engineering-skills:design-agent-automation-workflow` against a local-first macOS agent-framework planning request. Record the framework inventory, inference-server/model-capability boundary, canonical labs, and stack-owned implementation handoffs before adding deterministic scaffolding scripts.
 - [x] Implement the resulting local-first agent-framework guidance across Productivity Skills, Python Skills, Model Lab Skills, Server-Side JVM, and .NET Skills. Keep framework selection separate from local inference, require exact model/server capability gates, and retain draft-before-write escalation boundaries.
 - [ ] Forward-test `agent-engineering-skills:design-agent-eval-workflow` against real agent, automation, and eval planning requests before adding deterministic scaffolding scripts.
