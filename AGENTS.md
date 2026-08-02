@@ -17,6 +17,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md) when the question is about the root marketplace or the independent-plugin packaging stance.
 - Use [`docs/maintainers/codex-plugin-install-surfaces.md`](./docs/maintainers/codex-plugin-install-surfaces.md) when the question is about Codex marketplace sources, plugin roots, installed caches, or enabled-state config.
 - Use [`docs/maintainers/spi-add-package-automation-plan.md`](./docs/maintainers/spi-add-package-automation-plan.md) for Swift Package Index readiness, submission, and add-package automation.
+- Use [`docs/maintainers/deferred-work-wakeup-policy.md`](./docs/maintainers/deferred-work-wakeup-policy.md) for the live cross-host continuation contract; the similarly named `-plan.md` file is historical audit and design context.
 - When a task is really about one child repo's own behavior, read that child repo's docs before reading broadly across the superproject.
 
 ## Working Rules

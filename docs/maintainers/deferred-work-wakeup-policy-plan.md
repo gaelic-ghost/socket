@@ -2,8 +2,9 @@
 
 ## Status
 
-Implemented in Socket v9.30.0. This document preserves the audit, design, and
-acceptance record for the released policy and resumable release workflow.
+Superseded by the live [Deferred Work Wakeup Policy](./deferred-work-wakeup-policy.md).
+This document preserves the audit, design, and acceptance record for the
+implementation released in Socket v9.30.0.
 
 ## Decision
 
