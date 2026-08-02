@@ -212,7 +212,7 @@ Prefer this order:
 2. Validate Docker image behavior locally when startup, port binding, runtime assets, Linux dependencies, or entry point are the risk.
 3. Review `fly.toml` and secret names before first deploy.
 4. Run `fly launch --no-deploy` for a new app when configuration needs review.
-5. Run `fly deploy` for deployment validation. If its remote rollout, health checks, or build remain asynchronous after the bounded command returns, record the app, image/digest, release target, and health URL; schedule exactly one host-native continuation no sooner than five minutes later instead of holding a shell or polling. Codex uses heartbeat; Hermes uses a continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`. On wakeup inspect the recorded target before a further deployment action.
+5. Run `fly deploy` for deployment validation. If its remote rollout, health checks, or build remain asynchronous after the bounded command returns, record the app, image/digest, release target, and health URL; reuse a live matching host-native continuation while the gate is pending and healthy instead of holding a shell or polling. Do not delete/recreate it after an unchanged snapshot; create/update only after it fires or becomes stale, with at least five minutes between rechecks. Codex uses heartbeat; Hermes uses a continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`. On wakeup inspect the recorded target before a further deployment action.
 6. Use `fly logs`, `fly status`, `fly checks list`, or Fly's monitoring page when deploy or runtime checks fail.
 7. Use `curl https://<app>.fly.dev/...` only when public HTTP behavior is part of the expected result.
 

@@ -37,10 +37,14 @@ minutes after the observation that caused it. A shorter operation is allowed
 only for one bounded, command-local re-read; it must not become a repeated
 polling loop.
 
-For Codex desktop or ChatGPT, create a one-shot same-thread heartbeat through
-the host automation surface. For Hermes, create a self-contained one-shot
-`cronjob` with `deliver="origin"` and `attach_to_session=true`; confirm the
-cron tool and gateway are active first. The continuation must carry the exact
+For Codex desktop or ChatGPT, create or reuse a same-thread heartbeat through
+the host automation surface. For Hermes, create or update the same
+self-contained `cronjob` with `deliver="origin"` and `attach_to_session=true`;
+confirm the cron tool and gateway are active first. Before scheduling, inspect
+for an active continuation with the same target and gate. If it remains pending
+without failure or identity drift, leave that scheduler item in place rather
+than deleting and recreating it. Pause or delete it only once the gate clears,
+fails, is cancelled, or changes identity. The continuation must carry the exact
 target, observed state, closed gate, earliest recheck time, and safe next
 command. It must re-read source-of-truth state before it performs any mutation.
 

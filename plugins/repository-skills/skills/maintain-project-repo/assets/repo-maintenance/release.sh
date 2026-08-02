@@ -272,7 +272,7 @@ emit_continuation_packet() {
   repo_name="$(gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null || printf 'unknown')"
   head_sha="$(git -C "$REPO_ROOT" rev-parse HEAD)"
   printf '%s\n' "{\"schema\":\"repo-maintenance-continuation/v1\",\"operation\":\"standard-release\",\"repository\":\"$repo_name\",\"release_tag\":\"$RELEASE_TAG\",\"branch\":\"$branch_name\",\"head_commit\":\"$head_sha\",\"pr_number\":\"$pr_number\",\"phase\":\"$phase\",\"minimum_delay_minutes\":5,\"resume_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation inspect\",\"advance_command\":\"scripts/repo-maintenance/release.sh --mode standard --version $RELEASE_TAG --operation advance\"}"
-  log "Schedule exactly one host-native continuation no sooner than five minutes. On wakeup run inspect first; run advance only if this branch, commit, PR, and tag still match."
+  log "Before scheduling, reuse a live matching host-native continuation while this gate is pending and healthy; do not delete/recreate it after an unchanged snapshot. Create or update one only after it fires or becomes stale, no sooner than five minutes. On wakeup run inspect first; run advance only if this branch, commit, PR, and tag still match."
 }
 
 check_pr_comments() {

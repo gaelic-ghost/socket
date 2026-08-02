@@ -16,7 +16,7 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 - perform one immediate branch-visibility re-read; if it is not visible, emit a continuation packet instead of polling
 - open or update a pull request against `main`
 - use `--operation inspect` for one PR/check/review snapshot; it emits a continuation packet for unknown or pending remote state
-- schedule exactly one host-native continuation no sooner than five minutes later; Codex uses heartbeat, Hermes uses a continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`
+- create one host-native continuation no sooner than five minutes later, then reuse that same matching scheduler item while the gate stays pending and healthy; do not delete/recreate it after an unchanged snapshot. Codex uses heartbeat, Hermes uses an updated continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`
 - on wakeup run `inspect` first, then use `--operation advance` only if the packet's branch, commit, PR, and tag identities still match
 - stop with a clear message if CI fails, changes are requested, or unresolved comments remain
 - stop on requested changes or comments so the maintainer can address valid concerns, add out-of-scope concerns to `ROADMAP.md`, resolve the threads, push, and rerun the same script
@@ -42,7 +42,7 @@ bash scripts/repo-maintenance/release.sh --mode standard --version v1.2.0 --oper
 
 When a release intentionally has no repo version surfaces, pass `--skip-version-bump`. When the PR comment pass has already been handled and only historical comments remain visible through GitHub, rerun with `--review-comments-addressed`.
 
-Remote waiting is never a release-script operation. `prepare`, `inspect`, and `advance` each take one bounded snapshot and either make an immediate safe transition or emit a continuation packet. Agents schedule exactly one host-native wakeup no sooner than five minutes later, resume with `inspect`, and only use `advance` after the packet identities match. Do not use shell `sleep`, `gh pr checks --watch`, timer loops, or one-to-four-minute rechecks.
+Remote waiting is never a release-script operation. `prepare`, `inspect`, and `advance` each take one bounded snapshot and either make an immediate safe transition or emit a continuation packet. Agents create one host-native wakeup no sooner than five minutes later, reuse that same matching scheduler item while the gate remains pending and healthy, and pause/delete it only on resolution, failure, cancellation, or identity drift. Create/update a replacement only after the prior item fires or becomes stale. Resume with `inspect`, and use `advance` only after packet identities match. Do not use shell `sleep`, `gh pr checks --watch`, timer loops, or one-to-four-minute rechecks.
 
 ## `submodule`
 

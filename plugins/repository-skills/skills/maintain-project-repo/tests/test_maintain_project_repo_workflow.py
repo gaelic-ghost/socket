@@ -184,6 +184,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("Version bump commit for $RELEASE_TAG is already at HEAD", release_script)
         self.assertIn("emit_continuation_packet", release_script)
         self.assertIn("minimum_delay_minutes", release_script)
+        self.assertIn("reuse a live matching host-native continuation", release_script)
         self.assertIn("inspect_pr_gate", release_script)
         self.assertIn("remote_branch_is_visible", release_script)
         self.assertIn("remote_tag_is_visible", release_script)
@@ -256,6 +257,22 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertIn("host-native continuation", release_env)
         self.assertIn("five", release_env)
         self.assertIn("Never add a shell poll loop", release_env)
+        self.assertIn("do not delete/recreate it after an unchanged snapshot", release_env)
+
+    def test_release_guidance_reuses_healthy_pending_continuations(self) -> None:
+        skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")
+        release_modes = (ROOT / "skills/maintain-project-repo/references/release-modes.md").read_text(
+            encoding="utf-8"
+        )
+        prompts = (ROOT / "skills/maintain-project-repo/references/automation-prompts.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in (skill_text, release_modes, prompts):
+            with self.subTest(surface=text[:32]):
+                self.assertIn("matching", text)
+                self.assertIn("pending and healthy", text)
+                self.assertIn("do not delete/recreate", text)
 
     def test_branch_accounting_guidance_is_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")

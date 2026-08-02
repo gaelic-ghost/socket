@@ -51,13 +51,24 @@ The only shorter operation is the command-local, one-time bounded re-read
 defined above. It completes the current mutation attempt; it is not scheduled,
 is not repeated, and must not grow into a polling loop.
 
+### Continuation Reuse
+
+Before scheduling a remote-gate continuation, inspect for a live scheduler item
+for the same repository/target, gate, and identity. If that gate is still
+pending and has not failed or changed, reuse the existing heartbeat or cron job
+unchanged; do not delete and recreate it merely because the fresh snapshot is
+also pending. Pause or delete the item when the gate clears, fails, is
+cancelled, or the identity drifts. A new or updated item is appropriate only
+after the prior continuation has fired or its recorded state is no longer the
+current gate.
+
 ## Host Contract
 
 | Host | Required continuation surface | Required setup/check | Continuation rule |
 | --- | --- | --- | --- |
-| Codex desktop / ChatGPT app | A current-thread `heartbeat` created through the host automation surface. | Confirm that the active host exposes the heartbeat automation tool. | Use a one-shot same-thread heartbeat scheduled at least five minutes ahead; its prompt re-reads the exact PR, run, release, deployment, or process state and continues only when the named gate is clear. |
-| Hermes Agent | `cronjob(action="create", ...)` with a one-shot relative schedule of five minutes or longer, `deliver="origin"`, and `attach_to_session=true`. | Confirm the `cronjob` tool is enabled and `hermes cron status` reports an active gateway before claiming the wakeup is scheduled. | The cron execution is a fresh agent run, so its prompt must be self-contained. `attach_to_session=true` makes the delivered result continuable in the origin conversation; it does not revive a suspended shell or silently authorize the remaining release steps. |
-| Other hosts | That host's documented future-wakeup or scheduled-task tool. | Verify its availability before use. | Schedule it at least five minutes ahead. If the host has no approved continuation mechanism, report that limitation and return control rather than emulating a long wait with `sleep`, a background loop, or an idle shell. |
+| Codex desktop / ChatGPT app | A current-thread `heartbeat` created through the host automation surface. | Confirm that the active host exposes the heartbeat automation tool and look for a live matching heartbeat first. | Reuse the matching heartbeat while its named PR, run, release, deployment, or process gate is pending and healthy. Pause/delete it only on resolution, failure, cancellation, or identity drift. |
+| Hermes Agent | `cronjob(action="create" or update, ...)` with a relative schedule of five minutes or longer, `deliver="origin"`, and `attach_to_session=true`. | Confirm the `cronjob` tool is enabled and `hermes cron status` reports an active gateway, then look for a matching cron job first. | Reuse/update the matching cron job rather than churning jobs on an unchanged pending state. The cron execution is a fresh agent run, so its prompt must be self-contained. `attach_to_session=true` makes the delivered result continuable in the origin conversation; it does not revive a suspended shell or silently authorize the remaining release steps. |
+| Other hosts | That host's documented future-wakeup or scheduled-task tool. | Verify its availability and inspect for a matching live item before use. | Reuse it while healthy and pending; only create/replace it after it fires or becomes resolved, failed, cancelled, or stale. If the host has no approved continuation mechanism, report that limitation and return control rather than emulating a long wait with `sleep`, a background loop, or an idle shell. |
 
 Hermes evidence: its official [Scheduled Tasks (Cron)](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron)
 documentation identifies `cronjob` as the agent-facing scheduler, describes
@@ -195,17 +206,18 @@ The script must set `not_before` to no earlier than five minutes after
 that floor. The host adapter schedules a one-shot wakeup after `not_before`. Its prompt
 must include the packet, tell the agent to run `inspect` first, and permit
 `advance` only if the packet's repository, tag, branch, commit, and gate still
-match current source-of-truth state. If still pending, it schedules exactly one
-replacement wakeup; if failed or changed, it reports the discrepancy and does
-not continue automatically.
+match current source-of-truth state. If still pending and the same continuation
+is live, it retains that scheduler item rather than replacing it. It creates or
+updates a continuation only after the previous one fires or is stale. If failed
+or changed, it reports the discrepancy and does not continue automatically.
 
 ### Lifecycle
 
 1. `prepare` validates the release candidate and publishes the release branch
    and PR. It emits `awaiting-pr-checks` instead of watching CI.
-2. The host schedules the continuation. The wakeup runs `inspect` and either
-   reports a failed/changed gate, schedules one follow-up no sooner than five
-   minutes later, or calls `advance`.
+2. The host creates one continuation, or reuses the live matching item. The
+   wakeup runs `inspect` and either reports a failed/changed gate, retains the
+   healthy pending item (or updates it after it fires), or calls `advance`.
 3. `advance` verifies CI, review comments, and review-bot contexts before
    merging. It never treats a pending bot as approval.
 4. After merge, `advance` fast-forwards the local base, creates/pushes the tag,
