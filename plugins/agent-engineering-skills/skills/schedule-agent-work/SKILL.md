@@ -28,6 +28,22 @@ or duplicate policy, timeout/retry limit, no-op/rollback behavior, escalation
 trigger, status surface, artifact retention, and route that delivers the final
 report to Gale and the coordinator.
 
+## Deferred Remote Work
+
+When an agent reaches an external CI, review, release, deployment, or provider
+gate, use a host-native future wakeup rather than leaving a terminal, watcher,
+or polling loop alive. Schedule every agent-created recheck at least five
+minutes after the observation that caused it. A shorter operation is allowed
+only for one bounded, command-local re-read; it must not become a repeated
+polling loop.
+
+For Codex desktop or ChatGPT, create a one-shot same-thread heartbeat through
+the host automation surface. For Hermes, create a self-contained one-shot
+`cronjob` with `deliver="origin"` and `attach_to_session=true`; confirm the
+cron tool and gateway are active first. The continuation must carry the exact
+target, observed state, closed gate, earliest recheck time, and safe next
+command. It must re-read source-of-truth state before it performs any mutation.
+
 ## Guardrails
 
 - Do not schedule unattended mutation without validation, recovery, and an
