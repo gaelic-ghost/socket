@@ -1,6 +1,6 @@
 {
   "name": "repository-skills",
-  "version": "9.30.1",
+  "version": "9.31.0",
   "description": "Repository operations, GitHub settings, worktree, validation, and release workflow skills.",
   "author": {
     "name": "Gale",
