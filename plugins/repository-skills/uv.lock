@@ -310,7 +310,7 @@ wheels = [
 
 [[package]]
 name = "repository-skills-maintenance"
-version = "9.31.1"
+version = "9.31.2"
 source = { virtual = "." }
 
 [package.dev-dependencies]

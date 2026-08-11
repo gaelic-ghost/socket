@@ -28,8 +28,7 @@ if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
 fi
 
 prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"
-# shellcheck disable=SC2086
-gh release create "$RELEASE_TAG" --verify-tag --generate-notes $prerelease_flag
+create_github_release_from_notes_or_generated "$RELEASE_TAG" "$prerelease_flag"
 log "Created GitHub release $RELEASE_TAG."
 github_release_is_visible "$RELEASE_TAG" || die "GitHub release $RELEASE_TAG is not readable in this immediate re-read. Do not poll; schedule a host-native continuation for at least five minutes, then re-run the release step."
 verify_github_release_prerelease_metadata "$RELEASE_TAG"

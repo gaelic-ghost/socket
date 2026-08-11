@@ -49,6 +49,7 @@ MANAGED_TOOLKIT_FILES = [
     ("repo-maintenance/sync-shared.sh", "scripts/repo-maintenance/sync-shared.sh"),
     ("repo-maintenance/release.sh", "scripts/repo-maintenance/release.sh"),
     ("repo-maintenance/lib/common.sh", "scripts/repo-maintenance/lib/common.sh"),
+    ("repo-maintenance/lib/coderabbit.sh", "scripts/repo-maintenance/lib/coderabbit.sh"),
     ("repo-maintenance/validations/10-toolkit-layout.sh", "scripts/repo-maintenance/validations/10-toolkit-layout.sh"),
     ("repo-maintenance/validations/20-agents-guidance.sh", "scripts/repo-maintenance/validations/20-agents-guidance.sh"),
     ("repo-maintenance/validations/30-ci-wrapper.sh", "scripts/repo-maintenance/validations/30-ci-wrapper.sh"),

@@ -250,8 +250,74 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         for release_text in (release_script, release_step):
             with self.subTest(surface=release_text[:32]):
                 self.assertIn('prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"', release_text)
-                self.assertIn("gh release create \"$RELEASE_TAG\" --verify-tag --generate-notes $prerelease_flag", release_text)
+                self.assertIn('create_github_release_from_notes_or_generated "$RELEASE_TAG" "$prerelease_flag"', release_text)
                 self.assertIn('verify_github_release_prerelease_metadata "$RELEASE_TAG"', release_text)
+
+    def test_release_notes_helper_prefers_checked_in_notes_then_falls_back(self) -> None:
+        common_script = ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/common.sh"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            notes_dir = repo_root / "docs/releases"
+            notes_dir.mkdir(parents=True)
+            tagged_notes = notes_dir / "v1.2.3.md"
+            versioned_notes = notes_dir / "1.2.3.md"
+            tagged_notes.write_text("# Tagged notes\n", encoding="utf-8")
+            versioned_notes.write_text("# Versioned notes\n", encoding="utf-8")
+            fake_bin = repo_root / "bin"
+            fake_bin.mkdir()
+            fake_gh = fake_bin / "gh"
+            fake_gh.write_text('#!/usr/bin/env sh\nprintf "%s\\n" "$*" >> "$GH_LOG"\n', encoding="utf-8")
+            fake_gh.chmod(0o755)
+            log_path = repo_root / "gh.log"
+
+            script = '\n'.join(
+                [
+                    f'. "{common_script}"',
+                    f'REPO_ROOT="{repo_root}"',
+                    'create_github_release_from_notes_or_generated v1.2.3 ""',
+                ]
+            )
+            env = dict(os.environ, PATH=f"{fake_bin}:{os.environ['PATH']}", GH_LOG=str(log_path))
+            subprocess.run(["sh", "-c", script], check=True, capture_output=True, text=True, env=env)
+            self.assertIn(f"--notes-file {tagged_notes}", log_path.read_text(encoding="utf-8"))
+
+            tagged_notes.unlink()
+            log_path.unlink()
+            subprocess.run(["sh", "-c", script], check=True, capture_output=True, text=True, env=env)
+            self.assertIn(f"--notes-file {versioned_notes}", log_path.read_text(encoding="utf-8"))
+
+            versioned_notes.unlink()
+            log_path.unlink()
+            subprocess.run(["sh", "-c", script], check=True, capture_output=True, text=True, env=env)
+            self.assertIn("--generate-notes", log_path.read_text(encoding="utf-8"))
+
+    def test_coderabbit_review_unavailable_fixtures_are_narrow(self) -> None:
+        helper = ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/coderabbit.sh"
+        fixtures = [
+            ("CodeRabbit", "Review unavailable: monthly quota reached.", 0),
+            ("coderabbitai", "Rate limit reached; no review was produced.", 0),
+            ("CodeRabbit", "Found a potential nil dereference.", 1),
+            ("GitHub Actions", "Rate limit reached.", 1),
+        ]
+        for source, message, expected_returncode in fixtures:
+            with self.subTest(source=source, message=message):
+                proc = subprocess.run(
+                    ["sh", "-c", f'. "{helper}"; coderabbit_review_is_unavailable "$1" "$2"', "sh", source, message],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+                self.assertEqual(proc.returncode, expected_returncode, proc.stderr)
+
+    def test_release_gate_only_exempts_explicit_coderabbit_unavailability(self) -> None:
+        release_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("detect_coderabbit_review_unavailable", release_script)
+        self.assertIn("repos/$repo_name/commits/$head_sha/check-runs", release_script)
+        self.assertIn("CODERABBIT_UNAVAILABLE_COMMENT_COUNT", release_script)
+        self.assertIn('contains("coderabbit")', release_script)
+        self.assertIn("ignoring only its pending review context and diagnostic comments", release_script)
 
     def test_release_env_documents_scheduled_continuation_default(self) -> None:
         release_env = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/config/release.env").read_text(
