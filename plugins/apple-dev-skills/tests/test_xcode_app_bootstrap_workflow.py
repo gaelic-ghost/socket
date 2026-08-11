@@ -218,6 +218,7 @@ exit 1
             self.assertIn("- path: Sources", project_yml)
             self.assertIn("- path: Shared", project_yml)
             self.assertIn("- path: Tests", project_yml)
+            self.assertEqual(project_yml.count('- "**/.gitkeep"'), 2)
             self.assertNotIn("- path: Sources/App", project_yml)
             self.assertNotIn("- path: Sources/Resources", project_yml)
             self.assertNotIn("- path: Sources/Support", project_yml)
@@ -318,6 +319,18 @@ exit 1
                 (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn(
+                "LOCALIZATION_PREFERS_STRING_CATALOGS = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "STRING_CATALOG_GENERATE_SYMBOLS = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "SWIFT_EMIT_LOC_STRINGS = YES",
+                (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
                 "DEAD_CODE_STRIPPING = YES",
                 (target / "Configurations" / "Shared.xcconfig").read_text(encoding="utf-8"),
             )
@@ -327,6 +340,10 @@ exit 1
             )
             self.assertIn(
                 "PRODUCT_BUNDLE_IDENTIFIER = com.example.DemoApp.tests",
+                (target / "Configurations" / "Tests.xcconfig").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "GENERATE_INFOPLIST_FILE = YES",
                 (target / "Configurations" / "Tests.xcconfig").read_text(encoding="utf-8"),
             )
             self.assertIn("xcodegen_template_paths", payload)
@@ -399,6 +416,7 @@ exit 1
         self.assertIn("- path: Sources", project_template)
         self.assertIn("- path: Shared", project_template)
         self.assertIn("- path: Tests", project_template)
+        self.assertEqual(project_template.count('- "**/.gitkeep"'), 2)
         self.assertNotIn("- path: Sources/App", project_template)
         self.assertNotIn("- path: Sources/Resources", project_template)
         self.assertNotIn("- path: Sources/Support", project_template)
