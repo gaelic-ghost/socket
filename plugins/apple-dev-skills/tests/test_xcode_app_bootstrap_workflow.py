@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 from contextlib import contextmanager
@@ -388,6 +389,86 @@ exit 1
             )
             self.assertTrue((target / ".github" / "workflows" / "validate-repo-maintenance.yml").exists())
             self.assertEqual(payload["validation_result"], "passed (xcodebuild -list)")
+
+    @unittest.skipUnless(
+        sys.platform == "darwin" and os.environ.get("APPLE_DEV_SKILLS_RUN_XCODEGEN_INTEGRATION") == "1",
+        "Set APPLE_DEV_SKILLS_RUN_XCODEGEN_INTEGRATION=1 on macOS to run the XcodeGen integration test.",
+    )
+    def test_xcodegen_bootstrap_generates_catalog_symbols(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = self.run_script(
+                "--name",
+                "TemplateProbe",
+                "--file-prefix",
+                "TMP",
+                "--destination",
+                tmpdir,
+                "--platform",
+                "macos",
+                "--project-generator",
+                "xcodegen",
+                "--skip-validation",
+            )
+            self.assertEqual(code, 0, payload)
+
+            target = Path(payload["resolved_path"])
+            project = target / "TemplateProbe.xcodeproj"
+            derived_data_path = Path(tmpdir) / "DerivedData"
+            build_settings = subprocess.run(
+                [
+                    "xcodebuild",
+                    "-showBuildSettings",
+                    "-project",
+                    str(project),
+                    "-scheme",
+                    "TemplateProbe",
+                    "-derivedDataPath",
+                    str(derived_data_path),
+                ],
+                cwd=target,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(build_settings.returncode, 0, build_settings.stderr)
+            for setting in (
+                "ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES",
+                "LOCALIZATION_PREFERS_STRING_CATALOGS = YES",
+                "STRING_CATALOG_GENERATE_SYMBOLS = YES",
+                "SWIFT_EMIT_LOC_STRINGS = YES",
+            ):
+                self.assertIn(setting, build_settings.stdout)
+
+            test_result = subprocess.run(
+                [
+                    "xcodebuild",
+                    "test",
+                    "-project",
+                    str(project),
+                    "-scheme",
+                    "TemplateProbe",
+                    "-destination",
+                    "platform=macOS,arch=arm64",
+                    "-derivedDataPath",
+                    str(derived_data_path),
+                ],
+                cwd=target,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(test_result.returncode, 0, test_result.stdout + test_result.stderr)
+
+            generated_sources = derived_data_path.glob(
+                "Build/Intermediates.noindex/TemplateProbe.build/**/DerivedSources"
+            )
+            generated_files = {
+                source.name
+                for directory in generated_sources
+                for source in directory.glob("Generated*.swift")
+            }
+            self.assertIn("GeneratedAssetSymbols.swift", generated_files)
+            self.assertIn("GeneratedStringSymbols_Localizable.swift", generated_files)
 
     def test_xcodegen_templates_are_checked_in_as_bootstrap_sources(self) -> None:
         expected_templates = {
