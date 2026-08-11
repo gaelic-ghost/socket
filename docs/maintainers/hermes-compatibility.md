@@ -1,9 +1,8 @@
 # Hermes Agent Compatibility
 
-Date checked: 2026-07-19 against published Hermes Agent 0.18.2, the live
-machine-readable official docs, and local Hermes Agent 0.17.0. The local
-checkout reports an update available and retains one carried commit, so this
-documentation pass did not mutate that install.
+Date checked: 2026-08-10 against published and locally installed Hermes Agent
+0.20.0 (2026.8.3), the live machine-readable official docs, and the canonical
+ACP Registry.
 
 Socket's Hermes compatibility is a durable, explicit compatibility baseline.
 Every new or materially changed Socket plugin, skill, and MCP declaration must
@@ -37,6 +36,7 @@ Socket tap. The curated set is:
 - `choose-hermes-agent-workflow`
 - `hermes-agent-compatibility`
 - `operate-acp-agent-integration`
+- `operate-a2a-agent-integration`
 - `operate-hermes-agent`
 - `operate-hermes-agent-gateway`
 - `operate-zed-agent`
@@ -83,9 +83,9 @@ hermes skills install gaelic-ghost/socket/hermes-agent-compatibility
 ```
 
 The ACP workflows keep source support, package publication, canonical registry
-publication, and client runtime proof as separate states. Hermes 0.18.2 ships
+publication, and client runtime proof as separate states. Hermes 0.20.0 ships
 an official `acp_registry/agent.json` and PyPI ACP extra, but the live canonical
-ACP Registry did not contain `hermes-agent` on 2026-07-19. Until an official
+ACP Registry did not contain `hermes-agent` on 2026-08-10. Until an official
 entry is accepted and published, Zed users should validate `hermes acp --check`
 and use Zed's custom-agent command rather than an unrelated launcher.
 
@@ -93,10 +93,11 @@ Custom GitHub taps are community sources and Hermes security-scans skills at
 install time. Review a finding before using `--force`; Hermes does not let that
 flag override a dangerous verdict.
 
-The expanded Hermes set deliberately separates five jobs: workflow routing,
-day-to-day operation, extension development, messaging/API gateway operation,
-and Nous-hosted services. The compatibility skill remains responsible only for
-Socket-to-Hermes classification and export decisions.
+The expanded Hermes set deliberately separates protocol routing, A2A
+agent-to-agent operation, day-to-day operation, extension development,
+messaging/API gateway operation, and Nous-hosted services. The compatibility
+skill remains responsible only for Socket-to-Hermes classification and export
+decisions.
 
 The currently exported skills are listed in `skills.sh.json`. Their canonical
 sources remain in their owning child plugins; root `skills/` is a checked-in
@@ -285,7 +286,7 @@ validated compatibility classification, not a fictional universal runtime.
 - [Hermes Plugins](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
   defines plugin discovery, general and specialized plugin categories, and
   Python runtime extensions.
-- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
+- [Hermes plugin developer guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
   maps general plugins, provider plugins, platform adapters, config-driven
   extensions, desktop/dashboard plugins, and programmatic integration choices.
 - [Hermes Programmatic Integration](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration)

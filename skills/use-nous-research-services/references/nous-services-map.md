@@ -2,7 +2,12 @@
 
 ## Nous Portal
 
-Portal is the subscription, OAuth, inference, and entitlement surface used by Hermes. A fresh `hermes setup --portal` can authenticate Portal, select a model, set Nous as the provider, and offer managed tool routing. Existing installs can add Nous alongside other providers with `hermes model`.
+Portal is the subscription, OAuth, inference, and entitlement surface used by
+Hermes. Current onboarding describes a 300+ model catalog and four standard
+Tool Gateway routes under one OAuth; treat those counts as dated live-service
+claims. A fresh `hermes setup --portal` can authenticate Portal, select a
+model, set Nous as the provider, and offer managed tool routing. Existing
+installs can add Nous alongside other providers with `hermes model`.
 
 Portal authentication does not prove that every tool is routed through Nous. Verify with `hermes portal info`, `hermes portal tools`, and the per-tool configuration.
 

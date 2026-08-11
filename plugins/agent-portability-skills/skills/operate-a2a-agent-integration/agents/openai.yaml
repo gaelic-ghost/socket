@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate A2A Agent Integration"
+  short_description: "Connect and diagnose interoperable A2A agents"
+  default_prompt: "Use $operate-a2a-agent-integration to connect, validate, and troubleshoot an A2A agent boundary."

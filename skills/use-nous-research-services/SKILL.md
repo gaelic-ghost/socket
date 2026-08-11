@@ -26,6 +26,10 @@ Do not call the messaging gateway or TUI gateway “Nous Gateway.”
 ## Configure Portal Deliberately
 
 - For a fresh Hermes setup, use `hermes setup --portal` when the user wants both Portal inference and the managed tool onboarding path.
+- Current official onboarding describes one Portal OAuth for a 300+ model
+  catalog plus the four standard Tool Gateway routes: web search, image
+  generation, text-to-speech, and browser automation. Treat exact counts and
+  entitlements as live claims and re-check them before quoting.
 - For an existing install, use `hermes model` to add Nous without erasing other providers.
 - Use `/model` only to switch among already configured choices inside a session.
 - Use `hermes portal info` and `hermes portal tools` to inspect auth and routing.
@@ -36,7 +40,11 @@ Do not call the messaging gateway or TUI gateway “Nous Gateway.”
 
 Use `hermes tools` to choose Nous-hosted backends individually. A user may mix Nous-hosted web or image tools with their own browser, TTS, or other provider. Verify the active route instead of inferring it from Portal login alone.
 
-Current documented categories include web search/extract, image generation, text-to-speech, cloud browser automation, and an optional cloud terminal sandbox. Availability, free pools, add-ons, partners, models, and pricing can change; read the live Portal or official docs for current entitlement claims.
+Current documented categories include web search/extract, image generation,
+text-to-speech, and cloud browser automation. An optional cloud terminal
+sandbox is a separate entitlement, not one of the four standard onboarding
+routes. Availability, free pools, add-ons, partners, models, and pricing can
+change; read the live Portal or official docs for current entitlement claims.
 
 ## Use the Subscription Proxy Carefully
 

@@ -2,7 +2,7 @@
 
 This document records the first research pass for making Socket skills and plugins more portable across agent hosts while keeping the current Codex marketplace honest.
 
-Date checked: 2026-07-19.
+Date checked: 2026-08-10.
 
 ## Current Recommendation
 
@@ -34,15 +34,16 @@ retain OpenCode as a skills-first follow-up surface.
 
 Current locally installed evidence:
 
-- Xcode 27 beta: `/Applications/Xcode-beta.app`, bundle metadata checked on 2026-07-19 as Xcode 27.0 build 27A5218g. The selected command-line toolchain remains Xcode 26.6 build 17F113.
+- Xcode 27 beta: `/Applications/Xcode-beta.app`, bundle metadata checked on 2026-08-10 as Xcode 27.0 Beta 5 build 27A5237l. The selected command-line toolchain remains Xcode 26.6 build 17F113.
+- Xcode 27 Beta 5 headless MCP: the bundled service completed an MCP initialization without the Xcode app open after external-agent access was enabled. Documentation and other workspace-independent tools can therefore run headlessly; project, build/run, preview, simulator, and debugger tools still require their own live state.
 - Xcode 27 beta live bridge: verified on 2026-06-23 with the beta app open and selected through `MCP_XCODE_PID`; `run-agent --dry-run codex` resolved the beta-scoped Codex runtime and Xcode-specific `CODEX_HOME`. A direct `codex skills export` attempt through that runtime failed in this beta with `unrecognized subcommand 'export'`, so do not rely on that as an install or export path.
 - Xcode 27 beta plug-in import: verified on 2026-06-23 through the Xcode Beta Settings UI. `Import from Codex`, `Add from file`, and `Add from URL` all recognized agentic plug-in payloads; `Add from URL` accepted `https://github.com/gaelic-ghost/socket.git` and enumerated Socket child plug-ins before import.
 - Active command-line Xcode: `/Applications/Xcode.app/Contents/Developer`, currently Xcode 26.6 build 17F113 through the default `xcodebuild -version`.
-- Hermes CLI: local 0.17.0 (2026.6.19); published PyPI 0.18.2. `hermes update --check` reports an update available, while the local checkout has one carried commit and is one commit ahead/behind `origin/main`.
-- Hermes ACP: `hermes acp --check` passes locally. The source repository ships a 0.18.2 registry manifest, but the live canonical ACP Registry does not currently contain `hermes-agent`.
-- Zed: 1.8.2 build 20260624.160235, checked from the installed app bundle on 2026-07-19.
-- Claude Code CLI: 2.1.211, checked on 2026-07-19.
-- Codex CLI: 0.144.6, checked on 2026-07-19.
+- Hermes CLI: local and published 0.20.0 (2026.8.3).
+- Hermes ACP: `hermes acp --check` passes locally. Zed and Xcode both have local custom ACP registrations that launch `hermes acp`, while the live canonical ACP Registry still does not contain `hermes-agent`.
+- Zed: local 1.11.3; official stable release 1.12.1 when checked on 2026-08-10.
+- Claude Code CLI: local 2.1.211; current npm package 2.1.226 when checked on 2026-08-10.
+- Codex CLI: local and current 0.147.0 when checked on 2026-08-10.
 - OpenCode CLI: `/opt/homebrew/bin/opencode`, verified as 1.17.9.
 - OpenCode Desktop: `/Applications/OpenCode.app`, present locally.
 
@@ -93,12 +94,12 @@ Xcode support needs three different answers:
 
 - Xcode-launched Codex: supportable as a separate Codex target. Xcode gives Codex its own home under `~/Library/Developer/Xcode/CodingAssistant/codex`, writes imported plug-ins into that target's `plugins/cache`, and records enabled plug-ins in that target's `config.toml`. Socket should treat this as a separate Codex install target with its own preview/apply flow, not as normal `~/.codex`.
 - Xcode internal agents through Xcode plug-ins: supportable for existing Socket child plug-ins that Xcode can recognize through its official import UI. The live beta recognized `.codex-plugin/plugin.json`, skill folders, hooks, and `.mcp.json` declarations. Xcode normalized imported plug-ins into `~/Library/Developer/Xcode/CodingAssistant/AgentPlugins/<plugin>/plugin.json`, registered plug-ins in `AgentPlugins/PluginsManifest.json`, and wrote MCP servers into `CodingAssistant/mcp-servers.json`.
-- External agents controlling Xcode: already have a documented integration path through `xcrun mcpbridge`. External agents usually need Socket installed in their own host plus Xcode's external-agent MCP toggle and an open project in Xcode. They do not need a Socket Xcode plug-in merely to control Xcode.
+- External agents controlling Xcode: already have a documented integration path through `xcrun mcpbridge`. External agents need Socket installed in their own host plus Xcode's external-agent MCP permission. Xcode 27 Beta 5 can expose workspace-independent tools without an open Xcode project; active-workspace and debugger capabilities still need the corresponding live state. External agents do not need a Socket Xcode plug-in merely to control Xcode.
 
 Local validation target:
 
 - For bundle-presence and build-number audits, read Xcode bundle metadata without changing the selected toolchain.
-- Open the intended stable or beta Xcode app for live UI, MCP, agent, and plug-in checks instead of treating a closed app as a blocker.
+- Open the intended stable or beta Xcode app only when the requested UI or MCP capability needs live workspace, run, preview, simulator, or debugger state. Do not block workspace-independent Beta 5 MCP work merely because the app is closed.
 - Use `MCP_XCODE_PID` when stable and beta Xcode processes could both exist or when the bridge must target the beta process explicitly.
 - When the task explicitly needs beta command-line execution, record the previous `xcode-select -p` value, switch intentionally with `xcode-select`, verify the selected toolchain, run Apple CLI tools normally, and restore the previous selection when the check is finished. Do not inject `DEVELOPER_DIR` overrides or guess build-product paths.
 
@@ -227,7 +228,7 @@ remain separate protocols and security boundaries.
 Socket now routes this work through:
 
 - `choose-agent-integration-protocol` for ACP versus MCP, terminal, native host,
-  Hermes TUI gateway, or HTTP API selection.
+  A2A, Hermes TUI gateway, or HTTP API selection.
 - `operate-acp-agent-integration` for registry discovery, launch commands,
   authentication, capability negotiation, sessions, permissions, and logs.
 - `build-acp-agent` for protocol implementation, testing, package publication,
@@ -239,12 +240,39 @@ The current stable ACP wire version is 1. Clients and agents negotiate it and
 optional capabilities during initialization; SDK or schema-package versions do
 not determine wire compatibility by themselves.
 
+Stable ACP v1 includes initialization, prompts, tool calls, permissions,
+session configuration, listing, resume, close, and session-info updates.
+Elicitation, logout, session deletion, additional directories, remote
+HTTP/WebSocket transport, and the v2 prompt lifecycle remain draft proposals;
+do not present those drafts as guaranteed interoperability.
+
 Sources:
 
 - [ACP architecture](https://agentclientprotocol.com/get-started/architecture)
 - [ACP initialization](https://agentclientprotocol.com/protocol/v1/initialization)
 - [ACP Registry](https://agentclientprotocol.com/get-started/registry)
 - [Xcode coding intelligence setup](https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence)
+
+### Agent2Agent Protocol
+
+A2A is the peer-agent boundary. Use it when one autonomous agent needs to
+discover another agent through an Agent Card, send a message or durable task,
+track `contextId` and `taskId`, stream task events, or receive authenticated
+push notifications. Do not use A2A as a replacement for ACP's editor session
+transport or MCP's tool/resource boundary.
+
+Hermes 0.20 includes an opt-in A2A v1 plugin with inbound and outbound roles,
+the canonical `/.well-known/agent-card.json` discovery path, task and SSE
+support, per-peer authentication, signatures, audit controls, and anti-loop
+limits. The outbound A2A toolset is disabled by default. Use
+`operate-a2a-agent-integration` for discovery, lifecycle, trust, and failure
+routing.
+
+Sources:
+
+- [A2A agent discovery](https://a2a-protocol.org/latest/topics/agent-discovery/)
+- [A2A task lifecycle](https://a2a-protocol.org/latest/topics/life-of-a-task/)
+- [A2A specification](https://github.com/a2aproject/A2A/blob/main/docs/specification.md)
 
 ### Hermes Agent
 
@@ -253,7 +281,7 @@ Hermes user guide, developer guide, reference, and public source repository.
 Socket publishes a generated GitHub skill tap, checked-in MCP translations, a
 compatibility validator, and a focused operator/developer workflow set.
 
-Current Hermes extension systems include portable Agent Skills, MCP,
+Current Hermes extension systems include portable Agent Skills, MCP, A2A,
 config-driven integrations, general Python plugins, messaging platform
 adapters, model/memory/context/secret/media/search/browser providers, gateway
 hooks, desktop plugins, dashboard plugins, ACP, TUI gateway JSON-RPC, and the
@@ -263,14 +291,14 @@ Practical Socket implication:
 
 - Keep `SKILL.md` as the portable authored unit and root `skills/` as the generated Hermes tap.
 - Translate Socket MCP declarations into reviewed `mcp_servers` fragments; do not copy Codex config verbatim.
-- Route Hermes use through `choose-hermes-agent-workflow`, `operate-hermes-agent`, `build-hermes-agent-extensions`, `operate-hermes-agent-gateway`, and `use-nous-research-services`.
+- Route Hermes use through `choose-hermes-agent-workflow`, `operate-hermes-agent`, `operate-a2a-agent-integration`, `build-hermes-agent-extensions`, `operate-hermes-agent-gateway`, and `use-nous-research-services`.
 - Keep Codex manifests, apps, hooks, and custom-agent metadata host-specific until a concrete Hermes surface is designed.
 - Distinguish the Hermes messaging gateway, Nous Tool Gateway, and TUI gateway in every compatibility decision.
 
 Sources:
 
 - [Hermes Agent documentation](https://hermes-agent.nousresearch.com/docs/)
-- [Build a Hermes Plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
+- [Hermes plugin developer guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
 - [Nous Portal](https://hermes-agent.nousresearch.com/docs/integrations/nous-portal)
 - [Hermes compatibility guide](./hermes-compatibility.md)
 
@@ -353,7 +381,7 @@ Sources:
 - Should Socket's source of truth stay as per-child `skills/`, or should a root export index own cross-host skill publishing?
 - Should project-local `.agents/skills` output be a generated mirror, symlink tree, or documented install command?
 - Which CLI surfaces are installed locally and stable enough for smoke tests?
-- When will the official Hermes 0.18.2 `uvx` manifest be accepted into the canonical ACP Registry?
+- When will Hermes Agent receive an accepted, published entry in the canonical ACP Registry?
 - Which Socket child plug-ins can be imported from the public Git URL without path, dependency, auth, hook, or MCP execution issues?
 
 ## Decision Gate

@@ -602,6 +602,7 @@ Completed
 - [x] Add plugin metadata and README inventory entries for the new workflow.
 - [x] Update `xcode-build-run-workflow` and `xcode-testing-workflow` so setup and permission questions route to the new workflow.
 - [x] Add targeted tests for the new workflow and routing boundaries.
+- [x] Refresh the workflow for Xcode 27 Beta 5's headless MCP service, capability-specific live-state requirements, duration-scoped executable and folder permissions, and unsafe unattended-mode boundary.
 
 ### Exit Criteria
 
@@ -609,7 +610,7 @@ Completed
 - [x] Existing Xcode execution skills keep execution ownership while linking to the setup workflow only where needed.
 - [x] Beta-specific claims are dated, source-linked, and separated from stable or local-tool evidence.
 
-Completed Milestone 47 by shipping `xcode-coding-intelligence-workflow`, updating the active skill inventory and plugin metadata, adding routing notes from build/test execution skills, documenting Xcode 27 MCP capability additions without inventing beta tool names, adding shared Xcode and SwiftPM coverage guidance, and covering the setup, coverage, and permission boundaries with targeted tests.
+Completed Milestone 47 by shipping `xcode-coding-intelligence-workflow`, updating the active skill inventory and plugin metadata, adding routing notes from build/test execution skills, documenting Xcode 27 MCP capability additions and Beta 5's headless service with dated local evidence, adding shared Xcode and SwiftPM coverage guidance, and covering the setup, coverage, live-state, and permission boundaries with targeted tests.
 
 ## Milestone 48: Core AI and Foundation Models Workflow Planning
 

@@ -3,8 +3,11 @@
 ## Stable Baseline
 
 - Current stable wire protocol: ACP v1
+- Current v2 prompt lifecycle and transport work: Draft, not the baseline
 - Required connection phase: `initialize`
 - Required session behavior: new, prompt, cancel, and streamed update
+- Stable optional session lifecycle includes `session/list`, `session/resume`,
+  and `session/close` when advertised through capabilities
 - Optional behavior must be advertised through capabilities before use
 - Default transport: JSON-RPC over process stdin/stdout
 - Human diagnostics belong on stderr
@@ -24,8 +27,9 @@ Do not add another runtime solely to obtain a preferred SDK.
 - protocol negotiation and unsupported versions
 - capability omission and optional-method gating
 - authentication discovery, success, failure, and logout when advertised
-- new session, prompt, streaming updates, and cancellation
-- cwd and additional-root isolation
+- new session, prompt, streaming updates, cancellation, resume, and close
+- cwd isolation; additional directories only when the draft capability is
+  deliberately enabled
 - permission requests and fail-closed timeouts
 - file diff, terminal, tool-call, and plan rendering
 - process shutdown, malformed messages, and stderr/stdout separation
@@ -55,3 +59,5 @@ Official references:
 - https://agentclientprotocol.com/libraries/typescript
 - https://agentclientprotocol.com/libraries/rust
 - https://agentclientprotocol.com/get-started/registry
+- https://agentclientprotocol.com/rfds/updates
+- https://agentclientprotocol.com/rfds/v2/prompt

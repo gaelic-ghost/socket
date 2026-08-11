@@ -2,6 +2,7 @@
 
 | Desired behavior | Primary boundary | Process roles |
 | --- | --- | --- |
+| Let independently operated agents discover and delegate to each other | A2A | One agent is the A2A client; the peer exposes an Agent Card and A2A server |
 | Run Hermes, Codex, Claude, or another agent inside Zed/Xcode UI | ACP | Editor is client; agent executable is server |
 | Let an external agent call Xcode build, project, preview, or runtime tools | MCP through `xcrun mcpbridge` | Agent is MCP client; Xcode provides tools |
 | Give an agent external service tools | MCP | Agent is client; service is server |
@@ -26,9 +27,13 @@ An ACP client can pass MCP server configuration to an ACP agent. This combines
 an editor-to-agent ACP connection with agent-to-tool MCP connections; it does
 not merge the protocols or their security boundaries.
 
+An A2A-connected peer can internally use MCP tools or appear inside an ACP
+client. Those remain three distinct trust, lifecycle, and permission boundaries.
+
 Official references:
 
 - https://agentclientprotocol.com/get-started/architecture
+- https://a2a-protocol.org/latest/topics/what-is-a2a/
 - https://agentclientprotocol.com/protocol/v1/overview
 - https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence
 - https://developer.apple.com/documentation/xcode/giving-external-agents-access-to-xcode

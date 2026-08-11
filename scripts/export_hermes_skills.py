@@ -37,6 +37,7 @@ AGENT_PORTABILITY_SKILLS = (
     "choose-hermes-agent-workflow",
     "hermes-agent-compatibility",
     "operate-acp-agent-integration",
+    "operate-a2a-agent-integration",
     "operate-hermes-agent",
     "operate-hermes-agent-gateway",
     "operate-zed-agent",

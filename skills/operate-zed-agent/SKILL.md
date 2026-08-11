@@ -30,14 +30,23 @@ explicitly accepts a forwarded capability.
 ## Configure Zed Agent
 
 1. Confirm the worktree is trusted before expecting project-local skills.
-2. Keep skills as direct children of global `~/.agents/skills/` or project
-   `.agents/skills/`; Zed does not discover nested or arbitrary search roots.
-3. Keep names and descriptions concise because Zed has a catalog budget.
-4. Use Zed Instructions for always-on guidance, Agent Profiles for tool
+2. Use Zed's Skills Manager to create or import a skill when interactive
+   management is appropriate. A GitHub URL import is an installation copy, not
+   a remote runtime dependency.
+3. Keep manually managed skills as direct children of global
+   `~/.agents/skills/` or project `.agents/skills/`; Zed does not discover
+   nested or arbitrary search roots.
+4. Keep names and descriptions concise because Zed has a catalog budget.
+5. Use `/skill` or `@skill` for explicit invocation. Use
+   `disable-model-invocation` only when the skill must never be selected
+   implicitly.
+6. Treat `zed://skill` links as sharing/import affordances, not proof of a
+   centrally hosted runtime registry.
+7. Use Zed Instructions for always-on guidance, Agent Profiles for tool
    selection, Tool Permissions for approval policy, and Zed MCP configuration
    for external tools.
-5. Treat remote skill import as a one-time installation action, not a remote
-   runtime registry.
+8. Expect installed skill changes to reload without restarting, then verify the
+   catalog entry and one harmless invocation.
 
 ## Configure an External Agent
 
@@ -57,6 +66,11 @@ For Hermes, use `operate-acp-agent-integration` to check the canonical registry
 and validate `hermes acp --check` before adding a custom entry. The manual
 command is `hermes` with `args: ["acp"]`; prefer an accepted official registry
 entry if one becomes available later.
+
+On the locally verified 2026-08-10 setup, Hermes 0.20.0 passed
+`hermes acp --check` and Zed used a custom `agent_servers.hermes-agent` entry
+with command `hermes` and argument `acp`. Keep that as dated local evidence;
+the canonical registry remains the publication authority.
 
 ## Guards
 

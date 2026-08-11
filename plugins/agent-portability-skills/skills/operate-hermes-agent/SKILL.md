@@ -1,6 +1,6 @@
 ---
 name: operate-hermes-agent
-description: Install, update, configure, run, secure, and troubleshoot Hermes Agent across its CLI, TUI, dashboard, profiles, tools, skills, memory, models, sessions, worktrees, and terminal backends.
+description: Install, update, migrate to, configure, run, secure, and troubleshoot Hermes Agent across its CLI, TUI, desktop, dashboard, profiles, tools, skills, memory, models, goals, voice, sessions, worktrees, and terminal backends.
 metadata:
   hermes:
     category: agent-portability
@@ -43,6 +43,31 @@ Start from the installed runtime and the active profile, then change only the st
 - Use `hermes portal info` only for Nous Portal and Tool Gateway routing state.
 - Edit `config.yaml` or `.env` directly only when the CLI/dashboard cannot represent the needed setting or the task is explicitly config-file work.
 
+## Import Existing Agent Configuration Safely
+
+Use `hermes import-agent claude-code --dry-run` or
+`hermes import-agent codex --dry-run` before migrating an existing setup. Review
+the proposed instruction, permission, MCP, skill, and memory mappings item by
+item. Hermes does not import API keys or credentials; configure providers
+separately with `hermes setup` or `hermes model`.
+
+The normal importer skips name conflicts. Use `--overwrite` only after reviewing
+the destination state and preserving anything that must survive. Do not use
+`--yes` together with `--overwrite` for an unreviewed home directory.
+
+## Operate Persistent Goals And Voice
+
+- Use `/goal draft <objective>` when completion criteria, evidence, scope, and
+  stop conditions should be made explicit before autonomous continuation.
+- Add quality gates with `/goal gate add <command>` only when the command is a
+  deterministic, bounded proof. Use `/goal wait` for a real background process
+  rather than consuming continuation turns by polling.
+- Keep `/goal` single-session. Use Hermes Kanban for multiple independently
+  scheduled workers; neither surface implicitly creates the other.
+- Treat voice mode, wake-word listening, and desktop push-to-talk as separate
+  microphone paths. Verify the selected input device and local-only exposure,
+  and tune barge-in only from observed false triggers or missed speech.
+
 ## Protect Operator State
 
 - Treat auth stores, `.env`, provider keys, messaging tokens, and managed-scope configuration as secrets.
@@ -62,6 +87,7 @@ Start from the installed runtime and the active profile, then change only the st
 7. Session, memory, or context-file state.
 8. Terminal backend, permissions, and network reachability.
 9. Gateway or hosted-service state, if involved.
+10. Goal judge/gate or voice-device state, if involved.
 
 Report the exact layer that failed and the next read-only check before proposing a mutation.
 

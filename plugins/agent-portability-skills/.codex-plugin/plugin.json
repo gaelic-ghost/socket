@@ -1,7 +1,7 @@
 {
   "name": "agent-portability-skills",
   "version": "9.30.1",
-  "description": "Skills for agent portability, ACP, Zed, Hermes, Codex plugin surfaces, and host adapter guidance.",
+  "description": "Skills for agent portability, ACP, A2A, Zed, Hermes, Codex plugin surfaces, and host adapter guidance.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -22,6 +22,7 @@
     "hermes",
     "nous",
     "acp",
+    "a2a",
     "external-agents",
     "zed",
     "xcode",
@@ -31,7 +32,7 @@
   "interface": {
     "displayName": "Agent Portability Skills",
     "shortDescription": "Maintainer skills for agent skill and plugin portability.",
-    "longDescription": "Installable workflows for ACP agent operation and development, Zed native and external agents, Hermes Agent and Nous services, Socket-owned skill portability, Codex plugin surfaces, MCP and hook boundaries, and host adapter guidance across Xcode, OpenCode, and Claude Code.",
+    "longDescription": "Installable workflows for ACP editor-agent integration, A2A peer-agent operation, Zed native and external agents, Hermes Agent and Nous services, Socket-owned skill portability, Codex plugin surfaces, MCP and hook boundaries, and host adapter guidance across Xcode, OpenCode, and Claude Code.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

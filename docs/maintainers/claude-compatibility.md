@@ -1,12 +1,18 @@
 # Claude Code and Cowork Compatibility
 
-Date checked: 2026-07-19 against Claude Code 2.1.211 and the current Claude
-Code and Cowork plugin documentation.
+Date checked: 2026-08-10 against locally installed Claude Code 2.1.211,
+published npm package 2.1.226, and the current Claude Code and Cowork plugin
+documentation.
 
 Socket publishes a Claude marketplace at
 [`/.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json).
 It is a host adapter for the same canonical skill payloads under `plugins/`; it
 does not replace the Codex marketplace or copy the skill corpus.
+
+During plugin development, use `/reload-plugins` to reload changed plugin
+components in the current Claude Code session, then run strict marketplace
+validation before claiming the packaged surface works. A reload is a developer
+loop convenience, not a substitute for a clean install smoke test.
 
 ## Support Boundary
 

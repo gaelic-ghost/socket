@@ -18,6 +18,7 @@ Classify the requested outcome before opening broad documentation or changing co
 | Install, update, configure, run, secure, troubleshoot, or use Hermes | `operate-hermes-agent` |
 | Create skills, plugins, providers, tools, hooks, desktop/dashboard extensions, or programmatic integrations | `build-hermes-agent-extensions` |
 | Run Hermes inside Zed, Xcode, or another ACP client | `operate-acp-agent-integration` plus the client-owning workflow |
+| Let Hermes discover, call, or be called by an independently operated peer agent | `operate-a2a-agent-integration` plus gateway operation for inbound service lifecycle |
 | Decide between ACP, MCP, TUI gateway, API, terminal, or native host integration | `choose-agent-integration-protocol` |
 | Run a messaging gateway, API server, webhook intake, messaging platform, or long-lived remote agent | `operate-hermes-agent-gateway` |
 | Use Nous Portal, Tool Gateway, Nous Chat, subscription proxy, or Hermes Cloud | `use-nous-research-services` |
@@ -31,6 +32,8 @@ Use more than one workflow when the request genuinely crosses boundaries. Keep o
 - `Nous Tool Gateway`: Nous-hosted backends for web, media, browser, and optional cloud terminal tools.
 - `TUI gateway`: the JSON-RPC protocol used by Hermes TUI and custom host integrations.
 - `ACP`: the editor-to-agent protocol used when Zed, Xcode, or another client launches and renders Hermes through `hermes acp`.
+- `A2A`: the peer-agent protocol used when Hermes exchanges discovered messages
+  or tasks with independently operated agents.
 
 Never use an unqualified “gateway” in a decision or implementation note when more than one meaning is possible.
 Do not describe ACP as a gateway or as a general agent-to-agent protocol.

@@ -545,6 +545,8 @@ In progress
 - [x] Add `agent-portability-skills:hermes-agent-compatibility` with explicit skill, Codex bundle, MCP, and native Python plugin boundaries.
 - [x] Add the modular Hermes workflow family: `choose-hermes-agent-workflow`, `operate-hermes-agent`, `build-hermes-agent-extensions`, `operate-hermes-agent-gateway`, and `use-nous-research-services`.
 - [x] Add `choose-agent-integration-protocol`, `operate-acp-agent-integration`, `build-acp-agent`, and `operate-zed-agent` for cross-host direction selection, ACP operation/development, and Zed native/external/terminal workflows.
+- [x] Add `operate-a2a-agent-integration` for peer Agent Card discovery, message/task lifecycle, streaming and push delivery, authentication, trust boundaries, and Hermes 0.20 A2A routing without conflating A2A with ACP or MCP.
+- [x] Refresh Hermes 0.20, current ACP v1 versus draft RFDs, Zed custom external-agent setup, Nous services, Codex and Claude plugin surfaces, and Xcode 27 Beta 5 headless MCP evidence for the 9.31.0 compatibility release.
 - [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `uv run scripts/validate_hermes_compatibility.py`.
 - [x] Make an explicit Codex-and-Hermes compatibility classification mandatory for every new or materially changed Socket plugin, skill, and MCP declaration. Require portable-skill export decisions, validated MCP translations, and a real native-plugin design or host-specific boundary for runtime surfaces.
 
@@ -560,7 +562,7 @@ In progress
 - [ ] Add common skill constraint checks for Codex, OpenCode, and Zed, including Zed's flat roots, trusted-worktree rule, and catalog budget.
 - [ ] Add a dry-run OpenCode skills export plan for `.agents/skills` and `.opencode/skills`, starting with project-local fixtures and temporary homes.
 - [ ] Evaluate OpenCode adapters for `.opencode/skills`, `opencode.json`, MCP config, permissions, and TypeScript plugin modules.
-- [ ] Evaluate Xcode 27 beta adapters using the intended selected Xcode toolchain, Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23; the installed beta bundle is build 27A5218g as of 2026-07-19.
+- [x] Evaluate Xcode 27 beta adapters using the selected toolchain, Xcode-launched Codex configuration, MCP bridge behavior, and Xcode plug-in imports through the official Settings UI. Initial live beta bridge and plug-in import evidence was captured on 2026-06-23; Xcode 27 Beta 5 build 27A5237l headless MCP and executable-scoped permission behavior was verified on 2026-08-10.
 - [x] Add a read-only Socket-to-Xcode source assessment that classifies each child plugin across Xcode-launched Codex, Xcode internal plug-ins, and external agents using Xcode MCP without writing Xcode state.
 - [ ] Add disposable Xcode import fixture generation for skill-only, skill-plus-MCP, and hook-recognition probes.
 - [ ] Capture a public Socket Git URL import matrix from Xcode Beta before claiming user-facing Xcode install support.

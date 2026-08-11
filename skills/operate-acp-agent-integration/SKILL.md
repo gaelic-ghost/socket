@@ -16,8 +16,9 @@ for the current connection and failure map.
 ## Preflight
 
 1. Name the ACP client and ACP agent/server process.
-2. Check the current stable protocol version and the capabilities negotiated by
-   the actual pair; do not infer wire compatibility from SDK package versions.
+2. Treat ACP v1 as the current latest protocol and v2 as draft design work.
+   Check the capabilities negotiated by the actual pair; do not infer wire
+   compatibility from SDK package versions or implement a draft RFD as stable.
 3. Check the canonical ACP Registry with
    `scripts/check_acp_registry.py <agent-id>`.
 4. If the agent is missing, use its official local executable only when the
@@ -42,8 +43,16 @@ skills, and state; it does not create a separate provider setup.
 5. Create a harmless session and verify working-directory binding.
 6. Verify streaming messages, tool calls, file diffs, terminal rendering,
    permission requests, cancellation, and any advertised load, resume, fork,
-   list, delete, mode, or config-option behavior independently.
+   list, close, mode, or config-option behavior independently.
 7. Verify forwarded MCP servers separately from the agent's native MCP config.
+
+Completed v1 additions include generic session configuration options,
+`session/list`, session-information updates, `session/resume`, and
+`session/close`. Elicitation, boolean config-option refinements,
+`session/delete`, logout, additional directories, remote transports, and the v2
+prompt lifecycle remain draft RFDs unless the live ACP documentation says they
+have advanced. Gate experimental behavior on explicit capabilities and label
+it as draft in reports.
 
 ## Host Handoffs
 

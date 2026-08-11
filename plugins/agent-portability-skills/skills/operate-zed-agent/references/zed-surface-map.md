@@ -15,6 +15,11 @@
 - Global and project-local skills with the same name resolve to project-local
 - Total catalog name and description budget: 50 KB
 - No runtime remote skill registry or arbitrary search paths
+- Skills Manager supports creation and GitHub URL import
+- `/skill` and `@skill` provide manual invocation
+- `disable-model-invocation` prevents implicit model selection
+- `zed://skill` links share an import target; they do not host execution
+- Installed skill changes reload live
 - Zed Skills apply to Zed Agent, not automatically to External Agents
 
 ## External Agent Checks

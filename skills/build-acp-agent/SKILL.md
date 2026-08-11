@@ -17,18 +17,21 @@ distribution.
 ## Implementation Workflow
 
 1. Define concrete client targets and the user-visible behavior they require.
-2. Use the current stable ACP protocol and an official SDK when its language and
-   runtime fit. Use raw JSON-RPC only when an SDK cannot support a required
-   platform or feature.
+2. Use ACP v1, the current latest protocol, and an official SDK when its
+   language and runtime fit. Treat v2 and non-completed RFDs as experimental;
+   do not ship them as the portable baseline. Use raw JSON-RPC only when an SDK
+   cannot support a required platform or feature.
 3. Implement initialization first:
    - negotiate `protocolVersion`
    - advertise only implemented agent capabilities
    - inspect client filesystem and terminal capabilities before using them
    - advertise real authentication methods and implementation information
 4. Implement the required session baseline: new, prompt, cancel, and update.
-5. Add optional load, resume, fork, list, close, delete, modes, configuration,
-   plans, slash commands, rich prompt content, or MCP transports only with
-   matching capability declarations and tests.
+5. Add optional load, resume, fork, list, close, modes, configuration, plans,
+   slash commands, rich prompt content, or MCP transports only with matching
+   capability declarations and tests. Keep draft `session/delete`, logout,
+   elicitation, additional directories, and remote transports behind explicit
+   experimental flags and interoperability tests.
 6. Render tool calls, diffs, terminals, plans, and streamed content in the ACP
    structures the target clients understand.
 7. Route dangerous operations through permission requests and fail closed when
@@ -70,6 +73,7 @@ distribution.
 
 - Do not infer wire compatibility from SDK, schema-artifact, or package version
   numbers; use negotiated ACP protocol version and capabilities.
+- Do not present a v2 or draft RFD implementation as ACP v1 conformance.
 - Do not advertise methods that are stubs or only work in one client.
 - Do not make ACP a general agent-to-agent orchestration layer.
 - Do not embed provider secrets in registry manifests, launch arguments, logs,

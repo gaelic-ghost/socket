@@ -2,12 +2,16 @@
 
 Use this document when maintainers need the short Socket-level map of Codex plugin install surfaces.
 
-Date checked: 2026-07-19 against Codex CLI 0.144.6 and the current official
+Date checked: 2026-08-10 against Codex CLI 0.147.0 and the current official
 Codex plugin documentation.
 
 ## Core Model
 
 Codex plugin wiring has five separate jobs:
+
+The public plugin directory is shared across ChatGPT and Codex. Socket's
+Git-backed marketplace remains a separate, operator-added catalog for Socket
+plugins; it does not imply publication in that universal public directory.
 
 1. Tracked marketplace source
    - Added with `codex plugin marketplace add <owner>/<repo>`.
@@ -33,7 +37,7 @@ Codex plugin wiring has five separate jobs:
 - Plugin-bundled hooks may be declared in the manifest or discovered at `./hooks/hooks.json`, but installing or enabling a plugin does not automatically trust those hooks.
 - Git-backed marketplace add and upgrade commands are the default user-facing install and update path.
 - Manual local marketplace roots and copied payload folders are for development, unpublished testing, or fallback only.
-- Repo-visible plugins come from marketplace catalogs. OpenAI does not currently document a richer repo-private plugin scoping model beyond that marketplace model.
+- Workspace- or repo-visible plugins come from configured marketplace catalogs and local development sources. OpenAI does not currently document a richer repo-private plugin scoping model that bypasses the marketplace model.
 
 ## Reading Order
 
@@ -49,4 +53,4 @@ When plugin state looks wrong, inspect in this order:
 
 - [Plugin Packaging Strategy](./plugin-packaging-strategy.md)
 - [Plugin Install Testing](./plugin-install-testing.md)
-- [OpenAI Codex plugin build docs](https://developers.openai.com/codex/plugins/build)
+- [OpenAI plugin build docs](https://developers.openai.com/plugins/build/plugins)

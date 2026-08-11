@@ -2,8 +2,8 @@
 
 This plan turns the Xcode 27 beta import evidence into a practical Socket implementation path.
 
-Date checked: 2026-07-19. The installed beta bundle is Xcode 27.0 build
-27A5218g; the import/runtime observations below remain the dated 2026-06-23
+Date checked: 2026-08-10. The installed beta bundle is Xcode 27.0 Beta 5 build
+27A5237l; the import/runtime observations below remain the dated 2026-06-23
 probe unless a later line says otherwise.
 
 ## Goal
@@ -42,6 +42,10 @@ Local probe results:
 - Xcode registered imported plug-ins under `~/Library/Developer/Xcode/CodingAssistant/AgentPlugins`.
 - Xcode mirrored imported payloads into its Codex and Gemini CodingAssistant homes.
 - Xcode wrote MCP declarations from imported `.mcp.json` files into `~/Library/Developer/Xcode/CodingAssistant/mcp-servers.json`.
+- A separate 2026-08-10 Beta 5 probe completed an MCP initialization without
+  the Xcode app open. That establishes headless access for
+  workspace-independent tools, not for tools that need live project, run,
+  preview, simulator, or debugger state.
 
 ## Non-Goals
 

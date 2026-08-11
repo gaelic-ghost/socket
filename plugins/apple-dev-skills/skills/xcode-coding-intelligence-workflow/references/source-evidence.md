@@ -187,5 +187,58 @@ The Device Hub and Xcode debugger workflow references own the detailed behavior 
 
 Setup lesson:
 
-- A closed or unselected Xcode app is not enough reason to block an Xcode Intelligence task. Open the intended stable or beta Xcode app, select it with `MCP_XCODE_PID` when multiple Xcode processes may exist, and then retry the bridge check.
+- In the Beta 3 behavior recorded above, a live bridge check needed the intended
+  Xcode process and project. Xcode 27 Beta 5 added a separate headless MCP
+  service; use the newer evidence below for current routing.
 - Keep Xcode-generated and Xcode-copied files as local evidence and comparison input. Do not copy them into authored Socket skill roots unless a separate import or adaptation task explicitly chooses that source-of-truth change.
+
+## Checked 2026-08-10
+
+### Xcode 27 Beta 5 Headless MCP Service
+
+Bundle metadata, read without changing the selected command-line toolchain:
+
+```text
+/Applications/Xcode-beta.app
+Xcode 27.0 Beta 5
+Build version 27A5237l
+
+xcode-select -p
+/Applications/Xcode.app/Contents/Developer
+
+xcodebuild -version
+Xcode 26.6
+Build version 17F113
+```
+
+The Beta 5 release notes and bundled `mcp-server` management tool establish a
+new workspace-independent service surface. Its relevant commands include
+`start`, `open`, `stop`, `enable`, `disable`, `approve`, `allow-folder`,
+`clear-permissions`, `deny`, and `status`. The Xcode Intelligence setting
+**Allow External Agents to Use Xcode Tools** was set to **Always**, and the
+management tool reported external-agent permission enabled.
+
+A direct MCP initialization probe launched XcodeService and completed the
+handshake while the Xcode app was closed. This proves that documentation search
+and other workspace-independent tools can be available headlessly. It does not
+prove that active-workspace, build/run, preview, simulator, or debugger tools
+work without the live state those tools require.
+
+During the probe, Xcode requested a 24-hour grant for the logical client name
+`socket-audit`; the user approved it. The resulting permission record was tied
+to the actual unsigned Homebrew Python executable that opened the bridge, not
+only to the logical client label. Treat launchers and wrappers as part of the
+permission identity, and prefer a stable code-signed agent executable for
+durable grants.
+
+The service was returned to the stopped state after the probe. Apple labels the
+headless server an early preview and documents
+`--unsafe-always-allow-all-agents` only for unattended environments; do not use
+that bypass for normal at-desk development.
+
+### Hermes ACP Registration
+
+Xcode's Coding Assistant ACP configuration contained a `hermes-agent` entry
+that launches the installed `/Users/galew/.local/bin/hermes` executable with
+the `acp` argument. This is local integration evidence, not a claim that Hermes
+is published in the canonical ACP Registry.

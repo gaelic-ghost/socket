@@ -24,7 +24,11 @@ Treat the messaging gateway as a long-running service with external identities, 
 
 - Messaging gateway: `hermes gateway` and its platform adapters.
 - API server: OpenAI-compatible HTTP endpoint hosted by the gateway.
-- Webhooks: inbound event routes that trigger agent work.
+- Inbound webhooks: authenticated event routes that trigger agent work.
+- Outbound webhooks: signed delivery of Hermes events to a configured receiver;
+  they are not inbound prompt endpoints.
+- A2A platform: peer-agent discovery and tasks; hand its protocol lifecycle to
+  `operate-a2a-agent-integration`.
 - TUI gateway: JSON-RPC host protocol, not the messaging service.
 - Nous Tool Gateway: hosted tool backends, not message transport.
 
@@ -32,6 +36,9 @@ Treat the messaging gateway as a long-running service with external identities, 
 
 - Use a dedicated profile when a bot identity or authorization boundary differs.
 - Keep platform tokens and API server keys in private configuration.
+- Use separate secrets for inbound sender authentication and outbound webhook
+  signatures. Verify signatures over the exact documented bytes before parsing
+  or acting on a delivery.
 - Bind local dashboards and APIs to localhost by default.
 - Require explicit authentication and network controls before exposing an API or dashboard beyond localhost.
 - Use platform allowlists and Hermes user authorization; do not rely on obscurity or a private-looking channel name.
@@ -66,5 +73,7 @@ Check:
 7. model/provider and tool availability;
 8. outbound formatting and delivery;
 9. retry, rate-limit, and shutdown behavior.
+10. outbound webhook signature, receiver response, and retry behavior when
+    configured.
 
 Read [references/gateway-surface-map.md](references/gateway-surface-map.md) for deployment shapes, integration boundaries, and official sources.

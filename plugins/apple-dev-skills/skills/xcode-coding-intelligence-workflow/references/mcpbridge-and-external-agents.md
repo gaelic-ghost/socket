@@ -1,6 +1,7 @@
 # MCP Bridge And External Agents
 
-Last checked with local `xcrun mcpbridge --help` from Xcode 27.0 beta build 27A5194q on 2026-06-22.
+Last checked against Apple documentation and local Xcode 27.0 Beta 5 build
+27A5237l on 2026-08-10.
 
 ## What `xcrun mcpbridge` Does
 
@@ -14,15 +15,36 @@ codex mcp add xcode -- xcrun mcpbridge
 
 The exact client command can differ by agent, but the Xcode side is the same bridge command.
 
-## Xcode Process Selection
+## Headless Service Versus Live Xcode
 
-`mcpbridge` can auto-detect a running Xcode process. Its help describes this fallback order:
+Xcode 27 Beta 5 previews `xcrun mcp-server`, a headless Xcode MCP service that
+does not require an open Xcode workspace. Inspect it with:
 
-1. Use the only running Xcode process when exactly one exists.
-2. If multiple Xcode processes exist, use the Command Line Tools choice in the already-open Xcode app's Settings > Locations as the selection source, then verify the result with `xcode-select -p`.
-3. If no Xcode process exists, exit with an error.
+```bash
+xcrun mcp-server status
+```
 
-When multiple Xcode windows or versions make auto-detection ambiguous, set `MCP_XCODE_PID` intentionally:
+The selected Xcode toolchain must provide `mcp-server`; a stable toolchain may
+still resolve `mcpbridge` while lacking the Beta 5 management command. Change
+the selected toolchain only through the approved Xcode Settings > Locations
+workflow.
+
+Classify requests before starting anything:
+
+- Workspace-independent: documentation and other tools that the headless
+  service exposes without a project.
+- Headless project: start the service and use `xcrun mcp-server open <project>`
+  after the agent and folder have been approved.
+- Live Xcode: editor selection, previews, active run/debug state, Intelligence
+  settings, and plug-in UI.
+
+Use `start` and `stop` for an intentional headless service lifecycle. Do not
+leave a diagnostic service running when it was stopped before the check.
+
+## Live Process Selection
+
+When using a live Xcode process, `mcpbridge` can auto-detect it. If multiple
+Xcode processes make selection ambiguous, set `MCP_XCODE_PID` intentionally:
 
 ```bash
 MCP_XCODE_PID=12345 xcrun mcpbridge
@@ -52,19 +74,40 @@ Do not describe plug-in installation as an `mcpbridge` subcommand. `mcpbridge ru
 
 Before expecting Xcode tools to work through an external agent:
 
-- Xcode must be running.
-- The relevant project or workspace should be open in Xcode.
 - External-agent access must be enabled in Xcode's Intelligence settings.
+- Headless mode must be enabled for no-UI operation; otherwise Xcode must be
+  running.
+- A project-dependent tool needs the relevant project opened by the headless
+  service or live Xcode. Documentation lookup does not inherently need one.
+- Xcode must approve the actual agent executable and any requested folder tree.
 - The agent or client must be configured to start `xcrun mcpbridge`.
 - The requested tool permission must be allowed by Xcode and by the external client.
 - Plug-in import probes should use a harmless fixture or a trusted Git URL first, and should stop before importing additional plug-ins unless the user asked to mutate Xcode state.
 
-Do not treat a non-running Xcode instance as a final blocker by itself. If the task needs Xcode's live project context, MCP bridge, Intelligence settings, or plug-in UI, open the intended Xcode app and then retry the check. To change the CLI toolchain, use Settings > Locations > Command Line Tools in that app and let macOS obtain Touch ID or administrator approval; verify the result with `xcode-select -p`; do not override it with `DEVELOPER_DIR`.
+Do not treat a non-running Xcode instance as a final blocker by itself. Inspect
+headless status and requested tool scope first. If the task needs live editor,
+run/debug, Intelligence settings, or plug-in UI state, open the intended app and
+retry. To change the CLI toolchain, use Settings > Locations > Command Line
+Tools in that app and let macOS obtain Touch ID or administrator approval;
+verify with `xcode-select -p`; do not override it with `DEVELOPER_DIR`.
+
+## Permission Identity
+
+Headless enablement does not grant every process or folder access. Xcode can
+prompt separately for the connecting executable and directory tree, with
+bounded or persistent durations. Verify the displayed client name and the
+recorded executable identity: a diagnostic Python process, shell, or package
+runner may be authorized instead of Hermes, Codex, or Claude.
+
+Apple documents `sudo xcrun mcp-server enable
+--unsafe-always-allow-all-agents` for unattended environments only and says it
+is not recommended for at-desk use. Do not recommend it as ordinary setup.
 
 ## Failure Language
 
 Use concrete setup errors. Prefer messages like:
 
-- "Xcode MCP setup needs a live Xcode session. I opened the target Xcode app and will retry the MCP bridge after the project is available."
+- "This tool needs live Xcode editor or run/debug state; the headless service alone cannot provide that context."
+- "The headless service is enabled, but Xcode has not approved this agent executable or project folder."
 - "Xcode MCP setup is ambiguous because multiple Xcode processes are running. Set MCP_XCODE_PID to the intended Xcode process id before retrying."
 - "External-agent Xcode access is not ready because Xcode Intelligence settings have not allowed external agents."

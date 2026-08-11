@@ -46,7 +46,7 @@ Use this map when a request spans multiple Hermes products or extension systems.
 - [Hermes documentation](https://hermes-agent.nousresearch.com/docs/)
 - [Hermes features overview](https://hermes-agent.nousresearch.com/docs/user-guide/features/overview/)
 - [Hermes architecture](https://hermes-agent.nousresearch.com/docs/developer-guide/architecture)
-- [Hermes plugin guide](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
+- [Hermes plugin developer guide](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
 - [Hermes programmatic integration](https://hermes-agent.nousresearch.com/docs/developer-guide/programmatic-integration)
 - [Hermes ACP editor integration](https://hermes-agent.nousresearch.com/docs/user-guide/features/acp/)
 - [ACP protocol](https://agentclientprotocol.com/)

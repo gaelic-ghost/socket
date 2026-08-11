@@ -23,13 +23,19 @@
 | Native Hermes Desktop UI | Desktop Plugin SDK | `$HERMES_HOME/desktop-plugins/` |
 | Hermes web dashboard UI | Dashboard extension | dashboard `manifest.json` and SDK |
 | IDE integration | ACP | `operate-acp-agent-integration` or `build-acp-agent` |
+| Peer-agent interoperability | A2A platform | `operate-a2a-agent-integration` |
 | Custom rich host | TUI gateway JSON-RPC | `tui_gateway` protocol |
 | Generic HTTP client | API server | OpenAI-compatible HTTP API |
 | Built-in core behavior | Upstream contribution | Hermes source and contributor guide |
 
 ## General Plugin Discovery
 
-General plugins can be bundled, user-scoped, project-scoped, pip-distributed, or Nix-managed. Project plugins require explicit enablement. Specialized plugin directories use their own loaders. Later sources can override earlier sources on name collision, so tests must cover replacement and discovery order when names overlap.
+General plugins can be bundled, user-scoped, project-scoped, or pip-distributed.
+Arbitrary third-party plugins are opt-in through `plugins.enabled`; project
+plugins additionally require the trusted project-plugin boundary. Specialized
+plugin directories use their own loaders. Later sources can override earlier
+sources on name collision, so tests must cover replacement and discovery order
+when names overlap.
 
 Third-party product integrations should ship standalone. Keep upstream core changes for features Hermes itself owns.
 
@@ -48,7 +54,7 @@ Runtime provider resolution is shared by CLI, gateway, cron, ACP, and auxiliary 
 
 ## Authoritative Sources
 
-- [Build a Hermes plugin](https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin)
+- [Build a Hermes plugin](https://hermes-agent.nousresearch.com/docs/developer-guide/plugins)
 - [Plugins overview](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins)
 - [Creating skills](https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills)
 - [Adding tools](https://hermes-agent.nousresearch.com/docs/developer-guide/adding-tools)
@@ -61,3 +67,4 @@ Runtime provider resolution is shared by CLI, gateway, cron, ACP, and auxiliary 
 - [Agent loop](https://hermes-agent.nousresearch.com/docs/developer-guide/agent-loop)
 - [Provider runtime](https://hermes-agent.nousresearch.com/docs/developer-guide/provider-runtime)
 - [Plugin LLM access](https://hermes-agent.nousresearch.com/docs/developer-guide/plugin-llm-access)
+- [A2A](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/a2a)

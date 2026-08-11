@@ -1,10 +1,10 @@
 ---
 name: choose-agent-integration-protocol
-description: Choose ACP, MCP, a native host integration, a terminal thread, or a Hermes programmatic interface. Use when the direction of agent, editor, tool, or host control is unclear.
+description: Choose A2A, ACP, MCP, a native host integration, a terminal thread, or a Hermes programmatic interface. Use when the direction of agent, editor, tool, or host control is unclear.
 metadata:
   hermes:
     category: agent-portability
-    tags: [acp, mcp, zed, xcode, hermes]
+    tags: [a2a, acp, mcp, zed, xcode, hermes]
 ---
 
 # Choose Agent Integration Protocol
@@ -22,6 +22,9 @@ Do not use “connect the agents” or “hook into Xcode” as an architecture.
 4. Select one primary boundary:
    - Use ACP when an editor or compatible client launches and renders an
      external coding agent.
+   - Use A2A when independently operated agents discover each other and
+     exchange messages or stateful tasks across a process, machine, or
+     framework boundary.
    - Use MCP when an agent calls tools or resources supplied by another
      process. An externally running agent uses Xcode through `xcrun mcpbridge`.
    - Use a native host agent when the host should own the model, instructions,
@@ -42,6 +45,8 @@ host or appears to require multiple transports.
 ## Required Distinctions
 
 - ACP makes an agent editor-native; it is not a general tool protocol.
+- A2A connects independently operated peer agents; it does not provide an
+  editor UI or replace in-process subagents.
 - MCP gives an agent callable tools; it does not provide an editor conversation
   or review UI.
 - Hermes running `hermes acp` is the ACP agent/server. Zed or Xcode is the ACP
@@ -55,6 +60,8 @@ host or appears to require multiple transports.
 
 - Hand existing ACP installation and diagnosis to
   `operate-acp-agent-integration`.
+- Hand peer discovery, task lifecycle, and Hermes A2A setup to
+  `operate-a2a-agent-integration`.
 - Hand ACP server implementation and registry packaging to `build-acp-agent`.
 - Hand Zed-native, Zed External Agent, and Terminal Thread choices to
   `operate-zed-agent`.

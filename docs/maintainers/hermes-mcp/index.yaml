@@ -7,7 +7,7 @@ translations:
     translation: docs/maintainers/hermes-mcp/apple-dev-skills.yaml
     status: manual_setup_required
     required_environment: []
-    setup: Xcode must be installed and its MCP capability enabled before either bridge can start.
+    setup: Xcode must be installed and external-agent MCP access enabled. Xcode 27 Beta 5 can serve workspace-independent tools headlessly; project and debugger tools still require their live Xcode state.
   cardhop-app:
     source: plugins/cardhop-app/.mcp.json
     translation: docs/maintainers/hermes-mcp/cardhop-app.yaml

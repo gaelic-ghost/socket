@@ -28,6 +28,15 @@ The Hermes API server exposes the agent loop through an OpenAI-compatible HTTP i
 
 Webhooks accept external events that can trigger Hermes work. Authenticate senders, constrain routes, and decide whether each route may mutate systems or only create a queued prompt.
 
+Outbound webhooks deliver Hermes events to another service. Give them a
+separate signing secret, verify the receiver checks the signature before
+parsing the payload, and define retry/idempotency behavior. Do not reuse an
+inbound route token as proof of outbound authenticity.
+
+The A2A platform also runs under the gateway, but it exposes peer-agent Agent
+Cards and task lifecycles rather than a generic webhook contract. Use
+`operate-a2a-agent-integration` for that boundary.
+
 ## Deployment Shapes
 
 - Foreground local gateway for setup and smoke testing.
@@ -49,6 +58,7 @@ Capture the profile, gateway process state, platform connection status, authoriz
 - [Adding a platform adapter](https://hermes-agent.nousresearch.com/docs/developer-guide/adding-platform-adapters)
 - [API server](https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/)
 - [Webhooks](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks)
+- [A2A](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/a2a)
 - [Profiles](https://hermes-agent.nousresearch.com/docs/user-guide/profiles)
 - [Running many gateways](https://hermes-agent.nousresearch.com/docs/user-guide/multi-profile-gateways)
 - [Security](https://hermes-agent.nousresearch.com/docs/user-guide/security/)

@@ -113,7 +113,7 @@ codex plugin marketplace add gaelic-ghost/apple-dev-skills
 codex plugin marketplace upgrade apple-dev-skills
 ```
 
-When installed as a Codex plugin, Apple Dev Skills declares two Xcode-selected MCP commands: `xcrun mcpbridge` for Xcode's active project and debugging-session tools, plus experimental `xcrun lldb-mcp` for LLDB's standalone MCP bridge. Users still need to allow external agents in Xcode's Intelligence settings and keep the relevant project open before external Codex sessions can use Xcode-provided tools. Xcode 27.0 Beta 3 resolves but does not start `lldb-mcp`, so use the working `mcpbridge` path and Xcode's active debugger session until a later Xcode release starts the standalone bridge normally.
+When installed as a Codex plugin, Apple Dev Skills declares two Xcode-selected MCP commands: `xcrun mcpbridge` for Xcode tools, plus experimental `xcrun lldb-mcp` for LLDB's standalone MCP bridge. Users must allow external agents in Xcode's Intelligence settings. Xcode 27 Beta 5 can run the MCP service without an open Xcode workspace for documentation and other workspace-independent tools; project, build/run, preview, simulator, and debugger work still needs the live state required by the chosen tool. Beta 3 resolved but did not start `lldb-mcp`, so retain the working `mcpbridge` and active-debugger path until the selected Xcode release starts the standalone bridge normally.
 
 ## Development
 

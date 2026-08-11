@@ -1,6 +1,7 @@
 # Permissions And Artifacts
 
-Last checked against Apple developer pages and WWDC26 transcripts on 2026-06-22.
+Last checked against Apple developer pages, Xcode 27 Beta 5 release notes, and
+local permission prompts on 2026-08-10.
 
 ## Permission Boundary
 
@@ -17,6 +18,20 @@ Name what the agent may do before granting tools:
 - access provider credentials or account-backed services
 
 Do not grant broader permissions to work around unclear setup. Fix setup uncertainty first.
+
+For headless MCP, keep four grants distinct:
+
+- permission to enable the headless service;
+- permission for the actual connecting executable;
+- permission for a project folder and its descendants;
+- permission for individual Xcode tools or actions.
+
+Record whether an agent/folder grant lasts 24 hours or persists. Code-signed
+agents can receive longer-lived identity grants; ad hoc wrappers can appear as
+unsigned Python, shell, or package-manager processes. Approve only the identity
+that should actually retain access.
+
+Do not use the unsafe all-agent enablement flag for ordinary at-desk use.
 
 ## Plan-First Bias
 

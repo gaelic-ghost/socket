@@ -1,5 +1,16 @@
 # ACP Operations Map
 
+## Version Boundary
+
+- ACP v1 is the latest protocol line.
+- ACP v2 and its prompt lifecycle are draft work.
+- Completed v1 RFDs include session config options, `session/list`,
+  session-information updates, `session/resume`, `session/close`, and the ACP
+  Registry.
+- Elicitation, boolean config-option refinements, `session/delete`, logout,
+  additional directories, remote HTTP/WebSocket transport, and other RFDs must
+  remain capability-gated and labeled with their current lifecycle state.
+
 ## Connection Lifecycle
 
 1. Client launches the agent process, normally over stdio.
@@ -49,5 +60,7 @@ Official references:
 - https://agentclientprotocol.com/protocol/v1/session-setup
 - https://agentclientprotocol.com/protocol/v1/authentication
 - https://agentclientprotocol.com/get-started/registry
+- https://agentclientprotocol.com/rfds/updates
+- https://agentclientprotocol.com/rfds/v2/prompt
 - https://hermes-agent.nousresearch.com/docs/user-guide/features/acp
 - https://zed.dev/docs/ai/external-agents

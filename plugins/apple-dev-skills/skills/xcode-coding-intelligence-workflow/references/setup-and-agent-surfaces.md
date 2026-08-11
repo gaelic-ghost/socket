@@ -1,6 +1,7 @@
 # Setup And Agent Surfaces
 
-Last checked against Apple developer pages and Xcode release notes on 2026-07-19.
+Last checked against Apple developer pages, Xcode release notes, and local
+Xcode 27 Beta 5 behavior on 2026-08-10.
 
 ## Source Anchors
 
@@ -26,6 +27,10 @@ agent in Coding Intelligence settings, and Xcode 26.6 release notes record ACP
 support. Keep the agent's generic launch/handshake diagnosis in Agent
 Portability Skills.
 
+Do not claim Apple-documented ACP setup proves that a particular agent works in
+Xcode. Validate that agent's executable, authentication, negotiated
+capabilities, session behavior, and Xcode-side permissions independently.
+
 ## Xcode 27 Beta Surface
 
 As of 2026-06-22, Apple's Xcode 27 pages and WWDC26 transcripts describe:
@@ -40,6 +45,18 @@ As of 2026-06-22, Apple's Xcode 27 pages and WWDC26 transcripts describe:
 - Device Hub as the Xcode 27 surface for simulator and physical-device inspection
 
 Treat these as beta-era Xcode 27 claims until the installed Xcode and current Apple docs confirm the behavior for the target machine.
+
+Xcode 27 Beta 5 adds an early-preview headless MCP service managed by
+`xcrun mcp-server`. It can run without the Xcode app or an open workspace and
+can retain explicit agent and folder-tree permissions. This does not make every
+tool workspace-independent: project tools need a headlessly opened project or
+live Xcode, and editor/run/debug UI state still belongs to live Xcode.
+
+Local build `27A5237l` verified permission enablement and a successful MCP
+initialize handshake with no Xcode app process. The service launched
+`XcodeService` on demand. A user-approved `socket-audit` client produced a
+24-hour grant for the actual unsigned Python wrapper, demonstrating that the
+authorized executable can differ from the logical client name.
 
 Local beta tool check on 2026-06-22 verified Xcode 27.0 beta build 27A5194q at the then-installed beta app path. The local check verified `xcodebuild -version`, `xcrun --find mcpbridge`, and `xcrun mcpbridge --help`; it did not verify Xcode UI settings, project-session permissions, or agent execution inside a running Xcode session.
 
