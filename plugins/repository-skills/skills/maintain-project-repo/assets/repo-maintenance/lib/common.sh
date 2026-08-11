@@ -114,6 +114,38 @@ github_release_is_visible() {
   gh release view "$tag_name" >/dev/null 2>&1
 }
 
+checked_in_release_notes_file() {
+  tag_name="$1"
+  version_name="${tag_name#v}"
+
+  for candidate in \
+    "$REPO_ROOT/docs/releases/$tag_name.md" \
+    "$REPO_ROOT/docs/releases/$version_name.md"; do
+    if [ -f "$candidate" ]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+create_github_release_from_notes_or_generated() {
+  tag_name="$1"
+  prerelease_flag="${2:-}"
+
+  if notes_file="$(checked_in_release_notes_file "$tag_name")"; then
+    log "Creating GitHub release $tag_name from checked-in notes: $notes_file."
+    # shellcheck disable=SC2086
+    gh release create "$tag_name" --verify-tag --notes-file "$notes_file" $prerelease_flag
+    return 0
+  fi
+
+  log "No checked-in release notes found for $tag_name; using GitHub-generated release notes."
+  # shellcheck disable=SC2086
+  gh release create "$tag_name" --verify-tag --generate-notes $prerelease_flag
+}
+
 ensure_git_repo() {
   git -C "$REPO_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "maintain-project-repo must run inside a git worktree rooted at $REPO_ROOT."
 }

@@ -4,6 +4,7 @@ set -eu
 SELF_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 export REPO_MAINTENANCE_COMMON_DIR="$SELF_DIR/lib"
 . "$SELF_DIR/lib/common.sh"
+. "$SELF_DIR/lib/coderabbit.sh"
 
 load_profile_env
 load_env_file "$SELF_DIR/config/release.env"
@@ -243,6 +244,37 @@ EOF
   PR_NUMBER="$pr_number"
 }
 
+detect_coderabbit_review_unavailable() {
+  pr_number="$1"
+  CODERABBIT_REVIEW_UNAVAILABLE="false"
+  CODERABBIT_UNAVAILABLE_COMMENT_COUNT=0
+
+  review_lines="$(gh pr view "$pr_number" --json comments,reviews --jq '[.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | .[] | [(.author.login // ""), (.body // "")] | @tsv' 2>/dev/null || true)"
+  while IFS="$(printf '\t')" read -r source_name message; do
+    [ -n "${source_name:-}" ] || continue
+    if coderabbit_review_is_unavailable "$source_name" "$message"; then
+      CODERABBIT_REVIEW_UNAVAILABLE="true"
+      CODERABBIT_UNAVAILABLE_COMMENT_COUNT=$((CODERABBIT_UNAVAILABLE_COMMENT_COUNT + 1))
+    fi
+  done <<EOF
+$review_lines
+EOF
+
+  repo_name="$(gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null || true)"
+  head_sha="$(gh pr view "$pr_number" --json headRefOid --jq '.headRefOid' 2>/dev/null || true)"
+  if [ -n "$repo_name" ] && [ -n "$head_sha" ]; then
+    check_lines="$(gh api "repos/$repo_name/commits/$head_sha/check-runs" --paginate --jq '.check_runs[]? | [(.name // ""), ((.output.title // "") + "\\n" + (.output.summary // "") + "\\n" + (.output.text // ""))] | @tsv' 2>/dev/null || true)"
+    while IFS="$(printf '\t')" read -r source_name message; do
+      [ -n "${source_name:-}" ] || continue
+      if coderabbit_review_is_unavailable "$source_name" "$message"; then
+        CODERABBIT_REVIEW_UNAVAILABLE="true"
+      fi
+    done <<EOF
+$check_lines
+EOF
+  fi
+}
+
 inspect_pr_gate() {
   pr_number="$1"
   minimum_check_count="${REPO_MAINTENANCE_MIN_REQUIRED_CHECKS:-1}"
@@ -270,13 +302,22 @@ inspect_pr_gate() {
   fi
   REVIEW_DECISION="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""' 2>/dev/null || printf 'UNREADABLE')"
   COMMENT_COUNT="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)' 2>/dev/null || printf '1')"
+  detect_coderabbit_review_unavailable "$pr_number"
+  if [ "$CODERABBIT_UNAVAILABLE_COMMENT_COUNT" -gt 0 ]; then
+    COMMENT_COUNT=$((COMMENT_COUNT - CODERABBIT_UNAVAILABLE_COMMENT_COUNT))
+  fi
+  EFFECTIVE_CHECK_BUCKETS="$CHECK_BUCKETS"
+  if [ "$CODERABBIT_REVIEW_UNAVAILABLE" = "true" ]; then
+    EFFECTIVE_CHECK_BUCKETS="$(gh pr checks "$pr_number" --json name,bucket --jq 'map(select(.bucket != "pending" or ((.name | ascii_downcase | contains("coderabbit")) | not)) | map(.bucket) | join(",")' 2>/dev/null || printf '%s' "$CHECK_BUCKETS")"
+    log "CodeRabbit reported that review is unavailable because a limit was reached; ignoring only its pending review context and diagnostic comments."
+  fi
   if [ "$check_readable" != "true" ] || [ "$REVIEW_DECISION" = "UNREADABLE" ]; then
     GATE_PHASE="awaiting-github-state"
   elif [ "$check_count" -lt "$minimum_check_count" ]; then
     GATE_PHASE="awaiting-github-state"
-  elif case ",$CHECK_BUCKETS," in *,fail,*|*,cancel,*) true ;; *) false ;; esac; then
+  elif case ",$EFFECTIVE_CHECK_BUCKETS," in *,fail,*|*,cancel,*) true ;; *) false ;; esac; then
     GATE_PHASE="failed-checks"
-  elif case ",$CHECK_BUCKETS," in *,pending,*) true ;; *) false ;; esac; then
+  elif case ",$EFFECTIVE_CHECK_BUCKETS," in *,pending,*) true ;; *) false ;; esac; then
     GATE_PHASE="awaiting-pr-checks"
   elif [ "$REVIEW_DECISION" = "CHANGES_REQUESTED" ]; then
     GATE_PHASE="changes-requested"
@@ -372,8 +413,7 @@ create_github_release() {
   fi
 
   prerelease_flag="$(github_release_create_prerelease_flag "$RELEASE_TAG")"
-  # shellcheck disable=SC2086
-  gh release create "$RELEASE_TAG" --verify-tag --generate-notes $prerelease_flag
+  create_github_release_from_notes_or_generated "$RELEASE_TAG" "$prerelease_flag"
   log "Created GitHub release $RELEASE_TAG."
   if ! github_release_is_visible "$RELEASE_TAG"; then
     warn "GitHub release $RELEASE_TAG is not readable in this immediate re-read. Schedule a continuation for at least five minutes rather than polling."
