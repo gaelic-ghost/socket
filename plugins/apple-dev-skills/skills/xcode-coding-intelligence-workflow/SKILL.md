@@ -1,6 +1,6 @@
 ---
 name: xcode-coding-intelligence-workflow
-description: Guide Xcode coding-intelligence setup, Xcode-hosted agents, external-agent access through xcrun mcpbridge, command and tool permissions, Xcode-only agent configuration homes, and setup handoffs for Xcode 27 beta-era agentic coding workflows.
+description: Guide Xcode coding-intelligence setup, ACP-hosted agents, external-agent access through xcrun mcpbridge, permissions, Xcode-only agent configuration, and stable or beta agentic workflows.
 ---
 
 # Xcode Coding Intelligence Workflow
@@ -9,14 +9,15 @@ description: Guide Xcode coding-intelligence setup, Xcode-hosted agents, externa
 
 Guide setup and reasoning for Xcode coding intelligence without taking over normal build, run, preview, or testing execution.
 
-This skill owns Xcode Intelligence setup, Xcode-hosted coding agents, chat providers, external-agent access through `xcrun mcpbridge`, Xcode plug-in import inspection, command and tool permissions, Xcode-only agent configuration homes, and the boundary between Xcode's assistant UI and external Codex sessions. It is the setup and permissions companion for `xcode-build-run-workflow` and `xcode-testing-workflow`.
+This skill owns Xcode Intelligence setup, Xcode-hosted ACP agents, chat providers, external-agent access through `xcrun mcpbridge`, Xcode 27 headless MCP service lifecycle, Xcode plug-in import inspection, command and tool permissions, Xcode-only agent configuration homes, and the boundary between Xcode's assistant UI and external agent sessions. It is the setup and permissions companion for `xcode-build-run-workflow` and `xcode-testing-workflow`.
 
-Beta-specific note: Xcode 27 claims in this skill were checked against Apple developer pages and WWDC26 transcripts on 2026-06-22. Treat Xcode 27 behavior as beta-specific unless the target machine's installed Xcode and Apple docs confirm the same behavior.
+Current note: Apple documents ACP agent setup in Xcode 26.6 and Xcode 27. Xcode 27-only behavior remains beta-specific unless the target machine's installed Xcode and current Apple docs confirm it.
 
 ## When To Use
 
 - Use this skill when the task is about Xcode Intelligence settings, coding assistants, Xcode-hosted agents, chat providers, model choice, agent conversations, plan mode, artifacts, or command and tool permissions.
 - Use this skill when configuring external agents to use Xcode capabilities through `xcrun mcpbridge`.
+- Use this skill when adding an ACP-compatible agent such as Hermes to Xcode's own agent UI.
 - Use this skill when inspecting Xcode's Plug-ins UI import paths for skills, hooks, and MCP servers.
 - Use this skill when the user needs to distinguish Xcode-hosted agents from normal Codex sessions that connect to Xcode through MCP.
 - Use this skill when the task mentions Xcode-only agent configuration homes, Xcode-launched Codex, Claude, Gemini, ChatGPT in Xcode, or other chat-provider setup.
@@ -25,6 +26,8 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 - Recommend `xcode-testing-workflow` when the next step is Swift Testing, XCTest, XCUITest, `.xctestplan`, test filtering, retries, or test diagnosis.
 - Recommend `explore-apple-swift-docs` when the user primarily needs current Apple documentation lookup rather than setup and workflow planning.
 - Recommend `sync-xcode-project-guidance` when an existing Xcode app repo needs durable repo guidance updated for Xcode workflows.
+- Recommend `agent-portability-skills:operate-acp-agent-integration` for cross-client ACP launch and diagnosis.
+- Recommend `agent-portability-skills:build-acp-agent` for implementing an ACP agent/server.
 - Do not use this skill as the owner for implementing custom ACP agents, custom MCP servers, Xcode plug-in packages, or broad agent-configuration sync.
 
 ## Single-Path Workflow
@@ -32,6 +35,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 1. Classify the coding-intelligence request:
    - Xcode Intelligence settings
    - Xcode-hosted agent setup
+   - ACP agent setup through Xcode's Add an Agent flow
    - chat provider or model-provider setup
    - external-agent access through `xcrun mcpbridge`
    - command, tool, approval, or permission policy
@@ -46,25 +50,41 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
    - if no relevant Apple documentation can be found, say that explicitly before proceeding
 3. Establish which agent surface is in play:
    - Xcode-hosted agent: started inside Xcode, uses Xcode's assistant UI, Xcode's project context, Xcode's artifact review surfaces, and Xcode-managed tool permissions
-   - external agent through MCP: started outside Xcode and connected through `xcrun mcpbridge`, requiring a running Xcode instance and external-agent access
+   - ACP-hosted agent: an external agent executable launched by Xcode as the ACP client; the agent owns its runtime/auth/config while Xcode owns the editor UI and Xcode-side permissions
+   - external agent through MCP: started outside Xcode and connected through
+     `xcrun mcpbridge`; it may use the Xcode 27 Beta 5 headless service when
+     enabled, while editor/run/debug state still requires the matching live
+     Xcode or headlessly opened project context
    - chat provider: model or chat setup for Xcode coding intelligence that may not imply autonomous Xcode tool use
-   - exploratory agent protocol or plug-in surface: do not ship implementation guidance until Apple's current docs and local Xcode inspection verify the package and permission shape
+   - ACP agent implementation: hand off to Agent Portability Skills while keeping Xcode client setup and permissions here
 4. Plan setup:
    - verify the target Xcode version and whether the relevant behavior is stable, beta, or local-only
-   - check whether the intended Xcode app is running and open it when needed for project context, MCP bridge connection, agent settings, or UI/plugin inspection
+   - check whether the intended Xcode app is running and open it when needed for editor state, active run/debug state, agent settings, or UI/plugin inspection; do not require the app merely for a headless-capable documentation lookup
    - use the Xcode CLI toolchain Gale selected through `xcode-select`; when a switch is needed, use the already-open Xcode app or open the intended app, then change Settings > Locations > Command Line Tools and let macOS obtain Touch ID or administrator approval; verify afterward with `xcode-select -p` and do not override with `DEVELOPER_DIR`
    - open the intended beta app when the beta UI or live bridge state is required
    - do not invoke terminal `xcode-select --switch` as the default path; preserve the GUI-selected toolchain and restore only when Gale asked for a temporary switch
-   - verify the project is open in Xcode before expecting Xcode MCP tools to work
+   - classify the requested MCP tool as workspace-independent, headless-project,
+     or live-Xcode before deciding whether an app or project must be open
+   - on Xcode 27 Beta 5, use `xcrun mcp-server status` to inspect headless mode;
+     use `start`, `open`, or `stop` only when the user requested that lifecycle
+     change and the selected toolchain provides the command
    - verify external-agent access is enabled before configuring an external MCP client
    - use `xcrun mcpbridge` as the Xcode-provided STDIO bridge for external MCP clients
    - use `xcrun mcpbridge run-agent <agent-name>` only when intentionally launching a coding agent with Xcode-provided configuration
    - use Xcode Settings > Intelligence > Plug-ins for official plug-in import checks
+   - use Xcode Settings > Intelligence > Add an Agent for a documented ACP-compatible agent; validate the agent command separately before changing Xcode state
    - use `MCP_XCODE_PID` when multiple Xcode processes make auto-detection ambiguous
    - discover the live Xcode MCP tool inventory before naming a beta-era tool; Apple documents capability groups but does not make a stable tool-name contract part of this skill
    - use `xcodebuild` and `xccov` for code coverage unless a live Xcode MCP session exposes and documents an equivalent coverage contract
    - keep normal Codex config separate from Xcode-launched Codex config
 5. Plan command and tool permissions:
+   - separate global headless enablement, agent-executable approval, folder-tree
+     approval, and individual Xcode tool permissions
+   - identify the executable Xcode is authorizing; a Python, shell, package
+     manager, or other wrapper may become the recorded identity instead of the
+     intended agent
+   - prefer code-signed agent executables for durable grants and use the
+     shortest practical duration for ad hoc or unsigned diagnostic clients
    - identify which agent is allowed to read files, modify source, edit project settings, build, run tests, render previews, inspect devices, or search documentation
    - prefer plan-first work for architecture-sensitive or beta-sensitive changes
    - keep generated files, diffs, previews, screenshots, and other artifacts reviewable before committing
@@ -75,6 +95,8 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
    - durable String Catalog implementation, translation review, and locale validation go to `xcode-localization-workflow`
    - docs lookup goes to `explore-apple-swift-docs`
    - repo guidance sync goes to `sync-xcode-project-guidance`
+   - cross-client ACP diagnosis goes to `agent-portability-skills:operate-acp-agent-integration`
+   - ACP agent implementation goes to `agent-portability-skills:build-acp-agent`
 7. Report:
    - Xcode version or beta target checked
    - Apple docs or local Xcode tool output relied on
@@ -87,7 +109,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 
 - `request`: optional free-text setup or workflow request.
 - `xcode_version`: optional target such as `26.5`, `27 beta`, or `installed`.
-- `agent_surface`: optional explicit surface such as `xcode-hosted`, `external-mcp`, `chat-provider`, `plugin`, `acp`, or `unknown`.
+- `agent_surface`: optional explicit surface such as `xcode-hosted`, `acp-hosted`, `external-mcp`, `chat-provider`, `plugin`, or `unknown`.
 - `agent_name`: optional agent name when launching through Xcode, such as `codex` or `claude`.
 - `permission_focus`: optional emphasis such as `read-only`, `source-edits`, `project-settings`, `build`, `test`, `preview`, `device`, or `shell`.
 - Defaults:
@@ -117,14 +139,21 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 ## Guards and Stop Conditions
 
 - Do not claim Xcode 27 beta behavior is stable Xcode behavior.
+- Do not use `mcp-server enable --unsafe-always-allow-all-agents` for ordinary
+  at-desk use. Apple scopes it to unattended environments, and it removes the
+  per-agent approval boundary.
 - Do not treat Xcode-generated or Xcode-copied plug-in files as Socket source of truth unless the user explicitly asks to compare or import them.
-- Do not claim ACP setup, Xcode plug-in package shape, or Xcode plug-in import behavior unless current Apple docs or live Xcode inspection verify that exact surface.
+- Do not claim a particular ACP agent works in Xcode merely because Xcode supports ACP; validate the executable, authentication, negotiated capabilities, and Xcode client behavior separately.
 - Do not collapse Xcode-hosted agents and external MCP clients into one vague "agent"; name which process owns the UI, config, context, permissions, and execution.
 - Do not mutate normal Codex config, Xcode-launched agent config, shell rc files, keychains, or provider credentials without explicit user intent.
 - Do not set `DEVELOPER_DIR` unless it is genuinely the only viable path and Gale has explicitly approved that exception after hearing why `xcode-select` cannot serve the task.
 - Do not store provider API keys in repo files or app binaries.
 - Stop with `blocked` when no relevant Apple documentation or local Xcode evidence can be found for a requested setup claim.
-- If Xcode is not running and the requested setup depends on a live Xcode session, open the intended stable or beta Xcode app and continue verification. Stop with `blocked` only when Xcode cannot be opened, the required project or workspace cannot be opened or identified, external-agent access is disabled and cannot be inspected, or the user has forbidden launching the app.
+- If Xcode is not running, first inspect whether the selected toolchain and
+  permission state support headless MCP. Open the intended Xcode app only when
+  the requested tool needs live editor/run/debug state, settings UI, plug-in
+  UI, or project context that was not opened headlessly. Stop with `blocked`
+  only when neither the headless nor live path can provide the required state.
 
 ## Fallbacks and Handoffs
 
@@ -133,7 +162,7 @@ Beta-specific note: Xcode 27 claims in this skill were checked against Apple dev
 - Recommend `xcode-testing-workflow` when the next step is Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis.
 - Recommend `sync-xcode-project-guidance` when the target repo needs durable Apple/Xcode guidance updated rather than one-off setup.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance in a repo that will rely on Xcode coding intelligence.
-- Keep custom Xcode plug-in writers and ACP-agent work research-first until the live Xcode 27 package, runtime behavior, and permission surface are verified.
+- Keep custom Xcode plug-in writers research-first until the live package, runtime behavior, and permission surface are verified. Route ACP-agent implementation to Agent Portability Skills.
 
 ## Customization
 

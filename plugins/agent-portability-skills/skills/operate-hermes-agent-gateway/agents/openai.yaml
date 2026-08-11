@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate Hermes Agent Gateway"
+  short_description: "Run messaging and API gateway surfaces"
+  default_prompt: "Use $operate-hermes-agent-gateway to configure, run, secure, and troubleshoot a Hermes messaging or API gateway."

@@ -1,6 +1,6 @@
 name = "skills-repo-guidance-sync"
 description = "Read-heavy skills and plugin repository guidance auditor for Codex docs freshness, plugin-root policy, discovery mirrors, subagent guidance, hooks guidance, and marketplace wording."
-model = "gpt-5.4-mini"
+model = "gpt-5.6-terra"
 sandbox_mode = "read-only"
 model_reasoning_effort = "medium"
 nickname_candidates = ["Guidance Sync", "Plugin Auditor", "Skill Mirror"]

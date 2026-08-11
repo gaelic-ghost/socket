@@ -1,15 +1,32 @@
 # Claude Code and Cowork Compatibility
 
+Date checked: 2026-08-10 against locally installed Claude Code 2.1.211,
+published npm package 2.1.226, and the current Claude Code and Cowork plugin
+documentation.
+
 Socket publishes a Claude marketplace at
 [`/.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json).
 It is a host adapter for the same canonical skill payloads under `plugins/`; it
 does not replace the Codex marketplace or copy the skill corpus.
 
+During plugin development, use `/reload-plugins` to reload changed plugin
+components in the current Claude Code session, then run strict marketplace
+validation before claiming the packaged surface works. A reload is a developer
+loop convenience, not a substitute for a clean install smoke test.
+
 ## Support Boundary
 
-Claude Code is the complete Socket runtime target. Its marketplace entries use
-`strict: false` so the catalog supplies Claude metadata while each existing
-Socket plugin root remains the installed payload.
+Claude Code is Socket's primary Claude runtime target for the components Socket
+actually classifies: skills, MCP servers, selected hooks, and deliberately
+designed subagents. Its marketplace entries use `strict: false` so the catalog
+supplies Claude metadata while each existing Socket plugin root remains the
+installed payload.
+
+This is not a claim that every newer Claude plugin component is automatically
+portable. Claude Code also documents LSP servers, monitors, channels, `bin/`,
+settings, and output styles. Socket currently ships no Claude-specific
+implementation of those surfaces and must classify one explicitly before using
+it in a compatibility claim.
 
 Cowork is a skills-first target. It can use the same marketplace and skill
 workflows, but a connector runs from Anthropic's cloud rather than Gale's Mac.
@@ -46,6 +63,10 @@ excluded until its standalone source ships a Claude-native payload: Claude Code
 auto-loads its current Codex-only hook, which includes a hard-coded Codex cache
 path.
 
+The `speak-swiftly` exclusion was rechecked against Socket's pinned `v11.0.0`
+source on 2026-07-19. Its hook command still targets the Socket Codex cache
+directly, so exposing the payload to Claude would not be a faithful adapter.
+
 ## Install and Update
 
 In Claude Code, add the Socket Git marketplace and select individual plugins:
@@ -72,7 +93,7 @@ Remote MCP configurations can use their existing standard `.mcp.json` files.
 Secrets remain user or organization configuration; never commit credentials or
 machine-local paths into the marketplace payload.
 
-## Subagents and Hooks
+## Host-Specific Components
 
 Socket's `agents/openai.yaml` files are Codex custom-agent presentation
 metadata, not Claude subagent definitions. Do not mechanically convert them.
@@ -83,6 +104,12 @@ must not be used to mimic Codex-only runtime surfaces.
 Likewise, port a hook only after a Claude lifecycle event and trust boundary
 have been designed and tested. A plugin may not claim a hook merely because a
 Codex `hooks/hooks.json` file exists.
+
+Treat Claude LSP servers, background monitors, MCP-backed channels, executable
+`bin/` additions, settings, and output styles the same way: add them only when
+Socket owns a concrete Claude behavior, then validate that component in Claude
+Code and classify whether Cowork can consume it. Do not infer support from a
+similarly named Codex or Xcode surface.
 
 ## Maintainer Workflow
 
@@ -112,7 +139,8 @@ claude plugin validate .
   describes `.claude-plugin/marketplace.json`, `strict`, source paths, and
   validation.
 - [Claude Code plugins reference](https://code.claude.com/docs/en/plugins-reference)
-  describes plugin-root skills, MCP configuration, hooks, subagents, and
+  describes plugin-root skills, MCP configuration, hooks, subagents, LSP
+  servers, monitors, channels, executable paths, cache behavior, and
   `${CLAUDE_PLUGIN_ROOT}`.
 - [Cowork plugins](https://claude.com/docs/cowork/guide/plugins) describes
   marketplace installation and component controls.

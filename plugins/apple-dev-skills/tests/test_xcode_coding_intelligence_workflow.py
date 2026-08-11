@@ -28,7 +28,7 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
         skill_text = self.read("skills/xcode-coding-intelligence-workflow/SKILL.md")
         evidence_text = self.read("skills/xcode-coding-intelligence-workflow/references/source-evidence.md")
 
-        self.assertIn("checked against Apple developer pages and WWDC26 transcripts on 2026-06-22", skill_text)
+        self.assertIn("Xcode 27-only behavior remains beta-specific", skill_text)
         self.assertIn("Do not claim Xcode 27 beta behavior is stable Xcode behavior.", skill_text)
         self.assertIn("Observed beta Xcode version: Xcode 27.0, build 27A5194q.", evidence_text)
         self.assertIn("Earlier default-developer-dir check observed Xcode 26.5, build 17F42.", evidence_text)
@@ -60,7 +60,21 @@ class XcodeCodingIntelligenceWorkflowTests(unittest.TestCase):
         self.assertIn("xcrun mcpbridge run-agent --dry-run <agent-name>", bridge_text)
         self.assertIn("Plug-in Import Is Not A Bridge Subcommand", bridge_text)
         self.assertIn("External-agent access must be enabled", bridge_text)
-        self.assertIn("The relevant project or workspace should be open in Xcode", bridge_text)
+        self.assertIn("Workspace-independent", bridge_text)
+        self.assertIn("xcrun mcp-server status", bridge_text)
+        self.assertIn("actual agent executable", bridge_text)
+        self.assertIn("not recommended for at-desk use", bridge_text)
+
+    def test_beta5_headless_service_has_bounded_permissions(self) -> None:
+        skill_text = self.read("skills/xcode-coding-intelligence-workflow/SKILL.md")
+        setup_text = self.read("skills/xcode-coding-intelligence-workflow/references/setup-and-agent-surfaces.md")
+        permissions_text = self.read("skills/xcode-coding-intelligence-workflow/references/permissions-and-artifacts.md")
+
+        self.assertIn("Xcode 27 Beta 5 headless service", skill_text)
+        self.assertIn("27A5237l", setup_text)
+        self.assertIn("headlessly opened project", setup_text)
+        self.assertIn("24 hours", permissions_text)
+        self.assertIn("unsafe all-agent", permissions_text)
 
     def test_agent_surface_reference_keeps_acp_and_plugins_research_first(self) -> None:
         setup_text = self.read("skills/xcode-coding-intelligence-workflow/references/setup-and-agent-surfaces.md")

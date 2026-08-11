@@ -1,8 +1,12 @@
 # Xcode 27 Agentic Tooling Skill Plan
 
+Current bundle check: 2026-08-10, Xcode 27.0 Beta 5 build 27A5237l. Live import
+and bridge behavior in this document was last exercised on 2026-06-23 unless a
+later note says otherwise.
+
 This plan records the first Socket pass for supporting Xcode 27 beta-era coding intelligence inside the existing `apple-dev-skills` plugin.
 
-The goal is to add practical Apple and Xcode workflows without creating a separate beta plugin yet. Keep ACP-specific exploration outside this plan except where Xcode itself exposes ACP agent setup as part of its Intelligence settings.
+The goal is to add practical Apple and Xcode workflows without creating a separate beta plugin yet. Keep generic ACP operation and development in Agent Portability Skills while this plan owns Xcode's documented ACP client setup, permissions, and tools.
 
 ## Current Recommendation
 
@@ -51,16 +55,36 @@ Live beta probe checked on 2026-06-23:
 - `Add from file` imported a harmless fixture folder containing `.codex-plugin/plugin.json`, `skills/<name>/SKILL.md`, and `.mcp.json` as `1 Skill - 1 MCP Server`.
 - `Add from URL` rejected a local `file://` Git URL as invalid, but accepted `https://github.com/gaelic-ghost/socket.git` and enumerated Socket child plug-ins from the public repository before import.
 
-Live-app setup note: do not treat "Xcode is not running" as a final blocker for Xcode Intelligence, MCP, or plug-in inspection work. Open the intended stable or beta Xcode app, select the intended process with `MCP_XCODE_PID` when needed, and retry the check before reporting a blocker.
+Live-app setup note: Xcode 27 Beta 5 adds a headless MCP service for
+workspace-independent tools. Open and select the intended Xcode process only
+when the requested UI, workspace, build/run, preview, simulator, or debugger
+capability requires live state.
 
-Refresh note: no current Apple page found in this pass made ACP the documented Xcode setup surface. Keep ACP claims unresolved unless live Xcode documentation proves them.
+Refresh note, 2026-07-19: Apple now documents Add an Agent for ACP-compatible
+agents in Setting up coding intelligence, and Xcode 26.6 release notes state
+that Xcode adds ACP support. Keep each individual agent's runtime behavior
+unverified until its executable, authentication, capabilities, sessions, and
+Xcode-side permissions are exercised.
+
+Beta 5 headless-service probe, 2026-08-10:
+
+- The bundled `mcp-server` management tool reported external-agent access
+  enabled and exposes `start`, `open`, `stop`, `enable`, `disable`, `approve`,
+  `allow-folder`, `clear-permissions`, `deny`, and `status` commands.
+- An MCP initialization completed and launched XcodeService with the Xcode app
+  closed, confirming workspace-independent access.
+- Xcode granted the user-approved 24-hour permission to the actual Python
+  launcher executable behind the logical `socket-audit` client name. Stable,
+  code-signed executables are the safer identity for durable grants.
+- The service was returned to stopped after the probe. Apple's unattended
+  allow-all flag remains unsafe for normal at-desk use.
 
 Important current Xcode 27 signals:
 
 - Xcode integrates coding intelligence directly into the workspace, including conversations, transcript panes, artifacts panes, plan mode, source-editor coding tools, generated fixes, previews, playgrounds, and rollback through conversation history.
 - Xcode Intelligence settings expose agents, chat providers, Model Context Protocol settings, Xcode plug-ins, command/tool permissions, and Xcode-only agent configuration folders.
 - Xcode can add agents that support the Agent Client Protocol.
-- External agents can use Xcode capabilities through Xcode's MCP server after enabling external-agent access and configuring `xcrun mcpbridge`.
+- External agents can use Xcode capabilities through Xcode's MCP server after enabling external-agent access and configuring `xcrun mcpbridge`; Beta 5 no longer requires an open workspace for workspace-independent tools.
 - Xcode-hosted agents can use built-in Xcode guidance and skills.
 - Xcode can assist with localization by adding languages, updating string catalogs, translating strings, and setting machine-translation state.
 - Device Hub is now the central Xcode surface for simulated and physical device interaction, environment inspection, pairing, screenshots, videos, and diagnostics.
@@ -91,8 +115,8 @@ Scope:
   ```
 
 - Verify external-agent access is enabled before expecting MCP tools to work.
-- Require the relevant Xcode project to be open in Xcode before relying on Xcode MCP capabilities.
-- Open the intended stable or beta Xcode app before declaring live Xcode Intelligence or MCP setup blocked by missing app state.
+- Require the relevant Xcode project or debugger session only for MCP capabilities that consume that live state.
+- Use the Beta 5 headless service for documentation and other workspace-independent capabilities; open the intended stable or beta Xcode app when the chosen tool requires it.
 - Explain Xcode-only agent configuration homes:
 
   ```text
@@ -291,7 +315,7 @@ uv run scripts/validate_socket_metadata.py
 
 Completed on 2026-06-22 with the first practical setup and permission workflow. Xcode 27 claims are dated beta-era claims, and local `mcpbridge` behavior is recorded separately from Xcode 27 behavior because this authoring machine had Xcode 26.5 installed.
 
-Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app now has confirmed `run-agent --dry-run codex` evidence when selected through `DEVELOPER_DIR` plus `MCP_XCODE_PID`. A direct `codex skills export` attempt through Xcode's beta-scoped Codex runtime failed, so Xcode plug-in support should use the official Plug-ins UI import paths instead of bridge-based skill export.
+Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app produced confirmed `run-agent --dry-run codex` evidence through the then-used beta toolchain selection plus `MCP_XCODE_PID`. A direct `codex skills export` attempt through Xcode's beta-scoped Codex runtime failed, so Xcode plug-in support should use the official Plug-ins UI import paths instead of bridge-based skill export. This is historical evidence, not current command guidance; current workflows select Apple command-line toolchains through `xcode-select` rather than injecting `DEVELOPER_DIR`.
 
 Validation:
 
@@ -365,6 +389,7 @@ Observed import behavior:
 - Treat local MCP plugins as requiring path, dependency, authentication, and permission handling before they can be full-fidelity Xcode plug-ins.
 - Treat hooks as recognized by import but execution-unverified until a follow-up probe confirms behavior.
 - Treat Codex apps and OpenAI custom-agent metadata as non-portable until Xcode exposes matching component contracts.
+- The read-only source assessment is now implemented by `uv run scripts/audit_xcode_plugin_compatibility.py`; use its `likely`, `partial`, `blocked`, and `unknown` queue before choosing live import targets.
 
 ## Open Questions
 

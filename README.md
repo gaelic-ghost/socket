@@ -53,15 +53,18 @@ Newly added plugins can be installed from the same plugin directory inside Codex
 
 ### Hermes Agent
 
-Socket publishes an explicit Hermes compatibility surface for portable skills
-and translated MCP configuration:
+Socket publishes portable skills, translated MCP configuration, and a focused
+Hermes operator/developer workflow set:
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
-hermes skills install gaelic-ghost/socket/hermes-agent-compatibility
+hermes skills install gaelic-ghost/socket/choose-hermes-agent-workflow
 ```
 
-Codex plugin bundles remain host-specific. See the
+The workflow router covers everyday operation, extension development, the
+Hermes messaging gateway, and Nous Research services such as Portal and Tool
+Gateway. It also routes Hermes-in-Zed or Hermes-in-Xcode work through the ACP
+operation skills. Codex plugin bundles remain host-specific. See the
 [Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md) for
 the available skill tap, MCP translations, and the cases that need a native
 Hermes plugin.
@@ -105,7 +108,12 @@ The Import from Codex path is still under evaluation for Xcode 27 beta. In curre
 
 For Zed's Codex external agent, install and update Socket through the normal Codex marketplace flow. Current local testing shows Zed's bundled `codex-acp` path inherits the user's normal Codex home by default, so Codex-in-Zed sees the same global `~/.codex` config, Socket marketplace cache, installed plug-ins, skills, and MCP servers as the regular Codex CLI and GUI unless Zed or the adapter is launched with an explicit `CODEX_HOME`.
 
-Zed's own first-party Agent uses Zed-native skills and MCP configuration. Treat that as a separate compatibility surface from Codex running inside Zed through ACP.
+Use `agent-portability-skills:operate-zed-agent` for Zed Agent, ACP External
+Agent, and Terminal Thread selection. Zed's own Agent uses Zed-native skills and
+MCP configuration; external agents retain their native configuration. Hermes
+supports `hermes acp`, but it is not currently present in the canonical ACP
+Registry, so verify the live registry and use Zed's official custom-agent path
+until the entry is actually published.
 
 ## Usage
 
@@ -149,7 +157,7 @@ Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its 
 
 Current Socket catalog shape:
 
-- `agent-portability-skills`: maintainer skills plus a source-bundled guidance-sync custom-agent definition for Socket-owned agent skill portability, Codex plugin surfaces, and host adapter guidance
+- `agent-portability-skills`: cross-host protocol selection, ACP operation/development, Zed native/external/terminal workflows, Hermes operator/developer/gateway/Nous Research guidance, and source-bundled maintainer roles for Socket-owned skill portability and host adapter audits
 - `agent-engineering-skills`: portable coordinator/worker, external-agent, scheduling, and worktree/thread orchestration guidance; it also owns agent automation, eval, and n8n workflow design
 - `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
 - `apple-creator-studio-skills`: source-preserving Final Cut Pro editing, Motion template, Compressor delivery, Logic Pro production, MainStage concert, and GarageBand project workflows with local Help Viewer discovery, explicit Computer Use safeguards, and artifact or rehearsal verification

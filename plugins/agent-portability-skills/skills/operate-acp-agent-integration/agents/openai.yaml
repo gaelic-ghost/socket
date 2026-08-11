@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate ACP Agent Integration"
+  short_description: "Install, launch, and diagnose ACP agent connections"
+  default_prompt: "Use $operate-acp-agent-integration to connect and validate this ACP agent in its client."

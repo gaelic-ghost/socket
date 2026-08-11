@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate Zed Agent"
+  short_description: "Run Zed native, external, and terminal agents"
+  default_prompt: "Use $operate-zed-agent to configure and troubleshoot this Zed agent workflow."
