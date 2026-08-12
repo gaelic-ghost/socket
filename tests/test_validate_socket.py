@@ -88,7 +88,10 @@ def test_shared_skill_validator_accepts_valid_plugin(tmp_path: Path, monkeypatch
         plugin_root / "skills" / "example-skill" / "SKILL.md",
         "---\nname: example-skill\ndescription: A valid skill.\n---\n",
     )
-    write(plugin_root / "skills" / "example-skill" / "agents" / "openai.yaml", "interface: {}\n")
+    write(
+        plugin_root / "skills" / "example-skill" / "agents" / "openai.yaml",
+        "interface:\n  default_prompt: Use $example-skill.\n",
+    )
     monkeypatch.setattr(validate_skill_metadata, "REPO_ROOT", tmp_path)
 
     assert validate_skill_metadata.main() == 0
@@ -108,3 +111,33 @@ def test_shared_skill_validator_rejects_directory_name_drift(
 
     with pytest.raises(SystemExit):
         validate_skill_metadata.main()
+
+
+@pytest.mark.parametrize(
+    ("interface", "match"),
+    [
+        ("interface: {}\n", "non-empty interface"),
+        ("interface:\n  default_prompt: Use this skill.\n", "invocation token"),
+        ("interface:\n  default_prompt: Use $example-skill.\n  display_name: ''\n", "display_name"),
+    ],
+)
+def test_shared_skill_validator_rejects_invalid_openai_interface(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    interface: str,
+    match: str,
+) -> None:
+    plugin_root = tmp_path / "plugins" / "example-skills"
+    write(plugin_root / ".codex-plugin" / "plugin.json", "{}\n")
+    write(plugin_root / "AGENTS.md", "# Guidance\n")
+    write(
+        plugin_root / "skills" / "example-skill" / "SKILL.md",
+        "---\nname: example-skill\ndescription: A valid skill.\n---\n",
+    )
+    write(plugin_root / "skills" / "example-skill" / "agents" / "openai.yaml", interface)
+    monkeypatch.setattr(validate_skill_metadata, "REPO_ROOT", tmp_path)
+
+    with pytest.raises(SystemExit):
+        validate_skill_metadata.main()
+    assert match in capsys.readouterr().err

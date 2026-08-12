@@ -14,6 +14,7 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 MAX_DESCRIPTION_LENGTH = 1024
+OPTIONAL_INTERFACE_FIELDS = ("display_name", "short_description")
 
 
 def fail(message: str) -> NoReturn:
@@ -69,7 +70,28 @@ def validate_skill(path: Path) -> None:
 
     openai_metadata = path.parent / "agents" / "openai.yaml"
     if openai_metadata.exists():
-        load_yaml(openai_metadata)
+        validate_openai_interface(openai_metadata, expected_name)
+
+
+def validate_openai_interface(path: Path, skill_name: str) -> None:
+    metadata = load_yaml(path)
+    interface = metadata.get("interface")
+    if not isinstance(interface, dict) or not interface:
+        fail(f"{path.relative_to(REPO_ROOT)} must define a non-empty interface mapping.")
+
+    default_prompt = interface.get("default_prompt")
+    if not isinstance(default_prompt, str) or not default_prompt.strip():
+        fail(f"{path.relative_to(REPO_ROOT)} must define a non-empty interface.default_prompt.")
+    if f"${skill_name}" not in default_prompt:
+        fail(
+            f"{path.relative_to(REPO_ROOT)} interface.default_prompt must include "
+            f"the ${skill_name} invocation token."
+        )
+
+    for field_name in OPTIONAL_INTERFACE_FIELDS:
+        value = interface.get(field_name)
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            fail(f"{path.relative_to(REPO_ROOT)} interface.{field_name} must be a non-empty string.")
 
 
 def validate_child_guidance(plugin_root: Path) -> None:

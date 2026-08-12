@@ -1,4 +1,4 @@
 interface:
   display_name: "Choose Apple Model Runtime"
   short_description: "Route Apple model authoring, conversion, and deployment choices."
-  default_prompt: "Choose among Core AI, Core ML, MLX, ExecuTorch, and Foundation Models for an Apple model workflow."
+  default_prompt: "Use $choose-apple-model-runtime to choose among Core AI, Core ML, MLX, ExecuTorch, and Foundation Models for an Apple model workflow."
