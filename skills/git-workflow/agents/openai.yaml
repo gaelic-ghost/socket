@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Workflow"
+  short_description: "Safely inspect, integrate, and recover local Git work"
+  default_prompt: "Use $git-workflow to inspect this repository's Git state, choose a safe branch, commit, integration, conflict-resolution, or recovery path, and explain any required mutation authority before acting."

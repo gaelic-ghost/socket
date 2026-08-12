@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coordinate Worktrees And Threads"
+  short_description: "Assign repository ownership before parallel work."
+  default_prompt: "Use $coordinate-worktrees-and-threads to assign worker, worktree, branch, write, validation, and cleanup ownership."

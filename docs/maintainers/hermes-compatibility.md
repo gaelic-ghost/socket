@@ -75,6 +75,14 @@ Socket tap. The curated set is:
 - `fastapi-service-workflow`
 - `fastmcp-service-workflow`
 - `python-testing-workflow`
+- `coordinate-external-agents`
+- `coordinate-worktrees-and-threads`
+- `orchestrate-agent-work`
+- `repository-operations-workflow`
+- `git-workflow`
+- `github-collaboration-workflow`
+- `maintain-github-repository`
+- `maintain-project-repo`
 
 ```bash
 hermes skills tap add gaelic-ghost/socket
@@ -149,6 +157,21 @@ The exported Python workflows are portable guidance. They guide `uv`-managed
 agent services, FastAPI services, FastMCP services, and tests while relying on
 operator-installed Python tooling and project dependencies. They package no
 MCP server, credentials, hook, app, or native Hermes runtime surface.
+
+The exported repository workflows are portable guidance. They use the
+operator's `git` and, for GitHub work, authenticated `gh` CLI. They distinguish
+read-only inspection from pushing, merging, tagging, deletion, settings
+changes, publishing, and release actions; those mutations still need explicit
+authority or a repository-owned release contract. The host-neutral coordinator
+workflows accompany them so a Hermes agent can record worktree, branch, write,
+validation, and handoff ownership. `codex-gui-worktree-workflow` remains
+Codex-specific because its thread association and managed-worktree state have
+no Hermes equivalent.
+
+A named autonomous `git-steward` remains a future native Hermes-plugin
+decision. The current tap provides reusable workflow instructions, not a
+registered runtime role, slash command, credential store, or additional GitHub
+authority.
 
 The exported macOS platform-security workflows are portable instruction contracts. Public app permission, sandbox file-access, and entitlement diagnosis remain in Apple Dev Skills; exact-build private-control research remains in Reverse Engineering Skills; defensive host investigation remains in Cybersecurity Skills. Hermes does not receive a TCC database tool, permission grant service, privileged helper, protection bypass, or native runtime plugin from this work.
 

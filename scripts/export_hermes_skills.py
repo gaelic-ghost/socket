@@ -28,6 +28,7 @@ AGENT_ENGINEERING_SOURCE_ROOT = REPO_ROOT / "plugins" / "agent-engineering-skill
 PYTHON_SOURCE_ROOT = REPO_ROOT / "plugins" / "python-skills" / "skills"
 JVM_SOURCE_ROOT = REPO_ROOT / "plugins" / "server-side-jvm" / "skills"
 CLOUD_DEPLOYMENT_SOURCE_ROOT = REPO_ROOT / "plugins" / "cloud-deployment-skills" / "skills"
+REPOSITORY_SOURCE_ROOT = REPO_ROOT / "plugins" / "repository-skills" / "skills"
 EXPORT_ROOT = REPO_ROOT / "skills"
 AGENT_PORTABILITY_SKILLS = (
     "bootstrap-skills-plugin-repo",
@@ -153,7 +154,12 @@ DOTNET_SKILLS = (
     "build-oxpecker-web-app",
     "build-dotnet-agent-service",
 )
-AGENT_ENGINEERING_SKILLS = ("design-n8n-agent-workflow",)
+AGENT_ENGINEERING_SKILLS = (
+    "coordinate-external-agents",
+    "coordinate-worktrees-and-threads",
+    "design-n8n-agent-workflow",
+    "orchestrate-agent-work",
+)
 PYTHON_SKILLS = (
     "build-python-agent-service",
     "fastapi-service-workflow",
@@ -164,6 +170,13 @@ JVM_SKILLS = ("build-jvm-agent-service",)
 CLOUD_DEPLOYMENT_SKILLS = (
     "cloud-deployment-routing-workflow",
     "dockerized-service-release-deployment-workflow",
+)
+REPOSITORY_SKILLS = (
+    "repository-operations-workflow",
+    "git-workflow",
+    "github-collaboration-workflow",
+    "maintain-github-repository",
+    "maintain-project-repo",
 )
 EXPORTED_SKILLS = (
     AGENT_PORTABILITY_SKILLS
@@ -179,6 +192,7 @@ EXPORTED_SKILLS = (
     + PYTHON_SKILLS
     + JVM_SKILLS
     + CLOUD_DEPLOYMENT_SKILLS
+    + REPOSITORY_SKILLS
 )
 
 
@@ -217,6 +231,7 @@ def source_paths(source_root: Path | None = None) -> dict[str, Path]:
             skill_name: CLOUD_DEPLOYMENT_SOURCE_ROOT
             for skill_name in CLOUD_DEPLOYMENT_SKILLS
         },
+        **{skill_name: REPOSITORY_SOURCE_ROOT for skill_name in REPOSITORY_SKILLS},
     }
     return {
         skill_name: roots[skill_name] / skill_name for skill_name in EXPORTED_SKILLS
