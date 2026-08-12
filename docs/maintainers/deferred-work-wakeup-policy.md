@@ -1,9 +1,7 @@
 # Deferred Work Wakeup Policy
 
 Use this live reference when an agent needs to resume work after external CI,
-review, release, deployment, provider, or remote-worker state changes. The
-historical audit and design record is retained in
-[deferred-work-wakeup-policy-plan.md](./deferred-work-wakeup-policy-plan.md).
+review, release, deployment, provider, or remote-worker state changes.
 
 ## Required Behavior
 

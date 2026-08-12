@@ -798,7 +798,7 @@ Completed
 
 ### Tickets
 
-- [x] Use [the DeviceCheck and App Attest skill plan](../../docs/maintainers/devicecheck-app-attest-skill-plan.md) as the implementation source of truth.
+- [x] Ship `devicecheck-app-attest-workflow` as the source of truth for DeviceCheck and App Attest guidance.
 - [x] Add `devicecheck-app-attest-workflow` with clear routing between DeviceCheck two-bit state, App Attest app-instance integrity, broader client auth, and server-side validation implementation.
 - [x] Add references for DeviceCheck device state, App Attest client flow, App Attest server validation, App ID and entitlement setup, sandbox/production behavior, rollout/rate-limit planning, and macOS-specific validation notes.
 - [x] Add skill interface metadata and update Apple Dev Skills plugin metadata, README active skill inventory, and default prompt list.
@@ -1372,7 +1372,7 @@ In Progress
 
 ### Scope
 
-- [x] Use the Socket-owned [`tvOS Skills Plan`](../../docs/maintainers/tvos-skills-plan.md) as the implementation source of truth.
+- [x] Ship the focused `tvos-app-experience-workflow` and `tvos-media-playback-workflow` as the source of truth for tvOS guidance.
 - [x] Add `tvos-app-experience-workflow` for remote-first layout, SwiftUI focus behavior, UIKit focus escape hatches, Large Text, accessibility, capability gates, and TVMLKit migration decisions.
 - [x] Add `tvos-media-playback-workflow` for AVKit-first playback, custom-player escalation, `MPRemoteCommandCenter`, Now Playing, transport-command ownership, and validation planning.
 - [x] Keep TVMLKit migration-only, and keep Core AI/Foundation Models as an explicit unavailable-on-tvos handoff until Apple supplies a direct platform contract.
