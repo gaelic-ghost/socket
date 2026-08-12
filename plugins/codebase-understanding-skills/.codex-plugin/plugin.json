@@ -1,6 +1,6 @@
 {
   "name": "codebase-understanding-skills",
-  "version": "9.33.0",
+  "version": "9.34.0",
   "description": "Code-path exploration, call-site tracing, and evidence-based codebase explanation skills.",
   "author": {
     "name": "Gale",

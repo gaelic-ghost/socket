@@ -48,6 +48,7 @@
 - Keep public imported plugin surfaces and root marketplace wiring aligned in the same pass.
 - Keep user-facing plugin install and update docs on the official Git-backed marketplace path.
 - Keep the base `main` checkout clean for coordination and release verification; do implementation work in branch-backed worktrees unless Gale explicitly approves direct-main work.
+- Keep this roadmap for active commitments and concise completion history. Shipped behavior belongs in its owning skill or plugin, and live cross-repository policy belongs in its owning maintainer reference; do not retain completed implementation plans as active sources of truth.
 
 ## Milestone Progress
 
@@ -63,7 +64,7 @@
 - Milestone 14: Core AI and Foundation Models workflow ownership - Completed
 - Milestone 15: Android Dev Skills plugin - Completed
 - Milestone 16: Server-Side JVM skills plugin - In Progress
-- Milestone 17: Cross-agent skill and plugin portability - Planned
+- Milestone 17: Cross-agent skill and plugin portability - In Progress
 - Milestone 18: Swift Lang shared language plugin - Completed
 - Milestone 19: Project audit skills plugin - Planned
 - Milestone 20: Game Dev Skills plugin - Completed
@@ -73,9 +74,9 @@
 - Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Completed
 - Milestone 25: Apple Creator Studio operator workflows - Planned
 - Milestone 26: Messaging collaboration skills plugin - Completed
-- Milestone 27: Cybersecurity skills plugin - Planned
+- Milestone 27: Cybersecurity skills plugin - Completed
 - Milestone 28: Swift language tooling expansion - In Progress
-- Milestone 29: Model Lab skills plugin - Planned
+- Milestone 29: Model Lab skills plugin - Completed
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
 - Milestone 32: tvOS app experience and media playback workflows - Completed
@@ -84,7 +85,7 @@
 
 ### Status
 
-In progress
+Completed
 
 ### Scope
 
@@ -959,7 +960,7 @@ In Progress
 
 ### Status
 
-Implemented; release pending
+Completed
 
 ### Scope
 
@@ -1087,7 +1088,7 @@ Completed
 
 ### Scope
 
-- [x] Use [`docs/maintainers/tvos-skills-plan.md`](./docs/maintainers/tvos-skills-plan.md) as the source of truth for the focused Apple Dev Skills expansion.
+- [x] Ship `tvos-app-experience-workflow` and `tvos-media-playback-workflow` as the source of truth for the focused Apple Dev Skills expansion.
 - [x] Add `tvos-app-experience-workflow` for remote-first SwiftUI/UIKit design, focus-system decisions, Large Text, platform gates, and TVMLKit migration routing.
 - [x] Add `tvos-media-playback-workflow` for AVKit system-player preference, custom-player escalation, remote commands, Now Playing state, and tvOS media validation.
 - [x] Preserve SwiftUI architecture, general accessibility, general AVFoundation, Core Media timing, AVFAudio, Xcode execution/testing, Model Lab runtime selection, and Apple-owned Core AI implementation ownership through clear handoffs.
@@ -1208,14 +1209,15 @@ Completed
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
 - [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It covers Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
 - [x] Replace the separate `mlx-skills` and `coreml-skills` plugin candidates with the coordinated `model-lab-skills:choose-apple-model-runtime` plan. Keep app integration in Apple Dev Skills and revisit a narrower plugin only if repeated work proves the combined boundary insufficient.
-- [x] Expand Apple Dev Skills with dedicated SwiftUI animation, Core Animation, SF Symbols, and Apple typography workflows. Shipped `sf-symbols-workflow`, `swiftui-animation-workflow`, `core-animation-layer-workflow`, and `apple-typography-workflow` from [`docs/maintainers/apple-design-animation-skills-plan.md`](./docs/maintainers/apple-design-animation-skills-plan.md), keeping the skills under `plugins/apple-dev-skills`, using Xcode-local docs, Dash, official Apple docs, and local Apple developer apps as evidence, and avoiding absorption into the existing SwiftUI architecture skill.
-- [x] Add an `apple-dev-skills:appkit-app-architecture-workflow` skill so AppKit has a first-party architecture decision surface parallel to SwiftUI. It covers menu bar apps, status items, responder-chain menus, window and view-controller ownership, app and window restoration, AppKit MVC, object archiving and persistence choices, Observation with AppKit, and mixed AppKit/SwiftUI composition without steering agents inordinately toward either framework. Started from [`docs/agents/appkit-skills-coverage-plan.md`](./docs/agents/appkit-skills-coverage-plan.md).
+- [x] Expand Apple Dev Skills with dedicated SwiftUI animation, Core Animation, SF Symbols, and Apple typography workflows: `sf-symbols-workflow`, `swiftui-animation-workflow`, `core-animation-layer-workflow`, and `apple-typography-workflow`. Keep the skills under `plugins/apple-dev-skills`, use Xcode-local docs, Dash, official Apple docs, and local Apple developer apps as evidence, and avoid absorbing them into SwiftUI architecture guidance.
+- [x] Add `apple-dev-skills:appkit-app-architecture-workflow` as AppKit's first-party architecture decision surface, covering menu bar apps, responder-chain menus, window and view-controller ownership, restoration, MVC, archiving, Observation, and mixed AppKit/SwiftUI composition.
 - [x] Complete Phase 2 of the Apple Dev Skills Socket migration. Treat `plugins/apple-dev-skills` as monorepo-owned source, remove Apple Dev Skills from subtree release gates, update Socket docs and duplicate-install guidance, add the compatibility marketplace smoke test, run full Socket validation, and publish the Socket release that makes the ownership change durable.
 - [x] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open: [gaelic-ghost/SpeakSwiftlyServer#98](https://github.com/gaelic-ghost/SpeakSwiftlyServer/issues/98).
 - [x] Restore Socket and the Apple Dev Skills compatibility surface to Apache License 2.0 after the source-available licensing experiment proved less useful than the adoption and goodwill of a standard permissive license.
 
 ## History
 
+- Retired completed implementation plans for deferred wakeups, DeviceCheck/App Attest, tvOS, Apple design and animation, and AppKit coverage after their shipped skills and live policy became the authoritative owners; retained only active plans and compatibility/evidence records.
 - Re-contained SwiftData persistence guidance in a dedicated Apple Dev skill and SwiftUI composition in its architecture skill, while introducing the explicit three-letter Swift prefix and Xcode-friendly concatenated filename grammar.
 - Made Socket worktree-first for implementation work while keeping the base `main` checkout as the clean coordination and release-verification surface.
 - Aligned Socket documentation-source routing away from generic documentation aggregators by making Xcode MCP `DocumentationSearch` the Apple SDK default, Dash MCP/HTTP the preferred local-docs path for installed docsets across supported stacks, and canonical upstream docs/source the fallback when Dash/local coverage is missing or stale.
