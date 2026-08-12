@@ -399,12 +399,30 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
                 self.assertIn("do not delete/recreate", text)
 
     def test_continuation_policy_matches_emitted_packet_schema(self) -> None:
-        socket_root = ROOT.parents[1]
+        socket_root = (
+            ROOT
+            if (ROOT / "docs/maintainers/deferred-work-wakeup-policy.md").is_file()
+            else ROOT.parents[1]
+        )
         live_policy = (socket_root / "docs/maintainers/deferred-work-wakeup-policy.md").read_text(
             encoding="utf-8"
         )
         self.assertIn("Reuse that item unchanged", live_policy)
         self.assertIn("minimum delay is five minutes", live_policy)
+        for field in (
+            "repository",
+            "release tag",
+            "branch",
+            "head commit",
+            "PR number",
+            "phase",
+            "minimum_delay_minutes",
+            "resume/advance commands",
+        ):
+            with self.subTest(field=field):
+                self.assertIn(field, live_policy)
+        self.assertIn("Pre-PR packets resume with `prepare`", live_policy)
+        self.assertIn("post-PR\npackets resume with `inspect`", live_policy)
 
     def test_branch_accounting_guidance_is_documented(self) -> None:
         skill_text = (ROOT / "skills/maintain-project-repo/SKILL.md").read_text(encoding="utf-8")

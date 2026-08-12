@@ -1368,7 +1368,7 @@ Completed Milestone 69 by shipping privacy-permission, sandbox file-access, and 
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
