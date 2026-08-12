@@ -80,14 +80,12 @@ After a version bump lands on `main`, run the executable pre-tag gate:
 scripts/release.sh release-ready X.Y.Z
 ```
 
-`release-ready` verifies version, clean-main, tag, and subtree accounting. When
-the release touches the Hermes skill tap, run its explicit content validator
-alongside the root marketplace validator before this gate:
+`release-ready` verifies version, clean-main, tag, and subtree accounting. Run
+the consolidated full profile before this gate; it covers root, compatibility,
+and participating child validation without duplicating child suite ownership:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-uv run scripts/validate_hermes_compatibility.py
-uv run scripts/validate_claude_compatibility.py
+uv run scripts/validate_socket.py --profile full
 ```
 
 Then capture evidence from that exact commit and generate the release-note
@@ -143,9 +141,7 @@ Before opening or merging the `socket` release PR:
 Before tagging `socket`:
 
 - confirm the subtree policy table above was followed
-- run `uv run scripts/validate_socket_metadata.py`
-- when the release touches the Claude marketplace, Claude inventory, or Claude MCP adapters, also run `uv run scripts/validate_claude_compatibility.py`
-- when the release touches the Hermes skill tap, also run `uv run scripts/validate_hermes_compatibility.py`
+- run `uv run scripts/validate_socket.py --profile full`
 - confirm local `main` is fast-forwarded to `origin/main`
 - run `scripts/release.sh release-ready X.Y.Z`
 - run `scripts/release.sh release-evidence`

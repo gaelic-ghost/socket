@@ -376,7 +376,7 @@ def test_patch_refresh_captures_evidence_and_runs_cache_refresh_last(
     assert exit_code == 0
     assert "Patch-refresh release completed for v1.2.4." in output
     assert commands[-1] == ("cmd", ("codex", "plugin", "marketplace", "upgrade", "socket"))
-    assert ("cmd", ("uv", "run", "scripts/validate_socket_metadata.py")) in commands
+    assert ("cmd", ("uv", "run", "scripts/validate_socket.py", "--profile", "full")) in commands
     assert ("git", ("push", "origin", "main")) in commands
     assert ("git", ("push", "origin", "v1.2.4")) in commands
     assert commands.index(("evidence", (str(root / ".socket-release-evidence.json"),))) < commands.index(

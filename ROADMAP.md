@@ -70,7 +70,7 @@
 - Milestone 21: Cloud Deployment Skills plugin - Completed
 - Milestone 22: Network Protocol Skills plugin - Completed
 - Milestone 23: Cloud Inference Skills plugin - Completed
-- Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Planned
+- Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Completed
 - Milestone 25: Apple Creator Studio operator workflows - Planned
 - Milestone 26: Messaging collaboration skills plugin - Completed
 - Milestone 27: Cybersecurity skills plugin - Planned
@@ -78,7 +78,7 @@
 - Milestone 29: Model Lab skills plugin - Planned
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
-- Milestone 32: tvOS app experience and media playback workflows - Release candidate
+- Milestone 32: tvOS app experience and media playback workflows - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -792,33 +792,31 @@ Completed Milestone 23 by adding the `cloud-inference-skills` child plugin, ship
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
-- [ ] Expand the existing `apple-dev-skills` payload with five focused workflows where the installed OpenAI-curated Apple skills provide material coverage that Socket does not yet own.
-- [ ] Keep each workflow docs-first, grounded in current Apple documentation and real local/Xcode evidence; use the installed curated skills only as task-shape inspiration, not copied source material.
-- [ ] Preserve existing owners: Xcode build/run and testing retain workspace execution, SwiftUI architecture retains component and scene design, AppKit architecture retains AppKit ownership, and provisioning retains account-side certificate/profile automation.
-- [ ] Keep the first slice guidance-only. Do not bundle a simulator browser server, ETTrace helper, release service, signing credential manager, or app-runtime daemon.
+- [x] Expand the existing `apple-dev-skills` payload with five focused workflows where the installed OpenAI-curated Apple skills provide material coverage that Socket does not yet own.
+- [x] Keep each workflow docs-first, grounded in current Apple documentation and real local/Xcode evidence; use the installed curated skills only as task-shape inspiration, not copied source material.
+- [x] Preserve existing owners: Xcode build/run and testing retain workspace execution, SwiftUI architecture retains component and scene design, AppKit architecture retains AppKit ownership, and provisioning retains account-side certificate/profile automation.
+- [x] Keep the first slice guidance-only. Do not bundle a simulator browser server, ETTrace helper, release service, signing credential manager, or app-runtime daemon.
 
 ### Tickets
 
-- [ ] Add `apple-dev-skills:app-intents-workflow` for choosing and implementing narrow App Intent, App Entity, App Shortcut, and system-surface integrations. Cover Siri, Shortcuts, Spotlight, widgets, controls, deep-link or in-app handoff, availability, privacy, and validation; hand Xcode target, extension, build, and simulator work to the existing Xcode workflows.
-- [ ] Add `apple-dev-skills:swiftui-liquid-glass` for iOS and macOS Liquid Glass decisions, native API use, modifier ordering, container grouping, interactive affordances, shape consistency, availability checks, and non-glass fallbacks. Keep it separate from general SwiftUI architecture because it owns a version-sensitive visual-system contract rather than component ownership.
-- [ ] Add `apple-dev-skills:swiftui-performance-audit` for code-first diagnosis of invalidation fan-out, unstable identity, heavy body work, layout churn, image cost, and broad animation. Require a clear distinction between suspected code smells and trace-backed evidence, then hand Instruments and `xctrace` capture to `xcode-testing-workflow` or `swift-package-testing-workflow`.
-- [ ] Add `apple-dev-skills:ios-runtime-forensics-workflow` with explicit `performance-trace` and `memory-graph` modes for simulator ETTrace/symbolication and memgraph/leak ownership evidence. Keep it focused on reproducible before/after runtime proof, and route normal simulator build, launch, UI driving, and logs through `xcode-build-run-workflow`.
-- [ ] Add `apple-dev-skills:macos-distribution-workflow` for exported-artifact inspection, signing identities, entitlements, hardened runtime, nested-code signatures, Gatekeeper assessment, notarization readiness/failure classification, stapling, and release-only validation. Keep developer-account provisioning, certificate/profile creation, and Xcode project signing changes with `apple-developer-provisioning-workflow` and `xcode-build-run-workflow`.
+- [x] Add `apple-dev-skills:app-intents-workflow` for choosing and implementing narrow App Intent, App Entity, App Shortcut, and system-surface integrations. Cover Siri, Shortcuts, Spotlight, widgets, controls, deep-link or in-app handoff, availability, privacy, and validation; hand Xcode target, extension, build, and simulator work to the existing Xcode workflows.
+- [x] Add `apple-dev-skills:swiftui-liquid-glass` for iOS and macOS Liquid Glass decisions, native API use, modifier ordering, container grouping, interactive affordances, shape consistency, availability checks, and non-glass fallbacks. Keep it separate from general SwiftUI architecture because it owns a version-sensitive visual-system contract rather than component ownership.
+- [x] Add `apple-dev-skills:swiftui-performance-audit` for code-first diagnosis of invalidation fan-out, unstable identity, heavy body work, layout churn, image cost, and broad animation. Require a clear distinction between suspected code smells and trace-backed evidence, then hand Instruments and `xctrace` capture to `xcode-testing-workflow` or `swift-package-testing-workflow`.
+- [x] Add `apple-dev-skills:ios-runtime-forensics-workflow` with explicit `performance-trace` and `memory-graph` modes for simulator ETTrace/symbolication and memgraph/leak ownership evidence. Keep it focused on reproducible before/after runtime proof, and route normal simulator build, launch, UI driving, and logs through `xcode-build-run-workflow`.
+- [x] Add `apple-dev-skills:macos-distribution-workflow` for exported-artifact inspection, signing identities, entitlements, hardened runtime, nested-code signatures, Gatekeeper assessment, stapling, and release-only validation. Keep developer-account provisioning, certificate/profile creation, and Xcode project signing changes with `apple-developer-provisioning-workflow` and `xcode-build-run-workflow`.
 - [x] Add `apple-dev-skills:tips-helpviewer-workflow` for consistent local discovery of user guides for installed Apple apps. Use the `com.apple.helpviewer` Tips catalog as the primary UI target rather than the empty `com.apple.tips` shell observed on this Mac; route exact app/version help searches through the catalog, verify the opened guide matches the installed app, and keep official in-app Help, Xcode-local docs, Dash, and vendor documentation as the authoritative sources when the catalog is unavailable or incomplete.
 - [x] Add `apple-dev-skills:safari-mcp-workflow` for scoped Safari Technology Preview runtime-browser inspection, debugging, interaction verification, responsive/print checks, and evidence reporting through WebKit's local Safari MCP server. Keep it separate from Safari extension and native-control architecture, require explicit privacy and mutation boundaries, and export the portable guidance through the Hermes tap.
-- [ ] Add skill-local references, deterministic validation expectations, handoff contracts, and targeted tests for all five workflows. Update Apple Dev Skills inventory, root documentation, and marketplace metadata only if the exported skill surface changes.
-- [ ] After the five workflows are implemented and validated, explore the installed iOS Simulator browser and SwiftUI hot-reload surface with Gale in a dedicated research pass. Decide together whether it belongs as a Socket workflow, a documented external-tool handoff, or no durable Socket addition; do not bundle or install browser/runtime tooling before that decision.
+- [x] Add skill-local references, deterministic validation expectations, handoff contracts, and targeted tests for all five workflows. Update Apple Dev Skills inventory, root documentation, and marketplace metadata only if the exported skill surface changes.
 
 ### Exit Criteria
 
-- [ ] The five workflows have distinct entry conditions, owned decisions, Apple documentation anchors, validation evidence, and clear handoffs without duplicating the existing Xcode, SwiftUI, AppKit, or provisioning skills.
-- [ ] Each runtime or distribution workflow states its evidence boundary: code-level suspicion, simulator trace, memgraph ownership proof, signed artifact inspection, or notarization result.
-- [ ] The new skills pass their targeted tests, the Apple Dev Skills validation suite, shared-snippet checks, repository-doc validation, and root Socket metadata validation.
-- [ ] The simulator-browser and hot-reload investigation remains an explicit post-implementation conversation with Gale rather than an assumed dependency or unreviewed bundled runtime.
+- [x] The five workflows have distinct entry conditions, owned decisions, Apple documentation anchors, validation evidence, and clear handoffs without duplicating the existing Xcode, SwiftUI, AppKit, or provisioning skills.
+- [x] Each runtime or distribution workflow states its evidence boundary: code-level suspicion, simulator trace, memgraph ownership proof, signed artifact inspection, or notarization result.
+- [x] The new skills pass their targeted tests, the Apple Dev Skills validation suite, shared-snippet checks, repository-doc validation, and root Socket metadata validation.
 
 ## Milestone 25: Apple Creator Studio operator workflows
 
@@ -1085,7 +1083,7 @@ Completed Milestone 31 by shipping four focused, instruction-only macOS platform
 
 ### Status
 
-Planned
+Completed
 
 ### Scope
 
@@ -1094,7 +1092,7 @@ Planned
 - [x] Add `tvos-media-playback-workflow` for AVKit system-player preference, custom-player escalation, remote commands, Now Playing state, and tvOS media validation.
 - [x] Preserve SwiftUI architecture, general accessibility, general AVFoundation, Core Media timing, AVFAudio, Xcode execution/testing, Model Lab runtime selection, and Apple-owned Core AI implementation ownership through clear handoffs.
 - [x] Keep tvOS 27 claims beta-qualified and recheck them at release candidate/GM; do not claim direct Core AI or Foundation Models inference support for tvOS without an official platform contract.
-- [ ] Deliver the two backward-compatible skills in the next Socket minor release, with Apple Dev metadata, portability exports, compatibility records, child/root validation, release evidence, and branch accounting.
+- [x] Deliver the two backward-compatible skills in Socket v9.23.0, with Apple Dev metadata, portability exports, compatibility records, child/root validation, release evidence, and branch accounting.
 
 ### Exit Criteria
 
@@ -1129,11 +1127,12 @@ Planned
 - [ ] Investigate guidance consolidation opportunities that reduce repeated setup, routing, validation, and handoff text across skills while preserving the owner boundaries needed for accurate tool use and lower token load.
 - [ ] Investigate further standardization and automation for shared skill scaffolding, evidence capture, validation prompts, and generated references so common workflow knowledge is maintained once and reused with lower token load.
 - [ ] Redesign the Socket release flow around branch-backed worktrees. Split pre-merge feature-branch gates from post-merge `main` gates, make the release-ready failure mode more helpful when run from a worktree, preserve the rule that tags and release evidence come from reviewed `main`, and document how a release-prep branch should carry version bumps without making the base checkout dirty.
-- [ ] Centralize Socket validation behind one root command before adding more plugin-specific validators. The first pass should gather marketplace metadata, plugin manifests, icon assets, child `AGENTS.md`, `SKILL.md` frontmatter, `agents/openai.yaml`, shared version inventory, release-prep checks, and optional child-local tests into a clear report while keeping heavyweight behavior tests opt-in.
+- [x] Centralized Socket validation under `scripts/validate_socket.py` with core, compatibility, full, and release profiles. The shared structural layer checks marketplace wiring, plugin manifests and assets, child `AGENTS.md`, `SKILL.md` frontmatter, and present `agents/openai.yaml`; child-specific policy and behavior checks remain owned by their child projects and run once in the full profile.
 - [ ] Add a future Apple Developer Portal Driver for accessible, interactive portal-only provisioning tasks. Keep Apple authentication, two-factor authentication, account/team selection, and destructive operations behind explicit user-visible confirmation gates; retain official App Store Connect REST, Xcode-aware discovery, `cktool`, and CKTool JS as the primary surfaces, and do not automate unsupported portal forms until a reviewed driver design exists.
 
 ## Backlog Candidates
 
+- [ ] Explore the installed iOS Simulator browser and SwiftUI hot-reload surface with Gale in a dedicated research pass. Decide whether it belongs as a Socket workflow, a documented external-tool handoff, or no durable Socket addition; do not bundle or install browser/runtime tooling before that decision.
 - [x] Add `game-dev-skills:metal-game-rendering-workflow` for native Metal 3 and Metal 4 renderer architecture; keep D3D/Vulkan porting in GPTK routing, MetalFX in its own workflow, and profiling evidence in `xcode-game-profiling-workflow`.
 - [x] Add `game-dev-skills:game-porting-toolkit-workflow` to choose stable GPTK 3 evaluation/shader-conversion work or beta-sensitive GPTK 4 source-port work, then load Apple’s upstream GPTK 4 skills instead of duplicating their corpus.
 - [x] Add `game-dev-skills:metalfx-game-rendering-workflow`, `metal-asset-streaming-workflow`, and `metal-neural-rendering-workflow` for native MetalFX integration, GPU asset residency/streaming, and carefully gated experimental neural rendering.
@@ -1212,7 +1211,6 @@ Planned
 - [x] Expand Apple Dev Skills with dedicated SwiftUI animation, Core Animation, SF Symbols, and Apple typography workflows. Shipped `sf-symbols-workflow`, `swiftui-animation-workflow`, `core-animation-layer-workflow`, and `apple-typography-workflow` from [`docs/maintainers/apple-design-animation-skills-plan.md`](./docs/maintainers/apple-design-animation-skills-plan.md), keeping the skills under `plugins/apple-dev-skills`, using Xcode-local docs, Dash, official Apple docs, and local Apple developer apps as evidence, and avoiding absorption into the existing SwiftUI architecture skill.
 - [x] Add an `apple-dev-skills:appkit-app-architecture-workflow` skill so AppKit has a first-party architecture decision surface parallel to SwiftUI. It covers menu bar apps, status items, responder-chain menus, window and view-controller ownership, app and window restoration, AppKit MVC, object archiving and persistence choices, Observation with AppKit, and mixed AppKit/SwiftUI composition without steering agents inordinately toward either framework. Started from [`docs/agents/appkit-skills-coverage-plan.md`](./docs/agents/appkit-skills-coverage-plan.md).
 - [x] Complete Phase 2 of the Apple Dev Skills Socket migration. Treat `plugins/apple-dev-skills` as monorepo-owned source, remove Apple Dev Skills from subtree release gates, update Socket docs and duplicate-install guidance, add the compatibility marketplace smoke test, run full Socket validation, and publish the Socket release that makes the ownership change durable.
-- [ ] Evaluate a centralized Socket validation setup, preferably backed by the .NET 10/F# script migration, that can check marketplace metadata, plugin manifests, icon assets, child AGENTS shape, `SKILL.md` frontmatter, `agents/openai.yaml` alignment, shared version inventory, and release-prep state from one root command while still leaving child-local tests where behavior needs them.
 - [x] Track the remaining Speak Swiftly duplicate-enable repair behavior in the standalone `SpeakSwiftlyServer` plugin workflow rather than keeping the completed Socket catalog split open: [gaelic-ghost/SpeakSwiftlyServer#98](https://github.com/gaelic-ghost/SpeakSwiftlyServer/issues/98).
 - [x] Restore Socket and the Apple Dev Skills compatibility surface to Apache License 2.0 after the source-available licensing experiment proved less useful than the adoption and goodwill of a standard permissive license.
 
@@ -1233,6 +1231,9 @@ Planned
 - Completed the Apple Dev Skills Phase 2 ownership cleanup: Socket now documents `plugins/apple-dev-skills` as monorepo-owned, the standalone `gaelic-ghost/apple-dev-skills` repository is pruned to a compatibility marketplace pointer, and the compatibility install smoke path is documented alongside the Socket install tests.
 - Released `v6.7.0` after aggressively simplifying Socket documentation: root README and CONTRIBUTING split, child roadmap consolidation into root planning docs, child README collapse with user-owned `TBD` overview sections, nested maintainer doc cleanup, workflow atlas removal, and unsupported non-Codex surface removal.
 - Queued future `mlx-skills` and `coreml-skills` guidance plugins for Apple Silicon ML and Core ML workflows.
+- Completed the five-workflow Apple system-integration expansion: App Intents, Liquid Glass, SwiftUI performance evidence, iOS runtime forensics, and macOS distribution artifact inspection now have separate owners, targeted tests, and clear Xcode/provisioning handoffs.
+- Released the tvOS app-experience and media-playback workflows in Socket v9.23.0 with metadata, portability exports, compatibility records, validation, release evidence, and branch accounting.
+- Consolidated root validation under `scripts/validate_socket.py`, keeping compatibility checks in CI and assigning child behavior suites to their owning projects so full validation does not run the same suite twice.
 - Audited AppKit coverage against SwiftUI and queued an Apple Dev Skills AppKit app-architecture workflow so menu bar apps, restoration, MVC, archiving, Observation, and mixed AppKit/SwiftUI work get first-class guidance.
 - Implemented `apple-dev-skills:appkit-app-architecture-workflow` with AppKit ownership, menu bar, responder-chain, restoration, MVC, archiving, Observation, and mixed AppKit/SwiftUI references plus targeted tests.
 - Added draft `swift-steward` and `server-swift-steward` custom-agent roles plus root validator coverage so the steward contracts remain read-only and review-oriented until a guarded draft-patch workflow exists.

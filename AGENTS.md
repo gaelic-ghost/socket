@@ -95,7 +95,7 @@ uv sync --dev
 ### Validation
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+uv run scripts/validate_socket.py --profile compatibility
 ```
 
 ### Optional Project Commands
