@@ -1,4 +1,4 @@
-name: Validate Socket Metadata
+name: Validate Socket
 
 on:
   push:
@@ -22,5 +22,5 @@ jobs:
       - name: Sync root maintainer environment
         run: uv sync --dev
 
-      - name: Validate root marketplace wiring
-        run: uv run scripts/validate_socket_metadata.py
+      - name: Run Socket compatibility validation
+        run: uv run scripts/validate_socket.py --profile compatibility

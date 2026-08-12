@@ -17,9 +17,6 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = [
   "tests",
-  "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests",
-  "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests",
-  "plugins/repository-skills/skills/maintain-project-repo/tests",
   "plugins/model-lab-skills/skills/design-model-experiment/scripts",
   "plugins/model-lab-skills/skills/evaluate-language-model/scripts",
   "plugins/model-lab-skills/skills/compare-model-checkpoints/scripts",
@@ -29,10 +26,6 @@ testpaths = [
 files = [
   "scripts",
   "tests",
-  "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/scripts",
-  "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests",
-  "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/scripts",
-  "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests",
   "plugins/repository-skills/skills/maintain-project-repo/scripts",
   "plugins/repository-skills/skills/maintain-project-repo/tests",
   "plugins/model-lab-skills/skills/design-model-experiment/scripts",

@@ -660,7 +660,7 @@ def release_notes(
         "## Migration/upgrade notes\n\n"
         "- Run `codex plugin marketplace upgrade socket` to refresh a local Codex install.\n\n"
         "## Verification performed\n\n"
-        "- Ran `uv run scripts/validate_socket_metadata.py`.\n"
+        "- Ran `uv run scripts/validate_socket.py --profile full`.\n"
         "- Ran `scripts/release.sh release-ready "
         f"{version}`.\n"
         f"{render_evidence_summary(evidence)}"
@@ -830,8 +830,8 @@ def render_patch_refresh(root: Path, targets: list[VersionTarget], *, allow_unme
         for path in unchanged_files:
             print(f"- {path}")
 
-    print("Validating root marketplace metadata...")
-    run_command(root, ["uv", "run", "scripts/validate_socket_metadata.py"])
+    print("Running full Socket validation...")
+    run_command(root, ["uv", "run", "scripts/validate_socket.py", "--profile", "full"])
     print("Committing patch version bump...")
     run_git(root, ["add", *changed_files])
     run_git(root, ["commit", "-m", f"release: bump socket patch to {desired_version}"])

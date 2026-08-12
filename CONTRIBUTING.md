@@ -31,7 +31,7 @@ Use the root repository for work about:
 - repo-root marketplace wiring in [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
 - root maintainer docs under [`docs/`](./docs/)
 - root policies in [README.md](./README.md), [AGENTS.md](./AGENTS.md), and [ROADMAP.md](./ROADMAP.md)
-- root validation and CI such as [`scripts/validate_socket_metadata.py`](./scripts/validate_socket_metadata.py) and [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml)
+- root validation and CI such as [`scripts/validate_socket.py`](./scripts/validate_socket.py) and [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml)
 - coordinated child-skill guidance that needs one consistent policy across multiple monorepo-owned plugin or skills repositories
 
 If the change is really about one child repository's own skills, packaging, tests, or release flow, start in that child repository's docs and workflow instead of treating `socket` as a generic catch-all.
@@ -97,13 +97,15 @@ The root validation path does not require application secrets. If your change in
 - the `uv` dev environment is synced
 - the root marketplace file is valid JSON
 - the root packaged plugin paths still point at real installable plugin surfaces
-- the root validator completes successfully
+- the core Socket validation profile completes successfully
 
-You can verify that baseline with:
+Use the compatibility profile for ordinary root changes. It runs the core marketplace, skill-metadata, root-test, type, and lint checks plus the checked-in Hermes and Claude compatibility checks:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+uv run scripts/validate_socket.py --profile compatibility
 ```
+
+Use `--profile full` when the change affects child validation or behavior; it runs each participating child suite once from its owning project. The `--profile release --version X.Y.Z` profile additionally runs the read-only release-ready gate and is for reviewed `main` only.
 
 Every new or materially changed Socket plugin, skill, or MCP declaration needs
 an explicit Hermes compatibility outcome in the same pass. When that outcome
@@ -250,9 +252,7 @@ Root baseline validation:
 
 ```bash
 uv sync --dev
-uv run mypy
-uv run scripts/validate_socket_metadata.py
-uv run scripts/validate_claude_compatibility.py
+uv run scripts/validate_socket.py --profile compatibility
 ```
 
 When the change intentionally bumps released version numbers across the superproject, inventory or update the maintained manifest surfaces with:
