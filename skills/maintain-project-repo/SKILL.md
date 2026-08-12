@@ -48,6 +48,10 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - this is a durable building-block change because it creates one repo-owned maintainer surface that bootstrap, sync, validation, CI, and release flows can all share
    - it removes the pain of CI-only helper scripts and scattered release glue
    - the simpler extension path considered first was leaving helper scripts under `.github/scripts/` and adding more workflow-specific wrappers, but that would keep local and CI behavior drifting apart
+   - preserve machine-level Git defaults such as Gale's fetch pruning,
+     fast-forward-only pulls, and tracking-branch rebases; the installer does
+     not write `git config --local` because generated repositories must remain
+     portable across contributor machines
 4. Run `scripts/run_workflow.py` to normalize the inputs and choose the installer path.
 5. Apply the managed `maintain-project-repo` files:
    - install or refresh the managed repo-maintenance files under the selected profile's toolkit root
@@ -121,6 +125,9 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - `report-only` is the non-mutating fallback path.
 - The installer preserves repo-specific extra files under the selected profile's repo-maintenance root, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
 - The installer keeps the selected `maintain-project-repo` profile explicit via the selected profile's `config/profile.env`.
+- The installer does not write repository-local Git defaults. Its release script
+  uses explicit `git pull --ff-only` where protected-main safety must not depend
+  on a caller's global configuration.
 - Apple profiles install checked-in `.swiftformat` and `.swiftlint.yml` samples so SwiftFormat owns formatting shape while SwiftLint stays focused on complementary safety and clarity checks.
 - The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
 - The generated GitHub Actions wrapper uses Node 24-compatible Actions versions, with `actions/checkout@v6.0.2` as the current validated floor. Newer stable official action versions are allowed and often preferred after checking release notes and running the relevant validation. Apple profiles report the runner-selected Xcode with shell commands instead of using the Node 20-based `maxim-lobanov/setup-xcode@v1` action.

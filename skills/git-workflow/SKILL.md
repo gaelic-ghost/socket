@@ -15,23 +15,30 @@ GitHub settings or protected-main releases.
 
 1. Read the closest `AGENTS.md`; inspect `git status --short --branch`,
    `git worktree list`, and the relevant history/diff before a mutation.
-2. Classify the operation:
+2. Inspect the effective Git configuration before an operation depends on fetch,
+   pull, or tracking-branch behavior. On Gale-managed machines, expect
+   `fetch.prune=true`, `pull.ff=only`, and `branch.autoSetupRebase=always`;
+   report any local or worktree override rather than silently changing it. See
+   `references/gale-git-baseline.md`.
+3. Classify the operation:
    - inspection: status, diff, log, blame, or reachability;
    - focused change: create/switch a branch, stage intentional files, commit;
    - integration: fetch, compare, rebase or merge, resolve conflicts;
    - recovery: reflog, lost commit investigation, or safe restoration plan.
-3. Preserve the current work before an operation that rewrites, discards, or
+4. Preserve the current work before an operation that rewrites, discards, or
    moves it. Explain the exact target and recovery path before using reset,
    clean, rebase, force push, or branch/worktree deletion.
-4. For branch work, use a feature branch and separate worktree when required by
+5. For branch work, use a feature branch and separate worktree when required by
    repository guidance. Never keep the same branch live in two worktrees except
    as a short recovery step.
-5. Make focused commits with the repository's required subject format. Review
+6. Make focused commits with the repository's required subject format. Review
    staged changes and commit reachability after each shared Git mutation.
-6. For integration, fetch first; choose merge or rebase using repository policy
-   and the branch's publication state. Resolve each conflict from source intent,
-   run proportionate validation, and inspect the resulting diff.
-7. Before deleting a branch, worktree, ref, or archive, verify reachability and
+7. For integration, fetch first. The normal Gale baseline prunes stale refs and
+   refuses pull-created merge commits; newly tracking branches rebase on pull.
+   Choose a merge or rebase only when repository policy and the branch's
+   publication state justify it. Resolve each conflict from source intent, run
+   proportionate validation, and inspect the resulting diff.
+8. Before deleting a branch, worktree, ref, or archive, verify reachability and
    complete any repository-required branch accounting.
 
 ## Boundaries
@@ -44,6 +51,8 @@ GitHub settings or protected-main releases.
   `maintain-github-repository`.
 - Push, force push, merge, tag, and destructive recovery actions require clear
   user authority or an existing repository-owned release contract.
+- Do not encode Gale's machine-level Git baseline as repository-local config in
+  a generated template or existing repository.
 
 ## Hermes Notes
 

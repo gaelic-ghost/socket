@@ -19,7 +19,7 @@ needed for that classification, then hand work to the narrowest owner.
 
    | Outcome | Owner |
    | --- | --- |
-   | Status, branch, commit, history, rebase, conflict, or recovery | `git-workflow` |
+   | Status, branch, commit, history, rebase, conflict, recovery, or Git-default alignment | `git-workflow` |
    | Pull request, review, issue, CI, or collaboration handoff | `github-collaboration-workflow` |
    | Codex worktree mode, local environment, or app-owned worktree behavior | `codex-gui-worktree-workflow` |
    | Parallel worker branch, worktree, write, or integration ownership | `coordinate-worktrees-and-threads` |
@@ -40,5 +40,9 @@ needed for that classification, then hand work to the narrowest owner.
   GitHub settings from a read-only request.
 - Keep branch/worktree ownership explicit before parallel work; a branch does
   not grant permission to mutate shared repository state.
+- Treat Gale's fetch-prune, fast-forward-only pull, and tracking-branch rebase
+  preferences as machine-level defaults. Route their inspection and any
+  repository-specific override to `git-workflow`; do not install them as
+  repository-local configuration.
 - On Hermes or another non-Codex host, treat Codex GUI worktree association as
   unavailable and use ordinary Git worktree guidance instead.

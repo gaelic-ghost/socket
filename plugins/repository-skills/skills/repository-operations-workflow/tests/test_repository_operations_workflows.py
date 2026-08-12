@@ -28,6 +28,7 @@ def test_router_names_each_repository_owner_and_its_mutation_boundaries() -> Non
         "`coordinate-worktrees-and-threads`",
         "`maintain-github-repository`",
         "`maintain-project-repo`",
+        "machine-level defaults",
         "Do not infer permission to push, merge, tag, delete, publish, or change",
     ):
         assert expected in router
@@ -49,6 +50,10 @@ def test_git_and_github_workflows_keep_local_collaboration_and_release_owners_se
         "Push, force push, merge, tag, and destructive recovery actions require clear",
         "`github-collaboration-workflow`",
         "`maintain-project-repo`",
+        "fetch.prune=true",
+        "pull.ff=only",
+        "branch.autoSetupRebase=always",
+        "repository-local config",
     ):
         assert expected in git_text
     for expected in (
@@ -59,3 +64,18 @@ def test_git_and_github_workflows_keep_local_collaboration_and_release_owners_se
         "`maintain-project-repo`",
     ):
         assert expected in github_text
+
+
+def test_git_baseline_is_shared_machine_policy_without_local_template_writes() -> None:
+    baseline = read(REPOSITORY_SKILLS_ROOT / "git-workflow" / "references" / "gale-git-baseline.md")
+    repo_maintenance = read(REPOSITORY_SKILLS_ROOT / "maintain-project-repo" / "SKILL.md")
+
+    for expected in (
+        "fetch.prune = true",
+        "pull.ff = only",
+        "branch.autoSetupRebase = always",
+        "git config --show-origin --get-regexp",
+        "git config --local",
+    ):
+        assert expected in baseline
+    assert "not write `git config --local`" in repo_maintenance
