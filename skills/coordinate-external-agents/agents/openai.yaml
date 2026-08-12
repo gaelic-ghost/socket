@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coordinate External Agents"
+  short_description: "Create durable handoffs across agent systems."
+  default_prompt: "Use $coordinate-external-agents to hand this work to an external agent through a durable task and artifact contract."

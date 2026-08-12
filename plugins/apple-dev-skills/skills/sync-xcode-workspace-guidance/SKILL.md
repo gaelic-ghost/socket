@@ -30,7 +30,12 @@ guidance section when needed.
 6. Route app-specific guidance to `sync-xcode-project-guidance`, package-specific
    guidance to `sync-swift-package-guidance`, and active execution to
    `xcode-build-run-workflow` or `xcode-testing-workflow`.
-7. Keep optional services under `Services/` as their own deployment and runtime
+7. When the workspace root needs shared validation, release, or GitHub Actions
+   maintenance, compose it with `repository-skills:maintain-project-repo` using
+   the `xcode-workspace` profile. Its root dispatcher validates workspace shape
+   and runs any component-owned maintenance entrypoints serially; it does not
+   replace app, package, or service-local build policy.
+8. Keep optional services under `Services/` as their own deployment and runtime
    boundary. Use the selected server skill for service-local policy.
 
 ## Audit Contract

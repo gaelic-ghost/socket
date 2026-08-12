@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Operations"
+  short_description: "Route Git, GitHub, worktree, settings, and release work"
+  default_prompt: "Use $repository-operations-workflow to classify this repository task, inspect the minimum relevant state, and hand it to the focused Git, GitHub, worktree, settings, or release workflow."

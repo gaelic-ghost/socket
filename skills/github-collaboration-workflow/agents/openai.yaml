@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Collaboration"
+  short_description: "Prepare PRs, triage reviews and CI, and coordinate handoffs"
+  default_prompt: "Use $github-collaboration-workflow to inspect this change's GitHub collaboration state, prepare or update a pull request when authorized, triage checks and review feedback, and preserve clear remote-mutation boundaries."

@@ -117,7 +117,10 @@
     {
       "title": "Productivity Skills",
       "skills": [
-        "design-n8n-agent-workflow"
+        "coordinate-external-agents",
+        "coordinate-worktrees-and-threads",
+        "design-n8n-agent-workflow",
+        "orchestrate-agent-work"
       ]
     },
     {
@@ -178,6 +181,16 @@
         "evaluate-jailbreak-resilience",
         "evaluate-tool-calling-model",
         "benchmark-model-runtime"
+      ]
+    },
+    {
+      "title": "Repository Skills",
+      "skills": [
+        "repository-operations-workflow",
+        "git-workflow",
+        "github-collaboration-workflow",
+        "maintain-github-repository",
+        "maintain-project-repo"
       ]
     }
   ]

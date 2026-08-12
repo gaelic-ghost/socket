@@ -15,3 +15,8 @@
 - Use `sync-xcode-project-guidance` for an app project,
   `sync-swift-package-guidance` for a package, and
   `xcode-build-run-workflow` or `xcode-testing-workflow` for active Xcode work.
+- Use `repository-skills:maintain-project-repo` with the `xcode-workspace`
+  profile when the workspace root needs shared validation, release, or GitHub
+  Actions maintenance. It validates the root composition and serially delegates
+  to component-owned maintenance entrypoints; it does not replace app, package,
+  or service-local build policy.
