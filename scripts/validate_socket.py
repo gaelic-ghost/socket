@@ -159,8 +159,18 @@ CHILD_CHECKS = (
         REPO_ROOT / "plugins" / "cybersecurity-skills",
     ),
     Check(
+        "Cybersecurity Skills tests",
+        ("uv", "run", "pytest", "tests"),
+        REPO_ROOT / "plugins" / "cybersecurity-skills",
+    ),
+    Check(
         "Reverse Engineering Skills metadata",
         ("uv", "run", "scripts/validate_repo_metadata.py"),
+        REPO_ROOT / "plugins" / "reverse-engineering-skills",
+    ),
+    Check(
+        "Reverse Engineering Skills tests",
+        ("uv", "run", "pytest", "tests"),
         REPO_ROOT / "plugins" / "reverse-engineering-skills",
     ),
 )

@@ -48,6 +48,8 @@ def test_full_profile_adds_compatibility_and_child_checks_once() -> None:
 
     assert names.count("Agent Portability Skills tests") == 1
     assert names.count("Repository Skills tests") == 1
+    assert names.count("Cybersecurity Skills tests") == 1
+    assert names.count("Reverse Engineering Skills tests") == 1
     assert "Hermes compatibility" in names
     assert "Claude compatibility" in names
     assert "release readiness" not in names
