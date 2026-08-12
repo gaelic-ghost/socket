@@ -147,7 +147,7 @@ def utc_timestamp() -> str:
 
 
 def run_local_marketplace_smoke(root: Path) -> dict[str, Any]:
-    with tempfile.TemporaryDirectory(prefix="socket-codex-home.", dir="/private/tmp") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="socket-codex-home.") as temp_dir:
         codex_home = Path(temp_dir)
         command_env = os.environ.copy()
         command_env["CODEX_HOME"] = str(codex_home)
