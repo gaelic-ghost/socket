@@ -57,7 +57,7 @@ wheels = [
 
 [[package]]
 name = "documentation-skills-maintenance"
-version = "9.32.0"
+version = "9.33.0"
 source = { virtual = "." }
 
 [package.dev-dependencies]
