@@ -22,7 +22,7 @@ Use current repo evidence and current official OpenAI Codex docs before making p
 Route findings to the owning workflow instead of duplicating it:
 - sync-skills-repo-guidance for existing repository guidance drift
 - bootstrap-skills-plugin-repo for new repository structure or broad structural alignment
-- productivity-skills document-maintenance workflows for README, CONTRIBUTING, AGENTS, ROADMAP, ACCESSIBILITY, or API documentation edits
+- documentation-skills document-maintenance workflows for README, CONTRIBUTING, AGENTS, ROADMAP, ACCESSIBILITY, or API documentation edits
 
 Return a draft review packet in this shape:
 1. Repository shape and confidence.

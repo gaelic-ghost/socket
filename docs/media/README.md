@@ -6,7 +6,6 @@ Root documentation media for the `socket` superproject.
 
 | File | Use |
 | --- | --- |
-| [`codex-plugin-directory-socket-productivity-skills.png`](./codex-plugin-directory-socket-productivity-skills.png) | README screenshot showing the Codex plugin directory filtered to the `Socket` marketplace, with `Productivity Skills` featured. |
 | [`codex-plugin-directory-socket-speak-swiftly.png`](./codex-plugin-directory-socket-speak-swiftly.png) | Alternate Codex plugin-directory screenshot with `Speak Swiftly` featured. |
 | [`codex-plugin-directory-socket-python-skills.png`](./codex-plugin-directory-socket-python-skills.png) | Alternate Codex plugin-directory screenshot with `Python Skills` featured. |
 
