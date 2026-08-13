@@ -1,10 +1,9 @@
-# Workspace Sync Boundaries
+# Single-Project Apple Workspace Audit
 
-The workspace root composes app projects and packages but does not merge their
-ownership boundaries. Sync workspace-root guidance here, then use the app and
-package sync skills for their own `AGENTS.md` policy.
+The workspace root contains one generated `.xcodeproj` driven by root
+`project.yml`. `Apps/` holds target specs and target-owned source/configuration
+files; it does not hold child Xcode projects. `Packages/` contains local Swift
+packages registered through `Packages/packages-shared.yml`.
 
-- `Apps/*/*.xcodeproj`: generated/project-aware app integration.
-- `Packages/*/Package.swift`: package target and product graph.
-- `Services/*`: independent backend and deployment boundary.
-- `.xcworkspace`: Xcode-managed composition surface; do not hand-write it.
+Audit the source of truth, then run XcodeGen. Never repair generated project or
+workspace data directly during a guidance sync.

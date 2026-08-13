@@ -1,22 +1,17 @@
 ## Apple / Xcode Workspace Workflow
 
-- Treat this repository root as a composition layer: the `.xcworkspace` groups
-  related app projects, `Apps/` owns app projects, `Packages/` owns standalone
-  Swift packages, and `Services/` is an optional independent backend boundary.
-- Prefer local Swift package products for shared Core code. Each consuming app
-  declares its own local package path and product dependency in its XcodeGen
-  spec; workspace visibility alone is not dependency wiring.
-- Use `projectReferences` only for real Xcode target dependencies across
-  projects. Do not use groups, folder references, or cross-project references as
-  replacements for package boundaries.
-- For XcodeGen projects in this workspace, use `schemePathPrefix: "../"` when
-  a scheme stores workspace-relative file paths. Treat every app `project.yml`
-  as the source of truth for its generated project and never edit `.pbxproj`.
-- Use `sync-xcode-project-guidance` for an app project,
-  `sync-swift-package-guidance` for a package, and
-  `xcode-build-run-workflow` or `xcode-testing-workflow` for active Xcode work.
+- This product has one root `.xcworkspace` and one generated root `.xcodeproj`.
+  Root `project.yml` is the editable Xcode project graph; never hand-edit its
+  generated `.pbxproj` data.
+- `Apps/` owns Xcode targets. Keep common target and scheme templates in
+  `Apps/apps-shared.yml`, shared app build settings in
+  `Apps/Apps-shared.xcconfig`, and target-specific settings under the owning
+  target directory.
+- `Packages/` owns local SwiftPM packages. Register each package in
+  `Packages/packages-shared.yml`, but keep products, targets, and dependencies
+  in its own `Package.swift`.
+- Regenerate with `xcodegen generate --spec project.yml`; use the root
+  workspace for Xcode and `xcodebuild` operations. Use `swift` directly for
+  package work.
 - Use `repository-skills:maintain-project-repo` with the `xcode-workspace`
-  profile when the workspace root needs shared validation, release, or GitHub
-  Actions maintenance. It validates the root composition and serially delegates
-  to component-owned maintenance entrypoints; it does not replace app, package,
-  or service-local build policy.
+  profile for root validation, release, and CI maintenance.

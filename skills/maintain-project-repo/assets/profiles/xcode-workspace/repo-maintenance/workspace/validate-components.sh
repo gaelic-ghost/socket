@@ -22,8 +22,8 @@ run_component_validation() {
   log "No component-owned repo-maintenance validation found for $component_kind at $component_root; skipping."
 }
 
-find "$REPO_ROOT/Apps" -type d -name '*.xcodeproj' -print | sort | while IFS= read -r project; do
-  run_component_validation "$(dirname -- "$project")" "app"
+find "$REPO_ROOT/Apps" -type f \( -name 'target.yml' -o -name 'target.yaml' \) -print | sort | while IFS= read -r spec; do
+  run_component_validation "$(dirname -- "$spec")" "app-target"
 done
 
 find "$REPO_ROOT/Packages" -type f -name 'Package.swift' -print | sort | while IFS= read -r manifest; do

@@ -1,121 +1,103 @@
 ---
 name: bootstrap-xcode-workspace
-description: Bootstrap a modular Apple .xcworkspace with Apps, Packages, XcodeGen app projects, and optional services. Use for multi-app Apple codebases sharing Core Swift packages; not for one standalone project or package.
+description: Bootstrap one Apple product workspace with one root XcodeGen project, Apps target directories, and Packages local Swift packages. Use for all new Apple product repositories.
 ---
 
-# Bootstrap Xcode Workspace
+# Bootstrap Apple Product Workspace
 
 ## Purpose
 
-Create the root composition for a modular Apple product without pretending that a
-workspace, an Xcode project, an app target, and a Swift package are equivalent.
-The workspace owns related Xcode projects and shared schemes. Each app project
-owns its targets, build settings, and XcodeGen spec. Each package owns its
-manifest and target graph.
+Create one product repository with one root `.xcworkspace` and one generated
+root `.xcodeproj`. `Apps/` contains platform-specific targets in that project;
+`Packages/` contains the SwiftPM modules that support those targets. Do not
+bootstrap new Apple products as independent app projects.
 
-Use `scripts/run_workflow.py` to normalize the workspace contract before
-creating files. XcodeGen generates each app project; create the `.xcworkspace`
-and add the generated projects through Xcode's documented workspace flow rather
-than hand-writing workspace data.
-
-## Compatibility
-
-This is portable skill guidance and a local Python runner; it has no Codex-only
-plugin hooks, MCP declarations, or custom-agent dependency. The Hermes tap
-export decision is therefore **no export required**: Hermes can consume the
-same authored `SKILL.md` directly, and no translation artifact is needed.
+Run `scripts/run_workflow.py` before creating files. It generates the root
+XcodeGen project, creates the workspace wrapper, initializes the first local
+Swift package with SwiftPM, and installs the `xcode-workspace` maintenance
+profile through `repository-skills`.
 
 ## Required Shape
 
 ```text
 Product/
   Product.xcworkspace/
+  Product.xcodeproj/                 # generated from project.yml
+  project.yml                        # root project graph
+  Configurations/
   Apps/
+    apps-shared.yml                  # target and scheme templates
+    Apps-shared.xcconfig             # shared app build settings
     ProductiOS/
-    ProductMac/
+      target.yml
+      Configurations/
+      Sources/ Resources/ Tests/
+    ProductmacOS/
+      target.yml
+      Configurations/
+      Sources/ Resources/ Tests/
   Packages/
+    packages-shared.yml              # XcodeGen local-package registry
     ProductCore/
-  Services/                  # optional
+      Package.swift
+  Docs/
 ```
 
-- `Apps/` contains one or more independently generated Xcode app projects.
-- `Packages/` contains standalone SwiftPM packages, each with `Package.swift`.
-- `Services/` is optional and contains a server sibling, never an app target or
-  an implicit Apple build dependency.
+## Ownership
+
+- `project.yml` owns project identity, configurations, file groups, and the
+  included project graph.
+- `Apps/apps-shared.yml` owns common target and scheme templates.
+- `Apps/<Target>/target.yml` owns one target's platform, source roots,
+  target-local configurations, and product dependencies.
+- `Packages/packages-shared.yml` registers local packages with XcodeGen.
+- Each `Package.swift` owns its package products, targets, and dependencies.
+- Root `Configurations/` owns project-wide settings. `Apps/Apps-shared.xcconfig`
+  and target-local `.xcconfig` files layer app and target settings without
+  duplicating the project baseline.
+- Generated `.xcodeproj` data is build-critical output. Edit its XcodeGen and
+  SwiftPM sources, then regenerate; never hand-edit `.pbxproj`.
 
 ## Workflow
 
-1. Collect `name`, `destination`, `app_topology`, app platforms, and optional
-   service selection. Run `scripts/run_workflow.py` first.
-2. Apply the Apple docs gate with `explore-apple-swift-docs`. Use Xcode MCP
-   `DocumentationSearch` first; use Dash's `XcodeGen : ProjectSpec` docset when
-   XcodeGen detail is needed.
-3. Choose topology:
-   - Default to `separate-projects` for independently shipped or materially
-     platform-specific apps. Create one XcodeGen project per app under `Apps/`.
-   - Use `multiplatform-target` only when iOS, macOS, tvOS, or visionOS share
-     app identity and lifecycle. Keep watchOS in a separate target/project.
-4. Create each Core package under `Packages/` with `bootstrap-swift-package`.
-   Make reusable modules package products; do not use Xcode groups as module
-   boundaries.
-5. Create each app project with `bootstrap-xcode-app-project`. For a workspace
-   project, set XcodeGen `options.schemePathPrefix: "../"`; retain the default
-   standalone value for projects that are not opened from a workspace.
-6. In every consuming app's `project.yml`, declare the local package in the
-   top-level `packages` map and link the required product from the app target's
-   `dependencies`. A workspace does not replace that per-project declaration.
-7. In Xcode, create `<Name>.xcworkspace` at the root and add each `.xcodeproj`
-   at workspace root level. Open the workspace, not an individual project, for
-   product-wide work.
-8. Add an optional service under `Services/` only after selecting it:
-   - Hummingbird: `bootstrap-hummingbird-service`.
-   - Vapor: `bootstrap-vapor-service`.
-   - F#: `choose-fsharp-web-framework`, then `build-fsharp-project` and the
-     Azure deployment handoff.
-9. Validate packages and app schemes serially. Use `xcode-build-run-workflow`
-   for workspace/scheme execution and `xcode-testing-workflow` for Xcode-native
-   test work.
-
-## Dependency And Navigator Rules
-
-- Use a local Swift package for shared Core code. Its `Package.swift` is the
-  source of truth for targets and products.
-- Use an Xcode cross-project reference only when one `.xcodeproj` must depend on
-  a target from another `.xcodeproj`; declare it with XcodeGen
-  `projectReferences` and a `ProjectName/TargetName` dependency.
-- Use filesystem directories for organization. A group only organizes the
-  Project navigator. A folder reference is for a bundle-preserved resource
-  directory, not ordinary Swift source.
-- For Xcode 16 project formats, prefer broad `syncedFolder` roots for ordinary
-  app source. Use `explicitFolders` only when a child must intentionally remain
-  a folder reference.
-- Keep `project.yml`, `.xcconfig`, entitlements, schemes, and generated project
-  diffs owned by their documented source files. Never hand-edit `.pbxproj`.
+1. Apply the Apple documentation gate through `explore-apple-swift-docs`.
+2. Run `scripts/run_workflow.py --name <Name> --file-prefix <ABC>`.
+   The default creates iOS and macOS targets plus `<Name>Core`.
+3. Add platform-specific targets by adding a target directory and include in
+   root `project.yml`; use `Apps/apps-shared.yml` templates instead of copying
+   project settings.
+4. Add a local package under `Packages/`, register it in
+   `Packages/packages-shared.yml`, then declare only the consumed product in
+   the relevant target's dependencies.
+5. Regenerate with `xcodegen generate --spec project.yml`; use
+   `xcodebuild -workspace <Name>.xcworkspace` for app builds and tests and
+   `swift` for package work.
+6. Use Xcode MCP (`xcrun mcpbridge`) for agent-assisted project inspection and
+   debugging when Xcode is open. It augments these deterministic commands; it
+   is not a bootstrap prerequisite.
 
 ## Inputs
 
-- `name`: required product and workspace name.
-- `destination`: parent directory, default `.`.
-- `app_topology`: `separate-projects` (default) or `multiplatform-target`.
-- `platforms`: comma-separated app platforms; default `ios,macos`.
-- `service`: `none` (default), `hummingbird`, `vapor`, or `fsharp-azure`.
-- `dry_run`: emit the normalized composition contract without creating files.
+- `name`: required product name and root project/workspace stem.
+- `file_prefix`: three uppercase letters; default `APP`.
+- `destination`: parent directory; default `.`.
+- `platforms`: `ios`, `macos`, or both; default `ios,macos`.
+- `org_identifier`: bundle identifier prefix; default `com.example`.
+- `dry_run`: report the normalized scaffold without writing files.
 
 ## Guards And Handoffs
 
-- Stop when the requested root already contains non-ignorable files.
-- Stop when `multiplatform-target` includes watchOS; create a separate watchOS
-  target/project instead.
-- Do not add packages, services, or projects to the workspace merely for visual
-  symmetry. Add only real dependency or navigation surfaces.
-- Do not make a backend part of an Apple app's Xcode target graph.
-- Hand off existing workspace guidance to `sync-xcode-workspace-guidance`.
-- Hand off one existing app project to `sync-xcode-project-guidance` and one
-  package to `sync-swift-package-guidance`.
+- Stop when the destination product root is non-empty.
+- Stop when XcodeGen is unavailable.
+- Do not introduce a second project generator, manually edited project data, or
+  a separate app `.xcodeproj` under `Apps/`.
+- Use `sync-xcode-workspace-guidance` for an existing product root.
+- A standalone published library or CLI remains a deliberate exception: use
+  `bootstrap-swift-package` only when it is not part of an Apple product
+  workspace.
 
 ## References
 
 - `references/workspace-shape.md`
-- [Apple: managing multiple projects and dependencies](https://developer.apple.com/documentation/xcode/managing-multiple-projects-and-their-dependencies)
 - [Apple: organizing code with local packages](https://developer.apple.com/documentation/xcode/organizing-your-code-with-local-packages)
 - [XcodeGen Project Spec](https://yonaskolb.github.io/XcodeGen/Docs/ProjectSpec.html)

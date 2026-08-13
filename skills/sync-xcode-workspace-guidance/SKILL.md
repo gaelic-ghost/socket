@@ -1,70 +1,36 @@
 ---
 name: sync-xcode-workspace-guidance
-description: Sync guidance for an Apple .xcworkspace with Apps and Packages. Use to audit root guidance, app projects, local package wiring, XcodeGen settings, and service boundaries; not for one standalone .xcodeproj or package.
+description: Audit and sync guidance for one Apple product workspace with one root XcodeGen project, Apps target specs, and Packages local Swift packages.
 ---
 
-# Sync Xcode Workspace Guidance
+# Sync Apple Product Workspace Guidance
 
 ## Purpose
 
-Align the root guidance for a modular Apple workspace while preserving the
-separate owners of each app project and Swift package. `scripts/run_workflow.py`
-detects the shape, audits its composition, and adds the bounded workspace
-guidance section when needed.
+Align an existing Apple product root with the canonical single-workspace model.
+The runner audits the root workspace and generated project, `project.yml`,
+shared YAML and `.xcconfig` layers, target specs under `Apps/`, and local
+packages under `Packages/`. It adds only bounded root guidance; it does not
+edit generated project data, target membership, or package manifests.
 
 ## Workflow
 
-1. Use `explore-apple-swift-docs` before changing workflow policy. Prefer Xcode
-   MCP, then Dash's usable `XcodeGen : ProjectSpec` archive.
-2. Run `scripts/run_workflow.py --repo-root <root>` to inspect workspace,
-   projects, packages, and optional services.
-3. Confirm that the root contains one `.xcworkspace`, `Apps/`, and `Packages/`.
-   Report missing or misplaced projects and packages; do not repair project
-   membership by editing workspace or `.pbxproj` data directly.
-4. Check each app's `project.yml` for a local `packages` declaration before
-   claiming it consumes a Core package. Check the package's `Package.swift` for
-   its real target and product graph.
-5. For generated workspace projects, verify `schemePathPrefix: "../"` where
-   workspace-relative scheme paths are used. Keep XcodeGen per-project: it does
-   not become the workspace source of truth.
-6. Route app-specific guidance to `sync-xcode-project-guidance`, package-specific
-   guidance to `sync-swift-package-guidance`, and active execution to
-   `xcode-build-run-workflow` or `xcode-testing-workflow`.
-7. When the workspace root needs shared validation, release, or GitHub Actions
-   maintenance, compose it with `repository-skills:maintain-project-repo` using
-   the `xcode-workspace` profile. Its root dispatcher validates workspace shape
-   and runs any component-owned maintenance entrypoints serially; it does not
-   replace app, package, or service-local build policy.
-8. Keep optional services under `Services/` as their own deployment and runtime
-   boundary. Use the selected server skill for service-local policy.
-
-## Audit Contract
-
-The runtime reports:
-
-- workspace and app-project paths;
-- package paths containing `Package.swift`;
-- `project.yml` paths;
-- optional service roots;
-- missing workspace, app-project, package, or marker-directory findings;
-- the root `AGENTS.md` action taken or planned.
-
-It does not parse XcodeGen package declarations, classify topology, or change
-workspace membership, app target dependencies, package manifests, generated
-projects, or service code.
+1. Apply the Apple documentation gate through `explore-apple-swift-docs`.
+2. Run `scripts/run_workflow.py --repo-root <root>`.
+3. Require exactly one root `.xcworkspace`, exactly one root `.xcodeproj`, and
+   root `project.yml`.
+4. Require `Apps/apps-shared.yml`, `Apps/Apps-shared.xcconfig`, at least one
+   `Apps/**/target.yml`, `Packages/packages-shared.yml`, and at least one
+   `Packages/**/Package.swift`.
+5. Correct the owning source, run `xcodegen generate --spec project.yml`, and
+   validate with the root workspace. Do not repair `.pbxproj` data directly.
 
 ## Guards And Handoffs
 
-- Stop when the root has no `.xcworkspace`, `Apps/`, or `Packages/` marker.
-- Stop when the root is a single app project or package; use the narrower sync
-  skill instead.
-- Do not mistake a navigator group, folder reference, or directory for a Swift
-  package target.
-- Do not use cross-project references to replace local package products.
-- Do not hand-edit `.pbxproj` or workspace data. Make Xcode/XcodeGen-aware
-  changes through the owner skill.
-
-## References
-
-- `references/workspace-shape.md`
-- `assets/append-section.md`
+- Stop if the root is not the canonical product workspace shape.
+- Do not route each `Apps/` directory to standalone project sync: those
+  directories are target-owned portions of the one root project.
+- Use `sync-swift-package-guidance` only for a deliberately standalone package
+  repository, not a package below this product's `Packages/` directory.
+- Hand active building, running, diagnostics, and test work to the appropriate
+  Xcode workflow after this composition audit.

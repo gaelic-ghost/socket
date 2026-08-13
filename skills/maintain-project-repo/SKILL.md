@@ -40,7 +40,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - prefer `maintain-project-repo` for SwiftPM repos, Xcode app repos, mixed Apple repos, and general software repos that need local maintainer automation
    - choose `swift-package` for plain Swift package repos
    - choose `xcode-app` for one native Apple app project
-   - choose `xcode-workspace` for a modular Apple root with one `.xcworkspace`, `Apps/`, `Packages/`, and optional `Services/`
+   - choose `xcode-workspace` for an Apple product root with one `.xcworkspace`, one root XcodeGen project, `Apps/` target specs, `Packages/`, and optional `Services/`
    - choose `generic` when no stronger Swift or Xcode profile applies
    - stop if the requested path is not a repository root
    - use `scripts/repo-maintenance/` for `generic` and `swift-package`; use `Scripts/repo-maintenance/` for `xcode-app` and `xcode-workspace` so Apple repos keep one standard top-level `Scripts/` directory

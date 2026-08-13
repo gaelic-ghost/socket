@@ -11,7 +11,6 @@ import json
 import shutil
 from pathlib import Path
 
-
 PROFILE_CHOICES = {
     "generic": "Generic repo-maintenance baseline with no Swift or Xcode specialization.",
     "swift-package": "Swift Package Manager repo-maintenance profile for library, tool, and package repos.",
@@ -164,8 +163,13 @@ def xcode_workspace_findings(repo_root: Path) -> list[str]:
     apps_root = repo_root / "Apps"
     if not apps_root.is_dir():
         findings.append("expected Apps/ at the repository root")
-    elif not any(apps_root.glob("**/*.xcodeproj")):
-        findings.append("expected at least one .xcodeproj under Apps/")
+    elif not any(apps_root.glob("**/target.y*ml")):
+        findings.append("expected at least one XcodeGen target spec under Apps/")
+
+    if not (repo_root / "project.yml").is_file():
+        findings.append("expected root project.yml")
+    elif not any(repo_root.glob("*.xcodeproj")):
+        findings.append("expected one generated root .xcodeproj")
 
     packages_root = repo_root / "Packages"
     if not packages_root.is_dir():

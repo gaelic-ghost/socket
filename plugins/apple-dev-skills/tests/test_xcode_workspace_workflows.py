@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP = ROOT / "skills/bootstrap-xcode-workspace/scripts/run_workflow.py"
@@ -17,107 +17,122 @@ APP_SYNC = ROOT / "skills/sync-xcode-project-guidance/scripts/run_workflow.py"
 def run_script(script: Path, *args: str) -> tuple[int, dict]:
     env = dict(os.environ)
     env.setdefault("UV_CACHE_DIR", str(Path(tempfile.gettempdir()) / "apple-dev-skills-uv-cache"))
-    process = subprocess.run(
-        ["uv", "run", str(script), *args],
-        capture_output=True,
-        check=False,
-        env=env,
-        text=True,
-    )
+    process = subprocess.run(["uv", "run", str(script), *args], capture_output=True, check=False, env=env, text=True)
     return process.returncode, json.loads(process.stdout)
 
 
 class XcodeWorkspaceWorkflowTests(unittest.TestCase):
-    def test_bootstrap_defaults_to_separate_projects(self) -> None:
+    def test_bootstrap_defaults_to_one_root_project_and_workspace(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = run_script(
-                BOOTSTRAP,
-                "--name",
-                "Product",
-                "--destination",
-                tmpdir,
-                "--dry-run",
-            )
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--dry-run")
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["normalized_inputs"]["app_topology"], "separate-projects")
             self.assertEqual(payload["normalized_inputs"]["platforms"], ["ios", "macos"])
-            self.assertIn("create the .xcworkspace through Xcode", " ".join(payload["actions"]))
+            self.assertIn("root XcodeGen project", " ".join(payload["actions"]))
+            self.assertTrue(payload["workspace_path"].endswith("Product.xcworkspace"))
+            self.assertTrue(payload["project_path"].endswith("Product.xcodeproj"))
 
-    def test_bootstrap_creates_marker_directories_outside_dry_run(self) -> None:
+    def test_bootstrap_creates_one_project_target_specs_shared_layers_and_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir)
-            self.assertEqual(code, 0)
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--file-prefix", "PRD", "--destination", tmpdir, "--skip-validation")
+            self.assertEqual(code, 0, payload)
             root = Path(payload["workspace_root"])
-            self.assertTrue((root / "Apps").is_dir())
-            self.assertTrue((root / "Packages").is_dir())
-            self.assertFalse((root / "Services").exists())
+            self.assertTrue((root / "Product.xcworkspace/contents.xcworkspacedata").is_file())
+            self.assertTrue((root / "Product.xcodeproj/project.pbxproj").is_file())
+            self.assertTrue((root / "project.yml").is_file())
+            self.assertTrue((root / "Apps/apps-shared.yml").is_file())
+            self.assertTrue((root / "Apps/Apps-shared.xcconfig").is_file())
+            self.assertTrue((root / "Packages/packages-shared.yml").is_file())
+            self.assertTrue((root / "Packages/ProductCore/Package.swift").is_file())
+            root_spec = (root / "project.yml").read_text(encoding="utf-8")
+            self.assertIn("Apps/apps-shared.yml", root_spec)
+            self.assertIn("Packages/packages-shared.yml", root_spec)
+            for target in ("ProductiOS", "ProductmacOS"):
+                self.assertTrue((root / f"Apps/{target}/target.yml").is_file())
+                self.assertTrue((root / f"Apps/{target}/Configurations/App.xcconfig").is_file())
+            self.assertTrue((root / "Scripts/repo-maintenance/validate-all.sh").is_file())
 
-    def test_bootstrap_rejects_watchos_multiplatform_target(self) -> None:
+    def test_bootstrap_discovers_repository_runner_from_versioned_plugin_cache(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = run_script(
-                BOOTSTRAP,
-                "--name",
-                "Product",
-                "--destination",
-                tmpdir,
-                "--app-topology",
-                "multiplatform-target",
-                "--platforms",
-                "ios,watchos",
+            cache_root = Path(tmpdir) / "cache" / "socket"
+            apple_root = cache_root / "apple-dev-skills" / "9.34.0"
+            repository_root = cache_root / "repository-skills" / "9.34.0"
+            shutil.copytree(
+                ROOT / "skills/bootstrap-xcode-workspace",
+                apple_root / "skills/bootstrap-xcode-workspace",
             )
-            self.assertEqual(code, 1)
-            self.assertEqual(payload["status"], "blocked")
-            self.assertIn("watchOS requires", payload["stderr"])
-
-    def test_bootstrap_rejects_path_like_workspace_name(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = run_script(BOOTSTRAP, "--name", "../escape", "--destination", tmpdir)
-            self.assertEqual(code, 1)
-            self.assertEqual(payload["status"], "blocked")
-            self.assertIn("without path separators", payload["stderr"])
+            shutil.copytree(
+                ROOT.parent / "repository-skills",
+                repository_root,
+                ignore=shutil.ignore_patterns(".venv", ".pytest_cache", ".ruff_cache", "__pycache__"),
+            )
+            cache_script = apple_root / "skills/bootstrap-xcode-workspace/scripts/run_workflow.py"
+            destination = Path(tmpdir) / "products"
+            code, payload = run_script(
+                cache_script,
+                "--name",
+                "CachedProduct",
+                "--file-prefix",
+                "CCH",
+                "--destination",
+                str(destination),
+                "--skip-validation",
+            )
+            self.assertEqual(code, 0, payload)
+            self.assertTrue((destination / "CachedProduct/Scripts/repo-maintenance/validate-all.sh").is_file())
 
     def test_bootstrap_rejects_existing_file_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            root = Path(tmpdir)
-            (root / "Product").write_text("occupied", encoding="utf-8")
+            (Path(tmpdir) / "Product").write_text("occupied", encoding="utf-8")
             code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir)
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
             self.assertIn("already contains files", payload["stderr"])
 
-    def test_sync_writes_bounded_workspace_guidance(self) -> None:
+    def test_bootstrap_rejects_noncanonical_platform_or_prefix(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--platforms", "watchos")
+            self.assertEqual(code, 1)
+            self.assertIn("ios,macos", payload["stderr"])
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--file-prefix", "no")
+            self.assertEqual(code, 1)
+            self.assertIn("three uppercase", payload["stderr"])
+
+    def test_sync_writes_canonical_workspace_guidance(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             (root / "Product.xcworkspace").mkdir()
-            (root / "Apps/ProductiOS/ProductiOS.xcodeproj").mkdir(parents=True)
-            (root / "Apps/ProductiOS/project.yml").write_text("name: ProductiOS\n", encoding="utf-8")
+            (root / "Product.xcodeproj").mkdir()
+            (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
+            (root / "Apps/ProductiOS").mkdir(parents=True)
+            (root / "Apps/apps-shared.yml").write_text("targetTemplates: {}\n", encoding="utf-8")
+            (root / "Apps/Apps-shared.xcconfig").write_text("SWIFT_VERSION = 6.0\n", encoding="utf-8")
+            (root / "Apps/ProductiOS/target.yml").write_text("targets: {}\n", encoding="utf-8")
             (root / "Packages/ProductCore").mkdir(parents=True)
+            (root / "Packages/packages-shared.yml").write_text("packages: {}\n", encoding="utf-8")
             (root / "Packages/ProductCore/Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             code, payload = run_script(SYNC, "--repo-root", tmpdir)
-            self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "success")
-            self.assertEqual(len(payload["detected_state"]["app_projects"]), 1)
-            self.assertEqual(len(payload["detected_state"]["packages"]), 1)
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(len(payload["detected_state"]["root_projects"]), 1)
             agents = (root / "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("## Apple / Xcode Workspace Workflow", agents)
-            self.assertIn("schemePathPrefix", agents)
+            self.assertIn("Apps-shared.xcconfig", agents)
+            self.assertIn("packages-shared.yml", agents)
 
     def test_app_sync_redirects_workspace_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             (root / "Product.xcworkspace").mkdir()
-            (root / "Apps" / "Product.xcodeproj").mkdir(parents=True)
+            (root / "Apps").mkdir()
             (root / "Packages").mkdir()
             code, payload = run_script(APP_SYNC, "--repo-root", tmpdir)
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
             self.assertIn("sync-xcode-workspace-guidance", payload["next_step"])
 
-    def test_docs_record_current_xcodegen_workspace_contract(self) -> None:
+    def test_docs_record_single_root_project_contract(self) -> None:
         bootstrap = (ROOT / "skills/bootstrap-xcode-workspace/SKILL.md").read_text(encoding="utf-8")
-        xcodegen = (ROOT / "skills/xcode-build-run-workflow/references/xcodegen-project-maintenance.md").read_text(encoding="utf-8")
-        self.assertIn("separate-projects", bootstrap)
-        self.assertIn("multiplatform-target", bootstrap)
-        self.assertIn("schemePathPrefix", bootstrap)
-        self.assertIn("XcodeGen `2.46.0`", xcodegen)
+        sync = (ROOT / "skills/sync-xcode-workspace-guidance/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("one root XcodeGen project", bootstrap)
+        self.assertIn("Apps-shared.xcconfig", bootstrap)
+        self.assertIn("packages-shared.yml", bootstrap)
+        self.assertIn("exactly one root `.xcodeproj`", sync)
