@@ -212,19 +212,48 @@ final class {prefix}AppTests: XCTestCase {{
 """
 
 
+def version_sort_key(path: Path) -> tuple[int, ...]:
+    parts = []
+    for component in path.name.split("."):
+        try:
+            parts.append(int(component))
+        except ValueError:
+            parts.append(-1)
+    return tuple(parts)
+
+
 def maintain_project_repo_runner() -> Path:
-    plugins_root = Path(__file__).resolve().parents[4]
-    runner = plugins_root / "repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py"
-    if not runner.is_file():
-        raise RuntimeError(
-            "bootstrap-xcode-app-project needs repository-skills/maintain-project-repo "
-            f"to install repo-maintenance files, but the runner was missing at {runner}. "
-            "Install repository-skills alongside apple-dev-skills, or add the socket "
-            "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
-            "enable both apple-dev-skills and repository-skills from the Socket catalog, "
-            "then rerun this workflow."
-        )
-    return runner
+    script_path = Path(__file__).resolve()
+    candidate_paths: list[Path] = []
+    seen: set[Path] = set()
+
+    def add_candidate(path: Path) -> None:
+        resolved = path.resolve()
+        if resolved not in seen:
+            seen.add(resolved)
+            candidate_paths.append(resolved)
+
+    for root in script_path.parents:
+        add_candidate(root / "repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py")
+        versioned_plugin_root = root / "repository-skills"
+        if versioned_plugin_root.is_dir():
+            for version_dir in sorted(versioned_plugin_root.iterdir(), key=version_sort_key, reverse=True):
+                add_candidate(version_dir / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py")
+
+    for runner in candidate_paths:
+        if runner.is_file():
+            return runner
+
+    searched = "\n".join(f"- {path}" for path in candidate_paths) or "- no candidate paths were generated"
+    raise RuntimeError(
+        "bootstrap-xcode-app-project needs repository-skills/maintain-project-repo "
+        "to install repo-maintenance files, but no runner was found. "
+        f"Searched candidate paths:\n{searched}\n"
+        "Install repository-skills alongside apple-dev-skills, or add the socket "
+        "marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and "
+        "enable both apple-dev-skills and repository-skills from the Socket catalog, "
+        "then rerun this workflow."
+    )
 
 
 def main() -> int:

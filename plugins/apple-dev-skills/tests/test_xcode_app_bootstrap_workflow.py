@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -9,10 +10,23 @@ import unittest
 from contextlib import contextmanager
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "skills/bootstrap-xcode-app-project/scripts/run_workflow.py"
 XCODEGEN_TEMPLATE_DIR = ROOT / "templates/xcodegen/swiftui-app"
+
+
+def versioned_cache_script(tmpdir: str) -> Path:
+    cache_root = Path(tmpdir) / "cache" / "socket"
+    apple_plugin_root = cache_root / "apple-dev-skills" / "9.34.0"
+    repository_plugin_root = cache_root / "repository-skills" / "9.34.0"
+    shutil.copytree(ROOT / "skills/bootstrap-xcode-app-project", apple_plugin_root / "skills/bootstrap-xcode-app-project")
+    shutil.copytree(ROOT / "templates", apple_plugin_root / "templates")
+    shutil.copytree(
+        ROOT.parent / "repository-skills",
+        repository_plugin_root,
+        ignore=shutil.ignore_patterns(".venv", ".pytest_cache", ".ruff_cache", "__pycache__"),
+    )
+    return apple_plugin_root / "skills/bootstrap-xcode-app-project/scripts/run_workflow.py"
 
 
 def write_config(tmpdir: str, skill: str, settings: dict) -> None:
@@ -43,11 +57,11 @@ def fake_tools_in_path(*entries: tuple[str, str]):
 
 
 class XcodeAppBootstrapWorkflowTests(unittest.TestCase):
-    def run_script(self, *args: str, env: dict | None = None) -> tuple[int, dict]:
+    def run_script(self, *args: str, env: dict | None = None, script: Path = SCRIPT) -> tuple[int, dict]:
         command_env = dict(env or os.environ)
         command_env.setdefault("UV_CACHE_DIR", str(Path(tempfile.gettempdir()) / "apple-dev-skills-uv-cache"))
         proc = subprocess.run(
-            [str(SCRIPT), *args],
+            [str(script), *args],
             cwd="/tmp",
             env=command_env,
             capture_output=True,
@@ -389,6 +403,42 @@ exit 1
             )
             self.assertTrue((target / ".github" / "workflows" / "validate-repo-maintenance.yml").exists())
             self.assertEqual(payload["validation_result"], "passed (xcodebuild -list)")
+
+    def test_versioned_cache_discovers_repository_skills_runner(self) -> None:
+        xcodegen_body = """#!/bin/sh
+if [ "$1" = "generate" ]; then
+  mkdir -p CacheApp.xcodeproj
+  exit 0
+fi
+exit 1
+"""
+        xcodebuild_body = """#!/bin/sh
+if [ "$1" = "-list" ]; then
+  exit 0
+fi
+exit 1
+"""
+        with tempfile.TemporaryDirectory() as tmpdir, fake_tools_in_path(
+            ("xcodegen", xcodegen_body), ("xcodebuild", xcodebuild_body)
+        ) as env:
+            script = versioned_cache_script(tmpdir)
+            code, payload = self.run_script(
+                "--name",
+                "CacheApp",
+                "--file-prefix",
+                "CAP",
+                "--destination",
+                tmpdir,
+                "--platform",
+                "macos",
+                "--project-generator",
+                "xcodegen",
+                env=env,
+                script=script,
+            )
+            self.assertEqual(code, 0, payload)
+            target = Path(payload["resolved_path"])
+            self.assertTrue((target / "Scripts/repo-maintenance/validate-all.sh").is_file())
 
     @unittest.skipUnless(
         sys.platform == "darwin" and os.environ.get("APPLE_DEV_SKILLS_RUN_XCODEGEN_INTEGRATION") == "1",

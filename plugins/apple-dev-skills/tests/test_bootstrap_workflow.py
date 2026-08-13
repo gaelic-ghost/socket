@@ -9,9 +9,22 @@ import unittest
 from contextlib import contextmanager
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "skills/bootstrap-swift-package/scripts/run_workflow.py"
+
+
+def versioned_cache_script(tmpdir: str) -> Path:
+    cache_root = Path(tmpdir) / "cache" / "socket"
+    apple_plugin_root = cache_root / "apple-dev-skills" / "9.34.0"
+    repository_plugin_root = cache_root / "repository-skills" / "9.34.0"
+    shutil.copytree(ROOT / "skills/bootstrap-swift-package", apple_plugin_root / "skills/bootstrap-swift-package")
+    shutil.copytree(ROOT / "templates", apple_plugin_root / "templates")
+    shutil.copytree(
+        ROOT.parent / "repository-skills",
+        repository_plugin_root,
+        ignore=shutil.ignore_patterns(".venv", ".pytest_cache", ".ruff_cache", "__pycache__"),
+    )
+    return apple_plugin_root / "skills/bootstrap-swift-package/scripts/run_workflow.py"
 
 
 def write_config(tmpdir: str, skill: str, settings: dict) -> None:
@@ -43,11 +56,11 @@ def fake_swift_in_path(script_body: str):
 
 
 class BootstrapWorkflowTests(unittest.TestCase):
-    def run_script(self, *args: str, env: dict | None = None) -> tuple[int, dict]:
+    def run_script(self, *args: str, env: dict | None = None, script: Path = SCRIPT) -> tuple[int, dict]:
         command_env = dict(env or os.environ)
         command_env.setdefault("UV_CACHE_DIR", str(Path(tempfile.gettempdir()) / "apple-dev-skills-uv-cache"))
         proc = subprocess.run(
-            [str(SCRIPT), *args],
+            [str(script), *args],
             cwd="/tmp",
             env=command_env,
             capture_output=True,
@@ -470,6 +483,22 @@ exec "{real_swift}" "$@"
                 (package_dir / "scripts" / "repo-maintenance" / "config" / "profile.env").read_text(encoding="utf-8"),
             )
             self.assertTrue((package_dir / ".github" / "workflows" / "validate-repo-maintenance.yml").is_file())
+
+    @unittest.skipUnless(shutil.which("swift"), "swift is required for versioned-cache bootstrap coverage")
+    def test_versioned_cache_discovers_repository_skills_runner(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            script = versioned_cache_script(tmpdir)
+            code, payload = self.run_script(
+                "--name",
+                "CachePkg",
+                "--destination",
+                tmpdir,
+                "--skip-validation",
+                script=script,
+            )
+            self.assertEqual(code, 0, payload)
+            package_dir = Path(payload["resolved_path"])
+            self.assertTrue((package_dir / "scripts/repo-maintenance/validate-all.sh").is_file())
 
     @unittest.skipUnless(shutil.which("swift"), "swift is required for executable bootstrap coverage")
     def test_executable_bootstrap_creates_swift_testing_test_target(self) -> None:

@@ -75,8 +75,44 @@ swift_minor_version=""
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 agents_template="$script_dir/../assets/AGENTS.md"
 local_environment_template="$script_dir/../../../templates/codex-local-environments/swift-package.toml"
-maintain_project_repo_runner="$script_dir/../../../../repository-skills/skills/maintain-project-repo/scripts/run_workflow.py"
-maintain_project_repo_missing_message="Validation failed: bootstrap-swift-package needs repository-skills/maintain-project-repo to install repo-maintenance files, but the runner was missing at $maintain_project_repo_runner. Install repository-skills alongside apple-dev-skills, or add the socket marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and enable both apple-dev-skills and repository-skills from the Socket catalog, then rerun this workflow."
+maintain_project_repo_runner=""
+maintain_project_repo_search_paths=()
+
+find_maintain_project_repo_runner() {
+  local root="$script_dir"
+  local candidate=""
+  local versioned_plugin_root=""
+  local version_dir=""
+
+  while [[ "$root" != "/" ]]; do
+    candidate="$root/repository-skills/skills/maintain-project-repo/scripts/run_workflow.py"
+    maintain_project_repo_search_paths+=("$candidate")
+    if [[ -x "$candidate" ]]; then
+      maintain_project_repo_runner="$candidate"
+      return 0
+    fi
+
+    versioned_plugin_root="$root/repository-skills"
+    if [[ -d "$versioned_plugin_root" ]]; then
+      for version_dir in "$versioned_plugin_root"/*; do
+        [[ -d "$version_dir" ]] || continue
+        candidate="$version_dir/skills/maintain-project-repo/scripts/run_workflow.py"
+        maintain_project_repo_search_paths+=("$candidate")
+        if [[ -x "$candidate" ]]; then
+          maintain_project_repo_runner="$candidate"
+          return 0
+        fi
+      done
+    fi
+
+    root="$(dirname "$root")"
+  done
+
+  return 1
+}
+
+find_maintain_project_repo_runner || true
+maintain_project_repo_missing_message="Validation failed: bootstrap-swift-package needs repository-skills/maintain-project-repo to install repo-maintenance files, but no runner was found. Searched candidate paths: $(printf '\n- %s' "${maintain_project_repo_search_paths[@]}"). Install repository-skills alongside apple-dev-skills, or add the socket marketplace with 'codex plugin marketplace add gaelic-ghost/socket' and enable both apple-dev-skills and repository-skills from the Socket catalog, then rerun this workflow."
 
 is_ignorable_directory_entry() {
   local entry_name="$1"
