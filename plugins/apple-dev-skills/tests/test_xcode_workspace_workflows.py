@@ -55,6 +55,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertIn("Packages/packages-shared.yml", root_spec)
             self.assertIn("projectFormat: xcode16_3", root_spec)
             self.assertIn("AppStore: release", root_spec)
+            self.assertIn('iOS: "26.1"', root_spec)
             for target in ("ProductiOS", "ProductmacOS"):
                 self.assertTrue((root / f"Apps/{target}/target.yml").is_file())
                 self.assertTrue((root / f"Apps/{target}/Configurations/App.xcconfig").is_file())
@@ -63,6 +64,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
                 self.assertTrue((root / f"Apps/{target}/Resources/{target}.entitlements").is_file())
                 self.assertTrue((root / f"Apps/{target}Tests/Sources/{target}Tests.swift").is_file())
                 self.assertTrue((root / f"Apps/{target}UITests/Sources/{target}UITests.swift").is_file())
+                self.assertFalse((root / f"Apps/{target}Tests/Configurations").exists())
                 target_spec = (root / f"Apps/{target}/target.yml").read_text(encoding="utf-8")
                 self.assertIn(f"{target} All Tests", target_spec)
                 self.assertIn("SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor", target_spec)

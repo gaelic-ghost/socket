@@ -85,6 +85,7 @@ def root_spec(name: str, platforms: list[str]) -> str:
         f"name: {name}", "include:", *includes, "options:",
         "  minimumXcodeGenVersion: 2.46.0", "  projectFormat: xcode16_3", "  defaultConfig: Debug",
         "  defaultSourceDirectoryType: syncedFolder", "  schemePathPrefix: ../", "  localPackagesGroup: Packages",
+        "  deploymentTarget:", "    iOS: \"26.1\"", "    macOS: \"26.1\"", "    tvOS: \"26.1\"", "    watchOS: \"26.1\"", "    visionOS: \"26.1\"",
         "configs:", *(f"  {config}: {'debug' if config == 'Debug' else 'release'}" for config in CONFIGURATIONS), "configFiles:",
         *(f"  {config}: Configurations/{config}.xcconfig" for config in CONFIGURATIONS),
         "fileGroups:", "  - Apps", "  - Packages", "  - Configurations", "  - Scripts", "  - docs", "",
@@ -194,13 +195,6 @@ def target_spec(name: str, platform: str, prefix: str, org: str, team: str) -> s
         PRODUCT_BUNDLE_IDENTIFIER: {org}.{name.lower()}.{suffix}.tests
         DEVELOPMENT_TEAM: {team}
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
-    configFiles:
-      Debug: Apps/{target}Tests/Configurations/Debug.xcconfig
-      Staging: Apps/{target}Tests/Configurations/Staging.xcconfig
-      Release: Apps/{target}Tests/Configurations/Release.xcconfig
-      AppStore: Apps/{target}Tests/Configurations/AppStore.xcconfig
-      DirectDistribution: Apps/{target}Tests/Configurations/DirectDistribution.xcconfig
-      AltStore: Apps/{target}Tests/Configurations/AltStore.xcconfig
 schemes:
   {target}:
     templates: [AppScheme]
@@ -230,15 +224,12 @@ schemes:
         PRODUCT_BUNDLE_IDENTIFIER: {org}.{name.lower()}.{suffix}.uitests
         DEVELOPMENT_TEAM: {team}
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
-    configFiles:
-      Debug: Apps/{target}UITests/Configurations/Debug.xcconfig
-      Staging: Apps/{target}UITests/Configurations/Staging.xcconfig
-      Release: Apps/{target}UITests/Configurations/Release.xcconfig
-      AppStore: Apps/{target}UITests/Configurations/AppStore.xcconfig
-      DirectDistribution: Apps/{target}UITests/Configurations/DirectDistribution.xcconfig
-      AltStore: Apps/{target}UITests/Configurations/AltStore.xcconfig
 schemes:
   {target} UI Tests:
+    preActions:
+      - name: Increment build number
+        script: 'sh "${{SRCROOT}}/Scripts/increment-build-version.sh" "${{TARGET_NAME}}" "${{CONFIGURATION}}"'
+        settingsTarget: {target}
     build:
       targets: {{ {target}: all }}
     test:
@@ -261,6 +252,10 @@ schemes:
     archive: {{ config: {config} }}
 """
     spec += f"""  {target} Unit Tests:
+    preActions:
+      - name: Increment build number
+        script: 'sh "${{SRCROOT}}/Scripts/increment-build-version.sh" "${{TARGET_NAME}}" "${{CONFIGURATION}}"'
+        settingsTarget: {target}
     build:
       targets: {{ {target}: all }}
     test:
@@ -269,6 +264,10 @@ schemes:
         - name: {target}Tests
           parallelizable: true
   {target} All Tests:
+    preActions:
+      - name: Increment build number
+        script: 'sh "${{SRCROOT}}/Scripts/increment-build-version.sh" "${{TARGET_NAME}}" "${{CONFIGURATION}}"'
+        settingsTarget: {target}
     build:
       targets: {{ {target}: all }}
     test:
@@ -304,8 +303,8 @@ def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, 
         write(root / destination, (Path(__file__).resolve().parents[1] / "assets" / "managed-guidance" / source).read_text(encoding="utf-8"), destination.endswith("pre-commit"))
     write(root / "Justfile", "set shell := [\"sh\", \"-eu\", \"-c\"]\n\nsetup:\n  sh Scripts/setup.sh\nalign:\n  sh Scripts/align.sh\nvalidate:\n  sh Scripts/validate.sh\npackage-test:\n  for manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\ntest target:\n  xcodebuild -workspace *.xcworkspace -scheme \"{{target}}\" test\narchive target channel:\n  sh Scripts/release.sh \"{{target}}\" \"{{channel}}\"\napp-store target:\n  sh Scripts/release.sh \"{{target}}\" app-store\naltstore target:\n  sh Scripts/release.sh \"{{target}}\" altstore\ndirect-distribution target:\n  sh Scripts/release.sh \"{{target}}\" direct-distribution\n")
     write(root / "Scripts/setup.sh", "#!/usr/bin/env sh\nset -eu\nfor tool in git just swift xcodegen xcodebuild; do command -v \"$tool\" >/dev/null 2>&1 || { echo \"Missing required tool: $tool\" >&2; exit 1; }; done\ngit config core.hooksPath .githooks\n", True)
-    write(root / "Scripts/align.sh", "#!/usr/bin/env sh\nset -eu\nbase=${SOCKET_TEMPLATE_BASE_URL:-https://raw.githubusercontent.com/gaelic-ghost/socket/main/plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/assets/managed-guidance}\ntmp=$(mktemp -d)\ntrap 'rm -r \"$tmp\"' EXIT HUP INT TERM\nfor file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md pre-commit; do curl --fail --silent --show-error \"$base/$file\" -o \"$tmp/$file\"; done\nfor file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md; do grep -q 'socket-managed:begin' \"$tmp/$file\"; done\n[ -s \"$tmp/pre-commit\" ]\nreplace() { source=$1; destination=$2; grep -q 'socket-managed:begin' \"$destination\"; awk -v replacement=\"$source\" '/<!-- socket-managed:begin/ { while ((getline line < replacement) > 0) print line; in_managed=1; next } in_managed { if (/<!-- socket-managed:end/) in_managed=0; next } { print }' \"$destination\" > \"$tmp/out\"; mv \"$tmp/out\" \"$destination\"; }\nreplace \"$tmp/AGENTS-root.md\" AGENTS.md\nreplace \"$tmp/AGENTS-apps.md\" Apps/AGENTS.md\nreplace \"$tmp/AGENTS-packages.md\" Packages/AGENTS.md\nreplace \"$tmp/CONTRIBUTING.md\" CONTRIBUTING.md\ncp \"$tmp/pre-commit\" .githooks/pre-commit\nchmod +x .githooks/pre-commit\ngit config core.hooksPath .githooks\nxcodegen generate --spec project.yml\n", True)
-    write(root / "Scripts/increment-build-version.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; configuration=${2:?configuration required}; label=$(printf '%s' \"$configuration\" | tr '[:upper:]' '[:lower:]')\nfile=\"Apps/$target/Configurations/Version.xcconfig\"\n[ \"$configuration\" = Debug ] && key=DEBUG_BUILD_NUMBER || key=RELEASE_BUILD_NUMBER\nvalue=$(awk -F ' = ' -v key=\"$key\" '$1 == key { print $2 }' \"$file\")\n[ -n \"$value\" ] || { echo \"Missing $key in $file\" >&2; exit 1; }\nawk -F ' = ' -v key=\"$key\" -v next=$((value + 1)) 'BEGIN { OFS = \" = \" } $1 == key { $2 = next } { print }' \"$file\" > \"$file.tmp\" && mv \"$file.tmp\" \"$file\"\ngit rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo \"Build counter requires a Git repository.\" >&2; exit 1; }\nstaged=false; unstaged=false; git diff --cached --quiet || staged=true; git diff --quiet || unstaged=true\nif $staged && $unstaged; then git add \"$file\"; echo \"warning: staged build counter update; commit it manually as soon as possible.\" >&2; exit 0; fi\nif $staged; then patch=$(mktemp); git diff --cached --binary > \"$patch\"; git restore --staged :/; git add \"$file\"; git commit -m \"build: increment $target $label build\"; git apply --cached \"$patch\"; rm -f \"$patch\"; else git add \"$file\"; git commit -m \"build: increment $target $label build\"; fi\n", True)
+    write(root / "Scripts/align.sh", "#!/usr/bin/env sh\nset -eu\nbase=${SOCKET_TEMPLATE_BASE_URL:-https://raw.githubusercontent.com/gaelic-ghost/socket/main/plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/assets/managed-guidance}\ntmp=$(mktemp -d)\ntrap 'rm -r \"$tmp\"' EXIT HUP INT TERM\nfor file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md pre-commit; do curl --fail --silent --show-error \"$base/$file\" -o \"$tmp/$file\"; done\nfor file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md; do grep -q 'socket-managed:begin' \"$tmp/$file\"; done\n[ -s \"$tmp/pre-commit\" ]\nfor file in AGENTS.md Apps/AGENTS.md Packages/AGENTS.md CONTRIBUTING.md; do grep -q 'socket-managed:begin' \"$file\" || { echo \"just align: $file is missing managed markers; no files were changed.\" >&2; exit 1; }; done\nreplace() { source=$1; destination=$2; awk -v replacement=\"$source\" '/<!-- socket-managed:begin/ { while ((getline line < replacement) > 0) { print line; if (line ~ /<!-- socket-managed:end/) break }; in_managed=1; next } in_managed { if (/<!-- socket-managed:end/) in_managed=0; next } { print }' \"$destination\" > \"$tmp/out\"; mv \"$tmp/out\" \"$destination\"; }\nreplace \"$tmp/AGENTS-root.md\" AGENTS.md\nreplace \"$tmp/AGENTS-apps.md\" Apps/AGENTS.md\nreplace \"$tmp/AGENTS-packages.md\" Packages/AGENTS.md\nreplace \"$tmp/CONTRIBUTING.md\" CONTRIBUTING.md\ncp \"$tmp/pre-commit\" .githooks/pre-commit\nchmod +x .githooks/pre-commit\ngit config core.hooksPath .githooks\nxcodegen generate --spec project.yml\n", True)
+    write(root / "Scripts/increment-build-version.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; configuration=${2:?configuration required}; label=$(printf '%s' \"$configuration\" | tr '[:upper:]' '[:lower:]')\nfile=\"Apps/$target/Configurations/Version.xcconfig\"\ngit rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo \"Build counter requires a Git repository.\" >&2; exit 1; }\n[ \"$configuration\" = Debug ] && key=DEBUG_BUILD_NUMBER || key=RELEASE_BUILD_NUMBER\nvalue=$(awk -F ' = ' -v key=\"$key\" '$1 == key { print $2 }' \"$file\")\n[ -n \"$value\" ] || { echo \"Missing $key in $file\" >&2; exit 1; }\nawk -F ' = ' -v key=\"$key\" -v next=$((value + 1)) 'BEGIN { OFS = \" = \" } $1 == key { $2 = next } { print }' \"$file\" > \"$file.tmp\" && mv \"$file.tmp\" \"$file\"\nstaged=false; unstaged=false; git diff --cached --quiet || staged=true; git diff --quiet || unstaged=true\nif $staged && $unstaged; then git add \"$file\"; echo \"warning: staged build counter update; commit it manually as soon as possible.\" >&2; exit 0; fi\nif $staged; then patch=$(mktemp); git diff --cached --binary > \"$patch\"; git restore --staged :/; git add \"$file\"; git commit -m \"build: increment $target $label build\"; git apply --cached \"$patch\"; rm -f \"$patch\"; else git add \"$file\"; git commit -m \"build: increment $target $label build\"; fi\n", True)
     write(root / "Scripts/validate.sh", "#!/usr/bin/env sh\nset -eu\nswiftformat --lint --config .swiftformat Apps Packages\nswiftlint lint --config .swiftlint.yml --force-exclude Apps Packages\nxcodegen generate --spec project.yml\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\nxcodebuild -list -workspace \"$workspace\"\nfor manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\n", True)
     write(root / "Scripts/release.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; channel=${2:?channel required}\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\ncase \"$channel\" in\n  staging) scheme=\"$target Staging\"; config=Staging ;;\n  app-store) scheme=\"$target App Store\"; config=AppStore ;;\n  altstore) scheme=\"$target AltStore\"; config=AltStore ;;\n  direct-distribution) scheme=\"$target Direct Distribution\"; config=DirectDistribution ;;\n  *) echo \"Unknown release channel: $channel\" >&2; exit 1 ;;\nesac\narchive=\"Build/$target-$channel.xcarchive\"\nxcodebuild -workspace \"$workspace\" -scheme \"$scheme\" -configuration \"$config\" -archivePath \"$archive\" archive\ncase \"$channel\" in\n  app-store) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-app-store\" -exportOptionsPlist Scripts/ExportOptions/AppStore.plist; artifact=$(find \"Build/$target-app-store\" -type f \\( -name '*.ipa' -o -name '*.pkg' \\) -print -quit); [ -n \"$artifact\" ] || { echo \"App Store export produced no IPA or PKG.\" >&2; exit 1; }; case \"$target\" in *macOS) type=osx ;; *) type=ios ;; esac; xcrun altool --upload-app -f \"$artifact\" -t \"$type\" ;;\n  altstore) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-altstore\" -exportOptionsPlist Scripts/ExportOptions/AltStore.plist ;;\n  direct-distribution) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-direct\" -exportOptionsPlist Scripts/ExportOptions/DirectDistribution.plist; app=$(find \"Build/$target-direct\" -type d -name '*.app' -print -quit); [ -n \"$app\" ] || { echo \"Direct export produced no app bundle.\" >&2; exit 1; }; dmg=\"Build/$target-direct/$target.dmg\"; hdiutil create -volname \"$target\" -srcfolder \"$app\" -ov -format UDZO \"$dmg\"; xcrun notarytool submit \"$dmg\" --keychain-profile notarytool --wait; xcrun stapler staple \"$dmg\" ;;\nesac\n", True)
     write(root / "Scripts/ExportOptions/AppStore.plist", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>method</key><string>app-store</string></dict></plist>\n')
@@ -336,13 +335,9 @@ def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, 
         write(app_root / "Resources/Assets.xcassets/AccentColor.colorset/Contents.json", '{"colors":[],"info":{"author":"xcode","version":1}}\n')
         write(app_root / "Resources/Localizable.xcstrings", '{"sourceLanguage":"en","strings":{},"version":"1.0"}\n')
         tests_root = root / "Apps" / f"{target}Tests"
-        for config in CONFIGURATIONS:
-            write(tests_root / f"Configurations/{config}.xcconfig", '#include "../../Apps-shared.xcconfig"\nSWIFT_DEFAULT_ACTOR_ISOLATION = MainActor\n')
         write(tests_root / f"Sources/{target}Tests.swift", f'import Testing\n@testable import {target}\n\n@Test func example() {{ #expect(true) }}\n')
         if platform != "watchos":
             ui_root = root / "Apps" / f"{target}UITests"
-            for config in CONFIGURATIONS:
-                write(ui_root / f"Configurations/{config}.xcconfig", '#include "../../Apps-shared.xcconfig"\nSWIFT_DEFAULT_ACTOR_ISOLATION = MainActor\n')
             write(ui_root / f"Sources/{target}UITests.swift", f'import XCTest\n\nfinal class {target}UITests: XCTestCase {{\n    func testLaunch() {{}}\n}}\n')
     package_root = root / "Packages" / f"{name}Core"
     package_root.mkdir(parents=True)
