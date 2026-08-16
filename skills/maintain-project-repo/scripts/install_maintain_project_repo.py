@@ -44,10 +44,6 @@ PROFILE_OVERLAY_FILES = {
         ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
         ("profiles/apple/repo-maintenance/.swiftlint.yml", ".swiftlint.yml"),
         (
-            "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
-            "scripts/repo-maintenance/hooks/pre-commit.sample",
-        ),
-        (
             "profiles/xcode-workspace/repo-maintenance/validations/40-xcode-workspace-layout.sh",
             "scripts/repo-maintenance/validations/40-xcode-workspace-layout.sh",
         ),
@@ -129,6 +125,8 @@ def target_pairs(profile: str, skip_github_workflow: bool) -> list[tuple[Path, P
         pairs.append((root / source_relative, target))
 
     for source_relative, target_relative in MANAGED_TOOLKIT_FILES:
+        if profile == "xcode-workspace" and source_relative == "repo-maintenance/hooks/pre-commit.sample":
+            continue
         add_pair(source_relative, target_relative)
     for source_relative, target_relative in PROFILE_OVERLAY_FILES.get(profile, []):
         add_pair(source_relative, target_relative)

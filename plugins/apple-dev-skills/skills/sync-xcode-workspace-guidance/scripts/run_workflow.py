@@ -65,24 +65,26 @@ def main() -> int:
         "detected_state": state,
         "findings": findings,
         "actions": actions,
-        "next_step": "Refresh root project.yml, included target specs, and package manifests through their owning sources, then regenerate with XcodeGen.",
+        "next_step": "Initialize managed guidance, then run just align to fetch current Socket guidance, refresh hooks, and regenerate with XcodeGen.",
     }
-    agents_path = root / "AGENTS.md"
-    section = (Path(__file__).resolve().parents[1] / "assets" / "append-section.md").read_text(encoding="utf-8")
+    templates = Path(__file__).resolve().parents[2] / "bootstrap-xcode-workspace" / "assets" / "managed-guidance"
+    managed_files = (("AGENTS-root.md", root / "AGENTS.md"), ("AGENTS-apps.md", root / "Apps" / "AGENTS.md"), ("AGENTS-packages.md", root / "Packages" / "AGENTS.md"), ("CONTRIBUTING.md", root / "CONTRIBUTING.md"))
     if status == "success":
-        if not agents_path.exists():
-            actions.append("create root AGENTS.md with workspace guidance")
-            if not args.dry_run:
-                agents_path.write_text("# AGENTS.md\n\n" + section, encoding="utf-8")
-        elif not agents_path.is_file():
-            payload.update(status="blocked", findings=[*findings, "AGENTS.md exists but is not a regular file."])
-        elif "## Apple / Xcode Workspace Workflow" not in agents_path.read_text(encoding="utf-8"):
-            actions.append("append bounded workspace guidance to root AGENTS.md")
-            if not args.dry_run:
-                with agents_path.open("a", encoding="utf-8") as handle:
-                    handle.write("\n" + section)
-        else:
-            actions.append("preserve existing root workspace guidance")
+        for source_name, destination in managed_files:
+            source = templates / source_name
+            if destination.exists() and not destination.is_file():
+                payload.update(status="blocked", findings=[*findings, f"{destination.relative_to(root)} exists but is not a regular file."])
+            elif not destination.exists():
+                actions.append(f"create {destination.relative_to(root)} with managed markers")
+                if not args.dry_run:
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    destination.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+            elif "socket-managed:begin" not in destination.read_text(encoding="utf-8"):
+                actions.append(f"append managed boundary to {destination.relative_to(root)}")
+                if not args.dry_run:
+                    with destination.open("a", encoding="utf-8") as handle:
+                        handle.write("\n" + source.read_text(encoding="utf-8"))
+        actions.append("handoff to just align for latest Socket-managed guidance, hooks, and Xcode generation")
     status = str(payload["status"])
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0 if status == "success" else 1

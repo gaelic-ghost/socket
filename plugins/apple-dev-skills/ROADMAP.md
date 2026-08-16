@@ -7,6 +7,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
+- [Managed Workspace Alignment](#managed-workspace-alignment)
 - [Milestone 21: Swift Cleanup Automation Exploration](#milestone-21-swift-cleanup-automation-exploration)
 - [Milestone 24: MCP App UI for Configuration and Customization](#milestone-24-mcp-app-ui-for-configuration-and-customization)
 - [Milestone 25: macOS Menu Bar Extra for Skill Controls](#milestone-25-macos-menu-bar-extra-for-skill-controls)
@@ -113,6 +114,21 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 67: macOS and Linux Virtualization Workflows - Completed
 - Milestone 68: Safari MCP Browser Validation Workflow - Completed
 - Milestone 69: macOS Privacy, File Access, and Entitlement Workflows - Completed
+
+## Managed Workspace Alignment
+
+### Status
+
+In progress
+
+### Next managed surfaces
+
+- [ ] Extend `just align` ownership beyond `AGENTS.md`, `CONTRIBUTING.md`, and
+  Git hooks to safe marked regions in additional root documentation.
+- [ ] Define safe managed boundaries for reusable workspace template files and
+  repository scripts before bringing either under live Socket refresh.
+- [ ] Keep `just align` as the one workspace sync command; do not add parallel
+  append-only guidance sync paths.
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 

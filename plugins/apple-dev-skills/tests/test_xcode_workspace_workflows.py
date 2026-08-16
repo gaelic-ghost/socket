@@ -42,14 +42,34 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertTrue((root / "project.yml").is_file())
             self.assertTrue((root / "Apps/apps-shared.yml").is_file())
             self.assertTrue((root / "Apps/Apps-shared.xcconfig").is_file())
+            self.assertTrue((root / "Apps/AGENTS.md").is_file())
             self.assertTrue((root / "Packages/packages-shared.yml").is_file())
+            self.assertTrue((root / "Packages/AGENTS.md").is_file())
             self.assertTrue((root / "Packages/ProductCore/Package.swift").is_file())
+            self.assertTrue((root / "AGENTS.md").is_file())
+            self.assertTrue((root / "CONTRIBUTING.md").is_file())
+            self.assertTrue((root / "Justfile").is_file())
+            self.assertTrue((root / ".githooks/pre-commit").is_file())
             root_spec = (root / "project.yml").read_text(encoding="utf-8")
             self.assertIn("Apps/apps-shared.yml", root_spec)
             self.assertIn("Packages/packages-shared.yml", root_spec)
+            self.assertIn("projectFormat: xcode16_3", root_spec)
+            self.assertIn("AppStore: release", root_spec)
             for target in ("ProductiOS", "ProductmacOS"):
                 self.assertTrue((root / f"Apps/{target}/target.yml").is_file())
                 self.assertTrue((root / f"Apps/{target}/Configurations/App.xcconfig").is_file())
+                self.assertTrue((root / f"Apps/{target}/Configurations/Version.xcconfig").is_file())
+                self.assertTrue((root / f"Apps/{target}/Resources/Info.plist").is_file())
+                self.assertTrue((root / f"Apps/{target}/Resources/{target}.entitlements").is_file())
+                self.assertTrue((root / f"Apps/{target}Tests/Sources/{target}Tests.swift").is_file())
+                self.assertTrue((root / f"Apps/{target}UITests/Sources/{target}UITests.swift").is_file())
+                target_spec = (root / f"Apps/{target}/target.yml").read_text(encoding="utf-8")
+                self.assertIn(f"{target} All Tests", target_spec)
+                self.assertIn("SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor", target_spec)
+            manifest = (root / "Packages/ProductCore/Package.swift").read_text(encoding="utf-8")
+            self.assertIn("swift-tools-version: 6.2", manifest)
+            self.assertIn("ProductDomain", manifest)
+            self.assertIn("ProductServices", manifest)
             self.assertTrue((root / "Scripts/repo-maintenance/validate-all.sh").is_file())
 
     def test_bootstrap_discovers_repository_runner_from_versioned_plugin_cache(self) -> None:
@@ -91,9 +111,9 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
 
     def test_bootstrap_rejects_noncanonical_platform_or_prefix(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--platforms", "watchos")
-            self.assertEqual(code, 1)
-            self.assertIn("ios,macos", payload["stderr"])
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--platforms", "watchos", "--dry-run")
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["normalized_inputs"]["platforms"], ["watchos"])
             code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--file-prefix", "no")
             self.assertEqual(code, 1)
             self.assertIn("three uppercase", payload["stderr"])
@@ -115,8 +135,11 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 0, payload)
             self.assertEqual(len(payload["detected_state"]["root_projects"]), 1)
             agents = (root / "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("Apps-shared.xcconfig", agents)
-            self.assertIn("packages-shared.yml", agents)
+            self.assertIn("socket-managed:begin", agents)
+            self.assertIn("just align", agents)
+            self.assertTrue((root / "Apps/AGENTS.md").is_file())
+            self.assertTrue((root / "Packages/AGENTS.md").is_file())
+            self.assertTrue((root / "CONTRIBUTING.md").is_file())
 
     def test_app_sync_redirects_workspace_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
