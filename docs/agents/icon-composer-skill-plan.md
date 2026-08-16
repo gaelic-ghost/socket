@@ -195,7 +195,7 @@ When integrating into an existing app project:
 - treat `.icon` as the source icon artifact when Xcode supports it
 - run the narrowest useful project validation after integration
 
-For brand-new native Apple apps, hand off to `bootstrap-xcode-app-project` first, then return to this skill for icon production once the app exists.
+For brand-new native Apple products, hand off to `bootstrap-xcode-workspace` first, then return to this skill for icon production once the app exists.
 
 ## Future Packaged Agent Direction
 

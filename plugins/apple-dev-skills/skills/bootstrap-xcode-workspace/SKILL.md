@@ -89,15 +89,20 @@ Product/
 - `org_identifier`: bundle identifier prefix; default `com.galewilliams`.
 - `development_team`: code-signing team; default `BC73766F69`.
 - `dry_run`: report the normalized scaffold without writing files.
+- `operation`: `create` (default) creates a new product; `align` initializes
+  the managed alignment contract in an existing canonical workspace.
+- `repo_root`: required with `--operation align`; the existing workspace root.
 
 ## Guards And Handoffs
 
-- Stop when the destination product root is non-empty.
+- For an existing canonical workspace, run
+  `scripts/run_workflow.py --operation align --repo-root <root>` instead of
+  using a separate sync skill. It preserves local documentation and Justfile
+  content outside Socket-managed markers.
+- Stop when a create destination product root is non-empty.
 - Stop when XcodeGen is unavailable.
 - Do not introduce a second project generator, manually edited project data, or
   a separate app `.xcodeproj` under `Apps/`.
-- Use `sync-xcode-workspace-guidance` only to initialize the `just align`
-  contract in an existing product root.
 - A standalone published library or CLI remains a deliberate exception: use
   `bootstrap-swift-package` only when it is not part of an Apple product
   workspace.

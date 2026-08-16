@@ -8,8 +8,6 @@ def test_bootstrap_and_sync_skills_route_github_settings_to_repo_maintenance() -
     skill_paths = (
         "skills/bootstrap-swift-package/SKILL.md",
         "skills/sync-swift-package-guidance/SKILL.md",
-        "skills/bootstrap-xcode-app-project/SKILL.md",
-        "skills/sync-xcode-project-guidance/SKILL.md",
     )
 
     for relative_path in skill_paths:

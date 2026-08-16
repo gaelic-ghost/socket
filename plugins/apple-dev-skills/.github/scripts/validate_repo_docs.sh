@@ -155,9 +155,7 @@ active_skill_mds=(
   "./skills/format-swift-sources/SKILL.md"
   "./skills/structure-swift-sources/SKILL.md"
   "./skills/bootstrap-swift-package/SKILL.md"
-  "./skills/bootstrap-xcode-app-project/SKILL.md"
   "./skills/migrate-xcode-project-to-xcodegen/SKILL.md"
-  "./skills/sync-xcode-project-guidance/SKILL.md"
   "./skills/sync-swift-package-guidance/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
   "./skills/xcode-localization-workflow/SKILL.md"
@@ -171,7 +169,7 @@ active_skill_mds=(
   "./skills/tvos-app-experience-workflow/SKILL.md"
   "./skills/tvos-media-playback-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 64 ]] || fail "Expected exactly 64 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 62 ]] || fail "Expected exactly 62 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -281,7 +279,6 @@ for file in \
   "skills/appkit-app-architecture-workflow/SKILL.md" \
   "skills/swiftui-app-architecture-workflow/SKILL.md" \
   "skills/sync-swift-package-guidance/SKILL.md" \
-  "skills/sync-xcode-project-guidance/SKILL.md" \
   "ROADMAP.md"
 do
   require_not_contains "$file" 'install-plugin-to-socket'
@@ -292,9 +289,7 @@ echo "Validating maintain-project-repo delegation..."
 [[ ! -e "./shared/repo-maintenance-toolkit" ]] || fail "Did not expect apple-dev-skills to retain shared/repo-maintenance-toolkit."
 for skill_dir in \
   "./skills/bootstrap-swift-package" \
-  "./skills/bootstrap-xcode-app-project" \
-  "./skills/sync-swift-package-guidance" \
-  "./skills/sync-xcode-project-guidance"
+  "./skills/sync-swift-package-guidance"
 do
   [[ ! -e "$skill_dir/scripts/install_repo_maintenance_toolkit.py" ]] || fail "Did not expect legacy toolkit installer in $skill_dir"
   [[ ! -e "$skill_dir/assets/repo-maintenance" ]] || fail "Did not expect vendored repo-maintenance assets in $skill_dir"
@@ -304,9 +299,7 @@ do
   require_contains "$skill_dir/SKILL.md" 'https://github.com/gaelic-ghost/socket'
 done
 require_contains "./skills/bootstrap-swift-package/scripts/bootstrap_swift_package.sh" 'repository-skills/skills/maintain-project-repo/scripts/run_workflow.py'
-require_contains "./skills/bootstrap-xcode-app-project/scripts/bootstrap_xcode_app_project.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
 require_contains "./skills/sync-swift-package-guidance/scripts/sync_swift_package_guidance.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
-require_contains "./skills/sync-xcode-project-guidance/scripts/sync_xcode_project_guidance.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
 
 echo "Validating preserved guidance in AGENTS assets..."
 package_agents_assets=(
@@ -329,25 +322,6 @@ for agents_asset in "${package_agents_assets[@]}"; do
   require_contains "$agents_asset" '.xctestplan'
   require_contains "$agents_asset" 'Debug and Release'
   require_contains "$agents_asset" 'sync-swift-package-guidance'
-done
-
-xcode_agents_assets=(
-  "./skills/bootstrap-xcode-app-project/assets/AGENTS.md"
-  "./skills/sync-xcode-project-guidance/assets/AGENTS.md"
-)
-for agents_asset in "${xcode_agents_assets[@]}"; do
-  require_contains "$agents_asset" 'Use `xcode-build-run-workflow`'
-  require_contains "$agents_asset" 'Use `xcode-testing-workflow`'
-  require_contains "$agents_asset" 'Scripts/repo-maintenance/config/profile.env'
-  require_contains "$agents_asset" '.swiftformat'
-  require_contains "$agents_asset" 'Scripts/repo-maintenance/hooks/pre-commit.sample'
-  require_contains "$agents_asset" 'swiftformat --lint'
-  require_contains "$agents_asset" '.xctestplan'
-  require_contains "$agents_asset" 'project membership, target membership, build phases, and resource inclusion'
-  require_contains "$agents_asset" 'Debug and Release'
-  require_contains "$agents_asset" 'Never edit `.pbxproj` files directly.'
-  require_contains "$agents_asset" 'treat that diff as critical project state'
-  require_contains "$agents_asset" 'sync-xcode-project-guidance'
 done
 
 echo "Validating skill-creator contract..."

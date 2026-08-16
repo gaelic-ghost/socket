@@ -10,8 +10,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP = ROOT / "skills/bootstrap-xcode-workspace/scripts/run_workflow.py"
-SYNC = ROOT / "skills/sync-xcode-workspace-guidance/scripts/run_workflow.py"
-APP_SYNC = ROOT / "skills/sync-xcode-project-guidance/scripts/run_workflow.py"
 
 
 def run_script(script: Path, *args: str) -> tuple[int, dict]:
@@ -120,7 +118,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("three uppercase", payload["stderr"])
 
-    def test_sync_writes_canonical_workspace_guidance(self) -> None:
+    def test_existing_workspace_alignment_preserves_local_content_and_adds_just_contract(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             (root / "Product.xcworkspace").mkdir()
@@ -133,31 +131,22 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             (root / "Packages/ProductCore").mkdir(parents=True)
             (root / "Packages/packages-shared.yml").write_text("packages: {}\n", encoding="utf-8")
             (root / "Packages/ProductCore/Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
-            code, payload = run_script(SYNC, "--repo-root", tmpdir)
+            (root / "AGENTS.md").write_text("# Local\n\nKeep this.\n", encoding="utf-8")
+            (root / "Justfile").write_text("local:\n  echo local\n", encoding="utf-8")
+            code, payload = run_script(BOOTSTRAP, "--operation", "align", "--repo-root", tmpdir)
             self.assertEqual(code, 0, payload)
-            self.assertEqual(len(payload["detected_state"]["root_projects"]), 1)
-            agents = (root / "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("socket-managed:begin", agents)
-            self.assertIn("just align", agents)
-            self.assertTrue((root / "Apps/AGENTS.md").is_file())
-            self.assertTrue((root / "Packages/AGENTS.md").is_file())
-            self.assertTrue((root / "CONTRIBUTING.md").is_file())
-
-    def test_app_sync_redirects_workspace_root(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            root = Path(tmpdir)
-            (root / "Product.xcworkspace").mkdir()
-            (root / "Apps").mkdir()
-            (root / "Packages").mkdir()
-            code, payload = run_script(APP_SYNC, "--repo-root", tmpdir)
-            self.assertEqual(code, 1)
-            self.assertEqual(payload["status"], "blocked")
-            self.assertIn("sync-xcode-workspace-guidance", payload["next_step"])
+            self.assertIn("Justfile", " ".join(payload["actions"]))
+            self.assertIn(".socket/managed/align.sh", " ".join(payload["actions"]))
+            self.assertIn("Keep this.", (root / "AGENTS.md").read_text(encoding="utf-8"))
+            self.assertIn("socket-managed:begin", (root / "AGENTS.md").read_text(encoding="utf-8"))
+            self.assertIn("local:", (root / "Justfile").read_text(encoding="utf-8"))
+            self.assertIn("socket-managed:begin just-recipes", (root / "Justfile").read_text(encoding="utf-8"))
+            self.assertTrue((root / ".socket/managed/align.sh").is_file())
+            self.assertTrue((root / ".githooks/pre-commit").is_file())
 
     def test_docs_record_single_root_project_contract(self) -> None:
         bootstrap = (ROOT / "skills/bootstrap-xcode-workspace/SKILL.md").read_text(encoding="utf-8")
-        sync = (ROOT / "skills/sync-xcode-workspace-guidance/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("one root XcodeGen project", bootstrap)
         self.assertIn("Apps-shared.xcconfig", bootstrap)
         self.assertIn("packages-shared.yml", bootstrap)
-        self.assertIn("exactly one root `.xcodeproj`", sync)
+        self.assertIn("--operation align", bootstrap)

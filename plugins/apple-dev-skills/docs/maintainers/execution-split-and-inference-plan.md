@@ -40,9 +40,7 @@ Skills that remain separate and keep their current high-level role:
 
 - `explore-apple-swift-docs`
 - `bootstrap-swift-package`
-- `bootstrap-xcode-app-project`
 - `sync-swift-package-guidance`
-- `sync-xcode-project-guidance`
 - `format-swift-sources`
 - `structure-swift-sources`
 

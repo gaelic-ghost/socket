@@ -22,7 +22,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when structural cleanup in a plain package repo turns into ordinary package execution or SwiftPM validation.
 - Recommend `xcode-build-run-workflow` when structural cleanup turns into active Xcode execution, scheme validation, file-membership follow-through, or guarded project mutation work.
 - Recommend `xcode-testing-workflow` when structural cleanup turns into active Xcode test validation or test-target diagnosis.
-- Recommend `sync-xcode-project-guidance` or `sync-swift-package-guidance` when the real need is repo-level `AGENTS.md` alignment rather than source-structure cleanup.
+- Recommend `bootstrap-xcode-workspace --operation align` for an Apple product, or `sync-swift-package-guidance` for a standalone package, when the real need is repo guidance alignment.
 
 ## Single-Path Workflow
 
@@ -132,7 +132,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - If the request becomes symbol-doc or DocC-content work, hand off to `author-swift-docc-docs`.
 - If Xcode project integrity must be revalidated after file moves, hand off to `xcode-build-run-workflow`.
 - `scripts/run_workflow.py` is the top-level runtime entrypoint and converts repo inspection plus request inference into the documented JSON contract.
-- Recommend `sync-xcode-project-guidance` or `sync-swift-package-guidance` when the request is really about durable repo rules rather than current-file cleanup.
+- Recommend `bootstrap-xcode-workspace --operation align` for an Apple product, or `sync-swift-package-guidance` for a standalone package, when the request is really about durable repo rules.
 
 ## Customization
 

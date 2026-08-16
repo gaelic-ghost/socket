@@ -17,8 +17,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 - Use this skill when the user wants Dash-compatible Apple or Swift docs access, install guidance for a missing Dash docset, or generation guidance when a Dash docset is unavailable.
 - Recommend `xcode-build-run-workflow` when the user needs Apple or Swift execution, diagnostics, build, run, toolchain help, or mutation decisions inside an existing Xcode project.
 - Recommend `xcode-testing-workflow` when the user needs Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis inside an existing Xcode project.
-- Recommend `bootstrap-xcode-app-project` when the user is starting a brand new native Apple app project.
-- Recommend `sync-xcode-project-guidance` when an existing Xcode app repo needs `AGENTS.md` or workflow-guidance alignment rather than docs exploration.
+- Recommend `bootstrap-xcode-workspace` when the user is starting a native Apple product or aligning an existing canonical workspace.
 
 ## Single-Path Workflow
 
@@ -91,8 +90,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 - `dash-generate` falls back from stable automation guidance to deterministic manual guidance.
 - Recommend `xcode-build-run-workflow` directly when the user’s task shifts from docs exploration to Apple or Swift build, run, diagnostics, toolchain, or mutation work.
 - Recommend `xcode-testing-workflow` directly when the user’s task shifts from docs exploration to Apple or Swift test work.
-- Recommend `bootstrap-xcode-app-project` directly when the user needs new native app scaffolding.
-- Recommend `sync-xcode-project-guidance` directly when an existing Xcode app repo needs guidance sync rather than docs help.
+- Recommend `bootstrap-xcode-workspace` directly when the user needs a new native product scaffold or existing-workspace alignment.
 - `scripts/run_workflow.py` is the shared local helper for structured planning, install gating, and follow-up behavior; helper scripts remain implementation details behind it.
 
 ## Customization

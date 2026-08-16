@@ -164,18 +164,11 @@ class XcodeTestingWorkflowTests(unittest.TestCase):
         reference_text = (
             ROOT / "skills/xcode-testing-workflow/references/testing-plans-file-membership-and-configurations.md"
         ).read_text(encoding="utf-8")
-        snippet_text = (
-            ROOT / "skills/sync-xcode-project-guidance/references/snippets/apple-xcode-project-core.md"
-        ).read_text(encoding="utf-8")
-
-        for text in (reference_text, snippet_text):
-            self.assertIn("normal Xcode and XCTest parallel execution", text)
-            self.assertIn("over 500 million parameters", text)
-            self.assertIn("sequentially, one at a time", text)
+        self.assertIn("normal Xcode and XCTest parallel execution", reference_text)
+        self.assertIn("over 500 million parameters", reference_text)
+        self.assertIn("sequentially, one at a time", reference_text)
         self.assertIn("unload_models", reference_text)
         self.assertIn("reload_models", reference_text)
-        self.assertNotIn("unload_models", snippet_text)
-        self.assertNotIn("reload_models", snippet_text)
 
     def test_skill_documents_xcode_coverage_and_mcp_boundary(self) -> None:
         skill_text = (ROOT / "skills/xcode-testing-workflow/SKILL.md").read_text(encoding="utf-8")

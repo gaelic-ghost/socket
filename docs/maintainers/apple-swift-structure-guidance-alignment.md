@@ -63,7 +63,7 @@ The workflow now treats strict app MVVM as the app-project source layout:
 - keeps native SwiftUI scene actions, focused values, and selection-driven
   `NavigationSplitView` as the first choices when they fit
 
-### `apple-dev-skills:sync-xcode-project-guidance`
+### Apple product workspace alignment
 
 The reusable Xcode project guidance now names the structure directly and the
 sync runtime emits a `structure_audit` payload for downstream repos:

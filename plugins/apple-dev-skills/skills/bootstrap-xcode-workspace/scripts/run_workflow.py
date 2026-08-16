@@ -62,7 +62,7 @@ def maintain_project_repo_runner() -> Path:
 
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
-    result.add_argument("--name", required=True)
+    result.add_argument("--name")
     result.add_argument("--file-prefix", default="APP")
     result.add_argument("--destination", default=".")
     result.add_argument("--platforms", default="ios,macos")
@@ -70,12 +70,118 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--development-team", default="BC73766F69")
     result.add_argument("--dry-run", action="store_true")
     result.add_argument("--skip-validation", action="store_true")
+    result.add_argument("--repo-root", help="Align an existing canonical workspace root instead of creating a new product.")
+    result.add_argument("--operation", choices=("create", "align"), default="create")
     return result
 
 
 def blocked(message: str, inputs: dict[str, object]) -> int:
     print(json.dumps({"status": "blocked", "path_type": "primary", "normalized_inputs": inputs, "stderr": message}, indent=2, sort_keys=True))
     return 1
+
+
+MANAGED_BEGIN = "<!-- socket-managed:begin"
+MANAGED_END = "<!-- socket-managed:end"
+JUST_BEGIN = "# socket-managed:begin just-recipes"
+JUST_END = "# socket-managed:end just-recipes"
+
+
+def marker_state(content: str, begin: str = MANAGED_BEGIN, end: str = MANAGED_END) -> str:
+    begins, ends = content.count(begin), content.count(end)
+    if begins == 0 and ends == 0:
+        return "absent"
+    if begins == 1 and ends == 1 and content.index(begin) < content.index(end):
+        return "valid"
+    return "invalid"
+
+
+def workspace_findings(root: Path) -> list[str]:
+    findings: list[str] = []
+    if len(list(root.glob("*.xcworkspace"))) != 1:
+        findings.append("Expected exactly one root .xcworkspace.")
+    if len(list(root.glob("*.xcodeproj"))) != 1:
+        findings.append("Expected exactly one generated root .xcodeproj.")
+    required = ("project.yml", "Apps/apps-shared.yml", "Apps/Apps-shared.xcconfig", "Packages/packages-shared.yml")
+    findings.extend(f"Expected {path}." for path in required if not (root / path).is_file())
+    if not list((root / "Apps").glob("**/target.y*ml")):
+        findings.append("Expected at least one target.yml under Apps/.")
+    if not list((root / "Packages").glob("**/Package.swift")):
+        findings.append("Expected at least one Package.swift under Packages/.")
+    return findings
+
+
+def managed_recipe_block() -> str:
+    return "\n".join((
+        "# socket-managed:begin just-recipes",
+        "# Socket owns this bounded setup/alignment contract. Add project recipes outside it.",
+        "setup:", "  sh .socket/managed/setup.sh", "align:", "  sh .socket/managed/align.sh",
+        "# socket-managed:end just-recipes", "",
+    ))
+
+
+def setup_script() -> str:
+    return "\n".join((
+        "#!/usr/bin/env sh", "set -eu",
+        'for tool in git just swift xcodegen xcodebuild; do command -v "$tool" >/dev/null 2>&1 || { echo "Missing required tool: $tool" >&2; exit 1; }; done',
+        "git config core.hooksPath .githooks", "",
+    ))
+
+
+def align_script() -> str:
+    return "\n".join((
+        "#!/usr/bin/env sh", "set -eu",
+        "base=${SOCKET_TEMPLATE_BASE_URL:-https://raw.githubusercontent.com/gaelic-ghost/socket/main/plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/assets/managed-guidance}",
+        "tmp=$(mktemp -d)", "trap 'rm -r \"$tmp\"' EXIT HUP INT TERM",
+        "for file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md pre-commit; do curl --fail --silent --show-error \"$base/$file\" -o \"$tmp/$file\"; done",
+        "for file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md; do [ \"$(grep -c 'socket-managed:begin' \"$tmp/$file\")\" -eq 1 ] && [ \"$(grep -c 'socket-managed:end' \"$tmp/$file\")\" -eq 1 ] || { echo \"just align: remote $file has invalid managed markers; no files were changed.\" >&2; exit 1; }; done",
+        "[ -s \"$tmp/pre-commit\" ] || { echo \"just align: remote pre-commit hook is empty; no files were changed.\" >&2; exit 1; }",
+        "for file in AGENTS.md Apps/AGENTS.md Packages/AGENTS.md CONTRIBUTING.md; do [ \"$(grep -c 'socket-managed:begin' \"$file\")\" -eq 1 ] && [ \"$(grep -c 'socket-managed:end' \"$file\")\" -eq 1 ] || { echo \"just align: $file has invalid managed markers; no files were changed.\" >&2; exit 1; }; done",
+        "replace() { source=$1; destination=$2; awk -v replacement=\"$source\" '/<!-- socket-managed:begin/ { while ((getline line < replacement) > 0) { print line; if (line ~ /<!-- socket-managed:end/) break }; in_managed=1; next } in_managed { if (/<!-- socket-managed:end/) in_managed=0; next } { print }' \"$destination\" > \"$tmp/out\"; mv \"$tmp/out\" \"$destination\"; }",
+        "replace \"$tmp/AGENTS-root.md\" AGENTS.md", "replace \"$tmp/AGENTS-apps.md\" Apps/AGENTS.md", "replace \"$tmp/AGENTS-packages.md\" Packages/AGENTS.md", "replace \"$tmp/CONTRIBUTING.md\" CONTRIBUTING.md",
+        "cp \"$tmp/pre-commit\" .githooks/pre-commit", "chmod +x .githooks/pre-commit", "git config core.hooksPath .githooks", "xcodegen generate --spec project.yml", "",
+    ))
+
+
+def managed_document(source: Path, existing: str | None) -> str:
+    template = source.read_text(encoding="utf-8")
+    if existing is None:
+        return template
+    state = marker_state(existing)
+    if state == "invalid":
+        raise RuntimeError(f"{source.name} has malformed Socket managed markers.")
+    return existing + ("" if existing.endswith("\n") else "\n") + "\n" + template if state == "absent" else existing
+
+
+def install_alignment_runtime(root: Path, dry_run: bool = False) -> list[str]:
+    assets = Path(__file__).resolve().parents[1] / "assets" / "managed-guidance"
+    docs = (("AGENTS-root.md", root / "AGENTS.md"), ("AGENTS-apps.md", root / "Apps/AGENTS.md"), ("AGENTS-packages.md", root / "Packages/AGENTS.md"), ("CONTRIBUTING.md", root / "CONTRIBUTING.md"))
+    planned: dict[Path, tuple[str, bool]] = {}
+    for source_name, destination in docs:
+        if destination.exists() and not destination.is_file():
+            raise RuntimeError(f"{destination.relative_to(root)} exists but is not a regular file.")
+        existing = destination.read_text(encoding="utf-8") if destination.exists() else None
+        planned[destination] = (managed_document(assets / source_name, existing), False)
+    justfile = root / "Justfile"
+    if justfile.exists() and not justfile.is_file():
+        raise RuntimeError("Justfile exists but is not a regular file.")
+    existing = justfile.read_text(encoding="utf-8") if justfile.exists() else 'set shell := ["sh", "-eu", "-c"]\n'
+    state = marker_state(existing, JUST_BEGIN, JUST_END)
+    if state == "invalid":
+        raise RuntimeError("Justfile has malformed Socket managed recipe markers.")
+    planned[justfile] = ((existing.rstrip() + "\n\n" + managed_recipe_block()) if state == "absent" else existing, False)
+    for path, content in ((root / ".socket/managed/setup.sh", setup_script()), (root / ".socket/managed/align.sh", align_script())):
+        if path.exists() and path.read_text(encoding="utf-8") != content:
+            raise RuntimeError(f"{path.relative_to(root)} conflicts with the Socket-managed alignment helper.")
+        planned[path] = (content, True)
+    hook = root / ".githooks/pre-commit"
+    if hook.exists() and not hook.is_file():
+        raise RuntimeError(".githooks/pre-commit exists but is not a regular file.")
+    planned[hook] = ((assets / "pre-commit").read_text(encoding="utf-8"), True)
+    if not dry_run:
+        for destination, (content, executable) in planned.items():
+            write(destination, content, executable)
+        subprocess.run(["git", "config", "core.hooksPath", ".githooks"], cwd=root, check=False)
+    return [f"install Socket-managed alignment surface at {path.relative_to(root)}" for path in planned]
 
 
 def root_spec(name: str, platforms: list[str]) -> str:
@@ -299,11 +405,8 @@ def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, 
     write(root / ".gitignore", "Build/\nDerivedData/\nxcuserdata/\n*.xcuserstate\n")
     write(root / f"{name}.xcworkspace/contents.xcworkspacedata", f'<?xml version="1.0" encoding="UTF-8"?>\n<Workspace version="1.0">\n  <FileRef location="group:{name}.xcodeproj"/>\n</Workspace>\n')
     (root / "docs").mkdir()
-    for source, destination in (("AGENTS-root.md", "AGENTS.md"), ("AGENTS-apps.md", "Apps/AGENTS.md"), ("AGENTS-packages.md", "Packages/AGENTS.md"), ("CONTRIBUTING.md", "CONTRIBUTING.md"), ("pre-commit", ".githooks/pre-commit")):
-        write(root / destination, (Path(__file__).resolve().parents[1] / "assets" / "managed-guidance" / source).read_text(encoding="utf-8"), destination.endswith("pre-commit"))
-    write(root / "Justfile", "set shell := [\"sh\", \"-eu\", \"-c\"]\n\nsetup:\n  sh Scripts/setup.sh\nalign:\n  sh Scripts/align.sh\nvalidate:\n  sh Scripts/validate.sh\npackage-test:\n  for manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\ntest target:\n  xcodebuild -workspace *.xcworkspace -scheme \"{{target}}\" test\narchive target channel:\n  sh Scripts/release.sh \"{{target}}\" \"{{channel}}\"\napp-store target:\n  sh Scripts/release.sh \"{{target}}\" app-store\naltstore target:\n  sh Scripts/release.sh \"{{target}}\" altstore\ndirect-distribution target:\n  sh Scripts/release.sh \"{{target}}\" direct-distribution\n")
-    write(root / "Scripts/setup.sh", "#!/usr/bin/env sh\nset -eu\nfor tool in git just swift xcodegen xcodebuild; do command -v \"$tool\" >/dev/null 2>&1 || { echo \"Missing required tool: $tool\" >&2; exit 1; }; done\ngit config core.hooksPath .githooks\n", True)
-    write(root / "Scripts/align.sh", "#!/usr/bin/env sh\nset -eu\nbase=${SOCKET_TEMPLATE_BASE_URL:-https://raw.githubusercontent.com/gaelic-ghost/socket/main/plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/assets/managed-guidance}\ntmp=$(mktemp -d)\ntrap 'rm -r \"$tmp\"' EXIT HUP INT TERM\nfor file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md pre-commit; do curl --fail --silent --show-error \"$base/$file\" -o \"$tmp/$file\"; done\nfor file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md; do grep -q 'socket-managed:begin' \"$tmp/$file\"; done\n[ -s \"$tmp/pre-commit\" ]\nfor file in AGENTS.md Apps/AGENTS.md Packages/AGENTS.md CONTRIBUTING.md; do grep -q 'socket-managed:begin' \"$file\" || { echo \"just align: $file is missing managed markers; no files were changed.\" >&2; exit 1; }; done\nreplace() { source=$1; destination=$2; awk -v replacement=\"$source\" '/<!-- socket-managed:begin/ { while ((getline line < replacement) > 0) { print line; if (line ~ /<!-- socket-managed:end/) break }; in_managed=1; next } in_managed { if (/<!-- socket-managed:end/) in_managed=0; next } { print }' \"$destination\" > \"$tmp/out\"; mv \"$tmp/out\" \"$destination\"; }\nreplace \"$tmp/AGENTS-root.md\" AGENTS.md\nreplace \"$tmp/AGENTS-apps.md\" Apps/AGENTS.md\nreplace \"$tmp/AGENTS-packages.md\" Packages/AGENTS.md\nreplace \"$tmp/CONTRIBUTING.md\" CONTRIBUTING.md\ncp \"$tmp/pre-commit\" .githooks/pre-commit\nchmod +x .githooks/pre-commit\ngit config core.hooksPath .githooks\nxcodegen generate --spec project.yml\n", True)
+    install_alignment_runtime(root)
+    write(root / "Justfile", (root / "Justfile").read_text(encoding="utf-8") + "\nvalidate:\n  sh Scripts/validate.sh\npackage-test:\n  for manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\ntest target:\n  xcodebuild -workspace *.xcworkspace -scheme \"{{target}}\" test\narchive target channel:\n  sh Scripts/release.sh \"{{target}}\" \"{{channel}}\"\napp-store target:\n  sh Scripts/release.sh \"{{target}}\" app-store\naltstore target:\n  sh Scripts/release.sh \"{{target}}\" altstore\ndirect-distribution target:\n  sh Scripts/release.sh \"{{target}}\" direct-distribution\n")
     write(root / "Scripts/increment-build-version.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; configuration=${2:?configuration required}; label=$(printf '%s' \"$configuration\" | tr '[:upper:]' '[:lower:]')\nfile=\"Apps/$target/Configurations/Version.xcconfig\"\ngit rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo \"Build counter requires a Git repository.\" >&2; exit 1; }\n[ \"$configuration\" = Debug ] && key=DEBUG_BUILD_NUMBER || key=RELEASE_BUILD_NUMBER\nvalue=$(awk -F ' = ' -v key=\"$key\" '$1 == key { print $2 }' \"$file\")\n[ -n \"$value\" ] || { echo \"Missing $key in $file\" >&2; exit 1; }\nawk -F ' = ' -v key=\"$key\" -v next=$((value + 1)) 'BEGIN { OFS = \" = \" } $1 == key { $2 = next } { print }' \"$file\" > \"$file.tmp\" && mv \"$file.tmp\" \"$file\"\nstaged=false; unstaged=false; git diff --cached --quiet || staged=true; git diff --quiet || unstaged=true\nif $staged && $unstaged; then git add \"$file\"; echo \"warning: staged build counter update; commit it manually as soon as possible.\" >&2; exit 0; fi\nif $staged; then patch=$(mktemp); git diff --cached --binary > \"$patch\"; git restore --staged :/; git add \"$file\"; git commit -m \"build: increment $target $label build\"; git apply --cached \"$patch\"; rm -f \"$patch\"; else git add \"$file\"; git commit -m \"build: increment $target $label build\"; fi\n", True)
     write(root / "Scripts/validate.sh", "#!/usr/bin/env sh\nset -eu\nswiftformat --lint --config .swiftformat Apps Packages\nswiftlint lint --config .swiftlint.yml --force-exclude Apps Packages\nxcodegen generate --spec project.yml\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\nxcodebuild -list -workspace \"$workspace\"\nfor manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\n", True)
     write(root / "Scripts/release.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; channel=${2:?channel required}\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\ncase \"$channel\" in\n  staging) scheme=\"$target Staging\"; config=Staging ;;\n  app-store) scheme=\"$target App Store\"; config=AppStore ;;\n  altstore) scheme=\"$target AltStore\"; config=AltStore ;;\n  direct-distribution) scheme=\"$target Direct Distribution\"; config=DirectDistribution ;;\n  *) echo \"Unknown release channel: $channel\" >&2; exit 1 ;;\nesac\narchive=\"Build/$target-$channel.xcarchive\"\nxcodebuild -workspace \"$workspace\" -scheme \"$scheme\" -configuration \"$config\" -archivePath \"$archive\" archive\ncase \"$channel\" in\n  app-store) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-app-store\" -exportOptionsPlist Scripts/ExportOptions/AppStore.plist; artifact=$(find \"Build/$target-app-store\" -type f \\( -name '*.ipa' -o -name '*.pkg' \\) -print -quit); [ -n \"$artifact\" ] || { echo \"App Store export produced no IPA or PKG.\" >&2; exit 1; }; case \"$target\" in *macOS) type=osx ;; *) type=ios ;; esac; xcrun altool --upload-app -f \"$artifact\" -t \"$type\" ;;\n  altstore) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-altstore\" -exportOptionsPlist Scripts/ExportOptions/AltStore.plist ;;\n  direct-distribution) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-direct\" -exportOptionsPlist Scripts/ExportOptions/DirectDistribution.plist; app=$(find \"Build/$target-direct\" -type d -name '*.app' -print -quit); [ -n \"$app\" ] || { echo \"Direct export produced no app bundle.\" >&2; exit 1; }; dmg=\"Build/$target-direct/$target.dmg\"; hdiutil create -volname \"$target\" -srcfolder \"$app\" -ov -format UDZO \"$dmg\"; xcrun notarytool submit \"$dmg\" --keychain-profile notarytool --wait; xcrun stapler staple \"$dmg\" ;;\nesac\n", True)
@@ -373,8 +476,28 @@ let package = Package(
 def main() -> int:
     args = parser().parse_args()
     platforms = [item.strip().lower() for item in args.platforms.split(",") if item.strip()]
-    root = (Path(args.destination).expanduser() / args.name).resolve()
-    inputs = {"name": args.name, "file_prefix": args.file_prefix, "destination": args.destination, "platforms": platforms, "org_identifier": args.org_identifier, "development_team": args.development_team, "dry_run": args.dry_run, "skip_validation": args.skip_validation}
+    root = Path(args.repo_root).expanduser().resolve() if args.operation == "align" and args.repo_root else ((Path(args.destination).expanduser() / args.name).resolve() if args.name else Path(args.destination).expanduser().resolve())
+    inputs = {"operation": args.operation, "name": args.name, "file_prefix": args.file_prefix, "destination": args.destination, "repo_root": args.repo_root, "platforms": platforms, "org_identifier": args.org_identifier, "development_team": args.development_team, "dry_run": args.dry_run, "skip_validation": args.skip_validation}
+    if args.operation == "align":
+        if not args.repo_root:
+            return blocked("--repo-root is required with --operation align.", inputs)
+        if not args.dry_run and not shutil.which("xcodegen"):
+            return blocked("XcodeGen is required to regenerate an aligned workspace.", inputs)
+        findings = workspace_findings(root) if root.is_dir() else ["The requested workspace root is not a directory."]
+        if findings:
+            return blocked(" ".join(findings), inputs)
+        try:
+            actions = install_alignment_runtime(root, args.dry_run)
+            if not args.dry_run:
+                generated = subprocess.run(["xcodegen", "generate", "--spec", "project.yml"], cwd=root, capture_output=True, text=True, check=False)
+                if generated.returncode != 0:
+                    raise RuntimeError(f"xcodegen generate failed:\n{generated.stderr}")
+            print(json.dumps({"status": "success", "path_type": "primary", "workspace_root": str(root), "normalized_inputs": inputs, "actions": actions + ["regenerate the root XcodeGen project"], "next_step": "Run just setup once, then use just align as the single managed-guidance refresh command."}, indent=2, sort_keys=True))
+            return 0
+        except (OSError, RuntimeError, subprocess.CalledProcessError) as exc:
+            return blocked(str(exc), inputs)
+    if not args.name:
+        return blocked("--name is required when creating a new workspace.", inputs)
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", args.name):
         return blocked("--name must be an alphanumeric Swift/Xcode identifier beginning with a letter.", inputs)
     if not re.fullmatch(r"[A-Z]{3}", args.file_prefix):
@@ -382,7 +505,7 @@ def main() -> int:
     if not platforms or any(platform not in SUPPORTED_PLATFORMS for platform in platforms):
         return blocked("--platforms must be a comma-separated subset of ios,macos,tvos,watchos,visionos.", inputs)
     if root.exists() and (not root.is_dir() or any(root.iterdir())):
-        return blocked("The product root already contains files; use sync-xcode-workspace-guidance for an existing product.", inputs)
+        return blocked("The product root already contains files; use --operation align --repo-root <existing-root> for a canonical workspace.", inputs)
     xcodegen = shutil.which("xcodegen")
     if not xcodegen:
         return blocked("XcodeGen is required to create the root generated project.", inputs)
