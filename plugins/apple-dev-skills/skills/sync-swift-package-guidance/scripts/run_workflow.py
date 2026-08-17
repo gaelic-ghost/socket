@@ -167,7 +167,7 @@ def main() -> int:
                 blocked_payload(
                     str(repo_root),
                     detected_state,
-                    "Choose the plain Swift package root explicitly, or use sync-xcode-project-guidance for the Xcode app repo instead.",
+                    "Choose the plain Swift package root explicitly, or use bootstrap-xcode-workspace --operation align for the Apple product workspace instead.",
                     stderr="The requested repo root contains both Package.swift and Xcode app markers, so the guidance boundary is ambiguous.",
                 ),
                 indent=2,

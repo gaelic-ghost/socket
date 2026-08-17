@@ -9,5 +9,5 @@
 ## Boundaries
 
 - Use `sync-swift-package-guidance` for plain SwiftPM repos whose source of truth is `Package.swift`.
-- Use `sync-xcode-project-guidance` for native app repos whose source of truth is the Xcode project or workspace.
+- Use `bootstrap-xcode-workspace --operation align` for native Apple product workspaces.
 - Use `bootstrap-swift-package` when the package repo does not exist yet.

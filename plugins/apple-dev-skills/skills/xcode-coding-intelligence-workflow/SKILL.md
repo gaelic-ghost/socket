@@ -25,7 +25,7 @@ Current note: Apple documents ACP agent setup in Xcode 26.6 and Xcode 27. Xcode 
 - Recommend `xcode-build-run-workflow` when the next step is workspace inspection, build, run, preview, file membership, target membership, diagnostics, or guarded project mutation.
 - Recommend `xcode-testing-workflow` when the next step is Swift Testing, XCTest, XCUITest, `.xctestplan`, test filtering, retries, or test diagnosis.
 - Recommend `explore-apple-swift-docs` when the user primarily needs current Apple documentation lookup rather than setup and workflow planning.
-- Recommend `sync-xcode-project-guidance` when an existing Xcode app repo needs durable repo guidance updated for Xcode workflows.
+- Recommend `bootstrap-xcode-workspace --operation align` when an existing Apple product workspace needs durable Xcode guidance alignment.
 - Recommend `agent-portability-skills:operate-acp-agent-integration` for cross-client ACP launch and diagnosis.
 - Recommend `agent-portability-skills:build-acp-agent` for implementing an ACP agent/server.
 - Do not use this skill as the owner for implementing custom ACP agents, custom MCP servers, Xcode plug-in packages, or broad agent-configuration sync.
@@ -94,7 +94,7 @@ Current note: Apple documents ACP agent setup in Xcode 26.6 and Xcode 27. Xcode 
    - Swift Testing, XCTest, XCUITest, and `.xctestplan` work goes to `xcode-testing-workflow`
    - durable String Catalog implementation, translation review, and locale validation go to `xcode-localization-workflow`
    - docs lookup goes to `explore-apple-swift-docs`
-   - repo guidance sync goes to `sync-xcode-project-guidance`
+   - repo guidance alignment goes to `bootstrap-xcode-workspace --operation align`
    - cross-client ACP diagnosis goes to `agent-portability-skills:operate-acp-agent-integration`
    - ACP agent implementation goes to `agent-portability-skills:build-acp-agent`
 7. Report:
@@ -160,7 +160,7 @@ Current note: Apple documents ACP agent setup in Xcode 26.6 and Xcode 27. Xcode 
 - Recommend `explore-apple-swift-docs` when current Apple docs need to be gathered before setup can be trusted.
 - Recommend `xcode-build-run-workflow` when the next step is Xcode build, run, preview, file membership, target membership, or project-integrity work.
 - Recommend `xcode-testing-workflow` when the next step is Swift Testing, XCTest, XCUITest, `.xctestplan`, or test diagnosis.
-- Recommend `sync-xcode-project-guidance` when the target repo needs durable Apple/Xcode guidance updated rather than one-off setup.
+- Recommend `bootstrap-xcode-workspace --operation align` when the target product workspace needs durable Apple/Xcode guidance alignment.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance in a repo that will rely on Xcode coding intelligence.
 - Keep custom Xcode plug-in writers research-first until the live package, runtime behavior, and permission surface are verified. Route ACP-agent implementation to Agent Portability Skills.
 
@@ -187,7 +187,7 @@ Keep this skill focused on setup and permission decisions. If future iterations 
 - Recommend `explore-apple-swift-docs` when the user needs current Apple docs before an Xcode coding-intelligence setup claim.
 - Recommend `xcode-build-run-workflow` when the next step is build, run, preview, project membership, or project-integrity follow-through.
 - Recommend `xcode-testing-workflow` when the next step is test generation, execution, `.xctestplan`, or failure diagnosis.
-- Recommend `sync-xcode-project-guidance` when repo-local guidance needs to be updated for Xcode coding-intelligence workflows.
+- Recommend `bootstrap-xcode-workspace --operation align` when repo-local Apple workspace guidance needs updating.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance for a repo that will use Xcode coding intelligence.
 
 ### Script Inventory

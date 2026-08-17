@@ -13,7 +13,7 @@ Default scope:
 - source files, tests, fixtures, docs, package manifests, generated-code markers, and local architecture notes relevant to the requested slice
 - entrypoints, callers, callees, return paths, branch conditions, error paths, and data transformations
 - one comparison branch or one bounded subsystem when the parent request asks to compare slices
-- evidence needed by productivity-skills:explain-code-slice
+- evidence needed by codebase-understanding-skills:explain-code-slice
 
 Use current repo evidence before making claims. Prefer direct code references and tests over inference. If a path is ambiguous, name the ambiguity, describe the strongest supported path, and list alternate branches separately.
 

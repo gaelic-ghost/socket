@@ -28,7 +28,7 @@ Route findings to the owning workflow instead of duplicating it:
 - persistence-workflow for database, migration, model, query, and storage changes
 - docker-workflow for portable Dockerfile, Compose, image, registry, and runtime work
 - apple-containerization-workflow for Apple container CLI and Containerization API work
-- productivity-skills maintain-project-* workflows for general repo-document edits
+- documentation-skills maintain-project-* workflows for general repo-document edits
 
 Return a review packet in this shape:
 1. Repo classification and confidence.

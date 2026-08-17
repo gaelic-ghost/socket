@@ -165,7 +165,6 @@ uv run pytest
 - `avfaudio-session-workflow`
 - `avfoundation-media-pipeline-workflow`
 - `bootstrap-swift-package`
-- `bootstrap-xcode-app-project`
 - `bootstrap-xcode-workspace`
 - `camera-capture-depth-workflow`
 - `apple-typography-workflow`
@@ -210,8 +209,6 @@ uv run pytest
 - `swiftui-liquid-glass`
 - `swiftui-performance-audit`
 - `sync-swift-package-guidance`
-- `sync-xcode-project-guidance`
-- `sync-xcode-workspace-guidance`
 - `xcode-app-project-workflow`
 - `xcode-build-run-workflow`
 - `xcode-coding-intelligence-workflow`

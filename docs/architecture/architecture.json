@@ -1,10 +1,58 @@
 {
-  "detectedAt": "2026-07-29T13:33:08.747267+00:00",
+  "detectedAt": "2026-08-16T23:09:16.084669+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
       "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/coordinate-external-agents/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/coordinate-worktrees-and-threads/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/orchestrate-agent-work/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-engineering-skills/skills/schedule-agent-work/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/agent-engineering-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/build-acp-agent/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/build-hermes-agent-extensions/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/choose-agent-integration-protocol/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/choose-hermes-agent-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -12,7 +60,31 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/operate-a2a-agent-integration/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/operate-acp-agent-integration/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/operate-hermes-agent/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/operate-hermes-agent-gateway/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/operate-zed-agent/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/agent-portability-skills/skills/use-nous-research-services/SKILL.md"
     },
     {
       "kind": "codex-plugin-manifest",
@@ -137,10 +209,6 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -304,14 +372,6 @@
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
     },
     {
@@ -395,6 +455,10 @@
       "path": "plugins/cloud-deployment-skills/skills/cloud-deployment-routing-workflow/SKILL.md"
     },
     {
+      "kind": "skill-manifest",
+      "path": "plugins/cloud-deployment-skills/skills/dockerized-service-release-deployment-workflow/SKILL.md"
+    },
+    {
       "kind": "codex-plugin-manifest",
       "path": "plugins/cloud-deployment-skills/.codex-plugin/plugin.json"
     },
@@ -421,6 +485,14 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/cloud-inference-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/codebase-understanding-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -549,6 +621,42 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/cybersecurity-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/documentation-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -824,67 +932,7 @@
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
       "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
     },
     {
       "kind": "mcp-config",
@@ -892,23 +940,7 @@
     },
     {
       "kind": "codex-plugin-manifest",
-      "path": "plugins/agent-engineering-skills/.codex-plugin/plugin.json"
-    },
-    {
-      "kind": "codex-plugin-manifest",
-      "path": "plugins/codebase-understanding-skills/.codex-plugin/plugin.json"
-    },
-    {
-      "kind": "codex-plugin-manifest",
-      "path": "plugins/documentation-skills/.codex-plugin/plugin.json"
-    },
-    {
-      "kind": "codex-plugin-manifest",
       "path": "plugins/professional-skills/.codex-plugin/plugin.json"
-    },
-    {
-      "kind": "codex-plugin-manifest",
-      "path": "plugins/repository-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -973,6 +1005,34 @@
     {
       "kind": "codex-plugin-manifest",
       "path": "plugins/python-skills/.codex-plugin/plugin.json"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/repository-skills/skills/git-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/repository-skills/skills/github-collaboration-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
+      "path": "plugins/repository-skills/skills/repository-operations-workflow/SKILL.md"
+    },
+    {
+      "kind": "codex-plugin-manifest",
+      "path": "plugins/repository-skills/.codex-plugin/plugin.json"
     },
     {
       "kind": "skill-manifest",
@@ -1172,6 +1232,10 @@
     },
     {
       "kind": "skill-manifest",
+      "path": "plugins/server-side-swift/skills/leaf-rendered-web-workflow/SKILL.md"
+    },
+    {
+      "kind": "skill-manifest",
       "path": "plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md"
     },
     {
@@ -1313,6 +1377,20 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/agent-engineering-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "agent-engineering-skills",
+      "path": "plugins/agent-engineering-skills",
+      "targets": [
+        "skills:plugins/agent-engineering-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/agent-portability-skills/.codex-plugin/plugin.json"
         }
       ],
@@ -1426,6 +1504,20 @@
       "evidence": [
         {
           "kind": "codex-plugin-manifest",
+          "path": "plugins/codebase-understanding-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "codebase-understanding-skills",
+      "path": "plugins/codebase-understanding-skills",
+      "targets": [
+        "skills:plugins/codebase-understanding-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
           "path": "plugins/cybersecurity-skills/.codex-plugin/plugin.json"
         }
       ],
@@ -1434,6 +1526,20 @@
       "path": "plugins/cybersecurity-skills",
       "targets": [
         "skills:plugins/cybersecurity-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/documentation-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "documentation-skills",
+      "path": "plugins/documentation-skills",
+      "targets": [
+        "skills:plugins/documentation-skills/skills"
       ]
     },
     {
@@ -1507,39 +1613,19 @@
       ]
     },
     {
-      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/agent-engineering-skills/.codex-plugin/plugin.json" }],
-      "kind": "codex-plugin",
-      "name": "agent-engineering-skills",
-      "path": "plugins/agent-engineering-skills",
-      "targets": ["skills:plugins/agent-engineering-skills/skills"]
-    },
-    {
-      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/codebase-understanding-skills/.codex-plugin/plugin.json" }],
-      "kind": "codex-plugin",
-      "name": "codebase-understanding-skills",
-      "path": "plugins/codebase-understanding-skills",
-      "targets": ["skills:plugins/codebase-understanding-skills/skills"]
-    },
-    {
-      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/documentation-skills/.codex-plugin/plugin.json" }],
-      "kind": "codex-plugin",
-      "name": "documentation-skills",
-      "path": "plugins/documentation-skills",
-      "targets": ["skills:plugins/documentation-skills/skills"]
-    },
-    {
-      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/professional-skills/.codex-plugin/plugin.json" }],
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/professional-skills/.codex-plugin/plugin.json"
+        }
+      ],
       "kind": "codex-plugin",
       "name": "professional-skills",
       "path": "plugins/professional-skills",
-      "targets": ["skills:plugins/professional-skills/skills", "mcp:plugins/professional-skills/.mcp.json"]
-    },
-    {
-      "evidence": [{ "kind": "codex-plugin-manifest", "path": "plugins/repository-skills/.codex-plugin/plugin.json" }],
-      "kind": "codex-plugin",
-      "name": "repository-skills",
-      "path": "plugins/repository-skills",
-      "targets": ["skills:plugins/repository-skills/skills"]
+      "targets": [
+        "skills:plugins/professional-skills/skills",
+        "mcp:plugins/professional-skills/.mcp.json"
+      ]
     },
     {
       "evidence": [
@@ -1553,6 +1639,20 @@
       "path": "plugins/python-skills",
       "targets": [
         "skills:plugins/python-skills/skills"
+      ]
+    },
+    {
+      "evidence": [
+        {
+          "kind": "codex-plugin-manifest",
+          "path": "plugins/repository-skills/.codex-plugin/plugin.json"
+        }
+      ],
+      "kind": "codex-plugin",
+      "name": "repository-skills",
+      "path": "plugins/repository-skills",
+      "targets": [
+        "skills:plugins/repository-skills/skills"
       ]
     },
     {
@@ -1742,6 +1842,90 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/coordinate-external-agents/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/coordinate-external-agents"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/coordinate-worktrees-and-threads/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/coordinate-worktrees-and-threads"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/design-agent-automation-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/design-agent-eval-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/design-n8n-agent-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/orchestrate-agent-work/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/orchestrate-agent-work"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-engineering-skills/skills/schedule-agent-work/SKILL.md"
+        }
+      ],
+      "from": "product:agent-engineering-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-engineering-skills/schedule-agent-work"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
         }
       ],
@@ -1749,6 +1933,54 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:agent-portability-skills/bootstrap-skills-plugin-repo"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/build-acp-agent/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/build-acp-agent"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/build-hermes-agent-extensions/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/build-hermes-agent-extensions"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/choose-agent-integration-protocol/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/choose-agent-integration-protocol"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/choose-hermes-agent-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/choose-hermes-agent-workflow"
     },
     {
       "evidence": [
@@ -1766,6 +1998,66 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/operate-a2a-agent-integration/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/operate-a2a-agent-integration"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/operate-acp-agent-integration/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/operate-acp-agent-integration"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/operate-hermes-agent/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/operate-hermes-agent"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/operate-hermes-agent-gateway/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/operate-hermes-agent-gateway"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/operate-zed-agent/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/operate-zed-agent"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
         }
       ],
@@ -1773,6 +2065,18 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:agent-portability-skills/sync-skills-repo-guidance"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/agent-portability-skills/skills/use-nous-research-services/SKILL.md"
+        }
+      ],
+      "from": "product:agent-portability-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:agent-portability-skills/use-nous-research-services"
     },
     {
       "evidence": [
@@ -2097,18 +2401,6 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/bootstrap-swift-package"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/bootstrap-xcode-app-project"
     },
     {
       "evidence": [
@@ -2594,30 +2886,6 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/sync-xcode-project-guidance"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/sync-xcode-workspace-guidance"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
         }
       ],
@@ -2846,6 +3114,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/cloud-deployment-skills/skills/dockerized-service-release-deployment-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:cloud-deployment-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:cloud-deployment-skills/dockerized-service-release-deployment-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/cloud-inference-skills/skills/cloud-inference-routing-workflow/SKILL.md"
         }
       ],
@@ -2901,6 +3181,18 @@
       "kind": "exposes",
       "label": "plugin declares MCP servers",
       "to": "target:mcp:plugins/cloud-inference-skills/.mcp.json"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
+        }
+      ],
+      "from": "product:codebase-understanding-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:codebase-understanding-skills/explain-code-slice"
     },
     {
       "evidence": [
@@ -3273,6 +3565,102 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:cybersecurity-skills/validate-vulnerability"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-accessibility"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-agents"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-api"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-architecture"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-contributing"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-docs"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-readme"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
+        }
+      ],
+      "from": "product:documentation-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:documentation-skills/maintain-project-roadmap"
     },
     {
       "evidence": [
@@ -4034,54 +4422,6 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:repository-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:repository-skills/codex-gui-worktree-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:agent-engineering-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:agent-engineering-skills/design-agent-automation-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:agent-engineering-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:agent-engineering-skills/design-agent-eval-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:agent-engineering-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:agent-engineering-skills/design-n8n-agent-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
           "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
         }
       ],
@@ -4089,138 +4429,6 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:professional-skills/dice-job-search-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
-        }
-      ],
-      "from": "product:codebase-understanding-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:codebase-understanding-skills/explain-code-slice"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
-        }
-      ],
-      "from": "product:repository-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:repository-skills/maintain-github-repository"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-accessibility"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-agents"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-api"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-architecture"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-contributing"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-docs"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-readme"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
-        }
-      ],
-      "from": "product:repository-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:repository-skills/maintain-project-repo"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
-        }
-      ],
-      "from": "product:documentation-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:documentation-skills/maintain-project-roadmap"
     },
     {
       "evidence": [
@@ -4413,6 +4621,78 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:python-skills/python-upgrade-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:repository-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:repository-skills/codex-gui-worktree-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/repository-skills/skills/git-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:repository-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:repository-skills/git-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/repository-skills/skills/github-collaboration-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:repository-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:repository-skills/github-collaboration-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
+        }
+      ],
+      "from": "product:repository-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:repository-skills/maintain-github-repository"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
+        }
+      ],
+      "from": "product:repository-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:repository-skills/maintain-project-repo"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
+          "path": "plugins/repository-skills/skills/repository-operations-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:repository-skills",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:repository-skills/repository-operations-workflow"
     },
     {
       "evidence": [
@@ -4970,6 +5250,18 @@
       "evidence": [
         {
           "kind": "skill-directory",
+          "path": "plugins/server-side-swift/skills/leaf-rendered-web-workflow/SKILL.md"
+        }
+      ],
+      "from": "product:server-side-swift",
+      "kind": "exposes",
+      "label": "plugin exposes skill",
+      "to": "target:skill:server-side-swift/leaf-rendered-web-workflow"
+    },
+    {
+      "evidence": [
+        {
+          "kind": "skill-directory",
           "path": "plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md"
         }
       ],
@@ -5483,70 +5775,120 @@
       "to": "path:./plugins/dotnet-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
       "to": "product:agent-engineering-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:agent-engineering-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/agent-engineering-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
       "to": "product:codebase-understanding-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:codebase-understanding-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/codebase-understanding-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
       "to": "product:documentation-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:documentation-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/documentation-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
       "to": "product:professional-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:professional-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
       "to": "path:./plugins/professional-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:socket",
       "kind": "exposes",
       "label": "marketplace exposes plugin entry",
       "to": "product:repository-skills"
     },
     {
-      "evidence": [{ "kind": "plugin-marketplace", "path": ".agents/plugins/marketplace.json" }],
+      "evidence": [
+        {
+          "kind": "plugin-marketplace",
+          "path": ".agents/plugins/marketplace.json"
+        }
+      ],
       "from": "product:repository-skills",
       "kind": "owns",
       "label": "marketplace entry points at local plugin root",
@@ -5957,12 +6299,144 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/coordinate-external-agents/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/coordinate-external-agents",
+      "path": "plugins/agent-engineering-skills/skills/coordinate-external-agents/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/coordinate-worktrees-and-threads/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/coordinate-worktrees-and-threads",
+      "path": "plugins/agent-engineering-skills/skills/coordinate-worktrees-and-threads/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/design-agent-automation-workflow",
+      "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/design-agent-eval-workflow",
+      "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/design-n8n-agent-workflow",
+      "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/orchestrate-agent-work/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/orchestrate-agent-work",
+      "path": "plugins/agent-engineering-skills/skills/orchestrate-agent-work/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-engineering-skills/skills/schedule-agent-work/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-engineering-skills/schedule-agent-work",
+      "path": "plugins/agent-engineering-skills/skills/schedule-agent-work/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:agent-portability-skills/bootstrap-skills-plugin-repo",
       "path": "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/build-acp-agent/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/build-acp-agent",
+      "path": "plugins/agent-portability-skills/skills/build-acp-agent/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/build-hermes-agent-extensions/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/build-hermes-agent-extensions",
+      "path": "plugins/agent-portability-skills/skills/build-hermes-agent-extensions/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/choose-agent-integration-protocol/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/choose-agent-integration-protocol",
+      "path": "plugins/agent-portability-skills/skills/choose-agent-integration-protocol/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/choose-hermes-agent-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/choose-hermes-agent-workflow",
+      "path": "plugins/agent-portability-skills/skills/choose-hermes-agent-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -5981,12 +6455,84 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/operate-a2a-agent-integration/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/operate-a2a-agent-integration",
+      "path": "plugins/agent-portability-skills/skills/operate-a2a-agent-integration/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/operate-acp-agent-integration/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/operate-acp-agent-integration",
+      "path": "plugins/agent-portability-skills/skills/operate-acp-agent-integration/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/operate-hermes-agent/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/operate-hermes-agent",
+      "path": "plugins/agent-portability-skills/skills/operate-hermes-agent/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/operate-hermes-agent-gateway/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/operate-hermes-agent-gateway",
+      "path": "plugins/agent-portability-skills/skills/operate-hermes-agent-gateway/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/operate-zed-agent/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/operate-zed-agent",
+      "path": "plugins/agent-portability-skills/skills/operate-zed-agent/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:agent-portability-skills/sync-skills-repo-guidance",
       "path": "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/agent-portability-skills/skills/use-nous-research-services/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:agent-portability-skills/use-nous-research-services",
+      "path": "plugins/agent-portability-skills/skills/use-nous-research-services/SKILL.md"
     },
     {
       "dependencies": [],
@@ -6311,18 +6857,6 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/bootstrap-swift-package",
       "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/bootstrap-xcode-app-project",
-      "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-app-project/SKILL.md"
     },
     {
       "dependencies": [],
@@ -6809,30 +7343,6 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/sync-xcode-project-guidance",
-      "path": "plugins/apple-dev-skills/skills/sync-xcode-project-guidance/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/sync-xcode-workspace-guidance",
-      "path": "plugins/apple-dev-skills/skills/sync-xcode-workspace-guidance/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md"
         }
       ],
@@ -7061,6 +7571,18 @@
       "evidence": [
         {
           "kind": "skill-manifest",
+          "path": "plugins/cloud-deployment-skills/skills/dockerized-service-release-deployment-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:cloud-deployment-skills/dockerized-service-release-deployment-workflow",
+      "path": "plugins/cloud-deployment-skills/skills/dockerized-service-release-deployment-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
           "path": "plugins/cloud-inference-skills/skills/cloud-inference-routing-workflow/SKILL.md"
         }
       ],
@@ -7115,6 +7637,18 @@
       "kind": "mcp-config",
       "name": "mcp:plugins/cloud-inference-skills/.mcp.json",
       "path": "plugins/cloud-inference-skills/.mcp.json"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:codebase-understanding-skills/explain-code-slice",
+      "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
     },
     {
       "dependencies": [],
@@ -7487,6 +8021,102 @@
       "kind": "codex-skill",
       "name": "skill:cybersecurity-skills/validate-vulnerability",
       "path": "plugins/cybersecurity-skills/skills/validate-vulnerability/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-accessibility",
+      "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-agents",
+      "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-api",
+      "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-architecture",
+      "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-contributing",
+      "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-docs",
+      "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-readme",
+      "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:documentation-skills/maintain-project-roadmap",
+      "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
     },
     {
       "dependencies": [],
@@ -8249,192 +8879,12 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:repository-skills/codex-gui-worktree-workflow",
-      "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:agent-engineering-skills/design-agent-automation-workflow",
-      "path": "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:agent-engineering-skills/design-agent-eval-workflow",
-      "path": "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:agent-engineering-skills/design-n8n-agent-workflow",
-      "path": "plugins/agent-engineering-skills/skills/design-n8n-agent-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
           "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
         }
       ],
       "kind": "codex-skill",
       "name": "skill:professional-skills/dice-job-search-workflow",
       "path": "plugins/professional-skills/skills/dice-job-search-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:codebase-understanding-skills/explain-code-slice",
-      "path": "plugins/codebase-understanding-skills/skills/explain-code-slice/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:repository-skills/maintain-github-repository",
-      "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-accessibility",
-      "path": "plugins/documentation-skills/skills/maintain-project-accessibility/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-agents",
-      "path": "plugins/documentation-skills/skills/maintain-project-agents/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-api",
-      "path": "plugins/documentation-skills/skills/maintain-project-api/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-architecture",
-      "path": "plugins/documentation-skills/skills/maintain-project-architecture/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-contributing",
-      "path": "plugins/documentation-skills/skills/maintain-project-contributing/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-docs",
-      "path": "plugins/documentation-skills/skills/maintain-project-docs/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-readme",
-      "path": "plugins/documentation-skills/skills/maintain-project-readme/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:repository-skills/maintain-project-repo",
-      "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:documentation-skills/maintain-project-roadmap",
-      "path": "plugins/documentation-skills/skills/maintain-project-roadmap/SKILL.md"
     },
     {
       "dependencies": [],
@@ -8627,6 +9077,78 @@
       "kind": "codex-skill",
       "name": "skill:python-skills/python-upgrade-workflow",
       "path": "plugins/python-skills/skills/python-upgrade-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:repository-skills/codex-gui-worktree-workflow",
+      "path": "plugins/repository-skills/skills/codex-gui-worktree-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/repository-skills/skills/git-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:repository-skills/git-workflow",
+      "path": "plugins/repository-skills/skills/git-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/repository-skills/skills/github-collaboration-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:repository-skills/github-collaboration-workflow",
+      "path": "plugins/repository-skills/skills/github-collaboration-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:repository-skills/maintain-github-repository",
+      "path": "plugins/repository-skills/skills/maintain-github-repository/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:repository-skills/maintain-project-repo",
+      "path": "plugins/repository-skills/skills/maintain-project-repo/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/repository-skills/skills/repository-operations-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:repository-skills/repository-operations-workflow",
+      "path": "plugins/repository-skills/skills/repository-operations-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -9179,6 +9701,18 @@
       "kind": "codex-skill",
       "name": "skill:server-side-swift/hummingbird-server-workflow",
       "path": "plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md"
+    },
+    {
+      "dependencies": [],
+      "evidence": [
+        {
+          "kind": "skill-manifest",
+          "path": "plugins/server-side-swift/skills/leaf-rendered-web-workflow/SKILL.md"
+        }
+      ],
+      "kind": "codex-skill",
+      "name": "skill:server-side-swift/leaf-rendered-web-workflow",
+      "path": "plugins/server-side-swift/skills/leaf-rendered-web-workflow/SKILL.md"
     },
     {
       "dependencies": [],

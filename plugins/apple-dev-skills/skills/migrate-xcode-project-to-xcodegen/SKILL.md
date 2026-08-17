@@ -15,7 +15,7 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
 - Use this skill when an existing `project.yml` should be modernized to the current baseline: synced folders, external `.xcconfig` layers, external entitlements, default asset catalog, and current Swift/Xcode build settings.
 - Use this skill before regenerating an `.xcodeproj` when the repository has tracked `.pbxproj` changes from Xcode, XcodeGen, or another project-aware tool.
 - Use this skill when Xcode GUI edits need to be moved back into `project.yml`, `.xcconfig`, `.entitlements`, `Info.plist`, `.xcscheme`, `.xctestplan`, or resources.
-- Do not use this skill for brand-new app bootstrap; use `bootstrap-xcode-app-project`.
+- Do not use this skill for brand-new Apple product bootstrap; use `bootstrap-xcode-workspace`.
 - Do not use this skill for ordinary build, run, diagnostics, previews, or file edits after migration; use `xcode-build-run-workflow`.
 - Do not use this skill for test diagnosis except to preserve test-plan and test-target project state during migration; use `xcode-testing-workflow` for active testing work.
 - Do not use this skill for plain Swift packages.
@@ -66,7 +66,7 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
    - run a Debug build when practical
    - run tests or at least `xcodebuild test -list-tests` when the repo has test targets
 9. Hand off after migration:
-   - use `sync-xcode-project-guidance` to refresh repo guidance when needed
+   - use `bootstrap-xcode-workspace --operation align` to refresh managed workspace guidance when needed
    - use `xcode-build-run-workflow` for normal build/run work
    - use `xcode-testing-workflow` for test execution and diagnosis
 
@@ -115,8 +115,8 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
 ## Fallbacks and Handoffs
 
 - If project discovery is ambiguous, rerun the audit with `--project-path` or `--project-yml`.
-- If the repo is a new project request, hand off to `bootstrap-xcode-app-project`.
-- If the repo only needs guidance refresh, hand off to `sync-xcode-project-guidance`.
+- If the repo is a new Apple product request, hand off to `bootstrap-xcode-workspace`.
+- If the repo only needs managed guidance refresh, hand off to `bootstrap-xcode-workspace --operation align`.
 - If a migration uncovers build or test failures unrelated to project generation, hand off to `xcode-build-run-workflow` or `xcode-testing-workflow`.
 - If the XcodeGen baseline cannot represent a project feature cleanly, preserve the hand-managed project and report the unsupported feature instead of forcing conversion.
 
@@ -141,8 +141,7 @@ Convert existing native Apple app projects to the current XcodeGen baseline with
 
 - Recommend `references/snippets/apple-xcode-project-core.md` when an existing Xcode repo needs the reusable baseline policy content in a human-reviewable form.
 - `references/snippets/apple-xcode-project-core.md`
-- `bootstrap-xcode-app-project/references/xcodegen-synced-folder-and-config-notes.md`
-- `bootstrap-xcode-app-project/references/project-generators.md`
+- `bootstrap-xcode-workspace/references/workspace-shape.md`
 
 ### Script Inventory
 

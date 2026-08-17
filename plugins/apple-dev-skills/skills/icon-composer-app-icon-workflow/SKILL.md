@@ -18,7 +18,7 @@ Use this skill to help a user learn and operate Apple's Icon Composer workflow f
 - Use this skill when the task is to export rendered preview PNGs from an Icon Composer document.
 - Do not use this skill for generic logo design unless the logo is being prepared as an Apple app icon.
 - Do not use this skill for ordinary Xcode build, run, signing, asset-catalog, or project-file work after the app icon handoff is complete.
-- Recommend `bootstrap-xcode-app-project` when the app project does not exist yet.
+- Recommend `bootstrap-xcode-workspace` when the Apple product workspace does not exist yet.
 - Recommend `xcode-build-run-workflow` when the next step is adding the `.icon` file to an existing Xcode project, choosing it in the Project Editor, building, running, or inspecting project state.
 - Recommend `explore-apple-swift-docs` when the user needs a fresh Apple documentation research pass before icon-production work continues.
 
@@ -214,7 +214,7 @@ When integrating into an existing app project:
 5. Treat `.icon` as the source app icon artifact when Xcode supports it.
 6. Run the narrowest useful project validation after integration.
 
-For a new native Apple app, use `bootstrap-xcode-app-project` before icon production.
+For a new native Apple app, use `bootstrap-xcode-workspace` before icon production.
 
 ## Future Packaged Agent Direction
 
@@ -252,7 +252,7 @@ From `plugins/apple-dev-skills`, run `uv run pytest` only when tests, validation
 ## Handoffs
 
 - `explore-apple-swift-docs`: fresh Apple documentation research beyond the docs gate in this skill.
-- `bootstrap-xcode-app-project`: brand-new native Apple app scaffolding.
+- `bootstrap-xcode-workspace`: native Apple product workspace scaffolding.
 - `xcode-build-run-workflow`: existing Xcode project integration, build, run, and app validation.
 - `xcode-testing-workflow`: test-specific work after icon integration affects a project.
 - `swiftui-app-architecture-workflow`: app UI design or implementation work that is not the app icon itself.

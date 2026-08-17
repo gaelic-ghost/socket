@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+set -eu
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+files="$(mktemp "${TMPDIR:-/tmp}/swift-staged.XXXXXX")"
+trap 'rm -f "$files"' EXIT HUP INT TERM
+
+command -v swiftformat >/dev/null 2>&1 || { echo "SwiftFormat is required for commits." >&2; exit 1; }
+command -v swiftlint >/dev/null 2>&1 || { echo "SwiftLint is required for commits." >&2; exit 1; }
+git diff --cached --name-only --diff-filter=ACMR -- '*.swift' > "$files"
+[ -s "$files" ] || exit 0
+
+swiftformat --config "$repo_root/.swiftformat" --filelist "$files"
+swiftlint --fix --force-exclude $(tr '\n' ' ' < "$files")
+while IFS= read -r path; do [ -z "$path" ] || git add -- "$path"; done < "$files"
+swiftformat --lint --config "$repo_root/.swiftformat" --filelist "$files"
+swiftlint lint --force-exclude $(tr '\n' ' ' < "$files")

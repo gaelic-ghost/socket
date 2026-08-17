@@ -52,7 +52,6 @@ sync_one \
   "$ROOT_DIR/skills/xcode-build-run-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/xcode-testing-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/xcode-app-project-workflow/references/snippets/apple-xcode-project-core.md" \
-  "$ROOT_DIR/skills/bootstrap-xcode-app-project/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/migrate-xcode-project-to-xcodegen/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/format-swift-sources/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/explore-apple-swift-docs/references/snippets/apple-xcode-project-core.md" \
@@ -85,7 +84,6 @@ sync_one \
   "$ROOT_DIR/skills/swiftui-component-audit-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/swiftdata-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/appkit-app-architecture-workflow/references/snippets/apple-xcode-project-core.md" \
-  "$ROOT_DIR/skills/sync-xcode-project-guidance/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/xcode-coding-intelligence-workflow/references/snippets/apple-xcode-project-core.md"
 
 sync_one \

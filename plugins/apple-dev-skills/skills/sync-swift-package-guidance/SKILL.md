@@ -25,7 +25,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the task is ordinary package execution rather than repo guidance sync.
 - Recommend `xcode-build-run-workflow` when the task is Xcode-managed package build, run, toolchain, Metal, or mutation work rather than repo guidance sync.
 - Recommend `xcode-testing-workflow` when the task is Xcode-managed package test execution or test diagnosis rather than repo guidance sync.
-- Recommend `sync-xcode-project-guidance` when the repo is an Xcode app project instead of a plain Swift package.
+- Recommend `bootstrap-xcode-workspace --operation align` when the repo is an Apple product workspace instead of a plain Swift package.
 - After updating this plugin's package-policy surfaces, recommend rerunning `sync-swift-package-guidance` in downstream repos so their `AGENTS.md` and `maintain-project-repo` output stay aligned.
 - For maintainer notes about this repository itself, say plainly that the repo exports from top-level `skills/` today and does not ship repo-local installer workflows.
 
@@ -138,7 +138,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Recommend `xcode-build-run-workflow` when package work needs Xcode-managed SDK or toolchain behavior.
 - Recommend `xcode-testing-workflow` when package work needs Xcode-managed test execution behavior.
 - Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.
-- Recommend `sync-xcode-project-guidance` when the repo root is really an Xcode app project rather than a plain Swift package.
+- Recommend `bootstrap-xcode-workspace --operation align` when the repo root is really an Apple product workspace rather than a plain Swift package.
 
 ## Codex Subagent Fit
 

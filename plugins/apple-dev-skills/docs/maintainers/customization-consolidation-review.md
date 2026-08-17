@@ -8,11 +8,11 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 
 ## Current State Summary
 
-- The active skill surface ships `65` separate `references/customization.template.yaml` files.
-- The active skill surface ships `65` separate `scripts/customization_config.py` entrypoints.
+- The active skill surface ships `63` separate `references/customization.template.yaml` files.
+- The active skill surface ships `63` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `21` knobs total:
-  - `20` are documented as `runtime-enforced`
+- The current templates expose `17` knobs total:
+  - `16` are documented as `runtime-enforced`
   - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference
@@ -59,16 +59,12 @@ The decision is:
   - `defaultTestingMode`
   - `initializeGit`
   - `copyAgentsMd`
-- `bootstrap-xcode-app-project`
-  - `defaultPlatform`
   - `defaultOrgIdentifier`
   - `copyAgentsMd`
 - `explore-apple-swift-docs`
   - `defaultSourceOrder`
 - `format-swift-sources`
   - `defaultToolSelection`
-- `sync-xcode-project-guidance`
-  - `writeMode`
 - `sync-swift-package-guidance`
   - `writeMode`
 These are the knobs most likely to reflect real user preference instead of hidden implementation detail.
@@ -78,8 +74,6 @@ These are the knobs most likely to reflect real user preference instead of hidde
 - `bootstrap-swift-package`
   - `defaultPackageType`
   - `defaultPlatformPreset`
-- `bootstrap-xcode-app-project`
-  - `defaultProjectGenerator`
 - `explore-apple-swift-docs`
   - `troubleshootingPreference`
 - `format-swift-sources`
@@ -97,8 +91,6 @@ These are now better derived from request wording, available tools, repo shape, 
 
 ### Removed From Ordinary User Customization
 
-- `bootstrap-xcode-app-project`
-  - `defaultProjectKind`
   - `defaultUIStack`
   - `validationMode`
 - `explore-apple-swift-docs`
@@ -109,8 +101,6 @@ These are now better derived from request wording, available tools, repo shape, 
   - `dashGenerationPolicy`
 - `format-swift-sources`
   - `preferProjectRootConfigFiles`
-- `sync-xcode-project-guidance`
-  - `validationMode`
 - `sync-swift-package-guidance`
   - `validationMode`
 

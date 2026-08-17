@@ -21,7 +21,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Recommend `xcode-testing-workflow` when the task is primarily about tests or test diagnosis.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift documentation lookup rather than execution work.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the task is ordinary SwiftPM package work outside Xcode-managed execution.
-- Recommend `sync-xcode-project-guidance` when an existing Xcode app repo needs `AGENTS.md` or workflow-guidance alignment rather than active engineering work.
+- Recommend `bootstrap-xcode-workspace --operation align` when an existing Apple product workspace needs managed guidance alignment rather than active engineering work.
 
 ## Single-Path Workflow
 
@@ -100,7 +100,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Recommend `format-swift-sources` directly when the task becomes SwiftLint or SwiftFormat setup, config export, or style-tooling maintenance work.
 - Recommend `structure-swift-sources` directly when the task becomes structural source cleanup work.
 - Recommend `bootstrap-swift-package` directly when the task becomes new-package scaffolding.
-- Recommend `sync-xcode-project-guidance` directly when the repo needs Xcode-specific guidance sync rather than execution.
+- Recommend `bootstrap-xcode-workspace --operation align` directly when the repo needs Xcode-specific guidance alignment rather than execution.
 - `scripts/run_workflow.py` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
 - When maintaining this repository itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
@@ -134,7 +134,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift docs exploration or Dash-compatible docs access.
 - Recommend `format-swift-sources` when the user needs SwiftLint or SwiftFormat setup rather than active Xcode execution.
 - Recommend `structure-swift-sources` when the user needs structural Swift source cleanup rather than active Xcode execution.
-- Recommend `sync-xcode-project-guidance` when the user needs repo guidance aligned inside an existing Xcode app repo.
+- Recommend `bootstrap-xcode-workspace --operation align` when the user needs repo guidance aligned inside an existing Apple product workspace.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs to add or merge the shared Xcode-project guidance into an end-user repo.
 - `references/allowlist-guidance.md`
 - `references/skills-installation.md`

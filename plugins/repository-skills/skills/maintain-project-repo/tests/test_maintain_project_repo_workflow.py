@@ -7,7 +7,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = ROOT / "skills/maintain-project-repo/scripts/run_workflow.py"
 
@@ -111,7 +110,10 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             (root / "Product.xcworkspace").mkdir()
-            (root / "Apps/ProductApp.xcodeproj").mkdir(parents=True)
+            (root / "Product.xcodeproj").mkdir()
+            (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
+            (root / "Apps/ProductApp").mkdir(parents=True)
+            (root / "Apps/ProductApp/target.yml").write_text("targets: {}\n", encoding="utf-8")
             package_root = root / "Packages/ProductCore"
             package_root.mkdir(parents=True)
             (package_root / "Package.swift").write_text("// package\n", encoding="utf-8")
@@ -202,16 +204,10 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
 
             Path(tmpdir, "AGENTS.md").write_text(
-                "\n".join(
-                    [
-                        "# AGENTS.md",
-                        "",
-                        "- scripts/repo-maintenance/validate-all.sh",
-                        "- scripts/repo-maintenance/sync-shared.sh",
-                        "- scripts/repo-maintenance/release.sh",
-                        "",
-                    ]
-                ),
+                "# AGENTS.md\n\n"
+                "- scripts/repo-maintenance/validate-all.sh\n"
+                "- scripts/repo-maintenance/sync-shared.sh\n"
+                "- scripts/repo-maintenance/release.sh\n",
                 encoding="utf-8",
             )
             subprocess.run(["git", "init"], cwd=tmpdir, check=True, capture_output=True, text=True)

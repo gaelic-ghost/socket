@@ -15,8 +15,12 @@ require_apps_and_packages() {
   [ -d "$REPO_ROOT/Apps" ] || die "The xcode-workspace profile requires Apps/ at the repository root."
   [ -d "$REPO_ROOT/Packages" ] || die "The xcode-workspace profile requires Packages/ at the repository root."
 
-  app_count=$(find "$REPO_ROOT/Apps" -type d -name '*.xcodeproj' -print | wc -l | tr -d ' ')
-  [ "$app_count" -gt 0 ] || die "The xcode-workspace profile requires at least one .xcodeproj under Apps/."
+  target_spec_count=$(find "$REPO_ROOT/Apps" -type f \( -name 'target.yml' -o -name 'target.yaml' \) -print | wc -l | tr -d ' ')
+  [ "$target_spec_count" -gt 0 ] || die "The xcode-workspace profile requires at least one XcodeGen target spec under Apps/."
+
+  [ -f "$REPO_ROOT/project.yml" ] || die "The xcode-workspace profile requires root project.yml."
+  project_count=$(find "$REPO_ROOT" -maxdepth 1 -type d -name '*.xcodeproj' -print | wc -l | tr -d ' ')
+  [ "$project_count" -eq 1 ] || die "The xcode-workspace profile requires exactly one generated root .xcodeproj; found $project_count."
 
   package_count=$(find "$REPO_ROOT/Packages" -type f -name 'Package.swift' -print | wc -l | tr -d ' ')
   [ "$package_count" -gt 0 ] || die "The xcode-workspace profile requires at least one Package.swift under Packages/."
@@ -24,4 +28,4 @@ require_apps_and_packages() {
 
 require_exactly_one_workspace
 require_apps_and_packages
-log "Validated xcode-workspace composition: one root workspace, Apps/, and Packages/."
+log "Validated xcode-workspace composition: one root workspace and project, Apps/, and Packages/."

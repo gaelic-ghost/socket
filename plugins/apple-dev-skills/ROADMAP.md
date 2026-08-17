@@ -7,6 +7,7 @@ Swift naming and persistence ownership are now standardized: each project explic
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
+- [Managed Workspace Alignment](#managed-workspace-alignment)
 - [Milestone 21: Swift Cleanup Automation Exploration](#milestone-21-swift-cleanup-automation-exploration)
 - [Milestone 24: MCP App UI for Configuration and Customization](#milestone-24-mcp-app-ui-for-configuration-and-customization)
 - [Milestone 25: macOS Menu Bar Extra for Skill Controls](#milestone-25-macos-menu-bar-extra-for-skill-controls)
@@ -113,6 +114,21 @@ Swift naming and persistence ownership are now standardized: each project explic
 - Milestone 67: macOS and Linux Virtualization Workflows - Completed
 - Milestone 68: Safari MCP Browser Validation Workflow - Completed
 - Milestone 69: macOS Privacy, File Access, and Entitlement Workflows - Completed
+
+## Managed Workspace Alignment
+
+### Status
+
+In progress
+
+### Next managed surfaces
+
+- [ ] Extend `just align` ownership beyond `AGENTS.md`, `CONTRIBUTING.md`, and
+  Git hooks to safe marked regions in additional root documentation.
+- [ ] Define safe managed boundaries for reusable workspace template files and
+  repository scripts before bringing either under live Socket refresh.
+- [ ] Keep `just align` as the one workspace sync command; do not add parallel
+  append-only guidance sync paths.
 
 ## Milestone 21: Swift Cleanup Automation Exploration
 
@@ -1393,7 +1409,7 @@ Completed
 - Added `appkit-app-architecture-workflow` as the explicit owner for AppKit app architecture guidance, including app delegates, status items, responder-chain menus, windows, controllers, restoration, archiving, Observation, and mixed AppKit/SwiftUI composition.
 - Added `xcode-coding-intelligence-workflow` as the explicit owner for Xcode Intelligence setup, Xcode-hosted agents, external-agent MCP access through `xcrun mcpbridge`, command/tool permission boundaries, and execution-skill handoffs.
 - Added maintained XcodeGen and `.xcconfig` templates for SwiftUI app bootstrap, raised the generated XcodeGen baseline to `2.46.0`, and expanded XcodeGen guidance around explicit configs, schemes, package wiring, test-plan references, generated project review, and shared/target/configuration build-setting layers.
-- Added paired bootstrap and guidance-sync workflows for Apps/Packages Xcode workspaces. They default to separate app projects, use local Swift package products for shared Core modules, keep workspace composition Xcode-owned, route optional services to their framework-specific bootstrap skills, and document XcodeGen's workspace-relative `schemePathPrefix` contract.
+- Reworked Apple bootstrap and sync around one root `.xcworkspace` and one root XcodeGen project: `Apps/` now owns included target specs and target-local configuration, `Packages/` owns SwiftPM modules and the root local-package registry, and shared YAML/.xcconfig templates provide the default layers. The xcode-workspace maintenance profile validates this same composition.
 - Made XcodeGen plus checked-in `.xcconfig` files the default for new Xcode app-project bootstrap, updated shared Xcode project guidance to prefer external build configuration files for nontrivial build settings, and kept hand-managed Xcode projects as an explicit guided fallback or migration choice.
 - Updated the XcodeGen bootstrap direction to prefer Xcode 16 synchronized folders for ordinary app and test source roots, keep broad recursive paths with `includes` and `excludes` as the fallback, and install checked-in external app entitlement files wired through `.xcconfig`.
 - Added default tracked homes for app marketing/build versions, Swift 6 and concurrency settings, user-script sandboxing, macOS app sandbox state, and hardened-runtime state so Xcode GUI build-setting changes can be promoted back into `.xcconfig` files cleanly.
@@ -1404,7 +1420,7 @@ Completed
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.
 - Replaced the earlier MVVM source-layout guidance with direct concrete feature services: each service owns one capability or cohesive group and reaches its real boundary directly; SwiftUI environment is reserved for services whose UI descendants genuinely need direct access or observation, with no umbrella app-service or default protocol-wrapper chains.
-- Added strict app-structure drift reporting to `sync-xcode-project-guidance` and updated the XcodeGen bootstrap scaffold so new SwiftUI app projects start with `Sources/Views/Shared`, `Sources/Views/macOS`, `Sources/Views/iOS`, `Sources/Models`, and directional `Sources/Services` folders.
+- Replaced the legacy standalone app and sync routes with the unified workspace bootstrap and its `Apps/` and `Packages/` product layout.
 - Registered Xcode's built-in MCP bridge through the Codex plugin manifest so installed `apple-dev-skills` plugins expose the Xcode-owned MCP path without bundling a separate server package.
 - Added an experimental `xcode_lldb` MCP config entry for Xcode 27 beta-era `xcrun lldb-mcp` investigation while keeping the dedicated debugger workflow planned until startup validation succeeds.
 - Clarified the Apple `maintain-project-repo` branch-protection contract so generated and synced repos require the `validate` Actions check context instead of the workflow-title display string.

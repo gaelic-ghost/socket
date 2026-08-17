@@ -1,33 +1,22 @@
-# Apps And Packages Workspace Shape
+# Apple Product Workspace Shape
 
-Use this reference when a product has several Apple apps that share local Swift
-packages.
+One Apple product repository has one root workspace and one root XcodeGen
+project. The workspace is the stable opening and `xcodebuild` surface; the root
+XcodeGen spec is the project source of truth.
 
-| Surface | Owns | Does not own |
-| --- | --- | --- |
-| `.xcworkspace` | related Xcode projects, workspace navigation, shared scheme context | package target graph or app build settings |
-| `.xcodeproj` | targets, build configurations, schemes, package declarations | the whole product's package graph |
-| app target | one installable app product | reusable Core modules by default |
-| `Package.swift` | package products, targets, dependencies, resources, tests | Xcode app signing and destinations |
+| Surface | Owns |
+| --- | --- |
+| `.xcworkspace` | the root generated project entry point |
+| `project.yml` | project graph, shared configurations, includes |
+| `Apps/apps-shared.yml` | reusable app/test target and scheme templates |
+| `Apps/<Target>/target.yml` | one target's source roots, platform, and dependencies |
+| `Packages/packages-shared.yml` | local package registration with XcodeGen |
+| `Package.swift` | each package's products, targets, dependencies, and tests |
+| `.xcconfig` hierarchy | project, app-shared, and target/configuration build settings |
+| `AGENTS.md` / `CONTRIBUTING.md` | managed header plus preserved repository-specific guidance |
+| `Justfile` | setup, alignment, validation, test, and distribution command surface |
 
-## XcodeGen
-
-- XcodeGen `2.46.0` is the current validated baseline.
-- Generate each app project from its own spec.
-- For workspace-relative scheme file paths, set `options.schemePathPrefix: "../"`.
-- Set `defaultSourceDirectoryType: syncedFolder` only for Xcode 16+ project
-  formats and ordinary broad app roots. Retain narrow explicit source entries
-  only for genuinely exceptional build-phase or membership behavior.
-- A local package entry needs a path to a directory containing `Package.swift`.
-  Link its actual product through the consuming target dependency.
-- `excludeFromProject` is an exception for a package deliberately visible through
-  the workspace but not intended for a standalone app project.
-
-## Platform Topology
-
-- `separate-projects` is the default for independently shipped or heavily
-  platform-specific apps.
-- `multiplatform-target` is suitable only when non-watch Apple platforms share
-  lifecycle and app identity.
-- watchOS remains separate; do not treat it as another supported destination of
-  the shared app target.
+Use local package products for shared code. Do not use a second Xcode project,
+groups, or folder references as a module boundary. `just align` is the one
+managed-guidance sync surface; it refreshes marked sections from Socket and
+regenerates Xcode output.
