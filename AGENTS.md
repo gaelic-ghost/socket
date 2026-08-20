@@ -25,7 +25,6 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 ### Change Scope
 
 - Treat Gale's local `socket` checkout on `main` as the clean coordination and release-verification checkout.
-- Use a branch-backed worktree as the default implementation surface for `socket` code, docs, plugin metadata, child-skill payload, maintainer-script, and repository-configuration changes.
 - Work directly on local `main` only when Gale explicitly asks for a direct-main workflow, when the task is a read-only investigation, or when a repo-owned release helper explicitly owns the direct-main release operation.
 - Before editing from a detached Codex GUI checkout, create or switch to a named branch in that worktree so the branch/worktree owner is explicit.
 - When a commit is made in `socket`, push the current branch as the normal checkpoint unless Gale asks for local-only work or the branch is intentionally incomplete. Pushing the branch does not imply opening a PR, waiting on CI, tagging, or releasing.
