@@ -15,8 +15,45 @@ BOOTSTRAP = ROOT / "skills/bootstrap-xcode-workspace/scripts/run_workflow.py"
 def run_script(script: Path, *args: str) -> tuple[int, dict]:
     env = dict(os.environ)
     env.setdefault("UV_CACHE_DIR", str(Path(tempfile.gettempdir()) / "apple-dev-skills-uv-cache"))
-    process = subprocess.run(["uv", "run", str(script), *args], capture_output=True, check=False, env=env, text=True)
-    return process.returncode, json.loads(process.stdout)
+    with tempfile.TemporaryDirectory(prefix="fake-xcodegen-") as tool_dir:
+        fake_xcodegen = Path(tool_dir) / "xcodegen"
+        fake_xcodegen.write_text(
+            """#!/usr/bin/env python3
+from pathlib import Path
+import re
+import sys
+
+arguments = sys.argv[1:]
+root = Path.cwd()
+spec = root / "project.yml"
+if "--spec" in arguments:
+    spec = Path(arguments[arguments.index("--spec") + 1])
+    if not spec.is_absolute():
+        spec = root / spec
+name_match = re.search(r"^name:\\s*([^\\s]+)", spec.read_text(encoding="utf-8"), re.MULTILINE)
+if name_match is None:
+    raise SystemExit("fake xcodegen could not read the project name")
+destination = root
+if "--project" in arguments:
+    destination = Path(arguments[arguments.index("--project") + 1])
+    if not destination.is_absolute():
+        destination = root / destination
+project = destination / f"{name_match.group(1)}.xcodeproj"
+project.mkdir(parents=True, exist_ok=True)
+project.joinpath("project.pbxproj").write_text("// generated test project\\n", encoding="utf-8")
+""",
+            encoding="utf-8",
+        )
+        fake_xcodegen.chmod(0o755)
+        env["PATH"] = f"{tool_dir}{os.pathsep}{env['PATH']}"
+        process = subprocess.run(
+            ["uv", "run", str(script), *args],
+            capture_output=True,
+            check=False,
+            env=env,
+            text=True,
+        )
+        return process.returncode, json.loads(process.stdout)
 
 
 class XcodeWorkspaceWorkflowTests(unittest.TestCase):
