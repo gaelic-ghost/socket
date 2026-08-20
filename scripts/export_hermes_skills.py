@@ -114,7 +114,6 @@ CYBERSECURITY_SKILLS = (
     "validate-vulnerability",
 )
 SERVER_SIDE_SWIFT_SKILLS = (
-    "apple-containerization-workflow",
     "leaf-rendered-web-workflow",
     "soto-aws-workflow",
 )

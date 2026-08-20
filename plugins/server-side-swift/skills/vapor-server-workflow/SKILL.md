@@ -41,7 +41,6 @@ Use repo-local Swift files, checked-out dependency sources, Dash MCP or Dash HTT
 - [Vapor commands](https://docs.vapor.codes/advanced/commands/)
 - [Vapor environment](https://docs.vapor.codes/basics/environment/)
 - [Vapor Fluent migrations](https://docs.vapor.codes/fluent/migration/)
-- [Vapor Fly deployment](https://docs.vapor.codes/deploy/fly/)
 - [Leaf overview](https://docs.vapor.codes/leaf/overview/)
 - [Leaf custom tags](https://docs.vapor.codes/leaf/custom-tags/)
 - [Vapor GitHub organization](https://github.com/vapor)
@@ -62,7 +61,8 @@ For Vapor 5, treat GitHub releases and tagged source as the authoritative alpha 
    - `Sources/App/configure.swift`
    - `Sources/App/routes.swift`
    - controllers, models, migrations, middleware, and tests
-   - Docker, deployment, or environment files when present
+   - Dockerfile and deployment workflow definitions when present; treat them as
+     GitHub cloud inputs, not local execution surfaces
 2. Identify the service job:
    - JSON API
    - website or Leaf-rendered app
@@ -139,10 +139,6 @@ When evaluating Vapor 5 alpha:
 
 Do not present Vapor 5 alpha examples as stable documentation. If a Vapor 5 API is only visible in source or release notes, say that plainly and include the exact tag or release used.
 
-## Codex GUI Local Environment
-
-When a Vapor repo should be easy to use from Codex GUI Worktree mode, start from `templates/codex-local-environments/vapor.toml`. Keep the copied file under `.codex/environments/`, keep paths repo-relative, and adjust the executable name only when the app target is not `App`.
-
 ## App Structure
 
 For typical Vapor 4 projects:
@@ -208,18 +204,16 @@ Prefer `swift test` for normal validation. Use `curl` against a locally running 
 
 Keep deployment guidance grounded in the repository's existing target first.
 
-When no target exists, distinguish:
-
-- local development run
-- Docker image or Compose workflow
-- Fly.io deployment
-- Linux process manager or system service
-- hosted platform deployment
-- database migration timing
+When no cloud target exists, keep local work native and hand deployment to the
+GitHub artifact/deployment contract. Dockerfiles are definitions consumed by
+GitHub; provider adapters consume only the recorded immutable artifact.
 
 Do not add Docker, CI, process-manager, or cloud deployment files as part of a route or local development change unless the user asked for deployment scope.
 
-Use `fly-io-deployment-workflow` when the task involves `fly.toml`, `fly launch`, `fly deploy`, Fly secrets, Fly Postgres attachment, Fly health checks, Fly process groups, or production port binding for a Vapor service. Keep Vapor route, command, environment, server binding, and Fluent migration behavior here; hand Fly-specific config and deploy validation to the Fly workflow.
+Use `fly-io-deployment-workflow` only for its GitHub-hosted provider adapter:
+reviewed `fly.toml`, an app-scoped deploy-token secret, exact prebuilt image,
+health verification, and rollback. Keep Vapor route, command, environment,
+server binding, and Fluent migration behavior here.
 
 ## Output Shape
 
@@ -241,3 +235,5 @@ Return:
 - Do not claim Vapor CLI behavior from memory when current official docs can be checked.
 - Do not use obsolete Vapor Toolbox command habits when SwiftPM is the documented path for the task.
 - Do not create a standalone Vapor repository; use the root workspace add-component entrypoint.
+- Do not add any local container, image-build, or VM route; local dependencies
+  run as native Homebrew services and cloud work runs in GitHub Actions.

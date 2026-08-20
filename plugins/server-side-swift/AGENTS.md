@@ -14,7 +14,9 @@ This file is the Server-Side Swift child-plugin override for work done from `soc
 
 - Match the `socket` shared semantic version exactly; use the Socket root release workflow for version inventory and bumps.
 - Server-side Swift components live under `Services/` in the canonical product workspace. Swift Package Manager owns each service package; the root `.xcworkspace` remains the product entrypoint.
-- For Codex GUI worktree-first server-side Swift repos, keep local environment files portable and repo-owned. Start from `templates/codex-local-environments/`, keep paths repo-relative, and adjust executable names instead of committing machine-local paths.
+- The generated root workspace `Justfile`, service-owned scripts, and managed
+  guidance are the only local command surface. Do not add per-framework Codex
+  environment templates or standalone package entrypoints.
 - Use repo-local files, checked-out dependency sources, GitHub/source repositories, generated DocC, release notes, and Dash MCP or Dash HTTP for installed Swift package DocC before reaching for web docs. For Vapor and Hummingbird work, prefer local project, source, releases, and Dash docsets when present, then use official framework docs, GitHub releases, or tagged source when Dash/local/source coverage is missing, stale, or a public latest-release citation is needed. Do not treat generic no-JS web search/open results as proof that JS-rendered Apple Developer docs were read.
 - Use `workspace-service-component` only behind `apple-dev-skills:bootstrap-xcode-workspace --operation add-component --component-kind service`. It owns both fresh Hummingbird/Vapor generation and existing service guidance alignment; there is no standalone server bootstrap or sync path.
 - Fresh Hummingbird components start with `hb`, preserve Server or Lambda shape and generated `swift-configuration`, and default long-running services to Fluent ORM with PostgreSQL.
@@ -24,8 +26,9 @@ This file is the Server-Side Swift child-plugin override for work done from `soc
 - Soto is the default AWS SDK for server-side Swift. Create one `AWSClient` per application or Lambda environment, share it across service clients, and shut it down exactly once. Use the official AWS SDK for Swift only for an explicit capability, compatibility, or existing-contract requirement.
 - Treat the Hummingbird template repository as fallback, source inspection, or explicit-template guidance rather than the first default.
 - Treat Vapor 4 as the stable default while Vapor 5 is alpha. Vapor 5 is the planned future default once it has a stable release, stable docs, and a migration path that fits the target project; until then, use Vapor 5 only for explicit alpha evaluation, existing alpha-track repos, or migration-readiness audits grounded in current Vapor release notes and source tags.
-- For Docker work, use current official Docker documentation and Swift Docker image sources before proposing Dockerfile, Compose, BuildKit, image, registry, or runtime changes.
-- For Apple Containerization work, use the official `apple/containerization` and `apple/container` documentation for the relevant branch or release before proposing `container` CLI commands, Containerization Swift API use, host requirements, kernel setup, Rosetta behavior, image, registry, or runtime changes.
+- For Dockerfile work, use current official Docker documentation and Swift
+  Docker image sources. Docker and OCI definitions are GitHub cloud-build
+  inputs; they do not create a local runtime path.
 - Treat the Vapor Toolbox as project-creation and convenience tooling, not as a replacement for SwiftPM. Prefer `swift build`, `swift test`, `swift run`, and `swift run App serve` after a project exists unless current Vapor documentation says otherwise for the specific task.
 - Keep server-side Swift examples portable across macOS and Linux unless the target repository documents an Apple-only service environment.
 - Keep dependencies fetchable from GitHub, package registries, package-manager URLs, or other real remote repositories. Do not commit machine-local package paths.

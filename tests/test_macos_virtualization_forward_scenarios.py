@@ -36,16 +36,6 @@ def skill(plugin: str, name: str) -> str:
             ("save/restore only in documented states", "configuration compatible", "not call saved machine state a disk snapshot"),
         ),
         (
-            "server-side-swift",
-            "apple-containerization-workflow",
-            ("disposable application container", "persistent linux development environment", "home-mount=none"),
-        ),
-        (
-            "server-side-swift",
-            "apple-containerization-workflow",
-            ("supported apple silicon", "compatible kernel configuration", "observed `/dev/kvm`"),
-        ),
-        (
             "cybersecurity-skills",
             "prepare-isolated-analysis-lab",
             ("offline static tooling", "default host folders/home sharing", "verify teardown"),

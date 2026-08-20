@@ -51,9 +51,6 @@
     "docker",
     "fly.io",
     "flyctl",
-    "containerization",
-    "apple-container",
-    "container-machine",
     "oci",
     "swiftpm",
     "soto"
@@ -93,7 +90,7 @@
       "Diagnose duplicated writes, stale cursors, missed changes, or sync conflicts in this Swift service.",
       "Prepare a Dockerfile as GitHub Actions cloud-build input without adding a local container path.",
       "Diagnose why this Swift service Docker image fails to build, start, or bind its port.",
-      "Prepare this Vapor or Hummingbird service for Fly.io deployment with Dockerfile, fly.toml, secrets, health checks, and validation.",
+      "Prepare a GitHub Actions-only Fly.io adapter that deploys the exact prebuilt image with a scoped token, protected environment, health verification, and rollback.",
       "Diagnose why this Swift service fails to deploy or pass health checks on Fly.io.",
       "Inspect this Vapor app and explain its routes, configuration, and run commands.",
       "Assess whether this Vapor 4 app is ready for a Vapor 5 alpha spike without treating alpha APIs as stable.",

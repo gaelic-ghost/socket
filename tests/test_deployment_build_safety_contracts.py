@@ -28,10 +28,10 @@ def test_release_workflow_requires_target_and_session_preflight() -> None:
 def test_server_docker_workflow_enforces_github_only_cloud_builds() -> None:
     contents = text("plugins/server-side-swift/skills/docker-workflow/SKILL.md")
     for phrase in (
-        "run docker, buildkit, and image-smoke-test commands in github actions only",
-        "treat the actual child build process as the source of truth",
-        "do not start a duplicate invocation",
-        "do not issue docker status",
+        "github actions exclusively builds linux images",
+        "image smoke test",
+        "release manifest",
+        "never rebuild during deployment",
     ):
         assert phrase in contents
 

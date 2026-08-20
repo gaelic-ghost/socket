@@ -66,7 +66,7 @@ Use Swift Package Manager and Swift.org documentation for package, target, depen
    - executable target and library targets
    - route, controller, handler, or router owners
    - existing model, migration, repository, query, and database-support files
-   - configuration, environment, Docker, Compose, or test database setup
+   - configuration, environment, native Homebrew service, or test database setup
    - tests that create, migrate, seed, or reset storage
 2. Identify the persistence job:
    - CRUD storage

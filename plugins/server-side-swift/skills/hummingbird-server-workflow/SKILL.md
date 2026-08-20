@@ -60,7 +60,8 @@ Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swif
    - custom `RequestContext` types
    - request and response models
    - tests using `HummingbirdTesting`, `swift test`, or local HTTP checks
-   - Docker, deployment, service lifecycle, or environment files when present
+   - Dockerfile and deployment workflow definitions when present; treat them as
+     GitHub cloud inputs, not local execution surfaces
 2. Identify the service job:
    - JSON API
    - static file or website surface
@@ -130,10 +131,6 @@ When adding Hummingbird to an existing package, edit `Package.swift` through nor
 
 When an existing Hummingbird component needs guidance alignment, run the root workspace `just align`; do not invoke a framework-specific sync path.
 
-## Codex GUI Local Environment
-
-When a Hummingbird repo should be easy to use from Codex GUI Worktree mode, start from `templates/codex-local-environments/hummingbird.toml`. Keep the copied file under `.codex/environments/`, keep paths repo-relative, and replace `EXECUTABLE_NAME` with the repo's actual executable target.
-
 ## App Structure
 
 For typical Hummingbird 2 projects:
@@ -200,19 +197,18 @@ Prefer `swift test` for normal validation. Use `curl` against a locally running 
 
 Keep deployment guidance grounded in the repository's existing target first.
 
-When no target exists, distinguish:
+When no cloud target exists, keep local work native and hand deployment to the
+GitHub artifact/deployment contract. Dockerfiles are definitions consumed by
+GitHub; provider adapters consume only the recorded immutable artifact.
 
-- local development run
-- Docker image or Compose workflow
-- Apple Containerization workflow
-- Fly.io deployment
-- Linux process manager or system service
-- hosted platform deployment
-- database migration or background service timing
+Do not add Docker or cloud deployment files as part of a route or local
+development change unless the user asked for deployment scope. Never add a
+local container, image-build, or VM route.
 
-Do not add Docker, CI, process-manager, cloud deployment, or Apple Containerization files as part of a route or local development change unless the user asked for deployment scope.
-
-Use `fly-io-deployment-workflow` when the task involves `fly.toml`, `fly launch`, `fly deploy`, Fly secrets, Fly health checks, Fly process groups, Fly Postgres attachment, or production port binding for a Hummingbird service. Keep Hummingbird router, middleware, request context, application lifecycle, command-line options, and framework tests here; hand Fly-specific config and deploy validation to the Fly workflow.
+Use `fly-io-deployment-workflow` only for its GitHub-hosted provider adapter:
+reviewed `fly.toml`, an app-scoped deploy-token secret, exact prebuilt image,
+health verification, and rollback. Keep Hummingbird router, middleware, request
+context, application lifecycle, command-line options, and framework tests here.
 
 ## Output Shape
 
@@ -232,5 +228,6 @@ Return:
 - Do not commit secrets, machine-local paths, or deployment credentials.
 - Do not claim Hummingbird API behavior from memory when current official docs can be checked.
 - Do not use Hummingbird request context as a catch-all app dependency bag.
-- Do not add Docker, Apple Containerization, CI, or cloud deployment files without explicit deployment scope.
+- Do not add Docker or cloud deployment files without explicit deployment
+  scope; never add a local container, image-build, or Linux runtime.
 - Do not create a standalone Hummingbird repository; use the root workspace add-component entrypoint.
