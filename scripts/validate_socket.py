@@ -176,7 +176,7 @@ CHILD_CHECKS = (
 )
 
 
-def checks_for_profile(profile: str, version: str | None) -> tuple[Check, ...]:
+def checks_for_profile(profile: str) -> tuple[Check, ...]:
     checks: tuple[Check, ...] = CORE_CHECKS
     if profile in {"compatibility", "full"}:
         checks += COMPATIBILITY_CHECKS
@@ -212,7 +212,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     try:
-        checks = checks_for_profile(args.profile, None)
+        checks = checks_for_profile(args.profile)
     except ValueError as error:
         raise SystemExit(f"validate-socket: {error}") from error
     for check in checks:

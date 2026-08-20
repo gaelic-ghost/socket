@@ -43,6 +43,24 @@ def test_snapshot_phase_requires_checks_and_rejects_failures() -> None:
     )
 
 
+def test_snapshot_phase_requires_the_validate_job_and_an_open_pr() -> None:
+    base = {
+        "number": 7,
+        "url": "https://github.test/pr/7",
+        "head_ref": "release/v2",
+        "head_sha": "abc",
+        "review_decision": "",
+        "comments": 0,
+    }
+
+    assert release_workflow.PullRequestSnapshot(
+        state="OPEN", checks=(("unrelated", "pass"),), **base
+    ).phase == "awaiting-required-checks"
+    assert release_workflow.PullRequestSnapshot(
+        state="CLOSED", checks=(("validate", "pass"),), **base
+    ).phase == "closed"
+
+
 def test_prepare_and_advance_are_blocked_on_main(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(release_workflow, "current_branch", lambda: "main")
 
@@ -102,6 +120,19 @@ def test_prepare_version_must_be_the_next_patch_minor_or_major(
     release_workflow.ensure_next_stable_version([], "2.0.0")
     with pytest.raises(release_workflow.ReleaseWorkflowError, match="Choose one of"):
         release_workflow.ensure_next_stable_version([], "3.0.0")
+
+
+def test_prepare_rejects_an_already_published_version(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        release_workflow,
+        "git",
+        lambda args, **_kwargs: result("v9.35.0\n" if args[:2] == ["tag", "-l"] else ""),
+    )
+
+    with pytest.raises(release_workflow.ReleaseWorkflowError, match="already exists locally"):
+        release_workflow.ensure_unpublished("9.35.0")
 
 
 def test_release_evidence_contains_only_prepublication_facts() -> None:

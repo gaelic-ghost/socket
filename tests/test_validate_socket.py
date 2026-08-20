@@ -31,7 +31,7 @@ def write(path: Path, contents: str) -> None:
 
 
 def test_core_profile_uses_root_owned_checks_only() -> None:
-    checks = validate_socket.checks_for_profile("core", None)
+    checks = validate_socket.checks_for_profile("core")
 
     assert [check.name for check in checks] == [
         "root marketplace metadata",
@@ -43,7 +43,7 @@ def test_core_profile_uses_root_owned_checks_only() -> None:
 
 
 def test_full_profile_adds_compatibility_and_child_checks_once() -> None:
-    checks = validate_socket.checks_for_profile("full", None)
+    checks = validate_socket.checks_for_profile("full")
     names = [check.name for check in checks]
 
     assert names.count("Agent Portability Skills tests") == 1

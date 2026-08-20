@@ -13,6 +13,7 @@ import release_version
 
 ROOT = Path(__file__).resolve().parent.parent
 ACCOUNTING_STATUSES = {"preserved", "in-progress", "archived", "merged", "safe-to-delete"}
+REQUIRED_CHECKS = {"validate"}
 
 
 class ReleaseWorkflowError(RuntimeError):
@@ -35,8 +36,13 @@ class PullRequestSnapshot:
         buckets = {bucket for _, bucket in self.checks}
         if self.state == "MERGED":
             return "merged"
+        if self.state != "OPEN":
+            return "closed"
         if not self.checks:
             return "awaiting-github-state"
+        check_names = {name for name, _ in self.checks}
+        if not REQUIRED_CHECKS <= check_names:
+            return "awaiting-required-checks"
         if buckets & {"fail", "cancel"}:
             return "failed-checks"
         if "pending" in buckets:
@@ -122,6 +128,14 @@ def remote_main_sha() -> str:
     if not output:
         raise ReleaseWorkflowError("origin/main is not readable.")
     return output.split()[0]
+
+
+def ensure_unpublished(version: str) -> None:
+    tag = release_tag(version)
+    if git(["tag", "-l", tag]).stdout.strip():
+        raise ReleaseWorkflowError(f"Release tag {tag} already exists locally.")
+    if git(["ls-remote", "origin", f"refs/tags/{tag}"]).stdout.strip():
+        raise ReleaseWorkflowError(f"Release tag {tag} already exists on origin.")
 
 
 def parse_accounting(values: list[str]) -> dict[str, str]:
@@ -300,6 +314,7 @@ def run_full_validation(root: Path = ROOT) -> None:
 def prepare(version: str) -> int:
     branch = ensure_feature_branch()
     ensure_clean()
+    ensure_unpublished(version)
     release_notes_path(version)
     targets = release_version.discover_targets(ROOT)
     current_versions = release_version.read_versions(targets)

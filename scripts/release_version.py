@@ -269,38 +269,6 @@ def capture_release_evidence(root: Path, output_path: Path) -> ReleaseEvidence:
     return evidence
 
 
-def load_release_evidence(root: Path, input_path: Path) -> ReleaseEvidence:
-    if not input_path.is_file():
-        raise VersionToolError(
-            f"Release evidence file {input_path} is missing. Run the reviewed-main `scripts/release.sh advance X.Y.Z` path."
-        )
-    try:
-        payload = json.loads(input_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as error:
-        raise VersionToolError(f"Release evidence file {input_path} is not valid JSON.") from error
-    current_commit = run_git(root, ["rev-parse", "HEAD"]).stdout.strip()
-    recorded_commit = payload.get("commit")
-    if recorded_commit != current_commit:
-        raise VersionToolError(
-            "Release evidence is stale for the current checkout: "
-            f"recorded commit {recorded_commit!r}, current commit {current_commit!r}. "
-            "Capture evidence again through `scripts/release.sh advance X.Y.Z` from the matching reviewed commit."
-        )
-    marketplace_smoke = payload.get("marketplace_smoke")
-    dependabot = payload.get("dependabot")
-    raw_alerts = dependabot.get("alerts") if isinstance(dependabot, dict) else None
-    if not isinstance(marketplace_smoke, dict) or marketplace_smoke.get("status") != "passed":
-        raise VersionToolError("Release evidence does not contain a passing marketplace smoke test.")
-    if not isinstance(raw_alerts, list):
-        raise VersionToolError("Release evidence does not contain the Dependabot alert query result.")
-    return ReleaseEvidence(
-        commit=current_commit,
-        captured_at=str(payload.get("captured_at", "unknown")),
-        marketplace_smoke=marketplace_smoke,
-        dependabot_alerts=tuple(raw_alerts),
-    )
-
-
 def render_evidence_summary(evidence: ReleaseEvidence) -> str:
     severity_counts: dict[str, int] = {}
     for alert in evidence.dependabot_alerts:
@@ -549,16 +517,6 @@ def ensure_main_matches_origin(root: Path) -> None:
             "Reviewed-main verification requires local main to match origin/main before tagging. "
             "Push or fast-forward main first."
         )
-
-
-def ensure_tag_is_available(root: Path, version: str) -> None:
-    tag = f"v{version}"
-    local_tag = run_git(root, ["tag", "-l", tag]).stdout.strip()
-    if local_tag:
-        raise VersionToolError(f"Release tag {tag} already exists locally; do not create the GitHub release twice.")
-    remote_tag = run_git(root, ["ls-remote", "--tags", "origin", f"refs/tags/{tag}"]).stdout.strip()
-    if remote_tag:
-        raise VersionToolError(f"Release tag {tag} already exists on origin; do not create the GitHub release twice.")
 
 
 def ensure_versions_match_release(targets: list[VersionTarget], version: str) -> None:

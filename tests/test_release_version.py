@@ -91,35 +91,6 @@ def test_apply_version_updates_manifests_and_adjacent_lockfiles(tmp_path: Path) 
     assert 'version = "2.0.0"' in (root / "plugins/example/uv.lock").read_text()
 
 
-def test_load_release_evidence_rejects_a_different_commit(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    root = make_repo(tmp_path)
-    evidence_file = root / ".socket-release-evidence.json"
-    evidence_file.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "commit": "older-commit",
-                "captured_at": "2026-08-20T12:00:00Z",
-                "marketplace_smoke": {"status": "passed"},
-                "dependabot": {"alerts": []},
-            }
-        ),
-        encoding="utf-8",
-    )
-    monkeypatch.setattr(
-        release_version,
-        "run_git",
-        lambda *_args, **_kwargs: type(
-            "Result", (), {"returncode": 0, "stdout": "current-commit\n", "stderr": ""}
-        )(),
-    )
-
-    with pytest.raises(release_version.VersionToolError, match="stale"):
-        release_version.load_release_evidence(root, evidence_file)
-
-
 def test_release_version_module_has_no_release_choreography_entrypoint() -> None:
     assert not hasattr(release_version, "main")
     assert not hasattr(release_version, "render_patch_refresh")
