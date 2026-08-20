@@ -1080,6 +1080,8 @@ def main() -> int:
             return blocked(" ".join(findings), inputs)
         if args.component_kind == "app" and not args.platform:
             return blocked("--platform is required when adding an app component.", inputs)
+        if args.component_kind == "app" and not re.fullmatch(r"[A-Z]{3}", args.file_prefix):
+            return blocked("--file-prefix must contain exactly three uppercase ASCII letters.", inputs)
         if args.component_kind == "extension" and (not args.platform or not args.host_target or not args.extension_product_type or not args.extension_point_identifier):
             return blocked("--platform, --host-target, --extension-product-type, and --extension-point-identifier are required when adding an extension component.", inputs)
         if args.component_kind == "service" and not args.framework:

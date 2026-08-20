@@ -238,6 +238,33 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertTrue((root / "Packages/ProductAnalytics/Package.swift").is_file())
             self.assertIn("ProductAnalytics", (root / "Packages/packages-shared.yml").read_text(encoding="utf-8"))
 
+    def test_add_app_component_rejects_invalid_file_prefix_before_writes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--name", "Product",
+                "--file-prefix", "PRD",
+                "--destination", tmpdir,
+                "--skip-validation",
+            )
+            self.assertEqual(code, 0, payload)
+            root = Path(payload["workspace_root"])
+
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--operation", "add-component",
+                "--repo-root", str(root),
+                "--component-kind", "app",
+                "--component-name", "ProductAdmin",
+                "--platform", "macos",
+                "--file-prefix", "../../Outside",
+            )
+
+            self.assertEqual(code, 1)
+            self.assertIn("three uppercase", payload["stderr"])
+            self.assertFalse((root / "Apps/ProductAdmin").exists())
+            self.assertFalse((Path(tmpdir) / "OutsideApp.swift").exists())
+
     def test_extension_is_an_apps_peer_with_explicit_host_embedding(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, payload = run_script(BOOTSTRAP, "--name", "Product", "--file-prefix", "PRD", "--destination", tmpdir, "--skip-validation")
