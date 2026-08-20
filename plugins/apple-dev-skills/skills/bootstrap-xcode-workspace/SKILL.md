@@ -1,6 +1,6 @@
 ---
 name: bootstrap-xcode-workspace
-description: Create and align one Swift product workspace with Apps, Packages, and Services components, or add a new component without converting the repository.
+description: Create, adopt, extend, and align one Swift product workspace with app, extension, package, and service components under one permanent Xcode entrypoint.
 ---
 
 # Bootstrap Apple Product Workspace
@@ -33,6 +33,8 @@ Product/
     ProductiOS/
       target.yml
       Configurations/
+      Sources/ Resources/ Configurations/ target.yml
+    ProductShareExtension/          # peer Xcode target, explicitly embedded by its host app
       Sources/ Resources/ Configurations/ target.yml
     ProductiOSTests/  ProductiOSUITests/
     ProductmacOS/
@@ -68,10 +70,11 @@ Product/
 
 ## When To Use
 
-Use this skill to create any Swift product repository, add an app, package, or
-server component to an existing product, or realign the generated workspace and
-managed guidance. Use `bootstrap-swift-package` only for a deliberately
-standalone published library or CLI that is not part of a product workspace.
+Use this skill for every Swift repository lifecycle: create a new product,
+adopt an existing app/package/service repository, add an app, app extension,
+package, or server component, or realign the generated workspace and managed
+guidance. There is no standalone Swift repository bootstrap or separate Xcode
+project migration entrypoint.
 
 ## Single-Path Workflow
 
@@ -82,18 +85,28 @@ standalone published library or CLI that is not part of a product workspace.
    Start package-first with `--component-kind library` or service-first with
    `--component-kind service --framework hummingbird|vapor`; both still create
    the same permanent root workspace and component roots.
-3. Add components only through `--operation add-component`:
+3. Adopt existing repositories only through `--operation adopt --repo-root
+   <root>`. The first pass is read-only and emits concrete `components[]`, an
+   evidence inventory, and a proposed adoption map. Review that JSON, resolve
+   every ownership/platform/host ambiguity, then apply it with
+   `--adoption-map <path> --apply`. Application creates a separate candidate
+   project and equivalence report under `.socket/`; it does not delete the
+   original project state.
+4. Add components only through `--operation add-component`:
    - app: `--component-kind app --component-name <Name> --platform <platform>`
+   - extension: `--component-kind extension --component-name <Target>
+     --platform <platform> --host-target <AppTarget> --extension-product-type
+     app-extension|extensionkit-extension --extension-point-identifier <id>`
    - library: `--component-kind library --component-name <Name>`
    - service: `--component-kind service --component-name <Name> --framework hummingbird|vapor`
-4. The service option delegates framework generation to
+5. The service option delegates framework generation to
    `server-side-swift:workspace-service-component`, while this skill retains
    ownership of the root workspace and project graph.
-5. Run `just setup` after initializing Git, then use `just align` to refresh
+6. Run `just setup` after initializing Git, then use `just align` to refresh
   Socket-managed guidance/hooks and regenerate with XcodeGen. Route by
   operation: use the nearest `Package.swift` for package/service work and the
   root workspace for Xcode-owned schemes, destinations, previews, and project state.
-6. Use Xcode MCP (`xcrun mcpbridge`) for agent-assisted project inspection and
+7. Use Xcode MCP (`xcrun mcpbridge`) for agent-assisted project inspection and
    debugging when Xcode is open. It augments these deterministic commands; it
    is not a bootstrap prerequisite.
 
@@ -107,11 +120,16 @@ standalone published library or CLI that is not part of a product workspace.
 - `org_identifier`: bundle identifier prefix; default `com.galewilliams`.
 - `development_team`: code-signing team; default `BC73766F69`.
 - `dry_run`: report the normalized scaffold without writing files.
-- `operation`: `create`, `add-component`, or `align`.
-- `repo_root`: required with `add-component` and `align`.
+- `operation`: `create`, `adopt`, `add-component`, or `align`.
+- `repo_root`: required with `adopt`, `add-component`, and `align`.
 - `component_kind`, `component_name`: required with `add-component`.
 - `platform`: required for an app component.
 - `framework`: required for a service component; `hummingbird` or `vapor`.
+- `host_target`, `extension_product_type`, and `extension_point_identifier`:
+  required for an extension; the product type and point must come from current
+  Apple/Xcode documentation, never a guessed generic target.
+- `adoption_map`, `apply`: apply an explicitly reviewed adoption map after the
+  non-mutating inventory pass.
 
 ## Outputs
 
@@ -130,13 +148,17 @@ standalone published library or CLI that is not part of a product workspace.
 - Stop when XcodeGen is unavailable.
 - Do not introduce a second project generator, manually edited project data, or
   a separate app `.xcodeproj` under `Apps/`.
+- Put app extensions directly under `Apps/<ExtensionTarget>/`, adjacent to app
+  and test targets. Never create a root `Extensions/` directory. The containing
+  app target must name and embed each extension explicitly with XcodeGen.
 - Do not classify the repository as Xcode, SwiftPM, plain, or mixed. Those files
   coexist by design; select tools from the requested operation.
 - Local service dependencies use native Homebrew services. Cloud Linux builds,
   live-test deployments, and production deployments run only in GitHub Actions.
-- A standalone published library or CLI remains a deliberate exception: use
-  `bootstrap-swift-package` only when it is not part of an Apple product
-  workspace.
+- Adoption blocks before writes when component ownership, target platform,
+  extension product type, or extension host is ambiguous. Applying a map never
+  deletes the original project; review the generated candidate and equivalence
+  report before a separate, explicit finalization pass.
 
 ## Fallbacks and Handoffs
 

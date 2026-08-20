@@ -201,6 +201,128 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertTrue((root / "Packages/ProductAnalytics/Package.swift").is_file())
             self.assertIn("ProductAnalytics", (root / "Packages/packages-shared.yml").read_text(encoding="utf-8"))
 
+    def test_extension_is_an_apps_peer_with_explicit_host_embedding(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--file-prefix", "PRD", "--destination", tmpdir, "--skip-validation")
+            self.assertEqual(code, 0, payload)
+            root = Path(payload["workspace_root"])
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--operation", "add-component",
+                "--repo-root", str(root),
+                "--component-kind", "extension",
+                "--component-name", "ProductShareExtension",
+                "--platform", "ios",
+                "--host-target", "ProductiOS",
+                "--extension-product-type", "app-extension",
+                "--extension-point-identifier", "com.apple.share-services",
+            )
+            self.assertEqual(code, 0, payload)
+            self.assertTrue((root / "Apps/ProductShareExtension/target.yml").is_file())
+            self.assertFalse((root / "Extensions").exists())
+            host_spec = (root / "Apps/ProductiOS/target.yml").read_text(encoding="utf-8")
+            self.assertIn("- target: ProductShareExtension", host_spec)
+            self.assertIn("embed: true", host_spec)
+            extension_spec = (root / "Apps/ProductShareExtension/target.yml").read_text(encoding="utf-8")
+            self.assertIn("type: app-extension", extension_spec)
+            self.assertIn("Apps/ProductShareExtension/Sources", extension_spec)
+
+    def test_extension_addition_blocks_without_explicit_host_and_extension_point(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--skip-validation")
+            self.assertEqual(code, 0, payload)
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--operation", "add-component",
+                "--repo-root", payload["workspace_root"],
+                "--component-kind", "extension",
+                "--component-name", "ProductShareExtension",
+                "--platform", "ios",
+            )
+            self.assertEqual(code, 1)
+            self.assertIn("--host-target", payload["stderr"])
+
+    def test_adopt_inventories_swiftpm_library_without_xcode_prerequisites(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Sources/Library").mkdir(parents=True)
+            (root / "Sources/Library/Library.swift").write_text("public enum Library {}\n", encoding="utf-8")
+            (root / "Package.swift").write_text(
+                '// swift-tools-version: 6.2\nimport PackageDescription\nlet package = Package(name: "Library", products: [.library(name: "Library", targets: ["Library"])], targets: [.target(name: "Library")])\n',
+                encoding="utf-8",
+            )
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["components"][0]["kind"], "library")
+            self.assertEqual(payload["components"][0]["proposed_destination"], "Packages/Library")
+            self.assertFalse((root / "project.yml").exists(), "inventory must not mutate")
+            self.assertNotIn("repo_shape", json.dumps(payload))
+
+    def test_adopt_stages_reviewed_library_map_without_deleting_original_project_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Sources/Library").mkdir(parents=True)
+            (root / "Sources/Library/Library.swift").write_text("public enum Library {}\n", encoding="utf-8")
+            (root / "Package.swift").write_text(
+                '// swift-tools-version: 6.2\nimport PackageDescription\nlet package = Package(name: "Library", products: [.library(name: "Library", targets: ["Library"])], targets: [.target(name: "Library")])\n',
+                encoding="utf-8",
+            )
+            code, inventory = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, inventory)
+            mapping_path = root / "reviewed-adoption.json"
+            mapping_path.write_text(json.dumps(inventory["adoption_map"]), encoding="utf-8")
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir, "--adoption-map", str(mapping_path), "--apply")
+            self.assertEqual(code, 0, payload)
+            self.assertTrue((root / "Packages/Library/Package.swift").is_file())
+            self.assertTrue((root / "Packages/Library/Sources/Library/Library.swift").is_file())
+            self.assertTrue((root / ".socket/adoption/original-inventory.json").is_file())
+            self.assertTrue((root / ".socket/adoption/equivalence-report.json").is_file())
+            self.assertTrue((root / ".socket/adoption-candidate/Library.xcodeproj/project.pbxproj").is_file())
+
+    def test_adopt_discovers_hummingbird_and_vapor_services_independently(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            for name, dependency in (("API", "Hummingbird"), ("Worker", "Vapor")):
+                package = root / name
+                (package / f"Sources/{name}").mkdir(parents=True)
+                (package / f"Sources/{name}/main.swift").write_text("print(\"service\")\n", encoding="utf-8")
+                (package / "Package.swift").write_text(
+                    f'// swift-tools-version: 6.2\nimport PackageDescription\n// {dependency}\nlet package = Package(name: "{name}", products: [.executable(name: "{name}", targets: ["{name}"])], targets: [.executableTarget(name: "{name}")])\n',
+                    encoding="utf-8",
+                )
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            services = {item["name"]: item for item in payload["components"]}
+            self.assertEqual(services["API"]["proposed_destination"], "Services/API")
+            self.assertEqual(services["API"]["product_type"], "hummingbird")
+            self.assertEqual(services["Worker"]["product_type"], "vapor")
+
+    def test_adopt_blocks_ambiguous_extension_host_before_writes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            project = root / "Legacy.xcodeproj"
+            project.mkdir()
+            project.joinpath("project.pbxproj").write_text(
+                """A = { isa = PBXNativeTarget; name = FirstApp; productType = \"com.apple.product-type.application\"; };
+B = { isa = PBXNativeTarget; name = SecondApp; productType = \"com.apple.product-type.application\"; };
+C = { isa = PBXNativeTarget; name = ShareExtension; productType = \"com.apple.product-type.app-extension\"; };
+SDKROOT = iphoneos;
+""",
+                encoding="utf-8",
+            )
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 1)
+            self.assertIn("extension host target", " ".join(payload["unresolved"]))
+            self.assertFalse((root / "project.yml").exists())
+
+    def test_adopt_reports_already_canonical_workspace_without_migration(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, created = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--skip-validation")
+            self.assertEqual(code, 0, created)
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", created["workspace_root"])
+            self.assertEqual(code, 0, payload)
+            self.assertFalse(payload["migration_required"])
+
     def test_service_component_routes_through_server_adapter(self) -> None:
         adapter = ROOT.parent / "server-side-swift/skills/workspace-service-component/scripts/run_workflow.py"
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -11,7 +11,9 @@ import json
 import re
 import shutil
 import subprocess
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from typing import Any
 
 SUPPORTED_PLATFORMS = {
     "ios": "iOS",
@@ -21,6 +23,31 @@ SUPPORTED_PLATFORMS = {
     "visionos": "visionOS",
 }
 CONFIGURATIONS = ("Debug", "Staging", "Release", "AppStore", "DirectDistribution", "AltStore")
+XCODE_PRODUCT_TYPES = {
+    "com.apple.product-type.application": "app",
+    "com.apple.product-type.app-extension": "extension",
+    "com.apple.product-type.extensionkit-extension": "extension",
+    "com.apple.product-type.bundle.unit-test": "test",
+    "com.apple.product-type.bundle.ui-testing": "ui-test",
+}
+
+
+@dataclass
+class Component:
+    """One concrete repository component; never a whole-repository classification."""
+
+    name: str
+    kind: str
+    current_owner: str
+    proposed_destination: str
+    evidence: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
+    host_target: str | None = None
+    platform: str | None = None
+    product_type: str | None = None
+    extension_point_identifier: str | None = None
+    owned_paths: list[str] = field(default_factory=list)
+    unresolved: list[str] = field(default_factory=list)
 
 
 def write(path: Path, content: str, executable: bool = False) -> None:
@@ -88,12 +115,17 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--development-team", default="BC73766F69")
     result.add_argument("--dry-run", action="store_true")
     result.add_argument("--skip-validation", action="store_true")
-    result.add_argument("--repo-root", help="Align an existing canonical workspace root instead of creating a new product.")
-    result.add_argument("--operation", choices=("create", "add-component", "align"), default="create")
-    result.add_argument("--component-kind", choices=("app", "library", "service"))
+    result.add_argument("--repo-root", help="Adopt, add to, or align an existing Swift repository.")
+    result.add_argument("--operation", choices=("create", "adopt", "add-component", "align"), default="create")
+    result.add_argument("--component-kind", choices=("app", "extension", "library", "service"))
     result.add_argument("--component-name")
     result.add_argument("--platform", choices=tuple(SUPPORTED_PLATFORMS))
     result.add_argument("--framework", choices=("hummingbird", "vapor"))
+    result.add_argument("--host-target", help="Containing application target for an extension component.")
+    result.add_argument("--extension-product-type", choices=("app-extension", "extensionkit-extension"))
+    result.add_argument("--extension-point-identifier", help="Documented NSExtensionPointIdentifier for an extension component.")
+    result.add_argument("--adoption-map", help="Reviewed adoption-map JSON to apply after the read-only adopt inventory.")
+    result.add_argument("--apply", action="store_true", help="Apply --adoption-map. Adopt is read-only without this flag.")
     return result
 
 
@@ -368,8 +400,10 @@ schemes:
           parallelizable: true
 """)
     channels = [("Staging", "Staging"), ("App Store", "AppStore")]
-    if platform in {"ios", "visionos"}: channels.append(("AltStore", "AltStore"))
-    if platform == "macos": channels.append(("Direct Distribution", "DirectDistribution"))
+    if platform in {"ios", "visionos"}:
+        channels.append(("AltStore", "AltStore"))
+    if platform == "macos":
+        channels.append(("Direct Distribution", "DirectDistribution"))
     for title, config in channels:
         spec += f"""  {target} {title}:
     preActions:
@@ -502,6 +536,411 @@ def create_app_component(root: Path, product_name: str, component_name: str, pla
         write(ui_root / f"Sources/{target}UITests.swift", f'import XCTest\n\nfinal class {target}UITests: XCTestCase {{\n    func testLaunch() {{}}\n}}\n')
 
 
+def find_target_spec(root: Path, target_name: str) -> Path | None:
+    declaration = re.compile(rf"^  {re.escape(target_name)}:\s*$", re.MULTILINE)
+    for path in sorted((root / "Apps").glob("*/target.y*ml")):
+        if declaration.search(path.read_text(encoding="utf-8")):
+            return path
+    return None
+
+
+def embed_extension_in_host(root: Path, host_target: str, extension_target: str) -> None:
+    spec = find_target_spec(root, host_target)
+    if spec is None:
+        raise RuntimeError(f"Host application target {host_target!r} was not found under Apps/.")
+    content = spec.read_text(encoding="utf-8")
+    if f"- target: {extension_target}" in content:
+        return
+    lines = content.splitlines()
+    target_start = next((index for index, line in enumerate(lines) if line == f"  {host_target}:"), None)
+    if target_start is None:
+        raise RuntimeError(f"Could not locate the {host_target!r} target declaration in {spec.relative_to(root)}.")
+    target_end = next((index for index in range(target_start + 1, len(lines)) if re.match(r"^  \S.*:\s*$", lines[index])), len(lines))
+    dependencies = next((index for index in range(target_start + 1, target_end) if lines[index] == "    dependencies:"), None)
+    entry = [f"      - target: {extension_target}", "        embed: true"]
+    if dependencies is None:
+        lines[target_end:target_end] = ["    dependencies:", *entry]
+    else:
+        dependency_end = next((index for index in range(dependencies + 1, target_end) if re.match(r"^    \S.*:\s*$", lines[index])), target_end)
+        lines[dependency_end:dependency_end] = entry
+    write(spec, "\n".join(lines) + "\n")
+
+
+def extension_target_spec(
+    name: str,
+    platform: str,
+    org: str,
+    team: str,
+    product_type: str,
+) -> str:
+    display = SUPPORTED_PLATFORMS[platform]
+    xcodegen_type = "app-extension" if product_type == "app-extension" else "extensionkit-extension"
+    return f"""targets:
+  {name}:
+    type: {xcodegen_type}
+    platform: {display}
+    sources:
+      - path: Apps/{name}/Sources
+        type: syncedFolder
+      - path: Apps/{name}/Resources
+        type: syncedFolder
+    info:
+      path: Apps/{name}/Resources/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: {org}.{name.lower()}
+        DEVELOPMENT_TEAM: {team}
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: Apps/{name}/Resources/{name}.entitlements
+    configFiles:
+      Debug: Apps/{name}/Configurations/Debug.xcconfig
+      Staging: Apps/{name}/Configurations/Staging.xcconfig
+      Release: Apps/{name}/Configurations/Release.xcconfig
+      AppStore: Apps/{name}/Configurations/AppStore.xcconfig
+      DirectDistribution: Apps/{name}/Configurations/DirectDistribution.xcconfig
+      AltStore: Apps/{name}/Configurations/AltStore.xcconfig
+"""
+
+
+def create_extension_component(
+    root: Path,
+    name: str,
+    platform: str,
+    host_target: str,
+    product_type: str,
+    extension_point_identifier: str,
+    org: str,
+    team: str,
+) -> None:
+    extension_root = root / "Apps" / name
+    if extension_root.exists():
+        raise RuntimeError(f"Apps/{name} already exists.")
+    add_root_include(root, f"Apps/{name}/target.yml")
+    write(extension_root / "target.yml", extension_target_spec(name, platform, org, team, product_type))
+    write(extension_root / "Configurations/Extension.xcconfig", '#include "../../Apps-shared.xcconfig"\nMARKETING_VERSION = 0.0.1\nCODE_SIGN_STYLE = Automatic\n')
+    for config in CONFIGURATIONS:
+        write(extension_root / f"Configurations/{config}.xcconfig", '#include "Extension.xcconfig"\n')
+    write(extension_root / "Sources/Extension.swift", "import Foundation\n\n// Implement the documented extension-point entry type here.\n")
+    write(
+        extension_root / "Resources/Info.plist",
+        '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>NSExtension</key><dict><key>NSExtensionPointIdentifier</key><string>'
+        + extension_point_identifier
+        + "</string></dict></dict></plist>\n",
+    )
+    write(extension_root / f"Resources/{name}.entitlements", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict/></plist>\n')
+    embed_extension_in_host(root, host_target, name)
+
+
+def relative(path: Path, root: Path) -> str:
+    try:
+        return str(path.relative_to(root))
+    except ValueError:
+        return str(path)
+
+
+def read_text(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+
+
+def pbx_target_records(text: str) -> list[tuple[str, str | None]]:
+    records: list[tuple[str, str | None]] = []
+    for match in re.finditer(r"isa = PBXNativeTarget;(?P<body>[\s\S]{0,1800}?)\s*};", text):
+        body = match.group("body")
+        name_match = re.search(r"\bname = (?P<name>[^;]+);", body)
+        product_match = re.search(r"\bproductType = (?P<type>[^;]+);", body)
+        if name_match:
+            records.append((name_match.group("name").strip().strip('"'), product_match.group("type").strip().strip('"') if product_match else None))
+    return records
+
+
+def pbx_extension_hosts(text: str, app_names: list[str], extension_names: list[str]) -> dict[str, str]:
+    hosts: dict[str, str] = {}
+    for extension in extension_names:
+        if re.search(rf"\b{re.escape(extension)}\.appex in Embed App Extensions\b", text) and len(app_names) == 1:
+            hosts[extension] = app_names[0]
+    return hosts
+
+
+def xcodegen_target_records(text: str) -> list[tuple[str, str | None, str | None, str | None]]:
+    records: list[tuple[str, str | None, str | None, str | None]] = []
+    targets_match = re.search(r"^targets:\s*$", text, re.MULTILINE)
+    if not targets_match:
+        return records
+    tail = text[targets_match.end():]
+    section_end = re.search(r"^\S[^:]*:\s*$", tail, re.MULTILINE)
+    section = tail[:section_end.start()] if section_end else tail
+    matches = list(re.finditer(r"^  (?P<name>[^\s][^:]*):\s*$", section, re.MULTILINE))
+    for index, match in enumerate(matches):
+        body_end = matches[index + 1].start() if index + 1 < len(matches) else len(section)
+        body = section[match.end():body_end]
+        type_match = re.search(r"^    type:\s*([^\s#]+)", body, re.MULTILINE)
+        platform_match = re.search(r"^    platform:\s*([^\s#]+)", body, re.MULTILINE)
+        dependency_match = re.search(r"^      - target:\s*([^\s#]+)[\s\S]{0,120}?^        embed:\s*true", body, re.MULTILINE)
+        records.append((match.group("name").strip().strip('"'), type_match.group(1) if type_match else None, platform_match.group(1).lower() if platform_match else None, dependency_match.group(1) if dependency_match else None))
+    return records
+
+
+def manifest_component(manifest: Path, root: Path) -> Component:
+    text = read_text(manifest)
+    name_match = re.search(r"Package\s*\(\s*name:\s*\"([^\"]+)\"", text)
+    name = name_match.group(1) if name_match else manifest.parent.name
+    executable = bool(re.search(r"\.(?:executable|executableTarget)\s*\(", text))
+    framework = "hummingbird" if re.search(r"Hummingbird", text, re.IGNORECASE) else "vapor" if re.search(r"\bVapor\b", text) else None
+    kind = "service" if executable else "library"
+    destination = f"{'Services' if kind == 'service' else 'Packages'}/{name}"
+    owner = relative(manifest.parent, root) or "."
+    paths = [owner] if owner != "." else [relative(manifest, root)]
+    if owner == ".":
+        for child in ("Sources", "Tests", "Plugins"):
+            candidate = manifest.parent / child
+            if candidate.exists():
+                paths.append(relative(candidate, root))
+    evidence = [f"SwiftPM manifest {relative(manifest, root)}", "executable product or target" if executable else "library package"]
+    if framework:
+        evidence.append(f"{framework} dependency")
+    unresolved = [] if name_match else ["Package.swift does not expose a literal package name"]
+    return Component(name, kind, owner, destination, evidence, product_type=framework, owned_paths=paths, unresolved=unresolved)
+
+
+def inventory_components(root: Path) -> tuple[list[Component], dict[str, Any]]:
+    projects = sorted(path for path in root.rglob("*.xcodeproj") if ".build" not in path.parts)
+    workspaces = sorted(path for path in root.rglob("*.xcworkspace") if ".build" not in path.parts)
+    specs = sorted(path for path in root.rglob("project.y*ml") if ".build" not in path.parts)
+    manifests = sorted(path for path in root.rglob("Package.swift") if ".build" not in path.parts)
+    components = [manifest_component(path, root) for path in manifests]
+    pbx_settings: set[str] = set()
+    target_records: list[tuple[str, str | None]] = []
+    pbx_texts: list[str] = []
+    for project in projects:
+        text = read_text(project / "project.pbxproj")
+        pbx_texts.append(text)
+        target_records.extend(pbx_target_records(text))
+        pbx_settings.update(re.findall(r"\b(?:PRODUCT_BUNDLE_IDENTIFIER|CODE_SIGN_ENTITLEMENTS|DEVELOPMENT_TEAM|INFOPLIST_FILE|MARKETING_VERSION|CURRENT_PROJECT_VERSION|SWIFT_VERSION)\s*=", text))
+    sdk_roots = {match.lower() for text in pbx_texts for match in re.findall(r"\bSDKROOT\s*=\s*([^;\s]+)", text)}
+    inferred_platform = "ios" if sdk_roots and sdk_roots <= {"iphoneos"} else "macos" if sdk_roots and sdk_roots <= {"macosx"} else None
+    app_names = [name for name, product in target_records if XCODE_PRODUCT_TYPES.get(product or "") == "app"]
+    extension_names = [name for name, product in target_records if XCODE_PRODUCT_TYPES.get(product or "") == "extension"]
+    hosts: dict[str, str] = {}
+    for text in pbx_texts:
+        hosts.update(pbx_extension_hosts(text, app_names, extension_names))
+    flat_owned = [name for name in ("Sources", "Resources", "Tests", "Configurations", "Shared", "Extensions") if (root / name).exists()]
+    for name, product in target_records:
+        kind = XCODE_PRODUCT_TYPES.get(product or "")
+        if kind is None:
+            components.append(Component(name, "unsupported", ".", "", [f"PBX product type {product or 'missing'}"], product_type=product, unresolved=["unsupported or missing Xcode product type"]))
+            continue
+        destination = f"Apps/{name}"
+        host = hosts.get(name)
+        unresolved: list[str] = []
+        if kind in {"app", "extension", "test", "ui-test"} and not inferred_platform:
+            unresolved.append("target platform requires reviewed mapping evidence")
+        if kind == "extension" and not host:
+            unresolved.append("extension host target is not explicit or is ambiguous")
+        owned = flat_owned if kind == "app" and len(app_names) == 1 else []
+        components.append(Component(name, kind, ".", destination, [f"PBX native target product type {product}"], host_target=host, platform=inferred_platform, product_type=product, owned_paths=owned, unresolved=unresolved))
+    discovered_names = {component.name for component in components}
+    xcodegen_records = [record for spec in specs for record in xcodegen_target_records(read_text(spec))]
+    xcodegen_apps = [name for name, product, _, _ in xcodegen_records if product == "application"]
+    xcodegen_hosts = {dependency: name for name, product, _, dependency in xcodegen_records if product == "application" and dependency}
+    for name, product, platform, _ in xcodegen_records:
+        if name in discovered_names:
+            continue
+        kind = {"application": "app", "app-extension": "extension", "extensionkit-extension": "extension", "bundle.unit-test": "test", "bundle.ui-testing": "ui-test"}.get(product or "")
+        unresolved: list[str] = []
+        if kind is None:
+            components.append(Component(name, "unsupported", ".", "", [f"XcodeGen target type {product or 'missing'}"], product_type=product, unresolved=["unsupported or missing XcodeGen target type"]))
+            continue
+        normalized_platform = {"ios": "ios", "macos": "macos", "tvos": "tvos", "watchos": "watchos", "visionos": "visionos"}.get(platform or "")
+        if not normalized_platform:
+            unresolved.append("target platform requires reviewed mapping evidence")
+        host = xcodegen_hosts.get(name)
+        if kind == "extension" and not host:
+            unresolved.append("extension host target is not explicit or is ambiguous")
+        owned = flat_owned if kind == "app" and len(xcodegen_apps) == 1 else []
+        canonical_product = "com.apple.product-type.app-extension" if product == "app-extension" else "com.apple.product-type.extensionkit-extension" if product == "extensionkit-extension" else product
+        components.append(Component(name, kind, ".", f"Apps/{name}", [f"XcodeGen target type {product}"], host_target=host, platform=normalized_platform, product_type=canonical_product, owned_paths=owned, unresolved=unresolved))
+    inventory = {
+        "workspaces": [relative(path, root) for path in workspaces],
+        "projects": [relative(path, root) for path in projects],
+        "xcodegen_specs": [relative(path, root) for path in specs],
+        "swift_manifests": [relative(path, root) for path in manifests],
+        "xcconfigs": [relative(path, root) for path in sorted(root.rglob("*.xcconfig"))],
+        "entitlements": [relative(path, root) for path in sorted(root.rglob("*.entitlements"))],
+        "info_plists": [relative(path, root) for path in sorted(root.rglob("Info.plist"))],
+        "asset_catalogs": [relative(path, root) for path in sorted(root.rglob("*.xcassets"))],
+        "schemes": [relative(path, root) for path in sorted(root.rglob("*.xcscheme"))],
+        "test_plans": [relative(path, root) for path in sorted(root.rglob("*.xctestplan"))],
+        "pbx_settings_to_promote": sorted(item.removesuffix(" =") for item in pbx_settings),
+        "cloud_inputs": [relative(path, root) for pattern in ("Dockerfile*", "fly.toml") for path in sorted(root.rglob(pattern))],
+    }
+    return components, inventory
+
+
+def proposed_adoption_map(root: Path, components: list[Component]) -> dict[str, Any]:
+    name = next((path.stem for path in sorted(root.glob("*.xcworkspace"))), None) or next((path.stem for path in sorted(root.glob("*.xcodeproj"))), None) or (components[0].name if components else None) or re.sub(r"[^A-Za-z0-9]", "", root.name.title()) or "Product"
+    return {"schema_version": 1, "workspace_name": name, "components": [asdict(component) for component in components]}
+
+
+def validate_adoption_map(root: Path, mapping: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if mapping.get("schema_version") != 1:
+        errors.append("adoption map schema_version must be 1")
+    name = mapping.get("workspace_name")
+    if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", name):
+        errors.append("workspace_name must be an alphanumeric Xcode identifier")
+    components = mapping.get("components")
+    if not isinstance(components, list) or not components:
+        errors.append("adoption map must contain at least one component")
+        return errors
+    destinations: set[str] = set()
+    owned: dict[str, str] = {}
+    app_names = {item.get("name") for item in components if isinstance(item, dict) and item.get("kind") == "app"}
+    for index, item in enumerate(components):
+        label = f"components[{index}]"
+        if not isinstance(item, dict):
+            errors.append(f"{label} must be an object")
+            continue
+        kind, component_name, destination = item.get("kind"), item.get("name"), item.get("proposed_destination")
+        if kind not in {"app", "extension", "test", "ui-test", "library", "service"}:
+            errors.append(f"{label}.kind is unsupported: {kind!r}")
+        if not isinstance(component_name, str) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", component_name):
+            errors.append(f"{label}.name must be an alphanumeric target or package name")
+        expected_prefix = "Apps/" if kind in {"app", "extension", "test", "ui-test"} else "Packages/" if kind == "library" else "Services/"
+        if not isinstance(destination, str) or not destination.startswith(expected_prefix) or ".." in Path(destination).parts:
+            errors.append(f"{label}.proposed_destination must be under {expected_prefix}")
+        elif destination in destinations:
+            errors.append(f"duplicate component destination: {destination}")
+        else:
+            destinations.add(destination)
+        if kind in {"app", "extension", "test", "ui-test"} and item.get("platform") not in SUPPORTED_PLATFORMS:
+            errors.append(f"{label}.platform requires explicit ios, macos, tvos, watchos, or visionos evidence")
+        if kind == "extension":
+            if item.get("host_target") not in app_names:
+                errors.append(f"{label}.host_target must name one mapped application target")
+            if item.get("product_type") not in {"com.apple.product-type.app-extension", "com.apple.product-type.extensionkit-extension"}:
+                errors.append(f"{label}.product_type must be a supported documented extension product type")
+            if not item.get("extension_point_identifier"):
+                errors.append(f"{label}.extension_point_identifier is required")
+        for source in item.get("owned_paths") or []:
+            if not isinstance(source, str) or Path(source).is_absolute() or ".." in Path(source).parts:
+                errors.append(f"{label}.owned_paths contains an unsafe path")
+                continue
+            if source in owned:
+                errors.append(f"{source} is assigned to both {owned[source]} and {component_name}")
+            owned[source] = str(component_name)
+            if not (root / source).exists():
+                errors.append(f"mapped source does not exist: {source}")
+        if item.get("unresolved"):
+            errors.append(f"{label} still has unresolved evidence: {', '.join(item['unresolved'])}")
+    return errors
+
+
+def move_owned_path(root: Path, source_name: str, destination_root: Path) -> None:
+    source = root / source_name
+    if source.name in {"Package.swift", "Sources", "Tests", "Plugins"}:
+        destination = destination_root / source.name
+    elif source.is_dir() and source_name.count("/") > 0:
+        destination = destination_root
+    else:
+        destination = destination_root / source.name
+    if destination.exists():
+        raise RuntimeError(f"Adoption destination already exists: {relative(destination, root)}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(source), str(destination))
+
+
+def adopted_native_target_spec(item: dict[str, Any], org: str, team: str) -> str:
+    name, kind, platform = item["name"], item["kind"], item["platform"]
+    display = SUPPORTED_PLATFORMS[platform]
+    if kind == "app":
+        product_type = "application"
+    elif kind == "extension":
+        product_type = "app-extension" if item["product_type"] == "com.apple.product-type.app-extension" else "extensionkit-extension"
+    elif kind == "test":
+        product_type = "bundle.unit-test"
+    else:
+        product_type = "bundle.ui-testing"
+    destination = item["proposed_destination"]
+    lines = [
+        "targets:", f"  {name}:", f"    type: {product_type}", f"    platform: {display}", "    sources:",
+        f"      - path: {destination}/Sources", "        type: syncedFolder", "        optional: true",
+        f"      - path: {destination}/Resources", "        type: syncedFolder", "        optional: true",
+        "    settings:", "      base:", f"        PRODUCT_BUNDLE_IDENTIFIER: {item.get('bundle_identifier') or org + '.' + name.lower()}",
+        f"        DEVELOPMENT_TEAM: {item.get('development_team') or team}", "        CODE_SIGN_STYLE: Automatic",
+    ]
+    if kind == "extension":
+        lines.extend(["    info:", f"      path: {destination}/Resources/Info.plist"])
+    dependencies = item.get("dependencies") or []
+    if kind in {"test", "ui-test"} and item.get("host_target"):
+        dependencies = [*dependencies, item["host_target"]]
+    if dependencies:
+        lines.append("    dependencies:")
+        lines.extend(f"      - target: {dependency}" for dependency in dependencies)
+    return "\n".join(lines) + "\n"
+
+
+def stage_adoption(root: Path, mapping: dict[str, Any], org: str, team: str) -> dict[str, Any]:
+    snapshot = root / ".socket/adoption/original-inventory.json"
+    if snapshot.exists():
+        raise RuntimeError("An adoption is already staged; review or revert .socket/adoption before applying another map.")
+    components, inventory = inventory_components(root)
+    write(snapshot, json.dumps({"inventory": inventory, "components": [asdict(item) for item in components]}, indent=2, sort_keys=True) + "\n")
+    original_spec = root / "project.yml"
+    if original_spec.exists():
+        write(root / ".socket/adoption/original-project.yml", original_spec.read_text(encoding="utf-8"))
+    for directory in ("Apps", "Packages", "Services", "Configurations", "Scripts", "docs"):
+        (root / directory).mkdir(exist_ok=True)
+    name = mapping["workspace_name"]
+    write(root / "project.yml", root_spec(name, []))
+    write(root / "Apps/apps-shared.yml", app_shared_spec())
+    write(root / "Apps/Apps-shared.xcconfig", '#include "../Configurations/Project.xcconfig"\n')
+    write(root / "Packages/packages-shared.yml", "packages: {}\n")
+    write(root / "Services/services-shared.yml", "packages: {}\n")
+    write(root / "Configurations/Project.xcconfig", "SWIFT_VERSION = 6.0\nSWIFT_STRICT_CONCURRENCY = complete\n")
+    for config in CONFIGURATIONS:
+        write(root / f"Configurations/{config}.xcconfig", '#include "Project.xcconfig"\n')
+    native_items = [item for item in mapping["components"] if item["kind"] in {"app", "extension", "test", "ui-test"}]
+    for item in mapping["components"]:
+        destination = root / item["proposed_destination"]
+        for source in item.get("owned_paths") or []:
+            move_owned_path(root, source, destination)
+        if item["kind"] in {"library", "service"}:
+            add_package_mapping(root, "Packages" if item["kind"] == "library" else "Services", item["name"])
+        else:
+            add_root_include(root, f"{item['proposed_destination']}/target.yml")
+            write(destination / "target.yml", adopted_native_target_spec(item, org, team))
+            if item["kind"] == "extension":
+                info = destination / "Resources/Info.plist"
+                if not info.exists():
+                    write(info, '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>NSExtension</key><dict><key>NSExtensionPointIdentifier</key><string>' + item["extension_point_identifier"] + '</string></dict></dict></plist>\n')
+    for item in native_items:
+        if item["kind"] == "extension":
+            embed_extension_in_host(root, item["host_target"], item["name"])
+    candidate = root / ".socket/adoption-candidate"
+    candidate.mkdir(parents=True, exist_ok=True)
+    generated = subprocess.run(["xcodegen", "generate", "--spec", "project.yml", "--project", str(candidate), "--project-root", str(root)], cwd=root, capture_output=True, text=True, check=False)
+    if generated.returncode != 0:
+        raise RuntimeError(f"candidate XcodeGen generation failed:\n{generated.stderr}")
+    candidate_pbx = read_text(candidate / f"{name}.xcodeproj/project.pbxproj")
+    generated_targets = {target for target, _ in pbx_target_records(candidate_pbx)}
+    expected_targets = {item["name"] for item in native_items}
+    missing = sorted(expected_targets - generated_targets)
+    report = {
+        "expected_native_targets": sorted(expected_targets),
+        "generated_native_targets": sorted(generated_targets),
+        "missing_native_targets": missing,
+        "candidate_project": relative(candidate / f"{name}.xcodeproj", root),
+        "preserved_inventory": relative(snapshot, root),
+    }
+    write(root / ".socket/adoption/equivalence-report.json", json.dumps(report, indent=2, sort_keys=True) + "\n")
+    if missing:
+        raise RuntimeError("Candidate equivalence failed; missing native targets: " + ", ".join(missing))
+    return report
+
+
 def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, team: str) -> None:
     write(root / "project.yml", root_spec(name, platforms))
     write(root / "Apps/apps-shared.yml", app_shared_spec())
@@ -538,14 +977,16 @@ def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, 
         for config in CONFIGURATIONS:
             build_number = "$(DEBUG_BUILD_NUMBER)" if config == "Debug" else "$(RELEASE_BUILD_NUMBER)"
             content = '#include "App.xcconfig"\n#include "Version.xcconfig"\nCURRENT_PROJECT_VERSION = ' + build_number + "\n"
-            if config == "Debug": content += "ONLY_ACTIVE_ARCH = YES\n"
-            else: content += "SWIFT_OPTIMIZATION_LEVEL = -O\n"
+            if config == "Debug":
+                content += "ONLY_ACTIVE_ARCH = YES\n"
+            else:
+                content += "SWIFT_OPTIMIZATION_LEVEL = -O\n"
             write(app_root / f"Configurations/{config}.xcconfig", content)
         write(app_root / f"Sources/{prefix}App.swift", f'import SwiftUI\n\n@main\nstruct {prefix}{display}App: App {{\n    var body: some Scene {{ WindowGroup {{ Text("{target}") }} }}\n}}\n')
         write(app_root / "Sources/Views/.gitkeep", "")
         write(app_root / "Sources/Datamodels/.gitkeep", "")
         write(app_root / "Sources/Services/.gitkeep", "")
-        write(app_root / "Resources/Info.plist", f'<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string><key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string></dict></plist>\n')
+        write(app_root / "Resources/Info.plist", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string><key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string></dict></plist>\n')
         write(app_root / f"Resources/{target}.entitlements", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict/></plist>\n')
         write(app_root / "Resources/Assets.xcassets/Contents.json", '{"info":{"author":"xcode","version":1}}\n')
         write(app_root / "Resources/Assets.xcassets/AppIcon.appiconset/Contents.json", '{"images":[],"info":{"author":"xcode","version":1}}\n')
@@ -590,8 +1031,45 @@ let package = Package(
 def main() -> int:
     args = parser().parse_args()
     platforms = [item.strip().lower() for item in args.platforms.split(",") if item.strip()]
-    root = Path(args.repo_root).expanduser().resolve() if args.operation in {"align", "add-component"} and args.repo_root else ((Path(args.destination).expanduser() / args.name).resolve() if args.name else Path(args.destination).expanduser().resolve())
-    inputs = {"operation": args.operation, "name": args.name, "file_prefix": args.file_prefix, "destination": args.destination, "repo_root": args.repo_root, "platforms": platforms, "component_kind": args.component_kind, "component_name": args.component_name, "platform": args.platform, "framework": args.framework, "org_identifier": args.org_identifier, "development_team": args.development_team, "dry_run": args.dry_run, "skip_validation": args.skip_validation}
+    root = Path(args.repo_root).expanduser().resolve() if args.operation in {"adopt", "align", "add-component"} and args.repo_root else ((Path(args.destination).expanduser() / args.name).resolve() if args.name else Path(args.destination).expanduser().resolve())
+    inputs = {"operation": args.operation, "name": args.name, "file_prefix": args.file_prefix, "destination": args.destination, "repo_root": args.repo_root, "platforms": platforms, "component_kind": args.component_kind, "component_name": args.component_name, "platform": args.platform, "framework": args.framework, "host_target": args.host_target, "extension_product_type": args.extension_product_type, "extension_point_identifier": args.extension_point_identifier, "adoption_map": args.adoption_map, "apply": args.apply, "org_identifier": args.org_identifier, "development_team": args.development_team, "dry_run": args.dry_run, "skip_validation": args.skip_validation}
+    if args.operation == "adopt":
+        if not args.repo_root:
+            return blocked("--repo-root is required with --operation adopt.", inputs)
+        if not root.is_dir():
+            return blocked("The requested adoption root is not a directory.", inputs)
+        if not workspace_findings(root):
+            print(json.dumps({"status": "success", "path_type": "primary", "workspace_root": str(root), "normalized_inputs": inputs, "components": [], "migration_required": False, "next_step": "The repository is already canonical; use --operation align."}, indent=2, sort_keys=True))
+            return 0
+        components, inventory = inventory_components(root)
+        mapping = proposed_adoption_map(root, components)
+        if not components:
+            return blocked("No SwiftPM manifest or Xcode native target evidence was found to adopt.", inputs)
+        if not args.apply:
+            unresolved = [f"{item.name}: {reason}" for item in components for reason in item.unresolved]
+            payload = {"status": "blocked" if unresolved else "success", "path_type": "primary", "workspace_root": str(root), "normalized_inputs": inputs, "inventory": inventory, "components": [asdict(item) for item in components], "adoption_map": mapping, "migration_required": True, "unresolved": unresolved, "next_step": "Review the adoption_map, add required explicit ownership/host/platform/extension-point evidence, save it as JSON, then rerun with --adoption-map <path> --apply."}
+            print(json.dumps(payload, indent=2, sort_keys=True))
+            return 1 if unresolved else 0
+        if not args.adoption_map:
+            return blocked("--adoption-map is required with --operation adopt --apply.", inputs)
+        map_path = Path(args.adoption_map).expanduser().resolve()
+        if not map_path.is_file():
+            return blocked("The reviewed --adoption-map file does not exist.", inputs)
+        try:
+            reviewed = json.loads(map_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            return blocked(f"Could not read the reviewed adoption map: {exc}", inputs)
+        errors = validate_adoption_map(root, reviewed)
+        if errors:
+            return blocked("Reviewed adoption map is not safe to apply: " + "; ".join(errors), inputs)
+        if not shutil.which("xcodegen"):
+            return blocked("XcodeGen is required to generate the adoption candidate project.", inputs)
+        try:
+            report = stage_adoption(root, reviewed, args.org_identifier, args.development_team)
+            print(json.dumps({"status": "success", "path_type": "primary", "workspace_root": str(root), "normalized_inputs": inputs, "components": reviewed["components"], "equivalence": report, "migration_required": True, "next_step": "Review .socket/adoption/equivalence-report.json and candidate project before finalizing removal of superseded project files; no original project was deleted."}, indent=2, sort_keys=True))
+            return 0
+        except (OSError, RuntimeError, subprocess.CalledProcessError) as exc:
+            return blocked(str(exc), inputs)
     if args.operation == "add-component":
         if not args.repo_root or not args.component_kind or not args.component_name:
             return blocked("--repo-root, --component-kind, and --component-name are required with --operation add-component.", inputs)
@@ -602,6 +1080,8 @@ def main() -> int:
             return blocked(" ".join(findings), inputs)
         if args.component_kind == "app" and not args.platform:
             return blocked("--platform is required when adding an app component.", inputs)
+        if args.component_kind == "extension" and (not args.platform or not args.host_target or not args.extension_product_type or not args.extension_point_identifier):
+            return blocked("--platform, --host-target, --extension-product-type, and --extension-point-identifier are required when adding an extension component.", inputs)
         if args.component_kind == "service" and not args.framework:
             return blocked("--framework is required when adding a service component.", inputs)
         if not args.dry_run and not shutil.which("xcodegen"):
@@ -617,6 +1097,8 @@ def main() -> int:
                 create_library_component(root, args.component_name)
             elif args.component_kind == "app":
                 create_app_component(root, product, args.component_name, args.platform, args.file_prefix, args.org_identifier, args.development_team)
+            elif args.component_kind == "extension":
+                create_extension_component(root, args.component_name, args.platform, args.host_target, args.extension_product_type, args.extension_point_identifier, args.org_identifier, args.development_team)
             else:
                 adapter = subprocess.run([str(server_component_runner()), "--repo-root", str(root), "--name", args.component_name, "--framework", args.framework], capture_output=True, text=True, check=False)
                 if adapter.returncode != 0:
