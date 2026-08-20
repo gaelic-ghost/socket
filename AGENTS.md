@@ -114,24 +114,6 @@ git subtree push --prefix=<prefix> <remote> main
 
 Use these commands only when the work is intentionally publishing or syncing a currently subtree-managed child repo. Do not use them for `apple-dev-skills` while the standalone repository is only the compatibility redirect to Socket.
 
-### Release Workflow
-
-Use `scripts/release.sh` as the sole public release entrypoint. Inventory the
-maintained semantic-version surfaces without changing them with:
-
-```bash
-scripts/release.sh inventory
-```
-
-Every patch, minor, major, and Git-backed catalog-refresh release uses
-`prepare`, `inspect`, and `advance` from a feature worktree. The workflow owns
-the shared version, full local and GitHub validation, release PR, reviewed-main
-identity, annotated tag, GitHub release, structured branch/child accounting,
-and final marketplace refresh. Follow
-[`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md)
-for the complete contract; do not invoke internal Python release modules as a
-second operator path.
-
 ## Review and Delivery
 
 ### Review Expectations
