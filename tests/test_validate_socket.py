@@ -62,6 +62,15 @@ def test_validation_profiles_do_not_duplicate_release_choreography() -> None:
     assert "release-ready" not in source
 
 
+def test_full_validation_workflow_installs_declared_zsh_runtime() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "validate-socket.yml").read_text(
+        encoding="utf-8"
+    )
+
+    assert "sudo apt-get install --yes zsh" in workflow
+    assert "uv run scripts/validate_socket.py --profile full" in workflow
+
+
 def test_dry_run_does_not_execute_a_subprocess(monkeypatch: pytest.MonkeyPatch) -> None:
     called = False
 
