@@ -52,7 +52,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             component_validation.parent.mkdir(parents=True)
             component_validation.write_text("#!/usr/bin/env sh\nprintf '%s\\n' package-validated\n", encoding="utf-8")
             (root / "AGENTS.md").write_text(
-                "# AGENTS.md\n\n- Scripts/repo-maintenance/validate-all.sh\n- Scripts/repo-maintenance/sync-shared.sh\n- Scripts/repo-maintenance/release.sh\n",
+                "# AGENTS.md\n\n- scripts/repo-maintenance/validate-all.sh\n- scripts/repo-maintenance/sync-shared.sh\n- scripts/repo-maintenance/release.sh\n",
                 encoding="utf-8",
             )
 
@@ -62,14 +62,20 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
 
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
-            self.assertIn("Scripts/repo-maintenance/workspace/validate-components.sh", payload["managed_files"])
-            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validations/40-xcode-workspace-layout.sh").is_file())
-            profile_env = Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8")
+            self.assertIn("scripts/repo-maintenance/workspace/validate-components.sh", payload["managed_files"])
+            self.assertNotIn("Scripts", [path.name for path in root.iterdir()])
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validations/40-xcode-workspace-layout.sh").is_file())
+            profile_env = Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8")
             self.assertIn('REPO_MAINTENANCE_PROFILE="xcode-workspace"', profile_env)
+            dispatcher = Path(tmpdir, "scripts/repo-maintenance/workspace/validate-components.sh").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("scripts/repo-maintenance/validate-all.sh", dispatcher)
+            self.assertNotIn("Scripts/repo-maintenance", dispatcher)
 
             subprocess.run(["git", "init"], cwd=tmpdir, check=True, capture_output=True, text=True)
             proc = subprocess.run(
-                ["sh", "Scripts/repo-maintenance/validate-all.sh"],
+                ["sh", "scripts/repo-maintenance/validate-all.sh"],
                 cwd=tmpdir,
                 capture_output=True,
                 text=True,
@@ -79,10 +85,56 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertIn("Validated xcode-workspace composition", proc.stdout)
             self.assertIn("package-validated", proc.stdout)
 
+    def test_xcode_workspace_profile_normalizes_legacy_uppercase_toolkit_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Product.xcworkspace").mkdir()
+            (root / "Product.xcodeproj").mkdir()
+            (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
+            (root / "Apps/ProductApp").mkdir(parents=True)
+            (root / "Apps/ProductApp/target.yml").write_text("targets: {}\n", encoding="utf-8")
+            (root / "Packages").mkdir()
+            (root / "Services").mkdir()
+            legacy_custom = root / "Scripts/repo-maintenance/custom.sh"
+            legacy_custom.parent.mkdir(parents=True)
+            legacy_custom.write_text("#!/usr/bin/env sh\n", encoding="utf-8")
+
+            code, payload = self.run_script(
+                "--repo-root", tmpdir, "--operation", "install", "--profile", "xcode-workspace"
+            )
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertIn("legacy Scripts/repo-maintenance", "\n".join(payload["actions"]))
+            self.assertNotIn("Scripts", [path.name for path in root.iterdir()])
+            self.assertTrue((root / "scripts/repo-maintenance/custom.sh").is_file())
+            self.assertTrue((root / "scripts/repo-maintenance/validate-all.sh").is_file())
+
+    def test_xcode_workspace_profile_rejects_legacy_uppercase_toolkit_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Product.xcworkspace").mkdir()
+            (root / "Product.xcodeproj").mkdir()
+            (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
+            (root / "Apps/ProductApp").mkdir(parents=True)
+            (root / "Apps/ProductApp/target.yml").write_text("targets: {}\n", encoding="utf-8")
+            (root / "Packages").mkdir()
+            (root / "Services").mkdir()
+            (root / "Scripts").mkdir()
+            (root / "Scripts/repo-maintenance").write_text("not a directory\n", encoding="utf-8")
+
+            code, payload = self.run_script(
+                "--repo-root", tmpdir, "--operation", "install", "--profile", "xcode-workspace"
+            )
+
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "blocked")
+            self.assertIn("legacy path Scripts/repo-maintenance exists and is not a directory", payload["stderr"])
+
     def test_xcode_workspace_profile_rejects_invalid_workspace_layout(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "AGENTS.md").write_text(
-                "# AGENTS.md\n\n- Scripts/repo-maintenance/validate-all.sh\n- Scripts/repo-maintenance/sync-shared.sh\n- Scripts/repo-maintenance/release.sh\n",
+                "# AGENTS.md\n\n- scripts/repo-maintenance/validate-all.sh\n- scripts/repo-maintenance/sync-shared.sh\n- scripts/repo-maintenance/release.sh\n",
                 encoding="utf-8",
             )
             code, payload = self.run_script(

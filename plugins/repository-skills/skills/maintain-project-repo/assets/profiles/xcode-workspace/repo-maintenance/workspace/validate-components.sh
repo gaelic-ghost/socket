@@ -9,16 +9,12 @@ export REPO_MAINTENANCE_COMMON_DIR="$SELF_DIR/../lib"
 run_component_validation() {
   component_root=$1
   component_kind=$2
-  for candidate in \
-    "$component_root/Scripts/repo-maintenance/validate-all.sh" \
-    "$component_root/scripts/repo-maintenance/validate-all.sh"
-  do
-    if [ -f "$candidate" ]; then
-      log "Validating $component_kind component at $component_root with ${candidate#"$component_root/"}."
-      sh "$candidate"
-      return 0
-    fi
-  done
+  candidate="$component_root/scripts/repo-maintenance/validate-all.sh"
+  if [ -f "$candidate" ]; then
+    log "Validating $component_kind component at $component_root with ${candidate#"$component_root/"}."
+    sh "$candidate"
+    return 0
+  fi
   log "No component-owned repo-maintenance validation found for $component_kind at $component_root; skipping."
 }
 

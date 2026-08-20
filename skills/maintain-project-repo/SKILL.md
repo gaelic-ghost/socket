@@ -51,8 +51,7 @@ workflow does not classify repository shape.
    - never inspect markers to decide whether the whole repository is Xcode,
      SwiftPM, plain, or mixed
    - stop if the requested path is not a repository root
-   - use `scripts/repo-maintenance/` for `generic` and
-     `Scripts/repo-maintenance/` for `xcode-workspace`
+   - use lowercase `scripts/repo-maintenance/` for every profile
 3. Explain the architecture boundary before mutating anything:
    - this is a durable building-block change because it creates one repo-owned maintainer surface that bootstrap, sync, validation, CI, and release flows can all share
    - it removes the pain of CI-only helper scripts and scattered release glue
@@ -67,12 +66,11 @@ workflow does not classify repository shape.
    - install or refresh the selected profile's `config/profile.env`
    - install or refresh the thin workflow wrapper at `.github/workflows/validate-repo-maintenance.yml` unless disabled
    - for `xcode-workspace`, migrate an existing legacy
-     `scripts/repo-maintenance/` toolkit root to `Scripts/repo-maintenance/` when
-     the capitalized root is absent; stop if both roots exist separately
+     `Scripts/repo-maintenance/` toolkit root to lowercase
+     `scripts/repo-maintenance/`; stop if both roots exist separately
    - preserve repo-specific scripts or files that are not part of the managed file set
 6. Verify the installed `maintain-project-repo` files:
-   - `scripts/repo-maintenance/*.sh` for `generic`
-   - `Scripts/repo-maintenance/*.sh` for `xcode-workspace`
+   - `scripts/repo-maintenance/*.sh` for every profile
    - `.github/workflows/validate-repo-maintenance.yml` when workflow installation is enabled
    - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
 7. Hand off GitHub repository settings work:

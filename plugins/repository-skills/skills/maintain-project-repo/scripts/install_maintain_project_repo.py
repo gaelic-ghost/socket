@@ -17,7 +17,7 @@ PROFILE_CHOICES = {
 }
 PROFILE_TOOLKIT_ROOTS = {
     "generic": Path("scripts/repo-maintenance"),
-    "xcode-workspace": Path("Scripts/repo-maintenance"),
+    "xcode-workspace": Path("scripts/repo-maintenance"),
 }
 PROFILE_OVERLAY_FILES = {
     "xcode-workspace": [
@@ -56,6 +56,7 @@ MANAGED_TOOLKIT_FILES = [
 ]
 MANAGED_WORKFLOW_FILE = ".github/workflows/validate-repo-maintenance.yml"
 DEFAULT_TOOLKIT_ROOT = Path("scripts/repo-maintenance")
+LEGACY_XCODE_TOOLKIT_ROOT = Path("Scripts/repo-maintenance")
 EXECUTABLE_SUFFIXES = {".sh", ".py", ".sample"}
 
 
@@ -178,30 +179,41 @@ def legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> tuple[Path,
     if profile != "xcode-workspace":
         return None
 
-    legacy_root = repo_root / DEFAULT_TOOLKIT_ROOT
+    legacy_parent = next((path for path in repo_root.iterdir() if path.name == "Scripts"), None)
+    if legacy_parent is None:
+        return None
+
+    legacy_root = legacy_parent / "repo-maintenance"
     desired_root = repo_root / toolkit_root(profile)
     if not legacy_root.exists():
         return None
-
-    if desired_root.exists():
-        try:
-            if legacy_root.samefile(desired_root):
-                return None
-        except OSError:
-            pass
-        raise RuntimeError(
-            f"The {profile} profile expects repo-maintenance under "
-            f"{toolkit_root(profile).as_posix()}, but both {DEFAULT_TOOLKIT_ROOT.as_posix()} "
-            f"and {toolkit_root(profile).as_posix()} already exist as separate paths. "
-            "Choose the intentional toolkit root, preserve any repo-specific custom files, "
-            "and rerun maintain-project-repo."
-        )
 
     if not legacy_root.is_dir():
         raise RuntimeError(
             f"The {profile} profile expects repo-maintenance under "
             f"{toolkit_root(profile).as_posix()}, but the legacy path "
-            f"{DEFAULT_TOOLKIT_ROOT.as_posix()} exists and is not a directory."
+            f"{LEGACY_XCODE_TOOLKIT_ROOT.as_posix()} exists and is not a directory."
+        )
+
+    if desired_root.exists():
+        try:
+            if legacy_root.samefile(desired_root):
+                temporary_parent = repo_root / ".maintain-project-repo-scripts-case-migration"
+                if temporary_parent.exists():
+                    raise RuntimeError(
+                        f"Cannot normalize {LEGACY_XCODE_TOOLKIT_ROOT.as_posix()} while "
+                        f"{temporary_parent.name} already exists. Remove or preserve that temporary path "
+                        "and rerun maintain-project-repo."
+                    )
+                return legacy_root, desired_root
+        except OSError:
+            pass
+        raise RuntimeError(
+            f"The {profile} profile expects repo-maintenance under "
+            f"{toolkit_root(profile).as_posix()}, but both {DEFAULT_TOOLKIT_ROOT.as_posix()} "
+            f"and {LEGACY_XCODE_TOOLKIT_ROOT.as_posix()} already exist as separate paths. "
+            "Choose the intentional toolkit root, preserve any repo-specific custom files, "
+            "and rerun maintain-project-repo."
         )
 
     return legacy_root, desired_root
@@ -213,6 +225,21 @@ def apply_legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> str |
         return None
 
     legacy_root, desired_root = migration
+    try:
+        same_root = legacy_root.samefile(desired_root)
+    except OSError:
+        same_root = False
+
+    if same_root:
+        legacy_parent = legacy_root.parent
+        temporary_parent = repo_root / ".maintain-project-repo-scripts-case-migration"
+        legacy_parent.rename(temporary_parent)
+        temporary_parent.rename(desired_root.parent)
+        return (
+            f"normalized legacy {LEGACY_XCODE_TOOLKIT_ROOT.as_posix()} to "
+            f"{toolkit_root(profile).as_posix()} for {profile} profile"
+        )
+
     desired_root.parent.mkdir(parents=True, exist_ok=True)
     shutil.move(str(legacy_root), str(desired_root))
     try:
@@ -220,7 +247,7 @@ def apply_legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> str |
     except OSError:
         pass
     return (
-        f"migrated legacy {DEFAULT_TOOLKIT_ROOT.as_posix()} to "
+        f"migrated legacy {LEGACY_XCODE_TOOLKIT_ROOT.as_posix()} to "
         f"{toolkit_root(profile).as_posix()} for {profile} profile"
     )
 
@@ -229,7 +256,7 @@ def copy_file(source: Path, target: Path, profile: str) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     if profile == "xcode-workspace":
         content = source.read_text(encoding="utf-8")
-        content = content.replace("scripts/repo-maintenance", "Scripts/repo-maintenance")
+        content = content.replace("Scripts/repo-maintenance", "scripts/repo-maintenance")
         target.write_text(content, encoding="utf-8")
     else:
         shutil.copyfile(source, target)
@@ -323,7 +350,7 @@ def main() -> int:
     if args.operation == "report-only" or args.dry_run:
         if planned_migration is not None:
             actions.append(
-                f"migrate legacy {DEFAULT_TOOLKIT_ROOT.as_posix()} to "
+                f"migrate legacy {LEGACY_XCODE_TOOLKIT_ROOT.as_posix()} to "
                 f"{toolkit_root(args.profile).as_posix()} for {args.profile} profile"
             )
         for source, relative_target in target_pairs(args.profile, args.skip_github_workflow):

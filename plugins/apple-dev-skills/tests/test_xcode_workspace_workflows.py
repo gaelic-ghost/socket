@@ -124,7 +124,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertIn("swift-tools-version: 6.2", manifest)
             self.assertIn("ProductDomain", manifest)
             self.assertIn("ProductServices", manifest)
-            self.assertTrue((root / "Scripts/repo-maintenance/validate-all.sh").is_file())
+            self.assertTrue((root / "scripts/repo-maintenance/validate-all.sh").is_file())
 
     def test_bootstrap_discovers_repository_runner_from_versioned_plugin_cache(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -153,7 +153,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
                 "--skip-validation",
             )
             self.assertEqual(code, 0, payload)
-            self.assertTrue((destination / "CachedProduct/Scripts/repo-maintenance/validate-all.sh").is_file())
+            self.assertTrue((destination / "CachedProduct/scripts/repo-maintenance/validate-all.sh").is_file())
 
     def test_bootstrap_rejects_existing_file_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
