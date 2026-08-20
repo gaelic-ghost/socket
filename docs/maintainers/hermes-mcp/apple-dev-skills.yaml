@@ -1,0 +1,8 @@
+# Merge this mapping into ~/.hermes/config.yaml on a Mac with the stated Xcode capabilities enabled.
+mcp_servers:
+  xcode:
+    command: xcrun
+    args: [mcpbridge]
+  xcode_lldb:
+    command: xcrun
+    args: [lldb-mcp]

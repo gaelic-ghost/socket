@@ -1,0 +1,172 @@
+# Monorepo Workflow
+
+This document explains how `socket` is maintained after the monorepo simplification that made the Socket checkout the canonical source for its local child plugin payloads.
+
+## What Socket Owns
+
+`socket` owns the monorepo layer:
+
+- the nested directory layout under `plugins/`
+- the root Codex marketplace at `.agents/plugins/marketplace.json`
+- the maintainer docs that explain the mixed monorepo experiment
+- coordinated guidance passes that intentionally keep multiple child skill repositories aligned
+- release tags and release notes for the superproject itself
+
+Treat Gale's local `socket` checkout on `main` as the clean coordination and release-verification checkout.
+
+Implementation work is worktree-first by default. Create or use a branch-backed worktree before changing `socket` code, docs, marketplace metadata, child-skill payloads, maintainer scripts, or repository configuration. Work directly on local `main` only when Gale explicitly asks for direct-main work, when the task is read-only, or when a repo-owned release helper explicitly owns the direct-main release operation.
+
+`socket` is the source of truth for every local child directory under `plugins/`, including `plugins/apple-dev-skills/`.
+
+For ordinary child-directory fixes, work in the monorepo copy under `plugins/<name>/` from the active `socket` feature worktree and commit in `socket`.
+
+For coordinated guidance that spans multiple monorepo-owned child repositories, edit the relevant child directories directly and update the root docs only enough to explain the cross-child policy or discovery reason.
+
+For `apple-dev-skills`, work in `plugins/apple-dev-skills/` and commit in `socket`. The standalone `gaelic-ghost/apple-dev-skills` repository is now a compatibility marketplace and README pointer that redirects to Socket, so do not subtree-push Socket payload changes back into that repository unless a future migration explicitly restores that workflow.
+
+For Speak Swiftly plugin payload work, use the standalone `SpeakSwiftlyServer` checkout. Socket users receive that payload through the Git-backed marketplace entry, so `socket` no longer imports the standalone source tree under `plugins/`.
+
+## Child Repository Shape
+
+Each nested directory under `plugins/` keeps its own internal layout, docs, and packaging choices.
+
+That means there is one important packaging rule to expect:
+
+1. A child repo exposes plugin packaging from the actual child-repo root it treats as installable.
+   Examples: `plugins/agent-portability-skills/.codex-plugin/plugin.json` and `plugins/python-skills/.codex-plugin/plugin.json`
+
+The socket root marketplace must point at the actual packaged plugin root, not at an assumed one.
+
+### Remote Catalog Entries
+
+Most Socket marketplace entries point at local child directories under `./plugins/`, but a marketplace entry may intentionally point at a Git-backed plugin source when the canonical payload lives outside `socket`.
+
+The Speak Swiftly catalog split uses this model. `SpeakSwiftlyServer` remains the canonical owner of the `speak-swiftly` plugin payload and keeps its standalone marketplace functional. The Socket marketplace exposes the same canonical plugin payload by Git-backed reference instead of installing from the local `plugins/SpeakSwiftlyServer` subtree mirror.
+
+Use this shape when all of these are true:
+
+1. The external repository is the real source of truth for the plugin manifest, skills, hooks, MCP config, and doctor scripts.
+2. `socket` should list the plugin for catalog convenience, but should not own a second copied payload.
+3. `socket` does not need to carry a local source mirror for the plugin to stay available from the Socket catalog.
+
+When a remote catalog entry is added, update the root marketplace validator so it understands that entry type. Local entries should still verify their checked-in packaged plugin roots. Remote entries should verify the marketplace metadata shape and document which external repository owns plugin validation.
+
+## Current Named Remotes
+
+The superproject keeps `origin` for `socket`.
+
+Some local checkouts may still have an `apple-dev-skills` remote from the older subtree workflow. Treat that remote as historical compatibility context only while the standalone repository remains a Socket pointer.
+
+If a new subtree-managed child repository is introduced later, add its matching named remote first and update this document plus [`release-workflow.md`](./release-workflow.md) in the same pass.
+
+## Apple Dev Skills Compatibility Pointer
+
+`plugins/apple-dev-skills` is the canonical Socket-owned Apple Dev Skills payload. Make ordinary Apple Dev Skills payload changes directly in that directory and commit them in `socket`.
+
+Current release-time direction:
+
+| Child | Prefix | Standalone repository | Release-time action |
+| --- | --- | --- | --- |
+| `apple-dev-skills` | `plugins/apple-dev-skills` | `gaelic-ghost/apple-dev-skills` | `no subtree action` while the standalone repository is only the compatibility pointer |
+
+When Apple Dev Skills changes land:
+
+- verify the directory shape under `plugins/apple-dev-skills/`
+- update socket docs and marketplace wiring in a separate focused commit when needed
+- if the work is part of a coordinated release-prep pass, use [`release-workflow.md`](./release-workflow.md) and record `no subtree action` for `apple-dev-skills` while the standalone repository remains the compatibility pointer
+
+## Release Integration
+
+Socket's single [`release workflow`](./release-workflow.md) owns the shared
+version and always evaluates child synchronization before tagging. This document
+only owns the child relationship and pull/push decision; it does not define a
+second release mode or repeat the release sequence.
+
+- `apple-dev-skills`: no subtree action while the standalone repository remains
+  only the compatibility pointer.
+- future subtree-managed children: register the exact pull/push gate in the
+  release implementation before publishing them through Socket.
+- every child decision: record pulled, pushed, intentionally deferred, or not
+  touched in the one release's child-sync accounting.
+
+## Add A New Subtree-Managed Child Repository
+
+Only do this when Gale explicitly wants to preserve an upstream repository as a separate sync target.
+
+Typical flow:
+
+```bash
+git remote add <name> <source-url-or-path>
+git fetch <name>
+git subtree add --prefix=plugins/<name> <name> main
+```
+
+After the import:
+
+- verify the imported directory shape under `plugins/<name>/`
+- inspect whether the child repo ships `.codex-plugin/plugin.json`
+- if it does, locate the real packaged plugin root before touching the socket marketplace
+- re-check `.agents/plugins/marketplace.json`
+- re-check the root `README.md`
+- re-check `ROADMAP.md`
+- remove stale duplicated packaging if the import introduced a second surviving copy of an already present child plugin
+
+## Root Marketplace Rules
+
+The root marketplace lives at `.agents/plugins/marketplace.json`.
+
+Use these rules:
+
+- list every non-private imported child plugin surface by default
+- keep private child repos out of the public marketplace, and remove their entries if their directories are retired from the monorepo
+- point local entries' `source.path` at the actual child surface the imported repo treats as installable
+- use a Git-backed source when the actual plugin payload is canonical in another repository and `socket` is only exposing it through the Socket catalog
+- do not change a marketplace path just because a child repo rearranged files internally; if the packaged plugin root is unchanged, keep the same `source.path`
+- do not invent a second socket-level plugin wrapper when the child repo already has one
+- do not leave stale marketplace entries behind after a packaging move or subtree removal
+- keep one surviving plugin identity for each real child plugin
+
+### Marketplace Audit Pass
+
+Run this audit whenever a child plugin is added, removed, moved, renamed, converted from subtree-managed to monorepo-owned, or changes its packaged plugin root:
+
+1. List every marketplace entry in `.agents/plugins/marketplace.json`.
+2. For each local `source.path`, verify the directory exists under `plugins/` and exposes `.codex-plugin/plugin.json` at the packaged plugin root.
+3. For each Git-backed entry, verify the source kind matches the plugin location: `url` for a repository-root plugin and `git-subdir` for a plugin in a repository subdirectory.
+4. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed or intentionally exposed by Git-backed reference.
+5. Open each changed child repo's `AGENTS.md`, plugin manifest, optional public README, or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
+6. Run `uv run scripts/validate_socket_metadata.py`.
+7. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
+
+The audit is about the installable plugin roots that Codex can actually see. Do not rewrite marketplace paths to follow an invented uniform layout when the child repo still packages from a different root.
+
+For the Speak Swiftly catalog split, the expected surviving plugin identity is `speak-swiftly`, displayed as `Speak Swiftly`. The doctor should treat duplicate enablement from both the Socket marketplace and the standalone SpeakSwiftlyServer marketplace as repairable configuration drift. Its repair path should prefer `speak-swiftly@socket`, then disable or remove the duplicate standalone enablement after explaining the intended change.
+
+### Removing A Public Child Plugin
+
+Use this checklist before removing a public child repository from `socket` or from the root marketplace:
+
+1. Identify whether the child is monorepo-owned, subtree-managed with push-back, or pull-only.
+2. Confirm the child history is preserved where it belongs before deleting the directory, marketplace entry, branch, worktree, remote branch, or archive ref.
+3. Remove the child directory only when the source repo is no longer meant to be imported here, or when the child has been explicitly moved elsewhere.
+4. Remove the marketplace entry in the same commit as the directory removal when the plugin is no longer installable from `socket`.
+5. Update `README.md`, `ROADMAP.md`, and any maintainer docs that listed the child as active.
+6. Run `uv run scripts/validate_socket_metadata.py`.
+7. Account for local branches not contained by `main` before cleanup.
+
+If the removed Socket entry points at `SpeakSwiftlyServer`, do not use this checklist as permission to delete or rewrite the standalone live-service repository. That repo's standalone release, validation, and live-refresh path stays outside ordinary `socket` cleanup.
+
+## Common Failure Modes
+
+- The socket marketplace still points at a directory that no longer exists in `plugins/`.
+- A child directory vendors another plugin repo internally, leaving two plugin payloads with the same plugin name inside the monorepo.
+- `apple-dev-skills` is accidentally treated as a live subtree push target even though the standalone repository is only the compatibility pointer.
+- Socket docs still describe the old all-subtree model after the monorepo has already moved on.
+- Apple Dev Skills payload work lands without a follow-up pass over root marketplace wiring and docs when the packaging surface changed.
+- Socket docs or marketplace entries reintroduce a local SpeakSwiftlyServer mirror even though Speak Swiftly is served from the standalone Git-backed repository.
+
+## Practical Rule Of Thumb
+
+If the question is “how does this child directory work?”, read the child docs.
+
+If the question is “how does socket expose, sync, or release these child directories together?”, read and update the socket maintainer docs.
