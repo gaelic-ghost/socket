@@ -30,6 +30,20 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertTrue(payload["workspace_path"].endswith("Product.xcworkspace"))
             self.assertTrue(payload["project_path"].endswith("Product.xcodeproj"))
 
+    def test_bootstrap_supports_package_first_without_a_second_entrypoint(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--name", "Product",
+                "--destination", tmpdir,
+                "--component-kind", "library",
+                "--component-name", "ProductAnalytics",
+                "--dry-run",
+            )
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["normalized_inputs"]["platforms"], [])
+            self.assertIn("Packages/ProductAnalytics", " ".join(payload["actions"]))
+
     def test_bootstrap_creates_one_project_target_specs_shared_layers_and_package(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, payload = run_script(BOOTSTRAP, "--name", "Product", "--file-prefix", "PRD", "--destination", tmpdir, "--skip-validation")
@@ -44,6 +58,8 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertTrue((root / "Packages/packages-shared.yml").is_file())
             self.assertTrue((root / "Packages/AGENTS.md").is_file())
             self.assertTrue((root / "Packages/ProductCore/Package.swift").is_file())
+            self.assertTrue((root / "Services/services-shared.yml").is_file())
+            self.assertTrue((root / "Services/AGENTS.md").is_file())
             self.assertTrue((root / "AGENTS.md").is_file())
             self.assertTrue((root / "CONTRIBUTING.md").is_file())
             self.assertTrue((root / "Justfile").is_file())
@@ -51,6 +67,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             root_spec = (root / "project.yml").read_text(encoding="utf-8")
             self.assertIn("Apps/apps-shared.yml", root_spec)
             self.assertIn("Packages/packages-shared.yml", root_spec)
+            self.assertIn("Services/services-shared.yml", root_spec)
             self.assertIn("projectFormat: xcode16_3", root_spec)
             self.assertIn("AppStore: release", root_spec)
             self.assertIn('iOS: "26.1"', root_spec)
@@ -123,7 +140,7 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             root = Path(tmpdir)
             (root / "Product.xcworkspace").mkdir()
             (root / "Product.xcodeproj").mkdir()
-            (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
+            (root / "project.yml").write_text("name: Product\ninclude:\noptions:\n  createIntermediateGroups: true\n", encoding="utf-8")
             (root / "Apps/ProductiOS").mkdir(parents=True)
             (root / "Apps/apps-shared.yml").write_text("targetTemplates: {}\n", encoding="utf-8")
             (root / "Apps/Apps-shared.xcconfig").write_text("SWIFT_VERSION = 6.0\n", encoding="utf-8")
@@ -143,6 +160,21 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
             self.assertIn("socket-managed:begin just-recipes", (root / "Justfile").read_text(encoding="utf-8"))
             self.assertTrue((root / ".socket/managed/align.sh").is_file())
             self.assertTrue((root / ".githooks/pre-commit").is_file())
+            self.assertTrue((root / "Services/services-shared.yml").is_file())
+            self.assertIn("Services/services-shared.yml", (root / "project.yml").read_text(encoding="utf-8"))
+            aligned = {
+                path: (root / path).read_text(encoding="utf-8")
+                for path in ("project.yml", "AGENTS.md", "Justfile", "Services/services-shared.yml")
+            }
+            code, payload = run_script(BOOTSTRAP, "--operation", "align", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(
+                aligned,
+                {
+                    path: (root / path).read_text(encoding="utf-8")
+                    for path in aligned
+                },
+            )
 
     def test_docs_record_single_root_project_contract(self) -> None:
         bootstrap = (ROOT / "skills/bootstrap-xcode-workspace/SKILL.md").read_text(encoding="utf-8")
@@ -150,3 +182,86 @@ class XcodeWorkspaceWorkflowTests(unittest.TestCase):
         self.assertIn("Apps-shared.xcconfig", bootstrap)
         self.assertIn("packages-shared.yml", bootstrap)
         self.assertIn("--operation align", bootstrap)
+        self.assertIn("--operation add-component", bootstrap)
+        self.assertIn("Services/services-shared.yml", bootstrap)
+
+    def test_add_component_does_not_require_repo_conversion(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(BOOTSTRAP, "--name", "Product", "--file-prefix", "PRD", "--destination", tmpdir, "--skip-validation")
+            self.assertEqual(code, 0, payload)
+            root = Path(payload["workspace_root"])
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--operation", "add-component",
+                "--repo-root", str(root),
+                "--component-kind", "library",
+                "--component-name", "ProductAnalytics",
+            )
+            self.assertEqual(code, 0, payload)
+            self.assertTrue((root / "Packages/ProductAnalytics/Package.swift").is_file())
+            self.assertIn("ProductAnalytics", (root / "Packages/packages-shared.yml").read_text(encoding="utf-8"))
+
+    def test_service_component_routes_through_server_adapter(self) -> None:
+        adapter = ROOT.parent / "server-side-swift/skills/workspace-service-component/scripts/run_workflow.py"
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Services").mkdir()
+            (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
+            (root / "Services/services-shared.yml").write_text("packages: {}\n", encoding="utf-8")
+            code, payload = run_script(adapter, "--repo-root", tmpdir, "--name", "ProductAPI", "--framework", "hummingbird", "--dry-run")
+            self.assertEqual(code, 0, payload)
+            self.assertIn("brew", payload["output"]["next_step"].lower() if payload["output"]["next_step"] else "")
+
+    def test_service_package_is_visible_from_permanent_workspace(self) -> None:
+        if not shutil.which("xcodegen") or not shutil.which("xcodebuild"):
+            self.skipTest("xcodegen and xcodebuild are required")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--name", "Product",
+                "--file-prefix", "PRD",
+                "--destination", tmpdir,
+                "--component-kind", "library",
+                "--skip-validation",
+            )
+            self.assertEqual(code, 0, payload)
+            root = Path(payload["workspace_root"])
+            service = root / "Services/ProductAPI"
+            (service / "Sources/ProductAPI").mkdir(parents=True)
+            (service / "Package.swift").write_text(
+                "// swift-tools-version: 6.2\n"
+                "import PackageDescription\n"
+                "let package = Package(name: \"ProductAPI\", products: [.executable(name: \"ProductAPI\", targets: [\"ProductAPI\"])], targets: [.executableTarget(name: \"ProductAPI\")])\n",
+                encoding="utf-8",
+            )
+            (service / "Sources/ProductAPI/main.swift").write_text("print(\"ProductAPI\")\n", encoding="utf-8")
+            (root / "Services/services-shared.yml").write_text(
+                "packages:\n  ProductAPI:\n    path: Services/ProductAPI\n",
+                encoding="utf-8",
+            )
+            generated = subprocess.run(
+                ["xcodegen", "generate"], cwd=root, capture_output=True, text=True, check=False
+            )
+            self.assertEqual(generated.returncode, 0, generated.stderr or generated.stdout)
+            listed = subprocess.run(
+                ["xcodebuild", "-list", "-workspace", str(root / "Product.xcworkspace")],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(listed.returncode, 0, listed.stderr or listed.stdout)
+            self.assertIn("ProductAPI", listed.stdout)
+            service_manifest = (service / "Package.swift").read_text(encoding="utf-8")
+            code, payload = run_script(
+                BOOTSTRAP,
+                "--operation", "add-component",
+                "--repo-root", str(root),
+                "--component-kind", "app",
+                "--component-name", "Product",
+                "--platform", "ios",
+                "--file-prefix", "PRD",
+            )
+            self.assertEqual(code, 0, payload)
+            self.assertTrue((root / "Apps/ProductiOS/target.yml").is_file())
+            self.assertEqual(service_manifest, (service / "Package.swift").read_text(encoding="utf-8"))

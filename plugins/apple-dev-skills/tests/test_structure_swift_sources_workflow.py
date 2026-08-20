@@ -38,7 +38,7 @@ class StructureWorkflowTests(unittest.TestCase):
         )
         return proc.returncode, json.loads(proc.stdout)
 
-    def test_infers_header_cleanup_for_swift_package_repo(self) -> None:
+    def test_infers_header_cleanup_for_swift_component(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             repo = Path(tmpdir)
             (repo / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
@@ -54,7 +54,7 @@ class StructureWorkflowTests(unittest.TestCase):
 
         self.assertEqual(code, 0)
         self.assertEqual(payload["status"], "success")
-        self.assertEqual(payload["output"]["repository_kind"], "swift-package")
+        self.assertNotIn("repository_kind", payload["output"])
         self.assertEqual(payload["output"]["cleanup_kind"], "file-header-normalization")
         self.assertIn("scripts/normalize_swift_file_headers.py", payload["output"]["helper_scripts"])
 
@@ -94,8 +94,6 @@ class StructureWorkflowTests(unittest.TestCase):
                 },
             )
             code, payload = self.run_script(
-                "--repository-kind",
-                "swift-package",
                 "--request",
                 "Split this oversized file and normalize the file headers",
                 env=env,

@@ -24,6 +24,8 @@ The practical decision is whether the task needs Apple's macOS-native container 
 
 ## When To Use
 
+- Do not use this workflow for local development, Linux artifact creation, or deployment of a Gale-owned Swift product repository. Those repositories use native macOS plus Homebrew services locally and GitHub Actions for every cloud Linux build and deployment. Keep this skill for explicit unrelated container research or repositories with a different declared contract.
+
 - Use this skill when a user asks for Apple Containerization, Apple's `container` CLI, Containerization Swift APIs, OCI image work on Apple silicon, or native macOS container runtime behavior.
 - Use this skill when diagnosing `container system start`, `container build`, `container run`, `container machine`, image pull or push, registry login, kernel setup, lightweight VM startup, networking, Rosetta, nested virtualization, or Apple silicon runtime behavior.
 - Use this skill for a persistent OCI-image-backed Linux development machine with an init system, services, repeated shell access, or explicit CPU, memory, and home-sharing policy.

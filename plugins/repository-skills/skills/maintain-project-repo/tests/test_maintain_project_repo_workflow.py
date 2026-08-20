@@ -114,6 +114,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             (root / "project.yml").write_text("name: Product\n", encoding="utf-8")
             (root / "Apps/ProductApp").mkdir(parents=True)
             (root / "Apps/ProductApp/target.yml").write_text("targets: {}\n", encoding="utf-8")
+            (root / "Services").mkdir()
             package_root = root / "Packages/ProductCore"
             package_root.mkdir(parents=True)
             (package_root / "Package.swift").write_text("// package\n", encoding="utf-8")
@@ -159,7 +160,7 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             )
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
-            self.assertIn("requires a modular Apple workspace", payload["stderr"])
+            self.assertIn("requires a canonical Swift product workspace", payload["stderr"])
             self.assertIn("expected exactly one root .xcworkspace", payload["stderr"])
 
     def test_generic_profile_uses_generic_macos_latest_workflow(self) -> None:

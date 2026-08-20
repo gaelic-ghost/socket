@@ -27,7 +27,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - Do not use this skill for app bootstrap, Swift package bootstrap, or AGENTS-only guidance sync by themselves.
 - Recommend `bootstrap-swift-package` when the repo does not exist yet and package scaffold creation is still the primary task.
 - Recommend `bootstrap-xcode-workspace` when the repo does not exist yet and native Apple product bootstrap is still the primary task.
-- Recommend `sync-swift-package-guidance` for standalone package guidance, or `bootstrap-xcode-workspace --operation align` for an Apple product workspace.
+- Recommend `bootstrap-xcode-workspace --operation align` for Swift product guidance. A deliberately standalone published package keeps an explicit package-specific maintenance contract.
 
 ## Single-Path Workflow
 
@@ -136,7 +136,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - GitHub release creation prefers checked-in `docs/releases/vX.Y.Z.md` notes, then `docs/releases/X.Y.Z.md`; it logs and falls back to GitHub-generated notes only when neither file exists.
 - Treat branch accounting as a hard completion gate for release and cleanup work, not as follow-up tidying. If `git branch --no-merged <base>` reports local branches after a merge, account for each branch explicitly before deleting anything or reporting the workflow complete.
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-workspace` when the repo still needs to be created.
-- Recommend `sync-swift-package-guidance` or `bootstrap-xcode-workspace --operation align` when guidance alignment is still the missing baseline after `maintain-project-repo` is present.
+- Recommend `bootstrap-xcode-workspace --operation align` when product guidance alignment is still the missing baseline after `maintain-project-repo` is present.
 
 ## Codex Subagent Fit
 

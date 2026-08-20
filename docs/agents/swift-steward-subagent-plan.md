@@ -51,7 +51,7 @@ agent and Gale to review before any file changes are applied.
 - inspect `AGENTS.md`, README, CONTRIBUTING, ROADMAP, DocC catalogs, package
   manifests, Xcode markers, and repo-maintenance scripts
 - compare current guidance against the relevant Apple Dev Skills workflow
-- identify whether `sync-swift-package-guidance`,
+- identify whether `bootstrap-xcode-workspace --operation align`,
   `bootstrap-xcode-workspace --operation align`, `author-swift-docc-docs`, or a build/test
   workflow should own the next edit
 - return review packets with proposed patch sets, validation handoff, and
@@ -137,7 +137,7 @@ Completed for the first release:
 
 1. Added project-scoped custom-agent files in the child plugin roots so the role
    contracts are concrete and reviewable.
-2. Taught `sync-swift-package-guidance` and `bootstrap-xcode-workspace --operation align` when
+2. Taught `bootstrap-xcode-workspace --operation align` when
    to ask for or use `swift-steward` for broad discovery.
 3. Added the sibling `server-swift-steward` role and server-side Swift guidance
    boundary.

@@ -33,6 +33,7 @@
 - [Milestone 30: macOS virtualization and container skills expansion](#milestone-30-macos-virtualization-and-container-skills-expansion)
 - [Milestone 31: macOS platform security skills expansion](#milestone-31-macos-platform-security-skills-expansion)
 - [Milestone 32: tvOS app experience and media playback workflows](#milestone-32-tvos-app-experience-and-media-playback-workflows)
+- [Milestone 33: Unified Swift workspace and CI-owned cloud deployment](#milestone-33-unified-swift-workspace-and-ci-owned-cloud-deployment)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -80,6 +81,7 @@
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
 - Milestone 32: tvOS app experience and media playback workflows - Completed
+- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -293,7 +295,7 @@ Decision note: the root marketplace entry is installable now that `web-dev-skill
 
 ### Status
 
-In Progress
+Implementation Complete; Release Pending
 
 ### Scope
 
@@ -1101,6 +1103,40 @@ Completed
 - [x] The app-experience workflow keeps focus user-controlled, SwiftUI-first, and accessible at larger text sizes while reserving UIKit focus APIs for concrete geometry failures.
 - [x] The media workflow leads with AVKit’s system player and makes custom remote-command responsibility explicit.
 - [x] Apple Dev Skills, Socket metadata, Hermes exports, Claude/Cowork compatibility records, tests, and documentation agree on the new skill inventory before the minor release.
+
+## Milestone 33: Unified Swift workspace and CI-owned cloud deployment
+
+### Status
+
+In Progress
+
+### Scope
+
+- [x] Make one root Xcode workspace the permanent entry point for Gale-owned Swift product repositories, including service-only, app-only, package-only, and mixed products.
+- [x] Keep SwiftPM authoritative for shared packages and server executables while allowing Apple apps and services to be added without later repository conversion.
+- [x] Make native macOS execution with already-installed Homebrew services the only standard local server-development path.
+- [x] Make Soto the default AWS client stack for new Swift integrations.
+- [x] Make GitHub Actions the exclusive owner of Linux cloud artifacts plus test and production deployments.
+
+### Tickets
+
+- [x] Implement the detailed [unified Swift workspace and cloud boundary plan](./docs/maintainers/unified-swift-workspace-and-cloud-boundary-plan.md).
+- [x] Remove the repo-wide Xcode-versus-SwiftPM classifier, mixed-root states and opt-ins, and classifier-driven handoffs; route by component path and requested operation instead.
+- [x] GitHub #183: finish the XcodeGen-only workspace contract by supporting server-only roots and idempotent component addition ([#183](https://github.com/gaelic-ghost/socket/issues/183)).
+- [x] GitHub #185: add the Soto-default decision owner, lifecycle examples, deviation rule, and coverage ([#185](https://github.com/gaelic-ghost/socket/issues/185)).
+- [x] GitHub #186: replace generated Compose/VM local development with native macOS and Homebrew service guidance ([#186](https://github.com/gaelic-ghost/socket/issues/186)).
+- [x] GitHub #187: enforce GitHub-hosted Linux builds and protected test/production deployment workflows ([#187](https://github.com/gaelic-ghost/socket/issues/187)).
+- [x] Retire duplicate standalone Hummingbird/Vapor bootstrap and Hummingbird guidance-sync surfaces after the workspace component adapters ship.
+- [x] Add child, root, generated-repository, metadata, and Hermes compatibility validation for the unified contract.
+
+### Exit Criteria
+
+- [x] A service-only repository starts in the permanent workspace shape and can add an Apple app without moving or converting the service.
+- [x] Package and Xcode workflows coexist in that workspace without repo-shape classification, mixed-root handoff, or opt-in flags.
+- [x] Generated local commands use native Swift and Homebrew services and contain no standard Compose, container, or Linux VM path.
+- [x] New Swift AWS fixtures select Soto and demonstrate one-client application and warm-Lambda lifecycle ownership.
+- [x] Every test or production cloud artifact is built in GitHub Actions and deployed through protected environments with immutable identity and OIDC.
+- [x] Root guidance, child skills, generated assets, plugin metadata, tests, roadmap, and Hermes exports describe the same single workflow.
 
 ## Small Tickets
 

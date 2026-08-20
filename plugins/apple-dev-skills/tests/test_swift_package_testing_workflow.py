@@ -26,7 +26,7 @@ class SwiftPackageTestingWorkflowTests(unittest.TestCase):
         )
         return proc.returncode, json.loads(proc.stdout)
 
-    def test_succeeds_for_plain_package_tests(self) -> None:
+    def test_succeeds_for_package_tests(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             code, payload = self.run_script("--operation-type", "test", "--repo-root", tmpdir)
@@ -50,14 +50,15 @@ class SwiftPackageTestingWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "handoff")
             self.assertIn("swift-package-extension-workflow", payload["output"]["next_step"])
 
-    def test_handoffs_mixed_root_without_opt_in(self) -> None:
+    def test_xcode_files_do_not_change_swiftpm_test_execution(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             Path(tmpdir, "Demo.xcodeproj").mkdir()
             code, payload = self.run_script("--operation-type", "test", "--repo-root", tmpdir)
             self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "handoff")
-            self.assertIn("xcode-testing-workflow", payload["output"]["next_step"])
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(payload["output"]["planned_commands"][0], "swift test")
+            self.assertNotIn("mixed_root", payload["output"]["package_context"])
 
     def test_infers_test_plan_and_scheme_context(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -96,7 +97,7 @@ class SwiftPackageTestingWorkflowTests(unittest.TestCase):
             ROOT / "skills/swift-package-testing-workflow/references/package-resources-testing-and-builds.md"
         ).read_text(encoding="utf-8")
         snippet_text = (
-            ROOT / "skills/sync-swift-package-guidance/references/snippets/apple-swift-package-core.md"
+            ROOT / "skills/swift-package-testing-workflow/references/snippets/apple-swift-package-core.md"
         ).read_text(encoding="utf-8")
 
         for text in (reference_text, snippet_text):

@@ -2,6 +2,11 @@
 
 Date: 2026-04-08
 
+Status: Historical. Repository-shape inference and `sync-swift-package-guidance`
+were retired by the unified Xcode workspace contract. All Swift product repositories
+now use one workspace entry point with `Apps/`, `Packages/`, and `Services/` component
+surfaces.
+
 ## Purpose
 
 Record the planned split of the current execution skills into narrower build-run and testing skills, define the guidance-preservation contract for that split, and establish the companion plan for Swift and Xcode-oriented `maintain-project-repo` profiles selected by this shipped Apple plugin.
@@ -40,7 +45,7 @@ Skills that remain separate and keep their current high-level role:
 
 - `explore-apple-swift-docs`
 - `bootstrap-swift-package`
-- `sync-swift-package-guidance`
+- `bootstrap-xcode-workspace` for product-level alignment
 - `format-swift-sources`
 - `structure-swift-sources`
 
@@ -87,21 +92,19 @@ Keep execution-only mechanics out of `AGENTS.md` when they are too tied to tool 
 
 ## Repo-Maintenance Direction
 
-The repo should treat `repository-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface, with Apple workflows selecting the Swift- and Xcode-aware profiles. `apple-dev-skills` owns Apple repo classification and guidance; it does not own a second toolkit implementation.
+The repo treats `repository-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface. `apple-dev-skills` owns the unified workspace and Apple guidance; it does not classify repositories or own a second toolkit implementation.
 
 Planned profile shape:
 
 - `generic`
-- `swift-package`
-- `xcode-app`
-- optional later `swift-mixed-root`
+- one unified Swift product profile for workspaces containing any combination of apps, packages, and services
 
 The `socket` marketplace lists `repository-skills` and `apple-dev-skills` together, so users can add one catalog and then install or enable both plugin entries from the Socket marketplace instead of wiring each plugin marketplace one by one. Users who install only `apple-dev-skills` still get the Apple-only workflows, but mutating bootstrap and guidance-sync workflows must explain that repo-maintenance install or refresh requires the `repository-skills` companion plugin.
 
 Current Apple-side integration status:
 
 - `maintain-project-repo` is profile-aware
-- Apple bootstrap and guidance-sync skills explicitly run `maintain-project-repo` with the `swift-package` or `xcode-app` profile
+- workspace bootstrap and alignment explicitly run `maintain-project-repo` with the unified Swift product profile
 - installed repos now get `scripts/repo-maintenance/config/profile.env` as a concrete profile marker
 - Apple-specific formatting assets are promoted into the `maintain-project-repo` Apple profile overlay
 
@@ -135,7 +138,7 @@ Current status:
 ### Phase 4: Toolkit consolidation
 
 - Keep Swift and Xcode-oriented repo-maintenance profile support canonical in `repository-skills/maintain-project-repo`.
-- Keep Apple-specific plugin work focused on stack guidance, repo classification, and profile selection.
+- Keep Apple-specific plugin work focused on stack guidance and the permanent workspace/component model.
 
 ## First Implementation Slice
 

@@ -99,7 +99,7 @@ and bounded permissions. Good jobs include:
 - run a `check-only` documentation audit
 - apply one canonical docs skill to one repo
 - refresh `maintain-project-repo`
-- run `sync-swift-package-guidance` or `bootstrap-xcode-workspace --operation align`
+- run `bootstrap-xcode-workspace --operation align`
 - fix CI failures in response to a failed workflow
 - open a PR with the patch and validation output
 - emit structured JSON output for a scheduler or report collector
@@ -158,7 +158,7 @@ as the default Socket maintainer automation runtime.
 | `maintain-project-readme` | `codex exec` for one repo; code-owned service for product-doc sweep | It keeps README product-focused and hands contributor details to `CONTRIBUTING.md`, which makes it safer for repeated repo-wide application. |
 | `maintain-project-repo` | `codex exec` first; code-owned service for coordinated rollout | It installs managed scripts and CI wrappers. It is deterministic, but the write surface is broad enough that every repo should get a PR. |
 | `maintain-project-roadmap` | App check-only or `codex exec`; code-owned service only for planning sync | Roadmaps reflect human priorities. Automate stale-structure fixes, but keep milestone meaning human-reviewed. |
-| `sync-swift-package-guidance` | `codex exec` for one repo; code-owned service for SwiftPM fleet sync | It classifies repo shape, writes `AGENTS.md`, and refreshes `maintain-project-repo`. It is suitable for PR-based automation after the Socket-cache companion discovery fix. |
+| `bootstrap-xcode-workspace --operation align` | `codex exec` for one product workspace | It refreshes the one managed Apps/Packages/Services guidance boundary and repository maintenance surface without classifying the repository. |
 | `bootstrap-xcode-workspace --operation align` | `codex exec` for one repo; code-owned service for Apple-product workspace alignment | It safely owns only marked guidance, the managed hook, and marked Just recipes while preserving product-local content. |
 
 ## Dedicated Skill Recommendation

@@ -25,7 +25,6 @@ SKILL_MODULES = {
     "bootstrap-swift-package": ROOT / "skills/bootstrap-swift-package/scripts/customization_config.py",
     "migrate-xcode-project-to-xcodegen": ROOT
     / "skills/migrate-xcode-project-to-xcodegen/scripts/customization_config.py",
-    "sync-swift-package-guidance": ROOT / "skills/sync-swift-package-guidance/scripts/customization_config.py",
     "swift-package-build-run-workflow": ROOT / "skills/swift-package-build-run-workflow/scripts/customization_config.py",
     "swift-package-testing-workflow": ROOT / "skills/swift-package-testing-workflow/scripts/customization_config.py",
 }

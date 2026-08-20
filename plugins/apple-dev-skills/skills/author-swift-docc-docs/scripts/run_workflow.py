@@ -16,7 +16,7 @@ from pathlib import Path
 import customization_config
 
 
-VALID_REPO_SHAPES = {"swift-package", "xcode-app-framework"}
+VALID_EXECUTION_SURFACES = {"swiftpm", "xcode"}
 VALID_TASK_TYPES = {
     "symbol-docs",
     "article",
@@ -88,7 +88,6 @@ def detect_repo_state(repo_path: str | None) -> dict:
             "workspace": None,
             "project": None,
             "docc_catalogs": [],
-            "mixed_root": False,
         }
 
     requested = Path(repo_path).expanduser().resolve()
@@ -103,7 +102,6 @@ def detect_repo_state(repo_path: str | None) -> dict:
             "workspace": None,
             "project": None,
             "docc_catalogs": [],
-            "mixed_root": False,
         }
 
     candidate = existing if existing.is_dir() else existing.parent
@@ -118,21 +116,19 @@ def detect_repo_state(repo_path: str | None) -> dict:
         "workspace": str(workspaces[0]) if workspaces else None,
         "project": str(projects[0]) if projects else None,
         "docc_catalogs": docc_catalogs,
-        "mixed_root": bool(package_manifest.exists() and (workspaces or projects)),
     }
 
 
-def infer_repo_shape(repo_state: dict, request: str | None) -> str | None:
-    if repo_state.get("workspace") or repo_state.get("project"):
-        return "xcode-app-framework"
-    if repo_state.get("package_manifest"):
-        return "swift-package"
-
+def infer_execution_surface(repo_state: dict, request: str | None) -> str | None:
     text = normalize_request_text(request)
-    if "package.swift" in text or "swift package" in text or "swiftpm" in text:
-        return "swift-package"
-    if "xcode" in text or "workspace" in text or "scheme" in text or ".xcodeproj" in text:
-        return "xcode-app-framework"
+    if any(token in text for token in ("xcodebuild", "workspace", "scheme", "doccarchive", "archive export")):
+        return "xcode"
+    if any(token in text for token in ("swift package", "swiftpm", "docc convert", "package.swift")):
+        return "swiftpm"
+    if repo_state.get("package_manifest"):
+        return "swiftpm"
+    if repo_state.get("workspace") or repo_state.get("project"):
+        return "xcode"
     return None
 
 
@@ -143,10 +139,10 @@ def load_effective_config() -> dict:
     )
 
 
-def recommended_execution_skill(repo_shape: str | None) -> str | None:
-    if repo_shape == "swift-package":
+def recommended_execution_skill(execution_surface: str | None) -> str | None:
+    if execution_surface == "swiftpm":
         return "swift-package-build-run-workflow"
-    if repo_shape == "xcode-app-framework":
+    if execution_surface == "xcode":
         return "xcode-build-run-workflow"
     return None
 
@@ -154,7 +150,7 @@ def recommended_execution_skill(repo_shape: str | None) -> str | None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-path")
-    parser.add_argument("--repo-shape", choices=sorted(VALID_REPO_SHAPES))
+    parser.add_argument("--execution-surface", choices=sorted(VALID_EXECUTION_SURFACES))
     parser.add_argument("--task-type", choices=sorted(VALID_TASK_TYPES))
     parser.add_argument("--request")
     parser.add_argument("--needs-generation", action="store_true")
@@ -169,8 +165,8 @@ def main() -> int:
         tutorial_support_level = "light-review"
 
     repo_state = detect_repo_state(args.repo_path)
-    repo_shape = args.repo_shape or infer_repo_shape(repo_state, args.request)
-    repo_shape_source = "explicit" if args.repo_shape else ("inferred" if repo_shape else "missing")
+    execution_surface = args.execution_surface or infer_execution_surface(repo_state, args.request)
+    execution_surface_source = "explicit" if args.execution_surface else ("inferred" if execution_surface else "missing")
     task_type = args.task_type or infer_task_type_from_request(args.request)
     task_type_source = "explicit" if args.task_type else ("inferred" if task_type else "missing")
     text = normalize_request_text(args.request)
@@ -180,8 +176,8 @@ def main() -> int:
             "status": "handoff",
             "path_type": "primary",
             "output": {
-                "repo_shape": repo_shape,
-                "repo_shape_source": repo_shape_source,
+                "execution_surface": execution_surface,
+                "execution_surface_source": execution_surface_source,
                 "task_type": task_type,
                 "task_type_source": task_type_source,
                 "repo_state": repo_state,
@@ -195,21 +191,21 @@ def main() -> int:
         return 0
 
     if args.needs_generation or request_implies_execution(text):
-        recommended = recommended_execution_skill(repo_shape)
+        recommended = recommended_execution_skill(execution_surface)
         if not recommended:
             payload = {
                 "status": "blocked",
                 "path_type": "fallback",
                 "output": {
-                    "repo_shape": repo_shape,
-                    "repo_shape_source": repo_shape_source,
+                    "execution_surface": execution_surface,
+                    "execution_surface_source": execution_surface_source,
                     "task_type": task_type,
                     "task_type_source": task_type_source,
                     "repo_state": repo_state,
                     "tutorial_support_level": tutorial_support_level,
                     "correctness_model": ["content", "docc", "project"],
                     "recommended_skill": None,
-                    "next_step": "Provide --repo-shape explicitly or point --repo-path at the package or Xcode repo before handing DocC generation or export work to a build-run workflow.",
+                    "next_step": "Provide --execution-surface or request a specific SwiftPM or Xcode DocC generation operation.",
                 },
             }
             print(json.dumps(payload, indent=2, sort_keys=True))
@@ -217,10 +213,10 @@ def main() -> int:
 
         payload = {
             "status": "handoff",
-            "path_type": "primary" if repo_shape_source != "missing" else "fallback",
+            "path_type": "primary" if execution_surface_source != "missing" else "fallback",
             "output": {
-                "repo_shape": repo_shape,
-                "repo_shape_source": repo_shape_source,
+                "execution_surface": execution_surface,
+                "execution_surface_source": execution_surface_source,
                 "task_type": task_type,
                 "task_type_source": task_type_source,
                 "repo_state": repo_state,
@@ -236,10 +232,10 @@ def main() -> int:
     if task_type is None:
         payload = {
             "status": "blocked",
-            "path_type": "fallback" if repo_shape_source != "missing" else "primary",
+            "path_type": "fallback" if execution_surface_source != "missing" else "primary",
             "output": {
-                "repo_shape": repo_shape,
-                "repo_shape_source": repo_shape_source,
+                "execution_surface": execution_surface,
+                "execution_surface_source": execution_surface_source,
                 "task_type": None,
                 "task_type_source": "missing",
                 "repo_state": repo_state,
@@ -260,10 +256,10 @@ def main() -> int:
 
     payload = {
         "status": "success",
-        "path_type": "primary" if repo_shape_source != "missing" else "fallback",
+        "path_type": "primary",
         "output": {
-            "repo_shape": repo_shape,
-            "repo_shape_source": repo_shape_source,
+            "execution_surface": execution_surface,
+            "execution_surface_source": execution_surface_source,
             "task_type": task_type,
             "task_type_source": task_type_source,
             "repo_state": repo_state,

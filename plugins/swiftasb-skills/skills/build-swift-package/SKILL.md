@@ -234,7 +234,7 @@ If the package is also an Xcode app workspace, use the repository's documented X
 - Use `swiftasb:explain-swiftasb` when the user needs adoption tradeoffs before implementation.
 - Use `swiftasb:choose-integration-shape` when ownership or public API shape is unclear.
 - Use `swiftasb:diagnose-integration` when startup, turn, approval, MCP, diagnostics, or history behavior fails.
-- Use `apple-dev-skills:sync-swift-package-guidance` when the package repo's `AGENTS.md` or maintainer workflow needs alignment.
+- Use `apple-dev-skills:bootstrap-xcode-workspace --operation align` when product workspace guidance or maintainer workflow needs alignment.
 - Use Apple Swift package workflow skills for package build, test, manifest, resource, DocC, or release execution.
 
 ## Guardrails

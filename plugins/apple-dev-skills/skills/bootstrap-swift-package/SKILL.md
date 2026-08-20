@@ -23,7 +23,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the user is doing ordinary package development after bootstrap.
 - Recommend `xcode-build-run-workflow` when the user is working in an existing Xcode project or needs Xcode-managed Apple-platform build, run, toolchain, Metal, or mutation work after bootstrap.
 - Recommend `xcode-testing-workflow` when the user needs Xcode-managed Apple-platform test execution after bootstrap.
-- Recommend `sync-swift-package-guidance` when an existing Swift package repo needs `AGENTS.md` or workflow-guidance alignment rather than fresh bootstrap.
+- For a deliberately standalone package, use its explicit repository-maintenance contract for later guidance alignment.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift docs exploration, Dash-compatible lookup, or Dash follow-up work.
 
 ## Single-Path Workflow
@@ -84,7 +84,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
    - preserve the project-appropriate logging and telemetry guidance from that snippet
 8. Hand off package execution guidance cleanly:
    - use `swift build` and `swift test` by default
-   - recommend `sync-swift-package-guidance` when a later repo-guidance refresh or merge is needed for the created package repo
+   - record the standalone repository-maintenance command used for later guidance refreshes
    - recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` for ordinary package development after bootstrap
    - recommend `xcode-build-run-workflow` for package builds that need Xcode-managed toolchain behavior, such as package builds that depend on Xcode-provided Metal or other Apple-managed build assets
 9. Return one JSON execution summary with the created path, normalized options, and validation result.
@@ -158,7 +158,7 @@ This skill can be discovered from a standalone `apple-dev-skills` install, but i
 - When the new package is published to GitHub, use
   `repository-skills:maintain-github-repository` to audit repository features,
   merge modes, security automation, sign-off policy, and branch protection.
-- After a successful scaffold, hand off later repo-guidance alignment work to `sync-swift-package-guidance`.
+- After a successful standalone scaffold, hand later guidance alignment to its explicit repository-maintenance contract.
 - For ordinary package work, prefer `swift build` and `swift test`.
 - For package builds that need Xcode-managed SDK or toolchain behavior, use `xcode-build-run-workflow` and `xcodebuild` guidance instead of stretching the bootstrap skill into an execution skill.
 - Recommend `explore-apple-swift-docs` directly when the user’s next step is Apple or Swift docs exploration or Dash-compatible docs management.

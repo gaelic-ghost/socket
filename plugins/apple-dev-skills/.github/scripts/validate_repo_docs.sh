@@ -156,7 +156,7 @@ active_skill_mds=(
   "./skills/structure-swift-sources/SKILL.md"
   "./skills/bootstrap-swift-package/SKILL.md"
   "./skills/migrate-xcode-project-to-xcodegen/SKILL.md"
-  "./skills/sync-swift-package-guidance/SKILL.md"
+  "./skills/bootstrap-xcode-workspace/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
   "./skills/xcode-localization-workflow/SKILL.md"
   "./skills/choose-macos-virtualization-shape/SKILL.md"
@@ -185,7 +185,7 @@ for skill_md in "${active_skill_mds[@]}"; do
   [[ -d "$skill_dir/references" ]] || fail "Missing $skill_dir/references/"
 
   case "$skill_dir" in
-    ./skills/structure-swift-sources)
+    ./skills/structure-swift-sources|./skills/bootstrap-xcode-workspace)
       ;;
     *)
       [[ -f "$skill_dir/references/customization.template.yaml" ]] || fail "Missing $skill_dir/references/customization.template.yaml"
@@ -214,12 +214,12 @@ for skill_md in "${active_skill_mds[@]}"; do
   fi
 
   case "$skill_dir" in
-    ./skills/bootstrap-swift-package|./skills/sync-swift-package-guidance|./skills/swift-package-workflow|./skills/swift-package-build-run-workflow|./skills/swift-package-testing-workflow|./skills/swift-package-extension-workflow)
+    ./skills/bootstrap-swift-package|./skills/swift-package-workflow|./skills/swift-package-build-run-workflow|./skills/swift-package-testing-workflow|./skills/swift-package-extension-workflow)
       local_snippet="$skill_dir/references/snippets/apple-swift-package-core.md"
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'
       ;;
-    ./skills/structure-swift-sources|./skills/author-swift-docc-docs|./skills/safari-mcp-workflow|./skills/tvos-app-experience-workflow|./skills/tvos-media-playback-workflow)
+    ./skills/structure-swift-sources|./skills/bootstrap-xcode-workspace|./skills/author-swift-docc-docs|./skills/safari-mcp-workflow|./skills/tvos-app-experience-workflow|./skills/tvos-media-playback-workflow)
       local_snippet=""
       shared_snippet=""
       snippet_ref=""
@@ -278,7 +278,6 @@ for file in \
   "skills/devicecheck-app-attest-workflow/SKILL.md" \
   "skills/appkit-app-architecture-workflow/SKILL.md" \
   "skills/swiftui-app-architecture-workflow/SKILL.md" \
-  "skills/sync-swift-package-guidance/SKILL.md" \
   "ROADMAP.md"
 do
   require_not_contains "$file" 'install-plugin-to-socket'
@@ -288,8 +287,7 @@ done
 echo "Validating maintain-project-repo delegation..."
 [[ ! -e "./shared/repo-maintenance-toolkit" ]] || fail "Did not expect apple-dev-skills to retain shared/repo-maintenance-toolkit."
 for skill_dir in \
-  "./skills/bootstrap-swift-package" \
-  "./skills/sync-swift-package-guidance"
+  "./skills/bootstrap-swift-package"
 do
   [[ ! -e "$skill_dir/scripts/install_repo_maintenance_toolkit.py" ]] || fail "Did not expect legacy toolkit installer in $skill_dir"
   [[ ! -e "$skill_dir/assets/repo-maintenance" ]] || fail "Did not expect vendored repo-maintenance assets in $skill_dir"
@@ -299,12 +297,10 @@ do
   require_contains "$skill_dir/SKILL.md" 'https://github.com/gaelic-ghost/socket'
 done
 require_contains "./skills/bootstrap-swift-package/scripts/bootstrap_swift_package.sh" 'repository-skills/skills/maintain-project-repo/scripts/run_workflow.py'
-require_contains "./skills/sync-swift-package-guidance/scripts/sync_swift_package_guidance.py" 'repository-skills" / "skills" / "maintain-project-repo" / "scripts" / "run_workflow.py'
 
 echo "Validating preserved guidance in AGENTS assets..."
 package_agents_assets=(
   "./skills/bootstrap-swift-package/assets/AGENTS.md"
-  "./skills/sync-swift-package-guidance/assets/AGENTS.md"
 )
 for agents_asset in "${package_agents_assets[@]}"; do
   require_contains "$agents_asset" 'Use `swift-package-build-run-workflow`'
@@ -321,7 +317,7 @@ for agents_asset in "${package_agents_assets[@]}"; do
   require_contains "$agents_asset" '.metallib'
   require_contains "$agents_asset" '.xctestplan'
   require_contains "$agents_asset" 'Debug and Release'
-  require_contains "$agents_asset" 'sync-swift-package-guidance'
+  require_contains "$agents_asset" 'product repositories align guidance from their root workspace'
 done
 
 echo "Validating skill-creator contract..."

@@ -31,7 +31,7 @@ HANDOFF_EXPECTATIONS = {
     ),
     "plugins/swiftasb-skills/skills/build-swift-package/SKILL.md": (
         ("swiftasb:explain-swiftasb",),
-        ("apple-dev-skills:sync-swift-package-guidance", "Apple Swift package workflow skills"),
+        ("apple-dev-skills:bootstrap-xcode-workspace", "Apple Swift workspace workflow skills"),
     ),
     "plugins/swiftasb-skills/skills/build-swiftui-app/SKILL.md": (
         ("swiftasb:explain-swiftasb",),

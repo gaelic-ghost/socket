@@ -33,7 +33,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Recommend `xcode-testing-workflow` when the task shifts from style-tooling integration to active Xcode test work.
 - Recommend `structure-swift-sources` when the task shifts from formatter or linter setup into file splitting, file moves, declaration grouping, or TODO/FIXME ledger cleanup.
 - Recommend `author-swift-docc-docs` when the task shifts from style-tooling setup into symbol documentation, DocC article work, landing-page structure, topic groups, or DocC-oriented review.
-- Recommend `bootstrap-xcode-workspace` for Apple product alignment, or `sync-swift-package-guidance` for a standalone package.
+- Recommend `bootstrap-xcode-workspace --operation align` for product guidance alignment.
 
 ## Single-Path Workflow
 
@@ -115,7 +115,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Recommend `bootstrap-swift-package` or `bootstrap-xcode-workspace` when the user really needs a full project scaffold instead of isolated style-tooling setup.
 - Recommend `structure-swift-sources` directly when the task becomes file splitting, source moves, MARK normalization, or TODO/FIXME ledger maintenance.
 - Recommend `author-swift-docc-docs` directly when the task becomes symbol documentation, DocC article work, landing-page structure, topic groups, or DocC-oriented review.
-- Recommend `bootstrap-xcode-workspace` for Apple-product guidance alignment, or `sync-swift-package-guidance` for a standalone package.
+- Recommend `bootstrap-xcode-workspace --operation align` for product guidance alignment.
 
 ## Customization
 

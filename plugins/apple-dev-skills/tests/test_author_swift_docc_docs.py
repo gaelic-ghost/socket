@@ -35,7 +35,7 @@ class DoccWorkflowTests(unittest.TestCase):
         )
         return proc.returncode, json.loads(proc.stdout)
 
-    def test_infers_symbol_docs_for_swift_package_repo(self) -> None:
+    def test_infers_symbol_docs_for_package_component(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             repo = Path(tmpdir)
             (repo / "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
@@ -48,7 +48,7 @@ class DoccWorkflowTests(unittest.TestCase):
             )
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["output"]["repo_shape"], "swift-package")
+            self.assertEqual(payload["output"]["execution_surface"], "swiftpm")
             self.assertEqual(payload["output"]["task_type"], "symbol-docs")
 
     def test_handoffs_docs_lookup_to_explore_skill(self) -> None:
@@ -57,7 +57,7 @@ class DoccWorkflowTests(unittest.TestCase):
         self.assertEqual(payload["status"], "handoff")
         self.assertEqual(payload["output"]["recommended_skill"], "explore-apple-swift-docs")
 
-    def test_handoffs_generation_work_for_xcode_repo(self) -> None:
+    def test_handoffs_xcode_generation_operation(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             repo = Path(tmpdir)
             (repo / "Demo.xcodeproj").mkdir()

@@ -11,6 +11,8 @@ Prepare one persistent Linux development environment whose lifecycle, host integ
 
 ## When To Use
 
+- Do not use this workflow to build, test, package, or deploy a Gale-owned Swift product service. Its local path is native macOS with Homebrew services, and GitHub Actions owns every cloud Linux artifact and deployment. Keep this workflow for explicit VM fidelity, distro, kernel, or unrelated repository work.
+
 - Use for distro-specific builds, services, systemd or another init system, repeated shells, full-system tests, custom kernels, EFI boot, or GUI Linux.
 - Use to decide between `container machine`, Lima/Colima, and a full VM by required fidelity rather than product preference.
 - Do not use for a single portable application image; use the container owner skills.

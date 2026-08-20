@@ -1,6 +1,6 @@
 ---
 name: hummingbird-server-workflow
-description: Plan, build, run, test, and diagnose existing Hummingbird server-side Swift services using current Hummingbird documentation, SwiftPM-first commands, routing, middleware, request contexts, typed request and response models, service lifecycle, and deployment handoffs. Hand fresh service creation to bootstrap-hummingbird-service.
+description: Plan, build, run, test, and diagnose Hummingbird components under Services/ in the canonical product workspace. Hand fresh component creation and guidance alignment to the workspace service adapter.
 license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Hummingbird, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
@@ -24,7 +24,8 @@ The practical decision is what the HTTP service exposes, which executable owns t
 - Use this skill when changing Hummingbird routes, route groups, middleware, request contexts, application configuration, persistent request data, file middleware, service lifecycle integration, or local server behavior.
 - Use this skill when diagnosing `swift build`, `swift test`, `swift run`, application startup, route matching, middleware, request decoding, response encoding, or local HTTP failures in a Hummingbird project.
 - Use this skill when deciding whether an existing Swift package should become a Hummingbird service or stay a library consumed by one.
-- Use `bootstrap-hummingbird-service` instead when the user wants to start, begin, create, scaffold, or bootstrap a fresh Hummingbird service.
+- Use `soto-aws-workflow` when the component needs AWS service access or Lambda AWS-client lifecycle design.
+- Use `apple-dev-skills:bootstrap-xcode-workspace --operation add-component --component-kind service --framework hummingbird` for fresh service creation.
 - Use this skill when comparing Hummingbird to Vapor only long enough to choose the correct framework-specific workflow.
 - Do not use this skill for generic Swift package work that has no Hummingbird-specific behavior. Hand that work to a SwiftPM package workflow when available.
 - Do not use this skill for Vapor services unless the task is a comparison or migration involving Hummingbird.
@@ -69,7 +70,7 @@ Use Swift.org, Swift Package Manager, Swift Service Lifecycle, SwiftNIO, or Swif
    - OpenAPI-backed server transport
 3. Confirm the documented Hummingbird command and API path before running or recommending commands.
 4. Keep SwiftPM as the default execution surface after project creation:
-   - hand fresh service creation to `bootstrap-hummingbird-service`
+   - hand fresh service creation to the canonical workspace add-component entrypoint
    - use the Hummingbird template repository only when current docs, the CLI, or the user explicitly calls for template inspection or fallback
    - preserve the generated `swift-configuration` setup unless the repository has an intentional replacement
    - build with `swift build`
@@ -105,7 +106,7 @@ Before recommending or adding any package:
 
 ## Project Creation Handoff
 
-Fresh Hummingbird services belong to `bootstrap-hummingbird-service`. That bootstrap path starts with the official `hb` command line tool, preserves the CLI-selected Server or Lambda shape, uses the generated `swift-configuration` support, defaults long-running Server apps to Fluent ORM with PostgreSQL, creates a Docker Compose PostgreSQL dependency surface when the app has local database needs, and installs repo-local `AGENTS.md` guidance for the generated service.
+Fresh Hummingbird services belong to the canonical workspace add-component entrypoint. Its server adapter starts with `hb`, preserves the selected Server or Lambda shape and generated `swift-configuration`, defaults long-running Server apps to Fluent ORM with PostgreSQL, and uses native Homebrew services locally.
 
 ```bash
 brew tap hummingbird-project/tap
@@ -127,7 +128,7 @@ git clone https://github.com/hummingbird-project/template
 
 When adding Hummingbird to an existing package, edit `Package.swift` through normal SwiftPM dependency rules and follow current Hummingbird docs for package products. Do not copy a template over an existing service unless the user explicitly asks for replacement.
 
-When an existing Hummingbird repository needs its repo-local guidance, local Codex environment file, generated configuration assumptions, Server/Lambda distinction, OpenAPI transport notes, or command baseline refreshed, use `sync-hummingbird-service-guidance` instead of treating it as a fresh bootstrap.
+When an existing Hummingbird component needs guidance alignment, run the root workspace `just align`; do not invoke a framework-specific sync path.
 
 ## Codex GUI Local Environment
 
@@ -232,4 +233,4 @@ Return:
 - Do not claim Hummingbird API behavior from memory when current official docs can be checked.
 - Do not use Hummingbird request context as a catch-all app dependency bag.
 - Do not add Docker, Apple Containerization, CI, or cloud deployment files without explicit deployment scope.
-- Do not bootstrap fresh Hummingbird services manually; use `bootstrap-hummingbird-service` unless Gale explicitly approves an exception.
+- Do not create a standalone Hummingbird repository; use the root workspace add-component entrypoint.

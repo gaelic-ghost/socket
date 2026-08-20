@@ -77,16 +77,16 @@ sync runtime emits a `structure_audit` payload for downstream repos:
 - missing app-entry view model files
 - missing internal app service files when a strict app entry exists
 
-The sync skill still owns downstream repo guidance alignment. Socket Steward and
+The root workspace `just align` contract owns downstream product guidance alignment. Socket Steward and
 `documentation-skills:maintain-project-docs` own umbrella Socket docs audits and
-proposal reports; they should point at this sync skill when Apple app repo
+proposal reports; they should point at the workspace alignment entrypoint when Apple app repo
 guidance drift is the concrete finding.
 
-### `apple-dev-skills:sync-swift-package-guidance`
+### Swift package components
 
-Keep package guidance focused on SwiftPM and Swift language quality. Add only a
-handoff note for app architecture when a package contains app-facing SwiftUI or
-AppKit modules.
+Keep component guidance focused on SwiftPM and Swift language quality. Product
+repositories are intentionally combined workspaces; do not classify them as
+plain packages or require a mixed-root opt-in.
 
 ### `swift-lang`
 

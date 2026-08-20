@@ -16,7 +16,7 @@ Tune the documented tutorial-handling posture for the DocC authoring-and-review 
 - `scripts/run_workflow.py` loads the effective merged customization state at runtime.
 - `tutorialSupportLevel=light-review` keeps tutorial requests inside the workflow long enough for a high-level conceptual review before deeper directive-specific work is handed off to fuller DocC references.
 - `tutorialSupportLevel=defer` recognizes tutorial-shaped requests and recommends the fuller DocC references immediately.
-- The setting does not change build-run handoff rules, repo-shape detection, or the phase-one authoring-and-review boundary.
+- The setting does not change execution-surface handoff rules or the phase-one authoring-and-review boundary.
 
 ## Update Flow
 

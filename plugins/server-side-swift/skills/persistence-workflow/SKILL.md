@@ -27,7 +27,8 @@ The practical decision is which persistence tool owns the data access, how model
 - Use this skill when adding or changing Fluent models, migrations, relations, queries, transactions, or database configuration.
 - Use this skill when a Vapor service needs database behavior that goes beyond route setup.
 - Use this skill when a Hummingbird service needs database access, repository boundaries, migration handoffs, or driver selection.
-- Use `bootstrap-vapor-service` or `bootstrap-hummingbird-service` instead when the database choice is part of fresh service creation.
+- Use the canonical workspace service add-component entrypoint when the database choice is part of fresh service creation.
+- Use `soto-aws-workflow` for DynamoDB or other AWS persistence integrations so Soto dependency and client lifecycle ownership stay centralized.
 - Use this skill when comparing Fluent, direct SQL, a package-specific database client, or a small repository/query helper for a Swift service.
 - Use this skill when diagnosing failed migrations, missing schema, broken relations, connection-pool problems, query errors, transaction behavior, or database-backed tests.
 - Do not use this skill for route, middleware, request-context, server startup, or deployment-only work unless persistence is the reason for the change.
@@ -109,7 +110,7 @@ When the work is mostly route, middleware, command, environment, or Vapor app st
 For Hummingbird projects:
 
 - do not assume Fluent or any ORM is already part of an existing service
-- for fresh services, route to `bootstrap-hummingbird-service`, where Fluent ORM with PostgreSQL is Gale's strong default
+- for fresh services, route to the canonical workspace service adapter, where Fluent ORM with PostgreSQL is Gale's strong default
 - inspect how the `Application`, router, service lifecycle, and dependencies are currently constructed
 - check Hummingbird's persistent-data docs and Hummingbird-specific packages such as HummingbirdPostgres, HummingbirdFluent, PostgresMigrations, and Valkey or Redis integrations before choosing PostgresNIO, a direct driver, or a generic database package
 - choose a database client or repository shape that fits the existing Hummingbird service instead of copying Vapor app structure

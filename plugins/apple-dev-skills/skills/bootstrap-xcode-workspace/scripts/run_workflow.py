@@ -60,6 +60,24 @@ def maintain_project_repo_runner() -> Path:
     )
 
 
+def server_component_runner() -> Path:
+    candidates: list[Path] = []
+    for parent in Path(__file__).resolve().parents:
+        plugin_root = parent / "server-side-swift"
+        candidates.append(plugin_root / "skills" / "workspace-service-component" / "scripts" / "run_workflow.py")
+        if plugin_root.is_dir():
+            candidates.extend(
+                version / "skills" / "workspace-service-component" / "scripts" / "run_workflow.py"
+                for version in sorted(plugin_root.iterdir(), key=version_sort_key, reverse=True)
+                if version.is_dir()
+            )
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    searched = "\n".join(f"- {candidate}" for candidate in candidates)
+    raise RuntimeError(f"Adding a service requires the server-side-swift workspace-service-component adapter from the Socket marketplace. Searched:\n{searched}")
+
+
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument("--name")
@@ -71,7 +89,11 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--dry-run", action="store_true")
     result.add_argument("--skip-validation", action="store_true")
     result.add_argument("--repo-root", help="Align an existing canonical workspace root instead of creating a new product.")
-    result.add_argument("--operation", choices=("create", "align"), default="create")
+    result.add_argument("--operation", choices=("create", "add-component", "align"), default="create")
+    result.add_argument("--component-kind", choices=("app", "library", "service"))
+    result.add_argument("--component-name")
+    result.add_argument("--platform", choices=tuple(SUPPORTED_PLATFORMS))
+    result.add_argument("--framework", choices=("hummingbird", "vapor"))
     return result
 
 
@@ -95,18 +117,19 @@ def marker_state(content: str, begin: str = MANAGED_BEGIN, end: str = MANAGED_EN
     return "invalid"
 
 
-def workspace_findings(root: Path) -> list[str]:
+def workspace_findings(root: Path, allow_missing_services: bool = False) -> list[str]:
     findings: list[str] = []
     if len(list(root.glob("*.xcworkspace"))) != 1:
         findings.append("Expected exactly one root .xcworkspace.")
     if len(list(root.glob("*.xcodeproj"))) != 1:
         findings.append("Expected exactly one generated root .xcodeproj.")
-    required = ("project.yml", "Apps/apps-shared.yml", "Apps/Apps-shared.xcconfig", "Packages/packages-shared.yml")
+    required = ["project.yml", "Apps/apps-shared.yml", "Apps/Apps-shared.xcconfig", "Packages/packages-shared.yml"]
+    if not allow_missing_services:
+        required.append("Services/services-shared.yml")
     findings.extend(f"Expected {path}." for path in required if not (root / path).is_file())
-    if not list((root / "Apps").glob("**/target.y*ml")):
-        findings.append("Expected at least one target.yml under Apps/.")
-    if not list((root / "Packages").glob("**/Package.swift")):
-        findings.append("Expected at least one Package.swift under Packages/.")
+    components = list((root / "Apps").glob("**/target.y*ml")) + list((root / "Packages").glob("**/Package.swift")) + list((root / "Services").glob("**/Package.swift"))
+    if not components:
+        findings.append("Expected at least one component under Apps/, Packages/, or Services/.")
     return findings
 
 
@@ -132,12 +155,12 @@ def align_script() -> str:
         "#!/usr/bin/env sh", "set -eu",
         "base=${SOCKET_TEMPLATE_BASE_URL:-https://raw.githubusercontent.com/gaelic-ghost/socket/main/plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/assets/managed-guidance}",
         "tmp=$(mktemp -d)", "trap 'rm -r \"$tmp\"' EXIT HUP INT TERM",
-        "for file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md pre-commit; do curl --fail --silent --show-error \"$base/$file\" -o \"$tmp/$file\"; done",
-        "for file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md CONTRIBUTING.md; do [ \"$(grep -c 'socket-managed:begin' \"$tmp/$file\")\" -eq 1 ] && [ \"$(grep -c 'socket-managed:end' \"$tmp/$file\")\" -eq 1 ] || { echo \"just align: remote $file has invalid managed markers; no files were changed.\" >&2; exit 1; }; done",
+        "for file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md AGENTS-services.md CONTRIBUTING.md pre-commit; do curl --fail --silent --show-error \"$base/$file\" -o \"$tmp/$file\"; done",
+        "for file in AGENTS-root.md AGENTS-apps.md AGENTS-packages.md AGENTS-services.md CONTRIBUTING.md; do [ \"$(grep -c 'socket-managed:begin' \"$tmp/$file\")\" -eq 1 ] && [ \"$(grep -c 'socket-managed:end' \"$tmp/$file\")\" -eq 1 ] || { echo \"just align: remote $file has invalid managed markers; no files were changed.\" >&2; exit 1; }; done",
         "[ -s \"$tmp/pre-commit\" ] || { echo \"just align: remote pre-commit hook is empty; no files were changed.\" >&2; exit 1; }",
-        "for file in AGENTS.md Apps/AGENTS.md Packages/AGENTS.md CONTRIBUTING.md; do [ \"$(grep -c 'socket-managed:begin' \"$file\")\" -eq 1 ] && [ \"$(grep -c 'socket-managed:end' \"$file\")\" -eq 1 ] || { echo \"just align: $file has invalid managed markers; no files were changed.\" >&2; exit 1; }; done",
+        "for file in AGENTS.md Apps/AGENTS.md Packages/AGENTS.md Services/AGENTS.md CONTRIBUTING.md; do [ \"$(grep -c 'socket-managed:begin' \"$file\")\" -eq 1 ] && [ \"$(grep -c 'socket-managed:end' \"$file\")\" -eq 1 ] || { echo \"just align: $file has invalid managed markers; no files were changed.\" >&2; exit 1; }; done",
         "replace() { source=$1; destination=$2; awk -v replacement=\"$source\" '/<!-- socket-managed:begin/ { while ((getline line < replacement) > 0) { print line; if (line ~ /<!-- socket-managed:end/) break }; in_managed=1; next } in_managed { if (/<!-- socket-managed:end/) in_managed=0; next } { print }' \"$destination\" > \"$tmp/out\"; mv \"$tmp/out\" \"$destination\"; }",
-        "replace \"$tmp/AGENTS-root.md\" AGENTS.md", "replace \"$tmp/AGENTS-apps.md\" Apps/AGENTS.md", "replace \"$tmp/AGENTS-packages.md\" Packages/AGENTS.md", "replace \"$tmp/CONTRIBUTING.md\" CONTRIBUTING.md",
+        "replace \"$tmp/AGENTS-root.md\" AGENTS.md", "replace \"$tmp/AGENTS-apps.md\" Apps/AGENTS.md", "replace \"$tmp/AGENTS-packages.md\" Packages/AGENTS.md", "replace \"$tmp/AGENTS-services.md\" Services/AGENTS.md", "replace \"$tmp/CONTRIBUTING.md\" CONTRIBUTING.md",
         "cp \"$tmp/pre-commit\" .githooks/pre-commit", "chmod +x .githooks/pre-commit", "git config core.hooksPath .githooks", "xcodegen generate --spec project.yml", "",
     ))
 
@@ -154,7 +177,7 @@ def managed_document(source: Path, existing: str | None) -> str:
 
 def install_alignment_runtime(root: Path, dry_run: bool = False) -> list[str]:
     assets = Path(__file__).resolve().parents[1] / "assets" / "managed-guidance"
-    docs = (("AGENTS-root.md", root / "AGENTS.md"), ("AGENTS-apps.md", root / "Apps/AGENTS.md"), ("AGENTS-packages.md", root / "Packages/AGENTS.md"), ("CONTRIBUTING.md", root / "CONTRIBUTING.md"))
+    docs = (("AGENTS-root.md", root / "AGENTS.md"), ("AGENTS-apps.md", root / "Apps/AGENTS.md"), ("AGENTS-packages.md", root / "Packages/AGENTS.md"), ("AGENTS-services.md", root / "Services/AGENTS.md"), ("CONTRIBUTING.md", root / "CONTRIBUTING.md"))
     planned: dict[Path, tuple[str, bool]] = {}
     for source_name, destination in docs:
         if destination.exists() and not destination.is_file():
@@ -185,7 +208,7 @@ def install_alignment_runtime(root: Path, dry_run: bool = False) -> list[str]:
 
 
 def root_spec(name: str, platforms: list[str]) -> str:
-    includes = ["  - path: Apps/apps-shared.yml\n    relativePaths: false", "  - path: Packages/packages-shared.yml\n    relativePaths: false"]
+    includes = ["  - path: Apps/apps-shared.yml\n    relativePaths: false", "  - path: Packages/packages-shared.yml\n    relativePaths: false", "  - path: Services/services-shared.yml\n    relativePaths: false"]
     includes.extend(f"  - path: Apps/{name}{SUPPORTED_PLATFORMS[platform]}/target.yml\n    relativePaths: false" for platform in platforms)
     return "\n".join([
         f"name: {name}", "include:", *includes, "options:",
@@ -194,7 +217,7 @@ def root_spec(name: str, platforms: list[str]) -> str:
         "  deploymentTarget:", "    iOS: \"26.1\"", "    macOS: \"26.1\"", "    tvOS: \"26.1\"", "    watchOS: \"26.1\"", "    visionOS: \"26.1\"",
         "configs:", *(f"  {config}: {'debug' if config == 'Debug' else 'release'}" for config in CONFIGURATIONS), "configFiles:",
         *(f"  {config}: Configurations/{config}.xcconfig" for config in CONFIGURATIONS),
-        "fileGroups:", "  - Apps", "  - Packages", "  - Configurations", "  - Scripts", "  - docs", "",
+        "fileGroups:", "  - Apps", "  - Packages", "  - Services", "  - Configurations", "  - Scripts", "  - docs", "",
     ])
 
 
@@ -257,7 +280,7 @@ def package_spec(name: str) -> str:
 """
 
 
-def target_spec(name: str, platform: str, prefix: str, org: str, team: str) -> str:
+def target_spec(name: str, platform: str, prefix: str, org: str, team: str, core_package: str | None = None) -> str:
     display = SUPPORTED_PLATFORMS[platform]
     target = f"{name}{display}"
     suffix = {"ios": "ios", "macos": "mac", "tvos": "tv", "watchos": "watch", "visionos": "vision"}[platform]
@@ -287,7 +310,7 @@ def target_spec(name: str, platform: str, prefix: str, org: str, team: str) -> s
       DirectDistribution: Apps/{target}/Configurations/DirectDistribution.xcconfig
       AltStore: Apps/{target}/Configurations/AltStore.xcconfig
     dependencies:
-      - package: {name}Core
+      - package: {core_package or name + 'Core'}
   {target}Tests:
     templates: [SwiftTesting]
     platform: {display}
@@ -389,11 +412,102 @@ schemes:
     return spec
 
 
+def workspace_name(root: Path) -> str:
+    match = re.search(r"^name:\s*([A-Za-z][A-Za-z0-9]*)\s*$", (root / "project.yml").read_text(encoding="utf-8"), re.MULTILINE)
+    if not match:
+        raise RuntimeError("project.yml does not declare a canonical alphanumeric workspace name.")
+    return match.group(1)
+
+
+def add_root_include(root: Path, relative_path: str) -> None:
+    project = root / "project.yml"
+    content = project.read_text(encoding="utf-8")
+    if f"path: {relative_path}" in content:
+        return
+    anchor = "options:\n"
+    if anchor not in content:
+        raise RuntimeError("project.yml is missing the options section used as the managed include boundary.")
+    include = f"  - path: {relative_path}\n    relativePaths: false\n"
+    write(project, content.replace(anchor, include + anchor, 1))
+
+
+def ensure_services_surface(root: Path, dry_run: bool = False) -> list[str]:
+    actions: list[str] = []
+    shared = root / "Services/services-shared.yml"
+    if not shared.is_file():
+        actions.append("create Services/services-shared.yml")
+        if not dry_run:
+            write(shared, "packages: {}\n")
+    project = (root / "project.yml").read_text(encoding="utf-8")
+    if "path: Services/services-shared.yml" not in project:
+        actions.append("register Services/services-shared.yml in project.yml")
+        if not dry_run:
+            add_root_include(root, "Services/services-shared.yml")
+    return actions
+
+
+def add_package_mapping(root: Path, group: str, name: str) -> None:
+    shared = root / group / f"{group.lower()}-shared.yml"
+    content = shared.read_text(encoding="utf-8")
+    entry = f"  {name}:\n    path: {group}/{name}\n"
+    if f"  {name}:\n" in content:
+        return
+    if content.strip() == "packages: {}":
+        content = "packages:\n"
+    elif not content.endswith("\n"):
+        content += "\n"
+    write(shared, content + entry)
+
+
+def create_library_component(root: Path, name: str) -> None:
+    component = root / "Packages" / name
+    if component.exists():
+        raise RuntimeError(f"Packages/{name} already exists.")
+    component.mkdir(parents=True)
+    subprocess.run(["swift", "package", "init", "--type", "library", "--name", name, "--enable-swift-testing"], cwd=component, check=True, capture_output=True, text=True)
+    add_package_mapping(root, "Packages", name)
+
+
+def create_app_component(root: Path, product_name: str, component_name: str, platform: str, prefix: str, org: str, team: str) -> None:
+    display = SUPPORTED_PLATFORMS[platform]
+    target = f"{component_name}{display}"
+    app_root = root / "Apps" / target
+    if app_root.exists():
+        raise RuntimeError(f"Apps/{target} already exists.")
+    add_root_include(root, f"Apps/{target}/target.yml")
+    write(app_root / "target.yml", target_spec(component_name, platform, prefix, org, team, f"{product_name}Core"))
+    write(app_root / "Configurations/App.xcconfig", '#include "../../Apps-shared.xcconfig"\nMARKETING_VERSION = 0.0.1\nCODE_SIGN_STYLE = Automatic\n')
+    write(app_root / "Configurations/Version.xcconfig", "DEBUG_BUILD_NUMBER = 1\nRELEASE_BUILD_NUMBER = 1\n")
+    for config in CONFIGURATIONS:
+        build_number = "$(DEBUG_BUILD_NUMBER)" if config == "Debug" else "$(RELEASE_BUILD_NUMBER)"
+        content = '#include "App.xcconfig"\n#include "Version.xcconfig"\nCURRENT_PROJECT_VERSION = ' + build_number + "\n"
+        if config == "Debug":
+            content += "ONLY_ACTIVE_ARCH = YES\n"
+        else:
+            content += "SWIFT_OPTIMIZATION_LEVEL = -O\n"
+        write(app_root / f"Configurations/{config}.xcconfig", content)
+    write(app_root / f"Sources/{prefix}App.swift", f'import SwiftUI\n\n@main\nstruct {prefix}{display}App: App {{\n    var body: some Scene {{ WindowGroup {{ Text("{target}") }} }}\n}}\n')
+    for folder in ("Views", "Datamodels", "Services"):
+        write(app_root / f"Sources/{folder}/.gitkeep", "")
+    write(app_root / "Resources/Info.plist", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string><key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string></dict></plist>\n')
+    write(app_root / f"Resources/{target}.entitlements", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict/></plist>\n')
+    write(app_root / "Resources/Assets.xcassets/Contents.json", '{"info":{"author":"xcode","version":1}}\n')
+    write(app_root / "Resources/Assets.xcassets/AppIcon.appiconset/Contents.json", '{"images":[],"info":{"author":"xcode","version":1}}\n')
+    write(app_root / "Resources/Assets.xcassets/AccentColor.colorset/Contents.json", '{"colors":[],"info":{"author":"xcode","version":1}}\n')
+    write(app_root / "Resources/Localizable.xcstrings", '{"sourceLanguage":"en","strings":{},"version":"1.0"}\n')
+    tests_root = root / "Apps" / f"{target}Tests"
+    write(tests_root / f"Sources/{target}Tests.swift", f'import Testing\n@testable import {target}\n\n@Test func example() {{ #expect(true) }}\n')
+    if platform != "watchos":
+        ui_root = root / "Apps" / f"{target}UITests"
+        write(ui_root / f"Sources/{target}UITests.swift", f'import XCTest\n\nfinal class {target}UITests: XCTestCase {{\n    func testLaunch() {{}}\n}}\n')
+
+
 def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, team: str) -> None:
     write(root / "project.yml", root_spec(name, platforms))
     write(root / "Apps/apps-shared.yml", app_shared_spec())
     write(root / "Apps/Apps-shared.xcconfig", "#include \"../Configurations/Project.xcconfig\"\nASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES\nLOCALIZATION_PREFERS_STRING_CATALOGS = YES\nSTRING_CATALOG_GENERATE_SYMBOLS = YES\n")
     write(root / "Packages/packages-shared.yml", package_spec(name))
+    write(root / "Services/services-shared.yml", "packages: {}\n")
     write(root / "Configurations/Project.xcconfig", "SWIFT_VERSION = 6.0\nSWIFT_STRICT_CONCURRENCY = complete\nSWIFT_APPROACHABLE_CONCURRENCY = YES\nDEAD_CODE_STRIPPING = YES\nENABLE_USER_SCRIPT_SANDBOXING = NO\n")
     for config in CONFIGURATIONS:
         settings = '#include "Project.xcconfig"\n'
@@ -406,9 +520,9 @@ def install(root: Path, name: str, prefix: str, platforms: list[str], org: str, 
     write(root / f"{name}.xcworkspace/contents.xcworkspacedata", f'<?xml version="1.0" encoding="UTF-8"?>\n<Workspace version="1.0">\n  <FileRef location="group:{name}.xcodeproj"/>\n</Workspace>\n')
     (root / "docs").mkdir()
     install_alignment_runtime(root)
-    write(root / "Justfile", (root / "Justfile").read_text(encoding="utf-8") + "\nvalidate:\n  sh Scripts/validate.sh\npackage-test:\n  for manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\ntest target:\n  xcodebuild -workspace *.xcworkspace -scheme \"{{target}}\" test\narchive target channel:\n  sh Scripts/release.sh \"{{target}}\" \"{{channel}}\"\napp-store target:\n  sh Scripts/release.sh \"{{target}}\" app-store\naltstore target:\n  sh Scripts/release.sh \"{{target}}\" altstore\ndirect-distribution target:\n  sh Scripts/release.sh \"{{target}}\" direct-distribution\n")
+    write(root / "Justfile", (root / "Justfile").read_text(encoding="utf-8") + "\nvalidate:\n  sh Scripts/validate.sh\npackage-test:\n  for manifest in Packages/*/Package.swift Services/*/Package.swift; do [ -f \"$manifest\" ] || continue; (cd \"$(dirname \"$manifest\")\" && swift test); done\ntest target:\n  xcodebuild -workspace *.xcworkspace -scheme \"{{target}}\" test\narchive target channel:\n  sh Scripts/release.sh \"{{target}}\" \"{{channel}}\"\napp-store target:\n  sh Scripts/release.sh \"{{target}}\" app-store\naltstore target:\n  sh Scripts/release.sh \"{{target}}\" altstore\ndirect-distribution target:\n  sh Scripts/release.sh \"{{target}}\" direct-distribution\n")
     write(root / "Scripts/increment-build-version.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; configuration=${2:?configuration required}; label=$(printf '%s' \"$configuration\" | tr '[:upper:]' '[:lower:]')\nfile=\"Apps/$target/Configurations/Version.xcconfig\"\ngit rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo \"Build counter requires a Git repository.\" >&2; exit 1; }\n[ \"$configuration\" = Debug ] && key=DEBUG_BUILD_NUMBER || key=RELEASE_BUILD_NUMBER\nvalue=$(awk -F ' = ' -v key=\"$key\" '$1 == key { print $2 }' \"$file\")\n[ -n \"$value\" ] || { echo \"Missing $key in $file\" >&2; exit 1; }\nawk -F ' = ' -v key=\"$key\" -v next=$((value + 1)) 'BEGIN { OFS = \" = \" } $1 == key { $2 = next } { print }' \"$file\" > \"$file.tmp\" && mv \"$file.tmp\" \"$file\"\nstaged=false; unstaged=false; git diff --cached --quiet || staged=true; git diff --quiet || unstaged=true\nif $staged && $unstaged; then git add \"$file\"; echo \"warning: staged build counter update; commit it manually as soon as possible.\" >&2; exit 0; fi\nif $staged; then patch=$(mktemp); git diff --cached --binary > \"$patch\"; git restore --staged :/; git add \"$file\"; git commit -m \"build: increment $target $label build\"; git apply --cached \"$patch\"; rm -f \"$patch\"; else git add \"$file\"; git commit -m \"build: increment $target $label build\"; fi\n", True)
-    write(root / "Scripts/validate.sh", "#!/usr/bin/env sh\nset -eu\nswiftformat --lint --config .swiftformat Apps Packages\nswiftlint lint --config .swiftlint.yml --force-exclude Apps Packages\nxcodegen generate --spec project.yml\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\nxcodebuild -list -workspace \"$workspace\"\nfor manifest in Packages/*/Package.swift; do (cd \"$(dirname \"$manifest\")\" && swift test); done\n", True)
+    write(root / "Scripts/validate.sh", "#!/usr/bin/env sh\nset -eu\nswiftformat --lint --config .swiftformat Apps Packages Services\nswiftlint lint --config .swiftlint.yml --force-exclude Apps Packages Services\nxcodegen generate --spec project.yml\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\nxcodebuild -list -workspace \"$workspace\"\nfor manifest in Packages/*/Package.swift Services/*/Package.swift; do [ -f \"$manifest\" ] || continue; (cd \"$(dirname \"$manifest\")\" && swift test); done\n", True)
     write(root / "Scripts/release.sh", "#!/usr/bin/env sh\nset -eu\ntarget=${1:?target required}; channel=${2:?channel required}\nworkspace=$(find . -maxdepth 1 -type d -name '*.xcworkspace' -print -quit)\ncase \"$channel\" in\n  staging) scheme=\"$target Staging\"; config=Staging ;;\n  app-store) scheme=\"$target App Store\"; config=AppStore ;;\n  altstore) scheme=\"$target AltStore\"; config=AltStore ;;\n  direct-distribution) scheme=\"$target Direct Distribution\"; config=DirectDistribution ;;\n  *) echo \"Unknown release channel: $channel\" >&2; exit 1 ;;\nesac\narchive=\"Build/$target-$channel.xcarchive\"\nxcodebuild -workspace \"$workspace\" -scheme \"$scheme\" -configuration \"$config\" -archivePath \"$archive\" archive\ncase \"$channel\" in\n  app-store) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-app-store\" -exportOptionsPlist Scripts/ExportOptions/AppStore.plist; artifact=$(find \"Build/$target-app-store\" -type f \\( -name '*.ipa' -o -name '*.pkg' \\) -print -quit); [ -n \"$artifact\" ] || { echo \"App Store export produced no IPA or PKG.\" >&2; exit 1; }; case \"$target\" in *macOS) type=osx ;; *) type=ios ;; esac; xcrun altool --upload-app -f \"$artifact\" -t \"$type\" ;;\n  altstore) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-altstore\" -exportOptionsPlist Scripts/ExportOptions/AltStore.plist ;;\n  direct-distribution) xcodebuild -exportArchive -archivePath \"$archive\" -exportPath \"Build/$target-direct\" -exportOptionsPlist Scripts/ExportOptions/DirectDistribution.plist; app=$(find \"Build/$target-direct\" -type d -name '*.app' -print -quit); [ -n \"$app\" ] || { echo \"Direct export produced no app bundle.\" >&2; exit 1; }; dmg=\"Build/$target-direct/$target.dmg\"; hdiutil create -volname \"$target\" -srcfolder \"$app\" -ov -format UDZO \"$dmg\"; xcrun notarytool submit \"$dmg\" --keychain-profile notarytool --wait; xcrun stapler staple \"$dmg\" ;;\nesac\n", True)
     write(root / "Scripts/ExportOptions/AppStore.plist", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>method</key><string>app-store</string></dict></plist>\n')
     write(root / "Scripts/ExportOptions/AltStore.plist", '<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>method</key><string>development</string></dict></plist>\n')
@@ -476,18 +590,54 @@ let package = Package(
 def main() -> int:
     args = parser().parse_args()
     platforms = [item.strip().lower() for item in args.platforms.split(",") if item.strip()]
-    root = Path(args.repo_root).expanduser().resolve() if args.operation == "align" and args.repo_root else ((Path(args.destination).expanduser() / args.name).resolve() if args.name else Path(args.destination).expanduser().resolve())
-    inputs = {"operation": args.operation, "name": args.name, "file_prefix": args.file_prefix, "destination": args.destination, "repo_root": args.repo_root, "platforms": platforms, "org_identifier": args.org_identifier, "development_team": args.development_team, "dry_run": args.dry_run, "skip_validation": args.skip_validation}
+    root = Path(args.repo_root).expanduser().resolve() if args.operation in {"align", "add-component"} and args.repo_root else ((Path(args.destination).expanduser() / args.name).resolve() if args.name else Path(args.destination).expanduser().resolve())
+    inputs = {"operation": args.operation, "name": args.name, "file_prefix": args.file_prefix, "destination": args.destination, "repo_root": args.repo_root, "platforms": platforms, "component_kind": args.component_kind, "component_name": args.component_name, "platform": args.platform, "framework": args.framework, "org_identifier": args.org_identifier, "development_team": args.development_team, "dry_run": args.dry_run, "skip_validation": args.skip_validation}
+    if args.operation == "add-component":
+        if not args.repo_root or not args.component_kind or not args.component_name:
+            return blocked("--repo-root, --component-kind, and --component-name are required with --operation add-component.", inputs)
+        if not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*", args.component_name):
+            return blocked("--component-name must be an alphanumeric Swift identifier beginning with a letter.", inputs)
+        findings = workspace_findings(root, allow_missing_services=True) if root.is_dir() else ["The requested workspace root is not a directory."]
+        if findings:
+            return blocked(" ".join(findings), inputs)
+        if args.component_kind == "app" and not args.platform:
+            return blocked("--platform is required when adding an app component.", inputs)
+        if args.component_kind == "service" and not args.framework:
+            return blocked("--framework is required when adding a service component.", inputs)
+        if not args.dry_run and not shutil.which("xcodegen"):
+            return blocked("XcodeGen is required to regenerate the workspace after adding a component.", inputs)
+        actions = ensure_services_surface(root, dry_run=True) + [f"add {args.component_kind} component {args.component_name}", "regenerate the root XcodeGen project"]
+        if args.dry_run:
+            print(json.dumps({"status": "success", "path_type": "primary", "workspace_root": str(root), "normalized_inputs": inputs, "actions": actions}, indent=2, sort_keys=True))
+            return 0
+        try:
+            ensure_services_surface(root)
+            product = workspace_name(root)
+            if args.component_kind == "library":
+                create_library_component(root, args.component_name)
+            elif args.component_kind == "app":
+                create_app_component(root, product, args.component_name, args.platform, args.file_prefix, args.org_identifier, args.development_team)
+            else:
+                adapter = subprocess.run([str(server_component_runner()), "--repo-root", str(root), "--name", args.component_name, "--framework", args.framework], capture_output=True, text=True, check=False)
+                if adapter.returncode != 0:
+                    raise RuntimeError(f"server component adapter failed:\n{adapter.stdout}\n{adapter.stderr}")
+            generated = subprocess.run(["xcodegen", "generate", "--spec", "project.yml"], cwd=root, capture_output=True, text=True, check=False)
+            if generated.returncode != 0:
+                raise RuntimeError(f"xcodegen generate failed:\n{generated.stderr}")
+            print(json.dumps({"status": "success", "path_type": "primary", "workspace_root": str(root), "normalized_inputs": inputs, "actions": actions, "next_step": "Open the existing root workspace; the new component is part of the same product entrypoint."}, indent=2, sort_keys=True))
+            return 0
+        except (OSError, RuntimeError, subprocess.CalledProcessError) as exc:
+            return blocked(str(exc), inputs)
     if args.operation == "align":
         if not args.repo_root:
             return blocked("--repo-root is required with --operation align.", inputs)
         if not args.dry_run and not shutil.which("xcodegen"):
             return blocked("XcodeGen is required to regenerate an aligned workspace.", inputs)
-        findings = workspace_findings(root) if root.is_dir() else ["The requested workspace root is not a directory."]
+        findings = workspace_findings(root, allow_missing_services=True) if root.is_dir() else ["The requested workspace root is not a directory."]
         if findings:
             return blocked(" ".join(findings), inputs)
         try:
-            actions = install_alignment_runtime(root, args.dry_run)
+            actions = ensure_services_surface(root, args.dry_run) + install_alignment_runtime(root, args.dry_run)
             if not args.dry_run:
                 generated = subprocess.run(["xcodegen", "generate", "--spec", "project.yml"], cwd=root, capture_output=True, text=True, check=False)
                 if generated.returncode != 0:
@@ -502,14 +652,27 @@ def main() -> int:
         return blocked("--name must be an alphanumeric Swift/Xcode identifier beginning with a letter.", inputs)
     if not re.fullmatch(r"[A-Z]{3}", args.file_prefix):
         return blocked("--file-prefix must contain exactly three uppercase ASCII letters.", inputs)
-    if not platforms or any(platform not in SUPPORTED_PLATFORMS for platform in platforms):
+    service_first = args.component_kind == "service"
+    library_first = args.component_kind == "library"
+    component_first = service_first or library_first
+    if component_first:
+        platforms = []
+        inputs["platforms"] = platforms
+        if service_first and not args.framework:
+            return blocked("--framework is required when creating a service-first workspace.", inputs)
+    if (not component_first and not platforms) or any(platform not in SUPPORTED_PLATFORMS for platform in platforms):
         return blocked("--platforms must be a comma-separated subset of ios,macos,tvos,watchos,visionos.", inputs)
     if root.exists() and (not root.is_dir() or any(root.iterdir())):
         return blocked("The product root already contains files; use --operation align --repo-root <existing-root> for a canonical workspace.", inputs)
     xcodegen = shutil.which("xcodegen")
     if not xcodegen:
         return blocked("XcodeGen is required to create the root generated project.", inputs)
-    payload: dict[str, object] = {"status": "success", "path_type": "primary", "workspace_root": str(root), "workspace_path": str(root / f"{args.name}.xcworkspace"), "project_path": str(root / f"{args.name}.xcodeproj"), "normalized_inputs": inputs, "actions": ["create one root XcodeGen project", "create Apps/ target fragments and shared templates", "create Packages/ local Swift package", "create root workspace wrapper"]}
+    actions = ["create one root XcodeGen project", "create Apps/, Packages/, and Services/ component roots", "create Packages/ local Swift package", "create root workspace wrapper"]
+    if service_first:
+        actions.append(f"create Services/{args.component_name or args.name + 'API'} with the {args.framework} workspace adapter")
+    elif library_first:
+        actions.append(f"create Packages/{args.component_name or args.name + 'Core'} as the first product component")
+    payload: dict[str, object] = {"status": "success", "path_type": "primary", "workspace_root": str(root), "workspace_path": str(root / f"{args.name}.xcworkspace"), "project_path": str(root / f"{args.name}.xcodeproj"), "normalized_inputs": inputs, "actions": actions}
     if args.dry_run:
         payload["validation_result"] = "skipped (--dry-run)"
         print(json.dumps(payload, indent=2, sort_keys=True))
@@ -517,6 +680,15 @@ def main() -> int:
     root.mkdir(parents=True)
     try:
         install(root, args.name, args.file_prefix, platforms, args.org_identifier, args.development_team)
+        if library_first and args.component_name and args.component_name != f"{args.name}Core":
+            create_library_component(root, args.component_name)
+        if service_first:
+            adapter_command = [str(server_component_runner()), "--repo-root", str(root), "--name", args.component_name or f"{args.name}API", "--framework", args.framework]
+            if args.skip_validation:
+                adapter_command.append("--skip-validation")
+            adapter = subprocess.run(adapter_command, capture_output=True, text=True, check=False)
+            if adapter.returncode != 0:
+                raise RuntimeError(f"server component adapter failed:\n{adapter.stdout}\n{adapter.stderr}")
         generated = subprocess.run([xcodegen, "generate", "--spec", "project.yml"], cwd=root, capture_output=True, text=True, check=False)
         if generated.returncode != 0:
             raise RuntimeError(f"xcodegen generate failed:\n{generated.stderr}")

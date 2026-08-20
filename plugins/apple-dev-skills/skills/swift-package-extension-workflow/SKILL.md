@@ -32,7 +32,7 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
    - Do not assume the two toolchains expose identical SwiftPM commands, flags, manifest APIs, macro support, or plugin behavior.
 3. Read the relevant official SwiftPM, Swift Evolution, or Apple/Xcode documentation and state the behavior relied on before editing.
 4. Classify the primary extension concern as `build-tool-plugin`, `command-plugin`, `macro`, `traits`, or `generated-source`.
-5. Run `scripts/run_workflow.py` for repo-shape inspection and a non-mutating command plan.
+5. Run `scripts/run_workflow.py` for nearest-package resolution and a non-mutating command plan.
 6. Load only the reference needed for the selected concern:
    - plugins: `references/package-plugins-build-command-and-xcode.md`
    - permissions: `references/plugin-permissions-sandbox-and-outputs.md`
@@ -40,7 +40,7 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
    - traits: `references/package-traits-feature-flags.md`
    - generated files: `references/generated-source-and-build-products.md`
 7. Use `references/cli-command-matrix.md` to keep Swiftly and Xcode commands distinct.
-8. Apply `references/xcode-handoff-conditions.md` before using Xcode-managed execution or changing Xcode-owned project state.
+8. Use Xcode only when the requested operation changes an Xcode scheme, target, build phase, preview, or other Xcode-owned state; co-located Xcode files never change package routing.
 9. Validate the smallest relevant matrix first, then the supported Swift minor window and both host toolchains when the package claims both.
 10. Report the manifest/API floor, selected toolchain, commands run, generated or permission-sensitive outputs, and any handoff.
 
@@ -50,13 +50,12 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
 - `request`: optional natural-language request used to infer `extension_type`.
 - `repo_root`: package path; defaults to the current directory.
 - `toolchain_scope`: `swiftly`, `xcode`, or `both`; defaults to `both` for Apple ecosystem compatibility work.
-- `mixed_root_opt_in`: allow package-first planning when Xcode markers share the package root.
 
 ## Outputs
 
 - `status`: `success`, `handoff`, or `blocked`.
 - `path_type`: `primary` or `fallback`.
-- `output`: extension type, repo shape, toolchain scope, planned commands, evidence requirements, and one next step.
+- `output`: extension type, package context, toolchain scope, planned commands, evidence requirements, and one next step.
 
 ## Guards and Stop Conditions
 
@@ -93,7 +92,6 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
 - `references/swift-macros-package-shape.md`
 - `references/package-traits-feature-flags.md`
 - `references/generated-source-and-build-products.md`
-- `references/xcode-handoff-conditions.md`
 - `references/cli-command-matrix.md`
 
 ### Contract References

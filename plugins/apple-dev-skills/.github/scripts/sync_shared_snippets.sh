@@ -92,8 +92,7 @@ sync_one \
   "$ROOT_DIR/skills/swift-package-build-run-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-testing-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-workflow/references/snippets/apple-swift-package-core.md" \
-  "$ROOT_DIR/skills/bootstrap-swift-package/references/snippets/apple-swift-package-core.md" \
-  "$ROOT_DIR/skills/sync-swift-package-guidance/references/snippets/apple-swift-package-core.md"
+  "$ROOT_DIR/skills/bootstrap-swift-package/references/snippets/apple-swift-package-core.md"
 
 if "$check_mode"; then
   echo "Shared snippet skill-local copies are in sync."

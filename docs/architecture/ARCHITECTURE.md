@@ -134,7 +134,6 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:apple-dev-skills/swiftui-component-audit-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swiftui-liquid-glass` (codex-skill) at `plugins/apple-dev-skills/skills/swiftui-liquid-glass/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/swiftui-performance-audit` (codex-skill) at `plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md` depends on: no declared dependencies.
-- `skill:apple-dev-skills/sync-swift-package-guidance` (codex-skill) at `plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/tipkit-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/tips-helpviewer-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:apple-dev-skills/tvos-app-experience-workflow` (codex-skill) at `plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md` depends on: no declared dependencies.
@@ -327,8 +326,6 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:server-side-swift/app-sync-workflow` (codex-skill) at `plugins/server-side-swift/skills/app-sync-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/apple-containerization-workflow` (codex-skill) at `plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/auth-authorization-workflow` (codex-skill) at `plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md` depends on: no declared dependencies.
-- `skill:server-side-swift/bootstrap-hummingbird-service` (codex-skill) at `plugins/server-side-swift/skills/bootstrap-hummingbird-service/SKILL.md` depends on: no declared dependencies.
-- `skill:server-side-swift/bootstrap-vapor-service` (codex-skill) at `plugins/server-side-swift/skills/bootstrap-vapor-service/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/docker-workflow` (codex-skill) at `plugins/server-side-swift/skills/docker-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/fly-io-deployment-workflow` (codex-skill) at `plugins/server-side-swift/skills/fly-io-deployment-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/hummingbird-server-workflow` (codex-skill) at `plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md` depends on: no declared dependencies.
@@ -336,9 +333,10 @@ See [SLICES.md](./SLICES.md) for provable end-to-end code paths.
 - `skill:server-side-swift/observability-tracing-workflow` (codex-skill) at `plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/openapi-rpc-workflow` (codex-skill) at `plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/persistence-workflow` (codex-skill) at `plugins/server-side-swift/skills/persistence-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:server-side-swift/soto-aws-workflow` (codex-skill) at `plugins/server-side-swift/skills/soto-aws-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/swiftnio-workflow` (codex-skill) at `plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md` depends on: no declared dependencies.
-- `skill:server-side-swift/sync-hummingbird-service-guidance` (codex-skill) at `plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md` depends on: no declared dependencies.
 - `skill:server-side-swift/vapor-server-workflow` (codex-skill) at `plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md` depends on: no declared dependencies.
+- `skill:server-side-swift/workspace-service-component` (codex-skill) at `plugins/server-side-swift/skills/workspace-service-component/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/choose-swift-language-tooling` (codex-skill) at `plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/sourcekit-lsp-workflow` (codex-skill) at `plugins/swift-lang/skills/sourcekit-lsp-workflow/SKILL.md` depends on: no declared dependencies.
 - `skill:swift-lang/swift-api-style-workflow` (codex-skill) at `plugins/swift-lang/skills/swift-api-style-workflow/SKILL.md` depends on: no declared dependencies.
@@ -466,7 +464,6 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swiftui-component-audit-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swiftui-liquid-glass/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/swiftui-performance-audit/SKILL.md`.
-- `skill-manifest` evidence from `plugins/apple-dev-skills/skills/sync-swift-package-guidance/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tipkit-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tips-helpviewer-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/apple-dev-skills/skills/tvos-app-experience-workflow/SKILL.md`.
@@ -677,8 +674,6 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/app-sync-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md`.
-- `skill-manifest` evidence from `plugins/server-side-swift/skills/bootstrap-hummingbird-service/SKILL.md`.
-- `skill-manifest` evidence from `plugins/server-side-swift/skills/bootstrap-vapor-service/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/docker-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/fly-io-deployment-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/hummingbird-server-workflow/SKILL.md`.
@@ -686,9 +681,10 @@ The structured visual model lives in [architecture.json](./architecture.json). I
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/observability-tracing-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/openapi-rpc-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/persistence-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/server-side-swift/skills/soto-aws-workflow/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/swiftnio-workflow/SKILL.md`.
-- `skill-manifest` evidence from `plugins/server-side-swift/skills/sync-hummingbird-service-guidance/SKILL.md`.
 - `skill-manifest` evidence from `plugins/server-side-swift/skills/vapor-server-workflow/SKILL.md`.
+- `skill-manifest` evidence from `plugins/server-side-swift/skills/workspace-service-component/SKILL.md`.
 - `codex-plugin-manifest` evidence from `plugins/server-side-swift/.codex-plugin/plugin.json`.
 - `codex-plugin-manifest` evidence from `plugins/spotify/.codex-plugin/plugin.json`.
 - `skill-manifest` evidence from `plugins/swift-lang/skills/choose-swift-language-tooling/SKILL.md`.

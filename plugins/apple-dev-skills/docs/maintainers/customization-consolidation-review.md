@@ -8,11 +8,11 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 
 ## Current State Summary
 
-- The active skill surface ships `63` separate `references/customization.template.yaml` files.
-- The active skill surface ships `63` separate `scripts/customization_config.py` entrypoints.
+- The active skill surface ships `62` separate `references/customization.template.yaml` files.
+- The active skill surface ships `62` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `17` knobs total:
-  - `16` are documented as `runtime-enforced`
+- The current templates expose `16` knobs total:
+  - `15` are documented as `runtime-enforced`
   - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference
@@ -47,7 +47,7 @@ The decision is:
    - A shared runtime import would make the shipped skill depend on repository structure outside the skill.
 3. Treat the duplicated helper plumbing as an authoring and maintenance problem, not as a user-facing architecture problem.
    - If the duplication is still worth reducing after the surface shrinks, use maintainer-time generation or sync into local per-skill copies.
-4. Move toward an inference-first model for defaults that can be derived from the request, repo shape, tool availability, or current environment.
+4. Move toward an inference-first model for defaults that can be derived from the requested component and operation, tool availability, or current environment.
 5. Remove safety invariants and low-value maintainer tuning from the ordinary user-facing customization surface.
 
 ## Knob Classification
@@ -65,8 +65,6 @@ The decision is:
   - `defaultSourceOrder`
 - `format-swift-sources`
   - `defaultToolSelection`
-- `sync-swift-package-guidance`
-  - `writeMode`
 These are the knobs most likely to reflect real user preference instead of hidden implementation detail.
 
 ### Implemented As Inference, Fixed Workflow Defaults, Or Explicit Invocation Inputs
@@ -87,7 +85,7 @@ These are the knobs most likely to reflect real user preference instead of hidde
 - `swift-package-workflow`
   - no ordinary user-facing knobs
 
-These are now better derived from request wording, available tools, repo shape, explicit CLI input, or fixed workflow defaults than held as broad durable user state.
+These are now better derived from request wording, component context, available tools, explicit CLI input, or fixed workflow defaults than held as broad durable user state.
 
 ### Removed From Ordinary User Customization
 
@@ -101,10 +99,12 @@ These are now better derived from request wording, available tools, repo shape, 
   - `dashGenerationPolicy`
 - `format-swift-sources`
   - `preferProjectRootConfigFiles`
-- `sync-swift-package-guidance`
-  - `validationMode`
 
 These are either safety policy, implementation tuning, or maintainer defaults that should not be presented as if they were equally meaningful end-user preference.
+
+The former `sync-swift-package-guidance` customization surface was retired with
+the standalone sync skill. Product guidance now aligns through the root
+workspace's bounded `just align` contract.
 
 ### Reintroduced Runtime Tuning Where It Changes Real Behavior
 
@@ -155,7 +155,7 @@ If the repo still wants less duplication after the surface shrinks, the approved
 The Apple plugin now treats `repository-skills/maintain-project-repo` as the shipped local contract for reusable repo-maintenance behavior.
 
 - `apple-dev-skills` no longer owns a second bundled toolkit source
-- Apple bootstrap and guidance-sync skills stay responsible for Apple repo classification, `AGENTS.md` guidance, and choosing the `swift-package` or `xcode-app` `maintain-project-repo` profile
+- The Xcode workspace bootstrap owns component creation and guidance alignment for every Swift product; repository maintenance consumes that single workspace contract without classifying repositories as Xcode or SwiftPM shapes.
 - SwiftFormat profile assets live in `maintain-project-repo`, while the Apple formatting policy remains in the Apple skill guidance
 
 ## Follow-Up Plan

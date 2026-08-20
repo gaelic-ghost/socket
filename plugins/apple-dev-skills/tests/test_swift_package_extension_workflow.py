@@ -51,14 +51,15 @@ class SwiftPackageExtensionWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["output"]["extension_type"], "macro")
             self.assertIn("swift package init --type macro", payload["output"]["planned_commands"])
 
-    def test_mixed_root_hands_off_to_xcode(self) -> None:
+    def test_xcode_files_do_not_change_package_extension_execution(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             self.package(tmpdir)
             Path(tmpdir, "Demo.xcodeproj").mkdir()
             code, payload = self.run_script("--extension-type", "command-plugin", "--repo-root", tmpdir)
             self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "handoff")
-            self.assertIn("xcode-build-run-workflow", payload["output"]["next_step"])
+            self.assertEqual(payload["status"], "success")
+            self.assertIn("swift package plugin --list", payload["output"]["planned_commands"])
+            self.assertNotIn("mixed_root", payload["output"]["package_context"])
 
     def test_skill_contains_planned_reference_set_and_toolchain_boundary(self) -> None:
         skill_text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
@@ -68,12 +69,14 @@ class SwiftPackageExtensionWorkflowTests(unittest.TestCase):
             "swift-macros-package-shape.md",
             "package-traits-feature-flags.md",
             "generated-source-and-build-products.md",
-            "xcode-handoff-conditions.md",
             "cli-command-matrix.md",
         }
         for reference in references:
             self.assertTrue((SKILL / "references" / reference).is_file())
             self.assertIn(reference, skill_text)
+        shared_routing = ROOT / "shared/execution-surface-routing.md"
+        self.assertTrue(shared_routing.is_file())
+        self.assertIn("co-located Xcode files never change package routing", skill_text)
         self.assertIn("swiftly use --print-location", skill_text)
         self.assertIn("xcrun swift --version", skill_text)
 

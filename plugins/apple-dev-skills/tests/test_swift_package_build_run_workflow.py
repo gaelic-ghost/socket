@@ -26,7 +26,7 @@ class SwiftPackageBuildRunWorkflowTests(unittest.TestCase):
         )
         return proc.returncode, json.loads(proc.stdout)
 
-    def test_succeeds_for_plain_package_build(self) -> None:
+    def test_succeeds_for_package_build(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             code, payload = self.run_script("--operation-type", "build", "--repo-root", tmpdir)
@@ -50,14 +50,15 @@ class SwiftPackageBuildRunWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "handoff")
             self.assertIn("swift-package-extension-workflow", payload["output"]["next_step"])
 
-    def test_handoffs_mixed_root_without_opt_in(self) -> None:
+    def test_xcode_files_do_not_change_swiftpm_build_execution(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             Path(tmpdir, "Demo.xcodeproj").mkdir()
             code, payload = self.run_script("--operation-type", "build", "--repo-root", tmpdir)
             self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "handoff")
-            self.assertIn("xcode-build-run-workflow", payload["output"]["next_step"])
+            self.assertEqual(payload["status"], "success")
+            self.assertEqual(payload["output"]["planned_commands"], ["swift build"])
+            self.assertNotIn("mixed_root", payload["output"]["package_context"])
 
     def test_infers_nested_package_root_and_target_context(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -67,7 +68,7 @@ class SwiftPackageBuildRunWorkflowTests(unittest.TestCase):
             code, payload = self.run_script("--operation-type", "run", "--repo-root", str(package_root / "Sources" / "DemoTool"))
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["output"]["repo_shape"]["reason"], "package-root-inferred")
+            self.assertEqual(payload["output"]["package_context"]["reason"], "package-root-inferred")
             self.assertEqual(payload["output"]["inferred_context"]["primary_target"], "DemoTool")
             self.assertEqual(payload["output"]["planned_commands"][0], "swift run DemoTool")
 

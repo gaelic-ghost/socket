@@ -16,15 +16,15 @@ allowed-tools: Read Bash(rg:*) Bash(git:*) Bash(swift:*) Bash(docker:*) Bash(cur
 
 Build, modify, test, or diagnose Docker support for a server-side Swift service.
 
-The practical decision is which Swift executable becomes the container entry point, which Linux base image builds it, which slimmer runtime image ships it, how environment reaches the service, how local dependencies run through Compose, and which command proves the image starts and answers the expected service surface.
+The practical decision is which Swift executable becomes the container entry point, which Linux base image builds it, which runtime image ships it, how environment reaches the service, and which GitHub Actions job proves the image starts and answers the expected service surface.
 
 ## When To Use
 
-- Use this skill when adding or changing a `Dockerfile`, `.dockerignore`, `compose.yaml`, `docker-compose.yml`, image build command, container entry point, local database service, or container runtime configuration for a server-side Swift package.
-- Use this skill when diagnosing `docker build`, `docker run`, `docker compose`, Linux dependency, architecture, permissions, port binding, environment, or image-size problems in a Swift service.
+- Use this skill when authoring a `Dockerfile`, `.dockerignore`, image build command, container entry point, or GitHub Actions image validation for a server-side Swift component.
+- For Gale-owned product repositories, diagnose builds from GitHub Actions logs and artifacts. Do not reproduce the Linux build with local Docker, Compose, Colima, a container machine, or a VM.
 - Use this skill when preparing a Vapor or Hummingbird service for a generic Docker-compatible runtime, registry, CI image build, or hosted Linux deployment.
 - Use this skill when deciding whether Docker belongs in the current change or should stay a deployment handoff.
-- Use `bootstrap-vapor-service` or `bootstrap-hummingbird-service` instead when the Docker work is the CLI-generated Dockerfile, CLI-generated Compose file, or default local PostgreSQL Compose surface for a fresh service.
+- Use the workspace service adapter for a fresh service. A generated Dockerfile is GitHub Actions cloud-build input; Compose is not a local development surface.
 - Do not use this skill for normal Vapor routes, Hummingbird routes, persistence models, OpenAPI contracts, or SwiftPM package work unless container behavior is the reason for the change.
 - Do not use this skill for Apple's `container` CLI or Containerization Swift APIs unless the task is a comparison with Docker. Use `apple-containerization-workflow` for Apple Containerization work.
 
@@ -75,7 +75,7 @@ Use `cloud-deployment-skills:dockerized-service-release-deployment-workflow` whe
 
 ## Runtime And Build-Session Policy
 
-Before a Docker or Compose command, inspect the configured Docker-compatible runtime and the deployment target platform. When the requested local workflow requires an installed runtime that is stopped, start that existing runtime as a normal implementation step after announcing the resource-intensive action; do not misclassify its stopped state as a permission boundary or silently install a replacement runtime.
+Run Docker, BuildKit, and image-smoke-test commands in GitHub Actions only for Gale-owned product repositories. On the Mac, inspect and edit definitions, run native Swift checks, and read CI logs; do not start or install a container runtime.
 
 Treat the actual child build process as the source of truth. A wrapper, editor task, or orchestration command returning does not prove its spawned SwiftPM, Docker, Compose, or package-manager process has exited. Before another build, test, package, or package-manager command, confirm the prior child process is finished. If it remains active, report the owning command and wait; do not start a duplicate invocation against the same `.build` directory or Docker runtime.
 
@@ -131,11 +131,11 @@ Do not add a health check endpoint just to satisfy Docker if the service does no
 
 ## Compose Shape
 
-Use Compose when local development needs multiple services, such as a Swift app plus Postgres, Redis, or another dependency.
+Do not use Compose for Gale-owned product development. Run Postgres, Redis, and other supported local dependencies natively through Homebrew services.
 
-For fresh Vapor and Hummingbird services, CLI-generated Docker files and Compose-local PostgreSQL are part of the bootstrap baseline. Keep that baseline in `bootstrap-vapor-service` and `bootstrap-hummingbird-service`; use this skill when the generated container stack needs to change beyond the default local database or when registry publishing, CI image builds, deployment runtime, or nonstandard image hardening needs design.
+For Gale-owned product repositories, Dockerfiles and OCI definitions are cloud-build inputs only. GitHub Actions owns Linux image builds, registry publishing, deployment validation, and production artifacts. Local dependencies run natively through Homebrew services; do not provide a local Compose or image-smoke-test path.
 
-When adding or editing Compose files:
+For an explicitly unrelated repository whose own contract requires Compose:
 
 - name the Swift service, dependency services, ports, volumes, networks, and health checks plainly
 - keep local-only credentials fake, documented, and scoped to development
@@ -172,7 +172,7 @@ Prefer this order:
 4. Run the container with explicit port and environment values.
 5. Inspect the final image enough to catch root-user, missing-resource, entry-point, or accidental-debug-tool problems when production readiness is in scope.
 6. Use `curl` against the running service only when runtime HTTP behavior matters.
-7. Use `docker compose up --build` only when multiple services are part of the behavior being proven.
+7. Run the image smoke test in the owning GitHub Actions build job against the image identity that job produced.
 
 When a Docker command fails, report the exact image, stage, instruction, service, port, environment variable, or mounted path involved. Include the likely cause, such as a Swift toolchain mismatch, missing Linux package, wrong executable name, wrong working directory, missing resource copy, architecture mismatch, bad secret path, or service dependency not ready.
 

@@ -208,7 +208,6 @@ uv run pytest
 - `swiftui-component-audit-workflow`
 - `swiftui-liquid-glass`
 - `swiftui-performance-audit`
-- `sync-swift-package-guidance`
 - `xcode-app-project-workflow`
 - `xcode-build-run-workflow`
 - `xcode-coding-intelligence-workflow`

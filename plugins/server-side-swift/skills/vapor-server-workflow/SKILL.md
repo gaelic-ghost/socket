@@ -1,6 +1,6 @@
 ---
 name: vapor-server-workflow
-description: Plan, build, run, test, and diagnose existing Vapor server-side Swift services using current Vapor documentation, SwiftPM-first commands, routing, middleware, Fluent migrations, Vapor 5 alpha adoption posture, environment configuration, and deployment handoffs. Hand fresh service creation to bootstrap-vapor-service.
+description: Plan, build, run, test, and diagnose Vapor components under Services/ in the canonical product workspace. Hand fresh component creation and guidance alignment to the workspace service adapter.
 license: Apache-2.0
 compatibility: Designed for Codex and compatible Agent Skills clients working with Vapor, SwiftPM, and server-side Swift projects on macOS or Linux.
 metadata:
@@ -20,7 +20,8 @@ The practical decision is what the HTTP service exposes, which target owns the V
 
 ## When To Use
 
-- Use `bootstrap-vapor-service` when creating a new Vapor service with the Vapor Toolbox.
+- Use `apple-dev-skills:bootstrap-xcode-workspace --operation add-component --component-kind service --framework vapor` for a new Vapor component.
+- Use `soto-aws-workflow` when the component needs AWS service access.
 - Use this skill when evaluating or migrating toward Vapor 5 alpha, but keep alpha work explicitly experimental until Vapor publishes a stable Vapor 5 release and migration path.
 - Use this skill when modifying Vapor routes, route groups, controllers, middleware, app configuration, commands, migrations, or local server behavior.
 - Use `leaf-rendered-web-workflow` when the Vapor work is primarily a Leaf-rendered website, HTML email, page context, layout, partial component, custom tag, rendered HTML, public asset, or template-cache concern.
@@ -71,7 +72,7 @@ For Vapor 5, treat GitHub releases and tagged source as the authoritative alpha 
    - hand Leaf-rendered website or HTML email behavior to `leaf-rendered-web-workflow` when templates, contexts, composition, escaping, accessibility, assets, or rendered HTML are the primary concern
 3. Confirm the documented command path before running or recommending commands.
 4. Keep SwiftPM as the default execution surface after creation:
-   - hand fresh service creation to `bootstrap-vapor-service`
+   - hand fresh service creation to the canonical workspace add-component entrypoint
    - build with `swift build`
    - test with `swift test`
    - run locally with `swift run` or `swift run App serve`
@@ -108,7 +109,7 @@ Before recommending or adding any package:
 
 ## Project Creation Handoff
 
-Fresh Vapor services belong to `bootstrap-vapor-service`. That bootstrap path starts with the official Vapor CLI, uses Vapor's built-in `Environment` system, defaults to Fluent ORM with PostgreSQL, creates a Docker Compose PostgreSQL dependency surface, and installs repo-local `AGENTS.md` guidance for the generated service.
+Fresh Vapor services belong to the canonical workspace add-component entrypoint. Its server adapter starts with Vapor Toolbox, uses Vapor `Environment`, defaults to Fluent ORM with PostgreSQL, and uses native Homebrew services locally.
 
 Use this default creation path only as part of the bootstrap workflow:
 
@@ -239,4 +240,4 @@ Return:
 - Do not run migration reverts or destructive database commands without explicit user approval.
 - Do not claim Vapor CLI behavior from memory when current official docs can be checked.
 - Do not use obsolete Vapor Toolbox command habits when SwiftPM is the documented path for the task.
-- Do not bootstrap fresh Vapor services manually; use `bootstrap-vapor-service` unless Gale explicitly approves an exception.
+- Do not create a standalone Vapor repository; use the root workspace add-component entrypoint.

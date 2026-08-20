@@ -161,8 +161,6 @@ def xcode_workspace_findings(repo_root: Path) -> list[str]:
     apps_root = repo_root / "Apps"
     if not apps_root.is_dir():
         findings.append("expected Apps/ at the repository root")
-    elif not any(apps_root.glob("**/target.y*ml")):
-        findings.append("expected at least one XcodeGen target spec under Apps/")
 
     if not (repo_root / "project.yml").is_file():
         findings.append("expected root project.yml")
@@ -172,8 +170,17 @@ def xcode_workspace_findings(repo_root: Path) -> list[str]:
     packages_root = repo_root / "Packages"
     if not packages_root.is_dir():
         findings.append("expected Packages/ at the repository root")
-    elif not any(packages_root.glob("**/Package.swift")):
-        findings.append("expected at least one Package.swift under Packages/")
+    services_root = repo_root / "Services"
+    if not services_root.is_dir():
+        findings.append("expected Services/ at the repository root")
+
+    component_found = (
+        any(apps_root.glob("**/target.y*ml"))
+        or any(packages_root.glob("**/Package.swift"))
+        or any(services_root.glob("**/Package.swift"))
+    )
+    if not component_found:
+        findings.append("expected at least one component under Apps/, Packages/, or Services/")
     return findings
 
 
@@ -183,9 +190,9 @@ def ensure_profile_shape(repo_root: Path, profile: str) -> None:
     findings = xcode_workspace_findings(repo_root)
     if findings:
         raise RuntimeError(
-            "The xcode-workspace profile requires a modular Apple workspace: "
+            "The xcode-workspace profile requires a canonical Swift product workspace: "
             + "; ".join(findings)
-            + ". Use xcode-app, swift-package, or generic when this is not the workspace root."
+            + ". Create or align the product through bootstrap-xcode-workspace."
         )
 
 

@@ -18,7 +18,7 @@ Create or audit a durable release contract for a Dockerized backend or cloud ser
 
 The default contract is:
 
-1. Feature worktrees are development-only and may run local tests or image checks.
+1. Feature worktrees are development-only and may run native source tests, but never Linux artifact or image builds.
 2. A clean GitHub Actions checkout of a version tag validates the release commit and builds the published OCI image.
 3. The tag must resolve to a commit reachable from `origin/main`.
 4. The registry digest, tag, commit, image reference, build run, and provenance/SBOM choices are written into a release manifest.
@@ -55,7 +55,7 @@ Translate those sources into the actual project choices: registry, tag policy, e
 
 Before starting an image build, record the deployment target's architecture, operating system, available memory, disk capacity, container runtime, and any provider constraints. Select the OCI platform from that evidence. For example, an Apple-silicon developer machine targeting an x86-64 Linux host builds `linux/amd64`; do not let the developer machine's architecture choose the release artifact by accident.
 
-Build release images in a clean CI checkout by default. A developer machine may run a bounded local image check when the user requested it and the target platform is already known, but a production host must only pull or load a finished immutable image and run it. Do not clone application source, resolve dependencies, compile Swift, or run `docker build` on a small production VPS unless the user explicitly directs that exceptional path.
+Build every cloud Linux archive and OCI image in a clean GitHub Actions checkout. Developer machines and production hosts must not build, cross-compile, or smoke-test cloud images. Record OCI artifacts by registry digest and record archive artifacts by SHA-256 checksum in the release manifest; deployment must consume that exact recorded identity. A production host may only pull or load a finished immutable artifact and run it. Do not clone application source, resolve dependencies, compile Swift, or run `docker build` on a production host.
 
 One build owns its Docker client session until it exits. Preserve the original progress-producing shell or durable log stream; do not replace it with blind polling. When an agent must return for a build, GitHub Action, deployment approval, or health gate, it records the immutable identity (tag, digest, run, environment, and target), reuses a live matching host-native continuation while the gate remains pending and healthy, and performs one fresh inspection on wakeup. Continue only if every recorded identity equals the fresh tag, digest, run, environment, and target; on any mismatch, stop and create a new continuation packet rather than build, deploy, diagnose, roll back, or otherwise advance. Do not delete/recreate the continuation after an unchanged snapshot; create/update only after it fires or becomes stale, with at least five minutes between rechecks. Codex uses heartbeat; Hermes uses a continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`. Pause/delete it when the gate resolves, fails, is cancelled, or its identity changes. Do not leave a shell waiting or create a one-to-four-minute polling loop. While that build is active, do not run Docker status, image-inspection, build-history, Buildx, Compose, or second-build commands unless the runtime explicitly documents concurrent client access as safe. If an orchestration wrapper returns before its child exits, inspect the real process rather than trusting the wrapper result, report that the build is still active, and wait before starting another package-manager or container command.
 
@@ -70,7 +70,7 @@ Confirm these decisions. Stop rather than silently choosing a production target:
 - registry and image name
 - supported target platform or platforms
 - tag pattern and the protected integration branch, normally `main`
-- repository validation command and image smoke-test command
+- native repository validation command and GitHub Actions image smoke-test command
 - GitHub App with only the repository `contents: write` permission; store its client ID as `RELEASE_PUBLISH_APP_CLIENT_ID` and private key as `RELEASE_PUBLISH_APP_PRIVATE_KEY`
 - registry-specific `OCI_REGISTRY_USERNAME` repository variable and `OCI_REGISTRY_PASSWORD` secret, unless the adopting repository deliberately narrows the template to GHCR
 - GitHub `production` environment reviewers, permitted stable tags, and bypass policy
@@ -93,7 +93,7 @@ The shell templates fail closed until a project replaces their placeholders. Do 
 
 ## Release Workflow
 
-1. Create feature work in a branch-backed worktree. Use local checks for feedback only; do not publish a release image from that worktree.
+1. Create feature work in a branch-backed worktree. Use native source checks for feedback only; do not build or publish a Linux release image from that worktree.
 2. Open and merge the reviewed change into `main` through the repository's normal CI and review gates.
 3. Create an annotated SemVer tag from the reviewed `main` commit and push it.
 4. The tag workflow checks out the tag in a clean hosted runner, fetches `origin/main`, and rejects a tag commit that is not reachable from it.
@@ -131,7 +131,7 @@ The deployment workflow must listen only for `release: [published]`. It must not
 Before enabling the workflow:
 
 1. Validate YAML and shell syntax after template substitution.
-2. Run the repository test suite and a local image smoke test for fast feedback.
+2. Run the repository's native test suite locally when appropriate, then run the image build and smoke test only in GitHub Actions.
 3. Use a recognized prerelease tag in a repository with `test` enabled to prove that the Actions runner publishes a GitHub prerelease, produces the manifest and registry digest, and deploys its exact digest to `test`.
 4. Inspect the manifest against the registry and release tag after automated publication.
 5. Confirm a stable tag creates a normal GitHub Release, pauses at `production` approval, and passes `image@sha256:...`, not a tag, to the deployment adapter.

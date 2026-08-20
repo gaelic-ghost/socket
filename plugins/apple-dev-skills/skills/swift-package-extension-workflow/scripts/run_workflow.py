@@ -58,25 +58,20 @@ def resolve_package_root(repo_root: str | None) -> tuple[Path, Path | None]:
     return requested, None
 
 
-def repo_shape(repo_root: str | None) -> dict:
+def package_context(repo_root: str | None) -> dict:
     requested, package_root = resolve_package_root(repo_root)
     scan_root = package_root or requested
-    xcode_markers = []
     plugin_sources = []
     if scan_root.exists():
-        for pattern in ("*.xcodeproj", "*.xcworkspace", "*.pbxproj"):
-            xcode_markers.extend(sorted(str(path) for path in scan_root.rglob(pattern)))
         plugin_dir = scan_root / "Plugins"
         if plugin_dir.exists():
             plugin_sources = sorted(str(path) for path in plugin_dir.rglob("*.swift"))
     return {
         "requested_root": str(requested),
-        "repo_root": str(scan_root),
+        "package_root": str(scan_root) if package_root is not None else None,
         "exists": requested.exists(),
         "has_package": package_root is not None,
-        "xcode_markers": xcode_markers,
         "plugin_sources": plugin_sources,
-        "mixed_root": package_root is not None and bool(xcode_markers),
     }
 
 
@@ -126,7 +121,6 @@ def main() -> int:
     parser.add_argument("--request")
     parser.add_argument("--repo-root")
     parser.add_argument("--toolchain-scope", choices=sorted(TOOLCHAIN_SCOPES), default="both")
-    parser.add_argument("--mixed-root-opt-in", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     customization_config.merge_configs(
@@ -135,30 +129,26 @@ def main() -> int:
     )
 
     extension_type = args.extension_type or infer_extension_type(args.request)
-    shape = repo_shape(args.repo_root)
+    context = package_context(args.repo_root)
     status = "success"
     next_step = "Proceed with the package-first extension plan."
     if extension_type is None:
         status = "blocked"
         next_step = "Pass --extension-type or provide a request that identifies plugin, macro, trait, or generated-source work."
-    elif not shape["exists"]:
+    elif not context["exists"]:
         status = "blocked"
         next_step = "Resolve the requested repository path before continuing."
-    elif not shape["has_package"]:
+    elif not context["has_package"]:
         status = "blocked"
         next_step = "Use a Swift package repository containing Package.swift."
-    elif shape["mixed_root"] and not args.mixed_root_opt_in:
-        status = "handoff"
-        next_step = "Use xcode-build-run-workflow because the package shares a root with Xcode-managed project state."
-
     commands = extension_commands(extension_type, args.toolchain_scope) if extension_type else []
     payload = {
         "status": status,
-        "path_type": "primary" if status != "handoff" else "fallback",
+        "path_type": "primary",
         "output": {
             "extension_type": extension_type,
             "extension_type_source": "explicit" if args.extension_type else "inferred" if extension_type else "missing",
-            "repo_shape": shape,
+            "package_context": context,
             "toolchain_scope": args.toolchain_scope,
             "planned_commands": commands,
             "support_window": {"minimum": "6.2", "policy": "latest stable minor plus previous stable minor"},

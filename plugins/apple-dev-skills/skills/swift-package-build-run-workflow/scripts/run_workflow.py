@@ -93,29 +93,24 @@ def infer_package_root(repo_root: str | None) -> tuple[Path, Path | None]:
     return requested, None
 
 
-def discover_repo_shape(repo_root: str | None) -> dict:
+def discover_package_context(repo_root: str | None) -> dict:
     requested_root, package_root = infer_package_root(repo_root)
     if not requested_root.exists():
         return {
             "requested_root": str(requested_root),
-            "repo_root": str(requested_root),
+            "package_root": None,
             "exists": False,
             "has_package": False,
-            "xcode_markers": [],
             "xctestplans": [],
             "metal_sources": [],
             "metal_libraries": [],
             "source_targets": [],
             "test_targets": [],
-            "mixed_root": False,
             "reason": "repo-root-missing",
         }
 
     scan_root = package_root or requested_root
     has_package = package_root is not None
-    markers: list[str] = []
-    for suffix in ("*.xcodeproj", "*.xcworkspace", "*.pbxproj"):
-        markers.extend(first_matching_file(scan_root, suffix))
     sources_dir = scan_root / "Sources"
     tests_dir = scan_root / "Tests"
     source_targets = sorted(path.name for path in sources_dir.iterdir() if path.is_dir()) if sources_dir.exists() else []
@@ -126,16 +121,14 @@ def discover_repo_shape(repo_root: str | None) -> dict:
 
     return {
         "requested_root": str(requested_root),
-        "repo_root": str(scan_root),
+        "package_root": str(scan_root) if has_package else None,
         "exists": True,
         "has_package": has_package,
-        "xcode_markers": markers,
         "xctestplans": xctestplans,
         "metal_sources": metal_sources,
         "metal_libraries": metal_libraries,
         "source_targets": source_targets,
         "test_targets": test_targets,
-        "mixed_root": has_package and bool(markers),
         "reason": (
             "package-root-inferred"
             if has_package and scan_root != requested_root
@@ -146,8 +139,8 @@ def discover_repo_shape(repo_root: str | None) -> dict:
     }
 
 
-def inferred_package_name(repo_shape: dict) -> str | None:
-    root = repo_shape.get("repo_root")
+def inferred_package_name(package_context: dict) -> str | None:
+    root = package_context.get("package_root")
     return Path(root).name if root else None
 
 
@@ -172,10 +165,10 @@ def request_mentions_resources(request: str | None) -> bool:
     )
 
 
-def infer_build_run_handoff(repo_shape: dict, request: str | None, operation_type: str) -> str | None:
+def infer_build_run_handoff(package_context: dict, request: str | None, operation_type: str) -> str | None:
     text = normalize_request_text(request)
     if operation_type in {"build", "run", "toolchain-management", "manifest-dependencies"}:
-        if repo_shape["metal_sources"] and any(
+        if package_context["metal_sources"] and any(
             token in text
             for token in (
                 " metal ",
@@ -187,9 +180,9 @@ def infer_build_run_handoff(repo_shape: dict, request: str | None, operation_typ
             )
         ):
             return "Use xcode-build-run-workflow because this request touches Metal compilation or Apple-managed Metal toolchain behavior."
-        if repo_shape["xctestplans"] and "test plan" in text:
+        if package_context["xctestplans"] and "test plan" in text:
             return "Use xcode-build-run-workflow because this package repo already carries .xctestplan coverage and the request is crossing into Xcode-managed package behavior."
-        if repo_shape["xcode_markers"] and any(
+        if any(
             token in text
             for token in (
                 " xcode target",
@@ -204,8 +197,8 @@ def infer_build_run_handoff(repo_shape: dict, request: str | None, operation_typ
     return None
 
 
-def build_commands(operation_type: str, repo_shape: dict, request: str | None) -> list[str]:
-    inferred_target = repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else "<target>"
+def build_commands(operation_type: str, package_context: dict, request: str | None) -> list[str]:
+    inferred_target = package_context["source_targets"][0] if len(package_context["source_targets"]) == 1 else "<target>"
     resource_focused = request_mentions_resources(request)
     if operation_type == "package-inspection":
         return ["swift package describe", "swift package dump-package"]
@@ -227,7 +220,7 @@ def build_commands(operation_type: str, repo_shape: dict, request: str | None) -
             commands.append("swift package dump-package")
             commands.append("Verify Package.swift resource declarations for Resource.process(...), Resource.copy(...), or Resource.embedInCode(...).")
             commands.append("Verify resource loading paths use Bundle.module and that test fixtures stay under the owning test target.")
-        if repo_shape["metal_libraries"]:
+        if package_context["metal_libraries"]:
             commands.append("Verify bundled .metallib resources are declared intentionally in Package.swift and loaded through Bundle.module.")
         return commands
     if operation_type == "run":
@@ -239,7 +232,7 @@ def build_commands(operation_type: str, repo_shape: dict, request: str | None) -
         return ["swift package plugin --list"]
     if operation_type == "toolchain-management":
         commands = ["swift --version", "swift package --help", "xcrun --find swift"]
-        if repo_shape["metal_sources"] or repo_shape["metal_libraries"]:
+        if package_context["metal_sources"] or package_context["metal_libraries"]:
             commands.append("xcrun --find metal")
         return commands
     if operation_type == "mutation":
@@ -255,7 +248,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--operation-type", choices=sorted(VALID_OPERATION_TYPES))
     parser.add_argument("--request")
     parser.add_argument("--repo-root")
-    parser.add_argument("--mixed-root-opt-in", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser
 
@@ -274,7 +266,7 @@ def main() -> int:
             "output": {
                 "operation_type": None,
                 "operation_type_source": "missing",
-                "repo_shape": discover_repo_shape(args.repo_root),
+                "package_context": discover_package_context(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Pass --operation-type explicitly or provide --request text that makes the intended SwiftPM workflow obvious.",
             },
@@ -289,7 +281,7 @@ def main() -> int:
             "output": {
                 "operation_type": operation_type,
                 "operation_type_source": "explicit" if args.operation_type else "inferred",
-                "repo_shape": discover_repo_shape(args.repo_root),
+                "package_context": discover_package_context(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Use swift-package-testing-workflow because this request is primarily about package tests.",
             },
@@ -304,7 +296,7 @@ def main() -> int:
             "output": {
                 "operation_type": operation_type,
                 "operation_type_source": "explicit" if args.operation_type else "inferred",
-                "repo_shape": discover_repo_shape(args.repo_root),
+                "package_context": discover_package_context(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Use swift-package-extension-workflow because this request is primarily about a package plugin, macro, trait, generated source, or plugin permission.",
             },
@@ -312,21 +304,18 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
 
-    repo_shape = discover_repo_shape(args.repo_root)
+    package_context = discover_package_context(args.repo_root)
     status = "success"
     path_type = "primary"
     next_step = "Proceed with the SwiftPM-first path."
-    specialized_handoff = infer_build_run_handoff(repo_shape, args.request, operation_type)
+    specialized_handoff = infer_build_run_handoff(package_context, args.request, operation_type)
 
-    if not repo_shape["exists"]:
+    if not package_context["exists"]:
         status = "blocked"
         next_step = "Resolve the repo root before continuing."
-    elif not repo_shape["has_package"]:
+    elif not package_context["has_package"]:
         status = "blocked"
         next_step = "Use a Swift package repo with Package.swift at the selected root."
-    elif repo_shape["mixed_root"] and not args.mixed_root_opt_in:
-        status = "handoff"
-        next_step = "Use xcode-build-run-workflow because this repo root is mixed and Xcode-managed behavior may matter."
     elif specialized_handoff:
         status = "handoff"
         next_step = specialized_handoff
@@ -337,14 +326,14 @@ def main() -> int:
         "output": {
             "operation_type": operation_type,
             "operation_type_source": "explicit" if args.operation_type else "inferred",
-            "repo_shape": repo_shape,
-            "planned_commands": build_commands(operation_type, repo_shape, args.request),
+            "package_context": package_context,
+            "planned_commands": build_commands(operation_type, package_context, args.request),
             "inferred_context": {
-                "package_name": inferred_package_name(repo_shape),
-                "primary_target": repo_shape["source_targets"][0] if len(repo_shape["source_targets"]) == 1 else None,
-                "has_xcode_test_plan": bool(repo_shape["xctestplans"]),
-                "has_metal_sources": bool(repo_shape["metal_sources"]),
-                "has_bundled_metallib": bool(repo_shape["metal_libraries"]),
+                "package_name": inferred_package_name(package_context),
+                "primary_target": package_context["source_targets"][0] if len(package_context["source_targets"]) == 1 else None,
+                "has_xcode_test_plan": bool(package_context["xctestplans"]),
+                "has_metal_sources": bool(package_context["metal_sources"]),
+                "has_bundled_metallib": bool(package_context["metal_libraries"]),
                 "resource_request": request_mentions_resources(args.request),
             },
             "next_step": next_step,

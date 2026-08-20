@@ -16,7 +16,6 @@ from pathlib import Path
 import customization_config
 
 
-VALID_REPOSITORY_KINDS = {"swift-package", "xcode-app-project", "mixed"}
 VALID_CLEANUP_KINDS = {
     "repo-layout-cleanup",
     "large-file-split",
@@ -98,7 +97,6 @@ def detect_repo_state(repo_path: str | None) -> dict:
             "workspace": None,
             "project": None,
             "swift_files": 0,
-            "mixed_root": False,
         }
 
     requested = Path(repo_path).expanduser().resolve()
@@ -113,7 +111,6 @@ def detect_repo_state(repo_path: str | None) -> dict:
             "workspace": None,
             "project": None,
             "swift_files": 0,
-            "mixed_root": False,
         }
 
     candidate = existing if existing.is_dir() else existing.parent
@@ -130,24 +127,7 @@ def detect_repo_state(repo_path: str | None) -> dict:
         "workspace": str(workspaces[0]) if workspaces else None,
         "project": str(projects[0]) if projects else None,
         "swift_files": len(swift_files),
-        "mixed_root": bool(package_manifest.exists() and (workspaces or projects)),
     }
-
-
-def infer_repository_kind(repo_state: dict, request: str | None) -> str | None:
-    if repo_state.get("mixed_root"):
-        return "mixed"
-    if repo_state.get("workspace") or repo_state.get("project"):
-        return "xcode-app-project"
-    if repo_state.get("package_manifest"):
-        return "swift-package"
-
-    text = normalize_request_text(request)
-    if "swift package" in text or "package.swift" in text or "swiftpm" in text:
-        return "swift-package"
-    if "xcode" in text or ".xcodeproj" in text or "workspace" in text:
-        return "xcode-app-project"
-    return None
 
 
 def load_effective_config() -> dict:
@@ -203,7 +183,6 @@ def helper_scripts_for(cleanup_kind: str) -> list[str]:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-path")
-    parser.add_argument("--repository-kind", choices=sorted(VALID_REPOSITORY_KINDS))
     parser.add_argument("--cleanup-kind", choices=sorted(VALID_CLEANUP_KINDS))
     parser.add_argument("--target-scope")
     parser.add_argument("--split-mode", choices=sorted(VALID_SPLIT_MODES))
@@ -216,8 +195,6 @@ def main() -> int:
     args = build_parser().parse_args()
     settings = validated_runtime_settings()
     repo_state = detect_repo_state(args.repo_path)
-    repository_kind = args.repository_kind or infer_repository_kind(repo_state, args.request)
-    repository_kind_source = "explicit" if args.repository_kind else ("inferred" if repository_kind else "missing")
     cleanup_kind = args.cleanup_kind or infer_cleanup_kind(args.request)
     cleanup_kind_source = "explicit" if args.cleanup_kind else ("inferred" if cleanup_kind else "missing")
     request_text = normalize_request_text(args.request)
@@ -227,8 +204,6 @@ def main() -> int:
             "status": "handoff",
             "path_type": "primary",
             "output": {
-                "repository_kind": repository_kind,
-                "repository_kind_source": repository_kind_source,
                 "cleanup_kind": cleanup_kind,
                 "cleanup_kind_source": cleanup_kind_source,
                 "repo_state": repo_state,
@@ -252,10 +227,8 @@ def main() -> int:
     if request_implies_xcode_execution_handoff(request_text):
         payload = {
             "status": "handoff",
-            "path_type": "primary" if repository_kind_source != "missing" else "fallback",
+            "path_type": "primary",
             "output": {
-                "repository_kind": repository_kind,
-                "repository_kind_source": repository_kind_source,
                 "cleanup_kind": cleanup_kind,
                 "cleanup_kind_source": cleanup_kind_source,
                 "repo_state": repo_state,
@@ -279,10 +252,8 @@ def main() -> int:
     if cleanup_kind is None:
         payload = {
             "status": "blocked",
-            "path_type": "fallback" if repository_kind_source != "missing" else "primary",
+            "path_type": "primary",
             "output": {
-                "repository_kind": repository_kind,
-                "repository_kind_source": repository_kind_source,
                 "cleanup_kind": cleanup_kind,
                 "cleanup_kind_source": cleanup_kind_source,
                 "repo_state": repo_state,
@@ -298,33 +269,6 @@ def main() -> int:
                 "helper_scripts": ["scripts/run_workflow.py"],
                 "recommended_skill": None,
                 "next_step": "Pass --cleanup-kind explicitly or describe whether you need repo layout cleanup, large-file splitting, MARK normalization, file-header normalization, TODO/FIXME ledger extraction, or a combined hygiene pass.",
-            },
-        }
-        print(json.dumps(payload, indent=2, sort_keys=True))
-        return 1
-
-    if repository_kind is None:
-        payload = {
-            "status": "blocked",
-            "path_type": "fallback",
-            "output": {
-                "repository_kind": repository_kind,
-                "repository_kind_source": repository_kind_source,
-                "cleanup_kind": cleanup_kind,
-                "cleanup_kind_source": cleanup_kind_source,
-                "repo_state": repo_state,
-                "header_policy": {
-                    "mode": settings["fileHeaderMode"],
-                    "style": settings["fileHeaderStyle"],
-                    "copyright_owner": settings["fileHeaderCopyrightOwner"],
-                },
-                "split_thresholds": {
-                    "soft_limit": settings["splitSoftLimit"],
-                    "hard_limit": settings["splitHardLimit"],
-                },
-                "helper_scripts": helper_scripts_for(cleanup_kind),
-                "recommended_skill": None,
-                "next_step": "Provide --repository-kind explicitly or point --repo-path at the package or Xcode repository before running a structural-cleanup workflow that depends on repo shape.",
             },
         }
         print(json.dumps(payload, indent=2, sort_keys=True))
@@ -350,10 +294,8 @@ def main() -> int:
 
     payload = {
         "status": "success",
-        "path_type": "primary" if repository_kind_source != "missing" else "fallback",
+        "path_type": "primary",
         "output": {
-            "repository_kind": repository_kind,
-            "repository_kind_source": repository_kind_source,
             "cleanup_kind": cleanup_kind,
             "cleanup_kind_source": cleanup_kind_source,
             "repo_state": repo_state,

@@ -13,7 +13,9 @@ the checked-in Git hooks for this repository.
 - `just validate` runs formatting, lint, package, and workspace validation.
 - `just test <AppTarget>` runs the app's unit tests; use Xcode's shared test
   schemes for unit, UI, or combined test runs.
-- Use `swift test` from `Packages/ProductCore` for package-only work.
+- Use `swift test` from the owning directory under `Packages/` or `Services/`.
+- Run local service dependencies through Homebrew services. Linux artifacts and
+  test or production deployments run only in GitHub Actions.
 
 ## Project changes
 

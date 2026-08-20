@@ -7,7 +7,6 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_bootstrap_and_sync_skills_route_github_settings_to_repo_maintenance() -> None:
     skill_paths = (
         "skills/bootstrap-swift-package/SKILL.md",
-        "skills/sync-swift-package-guidance/SKILL.md",
     )
 
     for relative_path in skill_paths:

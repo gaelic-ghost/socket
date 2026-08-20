@@ -11,12 +11,16 @@ XcodeGen spec is the project source of truth.
 | `Apps/apps-shared.yml` | reusable app/test target and scheme templates |
 | `Apps/<Target>/target.yml` | one target's source roots, platform, and dependencies |
 | `Packages/packages-shared.yml` | local package registration with XcodeGen |
+| `Services/services-shared.yml` | deployable service-package registration with XcodeGen |
 | `Package.swift` | each package's products, targets, dependencies, and tests |
 | `.xcconfig` hierarchy | project, app-shared, and target/configuration build settings |
 | `AGENTS.md` / `CONTRIBUTING.md` | managed header plus preserved repository-specific guidance |
 | `Justfile` | setup, alignment, validation, test, and distribution command surface |
 
-Use local package products for shared code. Do not use a second Xcode project,
-groups, or folder references as a module boundary. `just align` is the one
+Use local package products for shared code and `Services/` SwiftPM executables
+for deployable backends. Do not use a second Xcode project, groups, or folder
+references as a module boundary. Do not classify the repository as Xcode,
+SwiftPM, plain, or mixed; route each operation to the nearest package or root
+workspace as appropriate. `just align` is the one
 managed-guidance sync surface; it refreshes marked sections from Socket and
 regenerates Xcode output.

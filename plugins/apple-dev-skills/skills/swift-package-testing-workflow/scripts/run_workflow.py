@@ -112,28 +112,23 @@ def infer_package_root(repo_root: str | None) -> tuple[Path, Path | None]:
     return requested, None
 
 
-def discover_repo_shape(repo_root: str | None) -> dict:
+def discover_package_context(repo_root: str | None) -> dict:
     requested_root, package_root = infer_package_root(repo_root)
     if not requested_root.exists():
         return {
             "requested_root": str(requested_root),
-            "repo_root": str(requested_root),
+            "package_root": None,
             "exists": False,
             "has_package": False,
-            "xcode_markers": [],
             "xctestplans": [],
             "test_targets": [],
             "ui_test_targets": [],
             "metal_sources": [],
-            "mixed_root": False,
             "reason": "repo-root-missing",
         }
 
     scan_root = package_root or requested_root
     has_package = package_root is not None
-    markers: list[str] = []
-    for suffix in ("*.xcodeproj", "*.xcworkspace", "*.pbxproj"):
-        markers.extend(first_matching_file(scan_root, suffix))
     tests_dir = scan_root / "Tests"
     test_targets = sorted(path.name for path in tests_dir.iterdir() if path.is_dir()) if tests_dir.exists() else []
     ui_test_targets = sorted(name for name in test_targets if "UI" in name or "UITest" in name)
@@ -142,15 +137,13 @@ def discover_repo_shape(repo_root: str | None) -> dict:
 
     return {
         "requested_root": str(requested_root),
-        "repo_root": str(scan_root),
+        "package_root": str(scan_root) if has_package else None,
         "exists": True,
         "has_package": has_package,
-        "xcode_markers": markers,
         "xctestplans": xctestplans,
         "test_targets": test_targets,
         "ui_test_targets": ui_test_targets,
         "metal_sources": metal_sources,
-        "mixed_root": has_package and bool(markers),
         "reason": (
             "package-root-inferred"
             if has_package and scan_root != requested_root
@@ -161,30 +154,30 @@ def discover_repo_shape(repo_root: str | None) -> dict:
     }
 
 
-def inferred_package_name(repo_shape: dict) -> str | None:
-    root = repo_shape.get("repo_root")
+def inferred_package_name(package_context: dict) -> str | None:
+    root = package_context.get("package_root")
     return Path(root).name if root else None
 
 
-def inferred_xcode_scheme(repo_shape: dict) -> str:
-    plans = repo_shape.get("xctestplans", [])
+def inferred_xcode_scheme(package_context: dict) -> str:
+    plans = package_context.get("xctestplans", [])
     if len(plans) == 1:
         return Path(plans[0]).stem
-    package_name = inferred_package_name(repo_shape)
+    package_name = inferred_package_name(package_context)
     return package_name or "<package-scheme>"
 
 
-def build_commands(operation_type: str, repo_shape: dict) -> list[str]:
+def build_commands(operation_type: str, package_context: dict) -> list[str]:
     if operation_type == "package-inspection":
         return ["swift package describe", "swift package dump-package"]
     if operation_type == "read-search":
         return ["swift package describe"]
     if operation_type == "test":
         commands = ["swift test", "swift test --filter <pattern>"]
-        if repo_shape["xctestplans"]:
-            commands.append(f"xcodebuild -scheme {inferred_xcode_scheme(repo_shape)} -showTestPlans")
+        if package_context["xctestplans"]:
+            commands.append(f"xcodebuild -scheme {inferred_xcode_scheme(package_context)} -showTestPlans")
             commands.append(
-                f"xcodebuild -scheme {inferred_xcode_scheme(repo_shape)} -testPlan {Path(repo_shape['xctestplans'][0]).stem} test"
+                f"xcodebuild -scheme {inferred_xcode_scheme(package_context)} -testPlan {Path(package_context['xctestplans'][0]).stem} test"
             )
         return commands
     if operation_type == "mutation":
@@ -200,7 +193,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--operation-type", choices=sorted(VALID_OPERATION_TYPES))
     parser.add_argument("--request")
     parser.add_argument("--repo-root")
-    parser.add_argument("--mixed-root-opt-in", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser
 
@@ -219,7 +211,7 @@ def main() -> int:
             "output": {
                 "operation_type": None,
                 "operation_type_source": "missing",
-                "repo_shape": discover_repo_shape(args.repo_root),
+                "package_context": discover_package_context(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Pass --operation-type explicitly or provide --request text that makes the intended SwiftPM workflow obvious.",
             },
@@ -234,7 +226,7 @@ def main() -> int:
             "output": {
                 "operation_type": operation_type,
                 "operation_type_source": "explicit" if args.operation_type else "inferred",
-                "repo_shape": discover_repo_shape(args.repo_root),
+                "package_context": discover_package_context(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Use swift-package-extension-workflow because traits, macros, plugins, or generated-source behavior is shaping this test request.",
             },
@@ -249,7 +241,7 @@ def main() -> int:
             "output": {
                 "operation_type": "build-or-run",
                 "operation_type_source": "explicit" if args.operation_type else "inferred",
-                "repo_shape": discover_repo_shape(args.repo_root),
+                "package_context": discover_package_context(args.repo_root),
                 "planned_commands": [],
                 "next_step": "Use swift-package-build-run-workflow because this request is primarily about ordinary package build, run, manifest, dependency, resource, or Metal-distribution work.",
             },
@@ -257,36 +249,32 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
 
-    repo_shape = discover_repo_shape(args.repo_root)
+    package_context = discover_package_context(args.repo_root)
     status = "success"
     path_type = "primary"
     next_step = "Proceed with the SwiftPM-first path."
 
-    if not repo_shape["exists"]:
+    if not package_context["exists"]:
         status = "blocked"
         next_step = "Resolve the repo root before continuing."
-    elif not repo_shape["has_package"]:
+    elif not package_context["has_package"]:
         status = "blocked"
         next_step = "Use a Swift package repo with Package.swift at the selected root."
-    elif repo_shape["mixed_root"] and not args.mixed_root_opt_in:
-        status = "handoff"
-        next_step = "Use xcode-testing-workflow because this repo root is mixed and Xcode-managed test behavior may matter."
-
     payload = {
         "status": status,
         "path_type": path_type,
         "output": {
             "operation_type": operation_type,
             "operation_type_source": "explicit" if args.operation_type else "inferred",
-            "repo_shape": repo_shape,
-            "planned_commands": build_commands(operation_type, repo_shape),
+            "package_context": package_context,
+            "planned_commands": build_commands(operation_type, package_context),
             "inferred_context": {
-                "package_name": inferred_package_name(repo_shape),
-                "primary_test_target": repo_shape["test_targets"][0] if len(repo_shape["test_targets"]) == 1 else None,
-                "ui_test_targets": repo_shape["ui_test_targets"],
-                "has_xcode_test_plan": bool(repo_shape["xctestplans"]),
-                "xcode_scheme_hint": inferred_xcode_scheme(repo_shape) if repo_shape["xctestplans"] else None,
-                "has_metal_sources": bool(repo_shape["metal_sources"]),
+                "package_name": inferred_package_name(package_context),
+                "primary_test_target": package_context["test_targets"][0] if len(package_context["test_targets"]) == 1 else None,
+                "ui_test_targets": package_context["ui_test_targets"],
+                "has_xcode_test_plan": bool(package_context["xctestplans"]),
+                "xcode_scheme_hint": inferred_xcode_scheme(package_context) if package_context["xctestplans"] else None,
+                "has_metal_sources": bool(package_context["metal_sources"]),
             },
             "next_step": next_step,
         },

@@ -31,9 +31,9 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             code, payload = self.run_script("--operation-type", "build", "--repo-root", tmpdir)
             self.assertEqual(code, 1)
             self.assertEqual(payload["status"], "blocked")
-            self.assertEqual(payload["output"]["repo_shape"]["reason"], "package-swift-missing")
+            self.assertEqual(payload["output"]["package_context"]["reason"], "package-swift-missing")
 
-    def test_succeeds_for_plain_package_repo(self) -> None:
+    def test_routes_package_build_to_build_run_owner(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             code, payload = self.run_script("--operation-type", "build", "--repo-root", tmpdir)
@@ -42,34 +42,18 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["path_type"], "primary")
             self.assertEqual(payload["output"]["recommended_skill"], "swift-package-build-run-workflow")
             self.assertIn("build-run skill", payload["output"]["routing_summary"])
-            self.assertFalse(payload["output"]["repo_shape"]["mixed_root"])
+            self.assertEqual(payload["output"]["package_context"]["package_root"], str(Path(tmpdir).resolve()))
 
-    def test_handoffs_mixed_root_without_opt_in(self) -> None:
+    def test_xcode_files_do_not_change_package_routing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
             Path(tmpdir, "Demo.xcodeproj").mkdir()
             code, payload = self.run_script("--operation-type", "build", "--repo-root", tmpdir)
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "handoff")
-            self.assertTrue(payload["output"]["repo_shape"]["mixed_root"])
-            self.assertEqual(payload["output"]["recommended_skill"], "xcode-build-run-workflow")
-            self.assertIn("xcode-build-run-workflow", payload["output"]["next_step"])
-
-    def test_allows_mixed_root_with_opt_in(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "Package.swift").write_text("// swift-tools-version: 6.0\n", encoding="utf-8")
-            Path(tmpdir, "Demo.xcodeproj").mkdir()
-            code, payload = self.run_script(
-                "--operation-type",
-                "build",
-                "--repo-root",
-                tmpdir,
-                "--mixed-root-opt-in",
-            )
-            self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "handoff")
             self.assertEqual(payload["output"]["recommended_skill"], "swift-package-build-run-workflow")
-            self.assertTrue(payload["output"]["repo_shape"]["mixed_root"])
+            self.assertNotIn("mixed_root", payload["output"]["package_context"])
+            self.assertNotIn("xcode_markers", payload["output"]["package_context"])
 
     def test_can_infer_test_operation_from_request(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -104,7 +88,7 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
             )
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "handoff")
-            self.assertEqual(payload["output"]["repo_shape"]["reason"], "package-root-inferred")
+            self.assertEqual(payload["output"]["package_context"]["reason"], "package-root-inferred")
             self.assertTrue(payload["output"]["inferred_context"]["resource_request"])
             self.assertEqual(payload["output"]["inferred_context"]["primary_target"], "DemoTool")
             self.assertEqual(payload["output"]["recommended_skill"], "swift-package-build-run-workflow")
@@ -118,7 +102,6 @@ class SwiftPackageWorkflowTests(unittest.TestCase):
                 "copy package resources into the app target build phase",
                 "--repo-root",
                 tmpdir,
-                "--mixed-root-opt-in",
             )
             self.assertEqual(code, 0)
             self.assertEqual(payload["status"], "handoff")
