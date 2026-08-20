@@ -178,14 +178,10 @@ CHILD_CHECKS = (
 
 def checks_for_profile(profile: str, version: str | None) -> tuple[Check, ...]:
     checks: tuple[Check, ...] = CORE_CHECKS
-    if profile in {"compatibility", "full", "release"}:
+    if profile in {"compatibility", "full"}:
         checks += COMPATIBILITY_CHECKS
-    if profile in {"full", "release"}:
+    if profile == "full":
         checks += CHILD_CHECKS
-    if profile == "release":
-        if version is None:
-            raise ValueError("--version is required with --profile release.")
-        checks += (Check("release readiness", ("scripts/release.sh", "release-ready", version)),)
     return checks
 
 
@@ -205,11 +201,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--profile",
-        choices=("core", "compatibility", "full", "release"),
+        choices=("core", "compatibility", "full"),
         default="core",
         help="Validation breadth; defaults to the fast PR-safe core profile.",
     )
-    parser.add_argument("--version", help="Expected semantic version for the release profile.")
     parser.add_argument("--dry-run", action="store_true", help="Print checks without running them.")
     return parser.parse_args(argv)
 
@@ -217,7 +212,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     try:
-        checks = checks_for_profile(args.profile, args.version)
+        checks = checks_for_profile(args.profile, None)
     except ValueError as error:
         raise SystemExit(f"validate-socket: {error}") from error
     for check in checks:

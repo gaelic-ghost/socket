@@ -23,18 +23,14 @@ marketplaces. A local checkout marketplace should be added, inspected, removed,
 and then discarded; trying to upgrade it should fail because it is not a Git
 marketplace.
 
-For release preparation, the repo-owned evidence command automates the Socket
-local checkout add/remove path below and records the result with the current
-Dependabot alert query:
+During `scripts/release.sh advance X.Y.Z`, the release workflow automates the
+Socket local checkout add/remove path below and records the result with the
+current Dependabot alert query. It writes `.socket-release-evidence.json` in the
+clean `main` worktree after verifying that `main` matches the reviewed remote
+commit. The file is ignored by Git and tied to that exact commit.
 
-```bash
-scripts/release.sh release-evidence
-```
-
-It writes `.socket-release-evidence.json` in the worktree. The file is ignored
-by Git, tied to the current commit, and consumed by `scripts/release.sh
-release-notes X.Y.Z`. Keep the manual commands below for focused debugging,
-child-specific manifest inspection, and Git-backed user-path tests.
+Keep the manual commands below for focused debugging, child-specific manifest
+inspection, and Git-backed user-path tests. They are not a second release path.
 
 ## Socket Local Checkout Test
 

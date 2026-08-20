@@ -57,7 +57,7 @@ The superproject keeps `origin` for `socket`.
 
 Some local checkouts may still have an `apple-dev-skills` remote from the older subtree workflow. Treat that remote as historical compatibility context only while the standalone repository remains a Socket pointer.
 
-If a new subtree-managed child repository is introduced later, add its matching named remote first and update this document plus [`release-modes.md`](./release-modes.md) in the same pass.
+If a new subtree-managed child repository is introduced later, add its matching named remote first and update this document plus [`release-workflow.md`](./release-workflow.md) in the same pass.
 
 ## Apple Dev Skills Compatibility Pointer
 
@@ -73,29 +73,21 @@ When Apple Dev Skills changes land:
 
 - verify the directory shape under `plugins/apple-dev-skills/`
 - update socket docs and marketplace wiring in a separate focused commit when needed
-- if the work is part of a coordinated release-prep pass, use [`release-modes.md`](./release-modes.md) and record `no subtree action` for `apple-dev-skills` while the standalone repository remains the compatibility pointer
+- if the work is part of a coordinated release-prep pass, use [`release-workflow.md`](./release-workflow.md) and record `no subtree action` for `apple-dev-skills` while the standalone repository remains the compatibility pointer
 
-## Shared Version Workflow
+## Release Integration
 
-The maintained version-bearing manifests across `socket` now stay on one shared semantic version. Use the root workflow to inspect or update those surfaces:
+Socket's single [`release workflow`](./release-workflow.md) owns the shared
+version and always evaluates child synchronization before tagging. This document
+only owns the child relationship and pull/push decision; it does not define a
+second release mode or repeat the release sequence.
 
-```bash
-scripts/release.sh inventory
-scripts/release.sh patch
-scripts/release.sh minor
-scripts/release.sh major
-scripts/release.sh custom 1.2.3
-```
-
-That workflow updates the maintained `pyproject.toml` and `.codex-plugin/plugin.json` files, plus adjacent `uv.lock` package self-version entries when those lockfiles exist. It intentionally refuses `patch`, `minor`, or `major` bumps while the maintained surfaces are split across multiple versions; use `custom` once to align them first.
-
-## Release Mode For Subtrees
-
-Use `subtrees` mode from [`release-modes.md`](./release-modes.md) when a `socket` release also needs subtree accounting. That mode treats the umbrella repository like a standard protected-main release and adds the subtree gate before tagging:
-
-- `apple-dev-skills`: record `no subtree action` while the standalone repository remains only the compatibility pointer
-- future subtree-managed children: pull or push as needed for the child state that the release owns
-- all subtree sync decisions: record whether the child was pulled, pushed, intentionally deferred, or not touched
+- `apple-dev-skills`: no subtree action while the standalone repository remains
+  only the compatibility pointer.
+- future subtree-managed children: register the exact pull/push gate in the
+  release implementation before publishing them through Socket.
+- every child decision: record pulled, pushed, intentionally deferred, or not
+  touched in the one release's child-sync accounting.
 
 ## Add A New Subtree-Managed Child Repository
 
@@ -163,24 +155,6 @@ Use this checklist before removing a public child repository from `socket` or fr
 7. Account for local branches not contained by `main` before cleanup.
 
 If the removed Socket entry points at `SpeakSwiftlyServer`, do not use this checklist as permission to delete or rewrite the standalone live-service repository. That repo's standalone release, validation, and live-refresh path stays outside ordinary `socket` cleanup.
-
-## Release Flow
-
-For full release sequencing, use [`release-modes.md`](./release-modes.md). In short, `standard` is the normal `socket` release mode and `subtrees` is the normal mode plus explicit subtree accounting.
-
-For socket releases:
-
-1. make the intended superproject commits first
-2. keep the working tree clean
-3. check CI and comments for any release PR before tagging
-4. merge the reviewed release state to `main`
-5. fast-forward local `main` from `origin/main`
-6. create the release tag locally from `main`
-7. push the tag
-8. create the GitHub release from the existing tag
-9. run `codex plugin marketplace upgrade socket`
-
-Use `vx.x.x` tags for socket releases. When a release used `subtrees` mode, do not create the tag until every touched subtree-managed child has been pulled, pushed, deferred with a stated reason, or confirmed untouched.
 
 ## Common Failure Modes
 

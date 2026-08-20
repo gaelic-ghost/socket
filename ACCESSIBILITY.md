@@ -24,7 +24,7 @@ This document covers the root superproject surfaces in this repository:
 
 - Markdown documentation such as [README.md](./README.md), [AGENTS.md](./AGENTS.md), [ROADMAP.md](./ROADMAP.md), and root maintainer docs under [`docs/`](./docs/)
 - Root repository metadata such as [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
-- Root maintainer automation such as [`scripts/validate_socket_metadata.py`](./scripts/validate_socket_metadata.py) and [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml)
+- Root maintainer automation such as [`scripts/validate_socket_metadata.py`](./scripts/validate_socket_metadata.py) and [`.github/workflows/validate-socket.yml`](./.github/workflows/validate-socket.yml)
 
 This document does not redefine accessibility policy for child repositories under [`plugins/`](./plugins/). Those repositories may maintain their own narrower accessibility contracts.
 
@@ -100,7 +100,7 @@ When editing root docs or maintainer automation:
 The root repository does not currently run automated accessibility auditing tools. Its current automated evidence is structural:
 
 - `uv run scripts/validate_socket_metadata.py` validates that the root marketplace wiring is present, readable, and correctly aligned with packaged plugin manifests
-- [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml) runs that validation in CI on pushes to `main` and on pull requests
+- [`.github/workflows/validate-socket.yml`](./.github/workflows/validate-socket.yml) runs full Socket validation in CI on pushes to `main` and on pull requests
 
 ### Manual Testing
 
@@ -160,7 +160,7 @@ Accessibility reports should be treated as ordinary quality issues for the root 
 
 Current root CI evidence:
 
-- [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml)
+- [`.github/workflows/validate-socket.yml`](./.github/workflows/validate-socket.yml)
 - `uv run scripts/validate_socket_metadata.py`
 
 These checks validate structural integrity for root marketplace metadata. They do not, by themselves, prove accessibility conformance.

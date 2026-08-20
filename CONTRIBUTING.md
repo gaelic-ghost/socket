@@ -31,7 +31,7 @@ Use the root repository for work about:
 - repo-root marketplace wiring in [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
 - root maintainer docs under [`docs/`](./docs/)
 - root policies in [README.md](./README.md), [AGENTS.md](./AGENTS.md), and [ROADMAP.md](./ROADMAP.md)
-- root validation and CI such as [`scripts/validate_socket.py`](./scripts/validate_socket.py) and [`.github/workflows/validate-socket-metadata.yml`](./.github/workflows/validate-socket-metadata.yml)
+- root validation and CI such as [`scripts/validate_socket.py`](./scripts/validate_socket.py) and [`.github/workflows/validate-socket.yml`](./.github/workflows/validate-socket.yml)
 - coordinated child-skill guidance that needs one consistent policy across multiple monorepo-owned plugin or skills repositories
 
 If the change is really about one child repository's own skills, packaging, tests, or release flow, start in that child repository's docs and workflow instead of treating `socket` as a generic catch-all.
@@ -105,7 +105,10 @@ Use the compatibility profile for ordinary root changes. It runs the core market
 uv run scripts/validate_socket.py --profile compatibility
 ```
 
-Use `--profile full` when the change affects child validation or behavior; it runs each participating child suite once from its owning project. The `--profile release --version X.Y.Z` profile additionally runs the read-only release-ready gate and is for reviewed `main` only.
+Use `--profile full` when the change affects child validation or behavior; it
+runs each participating child suite once from its owning project. Socket's
+release workflow runs this same profile before the release PR and again on
+reviewed `main`; validation profiles do not own tagging or publication.
 
 Every new or materially changed Socket plugin, skill, or MCP declaration needs
 an explicit Hermes compatibility outcome in the same pass. When that outcome
@@ -255,39 +258,28 @@ uv sync --dev
 uv run scripts/validate_socket.py --profile compatibility
 ```
 
-When the change intentionally bumps released version numbers across the superproject, inventory or update the maintained manifest surfaces with:
+Inspect the shared version without changing it with:
 
 ```bash
 scripts/release.sh inventory
-scripts/release.sh patch
-scripts/release.sh minor
-scripts/release.sh major
-scripts/release.sh custom 1.2.3
 ```
 
-Use the release modes in [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) when preparing the actual release. Use `standard` for root-only releases and `subtrees` when a release also needs subtree pull/push accounting.
-
-Before opening or merging a release PR that changes marketplace entries,
-plugin manifests, or child plugin payloads, run the appropriate temporary
-`CODEX_HOME` smoke check from
-[`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md)
-so the release proves the marketplace add path without touching a production
-Codex install.
-
-Before preparing release notes, capture the local marketplace smoke result and
-the current GitHub Dependabot alert state in one ignored worktree-local
-artifact:
+Socket has one release workflow for every semantic-version level and catalog
+refresh. Author `docs/releases/vX.Y.Z.md` on the feature branch, then use:
 
 ```bash
-scripts/release.sh release-evidence
-scripts/release.sh release-notes X.Y.Z
+scripts/release.sh prepare X.Y.Z
+scripts/release.sh inspect X.Y.Z
+scripts/release.sh advance X.Y.Z
 ```
 
-The evidence command writes `.socket-release-evidence.json`, ties the results
-to the current commit, and rejects stale evidence when release notes are
-generated from a different commit. `patch-refresh` runs both evidence checks
-and incorporates their summary into its generated GitHub release notes
-automatically.
+The workflow owns the version bump, full local and GitHub validation, release
+PR, reviewed-main verification, commit-bound marketplace and Dependabot
+evidence, annotated tag, GitHub release, structured branch/child accounting,
+and final marketplace refresh. See
+[`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md)
+for the complete contract. Do not invoke the internal Python modules or create
+a direct-main shortcut.
 
 If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy` commands where that repo's contributors will actually look.
 
@@ -296,32 +288,6 @@ When editing docs, also review the rendered Markdown structure and cross-links f
 When editing docs that include media, also review the image path, alt text, and adjacent explanatory prose.
 
 When adding or updating agent reports under [`docs/agents/`](./docs/agents/), verify that the report contains no secrets, no private environment values, and no machine-local absolute links intended for repository-facing docs.
-
-### Release and Subtree Accounting
-
-Use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md) for release sequencing. Use `standard` for root-only releases and `subtrees` when a release also needs explicit subtree pull or push accounting.
-
-Use the root release-version script when the task is to inventory or bump the maintained semantic-version surfaces across the superproject:
-
-```bash
-scripts/release.sh inventory
-scripts/release.sh patch
-scripts/release.sh minor
-scripts/release.sh major
-scripts/release.sh custom 1.2.3
-```
-
-`patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
-
-Sometimes `socket` needs a patch-only release even when the visible root catalog shape did not otherwise change. This is the current maintainer workaround for refreshing Git-backed plugin entries that Codex resolves through the Socket marketplace, including `speak-swiftly` from `gaelic-ghost/SpeakSwiftlyServer`. Treat those bumps as real releases: run the shared version bump, validate the marketplace metadata, follow the release-ready gate, capture release evidence, complete any required subtree accounting, tag the Socket release, create the GitHub release, and run `codex plugin marketplace upgrade socket`.
-
-Trusted maintainers can run that patch-refresh sequence with:
-
-```bash
-scripts/release.sh patch-refresh
-```
-
-If the branch-accounting preflight lists local branches not contained by `main`, account for each branch explicitly before rerunning. Use `scripts/release.sh patch-refresh --allow-unmerged-branches` only after that accounting is complete.
 
 ## Pull Request Expectations
 

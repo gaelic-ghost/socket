@@ -55,16 +55,11 @@ def test_full_profile_adds_compatibility_and_child_checks_once() -> None:
     assert "release readiness" not in names
 
 
-def test_release_profile_requires_a_version() -> None:
-    with pytest.raises(ValueError, match="--version"):
-        validate_socket.checks_for_profile("release", None)
+def test_validation_profiles_do_not_duplicate_release_choreography() -> None:
+    source = (ROOT / "scripts" / "validate_socket.py").read_text(encoding="utf-8")
 
-
-def test_release_profile_adds_the_release_ready_gate() -> None:
-    checks = validate_socket.checks_for_profile("release", "9.32.0")
-
-    assert checks[-1].name == "release readiness"
-    assert checks[-1].command == ("scripts/release.sh", "release-ready", "9.32.0")
+    assert '"release"' not in source
+    assert "release-ready" not in source
 
 
 def test_dry_run_does_not_execute_a_subprocess(monkeypatch: pytest.MonkeyPatch) -> None:

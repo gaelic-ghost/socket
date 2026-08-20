@@ -13,7 +13,7 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 
 ### Where To Look First
 
-- Start with [README.md](./README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [ROADMAP.md](./ROADMAP.md), [`docs/maintainers/subtree-workflow.md`](./docs/maintainers/subtree-workflow.md), and [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md).
+- Start with [README.md](./README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [ROADMAP.md](./ROADMAP.md), [`docs/maintainers/subtree-workflow.md`](./docs/maintainers/subtree-workflow.md), and [`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md).
 - Use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md) when the question is about the root marketplace or the independent-plugin packaging stance.
 - Use [`docs/maintainers/codex-plugin-install-surfaces.md`](./docs/maintainers/codex-plugin-install-surfaces.md) when the question is about Codex marketplace sources, plugin roots, installed caches, or enabled-state config.
 - Use [`docs/maintainers/spi-add-package-automation-plan.md`](./docs/maintainers/spi-add-package-automation-plan.md) for Swift Package Index readiness, submission, and add-package automation.
@@ -37,11 +37,14 @@ Use this file for durable repo-local guidance that Codex should follow before ch
 - Treat `SpeakSwiftlyServer` as a standalone Git-backed plugin source, not as a local `plugins/` mirror. Speak Swiftly plugin payload edits belong in the standalone checkout and reach Socket users through the Git-backed marketplace entry.
 - When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
 
-### Subtree Sync And Branch Accounting Gates
+### Child Sync And Branch Accounting Gates
 
 - Treat subtree sync completion and branch accounting as hard gates, not follow-up cleanup.
 - Before claiming a subtree-managed task is done, verify whether the corresponding child-repo work also needs an explicit `git subtree pull` or `git subtree push` in `socket`, and either perform that sync or say plainly why no sync is required.
-- In `subtrees` release mode, treat `socket` like a standard protected-main release: validate, branch or PR when needed, clear CI and PR comments before tagging, merge to `main`, fast-forward local `main`, tag the superproject from reviewed `main`, push the tag, create the GitHub release, run `codex plugin marketplace upgrade socket`, and only add the subtree accounting gates that determine whether each child repo needs pull or push.
+- Use the single branch-backed Socket release lifecycle in
+  [`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md).
+  Child synchronization is a conditional pre-tag gate inside that lifecycle,
+  never a separate release mode or a direct-main exception.
 - Before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch that is still not contained by local `main` and account for each one explicitly as one of: already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete.
 - Do not say work is "on main", "merged", "recovered", "preserved", or "safe to clean up" until commit reachability has been verified in the exact repository and remote that statement refers to.
 - Do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until the branch-accounting pass has been completed and any non-`main` history is either merged or preserved on an explicit archive ref.
@@ -111,23 +114,23 @@ git subtree push --prefix=<prefix> <remote> main
 
 Use these commands only when the work is intentionally publishing or syncing a currently subtree-managed child repo. Do not use them for `apple-dev-skills` while the standalone repository is only the compatibility redirect to Socket.
 
-### Shared Version Workflow
+### Release Workflow
 
-Use the root release-version script when the task is to inventory or bump the maintained semantic-version surfaces across the superproject:
+Use `scripts/release.sh` as the sole public release entrypoint. Inventory the
+maintained semantic-version surfaces without changing them with:
 
 ```bash
 scripts/release.sh inventory
-scripts/release.sh patch
-scripts/release.sh minor
-scripts/release.sh major
-scripts/release.sh custom 1.2.3
 ```
 
-`patch`, `minor`, and `major` assume every maintained version surface already shares one common semantic version. If versions are split, align them first with a `custom X.Y.Z` version.
-
-Expect occasional patch-only Socket releases whose practical purpose is to make Codex refresh Git-backed plugin entries exposed through the Socket marketplace, especially `speak-swiftly` from the standalone `gaelic-ghost/SpeakSwiftlyServer` source. These are still real Socket releases, not cache-only chores: bump the shared version surfaces, validate, run the release-ready gate, satisfy any subtree accounting, tag and publish the Socket release, and only then run `codex plugin marketplace upgrade socket`.
-
-For full release sequencing, use [`docs/maintainers/release-modes.md`](./docs/maintainers/release-modes.md). Use `standard` when only the `socket` superproject changes. Use `subtrees` when the release also needs subtree pull/push accounting.
+Every patch, minor, major, and Git-backed catalog-refresh release uses
+`prepare`, `inspect`, and `advance` from a feature worktree. The workflow owns
+the shared version, full local and GitHub validation, release PR, reviewed-main
+identity, annotated tag, GitHub release, structured branch/child accounting,
+and final marketplace refresh. Follow
+[`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md)
+for the complete contract; do not invoke internal Python release modules as a
+second operator path.
 
 ## Review and Delivery
 

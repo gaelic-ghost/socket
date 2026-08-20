@@ -61,7 +61,7 @@
 - Milestone 10: Expo inline native modules workflow - Completed
 - Milestone 11: AgentDeck plugin - In Progress
 - Milestone 12: Xcode 27 agentic tooling workflows - In Progress
-- Milestone 13: Reverse Engineering skills plugin - In Progress
+- Milestone 13: Reverse Engineering skills plugin - Completed
 - Milestone 14: Core AI and Foundation Models workflow ownership - Completed
 - Milestone 15: Android Dev Skills plugin - Completed
 - Milestone 16: Server-Side JVM skills plugin - In Progress
@@ -390,7 +390,7 @@ Completed
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
@@ -1180,7 +1180,7 @@ and test/production deployments for GitHub Actions.
 - [ ] Generalize Codex GUI local environment templates across stack plugins. Start from the root Socket `uv sync --dev` environment, preserve customized `.codex/environments/*.toml` files, keep setup scripts repo-relative, and let each stack plugin own templates for its common project shapes instead of installing global tool dependencies.
 - [ ] Investigate guidance consolidation opportunities that reduce repeated setup, routing, validation, and handoff text across skills while preserving the owner boundaries needed for accurate tool use and lower token load.
 - [ ] Investigate further standardization and automation for shared skill scaffolding, evidence capture, validation prompts, and generated references so common workflow knowledge is maintained once and reused with lower token load.
-- [ ] Redesign the Socket release flow around branch-backed worktrees. Split pre-merge feature-branch gates from post-merge `main` gates, make the release-ready failure mode more helpful when run from a worktree, preserve the rule that tags and release evidence come from reviewed `main`, and document how a release-prep branch should carry version bumps without making the base checkout dirty.
+- [x] Redesign the Socket release flow around one branch-backed `prepare`/`inspect`/`advance` lifecycle. The feature worktree owns version preparation and the PR; the clean `main` checkout owns post-merge validation, evidence, annotated tagging, publication, structured branch accounting, and the final marketplace refresh.
 - [x] Centralized Socket validation under `scripts/validate_socket.py` with core, compatibility, full, and release profiles. The shared structural layer checks marketplace wiring, plugin manifests and assets, child `AGENTS.md`, `SKILL.md` frontmatter, and present `agents/openai.yaml`; child-specific policy and behavior checks remain owned by their child projects and run once in the full profile.
 - [ ] Add a future Apple Developer Portal Driver for accessible, interactive portal-only provisioning tasks. Keep Apple authentication, two-factor authentication, account/team selection, and destructive operations behind explicit user-visible confirmation gates; retain official App Store Connect REST, Xcode-aware discovery, `cktool`, and CKTool JS as the primary surfaces, and do not automate unsupported portal forms until a reviewed driver design exists.
 
@@ -1203,8 +1203,8 @@ and test/production deployments for GitHub Actions.
 - [x] Add a first `agent-engineering-skills:design-agent-automation-workflow` planning skill for agent and automation design. It chooses between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet while delegating stack-specific implementation to the owning plugin.
 - [x] Added `agent-engineering-skills:design-agent-eval-workflow` for agent, skill, prompt, and automation eval planning, and skewed automation guidance toward safe full automation with exact escalation gates instead of broad human review.
 - [x] Replaced the legacy Apple app guidance and sync routes with the unified `bootstrap-xcode-workspace` workflow and its managed `just align` contract.
-- [x] Create a quicker full-auto Socket patch-refresh script for trusted maintainer use. It should bump the shared patch version, validate metadata, satisfy release-ready and subtree gates, push `main` and any required subtree split, tag and publish the GitHub release, verify branch accounting, and run `codex plugin marketplace upgrade socket`.
-- [x] Reduce hand-carried patch-release work by capturing commit-bound temporary `CODEX_HOME` marketplace smoke evidence and the final Dependabot alert query, then incorporating both into generated release notes without changing release-ready, subtree, branch-accounting, tag, GitHub release, or final marketplace-upgrade gates.
+- [x] Added the former direct-main patch-refresh helper, then retired it when every semantic-version level and catalog refresh moved into the single protected-main release lifecycle.
+- [x] Reduce hand-carried release work by capturing commit-bound temporary `CODEX_HOME` marketplace smoke evidence and the final Dependabot alert query during `advance`, then append only pre-publication evidence to the checked-in release notes.
 - [ ] Explore steward-assisted release and worktree orchestration. Start with Socket Steward release preflights and cache-refresh checks, then evaluate whether `swift-steward` or sibling roles should handle read-only release readiness, PR merge sequencing, branch accounting, and parallel worktree status reports while the main thread keeps write, merge, tag, and publish ownership.
 - [ ] Design a worker-thread orchestration workflow for Codex GUI and Socket Steward use. Capture the decisions before implementation: whether the durable surface is a new Productivity Skill, a Socket Steward command, or both; which fields belong in the worker launch envelope; how model and reasoning budgets are selected; how workers report branch, worktree, validation, and cleanup state back to the coordinator; which actions remain main-thread only; and when a finished worker thread or worktree should be archived, removed, or kept for follow-up.
 - [ ] Keep Socket Steward tied into cross-Socket docs, marketplace, audit, plan, and proposal workflows as the repo-local coordination surface.
