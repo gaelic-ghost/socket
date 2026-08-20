@@ -1,4 +1,0 @@
-interface:
-  display_name: "Things Digest Generator"
-  short_description: "Generate a Things planning digest from MCP data or JSON exports."
-  default_prompt: "Use $things-digest-generator to resolve config precedence, prefer Things MCP reads, fall back to JSON if needed, return markdown starting with `# Things Planning Digest - YYYY-MM-DD`, include `## Executive Summary` only when `outputStyle=executive`, and report `No findings.` when there is no actionable data."
