@@ -56,8 +56,8 @@ Prepare one persistent Linux development environment whose lifecycle, host integ
 
 ## Fallbacks and Handoffs
 
-- Use `server-side-swift:apple-containerization-workflow` for `container machine` command semantics.
-- Use `server-side-swift:docker-workflow` for Dockerfiles, Compose, registries, and portable OCI deployment.
+- Treat `container machine` semantics as general virtualization research outside the Server-Side Swift development contract; do not use this workflow for local Swift service development.
+- Use `server-side-swift:docker-workflow` only for Dockerfile/OCI definitions, registries, and GitHub-hosted deployment automation; it does not own Compose or local image builds.
 - Use `virtualization-framework-workflow` for custom full-VM implementation.
 - Use `xcode-build-run-workflow`, `swift-package-build-run-workflow`, or stack-specific skills after the guest is ready.
 - Use `prepare-isolated-analysis-lab` for disposable hostile-workload controls.

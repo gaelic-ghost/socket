@@ -1,5 +1,13 @@
 # macOS Virtualization And Container Skills Plan
 
+## Status
+
+Historical. The Server-Side Swift Apple container workflow described here was
+retired by the canonical Swift workspace contract. General virtualization and
+security-lab skills remain available, but local Swift service development is
+native macOS with Homebrew services and Linux artifact/deployment work runs only
+in GitHub Actions.
+
 ## Intent
 
 Expand Socket's Apple-hosted compute guidance so an agent can choose and operate the right boundary for development, compatibility testing, and authorized security research:

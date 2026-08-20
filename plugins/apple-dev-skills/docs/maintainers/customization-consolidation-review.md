@@ -52,15 +52,22 @@ The decision is:
 
 ## Knob Classification
 
-### Implemented User-Meaningful Customization
+### Retired Repository-Lifecycle Customization
 
-- `bootstrap-swift-package`
+- The former standalone package bootstrap exposed:
   - `defaultVersionProfile`
   - `defaultTestingMode`
   - `initializeGit`
   - `copyAgentsMd`
   - `defaultOrgIdentifier`
   - `copyAgentsMd`
+- Those knobs were removed with the standalone bootstrap. Repository creation,
+  adoption, component addition, and alignment now belong only to
+  `bootstrap-xcode-workspace`, with component-specific choices supplied as
+  explicit invocation inputs.
+
+### Implemented User-Meaningful Customization
+
 - `explore-apple-swift-docs`
   - `defaultSourceOrder`
 - `format-swift-sources`
@@ -69,7 +76,7 @@ These are the knobs most likely to reflect real user preference instead of hidde
 
 ### Implemented As Inference, Fixed Workflow Defaults, Or Explicit Invocation Inputs
 
-- `bootstrap-swift-package`
+- The retired standalone package bootstrap previously inferred:
   - `defaultPackageType`
   - `defaultPlatformPreset`
 - `explore-apple-swift-docs`
@@ -82,8 +89,8 @@ These are the knobs most likely to reflect real user preference instead of hidde
   - no ordinary user-facing knobs
 - `swift-package-testing-workflow`
   - no ordinary user-facing knobs
-- `swift-package-workflow`
-  - no ordinary user-facing knobs
+- The retired broad Swift package compatibility router had no ordinary
+  user-facing knobs. Focused build, test, and extension workflows remain.
 
 These are now better derived from request wording, component context, available tools, explicit CLI input, or fixed workflow defaults than held as broad durable user state.
 

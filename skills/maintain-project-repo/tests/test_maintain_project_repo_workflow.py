@@ -36,76 +36,6 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertIn("scripts/repo-maintenance/config/profile.env", payload["managed_files"])
             self.assertEqual(payload["profile"], "generic")
 
-    def test_install_writes_toolkit_files(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install", "--profile", "swift-package")
-            self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "success")
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/release.sh").is_file())
-            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/config/profile.env").is_file())
-            self.assertTrue(Path(tmpdir, ".swiftformat").is_file())
-            self.assertTrue(Path(tmpdir, ".swiftlint.yml").is_file())
-            self.assertIn('REPO_MAINTENANCE_PROFILE="swift-package"', Path(tmpdir, "scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"))
-            swiftlint_text = Path(tmpdir, ".swiftlint.yml").read_text(encoding="utf-8")
-            self.assertIn("SwiftFormat owns visual shape", swiftlint_text)
-            self.assertIn("fatal_error_message", swiftlint_text)
-            hook_text = Path(tmpdir, "scripts/repo-maintenance/hooks/pre-commit.sample").read_text(encoding="utf-8")
-            self.assertIn("swiftformat --lint", hook_text)
-            self.assertTrue(Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").is_file())
-            workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
-            self.assertIn("Branch protection should require the Actions check context `validate`.", workflow_text)
-            self.assertIn("  validate:\n    name: validate\n", workflow_text)
-            self.assertIn("runs-on: macos-26", workflow_text)
-            self.assertIn("actions/checkout@v6.0.2", workflow_text)
-            self.assertIn("xcode-select --print-path", workflow_text)
-            self.assertNotIn("actions/checkout@v4", workflow_text)
-            self.assertNotIn("maxim-lobanov/setup-xcode@v1", workflow_text)
-            self.assertIn("xcrun swift --version", workflow_text)
-            self.assertIn("brew install swiftformat swiftlint", workflow_text)
-
-    def test_xcode_profile_uses_standard_capital_scripts_directory(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install", "--profile", "xcode-app")
-            self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "success")
-            self.assertIn("Scripts/repo-maintenance/validate-all.sh", payload["managed_files"])
-            self.assertIn("Scripts/repo-maintenance/config/profile.env", payload["managed_files"])
-            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validate-all.sh").is_file())
-            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/release.sh").is_file())
-            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").is_file())
-            Path(tmpdir, "case-probe").touch()
-            if not Path(tmpdir, "CASE-PROBE").exists():
-                self.assertFalse(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").exists())
-            self.assertIn(
-                'REPO_MAINTENANCE_PROFILE="xcode-app"',
-                Path(tmpdir, "Scripts/repo-maintenance/config/profile.env").read_text(encoding="utf-8"),
-            )
-            workflow_text = Path(tmpdir, ".github/workflows/validate-repo-maintenance.yml").read_text(encoding="utf-8")
-            self.assertIn("bash Scripts/repo-maintenance/validate-all.sh", workflow_text)
-            self.assertNotIn("scripts/repo-maintenance", workflow_text)
-
-    def test_xcode_profile_migrates_legacy_lowercase_toolkit_root(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "case-probe").touch()
-            if Path(tmpdir, "CASE-PROBE").exists():
-                self.skipTest("legacy lowercase-to-capital migration requires a case-sensitive filesystem")
-
-            legacy_custom = Path(tmpdir, "scripts/repo-maintenance/validations/90-custom.sh")
-            legacy_custom.parent.mkdir(parents=True)
-            legacy_custom.write_text("#!/usr/bin/env sh\nexit 0\n", encoding="utf-8")
-
-            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "refresh", "--profile", "xcode-app")
-            self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "success")
-            self.assertIn(
-                "migrated legacy scripts/repo-maintenance to Scripts/repo-maintenance for xcode-app profile",
-                payload["actions"],
-            )
-            self.assertFalse(Path(tmpdir, "scripts/repo-maintenance").exists())
-            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validations/90-custom.sh").is_file())
-            self.assertTrue(Path(tmpdir, "Scripts/repo-maintenance/validate-all.sh").is_file())
-
     def test_xcode_workspace_profile_installs_workspace_validation_and_dispatches_components(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
@@ -499,16 +429,16 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertEqual(payload["status"], "success")
             self.assertTrue(custom_script.is_file())
 
-    def test_report_only_can_select_xcode_profile(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "report-only", "--profile", "xcode-app")
-            self.assertEqual(code, 0)
-            self.assertEqual(payload["status"], "success")
-            self.assertEqual(payload["profile"], "xcode-app")
-            self.assertIn("Scripts/repo-maintenance/validate-all.sh", payload["managed_files"])
-            joined = "\n".join(payload["actions"])
-            self.assertIn("profile.env", joined)
-            self.assertIn("xcode-app profile", joined)
+    def test_only_generic_and_xcode_workspace_profiles_exist(self) -> None:
+        installer = (
+            ROOT / "skills/maintain-project-repo/scripts/install_maintain_project_repo.py"
+        ).read_text(encoding="utf-8")
+        runner = SCRIPT.read_text(encoding="utf-8")
+        self.assertIn('"generic":', installer)
+        self.assertIn('"xcode-workspace":', installer)
+        self.assertNotIn('"swift-package":', installer)
+        self.assertNotIn('"xcode-app":', installer)
+        self.assertIn('choices=("generic", "xcode-workspace")', runner)
 
 
 if __name__ == "__main__":

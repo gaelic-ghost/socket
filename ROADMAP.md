@@ -81,7 +81,7 @@
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
 - Milestone 32: tvOS app experience and media playback workflows - Completed
-- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - In Progress
+- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - Completed
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -353,7 +353,7 @@ Implementation Complete; Release Pending
 
 ### Status
 
-In Progress
+Completed
 
 ### Scope
 
@@ -1128,12 +1128,12 @@ In Progress
 - [x] GitHub #187: enforce GitHub-hosted Linux builds and protected test/production deployment workflows ([#187](https://github.com/gaelic-ghost/socket/issues/187)).
 - [x] Retire duplicate standalone Hummingbird/Vapor bootstrap and Hummingbird guidance-sync surfaces after the workspace component adapters ship.
 - [x] Add child, root, generated-repository, metadata, and Hermes compatibility validation for the unified contract.
-- [ ] Implement the [canonical Swift workspace adoption and legacy-removal plan](./docs/maintainers/canonical-swift-workspace-adoption-and-legacy-removal-plan.md).
-- [ ] Fold existing-project migration into `bootstrap-xcode-workspace --operation adopt`, covering hand-managed Xcode, XcodeGen, package-only, service-only, and mixed repositories without whole-repo classification.
-- [ ] Place every app extension as a peer target under `Apps/`, record its host app explicitly, and remove the root `Extensions/` model.
-- [ ] Delete the standalone package bootstrap, old XcodeGen migrator, broad SwiftPM/Xcode compatibility routers, and `swift-package`/`xcode-app` maintainer profiles after their durable guards move to canonical owners.
-- [ ] Remove stale Compose/local-image, server Apple-container/VM, direct Fly deployment, and duplicate local-environment paths from active Swift product guidance.
-- [ ] Align plugin metadata, generated guidance, historical docs, architecture, Hermes exports, Claude/Cowork compatibility, and release notes with the final reduced inventory.
+- [x] Implement the [canonical Swift workspace adoption and legacy-removal plan](./docs/maintainers/canonical-swift-workspace-adoption-and-legacy-removal-plan.md).
+- [x] Fold existing-project migration into `bootstrap-xcode-workspace --operation adopt`, covering hand-managed Xcode, XcodeGen, package-only, service-only, and mixed repositories without whole-repo classification.
+- [x] Place every app extension as a peer target under `Apps/`, record its host app explicitly, and remove the root `Extensions/` model.
+- [x] Delete the standalone package bootstrap, old XcodeGen migrator, broad SwiftPM/Xcode compatibility routers, and `swift-package`/`xcode-app` maintainer profiles after their durable guards move to canonical owners.
+- [x] Remove stale Compose/local-image, server Apple-container/VM, direct Fly deployment, and duplicate local-environment paths from active Swift product guidance.
+- [x] Align plugin metadata, generated guidance, historical docs, architecture, Hermes exports, Claude/Cowork compatibility, and release notes with the final reduced inventory.
 
 ### Exit Criteria
 
@@ -1143,11 +1143,17 @@ In Progress
 - [x] New Swift AWS fixtures select Soto and demonstrate one-client application and warm-Lambda lifecycle ownership.
 - [x] Every test or production cloud artifact is built in GitHub Actions and deployed through protected environments with immutable identity and OIDC.
 - [x] Root guidance, child skills, generated assets, plugin metadata, tests, roadmap, and Hermes exports describe the same single workflow.
-- [ ] Existing repositories adopt the canonical workspace through a reviewed component map that preserves targets, settings, resources, schemes, test plans, SwiftPM products, services, and extension-host relationships.
-- [ ] `bootstrap-xcode-workspace` is the only Swift repository create/adopt/add/align entrypoint; no compatibility wrappers or per-shape creation/migration/profile surfaces remain.
-- [ ] Extensions, apps, and Xcode test targets are peers under `Apps/`; no active guidance creates a root `Extensions/` directory.
-- [ ] Active Server-Side Swift guidance contains no local Compose/image/VM path and no direct developer cloud deployment path.
-- [ ] The full adoption fixture matrix and negative legacy-surface scans pass before merge or issue closure.
+- [x] Existing repositories adopt the canonical workspace through a reviewed component map that preserves targets, settings, resources, schemes, test plans, SwiftPM products, services, and extension-host relationships.
+- [x] `bootstrap-xcode-workspace` is the only Swift repository create/adopt/add/align entrypoint; no compatibility wrappers or per-shape creation/migration/profile surfaces remain.
+- [x] Extensions, apps, and Xcode test targets are peers under `Apps/`; no active guidance creates a root `Extensions/` directory.
+- [x] Active Server-Side Swift guidance contains no local Compose/image/VM path and no direct developer cloud deployment path.
+- [x] The full adoption fixture matrix and negative legacy-surface scans pass before merge or issue closure.
+
+Completed Milestone 33 by making the root Xcode workspace the sole Swift product
+lifecycle, adding reviewed adoption for existing app/package/service repositories,
+placing extensions beside their host apps under `Apps/`, standardizing Soto and
+native Homebrew-backed local service development, and reserving Linux artifacts
+and test/production deployments for GitHub Actions.
 
 ## Small Tickets
 

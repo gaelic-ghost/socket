@@ -438,7 +438,7 @@ Completed
 - [x] Ship the skill as `swift-package-extension-workflow`.
 - [x] Keep `swift-package-build-run-workflow` focused on ordinary manifest, dependency, resource, build, and run work, and route plugin, macro, trait, and generated-source questions into the new skill.
 - [x] Keep `swift-package-testing-workflow` focused on tests, fixtures, `.xctestplan`, profiling evidence, and test diagnosis, but teach it to hand off trait-matrix or macro/plugin test-shape work when the package-extension concern is primary.
-- [x] Keep `swift-package-workflow` as a compatibility router, not a second detailed implementation surface.
+- [x] Retire the temporary broad Swift package compatibility router after its durable guards move into the focused build, test, extension, and workspace owners.
 - [x] Keep tool-specific formatter or linter plugin details in `format-swift-sources`, while linking back to the general package-extension workflow for plugin policy, permissions, generated files, and Xcode handoffs.
 
 ### Planned Reference Structure
@@ -1415,7 +1415,7 @@ Completed
 - Added default tracked homes for app marketing/build versions, Swift 6 and concurrency settings, user-script sandboxing, macOS app sandbox state, and hardened-runtime state so Xcode GUI build-setting changes can be promoted back into `.xcconfig` files cleanly.
 - Added a default asset catalog with app-icon and accent-color placeholders, explicit app-icon config wiring, Swift asset-symbol generation, and dead-code stripping defaults to the generated XcodeGen scaffold.
 - Completed the XcodeGen String Catalog bootstrap contract: new SwiftUI apps now include `Localizable.xcstrings`, enable generated localization symbols and Swift string extraction, generate unit-test Info.plists, and exclude placeholder files from synchronized app resources; an opt-in macOS integration test verifies the generated build settings and symbol sources.
-- Added `migrate-xcode-project-to-xcodegen` as the explicit owner for non-destructive Xcode-managed to XcodeGen conversion audits and stale XcodeGen modernization planning.
+- Added the former XcodeGen migrator as a temporary conversion owner, then retired it when reviewed existing-project adoption moved into `bootstrap-xcode-workspace --operation adopt`.
 - Tightened Xcode project guidance so tracked `.pbxproj` diffs produced by Xcode, XcodeGen, or other project-aware workflows are treated as critical project state that must be reviewed, staged, and committed before push, merge, release, or cleanup.
 - Updated standalone install guidance so `apple-dev-skills` defaults to Codex's Git-backed marketplace add/upgrade flow without an explicit ref, documents the optional `socket` marketplace path for Gale's broader plugin set, and keeps manual local clone marketplaces as development and fallback paths.
 - Tightened the Swift public API guidance across shared snippets, skill-local snippet copies, and generated `AGENTS.md` templates so public call sites default to streamlined typed APIs, optional defaulted parameters over overloads, request/options structs at four or more public parameters, and enum-backed choice modeling.

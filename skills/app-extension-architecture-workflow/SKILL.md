@@ -39,6 +39,8 @@ It owns extension-point routing, target and process boundaries, activation, enti
    - stop and surface a conflict if current code assumes a lifecycle, privilege, or data access that Apple documentation does not support
 3. Design targets and ownership:
    - give the containing app, each extension target, and any shared framework or package one clear job
+   - in the canonical product workspace, place every extension target directly at `Apps/<ExtensionTarget>/` as a peer of its containing app and test targets; never create a root `Extensions/` tree
+   - require the containing app's XcodeGen target dependency to name and embed the extension explicitly; directory proximity or target naming is not host evidence
    - keep extension entry points thin; put portable domain logic in deliberately shared source only when both targets need it
    - do not use a shared target to smuggle UI, host-only state, or privileged access across process boundaries
 4. Define the process and data-flow contract:
@@ -60,6 +62,10 @@ It owns extension-point routing, target and process boundaries, activation, enti
    - test the extension independently where its framework permits; extract pure/shared logic into a testable target instead of trying to unit-test an unsupported extension process directly
    - validate the same signing and distribution path intended for users; do not infer App Store, notarization, or enterprise behavior from a development build
 8. Return one recommendation with the extension point, target map, lifecycle/data-flow boundary, entitlement/share plan, privacy plan, validation sequence, and the next focused handoff.
+9. Hand settled target creation or existing-target adoption to
+   `bootstrap-xcode-workspace --operation add-component|adopt`; this workflow
+   chooses the extension contract while the workspace workflow owns placement,
+   XcodeGen registration, host embedding, and the permanent project graph.
 
 ## Inputs
 
@@ -92,6 +98,9 @@ It owns extension-point routing, target and process boundaries, activation, enti
 - Do not add an App Group, shared Keychain access group, network entitlement, or broad file access without naming the participating targets and the required data flow.
 - Do not place Messages/iMessage collaboration, communication-notification product policy, VoIP, or Push to Talk behavior in this workflow.
 - Do not claim an extension is enabled, activated, signed, distributable, or testable until the relevant host and build evidence exists.
+- Do not create or recommend a root `Extensions/` directory, a separate
+  extension project, or an inferred host relationship. Extensions are peer
+  targets under `Apps/` and the containing app embeds them explicitly.
 - Stop with `blocked` when the requested behavior needs an undocumented extension point, host privilege, private system data, or cross-process access the platform does not expose.
 
 ## Fallbacks and Handoffs
@@ -103,6 +112,8 @@ It owns extension-point routing, target and process boundaries, activation, enti
 - Recommend `safari-extension-control-workflow` for Safari-specific extension choices.
 - Recommend `app-intents-workflow` for App Intents and system-intent execution.
 - Recommend `xcode-build-run-workflow` for Xcode target creation, build settings, entitlements, signing, embedding, install, and run work.
+- Recommend `bootstrap-xcode-workspace` for canonical extension target creation,
+  `Apps/` placement, existing-repository adoption, and XcodeGen host embedding.
 - Recommend `xcode-testing-workflow` for XCTest, XCUITest, test plans, and execution evidence.
 - Recommend `macos-distribution-workflow` for macOS signing, notarization, Gatekeeper, and artifact inspection.
 - Recommend `explore-apple-swift-docs` for a current Apple documentation pass before choosing an unfamiliar extension point.

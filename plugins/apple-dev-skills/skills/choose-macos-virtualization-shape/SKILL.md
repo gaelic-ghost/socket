@@ -56,8 +56,8 @@ Choose one boundary from evidence about fidelity, persistence, portability, host
 
 ## Fallbacks and Handoffs
 
-- Use `server-side-swift:docker-workflow` for portable OCI authoring and deployment.
-- Use `server-side-swift:apple-containerization-workflow` for Apple `container`, `container machine`, or Containerization APIs.
+- Use `server-side-swift:docker-workflow` only for portable OCI definition and GitHub-hosted image/deployment automation; it is not a local Swift runtime path.
+- Treat Apple `container`, `container machine`, and Containerization APIs as general virtualization research outside the Server-Side Swift development contract; do not route Swift service development through them.
 - Use `virtualization-framework-workflow` for custom VM host implementation.
 - Use `linux-development-vm-workflow` or `macos-development-vm-workflow` for guest lifecycle work.
 - Use `cybersecurity-skills:select-analysis-isolation` and `prepare-isolated-analysis-lab` for untrusted material.

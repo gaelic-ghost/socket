@@ -19,7 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root")
     parser.add_argument("--operation", choices=("install", "refresh", "report-only"))
-    parser.add_argument("--profile", choices=("generic", "swift-package", "xcode-app", "xcode-workspace"))
+    parser.add_argument("--profile", choices=("generic", "xcode-workspace"))
     parser.add_argument("--skip-github-workflow", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser

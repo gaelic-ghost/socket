@@ -1,4 +1,4 @@
 interface:
   display_name: "Bootstrap Xcode Workspace"
-  short_description: "Bootstrap one Apple product workspace"
-  default_prompt: "Use $bootstrap-xcode-workspace to create one root XcodeGen project with Apps targets and Packages modules."
+  short_description: "Create or adopt one Swift product workspace"
+  default_prompt: "Use $bootstrap-xcode-workspace as the sole Swift repository create, adopt, add-component, or align entrypoint. Keep application, extension, and test targets as peers under Apps with explicit extension-host embedding; keep SwiftPM libraries under Packages and services under Services. Inventory existing components without classifying the whole repository, require a reviewed adoption map before writes, use native Swift and Homebrew services locally, and leave Linux artifacts and deployment to GitHub Actions."

@@ -13,33 +13,13 @@ from pathlib import Path
 
 PROFILE_CHOICES = {
     "generic": "Generic repo-maintenance baseline with no Swift or Xcode specialization.",
-    "swift-package": "Swift Package Manager repo-maintenance profile for library, tool, and package repos.",
-    "xcode-app": "Xcode app repo-maintenance profile for native Apple app repositories.",
-    "xcode-workspace": "Xcode workspace repo-maintenance profile for Apps, Packages, and optional Services roots.",
+    "xcode-workspace": "Canonical Swift workspace repo-maintenance profile for Apps, Packages, and Services roots.",
 }
 PROFILE_TOOLKIT_ROOTS = {
     "generic": Path("scripts/repo-maintenance"),
-    "swift-package": Path("scripts/repo-maintenance"),
-    "xcode-app": Path("Scripts/repo-maintenance"),
     "xcode-workspace": Path("Scripts/repo-maintenance"),
 }
 PROFILE_OVERLAY_FILES = {
-    "swift-package": [
-        ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
-        ("profiles/apple/repo-maintenance/.swiftlint.yml", ".swiftlint.yml"),
-        (
-            "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
-            "scripts/repo-maintenance/hooks/pre-commit.sample",
-        ),
-    ],
-    "xcode-app": [
-        ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
-        ("profiles/apple/repo-maintenance/.swiftlint.yml", ".swiftlint.yml"),
-        (
-            "profiles/apple/repo-maintenance/hooks/pre-commit.sample",
-            "scripts/repo-maintenance/hooks/pre-commit.sample",
-        ),
-    ],
     "xcode-workspace": [
         ("profiles/apple/repo-maintenance/.swiftformat", ".swiftformat"),
         ("profiles/apple/repo-maintenance/.swiftlint.yml", ".swiftlint.yml"),
@@ -54,8 +34,6 @@ PROFILE_OVERLAY_FILES = {
     ],
 }
 PROFILE_WORKFLOW_FILES = {
-    "swift-package": "profiles/apple/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
-    "xcode-app": "profiles/apple/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
     "xcode-workspace": "profiles/apple/github/repo-maintenance-workflows/validate-repo-maintenance.yml",
 }
 MANAGED_TOOLKIT_FILES = [
@@ -197,7 +175,7 @@ def ensure_profile_shape(repo_root: Path, profile: str) -> None:
 
 
 def legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> tuple[Path, Path] | None:
-    if profile not in {"xcode-app", "xcode-workspace"}:
+    if profile != "xcode-workspace":
         return None
 
     legacy_root = repo_root / DEFAULT_TOOLKIT_ROOT
@@ -249,7 +227,7 @@ def apply_legacy_xcode_toolkit_migration(repo_root: Path, profile: str) -> str |
 
 def copy_file(source: Path, target: Path, profile: str) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
-    if profile in {"xcode-app", "xcode-workspace"}:
+    if profile == "xcode-workspace":
         content = source.read_text(encoding="utf-8")
         content = content.replace("scripts/repo-maintenance", "Scripts/repo-maintenance")
         target.write_text(content, encoding="utf-8")

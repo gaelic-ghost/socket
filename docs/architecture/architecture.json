@@ -1,5 +1,5 @@
 {
-  "detectedAt": "2026-08-20T18:57:29.114965+00:00",
+  "detectedAt": "2026-08-20T20:04:00.823748+00:00",
   "detectionSource": "plugin-repo",
   "evidence": [
     {
@@ -208,10 +208,6 @@
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
     },
     {
@@ -300,10 +296,6 @@
     },
     {
       "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
     },
     {
@@ -337,10 +329,6 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -397,10 +385,6 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -1197,10 +1181,6 @@
     {
       "kind": "skill-manifest",
       "path": "plugins/server-side-swift/skills/app-sync-workflow/SKILL.md"
-    },
-    {
-      "kind": "skill-manifest",
-      "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
     },
     {
       "kind": "skill-manifest",
@@ -2386,18 +2366,6 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/bootstrap-swift-package"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
         }
       ],
@@ -2662,18 +2630,6 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/migrate-xcode-project-to-xcodegen"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
           "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
         }
       ],
@@ -2777,18 +2733,6 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/swift-package-testing-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/swift-package-workflow"
     },
     {
       "evidence": [
@@ -2957,18 +2901,6 @@
       "kind": "exposes",
       "label": "plugin exposes skill",
       "to": "target:skill:apple-dev-skills/vision-image-analysis-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
-          "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:apple-dev-skills",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:apple-dev-skills/xcode-app-project-workflow"
     },
     {
       "evidence": [
@@ -5146,18 +5078,6 @@
       "evidence": [
         {
           "kind": "skill-directory",
-          "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
-        }
-      ],
-      "from": "product:server-side-swift",
-      "kind": "exposes",
-      "label": "plugin exposes skill",
-      "to": "target:skill:server-side-swift/apple-containerization-workflow"
-    },
-    {
-      "evidence": [
-        {
-          "kind": "skill-directory",
           "path": "plugins/server-side-swift/skills/auth-authorization-workflow/SKILL.md"
         }
       ],
@@ -6819,18 +6739,6 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/bootstrap-swift-package",
-      "path": "plugins/apple-dev-skills/skills/bootstrap-swift-package/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/SKILL.md"
         }
       ],
@@ -7095,18 +7003,6 @@
       "evidence": [
         {
           "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/migrate-xcode-project-to-xcodegen",
-      "path": "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
           "path": "plugins/apple-dev-skills/skills/photos-library-editing-workflow/SKILL.md"
         }
       ],
@@ -7209,18 +7105,6 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/swift-package-testing-workflow",
       "path": "plugins/apple-dev-skills/skills/swift-package-testing-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/swift-package-workflow",
-      "path": "plugins/apple-dev-skills/skills/swift-package-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -7389,18 +7273,6 @@
       "kind": "codex-skill",
       "name": "skill:apple-dev-skills/vision-image-analysis-workflow",
       "path": "plugins/apple-dev-skills/skills/vision-image-analysis-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:apple-dev-skills/xcode-app-project-workflow",
-      "path": "plugins/apple-dev-skills/skills/xcode-app-project-workflow/SKILL.md"
     },
     {
       "dependencies": [],
@@ -9573,18 +9445,6 @@
       "kind": "codex-skill",
       "name": "skill:server-side-swift/app-sync-workflow",
       "path": "plugins/server-side-swift/skills/app-sync-workflow/SKILL.md"
-    },
-    {
-      "dependencies": [],
-      "evidence": [
-        {
-          "kind": "skill-manifest",
-          "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
-        }
-      ],
-      "kind": "codex-skill",
-      "name": "skill:server-side-swift/apple-containerization-workflow",
-      "path": "plugins/server-side-swift/skills/apple-containerization-workflow/SKILL.md"
     },
     {
       "dependencies": [],

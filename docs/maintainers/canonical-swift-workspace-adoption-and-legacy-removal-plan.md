@@ -2,12 +2,12 @@
 
 ## Status
 
-Planned. Implementation has not started. This plan closes the gaps found after
-the first unified-workspace pass on `docs/unify-swift-server-workflow`.
+Implemented on `docs/unify-swift-server-workflow`. This plan records the gaps
+closed after the first unified-workspace pass and remains the acceptance contract
+for review.
 
 Do not merge, release, or close GitHub issues #183, #185, #186, or #187 as fully
-remediated until this plan's definition of done passes. Setting an implementation
-goal is a separate next action.
+remediated until this plan's definition of done passes on the reviewed branch.
 
 ## Decision
 
@@ -460,4 +460,3 @@ planning pass.
 - Root and child docs, plugin metadata, generated guidance, maintainer tooling,
   architecture, roadmap, Hermes exports, and Claude/Cowork compatibility all
   describe the same one-way workflow.
-

@@ -10,7 +10,11 @@ metadata:
 
 ## Purpose
 
-Install or refresh the reusable `maintain-project-repo` toolkit inside a general, SwiftPM, or Xcode repository so validation, shared-sync work, and release steps live in repo-owned local scripts rather than in CI-only glue. `scripts/run_workflow.py` is the runtime entrypoint, and `scripts/install_maintain_project_repo.py` applies the managed file set, writes the profile marker, and keeps the installed profile explicit.
+Install or refresh the reusable `maintain-project-repo` toolkit inside a
+general repository or a canonical Swift product workspace so validation,
+shared-sync work, and release steps live in repo-owned local scripts rather than
+CI-only glue. Callers select `generic` or `xcode-workspace` explicitly; this
+workflow does not classify repository shape.
 
 ## When To Use
 
@@ -25,9 +29,11 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - Do not use this skill to make ordinary questions, investigations, local edits, or documentation maintenance take a full PR, CI, release, tag, and cleanup path.
 - Do not run or recommend the release choreography unless the user is actually asking to release, publish, merge, tag, open a release PR, or prepare the repo for that protected-main release workflow.
 - Do not use this skill for app bootstrap, Swift package bootstrap, or AGENTS-only guidance sync by themselves.
-- Recommend `bootstrap-swift-package` when the repo does not exist yet and package scaffold creation is still the primary task.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the repo does not exist yet and package scaffold creation is still the primary task.
 - Recommend `bootstrap-xcode-workspace` when the repo does not exist yet and native Apple product bootstrap is still the primary task.
-- Recommend `bootstrap-xcode-workspace --operation align` for Swift product guidance. A deliberately standalone published package keeps an explicit package-specific maintenance contract.
+- Recommend `bootstrap-xcode-workspace --operation adopt|align` for every
+  existing Swift repository before installing the explicit `xcode-workspace`
+  profile.
 
 ## Single-Path Workflow
 
@@ -36,14 +42,17 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - optional `operation`
    - optional `skip_github_workflow`
    - optional `dry_run`
-2. Classify the repo and profile:
-   - prefer `maintain-project-repo` for SwiftPM repos, Xcode app repos, mixed Apple repos, and general software repos that need local maintainer automation
-   - choose `swift-package` for plain Swift package repos
-   - choose `xcode-app` for one native Apple app project
-   - choose `xcode-workspace` for an Apple product root with one `.xcworkspace`, one root XcodeGen project, `Apps/` target specs, `Packages/`, and optional `Services/`
-   - choose `generic` when no stronger Swift or Xcode profile applies
+2. Use the profile explicitly supplied by the owning workflow:
+   - use `xcode-workspace` for every Swift repository after canonical creation
+     or adoption: one `.xcworkspace`, one generated root project, and required
+     `Apps/`, `Packages/`, and `Services/` roots
+   - use `generic` only for non-Swift repositories or an explicitly general
+     maintainer surface
+   - never inspect markers to decide whether the whole repository is Xcode,
+     SwiftPM, plain, or mixed
    - stop if the requested path is not a repository root
-   - use `scripts/repo-maintenance/` for `generic` and `swift-package`; use `Scripts/repo-maintenance/` for `xcode-app` and `xcode-workspace` so Apple repos keep one standard top-level `Scripts/` directory
+   - use `scripts/repo-maintenance/` for `generic` and
+     `Scripts/repo-maintenance/` for `xcode-workspace`
 3. Explain the architecture boundary before mutating anything:
    - this is a durable building-block change because it creates one repo-owned maintainer surface that bootstrap, sync, validation, CI, and release flows can all share
    - it removes the pain of CI-only helper scripts and scattered release glue
@@ -57,12 +66,13 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
    - install or refresh the managed repo-maintenance files under the selected profile's toolkit root
    - install or refresh the selected profile's `config/profile.env`
    - install or refresh the thin workflow wrapper at `.github/workflows/validate-repo-maintenance.yml` unless disabled
-   - for `xcode-app`, migrate an existing legacy `scripts/repo-maintenance/` toolkit root to `Scripts/repo-maintenance/` when the capitalized root is absent; stop if both roots exist separately so the user can preserve intentional custom files before retrying
+   - for `xcode-workspace`, migrate an existing legacy
+     `scripts/repo-maintenance/` toolkit root to `Scripts/repo-maintenance/` when
+     the capitalized root is absent; stop if both roots exist separately
    - preserve repo-specific scripts or files that are not part of the managed file set
 6. Verify the installed `maintain-project-repo` files:
-   - `scripts/repo-maintenance/validate-all.sh` for `generic` and `swift-package`, or `Scripts/repo-maintenance/validate-all.sh` for `xcode-app`
-   - `scripts/repo-maintenance/sync-shared.sh` for `generic` and `swift-package`, or `Scripts/repo-maintenance/sync-shared.sh` for `xcode-app`
-   - `scripts/repo-maintenance/release.sh` for `generic` and `swift-package`, or `Scripts/repo-maintenance/release.sh` for `xcode-app`
+   - `scripts/repo-maintenance/*.sh` for `generic`
+   - `Scripts/repo-maintenance/*.sh` for `xcode-workspace`
    - `.github/workflows/validate-repo-maintenance.yml` when workflow installation is enabled
    - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
 7. Hand off GitHub repository settings work:
@@ -86,7 +96,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 
 - `repo_root`: optional absolute or relative path to the repository root; defaults to `.`
 - `operation`: `install`, `refresh`, or `report-only`
-- `profile`: `generic`, `swift-package`, `xcode-app`, or `xcode-workspace`
+- `profile`: `generic` or `xcode-workspace`
 - `skip_github_workflow`: optional flag to skip `.github/workflows/validate-repo-maintenance.yml`
 - `dry_run`: optional flag to report the managed actions without writing files
 - Defaults:
@@ -135,7 +145,7 @@ Install or refresh the reusable `maintain-project-repo` toolkit inside a general
 - GitHub release creation preserves prerelease metadata for SemVer prerelease tags and fails clearly when an existing GitHub release object disagrees with the tag.
 - GitHub release creation prefers checked-in `docs/releases/vX.Y.Z.md` notes, then `docs/releases/X.Y.Z.md`; it logs and falls back to GitHub-generated notes only when neither file exists.
 - Treat branch accounting as a hard completion gate for release and cleanup work, not as follow-up tidying. If `git branch --no-merged <base>` reports local branches after a merge, account for each branch explicitly before deleting anything or reporting the workflow complete.
-- Recommend `bootstrap-swift-package` or `bootstrap-xcode-workspace` when the repo still needs to be created.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` or `bootstrap-xcode-workspace` when the repo still needs to be created.
 - Recommend `bootstrap-xcode-workspace --operation align` when product guidance alignment is still the missing baseline after `maintain-project-repo` is present.
 
 ## Codex Subagent Fit
