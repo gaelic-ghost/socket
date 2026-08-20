@@ -2,7 +2,11 @@
 
 ## Status
 
-Implemented on `docs/unify-swift-server-workflow`; release and issue closure remain separate lifecycle work. This plan coordinates GitHub issues [#183](https://github.com/gaelic-ghost/socket/issues/183), [#185](https://github.com/gaelic-ghost/socket/issues/185), [#186](https://github.com/gaelic-ghost/socket/issues/186), and [#187](https://github.com/gaelic-ghost/socket/issues/187).
+Partially implemented on `docs/unify-swift-server-workflow`. The follow-up
+[canonical adoption and legacy-removal plan](./canonical-swift-workspace-adoption-and-legacy-removal-plan.md)
+owns the remaining existing-repository migration, extension placement, legacy
+surface deletion, and contradictory deployment cleanup. Release and issue closure
+remain separate lifecycle work. This plan coordinates GitHub issues [#183](https://github.com/gaelic-ghost/socket/issues/183), [#185](https://github.com/gaelic-ghost/socket/issues/185), [#186](https://github.com/gaelic-ghost/socket/issues/186), and [#187](https://github.com/gaelic-ghost/socket/issues/187).
 
 Issue [#182](https://github.com/gaelic-ghost/socket/issues/182) remains a separate bootstrap-runner discovery fix. The current `bootstrap-xcode-workspace` implementation and regression test appear to cover its versioned-cache failure mode; verify that issue independently and do not widen this plan to carry unrelated compatibility cleanup.
 
