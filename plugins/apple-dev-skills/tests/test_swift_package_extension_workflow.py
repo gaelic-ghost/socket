@@ -84,7 +84,6 @@ class SwiftPackageExtensionWorkflowTests(unittest.TestCase):
         for name in (
             "swift-package-build-run-workflow",
             "swift-package-testing-workflow",
-            "swift-package-workflow",
         ):
             text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn("swift-package-extension-workflow", text)

@@ -189,7 +189,7 @@ Preview export should be used for:
 When integrating into an existing app project:
 
 - inspect the repo and project shape first
-- use `xcode-app-project-workflow` or `xcode-build-run-workflow` for existing Xcode project work
+- use `xcode-build-run-workflow` or `xcode-build-run-workflow` for existing Xcode project work
 - preserve tracked project files and asset catalogs intentionally
 - do not hand-edit generated project files or package manager outputs
 - treat `.icon` as the source icon artifact when Xcode supports it

@@ -315,6 +315,108 @@ SDKROOT = iphoneos;
             self.assertIn("extension host target", " ".join(payload["unresolved"]))
             self.assertFalse((root / "project.yml").exists())
 
+    def test_adopt_inventories_hand_managed_app_settings_resources_and_schemes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            project = root / "Legacy.xcodeproj"
+            (project / "xcshareddata/xcschemes").mkdir(parents=True)
+            project.joinpath("project.pbxproj").write_text(
+                """A = {
+  isa = PBXNativeTarget;
+  name = LegacyApp;
+  productType = "com.apple.product-type.application";
+};
+SDKROOT = iphoneos;
+PRODUCT_BUNDLE_IDENTIFIER = com.example.legacy;
+CODE_SIGN_ENTITLEMENTS = Sources/Legacy.entitlements;
+SWIFT_VERSION = 6.0;
+""",
+                encoding="utf-8",
+            )
+            (project / "xcshareddata/xcschemes/LegacyApp.xcscheme").write_text("<Scheme/>\n", encoding="utf-8")
+            (root / "Sources/Resources/Assets.xcassets").mkdir(parents=True)
+            (root / "Sources/Resources/Info.plist").write_text("<plist/>\n", encoding="utf-8")
+            (root / "Sources/Legacy.entitlements").write_text("<plist/>\n", encoding="utf-8")
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            app = next(item for item in payload["components"] if item["name"] == "LegacyApp")
+            self.assertEqual(app["proposed_destination"], "Apps/LegacyApp")
+            self.assertEqual(app["platform"], "ios")
+            self.assertIn("PRODUCT_BUNDLE_IDENTIFIER", payload["inventory"]["pbx_settings_to_promote"])
+            self.assertIn("Sources/Resources/Assets.xcassets", payload["inventory"]["asset_catalogs"])
+            self.assertIn("Legacy.xcodeproj/xcshareddata/xcschemes/LegacyApp.xcscheme", payload["inventory"]["schemes"])
+
+    def test_adopt_inventories_old_xcodegen_flat_app_without_repo_classification(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "Sources").mkdir()
+            (root / "Sources/App.swift").write_text("import SwiftUI\n", encoding="utf-8")
+            (root / "project.yml").write_text(
+                """name: Legacy
+targets:
+  LegacyApp:
+    type: application
+    platform: iOS
+    sources:
+      - Sources
+""",
+                encoding="utf-8",
+            )
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            self.assertEqual(payload["components"][0]["name"], "LegacyApp")
+            self.assertEqual(payload["components"][0]["owned_paths"], ["Sources"])
+            serialized = json.dumps(payload)
+            self.assertNotIn("repo_shape", serialized)
+            self.assertNotIn("migration_path", serialized)
+            self.assertFalse((root / "Apps").exists())
+
+    def test_adopt_inventories_mixed_components_independently(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            project = root / "Product.xcodeproj"
+            project.mkdir()
+            project.joinpath("project.pbxproj").write_text(
+                """A = { isa = PBXNativeTarget; name = ProductApp; productType = "com.apple.product-type.application"; };
+SDKROOT = macosx;
+""",
+                encoding="utf-8",
+            )
+            for name, executable in (("ProductCore", False), ("ProductAPI", True)):
+                package = root / "LegacyComponents" / name
+                (package / f"Sources/{name}").mkdir(parents=True)
+                product = f'.executable(name: "{name}", targets: ["{name}"])' if executable else f'.library(name: "{name}", targets: ["{name}"])'
+                target = f'.executableTarget(name: "{name}")' if executable else f'.target(name: "{name}")'
+                (package / "Package.swift").write_text(
+                    f'// swift-tools-version: 6.2\nimport PackageDescription\nlet package = Package(name: "{name}", products: [{product}], targets: [{target}])\n',
+                    encoding="utf-8",
+                )
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            destinations = {item["name"]: item["proposed_destination"] for item in payload["components"]}
+            self.assertEqual(destinations["ProductApp"], "Apps/ProductApp")
+            self.assertEqual(destinations["ProductCore"], "Packages/ProductCore")
+            self.assertEqual(destinations["ProductAPI"], "Services/ProductAPI")
+
+    def test_adopt_preserves_test_target_and_test_plan_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            project = root / "Product.xcodeproj"
+            project.mkdir()
+            project.joinpath("project.pbxproj").write_text(
+                """A = { isa = PBXNativeTarget; name = ProductApp; productType = "com.apple.product-type.application"; };
+B = { isa = PBXNativeTarget; name = ProductAppTests; productType = "com.apple.product-type.bundle.unit-test"; };
+SDKROOT = iphoneos;
+""",
+                encoding="utf-8",
+            )
+            (root / "Product.xctestplan").write_text('{"testTargets": []}\n', encoding="utf-8")
+            code, payload = run_script(BOOTSTRAP, "--operation", "adopt", "--repo-root", tmpdir)
+            self.assertEqual(code, 0, payload)
+            tests = next(item for item in payload["components"] if item["kind"] == "test")
+            self.assertEqual(tests["proposed_destination"], "Apps/ProductAppTests")
+            self.assertIn("Product.xctestplan", payload["inventory"]["test_plans"])
+
     def test_adopt_reports_already_canonical_workspace_without_migration(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             code, created = run_script(BOOTSTRAP, "--name", "Product", "--destination", tmpdir, "--skip-validation")

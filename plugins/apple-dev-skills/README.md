@@ -164,7 +164,6 @@ uv run pytest
 - `avaudio-engine-workflow`
 - `avfaudio-session-workflow`
 - `avfoundation-media-pipeline-workflow`
-- `bootstrap-swift-package`
 - `bootstrap-xcode-workspace`
 - `camera-capture-depth-workflow`
 - `apple-typography-workflow`
@@ -184,7 +183,6 @@ uv run pytest
 - `macos-distribution-workflow`
 - `macos-window-management-workflow`
 - `mailkit-workflow`
-- `migrate-xcode-project-to-xcodegen`
 - `photos-library-editing-workflow`
 - `safari-extension-control-workflow`
 - `safari-mcp-workflow`
@@ -202,13 +200,11 @@ uv run pytest
 - `swift-package-build-run-workflow`
 - `swift-package-extension-workflow`
 - `swift-package-testing-workflow`
-- `swift-package-workflow`
 - `swiftui-animation-workflow`
 - `swiftui-app-architecture-workflow`
 - `swiftui-component-audit-workflow`
 - `swiftui-liquid-glass`
 - `swiftui-performance-audit`
-- `xcode-app-project-workflow`
 - `xcode-build-run-workflow`
 - `xcode-coding-intelligence-workflow`
 - `xcode-debugger-mcp-workflow`

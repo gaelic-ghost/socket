@@ -22,7 +22,6 @@ def test_retired_standalone_and_sync_skills_are_absent() -> None:
 
 def test_package_workflows_have_no_repo_classifier_or_mixed_root_opt_in() -> None:
     for skill in (
-        "swift-package-workflow",
         "swift-package-build-run-workflow",
         "swift-package-testing-workflow",
         "swift-package-extension-workflow",
@@ -38,8 +37,8 @@ def test_package_workflows_have_no_repo_classifier_or_mixed_root_opt_in() -> Non
 def test_workspace_entrypoint_owns_all_component_roots() -> None:
     script = read("plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/scripts/run_workflow.py")
     for phrase in (
-        'choices=("create", "add-component", "align")',
-        'choices=("app", "library", "service")',
+        'choices=("create", "adopt", "add-component", "align")',
+        'choices=("app", "extension", "library", "service")',
         "Services/services-shared.yml",
         "workspace-service-component",
         "ensure_services_surface",

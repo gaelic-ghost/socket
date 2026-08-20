@@ -22,7 +22,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Do not use this skill as the default path for Xcode workspace, scheme, preview, simulator, or navigator-driven work.
 - Recommend `swift-package-build-run-workflow` when the request is primarily about ordinary package build/run, manifest, dependency, resource, or Metal-distribution work.
 - Recommend `swift-package-extension-workflow` when trait matrices, macro/plugin test shape, or generated-source validation is the primary concern.
-- Recommend `bootstrap-swift-package` when the package repo does not exist yet.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the package repo does not exist yet.
 - Recommend root workspace `just align` when product guidance needs to be refreshed.
 - Recommend `xcode-testing-workflow` when test work depends on active Xcode workspace state, navigator diagnostics, simulator or device flows, XCUITest, runtime accessibility verification, or Xcode-native test plans and test execution.
 - Recommend `apple-ui-accessibility-workflow` when the request is primarily about accessibility semantics or review rather than package-side testing strategy.
@@ -108,7 +108,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Recommend `apple-ui-accessibility-workflow` when the user is really asking how the UI should expose semantics to assistive technologies instead of how a package-side test should be organized.
 - Hand off to `xcode-build-run-workflow` when package test work instead crosses into direct changes inside `.xcodeproj`, `.xcworkspace`, or `.pbxproj` managed scope.
 - Recommend root workspace `just align` when the request is really about product guidance instead of execution.
-- Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the repository still needs to be created from scratch.
 - When maintaining this repository itself, refresh guidance-sync consumers after substantial package-testing policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
 ## Customization

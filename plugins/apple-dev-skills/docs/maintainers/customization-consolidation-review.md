@@ -8,11 +8,11 @@ Record the Milestone 20 audit of the current customization system, decide whethe
 
 ## Current State Summary
 
-- The active skill surface ships `62` separate `references/customization.template.yaml` files.
-- The active skill surface ships `62` separate `scripts/customization_config.py` entrypoints.
+- The active skill surface ships `58` separate `references/customization.template.yaml` files.
+- The active skill surface ships `58` separate `scripts/customization_config.py` entrypoints.
 - Those `customization_config.py` files are functionally identical and exist only because installed skills are expected to keep runtime resources inside the skill directory.
-- The current templates expose `16` knobs total:
-  - `15` are documented as `runtime-enforced`
+- The current templates expose `12` knobs total:
+  - `11` are documented as `runtime-enforced`
   - `1` is documented as `policy-only`
 - The current surface mixes together four different categories that should not all be presented as the same kind of user customization:
   - durable user preference
@@ -30,7 +30,7 @@ Milestone 20 audited a larger surface before the implementation pass landed.
 - Milestone 27 applied the approved reduction so the live surface now reflects the smaller counts in the current-state summary above.
 - Milestone 38 later added the narrower `author-swift-docc-docs` skill with one runtime-enforced tutorial-handling knob, which is included in the current-state counts above.
 - The current-state counts also include `structure-swift-sources`, which now ships runtime-enforced header-policy and split-threshold knobs for the structural-cleanup workflow.
-- The current-state counts now also include the no-runtime-knob `macos-privacy-permissions-workflow`, `macos-sandbox-file-access-workflow`, `diagnose-apple-entitlements`, `choose-macos-virtualization-shape`, `virtualization-framework-workflow`, `linux-development-vm-workflow`, `macos-development-vm-workflow`, `apple-ui-accessibility-workflow`, `safari-extension-control-workflow`, `safari-mcp-workflow`, `app-extension-architecture-workflow`, `mailkit-workflow`, `file-provider-and-finder-sync-workflow`, `devicecheck-app-attest-workflow`, `apple-developer-provisioning-workflow`, `swiftui-app-architecture-workflow`, `swiftui-component-audit-workflow`, `swiftui-animation-workflow`, `sf-symbols-workflow`, `core-animation-layer-workflow`, `apple-typography-workflow`, `appkit-app-architecture-workflow`, `xcode-coding-intelligence-workflow`, `xcode-localization-workflow`, `migrate-xcode-project-to-xcodegen`, `avfaudio-session-workflow`, `avaudio-engine-workflow`, `avfoundation-media-pipeline-workflow`, `coremedia-timing-samplebuffer-workflow`, and `coreaudio-modernization-repair-workflow` surfaces, all of which keep the customization-file contract without introducing runtime knobs.
+- The current-state counts include the active no-runtime-knob workflow surfaces; retired repository bootstrap, migration, and compatibility routers are excluded because `bootstrap-xcode-workspace` now owns the sole Swift repository lifecycle.
 
 ## Decision
 
@@ -192,4 +192,4 @@ Status: not started
 
 Milestone 20 is complete once the roadmap reflects this review and the repository treats this document as the source of truth for the next implementation pass.
 
-Milestone 27 is complete once the live customization templates, flow docs, runtime wrappers, tests, and roadmap all match the reduced surface described here. That implementation pass is now in place, with the narrower Xcode build/run and testing skills keeping the retry-count and fallback-profile runtime knobs while the compatibility `xcode-app-project-workflow` surface keeps only the hard `.pbxproj` warning boundary.
+Milestone 27 is complete once the live customization templates, flow docs, runtime wrappers, tests, and roadmap all match the reduced surface described here. That implementation pass is now in place, with the narrower Xcode build/run and testing skills keeping the retry-count and fallback-profile runtime knobs. The hard `.pbxproj` warning boundary belongs directly to `xcode-build-run-workflow`; the former compatibility router is retired.

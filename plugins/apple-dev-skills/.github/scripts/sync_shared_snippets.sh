@@ -51,8 +51,6 @@ sync_one \
   "$ROOT_DIR/skills/apple-ui-accessibility-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/xcode-build-run-workflow/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/xcode-testing-workflow/references/snippets/apple-xcode-project-core.md" \
-  "$ROOT_DIR/skills/xcode-app-project-workflow/references/snippets/apple-xcode-project-core.md" \
-  "$ROOT_DIR/skills/migrate-xcode-project-to-xcodegen/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/format-swift-sources/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/explore-apple-swift-docs/references/snippets/apple-xcode-project-core.md" \
   "$ROOT_DIR/skills/avfaudio-session-workflow/references/snippets/apple-xcode-project-core.md" \
@@ -90,9 +88,7 @@ sync_one \
   "$ROOT_DIR/shared/agents-snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-extension-workflow/references/snippets/apple-swift-package-core.md" \
   "$ROOT_DIR/skills/swift-package-build-run-workflow/references/snippets/apple-swift-package-core.md" \
-  "$ROOT_DIR/skills/swift-package-testing-workflow/references/snippets/apple-swift-package-core.md" \
-  "$ROOT_DIR/skills/swift-package-workflow/references/snippets/apple-swift-package-core.md" \
-  "$ROOT_DIR/skills/bootstrap-swift-package/references/snippets/apple-swift-package-core.md"
+  "$ROOT_DIR/skills/swift-package-testing-workflow/references/snippets/apple-swift-package-core.md"
 
 if "$check_mode"; then
   echo "Shared snippet skill-local copies are in sync."

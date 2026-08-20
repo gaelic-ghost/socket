@@ -10,7 +10,9 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 
 - run `--operation prepare` for local validation, the version bump, branch push, PR creation, one remote snapshot, and a continuation packet
 - require committed changes and a clean worktree
-- run the repo-specific version bump hook at the selected profile root: `scripts/repo-maintenance/version-bump.sh` for generic/SwiftPM profiles or `Scripts/repo-maintenance/version-bump.sh` for the xcode-app profile
+- run the repo-specific version bump hook at the selected profile root:
+  `scripts/repo-maintenance/version-bump.sh` for `generic` or
+  `Scripts/repo-maintenance/version-bump.sh` for `xcode-workspace`
 - commit the version bump as `release: bump versions for vX.Y.Z`
 - push the branch
 - perform one immediate branch-visibility re-read; if it is not visible, emit a continuation packet instead of polling

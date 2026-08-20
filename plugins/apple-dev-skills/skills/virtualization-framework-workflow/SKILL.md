@@ -56,7 +56,7 @@ Implement one explicit macOS or Linux Virtualization framework path without flat
 
 - Use `choose-macos-virtualization-shape` when the boundary is undecided.
 - Use `linux-development-vm-workflow` or `macos-development-vm-workflow` for guest preparation and reset strategy.
-- Use `xcode-app-project-workflow` for target membership, entitlement wiring, and app-project integration.
+- Use `xcode-build-run-workflow` for target membership, entitlement wiring, and app-project integration.
 - Use `xcode-build-run-workflow` and `xcode-testing-workflow` for execution and tests.
 - Use `prepare-isolated-analysis-lab` for hostile-workload control policy.
 

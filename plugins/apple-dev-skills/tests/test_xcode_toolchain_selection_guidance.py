@@ -15,7 +15,6 @@ class XcodeToolchainSelectionGuidanceTests(unittest.TestCase):
         references = [
             "skills/xcode-build-run-workflow/references/toolchain-management.md",
             "skills/xcode-testing-workflow/references/toolchain-management.md",
-            "skills/xcode-app-project-workflow/references/toolchain-management.md",
         ]
 
         for reference in references:

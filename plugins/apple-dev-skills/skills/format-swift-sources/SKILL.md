@@ -25,7 +25,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Use this skill when the user wants the recommended shared-repo formatting baseline for a Swift repository.
 - Use this skill when the user needs the supported-path caveats for SwiftLint or SwiftFormat, such as plugin config-path limitations, Xcode script sandboxing, or per-project config gaps in the SwiftFormat extension.
 - Use this skill first when a later `structure-swift-sources` pass will split files, move files, or normalize section layout and the repo needs a clean formatting baseline before structural edits begin.
-- Recommend `bootstrap-swift-package` when the user is creating a brand new Swift package and style tooling is only one part of that scaffold.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the user is creating a brand new Swift package and style tooling is only one part of that scaffold.
 - Recommend `bootstrap-xcode-workspace` when the user is creating a native Apple product and style tooling is only one part of that scaffold.
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` when the task shifts from style-tooling integration to ordinary SwiftPM package execution.
 - Recommend `swift-package-extension-workflow` when the task shifts from formatter-specific setup to general plugin capability, permissions, generated outputs, dual-toolchain behavior, or Xcode handoff policy.
@@ -112,7 +112,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Recommend `swift-package-extension-workflow` when formatter or linter plugin work needs general SwiftPM extension policy or Swiftly/Xcode comparison.
 - Recommend `xcode-build-run-workflow` when the task becomes Xcode execution or diagnostics work.
 - Recommend `xcode-testing-workflow` when the task becomes Xcode test work.
-- Recommend `bootstrap-swift-package` or `bootstrap-xcode-workspace` when the user really needs a full project scaffold instead of isolated style-tooling setup.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` or `bootstrap-xcode-workspace` when the user really needs a full project scaffold instead of isolated style-tooling setup.
 - Recommend `structure-swift-sources` directly when the task becomes file splitting, source moves, MARK normalization, or TODO/FIXME ledger maintenance.
 - Recommend `author-swift-docc-docs` directly when the task becomes symbol documentation, DocC article work, landing-page structure, topic groups, or DocC-oriented review.
 - Recommend `bootstrap-xcode-workspace --operation align` for product guidance alignment.

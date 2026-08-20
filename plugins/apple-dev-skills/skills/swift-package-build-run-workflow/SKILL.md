@@ -23,7 +23,7 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
 - Do not use this skill for repo-guidance alignment in an existing package repo.
 - Do not use this skill as the default path for Xcode workspace, scheme, preview, simulator, or navigator-driven work.
 - Recommend `swift-package-testing-workflow` when the request is primarily about running, diagnosing, organizing, or evolving tests.
-- Recommend `bootstrap-swift-package` when the package repo does not exist yet.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the package repo does not exist yet.
 - Recommend root workspace `just align` when product guidance needs to be refreshed.
 - Recommend `xcode-build-run-workflow` when the task depends on active Xcode workspace state, scheme-aware execution, previews, navigator diagnostics, simulator or device flows, or guarded mutation inside Xcode-managed scope.
 - Recommend `explore-apple-swift-docs` when the user needs Apple or Swift docs exploration before implementation or package changes.
@@ -115,7 +115,7 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
   - Metal shader compilation, Apple-managed Metal toolchain inspection, or package distribution that depends on Xcode-managed Apple SDK integration
   - direct changes inside `.xcodeproj`, `.xcworkspace`, or `.pbxproj` managed scope
 - Recommend root workspace `just align` when the request is really about product guidance instead of execution.
-- Recommend `bootstrap-swift-package` when the repository still needs to be created from scratch.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the repository still needs to be created from scratch.
 - When maintaining this repository itself, refresh guidance-sync consumers after substantial package-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
 ## Customization

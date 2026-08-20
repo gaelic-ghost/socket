@@ -99,7 +99,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Recommend `swift-package-build-run-workflow` or `swift-package-testing-workflow` directly when the task becomes ordinary SwiftPM package work.
 - Recommend `format-swift-sources` directly when the task becomes SwiftLint or SwiftFormat setup, config export, or style-tooling maintenance work.
 - Recommend `structure-swift-sources` directly when the task becomes structural source cleanup work.
-- Recommend `bootstrap-swift-package` directly when the task becomes new-package scaffolding.
+- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` directly when the task becomes new-package scaffolding.
 - Recommend `bootstrap-xcode-workspace --operation align` directly when the repo needs Xcode-specific guidance alignment rather than execution.
 - `scripts/run_workflow.py` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
 - When maintaining this repository itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.

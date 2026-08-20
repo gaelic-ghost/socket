@@ -9,7 +9,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL_SCRIPTS = {
-    "xcode-app-project-workflow": ROOT / "skills/xcode-app-project-workflow/scripts/customization_config.py",
     "xcode-build-run-workflow": ROOT / "skills/xcode-build-run-workflow/scripts/customization_config.py",
     "xcode-testing-workflow": ROOT / "skills/xcode-testing-workflow/scripts/customization_config.py",
     "author-swift-docc-docs": ROOT / "skills/author-swift-docc-docs/scripts/customization_config.py",
@@ -19,9 +18,6 @@ SKILL_SCRIPTS = {
     "swiftui-app-architecture-workflow": ROOT / "skills/swiftui-app-architecture-workflow/scripts/customization_config.py",
     "explore-apple-swift-docs": ROOT / "skills/explore-apple-swift-docs/scripts/customization_config.py",
     "structure-swift-sources": ROOT / "skills/structure-swift-sources/scripts/customization_config.py",
-    "bootstrap-swift-package": ROOT / "skills/bootstrap-swift-package/scripts/customization_config.py",
-    "migrate-xcode-project-to-xcodegen": ROOT
-    / "skills/migrate-xcode-project-to-xcodegen/scripts/customization_config.py",
     "swift-package-build-run-workflow": ROOT / "skills/swift-package-build-run-workflow/scripts/customization_config.py",
     "swift-package-testing-workflow": ROOT / "skills/swift-package-testing-workflow/scripts/customization_config.py",
 }

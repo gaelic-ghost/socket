@@ -106,13 +106,11 @@ require_contains "ROADMAP.md" "preserving guidance through the refactor"
 
 echo "Validating skill directory layout..."
 active_skill_mds=(
-  "./skills/xcode-app-project-workflow/SKILL.md"
   "./skills/xcode-build-run-workflow/SKILL.md"
   "./skills/xcode-testing-workflow/SKILL.md"
   "./skills/swift-package-build-run-workflow/SKILL.md"
   "./skills/swift-package-testing-workflow/SKILL.md"
   "./skills/swift-package-extension-workflow/SKILL.md"
-  "./skills/swift-package-workflow/SKILL.md"
   "./skills/author-swift-docc-docs/SKILL.md"
   "./skills/avfaudio-session-workflow/SKILL.md"
   "./skills/avaudio-engine-workflow/SKILL.md"
@@ -154,8 +152,6 @@ active_skill_mds=(
   "./skills/explore-apple-swift-docs/SKILL.md"
   "./skills/format-swift-sources/SKILL.md"
   "./skills/structure-swift-sources/SKILL.md"
-  "./skills/bootstrap-swift-package/SKILL.md"
-  "./skills/migrate-xcode-project-to-xcodegen/SKILL.md"
   "./skills/bootstrap-xcode-workspace/SKILL.md"
   "./skills/xcode-coding-intelligence-workflow/SKILL.md"
   "./skills/xcode-localization-workflow/SKILL.md"
@@ -169,7 +165,7 @@ active_skill_mds=(
   "./skills/tvos-app-experience-workflow/SKILL.md"
   "./skills/tvos-media-playback-workflow/SKILL.md"
 )
-[[ ${#active_skill_mds[@]} -eq 62 ]] || fail "Expected exactly 62 active skills, found ${#active_skill_mds[@]}."
+[[ ${#active_skill_mds[@]} -eq 58 ]] || fail "Expected exactly 58 active skills, found ${#active_skill_mds[@]}."
 
 shared_xcode_snippet="./shared/agents-snippets/apple-xcode-project-core.md"
 shared_package_snippet="./shared/agents-snippets/apple-swift-package-core.md"
@@ -214,7 +210,7 @@ for skill_md in "${active_skill_mds[@]}"; do
   fi
 
   case "$skill_dir" in
-    ./skills/bootstrap-swift-package|./skills/swift-package-workflow|./skills/swift-package-build-run-workflow|./skills/swift-package-testing-workflow|./skills/swift-package-extension-workflow)
+    ./skills/swift-package-build-run-workflow|./skills/swift-package-testing-workflow|./skills/swift-package-extension-workflow)
       local_snippet="$skill_dir/references/snippets/apple-swift-package-core.md"
       shared_snippet="$shared_package_snippet"
       snippet_ref='references/snippets/apple-swift-package-core.md'
@@ -251,15 +247,12 @@ require_contains "$dash_skill_dir/references/dash_call_library.md" '## High-Valu
 
 echo "Validating stale installer and nested-packaging guidance is gone..."
 for file in \
-  "skills/swift-package-workflow/SKILL.md" \
   "skills/swift-package-testing-workflow/SKILL.md" \
   "skills/swift-package-build-run-workflow/SKILL.md" \
   "skills/swift-package-extension-workflow/SKILL.md" \
-  "skills/xcode-app-project-workflow/SKILL.md" \
   "skills/xcode-testing-workflow/SKILL.md" \
   "skills/xcode-build-run-workflow/SKILL.md" \
   "skills/xcode-coding-intelligence-workflow/SKILL.md" \
-  "skills/migrate-xcode-project-to-xcodegen/SKILL.md" \
   "skills/author-swift-docc-docs/SKILL.md" \
   "skills/avfaudio-session-workflow/SKILL.md" \
   "skills/avaudio-engine-workflow/SKILL.md" \
@@ -286,38 +279,24 @@ done
 
 echo "Validating maintain-project-repo delegation..."
 [[ ! -e "./shared/repo-maintenance-toolkit" ]] || fail "Did not expect apple-dev-skills to retain shared/repo-maintenance-toolkit."
-for skill_dir in \
-  "./skills/bootstrap-swift-package"
-do
-  [[ ! -e "$skill_dir/scripts/install_repo_maintenance_toolkit.py" ]] || fail "Did not expect legacy toolkit installer in $skill_dir"
-  [[ ! -e "$skill_dir/assets/repo-maintenance" ]] || fail "Did not expect vendored repo-maintenance assets in $skill_dir"
-  [[ ! -e "$skill_dir/assets/github/repo-maintenance-workflows" ]] || fail "Did not expect vendored repo-maintenance workflow assets in $skill_dir"
-  require_contains "$skill_dir/SKILL.md" 'maintain-project-repo'
-  require_contains "$skill_dir/SKILL.md" 'Companion Plugin Requirement'
-  require_contains "$skill_dir/SKILL.md" 'https://github.com/gaelic-ghost/socket'
-done
-require_contains "./skills/bootstrap-swift-package/scripts/bootstrap_swift_package.sh" 'repository-skills/skills/maintain-project-repo/scripts/run_workflow.py'
+require_contains "./skills/bootstrap-xcode-workspace/SKILL.md" 'repository-skills:maintain-project-repo'
+require_contains "./skills/bootstrap-xcode-workspace/scripts/run_workflow.py" 'maintain-project-repo'
 
 echo "Validating preserved guidance in AGENTS assets..."
 package_agents_assets=(
-  "./skills/bootstrap-swift-package/assets/AGENTS.md"
+  "./skills/bootstrap-xcode-workspace/assets/managed-guidance/AGENTS-packages.md"
 )
 for agents_asset in "${package_agents_assets[@]}"; do
-  require_contains "$agents_asset" 'Use `swift-package-build-run-workflow`'
-  require_contains "$agents_asset" 'Use `swift-package-testing-workflow`'
-  require_contains "$agents_asset" 'Use `swift-package-extension-workflow`'
-  require_contains "$agents_asset" 'scripts/repo-maintenance/config/profile.env'
-  require_contains "$agents_asset" '.swiftformat'
-  require_contains "$agents_asset" 'scripts/repo-maintenance/hooks/pre-commit.sample'
-  require_contains "$agents_asset" 'swiftformat --lint'
+  require_contains "$agents_asset" '`swift-package-build-run-workflow`'
+  require_contains "$agents_asset" '`swift-package-testing-workflow`'
+  require_contains "$agents_asset" '`swift-package-extension-workflow`'
   require_contains "$agents_asset" 'Resource.process(...)'
   require_contains "$agents_asset" 'Resource.copy(...)'
   require_contains "$agents_asset" 'Resource.embedInCode(...)'
   require_contains "$agents_asset" 'Bundle.module'
-  require_contains "$agents_asset" '.metallib'
   require_contains "$agents_asset" '.xctestplan'
   require_contains "$agents_asset" 'Debug and Release'
-  require_contains "$agents_asset" 'product repositories align guidance from their root workspace'
+  require_contains "$agents_asset" 'root workspace'
 done
 
 echo "Validating skill-creator contract..."
