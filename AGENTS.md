@@ -1,152 +1,114 @@
 # AGENTS.md
 
-Use this file for durable repo-local guidance that Codex should follow before changing code, docs, or project workflow surfaces in this repository.
+Use this file for Socket-specific routing, invariants, and hard stops. Use the
+linked contributor and maintainer documents for procedures and commands.
 
-## Repository Scope
+## Scope And Routing
 
-### What This File Covers
+- `socket` is Gale's local Codex plugin and skills superproject. It owns the
+  child payloads under [`plugins/`](./plugins/), the root marketplace at
+  [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and
+  root coordination documentation.
+- Treat this repository as a stopgap around Codex's documented marketplace
+  scoping. Do not present it as evidence of a richer shared-parent or
+  repo-private plugin model.
+- For root contribution, setup, validation, and review workflow, use
+  [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+- For child ownership, marketplace exposure, or synchronization, use
+  [`subtree-workflow.md`](./docs/maintainers/subtree-workflow.md). For releases,
+  branch accounting, and cleanup, use
+  [`release-workflow.md`](./docs/maintainers/release-workflow.md).
+- For plugin source, cache, and enabled-state questions, use
+  [`codex-plugin-install-surfaces.md`](./docs/maintainers/codex-plugin-install-surfaces.md).
+  For pending external gates, use
+  [`deferred-work-wakeup-policy.md`](./docs/maintainers/deferred-work-wakeup-policy.md).
+- For Swift Package Index work, use
+  [`spi-add-package-automation-plan.md`](./docs/maintainers/spi-add-package-automation-plan.md)
+  and `scripts/spi_add_package.py`.
+- When work concerns one child repository's behavior, packaging, or validation,
+  read that child's `AGENTS.md` and task-owning skill before broader root docs.
+  Read [`ROADMAP.md`](./ROADMAP.md) when planning or status is relevant, not as
+  a prerequisite for every edit.
 
-- `socket` is Gale's local Codex plugin and skills superproject.
-- Use it to coordinate the child repositories under [`plugins/`](./plugins/), the repo-root marketplace at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), and the root maintainer docs.
-- Treat this repository as a conscious stopgap around OpenAI's current documented Codex plugin-scoping limits, not as proof that Codex supports richer shared-parent or repo-private plugin scoping than the documented marketplace model.
-- These defaults apply across the nested plugin and skills repositories unless a closer `AGENTS.md` narrows them.
+## Root Invariants
 
-### Where To Look First
+- Treat Gale's local `socket` checkout on `main` as the clean coordination and release-verification checkout. Use a named feature branch/worktree for implementation unless Gale explicitly authorizes direct-`main` work or a repo-owned release helper owns the operation.
+- Edit ordinary monorepo-owned child payloads directly under `plugins/` and
+  commit them in `socket`.
+- `plugins/apple-dev-skills` is the canonical Apple Dev Skills payload. The
+  standalone repository is a compatibility marketplace pointer; do not
+  subtree-push Socket payload changes to it.
+- Speak Swiftly is owned by the standalone `SpeakSwiftlyServer` repository and
+  reaches Socket through a Git-backed marketplace entry. Socket has no local
+  `plugins/SpeakSwiftlyServer` mirror.
+- The Socket root is a marketplace catalog, not an aggregate plugin. Point each
+  marketplace entry at the real packaged plugin root or canonical Git-backed
+  source.
+- Treat authored `skills/`, `mcps/`, `apps/`, and equivalent top-level child
+  surfaces as source of truth. Plugin manifests and marketplace files are
+  packaging metadata. Managed installs, caches, enabled-state configuration,
+  and consumer-side copies are runtime state, not editable source.
+- Every new or materially changed plugin, skill, or MCP declaration needs an
+  explicit Codex, Hermes, and Claude compatibility outcome in the same pass.
+  Follow the compatibility commands and ownership rules in
+  [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+- When shipped behavior, active inventory, packaging roots, or validation
+  commands change, update their owning docs and the roadmap in the same pass.
+  When docs and scripts disagree, fix the script or narrow the documented
+  contract.
 
-- Start with [README.md](./README.md), [CONTRIBUTING.md](./CONTRIBUTING.md), [ROADMAP.md](./ROADMAP.md), [`docs/maintainers/subtree-workflow.md`](./docs/maintainers/subtree-workflow.md), and [`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md).
-- Use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md) when the question is about the root marketplace or the independent-plugin packaging stance.
-- Use [`docs/maintainers/codex-plugin-install-surfaces.md`](./docs/maintainers/codex-plugin-install-surfaces.md) when the question is about Codex marketplace sources, plugin roots, installed caches, or enabled-state config.
-- Use [`docs/maintainers/spi-add-package-automation-plan.md`](./docs/maintainers/spi-add-package-automation-plan.md) for Swift Package Index readiness, submission, and add-package automation.
-- Use [`docs/maintainers/deferred-work-wakeup-policy.md`](./docs/maintainers/deferred-work-wakeup-policy.md) for the live cross-host continuation contract; the similarly named `-plan.md` file is historical audit and design context.
-- When a task is really about one child repo's own behavior, read that child repo's docs before reading broadly across the superproject.
+## Change Coupling
 
-## Working Rules
-
-### Change Scope
-
-- Treat Gale's local `socket` checkout on `main` as the clean coordination and release-verification checkout.
-- Work directly on local `main` only when Gale explicitly asks for a direct-main workflow, when the task is a read-only investigation, or when a repo-owned release helper explicitly owns the direct-main release operation.
-- Before editing from a detached Codex GUI checkout, create or switch to a named branch in that worktree so the branch/worktree owner is explicit.
-- When a commit is made in `socket`, push the current branch as the normal checkpoint unless Gale asks for local-only work or the branch is intentionally incomplete. Pushing the branch does not imply opening a PR, waiting on CI, tagging, or releasing.
-- On Gale-managed machines, expect `fetch.prune=true`, `pull.ff=only`, and `branch.autoSetupRebase=always` as global Git defaults. Inspect effective configuration before depending on them, surface any repository-specific override, and never install these machine preferences as repository-local configuration from a template, bootstrap, or sync workflow.
-- When an agent reaches a remote CI, review, release, deployment, or provider gate that will not resolve in the current command, it must schedule a host-native continuation at least five minutes later instead of holding a shell open or polling. Before creating one, find a live continuation for the same gate and reuse that same scheduler item while the gate remains pending and healthy; do not delete and recreate it after each unchanged snapshot. Pause or delete it only when the gate clears, fails, is cancelled, or its identity changes. Use a same-thread heartbeat in Codex desktop/ChatGPT when available; in Hermes, create or update the same self-contained `cronjob` delivered to the origin with `attach_to_session=true` after confirming its scheduler is active. A single sub-minute re-read is allowed only as a bounded part of the mutation that caused it, never as repeated polling. Use `maintain-project-repo` for the detailed release continuation contract.
-- Prefer small, focused commits over broad mixed changes.
-- For ordinary fixes in monorepo-owned child directories, edit the relevant copy under `plugins/` directly in `socket`.
-- Treat `plugins/apple-dev-skills` as the canonical Socket-owned Apple Dev Skills payload. The standalone `gaelic-ghost/apple-dev-skills` repository is a compatibility marketplace and README pointer that redirects to Socket; do not subtree-push Socket payload changes back into that compatibility repo unless a future migration explicitly restores that workflow.
-- Treat `SpeakSwiftlyServer` as a standalone Git-backed plugin source, not as a local `plugins/` mirror. Speak Swiftly plugin payload edits belong in the standalone checkout and reach Socket users through the Git-backed marketplace entry.
-- When a child repo gains, removes, or moves plugin packaging, update [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json), [README.md](./README.md), and the root maintainer docs in the same pass.
-
-### Child Sync And Branch Accounting Gates
-
-- Treat subtree sync completion and branch accounting as hard gates, not follow-up cleanup.
-- Before claiming a subtree-managed task is done, verify whether the corresponding child-repo work also needs an explicit `git subtree pull` or `git subtree push` in `socket`, and either perform that sync or say plainly why no sync is required.
-- Use the single branch-backed Socket release lifecycle in
-  [`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md).
-  Child synchronization is a conditional pre-tag gate inside that lifecycle,
-  never a separate release mode or a direct-main exception.
-- Before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch that is still not contained by local `main` and account for each one explicitly as one of: already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete.
-- Do not say work is "on main", "merged", "recovered", "preserved", or "safe to clean up" until commit reachability has been verified in the exact repository and remote that statement refers to.
-- Do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until the branch-accounting pass has been completed and any non-`main` history is either merged or preserved on an explicit archive ref.
-- After a subtree sync lands, re-check `git log origin/main..main` and `git branch --no-merged main` so the superproject does not silently stay ahead with imported child-repo history or stranded local refs.
-- If a child repo release lands outside `socket`, do not consider the overall workflow complete until `socket` has either been synced to that child-repo state or the absence of a `socket` sync has been surfaced explicitly to Gale before cleanup. For `SpeakSwiftlyServer`, the expected state is usually no local sync because the Socket marketplace follows the standalone Git-backed plugin source.
-
-### Source of Truth
-
-- Treat managed production installs such as `~/.agents/skills` as read-only deployment artifacts while working in these development repositories.
-- When a repository ships reusable skills, treat the top-level authored surface such as `skills/`, `mcps/`, or `apps/` as the source of truth. Treat plugin manifests, marketplace files, and nested packaged plugin roots as packaging metadata unless a nearer `AGENTS.md` explicitly says otherwise.
-- Treat Codex and Hermes compatibility as a required design and documentation pass for every new or materially changed Socket plugin, `SKILL.md`, and `.mcp.json`. A portable skill must have an explicit Hermes tap-export decision; a Socket MCP declaration must have a checked-in `mcp_servers` translation and index entry; and a Codex-only manifest, hook, app, custom agent, or runtime extension must be marked host-specific or receive a separately designed native Hermes plugin. Do not present Codex plugin metadata as a Hermes plugin, copy private Hermes configuration into Socket, or add a generic bridge merely to make the inventories look symmetrical. Run the relevant Hermes export and validation commands in the same pass.
-- For any skill guidance that covers SwiftData with SwiftUI, make the direct Apple-integrated path explicit: SwiftData drives SwiftUI through SwiftUI's `modelContainer`, environment `modelContext`, `@Query`, and SwiftData model objects. Do not recommend repositories, stores, service layers, mirrored DTO state, view-model cache layers, or other abstraction layers between SwiftData and SwiftUI unless the user explicitly asks for a separate non-SwiftUI boundary such as import/export, networking, tests, migration tooling, or server sync.
-- For Gale-owned Swift product repositories, use one permanent root Xcode workspace with `Apps/`, `Packages/`, and `Services/`. Do not classify the repository as Xcode, SwiftPM, plain, or mixed; route each operation to the nearest `Package.swift` or the root workspace capability it requires.
-- For those repositories, local server development is native macOS only with installed Homebrew services. Do not recommend Compose, Colima, Lima, Docker Desktop, QEMU, Apple container machines, or Linux VMs as a local fallback.
-- GitHub Actions exclusively owns cloud Linux artifacts, image smoke tests, live-test deployments, and production deployments. Require immutable artifact identity, protected environments, OIDC where supported, health verification, and rollback identity; never build cloud artifacts on Gale's Mac or a production host.
-- Soto is the default AWS SDK for new server-side Swift integrations. Use one shared `AWSClient` per application or Lambda environment with one shutdown owner; require a concrete recorded exception before choosing the official AWS SDK for Swift.
-- For technical documentation lookup, prefer source-specific and local paths before generic documentation aggregators. Use repo-local docs and checked-out dependency sources first when they answer the question. For Apple-owned SDK, framework, Xcode, and lifecycle behavior, use Xcode MCP `DocumentationSearch` or Xcode-local docs first. For ecosystems covered by installed Dash docsets, use Dash MCP first and Dash HTTP second before falling back to canonical upstream docs, source repositories, package registries, or web search. Use generic documentation aggregators only when the user explicitly asks for them or when repo-local, Xcode, Dash, upstream docs, source, registry, and web-search paths are unavailable or insufficient.
-- Keep the root README short, nontechnical, and focused on end users or agents installing and using the Socket marketplace. Put contributor workflow and maintainer procedures in `CONTRIBUTING.md` or `docs/maintainers/`, and put durable agent-facing operating rules in this file.
-- Keep installed skills independent from repo-level docs under `docs/`.
-- Do not add root-level `README.md` files to monorepo-owned child plugin directories by default. Keep child root guidance in `AGENTS.md`, plugin metadata, skill metadata, root Socket docs, and root planning docs unless a child has a real standalone public install surface or server-specific docs. `apple-dev-skills` keeps its public README because it is the canonical Socket-hosted payload for users arriving through the standalone compatibility marketplace; bundled MCP servers may keep their own `mcp/README.md` files.
-- Prefer POSIX symlink discovery mirrors over duplicate or hardlinked skill trees when a repo exposes `.agents/skills`.
-- Do not track consumer-side install copies, cache directories, or machine-local runtime state in git.
-- Keep the same names for the same concepts across `SKILL.md`, `agents/openai.yaml`, docs, automation prompts, scripts, and marketplace metadata.
-- If docs and scripts disagree, fix the script or narrow the documented contract so they match.
-- When shipped behavior, active skill inventory, packaging roots, or validation commands change, update the relevant docs and `ROADMAP.md` in the same pass unless Gale explicitly says not to.
-- Treat GitHub Actions versions, runner labels, stack versions, language versions, and toolchain versions in Socket guidance as minimum supported or currently validated baselines unless the text explicitly says an exact pin is required for reproducibility, security, or compatibility. Updating to a newer stable version is allowed and often preferred when official release notes or docs support it and the affected validation passes; do not downgrade a working newer repo to an older baseline just to match a template.
-- For Swift Package Index work, treat repo-local readiness and external submission as different states. Use [`scripts/spi_add_package.py`](./scripts/spi_add_package.py) for readiness, official issue-form URL generation, browser opening, and hands-free Computer Use handoff. Do not create `SwiftPackageIndex/PackageList` issues with `gh issue create`, do not apply labels manually, do not fork or clone `SwiftPackageIndex/PackageList`, do not edit `packages.json`, do not open PackageList pull requests, and do not trigger PackageList validation or CLA automation through a manual contribution path. The only supported external add-package path is the documented `Add Package(s)` issue form.
-- For hands-free SPI submission, use Codex Computer Use against Zen (`app.zen-browser.zen`) only after `scripts/spi_add_package.py hands-free <package-root>` opens the prefilled official issue form and prints its handoff. Computer Use may confirm the form, confirm the package URL, click GitHub's `Submit new issue` button, and verify the created issue has the `Add Package` label. If any check fails, stop and report the failure instead of improvising another GitHub action.
-- Say `SPI-ready locally`, `SPI Add Package issue submitted`, or `indexed on SPI` only when that exact state has been verified. A blocked issue, missing label, open PackageList PR, or failed external artifact is not successful SPI setup or successful SPI submission.
-- Default user-facing plugin install and update guidance to Git-backed marketplace sources with commands shaped like `codex plugin marketplace add owner/repo` and `codex plugin marketplace upgrade marketplace-name`. Use explicit refs such as `owner/repo@vX.Y.Z` only for pinned reproducible installs, and use manual local marketplace roots only for development, unpublished testing, or fallback cases.
-- For Python-backed repositories in `socket`, use `uv` as the maintainer baseline and declare repo-local dev dependencies in `pyproject.toml` instead of relying on globally installed tools.
-- Prefer a root or package-local dev group that explicitly includes the Python maintainer tools the repo expects to run, including `pytest`, `ruff`, and `mypy` when those checks are part of the workflow.
-- Prefer `uv sync --dev`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .` for repos that actually ship those Python-backed validation surfaces.
-- When OpenAI product behavior matters, prefer official docs first. When describing Codex plugin boundaries, say plainly that repo-visible plugins come from the documented marketplace model and that OpenAI does not currently document a richer repo-private scoping model.
-- Use these terms consistently:
-  - `skill`: reusable workflow-authoring unit
-  - `plugin`: installable distribution bundle
-  - `subagent`: delegated runtime worker with its own context and tool policy
-
-### Communication and Escalation
-
-- Start from the root docs when the task is about the mixed monorepo model, root marketplace wiring, subtree sync for `apple-dev-skills`, the Git-backed Speak Swiftly catalog entry, or superproject release flow.
-- Start from the child repo docs when the task is really about one child repo's own behavior.
-- If scope widens from one root concern into a cross-repo or packaging-policy change, stop and surface that widening before continuing.
-- When a historical maintainer doc no longer carries live decision-making value, collapse its durable conclusions into `ROADMAP.md` or a still-live reference doc instead of preserving another stale planning note.
-
-## Commands
-
-### Setup
-
-```bash
-uv sync --dev
-```
-
-### Validation
-
-```bash
-uv run scripts/validate_socket.py --profile compatibility
-```
-
-### Optional Project Commands
-
-```bash
-git subtree pull --prefix=<prefix> <remote> main
-git subtree push --prefix=<prefix> <remote> main
-```
-
-Use these commands only when the work is intentionally publishing or syncing a currently subtree-managed child repo. Do not use them for `apple-dev-skills` while the standalone repository is only the compatibility redirect to Socket.
-
-## Review and Delivery
-
-### Review Expectations
-
-- Use the shared house style for commit messages across terminal Git, Codex-driven commits, and subtree-managed child repo work.
-- Default commit subject format is a short lowercase kebab-case scope, one colon, one space, and an imperative summary such as `docs: tighten root docs`, with no trailing period.
-- For bigger, wider, riskier, refactor, breaking, or release commits, keep the same scoped subject and add concise body sections when relevant in this order: `Why:`, `Breaking:`, `Verification:`.
-- Prefer concrete scopes such as `runtime`, `normalize`, `forensics`, `models`, `docs`, `tests`, `release`, `build`, `plugin`, or `subtree`, and describe the real changed surface instead of vague intent.
-
-### Definition of Done
-
-- The change clearly belongs at the `socket` superproject layer or intentionally uses the documented subtree workflow for one child repo.
+- Keep root changes bounded to one coherent concern. Put detailed child
+  behavior in its owning child and keep the root explanation limited to the
+  cross-child policy or discovery reason.
+- When child packaging is added, removed, moved, or renamed, update the root
+  marketplace, user-facing install surface, and relevant maintainer references
+  together, then run the validation selected by `CONTRIBUTING.md`.
 - Root docs and marketplace wiring are updated together when packaging or policy changed.
-- The root validation path ran when marketplace metadata or packaged plugin paths changed.
-- Child-repo-specific validation ran from the relevant child repo when the real change lives there.
-- Any required subtree pull or subtree push has either been completed or called out explicitly as intentionally not done.
-- Every local branch not contained by `main` has been accounted for explicitly before cleanup, and no branch or archive ref was deleted before that accounting pass finished.
+- Treat child synchronization and branch accounting as completion gates. Do
+  not claim work is merged, preserved, synchronized, or safe to clean up until
+  reachability and ownership are verified in the exact repository and remote.
+- Route every release through the single branch-backed release lifecycle.
+  Child synchronization is a conditional gate inside that lifecycle, not a
+  direct-`main` exception or separate release mode.
+- At a remote CI, review, release, deployment, or provider gate that will not
+  resolve in the current command, follow the live deferred-wakeup policy. Do
+  not hold a terminal open or create a polling loop.
+- For SPI submission, use only the official Add Package issue-form path through
+  the repository script. Never substitute `gh issue create`, manual labels, a
+  PackageList fork or clone, `packages.json` edits, or a PackageList pull
+  request. Report only the exact verified states `SPI-ready locally`,
+  `SPI Add Package issue submitted`, or `indexed on SPI`.
 
-## Safety Boundaries
+## Hard Stops And Escalation
 
-### Never Do
+- Do not import non-Git directories as subtrees, rewrite subtree history to look
+  monorepo-native, re-vendor an existing child plugin inside another child, or
+  invent a second root packaging layer around an already packaged plugin.
+- Do not assume every child surface exposes `.codex-plugin/plugin.json` at its directory root. Inspect the child's actual installable surface.
+- Do not delete a branch, worktree, remote branch, archive ref, rescue ref, or
+  child directory until all unmerged history is explicitly accounted for and
+  preserved where required.
+- Ask before adding or reintroducing a subtree-managed child repository.
+- Ask before broadening Socket into a stronger bundle or packaging abstraction,
+  widening root ownership, or changing the root marketplace model.
+- Ask before deleting a root maintainer document unless its durable conclusions
+  have already moved to `ROADMAP.md` or a live owner reference.
+- Stop and surface the widening when a bounded root concern becomes a cross-repo
+  policy or architecture change.
 
-- Do not import non-git directories as subtrees.
-- Do not hand-edit subtree history to make imported child repos look monorepo-native.
-- Do not re-vendor one child plugin repo inside another nested directory when the top-level copy already exists in `socket`.
-- Do not assume every child surface exposes `.codex-plugin/plugin.json` at its directory root.
-- Do not invent a second packaging layer at the superproject root when a child repo already has a real packaged plugin root.
+## Validation Routing
 
-### Ask Before
-
-- Ask before adding or reintroducing a subtree-managed child repo.
-- Ask before broadening `socket` from a superproject stopgap into a stronger packaging or bundle abstraction.
-- Ask before deleting a root maintainer doc unless its durable conclusions have already been moved into `ROADMAP.md` or a still-live root reference.
+- Use the focused child validation for child behavior and the root profile that
+  matches the changed surface. `CONTRIBUTING.md` owns the current commands and
+  the distinction between compatibility, full, and release validation.
+- Before delivery, verify affected links and rendered Markdown plus any required
+  marketplace, portability, child-sync, and branch-accounting outcomes. Do not
+  imply that a build, test, sync, merge, release, or publication occurred when
+  it did not.
 
 ## Local Overrides
 
-- Nested `AGENTS.md` files under `plugins/` refine this root guidance for their own repo shapes, domain rules, validation paths, and packaging boundaries.
+- Nested `AGENTS.md` files under `plugins/` refine this guidance for their own
+  repository shape, domain rules, validation, and packaging boundaries.
