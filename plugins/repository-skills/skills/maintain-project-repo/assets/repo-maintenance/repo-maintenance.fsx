@@ -238,7 +238,7 @@ let releaseAdvance (tag: string) (args: string list) =
     if gate.Phase <> "ready-to-advance" && not (gate.Phase = "comments-require-review" && hasFlag "--review-comments-addressed" args) then
         continuation tag gate
         fail $"Release PR #{number} is not ready to advance: {gate.Phase}."
-    gh [ "pr"; "merge"; string number; "--merge"; "--delete-branch" ] |> requireSuccess "Merge release PR" |> ignore
+    gh [ "pr"; "merge"; string number; "--merge" ] |> requireSuccess "Merge release PR" |> ignore
     let mainRoot = findMainWorktree ()
     cleanWorktree mainRoot
     runIn mainRoot "git" [ "fetch"; "origin"; "main"; "--prune" ] |> requireSuccess "Fetch main" |> ignore
