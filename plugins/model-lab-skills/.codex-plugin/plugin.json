@@ -1,6 +1,6 @@
 {
   "name": "model-lab-skills",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "Reproducible model training, evaluation, intervention, and runtime research workflows.",
   "author": {
     "name": "Gale"

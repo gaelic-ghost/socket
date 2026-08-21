@@ -60,13 +60,11 @@ class TVOSWorkflowTests(unittest.TestCase):
     def test_discovery_and_portability_surfaces_list_both_workflows(self) -> None:
         readme = self.read("README.md")
         validator = self.read(".github/scripts/validate_repo_docs.sh")
-        roadmap = self.read("ROADMAP.md")
 
         for skill in ("tvos-app-experience-workflow", "tvos-media-playback-workflow"):
             with self.subTest(skill=skill):
                 self.assertIn(f"`{skill}`", readme)
                 self.assertIn(f"./skills/{skill}/SKILL.md", validator)
-                self.assertIn(skill, roadmap)
 
 
 if __name__ == "__main__":

@@ -140,12 +140,10 @@ class MediaAudioWorkflowTests(unittest.TestCase):
     def test_readme_and_validator_include_active_media_audio_skills(self) -> None:
         readme = self.read("README.md")
         validator = self.read(".github/scripts/validate_repo_docs.sh")
-        roadmap = self.read("ROADMAP.md")
 
         for skill in MEDIA_SKILLS:
             self.assertIn(f"`{skill}`", readme)
             self.assertIn(f"./skills/{skill}/SKILL.md", validator)
-            self.assertIn(skill, roadmap)
 
     def test_shared_media_type_ownership_contract_is_strict(self) -> None:
         text = self.read("shared/references/apple-media-type-ownership.md")

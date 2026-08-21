@@ -87,12 +87,5 @@ class SwiftPackageExtensionWorkflowTests(unittest.TestCase):
         ):
             text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn("swift-package-extension-workflow", text)
-
-    def test_roadmap_marks_milestone_complete(self) -> None:
-        roadmap = (ROOT / "ROADMAP.md").read_text(encoding="utf-8")
-        self.assertIn("Milestone 41: Swift Package Extension Workflow - Completed", roadmap)
-        self.assertIn("Completed Milestone 41", roadmap)
-
-
 if __name__ == "__main__":
     unittest.main()

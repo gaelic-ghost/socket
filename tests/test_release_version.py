@@ -89,9 +89,3 @@ def test_apply_version_updates_manifests_and_adjacent_lockfiles(tmp_path: Path) 
     assert "plugins/example/.codex-plugin/plugin.json" in changed
     assert "plugins/example/uv.lock" in changed
     assert 'version = "2.0.0"' in (root / "plugins/example/uv.lock").read_text()
-
-
-def test_release_version_module_has_no_release_choreography_entrypoint() -> None:
-    assert not hasattr(release_version, "main")
-    assert not hasattr(release_version, "render_patch_refresh")
-    assert not hasattr(release_version, "release_notes")

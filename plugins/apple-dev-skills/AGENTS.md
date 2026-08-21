@@ -36,9 +36,13 @@ This file is the Apple Dev Skills child-repo override for work done from `socket
 
 ## Validation
 
+Run from the Socket repository root so the shared maintainer environment and
+cache policy apply:
+
 ```bash
-bash .github/scripts/validate_repo_docs.sh
-uv run pytest
+bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+uv run python -B -m pytest plugins/apple-dev-skills/tests \
+  -o cache_dir=.codex/.cache/pytest
 ```
 
 Use the docs validator when README, AGENTS, ROADMAP, active skill inventory, or maintainer docs change. Use pytest when skill behavior, scripts, validation helpers, or tested contracts change.

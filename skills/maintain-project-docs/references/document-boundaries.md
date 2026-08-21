@@ -9,7 +9,6 @@ Use this reference when an audit finds repeated content or a doc section that se
 | `README.md` | Product identity, current status, quick start, usage, repo structure, and a short development pointer. | `CONTRIBUTING.md`, `ROADMAP.md`, relevant package or product docs. |
 | `CONTRIBUTING.md` | Human contributor setup, workflow, verification, PR expectations, and communication guidance. | `README.md`, repo-maintenance docs, `AGENTS.md` only when contributors need to know agent rules exist. |
 | `AGENTS.md` | Durable instructions for Codex and other repo agents: scope, routing, commands, workflow constraints, delivery rules, safety boundaries, and local overrides. | `README.md`, `CONTRIBUTING.md`, `ROADMAP.md`, maintainer docs. |
-| `API.md` | Grounded API surface, authentication, request and response schemas, errors, versioning, compatibility, verification, and support guidance. | Implementations, schemas, tests, and release notes that prove the documented contract. |
 | `ROADMAP.md` | Milestones, small tickets, imported TODO/FIXME work, issue links, and notable planning history. | GitHub issues, source references, docs that explain accepted scope. |
 
 ## Drift Signals
@@ -17,7 +16,6 @@ Use this reference when an audit finds repeated content or a doc section that se
 - README contains full branch, PR, release, or maintainer workflow instructions instead of a short pointer.
 - CONTRIBUTING repeats product overview or roadmap history instead of contributor workflow.
 - AGENTS repeats public product marketing, contributor onboarding prose, or detailed accessibility standards.
-- API documentation invents behavior or repeats contributor and roadmap procedure.
 - ROADMAP contains long procedural guidance that should live in AGENTS, CONTRIBUTING, or maintainer docs.
 
 ## Fixing Policy

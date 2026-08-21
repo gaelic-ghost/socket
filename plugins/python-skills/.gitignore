@@ -1,5 +1,0 @@
-.codex/profiles/
-.worktrees/
-
-# Agent plugin repo local runtime state
-.codex/plugins/

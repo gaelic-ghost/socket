@@ -1190,7 +1190,9 @@ and test/production deployments for GitHub Actions.
 - [x] Add `game-dev-skills:game-porting-toolkit-workflow` to choose stable GPTK 3 evaluation/shader-conversion work or beta-sensitive GPTK 4 source-port work, then load Apple’s upstream GPTK 4 skills instead of duplicating their corpus.
 - [x] Add `game-dev-skills:metalfx-game-rendering-workflow`, `metal-asset-streaming-workflow`, and `metal-neural-rendering-workflow` for native MetalFX integration, GPU asset residency/streaming, and carefully gated experimental neural rendering.
 - [x] Overhaul `agent-portability-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
-- [x] Consolidate README, CONTRIBUTING, AGENTS, API, coordinated docs, and ROADMAP maintenance workflows into `repository-skills` so repository operations and repository documentation have one owner.
+- [x] Consolidate README, CONTRIBUTING, AGENTS, coordinated docs, and ROADMAP
+  maintenance workflows into `repository-skills` so repository operations and
+  repository documentation have one owner.
 - [x] Add a first `agent-engineering-skills:design-agent-automation-workflow` planning skill for agent and automation design. It chooses between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet while delegating stack-specific implementation to the owning plugin.
 - [x] Added `agent-engineering-skills:design-agent-eval-workflow` for agent, skill, prompt, and automation eval planning, and skewed automation guidance toward safe full automation with exact escalation gates instead of broad human review.
 - [x] Replaced the legacy Apple app guidance and sync routes with the unified `bootstrap-xcode-workspace` workflow and its managed `just align` contract.
@@ -1286,7 +1288,9 @@ and test/production deployments for GitHub Actions.
 - Loosened coordinated Codex subagent guidance so skills preserve OpenAI's explicit-trigger model while allowing narrower workflow guidance, such as Codex Security repository-wide scans, to ask for and use subagents when the task depends on parallel file-pass review.
 - Added coordinated Codex subagent guidance across `agent-portability-skills` and `agent-engineering-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
 - Added `repository-skills:codex-gui-worktree-workflow` as the general Codex GUI worktree-first planning surface, while keeping SwiftPM, Xcode, Vapor, Hummingbird, and server-side Swift local environment templates inside their stack-specific plugins.
-- Prepared the `v6.1.0` minor release by adding the `maintain-project-api` productivity skill and keeping the monorepo-owned child docs, tests, and shared version surfaces aligned.
+- Prepared the `v6.1.0` minor release by expanding repository documentation
+  maintenance and keeping the monorepo-owned child docs, tests, and shared
+  version surfaces aligned.
 - Added explicit `standard` and `subtrees` release-mode guidance, including the pull-only `SpeakSwiftlyServer` rule for `socket` subtree sync.
 - Published `apple-dev-skills` `v6.0.11` after adding direct regression coverage for SwiftPM-generated `.swiftpm/xcode/package.xcworkspace` classification and synced the released child state back into `socket`.
 - Prepared the shared `v6.0.11` patch release after fixing `repository-skills:maintain-project-repo` release-helper regressions for initial PR check discovery and approval-only review handling.

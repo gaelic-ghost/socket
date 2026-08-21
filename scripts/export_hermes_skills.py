@@ -176,7 +176,6 @@ REPOSITORY_SKILLS = (
     "github-collaboration-workflow",
     "maintain-github-repository",
     "maintain-project-agents",
-    "maintain-project-api",
     "maintain-project-contributing",
     "maintain-project-docs",
     "maintain-project-readme",
@@ -199,6 +198,7 @@ EXPORTED_SKILLS = (
     + CLOUD_DEPLOYMENT_SKILLS
     + REPOSITORY_SKILLS
 )
+EXPORT_IGNORED_NAMES = ("tests", "__pycache__")
 
 
 class ExportError(RuntimeError):
@@ -266,7 +266,11 @@ def write_export(
         staged_root = Path(temp_dir) / "skills"
         staged_root.mkdir()
         for skill_name in EXPORTED_SKILLS:
-            shutil.copytree(sources[skill_name], staged_root / skill_name)
+            shutil.copytree(
+                sources[skill_name],
+                staged_root / skill_name,
+                ignore=shutil.ignore_patterns(*EXPORT_IGNORED_NAMES, "*.pyc"),
+            )
         if export_root.exists():
             shutil.rmtree(export_root)
         staged_root.replace(export_root)
@@ -283,8 +287,14 @@ def has_exact_export(
     export_names = {path.name for path in export_root.iterdir()}
     if set(sources) != set(EXPORTED_SKILLS) or export_names != set(EXPORTED_SKILLS):
         return False
+    if any(path.name in EXPORT_IGNORED_NAMES for path in export_root.rglob("*")):
+        return False
     for skill_name in EXPORTED_SKILLS:
-        comparison = filecmp.dircmp(sources[skill_name], export_root / skill_name)
+        comparison = filecmp.dircmp(
+            sources[skill_name],
+            export_root / skill_name,
+            ignore=list(EXPORT_IGNORED_NAMES),
+        )
         if comparison.left_only or comparison.right_only or comparison.funny_files:
             return False
         for _, mismatches, errors in _walk_comparison(comparison):

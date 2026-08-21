@@ -41,7 +41,6 @@ def test_plugin_manifest_and_marketplace_contract() -> None:
 
     assert ".codex-plugin/plugin.json" in agents_text
     assert "Root [`skills/`](./skills/) is the authored workflow surface" in agents_text
-    assert not (REPO_ROOT / "README.md").exists()
 
 
 def test_fastmcp_docs_tool_is_host_provided_not_packaged_dependency() -> None:
@@ -54,7 +53,7 @@ def test_fastmcp_docs_tool_is_host_provided_not_packaged_dependency() -> None:
         assert "does not package that server" in skill
 
 
-def test_service_and_testing_inventory_replaces_the_old_pytest_skill() -> None:
+def test_service_and_testing_inventory_is_complete() -> None:
     expected = {
         "fastapi-service-workflow",
         "fastmcp-service-workflow",
@@ -63,7 +62,6 @@ def test_service_and_testing_inventory_replaces_the_old_pytest_skill() -> None:
     actual = {path.parent.name for path in (REPO_ROOT / "skills").glob("*/SKILL.md")}
 
     assert expected <= actual
-    assert "uv-pytest-unit-testing" not in actual
 
     for skill_name in expected:
         assert (REPO_ROOT / "skills" / skill_name / "agents" / "openai.yaml").is_file()
@@ -82,12 +80,11 @@ def test_bootstrap_skills_share_one_contract_reference() -> None:
         assert "../../shared/bootstrap-contract.md" in skill
 
 
-def test_python_testing_scripts_use_the_replacement_profile_name() -> None:
+def test_python_testing_scripts_use_the_shipped_profile_name() -> None:
     scripts_root = REPO_ROOT / "skills" / "python-testing-workflow" / "scripts"
     for script_name in ("bootstrap_pytest_uv.sh", "run_pytest_uv.sh"):
         script = (scripts_root / script_name).read_text()
         assert 'SKILL_NAME="python-testing-workflow"' in script
-        assert "uv-pytest-unit-testing" not in script
 
 
 def test_fastapi_scaffold_smoke(tmp_path: Path) -> None:

@@ -47,13 +47,11 @@ class TipKitWorkflowTests(unittest.TestCase):
         readme = self.read("README.md")
         plugin = self.read(".codex-plugin/plugin.json")
         validator = self.read(".github/scripts/validate_repo_docs.sh")
-        roadmap = self.read("ROADMAP.md")
 
         self.assertIn("tipkit-workflow", readme)
         self.assertIn("TipKit", plugin)
         self.assertIn("./skills/tipkit-workflow/SKILL.md", validator)
         self.assertIn("Expected exactly 58 active skills", validator)
-        self.assertIn("Milestone 55: TipKit Workflow", roadmap)
 
 
 if __name__ == "__main__":

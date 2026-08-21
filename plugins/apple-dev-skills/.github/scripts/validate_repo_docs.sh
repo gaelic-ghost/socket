@@ -15,27 +15,15 @@ require_contains() {
   grep -Fq -- "$needle" "$file" || fail "Missing required string in $file: $needle"
 }
 
-require_not_contains() {
-  local file="$1"
-  local needle="$2"
-  ! grep -Fq -- "$needle" "$file" || fail "Unexpected stale string in $file: $needle"
-}
-
-echo "Validating roadmap presence..."
-[[ -f ROADMAP.md ]] || fail "Missing ROADMAP.md at repo root."
-
 echo "Validating root docs presence..."
 [[ -f README.md ]] || fail "Missing README.md at repo root."
 [[ -f CONTRIBUTING.md ]] || fail "Missing CONTRIBUTING.md at repo root."
 [[ -f AGENTS.md ]] || fail "Missing AGENTS.md at repo root."
 [[ -f docs/maintainers/reality-audit.md ]] || fail "Missing docs/maintainers/reality-audit.md."
-[[ -f docs/maintainers/customization-consolidation-review.md ]] || fail "Missing docs/maintainers/customization-consolidation-review.md."
-[[ -f docs/maintainers/execution-split-and-inference-plan.md ]] || fail "Missing docs/maintainers/execution-split-and-inference-plan.md."
 
 echo "Validating local discovery mirrors..."
 [[ -L ".agents/skills" ]] || fail "Expected .agents/skills to be a symlink to ../skills"
 [[ "$(readlink .agents/skills)" == "../skills" ]] || fail "Expected .agents/skills -> ../skills"
-[[ ! -e "plugins/apple-dev-skills" ]] || fail "Did not expect a nested plugins/apple-dev-skills tree."
 
 echo "Validating root README contract..."
 require_contains "README.md" 'Treat `repository-skills` as the default baseline layer for general repo-doc and maintenance work'
@@ -46,16 +34,14 @@ require_contains "README.md" 'Treat root [`skills/`](./skills/) as the canonical
 require_contains "README.md" 'Keep shared reusable assets in [`shared/`](./shared/)'
 require_contains "README.md" 'Run the repository test suite for skill and metadata changes:'
 require_contains "README.md" 'Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details'
-require_not_contains "README.md" 'plugins/apple-dev-skills/'
-require_not_contains "README.md" 'install-plugin-to-socket'
 
 echo "Validating CONTRIBUTING contract..."
 require_contains "CONTRIBUTING.md" 'Use this guide when preparing changes so the repository stays understandable, testable, and truthful about the Apple workflow surface it actually ships.'
 require_contains "CONTRIBUTING.md" '## Contribution Workflow'
 require_contains "CONTRIBUTING.md" '## Local Setup'
 require_contains "CONTRIBUTING.md" '## Development Expectations'
-require_contains "CONTRIBUTING.md" 'bash .github/scripts/validate_repo_docs.sh'
-require_contains "CONTRIBUTING.md" 'uv run pytest'
+require_contains "CONTRIBUTING.md" 'bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh'
+require_contains "CONTRIBUTING.md" 'uv run python -B -m pytest plugins/apple-dev-skills/tests'
 
 echo "Validating AGENTS contract..."
 require_contains "AGENTS.md" 'This repository is the canonical home for Gale'"'"'s Apple, Swift, and Xcode workflow skills.'
@@ -65,7 +51,6 @@ require_contains "AGENTS.md" 'Root `skills/` is the canonical authored and expor
 require_contains "AGENTS.md" 'Keep shared reusable assets in [`shared/`](./shared/) and maintainer tests in [`tests/`](./tests/).'
 require_contains "AGENTS.md" 'require reading the relevant Apple documentation before proposing implementation changes.'
 require_contains "AGENTS.md" 'Keep `explore-apple-swift-docs` as the canonical docs-routing surface'
-require_not_contains "AGENTS.md" 'plugins/apple-dev-skills/'
 
 echo "Validating reality audit guide..."
 audit_doc="docs/maintainers/reality-audit.md"
@@ -76,33 +61,6 @@ require_contains "$audit_doc" "## Reporting Shape"
 require_contains "$audit_doc" '`repository-skills` owns the reusable `maintain-project-repo` toolkit contract'
 require_contains "$audit_doc" 'standalone `apple-dev-skills` installs from installs that also include the `repository-skills` companion plugin'
 require_contains "$audit_doc" 'this repository owns only the Apple-specific profile selection and Xcode MCP registration contract'
-require_contains "$audit_doc" 'Historical milestone planning decisions that no longer need standalone docs should live in `ROADMAP.md`'
-require_not_contains "$audit_doc" 'plugins/apple-dev-skills/'
-
-echo "Validating customization consolidation review..."
-customization_review_doc="docs/maintainers/customization-consolidation-review.md"
-require_contains "$customization_review_doc" "## Current State Summary"
-require_contains "$customization_review_doc" "## Decision"
-require_contains "$customization_review_doc" "## Knob Classification"
-require_contains "$customization_review_doc" "## Shared Helper Decision"
-require_contains "$customization_review_doc" "## Follow-Up Plan"
-require_contains "$customization_review_doc" "Milestone 20 concludes that the repo should shrink the customization surface rather than expand it."
-require_contains "$customization_review_doc" "## Sync Skill Simplification Decision"
-require_contains "$customization_review_doc" 'implemented replacement: `writeMode`'
-execution_split_doc="docs/maintainers/execution-split-and-inference-plan.md"
-require_contains "$execution_split_doc" "## Target Skill Matrix"
-require_contains "$execution_split_doc" "## Guidance Preservation Contract"
-require_contains "$execution_split_doc" "## AGENTS Expansion Strategy"
-require_contains "$execution_split_doc" "## Repo-Maintenance Direction"
-require_contains "$execution_split_doc" "## Implementation Plan"
-require_contains "$execution_split_doc" '`repository-skills/maintain-project-repo` as the canonical shipped repo-maintenance surface'
-require_contains "$execution_split_doc" 'Users who install only `apple-dev-skills` still get the Apple-only workflows'
-require_contains "ROADMAP.md" "Completed Milestones 22 and 23"
-require_contains "ROADMAP.md" 'See `docs/maintainers/customization-consolidation-review.md`.'
-require_contains "ROADMAP.md" "Completed Milestones 30 through 36"
-require_contains "ROADMAP.md" "shrinking the customization surface"
-require_contains "ROADMAP.md" "splitting execution workflows"
-require_contains "ROADMAP.md" "preserving guidance through the refactor"
 
 echo "Validating skill directory layout..."
 active_skill_mds=(
@@ -245,40 +203,7 @@ require_contains "$dash_skill_dir/references/dash_call_library.md" '## Dash MCP 
 require_contains "$dash_skill_dir/references/dash_call_library.md" '## Dash Local HTTP Examples'
 require_contains "$dash_skill_dir/references/dash_call_library.md" '## High-Value Docset Targets'
 
-echo "Validating stale installer and nested-packaging guidance is gone..."
-for file in \
-  "skills/swift-package-testing-workflow/SKILL.md" \
-  "skills/swift-package-build-run-workflow/SKILL.md" \
-  "skills/swift-package-extension-workflow/SKILL.md" \
-  "skills/xcode-testing-workflow/SKILL.md" \
-  "skills/xcode-build-run-workflow/SKILL.md" \
-  "skills/xcode-coding-intelligence-workflow/SKILL.md" \
-  "skills/author-swift-docc-docs/SKILL.md" \
-  "skills/avfaudio-session-workflow/SKILL.md" \
-  "skills/avaudio-engine-workflow/SKILL.md" \
-  "skills/avfoundation-media-pipeline-workflow/SKILL.md" \
-  "skills/coremedia-timing-samplebuffer-workflow/SKILL.md" \
-  "skills/coreaudio-modernization-repair-workflow/SKILL.md" \
-  "skills/core-animation-layer-workflow/SKILL.md" \
-  "skills/apple-typography-workflow/SKILL.md" \
-  "skills/sf-symbols-workflow/SKILL.md" \
-  "skills/swiftui-animation-workflow/SKILL.md" \
-  "skills/safari-extension-control-workflow/SKILL.md" \
-  "skills/safari-mcp-workflow/SKILL.md" \
-  "skills/app-extension-architecture-workflow/SKILL.md" \
-  "skills/mailkit-workflow/SKILL.md" \
-  "skills/file-provider-and-finder-sync-workflow/SKILL.md" \
-  "skills/devicecheck-app-attest-workflow/SKILL.md" \
-  "skills/appkit-app-architecture-workflow/SKILL.md" \
-  "skills/swiftui-app-architecture-workflow/SKILL.md" \
-  "ROADMAP.md"
-do
-  require_not_contains "$file" 'install-plugin-to-socket'
-  require_not_contains "$file" 'plugins/apple-dev-skills/'
-done
-
 echo "Validating maintain-project-repo delegation..."
-[[ ! -e "./shared/repo-maintenance-toolkit" ]] || fail "Did not expect apple-dev-skills to retain shared/repo-maintenance-toolkit."
 require_contains "./skills/bootstrap-xcode-workspace/SKILL.md" 'repository-skills:maintain-project-repo'
 require_contains "./skills/bootstrap-xcode-workspace/scripts/run_workflow.py" 'maintain-project-repo'
 

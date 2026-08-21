@@ -1279,7 +1279,8 @@ Completed
 
 ### Tickets
 
-- [x] Use [`app-extension-workflows-plan.md`](./docs/maintainers/app-extension-workflows-plan.md) as the durable ownership and delivery record.
+- [x] Record the durable ownership split in `AGENTS.md` and the delivered
+  behavior in the three focused skill contracts and tests.
 - [x] Add the three skills with Apple documentation anchors, interface metadata, customization contracts, shared Xcode project references, and explicit Xcode/testing/distribution handoffs.
 - [x] Update Apple Dev Skills metadata, active inventory, README, AGENTS guidance, docs validator, customization review, and targeted tests.
 - [x] Export the portable instruction-only skills to the root Hermes tap and validate the generated inventory without representing the Codex plugin bundle as a Hermes plugin.

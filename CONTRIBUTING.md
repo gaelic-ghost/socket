@@ -65,13 +65,19 @@ A root change is ready for review when:
 
 ### Runtime Config
 
-The root superproject uses a small `uv` environment for maintainer tooling:
+The root superproject uses one `uv` environment for root and monorepo-owned
+child maintainer tooling:
 
 ```bash
 uv sync --dev
 ```
 
-If a root or child-repo workflow depends on Python quality tooling, declare that tooling in the relevant repo's `pyproject.toml` dev dependencies rather than assuming a machine-global install. Treat `pytest`, `ruff`, and `mypy` as the normal Python maintainer baseline when the repo's shipped validation surface uses them.
+Declare Python quality tooling in the root `pyproject.toml` dev dependencies
+rather than creating child environments or assuming a machine-global install.
+Treat `pytest`, `ruff`, and `mypy` as the normal Python maintainer baseline when
+the shipped validation surface uses them. Root validation redirects tool caches
+to `.codex/.cache/` and disables bytecode writes so checks do not recreate
+generated state inside plugin payloads.
 
 At the `socket` root, run `uv run mypy` without a path argument. The root mypy config intentionally checks root maintainer scripts, root tests, and package-shaped child maintainer code instead of crawling every standalone skill `scripts/` directory as one Python module namespace.
 
@@ -249,7 +255,10 @@ and final marketplace refresh. See
 for the complete contract. Do not invoke the internal Python modules or create
 a direct-main shortcut.
 
-If the changed surface also introduces or expands Python-backed repo checks, add the required tools to the repo-local `uv` dev group and document the corresponding `uv run pytest`, `uv run ruff check .`, and `uv run mypy` commands where that repo's contributors will actually look.
+If the changed surface also introduces or expands Python-backed repo checks,
+add the required tools to the root `uv` dev group and add the focused child
+command to `scripts/validate_socket.py` instead of creating a child
+`pyproject.toml`, lockfile, environment, or cache root.
 
 When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
 

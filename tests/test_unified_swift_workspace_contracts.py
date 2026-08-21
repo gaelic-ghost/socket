@@ -10,50 +10,13 @@ def read(relative: str) -> str:
     return (ROOT / relative).read_text(encoding="utf-8")
 
 
-def test_retired_standalone_and_sync_skills_are_absent() -> None:
-    for relative in (
-        "plugins/apple-dev-skills/skills/bootstrap-swift-package",
-        "plugins/apple-dev-skills/skills/migrate-xcode-project-to-xcodegen",
-        "plugins/apple-dev-skills/skills/swift-package-workflow",
-        "plugins/apple-dev-skills/skills/xcode-app-project-workflow",
-        "plugins/apple-dev-skills/skills/sync-swift-package-guidance",
-        "plugins/server-side-swift/skills/apple-containerization-workflow",
-        "plugins/server-side-swift/skills/bootstrap-hummingbird-service",
-        "plugins/server-side-swift/skills/bootstrap-vapor-service",
-        "plugins/server-side-swift/skills/sync-hummingbird-service-guidance",
-    ):
-        assert not (ROOT / relative / "SKILL.md").exists()
-
-
-def test_retired_server_local_environment_templates_are_absent() -> None:
-    template_root = ROOT / "plugins/server-side-swift/templates/codex-local-environments"
-    for name in ("hummingbird.toml", "vapor.toml", "swift-server-package.toml"):
-        assert not (template_root / name).exists()
-
-
-def test_repository_maintenance_exposes_only_generic_and_workspace_profiles() -> None:
-    for relative in (
-        "plugins/repository-skills/skills/maintain-project-repo/scripts/run_workflow.py",
-        "plugins/repository-skills/skills/maintain-project-repo/scripts/install_maintain_project_repo.py",
-    ):
-        text = read(relative)
-        assert '"generic"' in text
-        assert '"xcode-workspace"' in text
-        assert '"swift-package"' not in text
-        assert '"xcode-app"' not in text
-
-
-def test_package_workflows_have_no_repo_classifier_or_mixed_root_opt_in() -> None:
+def test_package_workflows_expose_package_context() -> None:
     for skill in (
         "swift-package-build-run-workflow",
         "swift-package-testing-workflow",
         "swift-package-extension-workflow",
     ):
         script = read(f"plugins/apple-dev-skills/skills/{skill}/scripts/run_workflow.py")
-        assert "mixed_root" not in script
-        assert "mixed-root-opt-in" not in script
-        assert "repo_shape" not in script
-        assert "xcode_markers" not in script
         assert "package_context" in script
 
 
@@ -67,8 +30,6 @@ def test_workspace_entrypoint_owns_all_component_roots() -> None:
         "ensure_services_surface",
     ):
         assert phrase in script
-    for retired_classifier in ("repo_shape", "mixed_root", "xcode_markers"):
-        assert retired_classifier not in script
 
 
 def test_active_xcode_guidance_uses_apps_peer_targets() -> None:

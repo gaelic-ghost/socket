@@ -14,6 +14,11 @@ documentation rules.
 
 ## Validation
 
+Run from the Socket repository root so the shared maintainer environment and
+cache policy apply:
+
 ```bash
-uv run pytest
+uv run python -B -m pytest \
+  plugins/professional-skills/skills/dice-job-search-workflow/tests \
+  -o cache_dir=.codex/.cache/pytest
 ```

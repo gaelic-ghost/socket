@@ -4,7 +4,11 @@ Use these prompts when scheduling or delegating recurring documentation sweeps.
 
 ## Check-Only Sweep
 
-Run `maintain-project-docs` in `check-only` mode for the target repository. Audit README, CONTRIBUTING, AGENTS, API when present, and ROADMAP in that order. Report owner-skill findings, cross-document responsibility drift, stale command evidence, and any roadmap small-ticket candidates requested by the operator. Do not edit files, commit, push, or open a pull request.
+Run `maintain-project-docs` in `check-only` mode for the target repository.
+Audit README, CONTRIBUTING, AGENTS, and ROADMAP in that order. Report
+owner-skill findings, cross-document responsibility drift, stale command
+evidence, and any roadmap small-ticket candidates requested by the operator. Do
+not edit files, commit, push, or open a pull request.
 
 ## Bounded Apply Sweep
 

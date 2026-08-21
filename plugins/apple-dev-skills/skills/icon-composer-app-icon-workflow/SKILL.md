@@ -247,7 +247,9 @@ uv run scripts/validate_socket_metadata.py
 bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
 ```
 
-From `plugins/apple-dev-skills`, run `uv run pytest` only when tests, validation helpers, or scripts changed.
+From the Socket root, run the Apple Dev tests through
+`uv run scripts/validate_socket.py --profile full` when tests, validation
+helpers, or scripts changed.
 
 ## Handoffs
 
