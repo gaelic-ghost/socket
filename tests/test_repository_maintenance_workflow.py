@@ -323,34 +323,6 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             subprocess.run(["sh", "-c", script], check=True, capture_output=True, text=True, env=env)
             self.assertIn("--generate-notes", log_path.read_text(encoding="utf-8"))
 
-    def test_coderabbit_review_unavailable_fixtures_are_narrow(self) -> None:
-        helper = ROOT / "skills/maintain-project-repo/assets/repo-maintenance/lib/coderabbit.sh"
-        fixtures = [
-            ("CodeRabbit", "Review unavailable: monthly quota reached.", 0),
-            ("coderabbitai", "Rate limit reached; no review was produced.", 0),
-            ("CodeRabbit", "Found a potential nil dereference.", 1),
-            ("GitHub Actions", "Rate limit reached.", 1),
-        ]
-        for source, message, expected_returncode in fixtures:
-            with self.subTest(source=source, message=message):
-                proc = subprocess.run(
-                    ["sh", "-c", f'. "{helper}"; coderabbit_review_is_unavailable "$1" "$2"', "sh", source, message],
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
-                self.assertEqual(proc.returncode, expected_returncode, proc.stderr)
-
-    def test_release_gate_only_exempts_explicit_coderabbit_unavailability(self) -> None:
-        release_script = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/release.sh").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn("detect_coderabbit_review_unavailable", release_script)
-        self.assertIn("repos/$repo_name/commits/$head_sha/check-runs", release_script)
-        self.assertIn("CODERABBIT_UNAVAILABLE_COMMENT_COUNT", release_script)
-        self.assertIn('contains("coderabbit")', release_script)
-        self.assertIn("ignoring only its pending review context and diagnostic comments", release_script)
-
     def test_release_env_documents_scheduled_continuation_default(self) -> None:
         release_env = (ROOT / "skills/maintain-project-repo/assets/repo-maintenance/config/release.env").read_text(
             encoding="utf-8"

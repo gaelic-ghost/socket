@@ -65,11 +65,10 @@ scripts/release.sh inspect 10.0.0
 
 If GitHub is still pending, reuse one matching host-native continuation no
 sooner than five minutes later. On wakeup, run `inspect` again before any
-mutation. Failed checks, requested changes, and unreviewed comments block the
-release. A CodeRabbit quota or rate-limit diagnostic may be reviewed and marked
-addressed only when it contains no substantive finding. After that review,
-pass `--review-comments-addressed` to `advance`; the flag does not bypass
-failed or pending checks, requested changes, or commit-identity validation.
+mutation. Failed or pending checks, requested changes, and unreviewed comments
+block the release. After reviewing and resolving comments, pass
+`--review-comments-addressed` to `advance`; the flag does not bypass failed or
+pending checks, requested changes, or commit-identity validation.
 
 The required GitHub `validate` job runs the same full Socket profile used by
 `prepare`; release PRs do not rely on a weaker compatibility-only check.
