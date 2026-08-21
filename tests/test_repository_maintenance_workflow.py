@@ -1,14 +1,23 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "plugins/repository-skills/skills/maintain-project-repo/scripts/run_workflow.py"
+DOCS_SCRIPT = ROOT / "plugins/repository-skills/skills/maintain-project-repo/scripts/maintain_project_docs.py"
+
+docs_spec = importlib.util.spec_from_file_location("maintain_project_repo_docs", DOCS_SCRIPT)
+assert docs_spec is not None and docs_spec.loader is not None
+docs_module = importlib.util.module_from_spec(docs_spec)
+sys.modules["maintain_project_repo_docs"] = docs_module
+docs_spec.loader.exec_module(docs_module)
 
 
 class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
@@ -35,6 +44,13 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertIn(".github/workflows/validate-repo-maintenance.yml", payload["managed_files"])
             self.assertIn("scripts/repo-maintenance/config/profile.env", payload["managed_files"])
             self.assertEqual(payload["profile"], "generic")
+            self.assertEqual(payload["documentation_result"], "checked (no writes)")
+            self.assertEqual(
+                payload["documentation"]["document_order"],
+                ["readme", "contributing", "agents", "roadmap"],
+            )
+            for filename in ("README.md", "CONTRIBUTING.md", "AGENTS.md", "ROADMAP.md"):
+                self.assertFalse(Path(tmpdir, filename).exists())
 
     def test_xcode_workspace_profile_installs_workspace_validation_and_dispatches_components(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -155,6 +171,55 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
             self.assertIn("actions/checkout@v6.0.2", workflow_text)
             self.assertNotIn("actions/checkout@v4", workflow_text)
             self.assertNotIn("maxim-lobanov/setup-xcode@v1", workflow_text)
+            for filename in ("README.md", "CONTRIBUTING.md", "AGENTS.md", "ROADMAP.md"):
+                self.assertTrue(Path(tmpdir, filename).is_file())
+            self.assertEqual(
+                payload["documentation_result"],
+                "canonical documents created or refreshed",
+            )
+
+    def test_refresh_recreates_missing_canonical_document(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            code, _payload = self.run_script("--repo-root", tmpdir, "--operation", "install")
+            self.assertEqual(code, 0)
+            roadmap = Path(tmpdir, "ROADMAP.md")
+            roadmap.unlink()
+
+            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "refresh")
+
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["status"], "success")
+            self.assertTrue(roadmap.is_file())
+            self.assertTrue(
+                any(
+                    fix.get("action") == "create-roadmap-from-template"
+                    for fix in payload["documentation"]["fixes_applied"]
+                )
+            )
+
+    def test_documentation_error_fails_combined_operation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "README.md").mkdir()
+
+            code, payload = self.run_script("--repo-root", tmpdir, "--operation", "install")
+
+            self.assertEqual(code, 1)
+            self.assertEqual(payload["status"], "failed")
+            self.assertIn("documentation", payload)
+            self.assertTrue(payload["documentation"]["errors"])
+            self.assertTrue(Path(tmpdir, "scripts/repo-maintenance/validate-all.sh").is_file())
+
+    def test_xcode_bootstrap_uses_integrated_repo_install(self) -> None:
+        bootstrap = (
+            ROOT
+            / "plugins/apple-dev-skills/skills/bootstrap-xcode-workspace/scripts/run_workflow.py"
+        ).read_text(encoding="utf-8")
+        self.assertIn("runner = maintain_project_repo_runner()", bootstrap)
+        self.assertIn(
+            '[str(runner), "--repo-root", str(root), "--operation", "install", "--profile", "xcode-workspace"]',
+            bootstrap,
+        )
+        self.assertNotIn("--skip-doc", bootstrap)
 
     def test_managed_workflows_avoid_node20_action_versions(self) -> None:
         workflow_assets = [
@@ -463,6 +528,84 @@ class RepoMaintenanceToolkitWorkflowTests(unittest.TestCase):
         self.assertNotIn('"swift-package":', installer)
         self.assertNotIn('"xcode-app":', installer)
         self.assertIn('choices=("generic", "xcode-workspace")', runner)
+
+
+class MaintainProjectRepoDocumentationTests(unittest.TestCase):
+    def test_select_workflows_preserves_canonical_order(self) -> None:
+        selected, errors = docs_module.select_workflows(None, None)
+        self.assertEqual(errors, [])
+        self.assertEqual(
+            [workflow.key for workflow in selected],
+            ["readme", "contributing", "agents", "roadmap"],
+        )
+
+    def test_select_workflows_reports_unknown_keys(self) -> None:
+        selected, errors = docs_module.select_workflows("readme,unknown", "roadmap")
+        self.assertEqual([workflow.key for workflow in selected], ["readme"])
+        self.assertEqual(errors, ["Unknown document workflow key: unknown"])
+
+    def test_build_child_command_passes_ticket_flags_only_to_roadmap(self) -> None:
+        args = docs_module.parse_args(
+            [
+                "--project-root",
+                "/tmp/demo",
+                "--run-mode",
+                "check-only",
+                "--collect-source-tickets",
+                "--collect-github-issues",
+                "--github-repo",
+                "owner/repo",
+            ]
+        )
+        readme_command = docs_module.build_child_command(
+            args, docs_module.DOCUMENT_WORKFLOWS[0], Path("/tmp/demo")
+        )
+        roadmap_command = docs_module.build_child_command(
+            args, docs_module.DOCUMENT_WORKFLOWS[-1], Path("/tmp/demo")
+        )
+        self.assertNotIn("--collect-source-tickets", readme_command)
+        self.assertIn("--collect-source-tickets", roadmap_command)
+        self.assertIn("--collect-github-issues", roadmap_command)
+        self.assertIn("owner/repo", roadmap_command)
+
+    def test_responsibility_audit_flags_cross_doc_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "README.md").write_text(
+                "# Demo\n\n## Contribution Workflow\n\nDo all the things.\n",
+                encoding="utf-8",
+            )
+            (root / "ROADMAP.md").write_text(
+                "# Roadmap\n\n## Safety Boundaries\n\nDo not.\n",
+                encoding="utf-8",
+            )
+            issues = docs_module.audit_responsibility_boundaries(
+                root, docs_module.DOCUMENT_WORKFLOWS
+            )
+            issue_ids = {issue["issue_id"] for issue in issues}
+            self.assertIn("readme-contains-maintainer-workflow", issue_ids)
+            self.assertIn("roadmap-contains-procedural-guidance", issue_ids)
+
+    def test_script_reports_selection_errors_as_json(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    str(DOCS_SCRIPT),
+                    "--project-root",
+                    tmpdir,
+                    "--run-mode",
+                    "check-only",
+                    "--include",
+                    "missing",
+                    "--print-json",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(proc.returncode, 1)
+            self.assertIn("Unknown document workflow key: missing", proc.stdout)
 
 
 if __name__ == "__main__":

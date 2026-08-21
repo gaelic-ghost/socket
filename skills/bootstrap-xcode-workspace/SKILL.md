@@ -165,7 +165,9 @@ project migration entrypoint.
 - Hand service generation to `server-side-swift:workspace-service-component`;
   do not let the framework generator own or replace the product workspace.
 - Hand repository maintenance to `repository-skills:maintain-project-repo` with
-  the `xcode-workspace` profile.
+  the `xcode-workspace` profile. Its install operation also creates or refreshes
+  README.md, CONTRIBUTING.md, AGENTS.md, and ROADMAP.md through the canonical
+  document-owner workflows; do not add a second bootstrap-only docs path.
 - When Xcode-only state is required, use the root workspace and Xcode workflows;
   otherwise run the nearest package operation directly.
 

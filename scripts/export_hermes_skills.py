@@ -177,7 +177,6 @@ REPOSITORY_SKILLS = (
     "maintain-github-repository",
     "maintain-project-agents",
     "maintain-project-contributing",
-    "maintain-project-docs",
     "maintain-project-readme",
     "maintain-project-repo",
     "maintain-project-roadmap",

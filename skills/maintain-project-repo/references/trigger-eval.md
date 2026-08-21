@@ -9,6 +9,8 @@
 - Run the release workflow and clean up the merged branch.
 - Install the repo-maintenance toolkit.
 - Refresh our validation, sync, and release scripts.
+- Bootstrap this repository and create its canonical project docs.
+- Run a coordinated README, CONTRIBUTING, AGENTS, and ROADMAP refresh.
 - Use the checked-in release notes for this patch release.
 
 ## Should Not Trigger
@@ -26,6 +28,7 @@
 
 - GitHub repository settings audit and alignment route to
   `maintain-github-repository`.
-- Ordinary documentation work routes to the owning document-maintenance skill.
+- Ordinary single-document work routes to the owning document-maintenance skill;
+  coordinated project-doc maintenance routes to `maintain-project-repo`.
 - Ordinary local Git work follows repo-local Git guidance without invoking the
   full release lifecycle.
