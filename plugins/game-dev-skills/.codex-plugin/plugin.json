@@ -1,6 +1,6 @@
 {
   "name": "game-dev-skills",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Apple platform game development workflow skills for native Metal rendering, Game Porting Toolkit routing, MetalFX, GPU asset streaming, neural rendering, frameworks, input, haptics, and profiling.",
   "author": {
     "name": "Gale",
