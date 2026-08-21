@@ -65,14 +65,12 @@ class DeviceCheckAppAttestWorkflowTests(unittest.TestCase):
         readme = self.read("README.md")
         plugin = self.read(".codex-plugin/plugin.json")
         validator = self.read(".github/scripts/validate_repo_docs.sh")
-        roadmap = self.read("ROADMAP.md")
 
         self.assertIn("devicecheck-app-attest-workflow", readme)
         self.assertIn("DeviceCheck", plugin)
         self.assertIn("App Attest", plugin)
         self.assertIn("./skills/devicecheck-app-attest-workflow/SKILL.md", validator)
         self.assertIn("Expected exactly 58 active skills", validator)
-        self.assertIn("Milestone 53: DeviceCheck and App Attest Workflow - Completed", roadmap)
 
 
 if __name__ == "__main__":

@@ -90,14 +90,12 @@ class CoreAnimationTypographyWorkflowTests(unittest.TestCase):
 
     def test_second_slice_inventory_is_wired_into_metadata_and_validation(self) -> None:
         readme = self.read("README.md")
-        roadmap = self.read("ROADMAP.md")
         validator = self.read(".github/scripts/validate_repo_docs.sh")
         plugin = self.read(".codex-plugin/plugin.json")
 
         for skill in ["core-animation-layer-workflow", "apple-typography-workflow"]:
             with self.subTest(skill=skill):
                 self.assertIn(f"`{skill}`", readme)
-                self.assertIn(skill, roadmap)
                 self.assertIn(f"./skills/{skill}/SKILL.md", validator)
 
         self.assertIn("Core Animation", plugin)

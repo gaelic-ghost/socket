@@ -43,13 +43,12 @@ class XcodeLocalizationWorkflowTests(unittest.TestCase):
         self.assertIn("optional beta-era workflow", agent)
         self.assertIn("machine-translation provenance", agent)
 
-    def test_inventory_metadata_and_roadmap_name_the_shipped_skill(self) -> None:
+    def test_inventory_and_metadata_name_the_shipped_skill(self) -> None:
         readme = self.read("README.md")
         manifest = self.read(".codex-plugin/plugin.json")
-        roadmap = self.read("ROADMAP.md")
         validator = self.read(".github/scripts/validate_repo_docs.sh")
 
-        for text in (readme, roadmap, validator):
+        for text in (readme, validator):
             self.assertIn("xcode-localization-workflow", text)
         self.assertIn("String Catalog localization", manifest)
         self.assertIn('"string-catalog"', manifest)
