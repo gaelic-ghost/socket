@@ -53,4 +53,4 @@ Observed install query keys:
 - `entry_name`
 - `version` (optional)
 
-Use `scripts/dash_url_install.py` with confirmation-first behavior.
+Use `scripts/run-workflow.fsx --mode dash-install` with confirmation-first behavior.

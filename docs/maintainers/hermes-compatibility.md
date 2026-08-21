@@ -29,7 +29,6 @@ workflow, not either host's plugin manifest.
 Hermes discovers the root `skills/` directory by default after a user adds the
 Socket tap. The curated set is:
 
-- `bootstrap-skills-plugin-repo`
 - `build-acp-agent`
 - `build-hermes-agent-extensions`
 - `choose-agent-integration-protocol`
@@ -40,7 +39,6 @@ Socket tap. The curated set is:
 - `operate-hermes-agent`
 - `operate-hermes-agent-gateway`
 - `operate-zed-agent`
-- `sync-skills-repo-guidance`
 - `use-nous-research-services`
 - `app-extension-architecture-workflow`
 - `diagnose-apple-entitlements`
@@ -71,9 +69,6 @@ Socket tap. The curated set is:
 - `evaluate-jailbreak-resilience`
 - `evaluate-tool-calling-model`
 - `benchmark-model-runtime`
-- `build-python-agent-service`
-- `fastapi-service-workflow`
-- `fastmcp-service-workflow`
 - `python-testing-workflow`
 - `coordinate-external-agents`
 - `coordinate-worktrees-and-threads`
@@ -192,8 +187,8 @@ The exported macOS platform-security workflows are portable instruction contract
 5. Regenerate and validate:
 
    ```bash
-   uv run scripts/export_hermes_skills.py
-   uv run scripts/validate_hermes_compatibility.py
+   just repo-sync
+   just repo-validate
    ```
 
 6. Run the root metadata validator and relevant tests before review.

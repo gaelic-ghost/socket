@@ -93,12 +93,6 @@ This skill owns that decision, File Provider synchronization mechanics, and Find
 - Recommend `explore-apple-swift-docs` for current File Provider or Finder Sync API confirmation.
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable File Provider/Finder Sync target structure guidance.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` preserves the common customization-file contract. Synchronization ownership, conflict policy, and monitored-directory scope remain product evidence, not opaque defaults.
-
 ## References
 
 ### Workflow References
@@ -106,7 +100,6 @@ Use `references/customization-flow.md`.
 - `references/file-provider-synchronization.md`
 - `references/finder-sync-boundaries.md`
 - `references/privacy-validation-and-recovery.md`
-- `references/customization-flow.md`
 
 ### Authoritative Sources
 
@@ -119,5 +112,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode project guidance for File Provider and Finder Sync targets.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

@@ -1,6 +1,6 @@
 {
   "name": "web-dev-skills",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Codex skills for focused web and Expo native-boundary workflows.",
   "author": {
     "name": "Gale",
@@ -33,7 +33,7 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/web-dev-skills",
     "defaultPrompt": [
-      "Work through an Expo SDK 56+ inline native module change with current Expo docs, live project inspection, type generation, and native-boundary validation."
+      "Work through an Expo SDK 56+ inline native module change with current Expo docs, live project inspection, type generation, and…"
     ],
     "brandColor": "#38BDF8",
     "composerIcon": "./assets/globe-icon.png",

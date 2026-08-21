@@ -1,8 +1,0 @@
-schemaVersion: 1
-isCustomized: false
-settings:
-  fileHeaderMode: "advisory"
-  fileHeaderStyle: "project-banner"
-  fileHeaderCopyrightOwner: "Gale Williams"
-  splitSoftLimit: 400
-  splitHardLimit: 800

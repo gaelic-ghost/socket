@@ -82,20 +82,13 @@ Guide AVFoundation camera, photo, depth, and computational-capture work while ke
 - Recommend `xcode-testing-workflow` for fixtures, capability probes, deterministic transforms, and device test plans.
 - Recommend `explore-apple-swift-docs` for current capture documentation.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/camera-discovery-controls-and-rotation.md`
 - `references/photo-computational-capture-and-lifecycle.md`
 - `references/depth-calibration-and-synchronized-capture.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-camera-capability-contract.md`
 - `../../shared/references/apple-media-type-ownership.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

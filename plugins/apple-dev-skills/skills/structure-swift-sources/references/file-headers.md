@@ -47,9 +47,9 @@ See Also: Optional related files, symbols, or flows.
 
 ## Automation Boundary
 
-- Use `scripts/normalize_swift_file_headers.py` to audit header presence and shape across `.swift` files.
+- Use `scripts/normalize-swift-structure.fsx` to audit header presence and shape across `.swift` files.
 - Start from `references/file-header-inventory.template.yaml` when you want a user-editable inventory file for `--apply` mode.
-- Use `scripts/normalize_swift_file_headers.py --apply --inventory <yaml>` when you already have explicit `Purpose` and `Concern` text for each file and want the script to normalize placement and formatting deterministically.
+- Use `scripts/normalize-swift-structure.fsx --apply --inventory <yaml>` when you already have explicit `Purpose` and `Concern` text for each file and want the script to normalize placement and formatting deterministically.
 - The script fills `<Project Name>`, `<File Name>`, and `<YEAR>` deterministically.
 - The inventory may also provide optional `key_types` and `see_also` entries.
 - Do not use the script to invent `Purpose` or `Concern` text. The script normalizes shape and placement; the meaning-bearing content still needs to come from actual code understanding or an explicit inventory.
@@ -63,7 +63,7 @@ Start from this checked-in template:
 It is meant to be copied and edited by maintainers or end users before running:
 
 ```bash
-scripts/normalize_swift_file_headers.py --apply --inventory path/to/headers.yaml
+scripts/normalize-swift-structure.fsx --apply --inventory path/to/headers.yaml
 ```
 
 The expected shape is:

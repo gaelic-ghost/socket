@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "document": "readme",
+  "targetFile": "README.md",
+  "requireTableOfContents": true,
+  "preservePreamble": true,
+  "allowAdditionalSections": true,
+  "requiredSections": ["Overview", "Quick Start", "Usage", "Development", "Repo Structure", "Release Notes", "License"],
+  "sectionOrder": ["Overview", "Quick Start", "Usage", "Development", "Repo Structure", "Release Notes", "License"],
+  "requiredSubsections": {
+    "Overview": ["Status", "What This Project Is", "Motivation"]
+  },
+  "sectionAliases": {
+    "Quick Start": ["Getting Started", "Installation"],
+    "Usage": ["Examples"]
+  },
+  "subsectionAliases": {}
+}

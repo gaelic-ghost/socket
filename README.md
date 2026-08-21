@@ -11,11 +11,11 @@ Promo audio: [Socket Codex Marketplace Promo](./docs/media/socket-codex-marketpl
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Usage](#usage)
-- [Plugin Status](#plugin-status)
 - [Development](#development)
 - [Repo Structure](#repo-structure)
 - [Release Notes](#release-notes)
 - [License](#license)
+- [Plugin Status](#plugin-status)
 
 ## Overview
 
@@ -143,44 +143,7 @@ Currently available from the catalog:
 - `swift-lang`
 - `rust-skills`
 - `speak-swiftly`
-- `swiftasb-skills`
 - `web-dev-skills`
-
-## Plugin Status
-
-Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its public README because existing users can still arrive through the standalone compatibility marketplace. Other child planning now lives in [ROADMAP.md](./ROADMAP.md).
-
-Current Socket catalog shape:
-
-- `agent-portability-skills`: cross-host protocol selection, ACP operation/development, Zed native/external/terminal workflows, Hermes operator/developer/gateway/Nous Research guidance, and source-bundled maintainer roles for Socket-owned skill portability and host adapter audits
-- `agent-engineering-skills`: portable coordinator/worker, external-agent, scheduling, and worktree/thread orchestration guidance; it also owns agent automation, eval, and n8n workflow design
-- `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
-- `apple-creator-studio-skills`: source-preserving Final Cut Pro editing, Motion template, Compressor delivery, Logic Pro production, MainStage concert, and GarageBand project workflows with local Help Viewer discovery, explicit Computer Use safeguards, and artifact or rehearsal verification
-- `apple-dev-skills`: Apple, Swift, SwiftPM, macOS-hosted boundary selection, custom Virtualization framework hosts, persistent Linux development guests, clean macOS development guests, imaging, Vision/Core ML, camera, spatial sensing, media/audio, SwiftUI, AppKit, Xcode, Safari, OpenAPI, and DocC workflows, plus the source-bundled `swift-steward` custom-agent definition with its own roadmap
-- `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, a reusable Dockerized-service release/deployment contract, AWS handoff to the official AWS Agent Toolkit, and Azure handoff to Microsoft's Azure Skills plugin rather than duplicated provider MCP or CLI setup
-- `cloud-inference-skills`: cloud AI inference, training, model conversion, and GPU infrastructure routing for Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers, with bundled Runpod MCP server configuration, upstream Runpod skill mirrors, and first-party Hugging Face/AWS handoffs
-- `cybersecurity-skills`: suspicious-content triage, evidence preservation, isolation selection, disposable Linux and macOS analysis-lab preparation, malware analysis, agentic security-tool controls, macOS investigation and defense, vulnerability validation, authorized testing, incident response, threat hunting, detection content, and clear non-specialist advice
-- `codebase-understanding-skills`: source-grounded code tracing and explanation, with the bounded `code-slice-tracer` role for evidence-first call-site, test, and documentation discovery
-- `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage collaboration, Communication Notifications, Push to Talk, VoIP/SIP, documented iOS/iPadOS default communication roles, and app-owned macOS client workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
-- `model-lab-skills`: reproducible language-model experiment design, dataset preparation, fine-tuning, evaluation, checkpoint comparison, representation and steering research, refusal ablation, authorized jailbreak and tool-calling evaluation, runtime benchmarking, and current-source routing across Core AI, Core ML, MLX, ExecuTorch, and Foundation Models
-- `agentdeck`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
-- `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, local-first Semantic Kernel agent-service, test, package, diagnostics, ASP.NET Core, Giraffe, Falco, Oxpecker, interop, CI, upgrade, and tooling guidance
-- `game-dev-skills`: Apple platform game development workflows for native Metal and Metal 4 renderers, GPTK 3/4 routing, MetalFX, GPU asset streaming, experimental neural rendering, SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode profiling, game-stack routing, and device-aware validation handoffs
-- `network-protocol-skills`: modern networking and application-protocol workflows for transport selection, HTTP/3 and QUIC planning, Media over QUIC draft-aware guidance, WebRTC signaling/media/data-channel work, and protocol diagnostics with stack-plugin handoffs
-- `professional-skills`: career and professional workflow guidance, starting with Dice job search and its bundled read-only remote MCP configuration
-- `python-skills`: Python runtime and tooling workflows, including local-first agent services, FastAPI and FastMCP service maintenance, and pytest-based testing; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
-- `repository-skills`: routed Git and GitHub collaboration, README,
-  CONTRIBUTING, AGENTS, ROADMAP, repository settings, protected-main release,
-  and Codex GUI worktree workflow guidance; its portable repository and
-  documentation workflows are available from the Hermes skill tap
-- `reverse-engineering-skills`: artifact triage, preservation, exact-build comparison, decompiler review, Apple Mach-O/runtime/signing/Apple Silicon/dyld/dynamic/kernel research, Cutter/Rizin, Malimite, Ghidra, Hopper, .NET, Unity and IL2CPP, and reproducible security evidence workflows
-- `server-side-jvm`: server-side JVM, Java, Scala, Google ADK agent-service, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
-- `server-side-swift`: canonical-workspace service components, Vapor, Leaf-rendered websites and HTML email, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Soto-first AWS integration, native macOS/Homebrew local development, and GitHub-only OCI/Fly.io deployment guidance plus the source-bundled `server-swift-steward` custom-agent definition
-- `swift-lang`: shared Swift language, API style, error handling, functional pipelines, formatting, source organization, SwiftSyntax transformation, compiler inspection, SourceKit semantics and indexing, SourceKit-LSP diagnosis, Swiftly/Xcode toolchain routing, and modernization cleanup workflows
-- `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
-- `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
-- `swiftasb-skills`: SwiftASB companion guidance
-- `web-dev-skills`: Expo SDK 56+ inline native modules, type generation, native-boundary inspection, and validation handoff guidance
 
 ## Development
 
@@ -214,3 +177,41 @@ Use GitHub releases and Git history for root `socket` changes. Child plugins may
 ## License
 
 The `socket` superproject, and all nested projects, are licensed under the Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
+
+## Plugin Status
+
+Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its public README because existing users can still arrive through the standalone compatibility marketplace. Other child planning now lives in [ROADMAP.md](./ROADMAP.md).
+
+Current Socket catalog shape:
+
+- `agent-plugin-skills`: fixed-policy Codex plugin creation and repository-wide
+  plugin maintenance through managed FSX assets and exactly
+  `just plugins-check` and `just plugins-apply`
+- `agent-portability-skills`: cross-host protocol selection, ACP operation/development, Zed native/external/terminal workflows, Hermes operator/developer/gateway/Nous Research guidance, and source-bundled maintainer roles for Socket-owned skill portability and host adapter audits
+- `agent-engineering-skills`: portable coordinator/worker, external-agent, scheduling, and worktree/thread orchestration guidance; it also owns agent automation, eval, and n8n workflow design
+- `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
+- `apple-creator-studio-skills`: source-preserving Final Cut Pro editing, Motion template, Compressor delivery, Logic Pro production, MainStage concert, and GarageBand project workflows with local Help Viewer discovery, explicit Computer Use safeguards, and artifact or rehearsal verification
+- `apple-dev-skills`: Apple, Swift, SwiftPM, macOS-hosted boundary selection, custom Virtualization framework hosts, persistent Linux development guests, clean macOS development guests, imaging, Vision/Core ML, camera, spatial sensing, media/audio, SwiftUI, AppKit, Xcode, Safari, OpenAPI, and DocC workflows, plus the source-bundled `swift-steward` custom-agent definition with its own roadmap
+- `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, a reusable Dockerized-service release/deployment contract, AWS handoff to the official AWS Agent Toolkit, and Azure handoff to Microsoft's Azure Skills plugin rather than duplicated provider MCP or CLI setup
+- `cloud-inference-skills`: cloud AI inference, training, model conversion, and GPU infrastructure routing for Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers, with bundled Runpod MCP server configuration, upstream Runpod skill mirrors, and first-party Hugging Face/AWS handoffs
+- `cybersecurity-skills`: suspicious-content triage, evidence preservation, isolation selection, disposable Linux and macOS analysis-lab preparation, malware analysis, agentic security-tool controls, macOS investigation and defense, vulnerability validation, authorized testing, incident response, threat hunting, detection content, and clear non-specialist advice
+- `codebase-understanding-skills`: source-grounded code tracing and explanation, with the bounded `code-slice-tracer` role for evidence-first call-site, test, and documentation discovery
+- `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage collaboration, Communication Notifications, Push to Talk, VoIP/SIP, documented iOS/iPadOS default communication roles, and app-owned macOS client workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
+- `model-lab-skills`: reproducible language-model experiment design, dataset preparation, fine-tuning, evaluation, checkpoint comparison, representation and steering research, refusal ablation, authorized jailbreak and tool-calling evaluation, runtime benchmarking, and current-source routing across Core AI, Core ML, MLX, ExecuTorch, and Foundation Models
+- `agentdeck`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
+- `dotnet-skills`: .NET, F#, and C# project-shape, bootstrap, implementation, local-first Semantic Kernel agent-service, test, package, diagnostics, ASP.NET Core, Giraffe, Falco, Oxpecker, interop, CI, upgrade, and tooling guidance
+- `game-dev-skills`: Apple platform game development workflows for native Metal and Metal 4 renderers, GPTK 3/4 routing, MetalFX, GPU asset streaming, experimental neural rendering, SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode profiling, game-stack routing, and device-aware validation handoffs
+- `network-protocol-skills`: modern networking and application-protocol workflows for transport selection, HTTP/3 and QUIC planning, Media over QUIC draft-aware guidance, WebRTC signaling/media/data-channel work, and protocol diagnostics with stack-plugin handoffs
+- `professional-skills`: career and professional workflow guidance, starting with Dice job search and its bundled read-only remote MCP configuration
+- `python-skills`: focused diagnostics, packaging, tooling, CI, upgrade, and testing guidance for existing Python code
+- `repository-skills`: routed Git and GitHub collaboration, README,
+  CONTRIBUTING, AGENTS, ROADMAP, repository settings, protected-main release,
+  and Codex GUI worktree workflow guidance; its portable repository and
+  documentation workflows are available from the Hermes skill tap
+- `reverse-engineering-skills`: artifact triage, preservation, exact-build comparison, decompiler review, Apple Mach-O/runtime/signing/Apple Silicon/dyld/dynamic/kernel research, Cutter/Rizin, Malimite, Ghidra, Hopper, .NET, Unity and IL2CPP, and reproducible security evidence workflows
+- `server-side-jvm`: server-side JVM, Java, Scala, Google ADK agent-service, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
+- `server-side-swift`: canonical-workspace service components, Vapor, Leaf-rendered websites and HTML email, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Soto-first AWS integration, native macOS/Homebrew local development, and GitHub-only OCI/Fly.io deployment guidance plus the source-bundled `server-swift-steward` custom-agent definition
+- `swift-lang`: shared Swift language, API style, error handling, functional pipelines, formatting, source organization, SwiftSyntax transformation, compiler inspection, SourceKit semantics and indexing, SourceKit-LSP diagnosis, Swiftly/Xcode toolchain routing, and modernization cleanup workflows
+- `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
+- `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
+- `web-dev-skills`: Expo SDK 56+ inline native modules, type generation, native-boundary inspection, and validation handoff guidance

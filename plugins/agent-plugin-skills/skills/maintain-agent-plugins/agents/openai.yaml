@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Agent Plugins"
+  short_description: "Create and align deterministic plugin repos"
+  default_prompt: "Use $maintain-agent-plugins to create or align the complete agent plugin set with managed FSX automation, exactly plugins-check and plugins-apply, fixed Socket publisher policy, and repository-skills integration."

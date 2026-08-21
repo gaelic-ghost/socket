@@ -32,7 +32,7 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
    - Do not assume the two toolchains expose identical SwiftPM commands, flags, manifest APIs, macro support, or plugin behavior.
 3. Read the relevant official SwiftPM, Swift Evolution, or Apple/Xcode documentation and state the behavior relied on before editing.
 4. Classify the primary extension concern as `build-tool-plugin`, `command-plugin`, `macro`, `traits`, or `generated-source`.
-5. Run `scripts/run_workflow.py` for nearest-package resolution and a non-mutating command plan.
+5. Run the managed FSX planner through the owning repository recipe for nearest-package resolution and a non-mutating command plan.
 6. Load only the reference needed for the selected concern:
    - plugins: `references/package-plugins-build-command-and-xcode.md`
    - permissions: `references/plugin-permissions-sandbox-and-outputs.md`
@@ -77,10 +77,8 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
 - Hand Xcode-managed builds to `xcode-build-run-workflow` and Xcode-native tests to `xcode-testing-workflow` with the exact package, plugin, macro, trait, scheme, and destination context.
 - Use `format-swift-sources` for formatter-specific behavior without duplicating the general plugin permission model.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization.template.yaml` and `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
 - The workflow currently keeps fixed package-first and least-permission defaults.
 
 ## References
@@ -96,9 +94,6 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
 
 ### Contract References
 
-- `references/customization.template.yaml`
-- `references/customization-flow.md`
-
 ### Support References
 
 - Recommend `references/snippets/apple-swift-package-core.md` when reusable package policy is needed in an end-user repo.
@@ -106,5 +101,4 @@ Own SwiftPM extension work that does not belong in ordinary package build/run or
 
 ### Script Inventory
 
-- `scripts/run_workflow.py`
-- `scripts/customization_config.py`
+- `scripts/run-workflow.fsx`

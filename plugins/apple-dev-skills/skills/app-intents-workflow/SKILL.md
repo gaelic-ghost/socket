@@ -57,15 +57,10 @@ Expose the smallest useful action and content surface outside an app without tur
 - Recommend `xcode-testing-workflow` for deterministic testing and UI automation.
 - Recommend `apple-developer-provisioning-workflow` only when documented capability or identifier provisioning becomes the actual blocker.
 
-## Customization
-
-Use `references/customization-flow.md`. The first version exposes no runtime-enforced knobs; it preserves the shared customization contract without allowing a configuration to bypass documentation, privacy, or validation requirements.
-
 ## References
 
 - `references/intent-entity-and-shortcut-shapes.md`
 - `references/system-surfaces-and-validation.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the app needs reusable Xcode-project policy alongside App Intents integration.
 - [App Intents](https://developer.apple.com/documentation/appintents) documents intents, entities, shortcuts, and system-surface integration.
 - [Adopting App Intents to support system experiences](https://developer.apple.com/documentation/appintents/adopting-app-intents-to-support-system-experiences) documents discovery across system experiences.

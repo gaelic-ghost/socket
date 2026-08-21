@@ -102,11 +102,9 @@ The workflow never commits a `.p8` key, CloudKit token, JWT, profile payload, or
 - Use the Apple Developer Portal manually for App Groups, CloudKit-container registration or App-ID assignment, Service IDs, and any capability configuration Apple does not expose through the current REST API.
 - Recommend `references/snippets/apple-xcode-project-core.md` when a repository needs durable Xcode-project guidance for entitlements, signing, and project-integrity follow-through.
 
-## Customization
+## Fixed Policy
 
-Use `references/customization-flow.md`.
-
-This workflow intentionally has no runtime-enforced mutation override. Customization can record a preferred discovery mode and CloudKit adapter, but it cannot bypass plan-first behavior, local-secret handling, portal-only classification, or explicit per-operation confirmation.
+This workflow intentionally has no runtime-enforced mutation override. The fixed policy selects the discovery mode and CloudKit adapter and cannot bypass plan-first behavior, local-secret handling, portal-only classification, or explicit per-operation confirmation.
 
 ## References
 
@@ -115,7 +113,6 @@ This workflow intentionally has no runtime-enforced mutation override. Customiza
 - `references/app-store-connect-provisioning.md`
 - `references/cloudkit-automation.md`
 - `references/portal-only-configuration.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -126,5 +123,3 @@ This workflow intentionally has no runtime-enforced mutation override. Customiza
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode project policy.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

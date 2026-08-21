@@ -7,7 +7,7 @@ description: Guide Swift Testing, XCTest holdouts, code coverage, xctestplan han
 
 ## Purpose
 
-Use this skill as the primary execution workflow for test-focused work in existing Swift package components. Keep it focused on Swift Testing, XCTest holdouts, code coverage, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, performance-sensitive package workload profiling, filters, retries, fixtures, and package-level test diagnosis. `scripts/run_workflow.py` resolves the nearest package root and plans the test surface without classifying the containing repository.
+Use this skill as the primary execution workflow for test-focused work in existing Swift package components. Keep it focused on Swift Testing, XCTest holdouts, code coverage, `.xctestplan` handoff conditions, async-test guidance, semantic accessibility-test boundaries, performance-sensitive package workload profiling, filters, retries, fixtures, and package-level test diagnosis. `scripts/run-workflow.fsx` resolves the nearest package root and plans the test surface without classifying the containing repository.
 
 ## When To Use
 
@@ -47,7 +47,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its explicit `swiftLanguageModes: [.v6]` package-manifest default and prefer that spelling over the legacy `swiftLanguageVersions` alias on current manifest surfaces
    - preserve its package-appropriate logging, telemetry, structured-concurrency, and Swift Testing guidance
-4. Run `scripts/run_workflow.py` to resolve the nearest package root, confirm the request stays on the testing surface, and plan the package-testing command path.
+4. Run `scripts/run-workflow.fsx` to resolve the nearest package root, confirm the request stays on the testing surface, and plan the package-testing command path.
 5. Use `references/code-coverage.md` when the request needs SwiftPM collection, exported-JSON discovery, coverage reporting, comparison, or an explicit coverage-gate boundary.
 6. Use `references/package-resources-testing-and-builds.md` when the request touches Swift Testing, XCTest, `.xctestplan`, accessibility-related semantic tests, fixtures, async test discipline, or test-related Debug/Release validation.
 7. Use `references/performance-sensitive-testing-and-profiling.md` when the request touches package-first instrumentation, `OSSignposter`, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Audio, MLX, local AI, streaming, or other performance-sensitive Apple silicon workloads.
@@ -60,7 +60,7 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - `request`: optional short natural-language request text used to infer `operation_type` when the explicit operation is omitted.
 - `repo_root`: optional absolute path for the target package repo.
 - Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
+  - runtime entrypoint: executable `scripts/run-workflow.fsx`
   - `repo_root=.` when omitted
   - the runtime may infer `operation_type` from `--request` text when the request wording is clear enough
   - package testing prefers `swift test`, filtered `swift test` runs, and `xcodebuild` test-plan follow-through only when the package surface truly needs it
@@ -111,12 +111,9 @@ Use this skill as the primary execution workflow for test-focused work in existi
 - Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the repository still needs to be created from scratch.
 - When maintaining this repository itself, refresh guidance-sync consumers after substantial package-testing policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization.template.yaml`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` reads customization state, but the current workflow keeps a fixed package-testing policy and does not expose ordinary user-facing knobs yet.
-- Run the Python wrapper and customization entrypoints through `uv`, because they rely on inline `PyYAML` script metadata rather than a repo-global Python environment.
+- `scripts/run-workflow.fsx` enforces the fixed package-testing policy without runtime customization.
 
 ## References
 
@@ -130,8 +127,6 @@ Use this skill as the primary execution workflow for test-focused work in existi
 
 ### Contract References
 
-- `references/customization.template.yaml`
-
 ### Support References
 
 - Recommend `references/snippets/apple-swift-package-core.md` when the user needs reusable SwiftPM baseline policy wording in an end-user repo.
@@ -139,5 +134,4 @@ Use this skill as the primary execution workflow for test-focused work in existi
 
 ### Script Inventory
 
-- `scripts/run_workflow.py`
-- `scripts/customization_config.py`
+- `scripts/run-workflow.fsx`

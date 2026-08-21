@@ -1,0 +1,24 @@
+name: Validate Repo Maintenance
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          global-json-file: global.json
+      - name: Install just
+        run: brew install just
+      - name: Validate repository
+        run: just repo-validate

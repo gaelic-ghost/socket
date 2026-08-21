@@ -1,6 +1,6 @@
 {
   "name": "cloud-deployment-skills",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Codex skills for routing cloud deployment work through official provider plugins, MCP servers, CLIs, and a reusable Dockerized-service release and deployment contract.",
   "author": {
     "name": "Gale",
@@ -43,9 +43,9 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-deployment-skills",
     "defaultPrompt": [
-      "Choose the right cloud deployment path and route AWS or Azure work through the applicable official provider plugin when appropriate.",
-      "Decide whether this deployment should use an official provider plugin, provider CLI, MCP server, framework-owned deploy workflow, or a Socket-owned provider skill.",
-      "Set up or audit a Dockerized backend release path that builds in clean GitHub Actions, deploys only a published release manifest digest after production approval, verifies health, and rolls back by exact digest."
+      "Choose the right cloud deployment path and route AWS or Azure work through the applicable official provider plugin when appropr…",
+      "Decide whether this deployment should use an official provider plugin, provider CLI, MCP server, framework-owned deploy workflo…",
+      "Set up or audit a Dockerized backend release path that builds in clean GitHub Actions, deploys only a published release manifes…"
     ],
     "brandColor": "#22D3EE",
     "composerIcon": "./assets/cloud-deployment-icon.svg",

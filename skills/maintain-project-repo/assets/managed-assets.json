@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    { "source": "shared/project-docs/ProjectDocs.fsx", "target": "scripts/repo-maintenance/lib/ProjectDocs.fsx" },
+    { "source": "shared/project-docs/DocsCoordinator.fsx", "target": "scripts/repo-maintenance/lib/DocsCoordinator.fsx" },
+    { "source": "skills/maintain-project-repo/assets/repo-maintenance/maintain-project-docs.fsx", "target": "scripts/repo-maintenance/maintain-project-docs.fsx" },
+    { "source": "skills/maintain-project-repo/assets/repo-maintenance/repo-maintenance.fsx", "target": "scripts/repo-maintenance/repo-maintenance.fsx" },
+    { "source": "skills/maintain-project-repo/assets/repo-maintenance/repo-maintenance.just", "target": "scripts/repo-maintenance/repo-maintenance.just" },
+    { "source": "skills/maintain-project-readme/assets/document.contract.json", "target": "scripts/repo-maintenance/docs/readme/document.contract.json" },
+    { "source": "skills/maintain-project-readme/assets/README.template.md", "target": "scripts/repo-maintenance/docs/readme/README.template.md" },
+    { "source": "skills/maintain-project-contributing/assets/document.contract.json", "target": "scripts/repo-maintenance/docs/contributing/document.contract.json" },
+    { "source": "skills/maintain-project-contributing/assets/CONTRIBUTING.template.md", "target": "scripts/repo-maintenance/docs/contributing/CONTRIBUTING.template.md" },
+    { "source": "skills/maintain-project-agents/assets/document.contract.json", "target": "scripts/repo-maintenance/docs/agents/document.contract.json" },
+    { "source": "skills/maintain-project-agents/assets/AGENTS.template.md", "target": "scripts/repo-maintenance/docs/agents/AGENTS.template.md" },
+    { "source": "skills/maintain-project-roadmap/assets/document.contract.json", "target": "scripts/repo-maintenance/docs/roadmap/document.contract.json" },
+    { "source": "skills/maintain-project-roadmap/assets/ROADMAP.template.md", "target": "scripts/repo-maintenance/docs/roadmap/ROADMAP.template.md" },
+    { "source": "skills/maintain-project-repo/assets/github/validate-repo-maintenance.yml", "target": ".github/workflows/validate-repo-maintenance.yml" },
+    { "source": "skills/maintain-project-repo/assets/profiles/xcode-workspace/repo-maintenance/validations/40-xcode-workspace-layout.fsx", "target": "scripts/repo-maintenance/validations/40-xcode-workspace-layout.fsx", "profile": "xcode-workspace" },
+    { "source": "skills/maintain-project-repo/assets/profiles/xcode-workspace/repo-maintenance/workspace/validate-components.fsx", "target": "scripts/repo-maintenance/workspace/validate-components.fsx", "profile": "xcode-workspace" }
+  ]
+}

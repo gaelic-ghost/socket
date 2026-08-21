@@ -104,7 +104,7 @@ For Socket:
 
 1. Keep `plugins/swift-lang` guidance in sync with the package API after it
    exists.
-2. Run `uv run scripts/validate_socket_metadata.py` when skills or plugin
+2. Run `just repo-validate` when skills or plugin
    metadata change.
 3. Do not claim the package exists until the standalone repository and fetchable
    Swift package are created.

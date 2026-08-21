@@ -124,20 +124,12 @@ session policy, or Xcode execution workflows.
 - Recommend `explore-apple-swift-docs` when current AVKit or tvOS docs lookup
   is the real task.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` preserves the shared customization-file
-contract. This first version has no runtime-enforced knobs.
-
 ## References
 
 ### Workflow References
 
 - `references/system-player-and-remote-commands.md`
 - `references/playback-validation-and-handoffs.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -147,5 +139,3 @@ contract. This first version has no runtime-enforced knobs.
   release-note evidence.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

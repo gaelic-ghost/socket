@@ -1,6 +1,4 @@
-# Contributing to socket
-
-Use this guide when preparing root-level changes so the `socket` superproject stays understandable, runnable, and reviewable for the next maintainer.
+# Contributing to Socket
 
 ## Table of Contents
 
@@ -16,288 +14,143 @@ Use this guide when preparing root-level changes so the `socket` superproject st
 
 ### Who This Guide Is For
 
-This guide is for contributors working on the `socket` superproject layer itself: the root marketplace, root maintainer docs, root validation scripts, and root coordination rules for the child repositories under [`plugins/`](./plugins/).
+This guide is for contributors changing Socket's root marketplace, managed
+documentation, repository maintenance, compatibility metadata, or the
+monorepo-owned plugin payloads under [`plugins/`](./plugins/).
 
 ### Before You Start
 
-Read the root [README.md](./README.md) and [AGENTS.md](./AGENTS.md), confirm whether the task belongs in the root superproject or in a specific child repository, and if the work affects subtree-managed children use the documented subtree workflow instead of improvising a mixed root-and-child change. If the change affects root docs, marketplace wiring, or maintainer automation, plan to update the relevant root docs in the same pass.
+Read [README.md](./README.md), [AGENTS.md](./AGENTS.md), and
+[ROADMAP.md](./ROADMAP.md). Work in the closest owning plugin when a change is
+plugin-specific. Speak Swiftly remains Git-backed and is maintained in its
+standalone repository.
 
 ## Contribution Workflow
 
 ### Choosing Work
 
-Use the root repository for work about:
-
-- repo-root marketplace wiring in [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
-- root maintainer docs under [`docs/`](./docs/)
-- root policies in [README.md](./README.md), [AGENTS.md](./AGENTS.md), and [ROADMAP.md](./ROADMAP.md)
-- root validation and CI such as [`scripts/validate_socket.py`](./scripts/validate_socket.py) and [`.github/workflows/validate-socket.yml`](./.github/workflows/validate-socket.yml)
-- coordinated child-skill guidance that needs one consistent policy across multiple monorepo-owned plugin or skills repositories
-
-If the change is really about one child repository's own skills, packaging, tests, or release flow, start in that child repository's docs and workflow instead of treating `socket` as a generic catch-all.
+Root work includes marketplace wiring, shared exports, root documentation,
+cross-plugin compatibility, FSX repository automation, and release policy.
+Child implementation belongs under its owning directory in `plugins/`.
 
 ### Making Changes
 
-Keep changes bounded to one coherent root concern at a time, such as docs-only root alignment, marketplace-path or manifest-alignment fixes, root validation improvements, or root subtree-workflow documentation updates. Start implementation work from a branch-backed worktree by default so the base `main` checkout stays clean for coordination and release verification. Direct local-`main` edits are reserved for explicit direct-main requests, read-only work, or repo-owned release helpers that document the direct-main operation.
+Use a `<scope>/<slug>` feature branch. Keep one coherent concern per change and
+update the owning source rather than an installed cache or generated copy.
+Repository Skills source lives under `plugins/repository-skills`; root exports
+are synchronized by `just repo-sync`.
 
-For ordinary work in monorepo-owned child directories, including `plugins/apple-dev-skills`, edit the copy in the relevant directory under `plugins/` directly from the active `socket` feature worktree. The standalone `gaelic-ghost/apple-dev-skills` repository is only a compatibility marketplace pointer to Socket; do not subtree-push Socket payload changes back into it unless a future migration restores that workflow. For Speak Swiftly plugin payload changes, work in the standalone `SpeakSwiftlyServer` checkout; `socket` lists that payload by Git-backed marketplace reference and does not keep a local `plugins/SpeakSwiftlyServer` mirror.
+Documentation is always maintained as one four-file transaction. The only docs
+commands are:
 
-When changing user-facing plugin install or update docs, make the Git-backed marketplace path the default. Use commands shaped like `codex plugin marketplace add owner/repo` for install setup and `codex plugin marketplace upgrade marketplace-name` for updates; keep explicit refs such as `owner/repo@vX.Y.Z` scoped to pinned reproducible installs, and keep manual local marketplace roots scoped to development, unpublished testing, or fallback instructions.
-
-For coordinated child-skill guidance, keep the root explanation small and put detailed behavior in the child repo that owns the skill surface. The root docs should explain why the pass is coordinated; the child docs should explain the actual skill contract.
-
-When adding root screenshots or other documentation media, place them under [`docs/media/`](./docs/media/), use portable descriptive filenames, and add nearby text that explains what the artifact proves or demonstrates. Do not rely on image content alone to explain a workflow.
-
-When updating root docs, keep [README.md](./README.md) short, nontechnical, and focused on people or agents installing and using the Socket marketplace. Put contributor workflow, maintainer commands, release process, subtree accounting, marketplace source-shape details, and root validation expectations in this file or the maintainer docs under [`docs/maintainers/`](./docs/maintainers/). Put durable agent-facing operating rules in [AGENTS.md](./AGENTS.md).
-
-Do not add `README.md` files to monorepo-owned child plugin roots by default. The root Socket docs, plugin manifests, skill metadata, child `AGENTS.md`, and root planning docs are the normal documentation surfaces for those children. Keep child root READMEs only for public compatibility surfaces such as `apple-dev-skills`; keep server-specific README files under bundled server directories such as `mcp/`.
+```bash
+just docs-check
+just docs-apply
+```
 
 ### Asking For Review
 
-A root change is ready for review when:
-
-- the change clearly belongs at the superproject layer
-- any affected root docs and automation surfaces were updated together
-- verification relevant to the changed root surface has been run
-- the PR or review request explains whether the change affects root docs, marketplace wiring, subtree workflow, or validation behavior
+State the changed ownership surface, compatibility consequence, and exact
+commands run. Do not claim a release, installation, or synchronization that was
+not performed.
 
 ## Local Setup
 
 ### Runtime Config
 
-The root superproject uses one `uv` environment for root and monorepo-owned
-child maintainer tooling:
+Socket pins .NET in [`global.json`](./global.json) and exposes maintainer work
+through [`justfile`](./justfile). Install a compatible .NET 10 SDK and `just`,
+then inspect the recipes:
 
 ```bash
-uv sync --dev
+just --list
 ```
 
-Declare Python quality tooling in the root `pyproject.toml` dev dependencies
-rather than creating child environments or assuming a machine-global install.
-Treat `pytest`, `ruff`, and `mypy` as the normal Python maintainer baseline when
-the shipped validation surface uses them. Root validation redirects tool caches
-to `.codex/.cache/` and disables bytecode writes so checks do not recreate
-generated state inside plugin payloads.
-
-At the `socket` root, run `uv run mypy` without a path argument. The root mypy config intentionally checks root maintainer scripts, root tests, and package-shaped child maintainer code instead of crawling every standalone skill `scripts/` directory as one Python module namespace.
-
-For the read-only Xcode plug-in source assessment, run:
-
-```bash
-uv run scripts/audit_xcode_plugin_compatibility.py
-```
-
-The report classifies each Socket child plug-in separately for Xcode-launched
-Codex, Xcode internal agents, and external agents using Xcode MCP. It does not
-write Xcode configuration or claim runtime support for hooks, MCP servers,
-apps, or custom agents.
-
-Versioned guidance in this repository is a floor unless it explicitly says an exact pin is required. For GitHub Actions, runners, language toolchains, package managers, and stack versions, prefer newer stable versions when official release notes or documentation support the update and the relevant local or CI validation passes.
-
-The root validation path does not require application secrets. If your change involves subtree sync or GitHub operations, make sure your git remotes and GitHub authentication are already configured on your machine before you start those steps.
+Do not add Python or shell maintainer scripts, direct operator-facing script
+commands, nested test suites, or per-document recipes.
 
 ### Runtime Behavior
 
-`socket` does not run a root application or service. A healthy root setup means:
-
-- the `uv` dev environment is synced
-- the root marketplace file is valid JSON
-- the root packaged plugin paths still point at real installable plugin surfaces
-- the core Socket validation profile completes successfully
-
-Use the compatibility profile for ordinary root changes. It runs the core marketplace, skill-metadata, root-test, type, and lint checks plus the checked-in Hermes and Claude compatibility checks:
+Socket has no root application. Its essential validation is integration-level:
 
 ```bash
-uv run scripts/validate_socket.py --profile compatibility
+just repo-validate
+just test
 ```
 
-Use `--profile full` when the change affects child validation or behavior; it
-runs each participating child suite once from its owning project. Socket's
-release workflow runs this same profile before the release PR and again on
-reviewed `main`; validation profiles do not own tagging or publication.
+`repo-validate` checks marketplace-to-plugin resolution, shared version
+alignment, Claude compatibility references, root-only test placement, managed
+repository assets, and the four canonical documents. `test` runs the installer,
+docs apply/idempotence/check, Just interface, and repository validation in a
+temporary Git repository. There are no unit-style or child-local test suites.
 
-Every new or materially changed Socket plugin, skill, or MCP declaration needs
-an explicit Hermes compatibility outcome in the same pass. When that outcome
-changes the checked-in Hermes skill tap, regenerate and validate it:
-
-```bash
-uv run scripts/export_hermes_skills.py
-uv run scripts/validate_hermes_compatibility.py
-```
-
-Do not edit root `skills/` by hand. The current generated export is maintained
-from the sources declared by the export script; see the
-[Hermes compatibility guide](./docs/maintainers/hermes-compatibility.md) for
-the required skill-export decision, MCP translation rules, and native-plugin
-boundary.
-
-Every new or materially changed Socket marketplace plugin also needs a checked
-Claude Code and Cowork classification. Keep the Claude marketplace and
-[`docs/maintainers/claude-compatibility.json`](./docs/maintainers/claude-compatibility.json)
-aligned, then run:
-
-```bash
-uv run scripts/validate_claude_compatibility.py
-```
-
-Use the [Claude compatibility guide](./docs/maintainers/claude-compatibility.md)
-for the skills-first Cowork boundary, local-MCP adapter rules, and selective
-subagent policy.
-
-When a change adds or changes any `plugins/**/.mcp.json` declaration, update
-the matching checked-in fragment under
-[`docs/maintainers/hermes-mcp/`](./docs/maintainers/hermes-mcp/) and its
-inventory entry in `index.yaml`. The Hermes validator requires every declared
-Socket MCP configuration to be accounted for and rejects committed
-machine-local paths or undocumented environment placeholders.
+Use `just repo-sync` to refresh generated root skill exports and validate the
+result. Do not edit root `skills/` by hand.
 
 ### Xcode Workspace
 
-The root [`Socket.xcworkspace`](./Socket.xcworkspace) is a browse-only workspace for maintainers who want to use Xcode's file navigator and Markdown editor, especially Xcode 27 beta's WYSIWYG Markdown surface. It references root docs, the marketplace file, `docs/`, `plugins/`, and `scripts/`, but it intentionally has no schemes, targets, package products, or root build settings.
-
-Do not add a generated `.xcodeproj`, root `Package.swift`, or workspace scheme only to improve documentation editing. If Socket later gains a real root build product, document that build surface separately and update the workspace guidance in [`docs/maintainers/socket-xcode-workspace.md`](./docs/maintainers/socket-xcode-workspace.md).
+[`Socket.xcworkspace`](./Socket.xcworkspace) is browse-only. Do not add a root
+project, scheme, target, or package solely for documentation browsing.
 
 ### Marketplace Shape
 
-The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json). It is a catalog, not a root aggregate plugin.
-
-The installable local child entries currently point at:
-
-- `./plugins/agent-portability-skills`
-- `./plugins/agent-engineering-skills`
-- `./plugins/android-dev-skills`
-- `./plugins/apple-dev-skills`
-- `./plugins/cloud-deployment-skills`
-- `./plugins/cloud-inference-skills`
-- `./plugins/codebase-understanding-skills`
-- `./plugins/model-lab-skills`
-- `./plugins/agentdeck`
-- `./plugins/dotnet-skills`
-- `./plugins/game-dev-skills`
-- `./plugins/network-protocol-skills`
-- `./plugins/professional-skills`
-- `./plugins/python-skills`
-- `./plugins/repository-skills`
-- `./plugins/reverse-engineering-skills`
-- `./plugins/rust-skills`
-- `./plugins/server-side-jvm`
-- `./plugins/server-side-swift`
-- `./plugins/swift-lang`
-- `./plugins/swiftasb-skills`
-- `./plugins/web-dev-skills`
-
-The Speak Swiftly entry points at the canonical Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source as `speak-swiftly`, with the display name `Speak Swiftly`.
-
-For the detailed packaging stance, use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md). For isolated install testing that leaves personal production installs alone, use [`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md).
-
-### Legacy Install Cleanup
-
-If a contributor is cleaning up an older copied-plugin or local-personal-marketplace setup after confirming the Git-backed Socket marketplace works, use the repo-owned cleanup helper:
-
-```bash
-uv run scripts/cleanup_legacy_socket_installs.py
-uv run scripts/cleanup_legacy_socket_installs.py --apply
-```
-
-The first command is a dry run. The `--apply` command backs up known legacy Socket install artifacts before removing them.
+The catalog at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json)
+points to monorepo-owned local plugins plus the Git-backed Speak Swiftly source.
+It is not an aggregate plugin. Each local entry must resolve to a matching
+`.codex-plugin/plugin.json`.
 
 ## Development Expectations
 
 ### Naming Conventions
 
-Keep root terminology aligned with the repository docs:
-
-- `skill` means a reusable workflow-authoring unit
-- `plugin` means an installable distribution bundle
-- `subagent` means a delegated runtime worker with its own context and tool policy
-
-Use the same names for the same concepts across `SKILL.md`, plugin manifests, marketplace metadata, docs, automation prompts, scripts, and validation messages.
+Use `skill` for a reusable workflow, `plugin` for an installable bundle, and
+`subagent` for a delegated runtime worker. Keep names aligned across manifests,
+skills, marketplaces, documentation, and reports.
 
 ### Accessibility Expectations
 
-Contributors must keep root-level changes aligned with the project's accessibility contract in [ACCESSIBILITY.md](./ACCESSIBILITY.md).
-
-If a change affects root docs, structural navigation, command readability, log clarity, workflow operability, or other root maintainer-facing surfaces, verify the affected surface against the documented accessibility expectations before asking for review.
-
-If a root-level change introduces a new accessibility limitation, exception, or remediation path, update [ACCESSIBILITY.md](./ACCESSIBILITY.md) in the same pass unless maintainers have explicitly agreed on a different tracking path.
+Keep commands, logs, headings, links, errors, and user-facing behavior readable
+and actionable. Record product-specific accessibility requirements beside the
+surface that owns them; do not create a separate root accessibility contract.
 
 ### Verification
 
-Prefer grounded validation commands that match the changed root surface.
-
-Root baseline validation:
+Run the root integration surface:
 
 ```bash
-uv sync --dev
-uv run scripts/validate_socket.py --profile compatibility
+just docs-check
+just repo-validate
+just test
 ```
 
-Inspect the shared version without changing it with:
+For a requested release, author `docs/releases/vX.Y.Z.md`, then use only:
 
 ```bash
-scripts/release.sh inventory
+just repo-release-prepare X.Y.Z
+just repo-release-inspect X.Y.Z
+just repo-release-advance X.Y.Z
 ```
 
-Socket has one release workflow for every semantic-version level and catalog
-refresh. Author `docs/releases/vX.Y.Z.md` on the feature branch, then use:
-
-```bash
-scripts/release.sh prepare X.Y.Z
-scripts/release.sh inspect X.Y.Z
-scripts/release.sh advance X.Y.Z
-```
-
-The workflow owns the version bump, full local and GitHub validation, release
-PR, reviewed-main verification, commit-bound marketplace and Dependabot
-evidence, annotated tag, GitHub release, structured branch/child accounting,
-and final marketplace refresh. See
-[`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md)
-for the complete contract. Do not invoke the internal Python modules or create
-a direct-main shortcut.
-
-If the changed surface also introduces or expands Python-backed repo checks,
-add the required tools to the root `uv` dev group and add the focused child
-command to `scripts/validate_socket.py` instead of creating a child
-`pyproject.toml`, lockfile, environment, or cache root.
-
-When editing docs, also review the rendered Markdown structure and cross-links for the files you changed.
-
-When editing docs that include media, also review the image path, alt text, and adjacent explanatory prose.
-
-When adding or updating agent reports under [`docs/agents/`](./docs/agents/), verify that the report contains no secrets, no private environment values, and no machine-local absolute links intended for repository-facing docs.
+See [`docs/maintainers/release-workflow.md`](./docs/maintainers/release-workflow.md)
+for release gates. Do not invoke internal FSX files directly.
 
 ## Pull Request Expectations
 
-A good root PR should make the changed superproject surface obvious. Include:
-
-- what root concern changed
-- why the change belongs in `socket` instead of a child repo
-- any root docs updated to keep the policy surface aligned
-- the verification you ran
-
-If a PR touches subtree-managed children, call that out explicitly so reviewers know whether they are looking at ordinary monorepo edits or subtree workflow changes.
+A pull request should state what changed, why it belongs at that ownership
+layer, any generated or compatibility surfaces updated, and the integration
+commands run. Preserve the current PR body when updating an existing pull
+request.
 
 ## Communication
 
-Surface uncertainty early when a change starts to look architectural, cross-repo, or hard to keep bounded. In particular, pause and ask for alignment if the work would:
-
-- change the root marketplace model
-- widen the superproject's ownership boundary
-- add a new root abstraction or coordination layer
-- blur the line between root policy and child-repo behavior
-
-When docs and scripts disagree, fix the script or narrow the documented contract so the two surfaces match.
+Surface ownership, packaging, compatibility, release, or destructive cleanup
+consequences explicitly. Ask before widening the marketplace architecture.
 
 ## License and Contribution Terms
 
-Unless a contribution explicitly says otherwise in writing, contributions to `socket` are made under the Apache License 2.0 terms in [LICENSE](./LICENSE). The root legal-notice surface for this superproject lives in [NOTICE](./NOTICE).
-
-Outside contributions must be signed off under the [Developer Certificate of Origin](./DCO.md). Add a `Signed-off-by:` line to each commit using your real name and an email address you are willing to have recorded in public Git history:
+Contributions are licensed under [Apache License 2.0](./LICENSE). Use Developer
+Certificate of Origin sign-off when the repository requires it:
 
 ```text
 Signed-off-by: Your Name <you@example.com>
 ```
-
-By submitting a contribution, you agree that, unless you explicitly state otherwise in writing, the contribution is submitted under the Apache License 2.0 as described in [LICENSE](./LICENSE).
-
-Do not submit contributions to `socket` unless you have the right to make the DCO certification and submit the work under the Apache License 2.0.

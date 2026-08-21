@@ -400,7 +400,7 @@ plugins/model-lab-skills/
 └── skills/
     ├── choose-model-lab-workflow/
     ├── design-model-experiment/
-    │   └── assets/experiment-manifest.yaml
+    │   └── assets/experiment-manifest.json
     ├── prepare-language-model-dataset/
     │   └── assets/dataset-card.md
     ├── fine-tune-language-model/
@@ -413,9 +413,9 @@ plugins/model-lab-skills/
 
 Likely deterministic scripts after the contracts settle:
 
-- `validate_experiment_manifest.py`
-- `snapshot_model_provenance.py`
-- `compare_eval_runs.py`
+- `validate-experiment-manifest.fsx`
+- `snapshot-model-provenance.fsx`
+- `compare-eval-runs.fsx`
 
 Do not add these scripts as placeholders. Add and test them when the first
 implemented skill needs their deterministic behavior.

@@ -58,7 +58,7 @@ Execution order:
 2) If no mode is explicit, start with `explore`.
 3) For `explore`, use the documented direct docs path first: Xcode MCP docs, then Dash MCP, then Dash localhost HTTP, then source repositories or generated docs when applicable, then readable official web docs.
 4) Use the documented fallback order only if the primary source is unavailable.
-5) Use `scripts/run_workflow.py` only when a structured helper result is useful or when the mode is `dash-install` or `dash-generate`.
+5) Use `scripts/run-workflow.fsx` only when a structured helper result is useful or when the mode is `dash-install` or `dash-generate`.
 6) When the next action belongs to the next mode, return a `handoff` output instead of mixing workflows.
 
 Behavior:

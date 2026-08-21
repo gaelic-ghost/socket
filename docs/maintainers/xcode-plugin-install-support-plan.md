@@ -155,9 +155,9 @@ matching import contract.
 
 Validation:
 
-```bash
-uv run scripts/validate_socket_metadata.py
-uv run pytest
+```text
+just repo-validate
+just test
 ```
 
 ### Slice 2: Official Import Smoke Fixtures
@@ -177,7 +177,7 @@ The fixture should never be committed as an installed user artifact, and it shou
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```
 
 Manual evidence to capture:

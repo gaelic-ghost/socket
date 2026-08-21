@@ -27,5 +27,5 @@ uv run python "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/
 Run the root Socket metadata validator after plugin metadata, marketplace wiring, or root docs change:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```

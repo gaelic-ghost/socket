@@ -10,6 +10,8 @@ documentation rules.
   orchestration, and agent-system evaluation.
 - Keep host compatibility adapters in `agent-portability-skills` and language
   implementation in the owning stack plugin.
+- Keep plugin manifests, marketplace wiring, and plugin repository maintenance
+  in `agent-plugin-skills`.
 - Root `skills/` is the authored source of truth; plugin metadata is packaging.
 
 ## Validation
@@ -17,9 +19,7 @@ documentation rules.
 Run from the Socket repository root so the shared maintainer environment and
 cache policy apply:
 
-```bash
-uv run python -B -m pytest \
-  plugins/agent-engineering-skills/skills/design-agent-automation-workflow/tests \
-  plugins/agent-engineering-skills/skills/design-agent-eval-workflow/tests \
-  -o cache_dir=.codex/.cache/pytest
+```text
+just repo-validate
+just test
 ```

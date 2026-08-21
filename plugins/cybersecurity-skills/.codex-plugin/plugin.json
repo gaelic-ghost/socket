@@ -1,6 +1,6 @@
 {
   "name": "cybersecurity-skills",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Defensive cybersecurity, isolated Linux and macOS analysis labs, suspicious-content and malware analysis, macOS defense, vulnerability testing, pentesting, and incident response workflows.",
   "skills": "./skills/",
   "author": {
@@ -33,9 +33,8 @@
     "longDescription": "Guide agents from an ambiguous suspicious artifact, host behavior, vulnerability report, or incident to preserved evidence, an appropriate isolation decision, a verified disposable Linux or macOS analysis lab, validated findings, proportionate containment, and an understandable defensive explanation. Includes malware analysis, macOS defense, authorized testing, incident response, hunting, detection content, evidence export, teardown verification, and explicit handoffs to specialist Socket plugins.",
     "defaultPrompt": [
       "Help me safely determine whether this suspicious artifact is dangerous.",
-      "Prepare and preflight a disposable Linux or macOS analysis lab with no ambient host authority, monitored networking, narrow evidence export, and verified teardown.",
-      "Investigate this Mac without destroying evidence or weakening protections.",
-      "Validate this vulnerability within an explicitly authorized test scope."
+      "Prepare and preflight a disposable Linux or macOS analysis lab with no ambient host authority, monitored networking, narrow evi…",
+      "Investigate this Mac without destroying evidence or weakening protections."
     ],
     "developerName": "Gale",
     "category": "Developer Tools",

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "document": "agents",
+  "targetFile": "AGENTS.md",
+  "requireTableOfContents": false,
+  "preservePreamble": true,
+  "allowAdditionalSections": true,
+  "requiredSections": ["Repository Scope", "Working Rules", "Commands", "Review and Delivery", "Safety Boundaries", "Local Overrides"],
+  "sectionOrder": ["Repository Scope", "Working Rules", "Commands", "Review and Delivery", "Safety Boundaries", "Local Overrides"],
+  "requiredSubsections": {
+    "Repository Scope": ["What This File Covers", "Where To Look First"],
+    "Working Rules": ["Change Scope", "Source of Truth", "Communication and Escalation"],
+    "Commands": ["Setup", "Validation", "Optional Project Commands"],
+    "Review and Delivery": ["Review Expectations", "Definition of Done"],
+    "Safety Boundaries": ["Never Do", "Ask Before"]
+  },
+  "sectionAliases": {
+    "Repository Scope": ["Repository Expectations"],
+    "Working Rules": ["Standards and Guidance"],
+    "Review and Delivery": ["Review"],
+    "Safety Boundaries": ["Safety and Boundaries"]
+  },
+  "subsectionAliases": {
+    "What This File Covers": ["Purpose"],
+    "Where To Look First": ["Priority Files"],
+    "Change Scope": ["Scope"],
+    "Source of Truth": ["Truth Sources"],
+    "Communication and Escalation": ["Escalation"],
+    "Optional Project Commands": ["Project Commands"],
+    "Review Expectations": ["PR Expectations"],
+    "Definition of Done": ["Done"],
+    "Never Do": ["Never"],
+    "Ask Before": ["Approval Gates"]
+  }
+}

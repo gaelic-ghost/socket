@@ -5,9 +5,8 @@
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
-- [Milestone 5: SwiftASB skills plugin](#milestone-5-swiftasb-skills-plugin)
 - [Milestone 6: Dotnet skills plugin](#milestone-6-dotnet-skills-plugin)
-- [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
+- [Milestone 7: Python skills plugin consolidation](#milestone-7-python-skills-plugin-consolidation)
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
 - [Milestone 10: Expo inline native modules workflow](#milestone-10-expo-inline-native-modules-workflow)
@@ -26,7 +25,7 @@
 - [Milestone 23: Cloud Inference Skills plugin](#milestone-23-cloud-inference-skills-plugin)
 - [Milestone 24: Apple system integration, runtime evidence, and distribution workflows](#milestone-24-apple-system-integration-runtime-evidence-and-distribution-workflows)
 - [Milestone 25: Apple Creator Studio operator workflows](#milestone-25-apple-creator-studio-operator-workflows)
-- [Milestone 26: Messaging collaboration skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
+- [Milestone 26: Messaging Collaboration Skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
 - [Milestone 27: Cybersecurity skills plugin](#milestone-27-cybersecurity-skills-plugin)
 - [Milestone 28: Swift language tooling expansion](#milestone-28-swift-language-tooling-expansion)
 - [Milestone 29: Model Lab skills plugin](#milestone-29-model-lab-skills-plugin)
@@ -34,6 +33,7 @@
 - [Milestone 31: macOS platform security skills expansion](#milestone-31-macos-platform-security-skills-expansion)
 - [Milestone 32: tvOS app experience and media playback workflows](#milestone-32-tvos-app-experience-and-media-playback-workflows)
 - [Milestone 33: Unified Swift workspace and CI-owned cloud deployment](#milestone-33-unified-swift-workspace-and-ci-owned-cloud-deployment)
+- [Milestone 34: Deterministic agent plugin repositories](#milestone-34-deterministic-agent-plugin-repositories)
 - [Small Tickets](#small-tickets)
 - [Backlog Candidates](#backlog-candidates)
 - [History](#history)
@@ -53,68 +53,35 @@
 
 ## Milestone Progress
 
-- Milestone 5: SwiftASB skills plugin - Completed
 - Milestone 6: Dotnet skills plugin - Completed
-- Milestone 7: Python skills plugin expansion - Completed
+- Milestone 7: Python skills plugin consolidation - Completed
 - Milestone 8: Server-Side Swift skills plugin - Completed
 - Milestone 9: Rust skills plugin - Completed
 - Milestone 10: Expo inline native modules workflow - Completed
 - Milestone 11: AgentDeck plugin - In Progress
-- Milestone 12: Xcode 27 agentic tooling workflows - In Progress
+- Milestone 12: Xcode 27 agentic tooling workflows - Completed
 - Milestone 13: Reverse Engineering skills plugin - Completed
 - Milestone 14: Core AI and Foundation Models workflow ownership - Completed
 - Milestone 15: Android Dev Skills plugin - Completed
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - In Progress
 - Milestone 18: Swift Lang shared language plugin - Completed
-- Milestone 19: Project audit skills plugin - Planned
+- Milestone 19: Project audit skills plugin - In Progress
 - Milestone 20: Game Dev Skills plugin - Completed
 - Milestone 21: Cloud Deployment Skills plugin - Completed
 - Milestone 22: Network Protocol Skills plugin - Completed
 - Milestone 23: Cloud Inference Skills plugin - Completed
 - Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Completed
 - Milestone 25: Apple Creator Studio operator workflows - Planned
-- Milestone 26: Messaging collaboration skills plugin - Completed
+- Milestone 26: Messaging Collaboration Skills plugin - Completed
 - Milestone 27: Cybersecurity skills plugin - Completed
 - Milestone 28: Swift language tooling expansion - In Progress
 - Milestone 29: Model Lab skills plugin - Completed
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
 - Milestone 32: tvOS app experience and media playback workflows - Completed
-- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - Completed
-
-## Milestone 5: SwiftASB skills plugin
-
-### Status
-
-Completed
-
-### Scope
-
-- [x] Add a Socket-hosted `swiftasb-skills` child plugin that helps agents explain SwiftASB, choose an integration shape, and build SwiftUI, AppKit, and Swift package surfaces on top of SwiftASB.
-- [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, duplicate SwiftASB source, or copy generated schema files into `socket`.
-- [x] Keep Apple framework workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftASB-specific explanation, decision support, integration, and troubleshooting.
-
-### Tickets
-
-- [x] Create `plugins/swiftasb-skills/` with its own `.codex-plugin/plugin.json` and authored `skills/` source.
-- [x] Add first-slice skills for explaining SwiftASB, choosing an integration shape, and building a SwiftUI app on top of SwiftASB.
-- [x] Add `swiftasb:build-appkit-app` for AppKit apps after the first slice proves useful.
-- [x] Add `swiftasb:build-swift-package` for Swift package authors after the first slice proves useful.
-- [x] Add an integration diagnostics skill for runtime discovery, app-server startup, threads, turns, approvals, diagnostics, MCP status, history reads, and live-test isolation.
-- [x] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
-- [x] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
-- [x] Sync `swiftasb-skills` with current SwiftASB changes, starting from the live SwiftASB source and docs so the explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills match the current client API and runtime behavior.
-- [x] Refresh `swiftasb-skills` for SwiftASB `v1.6.0`, including plan-mode turn starts, `CodexThread.Agenda`, thread goal helpers, and plan/goal diagnostics across the existing skill set.
-- [x] Refresh `swiftasb-skills` for SwiftASB `v1.8.0`, including Codex CLI `0.142.x` compatibility guidance, the compatible `0.141.x` prior-minor window, `CodexTurnItem.Kind.sleep`, and ASBPresentation/ASBAppKit/ASBSwiftUI product guidance across the existing skill set.
-
-### Exit Criteria
-
-- [x] The Socket marketplace exposes `swiftasb-skills` as an installable child plugin.
-- [x] The new skills can help an agent explain SwiftASB to a user before implementation, including when SwiftASB is not the right fit.
-- [x] The new skills guide SwiftUI, AppKit, and Swift package integrations without duplicating broad Apple framework guidance that belongs to `apple-dev-skills`.
-- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
+- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - In Progress
+- Milestone 34: Deterministic agent plugin repositories - In Progress
 
 ## Milestone 6: Dotnet skills plugin
 
@@ -139,7 +106,7 @@ Completed
 - [x] Route F# web application Azure work through Microsoft's official Azure Skills plugin rather than duplicating Azure MCP, Azure CLI, Azure Developer CLI, or deployment guidance in Socket.
 - [x] Switch the root marketplace entry for `dotnet-skills` from placeholder to installable only after real skill content exists.
 - [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
+- [x] Run root metadata validation with `just repo-validate` and any child-plugin checks added by the new plugin.
 
 ### Exit Criteria
 
@@ -150,7 +117,7 @@ Completed
 - [x] The F# web guidance distinguishes Giraffe, Falco, and Oxpecker contracts while preserving ordinary ASP.NET Core and F# domain boundaries.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
-## Milestone 7: Python skills plugin expansion
+## Milestone 7: Python skills plugin consolidation
 
 ### Status
 
@@ -158,25 +125,19 @@ Completed
 
 ### Scope
 
-- [x] Repair the `python-skills` child validator so it matches the current monorepo-owned child docs model without reintroducing a child README.
-- [x] Record the detailed expansion plan in [`docs/maintainers/python-skills-plugin-plan.md`](./docs/maintainers/python-skills-plugin-plan.md).
-- [x] Expand `python-skills` from scaffold-heavy coverage into ongoing project choice, implementation, diagnostics, packaging, tooling/style, CI, and upgrade workflows.
-- [x] Keep the existing `uv`, FastAPI, FastMCP, and pytest skill surfaces intact unless a later cleanup deliberately renames or replaces one without leaving duplicate long-term surfaces.
+- [x] Keep only diagnostics, packaging, tooling/style, CI, upgrade, and testing guidance for existing Python code.
+- [x] Remove Python bootstrap, synchronization, project-creation, FastAPI, FastMCP, and agent-service skills.
+- [x] Remove Python and shell automation from the plugin while retaining ordinary Python ecosystem command guidance.
 
 ### Tickets
 
-- [x] Update `plugins/python-skills/scripts/validate_repo_metadata.py` and child tests so validation targets `AGENTS.md`, plugin metadata, and skill metadata instead of a removed child `README.md`.
-- [x] Add `python-skills:choose-python-project-shape`.
-- [x] Add `python-skills:build-python-project`.
 - [x] Add `python-skills:diagnose-python-project`.
 - [x] Add `python-skills:python-package-workflow`.
 - [x] Add `python-skills:python-tooling-style-workflow`.
 - [x] Add `python-skills:python-ci-workflow`.
 - [x] Add `python-skills:python-upgrade-workflow`.
 - [x] Replace `python-skills:uv-pytest-unit-testing` with the broader `python-skills:python-testing-workflow` without a duplicate compatibility surface.
-- [x] Update Python plugin metadata after the first new skill slice lands.
-- [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Consolidate validation into the root FSX integration and E2E path.
 
 ### Exit Criteria
 
@@ -220,7 +181,7 @@ Completed
 - [x] Update Hummingbird guidance for current `hb` Server and Lambda prompts, generated `swift-configuration`, OpenAPIHummingbird plus `hummingbird-lambda` Lambda shape, and the separate `swift-openapi-lambda` transport distinction.
 - [x] Add `server-side-swift:sync-hummingbird-service-guidance` for existing Hummingbird repositories that need repo-local `AGENTS.md`, Codex local environment files, `hb` CLI assumptions, Server or Lambda shape, OpenAPI transport notes, and SwiftPM command guidance refreshed.
 - [x] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
+- [x] Run root metadata validation with `just repo-validate` after each metadata or marketplace-facing update.
 
 ### Exit Criteria
 
@@ -251,7 +212,7 @@ Completed
 - [x] Add package and CI workflow skills for publish-facing and automation guidance.
 - [x] Switch the root marketplace entry for `rust-skills` from placeholder to installable only after real skill content exists.
 - [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -280,7 +241,7 @@ Completed
 - [x] Update `plugins/web-dev-skills/AGENTS.md` with Expo and React Native native-boundary guidance.
 - [x] Update `plugins/web-dev-skills/.codex-plugin/plugin.json` metadata so the plugin advertises the Expo inline native module workflow.
 - [x] Decide whether the root marketplace entry needs to move from placeholder to installable as part of the first implementation slice.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -295,7 +256,7 @@ Decision note: the root marketplace entry is installable now that `web-dev-skill
 
 ### Status
 
-Implementation Complete; Release Pending
+In Progress
 
 ### Scope
 
@@ -318,7 +279,7 @@ Implementation Complete; Release Pending
 - [x] Add a Node stdlib App Server control-socket client for opt-in `thread/name/set` tests.
 - [x] Wire `agentdeck` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README so users can see the new installable plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 - [x] Run a hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
 - [x] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
 - [x] Record the desktop bridge MCP and skill plan in `plugins/agentdeck/docs/desktop-bridge-mcp-skill-plan.md`.
@@ -416,7 +377,7 @@ Completed
 - [x] Add version-sensitive dyld-cache, Apple dynamic-analysis, kernel/boot/firmware, and security-research reporting workflows with exact-build and live-source gates.
 - [x] Add .NET and Unity artifact workflows without delaying the Apple-focused sequence.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -479,7 +440,7 @@ Completed
 - [x] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
 - [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -518,7 +479,7 @@ In Progress
 - [ ] Keep `server-side-jvm:build-clojure-service` as a future candidate until the Java and Scala foundations are stable.
 - [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -532,7 +493,7 @@ In Progress
 
 ### Status
 
-In progress
+In Progress
 
 ### Scope
 
@@ -542,6 +503,8 @@ In progress
 - [x] Treat Agent Skills as the first portability layer while keeping Codex plugins, hooks, MCP registration, custom agents, and host package formats as target-specific adapters.
 - [ ] Keep Socket's root Codex marketplace model intact until a concrete non-Codex package or export target proves it needs a broader distribution abstraction.
 - [x] Rename `agent-plugin-skills` to `agent-portability-skills` so the child plugin name matches the cross-host compatibility role.
+- [x] Recreate `agent-plugin-skills` as a distinct plugin-repository owner after
+  portability grew into cross-host protocols and adapters.
 - [ ] Route complex local orchestration through AgentUtils once that app exposes supported discovery, dry-run, backup, and apply contracts instead of expanding Socket plugin payloads into broad machine-management code.
 - [x] Add a checked-in Hermes Agent skill tap at root `skills/`, generated from the canonical `agent-portability-skills` source and grouped with `skills.sh.json`.
 - [x] Add `agent-portability-skills:hermes-agent-compatibility` with explicit skill, Codex bundle, MCP, and native Python plugin boundaries.
@@ -549,7 +512,7 @@ In progress
 - [x] Add `choose-agent-integration-protocol`, `operate-acp-agent-integration`, `build-acp-agent`, and `operate-zed-agent` for cross-host direction selection, ACP operation/development, and Zed native/external/terminal workflows.
 - [x] Add `operate-a2a-agent-integration` for peer Agent Card discovery, message/task lifecycle, streaming and push delivery, authentication, trust boundaries, and Hermes 0.20 A2A routing without conflating A2A with ACP or MCP.
 - [x] Refresh Hermes 0.20, current ACP v1 versus draft RFDs, Zed custom external-agent setup, Nous services, Codex and Claude plugin surfaces, and Xcode 27 Beta 5 headless MCP evidence for the 9.31.0 compatibility release.
-- [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `uv run scripts/validate_hermes_compatibility.py`.
+- [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `just repo-validate`.
 - [x] Make an explicit Codex-and-Hermes compatibility classification mandatory for every new or materially changed Socket plugin, skill, and MCP declaration. Require portable-skill export decisions, validated MCP translations, and a real native-plugin design or host-specific boundary for runtime surfaces.
 
 ### Tickets
@@ -558,7 +521,8 @@ In progress
 - [ ] Replace the historical curated Hermes skill export with a complete, declarative Socket skill inventory. Keep the migration reviewable by grouping portable skills, recording intentional no-export decisions, and validating the inventory without claiming that Codex plugin manifests are Hermes plugins.
 - [ ] Add `agent-portability-skills:audit-agent-surface-portability`.
 - [ ] Add `agent-portability-skills:design-agent-host-adapter`.
-- [ ] Add `agent-portability-skills:maintain-codex-plugin-surface`.
+- [x] Move Codex plugin surface maintenance to
+  `agent-plugin-skills:maintain-agent-plugins`.
 - [x] Translate every declared Socket `.mcp.json` into checked-in, validated Hermes `mcp_servers` fragments with an explicit setup/status inventory.
 - [x] Document the prioritized native Hermes Python adapter plan, including per-plugin adapter shape, configuration boundary, and validation strategy without adding speculative bridge code.
 - [ ] Add common skill constraint checks for Codex, OpenCode, and Zed, including Zed's flat roots, trusted-worktree rule, and catalog budget.
@@ -608,7 +572,7 @@ Completed
 - [x] Wire `swift-lang` into the root Socket marketplace as an installable child plugin.
 - [x] Update Apple Dev and Server-Side Swift guidance to hand off shared Swift cleanup work to `swift-lang` when it is available.
 - [x] Keep Apple Dev's existing `format-swift-sources` and `structure-swift-sources` available during the first release so standalone Apple-only installs do not break.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any new child-plugin validation added for `swift-lang`.
+- [x] Run root metadata validation with `just repo-validate` and any new child-plugin validation added for `swift-lang`.
 
 ### Exit Criteria
 
@@ -623,7 +587,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with shared Swi
 
 ### Status
 
-Release candidate
+In Progress
 
 ### Scope
 
@@ -640,7 +604,7 @@ Release candidate
 - [ ] Add later skills for architecture mapping, adoption-risk decisions, and remediation planning after the first two workflows prove useful.
 - [ ] Wire the plugin into the root marketplace as `NOT_AVAILABLE` while it is a placeholder, then switch it to installable only after real skill content exists.
 - [ ] Update root README and ROADMAP when the plugin becomes installable.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -677,7 +641,7 @@ Completed
 - [x] Wire `game-dev-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface.
 - [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -710,7 +674,7 @@ Completed
 - [x] Wire `cloud-deployment-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface and the AWS delegation decision.
 - [x] Update root README and maintainer guidance so users understand the Azure Skills delegation decision and F# web-framework handoff.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -779,7 +743,7 @@ Completed
 - [x] Install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills into the exported plugin `skills/` tree, with `.agents/skills` kept as a symlink discovery mirror.
 - [x] Wire `cloud-inference-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README, CONTRIBUTING, and ROADMAP so users and maintainers understand the new plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -934,6 +898,17 @@ In Progress
 - [x] Keep the expansion as portable instruction skills without bundling a compiler, SourceKit service, language server, MCP server, or native host plugin.
 - [ ] Add the second-wave API-surface workflow after the first-wave routing and fixtures establish a stable base.
 
+### Tickets
+
+
+
+### Exit Criteria
+
+- [x] An agent selects syntax, compiler, semantics, index, or LSP by required information rather than tool name alone.
+- [x] Every first-wave workflow reports whether Swiftly or Xcode owns each selected binary and refuses mixed-toolchain proof.
+- [x] Codex, Claude, Cowork, and Hermes compatibility surfaces agree on the portable first-wave skill inventory.
+- [ ] The second-wave workflow can compare public API and ABI artifacts with explicit version and toolchain evidence.
+
 ### First Wave
 
 - [x] Add `swift-lang:choose-swift-language-tooling` for information-model, project-model, and toolchain routing.
@@ -950,13 +925,6 @@ In Progress
 - [ ] Route DocC authoring to Apple Dev while retaining language-level symbol-graph and public-API analysis in `swift-lang`.
 - [ ] Update Swift Lang metadata, Hermes export, Claude marketplace description, and root documentation when the second-wave skill ships.
 
-### Exit Criteria
-
-- [x] An agent selects syntax, compiler, semantics, index, or LSP by required information rather than tool name alone.
-- [x] Every first-wave workflow reports whether Swiftly or Xcode owns each selected binary and refuses mixed-toolchain proof.
-- [x] Codex, Claude, Cowork, and Hermes compatibility surfaces agree on the portable first-wave skill inventory.
-- [ ] The second-wave workflow can compare public API and ABI artifacts with explicit version and toolchain evidence.
-
 ## Milestone 29: Model Lab skills plugin
 
 ### Status
@@ -970,6 +938,19 @@ Completed
 - [x] Keep model behavior and experiment design separate from GPU/provider operations, agent-harness evaluation, host portability, app implementation, and real-system security testing.
 - [x] Treat the experiment manifest as the durable primitive connecting immutable model source, dataset provenance, recipe or intervention, checkpoint, evaluation suite, runtime evidence, and artifact decision.
 - [x] Include a first-class Apple model-runtime lane that compares Foundation Models, Core AI, Core ML, direct MLX, ExecuTorch Core ML, and the experimental ExecuTorch MLX delegate without duplicating Apple-owned Core AI skills.
+
+### Tickets
+
+
+
+### Exit Criteria
+
+- [x] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
+- [x] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
+- [x] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
+- [x] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
+- [x] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
+- [x] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
 
 ### First Slice
 
@@ -1004,15 +985,6 @@ Completed
 - [x] Forward-test the training, evaluation, Apple runtime, ablation, and jailbreak workflows against isolated representative tasks before treating their contracts as stable.
 - [x] Wire `model-lab-skills` into the Socket marketplace only after useful skill content exists, then update root README, contributor docs, plugin metadata, and root validation together.
 
-### Exit Criteria
-
-- [x] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
-- [x] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
-- [x] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
-- [x] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
-- [x] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
-- [x] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
-
 ## Milestone 30: macOS virtualization and container skills expansion
 
 ### Status
@@ -1028,14 +1000,9 @@ Completed
 - [x] Add a Cybersecurity lab-preparation workflow that turns an isolation decision into verified mount, clipboard, credential, device, network, baseline, evidence-export, revert, and teardown controls.
 - [x] Keep the expansion guidance-only: no VM images, restore images, kernels, malware samples, privileged helpers, daemons, guest agents, MCP servers, remote credentials, or automatic third-party tool installation.
 
-### Planned Slices
+### Tickets
 
-- [x] Phase 1: add `apple-dev-skills:choose-macos-virtualization-shape` and `apple-dev-skills:virtualization-framework-workflow`, then align Cybersecurity isolation handoffs.
-- [x] Phase 2: update `server-side-swift:apple-containerization-workflow` for `container` 1.x and add `apple-dev-skills:linux-development-vm-workflow`.
-- [x] Phase 3: add `apple-dev-skills:macos-development-vm-workflow` with restore-image, VM-bundle, identity, clean-baseline, and reset guidance.
-- [x] Phase 4: add `cybersecurity-skills:prepare-isolated-analysis-lab` and align dynamic-analysis and macOS-investigation workflows around its lab record.
-- [x] Forward-test the ten planned stable guidance paths through scenario contract tests before adding any tool-specific adapter skill; treat Lima, Colima, Tart, UTM, VMware Fusion, Parallels Desktop, OrbStack, and similar products as discovered adapters until repeated tasks justify a dedicated surface.
-- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh user-facing inventory text, and run affected child plus root validation with each shipped phase.
+
 
 ### Exit Criteria
 
@@ -1047,6 +1014,15 @@ Completed
 - [x] Socket's skill metadata, portability exports, compatibility records, documentation, and validation agree on the shipped virtualization inventory.
 
 Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a disposable Cybersecurity lab-preparation workflow, Apple `container` 1.x and `container machine` guidance, guest-versus-host evidence rules, Hermes exports, Claude and Cowork compatibility metadata, and ten scenario-level forward tests. The rebased `9.19.0` release candidate preserves the concurrent Model Lab inventory and passed 268 Apple Dev tests, 126 Socket tests with one intentional skip, Apple and Cybersecurity child validators, Socket marketplace validation, Hermes parity, and Claude/Cowork validation.
+
+### Planned Slices
+
+- [x] Phase 1: add `apple-dev-skills:choose-macos-virtualization-shape` and `apple-dev-skills:virtualization-framework-workflow`, then align Cybersecurity isolation handoffs.
+- [x] Phase 2: update `server-side-swift:apple-containerization-workflow` for `container` 1.x and add `apple-dev-skills:linux-development-vm-workflow`.
+- [x] Phase 3: add `apple-dev-skills:macos-development-vm-workflow` with restore-image, VM-bundle, identity, clean-baseline, and reset guidance.
+- [x] Phase 4: add `cybersecurity-skills:prepare-isolated-analysis-lab` and align dynamic-analysis and macOS-investigation workflows around its lab record.
+- [x] Forward-test the ten planned stable guidance paths through scenario contract tests before adding any tool-specific adapter skill; treat Lima, Colima, Tart, UTM, VMware Fusion, Parallels Desktop, OrbStack, and similar products as discovered adapters until repeated tasks justify a dedicated surface.
+- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh user-facing inventory text, and run affected child plus root validation with each shipped phase.
 
 ## Milestone 31: macOS platform security skills expansion
 
@@ -1062,13 +1038,9 @@ Completed
 - [x] Align existing Cybersecurity macOS workflows around explicit developer, research, threat-assessment, and isolation handoffs without moving defensive ownership.
 - [x] Keep the first implementation instruction-only: no TCC database mutation, permission grant service, privileged helper, daemon, endpoint agent, MCP server, protection bypass, or live-host prompt automation.
 
-### Planned Slices
+### Tickets
 
-- [x] Slice 1: ship `apple-dev-skills:macos-privacy-permissions-workflow` with responsible-code attribution, public API, prompt/settings, reset-only, PPPC, and disposable-fixture contracts.
-- [x] Slice 2: ship `apple-dev-skills:macos-sandbox-file-access-workflow` and `apple-dev-skills:diagnose-apple-entitlements`, then align provisioning, distribution, extension, File Provider, and Xcode handoffs.
-- [x] Slice 3: ship `reverse-engineering-skills:research-macos-security-control`, connect exact-build research and technical notes to existing artifact/signing/dynamic-analysis workflows, and align Cybersecurity handoffs.
-- [x] Slice 4: forward-test the complete scenario matrix, remediate trigger and handoff gaps, update discovery metadata and user-facing inventory, export portable skills through Hermes, record Claude/Cowork compatibility, and run full affected validation.
-- [x] Reconsider a standalone `macos-security-skills` plugin or shared read-only diagnostic collector only after repeated implementation use satisfies the explicit gate in the maintainer plan; retain the focused existing owners for this release.
+
 
 ### Exit Criteria
 
@@ -1080,6 +1052,14 @@ Completed
 - [x] Apple Dev, Reverse Engineering, Cybersecurity, Socket, Hermes, and Claude/Cowork discovery and validation surfaces agree on the shipped owner boundaries.
 
 Completed Milestone 31 by shipping four focused, instruction-only macOS platform-security workflows across Apple Dev and Reverse Engineering Skills, aligning defensive Cybersecurity handoffs, preserving visible prompt and protection-state approval gates, exporting the portable skill set through Hermes, and recording Claude Code/Cowork compatibility without introducing a permission manager, privileged service, or duplicate plugin.
+
+### Planned Slices
+
+- [x] Slice 1: ship `apple-dev-skills:macos-privacy-permissions-workflow` with responsible-code attribution, public API, prompt/settings, reset-only, PPPC, and disposable-fixture contracts.
+- [x] Slice 2: ship `apple-dev-skills:macos-sandbox-file-access-workflow` and `apple-dev-skills:diagnose-apple-entitlements`, then align provisioning, distribution, extension, File Provider, and Xcode handoffs.
+- [x] Slice 3: ship `reverse-engineering-skills:research-macos-security-control`, connect exact-build research and technical notes to existing artifact/signing/dynamic-analysis workflows, and align Cybersecurity handoffs.
+- [x] Slice 4: forward-test the complete scenario matrix, remediate trigger and handoff gaps, update discovery metadata and user-facing inventory, export portable skills through Hermes, record Claude/Cowork compatibility, and run full affected validation.
+- [x] Reconsider a standalone `macos-security-skills` plugin or shared read-only diagnostic collector only after repeated implementation use satisfies the explicit gate in the maintainer plan; retain the focused existing owners for this release.
 
 ## Milestone 32: tvOS app experience and media playback workflows
 
@@ -1095,6 +1075,10 @@ Completed
 - [x] Preserve SwiftUI architecture, general accessibility, general AVFoundation, Core Media timing, AVFAudio, Xcode execution/testing, Model Lab runtime selection, and Apple-owned Core AI implementation ownership through clear handoffs.
 - [x] Keep tvOS 27 claims beta-qualified and recheck them at release candidate/GM; do not claim direct Core AI or Foundation Models inference support for tvOS without an official platform contract.
 - [x] Deliver the two backward-compatible skills in Socket v9.23.0, with Apple Dev metadata, portability exports, compatibility records, child/root validation, release evidence, and branch accounting.
+
+### Tickets
+
+
 
 ### Exit Criteria
 
@@ -1154,6 +1138,62 @@ placing extensions beside their host apps under `Apps/`, standardizing Soto and
 native Homebrew-backed local service development, and reserving Linux artifacts
 and test/production deployments for GitHub Actions.
 
+## Milestone 34: Deterministic agent plugin repositories
+
+### Status
+
+In Progress
+
+### Scope
+
+
+
+### Tickets
+
+
+
+### Exit Criteria
+
+- [x] The only plugin-maintenance recipes are `plugins-check` and
+  `plugins-apply`, and both cover the complete plugin set.
+- [x] No removed bootstrap/sync skill, Python plugin automation, nested plugin
+  test, or portability-owned Codex packaging path remains.
+- [x] A second apply is byte-idempotent and the root E2E/validation path passes.
+- [ ] Socket 10.0.3 is merged, tagged, published, and remotely verified.
+
+### Decisions
+
+- `agent-plugin-skills` owns Codex plugin source shape, manifests, bundled
+  assets, marketplace wiring, and plugin repository consistency.
+- `agent-portability-skills` owns cross-host protocols and adapters;
+  `agent-engineering-skills` owns agent-system behavior; AgentDeck owns its
+  runtime hooks; `repository-skills` 10.0.2 owns docs, repo sync/validation, and
+  releases.
+- Plugin automation is managed FSX only. The public maintenance surface is
+  exactly `just plugins-check` and `just plugins-apply`, with no per-plugin
+  commands, profiles, Python generators, nested tests, or compatibility paths.
+- Gale's publisher identity, Apache-2.0 license, default repository URL,
+  marketplace policy, default hook discovery, and prompt-count limit are fixed
+  policy. Plugin-specific prose and capability contents remain authored source.
+
+### Implementation
+
+- [x] Remove stale bootstrap and guidance-sync exports from
+  `agent-portability-skills` and `skills.sh.json`.
+- [x] Add `agent-plugin-skills:maintain-agent-plugins` with a managed installer,
+  FSX reconciliation runtime, aggregate Just recipes, and repository-skills
+  sync/validation hooks.
+- [x] Reconcile all Socket manifests to current plugin shape and fixed publisher
+  policy, add the new plugin to Codex and Claude marketplaces, and keep default
+  prompts within the documented three-prompt limit.
+- [x] Narrow Agent Portability metadata and guidance, correct Agent Engineering
+  root-only validation guidance, and make AgentDeck's packaging/runtime
+  boundary explicit.
+- [x] Prove install, apply idempotence, drift detection, marketplace wiring, and
+  repository-maintenance integration through the single root E2E test.
+- [ ] Run root validation, commit and push the branch, and complete the canonical
+  Socket 10.0.3 patch release.
+
 ## Small Tickets
 
 - [ ] Record issue-sized fixes, TODO/FIXME imports, and cleanup work that is too small or too unplanned for a milestone.
@@ -1180,7 +1220,8 @@ and test/production deployments for GitHub Actions.
 - [x] Consolidated root agent guidance through the audited [`AGENTS.md` consolidation plan](./docs/maintainers/agents-guidance-consolidation-plan.md): preserved directly visible safety gates, moved procedures to one live owner, corrected current semantic drift, added focused ownership tests, and reduced root prompt load by 68 percent. Future skill-level consolidation can now apply the proven ownership pattern to repeated setup, validation, and handoff text.
 - [ ] Investigate further standardization and automation for shared skill scaffolding, evidence capture, validation prompts, and generated references so common workflow knowledge is maintained once and reused with lower token load.
 - [x] Redesign the Socket release flow around one branch-backed `prepare`/`inspect`/`advance` lifecycle. The feature worktree owns version preparation and the PR; the clean `main` checkout owns post-merge validation, evidence, annotated tagging, publication, structured branch accounting, and the final marketplace refresh.
-- [x] Centralized Socket validation under `scripts/validate_socket.py` with core, compatibility, full, and release profiles. The shared structural layer checks marketplace wiring, plugin manifests and assets, child `AGENTS.md`, `SKILL.md` frontmatter, and present `agents/openai.yaml`; child-specific policy and behavior checks remain owned by their child projects and run once in the full profile.
+- [x] Replaced the former Python validation profiles with canonical FSX
+  repository validation and one root integration/E2E test.
 - [ ] Add a future Apple Developer Portal Driver for accessible, interactive portal-only provisioning tasks. Keep Apple authentication, two-factor authentication, account/team selection, and destructive operations behind explicit user-visible confirmation gates; retain official App Store Connect REST, Xcode-aware discovery, `cktool`, and CKTool JS as the primary surfaces, and do not automate unsupported portal forms until a reviewed driver design exists.
 
 ## Backlog Candidates
@@ -1203,7 +1244,8 @@ and test/production deployments for GitHub Actions.
 - [ ] Design a worker-thread orchestration workflow for Codex GUI use. Capture which fields belong in the worker launch envelope, how model and reasoning budgets are selected, how workers report branch, worktree, validation, and cleanup state, which actions remain main-thread only, and when a finished worker thread or worktree should be archived, removed, or kept for follow-up.
 - [ ] Add `agent-portability-skills:audit-agent-surface-portability` for inventorying `SKILL.md`, `.codex-plugin`, `.mcp.json`, hooks, app config, custom agents, and host compatibility notes across Socket child plugins.
 - [ ] Add `agent-portability-skills:design-agent-host-adapter` for deciding whether a host needs docs-only guidance, `.agents/skills` export, native MCP config, a plugin or package adapter, or no Socket-specific support.
-- [ ] Add `agent-portability-skills:maintain-codex-plugin-surface` for Codex-specific marketplace, plugin manifest, hooks, MCP, app config, and enablement wording.
+- [x] Move Codex-specific marketplace, plugin manifest, hooks, MCP, app config,
+  and enablement packaging to `agent-plugin-skills:maintain-agent-plugins`.
 - [ ] Keep Git-backed Codex marketplace install and update guidance ahead of local authoring notes.
 - [ ] Keep repo-local discovery mirror guidance separate from install guidance.
 - [ ] Add or refine troubleshooting language for confusing Codex plugin expectations.
@@ -1234,7 +1276,7 @@ and test/production deployments for GitHub Actions.
 - [ ] Investigate an iTerm2 automation and integration skill covering AI Chat, the Python API, scripting fundamentals, variables, shell integration, tmux integration, and deprecated AppleScript boundaries. Keep the first pass docs-first and decide whether the skill should expose terminal-control workflows, app integration guidance, or only safe handoffs to existing shell and Codex GUI worktree guidance.
 - [ ] Add language validation triager roles after one shared contract is agreed: `python-skills:python-validation-triager`, `rust-skills:rust-validation-triager`, and `dotnet-skills:dotnet-validation-triager`, each report-first and scoped to logs, manifests, CI, test, tooling, package, and upgrade evidence.
 - [ ] Add Codex GUI local environment templates and auto-copy/install behavior to `dotnet-skills` for F#, C#, and mixed `.NET` repos, keeping setup/actions portable and preserving customized `.codex/environments/*.toml` files the same way the SwiftPM and Xcode workflows do.
-- [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `agent-engineering-skills:automation-plan-designer`, `swiftasb-skills:swiftasb-steward`, and `web-dev-skills:expo-native-boundary-scout`.
+- [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `agent-engineering-skills:automation-plan-designer` and `web-dev-skills:expo-native-boundary-scout`.
 - [ ] Keep write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward` or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
 - [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It covers Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
@@ -1262,7 +1304,8 @@ and test/production deployments for GitHub Actions.
 - Queued future `mlx-skills` and `coreml-skills` guidance plugins for Apple Silicon ML and Core ML workflows.
 - Completed the five-workflow Apple system-integration expansion: App Intents, Liquid Glass, SwiftUI performance evidence, iOS runtime forensics, and macOS distribution artifact inspection now have separate owners, targeted tests, and clear Xcode/provisioning handoffs.
 - Released the tvOS app-experience and media-playback workflows in Socket v9.23.0 with metadata, portability exports, compatibility records, validation, release evidence, and branch accounting.
-- Consolidated root validation under `scripts/validate_socket.py`, keeping compatibility checks in CI and assigning child behavior suites to their owning projects so full validation does not run the same suite twice.
+- Consolidated root validation under managed FSX repository maintenance and one
+  root integration/E2E path, removing nested child suites and duplicate runs.
 - Audited AppKit coverage against SwiftUI and queued an Apple Dev Skills AppKit app-architecture workflow so menu bar apps, restoration, MVC, archiving, Observation, and mixed AppKit/SwiftUI work get first-class guidance.
 - Implemented `apple-dev-skills:appkit-app-architecture-workflow` with AppKit ownership, menu bar, responder-chain, restoration, MVC, archiving, Observation, and mixed AppKit/SwiftUI references plus targeted tests.
 - Added draft `swift-steward` and `server-swift-steward` custom-agent roles plus root validator coverage so the steward contracts remain read-only and review-oriented until a guarded draft-patch workflow exists.
@@ -1281,7 +1324,6 @@ and test/production deployments for GitHub Actions.
 - Completed the subtree workflow hardening milestone by documenting subtree add, pull, and push paths, adding the root marketplace audit pass, and adding a public child plugin removal checklist.
 - Completed [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37) by hardening release and PR scripts around delayed GitHub state.
 - Completed [#39](https://github.com/gaelic-ghost/socket/issues/39) by adding the Swift Package Index add-package gate and one-shot script around the documented `SwiftPackageIndex/PackageList` Add Package issue form.
-- Planned a `swiftasb-skills` child plugin to help agents explain SwiftASB and build SwiftUI, AppKit, and Swift package integrations from a Socket-visible guidance surface.
 - Added and exposed a `web-dev-skills` Expo inline native modules workflow for SDK 56+ inline Swift/Kotlin modules, `expo-type-information`, CNG/prebuild validation, and Apple Dev Skills handoffs.
 - Updated `repository-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
@@ -1302,5 +1344,5 @@ and test/production deployments for GitHub Actions.
 - Completed Milestone 1, `superproject docs and marketplace alignment`, by bringing the root README, AGENTS guidance, roadmap shape, and marketplace-path explanation back into alignment with the live mixed-monorepo model.
 - Added the first root `ROADMAP.md` and established the checklist-style planning format for the superproject.
 - Added a root marketplace-validation script and GitHub Actions workflow so `socket` now checks packaged plugin paths and manifest alignment instead of leaving that audit entirely manual.
-- Added root `CONTRIBUTING.md`, `ACCESSIBILITY.md`, `LICENSE`, and `NOTICE` so the superproject's contributor, accessibility, and legal surfaces are explicit at the repository root.
+- Added root contributor and legal surfaces; the later managed-docs migration removed the obsolete standalone accessibility contract.
 - Collapsed the older subtree migration and plugin-alignment planning docs into this roadmap history plus the still-live root maintainer references once those plans had become historical rather than active operating guidance.

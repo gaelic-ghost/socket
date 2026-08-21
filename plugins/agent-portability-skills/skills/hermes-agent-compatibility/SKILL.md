@@ -40,8 +40,7 @@ export manually.
 3. Add `metadata.hermes.category` and `metadata.hermes.tags` when they improve
    Hermes discovery without changing the skill's meaning.
 4. Add the skill name to the relevant root `skills.sh.json` grouping.
-5. Run `uv run scripts/export_hermes_skills.py` and
-   `uv run scripts/validate_hermes_compatibility.py`.
+5. Run `just repo-sync` and `just repo-validate` from the Socket root.
 6. Review the generated root `skills/` diff with the authored source. The
    validator requires an exact mirror so a GitHub tap installs the reviewed
    content.

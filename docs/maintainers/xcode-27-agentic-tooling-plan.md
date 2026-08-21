@@ -302,7 +302,7 @@ Update with Xcode 27 Icon Composer notes for:
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```
 
 ### Slice 2: First Skill
@@ -320,9 +320,8 @@ Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app produced co
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
-uv run pytest
+just repo-validate
+just test
 ```
 
 ### Slice 3: Localization And Device Hub
@@ -335,9 +334,8 @@ uv run pytest
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
-uv run pytest
+just repo-validate
+just test
 ```
 
 ### Slice 4: Beta Docs Triage And Framework Updates
@@ -349,9 +347,8 @@ uv run pytest
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
-uv run pytest
+just repo-validate
+just test
 ```
 
 ### Slice 5: Xcode Plug-In Research

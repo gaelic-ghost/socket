@@ -1,6 +1,6 @@
 {
   "name": "apple-creator-studio-skills",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Human-facing and Computer Use-aware Apple Creator Studio workflows for Final Cut Pro editing, Motion templates, Compressor delivery, Logic Pro production, MainStage concert preparation, and GarageBand projects.",
   "author": {
     "name": "Gale",
@@ -41,10 +41,7 @@
     "defaultPrompt": [
       "Prepare a Compressor batch and verify its exported delivery artifacts without overwriting source media.",
       "Prepare this Final Cut Pro library or project safely, then verify a defined share or Compressor handoff.",
-      "Prepare this Motion project or Final Cut Pro template while preserving the editable source.",
-      "Set up or repair this Logic Pro session, then bounce a defined master or stem delivery safely.",
-      "Prepare this MainStage concert for rehearsal with explicit audio, MIDI, patch, and live-performance safety checks.",
-      "Prepare or export this GarageBand project while preserving recordings, tracks, and source media."
+      "Prepare this Motion project or Final Cut Pro template while preserving the editable source."
     ],
     "brandColor": "#C18CFF",
     "composerIcon": "./assets/creator-studio-icon.png",

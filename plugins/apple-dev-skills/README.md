@@ -117,16 +117,15 @@ When installed as a Codex plugin, Apple Dev Skills declares two Xcode-selected M
 
 ## Development
 
-Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/) and tests in [`tests/`](./tests/).
+Treat root [`skills/`](./skills/) as the canonical authored surface. Keep shared reusable assets in [`shared/`](./shared/) and integration/E2E tests only in Socket root [`tests/`](../../tests/).
 
 Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and use [AGENTS.md](./AGENTS.md) for agent-facing repo rules.
 
 Run the repository test suite for skill and metadata changes:
 
-```bash
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
-uv run python -B -m pytest plugins/apple-dev-skills/tests \
-  -o cache_dir=.codex/.cache/pytest
+```text
+just repo-validate
+just test
 ```
 
 ## Repo Structure

@@ -35,5 +35,5 @@ uv run python "$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.
 When manifest, marketplace, or root documentation changes, also run:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```

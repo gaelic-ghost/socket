@@ -15,3 +15,7 @@ This file is the Reverse Engineering Skills child-repo override for work done fr
 - Preserve original artifacts by default. Prefer copying inputs into a clearly named working area, recording hashes or identifying metadata when useful, and documenting tool versions and commands used.
 - Keep platform-specific work delegated where appropriate: use `dotnet-skills` for ordinary .NET development, `apple-dev-skills` for Apple build and Xcode workflows, and this plugin only when compiled artifacts, decompiled output, symbols, or binary metadata are the center of the task.
 - When this repository changes the root Socket marketplace or root docs, update those root surfaces in the same pass.
+
+## Validation
+
+Run `just repo-validate` and `just test` from the Socket root.

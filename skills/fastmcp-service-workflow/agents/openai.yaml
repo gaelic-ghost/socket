@@ -1,8 +1,0 @@
-interface:
-  display_name: "FastMCP Service Workflow"
-  short_description: "Maintain FastMCP components, transports, authorization, and client tests."
-  brand_color: "#1D4ED8"
-  default_prompt: "Use $fastmcp-service-workflow to inspect this existing FastMCP server and installed version, curate the requested tool, resource, or prompt change, preserve transport and authorization boundaries, and validate it with a focused uv client test."
-
-policy:
-  allow_implicit_invocation: true

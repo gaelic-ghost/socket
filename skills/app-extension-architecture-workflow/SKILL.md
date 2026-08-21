@@ -119,12 +119,6 @@ It owns extension-point routing, target and process boundaries, activation, enti
 - Recommend `explore-apple-swift-docs` for a current Apple documentation pass before choosing an unfamiliar extension point.
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable project-structure policy after the extension plan is settled.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` preserves the shared customization-file contract. This workflow has no runtime-enforced settings because extension-point and entitlement choices must stay evidence-driven for each app.
-
 ## References
 
 ### Workflow References
@@ -132,7 +126,6 @@ Use `references/customization-flow.md`.
 - `references/extension-points-targets-and-lifecycle.md`
 - `references/entitlements-shared-containers-and-data-flow.md`
 - `references/privacy-validation-signing-and-distribution.md`
-- `references/customization-flow.md`
 
 ### Authoritative Sources
 
@@ -145,5 +138,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode project guidance for containing-app and extension-target work.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

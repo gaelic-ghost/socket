@@ -228,18 +228,6 @@
       }
     },
     {
-      "name": "swiftasb-skills",
-      "source": {
-        "source": "local",
-        "path": "./plugins/swiftasb-skills"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Developer Tools"
-    },
-    {
       "name": "web-dev-skills",
       "source": {
         "source": "local",
@@ -316,6 +304,18 @@
       "source": {
         "source": "local",
         "path": "./plugins/model-lab-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "agent-plugin-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/agent-plugin-skills"
       },
       "policy": {
         "installation": "AVAILABLE",

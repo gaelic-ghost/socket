@@ -33,7 +33,7 @@ This file is the Swift Lang child-plugin override for work done from `socket`. F
 Use the narrowest validation that proves the changed surface. For plugin metadata changes, run from the Socket root:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```
 
 For future Swift helper scripts or tested contracts added under this plugin, add child-plugin validation commands here in the same pass.

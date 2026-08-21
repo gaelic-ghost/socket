@@ -58,10 +58,6 @@ Prepare a reproducible macOS guest while keeping restore images, identity, disks
 - Use `prepare-isolated-analysis-lab` before executing untrusted content.
 - Use a spare physical Mac when hardware, recoveryOS, Secure Enclave, device, performance, or anti-VM fidelity is required.
 
-## Customization
-
-Use [customization-flow.md](references/customization-flow.md). The first release has no runtime-enforced knobs.
-
 ## References
 
 - [macOS VM artifact lifecycle](references/macos-vm-artifact-lifecycle.md)

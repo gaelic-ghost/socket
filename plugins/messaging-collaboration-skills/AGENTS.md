@@ -27,7 +27,7 @@ This file refines the Socket root guidance for `messaging-collaboration-skills`.
 
 ```bash
 uv run python "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" skills/<skill-name>
-uv run scripts/validate_socket_metadata.py
-uv run scripts/export_hermes_skills.py
-uv run scripts/validate_hermes_compatibility.py
+just repo-sync
+just repo-validate
+just test
 ```

@@ -102,19 +102,12 @@ Guide AVFoundation capture, playback, asset loading, reader, writer, export, and
 - Recommend `xcode-testing-workflow` for repeatable media tests, fixtures, or runtime verification planning.
 - Recommend `explore-apple-swift-docs` when docs lookup is the real need.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but this workflow defines no runtime-enforced knobs.
-
 ## References
 
 ### Workflow References
 
 - `references/media-pipeline-and-repair.md`
 - `references/async-loading-and-backpressure.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -122,5 +115,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for media apps.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

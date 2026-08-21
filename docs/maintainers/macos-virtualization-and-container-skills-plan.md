@@ -242,9 +242,8 @@ Do not duplicate the same matrix in multiple plugins. Put Apple framework facts 
 ### Static validation
 
 - Generate or refresh `agents/openai.yaml` from final skill content.
-- Run the Apple Dev docs validator and pytest suite for Apple Dev changes.
-- Run the Cybersecurity child metadata validator for security changes.
-- Run root Socket metadata validation after every skill inventory or plugin metadata change.
+- Run `just repo-validate` and the single root `just test` integration/E2E path
+  after skill inventory or plugin metadata changes.
 - Export portable skills through Hermes and update Claude and Cowork classifications in the same pass.
 - Keep all repository documentation links portable and all runtime paths discovered rather than machine-coded.
 

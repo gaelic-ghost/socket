@@ -26,7 +26,6 @@
     "server-side-swift": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows; Apple container execution requires a supported local Mac." },
     "speak-swiftly": { "claudeCode": "not_supported", "cowork": "not_supported", "note": "The standalone payload auto-loads a Codex-only hook with a hard-coded Codex cache path; add a Claude-native payload there before exposing it here." },
     "swift-lang": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." },
-    "swiftasb-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Skill guidance is portable; live Codex app-server probes remain Codex-specific." },
     "web-dev-skills": { "claudeCode": "supported", "cowork": "skills_only", "note": "Instruction-only workflows." }
   }
 }

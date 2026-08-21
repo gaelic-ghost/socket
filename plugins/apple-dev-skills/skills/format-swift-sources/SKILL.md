@@ -54,7 +54,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 4. Choose one documented path:
    - when the user wants the default baseline for a shared Swift repo, prefer a checked-in root `.swiftformat` and a Git pre-commit hook that formats staged Swift files and then verifies them with `swiftformat --lint`
    - for SwiftFormat settings export, prefer the host app export flow in `references/swiftformat-xcode-config-export.md`
-   - use `scripts/export_swiftformat_xcode_config.py` only when a deterministic shared-defaults export is needed
+   - use `scripts/export-swiftformat-xcode-config.fsx` only when a deterministic shared-defaults export is needed
    - when `defaults export` from the suite domain is empty, stale, or incomplete, point the script at the real shared plist inside the SwiftFormat group container with `--input-plist`
    - after script export, review the generated file before checking it in because extension state may still need light curation
    - for all other surfaces, use the tool-specific references instead of inventing a hybrid path
@@ -103,7 +103,7 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 
 ## Fallbacks and Handoffs
 
-- SwiftFormat config export falls back from host-app export to `scripts/export_swiftformat_xcode_config.py`, preferably with `--input-plist` pointed at the real shared plist when the suite-domain export is not trustworthy on the current machine.
+- SwiftFormat config export falls back from host-app export to `scripts/export-swiftformat-xcode-config.fsx`, preferably with `--input-plist` pointed at the real shared plist when the suite-domain export is not trustworthy on the current machine.
 - SwiftLint plugin adoption falls back to an Xcode Run Script Build Phase when plugin constraints conflict with config placement or project layout.
 - SwiftFormat build-phase adoption falls back from package-managed or pinned local binaries to the locally installed CLI path only when shared-version drift is acceptable.
 - For shared repos, prefer the Git pre-commit path over build-phase-only enforcement when the goal is to keep commits formatted before review and CI.
@@ -117,11 +117,9 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 - Recommend `author-swift-docc-docs` directly when the task becomes symbol documentation, DocC article work, landing-page structure, topic groups, or DocC-oriented review.
 - Recommend `bootstrap-xcode-workspace --operation align` for product guidance alignment.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` reads, writes, resets, and reports per-skill customization metadata.
-- The current customization surface is one policy-only guidance default for tool selection. This skill has no `run_workflow.py` runtime entrypoint at present.
+- Tool selection follows the fixed workflow policy. This skill has no separate runtime planner.
 
 ## References
 
@@ -135,7 +133,6 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 ### Contract References
 
 - `references/automation-prompts.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -144,5 +141,4 @@ Use this skill as the top-level workflow for integrating and maintaining SwiftLi
 
 ### Script Inventory
 
-- `scripts/customization_config.py`
-- `scripts/export_swiftformat_xcode_config.py`
+- `scripts/export-swiftformat-xcode-config.fsx`

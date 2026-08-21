@@ -89,18 +89,11 @@ Guide Core Image processing and rendering without turning `CIImage` into a bitma
 - Recommend `xcode-testing-workflow` for fixtures, image comparisons, performance baselines, or regression tests.
 - Recommend `explore-apple-swift-docs` when documentation lookup is the real need.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/core-image-processing-and-rendering.md`
 - `references/core-image-diagnostics-and-handoffs.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-image-type-ownership.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

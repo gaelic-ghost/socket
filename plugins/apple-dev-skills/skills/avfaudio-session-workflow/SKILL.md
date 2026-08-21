@@ -104,19 +104,12 @@ It is not the audio-engine graph workflow, not the AVFoundation media-pipeline w
 - Recommend `xcode-build-run-workflow` for entitlements, `Info.plist`, target membership, build, run, or device setup.
 - Recommend `xcode-testing-workflow` for repeatable test plans, interruption test design, or runtime verification.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but this workflow defines no runtime-enforced knobs.
-
 ## References
 
 ### Workflow References
 
 - `references/session-policy-and-repair.md`
 - `references/validation-and-handoffs.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -124,5 +117,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for audio-session apps.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

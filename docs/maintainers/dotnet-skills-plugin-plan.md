@@ -273,10 +273,10 @@ The first slice should be intentionally small but installable:
 - [x] Add `dotnet:build-fsharp-project`.
 - [x] Add `dotnet:build-csharp-project`.
 - [x] Add `dotnet:testing-workflow`.
-- [x] Decide not to add per-skill `agents/openai.yaml` metadata in the first slice because this child plugin follows the existing SwiftASB skills shape.
+- [x] Decide not to add per-skill `agents/openai.yaml` metadata in the first slice because the first plugin slice keeps metadata at the plugin level.
 - [x] Switch the root marketplace entry for `dotnet-skills` to installable only after real skill content exists.
 - [x] Update `README.md` and `ROADMAP.md` so Socket documents the new child plugin surface.
-- [x] Run `uv run scripts/validate_socket_metadata.py`.
+- [x] Run `just repo-validate`.
 - [x] Run any child-plugin validation added by the new plugin; no child-local validator was added in the first slice.
 
 ## Second Implementation Slice

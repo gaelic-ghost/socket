@@ -51,13 +51,8 @@ Provide two explicit evidence modes for a reproducible iOS Simulator issue: `per
 - Recommend `xcode-testing-workflow` for Instruments, `xctrace`, test plans, and broader Xcode performance work.
 - Recommend `swiftui-performance-audit` when the user first needs a code-first SwiftUI hypothesis.
 
-## Customization
-
-Use `references/customization-flow.md`. Evidence mode and reproducibility requirements are fixed; local customization cannot bypass same-flow comparison or artifact-scope reporting.
-
 ## References
 
 - `references/performance-trace-evidence.md`
 - `references/memory-graph-evidence.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the app needs reusable Xcode-project policy alongside simulator evidence work.

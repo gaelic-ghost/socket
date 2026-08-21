@@ -78,18 +78,11 @@ Guide ARKit environment sensing while preserving the platform-specific session m
 - Recommend `xcode-testing-workflow` for transform fixtures, provider state tests, saved-map fixtures, and device test plans.
 - Recommend `explore-apple-swift-docs` for current ARKit or related framework research.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/world-tracking-depth-meshes-and-maps.md`
 - `references/visionos-providers-rendering-and-diagnostics.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-spatial-data-privacy-contract.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

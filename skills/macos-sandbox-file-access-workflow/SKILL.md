@@ -59,10 +59,6 @@ Preserve user intent and access lifetime while selecting the smallest supported 
 - Use `app-extension-architecture-workflow` for extension lifecycle/IPC design and Xcode workflows for project edits.
 - Use `research-macos-security-control` for private sandbox profiles, extensions, or exact-build Seatbelt behavior.
 
-## Customization
-
-Use `references/customization-flow.md`. The workflow has no runtime knobs; access scope must follow the recorded feature, process, resource, and lifetime.
-
 ## References
 
 - `references/sandbox-and-filesystem-control-map.md`

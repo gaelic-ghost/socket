@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "document": "roadmap",
+  "targetFile": "ROADMAP.md",
+  "requireTableOfContents": true,
+  "preservePreamble": true,
+  "allowAdditionalSections": true,
+  "requiredSections": ["Vision", "Product Principles", "Milestone Progress", "Small Tickets", "Backlog Candidates", "History"],
+  "sectionOrder": ["Vision", "Product Principles", "Milestone Progress", "__MILESTONES__", "Small Tickets", "Backlog Candidates", "History"],
+  "requiredSubsections": {
+    "__MILESTONE__": ["Status", "Scope", "Tickets", "Exit Criteria"]
+  },
+  "sectionAliases": {
+    "Product Principles": ["Product principles"],
+    "Small Tickets": ["Small tickets", "TODO", "Todo", "TODOs", "Fixes", "Bug Fixes"],
+    "Backlog Candidates": ["Backlog candidates"]
+  },
+  "subsectionAliases": {
+    "Status": ["status"],
+    "Exit Criteria": ["Exit criteria"]
+  },
+  "allowedStatuses": ["Planned", "In Progress", "Completed", "Blocked", "De-scoped"],
+  "statusAliases": {
+    "In Progress": ["Implementation Complete; Release Pending", "Release candidate"]
+  }
+}

@@ -135,7 +135,7 @@ Run this audit whenever a child plugin is added, removed, moved, renamed, conver
 3. For each Git-backed entry, verify the source kind matches the plugin location: `url` for a repository-root plugin and `git-subdir` for a plugin in a repository subdirectory.
 4. Compare the marketplace entries against the real child directories under `plugins/` and confirm every public child plugin that ships `.codex-plugin/plugin.json` is listed or intentionally exposed by Git-backed reference.
 5. Open each changed child repo's `AGENTS.md`, plugin manifest, optional public README, or maintainer docs and confirm the child still treats the marketplace path as its installable plugin root.
-6. Run `uv run scripts/validate_socket_metadata.py`.
+6. Run `just repo-validate`.
 7. Update `README.md`, this maintainer workflow, and `ROADMAP.md` when the audit finds a packaging-model change rather than only a metadata typo.
 
 The audit is about the installable plugin roots that Codex can actually see. Do not rewrite marketplace paths to follow an invented uniform layout when the child repo still packages from a different root.
@@ -151,7 +151,7 @@ Use this checklist before removing a public child repository from `socket` or fr
 3. Remove the child directory only when the source repo is no longer meant to be imported here, or when the child has been explicitly moved elsewhere.
 4. Remove the marketplace entry in the same commit as the directory removal when the plugin is no longer installable from `socket`.
 5. Update `README.md`, `ROADMAP.md`, and any maintainer docs that listed the child as active.
-6. Run `uv run scripts/validate_socket_metadata.py`.
+6. Run `just repo-validate`.
 7. Account for local branches not contained by `main` before cleanup.
 
 If the removed Socket entry points at `SpeakSwiftlyServer`, do not use this checklist as permission to delete or rewrite the standalone live-service repository. That repo's standalone release, validation, and live-refresh path stays outside ordinary `socket` cleanup.

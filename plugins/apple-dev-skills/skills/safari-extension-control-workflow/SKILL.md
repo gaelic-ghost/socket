@@ -117,11 +117,7 @@ This skill owns the decision between Safari Web Extensions, Safari Web Inspector
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project policy for a repo that will own the containing app and extension targets.
 - Treat external automation as a conscious fallback, not the default. When it is requested, state the user-visible permissions, fragility, and Safari-version sensitivity before implementation.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on the documented Safari surface decision. If future iterations add deterministic checks for manifests, entitlements, or app-group configuration, document the knobs before runtime behavior depends on them.
 
@@ -134,7 +130,6 @@ Keep the first release focused on the documented Safari surface decision. If fut
 - `references/safari-services-control-surfaces.md`
 - `references/messaging-shared-data-and-permissions.md`
 - `references/testing-debugging-and-distribution.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -144,5 +139,3 @@ Keep the first release focused on the documented Safari surface decision. If fut
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance for containing-app and extension-target work.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

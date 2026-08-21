@@ -196,7 +196,7 @@ This skill covers:
 - [x] Add package and CI workflow skills for publish-facing and automation guidance.
 - [x] Switch the root marketplace entry for `rust-skills` to installable only after real skill content exists.
 - [x] Update root README and TODO so users understand the new installable child plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ## Exit Criteria
 

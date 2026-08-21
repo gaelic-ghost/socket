@@ -13,7 +13,7 @@ materialized as the generated root `.xcodeproj`. `Apps/` contains platform-speci
 SwiftPM executables. This is the entrypoint for app-first, service-first, and
 combined products.
 
-Run `scripts/run_workflow.py` before creating files. It generates the root
+Run `scripts/run-workflow.fsx` before creating files. It generates the root
 XcodeGen project, creates the workspace wrapper, initializes the first local
 Swift package with SwiftPM, and installs the `xcode-workspace` maintenance
 profile through `repository-skills`.
@@ -79,7 +79,7 @@ project migration entrypoint.
 ## Single-Path Workflow
 
 1. Apply the Apple documentation gate through `explore-apple-swift-docs`.
-2. Run `scripts/run_workflow.py --name <Name> --file-prefix <ABC>`.
+2. Run `scripts/run-workflow.fsx --name <Name> --file-prefix <ABC>`.
    The default creates iOS and macOS targets, their Swift Testing and XCUITest
    bundles, plus `<Name>Core`.
    Start package-first with `--component-kind library` or service-first with
@@ -141,7 +141,7 @@ project migration entrypoint.
 ## Guards and Stop Conditions
 
 - For an existing canonical workspace, run
-  `scripts/run_workflow.py --operation align --repo-root <root>` instead of
+  `scripts/run-workflow.fsx --operation align --repo-root <root>` instead of
   using a separate sync skill. It preserves local documentation and Justfile
   content outside Socket-managed markers.
 - Stop when a create destination product root is non-empty.
@@ -171,7 +171,7 @@ project migration entrypoint.
 - When Xcode-only state is required, use the root workspace and Xcode workflows;
   otherwise run the nearest package operation directly.
 
-## Customization
+## Fixed Policy
 
 This skill intentionally has no independent customization template. Its explicit
 CLI inputs define product identity and component creation, while the generated

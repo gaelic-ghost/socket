@@ -60,6 +60,6 @@ Each ledger entry should include:
 
 ## Deterministic Helper
 
-- Use `scripts/normalize_todo_fixme_ledgers.py --apply` when the task is specifically about normalizing supported Swift and Objective-C TODO/FIXME comments into the ledger format above.
+- Use `scripts/normalize-swift-structure.fsx --apply` when the task is specifically about normalizing supported Swift and Objective-C TODO/FIXME comments into the ledger format above.
 - Use the script without `--apply` for a report-only preview.
 - Use report mode first when you want to audit unresolved roadmap or plan-doc references before mutating source.

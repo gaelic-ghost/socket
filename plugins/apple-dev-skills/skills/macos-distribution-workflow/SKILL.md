@@ -52,13 +52,8 @@ Treat a signed exported artifact as the source of truth for macOS distribution d
 - Recommend `xcode-build-run-workflow` for entitlement/project-signing changes, archive/export, and build validation.
 - Recommend `explore-apple-swift-docs` for current signing, notarization, or distribution policy.
 
-## Customization
-
-Use `references/customization-flow.md`. Distribution validation is artifact- and channel-specific, so this workflow provides no shortcut that can skip signature, Gatekeeper, or notarization evidence.
-
 ## References
 
 - `references/artifact-inspection-and-classification.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the app needs reusable Xcode-project policy alongside distribution work.
 - [Packaging Mac software for distribution](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution) documents distribution packaging and notarization context.

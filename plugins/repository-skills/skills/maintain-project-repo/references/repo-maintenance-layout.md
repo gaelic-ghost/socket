@@ -1,44 +1,23 @@
 # Repo Maintenance Layout
 
-The managed target layout is:
+The installer owns one fixed runtime under `scripts/repo-maintenance/`:
 
 ```text
-scripts/
-  repo-maintenance/
-    validate-all.sh
-    sync-shared.sh
-    release.sh
-    version-bump.sh (optional repo-specific hook)
-    lib/
-      common.sh
-    validations/
-      10-toolkit-layout.sh
-      20-agents-guidance.sh
-      30-ci-wrapper.sh
-    syncing/
-    release/
-      10-preflight.sh
-      20-tag-release.sh
-      30-push-release.sh
-      40-github-release.sh
-    config/
-      validation.env
-      release.env
-    hooks/
-      pre-commit.sample
-.github/
-  workflows/
-    validate-repo-maintenance.yml
-.swiftformat (Apple profiles)
-.swiftlint.yml (Apple profiles)
+maintain-project-docs.fsx
+repo-maintenance.fsx
+repo-maintenance.just
+managed-assets.json
+config/profile.json
+docs/
+validations/*.fsx
+syncing/*.fsx
+version-bump.fsx (optional repo-owned release hook)
 ```
 
-## Design Rules
+The root `justfile` imports `repo-maintenance.just`. Operators use `just`; the
+runtime discovers root-owned `.fsx` hooks lexically. Managed files refresh in
+place, while files outside the manifest remain repo-owned.
 
-- Top-level scripts are stable entrypoints.
-- Ordered `validations/*.sh`, `syncing/*.sh`, and `release/*.sh` are discovered automatically.
-- Managed files are safe to refresh in place.
-- Repo-specific extra scripts are allowed as long as they do not reuse the managed filenames.
-- Apple profiles install `.swiftformat` and `.swiftlint.yml` samples together; SwiftFormat remains the formatting authority and SwiftLint stays scoped to complementary non-formatting checks.
-- Standard release mode uses the optional repo-specific `version-bump.sh` hook when it exists and requires either that hook or an explicit `--skip-version-bump` decision.
-- The managed GitHub workflow exposes `validate` as the required branch-protection check context. Do not configure protected branches to require the display-style string `Validate Repo Maintenance / validate`.
+The only documentation recipes are `docs-check` and `docs-apply`. Both process
+all four documents. Do not add Python, shell, per-document recipes, nested
+tests, configuration schemas, or duplicate workflow implementations.

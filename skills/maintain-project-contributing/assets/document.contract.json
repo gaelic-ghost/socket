@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "document": "contributing",
+  "targetFile": "CONTRIBUTING.md",
+  "requireTableOfContents": true,
+  "preservePreamble": true,
+  "allowAdditionalSections": true,
+  "requiredSections": ["Overview", "Contribution Workflow", "Local Setup", "Development Expectations", "Pull Request Expectations", "Communication", "License and Contribution Terms"],
+  "sectionOrder": ["Overview", "Contribution Workflow", "Local Setup", "Development Expectations", "Pull Request Expectations", "Communication", "License and Contribution Terms"],
+  "requiredSubsections": {
+    "Overview": ["Who This Guide Is For", "Before You Start"],
+    "Contribution Workflow": ["Choosing Work", "Making Changes", "Asking For Review"],
+    "Local Setup": ["Runtime Config", "Runtime Behavior"],
+    "Development Expectations": ["Naming Conventions", "Accessibility Expectations", "Verification"]
+  },
+  "sectionAliases": {
+    "Development Expectations": ["Development"],
+    "License and Contribution Terms": ["Contribution Terms", "License"]
+  },
+  "subsectionAliases": {
+    "Who This Guide Is For": ["Audience"],
+    "Before You Start": ["Prerequisites"],
+    "Choosing Work": ["Picking Work"],
+    "Making Changes": ["Implementation Workflow"],
+    "Asking For Review": ["Requesting Review"],
+    "Naming Conventions": ["Naming"],
+    "Accessibility Expectations": ["Accessibility", "A11y Expectations"],
+    "Verification": ["Validation"]
+  }
+}

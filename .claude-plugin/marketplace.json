@@ -6,7 +6,8 @@
   },
   "description": "Socket workflows for Claude Code, with Cowork-compatible skills and explicitly classified connector support.",
   "plugins": [
-    { "name": "agent-portability-skills", "source": "./plugins/agent-portability-skills", "description": "Cross-host agent-skill and plugin portability workflows.", "category": "developer-tools", "tags": ["skills", "portability"], "strict": false },
+    { "name": "agent-plugin-skills", "source": "./plugins/agent-plugin-skills", "description": "Deterministic agent-plugin repository creation and maintenance workflows.", "category": "developer-tools", "tags": ["plugins", "maintenance", "fsx"], "strict": false },
+    { "name": "agent-portability-skills", "source": "./plugins/agent-portability-skills", "description": "Cross-host protocols and agent adapter workflows.", "category": "developer-tools", "tags": ["agents", "portability"], "strict": false },
     { "name": "agent-engineering-skills", "source": "./plugins/agent-engineering-skills", "description": "Agent orchestration, external-worker, scheduling, and automation-design workflows.", "category": "developer-tools", "tags": ["agents", "orchestration"], "strict": false },
     { "name": "android-dev-skills", "source": "./plugins/android-dev-skills", "description": "Android, Kotlin, Java, Gradle, testing, and release workflows.", "category": "developer-tools", "tags": ["android", "skills"], "strict": false },
     { "name": "apple-creator-studio-skills", "source": "./plugins/apple-creator-studio-skills", "description": "Apple Creator Studio workflows for production and delivery.", "category": "productivity", "tags": ["apple", "creative"], "strict": false },
@@ -21,14 +22,13 @@
     { "name": "model-lab-skills", "source": "./plugins/model-lab-skills", "description": "Reproducible model training, evaluation, intervention, and Apple runtime research workflows.", "category": "developer-tools", "tags": ["llm", "evaluation", "model-research", "apple-ml"], "strict": false },
     { "name": "network-protocol-skills", "source": "./plugins/network-protocol-skills", "description": "Networking, transport, QUIC, HTTP/3, and WebRTC workflows.", "category": "developer-tools", "tags": ["networking", "protocols"], "strict": false },
     { "name": "professional-skills", "source": "./plugins/professional-skills", "description": "Career and job-search workflows with Dice remote MCP support.", "category": "productivity", "tags": ["career", "job-search", "mcp"], "mcpServers": "./.mcp.json", "strict": false },
-    { "name": "python-skills", "source": "./plugins/python-skills", "description": "Python, uv, FastAPI, FastMCP, testing, and packaging workflows.", "category": "developer-tools", "tags": ["python", "uv"], "strict": false },
+    { "name": "python-skills", "source": "./plugins/python-skills", "description": "Diagnostics, packaging, tooling, CI, upgrade, and testing workflows for existing Python code.", "category": "developer-tools", "tags": ["python", "uv"], "strict": false },
     { "name": "repository-skills", "source": "./plugins/repository-skills", "description": "Repository operations, documentation maintenance, release, and Codex worktree workflows.", "category": "developer-tools", "tags": ["repository", "documentation", "github", "worktrees"], "strict": false },
     { "name": "reverse-engineering-skills", "source": "./plugins/reverse-engineering-skills", "description": "Artifact triage, binary analysis, exact-build macOS control research, and reproducible evidence workflows.", "category": "developer-tools", "tags": ["reverse-engineering", "security", "macos", "forensics"], "strict": false },
     { "name": "rust-skills", "source": "./plugins/rust-skills", "description": "Rust, Cargo, crate, test, CI, and package workflows.", "category": "developer-tools", "tags": ["rust", "cargo"], "strict": false },
     { "name": "server-side-jvm", "source": "./plugins/server-side-jvm", "description": "Java, Scala, JVM service, build, and testing workflows.", "category": "developer-tools", "tags": ["java", "scala", "jvm"], "strict": false },
     { "name": "server-side-swift", "source": "./plugins/server-side-swift", "description": "Vapor, Hummingbird, SwiftNIO, Docker, and Apple container workflows.", "category": "developer-tools", "tags": ["swift", "server", "containers"], "strict": false },
     { "name": "swift-lang", "source": "./plugins/swift-lang", "description": "Shared Swift language, syntax, compiler, semantic indexing, LSP, formatting, and modernization workflows.", "category": "developer-tools", "tags": ["swift", "language", "tooling"], "strict": false },
-    { "name": "swiftasb-skills", "source": "./plugins/swiftasb-skills", "description": "SwiftASB integration and application-development workflows.", "category": "developer-tools", "tags": ["swift", "swiftasb"], "strict": false },
     { "name": "web-dev-skills", "source": "./plugins/web-dev-skills", "description": "Web and Expo native-boundary workflows.", "category": "developer-tools", "tags": ["web", "expo"], "strict": false }
   ]
 }

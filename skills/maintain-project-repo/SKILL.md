@@ -1,204 +1,140 @@
 ---
 name: maintain-project-repo
-description: Install or refresh repository tooling and canonical project docs. Use for repository bootstrap or maintenance, coordinated README/CONTRIBUTING/AGENTS/ROADMAP updates, releases, tags, publication, or branch accounting.
+description: Install or refresh deterministic FSX repository maintenance, maintain all four canonical project documents, validate and synchronize repository assets, and operate protected-main releases.
 license: Apache-2.0
 metadata:
-  semver: 0.3.0
+  semver: 1.0.0
 ---
 
 # Maintain Project Repo
 
 ## Purpose
 
-Install or refresh the reusable `maintain-project-repo` toolkit and canonical
-project documentation inside a general repository or a canonical Swift product
-workspace. Validation, shared-sync work, release steps, README, contributor
-guidance, agent guidance, and roadmap planning stay aligned through one
-repository lifecycle. Callers select `generic` or `xcode-workspace` explicitly;
-this workflow does not classify repository shape.
+Install one repo-owned F# script runtime behind a small `just` interface. The
+runtime owns repository validation, shared-asset synchronization, canonical
+documentation, and bounded protected-main release operations.
 
-## When To Use
+## Required Interface
 
-- Use this skill when a Swift or Xcode repo needs one local entrypoint for validation, shared sync work, and releases.
-- Use this skill when a repo has GitHub Actions or local shell helpers that should become thin wrappers around repo-owned scripts.
-- Use this skill for a coordinated README.md, CONTRIBUTING.md, AGENTS.md, and ROADMAP.md maintenance pass.
-- Use this skill when a repo needs a protected-main standard release flow and a submodule-aware release flow.
-- Use this skill when the user asks to release or publish a version.
-- Use this skill when the user asks to bump and tag a release, create the GitHub release, prepare or merge a protected-main release, or finish release cleanup and branch accounting.
-- Use this skill when the user wants a local-first alternative to putting maintainer logic under `.github/scripts/`.
-- Do not use this skill to make ordinary questions, investigations, local edits, or documentation maintenance take a full PR, CI, release, tag, and cleanup path. Repository installation, refresh, and documentation maintenance remain local operations unless the user separately requests delivery or release work.
-- Do not run or recommend the release choreography unless the user is actually asking to release, publish, merge, tag, open a release PR, or prepare the repo for that protected-main release workflow.
-- Do not use this skill for app bootstrap, Swift package bootstrap, or AGENTS-only guidance sync by themselves.
-- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the repo does not exist yet and package scaffold creation is still the primary task.
-- Recommend `bootstrap-xcode-workspace` when the repo does not exist yet and native Apple product bootstrap is still the primary task.
-- Recommend `bootstrap-xcode-workspace --operation adopt|align` for every
-  existing Swift repository before installing the explicit `xcode-workspace`
-  profile.
+Run repository work through `just`. Documentation has exactly two public
+commands and both always process README.md, CONTRIBUTING.md, AGENTS.md, and
+ROADMAP.md as one transaction:
 
-## Single-Path Workflow
+```text
+just docs-check
+just docs-apply
+```
 
-1. Collect the required inputs:
-   - `repo_root`
-   - optional `operation`
-   - optional `skip_github_workflow`
-   - optional `dry_run`
-2. Use the profile explicitly supplied by the owning workflow:
-   - use `xcode-workspace` for every Swift repository after canonical creation
-     or adoption: one `.xcworkspace`, one generated root project, and required
-     `Apps/`, `Packages/`, and `Services/` roots
-   - use `generic` only for non-Swift repositories or an explicitly general
-     maintainer surface
-   - never inspect markers to decide whether the whole repository is Xcode,
-     SwiftPM, plain, or mixed
-   - stop if the requested path is not a repository root
-   - use lowercase `scripts/repo-maintenance/` for every profile
-3. Explain the architecture boundary before mutating anything:
-   - this is a durable building-block change because it creates one repo-owned maintainer surface that bootstrap, sync, validation, CI, and release flows can all share
-   - it removes the pain of CI-only helper scripts and scattered release glue
-   - the simpler extension path considered first was leaving helper scripts under `.github/scripts/` and adding more workflow-specific wrappers, but that would keep local and CI behavior drifting apart
-   - preserve machine-level Git defaults such as Gale's fetch pruning,
-     fast-forward-only pulls, and tracking-branch rebases; the installer does
-     not write `git config --local` because generated repositories must remain
-     portable across contributor machines
-4. Run `scripts/run_workflow.py` to normalize the inputs and choose the installer path.
-5. Apply the managed `maintain-project-repo` files:
-   - install or refresh the managed repo-maintenance files under the selected profile's toolkit root
-   - install or refresh the selected profile's `config/profile.env`
-   - install or refresh the thin workflow wrapper at `.github/workflows/validate-repo-maintenance.yml` unless disabled
-   - for `xcode-workspace`, migrate an existing legacy
-     `Scripts/repo-maintenance/` toolkit root to lowercase
-     `scripts/repo-maintenance/`; stop if both roots exist separately
-   - preserve repo-specific scripts or files that are not part of the managed file set
-6. Maintain canonical project documentation as part of the same operation:
-   - `install` and `refresh` run the README, CONTRIBUTING, AGENTS, and ROADMAP owner workflows serially in `apply` mode
-   - `report-only` and `--dry-run` run the same document workflows in `check-only` mode and never write documentation
-   - create missing canonical documents from the owner workflow templates
-   - preserve the responsibility split between product docs, contributor workflow, agent guidance, and roadmap planning
-   - report cross-document responsibility drift without silently moving content between files
-   - never offer a skip-docs path: every repository install or refresh owns the corresponding documentation pass
-7. Verify the installed `maintain-project-repo` files and documentation result:
-   - `scripts/repo-maintenance/*.sh` for every profile
-   - `.github/workflows/validate-repo-maintenance.yml` when workflow installation is enabled
-   - branch protection, when enabled, requires the GitHub Actions check context `validate`; do not require the display-style string `Validate Repo Maintenance / validate`
-8. Hand off GitHub repository settings work:
-   - use `maintain-github-repository` for repository features, merge methods,
-     Dependabot, secret scanning, push protection, vulnerability reporting,
-     sign-off policy, branch protection, and rulesets
-   - keep settings alignment separate from release choreography
-9. Hand off follow-on work cleanly:
-   - use the selected profile's `validate-all.sh` for local validation
-   - use the selected profile's `sync-shared.sh` for repo-local shared sync tasks
-   - use the selected profile's `release.sh --mode standard --operation prepare` from a feature branch or worktree when protected `main` owns the final release line
-   - for remote CI, review bots, deployment, or GitHub indexing, consume the emitted continuation packet and first reuse the live matching host-native continuation while the gate remains pending and healthy; do not delete/recreate it for an unchanged snapshot. Codex uses a same-thread heartbeat and Hermes uses an updated continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`; pause/delete only when the gate resolves, fails, is cancelled, or changes identity
-   - on wakeup, run `--operation inspect` first; run `--operation advance` only if the branch, commit, PR, and tag identities still match the continuation packet. Treat every pending status context as a wait state, not permission to merge; failed checks, requested changes, and unresolved comments remain blocking
-   - use `scripts/repo-maintenance/release.sh --mode submodule` only when the repo is checked out as a submodule and the parent pointer update remains a separate follow-up
-   - treat SemVer tags with prerelease suffixes such as `vX.Y.Z-alpha.N`, `vX.Y.Z-beta.N`, `vX.Y.Z-rc.N`, or preview-style suffixes as GitHub prereleases; the release script passes `--prerelease` for those tags and rejects existing release objects whose prerelease metadata does not match the tag
-   - before claiming a release, publish, merge, or cleanup step is done, enumerate every local branch still not contained by the local base branch and account for each one as already preserved elsewhere, intentionally still in progress, newly archived, newly merged, or safe to delete
-   - verify commit reachability in the exact local repository and remote before saying work is on `main`, merged, recovered, preserved, or safe to clean up
-   - do not delete local branches, remote branches, worktrees, archive refs, or temporary rescue refs until branch accounting is complete and any non-base history is merged or preserved on an explicit archive ref
+The remaining managed commands are:
 
-## Inputs
+```text
+just repo-validate
+just repo-sync
+just repo-release-prepare <version>
+just repo-release-inspect <version>
+just repo-release-advance <version>
+```
 
-- `repo_root`: optional absolute or relative path to the repository root; defaults to `.`
-- `operation`: `install`, `refresh`, or `report-only`
-- `profile`: `generic` or `xcode-workspace`
-- `skip_github_workflow`: optional flag to skip `.github/workflows/validate-repo-maintenance.yml`
-- `dry_run`: optional flag to report the managed actions without writing files
-- Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
-  - `repo_root=.` when omitted
-  - `operation=install`
-  - `profile=generic`
-  - GitHub workflow installation is enabled unless explicitly skipped
-  - documentation mode is derived from the repository operation and cannot be skipped: `apply` for install/refresh and `check-only` for report-only/dry-run
+Never add per-document recipes, direct operator-facing script commands, Python
+or shell implementations, compatibility wrappers, or alternate documentation
+modes.
 
-## Outputs
+## Installation Workflow
 
-- `status`
-  - `success`: `maintain-project-repo` is installed, refreshed, or reported successfully
-  - `blocked`: the requested repo root or installer preconditions are invalid
-  - `failed`: the installer started but did not complete successfully
-- `path_type`
-  - `primary`: the managed installer path completed
-  - `fallback`: a non-mutating report-only result was returned
-- `output`
-  - resolved repo root
-  - normalized inputs
-  - selected profile
-  - managed file list
-  - planned or applied actions
-  - integrated documentation report with document order, owner reports, responsibility issues, fixes, post-fix status, and errors
-  - one concise next step
+1. Confirm the target is the repository root and select `generic` or
+   `xcode-workspace` explicitly.
+2. Use `scripts/maintain-project-repo.fsx` from this skill for `install`,
+   `refresh`, or `report-only`.
+3. Install the fixed manifest under `scripts/repo-maintenance/`, the managed
+   Just import, and the GitHub validation workflow.
+4. Install or refresh the four documentation contracts and templates.
+5. Run the full documentation transaction: apply for install/refresh and check
+   for report-only.
+6. Run the target repository's `just repo-validate` after mutation.
 
-## Guards and Stop Conditions
+The installer preserves repo-owned files outside the managed manifest. It does
+not infer profiles, accept project-local schemas, or expose skip-docs behavior.
 
-- Stop with `blocked` if the repo root does not exist.
-- Stop with `blocked` if the repo root is not a directory.
-- Stop with `blocked` if the managed target paths are blocked by non-regular files that cannot be updated safely.
-- Stop with `blocked` if the requested operation is unsupported.
-- Return `failed` when any selected document owner workflow errors after the repository installer starts; report completed actions explicitly so a partial write is never presented as atomic success.
+## Documentation Contract
 
-## Fallbacks and Handoffs
+The four document-owner skills provide fixed JSON contracts and Markdown
+templates. `maintain-project-docs.fsx` loads all four in a fixed order, audits
+responsibility boundaries, plans every change before writing, applies writes
+atomically, and verifies the result. Apply is idempotent.
 
-- `report-only` is the non-mutating fallback path.
-- Documentation is a required repository lifecycle surface. Do not add a compatibility switch that refreshes tooling while leaving README.md, CONTRIBUTING.md, AGENTS.md, or ROADMAP.md outside the operation.
-- The installer preserves repo-specific extra files under the selected profile's repo-maintenance root, `.github/workflows/`, and adjacent surfaces when they are not part of the managed file set.
-- The installer keeps the selected `maintain-project-repo` profile explicit via the selected profile's `config/profile.env`.
-- The installer does not write repository-local Git defaults. Its release script
-  uses explicit `git pull --ff-only` where protected-main safety must not depend
-  on a caller's global configuration.
-- Apple profiles install checked-in `.swiftformat` and `.swiftlint.yml` samples so SwiftFormat owns formatting shape while SwiftLint stays focused on complementary safety and clarity checks.
-- The generated workflow's branch-protection check context is `validate`; GitHub exposes the job check run by that context, not by the workflow title plus job name.
-- The generated GitHub Actions wrapper uses Node 24-compatible Actions versions, with `actions/checkout@v6.0.2` as the current validated floor. Newer stable official action versions are allowed and often preferred after checking release notes and running the relevant validation. Apple profiles report the runner-selected Xcode with shell commands instead of using the Node 20-based `maxim-lobanov/setup-xcode@v1` action.
-- Standard release mode has bounded `prepare`, `inspect`, and `advance` operations. It never watches or polls remote state: it reuses a live matching host-native continuation while its gate is pending and healthy, creates/updates one only after it fires or becomes stale, resumes with `inspect`, and advances only after identity checks still match the packet. Every scheduled interval is at least five minutes.
-- GitHub release creation preserves prerelease metadata for SemVer prerelease tags and fails clearly when an existing GitHub release object disagrees with the tag.
-- GitHub release creation prefers checked-in `docs/releases/vX.Y.Z.md` notes, then `docs/releases/X.Y.Z.md`; it logs and falls back to GitHub-generated notes only when neither file exists.
-- Treat branch accounting as a hard completion gate for release and cleanup work, not as follow-up tidying. If `git branch --no-merged <base>` reports local branches after a merge, account for each branch explicitly before deleting anything or reporting the workflow complete.
-- Recommend `bootstrap-xcode-workspace --operation create --component-kind library` or `bootstrap-xcode-workspace` when the repo still needs to be created.
-- Recommend `bootstrap-xcode-workspace --operation align` when product guidance alignment is still the missing baseline after `maintain-project-repo` is present.
+Customization is intentionally narrow: repositories supply their substantive
+project content inside the canonical sections. They cannot customize document
+names, required headings, aliases, ordering, status vocabulary, normalization,
+or fix policy.
 
-## Codex Subagent Fit
+## Managed Layout
 
-When delegation is explicitly requested or authorized, follow `agent-engineering-skills:orchestrate-agent-work`. This skill is a good fit for read-heavy repo-maintenance discovery before the main workflow installs, refreshes, or reports: inspecting existing validation scripts, checking CI wrapper shape, reading release docs, or inventorying repo-specific commands in separate directories.
+```text
+scripts/repo-maintenance/
+  maintain-project-docs.fsx
+  repo-maintenance.fsx
+  repo-maintenance.just
+  managed-assets.json
+  docs/
+  validations/
+  syncing/
+  version-bump.fsx             # optional repo-owned release hook
+.github/workflows/
+  validate-repo-maintenance.yml
+```
 
-Keep managed file installation, refresh, and release guidance in the main thread unless the user explicitly requests parallel implementation with disjoint write scopes. Subagents should return concise findings and file references so the main thread can make one coherent decision about the managed toolkit.
+Ordered validation and synchronization hooks are `.fsx` files. The runtime
+discovers them lexically and invokes them through `dotnet fsi`. Hook filenames
+and arguments are the extension boundary; there is no persistent policy file.
 
-## Codex Hooks Fit
+## Validation and Synchronization
 
-This skill may document Codex Hooks as an adjacent Codex runtime surface, but it should not install or manage Codex Hooks as part of the current `maintain-project-repo` file set. Keep Codex Hooks distinct from git pre-commit hooks, `scripts/repo-maintenance/hooks/`, validation scripts, and GitHub Actions wrappers.
+- `just repo-validate` verifies the managed manifest and Just import, then runs
+  every root-owned validation hook.
+- `just repo-sync` runs every root-owned synchronization hook and then validates.
+- CI calls `just repo-validate`; it does not duplicate repository policy.
+- End-to-end tests live only at the target repository root. Do not install or
+  retain nested test suites inside skills or managed directories.
 
-When a repo needs Codex Hooks guidance, record that hooks are enabled by default, may be disabled with `features.hooks = false`, may live in `hooks.json` or inline `[hooks]` config, and should name the lifecycle event, matcher, stable script path, and expected effect. Recommend a future dedicated `maintain-project-hooks` workflow when the user wants deterministic hook auditing or scaffolding.
+## Release Workflow
 
-## Customization
+Use the standard protected-main path only when the user asks to release:
 
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
-- The current customization surface is one policy-only default for release mode preference. Installation shape, profile selection, standard-mode branch release behavior, and managed file selection are explicit workflow behavior, not durable runtime customization.
+1. `repo-release-prepare` validates, performs the repo-owned version bump,
+   checks release notes, commits the release branch, pushes it, and creates or
+   updates its PR.
+2. `repo-release-inspect` checks the saved branch, commit, PR, checks, reviews,
+   comments, base branch, and tag identities without polling.
+3. `repo-release-advance` repeats identity checks, merges only when every gate
+   passes, updates the owning main worktree, tags, pushes, creates the GitHub
+   release, and performs branch accounting.
+
+Prerelease SemVer tags create GitHub prereleases. Checked-in notes under
+`docs/releases/` are preferred. Never delete branches, worktrees, refs, or
+release state until every unmerged branch is explicitly accounted for.
+
+## Guards
+
+- Treat repository-skills 10.0.2 as the migration baseline; do not copy behavior
+  from an earlier installed version.
+- Stop when a managed target is not a regular file or when both legacy and
+  canonical toolkit roots exist.
+- Stop on unsupported profiles, operations, hook extensions, release states,
+  or document contract violations.
+- Do not write repository-local Git defaults.
+- Do not add Python, shell, YAML customization, per-file documentation commands,
+  nested tests, or transitional duplicate paths.
 
 ## References
-
-### Workflow References
 
 - `references/document-boundaries.md`
 - `references/repo-maintenance-layout.md`
 - `references/release-modes.md`
 - `references/pre-commit-vs-ci.md`
-- `references/trigger-eval.md`
-
-### Contract References
-
 - `references/automation-prompts.md`
 - `references/project-docs-maintenance-automation-prompts.md`
-- `references/customization-flow.md`
 
-### Support References
+## Script Inventory
 
-- `assets/repo-maintenance/`
-- `assets/github/repo-maintenance-workflows/validate-repo-maintenance.yml`
-
-### Script Inventory
-
-- `scripts/run_workflow.py`
-- `scripts/install_maintain_project_repo.py`
-- `scripts/maintain_project_docs.py`
-- `scripts/customization_config.py`
+- `scripts/maintain-project-repo.fsx`
+- `scripts/maintain-project-docs.fsx`

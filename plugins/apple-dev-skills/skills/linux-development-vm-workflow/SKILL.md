@@ -62,10 +62,6 @@ Prepare one persistent Linux development environment whose lifecycle, host integ
 - Use `xcode-build-run-workflow`, `swift-package-build-run-workflow`, or stack-specific skills after the guest is ready.
 - Use `prepare-isolated-analysis-lab` for disposable hostile-workload controls.
 
-## Customization
-
-Use [customization-flow.md](references/customization-flow.md). The first release has no runtime-enforced knobs.
-
 ## References
 
 - [Linux development guest matrix](references/linux-development-guest-matrix.md)

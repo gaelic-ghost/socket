@@ -97,19 +97,12 @@ It does not own a mail server, IMAP/SMTP transport, account provisioning, genera
 - Recommend `explore-apple-swift-docs` when current MailKit symbols or capability behavior need source-specific confirmation.
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable containing-app and extension-target project guidance.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` preserves the common customization-file contract. Mail handler choice, message policy, and security decisions remain project-specific and must not be converted into opaque persistent defaults.
-
 ## References
 
 ### Workflow References
 
 - `references/mailkit-capabilities-and-handler-boundaries.md`
 - `references/privacy-security-and-validation.md`
-- `references/customization-flow.md`
 
 ### Authoritative Sources
 
@@ -122,5 +115,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode project guidance for MailKit app and extension targets.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

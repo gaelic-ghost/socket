@@ -50,4 +50,3 @@ Use `LanguageModelSession.logFeedbackAttachment` only for Foundation Models beha
 - `references/report-quality-and-evidence.md`
 - `references/live-app-and-api-boundaries.md`
 - `references/foundation-models-feedback-attachments.md`
-- `references/customization-flow.md`

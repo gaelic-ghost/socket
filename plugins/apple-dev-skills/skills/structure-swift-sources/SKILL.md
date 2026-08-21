@@ -7,7 +7,7 @@ description: Organize Swift source trees and oversized Swift files by feature, l
 
 ## Purpose
 
-Use this skill as the top-level workflow for structural cleanup inside existing Swift components. It governs file splitting, file moves, section grouping, plain-language file headers, and TODO or FIXME ledger extraction. `scripts/run_workflow.py` classifies the cleanup, loads policy, and hands off only DocC content or Xcode-owned membership operations. It is not the formatter or linter integration authority, and it is not the DocC authoring authority.
+Use this skill as the top-level workflow for structural cleanup inside existing Swift components. It governs file splitting, file moves, section grouping, plain-language file headers, and TODO or FIXME ledger extraction. `scripts/run-workflow.fsx` classifies the cleanup, loads policy, and hands off only DocC content or Xcode-owned membership operations. It is not the formatter or linter integration authority, and it is not the DocC authoring authority.
 
 ## When To Use
 
@@ -25,52 +25,6 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - Recommend `bootstrap-xcode-workspace --operation align` for product guidance alignment. A deliberately standalone package uses its own explicit repository-maintenance contract.
 
 ## Single-Path Workflow
-
-1. Classify the request:
-   - repo layout cleanup
-   - large-file split
-   - section and MARK normalization
-   - file-header normalization
-   - TODO or FIXME ledger extraction
-   - combined source-hygiene pass
-2. Run or confirm `format-swift-sources` first:
-   - use it to establish a clean baseline before file moves or file splits
-   - if the repo does not have a clear formatter or linter path yet, stop and set that up first
-3. Resolve the requested Swift component and read the relevant references:
-   - `references/glossary.md`
-   - `references/layout-rules.md`
-   - `references/source-organization-rules.md`
-   - `references/file-headers.md`
-   - `references/todo-fixme-ledgers.md`
-   - `references/automation-prompts.md`
-   - `references/customization-flow.md`
-4. Apply the structure rules:
-   - strongly consider splitting a file once it exceeds the configured soft split threshold and clearly holds `2` or more separate concerns
-   - always split a file once it exceeds the configured hard split threshold
-   - require one explicit three-letter uppercase prefix for every project-owned Swift source file and primary declaration
-   - never infer a different prefix after project setup; ask the user or agent to choose explicitly from reasonable initials-based suggestions
-   - when a coherent type needs an extracted concern, concatenate the concern after the owning type, such as `GEAWhateverServiceAdapter.swift`; do not use `+` filenames
-   - add `// MARK:` groups only when a file is large enough or varied enough that the grouping materially improves navigation, concern ownership, or declaration discovery
-   - skip `// MARK:` groups entirely when a short file or an already-obvious declaration run does not present meaningful navigation ambiguity
-   - when groups are warranted, use explicit `// MARK: - <Heading>` sections that name a real responsibility boundary instead of restating declaration kinds or symbol names in slightly different words
-   - add a secondary `// MARK: <Comment>` line only when it answers a useful navigation question such as why this section exists, what job it serves, or how it differs from nearby sections
-   - never use headings or secondary comments that just restate an obvious type, symbol, or method name, narrate intuitive code in a small file, or pad the file with redundant structure
-   - require or recommend the documented project-and-file banner header according to the effective header policy
-   - keep `Concern` and `Purpose` text in plain terms that explain what the file owns and what job it does, instead of repeating the filename or symbol names as jargon
-   - treat `Key Types` and `See Also` as optional high-signal fields rather than mandatory filler
-   - move TODO and FIXME text into `TODO.md` and `FIXME.md`, keeping only ticket IDs in source comments
-   - when the task is TODO or FIXME normalization, use `scripts/normalize_todo_fixme_ledgers.py` for the deterministic ledger rewrite pass across supported Swift and Objective-C source forms
-   - when the task is file-header normalization or a full cleanup pass that includes headers, use `scripts/normalize_swift_file_headers.py` to audit or apply the documented header shape
-5. Apply component layout rules:
-   - for Swift packages, prefer directories grouped by layer and feature, such as `API/<Feature>/<Concern>.swift` and `Features/<Feature>/<Concern>.swift`
-   - for Xcode app projects, ensure important app-facing source directories such as `Views/`, `Models/`, and `Services/`, and do not preserve a root `Controllers/` directory
-   - for SwiftUI views, keep view files in `Views/Shared`, `Views/macOS`, or `Views/iOS`, require exactly one SwiftUI `View` component per file, and keep that component's Xcode SwiftUI preview in the same file
-   - hand SwiftUI component, feature-service, and modifier composition decisions to `swiftui-app-architecture-workflow`
-   - hand SwiftData persistence naming and integration decisions to `swiftdata-workflow`
-   - for services, use `Services/Consumed`, `Services/Internal`, and `Services/Provided`; name each direct concrete capability such as `GEAWhateverService.swift` without introducing an umbrella `GEAAppService.swift`
-   - reserve `Model` for persistence representations; use `Record` and `DTO` only when additional representations are genuinely needed
-   - treat `Package.swift`, externally generated Swift, and vendored third-party Swift as the only default filename-prefix exceptions
-7. Finish with `format-swift-sources` again so the moved or split files end in a normalized state.
 
 ## Inputs
 
@@ -125,14 +79,12 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 - If a broad repo-wide cleanup is too risky, fall back to one feature directory or one oversized file at a time.
 - If the request becomes symbol-doc or DocC-content work, hand off to `author-swift-docc-docs`.
 - If Xcode project integrity must be revalidated after file moves, hand off to `xcode-build-run-workflow`.
-- `scripts/run_workflow.py` is the top-level runtime entrypoint and converts component inspection plus request inference into the documented JSON contract.
+- `scripts/run-workflow.fsx` is the top-level runtime entrypoint and converts component inspection plus request inference into the documented JSON contract.
 - Recommend `bootstrap-xcode-workspace --operation align` when the request is really about durable product rules.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` loads the runtime-enforced header policy and split thresholds before shaping the final workflow contract.
+- `scripts/run-workflow.fsx` uses the managed header policy and fixed split thresholds.
 
 ## References
 
@@ -147,7 +99,6 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 ### Contract References
 
 - `references/automation-prompts.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -156,8 +107,7 @@ Use this skill as the top-level workflow for structural cleanup inside existing 
 
 ### Script Inventory
 
-- `scripts/customization_config.py`
-- `scripts/run_workflow.py`
-- `scripts/normalize_todo_fixme_ledgers.py`
-- `scripts/normalize_swift_file_headers.py`
+- `scripts/run-workflow.fsx`
+- `scripts/normalize-swift-structure.fsx`
+- `scripts/normalize-swift-structure.fsx`
 - `references/file-header-inventory.template.yaml`

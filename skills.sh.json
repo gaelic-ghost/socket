@@ -2,9 +2,14 @@
   "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
   "groupings": [
     {
+      "title": "Agent Plugin Skills",
+      "skills": [
+        "maintain-agent-plugins"
+      ]
+    },
+    {
       "title": "Agent Portability Skills",
       "skills": [
-        "bootstrap-skills-plugin-repo",
         "build-acp-agent",
         "build-hermes-agent-extensions",
         "choose-agent-integration-protocol",
@@ -15,7 +20,6 @@
         "operate-hermes-agent",
         "operate-hermes-agent-gateway",
         "operate-zed-agent",
-        "sync-skills-repo-guidance",
         "use-nous-research-services"
       ]
     },
@@ -125,9 +129,6 @@
     {
       "title": "Python Skills",
       "skills": [
-        "build-python-agent-service",
-        "fastapi-service-workflow",
-        "fastmcp-service-workflow",
         "python-testing-workflow"
       ]
     },

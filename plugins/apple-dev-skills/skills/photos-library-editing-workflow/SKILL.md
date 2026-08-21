@@ -83,18 +83,11 @@ Guide PhotosUI selection and PhotoKit library work while requesting the narrowes
 - Recommend `xcode-testing-workflow` for authorization matrices, picker/load fakes, resource fixtures, change-detail tests, and edit round trips.
 - Recommend `explore-apple-swift-docs` for current PhotosUI or PhotoKit research.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/photosui-selection-and-authorization.md`
 - `references/assets-fetches-requests-resources-and-changes.md`
 - `references/creation-collections-and-nondestructive-editing.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

@@ -110,11 +110,7 @@ It is not the generic visual-design workflow, not the SF Symbols workflow, and n
 - Recommend `explore-apple-swift-docs` when the user primarily needs raw Apple documentation lookup.
 - Recommend `references/snippets/apple-xcode-project-core.md` when repo policy or Xcode project-integrity guidance is needed before applying font resources.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on typography classification, system-font choices, Dynamic Type behavior, custom-font boundaries, and validation handoffs. If future iterations add deterministic font-bundle checks, document those helpers before relying on them.
 
@@ -124,7 +120,6 @@ Keep the first release focused on typography classification, system-font choices
 
 - `references/system-typography-and-dynamic-type.md`
 - `references/custom-fonts-and-licensing.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -133,5 +128,3 @@ Keep the first release focused on typography classification, system-font choices
 - Apple documentation anchors to verify include Human Interface Guidelines Typography, SwiftUI Font, SwiftUI Applying custom fonts to text, UIKit Scaling fonts automatically, `UIFontDescriptor.SystemDesign`, `UIFontMetrics`, `UIFont.preferredFont(forTextStyle:)`, AppKit `NSFont`, `UIAppFonts`, and `ATSApplicationFontsPath`.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

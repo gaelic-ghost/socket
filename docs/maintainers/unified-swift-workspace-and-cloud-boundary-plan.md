@@ -267,7 +267,7 @@ The ordering prevents new guidance from pointing at incomplete runtime support.
 | Soto fixtures | Dependency products, one-client lifecycle, Lambda warm reuse, shutdown, exception record. |
 | Cloud contract tests | No local Linux build path, hosted artifact identity, `test` and `production` environment separation, OIDC, rollback identity. |
 | Metadata and portability | Plugin manifests, prompts, skill inventory, Hermes tap export/validation, host-specific boundary notes. |
-| Root validation | `uv run scripts/validate_socket.py --profile compatibility`, then the relevant full profile before release. |
+| Root validation | `just repo-validate`, then the relevant full profile before release. |
 
 Build and test tools must run serially on Gale's machine. The end-to-end tests must not start containers, create VMs, deploy AWS resources, or mutate Homebrew installations.
 

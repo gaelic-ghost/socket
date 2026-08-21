@@ -227,7 +227,7 @@ Forward-test with redistributable, locally generated, or explicitly approved fix
 - Use official vendor documentation, current tool help, checked-out source, and observed local behavior before community summaries.
 - Date version-sensitive platform, threat-intelligence, scanner, and beta claims. Require live confirmation when they affect a conclusion.
 - Do not embed malware, exploit payloads, private samples, VM images, tool databases, cloud keys, machine-local paths, or copied proprietary intelligence in the plugin.
-- Validate every skill with the skill-authoring validator and run `uv run scripts/validate_socket_metadata.py` after marketplace or manifest changes.
+- Validate every skill with the skill-authoring validator and run `just repo-validate` after marketplace or manifest changes.
 - Export portable skills through the Hermes tap in the same pass and update `skills.sh.json`; document any host-specific tool or Computer Use workflow instead of pretending the Codex manifest is portable.
 - Add a checked-in Hermes `mcp_servers` translation only if a later approved `.mcp.json` exists. A guidance-only first release needs no MCP translation or native Hermes plugin.
 - Update root README inventory text, `ROADMAP.md`, marketplace metadata, and version surfaces together when the plugin becomes installable.

@@ -63,10 +63,6 @@ Choose one boundary from evidence about fidelity, persistence, portability, host
 - Use `cybersecurity-skills:select-analysis-isolation` and `prepare-isolated-analysis-lab` for untrusted material.
 - Escalate to a physical Mac with the unresolved gap stated when VM fidelity is insufficient.
 
-## Customization
-
-Use [customization-flow.md](references/customization-flow.md). The first release has no runtime-enforced knobs.
-
 ## References
 
 - [Virtualization shape record](references/virtualization-shape-record.md)

@@ -299,7 +299,7 @@ For every new skill:
 - give frontmatter descriptions concrete artifact, tool, and task triggers
 - generate or refresh matching `agents/openai.yaml` metadata
 - avoid bundling decompilers, sample binaries, private SDK material, machine-local paths, tool databases, or extracted proprietary artifacts
-- validate the skill folder with the skill-authoring validator and validate the Socket marketplace with `uv run scripts/validate_socket_metadata.py`
+- validate the skill folder with the skill-authoring validator and validate the Socket marketplace with `just repo-validate`
 - forward-test with small, redistributable or locally generated artifacts that exercise success, uncertainty, disagreement between tools, and unsupported-version failure paths
 - smoke-test GUI adapter steps through the available app integration when practical and retain a CLI or manual-GUI path
 - date and link any beta-sensitive claim, and require live confirmation before relying on it in a later analysis session

@@ -124,11 +124,7 @@ The practical decision is whether the app needs DeviceCheck two-bit device state
 - Recommend the broader client auth and app-sync workflow when the task is Keychain storage, Sign in with Apple, `ASWebAuthenticationSession`, token refresh, logout, multi-account state, offline edits, or sync conflict handling.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project policy for a repo that will own DeviceCheck capabilities, entitlements, signing, and target membership.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on DeviceCheck/App Attest classification, docs grounding, and handoffs. If future iterations add deterministic checks for entitlements, server validation fixtures, or rollout policy, document the knobs before runtime behavior depends on them.
 
@@ -140,7 +136,6 @@ Keep the first release focused on DeviceCheck/App Attest classification, docs gr
 - `references/app-attest-client-flow.md`
 - `references/app-attest-server-validation.md`
 - `references/entitlements-app-id-and-validation.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -151,5 +146,3 @@ Keep the first release focused on DeviceCheck/App Attest classification, docs gr
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance for DeviceCheck and App Attest capability work.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

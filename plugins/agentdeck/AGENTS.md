@@ -7,6 +7,9 @@ Use this file for durable guidance inside the AgentDeck Socket plugin.
 - This plugin is for local Codex runtime utilities that are not specific to one programming language, Apple platform workflow, external app, or skill-repository maintainer task.
 - Keep utilities small, explicit, and independently removable.
 - Do not add broad convenience tooling here when the behavior clearly belongs in `agent-engineering-skills`, `agent-portability-skills`, a language-specific `*-skills` plugin, or an app integration plugin.
+- Keep AgentDeck manifest and marketplace consistency in
+  `agent-plugin-skills`; AgentDeck owns the runtime behavior of the hooks it
+  ships.
 
 ## Current Utility
 

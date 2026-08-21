@@ -7,7 +7,7 @@ description: Guide ordinary build, run, manifest, dependency, resource, Metal-pa
 
 ## Purpose
 
-Use this skill as the primary execution workflow for ordinary non-testing work in existing Swift package components. Keep it focused on manifest and dependency changes, package resources, builds, runs, and Release-versus-Debug validation. `scripts/run_workflow.py` resolves the nearest package root and plans commands without classifying the containing repository.
+Use this skill as the primary execution workflow for ordinary non-testing work in existing Swift package components. Keep it focused on manifest and dependency changes, package resources, builds, runs, and Release-versus-Debug validation. `scripts/run-workflow.fsx` resolves the nearest package root and plans commands without classifying the containing repository.
 
 ## When To Use
 
@@ -52,7 +52,7 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its explicit `swiftLanguageModes: [.v6]` package-manifest default and prefer that spelling over the legacy `swiftLanguageVersions` alias on current manifest surfaces
    - preserve its package-appropriate logging, telemetry, and structured-concurrency guidance
-4. Run `scripts/run_workflow.py` to resolve the nearest package root, confirm the request stays on the build/run surface, and plan the SwiftPM command path.
+4. Run `scripts/run-workflow.fsx` to resolve the nearest package root, confirm the request stays on the build/run surface, and plan the SwiftPM command path.
 5. Use `references/cli-command-matrix.md` for agent-executed SwiftPM commands and terminal-first editor workflows.
 6. Use `references/package-resources-testing-and-builds.md` when the request touches package resources, Metal artifacts, `Bundle.module`, or Debug/Release and tagged-release validation.
 7. Apply `../../shared/execution-surface-routing.md`; use `xcode-build-run-workflow` only when the requested operation needs Xcode-owned state.
@@ -69,7 +69,7 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
 - `request`: optional short natural-language request text used to infer `operation_type` when the explicit operation is omitted.
 - `repo_root`: optional absolute path for the target package repo.
 - Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
+  - runtime entrypoint: executable `scripts/run-workflow.fsx`
   - `repo_root=.` when omitted
   - the runtime may infer `operation_type` from `--request` text when the request wording is clear enough
   - package execution prefers `swift package`, `swift build`, and `swift run`
@@ -118,12 +118,9 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
 - Recommend `bootstrap-xcode-workspace --operation create --component-kind library` when the repository still needs to be created from scratch.
 - When maintaining this repository itself, refresh guidance-sync consumers after substantial package-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization.template.yaml`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` reads customization state, but the current workflow keeps a fixed SwiftPM-first policy and does not expose ordinary user-facing knobs yet.
-- Run the Python wrapper and customization entrypoints through `uv`, because they rely on inline `PyYAML` script metadata rather than a repo-global Python environment.
+- `scripts/run-workflow.fsx` enforces the fixed SwiftPM-first policy without runtime customization.
 
 ## References
 
@@ -136,8 +133,6 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
 
 ### Contract References
 
-- `references/customization.template.yaml`
-
 ### Support References
 
 - Recommend `references/snippets/apple-swift-package-core.md` when the user needs reusable SwiftPM baseline policy wording in an end-user repo.
@@ -146,5 +141,4 @@ Use this skill as the primary execution workflow for ordinary non-testing work i
 
 ### Script Inventory
 
-- `scripts/run_workflow.py`
-- `scripts/customization_config.py`
+- `scripts/run-workflow.fsx`

@@ -1,8 +1,0 @@
-interface:
-  display_name: "Build Python Agent Service"
-  short_description: "Build a tested local-first Python agent service."
-  brand_color: "#4F46E5"
-  default_prompt: "Use $build-python-agent-service to select one Python agent framework for this bounded workflow, separate its inference server and exact model from its tool/state boundaries, prove read-only tool calling and structured output first, and name the exact approval gate before any external write."
-
-policy:
-  allow_implicit_invocation: true

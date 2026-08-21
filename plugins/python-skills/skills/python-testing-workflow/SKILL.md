@@ -2,7 +2,7 @@
 name: python-testing-workflow
 description: Set up, run, and improve Python tests in uv projects and workspaces. Use for pytest configuration, focused and package-targeted runs, fixtures, parametrization, async and integration tests, coverage, CI parity, or failure triage.
 license: Apache-2.0
-compatibility: Designed for Codex and compatible Agent Skills clients on macOS with uv-managed Python projects, pytest, and shell access for the bundled setup and execution scripts.
+compatibility: Designed for Codex and compatible Agent Skills clients with uv-managed Python projects and pytest.
 metadata:
   owner: gaelic-ghost
   repo: python-skills
@@ -16,8 +16,7 @@ allowed-tools: Bash(uv:*) Read
 
 Make Python tests describe behavior, run through `uv`, and give a focused
 failure signal. Preserve the repository's existing test framework and markers;
-use the bundled scripts only for pytest setup or repeatable package-targeted
-runs.
+use the repository's own checked-in commands for setup and execution.
 
 ## Workflow
 
@@ -46,22 +45,6 @@ runs.
 7. Run the relevant complete test selection, then the project's CI-equivalent
    validation commands. Add coverage only when the user or repository has a
    concrete coverage threshold or reporting need.
-
-## Setup And Execution Scripts
-
-For a new pytest setup or a repeatable workspace command, use the existing
-scripts:
-
-```bash
-scripts/bootstrap_pytest_uv.sh --workspace-root <repo>
-scripts/bootstrap_pytest_uv.sh --workspace-root <repo> --package <member-name>
-scripts/run_pytest_uv.sh --workspace-root <repo> --package <member-name>
-scripts/run_pytest_uv.sh --workspace-root <repo> --path tests/integration -- -m integration
-```
-
-Use `--with-cov` only when the requested test contract needs `pytest-cov`.
-Profiles use the `python-testing-workflow` name and should remain optional;
-ordinary repositories should work from their checked-in `pyproject.toml` alone.
 
 ## FastAPI And FastMCP Boundaries
 
@@ -117,8 +100,6 @@ Return:
 
 - `references/pytest-workflow.md`
 - `references/uv-workspace-testing.md`
-- `references/customization.md`
-- `references/interactive-customization.md`
 - [pytest documentation](https://docs.pytest.org/en/stable/)
 - [FastAPI async tests](https://fastapi.tiangolo.com/advanced/async-tests/)
 - [FastAPI dependency overrides](https://fastapi.tiangolo.com/advanced/testing-dependencies/)

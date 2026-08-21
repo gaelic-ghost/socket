@@ -33,6 +33,11 @@ root documentation, and cross-plugin policy.
 
 - Authored child `skills/`, `mcps/`, `apps/`, and equivalent surfaces are source.
 - Plugin manifests and marketplace files are packaging metadata.
+- Reusable scripts, templates, and contracts are versioned managed assets that
+  the owning install or sync recipe copies into their canonical target paths.
+- Gale's repository preferences are hard-coded in owning assets and skill
+  contracts. Do not add per-user preference files, layered customization,
+  runtime config merging, or alternate policy paths.
 - Installed plugins, caches, enabled-state configuration, and consumer copies
   are runtime state, not editable source.
 - When documentation and automation disagree, correct the owning source rather
@@ -49,17 +54,18 @@ cross-repository policy.
 ### Setup
 
 ```bash
-uv sync --dev
+just --list
 ```
 
 ### Validation
 
 ```bash
-uv run scripts/validate_socket.py --profile compatibility
+just repo-validate
+just test
 ```
 
-Use the full or release workflow only when the changed surface requires it;
-`CONTRIBUTING.md` owns that routing.
+Socket intentionally has one root integration/E2E test and no nested or unit
+test suites. `CONTRIBUTING.md` owns release routing.
 
 ### Optional Project Commands
 

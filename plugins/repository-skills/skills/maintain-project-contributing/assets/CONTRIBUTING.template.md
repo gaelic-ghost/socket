@@ -46,11 +46,9 @@ Describe the terminology, casing, and naming patterns contributors should match 
 
 ### Accessibility Expectations
 
-Contributors must keep changes aligned with the project's accessibility contract in [`ACCESSIBILITY.md`](./ACCESSIBILITY.md).
-
-If a change affects UI semantics, input behavior, focus flow, labels, announcements, motion, contrast, zoom behavior, content structure, or assistive-technology compatibility, verify the affected surface against the documented accessibility standards before asking for review.
-
-If a change introduces a new accessibility limitation, exception, or remediation plan, update `ACCESSIBILITY.md` in the same pass unless maintainers have explicitly agreed on a different tracking path.
+Keep commands, logs, headings, links, errors, and user-facing behavior readable
+and actionable. Record product-specific accessibility requirements beside the
+surface that owns them; do not create a separate root accessibility contract.
 
 ### Verification
 

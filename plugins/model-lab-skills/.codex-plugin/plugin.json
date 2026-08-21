@@ -1,9 +1,11 @@
 {
   "name": "model-lab-skills",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Reproducible model training, evaluation, intervention, and runtime research workflows.",
   "author": {
-    "name": "Gale"
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
   },
   "skills": "./skills/",
   "interface": {
@@ -25,5 +27,8 @@
     "brandColor": "#B56CFF",
     "composerIcon": "./assets/model-lab.svg",
     "logo": "./assets/model-lab.svg"
-  }
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/gaelic-ghost/model-lab-skills",
+  "repository": "https://github.com/gaelic-ghost/model-lab-skills"
 }

@@ -123,11 +123,7 @@ Current local evidence from 2026-06-28: SF Symbols 7.2 build 119 exposes an acce
 - Recommend `explore-apple-swift-docs` when the user primarily needs raw Apple documentation lookup.
 - Recommend `references/snippets/apple-xcode-project-core.md` when repo policy or Xcode project-integrity guidance is needed before applying symbol resources.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on symbol selection, app inspection, rendering behavior, accessibility semantics, and Xcode handoffs. If future iterations add deterministic export or validation helpers, document those helpers before relying on them.
 
@@ -137,7 +133,6 @@ Keep the first release focused on symbol selection, app inspection, rendering be
 
 - `references/symbol-selection-and-rendering.md`
 - `references/custom-symbols-and-app-inspection.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -146,5 +141,3 @@ Keep the first release focused on symbol selection, app inspection, rendering be
 - Apple documentation anchors to verify include SF Symbols in the Human Interface Guidelines, Configuring and displaying symbol images in your UI, Creating custom symbol images for your app, SwiftUI Images symbol rendering, and SwiftUI symbol effects.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

@@ -7,7 +7,7 @@ description: Explore Apple and Swift documentation across Xcode MCP docs, Dash, 
 
 ## Purpose
 
-Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP `DocumentationSearch` first, Dash.app MCP second, Dash localhost HTTP only when the Dash.app MCP is unavailable or incomplete, then checked-out source, generated DocC, GitHub/source repositories, or release notes, and finally readable online documentation. `scripts/run_workflow.py` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
+Explore Apple and Swift documentation through one top-level entry point. Prefer direct docs access methods in this order: Xcode MCP `DocumentationSearch` first, Dash.app MCP second, Dash localhost HTTP only when the Dash.app MCP is unavailable or incomplete, then checked-out source, generated DocC, GitHub/source repositories, or release notes, and finally readable online documentation. `scripts/run-workflow.fsx` remains a maintainer helper for structured dry runs, fallback planning, and Dash follow-up automation, but it is not the primary way the agent should perform ordinary Apple or Swift docs lookup.
 
 ## When To Use
 
@@ -32,7 +32,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
    - `dash-http`: use the documented Dash localhost HTTP structure directly when Dash MCP is unavailable or incomplete
    - `source-repo`: use GitHub/source repositories, generated DocC, release notes, or checked-out source when the request is about open source Swift projects, tools, or packages
    - `official-web`: use official Apple or Swift web docs when the local-docs and source-repo paths are unavailable, the user explicitly prefers the web source, and the page content is actually readable through the available tool
-4. Use `scripts/run_workflow.py` only when a structured non-interactive planning result is useful, or when the request is specifically about `dash-install` or `dash-generate` follow-up behavior.
+4. Use `scripts/run-workflow.fsx` only when a structured non-interactive planning result is useful, or when the request is specifically about `dash-install` or `dash-generate` follow-up behavior.
 5. If the selected mode cannot complete, hand off forward through one clear next step:
    - `explore -> dash-install`
    - `dash-install -> dash-generate`
@@ -52,7 +52,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
   - Dash install source priority is `built-in,user-contributed,cheatsheet`
   - default search result limit is `20`
   - default search snippets setting is `true`
-  - maintainer helper entrypoint: executable `scripts/run_workflow.py`
+  - maintainer helper entrypoint: executable `scripts/run-workflow.fsx`
 
 ## Outputs
 
@@ -75,7 +75,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 
 - Do not run Dash install actions without explicit user approval.
 - Do not invent Apple or Swift doc sources, Dash identifiers, or catalog matches.
-- Do not present `scripts/run_workflow.py` as the required first step for ordinary Apple or Swift docs lookup when direct Xcode MCP or Dash MCP/HTTP access is available.
+- Do not present `scripts/run-workflow.fsx` as the required first step for ordinary Apple or Swift docs lookup when direct Xcode MCP or Dash MCP/HTTP access is available.
 - Do not treat generic no-JS web search or no-JS page extraction as a readable source for Apple Developer documentation. Apple Developer pages often require JavaScript-rendered payloads; if the content cannot be read through Xcode MCP, Dash, source repositories, generated docs, or a capable browser/source path, say that plainly instead of claiming the docs were checked.
 - Do not cite an Apple Developer URL as evidence unless the relevant documentation text was actually read through a usable source. A URL alone is only a citation target, not proof that the guidance was verified.
 - Stop with `blocked` when `explore` has no usable docs source after applying the documented fallback order.
@@ -91,13 +91,7 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 - Recommend `xcode-build-run-workflow` directly when the user’s task shifts from docs exploration to Apple or Swift build, run, diagnostics, toolchain, or mutation work.
 - Recommend `xcode-testing-workflow` directly when the user’s task shifts from docs exploration to Apple or Swift test work.
 - Recommend `bootstrap-xcode-workspace` directly when the user needs a new native product scaffold or existing-workspace alignment.
-- `scripts/run_workflow.py` is the shared local helper for structured planning, install gating, and follow-up behavior; helper scripts remain implementation details behind it.
-
-## Customization
-
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` loads and enforces the runtime-safe knobs documented in `references/customization-flow.md`.
+- `scripts/run-workflow.fsx` is the shared local helper for structured planning, install gating, and follow-up behavior; helper scripts remain implementation details behind it.
 
 ## References
 
@@ -117,7 +111,6 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 
 - `references/stage-handoff-contract.md`
 - `references/automation-prompts.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -130,9 +123,5 @@ Explore Apple and Swift documentation through one top-level entry point. Prefer 
 ### Script Inventory
 
 - These are maintainer helpers behind the public docs workflow, not the primary lookup path for ordinary Apple or Swift docs exploration.
-- `scripts/run_workflow.py`
-- `scripts/dash_api_probe.py`
-- `scripts/dash_catalog_match.py`
-- `scripts/dash_catalog_refresh.py`
-- `scripts/dash_url_search.py`
-- `scripts/dash_url_install.py`
+- `scripts/run-workflow.fsx`
+- `scripts/run-workflow.fsx`: fixed-source-order planning and confirmation-gated Dash follow-up.

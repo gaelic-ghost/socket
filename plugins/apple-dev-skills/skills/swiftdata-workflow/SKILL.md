@@ -51,14 +51,9 @@ Return the documented behavior, schema and ownership decision, naming decision, 
 - Hand view composition to `swiftui-app-architecture-workflow` and source naming cleanup to `structure-swift-sources`.
 - Hand build or test execution to the focused Xcode workflows.
 
-## Customization
-
-Use `references/customization-flow.md`. The first version has no runtime-enforced knobs; `scripts/customization_config.py` preserves the shared configuration contract.
-
 ## References
 
 - `references/models-containers-and-contexts.md`
 - `references/swiftui-integration.md`
 - `references/migrations-testing-and-boundaries.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable repository policy rather than a one-off SwiftData decision.

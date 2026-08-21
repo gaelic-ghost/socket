@@ -243,7 +243,7 @@ Completed
 
 - [x] Maintainers have a verified, reality-based local discovery and top-level export story for this repo, with docs and tooling updated to match what the repository actually ships.
 
-Completed Milestone 27 by keeping the top-level `skills/` export story, local discovery symlinks, maintainer docs, and repo validator aligned with the live shipped surface, and by confirming that `bash .github/scripts/validate_repo_docs.sh` plus `uv run pytest` cover the intended self-compliance checks.
+Completed Milestone 27 by keeping the top-level `skills/` export story, local discovery symlinks, maintainer docs, and root integration validation aligned with the live shipped surface.
 
 ## Milestone 28: Use `Agent Portability Skills` plugin selectively for plugin and export-surface alignment
 
@@ -259,7 +259,7 @@ Completed
 ### Tickets
 
 - [x] Keep the personal-scope `agent-portability-skills` install current for work on this repository without reintroducing a nested packaged plugin tree here.
-- [x] Use `maintain-plugin-repo` and `sync-skills-repo-guidance` only for the plugin-shape and export-surface checks that still belong in that repo's standards layer.
+- [x] Use `agent-plugin-skills:maintain-agent-plugins` for plugin-shape and export-surface checks while keeping Apple workflow behavior in this plugin.
 - [x] Confirm that repo docs already align with the current `repository-skills` documentation standards before treating docs wording drift as a Milestone 28 blocker.
 - [x] Align plugin metadata, export surfaces, ignores, and maintainer guidance with the current shared plugin standards without flattening repo-specific policy.
 - [x] Remove stale nested packaging language while keeping the adjacent standards repo as the maintainer-only setup.
@@ -712,7 +712,7 @@ Completed
 - [x] Slice 3: add the reference files for session policy, engine graph repair, media pipelines, Core Media timing, Core Audio modernization, anti-patterns, and validation handoffs.
 - [x] Slice 4: update README active skill inventory, plugin metadata, repo validator expectations, and any router or handoff notes from existing Xcode, SwiftUI, AppKit, accessibility, and docs-exploration skills.
 - [x] Slice 5: add targeted tests for skill metadata, docs-gate language, repair anti-pattern coverage, deprecated API modernization guidance, Xcode handoffs, and active inventory preservation.
-- [x] Slice 6: run the docs validator, targeted pytest files, full `uv run pytest`, and root Socket metadata validation before any release or marketplace refresh.
+- [x] Slice 6: run canonical repository validation and the single Socket root integration/E2E test before any release or marketplace refresh.
 
 ### Exit Criteria
 

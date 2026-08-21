@@ -64,17 +64,12 @@ Use Safari MCP for evidence from a live Safari Technology Preview tab. It owns b
 - Recommend `apple-ui-accessibility-workflow` for Apple native UI accessibility work.
 - Recommend `explore-apple-swift-docs` for current Apple or WebKit documentation.
 
-## Customization
-
-Use `references/customization-flow.md`. The first version has no runtime-enforced settings: origin, interaction, and privacy boundaries must be chosen for each live session.
-
 ## References
 
 ### Workflow References
 
 - `references/setup-and-privacy.md`
 - `references/evidence-and-validation.md`
-- `references/customization-flow.md`
 
 ### Authoritative Sources
 
@@ -82,5 +77,3 @@ Use `references/customization-flow.md`. The first version has no runtime-enforce
 - [Safari Technology Preview](https://developer.apple.com/safari/technology-preview/)
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

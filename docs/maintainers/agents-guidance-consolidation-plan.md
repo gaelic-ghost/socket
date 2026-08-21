@@ -205,7 +205,7 @@ Apply the consolidation by current root section, not by ad hoc sentence edits:
 Run validation serially:
 
 ```bash
-uv run scripts/validate_socket.py --profile compatibility
+just repo-validate
 ```
 
 Also perform a manual scenario review for:

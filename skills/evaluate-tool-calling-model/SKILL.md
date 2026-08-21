@@ -40,9 +40,6 @@ Evaluate these stages separately: whether a tool is needed, which tool is select
 
 This skill evaluates a model plus harness interface. Use `agent-engineering-skills` when the primary artifact is an agent skill or plugin package, and `agent-portability-skills` when the question is host compatibility rather than behavioral quality.
 
-Use `python-skills:build-python-agent-service` when the primary work is a
-Python implementation rather than measurement.
-
 ## References
 
 Read `references/tool-evaluation-matrix.md` for minimum cases and metrics.

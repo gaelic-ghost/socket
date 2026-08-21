@@ -102,11 +102,7 @@ It is not the Apple-docs router, not the SwiftUI app-structure workflow, and not
 - Recommend `swiftui-app-architecture-workflow` when the next honest step is app, scene, command, focus, environment, or dependency-flow architecture rather than accessibility semantics.
 - Recommend `arkit-spatial-sensing-workflow` or `arkit-face-body-tracking-workflow` for ARKit sensing while keeping labels, alternatives, motion, audio/haptic cues, and nonvisual interaction with this accessibility workflow.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on the decision model, the documented accessibility boundary, and explicit verification expectations. If future iterations add a real deterministic need for runtime knobs, document them explicitly before letting runtime behavior depend on them.
 
@@ -120,7 +116,6 @@ Keep the first release focused on the decision model, the documented accessibili
 - `references/worked-swiftui-accessibility-examples.md`
 - `references/verification-expectations.md`
 - `references/common-accessibility-anti-patterns.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -128,5 +123,3 @@ Keep the first release focused on the decision model, the documented accessibili
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Apple-project baseline policy rather than a one-off accessibility recommendation.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

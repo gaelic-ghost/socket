@@ -33,4 +33,4 @@ This file is the Cybersecurity Skills child-repo override for work done from `so
 
 - Keep `SKILL.md` procedural and concise, with tool matrices, schemas, version-sensitive facts, and larger examples in directly linked `references/`.
 - Keep every skill portable unless a concrete host-specific tool contract requires otherwise. Update the Hermes export and grouping in the same pass as any portable skill change.
-- Run `uv run scripts/validate_repo_metadata.py` from this child root and `uv run scripts/validate_socket_metadata.py` from the Socket root before review.
+- Run `just repo-validate` and `just test` from the Socket root before review.
