@@ -67,8 +67,9 @@ This repository does not currently maintain a separate root `ACCESSIBILITY.md`. 
 Use the grounded repo checks:
 
 ```bash
-bash .github/scripts/validate_repo_docs.sh
-uv run pytest
+bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+uv run python -B -m pytest plugins/apple-dev-skills/tests \
+  -o cache_dir=.codex/.cache/pytest
 ```
 
 Run additional targeted checks only when the changed surface has a narrower validation path worth calling out.

@@ -23,8 +23,17 @@ This file is the Agent Portability Skills child-repo override for work done from
 
 ## Validation
 
+Run from the Socket repository root so the shared maintainer environment and
+cache policy apply:
+
 ```bash
-uv run pytest
-uv run ruff check .
-uv run mypy .
+uv run python -B -m pytest \
+  plugins/agent-portability-skills/tests \
+  plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests \
+  plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests \
+  -o cache_dir=.codex/.cache/pytest
+uv run ruff check --cache-dir .codex/.cache/ruff/agent-portability-skills \
+  plugins/agent-portability-skills
+uv run mypy --cache-dir .codex/.cache/mypy/agent-portability-skills \
+  plugins/agent-portability-skills
 ```

@@ -9,7 +9,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "plugins/repository-skills/skills/maintain-project-docs/scripts/maintain_project_docs.py"
+SCRIPT = (
+    ROOT
+    / "plugins/repository-skills/skills/maintain-project-docs/scripts/maintain_project_docs.py"
+)
 
 spec = importlib.util.spec_from_file_location("maintain_project_docs", SCRIPT)
 assert spec is not None and spec.loader is not None
@@ -19,10 +22,22 @@ spec.loader.exec_module(module)
 
 
 class MaintainProjectDocsTests(unittest.TestCase):
+    def test_retired_api_skill_is_absent_from_source_export_and_dispatch(self) -> None:
+        self.assertFalse(
+            (ROOT / "plugins/repository-skills/skills/maintain-project-api").exists()
+        )
+        self.assertFalse((ROOT / "skills/maintain-project-api").exists())
+        self.assertNotIn(
+            "api", {workflow.key for workflow in module.DOCUMENT_WORKFLOWS}
+        )
+
     def test_select_workflows_preserves_canonical_order(self) -> None:
         selected, errors = module.select_workflows(None, None)
         self.assertEqual(errors, [])
-        self.assertEqual([workflow.key for workflow in selected], ["readme", "contributing", "agents", "roadmap"])
+        self.assertEqual(
+            [workflow.key for workflow in selected],
+            ["readme", "contributing", "agents", "roadmap"],
+        )
 
     def test_select_workflows_reports_unknown_keys(self) -> None:
         selected, errors = module.select_workflows("readme,unknown", "roadmap")
@@ -42,8 +57,12 @@ class MaintainProjectDocsTests(unittest.TestCase):
                 "owner/repo",
             ]
         )
-        readme_command = module.build_child_command(args, module.DOCUMENT_WORKFLOWS[0], Path("/tmp/demo"))
-        roadmap_command = module.build_child_command(args, module.DOCUMENT_WORKFLOWS[-1], Path("/tmp/demo"))
+        readme_command = module.build_child_command(
+            args, module.DOCUMENT_WORKFLOWS[0], Path("/tmp/demo")
+        )
+        roadmap_command = module.build_child_command(
+            args, module.DOCUMENT_WORKFLOWS[-1], Path("/tmp/demo")
+        )
         self.assertNotIn("--collect-source-tickets", readme_command)
         self.assertIn("--collect-source-tickets", roadmap_command)
         self.assertIn("--collect-github-issues", roadmap_command)
@@ -52,9 +71,16 @@ class MaintainProjectDocsTests(unittest.TestCase):
     def test_responsibility_audit_flags_cross_doc_drift(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
-            (root / "README.md").write_text("# Demo\n\n## Contribution Workflow\n\nDo all the things.\n", encoding="utf-8")
-            (root / "ROADMAP.md").write_text("# Roadmap\n\n## Safety Boundaries\n\nDo not.\n", encoding="utf-8")
-            issues = module.audit_responsibility_boundaries(root, module.DOCUMENT_WORKFLOWS)
+            (root / "README.md").write_text(
+                "# Demo\n\n## Contribution Workflow\n\nDo all the things.\n",
+                encoding="utf-8",
+            )
+            (root / "ROADMAP.md").write_text(
+                "# Roadmap\n\n## Safety Boundaries\n\nDo not.\n", encoding="utf-8"
+            )
+            issues = module.audit_responsibility_boundaries(
+                root, module.DOCUMENT_WORKFLOWS
+            )
             issue_ids = {issue["issue_id"] for issue in issues}
             self.assertIn("readme-contains-maintainer-workflow", issue_ids)
             self.assertIn("roadmap-contains-procedural-guidance", issue_ids)

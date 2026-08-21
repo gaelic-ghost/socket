@@ -1,6 +1,6 @@
 ---
 name: maintain-project-docs
-description: Coordinate maintenance across README.md, CONTRIBUTING.md, AGENTS.md, optional API.md, and ROADMAP.md. Use for a complete documentation sweep, ownership-boundary audit, repeated-content cleanup, or one coordinated project-docs pass.
+description: Coordinate maintenance across README.md, CONTRIBUTING.md, AGENTS.md, and ROADMAP.md. Use for a complete documentation sweep, ownership-boundary audit, repeated-content cleanup, or one coordinated project-docs pass.
 ---
 
 # Maintain Project Docs
@@ -13,8 +13,8 @@ This skill is the umbrella layer for repository documentation maintenance. It de
 
 - Required: `--project-root <path>`
 - Required: `--run-mode <check-only|apply>`
-- Optional: `--include <readme,contributing,agents,api,roadmap>`
-- Optional: `--skip <readme,contributing,agents,api,roadmap>`
+- Optional: `--include <readme,contributing,agents,roadmap>`
+- Optional: `--skip <readme,contributing,agents,roadmap>`
 - Optional: `--collect-source-tickets`
 - Optional: `--collect-github-issues`
 - Optional: `--github-repo <owner/repo>`
@@ -22,7 +22,8 @@ This skill is the umbrella layer for repository documentation maintenance. It de
 ## Workflow
 
 1. Validate the project root and choose the included document workflows.
-2. Run the owner workflows serially in this order: README, CONTRIBUTING, AGENTS, API when `API.md` exists, ROADMAP.
+2. Run the owner workflows serially in this order: README, CONTRIBUTING,
+   AGENTS, ROADMAP.
 3. Pass `--collect-source-tickets`, `--collect-github-issues`, and `--github-repo` only to the roadmap workflow.
 4. In `check-only`, report each owner workflow's findings plus cross-document responsibility issues.
 5. In `apply`, let each owner workflow make only its own bounded file edits, then audit the resulting document set again.
@@ -33,7 +34,6 @@ This skill is the umbrella layer for repository documentation maintenance. It de
 - `README.md`: product overview, status, quick start, usage, and short development pointer.
 - `CONTRIBUTING.md`: human contributor workflow, setup, development expectations, PR expectations, and communication rules.
 - `AGENTS.md`: durable agent-facing repo scope, routing, commands, review and delivery rules, and safety boundaries.
-- `API.md`: grounded API surface, authentication, schemas, errors, versioning, compatibility, and verification guidance.
 - `ROADMAP.md`: milestones, small tickets, TODO/FIXME imports, backlog planning, and notable roadmap history.
 
 When content belongs in another file, report the mismatch instead of copying or rewriting it silently.
@@ -61,7 +61,8 @@ Keep `apply` edits in the main thread. The auditor may return proposed patch-set
 - Never auto-commit, auto-push, or open a PR.
 - Never invent project claims, commands, API behavior, roadmap scope, or agent policy.
 - Never make broad cross-file rewrites as a side effect of running the umbrella workflow.
-- Do not duplicate detailed rules across README, CONTRIBUTING, AGENTS, API, and ROADMAP just to make each file self-contained.
+- Do not duplicate detailed rules across README, CONTRIBUTING, AGENTS, and
+  ROADMAP just to make each file self-contained.
 - Treat this skill as an orchestrator. The owner document skills keep their own schemas, templates, and bounded apply behavior.
 
 ## References

@@ -124,8 +124,9 @@ Use [`CONTRIBUTING.md`](./CONTRIBUTING.md) for maintainer workflow details, and 
 Run the repository test suite for skill and metadata changes:
 
 ```bash
-bash .github/scripts/validate_repo_docs.sh
-uv run pytest
+bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+uv run python -B -m pytest plugins/apple-dev-skills/tests \
+  -o cache_dir=.codex/.cache/pytest
 ```
 
 ## Repo Structure

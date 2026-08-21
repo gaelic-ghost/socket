@@ -24,7 +24,7 @@ needed for that classification, then hand work to the narrowest owner.
    | Codex worktree mode, local environment, or app-owned worktree behavior | `codex-gui-worktree-workflow` |
    | Parallel worker branch, worktree, write, or integration ownership | `coordinate-worktrees-and-threads` |
    | GitHub settings, rulesets, security automation, or repository policy | `maintain-github-repository` |
-   | README, CONTRIBUTING, AGENTS, API, or ROADMAP maintenance | The matching `maintain-project-*` document workflow |
+   | README, CONTRIBUTING, AGENTS, or ROADMAP maintenance | The matching `maintain-project-*` document workflow |
    | Coordinated repository-document sweep | `maintain-project-docs` |
    | Version bump, tag, release, publication, or branch-accounting cleanup | `maintain-project-repo` |
 3. When the request crosses multiple outcomes, name the sequence and keep each

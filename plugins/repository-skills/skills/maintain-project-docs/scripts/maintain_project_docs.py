@@ -30,35 +30,32 @@ DOCUMENT_WORKFLOWS: Tuple[DocumentWorkflow, ...] = (
         key="readme",
         label="README",
         filename="README.md",
-        script=PLUGIN_ROOT / "skills/maintain-project-readme/scripts/maintain_project_readme.py",
+        script=PLUGIN_ROOT
+        / "skills/maintain-project-readme/scripts/maintain_project_readme.py",
         path_arg="--readme-path",
     ),
     DocumentWorkflow(
         key="contributing",
         label="CONTRIBUTING",
         filename="CONTRIBUTING.md",
-        script=PLUGIN_ROOT / "skills/maintain-project-contributing/scripts/maintain_project_contributing.py",
+        script=PLUGIN_ROOT
+        / "skills/maintain-project-contributing/scripts/maintain_project_contributing.py",
         path_arg="--contributing-path",
     ),
     DocumentWorkflow(
         key="agents",
         label="AGENTS",
         filename="AGENTS.md",
-        script=PLUGIN_ROOT / "skills/maintain-project-agents/scripts/maintain_project_agents.py",
+        script=PLUGIN_ROOT
+        / "skills/maintain-project-agents/scripts/maintain_project_agents.py",
         path_arg="--agents-path",
-    ),
-    DocumentWorkflow(
-        key="api",
-        label="API",
-        filename="API.md",
-        script=PLUGIN_ROOT / "skills/maintain-project-api/scripts/maintain_project_api.py",
-        path_arg="--api-path",
     ),
     DocumentWorkflow(
         key="roadmap",
         label="ROADMAP",
         filename="ROADMAP.md",
-        script=PLUGIN_ROOT / "skills/maintain-project-roadmap/scripts/maintain_project_roadmap.py",
+        script=PLUGIN_ROOT
+        / "skills/maintain-project-roadmap/scripts/maintain_project_roadmap.py",
         path_arg="--roadmap-path",
     ),
 )
@@ -77,16 +74,31 @@ ISSUE_KEYS = (
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run a coordinated project documentation maintenance sweep.")
-    parser.add_argument("--project-root", required=True, help="Absolute project root path")
-    parser.add_argument("--run-mode", required=True, choices=["check-only", "apply"], help="Execution mode")
-    parser.add_argument("--include", help="Comma-separated document workflow keys to include")
+    parser = argparse.ArgumentParser(
+        description="Run a coordinated project documentation maintenance sweep."
+    )
+    parser.add_argument(
+        "--project-root", required=True, help="Absolute project root path"
+    )
+    parser.add_argument(
+        "--run-mode",
+        required=True,
+        choices=["check-only", "apply"],
+        help="Execution mode",
+    )
+    parser.add_argument(
+        "--include", help="Comma-separated document workflow keys to include"
+    )
     parser.add_argument("--skip", help="Comma-separated document workflow keys to skip")
     parser.add_argument("--json-out", help="Write JSON report path")
     parser.add_argument("--md-out", help="Write markdown report path")
     parser.add_argument("--print-json", action="store_true", help="Print JSON report")
     parser.add_argument("--print-md", action="store_true", help="Print markdown report")
-    parser.add_argument("--fail-on-issues", action="store_true", help="Exit non-zero when findings remain")
+    parser.add_argument(
+        "--fail-on-issues",
+        action="store_true",
+        help="Exit non-zero when findings remain",
+    )
     parser.add_argument(
         "--collect-source-tickets",
         action="store_true",
@@ -97,7 +109,10 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         action="store_true",
         help="Pass GitHub issue collection through to the roadmap workflow.",
     )
-    parser.add_argument("--github-repo", help="Optional OWNER/REPO override for roadmap GitHub issue collection")
+    parser.add_argument(
+        "--github-repo",
+        help="Optional OWNER/REPO override for roadmap GitHub issue collection",
+    )
     return parser.parse_args(argv)
 
 
@@ -120,16 +135,13 @@ def select_workflows(
     if include_keys:
         selected = [known[key] for key in include_keys if key in known]
     else:
-        selected = [
-            workflow
-            for workflow in DOCUMENT_WORKFLOWS
-            if workflow.key != "api"
-            or (project_root is not None and (project_root / workflow.filename).is_file())
-        ]
+        selected = list(DOCUMENT_WORKFLOWS)
     return [workflow for workflow in selected if workflow.key not in skip_keys], errors
 
 
-def build_child_command(args: argparse.Namespace, workflow: DocumentWorkflow, project_root: Path) -> List[str]:
+def build_child_command(
+    args: argparse.Namespace, workflow: DocumentWorkflow, project_root: Path
+) -> List[str]:
     command = [
         sys.executable,
         str(workflow.script),
@@ -151,9 +163,13 @@ def build_child_command(args: argparse.Namespace, workflow: DocumentWorkflow, pr
     return command
 
 
-def run_child(args: argparse.Namespace, workflow: DocumentWorkflow, project_root: Path) -> Dict[str, Any]:
+def run_child(
+    args: argparse.Namespace, workflow: DocumentWorkflow, project_root: Path
+) -> Dict[str, Any]:
     command = build_child_command(args, workflow, project_root)
-    proc = subprocess.run(command, cwd=project_root, capture_output=True, text=True, check=False)
+    proc = subprocess.run(
+        command, cwd=project_root, capture_output=True, text=True, check=False
+    )
     child: Dict[str, Any] = {
         "key": workflow.key,
         "label": workflow.label,
@@ -171,7 +187,9 @@ def run_child(args: argparse.Namespace, workflow: DocumentWorkflow, project_root
         if proc.stdout.strip():
             child["stdout"] = proc.stdout.strip()
     if proc.returncode != 0:
-        child["errors"].append(f"{workflow.label} workflow exited with status {proc.returncode}.")
+        child["errors"].append(
+            f"{workflow.label} workflow exited with status {proc.returncode}."
+        )
     return child
 
 
@@ -187,7 +205,9 @@ def heading_present(text: str, heading: str) -> bool:
     return re.search(pattern, text) is not None
 
 
-def responsibility_issue(file: Path, issue_id: str, message: str, destination: str) -> Dict[str, Any]:
+def responsibility_issue(
+    file: Path, issue_id: str, message: str, destination: str
+) -> Dict[str, Any]:
     return {
         "issue_id": issue_id,
         "severity": "warning",
@@ -197,7 +217,9 @@ def responsibility_issue(file: Path, issue_id: str, message: str, destination: s
     }
 
 
-def audit_responsibility_boundaries(project_root: Path, selected: Sequence[DocumentWorkflow]) -> List[Dict[str, Any]]:
+def audit_responsibility_boundaries(
+    project_root: Path, selected: Sequence[DocumentWorkflow]
+) -> List[Dict[str, Any]]:
     selected_keys = {workflow.key for workflow in selected}
     issues: List[Dict[str, Any]] = []
 
@@ -209,7 +231,11 @@ def audit_responsibility_boundaries(project_root: Path, selected: Sequence[Docum
 
     readme_path, readme = maybe_read("readme", "README.md")
     if readme:
-        for heading in ("Contribution Workflow", "Review Expectations", "Release Process"):
+        for heading in (
+            "Contribution Workflow",
+            "Review Expectations",
+            "Release Process",
+        ):
             if heading_present(readme, heading):
                 issues.append(
                     responsibility_issue(
@@ -237,7 +263,9 @@ def audit_responsibility_boundaries(project_root: Path, selected: Sequence[Docum
     if agents:
         for heading in ("Quick Start", "Usage", "Known Gaps"):
             if heading_present(agents, heading):
-                destination = "README.md" if heading in {"Quick Start", "Usage"} else "ROADMAP.md"
+                destination = (
+                    "README.md" if heading in {"Quick Start", "Usage"} else "ROADMAP.md"
+                )
                 issues.append(
                     responsibility_issue(
                         agents_path,
@@ -251,7 +279,9 @@ def audit_responsibility_boundaries(project_root: Path, selected: Sequence[Docum
     if roadmap:
         for heading in ("Contribution Workflow", "Local Setup", "Safety Boundaries"):
             if heading_present(roadmap, heading):
-                destination = "CONTRIBUTING.md" if heading != "Safety Boundaries" else "AGENTS.md"
+                destination = (
+                    "CONTRIBUTING.md" if heading != "Safety Boundaries" else "AGENTS.md"
+                )
                 issues.append(
                     responsibility_issue(
                         roadmap_path,
@@ -267,9 +297,11 @@ def child_issue_count(child: Dict[str, Any]) -> int:
     report = child.get("report")
     if not isinstance(report, dict):
         return len(child.get("errors", []))
-    return sum(len(report.get(key, [])) for key in ISSUE_KEYS if isinstance(report.get(key), list)) + len(
-        child.get("errors", [])
-    )
+    return sum(
+        len(report.get(key, []))
+        for key in ISSUE_KEYS
+        if isinstance(report.get(key), list)
+    ) + len(child.get("errors", []))
 
 
 def child_fixes(child: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -297,7 +329,9 @@ def markdown_report(report: Dict[str, Any]) -> str:
     ]
     for child in report["document_reports"]:
         issue_count = child_issue_count(child)
-        lines.append(f"- `{child['key']}`: exit `{child['returncode']}`, {issue_count} issue(s)")
+        lines.append(
+            f"- `{child['key']}`: exit `{child['returncode']}`, {issue_count} issue(s)"
+        )
 
     lines.extend(["", "## Responsibility Issues", ""])
     if report["responsibility_issues"]:
@@ -332,9 +366,9 @@ def write_text(path: Path, text: str) -> None:
 
 
 def unresolved_issues(report: Dict[str, Any]) -> bool:
-    return bool(report["responsibility_issues"] or report["errors"] or report["post_fix_status"]) or any(
-        child_issue_count(child) for child in report["document_reports"]
-    )
+    return bool(
+        report["responsibility_issues"] or report["errors"] or report["post_fix_status"]
+    ) or any(child_issue_count(child) for child in report["document_reports"])
 
 
 def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
@@ -357,7 +391,9 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
         "errors": selection_errors,
     }
     if not project_root.is_dir():
-        report["errors"].append(f"Project root does not exist or is not a directory: {project_root}")
+        report["errors"].append(
+            f"Project root does not exist or is not a directory: {project_root}"
+        )
         return report, markdown_report(report)
 
     if not report["errors"]:
@@ -367,7 +403,9 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
             report["fixes_applied"].extend(child_fixes(child))
             report["post_fix_status"].extend(child_post_fix_status(child))
             report["errors"].extend(child["errors"])
-        report["responsibility_issues"] = audit_responsibility_boundaries(project_root, selected)
+        report["responsibility_issues"] = audit_responsibility_boundaries(
+            project_root, selected
+        )
 
     return report, markdown_report(report)
 

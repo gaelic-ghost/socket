@@ -13,6 +13,9 @@ from typing import Sequence
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+PYTEST_CACHE = REPO_ROOT / ".codex" / ".cache" / "pytest"
+MYPY_CACHE = REPO_ROOT / ".codex" / ".cache" / "mypy"
+RUFF_CACHE = REPO_ROOT / ".codex" / ".cache" / "ruff"
 
 
 @dataclass(frozen=True)
@@ -23,15 +26,47 @@ class Check:
 
 
 def root_python(script_name: str) -> tuple[str, ...]:
-    return (sys.executable, f"scripts/{script_name}")
+    return (sys.executable, "-B", f"scripts/{script_name}")
+
+
+def python_module(module: str, *args: str) -> tuple[str, ...]:
+    return (sys.executable, "-B", "-m", module, *args)
+
+
+def pytest(*paths: str) -> tuple[str, ...]:
+    return python_module(
+        "pytest",
+        *paths,
+        "-o",
+        f"cache_dir={PYTEST_CACHE}",
+    )
+
+
+def mypy(*paths: str, cache_name: str = "root") -> tuple[str, ...]:
+    return python_module(
+        "mypy",
+        "--cache-dir",
+        str(MYPY_CACHE / cache_name),
+        *paths,
+    )
+
+
+def ruff(*paths: str, cache_name: str = "root") -> tuple[str, ...]:
+    return python_module(
+        "ruff",
+        "check",
+        "--cache-dir",
+        str(RUFF_CACHE / cache_name),
+        *paths,
+    )
 
 
 CORE_CHECKS = (
     Check("root marketplace metadata", root_python("validate_socket_metadata.py")),
     Check("shared skill metadata", root_python("validate_socket_skill_metadata.py")),
-    Check("root tests", (sys.executable, "-m", "pytest")),
-    Check("root type checks", (sys.executable, "-m", "mypy")),
-    Check("root lint", (sys.executable, "-m", "ruff", "check", "scripts", "tests")),
+    Check("root tests", pytest()),
+    Check("root type checks", mypy()),
+    Check("root lint", ruff("scripts", "tests")),
 )
 COMPATIBILITY_CHECKS = (
     Check("Hermes compatibility", root_python("validate_hermes_compatibility.py")),
@@ -40,23 +75,26 @@ COMPATIBILITY_CHECKS = (
 CHILD_CHECKS = (
     Check(
         "Agent Engineering Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "agent-engineering-skills",
+        pytest(
+            "plugins/agent-engineering-skills/skills/design-agent-automation-workflow/tests",
+            "plugins/agent-engineering-skills/skills/design-agent-eval-workflow/tests",
+        ),
     ),
     Check(
         "Agent Portability Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "agent-portability-skills",
+        pytest(
+            "plugins/agent-portability-skills/tests",
+            "plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests",
+            "plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests",
+        ),
     ),
     Check(
         "Agent Portability Skills lint",
-        ("uv", "run", "ruff", "check", "."),
-        REPO_ROOT / "plugins" / "agent-portability-skills",
+        ruff("plugins/agent-portability-skills", cache_name="agent-portability-skills"),
     ),
     Check(
         "Agent Portability Skills type checks",
-        ("uv", "run", "mypy", "."),
-        REPO_ROOT / "plugins" / "agent-portability-skills",
+        mypy("plugins/agent-portability-skills", cache_name="agent-portability-skills"),
     ),
     Check(
         "Apple Dev Skills docs",
@@ -65,53 +103,58 @@ CHILD_CHECKS = (
     ),
     Check(
         "Apple Dev Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "apple-dev-skills",
+        pytest("plugins/apple-dev-skills/tests"),
     ),
     Check(
         "Professional Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "professional-skills",
+        pytest("plugins/professional-skills/skills/dice-job-search-workflow/tests"),
     ),
     Check(
         "Python Skills metadata",
-        ("uv", "run", "scripts/validate_repo_metadata.py"),
+        (
+            sys.executable,
+            "-B",
+            "scripts/validate_repo_metadata.py",
+        ),
         REPO_ROOT / "plugins" / "python-skills",
     ),
     Check(
         "Python Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "python-skills",
+        pytest("plugins/python-skills/tests"),
     ),
     Check(
         "Python Skills lint",
-        ("uv", "run", "ruff", "check", "."),
-        REPO_ROOT / "plugins" / "python-skills",
+        ruff("plugins/python-skills", cache_name="python-skills"),
     ),
     Check(
         "Python Skills type checks",
-        ("uv", "run", "mypy", "."),
-        REPO_ROOT / "plugins" / "python-skills",
+        mypy("plugins/python-skills", cache_name="python-skills"),
     ),
     Check(
         "Cybersecurity Skills metadata",
-        ("uv", "run", "scripts/validate_repo_metadata.py"),
+        (
+            sys.executable,
+            "-B",
+            "scripts/validate_repo_metadata.py",
+        ),
         REPO_ROOT / "plugins" / "cybersecurity-skills",
     ),
     Check(
         "Cybersecurity Skills tests",
-        ("uv", "run", "pytest", "tests"),
-        REPO_ROOT / "plugins" / "cybersecurity-skills",
+        pytest("plugins/cybersecurity-skills/tests"),
     ),
     Check(
         "Reverse Engineering Skills metadata",
-        ("uv", "run", "scripts/validate_repo_metadata.py"),
+        (
+            sys.executable,
+            "-B",
+            "scripts/validate_repo_metadata.py",
+        ),
         REPO_ROOT / "plugins" / "reverse-engineering-skills",
     ),
     Check(
         "Reverse Engineering Skills tests",
-        ("uv", "run", "pytest", "tests"),
-        REPO_ROOT / "plugins" / "reverse-engineering-skills",
+        pytest("plugins/reverse-engineering-skills/tests"),
     ),
 )
 
@@ -130,9 +173,9 @@ def run_check(check: Check, *, dry_run: bool) -> None:
     relative_cwd = check.cwd.relative_to(REPO_ROOT)
     print(f"\n==> {check.name}\n    cwd: {relative_cwd or '.'}\n    {rendered_command}")
     if not dry_run:
-        environment = None
+        environment = os.environ.copy()
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
         if check.cwd != REPO_ROOT:
-            environment = os.environ.copy()
             environment.pop("VIRTUAL_ENV", None)
         subprocess.run(check.command, cwd=check.cwd, check=True, env=environment)
 
@@ -145,7 +188,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default="core",
         help="Validation breadth; defaults to the fast PR-safe core profile.",
     )
-    parser.add_argument("--dry-run", action="store_true", help="Print checks without running them.")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Print checks without running them."
+    )
     return parser.parse_args(argv)
 
 
@@ -157,7 +202,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise SystemExit(f"validate-socket: {error}") from error
     for check in checks:
         run_check(check, dry_run=args.dry_run)
-    print(f"\nSocket validation profile `{args.profile}` passed ({len(checks)} checks).")
+    print(
+        f"\nSocket validation profile `{args.profile}` passed ({len(checks)} checks)."
+    )
     return 0
 
 

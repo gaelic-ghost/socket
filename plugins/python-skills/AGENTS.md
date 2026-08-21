@@ -21,9 +21,16 @@ This file is the Python Skills child-repo override for work done from `socket`. 
 
 ## Validation
 
+Run from the Socket repository root so the shared maintainer environment and
+cache policy apply:
+
 ```bash
-uv run scripts/validate_repo_metadata.py
-uv run pytest
-uv run ruff check .
-uv run mypy .
+(cd plugins/python-skills && \
+  uv run --project ../.. python -B scripts/validate_repo_metadata.py)
+uv run python -B -m pytest plugins/python-skills/tests \
+  -o cache_dir=.codex/.cache/pytest
+uv run ruff check --cache-dir .codex/.cache/ruff/python-skills \
+  plugins/python-skills
+uv run mypy --cache-dir .codex/.cache/mypy/python-skills \
+  plugins/python-skills
 ```

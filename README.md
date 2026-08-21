@@ -169,7 +169,10 @@ Current Socket catalog shape:
 - `network-protocol-skills`: modern networking and application-protocol workflows for transport selection, HTTP/3 and QUIC planning, Media over QUIC draft-aware guidance, WebRTC signaling/media/data-channel work, and protocol diagnostics with stack-plugin handoffs
 - `professional-skills`: career and professional workflow guidance, starting with Dice job search and its bundled read-only remote MCP configuration
 - `python-skills`: Python runtime and tooling workflows, including local-first agent services, FastAPI and FastMCP service maintenance, and pytest-based testing; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
-- `repository-skills`: routed Git and GitHub collaboration, README, CONTRIBUTING, AGENTS, API, ROADMAP, repository settings, protected-main release, and Codex GUI worktree workflow guidance; its portable repository and documentation workflows are available from the Hermes skill tap
+- `repository-skills`: routed Git and GitHub collaboration, README,
+  CONTRIBUTING, AGENTS, ROADMAP, repository settings, protected-main release,
+  and Codex GUI worktree workflow guidance; its portable repository and
+  documentation workflows are available from the Hermes skill tap
 - `reverse-engineering-skills`: artifact triage, preservation, exact-build comparison, decompiler review, Apple Mach-O/runtime/signing/Apple Silicon/dyld/dynamic/kernel research, Cutter/Rizin, Malimite, Ghidra, Hopper, .NET, Unity and IL2CPP, and reproducible security evidence workflows
 - `server-side-jvm`: server-side JVM, Java, Scala, Google ADK agent-service, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
 - `server-side-swift`: canonical-workspace service components, Vapor, Leaf-rendered websites and HTML email, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Soto-first AWS integration, native macOS/Homebrew local development, and GitHub-only OCI/Fly.io deployment guidance plus the source-bundled `server-swift-steward` custom-agent definition

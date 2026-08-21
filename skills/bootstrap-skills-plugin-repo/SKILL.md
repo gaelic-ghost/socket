@@ -52,7 +52,9 @@ When creating or aligning skills that can benefit from parallel support work, ad
 - Apply-mode or implementation edits should stay in the main thread unless the user explicitly asks for parallel implementation and each worker has a disjoint write scope.
 - Plugin-specific guidance can be stricter. For example, Codex Security repository-wide scans may require asking for subagent use because the scan quality depends on parallel file-pass review.
 
-Do not add subagent guidance to every skill by default. Use `docs/maintainers/codex-subagent-skill-guidance.md` to decide whether the target skill has real parallelizable support work.
+Do not add subagent guidance to every skill by default. Use
+`references/codex-subagent-skill-guidance.md` to decide whether the target skill
+has real parallelizable support work.
 
 ## Codex Install Guidance
 

@@ -176,7 +176,6 @@ REPOSITORY_SKILLS = (
     "github-collaboration-workflow",
     "maintain-github-repository",
     "maintain-project-agents",
-    "maintain-project-api",
     "maintain-project-contributing",
     "maintain-project-docs",
     "maintain-project-readme",

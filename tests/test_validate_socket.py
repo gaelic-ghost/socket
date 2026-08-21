@@ -54,6 +54,33 @@ def test_full_profile_adds_compatibility_and_child_checks_once() -> None:
     assert "release readiness" not in names
 
 
+def test_child_python_checks_use_root_runtime_and_central_caches() -> None:
+    checks = [
+        check for check in validate_socket.CHILD_CHECKS if check.command[0] != "bash"
+    ]
+
+    assert checks
+    assert all(check.command[0] == sys.executable for check in checks)
+    assert all("uv" not in check.command for check in checks)
+    rendered = "\n".join(" ".join(check.command) for check in checks)
+    assert ".codex/.cache" in rendered
+
+
+def test_monorepo_children_do_not_own_python_tooling_roots() -> None:
+    child_names = (
+        "agent-engineering-skills",
+        "agent-portability-skills",
+        "apple-dev-skills",
+        "professional-skills",
+        "python-skills",
+    )
+
+    for child_name in child_names:
+        child_root = ROOT / "plugins" / child_name
+        assert not (child_root / "pyproject.toml").exists()
+        assert not (child_root / "uv.lock").exists()
+
+
 def test_validation_profiles_do_not_duplicate_release_choreography() -> None:
     source = (ROOT / "scripts" / "validate_socket.py").read_text(encoding="utf-8")
 
@@ -84,7 +111,9 @@ def test_dry_run_does_not_execute_a_subprocess(monkeypatch: pytest.MonkeyPatch) 
     assert not called
 
 
-def test_shared_skill_validator_accepts_valid_plugin(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_shared_skill_validator_accepts_valid_plugin(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     plugin_root = tmp_path / "plugins" / "example-skills"
     write(plugin_root / ".codex-plugin" / "plugin.json", "{}\n")
     write(plugin_root / "AGENTS.md", "# Guidance\n")
@@ -122,7 +151,10 @@ def test_shared_skill_validator_rejects_directory_name_drift(
     [
         ("interface: {}\n", "non-empty interface"),
         ("interface:\n  default_prompt: Use this skill.\n", "invocation token"),
-        ("interface:\n  default_prompt: Use $example-skill.\n  display_name: ''\n", "display_name"),
+        (
+            "interface:\n  default_prompt: Use $example-skill.\n  display_name: ''\n",
+            "display_name",
+        ),
     ],
 )
 def test_shared_skill_validator_rejects_invalid_openai_interface(
@@ -139,7 +171,9 @@ def test_shared_skill_validator_rejects_invalid_openai_interface(
         plugin_root / "skills" / "example-skill" / "SKILL.md",
         "---\nname: example-skill\ndescription: A valid skill.\n---\n",
     )
-    write(plugin_root / "skills" / "example-skill" / "agents" / "openai.yaml", interface)
+    write(
+        plugin_root / "skills" / "example-skill" / "agents" / "openai.yaml", interface
+    )
     monkeypatch.setattr(validate_skill_metadata, "REPO_ROOT", tmp_path)
 
     with pytest.raises(SystemExit):
