@@ -190,8 +190,7 @@ For Xcode 27 beta Markdown editing and repository browsing, open [`Socket.xcwork
 ```text
 .
 ├── .agents/
-│   ├── plugins/marketplace.json
-│   └── socket-steward/
+│   └── plugins/marketplace.json
 ├── docs/
 │   ├── agents/
 │   ├── media/

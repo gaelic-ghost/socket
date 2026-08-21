@@ -25,7 +25,7 @@ per-plugin boundary. Claude Code supports the full classified catalog; Cowork
 uses the same skills but only public remote MCP servers. Local Mac MCP servers
 remain Claude Code-only.
 
-Use `agent-portability-skills` as the reusable skill layer for these decisions. Socket Steward remains the repo-local audit, plan, and proposal engine under `.agents/socket-steward/`; Agent Portability Skills should own the agent-facing workflows that decide what is portable, what is Codex-specific, and what needs a host adapter.
+Use `agent-portability-skills` as the reusable skill layer for these decisions. It owns the agent-facing workflows that decide what is portable, what is Codex-specific, and what needs a host adapter; root validation and maintainer documentation own Socket-wide consistency checks.
 
 ## Near-Term Focus
 

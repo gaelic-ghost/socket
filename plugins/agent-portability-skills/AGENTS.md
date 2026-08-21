@@ -9,7 +9,7 @@ This file is the Agent Portability Skills child-repo override for work done from
 - Root [`skills/`](./skills/) is the canonical authored and exported surface.
 - Treat [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json) as plugin packaging metadata only.
 - Use the Socket root maintainer docs for shared marketplace, release, and contribution workflow. Keep child maintainer notes only when they describe `agent-portability-skills`-specific behavior.
-- Keep repo-level planning and deterministic cross-Socket audits connected to Socket Steward under `.agents/socket-steward/`; this plugin owns reusable agent-facing workflow guidance, while Socket Steward owns repo-local audit, plan, and proposal commands.
+- Keep reusable agent-facing portability workflows in this plugin; keep Socket-wide planning, validation, and marketplace consistency in their root-owned documents and scripts.
 
 ## Local Rules
 

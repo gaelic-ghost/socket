@@ -22,11 +22,11 @@ items. It mixes five kinds of guidance:
 4. cross-plugin product guidance; and
 5. current inventories, commands, and historical context.
 
-The deterministic Socket Steward checks both pass:
+The deterministic root guidance and documentation checks both pass:
 
 ```text
-socket-steward audit guidance: PASS
-socket-steward audit docs: PASS
+root guidance audit: PASS
+root documentation audit: PASS
 ```
 
 Those checks establish structural health, not semantic consistency. Manual
@@ -205,8 +205,6 @@ Apply the consolidation by current root section, not by ad hoc sentence edits:
 Run validation serially:
 
 ```bash
-uv run --directory .agents/socket-steward socket-steward audit guidance
-uv run --directory .agents/socket-steward socket-steward audit docs
 uv run scripts/validate_socket.py --profile compatibility
 ```
 
@@ -237,7 +235,7 @@ authority checks, and name the relevant validation surface.
 - Conditional reading replaces the unconditional root-doc reading list.
 - The Speak Swiftly source model and deferred-wakeup references are consistent
   across all live root docs.
-- Socket Steward guidance/docs audits and the compatibility profile pass.
+- Root guidance/documentation audits and the compatibility profile pass.
 - The final review reports word-count reduction and the behavior-preservation
   checklist, not just a clean diff.
 
@@ -281,9 +279,9 @@ now guard the word budget, live-owner routes, directly visible hard stops,
 absence of reintroduced domain/command detail, and the retired Speak Swiftly
 mirror model.
 
-Final validation passed with both Socket Steward audits, all 140 root tests,
-Mypy, Ruff, root marketplace and shared-skill metadata checks, and the Hermes
-and Claude compatibility validators.
+Final validation passed with the root guidance and documentation audits, all
+140 root tests, Mypy, Ruff, root marketplace and shared-skill metadata checks,
+and the Hermes and Claude compatibility validators.
 
 ## Suggested Change Slices
 

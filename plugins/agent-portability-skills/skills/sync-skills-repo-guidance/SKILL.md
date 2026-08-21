@@ -67,7 +67,7 @@ When syncing `AGENTS.md`, include strict dependency guidance:
 
 ## Codex Subagent Guidance
 
-When the user explicitly requests subagents, `skills-repo-guidance-sync`, review-packet planning, or asks to keep working while broad skills-repo guidance discovery happens in parallel, use the `skills-repo-guidance-sync` custom-agent role for bounded read-heavy discovery before this skill applies guidance sync. When the target is the Socket superproject itself, consider Socket Steward's deterministic audits and proposal reports first so the repo-local maintainer agent stays tied into cross-Socket docs and marketplace maintenance.
+When the user explicitly requests subagents, `skills-repo-guidance-sync`, review-packet planning, or asks to keep working while broad skills-repo guidance discovery happens in parallel, use the `skills-repo-guidance-sync` custom-agent role for bounded read-heavy discovery before this skill applies guidance sync. When the target is the Socket superproject itself, include root docs, marketplace metadata, and validation scripts in the bounded audit.
 
 Good `skills-repo-guidance-sync` jobs for this skill:
 

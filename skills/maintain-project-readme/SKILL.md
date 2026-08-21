@@ -1,6 +1,6 @@
 ---
 name: maintain-project-readme
-description: Maintain README.md files against a hard-enforced canonical base schema with deterministic check-only and bounded apply modes. Use when a repository README needs a durable baseline structure that downstream plugins or repo-specific customization can extend without weakening the shared README contract.
+description: Maintain README.md files against a canonical base schema with deterministic check-only and bounded apply modes. Use when a repository needs baseline structure, normalization, or targeted fixes without weakening downstream customization.
 ---
 
 # Maintain Project README

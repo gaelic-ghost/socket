@@ -139,7 +139,7 @@ score without explaining which files, commands, or observations justify it.
 - Should the long-term home be a new child plugin or a focused expansion of
   `codebase-understanding-skills`?
 - Should grading output be a Markdown report only, or should it also support a
-  small JSON shape for future Socket Steward ingestion?
+  small JSON shape for automation and downstream analysis?
 - Should "slop risk" remain internal wording, or should there be a user-facing
   "complexity risk" grade with the same practical meaning?
-- Which existing Socket Steward audit outputs should seed the first examples?
+- Which existing root audit outputs should seed the first examples?

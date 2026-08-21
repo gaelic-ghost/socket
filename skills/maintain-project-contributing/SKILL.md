@@ -1,6 +1,6 @@
 ---
 name: maintain-project-contributing
-description: Maintain canonical CONTRIBUTING.md files through deterministic audit and bounded apply modes. Use when a project contribution guide needs auditing, normalization, or bounded fixes for contributor workflow, local setup, development expectations, review handoff, or communication guidance. This is the default baseline CONTRIBUTING workflow for most repos unless a narrower plugin owns that repo shape.
+description: Maintain canonical CONTRIBUTING.md files with deterministic audit and bounded apply modes. Use for contributor workflow, local setup, development expectations, review handoff, communication guidance, normalization, or targeted fixes.
 ---
 
 # Maintain Project Contributing

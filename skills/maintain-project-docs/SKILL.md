@@ -1,6 +1,6 @@
 ---
 name: maintain-project-docs
-description: Coordinate project documentation maintenance across README.md, CONTRIBUTING.md, AGENTS.md, optional API.md, and ROADMAP.md by delegating to the owner document skills and auditing cross-document responsibility drift. Use when a repo needs a complete docs sweep, doc-boundary audit, repeated-content cleanup, or a single umbrella pass over project-maintenance documentation.
+description: Coordinate maintenance across README.md, CONTRIBUTING.md, AGENTS.md, optional API.md, and ROADMAP.md. Use for a complete documentation sweep, ownership-boundary audit, repeated-content cleanup, or one coordinated project-docs pass.
 ---
 
 # Maintain Project Docs

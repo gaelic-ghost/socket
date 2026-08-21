@@ -1,6 +1,6 @@
 ---
 name: maintain-project-agents
-description: Maintain project-local AGENTS.md files through deterministic audit and bounded apply modes. Use when a repository's AGENTS.md needs auditing, normalization, or bounded fixes for durable repo guidance, grounded commands, review expectations, or safety boundaries. This is the default baseline AGENTS workflow for most repos unless a narrower plugin owns that repo shape.
+description: Maintain project-local AGENTS.md files with deterministic audit and bounded apply modes. Use for durable repository guidance, grounded commands, review expectations, safety boundaries, normalization, or targeted fixes.
 ---
 
 # Maintain Project Agents

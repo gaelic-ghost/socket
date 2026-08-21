@@ -1,6 +1,6 @@
 ---
 name: maintain-project-roadmap
-description: Maintain checklist-style ROADMAP.md files against a hard-enforced canonical base schema with deterministic check-only and bounded apply modes. Use when a project roadmap needs milestone planning, small-ticket tracking for issue-sized fixes or TODO/FIXME imports, and a durable checklist baseline that downstream plugins can extend or customize without weakening the shared roadmap contract.
+description: Maintain checklist-style ROADMAP.md files against a canonical base schema with deterministic check-only and bounded apply modes. Use for milestone planning, issue-sized tickets, TODO/FIXME imports, normalization, or targeted fixes.
 ---
 
 # Maintain Project Roadmap
@@ -76,8 +76,8 @@ scripts/maintain_project_roadmap.py \
   --project-root . \
   --run-mode apply \
   --ticket-section "Backlog Candidates" \
-  --ticket-text "Add guarded Socket Steward roadmap apply support" \
-  --ticket-source "docs/agents/socket-steward-docs-sync.md"
+  --ticket-text "Add guarded roadmap apply support" \
+  --ticket-source "docs/agents/roadmap-maintenance.md"
 ```
 
 ```bash
@@ -85,7 +85,7 @@ scripts/maintain_project_roadmap.py \
   --project-root . \
   --run-mode apply \
   --ticket-section "Small Tickets" \
-  --ticket-text "Add guarded Socket Steward roadmap apply support" \
+  --ticket-text "Add guarded roadmap apply support" \
   --ticket-state done
 ```
 
@@ -94,7 +94,7 @@ scripts/maintain_project_roadmap.py \
   --project-root . \
   --run-mode apply \
   --ticket-section "Milestone 2: Tickets" \
-  --ticket-text "Wire roadmap ticket mutation into Socket Steward apply"
+  --ticket-text "Wire roadmap ticket mutation into the maintainer workflow"
 ```
 
 Rules:

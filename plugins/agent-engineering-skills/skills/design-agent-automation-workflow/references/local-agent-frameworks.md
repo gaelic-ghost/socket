@@ -49,8 +49,7 @@ resembles the real workflow.
 
 Choose the OpenAI Agents SDK when the application is primarily an OpenAI agent
 service: typed tools, handoffs, guardrails, approval points, traces, and a
-server-owned execution loop. Socket Steward is the deliberately small,
-read-only local example; it is not a mandate to build every agent as a service.
+server-owned execution loop.
 
 - Good first lab: a read-only repository analyst that returns a typed audit
   report and never invokes a mutating tool.
