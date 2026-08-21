@@ -5,7 +5,6 @@
 - [Vision](#vision)
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
-- [Milestone 5: SwiftASB skills plugin](#milestone-5-swiftasb-skills-plugin)
 - [Milestone 6: Dotnet skills plugin](#milestone-6-dotnet-skills-plugin)
 - [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
@@ -53,7 +52,6 @@
 
 ## Milestone Progress
 
-- Milestone 5: SwiftASB skills plugin - Completed
 - Milestone 6: Dotnet skills plugin - Completed
 - Milestone 7: Python skills plugin expansion - Completed
 - Milestone 8: Server-Side Swift skills plugin - Completed
@@ -82,39 +80,6 @@
 - Milestone 31: macOS platform security skills expansion - Completed
 - Milestone 32: tvOS app experience and media playback workflows - Completed
 - Milestone 33: Unified Swift workspace and CI-owned cloud deployment - In Progress
-
-## Milestone 5: SwiftASB skills plugin
-
-### Status
-
-Completed
-
-### Scope
-
-- [x] Add a Socket-hosted `swiftasb-skills` child plugin that helps agents explain SwiftASB, choose an integration shape, and build SwiftUI, AppKit, and Swift package surfaces on top of SwiftASB.
-- [x] Keep the plugin as a companion guidance surface rather than a runtime plugin: do not bundle an MCP server, duplicate SwiftASB source, or copy generated schema files into `socket`.
-- [x] Keep Apple framework workflow rules delegated to `apple-dev-skills`, with this plugin focused on SwiftASB-specific explanation, decision support, integration, and troubleshooting.
-
-### Tickets
-
-- [x] Create `plugins/swiftasb-skills/` with its own `.codex-plugin/plugin.json` and authored `skills/` source.
-- [x] Add first-slice skills for explaining SwiftASB, choosing an integration shape, and building a SwiftUI app on top of SwiftASB.
-- [x] Add `swiftasb:build-appkit-app` for AppKit apps after the first slice proves useful.
-- [x] Add `swiftasb:build-swift-package` for Swift package authors after the first slice proves useful.
-- [x] Add an integration diagnostics skill for runtime discovery, app-server startup, threads, turns, approvals, diagnostics, MCP status, history reads, and live-test isolation.
-- [x] Wire `swiftasb-skills` into the root Socket marketplace as a normal local child plugin.
-- [x] Update root README and maintainer docs so users understand the split between the SwiftASB package source of truth and the Socket-hosted Codex guidance plugin.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
-- [x] Sync `swiftasb-skills` with current SwiftASB changes, starting from the live SwiftASB source and docs so the explanation, integration-shape, SwiftUI, AppKit, package, and diagnostics skills match the current client API and runtime behavior.
-- [x] Refresh `swiftasb-skills` for SwiftASB `v1.6.0`, including plan-mode turn starts, `CodexThread.Agenda`, thread goal helpers, and plan/goal diagnostics across the existing skill set.
-- [x] Refresh `swiftasb-skills` for SwiftASB `v1.8.0`, including Codex CLI `0.142.x` compatibility guidance, the compatible `0.141.x` prior-minor window, `CodexTurnItem.Kind.sleep`, and ASBPresentation/ASBAppKit/ASBSwiftUI product guidance across the existing skill set.
-
-### Exit Criteria
-
-- [x] The Socket marketplace exposes `swiftasb-skills` as an installable child plugin.
-- [x] The new skills can help an agent explain SwiftASB to a user before implementation, including when SwiftASB is not the right fit.
-- [x] The new skills guide SwiftUI, AppKit, and Swift package integrations without duplicating broad Apple framework guidance that belongs to `apple-dev-skills`.
-- [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
 ## Milestone 6: Dotnet skills plugin
 
@@ -1254,7 +1219,7 @@ and test/production deployments for GitHub Actions.
 - [ ] Investigate an iTerm2 automation and integration skill covering AI Chat, the Python API, scripting fundamentals, variables, shell integration, tmux integration, and deprecated AppleScript boundaries. Keep the first pass docs-first and decide whether the skill should expose terminal-control workflows, app integration guidance, or only safe handoffs to existing shell and Codex GUI worktree guidance.
 - [ ] Add language validation triager roles after one shared contract is agreed: `python-skills:python-validation-triager`, `rust-skills:rust-validation-triager`, and `dotnet-skills:dotnet-validation-triager`, each report-first and scoped to logs, manifests, CI, test, tooling, package, and upgrade evidence.
 - [ ] Add Codex GUI local environment templates and auto-copy/install behavior to `dotnet-skills` for F#, C#, and mixed `.NET` repos, keeping setup/actions portable and preserving customized `.codex/environments/*.toml` files the same way the SwiftPM and Xcode workflows do.
-- [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `agent-engineering-skills:automation-plan-designer`, `swiftasb-skills:swiftasb-steward`, and `web-dev-skills:expo-native-boundary-scout`.
+- [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `agent-engineering-skills:automation-plan-designer` and `web-dev-skills:expo-native-boundary-scout`.
 - [ ] Keep write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward` or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
 - [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It covers Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
@@ -1301,7 +1266,6 @@ and test/production deployments for GitHub Actions.
 - Completed the subtree workflow hardening milestone by documenting subtree add, pull, and push paths, adding the root marketplace audit pass, and adding a public child plugin removal checklist.
 - Completed [#35](https://github.com/gaelic-ghost/socket/issues/35) / [#37](https://github.com/gaelic-ghost/socket/issues/37) by hardening release and PR scripts around delayed GitHub state.
 - Completed [#39](https://github.com/gaelic-ghost/socket/issues/39) by adding the Swift Package Index add-package gate and one-shot script around the documented `SwiftPackageIndex/PackageList` Add Package issue form.
-- Planned a `swiftasb-skills` child plugin to help agents explain SwiftASB and build SwiftUI, AppKit, and Swift package integrations from a Socket-visible guidance surface.
 - Added and exposed a `web-dev-skills` Expo inline native modules workflow for SDK 56+ inline Swift/Kotlin modules, `expo-type-information`, CNG/prebuild validation, and Apple Dev Skills handoffs.
 - Updated `repository-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.

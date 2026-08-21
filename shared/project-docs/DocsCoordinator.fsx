@@ -67,6 +67,10 @@ let private renderMarkdown report =
     lines.Add("")
     for document in report.Documents do
         lines.Add($"- `{document.Document}`: {document.Findings.Length} finding(s), {document.Fixes.Length} fix(es), changed `{document.Changed.ToString().ToLowerInvariant()}`")
+        for finding in document.Findings do
+            lines.Add($"  - `{finding.Severity}` `{finding.Id}`: {finding.Message}")
+        for fix in document.Fixes do
+            lines.Add($"  - `fix` `{fix.Id}`: {fix.Message}")
     lines.Add("")
     lines.Add("## Responsibility issues")
     lines.Add("")

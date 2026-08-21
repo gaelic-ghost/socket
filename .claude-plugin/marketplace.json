@@ -28,7 +28,6 @@
     { "name": "server-side-jvm", "source": "./plugins/server-side-jvm", "description": "Java, Scala, JVM service, build, and testing workflows.", "category": "developer-tools", "tags": ["java", "scala", "jvm"], "strict": false },
     { "name": "server-side-swift", "source": "./plugins/server-side-swift", "description": "Vapor, Hummingbird, SwiftNIO, Docker, and Apple container workflows.", "category": "developer-tools", "tags": ["swift", "server", "containers"], "strict": false },
     { "name": "swift-lang", "source": "./plugins/swift-lang", "description": "Shared Swift language, syntax, compiler, semantic indexing, LSP, formatting, and modernization workflows.", "category": "developer-tools", "tags": ["swift", "language", "tooling"], "strict": false },
-    { "name": "swiftasb-skills", "source": "./plugins/swiftasb-skills", "description": "SwiftASB integration and application-development workflows.", "category": "developer-tools", "tags": ["swift", "swiftasb"], "strict": false },
     { "name": "web-dev-skills", "source": "./plugins/web-dev-skills", "description": "Web and Expo native-boundary workflows.", "category": "developer-tools", "tags": ["web", "expo"], "strict": false }
   ]
 }

@@ -143,7 +143,6 @@ Currently available from the catalog:
 - `swift-lang`
 - `rust-skills`
 - `speak-swiftly`
-- `swiftasb-skills`
 - `web-dev-skills`
 
 ## Development
@@ -212,5 +211,4 @@ Current Socket catalog shape:
 - `swift-lang`: shared Swift language, API style, error handling, functional pipelines, formatting, source organization, SwiftSyntax transformation, compiler inspection, SourceKit semantics and indexing, SourceKit-LSP diagnosis, Swiftly/Xcode toolchain routing, and modernization cleanup workflows
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
-- `swiftasb-skills`: SwiftASB companion guidance
 - `web-dev-skills`: Expo SDK 56+ inline native modules, type generation, native-boundary inspection, and validation handoff guidance

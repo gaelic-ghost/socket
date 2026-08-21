@@ -49,17 +49,18 @@ cross-repository policy.
 ### Setup
 
 ```bash
-uv sync --dev
+just --list
 ```
 
 ### Validation
 
 ```bash
-uv run scripts/validate_socket.py --profile compatibility
+just repo-validate
+just test
 ```
 
-Use the full or release workflow only when the changed surface requires it;
-`CONTRIBUTING.md` owns that routing.
+Socket intentionally has one root integration/E2E test and no nested or unit
+test suites. `CONTRIBUTING.md` owns release routing.
 
 ### Optional Project Commands
 

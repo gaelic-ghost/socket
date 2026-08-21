@@ -71,8 +71,6 @@ root `Controllers/` directory.
   library workflow when the real issue is not AppKit app structure.
 - Do not use this skill as the primary path for Xcode execution, signing,
   target-membership, sandbox, entitlement, or test mechanics.
-- Do not absorb SwiftASB-specific runtime guidance; use the SwiftASB skills when
-  the AppKit app is specifically integrating SwiftASB.
 
 ## Single-Path Workflow
 
@@ -136,7 +134,7 @@ root `Controllers/` directory.
    - the documented Apple behavior relied on
    - any anti-pattern correction
    - one handoff when the work is really docs lookup, SwiftUI architecture,
-     execution, accessibility, or SwiftASB integration
+     execution, or accessibility
 
 ## Inputs
 
@@ -200,7 +198,7 @@ root `Controllers/` directory.
 - Do not hide controller lifetimes behind broad coordinators, managers, command
   buses, or wrappers unless a concrete ownership problem requires that surface.
 - Do not silently absorb raw Apple-docs lookup, SwiftUI architecture,
-  accessibility work, Xcode execution, or SwiftASB integration.
+  accessibility work, or Xcode execution.
 - Stop with `blocked` when the request is too vague to determine whether the
   issue is app-level, status-item-level, window-level, controller-level,
   document-level, model-level, or hosted-SwiftUI structure.
@@ -223,9 +221,6 @@ root `Controllers/` directory.
   or test diagnosis.
 - Recommend `apple-ui-accessibility-workflow` when the next honest step is
   accessibility-specific implementation or review.
-- Recommend SwiftASB skills when the AppKit question is specifically about
-  adding, diagnosing, or explaining SwiftASB integration.
-
 ## Customization
 
 Use `references/customization-flow.md`.

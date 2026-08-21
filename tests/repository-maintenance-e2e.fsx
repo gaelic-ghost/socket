@@ -26,6 +26,29 @@ let run cwd executable arguments =
 let requireSuccess description result =
     if result.ExitCode <> 0 then failwith $"{description} failed: {result.Stderr}\n{result.Stdout}"
 
+let rootRecipes = run socketRoot "just" [ "--summary" ]
+requireSuccess "Socket Just recipe discovery" rootRecipes
+let documentationRecipes =
+    rootRecipes.Stdout.Split([| ' '; '\r'; '\n' |], StringSplitOptions.RemoveEmptyEntries)
+    |> Array.filter (fun name -> name.StartsWith("docs-", StringComparison.Ordinal))
+    |> Array.sort
+if documentationRecipes <> [| "docs-apply"; "docs-check" |] then
+    let rendered = String.concat ", " documentationRecipes
+    failwith $"Expected exactly docs-apply and docs-check, found: {rendered}"
+
+let nestedTests =
+    Directory.GetFiles(socketRoot, "*", SearchOption.AllDirectories)
+    |> Array.map (fun path -> Path.GetRelativePath(socketRoot, path))
+    |> Array.filter (fun path ->
+        let parts = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+        not (parts |> Array.exists (fun part -> part = ".git" || part = ".venv" || part = ".codex"))
+        && parts.Length > 1
+        && parts[0] <> "tests"
+        && (parts |> Array.exists (fun part -> part = "test" || part = "tests")))
+if not (Array.isEmpty nestedTests) then
+    let rendered = String.concat ", " nestedTests
+    failwith $"Tests must live only at the Socket root: {rendered}"
+
 let snapshot () =
     Directory.GetFiles(testRoot, "*", SearchOption.AllDirectories)
     |> Array.filter (fun path -> not (path.Contains($"{Path.DirectorySeparatorChar}.git{Path.DirectorySeparatorChar}")))
@@ -46,6 +69,15 @@ if first.Length <> second.Length || Array.exists2 (fun (leftPath, leftBytes) (ri
     failwith "Second full documentation apply was not byte-idempotent."
 
 run testRoot "just" [ "docs-check" ] |> requireSuccess "full documentation check"
+let fixtureRecipes = run testRoot "just" [ "--summary" ]
+requireSuccess "fixture Just recipe discovery" fixtureRecipes
+let fixtureDocs =
+    fixtureRecipes.Stdout.Split([| ' '; '\r'; '\n' |], StringSplitOptions.RemoveEmptyEntries)
+    |> Array.filter (fun name -> name.StartsWith("docs-", StringComparison.Ordinal))
+    |> Array.sort
+if fixtureDocs <> [| "docs-apply"; "docs-check" |] then
+    let rendered = String.concat ", " fixtureDocs
+    failwith $"Installed repository exposed unexpected docs recipes: {rendered}"
 run testRoot "git" [ "add"; "-A" ] |> requireSuccess "stage generated repository"
 run testRoot "git" [ "-c"; "user.name=Socket Tests"; "-c"; "user.email=tests@example.invalid"; "commit"; "-qm"; "test fixture" ] |> requireSuccess "commit generated repository"
 run testRoot "just" [ "repo-validate" ] |> requireSuccess "managed repository validation"
