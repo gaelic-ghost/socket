@@ -151,33 +151,6 @@ The root [`Socket.xcworkspace`](./Socket.xcworkspace) is a browse-only workspace
 
 Do not add a generated `.xcodeproj`, root `Package.swift`, or workspace scheme only to improve documentation editing. If Socket later gains a real root build product, document that build surface separately and update the workspace guidance in [`docs/maintainers/socket-xcode-workspace.md`](./docs/maintainers/socket-xcode-workspace.md).
 
-### Repo-Local Steward
-
-The repo-local Socket Steward prototype lives at [`.agents/socket-steward/`](./.agents/socket-steward/). It is a Python `uv` project built around the OpenAI Agents SDK, with deterministic read-only audits available without API credentials and an optional agent-backed `ask` command when `OPENAI_API_KEY` is available.
-
-Use it as maintainer assistance, not as a release gate or background service:
-
-```bash
-uv run --directory .agents/socket-steward socket-steward audit docs
-uv run --directory .agents/socket-steward socket-steward audit guidance
-uv run --directory .agents/socket-steward socket-steward audit marketplace
-uv run --directory .agents/socket-steward socket-steward plan docs-sync
-uv run --directory .agents/socket-steward socket-steward propose docs-sync
-uv run --directory .agents/socket-steward socket-steward propose docs-sync --output
-uv run --directory .agents/socket-steward socket-steward prepare docs-sync --output
-uv run --directory .agents/socket-steward socket-steward apply docs-sync --confirm
-```
-
-Socket Steward proposal report writes are limited to [`docs/agents/`](./docs/agents/). Use that directory for reviewable agent-generated Markdown reports; move durable conclusions into the owning root docs, maintainer docs, child guidance, roadmap, scripts, or marketplace metadata instead of treating reports as policy. The first guarded `apply docs-sync --confirm` mode refreshes the proposal report only; it does not mutate durable docs for TODO plans yet.
-
-Validate the steward package from its own directory:
-
-```bash
-uv run --directory .agents/socket-steward pytest
-uv run --directory .agents/socket-steward ruff check .
-uv run --directory .agents/socket-steward mypy .
-```
-
 ### Marketplace Shape
 
 The repo-root marketplace lives at [`.agents/plugins/marketplace.json`](./.agents/plugins/marketplace.json). It is a catalog, not a root aggregate plugin.

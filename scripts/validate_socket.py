@@ -94,21 +94,6 @@ CHILD_CHECKS = (
         REPO_ROOT / "plugins" / "python-skills",
     ),
     Check(
-        "Socket Steward tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / ".agents" / "socket-steward",
-    ),
-    Check(
-        "Socket Steward lint",
-        ("uv", "run", "ruff", "check", "."),
-        REPO_ROOT / ".agents" / "socket-steward",
-    ),
-    Check(
-        "Socket Steward type checks",
-        ("uv", "run", "mypy", "."),
-        REPO_ROOT / ".agents" / "socket-steward",
-    ),
-    Check(
         "Cybersecurity Skills metadata",
         ("uv", "run", "scripts/validate_repo_metadata.py"),
         REPO_ROOT / "plugins" / "cybersecurity-skills",

@@ -19,7 +19,7 @@ Run it from a feature branch or worktree. Do not run standard release mode from 
 - use `--operation inspect` for one PR/check/review snapshot; it emits a continuation packet for unknown or pending remote state
 - create one host-native continuation no sooner than five minutes later, then reuse that same matching scheduler item while the gate stays pending and healthy; do not delete/recreate it after an unchanged snapshot. Codex uses heartbeat, Hermes uses an updated continuable `cronjob` with `deliver="origin"` and `attach_to_session=true`
 - on wakeup run `inspect` first, then use `--operation advance` only if the packet's branch, commit, PR, and tag identities still match
-- stop with a clear message if CI fails, changes are requested, or unresolved comments remain; an explicit CodeRabbit quota, usage, rate, or review-limit diagnostic is non-blocking because it produced no review, but all other CodeRabbit contexts and comments still block
+- stop with a clear message if any required check fails or remains pending, changes are requested, or unresolved comments remain
 - stop on requested changes or comments so the maintainer can address valid concerns, add out-of-scope concerns to `ROADMAP.md`, resolve the threads, push, and rerun the same script
 - merge the PR with a merge commit once CI is green and the comment pass is clear
 - fast-forward local `main` from `origin/main`

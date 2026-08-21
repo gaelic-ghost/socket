@@ -65,8 +65,8 @@ def contains_machine_local_path(value: object) -> bool:
     return False
 
 
-def validate_exported_skills() -> list[str]:
-    warnings: list[str] = []
+def validate_exported_skills() -> None:
+    overlong_descriptions: list[str] = []
     try:
         if not export_hermes_skills.has_exact_export():
             raise ValidationError(
@@ -91,15 +91,19 @@ def validate_exported_skills() -> list[str]:
                 f"{skill_path.relative_to(REPO_ROOT)} must define a non-empty description."
             )
         if len(description) > MAX_FRIENDLY_DESCRIPTION_LENGTH:
-            warnings.append(
+            overlong_descriptions.append(
                 f"{skill_path.relative_to(REPO_ROOT)} description is {len(description)} characters; "
-                f"Hermes discovery is clearer at {MAX_FRIENDLY_DESCRIPTION_LENGTH} or fewer."
+                f"maximum is {MAX_FRIENDLY_DESCRIPTION_LENGTH}."
             )
         if contains_machine_local_path(metadata):
             raise ValidationError(
                 f"{skill_path.relative_to(REPO_ROOT)} frontmatter contains a machine-local or parent-relative path."
             )
-    return warnings
+    if overlong_descriptions:
+        raise ValidationError(
+            "Hermes skill descriptions exceed the maximum length:\n- "
+            + "\n- ".join(overlong_descriptions)
+        )
 
 
 def validate_groupings() -> None:
@@ -250,12 +254,10 @@ def validate_mcp_translations() -> None:
 
 
 def main() -> int:
-    warnings = validate_exported_skills()
+    validate_exported_skills()
     validate_groupings()
     validate_mcp_examples()
     validate_mcp_translations()
-    for warning in warnings:
-        print(f"Warning: {warning}")
     print("Socket Hermes compatibility validation passed.")
     return 0
 

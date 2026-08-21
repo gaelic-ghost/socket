@@ -41,7 +41,7 @@ When creating or aligning `AGENTS.md`, include strict dependency guidance:
 
 ## Codex Subagent Guidance
 
-For existing repositories that need broad guidance drift discovery before edits, prefer `sync-skills-repo-guidance` and its `skills-repo-guidance-sync` custom-agent role. For Socket-wide docs, marketplace, or proposal planning, run Socket Steward first when its deterministic audits fit the question. Use this bootstrap skill for new repository structure or structural alignment after the main thread has reviewed any audit or subagent findings.
+For existing repositories that need broad guidance drift discovery before edits, prefer `sync-skills-repo-guidance` and its `skills-repo-guidance-sync` custom-agent role. Use this bootstrap skill for new repository structure or structural alignment after the main thread has reviewed any audit or subagent findings.
 
 When creating or aligning skills that can benefit from parallel support work, add optional `Codex Subagent Fit` guidance that matches OpenAI's current Codex subagent docs:
 

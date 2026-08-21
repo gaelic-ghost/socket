@@ -1,6 +1,6 @@
 ---
 name: maintain-project-api
-description: Maintain canonical API.md files through deterministic audit and bounded apply modes. Use when a project API reference needs auditing, normalization, or bounded fixes for API surface, authentication, request and response schemas, errors, versioning, compatibility, local verification, or support guidance. This is the default baseline API.md workflow for most repos unless a narrower plugin owns that repo shape.
+description: Maintain canonical API.md files with deterministic audit and bounded apply modes. Use for API surface, authentication, schemas, errors, versioning, compatibility, verification, support guidance, normalization, or targeted fixes.
 ---
 
 # Maintain Project API

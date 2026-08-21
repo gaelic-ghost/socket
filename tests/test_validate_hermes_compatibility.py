@@ -153,6 +153,54 @@ def test_main_rejects_machine_local_metadata(tmp_path: Path, monkeypatch: pytest
         validate_hermes_compatibility.validate_exported_skills()
 
 
+def test_exported_skill_description_accepts_240_characters(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo_root = make_repo(tmp_path)
+    configure_paths(repo_root, monkeypatch)
+    source = (
+        repo_root
+        / "plugins"
+        / "agent-portability-skills"
+        / "skills"
+        / "hermes-agent-compatibility"
+        / "SKILL.md"
+    )
+    source.write_text(
+        f"---\nname: hermes-agent-compatibility\ndescription: {'x' * 240}\n---\n",
+        encoding="utf-8",
+    )
+    export_hermes_skills.write_export()
+
+    validate_hermes_compatibility.validate_exported_skills()
+
+
+def test_exported_skill_description_rejects_241_characters(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo_root = make_repo(tmp_path)
+    configure_paths(repo_root, monkeypatch)
+    source = (
+        repo_root
+        / "plugins"
+        / "agent-portability-skills"
+        / "skills"
+        / "hermes-agent-compatibility"
+        / "SKILL.md"
+    )
+    source.write_text(
+        f"---\nname: hermes-agent-compatibility\ndescription: {'x' * 241}\n---\n",
+        encoding="utf-8",
+    )
+    export_hermes_skills.write_export()
+
+    with pytest.raises(
+        validate_hermes_compatibility.ValidationError,
+        match=r"skills/hermes-agent-compatibility/SKILL\.md description is 241 characters; maximum is 240",
+    ):
+        validate_hermes_compatibility.validate_exported_skills()
+
+
 def test_export_check_detects_missing_skill(tmp_path: Path) -> None:
     source_root = tmp_path / "source"
     for skill_name in export_hermes_skills.EXPORTED_SKILLS:
