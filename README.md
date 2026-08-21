@@ -184,6 +184,9 @@ Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its 
 
 Current Socket catalog shape:
 
+- `agent-plugin-skills`: fixed-policy Codex plugin creation and repository-wide
+  plugin maintenance through managed FSX assets and exactly
+  `just plugins-check` and `just plugins-apply`
 - `agent-portability-skills`: cross-host protocol selection, ACP operation/development, Zed native/external/terminal workflows, Hermes operator/developer/gateway/Nous Research guidance, and source-bundled maintainer roles for Socket-owned skill portability and host adapter audits
 - `agent-engineering-skills`: portable coordinator/worker, external-agent, scheduling, and worktree/thread orchestration guidance; it also owns agent automation, eval, and n8n workflow design
 - `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance

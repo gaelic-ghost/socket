@@ -40,9 +40,7 @@
     "defaultPrompt": [
       "Choose the right Android project shape before we start implementing.",
       "Inspect this Android repository and decide which Gradle, AGP, module, and variant surfaces own the change.",
-      "Build this Kotlin Android UI or platform change while respecting existing Compose or XML conventions.",
-      "Maintain this Java Android or Kotlin/Java interop boundary without forcing a migration.",
-      "Run and explain the Android tests, lint checks, or release-readiness workflow for this project."
+      "Build this Kotlin Android UI or platform change while respecting existing Compose or XML conventions."
     ],
     "brandColor": "#3DDC84",
     "composerIcon": "./assets/android-dev-icon.svg",

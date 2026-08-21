@@ -713,24 +713,14 @@ Run commands strictly serially and from the owning repository root.
 
 Planning slice:
 
-```bash
+```text
 just repo-validate
-just repo-validate
+just test
 ```
 
-Implementation slices add, as applicable:
-
-```bash
-cd plugins/apple-dev-skills && uv run pytest
-cd plugins/reverse-engineering-skills && uv run scripts/validate_repo_metadata.py
-cd plugins/cybersecurity-skills && uv run scripts/validate_repo_metadata.py
-just repo-validate
-```
-
-Also run the repository's current Hermes, Claude/Cowork, architecture, and
-release-ready validation gates before a publish or release request. Preserve
-full-suite execution for the final integrated slice while using targeted tests
-between coherent commits.
+Also run the repository's current compatibility and release-ready validation
+gates before a publish or release request. Preserve the root integration/E2E
+execution for the final integrated slice between coherent commits.
 
 ## Branch And Commit Plan
 

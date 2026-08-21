@@ -45,9 +45,7 @@
     "defaultPrompt": [
       "Choose the right network transport for this feature before implementation.",
       "Plan an HTTP/3 or QUIC change and identify the stack-specific implementation handoff.",
-      "Assess whether Media over QUIC fits this real-time media workflow and what draft state must be checked.",
-      "Plan or diagnose a WebRTC feature, including signaling, ICE, DTLS, SRTP, data channels, TURN, and browser/runtime constraints.",
-      "Diagnose this protocol, proxy, CDN, browser, UDP, TLS, ALPN, Alt-Svc, or NAT traversal failure with concrete evidence."
+      "Assess whether Media over QUIC fits this real-time media workflow and what draft state must be checked."
     ],
     "brandColor": "#22D3EE",
     "composerIcon": "./assets/network-protocol-icon.svg",

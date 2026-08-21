@@ -57,7 +57,7 @@ Deprecated compatibility skills that remain on disk do not count as part of the 
 Use this flow when validating the current top-level export surface and local discovery mirrors instead of checking a nested packaged plugin tree.
 
 1. From the Socket root, run `just repo-validate`.
-2. Run `uv run python -B -m pytest plugins/apple-dev-skills/tests -o cache_dir=.codex/.cache/pytest`.
+2. Run `just test` from the Socket root.
 3. Confirm `.agents/skills` still points at `../skills`.
 4. Confirm root docs, skill docs, and the roadmap all describe top-level `skills/` as the active export surface and do not mention a nested packaged plugin tree or removed installer workflows.
 5. If discovery or docs drift remains, update the docs to match the tested top-level export surface instead of preserving stale packaging language.

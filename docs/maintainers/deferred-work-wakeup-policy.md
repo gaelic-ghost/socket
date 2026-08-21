@@ -68,5 +68,4 @@ Run these serially after changing this policy or its exported guidance:
 just repo-sync
 just repo-validate
 just test
-uv run pytest plugins/repository-skills/skills/maintain-project-repo/tests/test_maintain_project_repo_workflow.py
 ```

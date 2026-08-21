@@ -155,9 +155,9 @@ matching import contract.
 
 Validation:
 
-```bash
+```text
 just repo-validate
-uv run pytest
+just test
 ```
 
 ### Slice 2: Official Import Smoke Fixtures

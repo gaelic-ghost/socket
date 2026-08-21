@@ -38,18 +38,9 @@
     ],
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/python-skills",
     "defaultPrompt": [
-      "Bootstrap a new uv FastAPI service with typed settings and a committed .env baseline.",
       "Choose the right Python project shape before we start implementing.",
-      "Build this Python project while respecting its uv, package layout, tests, Ruff, and mypy conventions.",
-      "Diagnose why this Python uv, import, pytest, Ruff, mypy, FastAPI, FastMCP, or package command failed.",
-      "Validate this Python package surface without publishing it.",
-      "Align this Python repo's uv, Ruff, mypy, pytest, dependency-group, and validation workflow.",
-      "Align this Python repo's CI with local uv validation commands.",
-      "Plan this Python dependency, framework, lockfile, or tooling upgrade with staged validation.",
-      "Set up, run, or diagnose pytest for this uv workspace with explicit package targeting.",
-      "Maintain this FastAPI service's routes, typed settings, lifespan, OpenAPI contract, and tests.",
-      "Maintain this FastMCP server's curated tools, resources, prompts, transport, authorization, and client tests.",
-      "Add a FastMCP surface to an existing FastAPI project and choose the right combined-app pattern."
+      "Build this existing Python project while respecting its uv, package layout, tests, Ruff, and mypy conventions.",
+      "Diagnose this existing Python project's uv, import, pytest, Ruff, mypy, or package failure."
     ],
     "brandColor": "#0F766E",
     "composerIcon": "./assets/python-snake-icon.png",

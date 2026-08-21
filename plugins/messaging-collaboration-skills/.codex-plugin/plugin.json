@@ -21,11 +21,13 @@
     "defaultPrompt": [
       "Choose the correct chat, calling, or collaboration platform integration before implementation.",
       "Plan a secure, idempotent webhook and event lifecycle for this messaging app.",
-      "Build a Discord, Telegram, Slack, Teams, WhatsApp Business, or SMS/MMS/RCS integration with the platform-specific policy boundary explicit.",
-      "Choose the right Apple path for an iMessage collaboration feature, Communication Notification or Notification Service Extension, Push to Talk channel, VoIP/SIP calling app, documented iOS/iPadOS default role, or app-owned macOS client."
+      "Build a Discord, Telegram, Slack, Teams, WhatsApp Business, or SMS/MMS/RCS integration with the platform-specific policy bounda…"
     ],
     "brandColor": "#D946EF",
     "composerIcon": "./assets/messaging-collaboration-icon.svg",
     "logo": "./assets/messaging-collaboration-icon.svg"
-  }
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/gaelic-ghost/messaging-collaboration-skills",
+  "repository": "https://github.com/gaelic-ghost/messaging-collaboration-skills"
 }

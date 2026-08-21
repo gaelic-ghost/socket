@@ -2,6 +2,7 @@
 
 open System
 open System.IO
+open System.Text.Json
 
 let repositoryRoot = Path.GetFullPath(Path.Combine(__SOURCE_DIRECTORY__, "..", "..", ".."))
 let pluginsRoot = Path.Combine(repositoryRoot, "plugins")
@@ -32,12 +33,20 @@ let replaceTree (source: string) (target: string) =
         if not (Directory.Exists(target)) && Directory.Exists(backup) then Directory.Move(backup, target)
         raise error
 
-let exportedSkills =
+let existingNames =
     Directory.GetDirectories(Path.Combine(repositoryRoot, "skills"))
     |> Array.filter (fun directory -> File.Exists(Path.Combine(directory, "SKILL.md")))
-    |> Array.sort
-for target in exportedSkills do
-    let skillName = Path.GetFileName(target)
+    |> Array.map Path.GetFileName
+
+let declaredNames =
+    use document = JsonDocument.Parse(File.ReadAllText(Path.Combine(repositoryRoot, "skills.sh.json")))
+    document.RootElement.GetProperty("groupings").EnumerateArray()
+    |> Seq.collect (fun grouping -> grouping.GetProperty("skills").EnumerateArray() |> Seq.map (fun skill -> skill.GetString()))
+    |> Seq.toArray
+
+let exportedNames = Array.append existingNames declaredNames |> Array.distinct |> Array.sort
+for skillName in exportedNames do
+    let target = Path.Combine(repositoryRoot, "skills", skillName)
     let source =
         let candidates = Directory.GetDirectories(pluginsRoot) |> Array.map (fun plugin -> Path.Combine(plugin, "skills", skillName)) |> Array.filter Directory.Exists
         match candidates with
@@ -52,4 +61,4 @@ replaceTree
     (Path.Combine(pluginsRoot, "repository-skills", "shared", "project-docs"))
     (Path.Combine(repositoryRoot, "shared", "project-docs"))
 
-printfn "Synchronized %d managed root skill exports and the shared documentation runtime." exportedSkills.Length
+printfn "Synchronized %d managed root skill exports and the shared documentation runtime." exportedNames.Length

@@ -40,7 +40,7 @@
     "websiteURL": "https://github.com/gaelic-ghost/socket/tree/main/plugins/cloud-inference-skills",
     "defaultPrompt": [
       "Choose the right cloud GPU inference or training path for this model and budget.",
-      "Route this Runpod, Hugging Face, AWS, Vast.ai, or CoreWeave inference task through the safest available official tool, MCP server, CLI, or Socket guidance.",
+      "Route this Runpod, Hugging Face, AWS, Vast.ai, or CoreWeave inference task through the safest available official tool, MCP serv…",
       "Help me decide between quick managed inference, cheap flexible GPU infrastructure, and providers I already know."
     ],
     "brandColor": "#D946EF",

@@ -15,3 +15,7 @@ test:
 # BEGIN managed repo-maintenance
 import 'scripts/repo-maintenance/repo-maintenance.just'
 # END managed repo-maintenance
+
+# BEGIN managed agent-plugins
+import 'scripts/agent-plugins/agent-plugins.just'
+# END managed agent-plugins

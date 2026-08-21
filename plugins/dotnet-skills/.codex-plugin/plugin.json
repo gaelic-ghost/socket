@@ -37,15 +37,7 @@
     "defaultPrompt": [
       "Choose the right .NET project shape before we start implementing.",
       "Bootstrap a .NET solution while treating F# and C# as equal options.",
-      "Build this F# project idiomatically instead of translating from C#.",
-      "Build this C# project idiomatically while respecting existing repo conventions.",
-      "Run and explain the .NET testing workflow for this solution.",
-      "Validate this .NET package surface without publishing it.",
-      "Diagnose why this .NET restore, build, test, or pack command failed.",
-      "Design the F# and C# boundary in this mixed .NET solution.",
-      "Choose the right F# web framework before building this ASP.NET Core application.",
-      "Build this Giraffe, Falco, or Oxpecker app idiomatically and test its endpoint contract.",
-      "Align this .NET repo's CI, upgrade, formatting, and analyzer workflow."
+      "Build this F# project idiomatically instead of translating from C#."
     ],
     "brandColor": "#512BD4",
     "composerIcon": "./assets/sharp-icon.jpg",

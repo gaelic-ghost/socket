@@ -1,0 +1,37 @@
+{
+  "name": "agent-plugin-skills",
+  "version": "10.0.2",
+  "description": "Create and maintain deterministic agent plugin repositories with managed FSX automation and aggregate Just commands.",
+  "author": {
+    "name": "Gale",
+    "email": "mail@galewilliams.com",
+    "url": "https://github.com/gaelic-ghost"
+  },
+  "homepage": "https://github.com/gaelic-ghost/agent-plugin-skills",
+  "repository": "https://github.com/gaelic-ghost/agent-plugin-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "plugins",
+    "skills",
+    "maintainer",
+    "fsx",
+    "just"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Plugin Skills",
+    "shortDescription": "Create and maintain deterministic agent plugins.",
+    "longDescription": "Fixed-policy workflows for creating and maintaining agent plugin repositories with managed F# scripts, aggregate Just commands, canonical manifests, marketplace wiring, and repository-skills integration.",
+    "developerName": "Gale",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gaelic-ghost/agent-plugin-skills",
+    "defaultPrompt": [
+      "Create or align an agent plugin with managed FSX automation."
+    ]
+  }
+}

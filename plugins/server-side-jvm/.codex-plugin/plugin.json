@@ -40,9 +40,7 @@
     "defaultPrompt": [
       "Choose the right server-side JVM project shape before we start implementing.",
       "Inspect this JVM repository and decide whether Gradle, Maven, or SBT owns the build workflow.",
-      "Build this Java service change idiomatically while respecting existing repo conventions.",
-      "Build this Scala service change with functional design treated as first-class.",
-      "Run and explain the JVM testing workflow for this service."
+      "Build this Java service change idiomatically while respecting existing repo conventions."
     ],
     "brandColor": "#7C3AED",
     "composerIcon": "./assets/java-coffee-cup-icon.png",

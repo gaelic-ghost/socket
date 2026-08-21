@@ -321,8 +321,7 @@ Validation:
 
 ```bash
 just repo-validate
-just repo-validate
-uv run pytest
+just test
 ```
 
 ### Slice 3: Localization And Device Hub
@@ -336,8 +335,7 @@ Validation:
 
 ```bash
 just repo-validate
-just repo-validate
-uv run pytest
+just test
 ```
 
 ### Slice 4: Beta Docs Triage And Framework Updates
@@ -350,8 +348,7 @@ Validation:
 
 ```bash
 just repo-validate
-just repo-validate
-uv run pytest
+just test
 ```
 
 ### Slice 5: Xcode Plug-In Research
