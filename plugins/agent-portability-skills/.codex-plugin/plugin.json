@@ -1,6 +1,6 @@
 {
   "name": "agent-portability-skills",
-  "version": "10.0.1",
+  "version": "10.0.2",
   "description": "Skills for agent portability, ACP, A2A, Zed, Hermes, Codex plugin surfaces, and host adapter guidance.",
   "author": {
     "name": "Gale",
