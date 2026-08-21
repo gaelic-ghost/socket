@@ -26,7 +26,7 @@
 - [Milestone 23: Cloud Inference Skills plugin](#milestone-23-cloud-inference-skills-plugin)
 - [Milestone 24: Apple system integration, runtime evidence, and distribution workflows](#milestone-24-apple-system-integration-runtime-evidence-and-distribution-workflows)
 - [Milestone 25: Apple Creator Studio operator workflows](#milestone-25-apple-creator-studio-operator-workflows)
-- [Milestone 26: Messaging collaboration skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
+- [Milestone 26: Messaging Collaboration Skills plugin](#milestone-26-messaging-collaboration-skills-plugin)
 - [Milestone 27: Cybersecurity skills plugin](#milestone-27-cybersecurity-skills-plugin)
 - [Milestone 28: Swift language tooling expansion](#milestone-28-swift-language-tooling-expansion)
 - [Milestone 29: Model Lab skills plugin](#milestone-29-model-lab-skills-plugin)
@@ -60,28 +60,28 @@
 - Milestone 9: Rust skills plugin - Completed
 - Milestone 10: Expo inline native modules workflow - Completed
 - Milestone 11: AgentDeck plugin - In Progress
-- Milestone 12: Xcode 27 agentic tooling workflows - In Progress
+- Milestone 12: Xcode 27 agentic tooling workflows - Completed
 - Milestone 13: Reverse Engineering skills plugin - Completed
 - Milestone 14: Core AI and Foundation Models workflow ownership - Completed
 - Milestone 15: Android Dev Skills plugin - Completed
 - Milestone 16: Server-Side JVM skills plugin - In Progress
 - Milestone 17: Cross-agent skill and plugin portability - In Progress
 - Milestone 18: Swift Lang shared language plugin - Completed
-- Milestone 19: Project audit skills plugin - Planned
+- Milestone 19: Project audit skills plugin - In Progress
 - Milestone 20: Game Dev Skills plugin - Completed
 - Milestone 21: Cloud Deployment Skills plugin - Completed
 - Milestone 22: Network Protocol Skills plugin - Completed
 - Milestone 23: Cloud Inference Skills plugin - Completed
 - Milestone 24: Apple system integration, runtime evidence, and distribution workflows - Completed
 - Milestone 25: Apple Creator Studio operator workflows - Planned
-- Milestone 26: Messaging collaboration skills plugin - Completed
+- Milestone 26: Messaging Collaboration Skills plugin - Completed
 - Milestone 27: Cybersecurity skills plugin - Completed
 - Milestone 28: Swift language tooling expansion - In Progress
 - Milestone 29: Model Lab skills plugin - Completed
 - Milestone 30: macOS virtualization and container skills expansion - Completed
 - Milestone 31: macOS platform security skills expansion - Completed
 - Milestone 32: tvOS app experience and media playback workflows - Completed
-- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - Completed
+- Milestone 33: Unified Swift workspace and CI-owned cloud deployment - In Progress
 
 ## Milestone 5: SwiftASB skills plugin
 
@@ -295,7 +295,7 @@ Decision note: the root marketplace entry is installable now that `web-dev-skill
 
 ### Status
 
-Implementation Complete; Release Pending
+In Progress
 
 ### Scope
 
@@ -532,7 +532,7 @@ In Progress
 
 ### Status
 
-In progress
+In Progress
 
 ### Scope
 
@@ -623,7 +623,7 @@ Implemented Milestone 18 by adding the `swift-lang` child plugin with shared Swi
 
 ### Status
 
-Release candidate
+In Progress
 
 ### Scope
 
@@ -934,6 +934,17 @@ In Progress
 - [x] Keep the expansion as portable instruction skills without bundling a compiler, SourceKit service, language server, MCP server, or native host plugin.
 - [ ] Add the second-wave API-surface workflow after the first-wave routing and fixtures establish a stable base.
 
+### Tickets
+
+
+
+### Exit Criteria
+
+- [x] An agent selects syntax, compiler, semantics, index, or LSP by required information rather than tool name alone.
+- [x] Every first-wave workflow reports whether Swiftly or Xcode owns each selected binary and refuses mixed-toolchain proof.
+- [x] Codex, Claude, Cowork, and Hermes compatibility surfaces agree on the portable first-wave skill inventory.
+- [ ] The second-wave workflow can compare public API and ABI artifacts with explicit version and toolchain evidence.
+
 ### First Wave
 
 - [x] Add `swift-lang:choose-swift-language-tooling` for information-model, project-model, and toolchain routing.
@@ -950,13 +961,6 @@ In Progress
 - [ ] Route DocC authoring to Apple Dev while retaining language-level symbol-graph and public-API analysis in `swift-lang`.
 - [ ] Update Swift Lang metadata, Hermes export, Claude marketplace description, and root documentation when the second-wave skill ships.
 
-### Exit Criteria
-
-- [x] An agent selects syntax, compiler, semantics, index, or LSP by required information rather than tool name alone.
-- [x] Every first-wave workflow reports whether Swiftly or Xcode owns each selected binary and refuses mixed-toolchain proof.
-- [x] Codex, Claude, Cowork, and Hermes compatibility surfaces agree on the portable first-wave skill inventory.
-- [ ] The second-wave workflow can compare public API and ABI artifacts with explicit version and toolchain evidence.
-
 ## Milestone 29: Model Lab skills plugin
 
 ### Status
@@ -970,6 +974,19 @@ Completed
 - [x] Keep model behavior and experiment design separate from GPU/provider operations, agent-harness evaluation, host portability, app implementation, and real-system security testing.
 - [x] Treat the experiment manifest as the durable primitive connecting immutable model source, dataset provenance, recipe or intervention, checkpoint, evaluation suite, runtime evidence, and artifact decision.
 - [x] Include a first-class Apple model-runtime lane that compares Foundation Models, Core AI, Core ML, direct MLX, ExecuTorch Core ML, and the experimental ExecuTorch MLX delegate without duplicating Apple-owned Core AI skills.
+
+### Tickets
+
+
+
+### Exit Criteria
+
+- [x] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
+- [x] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
+- [x] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
+- [x] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
+- [x] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
+- [x] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
 
 ### First Slice
 
@@ -1004,15 +1021,6 @@ Completed
 - [x] Forward-test the training, evaluation, Apple runtime, ablation, and jailbreak workflows against isolated representative tasks before treating their contracts as stable.
 - [x] Wire `model-lab-skills` into the Socket marketplace only after useful skill content exists, then update root README, contributor docs, plugin metadata, and root validation together.
 
-### Exit Criteria
-
-- [x] Socket exposes one coherent model-research plugin rather than overlapping training, evaluation, MLX, Core ML, and Core AI plugins.
-- [x] The first skills preserve source-model, dataset, recipe, checkpoint, evaluation, runtime, and artifact provenance end to end.
-- [x] Cloud inference, agent evaluation, host portability, Apple app integration, Python implementation, and real-system security testing retain explicit owner handoffs.
-- [x] Apple runtime selection distinguishes stable, beta, experimental, and exploratory surfaces and reuses Apple-owned skills rather than copying them.
-- [x] Refusal ablation and jailbreak workflows measure ordinary behavior, regressions, and uncertainty in addition to bypass outcomes.
-- [x] Root docs, marketplace wiring, Codex/Hermes/Claude compatibility, plugin metadata, and validation agree on the shipped inventory.
-
 ## Milestone 30: macOS virtualization and container skills expansion
 
 ### Status
@@ -1028,14 +1036,9 @@ Completed
 - [x] Add a Cybersecurity lab-preparation workflow that turns an isolation decision into verified mount, clipboard, credential, device, network, baseline, evidence-export, revert, and teardown controls.
 - [x] Keep the expansion guidance-only: no VM images, restore images, kernels, malware samples, privileged helpers, daemons, guest agents, MCP servers, remote credentials, or automatic third-party tool installation.
 
-### Planned Slices
+### Tickets
 
-- [x] Phase 1: add `apple-dev-skills:choose-macos-virtualization-shape` and `apple-dev-skills:virtualization-framework-workflow`, then align Cybersecurity isolation handoffs.
-- [x] Phase 2: update `server-side-swift:apple-containerization-workflow` for `container` 1.x and add `apple-dev-skills:linux-development-vm-workflow`.
-- [x] Phase 3: add `apple-dev-skills:macos-development-vm-workflow` with restore-image, VM-bundle, identity, clean-baseline, and reset guidance.
-- [x] Phase 4: add `cybersecurity-skills:prepare-isolated-analysis-lab` and align dynamic-analysis and macOS-investigation workflows around its lab record.
-- [x] Forward-test the ten planned stable guidance paths through scenario contract tests before adding any tool-specific adapter skill; treat Lima, Colima, Tart, UTM, VMware Fusion, Parallels Desktop, OrbStack, and similar products as discovered adapters until repeated tasks justify a dedicated surface.
-- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh user-facing inventory text, and run affected child plus root validation with each shipped phase.
+
 
 ### Exit Criteria
 
@@ -1047,6 +1050,15 @@ Completed
 - [x] Socket's skill metadata, portability exports, compatibility records, documentation, and validation agree on the shipped virtualization inventory.
 
 Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a disposable Cybersecurity lab-preparation workflow, Apple `container` 1.x and `container machine` guidance, guest-versus-host evidence rules, Hermes exports, Claude and Cowork compatibility metadata, and ten scenario-level forward tests. The rebased `9.19.0` release candidate preserves the concurrent Model Lab inventory and passed 268 Apple Dev tests, 126 Socket tests with one intentional skip, Apple and Cybersecurity child validators, Socket marketplace validation, Hermes parity, and Claude/Cowork validation.
+
+### Planned Slices
+
+- [x] Phase 1: add `apple-dev-skills:choose-macos-virtualization-shape` and `apple-dev-skills:virtualization-framework-workflow`, then align Cybersecurity isolation handoffs.
+- [x] Phase 2: update `server-side-swift:apple-containerization-workflow` for `container` 1.x and add `apple-dev-skills:linux-development-vm-workflow`.
+- [x] Phase 3: add `apple-dev-skills:macos-development-vm-workflow` with restore-image, VM-bundle, identity, clean-baseline, and reset guidance.
+- [x] Phase 4: add `cybersecurity-skills:prepare-isolated-analysis-lab` and align dynamic-analysis and macOS-investigation workflows around its lab record.
+- [x] Forward-test the ten planned stable guidance paths through scenario contract tests before adding any tool-specific adapter skill; treat Lima, Colima, Tart, UTM, VMware Fusion, Parallels Desktop, OrbStack, and similar products as discovered adapters until repeated tasks justify a dedicated surface.
+- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh user-facing inventory text, and run affected child plus root validation with each shipped phase.
 
 ## Milestone 31: macOS platform security skills expansion
 
@@ -1062,13 +1074,9 @@ Completed
 - [x] Align existing Cybersecurity macOS workflows around explicit developer, research, threat-assessment, and isolation handoffs without moving defensive ownership.
 - [x] Keep the first implementation instruction-only: no TCC database mutation, permission grant service, privileged helper, daemon, endpoint agent, MCP server, protection bypass, or live-host prompt automation.
 
-### Planned Slices
+### Tickets
 
-- [x] Slice 1: ship `apple-dev-skills:macos-privacy-permissions-workflow` with responsible-code attribution, public API, prompt/settings, reset-only, PPPC, and disposable-fixture contracts.
-- [x] Slice 2: ship `apple-dev-skills:macos-sandbox-file-access-workflow` and `apple-dev-skills:diagnose-apple-entitlements`, then align provisioning, distribution, extension, File Provider, and Xcode handoffs.
-- [x] Slice 3: ship `reverse-engineering-skills:research-macos-security-control`, connect exact-build research and technical notes to existing artifact/signing/dynamic-analysis workflows, and align Cybersecurity handoffs.
-- [x] Slice 4: forward-test the complete scenario matrix, remediate trigger and handoff gaps, update discovery metadata and user-facing inventory, export portable skills through Hermes, record Claude/Cowork compatibility, and run full affected validation.
-- [x] Reconsider a standalone `macos-security-skills` plugin or shared read-only diagnostic collector only after repeated implementation use satisfies the explicit gate in the maintainer plan; retain the focused existing owners for this release.
+
 
 ### Exit Criteria
 
@@ -1080,6 +1088,14 @@ Completed
 - [x] Apple Dev, Reverse Engineering, Cybersecurity, Socket, Hermes, and Claude/Cowork discovery and validation surfaces agree on the shipped owner boundaries.
 
 Completed Milestone 31 by shipping four focused, instruction-only macOS platform-security workflows across Apple Dev and Reverse Engineering Skills, aligning defensive Cybersecurity handoffs, preserving visible prompt and protection-state approval gates, exporting the portable skill set through Hermes, and recording Claude Code/Cowork compatibility without introducing a permission manager, privileged service, or duplicate plugin.
+
+### Planned Slices
+
+- [x] Slice 1: ship `apple-dev-skills:macos-privacy-permissions-workflow` with responsible-code attribution, public API, prompt/settings, reset-only, PPPC, and disposable-fixture contracts.
+- [x] Slice 2: ship `apple-dev-skills:macos-sandbox-file-access-workflow` and `apple-dev-skills:diagnose-apple-entitlements`, then align provisioning, distribution, extension, File Provider, and Xcode handoffs.
+- [x] Slice 3: ship `reverse-engineering-skills:research-macos-security-control`, connect exact-build research and technical notes to existing artifact/signing/dynamic-analysis workflows, and align Cybersecurity handoffs.
+- [x] Slice 4: forward-test the complete scenario matrix, remediate trigger and handoff gaps, update discovery metadata and user-facing inventory, export portable skills through Hermes, record Claude/Cowork compatibility, and run full affected validation.
+- [x] Reconsider a standalone `macos-security-skills` plugin or shared read-only diagnostic collector only after repeated implementation use satisfies the explicit gate in the maintainer plan; retain the focused existing owners for this release.
 
 ## Milestone 32: tvOS app experience and media playback workflows
 
@@ -1095,6 +1111,10 @@ Completed
 - [x] Preserve SwiftUI architecture, general accessibility, general AVFoundation, Core Media timing, AVFAudio, Xcode execution/testing, Model Lab runtime selection, and Apple-owned Core AI implementation ownership through clear handoffs.
 - [x] Keep tvOS 27 claims beta-qualified and recheck them at release candidate/GM; do not claim direct Core AI or Foundation Models inference support for tvOS without an official platform contract.
 - [x] Deliver the two backward-compatible skills in Socket v9.23.0, with Apple Dev metadata, portability exports, compatibility records, child/root validation, release evidence, and branch accounting.
+
+### Tickets
+
+
 
 ### Exit Criteria
 

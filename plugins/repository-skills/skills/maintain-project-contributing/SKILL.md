@@ -1,91 +1,59 @@
 ---
 name: maintain-project-contributing
-description: Maintain canonical CONTRIBUTING.md files with deterministic audit and bounded apply modes. Use for contributor workflow, local setup, development expectations, review handoff, communication guidance, normalization, or targeted fixes.
+description: Maintain CONTRIBUTING.md as the contributor-facing member of the canonical four-document repository suite.
 ---
 
 # Maintain Project Contributing
 
-Maintain canonical `CONTRIBUTING.md` files through one deterministic contribution-guide workflow.
+## Purpose
 
-This skill is the default baseline path for `CONTRIBUTING.md` maintenance across most repositories. Reach for a narrower plugin only when the target repo has a specialized shape that deserves its own maintainer contract, such as a skills-export or plugin-export repository.
+Keep `CONTRIBUTING.md` focused on human contributor setup, workflow,
+verification, review, communication, and contribution terms while all four
+canonical repository documents move together.
 
-## Inputs
+## Commands
 
-- Required: `--project-root <path>`
-- Required: `--run-mode <check-only|apply>`
-- Optional: `--contributing-path <path>`
-- Optional: `--config <path>`
+The only documentation commands are:
 
-## Workflow
+```text
+just docs-check
+just docs-apply
+```
 
-1. Validate the project root and resolve the target `CONTRIBUTING.md`.
-2. Load the canonical contributing-guide schema from `config/contributing-customization.template.yaml`, then merge any explicit override or project-local customization file.
-3. In `check-only`, audit the required section schema, required subsection schema, required table of contents, placeholder content, and verification-command formatting.
-4. In `apply`, keep edits bounded to the target `CONTRIBUTING.md` while creating a missing file from the bundled template and normalizing the document to the canonical structure.
-5. Re-run the same audit to confirm post-fix status.
+Both always process README, CONTRIBUTING, AGENTS, and ROADMAP. There are no
+per-file recipes and no supported direct script commands.
 
-## Canonical Base Contract
+## Managed Contract
 
-The source of truth for the base contributing-guide contract lives in:
+- `assets/document.contract.json` fixes the canonical structure and aliases.
+- `assets/CONTRIBUTING.template.md` supplies deterministic bootstrap content.
+- Repositories cannot customize headings, order, aliases, or fix policy.
+- Healthy existing prose and allowed additional sections remain preserved.
 
-- `config/contributing-customization.template.yaml`
-- `assets/CONTRIBUTING.template.md`
+## CONTRIBUTING Ownership
 
-The base contract requires:
+CONTRIBUTING owns who the guide serves, prerequisites, choosing work, making
+changes, asking for review, runtime setup, development expectations, pull
+request expectations, communication, and contribution terms. Product overview
+belongs in README, durable agent policy in AGENTS, and planning in ROADMAP.
 
-- a top-level title and short summary
-- a required `## Table of Contents`
-- canonical top-level sections for overview, workflow, setup, development expectations, PR expectations, communication, and contribution terms
-- required subsection structure for `Overview`, `Contribution Workflow`, `Local Setup`, and `Development Expectations`
+Placeholder checks ignore fenced examples, including generic DCO sign-off
+examples. They apply only to prose that matches managed scaffold language.
 
-## Writing Expectations
+## Deterministic Workflow
 
-- Keep the whole CONTRIBUTING guide near 300 lines or less by default. Treat 350 lines as a soft ceiling that should trigger consolidation into shorter sections or links to maintainer docs.
-- Keep most top-level sections near 45 lines or less and most subsections near 25 lines or less. Prefer one clear rule plus a link to canonical detail over repeated process narration.
-- `Overview > Who This Guide Is For` should stay short and plainly explain who this guide serves.
-- `Overview > Before You Start` should call out the most important prerequisites before someone begins work.
-- `Contribution Workflow` should describe how contributors choose work, make changes, and ask for review without drifting into repo history or product overview prose.
-- `Local Setup > Runtime Config` should be explicit about config files, env vars, secrets, and local services.
-- `Local Setup > Runtime Behavior` should explain what needs to be running locally and how contributors can tell the project is actually working.
-- `Development Expectations > Accessibility Expectations` should keep the contributor contract short, point contributors back to `ACCESSIBILITY.md`, and make accessibility part of normal change quality for relevant work.
-- `Development Expectations > Verification` should prefer fenced code blocks with language info strings when commands help contributors validate changes.
-- `Communication` should stay practical and concise, focused on how contributors surface uncertainty or larger-scope questions.
-- Keep CONTRIBUTING, README, AGENTS, and ACCESSIBILITY responsibilities distinct. Contributor workflow lives here; product overview belongs in `README.md`; durable agent rules belong in `AGENTS.md`; detailed accessibility standards belong in `ACCESSIBILITY.md`.
-
-## Codex Subagent Fit
-
-When delegation is explicitly requested or authorized, follow `agent-engineering-skills:orchestrate-agent-work`. This skill is a good fit for read-heavy contribution-guide discovery before the main workflow edits or reports: checking setup commands, comparing PR expectations against repo policy, reading workflow docs, or verifying contributor-facing tool requirements.
-
-Keep `apply` edits in the main thread because this skill owns one target `CONTRIBUTING.md` file and needs one coherent contributor contract. Ask workers for concise evidence and file references, not replacement guide prose.
-
-## Output Contract
-
-- Return Markdown plus JSON with:
-  - `run_context`
-  - `schema_contract`
-  - `schema_violations`
-  - `command_integrity_issues`
-  - `content_quality_issues`
-  - `fixes_applied`
-  - `post_fix_status`
-  - `errors`
-- If there are no issues and no errors, output exactly `No findings.`
+Use `just docs-check` for a no-write audit and `just docs-apply` for the atomic
+four-document normalization transaction. Apply must be byte-idempotent.
 
 ## Guardrails
 
-- Never auto-commit, auto-push, or open a PR.
-- Never invent commands, setup steps, environment variables, branch rules, review policies, or contribution terms that are not grounded in the repo.
-- Never edit files other than the target `CONTRIBUTING.md`.
-- Keep `CONTRIBUTING.md` as the canonical contribution-guide filename for this skill.
-- Treat this skill as a hard-enforced base template. Downstream plugins may specialize the schema, but the base skill should not do repo-profile inference.
+- Never maintain CONTRIBUTING separately from the full document suite.
+- Never invent environment variables, services, commands, branch policy,
+  review policy, or legal terms.
+- Never expose project-local schema customization.
+- Never commit, push, or open a pull request as part of documentation upkeep.
 
 ## References
 
-- `agents/openai.yaml`
-- `references/section-schema.md`
-- `references/output-contract.md`
-- `references/fix-policies.md`
-- `references/style-rules.md`
-- `references/contributing-customization.md`
-- `references/contributing-config-schema.md`
-- `references/project-contributing-maintenance-automation-prompts.md`
+- `assets/document.contract.json`
+- `assets/CONTRIBUTING.template.md`

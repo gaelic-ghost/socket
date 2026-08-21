@@ -1,106 +1,55 @@
 ---
 name: maintain-project-agents
-description: Maintain project-local AGENTS.md files with deterministic audit and bounded apply modes. Use for durable repository guidance, grounded commands, review expectations, safety boundaries, normalization, or targeted fixes.
+description: Maintain AGENTS.md as the agent-policy member of the canonical four-document repository suite.
 ---
 
 # Maintain Project Agents
 
-Maintain project-local `AGENTS.md` files through one deterministic AGENTS workflow.
+## Purpose
 
-This skill is the default baseline path for `AGENTS.md` maintenance across most repositories. Reach for a narrower plugin only when the target repo has a specialized shape that deserves its own maintainer contract, such as a skills-export or plugin-export repository.
+Keep project-local `AGENTS.md` compact, durable, grounded, and specific while
+README, CONTRIBUTING, AGENTS, and ROADMAP are maintained together.
 
-## Inputs
+## Commands
 
-- Required: `--project-root <path>`
-- Required: `--run-mode <check-only|apply>`
-- Optional: `--agents-path <path>`
-- Optional: `--config <path>`
+The complete documentation command surface is:
 
-## Workflow
+```text
+just docs-check
+just docs-apply
+```
 
-1. Validate the project root and resolve the target `AGENTS.md`.
-2. Load the canonical AGENTS schema from `config/agents-customization.template.yaml`, then merge any explicit override or project-local customization file.
-3. In `check-only`, audit the required AGENTS sections, required subsection structure, command formatting, workflow routing guidance, and safety boundaries.
-4. In `apply`, keep edits bounded to the target `AGENTS.md` while creating a missing file from the bundled template and normalizing the document to the canonical structure.
-5. Re-run the same audit to confirm post-fix status.
+Both commands process all four documents. Do not create per-file recipes or
+document direct `.fsx` entrypoints.
 
-## Canonical Base Contract
+## Managed Contract
 
-The source of truth for the base AGENTS contract lives in:
+- `assets/document.contract.json` fixes structure, ordering, and aliases.
+- `assets/AGENTS.template.md` supplies deterministic bootstrap scaffolding.
+- No project-local structural customization is supported.
+- Existing grounded policy and allowed additional sections are preserved.
 
-- `config/agents-customization.template.yaml`
-- `assets/AGENTS.template.md`
+## AGENTS Ownership
 
-The base contract requires:
+AGENTS owns repository scope, source-of-truth routing, change boundaries,
+commands, review and delivery rules, safety boundaries, and local overrides.
+Product prose belongs in README, contributor workflow in CONTRIBUTING, and
+planning in ROADMAP.
 
-- a top-level title and short preamble
-- canonical top-level sections for repo scope, working rules, commands, review and delivery, safety boundaries, and local overrides
-- required subsection structure for those sections where specific guidance needs to be easy to scan and maintain
+## Deterministic Workflow
 
-## Writing Expectations
-
-- Keep the file compact, practical, and repo-specific.
-- Keep the whole AGENTS file near 250 lines or less by default. Treat 300 lines as a soft ceiling that should trigger consolidation, trimming, or moving non-agent material to README, CONTRIBUTING, ROADMAP, or maintainer docs.
-- Keep most top-level sections near 40 lines or less and most subsections near 20 lines or less. Prefer durable rules, routing, and commands over long explanations or historical context.
-- `Repository Scope > Where To Look First` should route Codex toward the few highest-value files or directories, not try to summarize the whole repo.
-- `Commands` should prefer fenced code blocks with language info strings for setup and validation commands.
-- `Review and Delivery` should explain what good handoff looks like and what “done” means in this repo, including grounded verification and nearby updates when they matter.
-- `Safety Boundaries` should stay concrete, high-signal, and easy to scan.
-- `Local Overrides` should briefly explain whether more specific AGENTS files or fallback instruction files exist below this root, and make clear that closer guidance refines this root file later in the instruction chain.
-- Keep AGENTS focused on durable agent-facing rules. Product explanation belongs in `README.md`; contributor workflow belongs in `CONTRIBUTING.md`; milestone, backlog, and small-ticket planning belong in `ROADMAP.md`; detailed architecture or release procedures belong in linked maintainer docs when they would bloat this file.
-
-## Alignment With Official Codex Guidance
-
-The base contract is shaped to match the official Codex `AGENTS.md` guidance:
-
-- keep repo-local guidance small and practical
-- encode durable repo rules, commands, review expectations, and constraints
-- add routing guidance when Codex reads too broadly
-- update `AGENTS.md` when repeated mistakes or recurring review feedback reveal missing guidance
-- acknowledge that more specific nested instruction files can refine the root guidance
-
-## Codex Subagent Fit
-
-When delegation is explicitly requested or authorized, follow `agent-engineering-skills:orchestrate-agent-work`. This skill is a good fit for bounded read-heavy checks before the main workflow edits or reports: auditing command accuracy, comparing repo instructions against nearby docs, checking safety boundaries, or reading nested guidance files in separate directories.
-
-Keep `apply` edits in the main thread because this skill owns one target `AGENTS.md` file and needs one coherent policy voice. If a target `AGENTS.md` mentions subagents, make the wording match OpenAI's current Codex rule: subagents need an explicit trigger, are best for bounded parallel discovery, tests, triage, and summarization, and may be called for by narrower plugin guidance that tells the agent to ask and receive permission before delegation.
-
-## Codex Hooks Fit
-
-When a target `AGENTS.md` mentions OpenAI Codex Hooks, keep the wording narrow and operational. Hooks are lifecycle scripts loaded from `hooks.json` or inline `[hooks]` config; they are enabled by default and can be disabled with `features.hooks = false`. Project-local hooks load only from trusted `.codex/` layers.
-
-Use hooks guidance in `AGENTS.md` only when the repo actually owns hook behavior or wants to warn contributors about repo-local Codex runtime checks. Name the event, matcher, script location, and user-visible effect. Do not present hooks as a replacement for `AGENTS.md`, approval policy, tests, or ordinary validation commands.
-
-## Output Contract
-
-- Return Markdown plus JSON with:
-  - `run_context`
-  - `schema_contract`
-  - `schema_violations`
-  - `workflow_drift_issues`
-  - `validation_drift_issues`
-  - `boundary_and_safety_issues`
-  - `fixes_applied`
-  - `post_fix_status`
-  - `errors`
-- If there are no issues and no errors, output exactly `No findings.`
+Use `just docs-check` for the full no-write audit and `just docs-apply` for the
+atomic four-document apply. The coordinator validates every proposed document
+before it writes any of them and rolls back completed replacements on failure.
 
 ## Guardrails
 
-- Never auto-commit, auto-push, or open a PR.
-- Never invent commands, toolchains, packaging surfaces, or project policy that are not grounded in the repo.
-- Never edit files other than the target `AGENTS.md`.
-- Preserve intentional repo-specific policy when it is already coherent and grounded.
-- Treat `AGENTS.md` as maintainer and agent guidance, not as public README content.
-- Treat this skill as a hard-enforced base template. Downstream plugins may specialize the schema, but the base skill should not do repo-profile inference.
+- Never maintain AGENTS separately from the full document suite.
+- Never invent commands, toolchains, packaging surfaces, or policy.
+- Never add structural customization or alternate document modes.
+- Never commit, push, or open a pull request as part of documentation upkeep.
 
 ## References
 
-- `agents/openai.yaml`
-- `references/section-schema.md`
-- `references/output-contract.md`
-- `references/fix-policies.md`
-- `references/style-rules.md`
-- `references/agents-customization.md`
-- `references/agents-config-schema.md`
-- `references/project-agents-maintenance-automation-prompts.md`
+- `assets/document.contract.json`
+- `assets/AGENTS.template.md`

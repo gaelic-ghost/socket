@@ -1,96 +1,62 @@
 ---
 name: maintain-project-readme
-description: Maintain README.md files against a canonical base schema with deterministic check-only and bounded apply modes. Use when a repository needs baseline structure, normalization, or targeted fixes without weakening downstream customization.
+description: Maintain README.md as the product-facing member of the canonical four-document repository suite.
 ---
 
 # Maintain Project README
 
-Maintain `README.md` files through one deterministic base-template workflow.
+## Purpose
 
-This skill is the primary layer for README maintenance. It defines the canonical shared README contract that downstream language-, framework-, stack-, or repository-specific customization can adapt through explicit extension, instead of ad hoc structure drift.
+Keep `README.md` product-focused while the repository's README, CONTRIBUTING,
+AGENTS, and ROADMAP documents are checked or applied as one deterministic unit.
 
-## Inputs
+## Commands
 
-- Required: `--project-root <path>`
-- Required: `--run-mode <check-only|apply>`
-- Optional: `--readme-path <path>`
-- Optional: `--config <path>`
+There are exactly two documentation commands:
 
-## Workflow
+```text
+just docs-check
+just docs-apply
+```
 
-1. Validate the project root and resolve the target `README.md`.
-2. Load the canonical README schema from the built-in template config, then merge any explicit customization override.
-3. In `check-only`, audit title and summary requirements, top-level section names and order, required subsection names, the required table of contents, and placeholder-style content.
-4. In `apply`, keep edits bounded to the target `README.md` while normalizing the README into the configured canonical structure.
-5. Preserve preamble material such as badges, callouts, screenshots, and extra intro prose before the first H2 while normalizing the structural contract around it.
-6. When bootstrapping a missing `README.md`, ask the user for text for `Overview > Status`, `Overview > What This Project Is`, and `Overview > Motivation` before writing those subsections.
-7. Use the bundled README template when bootstrapping a missing `README.md` or when a downstream workflow needs a canonical starter document; if the user has not provided text for any Overview subsection, leave that subsection body exactly `TBD`.
-8. Re-run the same audit to confirm post-fix status.
-9. For skills, plugin, or hybrid repositories, keep the same hard-enforced schema while grounding install, discovery, packaging, and maintainer wording in the real repo surface instead of inventing ordinary-app sections that are not actually shipped.
+Both commands always process all four canonical documents in this order:
+README, CONTRIBUTING, AGENTS, ROADMAP. Never expose or recommend a per-file
+documentation command or direct `.fsx` invocation.
 
-## Writing Expectations
+## Managed Contract
 
-- `README.md` is product-focused: write it for end users, evaluators, integrators, and their agents who need to understand what the project is, whether it fits, how to try it, and where the shipped surface lives.
-- Contributor, maintainer, release, validation, branch, review, and local development procedures belong in `CONTRIBUTING.md` or a linked maintainer document. In `README.md`, keep only the shortest useful pointer to that contributor path.
-- Keep the whole README near 250 lines or less by default. Treat 300 lines as a soft ceiling that should trigger consolidation unless the user explicitly wants a long-form README.
-- Keep most generated or agent-edited top-level sections near 40 lines or less. Split or hoist content only when it clarifies ownership; otherwise trim repetition and link to the canonical owner.
-- The user-authored `Overview` subsections may be longer when the user supplies that text. Do not shorten `Overview > Status`, `Overview > What This Project Is`, or `Overview > Motivation` unless the user explicitly asks.
-- `Overview > Status`, `Overview > What This Project Is`, and `Overview > Motivation` must be written by the user in the user's own words, never by the agent.
-- If one of those Overview subsections already contains text, leave that text intact and untouched unless the user explicitly provides replacement text for that exact subsection.
-- If one of those Overview subsections is empty or missing, set the subsection body to exactly `TBD`; for new README files, ask the user for text to place there before falling back to `TBD`.
-- `Quick Start` should stay human-focused, short, concise, and end-user friendly, or explicitly say the project is still too early for a real quick start and direct curious readers to `Development`.
-- `Usage` should stay human-focused, concise, and informative. Prefer fenced code blocks with info strings when examples help.
-- `Development` should stay short and reader-oriented. Prefer a direct link to `CONTRIBUTING.md` for setup, workflow, validation, review, and maintainer commands instead of duplicating those procedures in the README.
-- `Repo Structure` should be a small directory tree or outline diagram, not a prose section.
-- Keep README, CONTRIBUTING, ROADMAP, and AGENTS responsibilities distinct. Product summary and end-user fit belong here; contribution workflow belongs in `CONTRIBUTING.md`; backlog and small-ticket planning belong in `ROADMAP.md` by default; agent-facing maintainer rules belong in `AGENTS.md`.
+- `assets/document.contract.json` is the fixed structural contract.
+- `assets/README.template.md` is the bootstrap and missing-content asset.
+- The contract is versioned with the skill and is not project-customizable.
+- Existing prose and allowed additional sections are preserved; canonical
+  headings, aliases, ordering, and fix policy cannot be overridden.
 
-## Codex Subagent Fit
+## README Ownership
 
-When delegation is explicitly requested or authorized, follow `agent-engineering-skills:orchestrate-agent-work`. This skill is a good fit for read-heavy README discovery before the main workflow edits or reports: checking source docs, inventorying commands, inspecting sibling package metadata, or comparing README claims against one upstream source per worker.
+README owns product identity, current status, quick start, usage, repository
+shape, release-note discovery, and license discovery. Contributor workflow,
+agent policy, release procedure, and roadmap tickets belong to their canonical
+owners and should be linked rather than duplicated.
 
-Keep `apply` edits in the main thread because this skill has one target file and a hard-enforced schema. Ask subagents to return concise evidence and file references, not replacement README prose.
+Preserve existing user-authored Overview prose. Missing Overview content uses
+the exact managed `TBD` scaffold and is reported without inventing claims.
 
-## Canonical Base Contract
+## Deterministic Workflow
 
-The authoritative default shared README structure lives in:
-
-- `config/readme-customization.template.yaml`
-- `assets/README.template.md`
-
-Treat those two files as the source of truth for the canonical base schema and the canonical bootstrap document. Downstream plugins may extend that structure through preamble and appendices, but this base skill treats the required table of contents plus the configured section block as hard-enforced.
-
-## Output Contract
-
-- Return Markdown plus JSON with:
-  - `run_context`
-  - `customization_state`
-  - `schema_contract`
-  - `schema_violations`
-  - `content_quality_issues`
-  - `fixes_applied`
-  - `post_fix_status`
-  - `errors`
-- If there are no issues and no errors, output exactly `No findings.`
+1. Run `just docs-check` for a no-write four-document audit.
+2. Run `just docs-apply` when structural normalization is requested.
+3. The coordinator plans all four outputs before writing any file.
+4. Apply uses atomic replacements and rolls back completed writes on failure.
+5. A second apply must be byte-identical and produce no change.
 
 ## Guardrails
 
-- Never auto-commit, auto-push, or open a PR.
-- Never invent commands, setup steps, or product claims that are not grounded in the repo.
-- Never edit files other than the target `README.md`.
-- Never move contributor or maintainer procedures into `README.md` when `CONTRIBUTING.md` or a maintainer doc is the correct owner.
-- Keep the README schema hard-enforced against the configured contract instead of inferring structure from repo profile heuristics.
-- Do not relax the configured schema just because the repository is a plugin, skills, or hybrid repo. Use explicit extension via preamble or appendices when the repo genuinely needs an additional structure or section.
+- Never edit or check README in isolation from the full document suite.
+- Never invent product claims, commands, guarantees, or support promises.
+- Never add project-local schema or fix-policy customization.
+- Never commit, push, or open a pull request as part of documentation upkeep.
 
 ## References
 
-- `agents/openai.yaml`
-- `config/readme-customization.template.yaml`
+- `assets/document.contract.json`
 - `assets/README.template.md`
-- `references/section-schema.md`
-- `references/readme-customization.md`
-- `references/readme-config-schema.md`
-- `references/output-contract.md`
-- `references/fix-policies.md`
-- `references/style-rules.md`
-- `references/verification-checklist.md`
-- `references/project-readme-maintenance-automation-prompts.md`

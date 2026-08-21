@@ -11,11 +11,11 @@ Promo audio: [Socket Codex Marketplace Promo](./docs/media/socket-codex-marketpl
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Usage](#usage)
-- [Plugin Status](#plugin-status)
 - [Development](#development)
 - [Repo Structure](#repo-structure)
 - [Release Notes](#release-notes)
 - [License](#license)
+- [Plugin Status](#plugin-status)
 
 ## Overview
 
@@ -146,6 +146,39 @@ Currently available from the catalog:
 - `swiftasb-skills`
 - `web-dev-skills`
 
+## Development
+
+For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For the consolidated child backlog, see [ROADMAP.md](./ROADMAP.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
+
+For Xcode 27 beta Markdown editing and repository browsing, open [`Socket.xcworkspace`](./Socket.xcworkspace). It is a browse-only workspace for docs, plugin payloads, scripts, and marketplace metadata; it is not a root build surface.
+
+## Repo Structure
+
+```text
+.
+├── .agents/
+│   └── plugins/marketplace.json
+├── docs/
+│   ├── agents/
+│   ├── media/
+│   └── maintainers/
+├── plugins/
+├── scripts/
+├── AGENTS.md
+├── CONTRIBUTING.md
+├── README.md
+├── Socket.xcworkspace
+└── ROADMAP.md
+```
+
+## Release Notes
+
+Use GitHub releases and Git history for root `socket` changes. Child plugins may carry their own release notes and maintainer docs.
+
+## License
+
+The `socket` superproject, and all nested projects, are licensed under the Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
+
 ## Plugin Status
 
 Apple Dev Skills is Socket-owned under `plugins/apple-dev-skills` and keeps its public README because existing users can still arrive through the standalone compatibility marketplace. Other child planning now lives in [ROADMAP.md](./ROADMAP.md).
@@ -181,36 +214,3 @@ Current Socket catalog shape:
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance
 - `web-dev-skills`: Expo SDK 56+ inline native modules, type generation, native-boundary inspection, and validation handoff guidance
-
-## Development
-
-For setup, local workflow, validation, review, release, and maintainer expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md). For the consolidated child backlog, see [ROADMAP.md](./ROADMAP.md). For agent-facing repo rules, see [AGENTS.md](./AGENTS.md).
-
-For Xcode 27 beta Markdown editing and repository browsing, open [`Socket.xcworkspace`](./Socket.xcworkspace). It is a browse-only workspace for docs, plugin payloads, scripts, and marketplace metadata; it is not a root build surface.
-
-## Repo Structure
-
-```text
-.
-├── .agents/
-│   └── plugins/marketplace.json
-├── docs/
-│   ├── agents/
-│   ├── media/
-│   └── maintainers/
-├── plugins/
-├── scripts/
-├── AGENTS.md
-├── CONTRIBUTING.md
-├── README.md
-├── Socket.xcworkspace
-└── ROADMAP.md
-```
-
-## Release Notes
-
-Use GitHub releases and Git history for root `socket` changes. Child plugins may carry their own release notes and maintainer docs.
-
-## License
-
-The `socket` superproject, and all nested projects, are licensed under the Apache License 2.0. See [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
