@@ -75,18 +75,11 @@ Guide ARKit face and body tracking while keeping TrueDepth geometry, body skelet
 - Recommend `xcode-testing-workflow` for transform, coefficient, skeleton, session-generation, and device test plans.
 - Recommend `explore-apple-swift-docs` for current ARKit or Local Authentication research.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/face-geometry-blend-shapes-and-authentication-boundary.md`
 - `references/body-skeleton-scale-rendering-and-diagnostics.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-spatial-data-privacy-contract.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

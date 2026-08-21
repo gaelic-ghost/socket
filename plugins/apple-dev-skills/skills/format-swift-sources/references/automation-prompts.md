@@ -53,7 +53,7 @@ Execution requirements:
 1) Check `references/integration-matrix.md` before proposing steps.
 2) Use only the documented tool-specific surface guidance from `references/swiftformat-surfaces.md`, `references/swiftlint-surfaces.md`, and `references/swiftformat-xcode-config-export.md`.
 3) If the request is for SwiftFormat for Xcode settings export, prefer the host app export path unless the script path is explicitly needed.
-4) If the request is for the scriptable export path, use `scripts/export_swiftformat_xcode_config.py`, prefer `--input-plist` when the suite-domain export is incomplete, and call out that the generated file should be reviewed before commit.
+4) If the request is for the scriptable export path, use `scripts/export-swiftformat-xcode-config.fsx`, prefer `--input-plist` when the suite-domain export is incomplete, and call out that the generated file should be reviewed before commit.
 5) Stop and return `blocked` if the requested tool and surface combination is unsupported.
 
 Return the documented contract only:

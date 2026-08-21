@@ -4,7 +4,7 @@ open System
 open System.IO
 
 let repositoryRoot = Path.GetFullPath(Path.Combine(__SOURCE_DIRECTORY__, "..", "..", ".."))
-let pluginRoot = Path.Combine(repositoryRoot, "plugins", "repository-skills")
+let pluginsRoot = Path.Combine(repositoryRoot, "plugins")
 
 let copyTree (source: string) (target: string) =
     if not (Directory.Exists(source)) then failwith $"Repository-skills source is missing: {source}"
@@ -32,20 +32,24 @@ let replaceTree (source: string) (target: string) =
         if not (Directory.Exists(target)) && Directory.Exists(backup) then Directory.Move(backup, target)
         raise error
 
-let skillNames =
-    [ "maintain-project-readme"
-      "maintain-project-contributing"
-      "maintain-project-agents"
-      "maintain-project-roadmap"
-      "maintain-project-repo" ]
-
-for skillName in skillNames do
-    replaceTree
-        (Path.Combine(pluginRoot, "skills", skillName))
-        (Path.Combine(repositoryRoot, "skills", skillName))
+let exportedSkills =
+    Directory.GetDirectories(Path.Combine(repositoryRoot, "skills"))
+    |> Array.filter (fun directory -> File.Exists(Path.Combine(directory, "SKILL.md")))
+    |> Array.sort
+for target in exportedSkills do
+    let skillName = Path.GetFileName(target)
+    let source =
+        let candidates = Directory.GetDirectories(pluginsRoot) |> Array.map (fun plugin -> Path.Combine(plugin, "skills", skillName)) |> Array.filter Directory.Exists
+        match candidates with
+        | [| only |] -> only
+        | [||] -> failwith $"Root skill export has no owning plugin source: {skillName}"
+        | many ->
+            let rendered = String.concat ", " many
+            failwith $"Root skill export has ambiguous owners: {skillName} ({rendered})"
+    replaceTree source target
 
 replaceTree
-    (Path.Combine(pluginRoot, "shared", "project-docs"))
+    (Path.Combine(pluginsRoot, "repository-skills", "shared", "project-docs"))
     (Path.Combine(repositoryRoot, "shared", "project-docs"))
 
-printfn "Synchronized %d repository skills and the shared documentation runtime." skillNames.Length
+printfn "Synchronized %d managed root skill exports and the shared documentation runtime." exportedSkills.Length

@@ -59,10 +59,6 @@ Identify the protected operation, responsible executable, and current public aut
 - Use `research-macos-security-control` for private TCC symbols, database schemas, daemon behavior, or exact-build implementation research.
 - Use Cybersecurity Skills for suspicious prompts, unexplained grants, Gatekeeper/XProtect alerts, or host compromise questions.
 
-## Customization
-
-Use `references/customization-flow.md`. The workflow has no runtime knobs; permission behavior must remain tied to the recorded identity, OS build, public API, and user or managed decision.
-
 ## References
 
 - `references/permission-class-matrix.md`

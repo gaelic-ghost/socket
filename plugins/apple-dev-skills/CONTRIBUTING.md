@@ -40,17 +40,17 @@ Ask for review after the changed docs, validator expectations, and relevant test
 
 ### Runtime Config
 
-Sync the local maintainer environment with:
+Inspect the root managed commands with:
 
 ```bash
-uv sync --dev
+just --list
 ```
 
 This repository does not require app secrets or background services for its normal docs and skill-validation workflow.
 
 ### Runtime Behavior
 
-The repository is healthy when the docs validator passes, the pytest suite passes, and the root docs describe the same shipped surface as the active skill directories. Use [`docs/maintainers/reality-audit.md`](./docs/maintainers/reality-audit.md) when you need the repo's source-of-truth order or audit procedure.
+The repository is healthy when root validation and the single root E2E test pass, and the root docs describe the same shipped surface as the active skill directories. Use [`docs/maintainers/reality-audit.md`](./docs/maintainers/reality-audit.md) when you need the repo's source-of-truth order or audit procedure.
 
 ## Development Expectations
 
@@ -60,19 +60,18 @@ Keep skill names literal and workflow-oriented. Preserve the existing Apple-spec
 
 ### Accessibility Expectations
 
-This repository does not currently maintain a separate root `ACCESSIBILITY.md`. When you change Apple accessibility guidance here, keep it grounded in current Apple documentation, update the relevant skill docs and tests in the same pass, and avoid presenting generic visual-design advice as if it were accessibility guidance.
+When you change Apple accessibility guidance, keep it grounded in current Apple documentation, update the owning skill in the same pass, and avoid presenting generic visual-design advice as if it were accessibility guidance.
 
 ### Verification
 
-Use the grounded repo checks:
+Run only the root integration gates:
 
 ```bash
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
-uv run python -B -m pytest plugins/apple-dev-skills/tests \
-  -o cache_dir=.codex/.cache/pytest
+just repo-validate
+just test
 ```
 
-Run additional targeted checks only when the changed surface has a narrower validation path worth calling out.
+Do not add nested or unit tests for this plugin.
 
 ## Pull Request Expectations
 

@@ -8,7 +8,7 @@ Dash exposes a localhost API server when integration is enabled.
 - The file contains JSON with a `port` key.
 - Build `base_url` as `http://127.0.0.1:{port}`.
 
-Use `scripts/dash_api_probe.py` to produce:
+Use `scripts/run-workflow.fsx` to produce:
 
 ```json
 {

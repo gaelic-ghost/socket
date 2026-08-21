@@ -7,7 +7,7 @@ description: Guide Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mech
 
 ## Purpose
 
-Use this skill as the primary execution workflow for test-focused work in or around Xcode-managed projects and workspaces. Keep it focused on Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mechanics, code coverage, `.xctestplan`, destinations, launch arguments, interruption handling, attachments, accessibility-verification follow-through, Instruments profiling, `xctrace` trace capture, filters, retries, diagnostics, and test-specific Debug/Release validation instead of broad build/run or toolchain work. `scripts/run_workflow.py` is the runtime entrypoint for MCP-first test execution, official CLI fallback planning, and the remaining `.pbxproj` warning boundary when mutation enters project-file territory.
+Use this skill as the primary execution workflow for test-focused work in or around Xcode-managed projects and workspaces. Keep it focused on Swift Testing, XCTest, XCUITest, XCUIAutomation-oriented mechanics, code coverage, `.xctestplan`, destinations, launch arguments, interruption handling, attachments, accessibility-verification follow-through, Instruments profiling, `xctrace` trace capture, filters, retries, diagnostics, and test-specific Debug/Release validation instead of broad build/run or toolchain work. `scripts/run-workflow.fsx` is the runtime entrypoint for MCP-first test execution, official CLI fallback planning, and the remaining `.pbxproj` warning boundary when mutation enters project-file territory.
 
 ## When To Use
 
@@ -39,7 +39,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
-4. Run `scripts/run_workflow.py` to apply runtime configuration, `.pbxproj` warning safeguards, and CLI fallback planning.
+4. Run `scripts/run-workflow.fsx` to apply runtime configuration, `.pbxproj` warning safeguards, and CLI fallback planning.
 5. Use the focused references for the right testing surface:
    - `references/code-coverage.md` for Xcode coverage collection, `.xcresult` artifacts, `xccov` reporting, comparison, and the Xcode 27 MCP boundary
    - `references/xctestplan-configurations-and-matrix.md` for `.xctestplan`, launch-argument matrices, named configurations, and Debug/Release test coverage
@@ -50,7 +50,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
    - `references/instruments-performance-profiling.md` for Instruments, `xctrace`, Time Profiler, Metal System Trace, Allocations, VM Tracker, Points of Interest, and signpost-aligned trace evidence
    - `references/testing-plans-file-membership-and-configurations.md` for the condensed cross-cutting summary and file-membership reminder
 6. Use `references/xcodegen-project-maintenance.md` when the repo is XcodeGen-backed and the task touches generated test targets, scheme test actions, test-plan references, launch arguments, environment variables, or test bundle membership.
-7. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
+7. If MCP fails, use the structured fallback output from `scripts/run-workflow.fsx` together with `references/cli-fallback-matrix.md`.
 8. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, any tracked `.pbxproj` diff that must be staged and committed with the branch, and any required next step.
 
 ## Inputs
@@ -63,7 +63,7 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - `direct_pbxproj_edit`: optional flag when the requested mutation would directly edit a `.pbxproj` file.
 - `direct_pbxproj_edit_opt_in`: optional explicit opt-in after the user has been warned about direct `.pbxproj` edit risks.
 - Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
+  - runtime entrypoint: executable `scripts/run-workflow.fsx`
   - the runtime may infer `operation_type` from `--request` text when the request wording is clear enough
   - agent-side MCP retries once for transient failures
   - direct edits are allowed by default when they do not directly edit `.pbxproj`
@@ -105,14 +105,12 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 - Recommend `format-swift-sources` directly when the task becomes SwiftLint or SwiftFormat setup, config export, or style-tooling maintenance work.
 - Recommend `structure-swift-sources` directly when the task becomes structural source cleanup work.
 - Recommend `bootstrap-xcode-workspace --operation align` directly when the repo needs Xcode-specific guidance alignment rather than execution.
-- `scripts/run_workflow.py` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
+- `scripts/run-workflow.fsx` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
 - When maintaining this repository itself, refresh repo-guidance consumers after substantial Xcode-testing-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` reads customization state for the remaining user-facing execution knobs.
+- `scripts/run-workflow.fsx` enforces the fixed MCP-first execution policy.
 - MCP tool execution itself remains agent-side and is not performed by the local runtime entrypoint or by the skill as a direct runtime.
 
 ## References
@@ -137,7 +135,6 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 ### Contract References
 
 - `references/mcp-failure-handoff.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -153,6 +150,5 @@ Use this skill as the primary execution workflow for test-focused work in or aro
 
 ### Script Inventory
 
-- `scripts/run_workflow.py`
-- `scripts/detect_xcode_managed_scope.sh`
-- `scripts/customization_config.py`
+- `scripts/run-workflow.fsx`
+- `scripts/detect-xcode-managed-scope.fsx`

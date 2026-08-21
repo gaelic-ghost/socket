@@ -49,13 +49,8 @@ Make performance work evidence-led: inspect the smallest relevant SwiftUI data-f
 - Recommend `swift-package-testing-workflow` for package-first signposts and profiling workloads.
 - Recommend `swiftui-app-architecture-workflow` or `swiftui-component-audit-workflow` only when the evidence shows a real component-ownership issue.
 
-## Customization
-
-Use `references/customization-flow.md`. The workflow has no knobs that can weaken the distinction between a code suspicion and trace-backed performance evidence.
-
 ## References
 
 - `references/code-smells-and-remediation.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the app needs reusable Xcode-project policy alongside profiling work.
 - [Understanding and improving SwiftUI performance](https://developer.apple.com/documentation/xcode/understanding-and-improving-swiftui-performance) documents SwiftUI performance analysis in Xcode.

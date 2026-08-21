@@ -243,7 +243,7 @@ Completed
 
 - [x] Maintainers have a verified, reality-based local discovery and top-level export story for this repo, with docs and tooling updated to match what the repository actually ships.
 
-Completed Milestone 27 by keeping the top-level `skills/` export story, local discovery symlinks, maintainer docs, and repo validator aligned with the live shipped surface, and by confirming that `bash .github/scripts/validate_repo_docs.sh` plus `uv run pytest` cover the intended self-compliance checks.
+Completed Milestone 27 by keeping the top-level `skills/` export story, local discovery symlinks, maintainer docs, and root integration validation aligned with the live shipped surface.
 
 ## Milestone 28: Use `Agent Portability Skills` plugin selectively for plugin and export-surface alignment
 

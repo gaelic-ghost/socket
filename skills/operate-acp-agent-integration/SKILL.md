@@ -20,7 +20,7 @@ for the current connection and failure map.
    Check the capabilities negotiated by the actual pair; do not infer wire
    compatibility from SDK package versions or implement a draft RFD as stable.
 3. Check the canonical ACP Registry with
-   `scripts/check_acp_registry.py <agent-id>`.
+   the managed ACP registry checker.
 4. If the agent is missing, use its official local executable only when the
    client supports custom agents. Keep registry absence distinct from missing
    ACP support.

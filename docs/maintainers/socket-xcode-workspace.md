@@ -18,7 +18,7 @@ The workspace references the root maintainer files plus the main authored
 source directories:
 
 - root docs such as `README.md`, `CONTRIBUTING.md`, and `ROADMAP.md`,
-  `AGENTS.md`, and `ACCESSIBILITY.md`
+  and `AGENTS.md`
 - the root marketplace file at `.agents/plugins/marketplace.json`
 - `docs/`
 - `plugins/`

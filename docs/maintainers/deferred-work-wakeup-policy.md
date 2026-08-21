@@ -65,8 +65,8 @@ separate completion states.
 Run these serially after changing this policy or its exported guidance:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-uv run scripts/validate_hermes_compatibility.py
-uv run scripts/export_hermes_skills.py --check
+just repo-sync
+just repo-validate
+just test
 uv run pytest plugins/repository-skills/skills/maintain-project-repo/tests/test_maintain_project_repo_workflow.py
 ```

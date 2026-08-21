@@ -52,12 +52,7 @@ Use the macOS Tips HelpViewer catalog as a read-only discovery surface for insta
 - Recommend `explore-apple-swift-docs` for Apple framework APIs, Xcode-local documentation, Dash, or official documentation-source routing.
 - Recommend the owning app, Xcode, device, test, or Creator Studio workflow when the user needs to act on a project or system state rather than read guidance.
 
-## Customization
-
-Use `references/customization-flow.md`. The first version has no runtime-enforced knobs; `scripts/customization_config.py` preserves the shared Apple Dev Skills customization contract.
-
 ## References
 
 - `references/catalog-and-fallback-contract.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when an Apple app repository needs its reusable project-policy baseline alongside a local documentation lookup.

@@ -7,7 +7,7 @@ description: Guide build, run, preview-adjacent, workspace-inspection, diagnosti
 
 ## Purpose
 
-Use this skill as the primary execution workflow for non-testing work in or around Xcode-managed projects and workspaces. Keep it focused on workspace inspection, read/search diagnostics, builds, runs, previews, toolchain management, file membership, Release-versus-Debug validation, and the `.pbxproj` warning boundary. `scripts/run_workflow.py` is the runtime entrypoint for MCP-first build/run execution, official CLI fallback planning, and direct `.pbxproj` warning enforcement.
+Use this skill as the primary execution workflow for non-testing work in or around Xcode-managed projects and workspaces. Keep it focused on workspace inspection, read/search diagnostics, builds, runs, previews, toolchain management, file membership, Release-versus-Debug validation, and the `.pbxproj` warning boundary. `scripts/run-workflow.fsx` is the runtime entrypoint for MCP-first build/run execution, official CLI fallback planning, and direct `.pbxproj` warning enforcement.
 
 ## When To Use
 
@@ -41,11 +41,11 @@ Use this skill as the primary execution workflow for non-testing work in or arou
    - apply the detailed local policy in `references/snippets/apple-xcode-project-core.md`
    - preserve its simplicity-first, shape-preserving, and anti-ceremony Swift guidance
    - preserve its project-appropriate logging, telemetry, and SwiftUI architecture guidance
-4. Run `scripts/run_workflow.py` to apply runtime configuration, `.pbxproj` warning safeguards, and CLI fallback planning.
+4. Run `scripts/run-workflow.fsx` to apply runtime configuration, `.pbxproj` warning safeguards, and CLI fallback planning.
 5. Use the guidance in `references/mcp-tool-matrix.md` for agent-executed MCP operations.
 6. Use `references/xcodegen-project-maintenance.md` when the repo is XcodeGen-backed and the task touches generated targets, schemes, build settings, packages, file membership, resource membership, or generation options.
 7. Use `references/testing-plans-file-membership-and-configurations.md` when the task touches file membership after filesystem edits or Debug/Release validation.
-8. If MCP fails, use the structured fallback output from `scripts/run_workflow.py` together with `references/cli-fallback-matrix.md`.
+8. If MCP fails, use the structured fallback output from `scripts/run-workflow.fsx` together with `references/cli-fallback-matrix.md`.
 9. Report which parts were agent-executed, which parts were locally enforced by script, the Apple docs relied on, any tracked `.pbxproj` diff that must be staged and committed with the branch, and any required next step.
 
 ## Inputs
@@ -58,7 +58,7 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - `direct_pbxproj_edit`: optional flag when the requested mutation would directly edit a `.pbxproj` file.
 - `direct_pbxproj_edit_opt_in`: optional explicit opt-in after the user has been warned about direct `.pbxproj` edit risks.
 - Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
+  - runtime entrypoint: executable `scripts/run-workflow.fsx`
   - the runtime may infer `operation_type` from `--request` text when the request wording is clear enough
   - agent-side MCP retries once for transient failures
   - direct edits are allowed by default when they do not directly edit `.pbxproj`
@@ -101,14 +101,12 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 - Recommend `structure-swift-sources` directly when the task becomes structural source cleanup work.
 - Recommend `bootstrap-xcode-workspace --operation create --component-kind library` directly when the task becomes new-package scaffolding.
 - Recommend `bootstrap-xcode-workspace --operation align` directly when the repo needs Xcode-specific guidance alignment rather than execution.
-- `scripts/run_workflow.py` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
+- `scripts/run-workflow.fsx` plans fallback commands; MCP execution itself remains agent-side tool usage guided by this skill.
 - When maintaining this repository itself, refresh repo-guidance consumers after substantial Xcode-policy changes and keep the top-level export-surface docs aligned. Do not tell users to rely on repo-local installer workflows; this repository does not ship them.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` reads customization state for the remaining user-facing execution knobs.
+- `scripts/run-workflow.fsx` enforces the fixed MCP-first execution policy.
 - MCP tool execution itself remains agent-side and is not performed by the local runtime entrypoint or by the skill as a direct runtime.
 
 ## References
@@ -127,7 +125,6 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 ### Contract References
 
 - `references/mcp-failure-handoff.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -143,6 +140,5 @@ Use this skill as the primary execution workflow for non-testing work in or arou
 
 ### Script Inventory
 
-- `scripts/run_workflow.py`
-- `scripts/detect_xcode_managed_scope.sh`
-- `scripts/customization_config.py`
+- `scripts/run-workflow.fsx`
+- `scripts/detect-xcode-managed-scope.fsx`

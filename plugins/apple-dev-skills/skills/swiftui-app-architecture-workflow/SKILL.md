@@ -157,11 +157,7 @@ Extract a custom `ViewModifier` when a view accumulates more than eight chained 
 - Recommend `xcode-testing-workflow` when the next honest step is test execution or test diagnosis.
 - Recommend `apple-ui-accessibility-workflow` when the next honest step is accessibility-specific implementation or review.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on the decision model and the documented boundary. If future iterations add a real deterministic need for runtime knobs, document them explicitly before letting runtime behavior depend on them.
 
@@ -176,7 +172,6 @@ Keep the first release focused on the decision model and the documented boundary
 - `references/environment-and-preferences.md`
 - `references/architecture-decision-rules.md`
 - `references/anti-patterns-and-corrections.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -184,5 +179,3 @@ Keep the first release focused on the decision model and the documented boundary
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable repo policy rather than a one-off architecture recommendation.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

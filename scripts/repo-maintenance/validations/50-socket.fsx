@@ -57,13 +57,15 @@ let nestedTests =
         not (parts |> Array.exists (fun part -> part = ".git" || part = ".venv" || part = ".codex"))
         && parts.Length > 1
         && parts[0] <> "tests"
-        && (parts |> Array.exists (fun part -> part = "test" || part = "tests")))
+        && (parts |> Array.exists (fun part -> part = "test" || part = "tests" || part = "evals")))
 if not (Array.isEmpty nestedTests) then fail $"Tests must live only at Socket root; found {relative nestedTests[0]}."
 
-let repositorySkillRoot = Path.Combine(root, "plugins", "repository-skills")
-let legacyRepositoryScripts =
-    Directory.GetFiles(repositorySkillRoot, "*", SearchOption.AllDirectories)
-    |> Array.filter (fun path -> path.EndsWith(".py") || path.EndsWith(".sh"))
-if not (Array.isEmpty legacyRepositoryScripts) then fail $"Repository Skills contains a legacy script: {relative legacyRepositoryScripts[0]}."
+let legacyScripts =
+    Directory.GetFiles(root, "*", SearchOption.AllDirectories)
+    |> Array.filter (fun path ->
+        let parts = relative path |> fun value -> value.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+        not (parts |> Array.exists (fun part -> part = ".git" || part = ".venv" || part = ".codex"))
+        && (path.EndsWith(".py", StringComparison.Ordinal) || path.EndsWith(".sh", StringComparison.Ordinal)))
+if not (Array.isEmpty legacyScripts) then fail $"Socket automation must use FSX only; found {relative legacyScripts[0]}."
 
-printfn "Socket marketplace integration, compatibility wiring, root-only tests, and repository-skills automation are valid."
+printfn "Socket marketplace integration, compatibility wiring, root-only E2E tests, and FSX-only automation are valid."

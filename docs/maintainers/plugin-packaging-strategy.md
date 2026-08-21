@@ -69,7 +69,7 @@ The canonical plugin payload in `SpeakSwiftlyServer` should own the Codex-facing
 
 The standalone `SpeakSwiftlyServer` repository should also remain the source of truth for the Swift package, executable, LaunchAgent behavior, embedded API, HTTP/MCP implementation, API docs, release notes, and live-service validation.
 
-The Socket catalog entry named `speak-swiftly` points at the Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source instead of a local `./plugins/SpeakSwiftlyServer` mirror. Because the plugin root is the repository root, it uses the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry. Run the marketplace audit and `uv run scripts/validate_socket_metadata.py` after changes to this entry.
+The Socket catalog entry named `speak-swiftly` points at the Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source instead of a local `./plugins/SpeakSwiftlyServer` mirror. Because the plugin root is the repository root, it uses the Codex marketplace source shape for a Git-backed root plugin rather than a `git-subdir` entry. Run `just repo-validate` after changes to this entry.
 
 Update README, ROADMAP, subtree workflow guidance, and any SpeakSwiftlyServer-facing install docs in the same pass when this catalog model changes so users see one coherent story: Codex users can install `Speak Swiftly` from either the Git-backed `socket` marketplace or the standalone `SpeakSwiftlyServer` marketplace; app embedders use `SpeakSwiftlyServer` as a Swift package.
 
@@ -102,8 +102,8 @@ codex plugin marketplace add gaelic-ghost/SpeakSwiftlyServer
 When a user has already migrated from an older copied-plugin or personal-local-marketplace install to the Git-backed marketplace, use the repo-owned cleanup helper instead of hand-editing home-directory files:
 
 ```bash
-uv run scripts/cleanup_legacy_socket_installs.py
-uv run scripts/cleanup_legacy_socket_installs.py --apply
+just repo-sync
+just repo-validate
 ```
 
 The helper's job is intentionally narrow. It removes known legacy `socket` entries from `~/.agents/plugins/marketplace.json` and copied personal payload directories such as `~/.codex/plugins/apple-dev-skills` after backing them up. It leaves Codex's installed cache under `~/.codex/plugins/cache/` alone, because that cache is Codex-owned install state for current marketplace entries.

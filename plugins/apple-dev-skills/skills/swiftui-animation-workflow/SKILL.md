@@ -120,11 +120,7 @@ It is not the SwiftUI app architecture workflow, not the SF Symbols selection wo
 - Recommend `explore-apple-swift-docs` when the user primarily needs raw Apple documentation lookup.
 - Recommend `references/snippets/apple-xcode-project-core.md` when repo policy or Xcode project-integrity guidance is needed before validating animation in an app project.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on motion classification, SwiftUI primitive choice, reduce-motion behavior, and validation handoffs. If future iterations add deterministic preview or screenshot helpers, document those helpers before relying on them.
 
@@ -134,7 +130,6 @@ Keep the first release focused on motion classification, SwiftUI primitive choic
 
 - `references/animation-decision-rules.md`
 - `references/transitions-effects-and-accessibility.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -143,5 +138,3 @@ Keep the first release focused on motion classification, SwiftUI primitive choic
 - Apple documentation anchors to verify include SwiftUI Animations, Managing user interface state, Controlling the timing and movements of your animations, Unifying your app's animations, SwiftUI symbol effects, and Human Interface Guidelines Motion.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

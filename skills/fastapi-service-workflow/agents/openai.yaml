@@ -1,8 +1,0 @@
-interface:
-  display_name: "FastAPI Service Workflow"
-  short_description: "Maintain FastAPI routes, settings, lifespan, OpenAPI, and service tests."
-  brand_color: "#0F766E"
-  default_prompt: "Use $fastapi-service-workflow to inspect this existing FastAPI service, preserve its typed settings and lifespan contract, implement the requested route or dependency change, review the OpenAPI impact, and run focused uv validation."
-
-policy:
-  allow_implicit_invocation: true

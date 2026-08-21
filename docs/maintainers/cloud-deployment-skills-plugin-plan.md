@@ -31,6 +31,6 @@ The first practical use case is AWS. AWS now publishes the official [`aws/agent-
 
 ## Validation
 
-- Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- Run root metadata validation with `just repo-validate`.
 - Run `git diff --check`.
 - For release, follow the standard Socket release mode because this is a monorepo-owned child plugin with no subtree synchronization requirement.

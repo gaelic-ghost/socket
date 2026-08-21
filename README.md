@@ -200,7 +200,7 @@ Current Socket catalog shape:
 - `game-dev-skills`: Apple platform game development workflows for native Metal and Metal 4 renderers, GPTK 3/4 routing, MetalFX, GPU asset streaming, experimental neural rendering, SpriteKit, SceneKit, GameplayKit simulation, Game Controller input, Core Haptics feedback, Xcode profiling, game-stack routing, and device-aware validation handoffs
 - `network-protocol-skills`: modern networking and application-protocol workflows for transport selection, HTTP/3 and QUIC planning, Media over QUIC draft-aware guidance, WebRTC signaling/media/data-channel work, and protocol diagnostics with stack-plugin handoffs
 - `professional-skills`: career and professional workflow guidance, starting with Dice job search and its bundled read-only remote MCP configuration
-- `python-skills`: Python runtime and tooling workflows, including local-first agent services, FastAPI and FastMCP service maintenance, and pytest-based testing; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
+- `python-skills`: focused diagnostics, packaging, tooling, CI, upgrade, and testing guidance for existing Python code
 - `repository-skills`: routed Git and GitHub collaboration, README,
   CONTRIBUTING, AGENTS, ROADMAP, repository settings, protected-main release,
   and Codex GUI worktree workflow guidance; its portable repository and

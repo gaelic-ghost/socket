@@ -94,9 +94,7 @@ Stop and surface the decision when the requested change needs a new catalog owne
 - Use `apple-ui-accessibility-workflow` when Dynamic Type, right-to-left, VoiceOver, or semantic UI behavior is the primary concern.
 - Use `xcode-coding-intelligence-workflow` only for Xcode 27 agent setup, permissions, or live localization-MCP capability discovery; return here for the catalog-first implementation and review path.
 
-## Customization
-
-Use `references/customization-flow.md`. The initial workflow has no runtime-enforced customization knobs; it keeps the shared configuration surface available without turning locale or translation policy into hidden machine state.
+## Fixed Policy
 
 Recommend `references/snippets/apple-xcode-project-core.md` when a target app repository needs durable Xcode project guidance alongside its localization contract.
 
@@ -106,5 +104,4 @@ Recommend `references/snippets/apple-xcode-project-core.md` when a target app re
 - `references/source-apis-and-translator-context.md`
 - `references/translation-review-and-validation.md`
 - `references/agent-assisted-translation.md`
-- `references/customization-flow.md`
 - `references/snippets/apple-xcode-project-core.md`

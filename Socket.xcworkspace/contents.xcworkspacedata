@@ -14,9 +14,6 @@
       location = "group:AGENTS.md">
    </FileRef>
    <FileRef
-      location = "group:ACCESSIBILITY.md">
-   </FileRef>
-   <FileRef
       location = "group:.agents/plugins/marketplace.json">
    </FileRef>
    <FileRef

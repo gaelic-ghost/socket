@@ -156,7 +156,7 @@ matching import contract.
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 uv run pytest
 ```
 
@@ -177,7 +177,7 @@ The fixture should never be committed as an installed user artifact, and it shou
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```
 
 Manual evidence to capture:

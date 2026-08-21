@@ -112,9 +112,9 @@ similarly named Codex or Xcode surface.
    and a temporary-home install smoke test.
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-uv run scripts/validate_hermes_compatibility.py
-uv run scripts/validate_claude_compatibility.py
+just repo-sync
+just repo-validate
+just test
 claude plugin validate .
 ```
 

@@ -6,7 +6,7 @@
 - [Product Principles](#product-principles)
 - [Milestone Progress](#milestone-progress)
 - [Milestone 6: Dotnet skills plugin](#milestone-6-dotnet-skills-plugin)
-- [Milestone 7: Python skills plugin expansion](#milestone-7-python-skills-plugin-expansion)
+- [Milestone 7: Python skills plugin consolidation](#milestone-7-python-skills-plugin-consolidation)
 - [Milestone 8: Server-Side Swift skills plugin](#milestone-8-server-side-swift-skills-plugin)
 - [Milestone 9: Rust skills plugin](#milestone-9-rust-skills-plugin)
 - [Milestone 10: Expo inline native modules workflow](#milestone-10-expo-inline-native-modules-workflow)
@@ -53,7 +53,7 @@
 ## Milestone Progress
 
 - Milestone 6: Dotnet skills plugin - Completed
-- Milestone 7: Python skills plugin expansion - Completed
+- Milestone 7: Python skills plugin consolidation - Completed
 - Milestone 8: Server-Side Swift skills plugin - Completed
 - Milestone 9: Rust skills plugin - Completed
 - Milestone 10: Expo inline native modules workflow - Completed
@@ -104,7 +104,7 @@ Completed
 - [x] Route F# web application Azure work through Microsoft's official Azure Skills plugin rather than duplicating Azure MCP, Azure CLI, Azure Developer CLI, or deployment guidance in Socket.
 - [x] Switch the root marketplace entry for `dotnet-skills` from placeholder to installable only after real skill content exists.
 - [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any child-plugin checks added by the new plugin.
+- [x] Run root metadata validation with `just repo-validate` and any child-plugin checks added by the new plugin.
 
 ### Exit Criteria
 
@@ -115,7 +115,7 @@ Completed
 - [x] The F# web guidance distinguishes Giraffe, Falco, and Oxpecker contracts while preserving ordinary ASP.NET Core and F# domain boundaries.
 - [x] Root Socket docs, marketplace wiring, and validation agree on the plugin's install surface.
 
-## Milestone 7: Python skills plugin expansion
+## Milestone 7: Python skills plugin consolidation
 
 ### Status
 
@@ -123,25 +123,19 @@ Completed
 
 ### Scope
 
-- [x] Repair the `python-skills` child validator so it matches the current monorepo-owned child docs model without reintroducing a child README.
-- [x] Record the detailed expansion plan in [`docs/maintainers/python-skills-plugin-plan.md`](./docs/maintainers/python-skills-plugin-plan.md).
-- [x] Expand `python-skills` from scaffold-heavy coverage into ongoing project choice, implementation, diagnostics, packaging, tooling/style, CI, and upgrade workflows.
-- [x] Keep the existing `uv`, FastAPI, FastMCP, and pytest skill surfaces intact unless a later cleanup deliberately renames or replaces one without leaving duplicate long-term surfaces.
+- [x] Keep only diagnostics, packaging, tooling/style, CI, upgrade, and testing guidance for existing Python code.
+- [x] Remove Python bootstrap, synchronization, project-creation, FastAPI, FastMCP, and agent-service skills.
+- [x] Remove Python and shell automation from the plugin while retaining ordinary Python ecosystem command guidance.
 
 ### Tickets
 
-- [x] Update `plugins/python-skills/scripts/validate_repo_metadata.py` and child tests so validation targets `AGENTS.md`, plugin metadata, and skill metadata instead of a removed child `README.md`.
-- [x] Add `python-skills:choose-python-project-shape`.
-- [x] Add `python-skills:build-python-project`.
 - [x] Add `python-skills:diagnose-python-project`.
 - [x] Add `python-skills:python-package-workflow`.
 - [x] Add `python-skills:python-tooling-style-workflow`.
 - [x] Add `python-skills:python-ci-workflow`.
 - [x] Add `python-skills:python-upgrade-workflow`.
 - [x] Replace `python-skills:uv-pytest-unit-testing` with the broader `python-skills:python-testing-workflow` without a duplicate compatibility surface.
-- [x] Update Python plugin metadata after the first new skill slice lands.
-- [x] Run child validation with `uv run scripts/validate_repo_metadata.py`, `uv run pytest`, `uv run ruff check .`, and `uv run mypy .`.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Consolidate validation into the root FSX integration and E2E path.
 
 ### Exit Criteria
 
@@ -185,7 +179,7 @@ Completed
 - [x] Update Hummingbird guidance for current `hb` Server and Lambda prompts, generated `swift-configuration`, OpenAPIHummingbird plus `hummingbird-lambda` Lambda shape, and the separate `swift-openapi-lambda` transport distinction.
 - [x] Add `server-side-swift:sync-hummingbird-service-guidance` for existing Hummingbird repositories that need repo-local `AGENTS.md`, Codex local environment files, `hb` CLI assumptions, Server or Lambda shape, OpenAPI transport notes, and SwiftPM command guidance refreshed.
 - [x] Update plugin metadata prompts and keywords as new server-side Swift skill surfaces ship.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` after each metadata or marketplace-facing update.
+- [x] Run root metadata validation with `just repo-validate` after each metadata or marketplace-facing update.
 
 ### Exit Criteria
 
@@ -216,7 +210,7 @@ Completed
 - [x] Add package and CI workflow skills for publish-facing and automation guidance.
 - [x] Switch the root marketplace entry for `rust-skills` from placeholder to installable only after real skill content exists.
 - [x] Update root README and maintainer docs so users understand the new installable child plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -245,7 +239,7 @@ Completed
 - [x] Update `plugins/web-dev-skills/AGENTS.md` with Expo and React Native native-boundary guidance.
 - [x] Update `plugins/web-dev-skills/.codex-plugin/plugin.json` metadata so the plugin advertises the Expo inline native module workflow.
 - [x] Decide whether the root marketplace entry needs to move from placeholder to installable as part of the first implementation slice.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -283,7 +277,7 @@ In Progress
 - [x] Add a Node stdlib App Server control-socket client for opt-in `thread/name/set` tests.
 - [x] Wire `agentdeck` into the root Socket marketplace as a normal local child plugin.
 - [x] Update root README so users can see the new installable plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 - [x] Run a hook test from the Codex GUI and inspect `thread-title-decisions.jsonl`.
 - [x] Install or refresh the plugin locally, trust the hook, start a real new thread, and compare captured `session_id` with the created thread id.
 - [x] Record the desktop bridge MCP and skill plan in `plugins/agentdeck/docs/desktop-bridge-mcp-skill-plan.md`.
@@ -381,7 +375,7 @@ Completed
 - [x] Add version-sensitive dyld-cache, Apple dynamic-analysis, kernel/boot/firmware, and security-research reporting workflows with exact-build and live-source gates.
 - [x] Add .NET and Unity artifact workflows without delaying the Apple-focused sequence.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -444,7 +438,7 @@ Completed
 - [x] Add `android-dev:release-readiness-workflow` for versioning, signing, release builds, R8/ProGuard, app bundles, APKs, Play delivery handoffs, permissions, privacy checks, and release automation routing.
 - [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -483,7 +477,7 @@ In Progress
 - [ ] Keep `server-side-jvm:build-clojure-service` as a future candidate until the Java and Scala foundations are stable.
 - [x] Update plugin metadata after real skills land, including `skills`, keywords, prompts, and accurate installable descriptions.
 - [x] Switch the root marketplace entry to installable only after real skill content exists.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -514,7 +508,7 @@ In Progress
 - [x] Add `choose-agent-integration-protocol`, `operate-acp-agent-integration`, `build-acp-agent`, and `operate-zed-agent` for cross-host direction selection, ACP operation/development, and Zed native/external/terminal workflows.
 - [x] Add `operate-a2a-agent-integration` for peer Agent Card discovery, message/task lifecycle, streaming and push delivery, authentication, trust boundaries, and Hermes 0.20 A2A routing without conflating A2A with ACP or MCP.
 - [x] Refresh Hermes 0.20, current ACP v1 versus draft RFDs, Zed custom external-agent setup, Nous services, Codex and Claude plugin surfaces, and Xcode 27 Beta 5 headless MCP evidence for the 9.31.0 compatibility release.
-- [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `uv run scripts/validate_hermes_compatibility.py`.
+- [x] Validate exported Hermes metadata, grouping integrity, generated export freshness, and maintained MCP examples with `just repo-validate`.
 - [x] Make an explicit Codex-and-Hermes compatibility classification mandatory for every new or materially changed Socket plugin, skill, and MCP declaration. Require portable-skill export decisions, validated MCP translations, and a real native-plugin design or host-specific boundary for runtime surfaces.
 
 ### Tickets
@@ -573,7 +567,7 @@ Completed
 - [x] Wire `swift-lang` into the root Socket marketplace as an installable child plugin.
 - [x] Update Apple Dev and Server-Side Swift guidance to hand off shared Swift cleanup work to `swift-lang` when it is available.
 - [x] Keep Apple Dev's existing `format-swift-sources` and `structure-swift-sources` available during the first release so standalone Apple-only installs do not break.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py` and any new child-plugin validation added for `swift-lang`.
+- [x] Run root metadata validation with `just repo-validate` and any new child-plugin validation added for `swift-lang`.
 
 ### Exit Criteria
 
@@ -605,7 +599,7 @@ In Progress
 - [ ] Add later skills for architecture mapping, adoption-risk decisions, and remediation planning after the first two workflows prove useful.
 - [ ] Wire the plugin into the root marketplace as `NOT_AVAILABLE` while it is a placeholder, then switch it to installable only after real skill content exists.
 - [ ] Update root README and ROADMAP when the plugin becomes installable.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -642,7 +636,7 @@ Completed
 - [x] Wire `game-dev-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface.
 - [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -675,7 +669,7 @@ Completed
 - [x] Wire `cloud-deployment-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README and ROADMAP so users understand the new plugin surface and the AWS delegation decision.
 - [x] Update root README and maintainer guidance so users understand the Azure Skills delegation decision and F# web-framework handoff.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -744,7 +738,7 @@ Completed
 - [x] Install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills into the exported plugin `skills/` tree, with `.agents/skills` kept as a symlink discovery mirror.
 - [x] Wire `cloud-inference-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README, CONTRIBUTING, and ROADMAP so users and maintainers understand the new plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ### Exit Criteria
 
@@ -1286,5 +1280,5 @@ and test/production deployments for GitHub Actions.
 - Completed Milestone 1, `superproject docs and marketplace alignment`, by bringing the root README, AGENTS guidance, roadmap shape, and marketplace-path explanation back into alignment with the live mixed-monorepo model.
 - Added the first root `ROADMAP.md` and established the checklist-style planning format for the superproject.
 - Added a root marketplace-validation script and GitHub Actions workflow so `socket` now checks packaged plugin paths and manifest alignment instead of leaving that audit entirely manual.
-- Added root `CONTRIBUTING.md`, `ACCESSIBILITY.md`, `LICENSE`, and `NOTICE` so the superproject's contributor, accessibility, and legal surfaces are explicit at the repository root.
+- Added root contributor and legal surfaces; the later managed-docs migration removed the obsolete standalone accessibility contract.
 - Collapsed the older subtree migration and plugin-alignment planning docs into this roadmap history plus the still-live root maintainer references once those plans had become historical rather than active operating guidance.

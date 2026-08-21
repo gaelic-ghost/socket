@@ -98,19 +98,12 @@ It is not the default audio recommendation when AVFAudio covers the job.
 - Recommend `xcode-testing-workflow` for repeatable regression tests around audio conversion, fixtures, or wrapper behavior.
 - Recommend `explore-apple-swift-docs` when more current or archive docs lookup is the next honest step.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but this workflow defines no runtime-enforced knobs.
-
 ## References
 
 ### Workflow References
 
 - `references/coreaudio-modernization-and-repair.md`
 - `references/legacy-archive-boundary.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -118,5 +111,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for low-level audio apps.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

@@ -44,10 +44,20 @@ let nestedTests =
         not (parts |> Array.exists (fun part -> part = ".git" || part = ".venv" || part = ".codex"))
         && parts.Length > 1
         && parts[0] <> "tests"
-        && (parts |> Array.exists (fun part -> part = "test" || part = "tests")))
+        && (parts |> Array.exists (fun part -> part = "test" || part = "tests" || part = "evals")))
 if not (Array.isEmpty nestedTests) then
     let rendered = String.concat ", " nestedTests
     failwith $"Tests must live only at the Socket root: {rendered}"
+
+let legacyAutomation =
+    Directory.GetFiles(socketRoot, "*", SearchOption.AllDirectories)
+    |> Array.map (fun path -> Path.GetRelativePath(socketRoot, path))
+    |> Array.filter (fun path ->
+        let parts = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+        not (parts |> Array.exists (fun part -> part = ".git" || part = ".venv" || part = ".codex"))
+        && (path.EndsWith(".py", StringComparison.Ordinal) || path.EndsWith(".sh", StringComparison.Ordinal)))
+if not (Array.isEmpty legacyAutomation) then
+    failwith $"Socket automation must use FSX only; found {legacyAutomation[0]}."
 
 let snapshot () =
     Directory.GetFiles(testRoot, "*", SearchOption.AllDirectories)

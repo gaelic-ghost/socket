@@ -221,13 +221,7 @@ root `Controllers/` directory.
   or test diagnosis.
 - Recommend `apple-ui-accessibility-workflow` when the next honest step is
   accessibility-specific implementation or review.
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide
-customization-file contract, but the first version of this skill defines no
-runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on the decision model and the documented
 boundary. If future iterations add a real deterministic need for runtime knobs,
@@ -248,7 +242,6 @@ document them explicitly before letting runtime behavior depend on them.
 - `references/mixed-appkit-swiftui-composition.md`
 - `references/architecture-decision-rules.md`
 - `references/anti-patterns-and-corrections.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -258,5 +251,3 @@ document them explicitly before letting runtime behavior depend on them.
   needs reusable repo policy rather than a one-off architecture recommendation.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

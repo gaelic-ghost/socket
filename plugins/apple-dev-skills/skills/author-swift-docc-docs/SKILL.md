@@ -7,7 +7,7 @@ description: Author and review DocC content in Swift components, including symbo
 
 ## Purpose
 
-Provide the canonical DocC authoring-and-review workflow for Swift components. `scripts/run_workflow.py` classifies the task and, only when execution is needed, selects SwiftPM or Xcode according to the requested generation operation.
+Provide the canonical DocC authoring-and-review workflow for Swift components. `scripts/run-workflow.fsx` classifies the task and, only when execution is needed, selects SwiftPM or Xcode according to the requested generation operation.
 
 ## When To Use
 
@@ -29,7 +29,7 @@ Provide the canonical DocC authoring-and-review workflow for Swift components. `
    - `structure`
    - `review`
    - `tutorial-aware-review`
-2. Run `scripts/run_workflow.py` so task inference, tutorial-depth boundaries, and handoff rules resolve into one JSON contract.
+2. Run `scripts/run-workflow.fsx` so task inference, tutorial-depth boundaries, and handoff rules resolve into one JSON contract.
 4. If the request is actually broad Apple-docs lookup, hand off to `explore-apple-swift-docs`.
 4. If the request is DocC generation, export, hosting, archive, or project-integrity follow-through, select the execution surface required by that operation and hand off to its owner.
 6. Otherwise stay local to DocC authoring and review:
@@ -46,11 +46,6 @@ Provide the canonical DocC authoring-and-review workflow for Swift components. `
 - `task_type`: optional explicit override; use `symbol-docs`, `article`, `structure`, `review`, or `tutorial-aware-review`
 - `request`: optional free-text task description used for inference and handoff decisions
 - `needs_generation`: optional explicit flag for generation, export, archive, hosting, or other execution-heavy DocC follow-through
-- Defaults:
-  - runtime entrypoint: executable `scripts/run_workflow.py`
-  - tutorial handling defaults to the configured first-pass policy in `references/customization-flow.md`
-  - execution-surface inference is used only for generation and prefers the requested operation, then the nearest package or workspace context
-  - task inference prefers an explicit override, then request wording
 
 ## Outputs
 
@@ -86,13 +81,11 @@ Provide the canonical DocC authoring-and-review workflow for Swift components. `
 - Hand off to `explore-apple-swift-docs` when the request is primarily about finding DocC or Apple documentation rather than writing or reviewing DocC content.
 - Hand off to `swift-package-build-run-workflow` when the requested generation operation is SwiftPM-owned.
 - Hand off to `xcode-build-run-workflow` when the requested generation operation needs `docbuild`, a scheme, export, archive, or project-integrity follow-through.
-- `scripts/run_workflow.py` is the top-level runtime entrypoint and converts repo inspection plus request inference into the documented JSON contract.
+- `scripts/run-workflow.fsx` is the top-level runtime entrypoint and converts repo inspection plus request inference into the documented JSON contract.
 
-## Customization
+## Fixed Policy
 
-- Use `references/customization-flow.md`.
-- `scripts/customization_config.py` stores and reports customization state.
-- `scripts/run_workflow.py` loads the runtime-safe tutorial-depth setting before shaping the final workflow contract.
+- `scripts/run-workflow.fsx` uses the managed tutorial-depth policy.
 
 ## References
 
@@ -106,7 +99,6 @@ Provide the canonical DocC authoring-and-review workflow for Swift components. `
 ### Contract References
 
 - `references/automation-prompts.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -114,5 +106,4 @@ Provide the canonical DocC authoring-and-review workflow for Swift components. `
 
 ### Script Inventory
 
-- `scripts/run_workflow.py`
-- `scripts/customization_config.py`
+- `scripts/run-workflow.fsx`

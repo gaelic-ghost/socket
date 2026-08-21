@@ -60,10 +60,6 @@ Implement one explicit macOS or Linux Virtualization framework path without flat
 - Use `xcode-build-run-workflow` and `xcode-testing-workflow` for execution and tests.
 - Use `prepare-isolated-analysis-lab` for hostile-workload control policy.
 
-## Customization
-
-Use [customization-flow.md](references/customization-flow.md). The first release has no runtime-enforced knobs.
-
 ## References
 
 - [macOS and Linux guest matrix](references/macos-and-linux-guest-matrix.md)

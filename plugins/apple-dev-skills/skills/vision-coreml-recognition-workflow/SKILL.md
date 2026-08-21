@@ -77,18 +77,11 @@ Guide custom image-model integration through Vision while keeping Core ML model 
 - Recommend `xcode-testing-workflow` for fixtures, evaluation harnesses, performance baselines, and regression tests.
 - Recommend `explore-apple-swift-docs` for current Vision or Core ML research.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/vision-coreml-model-integration.md`
 - `references/model-evaluation-performance-and-diagnostics.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-vision-analysis-contract.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

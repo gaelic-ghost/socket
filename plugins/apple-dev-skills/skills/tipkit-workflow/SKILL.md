@@ -63,13 +63,8 @@ Return the documented Apple behavior, chosen presentation, configuration locatio
 - Recommend `xcode-testing-workflow` for automated validation.
 - Use a native SwiftUI `help` modifier on macOS or a custom help presentation only when the product requirement is persistent contextual help rather than TipKit feature education; verify that API through Apple docs before implementing it.
 
-## Customization
-
-Use `references/customization-flow.md`. The first version has no runtime-enforced knobs; `scripts/customization_config.py` preserves the shared configuration contract.
-
 ## References
 
 - `references/presentation-and-platform-patterns.md`
 - `references/eligibility-lifecycle-and-testing.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the app needs reusable repository policy alongside TipKit implementation guidance.

@@ -102,19 +102,12 @@ It is not the AVFoundation pipeline owner, not the AVAudioEngine graph owner, an
 - Recommend `xcode-testing-workflow` for repeatable sample fixtures and timing regression tests.
 - Recommend `explore-apple-swift-docs` when more docs lookup is the next honest step.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but this workflow defines no runtime-enforced knobs.
-
 ## References
 
 ### Workflow References
 
 - `references/time-samplebuffer-and-repair.md`
 - `references/diagnostics-and-handoffs.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -122,5 +115,3 @@ Use `references/customization-flow.md`.
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode-project baseline policy for sample-buffer apps.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

@@ -40,7 +40,7 @@ Run from the Socket repository root so the shared maintainer environment and
 cache policy apply:
 
 ```bash
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+just repo-validate
 uv run python -B -m pytest plugins/apple-dev-skills/tests \
   -o cache_dir=.codex/.cache/pytest
 ```

@@ -19,18 +19,18 @@ Why this is the preferred path:
 
 ## Deterministic Fallback Path
 
-Use `scripts/export_swiftformat_xcode_config.py` when you need a scriptable export from the SwiftFormat shared defaults state.
+Use `scripts/export-swiftformat-xcode-config.fsx` when you need a scriptable export from the SwiftFormat shared defaults state.
 
 Example:
 
 ```bash
-skills/format-swift-sources/scripts/export_swiftformat_xcode_config.py --output .swiftformat
+skills/format-swift-sources/scripts/export-swiftformat-xcode-config.fsx --output .swiftformat
 ```
 
 If `defaults export com.charcoaldesign.SwiftFormat -` does not produce a useful payload on the current machine, point the script at the actual shared plist inside the SwiftFormat group container instead:
 
 ```bash
-skills/format-swift-sources/scripts/export_swiftformat_xcode_config.py \
+skills/format-swift-sources/scripts/export-swiftformat-xcode-config.fsx \
   --input-plist "/path/to/SwiftFormat-group-container/.../com.charcoaldesign.SwiftFormat.plist" \
   --output .swiftformat
 ```

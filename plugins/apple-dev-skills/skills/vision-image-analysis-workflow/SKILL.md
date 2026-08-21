@@ -81,18 +81,11 @@ Guide Apple-provided image and video analysis while keeping Vision request owner
 - Recommend `xcode-testing-workflow` for fixtures, coordinate tests, sequence regressions, and performance baselines.
 - Recommend `explore-apple-swift-docs` for documentation research.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/vision-requests-observations-and-sequences.md`
 - `references/vision-coordinates-live-frames-and-diagnostics.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-vision-analysis-contract.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

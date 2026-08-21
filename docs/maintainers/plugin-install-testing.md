@@ -23,7 +23,7 @@ marketplaces. A local checkout marketplace should be added, inspected, removed,
 and then discarded; trying to upgrade it should fail because it is not a Git
 marketplace.
 
-During `scripts/release.sh advance X.Y.Z`, the release workflow automates the
+During `just repo-release-advance X.Y.Z`, the release workflow automates the
 Socket local checkout add/remove path below and records the result with the
 current Dependabot alert query. It writes `.socket-release-evidence.json` in the
 clean `main` worktree after verifying that `main` matches the reviewed remote

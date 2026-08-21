@@ -57,14 +57,9 @@ Use the platform's native glass system deliberately rather than reproducing it w
 - Recommend `apple-ui-accessibility-workflow` for contrast, VoiceOver, Dynamic Type, reduced motion, and alternate input review.
 - Recommend `xcode-build-run-workflow` for previews, build, run, and visual validation.
 
-## Customization
-
-Use `references/customization-flow.md`. The first version has no runtime-enforced appearance knob because visual-system choices must remain tied to the app's deployment target, semantics, and current Apple documentation.
-
 ## References
 
 - `references/glass-composition-and-fallbacks.md`
 - `references/review-and-validation.md`
-- `references/customization-flow.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` when the app needs reusable Xcode-project policy alongside Liquid Glass implementation.
 - [Applying Liquid Glass to custom views](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views) documents native glass composition and customization.

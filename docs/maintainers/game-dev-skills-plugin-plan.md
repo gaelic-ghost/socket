@@ -122,7 +122,7 @@ Guide carefully gated experimental renderer integration across MetalFX, Metal 4 
 - [x] Wire `game-dev-skills` into the root Socket marketplace as installable.
 - [x] Update README and ROADMAP so users understand the new plugin surface.
 - [x] Run skill-folder validation and plugin-manifest validation for the new child plugin.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.
 
 ## Open Questions
 

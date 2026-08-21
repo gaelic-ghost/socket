@@ -11,7 +11,7 @@ Identify the exact model and tokenizer revisions, chat template, adapter/merge s
 
 ## Workflow
 
-1. Preserve every source artifact as immutable, snapshot its provenance with `scripts/snapshot_model_provenance.py`, and write the snapshot outside the artifact directory.
+1. Preserve every source artifact as immutable, snapshot its provenance with `scripts/snapshot-model-provenance.fsx`, and write the snapshot outside the artifact directory.
 2. Verify that every comparison artifact can be loaded and produces output on the same smoke cases.
 3. Use `evaluate-language-model` for paired quality and behavior evidence.
 4. Use `benchmark-model-runtime` when deployment properties affect the decision.
@@ -30,4 +30,4 @@ Identify the exact model and tokenizer revisions, chat template, adapter/merge s
 
 - `assets/model-comparison-report.md`: selection report.
 - `references/checkpoint-provenance.md`: provenance field guide.
-- `scripts/snapshot_model_provenance.py`: deterministic local artifact inventory.
+- `scripts/snapshot-model-provenance.fsx`: deterministic local artifact inventory.

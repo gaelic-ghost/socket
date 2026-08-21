@@ -164,11 +164,7 @@ Current note: Apple documents ACP agent setup in Xcode 26.6 and Xcode 27. Xcode 
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance in a repo that will rely on Xcode coding intelligence.
 - Keep custom Xcode plug-in writers research-first until the live package, runtime behavior, and permission surface are verified. Route ACP-agent implementation to Agent Portability Skills.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep this skill focused on setup and permission decisions. If future iterations add deterministic checks for Xcode settings exports, agent config folders, or MCP bridge status, document the knobs before runtime behavior depends on them.
 
@@ -180,7 +176,6 @@ Keep this skill focused on setup and permission decisions. If future iterations 
 - `references/mcpbridge-and-external-agents.md`
 - `references/permissions-and-artifacts.md`
 - `references/source-evidence.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -191,5 +186,3 @@ Keep this skill focused on setup and permission decisions. If future iterations 
 - Recommend `references/snippets/apple-xcode-project-core.md` when the user needs reusable Xcode project guidance for a repo that will use Xcode coding intelligence.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

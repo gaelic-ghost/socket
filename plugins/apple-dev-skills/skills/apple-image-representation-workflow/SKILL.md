@@ -82,18 +82,11 @@ Guide image source, destination, representation, and conversion work without fla
 - Recommend `xcode-testing-workflow` for image fixtures, metadata round trips, comparison tests, or performance baselines.
 - Recommend `explore-apple-swift-docs` when documentation lookup is the real need.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/image-io-decoding-encoding-and-metadata.md`
 - `references/apple-image-representations-and-bridging.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-image-type-ownership.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
+            "command": "dotnet fsi ${PLUGIN_ROOT}/hooks/run-thread-title-hook.fsx",
             "statusMessage": "Running AgentDeck SessionStart hook",
             "timeout": 10
           }
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
+            "command": "dotnet fsi ${PLUGIN_ROOT}/hooks/run-thread-title-hook.fsx",
             "statusMessage": "Running AgentDeck Stop hook",
             "timeout": 10
           }
@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh ${PLUGIN_ROOT}/hooks/run-thread-title-hook.sh",
+            "command": "dotnet fsi ${PLUGIN_ROOT}/hooks/run-thread-title-hook.fsx",
             "statusMessage": "Logging AgentDeck tool-use hook",
             "timeout": 10
           }

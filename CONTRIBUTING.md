@@ -109,8 +109,9 @@ skills, marketplaces, documentation, and reports.
 
 ### Accessibility Expectations
 
-Follow [ACCESSIBILITY.md](./ACCESSIBILITY.md). Keep commands, logs, headings,
-links, and errors readable and actionable.
+Keep commands, logs, headings, links, errors, and user-facing behavior readable
+and actionable. Record product-specific accessibility requirements beside the
+surface that owns them; do not create a separate root accessibility contract.
 
 ### Verification
 

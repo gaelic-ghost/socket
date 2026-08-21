@@ -33,6 +33,11 @@ root documentation, and cross-plugin policy.
 
 - Authored child `skills/`, `mcps/`, `apps/`, and equivalent surfaces are source.
 - Plugin manifests and marketplace files are packaging metadata.
+- Reusable scripts, templates, and contracts are versioned managed assets that
+  the owning install or sync recipe copies into their canonical target paths.
+- Gale's repository preferences are hard-coded in owning assets and skill
+  contracts. Do not add per-user preference files, layered customization,
+  runtime config merging, or alternate policy paths.
 - Installed plugins, caches, enabled-state configuration, and consumer copies
   are runtime state, not editable source.
 - When documentation and automation disagree, correct the owning source rather

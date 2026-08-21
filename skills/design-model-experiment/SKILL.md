@@ -19,10 +19,10 @@ Produce an experiment manifest that another operator can run, audit, and compare
 6. Define primary metrics, guardrail metrics, uncertainty treatment, and failure thresholds before the run.
 7. Estimate compute, storage, time, and paid cost. Set smoke-test and full-run stop conditions.
 8. Define raw and derived artifacts, retention, and sensitive-data handling.
-9. Copy `assets/experiment-manifest.yaml`, fill it, then run:
+9. Copy `assets/experiment-manifest.json`, fill it, then run:
 
 ```bash
-python3 scripts/validate_experiment_manifest.py path/to/experiment.yaml
+dotnet fsi scripts/validate-experiment-manifest.fsx path/to/experiment.json
 ```
 
 10. Run the smallest experiment capable of detecting configuration or pipeline failure before spending the full budget.
@@ -33,6 +33,6 @@ Keep configuration validation, smoke-run evidence, and final experimental eviden
 
 ## Resources
 
-- `assets/experiment-manifest.yaml`: portable experiment template.
+- `assets/experiment-manifest.json`: managed experiment template.
 - `references/experiment-design.md`: field semantics and comparison rules.
-- `scripts/validate_experiment_manifest.py`: deterministic structural validation.
+- `scripts/validate-experiment-manifest.fsx`: deterministic structural validation.

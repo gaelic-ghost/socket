@@ -17,8 +17,8 @@ This should stay sequential. The formatting passes and the structural pass all m
 - Use a Codex GUI automation or `codex exec` wrapper for the sequence above when the task is large and repeatable.
 - Keep file splitting itself agent-driven because concern detection and access-control-safe extraction still require reasoning.
 - Keep deterministic follow-up work, such as running the formatting skill before and after, inside automation.
-- Use `scripts/normalize_todo_fixme_ledgers.py --apply` as the deterministic helper when the structure pass includes TODO/FIXME ledger normalization.
-- Use `references/file-header-inventory.template.yaml` as the starting point when the structure pass includes deterministic file-header application through `scripts/normalize_swift_file_headers.py --apply --inventory ...`.
+- Use `scripts/normalize-swift-structure.fsx --apply` as the deterministic helper when the structure pass includes TODO/FIXME ledger normalization.
+- Use `references/file-header-inventory.template.yaml` as the starting point when the structure pass includes deterministic file-header application through `scripts/normalize-swift-structure.fsx --apply --inventory ...`.
 
 ## Codex CLI Prompt Template
 
@@ -36,7 +36,7 @@ Then use $structure-swift-sources for:
 
 Execution requirements:
 1) Establish or confirm the formatting baseline first.
-2) Run `scripts/run_workflow.py` first so the cleanup kind, header policy, split thresholds, and handoff surface resolve into one contract.
+2) Run `scripts/run-workflow.fsx` first so the cleanup kind, header policy, split thresholds, and handoff surface resolve into one contract.
 3) Apply the structure rules from the skill references.
 4) If the request becomes symbol-doc or DocC-content work, stop and hand off to $author-swift-docc-docs.
 5) If splitting or moving files touches Xcode-managed membership, stop and hand off to $xcode-build-run-workflow.

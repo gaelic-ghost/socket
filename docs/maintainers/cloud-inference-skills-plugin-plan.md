@@ -63,4 +63,4 @@ Do not duplicate Hugging Face or AWS setup while their first-party Codex plugins
 - [x] Install Runpod's upstream `companion-clis`, `flash`, and `runpodctl` skills with `npx skills add runpod/skills`.
 - [x] Wire `cloud-inference-skills` into the root Socket marketplace as an installable child plugin.
 - [x] Update root README, CONTRIBUTING, and ROADMAP so users and maintainers understand the new plugin surface.
-- [x] Run root metadata validation with `uv run scripts/validate_socket_metadata.py`.
+- [x] Run root metadata validation with `just repo-validate`.

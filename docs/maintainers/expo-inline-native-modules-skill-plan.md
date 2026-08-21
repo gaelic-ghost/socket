@@ -194,7 +194,7 @@ For the Socket skill implementation pass:
 1. Run root metadata validation:
 
    ```bash
-   uv run scripts/validate_socket_metadata.py
+   just repo-validate
    ```
 
 2. Run child-local validation if `web-dev-skills` gains tests or a validator.

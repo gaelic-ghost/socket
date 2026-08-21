@@ -39,4 +39,4 @@ State the population, task, model artifact, prompt/template, decoding settings, 
 - `assets/eval-cases.jsonl`: starter case schema.
 - `assets/evaluation-report.md`: comparison report template.
 - `references/evaluation-methods.md`: grader and uncertainty rules.
-- `scripts/compare_eval_runs.py`: paired JSONL comparison.
+- `scripts/compare-eval-runs.fsx`: paired JSONL comparison.

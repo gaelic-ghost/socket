@@ -58,10 +58,6 @@ Trace one desired behavior through tracked project source, developer-account/pro
 - Use `macos-privacy-permissions-workflow` for user or managed privacy authorization.
 - Use `audit-apple-signing-and-containment` for forensic artifact audit and `research-macos-security-control` for private entitlement or exact-build enforcement research.
 
-## Customization
-
-Use `references/customization-flow.md`. The workflow has no runtime knobs; comparison states and evidence levels may not be skipped.
-
 ## References
 
 - `references/five-state-entitlement-comparison.md`

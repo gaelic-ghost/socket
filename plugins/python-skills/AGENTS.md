@@ -17,20 +17,13 @@ This file is the Python Skills child-repo override for work done from `socket`. 
 - Do not reintroduce maintained per-skill `README.md` files unless Gale explicitly asks for that public-doc surface again.
 - Keep user-facing and maintainer-facing Python command examples expressed with `uv`.
 - Use repo-local files, checked-out dependency sources, and Dash MCP or Dash HTTP for installed Python, `uv`, pytest, Ruff, mypy, FastAPI, and FastMCP docsets before reaching for web docs. Use official project documentation when Dash/local coverage is missing, stale, or a public latest-release citation is needed.
-- Use [`scripts/validate_repo_metadata.py`](./scripts/validate_repo_metadata.py) and [`tests/test_validate_repo_metadata.py`](./tests/test_validate_repo_metadata.py) as the mechanical source of truth for metadata rules.
+- Do not add bootstrap, synchronization, project-creation, FastAPI, FastMCP, or agent-service skills. Keep this plugin focused on diagnostics, packaging, tooling, CI, upgrades, and testing for existing Python code.
 
 ## Validation
 
-Run from the Socket repository root so the shared maintainer environment and
-cache policy apply:
+Run the essential Socket integration path from the repository root:
 
 ```bash
-(cd plugins/python-skills && \
-  uv run --project ../.. python -B scripts/validate_repo_metadata.py)
-uv run python -B -m pytest plugins/python-skills/tests \
-  -o cache_dir=.codex/.cache/pytest
-uv run ruff check --cache-dir .codex/.cache/ruff/python-skills \
-  plugins/python-skills
-uv run mypy --cache-dir .codex/.cache/mypy/python-skills \
-  plugins/python-skills
+just repo-validate
+just test
 ```

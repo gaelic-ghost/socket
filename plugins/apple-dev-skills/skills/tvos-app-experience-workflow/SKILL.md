@@ -138,13 +138,6 @@ only for a demonstrated geometry or lifecycle constraint.
 - Recommend `explore-apple-swift-docs` when the real need is current Apple
   documentation rather than a design decision.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` preserves the shared customization-file
-contract. This first version has no runtime-enforced knobs.
-
 ## References
 
 ### Workflow References
@@ -152,7 +145,6 @@ contract. This first version has no runtime-enforced knobs.
 - `references/focus-layout-and-input.md`
 - `references/platform-beta-and-migration.md`
 - `references/validation-expectations.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -162,5 +154,3 @@ contract. This first version has no runtime-enforced knobs.
   accessibility beyond this skill's tvOS focus and Large Text boundary.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

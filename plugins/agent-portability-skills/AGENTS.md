@@ -18,22 +18,13 @@ This file is the Agent Portability Skills child-repo override for work done from
 - Keep Codex-specific marketplace, plugin manifest, hook, app, and MCP behavior distinct from host-native surfaces such as Zed skills, Xcode plug-ins, OpenCode skills, Claude Code skills, and future adapter packages.
 - Default user-facing install and update guidance to Git-backed marketplace sources. Do not recreate nested staged plugin directories, manual-first local install stories, `skills/install-plugin-to-socket`, or `skills/validate-plugin-install-surfaces`.
 - Resolve shared project dependencies only from GitHub repository URLs, package managers, package registries, or other real remote repositories that another contributor can fetch. Machine-local dependency paths are expressly prohibited in any project that is public or intended to be shared publicly.
-- When a skill contract changes, update the nearby skill docs, maintainer docs, and tests in the same pass.
-- Use the `skills-repo-guidance-sync` custom-agent role only for explicit-trigger subagent workflows: broad read-heavy skills/plugin repo guidance audits, Codex docs freshness checks, discovery mirror drift, marketplace wording checks, and review-packet planning. Keep final edits, validation, commits, pushes, PRs, and releases in the main thread.
+- When a skill contract changes, update nearby skill and maintainer docs in the same pass.
 
 ## Validation
 
-Run from the Socket repository root so the shared maintainer environment and
-cache policy apply:
+Run the essential Socket integration path from the repository root:
 
 ```bash
-uv run python -B -m pytest \
-  plugins/agent-portability-skills/tests \
-  plugins/agent-portability-skills/skills/bootstrap-skills-plugin-repo/tests \
-  plugins/agent-portability-skills/skills/sync-skills-repo-guidance/tests \
-  -o cache_dir=.codex/.cache/pytest
-uv run ruff check --cache-dir .codex/.cache/ruff/agent-portability-skills \
-  plugins/agent-portability-skills
-uv run mypy --cache-dir .codex/.cache/mypy/agent-portability-skills \
-  plugins/agent-portability-skills
+just repo-validate
+just test
 ```

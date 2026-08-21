@@ -22,7 +22,7 @@ Root `skills/` is the canonical workflow-authoring surface.
    - `.codex-plugin/plugin.json` is the Codex plugin entrypoint
    - `.mcp.json` registers Xcode's built-in `xcrun mcpbridge` server for external Codex sessions
    - the Xcode MCP server remains Xcode-owned; this repo does not bundle a separate Xcode MCP server package
-3. Repository validation rules in `.github/scripts/validate_repo_docs.sh`
+3. Root integration rules in `scripts/repo-maintenance/validations/50-socket.fsx`
 4. Root maintainer and discoverability docs
    - `README.md`
    - `AGENTS.md`
@@ -33,11 +33,10 @@ Deprecated compatibility skills that remain on disk do not count as part of the 
 
 ## Audit Procedure
 
-1. Confirm the active public skill surface from `.github/scripts/validate_repo_docs.sh` and the matching sections in `README.md`.
+1. Confirm the active public skill surface from the skill directories and matching sections in `README.md`.
 2. Check each active skill for the documented contract:
    - required headings in `SKILL.md`
    - `agents/openai.yaml`
-   - `references/customization.template.yaml`
    - `references/`
    - the skill-appropriate local snippet copy under `references/snippets/`
 3. Check export-surface docs for drift:
@@ -45,19 +44,19 @@ Deprecated compatibility skills that remain on disk do not count as part of the 
    - docs do not reintroduce a nested packaged plugin tree or any other second export surface under `plugins/`
    - docs do not tell maintainers to use removed installer or install-validator skills
    - docs describe top-level `skills/` as the active export surface today, with top-level `mcps/` or `apps/` only if those directories are added later
-4. From the Socket root, run `bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh` and treat failures as documentation-contract drift unless code assets prove otherwise.
+4. From the Socket root, run `just repo-validate` and treat failures as documentation-contract drift unless code assets prove otherwise.
    - for repo-maintenance drift inside this repo, compare Apple behavior against `repository-skills/skills/maintain-project-repo/`
    - when intentionally syncing ideas from another repo, reconcile them into `maintain-project-repo` first, then keep this repo limited to Apple guidance and profile selection
    - for Xcode MCP drift, compare the plugin metadata against Apple's documented `codex mcp add xcode -- xcrun mcpbridge` setup
-5. Run `uv run --group dev pytest` and treat failures as runtime drift.
-6. Reconcile root docs to the tested, shipped state instead of preserving stale historical wording.
+5. Run `just test` for the root integration/E2E path.
+6. Reconcile root docs to the shipped state instead of preserving stale historical wording.
 7. Update `ROADMAP.md` in the same change when milestone or status text is no longer truthful.
 
 ## Local Discovery Smoke Test Flow
 
 Use this flow when validating the current top-level export surface and local discovery mirrors instead of checking a nested packaged plugin tree.
 
-1. From the Socket root, run `bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh`.
+1. From the Socket root, run `just repo-validate`.
 2. Run `uv run python -B -m pytest plugins/apple-dev-skills/tests -o cache_dir=.codex/.cache/pytest`.
 3. Confirm `.agents/skills` still points at `../skills`.
 4. Confirm root docs, skill docs, and the roadmap all describe top-level `skills/` as the active export surface and do not mention a nested packaged plugin tree or removed installer workflows.

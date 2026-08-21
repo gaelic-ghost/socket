@@ -714,8 +714,8 @@ Run commands strictly serially and from the owning repository root.
 Planning slice:
 
 ```bash
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
-uv run scripts/validate_socket_metadata.py
+just repo-validate
+just repo-validate
 ```
 
 Implementation slices add, as applicable:
@@ -724,7 +724,7 @@ Implementation slices add, as applicable:
 cd plugins/apple-dev-skills && uv run pytest
 cd plugins/reverse-engineering-skills && uv run scripts/validate_repo_metadata.py
 cd plugins/cybersecurity-skills && uv run scripts/validate_repo_metadata.py
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```
 
 Also run the repository's current Hermes, Claude/Cowork, architecture, and

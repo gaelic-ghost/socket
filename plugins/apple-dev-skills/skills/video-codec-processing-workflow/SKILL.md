@@ -79,19 +79,12 @@ Guide low-level Apple video encode, decode, and pixel-buffer work while keeping 
 - Recommend `xcode-testing-workflow` for encoded fixtures, round trips, corruption tests, color/HDR checks, and performance baselines.
 - Recommend `explore-apple-swift-docs` for current codec or media-buffer research.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow defines no runtime-enforced knobs.
-
 ## References
 
 - `references/compression-decompression-and-session-lifecycle.md`
 - `references/pixel-buffers-metal-color-and-hdr.md`
 - `references/compressed-samples-diagnostics-and-performance.md`
-- `references/customization-flow.md`
 - `../../shared/references/apple-media-type-ownership.md`
 - Recommend `references/snippets/apple-xcode-project-core.md` for reusable Xcode-project policy.
 
 ## Script Inventory
-
-- `scripts/customization_config.py`

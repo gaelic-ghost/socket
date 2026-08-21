@@ -243,12 +243,12 @@ Product constraints to preserve:
 For Socket implementation work involving this skill:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+just repo-validate
+just repo-validate
 ```
 
 From the Socket root, run the Apple Dev tests through
-`uv run scripts/validate_socket.py --profile full` when tests, validation
+`just repo-validate` and `just test` when tests, validation
 helpers, or scripts changed.
 
 ## Handoffs

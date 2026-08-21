@@ -114,11 +114,7 @@ It is not the default path for ordinary SwiftUI motion, AppKit/UIKit control ani
 - Recommend `explore-apple-swift-docs` when the user primarily needs raw Apple documentation lookup.
 - Recommend `references/snippets/apple-xcode-project-core.md` when repo policy or Xcode project-integrity guidance is needed before applying layer-backed changes.
 
-## Customization
-
-Use `references/customization-flow.md`.
-
-`scripts/customization_config.py` exists to preserve the repo-wide customization-file contract, but the first version of this skill defines no runtime-enforced knobs.
+## Fixed Policy
 
 Keep the first release focused on layer classification, model/presentation repair, animation primitive choice, and validation handoffs. If future iterations add deterministic layer-tree diagnostics, document those helpers before relying on them.
 
@@ -128,7 +124,6 @@ Keep the first release focused on layer classification, model/presentation repai
 
 - `references/layer-ownership-and-animation-rules.md`
 - `references/model-presentation-and-performance.md`
-- `references/customization-flow.md`
 
 ### Support References
 
@@ -137,5 +132,3 @@ Keep the first release focused on layer classification, model/presentation repai
 - Apple documentation anchors to verify include Core Animation Support, `UIView.layer`, `UIView.layerClass`, `NSView.layer`, `NSImage` layer contents, `CALayer`, `CAAnimation`, `CATransaction`, and Core Animation specialized layer types.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`

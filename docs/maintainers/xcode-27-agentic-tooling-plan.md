@@ -302,7 +302,7 @@ Update with Xcode 27 Icon Composer notes for:
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
+just repo-validate
 ```
 
 ### Slice 2: First Skill
@@ -320,8 +320,8 @@ Updated on 2026-06-23 after a live Xcode 27 beta probe. The beta app produced co
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+just repo-validate
+just repo-validate
 uv run pytest
 ```
 
@@ -335,8 +335,8 @@ uv run pytest
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+just repo-validate
+just repo-validate
 uv run pytest
 ```
 
@@ -349,8 +349,8 @@ uv run pytest
 Validation:
 
 ```bash
-uv run scripts/validate_socket_metadata.py
-bash plugins/apple-dev-skills/.github/scripts/validate_repo_docs.sh
+just repo-validate
+just repo-validate
 uv run pytest
 ```
 

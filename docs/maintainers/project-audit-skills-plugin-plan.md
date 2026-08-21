@@ -131,7 +131,7 @@ score without explaining which files, commands, or observations justify it.
 - Keep the root marketplace entry `NOT_AVAILABLE` until at least those two real
   skills exist and validation passes.
 - Update root README, TODO, and this plan when the plugin becomes installable.
-- Run `uv run scripts/validate_socket_metadata.py` after wiring the marketplace
+- Run `just repo-validate` after wiring the marketplace
   entry.
 
 ## Open Questions

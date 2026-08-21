@@ -85,17 +85,10 @@ Keep SwiftData directly integrated with SwiftUI through `modelContainer`, enviro
 - Recommend `xcode-build-run-workflow` for previews, build, run, project membership, or guarded mutations.
 - Recommend `xcode-testing-workflow` for Swift Testing, XCTest, XCUITest, or test diagnosis.
 
-## Customization
-
-Use `references/customization-flow.md`. This workflow has no runtime-enforced knobs; keep audits grounded in the repository and Apple documentation.
-
 ## References
 
 - `references/component-rules-and-examples.md`
 - `references/audit-checklist.md`
-- `references/customization-flow.md`
 - Recommend `swiftui-app-architecture-workflow/references/snippets/apple-xcode-project-core.md` when the target repo needs durable Apple project policy.
 
 ### Script Inventory
-
-- `scripts/customization_config.py`
