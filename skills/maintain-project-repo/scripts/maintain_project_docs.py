@@ -308,7 +308,7 @@ def child_fixes(child: Dict[str, Any]) -> List[Dict[str, Any]]:
     report = child.get("report")
     if not isinstance(report, dict):
         return []
-    fixes = report.get("fixes_applied", [])
+    fixes = report.get("fixes_applied", report.get("apply_actions", []))
     return fixes if isinstance(fixes, list) else []
 
 

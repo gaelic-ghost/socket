@@ -1191,8 +1191,10 @@ and test/production deployments for GitHub Actions.
 - [x] Add `game-dev-skills:metalfx-game-rendering-workflow`, `metal-asset-streaming-workflow`, and `metal-neural-rendering-workflow` for native MetalFX integration, GPU asset residency/streaming, and carefully gated experimental neural rendering.
 - [x] Overhaul `agent-portability-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
 - [x] Consolidate README, CONTRIBUTING, AGENTS, coordinated docs, and ROADMAP
-  maintenance workflows into `repository-skills` so repository operations and
-  repository documentation have one owner.
+  maintenance workflows into `repository-skills`, then absorb the coordinated
+  docs lifecycle into `maintain-project-repo` so every repository install,
+  refresh, and calling bootstrap creates or refreshes the canonical document
+  set without a parallel umbrella skill.
 - [x] Add a first `agent-engineering-skills:design-agent-automation-workflow` planning skill for agent and automation design. It chooses between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet while delegating stack-specific implementation to the owning plugin.
 - [x] Added `agent-engineering-skills:design-agent-eval-workflow` for agent, skill, prompt, and automation eval planning, and skewed automation guidance toward safe full automation with exact escalation gates instead of broad human review.
 - [x] Replaced the legacy Apple app guidance and sync routes with the unified `bootstrap-xcode-workspace` workflow and its managed `just align` contract.

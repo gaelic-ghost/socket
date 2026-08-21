@@ -830,8 +830,18 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
     elif args.run_mode == "apply":
         readme_text = ""
     else:
-        report["errors"].append(f"README path does not exist: {readme_path}")
-        return report, markdown_report(report)
+        readme_text = ""
+        report["schema_violations"] = [
+            Issue(
+                issue_id="missing-readme-file",
+                category="schema",
+                severity="high",
+                file=str(readme_path),
+                evidence="README.md does not exist.",
+                recommended_fix="Create the canonical README.md file from the bundled template.",
+                auto_fixable=True,
+            ).to_dict()
+        ]
 
     if args.run_mode == "apply" and not report["errors"]:
         _updated_text, actions = apply_fixes(project_root, readme_path, readme_text, config)

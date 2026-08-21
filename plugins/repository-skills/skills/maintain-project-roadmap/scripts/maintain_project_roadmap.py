@@ -1551,8 +1551,17 @@ def run_maintenance(args: argparse.Namespace) -> Tuple[Dict[str, Any], str]:
             ).to_dict()
         ]
     else:
-        report["errors"].append(f"ROADMAP path does not exist: {roadmap_path}")
-        return report, markdown_report(report)
+        roadmap_text = ""
+        report["findings"] = [
+            Finding(
+                finding_id="missing-roadmap",
+                category="schema",
+                severity="high",
+                message=f"ROADMAP file is missing at {roadmap_path}.",
+                file=str(roadmap_path),
+                auto_fixable=True,
+            ).to_dict()
+        ]
 
     small_ticket_candidates: List[SmallTicketCandidate] = []
     if args.collect_source_tickets:

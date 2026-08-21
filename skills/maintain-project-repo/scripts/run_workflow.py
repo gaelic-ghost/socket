@@ -5,14 +5,16 @@
 #   "PyYAML>=6.0.2,<7",
 # ]
 # ///
-"""Unified runtime entrypoint for maintain-project-repo."""
+"""Install or refresh repository tooling and canonical project documentation."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import subprocess
+import sys
 from pathlib import Path
+from typing import Any
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -23,6 +25,44 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--skip-github-workflow", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser
+
+
+def decode_payload(proc: subprocess.CompletedProcess[str], fallback: dict[str, Any]) -> dict[str, Any]:
+    if not proc.stdout.strip():
+        return fallback
+    try:
+        payload = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return {
+            **fallback,
+            "stdout": proc.stdout,
+            "stderr": proc.stderr,
+        }
+    return payload if isinstance(payload, dict) else fallback
+
+
+def run_documentation(repo_root: str, run_mode: str) -> tuple[int, dict[str, Any], str]:
+    helper_path = Path(__file__).with_name("maintain_project_docs.py")
+    command = [
+        sys.executable,
+        str(helper_path),
+        "--project-root",
+        repo_root,
+        "--run-mode",
+        run_mode,
+        "--print-json",
+    ]
+    proc = subprocess.run(command, capture_output=True, text=True, check=False)
+    fallback = {
+        "run_context": {"project_root": repo_root, "run_mode": run_mode},
+        "document_order": [],
+        "document_reports": [],
+        "responsibility_issues": [],
+        "fixes_applied": [],
+        "post_fix_status": [],
+        "errors": ["The integrated documentation workflow did not return JSON output."],
+    }
+    return proc.returncode, decode_payload(proc, fallback), proc.stderr.strip()
 
 
 def main() -> int:
@@ -54,7 +94,8 @@ def main() -> int:
         command.append("--dry-run")
 
     proc = subprocess.run(command, capture_output=True, text=True, check=False)
-    payload = json.loads(proc.stdout) if proc.stdout.strip() else {
+    return_code = proc.returncode
+    payload = decode_payload(proc, {
         "status": "failed",
         "path_type": "primary",
         "repo_root": repo_root,
@@ -65,10 +106,38 @@ def main() -> int:
         "stdout": proc.stdout,
         "stderr": proc.stderr,
         "next_step": "Fix the maintain-project-repo workflow error and rerun the workflow.",
-    }
+    })
     payload.setdefault("normalized_inputs", normalized_inputs)
+    if proc.returncode == 0:
+        documentation_mode = (
+            "check-only"
+            if operation == "report-only" or args.dry_run
+            else "apply"
+        )
+        docs_code, docs_payload, docs_stderr = run_documentation(
+            repo_root, documentation_mode
+        )
+        payload["documentation"] = docs_payload
+        payload["documentation_result"] = (
+            "checked (no writes)"
+            if documentation_mode == "check-only"
+            else "canonical documents created or refreshed"
+        )
+        if docs_code != 0:
+            payload["status"] = "failed"
+            payload["documentation_result"] = "failed after toolkit update"
+            existing_stderr = str(payload.get("stderr", "")).strip()
+            details = docs_stderr or "The integrated documentation workflow failed."
+            payload["stderr"] = "\n".join(
+                part for part in (existing_stderr, details) if part
+            )
+            payload["next_step"] = (
+                "Fix the reported documentation workflow error and rerun "
+                "maintain-project-repo so tooling and canonical docs agree."
+            )
+            return_code = 1
     print(json.dumps(payload, indent=2, sort_keys=True))
-    return 0 if proc.returncode == 0 else 1
+    return 0 if return_code == 0 else 1
 
 
 if __name__ == "__main__":

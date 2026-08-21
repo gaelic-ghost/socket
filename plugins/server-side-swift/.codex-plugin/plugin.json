@@ -1,6 +1,6 @@
 {
   "name": "server-side-swift",
-  "version": "10.0.1",
+  "version": "10.0.2",
   "description": "Codex skills for adding, building, testing, and operating server-side Swift components in canonical product workspaces, with native Homebrew local services and GitHub-only Linux builds and deployments.",
   "author": {
     "name": "Gale",

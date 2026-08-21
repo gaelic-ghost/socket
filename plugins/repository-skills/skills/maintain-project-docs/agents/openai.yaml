@@ -1,4 +1,0 @@
-interface:
-  display_name: "Maintain Project Docs"
-  short_description: "Run a coordinated docs sweep across README, CONTRIBUTING, AGENTS, optional API, and ROADMAP."
-  default_prompt: "Use $maintain-project-docs when a repository needs a complete documentation maintenance pass across README.md, CONTRIBUTING.md, AGENTS.md, and ROADMAP.md. Delegate each file to its owner maintenance skill, run the workflows serially, preserve the responsibility split between product docs, contributor workflow, agent guidance, and roadmap planning, and report cross-document drift instead of rewriting several files at once."
