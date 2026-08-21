@@ -25,5 +25,5 @@ Return this shape:
 5. Ambiguity, missing evidence, or follow-up reads for the main agent.
 6. Suggested focus for the final parent-thread explanation.
 
-Keep output concise. Include file references and evidence, not raw logs. Do not write final user-facing prose for the main thread and do not persist `SLICES.md` records.
+Keep output concise. Include file references and evidence, not raw logs. Do not write final user-facing prose for the main thread and do not persist repository records.
 """

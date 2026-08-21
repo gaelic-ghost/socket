@@ -912,7 +912,7 @@ Completed
 - [x] Add incident triage, containment, recovery, threat hunting, and detection-content workflows on the shared records after the earlier defensive slices validated.
 - [x] Forward-test benign lookalikes, isolation failures, macOS-control separation, privacy-aware reputation, scanner false positives, reachable/unreachable vulnerabilities, incident containment, detection fixtures, and non-specialist advice.
 - [x] Export portable skills through the Hermes tap and validate each host-specific or future MCP/runtime decision explicitly.
-- [x] Update root README inventory text, marketplace metadata, architecture metadata, and validation when the plugin becomes installable.
+- [x] Update root README inventory text, marketplace metadata, and validation when the plugin becomes installable.
 
 ### Exit Criteria
 
@@ -1036,7 +1036,7 @@ Completed
 - [x] Phase 3: add `apple-dev-skills:macos-development-vm-workflow` with restore-image, VM-bundle, identity, clean-baseline, and reset guidance.
 - [x] Phase 4: add `cybersecurity-skills:prepare-isolated-analysis-lab` and align dynamic-analysis and macOS-investigation workflows around its lab record.
 - [x] Forward-test the ten planned stable guidance paths through scenario contract tests before adding any tool-specific adapter skill; treat Lima, Colima, Tart, UTM, VMware Fusion, Parallels Desktop, OrbStack, and similar products as discovered adapters until repeated tasks justify a dedicated surface.
-- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh root architecture metadata and user-facing inventory text, and run affected child plus root validation with each shipped phase.
+- [x] Regenerate portable Hermes exports, update Claude and Cowork classifications, refresh user-facing inventory text, and run affected child plus root validation with each shipped phase.
 
 ### Exit Criteria
 
@@ -1047,7 +1047,7 @@ Completed
 - [x] Security labs default ambient host authority to absent, preserve intended evidence through a narrow export, and verify revert or teardown after execution.
 - [x] Socket's skill metadata, portability exports, compatibility records, documentation, and validation agree on the shipped virtualization inventory.
 
-Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a disposable Cybersecurity lab-preparation workflow, Apple `container` 1.x and `container machine` guidance, guest-versus-host evidence rules, Hermes exports, Claude and Cowork compatibility metadata, architecture inventory updates, and ten scenario-level forward tests. The rebased `9.19.0` release candidate preserves the concurrent Model Lab inventory and passed 268 Apple Dev tests, 126 Socket tests with one intentional skip, Apple and Cybersecurity child validators, Socket marketplace validation, Hermes parity, Claude/Cowork validation, and the architecture consistency check.
+Completed Milestone 30 by shipping four Apple Dev virtualization workflows, a disposable Cybersecurity lab-preparation workflow, Apple `container` 1.x and `container machine` guidance, guest-versus-host evidence rules, Hermes exports, Claude and Cowork compatibility metadata, and ten scenario-level forward tests. The rebased `9.19.0` release candidate preserves the concurrent Model Lab inventory and passed 268 Apple Dev tests, 126 Socket tests with one intentional skip, Apple and Cybersecurity child validators, Socket marketplace validation, Hermes parity, and Claude/Cowork validation.
 
 ## Milestone 31: macOS platform security skills expansion
 
@@ -1194,12 +1194,10 @@ and test/production deployments for GitHub Actions.
 - [x] Expand Socket Steward with a docs-sync planning command that emits structured recommended edits for README, CONTRIBUTING, AGENTS, ROADMAP, marketplace metadata, and child plugin guidance without applying them.
 - [x] Add `docs/agents/` as the repo-local report surface and let Socket Steward write reviewable docs-sync proposal reports there without applying the proposed documentation edits.
 - [x] Add a serialized Socket Steward `prepare docs-sync` workflow and first guarded `apply docs-sync --confirm` mode that refreshes proposal reports without mutating durable docs.
-- [x] Extend `documentation-skills:maintain-project-roadmap` with explicit checklist ticket add/update flags so repo-local agents can delegate roadmap TODO mutations to the roadmap skill instead of duplicating roadmap editing logic.
 - [ ] Add a read-only Socket Steward fan-out experiment for broad docs and guidance scans. Start with deterministic sharding by file count or total line count, keep workers read-only, merge findings into one bounded report, and compare the result against the single-process audit before deciding whether subagent fan-out belongs in the durable steward workflow.
-- [x] Retire the `productivity-skills` catch-all into `repository-skills`, `documentation-skills`, `professional-skills`, `agent-engineering-skills`, and `codebase-understanding-skills`, following the durable [agent skills domain split plan](./docs/maintainers/agent-skills-domain-split.md). Agent Engineering Skills owns the coordinator/worker and external-agent contracts; language plugins retain runtime implementation; Agent Portability Skills retains host adapters.
 - [ ] Add a guarded Socket Steward write mode only after the read-only audit and planning contracts are stable, with explicit approval boundaries for file edits, validation, git operations, release workflow, and future background execution.
 - [x] Overhaul `agent-portability-skills` so its docs, tests, generated bootstrap content, and sync audit logic target Codex/OpenAI plus the open `.agents/skills` discovery mirror only. Remove stale expectations for retired child maintainer docs such as reality-audit and install-surface docs, and keep the wording away from unsupported non-Codex or generic multi-agent surfaces.
-- [x] Add a `documentation-skills:maintain-project-docs` umbrella workflow after `maintain-project-roadmap` owns small-ticket tracking. It should run the individual docs skills together, enforce the splits between `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ACCESSIBILITY.md`, and `ROADMAP.md`, and prevent repeated content from drifting across files.
+- [x] Consolidate README, CONTRIBUTING, AGENTS, API, coordinated docs, and ROADMAP maintenance workflows into `repository-skills` so repository operations and repository documentation have one owner.
 - [x] Add a first `agent-engineering-skills:design-agent-automation-workflow` planning skill for agent and automation design. It chooses between Codex app automations, `codex exec`, Codex subagents, OpenAI Agents SDK services, LangGraph graphs, Hermes-specific workflows, or no automation yet while delegating stack-specific implementation to the owning plugin.
 - [x] Added `agent-engineering-skills:design-agent-eval-workflow` for agent, skill, prompt, and automation eval planning, and skewed automation guidance toward safe full automation with exact escalation gates instead of broad human review.
 - [x] Replaced the legacy Apple app guidance and sync routes with the unified `bootstrap-xcode-workspace` workflow and its managed `just align` contract.
@@ -1217,11 +1215,6 @@ and test/production deployments for GitHub Actions.
 - [ ] Add a maintainer workflow for moving or re-homing skills between repositories.
 - [ ] Add durable process support for noticing changes in OpenAI Codex docs and the open `.agents` skill discovery convention.
 - [ ] Add Claude Code marketplace, plugin, skills, subagent, and MCP compatibility guidance after the first Socket portability audit and adapter-design skills land.
-- [ ] Keep `cardhop-contact-workflow`, bundled MCP server docs, `.mcp.json`, and plugin metadata aligned.
-- [ ] Validate the bundled Cardhop MCP server from `plugins/cardhop-app/mcp/`.
-- [ ] Add root or child Cardhop validation coverage once the Cardhop skill or MCP surface grows beyond the current single workflow.
-- [ ] Add `documentation-skills:maintain-project-security` for canonical `SECURITY.md` maintenance.
-- [ ] Add `documentation-skills:maintain-project-support` for canonical `SUPPORT.md` maintenance.
 - [ ] Add a future `agent-engineering-skills:maintain-project-hooks` workflow for repositories that intentionally use Codex Hooks.
 - [x] Implement the cross-host deferred-work wakeup policy in [`docs/maintainers/deferred-work-wakeup-policy.md`](./docs/maintainers/deferred-work-wakeup-policy.md): Codex same-thread heartbeats and Hermes continuable one-shot `cronjob` jobs scheduled no sooner than five minutes after observation, non-blocking agent release/CI/deployment waits, bounded script visibility checks, generated guidance alignment, and upstream Runpod Flash handling.
 - [x] Forward-test `agent-engineering-skills:design-agent-automation-workflow` against a local-first macOS agent-framework planning request. Record the framework inventory, inference-server/model-capability boundary, canonical labs, and stack-owned implementation handoffs before adding deterministic scaffolding scripts.
@@ -1234,31 +1227,20 @@ and test/production deployments for GitHub Actions.
 - [ ] Cover server-side JVM package/runtime handoffs, persistence, observability, CI, and upgrades after the first project-shape, build-tooling, implementation, and testing slice.
 - [ ] Cover reverse-engineering workflows for .NET assemblies, Unity managed and IL2CPP artifacts, Apple binaries, symbols, crash logs, and decompiler or disassembler output review.
 - [x] Expand hands-on reverse-engineering guidance for direct Ghidra projects, Ghidra headless and PyGhidra work, Hopper interactive documents, Hopper Python SDK automation, and Hopper's operator-local MCP profile with a Hermes-compatible skill-tap export.
-- [ ] Finish Things guidance and maintenance modernization for the mixed Things skill plus bundled MCP server repo.
-- [ ] Keep root README and AGENTS guidance clear about whether Things changes belong in `skills/`, `mcp/`, or plugin metadata.
-- [ ] Expand Things repo-root maintainer tooling once more than one root skill needs Python-backed verification.
-- [ ] Add broader Things bundled-server smoke coverage when new tool families or auth-sensitive update flows are introduced.
-- [ ] Revisit Things packaging mirrors if the repo starts shipping additional Codex discovery surfaces.
-- [ ] Author the first real Spotify-focused Codex workflow.
-- [ ] Add the first maintained Spotify skill, app, or MCP-backed workflow under the canonical exported surface.
-- [ ] Update Socket docs and validation once the exported Spotify surface is real.
-- [ ] Decide whether Socket remains Spotify's canonical home after the first real shipped workflow.
 - [ ] Investigate Socket-owned F# `.fsx` hook and maintenance-script conventions as the first step toward migrating repo maintenance scripts to .NET 10. Define where scripts live, how Codex hook commands launch `dotnet fsi --exec`, which repo-local `DOTNET_CLI_HOME` cache paths must be gitignored, how event-specific hook JSON input/output types are modeled, which validation commands prove portability, when a script should graduate into a compiled F# console tool for frequently fired hooks, and how Python scripts such as release/version and metadata validation should be replaced or wrapped during migration.
 - [ ] Plan a small evidence-first demo and comparison series for local-first AI-assisted macOS development. Show Socket and Gale-built local workflows against mainstream Codex, Xcode-integrated, courseware, or cloud-first workflows using concrete tasks such as Swift repo guidance sync, release maintenance, local inference handoff, worktree coordination, privacy-preserving docs audits, and quality-focused Apple-platform validation.
 - [x] Add root validator coverage for the first Swift Steward subagent role drafts, keeping custom-agent TOML parseable, read-only, name-aligned, and review-oriented before any write-capable steward workflow exists.
 - [x] Set the first Swift Steward roles to a role-local `gpt-5.4-mini` default and document when read-heavy custom subagents should pin a smaller model versus deferring to the parent session.
 - [x] Inventory bundled subagent role candidates across Socket plugins and rank the strongest read-heavy candidates before adding more `.codex/agents` files.
-- [x] Add `documentation-skills:repo-docs-auditor` as the next bundled read-only custom-agent role. Keep it evidence-first across README, CONTRIBUTING, AGENTS, ACCESSIBILITY, ROADMAP, and command drift, and have it return review packets for the main thread to apply through the owner docs skills.
 - [x] Add `codebase-understanding-skills:code-slice-tracer` as a bounded code-reading custom-agent role for call-site tracing, test/doc correlation, and multi-slice explanation support without owning final prose or architecture-file writes.
 - [x] Add `agent-portability-skills:skills-repo-guidance-sync` as a read-only custom-agent role for plugin-root policy audits, marketplace wording checks, Codex docs freshness, `.agents/skills` discovery mirrors, and generated guidance drift.
-- [ ] Add privacy-fenced app plugin auditor roles only after their read/write boundaries are explicit: `things-app:things-route-auditor` for read-only Things route and digest planning, and `cardhop-app:cardhop-contact-auditor` for schema, health, route, and dry-run preview checks.
 - [x] Add `professional-skills:dice-job-search-workflow` after verifying Dice's official MCP docs and setup pages. Keep the first pass guidance-only around Dice's remote `search_jobs` MCP tool, bundle the remote MCP config for automatic setup, and preserve explicit authentication, rate-limit, saved-search, application-state, and privacy boundaries.
 - [ ] Investigate a Drafts.app MCP and automation skill covering the official Drafts MCP Server for Mac, JavaScript action scripting, Shortcuts, URL schemes, AppleScript, AI action helpers, and safe draft read/write boundaries. Decide whether the durable home is a dedicated Drafts app plugin, `agent-engineering-skills`, or a general macOS automation skill before adding implementation guidance.
 - [ ] Investigate an iTerm2 automation and integration skill covering AI Chat, the Python API, scripting fundamentals, variables, shell integration, tmux integration, and deprecated AppleScript boundaries. Keep the first pass docs-first and decide whether the skill should expose terminal-control workflows, app integration guidance, or only safe handoffs to existing shell and Codex GUI worktree guidance.
 - [ ] Add language validation triager roles after one shared contract is agreed: `python-skills:python-validation-triager`, `rust-skills:rust-validation-triager`, and `dotnet-skills:dotnet-validation-triager`, each report-first and scoped to logs, manifests, CI, test, tooling, package, and upgrade evidence.
 - [ ] Add Codex GUI local environment templates and auto-copy/install behavior to `dotnet-skills` for F#, C#, and mixed `.NET` repos, keeping setup/actions portable and preserving customized `.codex/environments/*.toml` files the same way the SwiftPM and Xcode workflows do.
-- [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `documentation-skills:roadmap-triage-worker`, `agent-engineering-skills:automation-plan-designer`, `swiftasb-skills:swiftasb-steward`, and `web-dev-skills:expo-native-boundary-scout`.
-- [ ] Keep placeholder or write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward`, `spotify`, or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
+- [ ] Revisit maybe-later subagent roles only after the owning plugin surface justifies them: `agent-engineering-skills:automation-plan-designer`, `swiftasb-skills:swiftasb-steward`, and `web-dev-skills:expo-native-boundary-scout`.
+- [ ] Keep write-heavy surfaces out of bundled roles for now: do not add `android-dev-skills:android-steward` or a `maintain-project-repo` worker role until those surfaces have enough read-heavy workflow evidence and safe boundaries.
 - [x] Grow Swift Steward from read-heavy guidance-sync and repo-maintenance scans into reviewable patch artifacts that can be saved, edited, or applied by the main thread, then decide whether any apply-mode behavior belongs in the main thread, a guarded report workflow, or a future repo-local sidecar.
 - [x] Turn the placeholder `android-dev-skills` child plugin into an installable Android guidance plugin. It covers Kotlin-first Android project work, Java interoperability or Java-only maintenance when a repo requires it, Gradle and Android Gradle Plugin alignment, emulator-aware validation, release readiness, and clear handoffs to existing mobile testing plugins instead of duplicating emulator tooling.
 - [x] Replace the separate `mlx-skills` and `coreml-skills` plugin candidates with the coordinated `model-lab-skills:choose-apple-model-runtime` plan. Keep app integration in Apple Dev Skills and revisit a narrower plugin only if repeated work proves the combined boundary insufficient.
@@ -1295,7 +1277,7 @@ and test/production deployments for GitHub Actions.
 - Added draft `swift-steward` and `server-swift-steward` custom-agent roles plus root validator coverage so the steward contracts remain read-only and review-oriented until a guarded draft-patch workflow exists.
 - Tuned the Swift Steward custom-agent contracts and shared subagent guidance around a role-local `gpt-5.4-mini` default for bounded read-heavy scans, while keeping write ownership and harder reasoning in the main thread or stronger model choices.
 - Tightened Swift Steward output around review packets with proposed patch sets and validation handoff so future draft-patch behavior has a stable report contract before any apply mode exists.
-- Added a bundled subagent role candidate inventory covering docs audit, code tracing, plugin guidance sync, Things and Cardhop auditors, validation triage roles, and no-for-now placeholder plugins.
+- Added a bundled subagent role candidate inventory covering docs audit, code tracing, plugin guidance sync, validation triage roles, and no-for-now placeholder plugins.
 - Added the first Productivity Skills bundled custom-agent role, `repo-docs-auditor`, for read-only repo-document audits and review-packet planning before the main thread applies owner-doc skill edits.
 - Added `code-slice-tracer` as a read-only Productivity Skills custom-agent role for bounded call-site maps, branch tracing, test/doc correlation, and comparison support before the main thread writes the final code-slice explanation.
 - Added `skills-repo-guidance-sync` as a read-only Agent Portability Skills custom-agent role for Codex docs freshness, plugin-root policy, discovery mirror drift, marketplace wording, and review-packet guidance sync.
@@ -1313,7 +1295,6 @@ and test/production deployments for GitHub Actions.
 - Updated `repository-skills:maintain-project-repo` so heavy remote CI can be deferred after full local validation, branch push, PR creation, and initial check discovery, with Codex expected to use native thread Timer/Wakeup or heartbeat automation to resume the release instead of keeping an idle CI-waiting script open.
 - Added root `docs/media` screenshot assets and README media guidance so the Codex plugin-directory catalog surface is visible without weakening text-first documentation.
 - Added coordinated OpenAI Codex Hooks guidance across `agent-portability-skills` and `agent-engineering-skills`, with future `maintain-project-hooks` work tracked in the Agent Engineering roadmap.
-- Added `documentation-skills:maintain-project-docs` as an umbrella documentation sweep that runs the owner README, CONTRIBUTING, AGENTS, ACCESSIBILITY, and ROADMAP workflows serially while auditing cross-document responsibility drift.
 - Updated `socket` and plugin guidance so ordinary user installs and updates default to Git-backed Codex marketplace sources and official marketplace add/upgrade commands.
 - Loosened coordinated Codex subagent guidance so skills preserve OpenAI's explicit-trigger model while allowing narrower workflow guidance, such as Codex Security repository-wide scans, to ask for and use subagents when the task depends on parallel file-pass review.
 - Added coordinated Codex subagent guidance across `agent-portability-skills` and `agent-engineering-skills`, grounding skill wording in OpenAI's current explicit-trigger `subagents` model while keeping the root docs clear about why the pass belongs in `socket`.
@@ -1322,9 +1303,6 @@ and test/production deployments for GitHub Actions.
 - Added explicit `standard` and `subtrees` release-mode guidance, including the pull-only `SpeakSwiftlyServer` rule for `socket` subtree sync.
 - Published `apple-dev-skills` `v6.0.11` after adding direct regression coverage for SwiftPM-generated `.swiftpm/xcode/package.xcworkspace` classification and synced the released child state back into `socket`.
 - Prepared the shared `v6.0.11` patch release after fixing `repository-skills:maintain-project-repo` release-helper regressions for initial PR check discovery and approval-only review handling.
-- Added the placeholder `plugins/spotify` child repository, wired it into the root marketplace, and kept the superproject docs honest about that new monorepo-owned plugin surface.
-- Converted the former standalone `cardhop-mcp` checkout into the monorepo-owned `plugins/cardhop-app` child, added first-pass Codex plugin metadata plus a bundled MCP config, and recorded the new child as a normal `socket` marketplace entry.
-- Retired the remaining `things-app` subtree-era wording from the root maintainer docs, removed the now-redundant local `things-app` and `things-app-mcp` sibling checkouts after verification, and prepared the `v0.11.1` plus `things-app v0.1.3` patch bump.
 - Synced the `SpeakSwiftlyServer` subtree through the newer `v4.2.x` plugin and embedded live-speech updates, confirmed the root marketplace path still stayed valid, and kept the superproject release trail explicit with the `v0.11.0` bump.
 - Re-checked the root packaging strategy against current OpenAI Codex plugin docs, added standalone repo-marketplace coverage for `apple-dev-skills`, normalized `SpeakSwiftlyServer`'s child marketplace path, and documented that the subtree-managed child plugins can be installed from their own clones without using `socket`.
 - Added a root version-alignment script, switched `python-skills` to the monorepo-owned workflow, and documented the shared-version policy for the maintained manifest surfaces.

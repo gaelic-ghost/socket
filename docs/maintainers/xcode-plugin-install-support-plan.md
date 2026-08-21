@@ -146,7 +146,6 @@ The 2026-07-19 source audit classifies 16 skill-only child plug-ins as
 structurally `likely` for all three targets. The runtime-proof queue contains
 the MCP-backed plug-ins, plug-ins with Codex custom-agent metadata, the
 Codex-only `agentdeck` hook, and the external Git-backed `speak-swiftly`
-payload. `spotify` remains blocked because it is unavailable and has no usable
 payload.
 
 `agents/openai.yaml` files are counted separately as Codex presentation
@@ -212,7 +211,6 @@ Pick a small set of representative plug-ins and validate runtime behavior inside
 Suggested first targets:
 
 - `apple-dev-skills`: skill and hook-recognition path
-- `things-app` or `cardhop-app`: skill plus local MCP path
 - `repository-skills`: broader repository-maintenance skill pack
 - one skill-only language pack
 

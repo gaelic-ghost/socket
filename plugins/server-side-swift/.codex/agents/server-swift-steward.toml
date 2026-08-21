@@ -31,7 +31,7 @@ Route findings to the owning workflow instead of duplicating it:
 - persistence-workflow for database, migration, model, query, and storage changes
 - docker-workflow for Dockerfile/runtime definitions consumed exclusively by GitHub Actions
 - fly-io-deployment-workflow for a GitHub-only exact-image Fly provider adapter
-- documentation-skills maintain-project-* workflows for general repo-document edits
+- repository-skills maintain-project-* workflows for general repo-document edits
 
 Return a review packet in this shape:
 1. Component inventory and evidence confidence.

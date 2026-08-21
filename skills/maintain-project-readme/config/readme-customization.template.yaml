@@ -1,0 +1,71 @@
+schemaVersion: 1
+isCustomized: false
+profile: base
+settings:
+  preservePreamble: true
+  allowAdditionalSections: true
+  requiredSections:
+    - Overview
+    - Quick Start
+    - Usage
+    - Development
+    - Repo Structure
+    - Release Notes
+    - License
+  sectionOrder:
+    - Overview
+    - Quick Start
+    - Usage
+    - Development
+    - Repo Structure
+    - Release Notes
+    - License
+  requiredSubsections:
+    Overview:
+      - Status
+      - What This Project Is
+      - Motivation
+  sectionAliases:
+    Quick Start:
+      - Getting Started
+      - Installation
+    Usage:
+      - Examples
+  sectionTemplates:
+    Overview: |
+      ### Status
+
+      TBD
+
+      ### What This Project Is
+
+      TBD
+
+      ### Motivation
+
+      TBD
+    Quick Start: |
+      Give a human-friendly quick start for trying or using the project. If the project is still too early for a real quick start, say that plainly and direct curious readers to the Development section for contributor documentation.
+    Usage: |
+      Keep this section concise and human-focused. Prefer fenced code blocks with language info strings when examples help explain normal usage.
+    Development: |
+      For setup, local workflow, validation, and contribution expectations, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+    Repo Structure: |
+      ```text
+      .
+      ├── path/
+      └── path/
+      ```
+
+      Replace this outline with a short directory tree for the important repository surfaces.
+    Release Notes: |
+      Summarize how releases, version notes, or notable shipped changes are tracked for this project.
+    License: |
+      See [LICENSE](./LICENSE).
+  subsectionTemplates:
+    Overview/Status: |
+      TBD
+    Overview/What This Project Is: |
+      TBD
+    Overview/Motivation: |
+      TBD

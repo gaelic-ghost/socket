@@ -151,7 +151,6 @@ as the default Socket maintainer automation runtime.
 | Skill | Best automation tier | Why |
 | --- | --- | --- |
 | `explain-code-slice` | Codex app automation, subagent read phase, or code-owned read phase | It is read-only and explanation-focused. Good for batch reports, but it should not mutate repos. |
-| `maintain-project-accessibility` | `codex exec` for one repo; code-owned service for fleet rollout | It has check-only/apply modes and one target file. Use check-only broadly, apply through PRs. |
 | `maintain-project-agents` | `codex exec` for one repo; code-owned service for policy rollout | It changes durable agent instructions, so apply mode should be branch-and-PR gated. App automation is good for drift reports. |
 | `maintain-project-api` | `codex exec` for one repo; subagents for read-heavy evidence; code-owned service for API-doc inventory | It must avoid invented endpoints and credentials. Best run with repo-grounded evidence and PR review. |
 | `maintain-project-contributing` | `codex exec` for one repo; code-owned service for standardization campaigns | It owns contributor workflow. Good candidate for automated apply after check-only evidence. |

@@ -613,7 +613,7 @@ private implementation, runtime observation, and inference.
 - Record Claude Code and Cowork compatibility, keeping Codex-specific MCP or
   app metadata out of portable claims.
 - Run affected child validation, root metadata validation, Hermes parity,
-  Claude/Cowork checks, architecture consistency, and the full relevant tests.
+  Claude/Cowork checks and the full relevant tests.
 - Review whether repeated use earned a shared read-only collector or standalone
   plugin. Default to no if the evidence remains workflow-specific.
 

@@ -212,8 +212,7 @@ Every declared Socket MCP configuration, including each new or changed one, is t
 [`hermes-mcp/index.yaml`](./hermes-mcp/index.yaml). Copy the chosen fragment's
 `mcp_servers` mapping into the operator's private `~/.hermes/config.yaml` and
 complete any listed setup first. The checked-in fragments never require a
-machine-local path: local Cardhop and Things servers instead use documented
-environment variables that the operator sets before starting Hermes.
+machine-local path.
 
 Hermes config has this shape:
 
@@ -252,10 +251,8 @@ server command plus a deliberately small tool allowlist.
 | Socket declaration | Checked-in Hermes translation | Status |
 | --- | --- | --- |
 | Apple Dev Skills Xcode bridges | [`apple-dev-skills.yaml`](./hermes-mcp/apple-dev-skills.yaml) | Manual Xcode setup required |
-| Cardhop local server | [`cardhop-app.yaml`](./hermes-mcp/cardhop-app.yaml) | Local server-directory setup required |
 | Cloud Inference Runpod API and docs servers | [`cloud-inference-skills.yaml`](./hermes-mcp/cloud-inference-skills.yaml) | Ready; API server needs `RUNPOD_API_KEY` |
 | Professional Dice server | [`professional-skills.yaml`](./hermes-mcp/professional-skills.yaml) | Ready; basic public search needs no credential |
-| Things local server | [`things-app.yaml`](./hermes-mcp/things-app.yaml) | Local server-directory setup required; updates need `THINGS_AUTH_TOKEN` |
 
 ## When a Native Hermes Plugin Is Required
 

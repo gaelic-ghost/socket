@@ -16,25 +16,21 @@ from pathlib import Path
 from typing import Any
 
 
-KNOWN_SOCKET_PLUGINS = {
-    "agent-plugin-skills",
-    "agent-portability-skills",
-    "agent-engineering-skills",
-    "apple-dev-skills",
-    "cardhop-app",
-    "dotnet-skills",
-    "codebase-understanding-skills",
-    "documentation-skills",
-    "productivity-skills",
-    "professional-skills",
-    "python-skills",
-    "repository-skills",
-    "rust-skills",
-    "speak-swiftly-server",
-    "spotify",
-    "things-app",
-    "web-dev-skills",
-}
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SOCKET_MARKETPLACE_PATH = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
+
+
+def socket_plugin_names(path: Path = SOCKET_MARKETPLACE_PATH) -> set[str]:
+    document = json.loads(path.read_text(encoding="utf-8"))
+    plugins = document.get("plugins", [])
+    return {
+        entry["name"]
+        for entry in plugins
+        if isinstance(entry, dict) and isinstance(entry.get("name"), str)
+    }
+
+
+KNOWN_SOCKET_PLUGINS = socket_plugin_names()
 
 CANONICAL_MARKETPLACE_NAMES = KNOWN_SOCKET_PLUGINS | {"socket"}
 

@@ -77,8 +77,8 @@ claude plugin marketplace add gaelic-ghost/socket
 
 Then install the individual Socket plugins you want. Cowork users can add the
 same GitHub marketplace from **Customize → Plugins**. Socket skills work in
-both hosts; local Mac integrations such as Xcode, Cardhop, and Things are
-Claude Code-only. Speak Swiftly remains unavailable in this catalog until its
+both hosts; local Mac integrations such as Xcode are Claude Code-only. Speak
+Swiftly remains unavailable in this catalog until its
 standalone payload has a Claude-native hook boundary. See the
 [Claude compatibility guide](./docs/maintainers/claude-compatibility.md) for
 the full support boundary and update flow.
@@ -124,12 +124,10 @@ Currently available from the catalog:
 - `android-dev-skills`
 - `apple-creator-studio-skills`
 - `apple-dev-skills`
-- `cardhop-app`
 - `cloud-deployment-skills`
 - `cloud-inference-skills`
 - `cybersecurity-skills`
 - `codebase-understanding-skills`
-- `documentation-skills`
 - `messaging-collaboration-skills`
 - `model-lab-skills`
 - `agentdeck`
@@ -146,7 +144,6 @@ Currently available from the catalog:
 - `rust-skills`
 - `speak-swiftly`
 - `swiftasb-skills`
-- `things-app`
 - `web-dev-skills`
 
 ## Plugin Status
@@ -160,12 +157,10 @@ Current Socket catalog shape:
 - `android-dev-skills`: Android, Kotlin, Java, Gradle, Android Gradle Plugin, Compose/XML UI, testing, lint, emulator-aware validation handoff, and release-readiness workflow guidance
 - `apple-creator-studio-skills`: source-preserving Final Cut Pro editing, Motion template, Compressor delivery, Logic Pro production, MainStage concert, and GarageBand project workflows with local Help Viewer discovery, explicit Computer Use safeguards, and artifact or rehearsal verification
 - `apple-dev-skills`: Apple, Swift, SwiftPM, macOS-hosted boundary selection, custom Virtualization framework hosts, persistent Linux development guests, clean macOS development guests, imaging, Vision/Core ML, camera, spatial sensing, media/audio, SwiftUI, AppKit, Xcode, Safari, OpenAPI, and DocC workflows, plus the source-bundled `swift-steward` custom-agent definition with its own roadmap
-- `cardhop-app`: mixed skill plus bundled MCP server for Cardhop.app contact workflows
 - `cloud-deployment-skills`: cloud provider deployment routing, official provider plugin selection, credential and mutation boundary checks, a reusable Dockerized-service release/deployment contract, AWS handoff to the official AWS Agent Toolkit, and Azure handoff to Microsoft's Azure Skills plugin rather than duplicated provider MCP or CLI setup
 - `cloud-inference-skills`: cloud AI inference, training, model conversion, and GPU infrastructure routing for Runpod, Hugging Face, AWS, Vast.ai, CoreWeave, and similar providers, with bundled Runpod MCP server configuration, upstream Runpod skill mirrors, and first-party Hugging Face/AWS handoffs
 - `cybersecurity-skills`: suspicious-content triage, evidence preservation, isolation selection, disposable Linux and macOS analysis-lab preparation, malware analysis, agentic security-tool controls, macOS investigation and defense, vulnerability validation, authorized testing, incident response, threat hunting, detection content, and clear non-specialist advice
 - `codebase-understanding-skills`: source-grounded code tracing and explanation, with the bounded `code-slice-tracer` role for evidence-first call-site, test, and documentation discovery
-- `documentation-skills`: maintenance workflows for README, CONTRIBUTING, AGENTS, ROADMAP, API, architecture, and accessibility documentation, with the bounded `repo-docs-auditor` role
 - `messaging-collaboration-skills`: chat-app, bot, business-messaging, meeting-collaboration, iMessage collaboration, Communication Notifications, Push to Talk, VoIP/SIP, documented iOS/iPadOS default communication roles, and app-owned macOS client workflows for Discord, Telegram, Slack, Teams, WhatsApp Business, SMS/MMS/RCS, Google Meet, and Apple communication surfaces, with explicit Signal and Mac operator-automation boundaries
 - `model-lab-skills`: reproducible language-model experiment design, dataset preparation, fine-tuning, evaluation, checkpoint comparison, representation and steering research, refusal ablation, authorized jailbreak and tool-calling evaluation, runtime benchmarking, and current-source routing across Core AI, Core ML, MLX, ExecuTorch, and Foundation Models
 - `agentdeck`: local Codex runtime utilities, starting with hooks that prefix generated Codex thread titles with the project directory name
@@ -174,7 +169,7 @@ Current Socket catalog shape:
 - `network-protocol-skills`: modern networking and application-protocol workflows for transport selection, HTTP/3 and QUIC planning, Media over QUIC draft-aware guidance, WebRTC signaling/media/data-channel work, and protocol diagnostics with stack-plugin handoffs
 - `professional-skills`: career and professional workflow guidance, starting with Dice job search and its bundled read-only remote MCP configuration
 - `python-skills`: Python runtime and tooling workflows, including local-first agent services, FastAPI and FastMCP service maintenance, and pytest-based testing; see the [Python skills expansion plan](./docs/maintainers/python-skills-plugin-plan.md) for maintainer details
-- `repository-skills`: routed Git and GitHub collaboration, repository settings, protected-main release, and Codex GUI worktree workflow guidance; its portable Git, GitHub, settings, release, and coordination workflows are available from the Hermes skill tap
+- `repository-skills`: routed Git and GitHub collaboration, README, CONTRIBUTING, AGENTS, API, ROADMAP, repository settings, protected-main release, and Codex GUI worktree workflow guidance; its portable repository and documentation workflows are available from the Hermes skill tap
 - `reverse-engineering-skills`: artifact triage, preservation, exact-build comparison, decompiler review, Apple Mach-O/runtime/signing/Apple Silicon/dyld/dynamic/kernel research, Cutter/Rizin, Malimite, Ghidra, Hopper, .NET, Unity and IL2CPP, and reproducible security evidence workflows
 - `server-side-jvm`: server-side JVM, Java, Scala, Google ADK agent-service, Gradle, Maven, SBT, and testing workflow guidance, with future Clojure support planned
 - `server-side-swift`: canonical-workspace service components, Vapor, Leaf-rendered websites and HTML email, Hummingbird, persistence, OpenAPI/RPC, SwiftNIO, observability, auth, app sync, Soto-first AWS integration, native macOS/Homebrew local development, and GitHub-only OCI/Fly.io deployment guidance plus the source-bundled `server-swift-steward` custom-agent definition
@@ -182,12 +177,7 @@ Current Socket catalog shape:
 - `rust-skills`: Rust, Cargo, rustup, crate, workspace, CLI, library, package, CI, test, lint, and format workflow guidance
 - `speak-swiftly`: Git-backed Speak Swiftly plugin from the standalone SpeakSwiftlyServer repository
 - `swiftasb-skills`: SwiftASB companion guidance
-- `things-app`: mixed skill plus bundled MCP server for Things.app workflows
 - `web-dev-skills`: Expo SDK 56+ inline native modules, type generation, native-boundary inspection, and validation handoff guidance
-
-Placeholder directories for future plugins (not available for install):
-
-- `spotify`
 
 ## Development
 

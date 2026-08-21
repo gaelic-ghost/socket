@@ -36,8 +36,6 @@ disabled in Cowork:
 | Plugin | Claude Code | Cowork |
 | --- | --- | --- |
 | `apple-dev-skills` | Xcode local MCP bridge | Skills only |
-| `cardhop-app` | Local Cardhop MCP server | Skills only |
-| `things-app` | Local Things MCP server | Skills only |
 | `cloud-inference-skills` | Runpod remote MCP servers | Remote MCP supported |
 | `professional-skills` | Dice remote MCP server | Remote MCP supported |
 
@@ -57,8 +55,7 @@ the plugin declares no MCP server or host-specific runtime extension.
 The macOS platform-security workflows remain instruction-portable in Claude Code and Cowork. Apple Dev Skills owns supported app permission, sandbox file-access, and entitlement diagnosis; Reverse Engineering Skills owns exact-build private-control research; Cybersecurity Skills owns defensive host investigation. Visible permission prompts, System Settings changes, local artifact inspection, VM execution, and protection-state changes still require the corresponding approved local environment and are not supplied by the Claude marketplace adapter.
 
 `agentdeck` is intentionally absent from the Claude marketplace: its title
-hook is a Codex runtime integration, not an instruction workflow. `spotify`
-is also absent because it remains a Socket placeholder. `speak-swiftly` is
+hook is a Codex runtime integration, not an instruction workflow. `speak-swiftly` is
 excluded until its standalone source ships a Claude-native payload: Claude Code
 auto-loads its current Codex-only hook, which includes a hard-coded Codex cache
 path.
@@ -80,18 +77,6 @@ claude plugin marketplace update socket
 In Cowork, open **Customize → Plugins**, add the `gaelic-ghost/socket`
 marketplace, then install the desired plugin. Leave any local-process
 connector disabled; its skill workflows remain usable.
-
-## MCP Adapters
-
-Claude marketplace installs are copied into a versioned cache. Local MCP
-servers must therefore use `${CLAUDE_PLUGIN_ROOT}` rather than Codex's
-`${PLUGIN_ROOT}` or a traversal outside the plugin root. Socket provides
-`claude.mcp.json` adapters for Cardhop and Things. The adapters preserve each
-server name and start it from the packaged `mcp/` directory.
-
-Remote MCP configurations can use their existing standard `.mcp.json` files.
-Secrets remain user or organization configuration; never commit credentials or
-machine-local paths into the marketplace payload.
 
 ## Host-Specific Components
 

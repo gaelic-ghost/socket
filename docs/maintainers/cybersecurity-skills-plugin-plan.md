@@ -40,7 +40,7 @@ Use `Developer Tools` as the marketplace category. Keep the authored plugin name
 | Ordinary Apple app development, signing, Xcode, Endpoint Security API implementation, or Virtualization framework implementation | `apple-dev-skills` | Own the security investigation or lab requirement, then hand implementation to Apple development workflows. |
 | Protocol implementation or ordinary network-stack engineering | `network-protocol-skills` | Own security test scope and observed behavior; hand protocol construction or repair to the protocol owner. |
 | Language- or stack-specific remediation | Owning Socket stack plugin | Preserve the finding and acceptance criteria, then hand the implementation to the relevant language or framework workflow. |
-| GitHub repository settings and project security documents | `repository-skills` and `documentation-skills` | Provide the security requirement or finding; use the repository-maintenance owners for settings and policy-file changes. |
+| GitHub repository settings and project security documents | `repository-skills` | Provide the security requirement or finding; use the repository-maintenance owner for settings and policy-file changes. |
 
 Do not copy Codex Security's repository scan phases into this plugin. The new plugin should remain useful when Codex Security is unavailable, but its fallback is bounded manual validation of a supplied concern, not a second full repository scanner.
 
@@ -230,7 +230,7 @@ Forward-test with redistributable, locally generated, or explicitly approved fix
 - Validate every skill with the skill-authoring validator and run `uv run scripts/validate_socket_metadata.py` after marketplace or manifest changes.
 - Export portable skills through the Hermes tap in the same pass and update `skills.sh.json`; document any host-specific tool or Computer Use workflow instead of pretending the Codex manifest is portable.
 - Add a checked-in Hermes `mcp_servers` translation only if a later approved `.mcp.json` exists. A guidance-only first release needs no MCP translation or native Hermes plugin.
-- Update root README inventory text, `ROADMAP.md`, architecture metadata, marketplace metadata, and version surfaces together when the plugin becomes installable.
+- Update root README inventory text, `ROADMAP.md`, marketplace metadata, and version surfaces together when the plugin becomes installable.
 
 ## Source Baseline
 

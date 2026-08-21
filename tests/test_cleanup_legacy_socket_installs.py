@@ -74,10 +74,10 @@ def test_plan_marketplace_cleanup_deletes_socket_only_marketplace(tmp_path: Path
             "name": "socket",
             "plugins": [
                 {
-                    "name": "agent-plugin-skills",
+                    "name": "agent-engineering-skills",
                     "source": {
                         "source": "local",
-                        "path": "/Users/example/socket/plugins/agent-plugin-skills",
+                        "path": "/Users/example/socket/plugins/agent-engineering-skills",
                     },
                 }
             ],
@@ -88,7 +88,7 @@ def test_plan_marketplace_cleanup_deletes_socket_only_marketplace(tmp_path: Path
 
     assert rewrite is not None
     assert rewrite.data is None
-    assert rewrite.removed_names == ("agent-plugin-skills",)
+    assert rewrite.removed_names == ("agent-engineering-skills",)
 
 
 def test_plan_plugin_dir_cleanup_skips_cache_and_unknown_payloads(tmp_path: Path) -> None:
@@ -96,8 +96,8 @@ def test_plan_plugin_dir_cleanup_skips_cache_and_unknown_payloads(tmp_path: Path
     write_plugin_manifest(codex_plugins_root / "apple-dev-skills", "apple-dev-skills")
     write_plugin_manifest(codex_plugins_root / "unrelated", "unrelated")
     write_plugin_manifest(
-        codex_plugins_root / "cache" / "socket" / "things-app" / "6.3.1",
-        "things-app",
+        codex_plugins_root / "cache" / "socket" / "python-skills" / "6.3.1",
+        "python-skills",
     )
 
     actions = cleanup_legacy_socket_installs.plan_plugin_dir_cleanup(codex_plugins_root)

@@ -290,7 +290,7 @@ alternate profiles, or migration-only wrappers in the adopted repository.
   credentials, prebuilt immutable artifact, exact deployment identity, health,
   and rollback. No local build, `fly launch`, or direct developer deployment.
 - Root and child `AGENTS.md`, plugin manifests, README inventories, prompts,
-  generated guidance, roadmap, architecture inventory, and portability exports.
+  generated guidance, roadmap, and portability exports.
 
 ### Preserve Only As Explicit History
 
@@ -355,7 +355,6 @@ alternate profiles, or migration-only wrappers in the adopted repository.
 - Remove deleted skills from validators, customization counts, inventories,
   Hermes allowlists, `skills.sh.json`, and generated tap output.
 - Mark or collapse historical docs and annotate superseded ROADMAP entries.
-- Regenerate architecture inventory only after the final skill graph is stable.
 
 ### Slice 7: Full Contract Validation
 

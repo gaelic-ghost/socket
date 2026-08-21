@@ -274,7 +274,7 @@ Implementation should land in coherent phases:
 3. macOS development VM workflow
 4. disposable security-lab workflow and security-owner alignment
 
-Each phase should update its owning plugin skill metadata, tests, references, Hermes export, Claude and Cowork compatibility record, root architecture metadata, README inventory text when user-visible coverage changes, and `ROADMAP.md`. A phase that adds only portable guidance needs no MCP server or native host plugin.
+Each phase should update its owning plugin skill metadata, tests, references, Hermes export, Claude and Cowork compatibility record, README inventory text when user-visible coverage changes, and `ROADMAP.md`. A phase that adds only portable guidance needs no MCP server or native host plugin.
 
 ## Explicit Non-Goals
 

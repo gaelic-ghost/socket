@@ -1,7 +1,7 @@
 {
   "name": "repository-skills",
   "version": "10.0.0",
-  "description": "Repository operations, GitHub settings, worktree, validation, and release workflow skills.",
+  "description": "Repository operations, documentation maintenance, GitHub settings, worktree, and release workflow skills.",
   "author": {
     "name": "Gale",
     "email": "mail@galewilliams.com",
@@ -14,6 +14,7 @@
     "codex",
     "skills",
     "repository",
+    "documentation",
     "github",
     "worktree",
     "release"
@@ -21,8 +22,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Repository Skills",
-    "shortDescription": "Repository operations and release workflows for Codex.",
-    "longDescription": "Repository operations, GitHub settings, Codex GUI worktrees, validation, release preparation, and branch-accounting workflow guidance.",
+    "shortDescription": "Repository operations and documentation workflows for Codex.",
+    "longDescription": "Repository operations, documentation maintenance, GitHub settings, Codex GUI worktrees, release preparation, and branch-accounting workflow guidance.",
     "developerName": "Gale",
     "category": "Developer Tools",
     "capabilities": [

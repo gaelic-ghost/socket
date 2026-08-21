@@ -303,7 +303,7 @@ For every new skill:
 - forward-test with small, redistributable or locally generated artifacts that exercise success, uncertainty, disagreement between tools, and unsupported-version failure paths
 - smoke-test GUI adapter steps through the available app integration when practical and retain a CLI or manual-GUI path
 - date and link any beta-sensitive claim, and require live confirmation before relying on it in a later analysis session
-- update `ROADMAP.md`, root plugin inventory text, and architecture metadata when the shipped skill inventory changes
+- update `ROADMAP.md` and root plugin inventory text when the shipped skill inventory changes
 
 The first Cutter calibration on this planning branch found Cutter `2.5.0-HEAD-a6f6ad7` with an accessibility-visible welcome and open-file workflow. Standalone Rizin commands were not on `PATH`. Treat this only as a dated workstation observation, not an install requirement or a capability claim for other Cutter builds. Recheck the [Cutter site and documentation](https://cutter.re/), [Cutter source](https://github.com/rizinorg/cutter), [Rizin handbook](https://book.rizin.re/), [Rizin source](https://github.com/rizinorg/rizin), and [rz-ghidra integration](https://github.com/rizinorg/rz-ghidra) before implementing the adapter.
 

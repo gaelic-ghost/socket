@@ -10,7 +10,7 @@ Use this skill when the user wants one bounded walkthrough of how part of a syst
 ## Purpose
 
 - Explain one slice end to end without dropping meaningful steps.
-- When the user wants the slice recorded durably, update `docs/architecture/SLICES.md` after the explanation.
+- When the user wants the slice recorded durably, preserve an existing repository-owned slice record or ask where it belongs.
 - Start with the incoming data shape, what it represents, who sends it, and why it enters the flow.
 - Walk the execution path in order, including boundaries, branch points, shared versus specialized steps, and data transformations.
 - End with the final output shape, who receives it, and what purpose it serves.
@@ -95,7 +95,7 @@ Treat comparison requests as first-class trigger cases, not as an advanced follo
 
 When delegation is explicitly requested or authorized, follow `agent-engineering-skills:orchestrate-agent-work`. This skill is a good fit for `code-slice-tracer`, parallel code tracing, and bounded read-heavy discovery: mapping call sites, reading tests, checking docs, finding data-shape changes, or tracing one branch of a comparison, with each worker returning concise file references and findings.
 
-Do not spawn subagents just because a slice is large. Keep the final explanation in the main thread so the user gets one coherent walkthrough, and keep any `SLICES.md`, write, or refactor follow-up outside the tracer role unless the user asks for that next step.
+Do not spawn subagents just because a slice is large. Keep the final explanation in the main thread so the user gets one coherent walkthrough, and keep any persistent-record write or refactor follow-up outside the tracer role unless the user asks for that next step.
 
 ## Detail levels
 
@@ -121,7 +121,7 @@ The writing should stay conversational and narrative-first. Avoid sterile dumps,
 Use this when the user asks to save, record, maintain, update, or add a slice to repository architecture docs.
 
 1. Explain the slice normally first.
-2. Ensure `docs/architecture/SLICES.md` exists. If it is missing, use the `maintain-project-architecture` structure: title, summary, slice index, and slices sections.
+2. If the repository already owns a slice-record document, preserve its existing structure; otherwise ask where the user wants the record stored before creating a new documentation surface.
 3. Add or refresh one `## Slice: <Name>` section.
 4. Include:
    - `### Trigger`
@@ -140,7 +140,7 @@ Use this when the user asks to save, record, maintain, update, or add a slice to
 - Do not replace the end-to-end walkthrough with only a component map or only a high-level summary.
 - If the path is ambiguous, say where the ambiguity starts and explain the most likely path plus the alternate branch.
 - If a step cannot be proven from the code, say that plainly instead of guessing.
-- Do not persist unproven slice claims into `SLICES.md`.
+- Do not persist unproven slice claims into a repository-owned slice record.
 - Prefer concrete file/function references when available.
 - Keep branch and data-shape notes short and move clutter out of the main narrative when a marker note will do.
 

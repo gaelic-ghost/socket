@@ -8,13 +8,6 @@ translations:
     status: manual_setup_required
     required_environment: []
     setup: Xcode must be installed and external-agent MCP access enabled. Xcode 27 Beta 5 can serve workspace-independent tools headlessly; project and debugger tools still require their live Xcode state.
-  cardhop-app:
-    source: plugins/cardhop-app/.mcp.json
-    translation: docs/maintainers/hermes-mcp/cardhop-app.yaml
-    status: manual_setup_required
-    required_environment:
-      - SOCKET_CARDHOP_MCP_DIR
-    setup: Point SOCKET_CARDHOP_MCP_DIR at a local Cardhop MCP checkout with its uv environment synced.
   cloud-inference-skills:
     source: plugins/cloud-inference-skills/.mcp.json
     translation: docs/maintainers/hermes-mcp/cloud-inference-skills.yaml
@@ -28,11 +21,3 @@ translations:
     status: ready
     required_environment: []
     setup: The public Dice search endpoint requires no credential for basic search.
-  things-app:
-    source: plugins/things-app/.mcp.json
-    translation: docs/maintainers/hermes-mcp/things-app.yaml
-    status: manual_setup_required
-    required_environment:
-      - SOCKET_THINGS_MCP_DIR
-      - THINGS_AUTH_TOKEN
-    setup: Point SOCKET_THINGS_MCP_DIR at a local Things MCP checkout; THINGS_AUTH_TOKEN is required only for Things update operations.

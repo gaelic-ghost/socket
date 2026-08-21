@@ -36,8 +36,8 @@ worth the extra surface.
 
 ## Relationship To Existing Plugins
 
-`documentation-skills` and `repository-skills` already own ongoing project-maintenance workflows such as
-README, contributing, roadmap, accessibility, repo maintenance, GitHub settings,
+`repository-skills` already owns ongoing project-maintenance workflows such as
+README, contributing, roadmap, API, repo maintenance, GitHub settings,
 automation design, and eval design.
 
 `project-audit-skills` should own the earlier intake phase:

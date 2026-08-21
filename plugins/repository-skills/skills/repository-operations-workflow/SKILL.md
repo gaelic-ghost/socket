@@ -1,6 +1,6 @@
 ---
 name: repository-operations-workflow
-description: Route repository work to focused Git, GitHub, worktree, settings, or release workflows. Use first when a request spans several repository operations or the correct owner is unclear.
+description: Route repository work to focused Git, GitHub, documentation, worktree, settings, or release workflows. Use first when a request spans several repository operations or the correct owner is unclear.
 ---
 
 # Repository Operations Workflow
@@ -24,6 +24,8 @@ needed for that classification, then hand work to the narrowest owner.
    | Codex worktree mode, local environment, or app-owned worktree behavior | `codex-gui-worktree-workflow` |
    | Parallel worker branch, worktree, write, or integration ownership | `coordinate-worktrees-and-threads` |
    | GitHub settings, rulesets, security automation, or repository policy | `maintain-github-repository` |
+   | README, CONTRIBUTING, AGENTS, API, or ROADMAP maintenance | The matching `maintain-project-*` document workflow |
+   | Coordinated repository-document sweep | `maintain-project-docs` |
    | Version bump, tag, release, publication, or branch-accounting cleanup | `maintain-project-repo` |
 3. When the request crosses multiple outcomes, name the sequence and keep each
    mutation with its owning workflow. For example: select a worktree, make a

@@ -69,11 +69,6 @@ CHILD_CHECKS = (
         REPO_ROOT / "plugins" / "apple-dev-skills",
     ),
     Check(
-        "Documentation Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "documentation-skills",
-    ),
-    Check(
         "Professional Skills tests",
         ("uv", "run", "pytest"),
         REPO_ROOT / "plugins" / "professional-skills",
@@ -99,11 +94,6 @@ CHILD_CHECKS = (
         REPO_ROOT / "plugins" / "python-skills",
     ),
     Check(
-        "Repository Skills tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "repository-skills",
-    ),
-    Check(
         "Socket Steward tests",
         ("uv", "run", "pytest"),
         REPO_ROOT / ".agents" / "socket-steward",
@@ -117,41 +107,6 @@ CHILD_CHECKS = (
         "Socket Steward type checks",
         ("uv", "run", "mypy", "."),
         REPO_ROOT / ".agents" / "socket-steward",
-    ),
-    Check(
-        "Things app tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "things-app",
-    ),
-    Check(
-        "Cardhop MCP tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "cardhop-app" / "mcp",
-    ),
-    Check(
-        "Cardhop MCP lint",
-        ("uv", "run", "ruff", "check", "."),
-        REPO_ROOT / "plugins" / "cardhop-app" / "mcp",
-    ),
-    Check(
-        "Cardhop MCP type checks",
-        ("uv", "run", "mypy", "."),
-        REPO_ROOT / "plugins" / "cardhop-app" / "mcp",
-    ),
-    Check(
-        "Things MCP tests",
-        ("uv", "run", "pytest"),
-        REPO_ROOT / "plugins" / "things-app" / "mcp",
-    ),
-    Check(
-        "Things MCP lint",
-        ("uv", "run", "ruff", "check", "."),
-        REPO_ROOT / "plugins" / "things-app" / "mcp",
-    ),
-    Check(
-        "Things MCP type checks",
-        ("uv", "run", "mypy", "."),
-        REPO_ROOT / "plugins" / "things-app" / "mcp",
     ),
     Check(
         "Cybersecurity Skills metadata",

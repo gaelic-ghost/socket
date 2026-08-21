@@ -1,0 +1,102 @@
+schemaVersion: 1
+isCustomized: false
+profile: base
+settings:
+  preservePreamble: true
+  allowAdditionalSections: true
+  requiredSections:
+    - Repository Scope
+    - Working Rules
+    - Commands
+    - Review and Delivery
+    - Safety Boundaries
+    - Local Overrides
+  sectionOrder:
+    - Repository Scope
+    - Working Rules
+    - Commands
+    - Review and Delivery
+    - Safety Boundaries
+    - Local Overrides
+  requiredSubsections:
+    Repository Scope:
+      - What This File Covers
+      - Where To Look First
+    Working Rules:
+      - Change Scope
+      - Source of Truth
+      - Communication and Escalation
+    Commands:
+      - Setup
+      - Validation
+      - Optional Project Commands
+    Review and Delivery:
+      - Review Expectations
+      - Definition of Done
+    Safety Boundaries:
+      - Never Do
+      - Ask Before
+  sectionAliases:
+    Repository Scope:
+      - Repository Expectations
+    Working Rules:
+      - Standards and Guidance
+    Commands:
+      - Validation
+    Review and Delivery:
+      - Review
+    Safety Boundaries:
+      - Safety and Boundaries
+  subsectionAliases:
+    Repository Scope/What This File Covers:
+      - Purpose
+    Repository Scope/Where To Look First:
+      - Priority Files
+    Working Rules/Change Scope:
+      - Scope
+    Working Rules/Source of Truth:
+      - Truth Sources
+    Working Rules/Communication and Escalation:
+      - Escalation
+    Commands/Optional Project Commands:
+      - Project Commands
+    Review and Delivery/Review Expectations:
+      - PR Expectations
+    Review and Delivery/Definition of Done:
+      - Done
+    Safety Boundaries/Never Do:
+      - Never
+    Safety Boundaries/Ask Before:
+      - Approval Gates
+  sectionTemplates:
+    Local Overrides: |
+      Explain whether this repository uses more specific AGENTS files or fallback instruction files in subdirectories, and make clear that deeper guidance refines this root file when work happens there. If there are no deeper overrides, say that plainly.
+  subsectionTemplates:
+    Repository Scope/What This File Covers: |
+      Explain what this root-level AGENTS file governs for the repository.
+    Repository Scope/Where To Look First: |
+      Point to the few highest-value docs, directories, or files Codex should check first before it starts reading broadly.
+    Working Rules/Change Scope: |
+      Explain how to keep work bounded and what kinds of scope expansion should be surfaced explicitly.
+    Working Rules/Source of Truth: |
+      Explain which files, docs, or project surfaces Codex should trust first when there is ambiguity.
+    Working Rules/Communication and Escalation: |
+      Explain when Codex should stop, surface tradeoffs, or ask before widening scope, especially when the next step has non-obvious consequences.
+    Commands/Setup: |
+      ```bash
+      # Replace this with the grounded setup or sync command for the repository.
+      ```
+    Commands/Validation: |
+      ```bash
+      # Replace this with the grounded validation command for the repository.
+      ```
+    Commands/Optional Project Commands: |
+      State any other important repo-specific commands here, or say plainly that there are no additional project commands worth calling out.
+    Review and Delivery/Review Expectations: |
+      Explain what Codex should include or check before handing work back for review.
+    Review and Delivery/Definition of Done: |
+      Explain what must be true before work should be considered complete in this repository, including grounded verification and any nearby docs or tests that should be updated.
+    Safety Boundaries/Never Do: |
+      List the highest-signal actions Codex must not take in this repository.
+    Safety Boundaries/Ask Before: |
+      List the decisions or changes that require explicit approval first.

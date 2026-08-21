@@ -77,7 +77,7 @@ When a skill relies on documentation, translate the relevant rule into practical
 The shipped inventory has fifteen skills. The original expansion plan below
 predates the later local-first agent-service addition, so this list is the
 current source of truth for the audit rather than the older twelve-skill
-summary in generated architecture metadata.
+summary in the root plugin inventory.
 
 ### `python-skills:bootstrap-uv-python-workspace`
 
@@ -443,7 +443,7 @@ folded into the general implementation skill:
 ### Definition Of Done For The Follow-Up
 
 - [x] Every shipped Python skill appears in the child plan, plugin discovery
-  metadata, portable export decision, and regenerated architecture inventory.
+  metadata and portable export decision.
 - [x] Each declared MCP dependency is packaged and translated, explicitly
   host-provided, or removed.
 - [x] Bootstrap policies have one shared source while each entry point keeps a

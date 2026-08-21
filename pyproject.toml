@@ -27,7 +27,6 @@ files = [
   "scripts",
   "tests",
   "plugins/repository-skills/skills/maintain-project-repo/scripts",
-  "plugins/repository-skills/skills/maintain-project-repo/tests",
   "plugins/model-lab-skills/skills/design-model-experiment/scripts",
   "plugins/model-lab-skills/skills/evaluate-language-model/scripts",
   "plugins/model-lab-skills/skills/compare-model-checkpoints/scripts",

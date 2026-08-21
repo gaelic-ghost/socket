@@ -94,20 +94,12 @@ def validate_openai_interface(path: Path, skill_name: str) -> None:
             fail(f"{path.relative_to(REPO_ROOT)} interface.{field_name} must be a non-empty string.")
 
 
-def validate_child_guidance(plugin_root: Path) -> None:
-    if not (plugin_root / "AGENTS.md").is_file():
-        fail(f"{plugin_root.relative_to(REPO_ROOT)} is missing its child AGENTS.md guidance.")
-
-
 def main() -> int:
     plugin_roots = sorted(
         path.parent.parent
         for path in REPO_ROOT.glob("plugins/*/.codex-plugin/plugin.json")
         if path.is_file()
     )
-    for plugin_root in plugin_roots:
-        validate_child_guidance(plugin_root)
-
     skill_paths = sorted(REPO_ROOT.glob("plugins/*/skills/*/SKILL.md"))
     if not skill_paths:
         fail("No authored plugin SKILL.md files were found.")

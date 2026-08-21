@@ -188,11 +188,9 @@ The installable local child entries currently point at:
 - `./plugins/agent-engineering-skills`
 - `./plugins/android-dev-skills`
 - `./plugins/apple-dev-skills`
-- `./plugins/cardhop-app`
 - `./plugins/cloud-deployment-skills`
 - `./plugins/cloud-inference-skills`
 - `./plugins/codebase-understanding-skills`
-- `./plugins/documentation-skills`
 - `./plugins/model-lab-skills`
 - `./plugins/agentdeck`
 - `./plugins/dotnet-skills`
@@ -207,12 +205,9 @@ The installable local child entries currently point at:
 - `./plugins/server-side-swift`
 - `./plugins/swift-lang`
 - `./plugins/swiftasb-skills`
-- `./plugins/things-app`
 - `./plugins/web-dev-skills`
 
 The Speak Swiftly entry points at the canonical Git-backed `gaelic-ghost/SpeakSwiftlyServer` plugin source as `speak-swiftly`, with the display name `Speak Swiftly`.
-
-Placeholder entries may stay visible with `policy.installation: NOT_AVAILABLE` until they ship real plugin content. Current placeholder entries are `spotify`.
 
 For the detailed packaging stance, use [`docs/maintainers/plugin-packaging-strategy.md`](./docs/maintainers/plugin-packaging-strategy.md). For isolated install testing that leaves personal production installs alone, use [`docs/maintainers/plugin-install-testing.md`](./docs/maintainers/plugin-install-testing.md).
 
